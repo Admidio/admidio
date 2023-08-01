@@ -45,10 +45,10 @@ if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('c
 }
 
 // check if user is allowed to assign members to this role
-if (!$role->allowedToAssignMembers($gCurrentUser)) {
+/*f (!$role->allowedToAssignMembers($gCurrentUser)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
-}
+}*/
 
 if ($getMembersShowAll) {
     $getFilterRoleId = 0;

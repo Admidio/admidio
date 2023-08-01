@@ -74,10 +74,10 @@ if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('c
 }
 
 // check if user is allowed to assign members to this role
-if (!$role->allowedToAssignMembers($gCurrentUser)) {
+/*f (!$role->allowedToAssignMembers($gCurrentUser)) {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
     exit();
-}
+}*/
 
 if ($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId)) {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS_VIEW_LIST')));

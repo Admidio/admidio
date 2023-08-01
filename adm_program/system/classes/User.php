@@ -159,7 +159,7 @@ class User extends TableAccess
 
     /**
      * @param string $mode      'set' or 'edit'
-     * @param int $id           ID of the role for which the membership should be set,
+     * @param int $roleId       ID of the role for which the membership should be set,
      *                          or id of the current membership that should be edited.
      * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
      * @param string $endDate   New end date of the membership. Default will be **31.12.9999**
@@ -167,7 +167,7 @@ class User extends TableAccess
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added/edited.
      */
-    private function changeRoleMembership($mode, $id, $startDate, $endDate, $leader)
+    private function changeRoleMembership($mode, $roleId, $startDate, $endDate, $leader)
     {
         if ($startDate === '' || $endDate === '') {
             return false;
@@ -198,30 +198,30 @@ class User extends TableAccess
 
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = ? -- $id
+                     WHERE mem_rol_id = ? -- $roleId
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin';
             $queryParams = array(
-                $id,
+                $roleId,
                 $usrId,
                 $endDate,
                 $startDate
             );
         } else {
-            $member = new TableMembers($this->db, $id);
+            $member = new TableMembers($this->db, $roleId);
 
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_id    <> ? -- $id
+                     WHERE mem_id    <> ? -- $roleId
                        AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin';
             $queryParams = array(
-                $id,
+                $roleId,
                 $member->getValue('mem_rol_id'),
                 $usrId,
                 $endDate,
@@ -287,7 +287,7 @@ class User extends TableAccess
         } else {
             // save membership to database
             if ($mode === 'set') {
-                $member->setValue('mem_rol_id', $id);
+                $member->setValue('mem_rol_id', $roleId);
                 $member->setValue('mem_usr_id', $usrId);
             }
             $member->setValue('mem_begin', $minStartDate);

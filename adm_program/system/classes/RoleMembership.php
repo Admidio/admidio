@@ -25,20 +25,89 @@
  * $membership->stopMembership();
  * ```
  */
-class TableMembers extends TableAccess
+class RoleMembership extends TableRoles
 {
-    /**
-     * Constructor that will create an object of a recordset of the table adm_members.
-     * If the id is set than the specific membership will be loaded.
-     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $memId    The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
-     */
-    public function __construct(Database $database, $memId = 0)
-    {
-        // read also data of assigned category
-        $this->connectAdditionalTable(TBL_ROLES, 'rol_id', 'mem_rol_id');
+    protected $mMembershipPeriods;
 
-        parent::__construct($database, TBL_MEMBERS, 'mem', $memId);
+    /**
+     * Constructor that will create an object of a recordset of the table adm_roles.
+     * If the id is set than the specific role will be loaded.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param int      $roleId   The recordset of the role with this id will be loaded. If id isn't set than an empty object of the table is created.
+     */
+    public function __construct(Database $database, $roleId = 0)
+    {
+        $this->mMembershipPeriods = array();
+
+        parent::__construct($database, $roleId);
+    }
+
+    /**
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @param string $startDate Date in format YYYY-MM-DD at which the role membership should start.
+     * @param string $endDate Date in format YYYY-MM-DD at which the role membership should end.
+     * @param bool|null $leader Flag if the user is assigned as a leader to this role.
+     * @return void
+     * @throws AdmException
+     */
+    public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = null)
+    {
+        $expandPeriod = false;
+
+        // search for existing periods of membership and adjust them
+        $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
+                  FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+                   AND mem_usr_id = ? -- $userId
+                 ORDER BY mem_begin ASC';
+        $queryParams = array(
+            $this->getValue('rol_id'),
+            $userId
+        );
+        $membersStatement = $this->db->queryPrepared($sql, $queryParams);
+        $membersList      = $membersStatement->fetchAll();
+        $this->db->startTransaction();
+
+        foreach ($membersList as $row) {
+            if ($startDate < $row['mem_end'] && $endDate > $row['mem_end']) {
+                // existing period overlaps the new start date
+                $expandPeriod = true;
+
+                // save new membership period
+                $membership = new TableMembers($this->db);
+                $membership->setArray($row);
+                $membership->setValue('mem_end', $endDate);
+                $membership->save();
+            } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_end']) {
+                // new time period surrounds existing time period
+
+                // delete existing membership
+                $membership = new TableMembers($this->db);
+                $membership->setArray($row);
+                $membership->delete();
+            } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_begin'] && !$expandPeriod) {
+                // existing period overlaps the new end date
+                $expandPeriod = true;
+
+                // save new membership period
+                $membership = new TableMembers($this->db);
+                $membership->setArray($row);
+                $membership->setValue('mem_start', $startDate);
+                $membership->save();
+            }
+        }
+
+        if (!$expandPeriod) {
+            // new existing period was adjusted to the new membership than save the new membership
+            $membership = new TableMembers($this->db);
+            $membership->setValue('mem_rol_id', $this->getValue('rol_id'));
+            $membership->setValue('mem_usr_id', $userId);
+            $membership->setValue('mem_start', $startDate);
+            $membership->setValue('mem_end', $endDate);
+            $membership->save();
+        }
+
+        $this->db->endTransaction();
     }
 
     /**
@@ -49,11 +118,11 @@ class TableMembers extends TableAccess
      * messages. Apart from this, the parent's setValue is used to set the new value.
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @see TableAccess#getValue
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
         global $gChangeNotification, $gCurrentSession;
 
@@ -113,7 +182,7 @@ class TableMembers extends TableAccess
      * Deletes the selected record of the table and optionally sends an admin notification if configured
      * @return true Returns **true** if no error occurred
      */
-    public function delete(): bool
+    public function delete()
     {
         // Queue admin notification about membership deletion
         global $gChangeNotification;
@@ -173,7 +242,7 @@ class TableMembers extends TableAccess
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
      */
-    public function save(bool $updateFingerPrint = true): bool
+    public function save($updateFingerPrint = true)
     {
         global $gCurrentSession, $gChangeNotification, $gCurrentUser;
 

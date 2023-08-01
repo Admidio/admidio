@@ -59,6 +59,7 @@ return array(
     'ProfileFields' => $baseDir . '/adm_program/system/classes/ProfileFields.php',
     'QRcode' => $vendorDir . '/tecnickcom/tcpdf/include/barcodes/qrcode.php',
     'RoleDependency' => $baseDir . '/adm_program/system/classes/RoleDependency.php',
+    'RoleMembership' => $baseDir . '/adm_program/system/classes/RoleMembership.php',
     'RolesRights' => $baseDir . '/adm_program/system/classes/RolesRights.php',
     'RssFeed' => $baseDir . '/adm_program/system/classes/RssFeed.php',
     'Securimage' => $vendorDir . '/dapphp/securimage/securimage.php',
