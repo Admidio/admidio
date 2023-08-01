@@ -186,7 +186,7 @@ if ($getPhotoUuid !== '') {
     $page->addHtml('
     <p class="lead">
         <p class="font-weight-bold">' . $datePeriod . '</p>
-        <p>' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getPhotographer() . '</p>');
+        <p>' . $photoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($photoAlbum->getPhotographer())) . '</p>');
 
     if (strlen($photoAlbum->getValue('pho_description')) > 0) {
         $page->addHtml('<p>' . $photoAlbum->getValue('pho_description', 'html') . '</p>');
@@ -433,7 +433,7 @@ if ($albumsCount > 0) {
                 $page->addHtml('<p class="card-text">' . $albumDescription . '</p>');
             }
 
-            $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $childPhotoAlbum->getPhotographer() . '</p>');
+            $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($childPhotoAlbum->getPhotographer())) . '</p>');
 
             // Notice for users with foto edit rights that the folder of the album doesn't exist
             if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight()) {

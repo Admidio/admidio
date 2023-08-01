@@ -142,7 +142,7 @@ $form->addInput(
 );
 $form->addInput(
     'pho_photographers',
-    $gL10n->get('PHO_PHOTOGRAPHER'),
+    $gL10n->get('SYS_PHOTOS_BY'),
     $photoAlbum->getValue('pho_photographers'),
     array('maxLength' => 100)
 );

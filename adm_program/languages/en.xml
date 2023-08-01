@@ -361,7 +361,6 @@
   <string name="PHO_PHOTO_SEND_ECARD">Send photo as greeting card</string>
   <string name="PHO_PHOTO_UPLOAD_DESC">Please select the images which you want to upload to album #VAR1_BOLD#.</string>
   <string name="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL">Not all photos were successfully uploaded.</string>
-  <string name="PHO_PHOTOGRAPHER">Photos of</string>
   <string name="PHO_PHOTOS_DESC">Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.</string>
   <string name="PHO_POPUP_WINDOW">Popup window</string>
   <string name="PHO_PREVIOUS_PHOTO">Previous picture</string>
@@ -1122,7 +1121,8 @@
   <string name="SYS_PHOTO">Photo</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">All photos were successfully uploaded.</string>
   <string name="SYS_PHOTOS">Photos</string>
-  <string name="SYS_PHOTO_OF_VAR">Photo of #VAR1#</string>
+  <string name="SYS_PHOTOS_BY">Photos by</string>
+  <string name="SYS_PHOTOS_BY_VAR">Photos by #VAR1#</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">All PHP settings</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>
