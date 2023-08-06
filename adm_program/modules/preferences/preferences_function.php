@@ -43,6 +43,20 @@ if (!$gCurrentUser->isAdministrator()) {
     // => EXIT
 }
 
+function getTemplateFileName($folder, $templateName)
+{
+    // get all files from the folder
+    $files = array_keys(FileSystemUtils::getDirectoryContent($folder, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+    $templateFileName = '';
+
+    foreach ($files as $fileName) {
+        if ($templateName === ucfirst(preg_replace('/[_-]/', ' ', str_replace(array('.tpl', '.html', '.txt'), '', $fileName)))) {
+            $templateFileName = $fileName;
+        }
+    }
+    return $templateFileName;
+}
+
 switch ($getMode) {
     case 1:
         $checkboxes = array();
@@ -174,10 +188,20 @@ switch ($getMode) {
                 case 'messages':
                     $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha',
                                         'mail_send_to_all_addresses', 'mail_html_registered_users', 'mail_show_former', 'mail_save_attachments');
+
+                    // get real filename of the template file
+                    if ($_POST['mail_template'] !== $gSettingsManager->getString('mail_template')) {
+                        $_POST['mail_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $_POST['mail_template']);
+                    }
                     break;
 
                 case 'photos':
                     $checkboxes = array('photo_download_enabled', 'photo_keep_original', 'photo_ecard_enabled');
+
+                    // get real filename of the template file
+                    if ($_POST['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
+                        $_POST['photo_ecard_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $_POST['photo_ecard_template']);
+                    }
                     break;
 
                 case 'profile':
