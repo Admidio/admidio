@@ -27,6 +27,25 @@ if (!$gCurrentUser->isAdministrator()) {
     // => EXIT
 }
 
+/**
+ * Read all file names of a folder and return an array where the file names are the keys and a readable
+ * version of the file names are the values.
+ * @param $folder
+ * @return false|int[]|string[]
+ */
+function getArrayFileNames($folder)
+{
+    // get all files from the folder
+    $files = array_keys(FileSystemUtils::getDirectoryContent($folder, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+
+    foreach ($files as &$templateName) {
+        $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace(array('.tpl', '.html', '.txt'), '', $templateName)));
+    }
+    unset($templateName);
+
+    return $files;
+}
+
 // read organization and all system preferences values into form array
 $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
 
@@ -1366,23 +1385,17 @@ $formEcards->addInput(
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ECARD_MAX_PHOTO_SIZE_DESC')
 );
 
-try {
-    // get all ecard templates from the theme folder ecard_templates
-    $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-} catch (\UnexpectedValueException $e) {
-    $ecardTemplatesFiles = array();
-}
-
-foreach ($ecardTemplatesFiles as &$templateName) {
-    $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
-}
-unset($templateName);
-
 $formEcards->addSelectBox(
     'ecard_template',
     $gL10n->get('SYS_TEMPLATE'),
-    $ecardTemplatesFiles,
-    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
+    getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
+    array(
+        'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $formValues['ecard_template']))),
+        'showContextDependentFirstEntry' => false,
+        'arrayKeyIsNotValue' => true,
+        'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
+        'helpTextIdInline' => 'SYS_TEMPLATE_DESC'
+    )
 );
 $formEcards->addSubmitButton(
     'btn_save_ecards',
@@ -1539,18 +1552,15 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'SYS_SHOW_CAPTCHA_DESC')
 );
 
-try {
-    // search all available email templates in folder of adm_my_files
-    $emailTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-} catch (\UnexpectedValueException $e) {
-    $emailTemplatesFiles = array();
-}
-
 $formMessages->addSelectBox(
     'mail_template',
     $gL10n->get('SYS_EMAIL_TEMPLATE'),
-    $emailTemplatesFiles,
-    array('defaultValue' => $formValues['mail_template'], 'showContextDependentFirstEntry' => true, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true,
+    getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
+    array(
+        'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.html', '', $formValues['mail_template']))),
+        'showContextDependentFirstEntry' => true,
+        'arrayKeyIsNotValue' => true,
+        'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
         'helpTextIdInline' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
 );
 $formMessages->addInput(
