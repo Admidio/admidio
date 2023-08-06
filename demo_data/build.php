@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * This script imports a bunch of demo data into a Admidio database
+ * This script imports a bunch of demo data into a database of Admidio
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
@@ -35,74 +35,43 @@ if (!isset($gImportDemoData) || !$gImportDemoData) {
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 
 /**
- * parts of this function are from get_backtrace out of phpBB3
- * @return string Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
- */
-function getBacktrace()
-{
-    $output = '<div style="font-family: monospace;">';
-    $backtrace = debug_backtrace();
-
-    foreach ($backtrace as $number => $trace) {
-        // We skip the first one, because it only shows this file/function
-        if ($number === 0) {
-            continue;
-        }
-
-        // Strip the current directory from path
-        if (empty($trace['file'])) {
-            $trace['file'] = '';
-        } else {
-            $trace['file'] = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $trace['file']);
-            $trace['file'] = substr($trace['file'], 1);
-        }
-        $args = array();
-
-        // If include/require/include_once is not called, do not show arguments - they may contain sensible information
-        if (!in_array($trace['function'], array('include', 'require', 'include_once'), true)) {
-            unset($trace['args']);
-        } else {
-            // Path...
-            if (!empty($trace['args'][0])) {
-                $argument = SecurityUtils::encodeHTML($trace['args'][0]);
-                $argument = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $argument);
-                $argument = substr($argument, 1);
-                $args[] = '\''.$argument.'\'';
-            }
-        }
-
-        $trace['class'] = array_key_exists('class', $trace) ? $trace['class'] : '';
-        $trace['type']  = array_key_exists('type', $trace) ? $trace['type'] : '';
-
-        $output .= '<br />';
-        $output .= '<strong>FILE:</strong> '.SecurityUtils::encodeHTML($trace['file']).'<br />';
-        $output .= '<strong>LINE:</strong> '.((!empty($trace['line'])) ? $trace['line'] : '').'<br />';
-
-        $output .= '<strong>CALL:</strong> '.SecurityUtils::encodeHTML($trace['class'].$trace['type'].$trace['function']).
-            '('.(count($args) ? implode(', ', $args) : '').')<br />';
-    }
-    $output .= '</div>';
-
-    return $output;
-}
-
-/**
- * @throws \RuntimeException
- * @throws \UnexpectedValueException
+ * Deletes all files and folder within adm_my_files except the config.php . After that all
+ * files and folder of the demo_data folder adm_my_files will be copied to the original adm_my_files folder.
+ * @throws RuntimeException
+ * @throws UnexpectedValueException
  */
 function prepareAdmidioDataFolder()
 {
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/announcements', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/backup', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/dates', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/documents_demo', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/documents_test', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/photos', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/weblinks', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/templates', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', true);
-    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', true);
+    $dh = opendir(ADMIDIO_PATH . FOLDER_DATA);
+
+    while (($fileFolderName = readdir($dh)) !== false) {
+        $fileFolderPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $fileFolderName;
+        if (is_dir($fileFolderPath) && $fileFolderName !== '.' && $fileFolderName !== '..') {
+            // delete all folders except the log folder
+            if ($fileFolderName !== 'logs') {
+                FileSystemUtils::deleteDirectoryIfExists($fileFolderPath, true);
+            } else {
+                // delete all files and folders in the log folder except the log files
+                $dhLogs = opendir($fileFolderPath);
+
+                while (($logsFileFolderName = readdir($dhLogs)) !== false) {
+                    $logsFileFolderPath = $fileFolderPath . '/' . $logsFileFolderName;
+                    if (is_dir($logsFileFolderPath) && $logsFileFolderName !== '.' && $logsFileFolderName !== '..') {
+                        FileSystemUtils::deleteDirectoryIfExists($logsFileFolderPath, true);
+                    } elseif (is_file($logsFileFolderPath)) {
+                        if ('log' !== strtolower(pathinfo($logsFileFolderPath, PATHINFO_EXTENSION))) {
+                            FileSystemUtils::deleteFileIfExists($logsFileFolderPath);
+                        }
+                    }
+                }
+                closedir($dhLogs);
+            }
+        } elseif (is_file($fileFolderPath) && $fileFolderName !== 'config.php' && $fileFolderName !== '.htaccess') {
+            // delete all files except the config and htaccess files
+            FileSystemUtils::deleteFileIfExists($fileFolderPath);
+        }
+    }
+    closedir($dh);
 
     FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/demo_data/adm_my_files', ADMIDIO_PATH . FOLDER_DATA, array('overwriteContent' => true));
 }
@@ -110,12 +79,12 @@ function prepareAdmidioDataFolder()
 /**
  * @param bool $enable
  */
-function toggleForeignKeyChecks($enable)
+function toggleForeignKeyChecks(bool $enable)
 {
     global $gDb;
 
     if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
-        // disable foreign key checks for mysql, so tables can easily deleted
+        // disable foreign key checks for mysql, so tables can easily be deleted
         $sql = 'SET foreign_key_checks = ' . (int) $enable;
         $gDb->queryPrepared($sql);
     }
@@ -125,7 +94,7 @@ function toggleForeignKeyChecks($enable)
  * @param array<int,string> $sqlStatements
  * @param string $filename
  */
-function executeSqlStatements(array $sqlStatements, $filename)
+function executeSqlStatements(array $sqlStatements, string $filename)
 {
     global $gDb, $gL10n;
 
@@ -135,7 +104,7 @@ function executeSqlStatements(array $sqlStatements, $filename)
             preg_match_all('/(DDT_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
 
             foreach ($results[0] as $value) {
-                // if it's a string of a systemmail then html linefeeds must be replaced
+                // if it's a string of a systemmail then html line feeds must be replaced
                 if (str_starts_with($value, 'SYS_SYSMAIL_')) {
                     // convert <br /> to a normal line feed
                     $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
@@ -157,7 +126,7 @@ function executeSqlStatements(array $sqlStatements, $filename)
 /**
  * @param string $filename The SQL filename (db.sql, data.sql)
  */
-function readAndExecuteSQLFromFile($filename)
+function readAndExecuteSQLFromFile(string $filename)
 {
     $sqlFilePath = __DIR__ . '/' . $filename;
 
@@ -165,7 +134,7 @@ function readAndExecuteSQLFromFile($filename)
 
     try {
         $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFilePath);
-    } catch (\RuntimeException $exception) {
+    } catch (RuntimeException $exception) {
         exit('<p style="color: #cc0000;">' . $exception->getMessage() . ' File-Path: ' . $sqlFilePath . '</p>');
     }
 
@@ -187,8 +156,8 @@ function resetPostgresSequences()
                  WHERE relkind = \'S\'';
         $pdoStatement = $gDb->queryPrepared($sql);
 
-        while ($relname = $pdoStatement->fetchColumn()) {
-            $sql = 'SELECT setval(\'' . $relname . '\', 1000000)';
+        while ($relName = $pdoStatement->fetchColumn()) {
+            $sql = 'SELECT setval(\'' . $relName . '\', 1000000)';
             $gDb->queryPrepared($sql);
         }
     }
@@ -197,7 +166,7 @@ function resetPostgresSequences()
 /**
  * @param string $language
  */
-function setInstallationLanguage($language)
+function setInstallationLanguage(string $language)
 {
     global $gDb;
 
@@ -209,8 +178,9 @@ function setInstallationLanguage($language)
 
 /**
  * @return string
+ * @throws AdmException
  */
-function getInstalledDbVersion()
+function getInstalledDbVersion(): string
 {
     global $gDb;
 
@@ -236,16 +206,16 @@ function getInstalledDbVersion()
 
 /**
  * @param string $language
- * @throws \RuntimeException
+ * @throws RuntimeException
  */
-function doInstallation($language)
+function doInstallation(string $language)
 {
     global $gDb, $gL10n; // necessary for "data_edit.php"
 
     // set runtime of script to 2 minutes because of the many work to do
     PhpIniUtils::startNewExecutionTimeLimit(120);
 
-    // disable foreign key checks for mysql, so tables can easily deleted
+    // disable foreign key checks for mysql, so tables can easily be deleted
     toggleForeignKeyChecks(false);
 
     readAndExecuteSQLFromFile('db.sql');
@@ -272,7 +242,7 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 // all data will be read after the update
 try {
     Session::start(COOKIE_PREFIX);
-} catch (\RuntimeException $exception) {
+} catch (RuntimeException $exception) {
     // TODO
 }
 unset($_SESSION['gCurrentSession']);
@@ -285,7 +255,7 @@ $gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
 // copy content of folder adm_my_files to productive folder
 try {
     prepareAdmidioDataFolder();
-} catch (\RuntimeException $exception) {
+} catch (RuntimeException $exception) {
     echo '<p style="color: #cc0000;">' . $exception->getMessage() . '</p>';
     exit();
 }
@@ -305,7 +275,11 @@ doInstallation($getLanguage);
 echo 'Installation successful!<br />';
 
 // read installed database version
-$databaseVersion = getInstalledDbVersion();
+try {
+    $databaseVersion = getInstalledDbVersion();
+} catch (AdmException $e) {
+    exit('<br />'.$e->getText());
+}
 
 echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
