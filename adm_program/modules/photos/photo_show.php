@@ -131,7 +131,7 @@ if ($image !== null) {
 
         // show name of photograph if set otherwise show name of organization
         if ((string) $photoAlbum->getValue('pho_photographers') !== '') {
-            $text = '© ' . $photoAlbum->getValue('pho_photographers');
+            $text = '© ' . $photoAlbum->getValue('pho_photographers', 'database');
         } else {
             $text = $gSettingsManager->getString('photo_image_text');
         }
