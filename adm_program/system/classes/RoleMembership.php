@@ -52,60 +52,82 @@ class RoleMembership extends TableRoles
      */
     public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = null)
     {
-        $expandPeriod = false;
+        global $gCurrentUser, $gCurrentUserId;
+
+        $newMembershipSaved = false;
+        $updateNecessary = true;
 
         // search for existing periods of membership and adjust them
         $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
-                  FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
-                   AND mem_usr_id = ? -- $userId
-                 ORDER BY mem_begin ASC';
+              FROM ' . TBL_MEMBERS . '
+             WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+               AND mem_usr_id = ? -- $userId
+             ORDER BY mem_begin ASC';
         $queryParams = array(
             $this->getValue('rol_id'),
             $userId
         );
         $membersStatement = $this->db->queryPrepared($sql, $queryParams);
-        $membersList      = $membersStatement->fetchAll();
+        $membersList = $membersStatement->fetchAll();
         $this->db->startTransaction();
 
         foreach ($membersList as $row) {
-            if ($startDate < $row['mem_end'] && $endDate > $row['mem_end']) {
-                // existing period overlaps the new start date
-                $expandPeriod = true;
+            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin']) {
+                // assignment already exists and must not be updated
+                $updateNecessary = false;
+            } else {
+                if ($startDate < $row['mem_end'] && $endDate > $row['mem_end']) {
+                    // existing period overlaps the new start date
+                    $newMembershipSaved = true;
 
-                // save new membership period
-                $membership = new TableMembers($this->db);
-                $membership->setArray($row);
-                $membership->setValue('mem_end', $endDate);
-                $membership->save();
-            } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_end']) {
-                // new time period surrounds existing time period
+                    // save new membership period
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->setValue('mem_end', $endDate);
+                    $membership->save();
+                } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_end']) {
+                    // new time period surrounds existing time period
 
-                // delete existing membership
-                $membership = new TableMembers($this->db);
-                $membership->setArray($row);
-                $membership->delete();
-            } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_begin'] && !$expandPeriod) {
-                // existing period overlaps the new end date
-                $expandPeriod = true;
+                    // delete existing membership
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
+                    // existing period overlaps the new end date
+                    $newMembershipSaved = true;
 
-                // save new membership period
-                $membership = new TableMembers($this->db);
-                $membership->setArray($row);
-                $membership->setValue('mem_start', $startDate);
-                $membership->save();
+                    // save new membership period
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->setValue('mem_begin', $startDate);
+                    $membership->save();
+                }
             }
         }
 
-        if (!$expandPeriod) {
+        if (!$newMembershipSaved && $updateNecessary) {
             // new existing period was adjusted to the new membership than save the new membership
             $membership = new TableMembers($this->db);
             $membership->setValue('mem_rol_id', $this->getValue('rol_id'));
             $membership->setValue('mem_usr_id', $userId);
-            $membership->setValue('mem_start', $startDate);
+            $membership->setValue('mem_begin', $startDate);
             $membership->setValue('mem_end', $endDate);
             $membership->save();
         }
+
+        // if role is administrator than only administrator can add new user,
+        // but don't change their own membership, because there must be at least one administrator
+        if ($updateNecessary &&
+            (bool) $this->getValue('rol_administrator') === true
+            && !$gCurrentUser->isAdministrator()) {
+            $this->db->rollback();
+            if ($userId !== $gCurrentUserId) {
+                throw new AdmException('You could not edit your own membership to an administrator role!');
+            } else {
+                throw new AdmException('Members to administrator role could only be assigned by administrators!');
+            }
+        }
+
 
         $this->db->endTransaction();
     }

@@ -143,7 +143,7 @@ foreach ($rolesList as $row) {
                        AND mem_end    > ? -- DATE_NOW';
             $pdoStatement = $gDb->queryPrepared($sql, array($row['rol_id'], DATE_NOW, DATE_NOW));
 
-            // maximum number of participiants exceeded and it's not a role leader assignement
+            // maximum number of participants exceeded and it's not a role leader assignment
             if ($pdoStatement->fetchColumn() >= $row['rol_max_members']
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true) {
@@ -160,50 +160,62 @@ foreach ($rolesList as $row) {
 
 // Run through results and perform database update
 foreach ($rolesList as $row) {
-    // if role is administrator than only administrator can add new user,
-    // but don't change their own membership, because there must be at least one administrator
-    if ($row['rol_administrator'] == 0
-    || ($row['rol_administrator'] == 1 && $gCurrentUser->isAdministrator()
-        && (int) $user->getValue('usr_id') !== $gCurrentUserId)) {
-        $roleAssign = false;
-        if (isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1) {
-            $roleAssign = true;
-        }
+    $roleLeader = false;
+    if (isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == 1) {
+        $roleLeader = true;
+    }
 
-        $roleLeader = false;
-        if (isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == 1) {
-            $roleLeader = true;
-        }
-
-        // update role membership
-        if ($roleAssign) {
-            $roleAssignmentEndDate = DATE_MAX;
-
-            if ($row['mem_end'] > date('Y-m-d')) {
-                $roleAssignmentEndDate = $row['mem_end'];
+    try {
+        $roleMemberships = new RoleMembership($gDb, $row['rol_id']);
+        $roleMemberships->setMembership($user->getValue('usr_id'), $row['mem_begin'], $row['mem_end'], $roleLeader);
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
+    /*
+        // if role is administrator than only administrator can add new user,
+        // but don't change their own membership, because there must be at least one administrator
+        if ($row['rol_administrator'] == 0
+        || ($row['rol_administrator'] == 1 && $gCurrentUser->isAdministrator()
+            && (int) $user->getValue('usr_id') !== $gCurrentUserId)) {
+            $roleAssign = false;
+            if (isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1) {
+                $roleAssign = true;
             }
 
-            $user->setRoleMembership($row['rol_id'], DATE_NOW, $roleAssignmentEndDate, $roleLeader);
-            ++$assignedCount;
+            $roleLeader = false;
+            if (isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == 1) {
+                $roleLeader = true;
+            }
 
-            // find the parent roles and assign user to parent roles
-            $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);
-            foreach ($tmpRoles as $tmpRole) {
-                if (!in_array($tmpRole, $parentRoles, true)) {
-                    $parentRoles[] = $tmpRole;
+            // update role membership
+            if ($roleAssign) {
+                $roleAssignmentEndDate = DATE_MAX;
+
+                if ($row['mem_end'] > date('Y-m-d')) {
+                    $roleAssignmentEndDate = $row['mem_end'];
+                }
+
+                $user->setRoleMembership($row['rol_id'], DATE_NOW, $roleAssignmentEndDate, $roleLeader);
+                ++$assignedCount;
+
+                // find the parent roles and assign user to parent roles
+                $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);
+                foreach ($tmpRoles as $tmpRole) {
+                    if (!in_array($tmpRole, $parentRoles, true)) {
+                        $parentRoles[] = $tmpRole;
+                    }
+                }
+            } else {
+                // if membership already exists then stop this membership
+                if ($row['mem_id'] > 0) {
+                    // subtract one day, so that user leaves role immediately
+                    $now = new \DateTime();
+                    $oneDayOffset = new \DateInterval('P1D');
+                    $newEndDate = $now->sub($oneDayOffset)->format('Y-m-d');
+                    $user->editRoleMembership($row['mem_id'], $row['mem_begin'], $newEndDate, $roleLeader);
                 }
             }
-        } else {
-            // if membership already exists then stop this membership
-            if ($row['mem_id'] > 0) {
-                // subtract one day, so that user leaves role immediately
-                $now = new \DateTime();
-                $oneDayOffset = new \DateInterval('P1D');
-                $newEndDate = $now->sub($oneDayOffset)->format('Y-m-d');
-                $user->editRoleMembership($row['mem_id'], $row['mem_begin'], $newEndDate, $roleLeader);
-            }
-        }
-    }
+        }*/
 }
 
 // assign all memberships of parent roles
