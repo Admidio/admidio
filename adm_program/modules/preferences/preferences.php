@@ -1290,7 +1290,7 @@ $formPhotos->addInput(
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
 );
 
-$formEcards->addSelectBox(
+$formPhotos->addSelectBox(
     'photo_ecard_template',
     $gL10n->get('SYS_TEMPLATE'),
     getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
