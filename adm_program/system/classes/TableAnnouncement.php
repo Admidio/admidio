@@ -173,11 +173,11 @@ class TableAnnouncement extends TableAccess
                 $messageDateText = 'SYS_CHANGED_AT';
             }
 
-            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
-                . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('ann_headline') . '\n'
-                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '\n'
-                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '\n'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php?ann_uuid=' . $this->getValue('ann_uuid') . '\n';
+            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
+                . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('ann_headline') . '<br />'
+                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php?ann_uuid=' . $this->getValue('ann_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message

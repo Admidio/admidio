@@ -287,13 +287,13 @@ class TablePhotos extends TableAccess
                 $messageDateText = 'SYS_CHANGED_AT';
             }
 
-            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
-                . $gL10n->get('PHO_ALBUM') . ': ' . $this->getValue('pho_name') . '\n'
-                . $gL10n->get('SYS_START') . ': ' . $this->getValue('pho_begin') . '\n'
-                . $gL10n->get('SYS_END') . ': ' . $this->getValue('pho_end') . '\n'
-                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '\n'
-                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '\n'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php?photo_uuid=' . $this->getValue('pho_uuid') . '\n';
+            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
+                . $gL10n->get('PHO_ALBUM') . ': ' . $this->getValue('pho_name') . '<br />'
+                . $gL10n->get('SYS_START') . ': ' . $this->getValue('pho_begin') . '<br />'
+                . $gL10n->get('SYS_END') . ': ' . $this->getValue('pho_end') . '<br />'
+                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php?photo_uuid=' . $this->getValue('pho_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message

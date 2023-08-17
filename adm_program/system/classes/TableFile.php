@@ -221,11 +221,11 @@ class TableFile extends TableAccess
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();
 
-            $message = $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
-                . $gL10n->get('SYS_FILE') . ': ' . $this->getValue('fil_name') . '\n'
-                . $gL10n->get('SYS_CREATED_BY') . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '\n'
-                . $gL10n->get('SYS_CREATED_AT') . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '\n'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php?folder_uuid=' . $this->getValue('fol_uuid') . '\n';
+            $message = $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
+                . $gL10n->get('SYS_FILE') . ': ' . $this->getValue('fil_name') . '<br />'
+                . $gL10n->get('SYS_CREATED_BY') . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
+                . $gL10n->get('SYS_CREATED_AT') . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php?folder_uuid=' . $this->getValue('fol_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))),
                 $message
