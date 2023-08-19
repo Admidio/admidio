@@ -322,7 +322,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                     WHERE cat_id = ?';
         $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $date->getValue('dat_cat_id')));
         $calendar = $pdoStatement->fetchColumn();
-        if (Language::isTranslationStringId($value)) {
+        if (Language::isTranslationStringId($calendar)) {
             $calendar = $gL10n->get($calendar);
         }
 
