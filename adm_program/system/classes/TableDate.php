@@ -487,6 +487,9 @@ class TableDate extends TableAccess
                         WHERE cat_id = ?';
             $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $this->getValue('dat_cat_id')));
             $calendar = $pdoStatement->fetchColumn();
+            if (Language::isTranslationStringId($calendar)) {
+                $calendar = $gL10n->get($calendar);
+            }
 
             if ((string) $this->getValue('dat_location') !== '') {
                 $location = $this->getValue('dat_location');
