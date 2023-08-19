@@ -484,9 +484,16 @@ class TableCategory extends TableAccess
                 $sql = 'UPDATE '.TBL_CATEGORIES.'
                            SET cat_default = false
                          WHERE cat_type    = ? -- $this->getValue(\'cat_type\')
+                           AND cat_id     <> ? -- $this->getValue(\'cat_id\')
                            AND (  cat_org_id IS NULL
                                OR cat_org_id = ?) -- $GLOBALS[\'gCurrentOrgId\']';
-                $this->db->queryPrepared($sql, array($this->getValue('cat_type'), $GLOBALS['gCurrentOrgId']));
+                $this->db->queryPrepared($sql,
+                    array(
+                        $this->getValue('cat_type'),
+                        $this->getValue('cat_id'),
+                        $GLOBALS['gCurrentOrgId']
+                    )
+                );
             }
         }
 
