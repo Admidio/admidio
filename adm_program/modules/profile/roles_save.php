@@ -167,6 +167,9 @@ foreach ($rolesList as $row) {
 
     try {
         $roleMemberships = new RoleMembership($gDb, $row['rol_id']);
+        if (isset($_POST['role-'.$row['rol_id']]) && (string) $row['mem_begin'] === '') {
+            $roleMemberships->setMembership($user->getValue('usr_id'), DATE_NOW, DATE_MAX, $roleLeader);
+        }
         $roleMemberships->setMembership($user->getValue('usr_id'), $row['mem_begin'], $row['mem_end'], $roleLeader);
     } catch (AdmException $e) {
         $e->showHtml();
