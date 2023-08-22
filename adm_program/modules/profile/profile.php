@@ -88,9 +88,6 @@ if (!isset($_GET['user_uuid'])) {
 // create html page object
 $page = new HtmlPage('admidio-profile', $headline);
 
-$page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/css/bootstrap-datepicker3.css');
-$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/bootstrap-datepicker.js');
-$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageLibs().'.min.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
@@ -185,13 +182,6 @@ $page->addJavascript(
     $("#menu_item_profile_password").attr("href", "javascript:void(0);");
     $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)).'");
     $("#menu_item_profile_password").attr("class", "nav-link btn btn-secondary openPopup");
-
-    $("input[data-provide=\'datepicker\']").datepicker({
-        language: "'.$gL10n->getLanguageLibs().'",
-        format: "'.DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')).'",
-        todayHighlight: true,
-        autoclose: true
-    });
 
     formSubmitEvent();',
     true
