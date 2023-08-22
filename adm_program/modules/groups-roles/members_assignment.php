@@ -90,15 +90,6 @@ if ($getMode === 'assign') {
         // If role have fewer members than allowed or leader is to be added
         if ($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0))) {
             $role->startMembership($user->getValue('usr_id'), $leadership);
-
-            // find the parent roles and assign user to parent roles
-            $dependencies = RoleDependency::getParentRoles($gDb, (int) $role->getValue('rol_id'));
-            $parentRoles  = array();
-
-            foreach ($dependencies as $tmpRole) {
-                $parentRole = new RoleMembership($gDb, $tmpRole);
-                $parentRole->startMembership($user->getValue('usr_id'), $leadership);
-            }
             echo 'success';
         } elseif (!$leadership && !$membership) {
             $role->stopMembership($user->getValue('usr_id'));

@@ -162,7 +162,6 @@ class RoleMembership extends TableRoles
             }
         }
 
-
         $this->db->endTransaction();
     }
 
@@ -176,7 +175,17 @@ class RoleMembership extends TableRoles
      */
     public function startMembership(int $userId, bool $leader = false)
     {
+        $this->db->startTransaction();
         $this->setMembership($userId, DATE_NOW, '9999-12-31', $leader);
+
+        // find the parent roles and assign user to parent roles
+        $dependencies = RoleDependency::getParentRoles($this->db, $this->getValue('rol_id'));
+
+        foreach ($dependencies as $tmpRole) {
+            $parentRole = new RoleMembership($this->db, $tmpRole);
+            $parentRole->startMembership($userId, $leader);
+        }
+        $this->db->endTransaction();
     }
 
     /**
