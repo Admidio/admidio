@@ -129,7 +129,7 @@ if ($getMode === 1) {
 
     $member = new TableMembers($gDb);
     $member->readDataByUuid($getMemberUuid);
-    $role   = new RoleMembership($gDb, (int) $member->getValue('mem_rol_id'));
+    $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
 
     // check if user has the right to edit this membership
     if (!$role->allowedToAssignMembers($gCurrentUser)) {

@@ -134,7 +134,7 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
         }
 
         // assign role membership to user
-        $role = new RoleMembership($gDb, (int) $_SESSION['rol_id']);
+        $role = new TableRoles($gDb, (int) $_SESSION['rol_id']);
         $role->startMembership($userImport->getValue('usr_id'));
         ++$countImportEditRole;
     } catch (AdmException $e) {

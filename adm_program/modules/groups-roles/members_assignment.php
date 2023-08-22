@@ -33,7 +33,7 @@ $getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'string'
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 
 // create object of the commited role
-$role = new RoleMembership($gDb);
+$role = new TableRoles($gDb);
 $role->readDataByUuid($getRoleUuid);
 
 $_SESSION['set_rol_id'] = $role->getValue('rol_id');

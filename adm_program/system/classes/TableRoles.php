@@ -498,6 +498,153 @@ class TableRoles extends TableAccess
     }
 
     /**
+     * Method will set a membership with the given start and end date. If there are cutting time periods these periods
+     * be adjusted. Periods within the new periods will be deleted. The leader flag will be respected and could lead
+     * to separate membership periods. If someone has already a membership and get a leader than he has two
+     * sequential periods. If the current role has dependent parent roles than the membership will be also assigned to
+     * the parent roles. After all a session refresh for the user will be initiated so he get the new role
+     * assignments at once.
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @param string $startDate Date in format YYYY-MM-DD at which the role membership should start.
+     * @param string $endDate Date in format YYYY-MM-DD at which the role membership should end.
+     * @param bool $leader Flag if the user is assigned as a leader to this role.
+     * @return void
+     * @throws AdmException
+     */
+    public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = false)
+    {
+        global $gCurrentUser, $gCurrentUserId, $gCurrentSession;
+
+        $newMembershipSaved = false;
+        $updateNecessary = true;
+
+        // search for existing periods of membership and adjust them
+        $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
+              FROM ' . TBL_MEMBERS . '
+             WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+               AND mem_usr_id = ? -- $userId
+             ORDER BY mem_begin ASC';
+        $queryParams = array(
+            $this->getValue('rol_id'),
+            $userId
+        );
+        $membersStatement = $this->db->queryPrepared($sql, $queryParams);
+        $membersList = $membersStatement->fetchAll();
+        $this->db->startTransaction();
+
+        foreach ($membersList as $row) {
+            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin'] && $leader === $row['mem_leader']) {
+                // assignment already exists and must not be updated
+                $updateNecessary = false;
+            } else {
+                if ($startDate < $row['mem_end'] && $endDate >= $row['mem_end']) {
+                    // new period starts in existing period and ends after existing period
+                    if ($leader === (bool)$row['mem_leader']) {
+                        $newMembershipSaved = true;
+
+                        // save new membership period
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_begin', $startDate);
+                        $membership->setValue('mem_end', $endDate);
+                    } else {
+                        // End existing period and later add new period with changed leader flag
+                        $tempEndDate = DateTime::createFromFormat('Y-m-d', $startDate);
+                        $newEndDate = $tempEndDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_end', $newEndDate);
+                    }
+                    $membership->save();
+                } elseif ($startDate <= $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
+                    // new period starts before existing period and ends in existing period
+                    if ($leader === (bool) $row['mem_leader']) {
+                        $newMembershipSaved = true;
+
+                        // save new membership period
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_begin', $startDate);
+                        $membership->setValue('mem_end', $endDate);
+                    } else {
+                        // End existing period and later add new period with changed leader flag
+                        $tempStartDate = DateTime::createFromFormat('Y-m-d', $endDate);
+                        $newStartDate = $tempStartDate->add(new DateInterval('P1D'))->format('Y-m-d');
+
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_end', $newStartDate);
+                    }
+                    $membership->save();
+                } elseif ($endDate === $row['mem_end'] && $startDate === $row['mem_begin'] && $leader !== $row['mem_leader']) {
+                    // exact same time period but the leader flag has changed than delete current period
+                    // and updated period later
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_end']) {
+                    // new time period surrounds existing time period than delete that period
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                } elseif ($startDate === $row['mem_begin'] && $startDate > $endDate) {
+                    // new time period is negative than search for equal start date and delete this period
+                    $newMembershipSaved = true;
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                }
+            }
+        }
+
+        if (!$newMembershipSaved && $updateNecessary) {
+            // new existing period was adjusted to the new membership than save the new membership
+            $membership = new TableMembers($this->db);
+            $membership->setValue('mem_rol_id', $this->getValue('rol_id'));
+            $membership->setValue('mem_usr_id', $userId);
+            $membership->setValue('mem_begin', $startDate);
+            $membership->setValue('mem_end', $endDate);
+            $membership->setValue('mem_leader', $leader);
+            if ($this->getValue('cat_name_intern') === 'EVENTS') {
+                $membership->setValue('mem_approved', Participants::PARTICIPATION_YES);
+            }
+            $membership->save();
+        }
+
+        // if role is administrator than only administrator can add new user,
+        // but don't change their own membership, because there must be at least one administrator
+        if ($updateNecessary &&
+            (bool) $this->getValue('rol_administrator') === true
+            && !$gCurrentUser->isAdministrator()) {
+            $this->db->rollback();
+            if ($userId !== $gCurrentUserId) {
+                throw new AdmException('You could not edit your own membership to an administrator role!');
+            } else {
+                throw new AdmException('Members to administrator role could only be assigned by administrators!');
+            }
+        }
+
+        // reload session of that user because of changes to the assigned roles and rights
+        $gCurrentSession->reload($userId);
+
+        $this->db->endTransaction();
+    }
+
+    /**
+     * Set the type of the role. This could be a role that represents a group ROLE_GROUP that will be used in the
+     * groups and roles module or participants of an event ROLE_EVENT that will be used within the event module.
+     * @param int $type Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
+     * @return void
+     */
+    public function setType($type)
+    {
+        if($type === TableRoles::ROLE_GROUP || $type === TableRoles::ROLE_EVENT) {
+            $this->type = $type;
+        }
+    }
+
+    /**
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method **save** to store the new value to the database.
      * @param string $columnName The name of the database column whose value should get a new value
@@ -546,15 +693,55 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * Set the type of the role. This could be a role that represents a group ROLE_GROUP that will be used in the
-     * groups and roles module or participants of an event ROLE_EVENT that will be used within the event module.
-     * @param int $type Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
+     * Starts a new membership of the given user to the role of this class. The membership will start today
+     * and will "never" ends. End date is set to 9999-12-31.
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @param bool $leader Flag if the user is assigned as a leader to this role.
      * @return void
+     * @throws AdmException
      */
-    public function setType($type)
+    public function startMembership(int $userId, bool $leader = false)
     {
-        if($type === TableRoles::ROLE_GROUP || $type === TableRoles::ROLE_EVENT) {
-            $this->type = $type;
+        $this->db->startTransaction();
+        $this->setMembership($userId, DATE_NOW, '9999-12-31', $leader);
+
+        // find the parent roles and assign user to parent roles
+        $dependencies = RoleDependency::getParentRoles($this->db, $this->getValue('rol_id'));
+
+        foreach ($dependencies as $tmpRole) {
+            $parentRole = new TableRoles($this->db, $tmpRole);
+            $parentRole->startMembership($userId, $leader);
+        }
+        $this->db->endTransaction();
+    }
+
+    /**
+     * Stops a current membership of the given user to the role of this class. The membership will stop
+     * yesterday.
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @return void
+     * @throws AdmException
+     */
+    public function stopMembership(int $userId)
+    {
+        // search for existing periods of membership and adjust them
+        $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
+                  FROM ' . TBL_MEMBERS . '
+                 WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+                   AND mem_usr_id = ? -- $userId
+                   AND ? BETWEEN mem_begin AND mem_end ';
+        $queryParams = array(
+            $this->getValue('rol_id'),
+            $userId,
+            DATE_NOW
+        );
+        $membersStatement = $this->db->queryPrepared($sql, $queryParams);
+        $membersList = $membersStatement->fetchAll();
+
+        if (count($membersList) > 0) {
+            $endDate = DateTime::createFromFormat('Y-m-d', DATE_NOW);
+            $newEndDate = $endDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+            $this->setMembership($userId, $membersList[0]['mem_begin'], $newEndDate);
         }
     }
 

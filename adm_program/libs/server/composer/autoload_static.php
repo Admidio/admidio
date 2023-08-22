@@ -197,7 +197,6 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'ProfileFields' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ProfileFields.php',
         'QRcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/qrcode.php',
         'RoleDependency' => __DIR__ . '/../../../..' . '/adm_program/system/classes/RoleDependency.php',
-        'RoleMembership' => __DIR__ . '/../../../..' . '/adm_program/system/classes/RoleMembership.php',
         'RolesRights' => __DIR__ . '/../../../..' . '/adm_program/system/classes/RolesRights.php',
         'RssFeed' => __DIR__ . '/../../../..' . '/adm_program/system/classes/RssFeed.php',
         'Securimage' => __DIR__ . '/..' . '/dapphp/securimage/securimage.php',

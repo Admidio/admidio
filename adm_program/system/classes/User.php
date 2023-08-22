@@ -152,7 +152,7 @@ class User extends TableAccess
 
         while ($rolId = $defaultRolesStatement->fetchColumn()) {
             // starts a membership for role from now
-            $role = new RoleMembership($this->db, $rolId);
+            $role = new TableRoles($this->db, $rolId);
             $role->startMembership($this->getValue('usr_id'));
         }
 
