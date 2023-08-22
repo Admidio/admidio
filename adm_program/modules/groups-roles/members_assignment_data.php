@@ -33,7 +33,7 @@
  * Parameters:
  *
  * role_uuid     - UUID of role to which members should be assigned or removed
- * filter_rol_id - If set only users from this role will be shown in list.
+ * filter_rol_uuid - If set only users from this role will be shown in list.
  * mem_show_all  - true  : (Default) Show active and inactive members of all organizations in database
  *                 false : Show only active members of the current organization
  * draw          - Number to validate the right inquiry from DataTables.
@@ -50,7 +50,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
-$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
+$getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'int');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 $getDraw   = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
 $getStart  = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
@@ -74,14 +74,18 @@ if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('c
 }
 
 // check if user is allowed to assign members to this role
-/*f (!$role->allowedToAssignMembers($gCurrentUser)) {
+if (!$role->allowedToAssignMembers($gCurrentUser)) {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
     exit();
-}*/
+}
 
-if ($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId)) {
-    echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS_VIEW_LIST')));
-    exit();
+if ($getFilterRoleUuid !== '') {
+    $filterRole = new TableRoles($gDb);
+    $filterRole->readDataByUuid($getFilterRoleUuid);
+    if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
+        echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS_VIEW_LIST')));
+        exit();
+    }
 }
 
 // create order statement
@@ -134,15 +138,15 @@ if ($getSearch !== '' && count($searchColumns) > 0) {
 
 $filterRoleCondition = '';
 if ($getMembersShowAll) {
-    $getFilterRoleId = 0;
+    $getFilterRoleUuid = 0;
 } else {
     // show only members of current organization
-    if ($getFilterRoleId > 0) {
-        $filterRoleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
+    if ($getFilterRoleUuid !== '') {
+        $filterRoleCondition = ' AND rol_uuid = '.$getFilterRoleUuid.' ';
     }
 }
 
-// create a subselect to check if the user is an acitve member of the current organization
+// create a subselect to check if the user is an active member of the current organization
 $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                     FROM '.TBL_MEMBERS.'
               INNER JOIN '.TBL_ROLES.'

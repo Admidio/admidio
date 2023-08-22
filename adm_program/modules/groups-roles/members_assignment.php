@@ -13,7 +13,7 @@
  *               assign : Add membership of a specific user to the role.
  * role_uuid            : UUID of role to which members should be assigned or removed
  * user_uuid            : UUID of the user whose membership should be assigned or removed
- * filter_rol_id        : If set only users from this role will be shown in list.
+ * filter_rol_uuid      : If set only users from this role will be shown in list.
  * mem_show_all - true  : (Default) Show active and inactive members of all organizations in database
  *                false : Show only active members of the current organization
  *****************************************************************************/
@@ -29,7 +29,7 @@ if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
 $getMode           = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
 $getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
 $getUserUuid       = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('directOutput' => true));
-$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
+$getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'string');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 
 // create object of the commited role
@@ -51,12 +51,16 @@ if (!$role->allowedToAssignMembers($gCurrentUser)) {
 }
 
 if ($getMembersShowAll) {
-    $getFilterRoleId = 0;
+    $getFilterRoleUuid = 0;
 }
 
-if ($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId)) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
-    // => EXIT
+if ($getFilterRoleUuid !== '') {
+    $filterRole = new TableRoles($gDb);
+    $filterRole->readDataByUuid($getFilterRoleUuid);
+    if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
+        // => EXIT
+    }
 }
 
 if ($getMode === 'assign') {
@@ -133,8 +137,8 @@ if ($getMode === 'assign') {
         $("#menu_item_members_assign_create_user").attr("class", "nav-link btn btn-secondary openPopup");
 
         // change mode of users that should be shown
-        $("#filter_rol_id").change(function() {
-            window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $getRoleUuid, 'mem_show_all' => 0)).'&filter_rol_id=" + $("#filter_rol_id").val());
+        $("#filter_rol_uuid").change(function() {
+            window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $getRoleUuid, 'mem_show_all' => 0)).'&filter_rol_uuid=" + $("#filter_rol_uuid").val());
         });
 
         // change mode of users that should be shown
@@ -201,7 +205,7 @@ if ($getMode === 'assign') {
         );
     }
 
-    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+    $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
@@ -216,11 +220,11 @@ if ($getMode === 'assign') {
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form_roles', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxFromSql(
-        'filter_rol_id',
+        'filter_rol_uuid',
         $gL10n->get('SYS_ROLE'),
         $gDb,
         $sqlData,
-        array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL'))
+        array('defaultValue' => $getFilterRoleUuid, 'firstEntry' => $gL10n->get('SYS_ALL'))
     );
     $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), false, array('helpTextIdLabel' => 'SYS_SHOW_ALL_DESC'));
     $filterNavbar->addForm($form->show());
@@ -278,7 +282,7 @@ if ($getMode === 'assign') {
     $columnHeading[] = $gL10n->get('SYS_LEADER') . HtmlForm::getHelpTextIcon($htmlLeaderText);
     $columnAlignment[] = 'left';
 
-    $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_id' => $getFilterRoleId, 'mem_show_all' => $getMembersShowAll)));
+    $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_uuid' => $getFilterRoleUuid, 'mem_show_all' => $getMembersShowAll)));
     $table->setColumnAlignByArray($columnAlignment);
     $table->addRowHeadingByArray($columnHeading);
 
