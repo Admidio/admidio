@@ -57,62 +57,64 @@ if (isset($_SESSION['set_rol_id'])) {
 
 $page = null;
 
+$javascript = '
+    // if checkbox of role is clicked then change membership
+    $("#role_assignment_table input[type=checkbox]").click(function() {
+        var checkbox = $(this);
+        var roleUuid = $(this).data("role");
+
+        var roleChecked = $("input[type=checkbox]#role-" + roleUuid).prop("checked");
+        var leaderChecked = $("input[type=checkbox]#leader-" + roleUuid).prop("checked");
+
+        // If the group leader checkbox is set, the role checkbox must also be set
+        if (checkbox.data("type") === "leader" && leaderChecked) {
+            $("input[type=checkbox]#role-" + roleUuid).prop("checked", true);
+            roleChecked = true;
+        }
+
+        // When removing the membership also ends the leader assignment
+        if (checkbox.data("type") === "membership" && !roleChecked) {
+            $("input[type=checkbox]#leader-" + roleUuid).prop("checked", false);
+            leaderChecked = false;
+        }
+
+        // change data in database
+        $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=" + roleUuid + "&user_uuid='.$getUserUuid.'",
+            "memberFlag=" + roleChecked + "&leaderFlag=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
+            function(data) {
+                // check if error occurs
+                if (data === "success") {
+                    $("#admidio-profile-roles-alert").fadeOut();
+                } else {
+                    // reset checkbox status
+                    if (checkbox.prop("checked")) {
+                        checkbox.prop("checked", false);
+                        if (checkbox.data("type") === "leader") {
+                            $("input[type=checkbox]#role-" + roleUuid).prop("checked", false);
+                        }
+                    } else {
+                        checkbox.prop("checked", true);
+                    }
+
+                    $("#admidio-profile-roles-alert").fadeIn();
+                    $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                    return false;
+                }
+                return true;
+            }
+        );
+    });';
+
 if ($getInline) {
-    header('Content-type: text/html; charset=utf-8');
+   // header('Content-type: text/html; charset=utf-8');
 
     $html .= '<script type="text/javascript">
         $(function() {
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this).attr("id"));
             });
-
-            // if checkbox of user is clicked then change membership
-            $("#role_assignment_table").on("click", "input[type=checkbox]", function() {
-                var checkbox = $(this);
-                var roleUuid = $(this).data("role");
-
-                var roleChecked = $("input[type=checkbox]#role-" + roleUuid).prop("checked");
-                var leaderChecked = $("input[type=checkbox]#leader-" + roleUuid).prop("checked");
-
-                // If the group leader checkbox is set, the role checkbox must also be set
-                if (checkbox.data("type") === "leader" && leaderChecked) {
-                    $("input[type=checkbox]#role-" + roleUuid).prop("checked", true);
-                    roleChecked = true;
-                }
-
-                // When removing the membership also ends the leader assignment
-                if (checkbox.data("type") === "membership" && !roleChecked) {
-                    $("input[type=checkbox]#leader-" + roleUuid).prop("checked", false);
-                    leaderChecked = false;
-                }
-
-                // change data in database
-                $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=" + roleUuid + "&user_uuid='.$getUserUuid.'",
-                    "memberFlag=" + roleChecked + "&leaderFlag=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
-                    function(data) {
-                        // check if error occurs
-                        if (data === "success") {
-                            $("#admidio-profile-roles-alert").fadeOut();
-                        } else {
-                            // reset checkbox status
-                            if (checkbox.prop("checked")) {
-                                checkbox.prop("checked", false);
-                                if (checkbox.data("type") === "leader") {
-                                    $("input[type=checkbox]#role-" + roleUuid).prop("checked", false);
-                                }
-                            } else {
-                                checkbox.prop("checked", true);
-                            }
-
-                            $("#admidio-profile-roles-alert").fadeIn();
-                            $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
-                            return false;
-                        }
-                        return true;
-                    }
-                );
-            });
         });
+        '.$javascipt.'
     </script>
 
     <div class="modal-header">
@@ -123,9 +125,35 @@ if ($getInline) {
 } else {
     // create html page object
     $page = new HtmlPage('admidio-profile-roles', $headline);
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
+    $page->addJavascript($javascript, true);
 
-    $page->addJavascript('var profileJS = new ProfileJS(gRootPath);');
+    if ($getNewUser === 3) {
+        $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
+    } else {
+        $messageId = 'SYS_SAVE_DATA';
+    }
+    $page->addJavascript('
+        $("#btn-next").click(function() {
+            $oneMembershipSet = false;
+            $("#role_assignment_table input[type=checkbox]").each(function(){
+                if($(this).data("type") === "membership" && $(this).prop("checked")) {
+                    $oneMembershipSet = true;
+                }
+            });
+
+            if($oneMembershipSet) {
+                $("#btn-next").prop("disabled", true) ;
+                $("#admidio-profile-roles-alert").attr("class", "alert alert-success form-alert");
+                $("#admidio-profile-roles-alert").fadeIn();
+                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-check\"></i>'.$gL10n->get($messageId).'");
+                setTimeout(function() {
+                    window.location.href = "'.$gNavigation->getPreviousUrl().'";
+                }, 3000);
+            } else {
+                $("#admidio-profile-roles-alert").fadeIn();
+                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>'.$gL10n->get('PRO_ROLE_NOT_ASSIGNED').'");
+            }
+        });', true);
 }
 
 // Create table
@@ -237,7 +265,7 @@ while ($row = $statement->fetch()) {
     $columnValues = array(
         '<input type="checkbox" id="role-'.$role->getValue('rol_uuid').'" name="role-'.$role->getValue('rol_uuid').'"
             data-role="'.$role->getValue('rol_uuid').'" data-type="membership" '.
-            $memberChecked.$memberDisabled.' onclick="profileJS.unMarkLeader(this);" value="1" />',
+            $memberChecked.$memberDisabled.' value="1" />',
         '<label for="role-'.(int) $role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
         $role->getValue('rol_description')
     );
@@ -258,7 +286,7 @@ while ($row = $statement->fetch()) {
 
     $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_uuid').'" name="leader-'.$role->getValue('rol_uuid').'"
                        data-role="'.$role->getValue('rol_uuid').'" data-type="leader" '.
-                       $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
+                       $leaderChecked.$leaderDisabled.' value="1" />';
 
     // show icon that leaders have no additional rights
     if ((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS) {
@@ -291,7 +319,7 @@ $html .= $table->show() . '<div id="admidio-profile-roles-alert" class="alert al
 if ($getInline) {
     echo $html.'</div>';
 } else {
-    $html .= '<button class="btn-primary btn" id="btn_save" type="submit"><i class="fas fa-check"></i>'.$gL10n->get('SYS_SAVE').'</button>';
+    $html .= '<button class="btn-primary btn admidio-margin-bottom" id="btn-next" type="submit"><i class="fas fa-check"></i>'.$gL10n->get('SYS_NEXT').'</button>';
     $page->addHtml($html);
     $page->show();
 }
