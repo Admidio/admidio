@@ -183,6 +183,13 @@ $page->addJavascript(
     $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)).'");
     $("#menu_item_profile_password").attr("class", "nav-link btn btn-secondary openPopup");
 
+    $("body").on("hidden.bs.modal", ".modal", function() {
+        $(this).removeData("bs.modal");
+        profileJS.reloadRoleMemberships();
+        profileJS.reloadFormerRoleMemberships();
+        profileJS.reloadFutureRoleMemberships();
+    });
+
     formSubmitEvent();',
     true
 );

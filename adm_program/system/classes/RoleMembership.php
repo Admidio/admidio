@@ -76,14 +76,15 @@ class RoleMembership extends TableRoles
                 // assignment already exists and must not be updated
                 $updateNecessary = false;
             } else {
-                if ($startDate < $row['mem_end'] && $endDate > $row['mem_end']) {
-                    // existing period overlaps the new start date
+                if ($startDate < $row['mem_end'] && $endDate >= $row['mem_end']) {
+                    // new period starts in existing period and ends after existing period
                     if ($leader === (bool)$row['mem_leader']) {
                         $newMembershipSaved = true;
 
                         // save new membership period
                         $membership = new TableMembers($this->db);
                         $membership->setArray($row);
+                        $membership->setValue('mem_begin', $startDate);
                         $membership->setValue('mem_end', $endDate);
                     } else {
                         // End existing period and later add new period with changed leader flag
@@ -95,8 +96,8 @@ class RoleMembership extends TableRoles
                         $membership->setValue('mem_end', $newEndDate);
                     }
                     $membership->save();
-                } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
-                    // existing period overlaps the new end date
+                } elseif ($startDate <= $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
+                    // new period starts before existing period and ends in existing period
                     if ($leader === (bool) $row['mem_leader']) {
                         $newMembershipSaved = true;
 
@@ -104,6 +105,7 @@ class RoleMembership extends TableRoles
                         $membership = new TableMembers($this->db);
                         $membership->setArray($row);
                         $membership->setValue('mem_begin', $startDate);
+                        $membership->setValue('mem_end', $endDate);
                     } else {
                         // End existing period and later add new period with changed leader flag
                         $tempStartDate = DateTime::createFromFormat('Y-m-d', $endDate);

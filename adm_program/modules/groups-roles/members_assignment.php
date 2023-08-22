@@ -74,10 +74,10 @@ if ($getMode === 'assign') {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
-        if (isset($_POST['member_'.$getUserUuid]) && $_POST['member_'.$getUserUuid] === 'true') {
+        if (isset($_POST['memberFlag']) && $_POST['memberFlag'] === 'true') {
             $membership = true;
         }
-        if (isset($_POST['leader_'.$getUserUuid]) && $_POST['leader_'.$getUserUuid] === 'true') {
+        if (isset($_POST['leaderFlag']) && $_POST['leaderFlag'] === 'true') {
             $membership = true;
             $leadership = true;
         }
@@ -146,32 +146,32 @@ if ($getMode === 'assign') {
             var checkbox = $(this);
             var userUuid = $(this).data("user");
 
-            var memberChecked = $("input[type=checkbox]#member_" + userUuid).prop("checked");
-            var leaderChecked = $("input[type=checkbox]#leader_" + userUuid).prop("checked");
+            var memberChecked = $("input[type=checkbox]#member-" + userUuid).prop("checked");
+            var leaderChecked = $("input[type=checkbox]#leader-" + userUuid).prop("checked");
 
             // If the group leader checkbox is set, the member checkbox must also be set
-            if (checkbox.hasClass("memlist_leader") && leaderChecked) {
-                $("input[type=checkbox]#member_" + userUuid).prop("checked", true);
+            if (checkbox.data("type") === "leader" && leaderChecked) {
+                $("input[type=checkbox]#member-" + userUuid).prop("checked", true);
                 memberChecked = true;
             }
 
             // When removing the membership also ends the leader assignment
-            if (checkbox.hasClass("memlist_member") && !memberChecked) {
-                $("input[type=checkbox]#leader_" + userUuid).prop("checked", false);
+            if (checkbox.data("type") === "member" && !memberChecked) {
+                $("input[type=checkbox]#leader-" + userUuid).prop("checked", false);
                 leaderChecked = false;
             }
 
             // change data in database
             $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid='.$getRoleUuid.'&user_uuid=" + userUuid,
-                "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
+                "memberFlag=" + memberChecked + "&leaderFlag=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
                 function(data) {
                     // check if error occurs
                     if (data !== "success") {
                         // reset checkbox status
                         if (checkbox.prop("checked")) {
                             checkbox.prop("checked", false);
-                            if (checkbox.hasClass("memlist_leader")) {
-                                $("input[type=checkbox]#member_" + userUuid).prop("checked", false);
+                            if (checkbox.data("type") === "leader") {
+                                $("input[type=checkbox]#member-" + userUuid).prop("checked", false);
                             }
                         } else {
                             checkbox.prop("checked", true);
