@@ -45,10 +45,10 @@ if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('c
 }
 
 // check if user is allowed to assign members to this role
-/*if (!$role->allowedToAssignMembers($gCurrentUser)) {
+if (!$role->allowedToAssignMembers($gCurrentUser)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
-}*/
+}
 
 if ($getMembersShowAll) {
     $getFilterRoleId = 0;
@@ -66,15 +66,9 @@ if ($getMode === 'assign') {
     try {
         $membership = false;
         $leadership = false;
-        //$memberApproved = null;
 
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
-        // if its an event the user must attend to the event
-        /*if ($role->getValue('cat_name_intern') === 'EVENTS') {
-            $memberApproved = 2;
-        }*/
 
         if (isset($_POST['member_'.$getUserUuid]) && $_POST['member_'.$getUserUuid] === 'true') {
             $membership = true;
@@ -89,10 +83,9 @@ if ($getMode === 'assign') {
 
         $memCount = $role->countMembers($user->getValue('usr_id'));
 
-        // If role would have less members than allowed or leader is to be added
+        // If role have fewer members than allowed or leader is to be added
         if ($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0))) {
             $role->startMembership($user->getValue('usr_id'), $leadership);
-            //$member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), $leadership, $memberApproved);
 
             // find the parent roles and assign user to parent roles
             $dependencies = RoleDependency::getParentRoles($gDb, (int) $role->getValue('rol_id'));
@@ -101,12 +94,10 @@ if ($getMode === 'assign') {
             foreach ($dependencies as $tmpRole) {
                 $parentRole = new RoleMembership($gDb, $tmpRole);
                 $parentRole->startMembership($user->getValue('usr_id'), $leadership);
-                //$member->startMembership($tmpRole, $user->getValue('usr_id'), null, $memberApproved);
             }
             echo 'success';
         } elseif (!$leadership && !$membership) {
             $role->stopMembership($user->getValue('usr_id'));
-            //$member->stopMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'));
             echo 'success';
         } else {
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name'))));
@@ -176,7 +167,7 @@ if ($getMode === 'assign') {
             }
 
             // change data in database
-            $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=" + $(this).data("role") + "&user_uuid=" + userUuid,
+            $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid='.$getRoleUuid.'&user_uuid=" + userUuid,
                 "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
                 function(data) {
                     // check if error occurs

@@ -72,13 +72,13 @@ class RoleMembership extends TableRoles
         $this->db->startTransaction();
 
         foreach ($membersList as $row) {
-            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin']) {
+            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin'] && $leader === $row['mem_leader']) {
                 // assignment already exists and must not be updated
                 $updateNecessary = false;
             } else {
                 if ($startDate < $row['mem_end'] && $endDate > $row['mem_end']) {
                     // existing period overlaps the new start date
-                    if ($leader === (bool) $row['mem_leader']) {
+                    if ($leader === (bool)$row['mem_leader']) {
                         $newMembershipSaved = true;
 
                         // save new membership period
@@ -95,17 +95,6 @@ class RoleMembership extends TableRoles
                         $membership->setValue('mem_end', $newEndDate);
                     }
                     $membership->save();
-                } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_end']) {
-                    // new time period surrounds existing time period than delete that period
-                    $membership = new TableMembers($this->db);
-                    $membership->setArray($row);
-                    $membership->delete();
-                } elseif ($startDate === $row['mem_begin'] && $startDate > $endDate) {
-                    // new time period is negative than search for equal start date and delete this period
-                    $newMembershipSaved = true;
-                    $membership = new TableMembers($this->db);
-                    $membership->setArray($row);
-                    $membership->delete();
                 } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
                     // existing period overlaps the new end date
                     if ($leader === (bool) $row['mem_leader']) {
@@ -125,6 +114,23 @@ class RoleMembership extends TableRoles
                         $membership->setValue('mem_end', $newStartDate);
                     }
                     $membership->save();
+                } elseif ($endDate === $row['mem_end'] && $startDate === $row['mem_begin'] && $leader !== $row['mem_leader']) {
+                    // exact same time period but the leader flag has changed than delete current period
+                    // and updated period later
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_end']) {
+                    // new time period surrounds existing time period than delete that period
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                } elseif ($startDate === $row['mem_begin'] && $startDate > $endDate) {
+                    // new time period is negative than search for equal start date and delete this period
+                    $newMembershipSaved = true;
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
                 }
             }
         }
@@ -136,6 +142,7 @@ class RoleMembership extends TableRoles
             $membership->setValue('mem_usr_id', $userId);
             $membership->setValue('mem_begin', $startDate);
             $membership->setValue('mem_end', $endDate);
+            $membership->setValue('mem_leader', $leader);
             if ($this->getValue('cat_name_intern') === 'EVENTS') {
                 $membership->setValue('mem_approved', Participants::PARTICIPATION_YES);
             }

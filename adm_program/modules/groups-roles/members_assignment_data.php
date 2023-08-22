@@ -272,9 +272,9 @@ while ($user = $userStatement->fetch()) {
 
     // set flag if user is member of the current organization or not
     if ($user['member_this_role']) {
-        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" data-role="'.$getRoleUuid.'" checked="checked" class="memlist_checkbox memlist_member" />';
+        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" checked="checked" class="memlist_checkbox memlist_member" />';
     } else {
-        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" data-role="'.$getRoleUuid.'" class="memlist_checkbox memlist_member" />';
+        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" class="memlist_checkbox memlist_member" />';
     }
 
     if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers())) {
@@ -325,9 +325,9 @@ while ($user = $userStatement->fetch()) {
 
     // set flag if user is a leader of the current role or not
     if ($user['leader_this_role']) {
-        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_uuid'].'" name="leader_'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" data-role="'.$getRoleUuid.'" checked="checked" class="memlist_checkbox memlist_leader" />';
+        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_uuid'].'" name="leader_'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
     } else {
-        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_uuid'].'" name="leader_'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" data-role="'.$getRoleUuid.'" class="memlist_checkbox memlist_leader" />';
+        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_uuid'].'" name="leader_'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" class="memlist_checkbox memlist_leader" />';
     }
 
     // create array with all column values and add it to the json array
