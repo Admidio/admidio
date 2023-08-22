@@ -168,7 +168,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added/edited.
-     * @deprecated 4.3.0:4.4.0 "changeRoleMembership()" is deprecated, use "RoleMembership::setMembership()" instead.
+     * @deprecated 4.3.0:4.4.0 "changeRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
     private function changeRoleMembership($mode, $roleId, $startDate, $endDate, $leader)
     {
@@ -826,7 +826,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully edited.
-     * @deprecated 4.3.0:4.4.0 "editRoleMembership()" is deprecated, use "RoleMembership::setMembership()" instead.
+     * @deprecated 4.3.0:4.4.0 "editRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
     public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
@@ -1885,7 +1885,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added.
-     * @deprecated 4.3.0:4.4.0 "setRoleMembership()" is deprecated, use "RoleMembership::setMembership()" instead.
+     * @deprecated 4.3.0:4.4.0 "setRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
     public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {

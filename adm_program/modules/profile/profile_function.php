@@ -10,7 +10,7 @@
  * Parameters:
  *
  * mode   :  1 - Export vCard of user
- *           2 - Cancel membership of role
+ *           2 - Stop membership of role
  *           3 - Remove former membership of role
  *           4 - reload Role Memberships
  *           5 - reload former role memberships
@@ -76,7 +76,7 @@ if ($getMode === 1) {
     // if user has the right then cancel membership
     if ($role->allowedToAssignMembers($gCurrentUser)) {
         try {
-            $member->stopMembership();
+            $role->stopMembership($getUserUuid);
         } catch (AdmException $e) {
             $e->showText();
             // => EXIT

@@ -381,8 +381,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             if (isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
                 && !$gCurrentUser->isLeaderOfRole((int)$date->getValue('dat_rol_id'))) {
                 // user wants to participate -> add him to date and set approval state to 2 ( user attend )
-                $member = new TableMembers($gDb);
-                $member->startMembership((int)$role->getValue('rol_id'), $user->getValue('usr_id'), true, 2);
+                $role->startMembership($user->getValue('usr_id'), true);
             } elseif (!isset($_POST['date_current_user_assigned'])
                 && $gCurrentUser->isMemberOfRole((int)$date->getValue('dat_rol_id'))) {
                 // user doesn't want to participate as leader -> remove his participation as leader from the event,
