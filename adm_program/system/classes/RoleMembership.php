@@ -46,11 +46,11 @@ class RoleMembership extends TableRoles
      * @param int $userId ID if the user who should get the membership to this role.
      * @param string $startDate Date in format YYYY-MM-DD at which the role membership should start.
      * @param string $endDate Date in format YYYY-MM-DD at which the role membership should end.
-     * @param bool|null $leader Flag if the user is assigned as a leader to this role.
+     * @param bool $leader Flag if the user is assigned as a leader to this role.
      * @return void
      * @throws AdmException
      */
-    public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = null)
+    public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = false)
     {
         global $gCurrentUser, $gCurrentUserId;
 
@@ -78,28 +78,52 @@ class RoleMembership extends TableRoles
             } else {
                 if ($startDate < $row['mem_end'] && $endDate > $row['mem_end']) {
                     // existing period overlaps the new start date
-                    $newMembershipSaved = true;
+                    if ($leader === (bool) $row['mem_leader']) {
+                        $newMembershipSaved = true;
 
-                    // save new membership period
-                    $membership = new TableMembers($this->db);
-                    $membership->setArray($row);
-                    $membership->setValue('mem_end', $endDate);
+                        // save new membership period
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_end', $endDate);
+                    } else {
+                        // End existing period and later add new period with changed leader flag
+                        $tempEndDate = DateTime::createFromFormat('Y-m-d', $startDate);
+                        $newEndDate = $tempEndDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_end', $newEndDate);
+                    }
                     $membership->save();
                 } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_end']) {
-                    // new time period surrounds existing time period
-
-                    // delete existing membership
+                    // new time period surrounds existing time period than delete that period
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                } elseif ($startDate === $row['mem_begin'] && $startDate > $endDate) {
+                    // new time period is negative than search for equal start date and delete this period
+                    $newMembershipSaved = true;
                     $membership = new TableMembers($this->db);
                     $membership->setArray($row);
                     $membership->delete();
                 } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
                     // existing period overlaps the new end date
-                    $newMembershipSaved = true;
+                    if ($leader === (bool) $row['mem_leader']) {
+                        $newMembershipSaved = true;
 
-                    // save new membership period
-                    $membership = new TableMembers($this->db);
-                    $membership->setArray($row);
-                    $membership->setValue('mem_begin', $startDate);
+                        // save new membership period
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_begin', $startDate);
+                    } else {
+                        // End existing period and later add new period with changed leader flag
+                        $tempStartDate = DateTime::createFromFormat('Y-m-d', $endDate);
+                        $newStartDate = $tempStartDate->add(new DateInterval('P1D'))->format('Y-m-d');
+
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_end', $newStartDate);
+                    }
                     $membership->save();
                 }
             }
@@ -112,6 +136,9 @@ class RoleMembership extends TableRoles
             $membership->setValue('mem_usr_id', $userId);
             $membership->setValue('mem_begin', $startDate);
             $membership->setValue('mem_end', $endDate);
+            if ($this->getValue('cat_name_intern') === 'EVENTS') {
+                $membership->setValue('mem_approved', Participants::PARTICIPATION_YES);
+            }
             $membership->save();
         }
 
@@ -133,331 +160,45 @@ class RoleMembership extends TableRoles
     }
 
     /**
-     * Set a new value for a column of the database table. The value is only saved in the object.
-     * You must call the method **save** to store the new value to the database. If the unique key
-     * column is set to 0 than this record will be a new record and all other columns are marked as changed.
-     * This method also queues the changes to the field for admin notification
-     * messages. Apart from this, the parent's setValue is used to set the new value.
-     * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
-     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @see TableAccess#getValue
-     */
-    public function setValue($columnName, $newValue, $checkValue = true)
-    {
-        global $gChangeNotification, $gCurrentSession;
-
-        // New records will be logged in ::save, because their ID is only generated during first save
-        if (!$this->newRecord && $gCurrentSession instanceof Session) {
-            if (in_array($columnName, array('mem_begin', 'mem_end'))) {
-                $oldValue = $this->getValue($columnName, 'Y-m-d');
-            } else {
-                $oldValue = $this->getValue($columnName);
-            }
-            if ($oldValue != $newValue) {
-                $gChangeNotification->logRoleChange(
-                    $this->getValue('mem_usr_id'),
-                    $this->getValue('mem_id'),
-                    $this->getValue('rol_name'),
-                    $columnName,
-                    $oldValue,
-                    $newValue
-                );
-            }
-        }
-        return parent::setValue($columnName, $newValue, $checkValue);
-    }
-
-    /**
-     * Deletes a membership for the assigned role and user. In opposite to removeMembership
-     * this method will delete the entry and you can't see any history assignment.
-     * If the user is the current user then initiate a refresh of his role cache.
-     * @param int $roleId Stops the membership of this role
-     * @param int $userId The user who should loose the member of the role.
-     * @return bool Return **true** if the membership was successful deleted.
-     */
-    public function deleteMembership($roleId = 0, $userId = 0)
-    {
-        global $gCurrentUser;
-
-        // if role and user is set, than search for this membership and load data into class
-        if ($roleId > 0 && $userId > 0) {
-            $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
-        }
-
-        if ($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
-            $this->delete();
-
-            // if role membership of current user will be changed then renew his rights arrays
-            if ($userId === $GLOBALS['gCurrentUserId']) {
-                $gCurrentUser->renewRoleData();
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Deletes the selected record of the table and optionally sends an admin notification if configured
-     * @return true Returns **true** if no error occurred
-     */
-    public function delete()
-    {
-        // Queue admin notification about membership deletion
-        global $gChangeNotification;
-
-        // If this is a new record that hasn't been written to the database, simply ignore it
-        if (!$this->newRecord && is_object($gChangeNotification)) {
-            // Log begin, end and leader as changed (set to NULL)
-            $usrId = $this->getValue('mem_usr_id');
-            $memId = $this->getValue('mem_id');
-            $membership = $this->getValue('rol_name');
-            $gChangeNotification->logRoleChange(
-                $usrId,
-                $memId,
-                $membership,
-                'mem_begin',
-                $this->getValue('mem_begin', 'Y-m-d'),
-                null, // user=
-                null, // deleting=
-                true
-            );
-            $gChangeNotification->logRoleChange(
-                $usrId,
-                $memId,
-                $membership,
-                'mem_end',
-                $this->getValue('mem_end', 'Y-m-d'),
-                null, // user=
-                null, // deleting=
-                true
-            );
-            if ($this->getValue('mem_leader')) {
-                $gChangeNotification->logRoleChange(
-                    $usrId,
-                    $memId,
-                    $membership,
-                    'mem_leaderf',
-                    $this->getValue('mem_leader'),
-                    null, // user=
-                    null, // deleting=
-                    true
-                );
-            }
-        }
-
-        // renew user object of the affected user because of edited role assignment
-        $GLOBALS['gCurrentSession']->reload($this->getValue('mem_usr_id'));
-
-        return parent::delete();
-    }
-
-    /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     * a new record or if only an update is necessary. The update statement will only update
-     * the changed columns. If the table has columns for creator or editor than these column
-     * with their timestamp will be updated.
-     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
-     * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * Starts a new membership of the given user to the role of this class. The membership will start today
+     * and will "never" ends. End date is set to 9999-12-31.
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @param bool $leader Flag if the user is assigned as a leader to this role.
+     * @return void
      * @throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function startMembership(int $userId, bool $leader = false)
     {
-        global $gCurrentSession, $gChangeNotification, $gCurrentUser;
-
-        // if role is administrator than only administrator can add new user,
-        // but don't change their own membership, because there must be at least one administrator
-        if ($this->getValue('rol_administrator') && !$gCurrentUser->isAdministrator()) {
-            throw new AdmException('SYS_NO_RIGHTS');
-        }
-
-        $newRecord = $this->newRecord;
-
-        $returnStatus = parent::save($updateFingerPrint);
-
-        if ($returnStatus && $gCurrentSession instanceof Session) {
-            // renew user object of the affected user because of edited role assignment
-            $gCurrentSession->reload($this->getValue('mem_usr_id'));
-        }
-
-        if ($newRecord && is_object($gChangeNotification)) {
-            // Queue admin notification about membership deletion
-
-            // storing a record for the first time does NOT update the fields from
-            // the roles table => need to create a new object that loads the
-            // role name from the database, too!
-            $memId = $this->getValue('mem_id');
-
-            $obj = new self($this->db, $memId);
-
-            // Log begin, end and leader as changed (set to NULL)
-            $usrId = $obj->getValue('mem_usr_id');
-            $membership = $obj->getValue('rol_name');
-            $gChangeNotification->logRoleChange(
-                $usrId,
-                $memId,
-                $membership,
-                'mem_begin',
-                null,
-                $obj->getValue('mem_begin', 'Y-m-d'), // user=
-                null, // deleting=
-                true
-            );
-            $gChangeNotification->logRoleChange(
-                $usrId,
-                $memId,
-                $membership,
-                'mem_end',
-                null,
-                $obj->getValue('mem_end', 'Y-m-d'), // user=
-                null, // deleting=
-                true
-            );
-            if ($obj->getValue('mem_leader')) {
-                $gChangeNotification->logRoleChange(
-                    $usrId,
-                    $memId,
-                    $membership,
-                    'mem_leader',
-                    null,
-                    $obj->getValue('mem_leader'), // user=
-                    null, // deleting=
-                    true
-                );
-            }
-        }
-
-        return $returnStatus;
+        $this->setMembership($userId, DATE_NOW, '9999-12-31', $leader);
     }
 
     /**
-     * Starts a membership for the assigned role and user from now until 31.12.9999.
-     * An existing membership will be extended if necessary. If the user is the
-     * current user then initiate a refresh of his role cache.
-     * @param int  $roleId Assign the membership to this role
-     * @param int  $userId The user who should get a member of the role.
-     * @param bool $leader If value **1** then the user will be a leader of the role and get more rights.
-     * @param int  $approvalState Option for User to confirm and adjust the membership ( **1** = User confirmed membership but maybe disagreed, **2** = user accepted membership
-     * @return bool Return **true** if the assignment was successful.
-     */
-    public function startMembership($roleId = 0, $userId = 0, $leader = null, $approvalState = null)
-    {
-        global $gCurrentUser;
-
-        // if role and user is set, than search for this membership and load data into class
-        if ($roleId > 0 && $userId > 0) {
-            $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
-        }
-
-        if ($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
-            // Beginn nicht ueberschreiben, wenn schon existiert
-            if ($this->newRecord || strcmp($this->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0) {
-                $this->setValue('mem_begin', DATE_NOW);
-            }
-
-            // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
-            if ($leader === null) {
-                if ($this->newRecord) {
-                    $this->setValue('mem_leader', false);
-                }
-            } else {
-                $this->setValue('mem_leader', $leader);
-            }
-
-            $this->setValue('mem_end', DATE_MAX);
-
-            // User hat Rollenmitgliedschaft bestätigt bzw. angepasst
-            if ($approvalState > 0) {
-                $this->setValue('mem_approved', $approvalState);
-            }
-
-            if ($this->columnsValueChanged) {
-                $this->save();
-
-                // if role membership of current user will be changed then renew his rights arrays
-                if ($GLOBALS['gCurrentUserId'] === $userId) {
-                    $gCurrentUser->renewRoleData();
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Stops a membership for the assigned role and user from now until 31.12.9999.
-     * If the user is the current user then initiate a refresh of his role cache. If
-     * the last membership of a administrator role should be stopped then throw an exception.
-     * @param int $roleId Stops the membership of this role
-     * @param int $userId The user who should loose the member of the role.
+     * Stops a current membership of the given user to the role of this class. The membership will stop
+     * yesterday.
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @return void
      * @throws AdmException
-     * @return bool Return **true** if the membership removal was successful.
      */
-    public function stopMembership($roleId = 0, $userId = 0)
+    public function stopMembership(int $userId)
     {
-        global $gCurrentUser;
+        // search for existing periods of membership and adjust them
+        $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
+                  FROM ' . TBL_MEMBERS . '
+                 WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+                   AND mem_usr_id = ? -- $userId
+                   AND ? BETWEEN mem_begin AND mem_end ';
+        $queryParams = array(
+            $this->getValue('rol_id'),
+            $userId,
+            DATE_NOW
+        );
+        $membersStatement = $this->db->queryPrepared($sql, $queryParams);
+        $membersList = $membersStatement->fetchAll();
 
-        // if role and user is set, than search for this membership and load data into class
-        if ($roleId > 0 && $userId > 0) {
-            $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
+        if (count($membersList) > 0) {
+            $endDate = DateTime::createFromFormat('Y-m-d', DATE_NOW);
+            $newEndDate = $endDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+            $this->setMembership($userId, $membersList[0]['mem_begin'], $newEndDate);
         }
-
-        if (!$this->newRecord && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
-            // subtract one day, so that user leaves role immediately
-            $now = new \DateTime();
-            $oneDayOffset = new \DateInterval('P1D');
-            $nowDate = $now->format('Y-m-d');
-            $endDate = $now->sub($oneDayOffset)->format('Y-m-d');
-
-            // only stop membership if there is an actual membership
-            // the actual date must be after the beginning
-            // and the actual date must be before the end date
-            if (strcmp($nowDate, $this->getValue('mem_begin', 'Y-m-d')) >= 0
-            &&  strcmp($endDate, $this->getValue('mem_end', 'Y-m-d')) < 0) {
-                // if role administrator then check if this membership is the last one -> don't delete it
-                if ((int) $this->getValue('rol_administrator') === 1) {
-                    $sql = 'SELECT mem_id
-                              FROM '.TBL_MEMBERS.'
-                             WHERE mem_rol_id  = ? -- $this->getValue(\'mem_rol_id\')
-                               AND mem_usr_id <> ? -- $this->getValue(\'mem_usr_id\')
-                               AND ? BETWEEN mem_begin AND mem_end';
-                    $queryParams = array((int) $this->getValue('mem_rol_id'), (int) $this->getValue('mem_usr_id'), DATE_NOW);
-                    $memberStatement = $this->db->queryPrepared($sql, $queryParams);
-
-                    if ($memberStatement->rowCount() === 0) {
-                        throw new AdmException('SYS_MUST_HAVE_ADMINISTRATOR');
-                    }
-                }
-
-                // if start date is greater than end date than delete membership
-                if (strcmp($this->getValue('mem_begin', 'Y-m-d'), $endDate) >= 0) {
-                    $this->delete();
-                    $this->clear();
-                } else {
-                    $this->setValue('mem_end', $endDate);
-
-                    // stop leader
-                    if ((int) $this->getValue('mem_leader') === 1) {
-                        $this->setValue('mem_leader', 0);
-                    }
-
-                    $this->save();
-                }
-
-                // if role membership of current user will be changed then renew his rights arrays
-                if ($GLOBALS['gCurrentUserId'] === (int) $this->getValue('mem_usr_id')) {
-                    $gCurrentUser->renewRoleData();
-                }
-
-                return true;
-            }
-        }
-
-        return false;
     }
 }

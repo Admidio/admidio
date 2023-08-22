@@ -33,7 +33,7 @@ $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 
 // create object of the commited role
-$role = new TableRoles($gDb);
+$role = new RoleMembership($gDb);
 $role->readDataByUuid($getRoleUuid);
 
 $_SESSION['set_rol_id'] = $role->getValue('rol_id');
@@ -45,7 +45,7 @@ if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('c
 }
 
 // check if user is allowed to assign members to this role
-/*f (!$role->allowedToAssignMembers($gCurrentUser)) {
+/*if (!$role->allowedToAssignMembers($gCurrentUser)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }*/
@@ -66,15 +66,15 @@ if ($getMode === 'assign') {
     try {
         $membership = false;
         $leadership = false;
-        $memberApproved = null;
+        //$memberApproved = null;
 
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
         // if its an event the user must attend to the event
-        if ($role->getValue('cat_name_intern') === 'EVENTS') {
+        /*if ($role->getValue('cat_name_intern') === 'EVENTS') {
             $memberApproved = 2;
-        }
+        }*/
 
         if (isset($_POST['member_'.$getUserUuid]) && $_POST['member_'.$getUserUuid] === 'true') {
             $membership = true;
@@ -87,23 +87,26 @@ if ($getMode === 'assign') {
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
 
-        $member = new TableMembers($gDb);
         $memCount = $role->countMembers($user->getValue('usr_id'));
 
         // If role would have less members than allowed or leader is to be added
         if ($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0))) {
-            $member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), $leadership, $memberApproved);
+            $role->startMembership($user->getValue('usr_id'), $leadership);
+            //$member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), $leadership, $memberApproved);
 
             // find the parent roles and assign user to parent roles
             $dependencies = RoleDependency::getParentRoles($gDb, (int) $role->getValue('rol_id'));
             $parentRoles  = array();
 
             foreach ($dependencies as $tmpRole) {
-                $member->startMembership($tmpRole, $user->getValue('usr_id'), null, $memberApproved);
+                $parentRole = new RoleMembership($gDb, $tmpRole);
+                $parentRole->startMembership($user->getValue('usr_id'), $leadership);
+                //$member->startMembership($tmpRole, $user->getValue('usr_id'), null, $memberApproved);
             }
             echo 'success';
         } elseif (!$leadership && !$membership) {
-            $member->stopMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'));
+            $role->stopMembership($user->getValue('usr_id'));
+            //$member->stopMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'));
             echo 'success';
         } else {
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name'))));
@@ -155,7 +158,7 @@ if ($getMode === 'assign') {
         // if checkbox of user is clicked then change membership
         $("#tbl_assign_role_membership").on("click", "input[type=checkbox].memlist_checkbox", function() {
             var checkbox = $(this);
-            var userUuid = $(this).attr("id").substring($(this).attr("id").search("_") + 1);
+            var userUuid = $(this).data("user");
 
             var memberChecked = $("input[type=checkbox]#member_" + userUuid).prop("checked");
             var leaderChecked = $("input[type=checkbox]#leader_" + userUuid).prop("checked");
@@ -173,7 +176,7 @@ if ($getMode === 'assign') {
             }
 
             // change data in database
-            $.post("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('mode' => 'assign', 'role_uuid' => $getRoleUuid)).'&user_uuid=" + userUuid,
+            $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=" + $(this).data("role") + "&user_uuid=" + userUuid,
                 "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
                 function(data) {
                     // check if error occurs
