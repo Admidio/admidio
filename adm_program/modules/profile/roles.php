@@ -106,7 +106,7 @@ $javascript = '
     });';
 
 if ($getInline) {
-   // header('Content-type: text/html; charset=utf-8');
+    header('Content-type: text/html; charset=utf-8');
 
     $html .= '<script type="text/javascript">
         $(function() {
@@ -151,7 +151,7 @@ if ($getInline) {
                 }, 3000);
             } else {
                 $("#admidio-profile-roles-alert").fadeIn();
-                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>'.$gL10n->get('PRO_ROLE_NOT_ASSIGNED').'");
+                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>'.$gL10n->get('SYS_ASSIGN_ROLE_TO_USER').'");
             }
         });', true);
 }
@@ -169,7 +169,7 @@ $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
 $table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
 
 if ($gCurrentUser->manageRoles()) {
-    // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
+    // User with role rights may assign ALL roles
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_uuid, rol_leader_rights, mem_rol_id, mem_usr_id, mem_leader
               FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
@@ -191,7 +191,7 @@ if ($gCurrentUser->manageRoles()) {
         $gCurrentOrgId
     );
 } else {
-    // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
+    // Leader may only assign roles for which he is also the leader
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_uuid, rol_leader_rights,
                    mgl.mem_rol_id AS mem_rol_id, mgl.mem_usr_id AS mem_usr_id, mgl.mem_leader AS mem_leader
               FROM '.TBL_MEMBERS.' AS bm
@@ -252,12 +252,12 @@ while ($row = $statement->fetch()) {
         $memberDisabled = ' disabled="disabled" ';
     }
 
-    // if user is flagged as leader than check the ckeckbox ;)
+    // if user is flagged as leader than check the checkbox ;)
     if ($row['mem_leader'] > 0) {
         $leaderChecked = ' checked="checked" ';
     }
 
-    // the leader of administrator role can only be set by a administrator
+    // the leader of administrator role can only be set by an administrator
     if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
         $leaderDisabled = ' disabled="disabled" ';
     }

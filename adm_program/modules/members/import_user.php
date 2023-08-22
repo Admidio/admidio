@@ -132,18 +132,13 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
             ++$countImportEditUser;
             $userCounted = true;
         }
+
+        // assign role membership to user
+        $role = new RoleMembership($gDb, (int) $_SESSION['rol_id']);
+        $role->startMembership($userImport->getValue('usr_id'));
+        ++$countImportEditRole;
     } catch (AdmException $e) {
         $e->showHtml();
-    }
-
-    // assign role membership to user
-    if ($userImport->setRoleMembership((int) $_SESSION['rol_id'])) {
-        ++$countImportEditRole;
-    }
-
-    // assign dependent role memberships to user
-    foreach ($depRoles as $depRole) {
-        $userImport->setRoleMembership($depRole);
     }
 
     $line = next($_SESSION['import_data']);

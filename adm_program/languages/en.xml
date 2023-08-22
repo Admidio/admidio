@@ -430,7 +430,6 @@
   <string name="PRO_RESTRICTIONS_HELP_3">Server is able to handle photos with a maximum size of #VAR1# megapixels.</string>
   <string name="PRO_RESTRICTIONS_HELP_4">Uploaded files must not be greater than #VAR1# MB.</string>
   <string name="PRO_ROLE_MEMBERSHIP_OTHER_ORG">Role memberships of other organizations</string>
-  <string name="PRO_ROLE_NOT_ASSIGNED">Data can not be saved.\nNo role was assigned to user.</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Display former role memberships</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">A box will be shown with all roles of the user in the current organization. Membership start and end date will be displayed. (default: yes)</string>
   <string name="PRO_SHOW_MAP_LINK">Show map link</string>
@@ -502,6 +501,7 @@
   <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The member can now log on to the system.</string>
   <string name="SYS_ASSIGN_ROLE">Assign role</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Select a role for all imported users.\n\nAvailable are only roles which you have user permission for.</string>
+  <string name="SYS_ASSIGN_ROLE_TO_USER">The data cannot be saved.\nAt least one role must be assigned to the user.</string>
   <string name="SYS_ASSIGN_ROLES">Assign roles</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrical</string>
   <string name="SYS_ATTACHMENT">Attachment</string>

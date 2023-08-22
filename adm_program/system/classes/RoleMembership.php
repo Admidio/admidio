@@ -52,7 +52,7 @@ class RoleMembership extends TableRoles
      */
     public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = false)
     {
-        global $gCurrentUser, $gCurrentUserId;
+        global $gCurrentUser, $gCurrentUserId, $gCurrentSession;
 
         $newMembershipSaved = false;
         $updateNecessary = true;
@@ -163,6 +163,9 @@ class RoleMembership extends TableRoles
                 throw new AdmException('Members to administrator role could only be assigned by administrators!');
             }
         }
+
+        // reload session of that user because of changes to the assigned roles and rights
+        $gCurrentSession->reload($userId);
 
         $this->db->endTransaction();
     }

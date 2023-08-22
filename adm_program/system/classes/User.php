@@ -105,7 +105,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedEditProfileField(self $user, $fieldNameIntern)
+    public function allowedEditProfileField(self $user, $fieldNameIntern): bool
     {
         return $this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -119,7 +119,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedViewProfileField(self $user, string $fieldNameIntern)
+    public function allowedViewProfileField(self $user, string $fieldNameIntern): bool
     {
         return $user->mProfileFieldsData->isVisible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -127,6 +127,7 @@ class User extends TableAccess
     /**
      * Assign the user to all roles that have set the flag **rol_default_registration**.
      * These flag should be set if you want that every new user should get this role.
+     * @throws AdmException
      */
     public function assignDefaultRoles()
     {
@@ -151,7 +152,8 @@ class User extends TableAccess
 
         while ($rolId = $defaultRolesStatement->fetchColumn()) {
             // starts a membership for role from now
-            $this->setRoleMembership($rolId);
+            $role = new RoleMembership($this->db, $rolId);
+            $role->startMembership($this->getValue('usr_id'));
         }
 
         $this->db->endTransaction();
@@ -166,6 +168,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added/edited.
+     * @deprecated 4.3.0:4.4.0 "changeRoleMembership()" is deprecated, use "RoleMembership::setMembership()" instead.
      */
     private function changeRoleMembership($mode, $roleId, $startDate, $endDate, $leader)
     {
@@ -823,6 +826,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully edited.
+     * @deprecated 4.3.0:4.4.0 "editRoleMembership()" is deprecated, use "RoleMembership::setMembership()" instead.
      */
     public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
@@ -1881,6 +1885,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added.
+     * @deprecated 4.3.0:4.4.0 "setRoleMembership()" is deprecated, use "RoleMembership::setMembership()" instead.
      */
     public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
