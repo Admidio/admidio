@@ -114,7 +114,7 @@ if ($getInline) {
                 showHideBlock($(this).attr("id"));
             });
         });
-        '.$javascipt.'
+        '.$javascript.'
     </script>
 
     <div class="modal-header">

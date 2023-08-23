@@ -537,6 +537,9 @@ class TableRoles extends TableAccess
                 // assignment already exists and must not be updated
                 $updateNecessary = false;
             } else {
+                $tempStartDate = DateTime::createFromFormat('Y-m-d', $startDate);
+                $oneDayBeforeStartDate = $tempStartDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+
                 if ($startDate < $row['mem_end'] && $endDate >= $row['mem_end']) {
                     // new period starts in existing period and ends after existing period
                     if ($leader === (bool)$row['mem_leader']) {
@@ -576,6 +579,15 @@ class TableRoles extends TableAccess
                         $membership->setArray($row);
                         $membership->setValue('mem_end', $newStartDate);
                     }
+                    $membership->save();
+                } elseif ($oneDayBeforeStartDate === $row['mem_end'] && $leader === (bool) $row['mem_leader']) {
+                    // existing period ends 1 day before new period than merge the two periods
+                    $newMembershipSaved = true;
+
+                    // save new membership period
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->setValue('mem_end', $endDate);
                     $membership->save();
                 } elseif ($endDate === $row['mem_end'] && $startDate === $row['mem_begin'] && $leader !== $row['mem_leader']) {
                     // exact same time period but the leader flag has changed than delete current period

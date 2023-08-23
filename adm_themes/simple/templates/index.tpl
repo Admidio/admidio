@@ -37,7 +37,7 @@
             {$javascriptContentExecuteAtPageLoad}
 
             // function to handle modal window and load data from url
-            $('.openPopup').on('click',function(){
+            $(document).on('click', '.openPopup', function (){
                 $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
                 $('.modal-content').load($(this).attr('data-href'),function(){
                     $('#admidio-modal').modal({
