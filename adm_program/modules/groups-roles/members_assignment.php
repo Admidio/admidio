@@ -68,40 +68,30 @@ if ($getMode === 'assign') {
     // this must be called as ajax request
 
     try {
-        $membership = false;
-        $leadership = false;
-
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
-        if (isset($_POST['memberFlag']) && $_POST['memberFlag'] === 'true') {
-            $membership = true;
-        }
+        $leadership = false;
         if (isset($_POST['leaderFlag']) && $_POST['leaderFlag'] === 'true') {
-            $membership = true;
             $leadership = true;
         }
 
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
 
-        $memCount = $role->countMembers($user->getValue('usr_id'));
-
-        // If role have fewer members than allowed or leader is to be added
-        if ($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0))) {
+        if ((isset($_POST['memberFlag']) && $_POST['memberFlag'] === 'true')
+        || $leadership) {
             $role->startMembership($user->getValue('usr_id'), $leadership);
-            echo 'success';
-        } elseif (!$leadership && !$membership) {
-            $role->stopMembership($user->getValue('usr_id'));
-            echo 'success';
         } else {
-            $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name'))));
-            // => EXIT
+            $role->stopMembership($user->getValue('usr_id'));
         }
     } catch (AdmException $e) {
         $e->showText();
         // => EXIT
     }
+
+    echo 'success';
+    exit();
 } else {
     // show html list with all users and their membership to this role
 
