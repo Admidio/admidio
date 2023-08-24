@@ -105,7 +105,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedEditProfileField(self $user, $fieldNameIntern)
+    public function allowedEditProfileField(self $user, $fieldNameIntern): bool
     {
         return $this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -119,7 +119,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedViewProfileField(self $user, string $fieldNameIntern)
+    public function allowedViewProfileField(self $user, string $fieldNameIntern): bool
     {
         return $user->mProfileFieldsData->isVisible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -127,6 +127,7 @@ class User extends TableAccess
     /**
      * Assign the user to all roles that have set the flag **rol_default_registration**.
      * These flag should be set if you want that every new user should get this role.
+     * @throws AdmException
      */
     public function assignDefaultRoles()
     {
@@ -151,7 +152,8 @@ class User extends TableAccess
 
         while ($rolId = $defaultRolesStatement->fetchColumn()) {
             // starts a membership for role from now
-            $this->setRoleMembership($rolId);
+            $role = new TableRoles($this->db, $rolId);
+            $role->startMembership($this->getValue('usr_id'));
         }
 
         $this->db->endTransaction();
@@ -159,15 +161,16 @@ class User extends TableAccess
 
     /**
      * @param string $mode      'set' or 'edit'
-     * @param int $id           ID of the role for which the membership should be set,
+     * @param int $roleId       ID of the role for which the membership should be set,
      *                          or id of the current membership that should be edited.
      * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
      * @param string $endDate   New end date of the membership. Default will be **31.12.9999**
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added/edited.
+     * @deprecated 4.3.0:4.4.0 "changeRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
-    private function changeRoleMembership($mode, $id, $startDate, $endDate, $leader)
+    private function changeRoleMembership($mode, $roleId, $startDate, $endDate, $leader)
     {
         if ($startDate === '' || $endDate === '') {
             return false;
@@ -198,30 +201,30 @@ class User extends TableAccess
 
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = ? -- $id
+                     WHERE mem_rol_id = ? -- $roleId
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin';
             $queryParams = array(
-                $id,
+                $roleId,
                 $usrId,
                 $endDate,
                 $startDate
             );
         } else {
-            $member = new TableMembers($this->db, $id);
+            $member = new TableMembers($this->db, $roleId);
 
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_id    <> ? -- $id
+                     WHERE mem_id    <> ? -- $roleId
                        AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin';
             $queryParams = array(
-                $id,
+                $roleId,
                 $member->getValue('mem_rol_id'),
                 $usrId,
                 $endDate,
@@ -287,7 +290,7 @@ class User extends TableAccess
         } else {
             // save membership to database
             if ($mode === 'set') {
-                $member->setValue('mem_rol_id', $id);
+                $member->setValue('mem_rol_id', $roleId);
                 $member->setValue('mem_usr_id', $usrId);
             }
             $member->setValue('mem_begin', $minStartDate);
@@ -823,6 +826,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully edited.
+     * @deprecated 4.3.0:4.4.0 "editRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
     public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
@@ -1881,6 +1885,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added.
+     * @deprecated 4.3.0:4.4.0 "setRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
     public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {

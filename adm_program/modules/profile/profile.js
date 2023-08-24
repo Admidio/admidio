@@ -53,25 +53,6 @@ function ProfileJS(gRootPath) {
         );
     };
 
-    this.markLeader = function (element) {
-        if (element.checked) {
-            var roleName = getRoleName(element);
-            $("#" + roleName).attr("checked", true);
-        }
-    };
-    this.unMarkLeader = function (element) {
-        if (!element.checked) {
-            var roleName = getRoleName(element);
-            $("#" + roleName).attr("checked", false);
-        }
-    };
-    function getRoleName(element) {
-        var name = element.name;
-        var posNumber = name.search("-") + 1;
-        var number = name.substr(posNumber, name.length - posNumber);
-        return "leader-" + number;
-    }
-
     this.toggleDetailsOn = function (memberUuid) {
         $("#membership_period_" + memberUuid).css({"visibility": "visible", "display": "block"});
     };

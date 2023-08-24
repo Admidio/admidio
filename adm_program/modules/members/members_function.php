@@ -106,15 +106,20 @@ if ($getMode === 2) {
                AND mem_usr_id = ? -- $user->getValue(\'usr_id\')';
     $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
 
-    while ($row = $pdoStatement->fetch()) {
-        // invalidate all roles of this organization
-        $member->setArray($row);
-        $member->stopMembership($row['mem_rol_id'], $row['mem_usr_id']);
+    try {
+        while ($row = $pdoStatement->fetch()) {
+            // stop all role memberships of this organization
+            $role = new TableRoles($gDb, $row['mem_rol_id']);
+            $role->stopMembership($row['mem_usr_id']);
+        }
+    } catch (AdmException $e) {
+        $e->showHtml();
+        // => EXIT
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))));
-// => EXIT
+    // => EXIT
 } elseif ($getMode === 3) {
     // User must not be in any other organization
     // User could not delete himself

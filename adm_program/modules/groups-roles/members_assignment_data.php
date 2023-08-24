@@ -32,8 +32,8 @@
  *
  * Parameters:
  *
- * rol_id        - ID of role to which members should be assigned or removed
- * filter_rol_id - If set only users from this role will be shown in list.
+ * role_uuid     - UUID of role to which members should be assigned or removed
+ * filter_rol_uuid - If set only users from this role will be shown in list.
  * mem_show_all  - true  : (Default) Show active and inactive members of all organizations in database
  *                 false : Show only active members of the current organization
  * draw          - Number to validate the right inquiry from DataTables.
@@ -50,7 +50,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
-$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
+$getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'int');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 $getDraw   = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
 $getStart  = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
@@ -79,9 +79,13 @@ if (!$role->allowedToAssignMembers($gCurrentUser)) {
     exit();
 }
 
-if ($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId)) {
-    echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS_VIEW_LIST')));
-    exit();
+if ($getFilterRoleUuid !== '') {
+    $filterRole = new TableRoles($gDb);
+    $filterRole->readDataByUuid($getFilterRoleUuid);
+    if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
+        echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS_VIEW_LIST')));
+        exit();
+    }
 }
 
 // create order statement
@@ -134,15 +138,15 @@ if ($getSearch !== '' && count($searchColumns) > 0) {
 
 $filterRoleCondition = '';
 if ($getMembersShowAll) {
-    $getFilterRoleId = 0;
+    $getFilterRoleUuid = 0;
 } else {
     // show only members of current organization
-    if ($getFilterRoleId > 0) {
-        $filterRoleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
+    if ($getFilterRoleUuid !== '') {
+        $filterRoleCondition = ' AND rol_uuid = '.$getFilterRoleUuid.' ';
     }
 }
 
-// create a subselect to check if the user is an acitve member of the current organization
+// create a subselect to check if the user is an active member of the current organization
 $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                     FROM '.TBL_MEMBERS.'
               INNER JOIN '.TBL_ROLES.'
@@ -272,9 +276,9 @@ while ($user = $userStatement->fetch()) {
 
     // set flag if user is member of the current organization or not
     if ($user['member_this_role']) {
-        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" checked="checked" class="memlist_checkbox memlist_member" />';
+        $arrContent[] = '<input type="checkbox" id="member-'.$user['usr_uuid'].'" name="member-'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" data-type="member" checked="checked" class="memlist_checkbox memlist_member" />';
     } else {
-        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" class="memlist_checkbox memlist_member" />';
+        $arrContent[] = '<input type="checkbox" id="member-'.$user['usr_uuid'].'" name="member-'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" data-type="member" class="memlist_checkbox memlist_member" />';
     }
 
     if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers())) {
@@ -325,9 +329,9 @@ while ($user = $userStatement->fetch()) {
 
     // set flag if user is a leader of the current role or not
     if ($user['leader_this_role']) {
-        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_uuid'].'" name="leader_'.$user['usr_uuid'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
+        $arrContent[] = '<input type="checkbox" id="leader-'.$user['usr_uuid'].'" name="leader-'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" data-type="leader" checked="checked" class="memlist_checkbox memlist_leader" />';
     } else {
-        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_uuid'].'" name="leader_'.$user['usr_uuid'].'" class="memlist_checkbox memlist_leader" />';
+        $arrContent[] = '<input type="checkbox" id="leader-'.$user['usr_uuid'].'" name="leader-'.$user['usr_uuid'].'" data-user="'.$user['usr_uuid'].'" data-type="leader" class="memlist_checkbox memlist_leader" />';
     }
 
     // create array with all column values and add it to the json array

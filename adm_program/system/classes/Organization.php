@@ -105,8 +105,9 @@ class Organization extends TableAccess
      * It will create the basic categories, lists, roles, systemmails etc.
      * @param int $userId The id of the administrator who creates the new organization.
      *                    This will be the first valid user of the new organization.
+     * @throws AdmException
      */
-    public function createBasicData($userId)
+    public function createBasicData(int $userId)
     {
         global $gL10n, $gProfileFields, $gSettingsManager;
 
@@ -255,9 +256,8 @@ class Organization extends TableAccess
         $roleManagement->save();
 
         // Create membership for user in role 'Administrator' and 'Members'
-        $member = new TableMembers($this->db);
-        $member->startMembership((int)$roleAdministrator->getValue('rol_id'), $userId);
-        $member->startMembership((int)$roleMember->getValue('rol_id'), $userId);
+        $roleAdministrator->startMembership($userId);
+        $roleMember->startMembership($userId);
 
         // create object with current user field structure
         $gProfileFields = new ProfileFields($this->db, $orgId);

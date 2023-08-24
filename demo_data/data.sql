@@ -2864,6 +2864,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1799, 352, 10, '1972-08-10'),
 (1800, 352, 11, 1),
 (1801, 352, 12, 'kasper@example.com'),
+(18011, 352, 14, '1'),
 (1802, 352, 20, '025789'),
 (1803, 352, 21, 'grün'),
 (18031, 352, 25, '3'),
@@ -2872,7 +2873,8 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1806, 353, 6, 'DEU'),
 (1807, 353, 11, '2'),
 (1808, 353, 12, 'dina@example.com'),
-(18081, 353, 25, '9'),
+(18081, 353, 14, '1'),
+(18082, 353, 25, '9'),
 (1809, 354, 1, 'DDT_CHAIRMAN'),
 (1810, 354, 2, 'Eric'),
 (1811, 354, 6, 'DEU'),
@@ -2919,13 +2921,15 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (2104, 359, 5, 'Birmingham'),
 (2105, 359, 6, 'GBR'),
 (2106, 359, 12, 'c.bakers@example.com'),
+(2107, 359, 14, '1'),
 (2200, 360, 1, 'Smith'),
 (2201, 360, 2, 'Barbara'),
 (2202, 360, 3, 'Mainstreet 876'),
 (2203, 360, 4, '573545'),
 (2204, 360, 5, 'Boston'),
 (2205, 360, 6, 'USA'),
-(2206, 360, 12, 'bab.smith@example.com');
+(2206, 360, 12, 'bab.smith@example.com'),
+(2207, 360, 14, '1');
 
 
 --
