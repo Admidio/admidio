@@ -132,7 +132,7 @@ if ($getMode === 'assign') {
         });
 
         // if checkbox of user is clicked then change membership
-        $("#tbl_assign_role_membership").on("click", "input[type=checkbox].memlist_checkbox", function() {
+        $("#tbl_assign_role_membership").on("click", "input[type=checkbox]", function() {
             var checkbox = $(this);
             var userUuid = $(this).data("user");
 
