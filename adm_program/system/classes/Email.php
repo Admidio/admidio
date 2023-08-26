@@ -211,7 +211,15 @@ class Email extends PHPMailer
 
         if ($memberStatus === self::EMAIL_ONLY_FORMER_MEMBERS && $gSettingsManager->getBool('mail_show_former')) {
             // only former members
-            $sqlConditions = ' AND mem_end < ? -- DATE_NOW ';
+            $sqlConditions = '
+                AND mem_end < ? -- DATE_NOW
+                AND NOT EXISTS (
+                    SELECT 1
+                         FROM '.TBL_MEMBERS.' AS act
+                        WHERE act.mem_rol_id = mem.mem_rol_id
+                          AND act.mem_usr_id = mem.mem_usr_id
+                          AND \''.DATE_NOW.'\' BETWEEN act.mem_begin AND act.mem_end
+                    )';
         } elseif ($memberStatus === self::EMAIL_ALL_MEMBERS && $gSettingsManager->getBool('mail_show_former')) {
             // former members and active members
             $sqlConditions = ' AND mem_begin < ? -- DATE_NOW ';
@@ -224,7 +232,7 @@ class Email extends PHPMailer
         $queryParams[] = DATE_NOW;
 
         $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
-                          FROM ' . TBL_MEMBERS . '
+                          FROM ' . TBL_MEMBERS . ' mem
                     INNER JOIN ' . TBL_ROLES . '
                             ON rol_id = mem_rol_id
                     INNER JOIN ' . TBL_CATEGORIES . '
