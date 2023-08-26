@@ -731,7 +731,14 @@ class ListConfiguration extends TableLists
 
         // Set state of membership
         if ($optionsAll['showFormerMembers']) {
-            $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'';
+            $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'
+                AND NOT EXISTS (
+                   SELECT 1
+                     FROM '.TBL_MEMBERS.' AS act
+                    WHERE act.mem_rol_id = mem.mem_rol_id
+                      AND act.mem_usr_id = mem.mem_usr_id
+                      AND \''.DATE_NOW.'\' BETWEEN act.mem_begin AND act.mem_end
+                )';
         } else {
             if ($optionsAll['startDate'] === null) {
                 $sqlMemberStatus = 'AND mem_begin <= \''.DATE_NOW.'\'';
@@ -774,7 +781,7 @@ class ListConfiguration extends TableLists
                            $sqlOrderBys;
         } else {
             $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, usr_uuid ' . $sqlColumnNames . '
-                      FROM '.TBL_MEMBERS.'
+                      FROM '.TBL_MEMBERS.' mem
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
                 INNER JOIN '.TBL_CATEGORIES.'
