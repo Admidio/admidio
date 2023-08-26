@@ -1,6 +1,6 @@
 
-<div id="{$id}_group" class="form-group row {if $property eq 1}admidio-form-group-required{/if}">
-    <label for="{$id}" class="col-sm-3 control-label">
+<div id="{$id}_group" class="form-group {if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}row{/if} {if $property eq 1}admidio-form-group-required{/if}">
+    <label for="{$id}" class="{if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}col-sm-3{/if} control-label">
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
         {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}

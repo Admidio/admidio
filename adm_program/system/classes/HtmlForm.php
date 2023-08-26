@@ -136,6 +136,11 @@ class HtmlForm extends \Smarty
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
         $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
 
+        $this->showRequiredFields = $optionsAll['showRequiredFields'];
+        $this->type   = $optionsAll['type'];
+        $this->id     = $id;
+        $this->action = $action;
+
         // set specific Admidio css form class
         $this->attributes['role'] = 'form';
         $this->attributes['method'] = $optionsAll['method'];
@@ -151,11 +156,6 @@ class HtmlForm extends \Smarty
         if ($optionsAll['class'] !== '') {
             $this->attributes['class'] = $optionsAll['class'];
         }
-
-        $this->showRequiredFields = $optionsAll['showRequiredFields'];
-        $this->type   = $optionsAll['type'];
-        $this->id     = $id;
-        $this->action = $action;
 
         // Set specific parameters that are necessary for file upload with a form
         if ($optionsAll['enableFileUpload']) {
@@ -1108,18 +1108,18 @@ class HtmlForm extends \Smarty
         $valuesArray = array();
         foreach($values as $arrayKey => $arrayValue) {
             if (is_array($arrayValue)) {
-                $subArray = array();
-
-                foreach($arrayValue as $subArrayKey => $subArrayValue) {
-                    if ($subArrayKey === 0) {
-                        $subArray['id'] = $subArrayValue;
-                    } elseif ($subArrayKey === 1) {
-                        $subArray['value'] = Language::translateIfTranslationStrId($subArrayValue);
-                    } elseif ($subArrayKey === 2) {
-                        $subArray['group'] = Language::translateIfTranslationStrId($subArrayValue);
-                    }
+                if (array_key_exists(2, $arrayValue)) {
+                    $valuesArray[] = array(
+                        'id' => $arrayValue[0],
+                        'value' => Language::translateIfTranslationStrId($arrayValue[1]),
+                        'group' => Language::translateIfTranslationStrId($arrayValue[2])
+                    );
+                } else {
+                    $valuesArray[] = array(
+                        'id' => $arrayValue[0],
+                        'value' => Language::translateIfTranslationStrId($arrayValue[1])
+                    );
                 }
-                $valuesArray[] = $subArray;
             } else {
                 $valuesArray[] = array('id' => $arrayKey, 'value' => Language::translateIfTranslationStrId($arrayValue));
             }
