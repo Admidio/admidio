@@ -351,7 +351,6 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
      */
     public function addCustomContent(string $label, string $content, array $options = array())
     {
@@ -1246,7 +1245,7 @@ class HtmlForm extends \Smarty
      *                               - **maximumSelectionNumber** : If **multiselect** is enabled then you can configure the maximum number
      *                                 of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                               - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
-     *                                 onother array with the combination of attributes name and attributes value.
+     *                                 another array with the combination of attributes name and attributes value.
      *                               - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                                 e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                                 the user can see the text if he hovers over the icon. If you need an additional parameter
@@ -1304,7 +1303,7 @@ class HtmlForm extends \Smarty
      * different values and a default value could be set.
      * @param string $id ID of the selectbox. This will also be the name of the selectbox.
      * @param string $label The label of the selectbox.
-     * @param string $xmlFile Serverpath to the xml file
+     * @param string $xmlFile Server path to the xml file
      * @param string $xmlValueTag Name of the xml tag that should contain the internal value of a selectbox entry
      * @param string $xmlViewTag Name of the xml tag that should contain the visual value of a selectbox entry
      * @param array $options (optional) An array with the following possible entries:
@@ -1328,7 +1327,7 @@ class HtmlForm extends \Smarty
      *                        - **maximumSelectionNumber** : If **multiselect** is enabled then you can configure the maximum number
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
-     *                          onother array with the combination of attributes name and attributes value.
+     *                          another array with the combination of attributes name and attributes value.
      *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hovers over the icon. If you need an additional parameter
@@ -1389,7 +1388,7 @@ class HtmlForm extends \Smarty
      *                                 event categories.
      * @param string $selectBoxModus The selectbox could be shown in 2 different modus.
      *                                 - **EDIT_CATEGORIES** : First entry will be "Please choose" and default category will be preselected.
-     *                                 - **FILTER_CATEGORIES** : First entry will be "All" and only categories with childs will be shown.
+     *                                 - **FILTER_CATEGORIES** : First entry will be "All" and only categories with children will be shown.
      * @param array    $options        (optional) An array with the following possible entries:
      *                                 - **property** : With this param you can set the following properties:
      *                                   + **self::FIELD_DEFAULT**  : The field can accept an input.
@@ -1748,7 +1747,6 @@ class HtmlForm extends \Smarty
      * @param string $templateName
      * @param array $assigns
      * @return void
-     * @throws SmartyException
      */
     private function render(string $templateName, array $assigns) {
         global $gL10n;
