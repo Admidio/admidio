@@ -6,7 +6,7 @@
         {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
     </label>
     <div class="{if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}col-sm-9{/if}">
-        <select name="{$id}" id="{$id}" {foreach $data.attributes as $itemvar}
+        <select {foreach $data.attributes as $itemvar}
             {$itemvar@key}="{$itemvar}" {/foreach}>
             {assign "group" ""}
             {foreach $values as $optionvar}

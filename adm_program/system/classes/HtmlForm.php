@@ -1080,6 +1080,8 @@ class HtmlForm extends \Smarty
             'label'                          => $label
         );
         $optionsAll = array_replace($optionsDefault, $options);
+        $attributes['id'] = $id;
+        $attributes['name'] = $id;
 
         // set field properties
         switch ($optionsAll['property']) {
@@ -1126,6 +1128,7 @@ class HtmlForm extends \Smarty
 
         if ($optionsAll['multiselect']) {
             $attributes['multiple'] = 'multiple';
+            $attributes['name'] = $id . '[]';
 
             if ($optionsAll['defaultValue'] !== '' && !is_array($optionsAll['defaultValue'])) {
                 $optionsAll['defaultValue'] = array($optionsAll['defaultValue']);
