@@ -26,7 +26,7 @@ if (!$gSettingsManager->getBool('documents_files_enable_module')) {
     // => EXIT
 }
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
+// first check whether the user also has the appropriate rights
 if (!$gCurrentUser->adminDocumentsFiles()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -50,7 +50,7 @@ try {
         $parentFolder->getFolderForDownload($parentFolder->getValue('fol_uuid'));
 
         // get assigned roles of the parent folder
-        $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
+        $rolesViewRightParentFolder = $parentFolder->getViewRolesIds();
         if (count($rolesViewRightParentFolder) > 0) {
             $sqlRolesViewRight = ' AND rol_id IN (' . Database::getQmForValues($rolesViewRightParentFolder) . ')';
         }
@@ -83,7 +83,7 @@ if (count($rolesViewRightParentFolder) === 0) {
 }
 
 // get assigned roles of this folder
-$roleViewSet = $folder->getRoleViewArrayOfFolder();
+$roleViewSet = $folder->getViewRolesIds();
 
 // if no roles are assigned then set "all users" as default
 if (count($roleViewSet) === 0) {
@@ -91,7 +91,7 @@ if (count($roleViewSet) === 0) {
 }
 
 // get assigned roles of this folder
-$roleUploadSet = $folder->getRoleUploadArrayOfFolder();
+$roleUploadSet = $folder->getUploadRolesIds();
 
 // if no roles are assigned then set "all users" as default
 if (count($roleUploadSet) === 0) {
@@ -117,7 +117,7 @@ while ($row = $statementAdminRoles->fetch()) {
 // create html page object
 $page = new HtmlPage('admidio-documents-files-config-folder', $headline);
 
-$page->addHtml('<p class="lead">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
+$page->addHtml('<p class="lead admidio-max-with">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
 
 // show form
 $form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '7', 'folder_uuid' => $getFolderUuid)), $page);

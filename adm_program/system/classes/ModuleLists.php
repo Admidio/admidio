@@ -278,7 +278,14 @@ class ModuleLists extends Modules
                        COALESCE((SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
-                           AND mem_end < ?), 0) AS num_former -- DATE_NOW
+                           AND mem_end < ?  -- DATE_NOW
+                           AND NOT EXISTS (
+                               SELECT 1
+                                 FROM '.TBL_MEMBERS.' AS act
+                                WHERE act.mem_rol_id = mem.mem_rol_id
+                                  AND act.mem_usr_id = mem.mem_usr_id
+                                  AND ? BETWEEN act.mem_begin AND act.mem_end -- DATE_NOW
+                           )), 0) AS num_former -- DATE_NOW
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = rol_cat_id
@@ -301,7 +308,17 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, $GLOBALS['gCurrentOrgId'])); // TODO add more params
+        $listsStatement = $gDb->queryPrepared($sql,
+            array(
+                DATE_NOW,
+                DATE_NOW,
+                DATE_NOW,
+                DATE_NOW,
+                DATE_NOW,
+                DATE_NOW,
+                $GLOBALS['gCurrentOrgId']
+            )
+        ); // TODO add more params
 
         // array for results
         return array(

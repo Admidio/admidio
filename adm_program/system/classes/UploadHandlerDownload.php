@@ -73,34 +73,20 @@ class UploadHandlerDownload extends UploadHandler
                     throw new AdmException('SYS_FILE_EXTENSION_INVALID');
                 }
 
-                $newFile->save();
-
-                if ($gSettingsManager->getBool('system_notifications_new_entries')) {
-                    // send notification email for new entries
-                    $message = $gL10n->get(
-                        'SYS_EMAIL_FILE_NOTIFICATION_MESSAGE',
-                        array(
-                            $gCurrentOrganization->getValue('org_longname'),
-                            $file->name,
-                            $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
-                            date($gSettingsManager->getString('system_date'))
-                        )
-                    );
-                    $notification = new Email();
-                    $notification->sendNotification(
-                        $gL10n->get('SYS_EMAIL_FILE_NOTIFICATION_TITLE'),
-                        $message
-                    );
+                if($newFile->save()) {
+                    // Notification a email for new or changed entries to all members of the notification role
+                    $newFile->sendNotification();
                 }
             } catch (AdmException $e) {
-                $file->error = $e->getText();
-
                 try {
                     FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
-                } catch (\RuntimeException $exception) {
+                } catch (RuntimeException $exception) {
                     $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'].$file->name));
                     // TODO
                 }
+                // remove XSS from filename before the name will be shown in the error message
+                $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
+                $file->error = $e->getText();
 
                 return $file;
             }

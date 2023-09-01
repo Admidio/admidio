@@ -31,10 +31,10 @@ if (!$gSettingsManager->getBool('enable_rss')) {
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
+if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 // => EXIT
-} elseif ((int) $gSettingsManager->get('enable_photo_module') === 2) {
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 2) {
     // only logged in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
@@ -123,7 +123,7 @@ while ($row = $statement->fetch()) {
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin')) {
         $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'))));
     }
-    $description .= '<br />' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getValue('pho_photographers');
+    $description .= '<br />' . $photoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($photoAlbum->getPhotographer()));
 
     if (strlen($photoAlbum->getValue('pho_description')) > 0) {
         $description .= '<br /><br />' . $photoAlbum->getValue('pho_description') . '</p>';

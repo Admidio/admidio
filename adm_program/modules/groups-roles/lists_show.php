@@ -61,7 +61,7 @@ $hasRightViewMembersProfile = true;
 $showComment = true;
 $showCountGuests = true;
 
-// read informations about the roles
+// read information about the roles
 $sql = 'SELECT rol_id, rol_name, rol_valid
           FROM '.TBL_ROLES.'
          WHERE rol_id IN ('.Database::getQmForValues($roleIds).')';
@@ -80,7 +80,7 @@ foreach ($rolesData as $role) {
     }
 
     // check if the user is allowed to view all profiles
-    // if not, than only first name and last name will be shown
+    // if not, then only first name and last name will be shown
     if (!$gCurrentUser->hasRightViewProfiles($roleId)) {
         $hasRightViewMembersProfile = false;
     }
@@ -106,7 +106,7 @@ if ($numberRoles === 1) {
     $htmlSubHeadline = $role->getValue('cat_name');
     $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
 
-    // If it's an event list and user has right to edit user states then a additional column with edit link is shown
+    // If it's an event list and user has right to edit user states then an additional column with edit link is shown
     if ($role->getValue('cat_name_intern') === 'EVENTS') {
         $event = new TableDate($gDb);
         $event->readDataByRoleId($roleIds[0]);
@@ -214,66 +214,63 @@ if (in_array($getMode, array('csv', 'pdf'), true)
 $mainSql = ''; // Main SQL statement for lists
 $csvStr = ''; // CSV file as string
 
-try {
-    // if no list parameter is set then load role default list configuration or system default list configuration
-    if ($numberRoles === 1 && $getListUuid === '') {
-        // set role default list configuration
-        $listId = $role->getDefaultList();
+// if no list parameter is set then load role default list configuration or system default list configuration
+if ($numberRoles === 1 && $getListUuid === '') {
+    // set role default list configuration
+    $listId = $role->getDefaultList();
 
-        if ($listId === 0) {
-            $gMessage->show($gL10n->get('SYS_DEFAULT_LIST_NOT_SET_UP'));
-            // => EXIT
-        }
-
-        $list = new ListConfiguration($gDb, $listId);
-        $getListUuid = $list->getValue('lst_uuid');
-    } else {
-        // create list configuration object and create a sql statement out of it
-        $list = new ListConfiguration($gDb);
-        $list->readDataByUuid($getListUuid);
+    if ($listId === 0) {
+        $gMessage->show($gL10n->get('SYS_DEFAULT_LIST_NOT_SET_UP'));
+        // => EXIT
     }
 
-    // only first name and last name should be shown
-    if (!$hasRightViewMembersProfile) {
-        $list->setModeShowOnlyNames();
-    }
-
-    // remove columns that are not necessary for the selected role
-    if (!$showComment) {
-        $list->removeColumn('mem_comment');
-    }
-    if (!$showCountGuests) {
-        $list->removeColumn('mem_count_guests');
-    }
-
-    // create the main sql
-    $mainSql = $list->getSQL(
-        array('showRolesMembers'  => $roleIds,
-              'showFormerMembers' => $getShowFormerMembers,
-              'showRelationTypes' => $relationTypeIds,
-              'startDate' => $startDateEnglishFormat,
-              'endDate'   => $endDateEnglishFormat
-        )
-    );
-} catch (AdmException $e) {
-    $e->showHtml();
+    $list = new ListConfiguration($gDb, $listId);
+    $getListUuid = $list->getValue('lst_uuid');
+} else {
+    // create list configuration object and create a sql statement out of it
+    $list = new ListConfiguration($gDb);
+    $list->readDataByUuid($getListUuid);
 }
+
+// only first name and last name should be shown
+if (!$hasRightViewMembersProfile) {
+    $list->setModeShowOnlyNames();
+}
+
+// remove columns that are not necessary for the selected role
+if (!$showComment) {
+    $list->removeColumn('mem_comment');
+}
+if (!$showCountGuests) {
+    $list->removeColumn('mem_count_guests');
+}
+
+// create the main sql
+$mainSql = $list->getSQL(
+    array('showRolesMembers'  => $roleIds,
+          'showFormerMembers' => $getShowFormerMembers,
+          'showRelationTypes' => $relationTypeIds,
+          'startDate' => $startDateEnglishFormat,
+          'endDate'   => $endDateEnglishFormat
+    )
+);
+
 // determine the number of users in this list
 $listStatement = $gDb->query($mainSql); // TODO add more params
 $numMembers = $listStatement->rowCount();
 
 // get all members and their data of this list in an array
 if($getMode === 'csv') {
-    $membersList = $listStatement->fetchAll(\PDO::FETCH_ASSOC);
+    $membersList = $listStatement->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    $membersList = $listStatement->fetchAll(\PDO::FETCH_BOTH);
+    $membersList = $listStatement->fetchAll(PDO::FETCH_BOTH);
 }
 
 $userUuidList = array();
 foreach ($membersList as $member) {
     $user = new User($gDb, $gProfileFields, $member['usr_id']);
 
-    // besitzt der User eine gueltige E-Mail-Adresse? && aktuellen User ausschließen
+    // only users with a valid email address should be added to the email list
     if (StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUserId !== (int) $member['usr_id']) {
         $userUuidList[] = $member['usr_uuid'];
     }
@@ -281,7 +278,7 @@ foreach ($membersList as $member) {
 
 // define title (html) and headline
 $title = $gL10n->get('SYS_LIST').' - '.$roleName;
-if (strlen($list->getValue('lst_name')) > 0) {
+if ((string) $list->getValue('lst_name') !== '') {
     $headline = $roleName.' - '.$list->getValue('lst_name');
 } else {
     $headline = $roleName;
@@ -369,7 +366,7 @@ if ($getMode !== 'csv') {
         $pdf->SetTitle($headline);
 
         // remove default header/footer
-        $pdf->setPrintHeader(true);
+        $pdf->setPrintHeader();
         $pdf->setPrintFooter(false);
         // set header and footer fonts
         $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -378,7 +375,7 @@ if ($getMode !== 'csv') {
         // set auto page breaks
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
         $pdf->SetMargins(10, 20, 10);
-        $pdf->setHeaderMargin(10);
+        $pdf->setHeaderMargin();
         $pdf->setFooterMargin(0);
 
         // headline for PDF
@@ -546,19 +543,19 @@ if ($getMode !== 'csv') {
 }
 
 if ($numMembers === 0) {
-    // Es sind keine Daten vorhanden !
+    // no members found
     $page->addHtml('<div class="alert alert-warning" role="alert">' . $gL10n->get('SYS_NO_USER_FOUND') . '</div>');
     $page->show();
     // => EXIT
 }
 
-// read column informations from the list configuration
+// read column information from the list configuration
 $arrColumnNames = $list->getColumnNames();
 $arrColumnAlign = $list->getColumnAlignments();
 
 // set the first column for the counter
 if ($getMode === 'html') {
-    // in html mode we group leaders. Therefore we need a special hidden column.
+    // in html mode we group leaders. Therefore, we need a special hidden column.
     array_unshift($arrColumnNames, $gL10n->get('INS_GROUPS'));
     array_unshift($arrColumnAlign, 'left');
 
@@ -656,7 +653,7 @@ foreach ($membersList as $member) {
                 $csvStr .= $valueQuotes.$listRowNumber.$valueQuotes;
             }
 
-            // in html mode we add an additional column with leader/member information to
+            // in html mode we add a column with leader/member information to
             // enable the grouping function of jquery datatables
             if ($getMode === 'html') {
                 if ($memberIsLeader) {
@@ -704,7 +701,7 @@ if ($getMode === 'csv' || $getMode === 'pdf') {
     $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
 
     // file name in the current directory...
-    if (strlen($list->getValue('lst_name')) > 0) {
+    if ((string) $list->getValue('lst_name') !== '') {
         $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
     }
 
@@ -745,7 +742,7 @@ elseif ($getMode === 'pdf') {
 
     try {
         FileSystemUtils::deleteFileIfExists($file);
-    } catch (\RuntimeException $exception) {
+    } catch (RuntimeException $exception) {
         $gLogger->error('Could not delete file!', array('filePath' => $file));
         // TODO
     }
@@ -753,15 +750,15 @@ elseif ($getMode === 'pdf') {
     // add table list to the page
     $page->addHtml($table->show());
 
-    // create a infobox for the role
+    // create an infobox for the role
     if ($getMode === 'html' && $numberRoles === 1) {
         $htmlBox = '';
 
         // only show infobox if additional role information fields are filled
         if ($role->getValue('rol_weekday') > 0
-        || strlen($role->getValue('rol_start_date')) > 0
-        || strlen($role->getValue('rol_start_time')) > 0
-        || strlen($role->getValue('rol_location')) > 0
+        || (string) $role->getValue('rol_start_date') !== ''
+        || (string) $role->getValue('rol_start_time') !== ''
+        || (string) $role->getValue('rol_location') !== ''
         || !empty($role->getValue('rol_cost'))
         || !empty($role->getValue('rol_max_members'))) {
             $htmlBox = '
@@ -772,12 +769,12 @@ elseif ($getMode === 'pdf') {
             $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
 
             // Description
-            if (strlen($role->getValue('rol_description')) > 0) {
+            if ((string) $role->getValue('rol_description') !== '') {
                 $form->addStaticControl('infobox_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
             }
 
             // Period
-            if (strlen($role->getValue('rol_start_date')) > 0) {
+            if ((string) $role->getValue('rol_start_date') !== '') {
                 $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))));
             }
 
@@ -786,30 +783,30 @@ elseif ($getMode === 'pdf') {
             if ($role->getValue('rol_weekday') > 0) {
                 $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
             }
-            if (strlen($role->getValue('rol_start_time')) > 0) {
+            if ((string) $role->getValue('rol_start_time') !== '') {
                 $value = $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
             }
-            if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0) {
+            if ($role->getValue('rol_weekday') > 0 || (string) $role->getValue('rol_start_time') !== '') {
                 $form->addStaticControl('infobox_date', $gL10n->get('DAT_DATE'), $value);
             }
 
             // Meeting Point
-            if (strlen($role->getValue('rol_location')) > 0) {
+            if ((string) $role->getValue('rol_location') !== '') {
                 $form->addStaticControl('infobox_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
             }
 
             // Member Fee
-            if (strlen($role->getValue('rol_cost')) > 0) {
+            if ((string) $role->getValue('rol_cost') !== '') {
                 $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), (float) $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency'));
             }
 
             // Fee period
-            if (strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0) {
+            if ((string) $role->getValue('rol_cost_period') !== '' && $role->getValue('rol_cost_period') != 0) {
                 $form->addStaticControl('infobox_contribution_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods($role->getValue('rol_cost_period')));
             }
 
             // max participants
-            if (strlen($role->getValue('rol_max_members')) > 0) {
+            if ((string) $role->getValue('rol_max_members') !== '') {
                 $form->addStaticControl('infobox_max_participants', $gL10n->get('SYS_MAX_PARTICIPANTS'), (int) $role->getValue('rol_max_members'));
             }
             $htmlBox .= $form->show();

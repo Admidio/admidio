@@ -34,17 +34,17 @@ class TableMessageContent extends TableAccess
      * @return int|string Returns the value of the database column.
      *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         if ($columnName === 'msc_message') {
             if ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['msc_message']));
             } elseif($this->dbColumns['msc_message'] != strip_tags($this->dbColumns['msc_message'])) {
                 // text contains html
-                $value = htmlspecialchars_decode(stripslashes($this->dbColumns['msc_message']));
+                $value = htmlspecialchars_decode(stripslashes(SecurityUtils::encodeHTML($this->dbColumns['msc_message'])));
             } else {
                 // simple plain text than replace the line breaks
-                $value = nl2br($this->dbColumns['msc_message']);
+                $value = nl2br(SecurityUtils::encodeHTML($this->dbColumns['msc_message']));
             }
 
             return $value;

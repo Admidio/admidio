@@ -26,7 +26,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 5, 6)));
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requireValue' => true));
 
 // Only users with user-edit rights are allowed
@@ -106,15 +106,20 @@ if ($getMode === 2) {
                AND mem_usr_id = ? -- $user->getValue(\'usr_id\')';
     $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
 
-    while ($row = $pdoStatement->fetch()) {
-        // invalidate all roles of this organization
-        $member->setArray($row);
-        $member->stopMembership($row['mem_rol_id'], $row['mem_usr_id']);
+    try {
+        while ($row = $pdoStatement->fetch()) {
+            // stop all role memberships of this organization
+            $role = new TableRoles($gDb, $row['mem_rol_id']);
+            $role->stopMembership($row['mem_usr_id']);
+        }
+    } catch (AdmException $e) {
+        $e->showHtml();
+        // => EXIT
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))));
-// => EXIT
+    // => EXIT
 } elseif ($getMode === 3) {
     // User must not be in any other organization
     // User could not delete himself
@@ -145,7 +150,7 @@ if ($getMode === 2) {
 
             // Send mail with login data to user
             $sysMail = new SystemMail($gDb);
-            $sysMail->addRecipientsByUserId((int) $user->getValue('usr_id'));
+            $sysMail->addRecipientsByUser($getUserUuid);
             $sysMail->setVariable(1, $password);
             $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
         } catch (AdmException $e) {

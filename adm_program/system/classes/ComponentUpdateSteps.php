@@ -26,6 +26,49 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will add a new profile field LinkedIn to the database,
+     * but only if the category social networks exists
+     */
+    public static function updateStep43AddProfileFieldLinkedIn()
+    {
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name_intern = \'SOCIAL_NETWORKS\' ';
+        $categoriesStatement = self::$db->queryPrepared($sql);
+
+        if ($row = $categoriesStatement->fetch()) {
+            $profileField = new TableUserField(self::$db);
+            $profileField->saveChangesWithoutRights();
+            $profileField->setValue('usf_cat_id', $row['cat_id']);
+            $profileField->setValue('usf_type', 'TEXT');
+            $profileField->setValue('usf_name_intern', 'LINKEDIN');
+            $profileField->setValue('usf_name', 'SYS_LINKEDIN');
+            $profileField->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
+            $profileField->setValue('usf_icon', 'fab fa-linkedin');
+            $profileField->setValue('usf_url', 'https://www.linkedin.com/in/#user_content#');
+            $profileField->save();
+        }
+    }
+
+    /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+    public static function updateStep43AddNewNotificationText()
+    {
+        global $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $organizationStatement->fetch()) {
+            $textPasswordReset = new TableText(self::$db);
+            $textPasswordReset->setValue('txt_org_id', $row['org_id']);
+            $textPasswordReset->setValue('txt_name', 'SYSMAIL_REGISTRATION_CONFIRMATION');
+            $textPasswordReset->setValue('txt_text', $gL10n->get('SYS_SYSMAIL_REGISTRATION_CONFIRMATION'));
+            $textPasswordReset->save();
+        }
+    }
+
+    /**
      * This method only execute an sql statement but because of the use of & it could not done in our XML structure
      */
     public static function updateStep41CleanUpRoleNames()
@@ -341,13 +384,10 @@ final class ComponentUpdateSteps
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            // convert <br /> to a normal line feed
-            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
-
-            $textPasswordReset = new TableAccess(self::$db, TBL_TEXTS, 'txt');
+            $textPasswordReset = new TableText(self::$db);
             $textPasswordReset->setValue('txt_org_id', $row['org_id']);
             $textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
-            $textPasswordReset->setValue('txt_text', $value);
+            $textPasswordReset->setValue('txt_text', $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
             $textPasswordReset->save();
         }
     }

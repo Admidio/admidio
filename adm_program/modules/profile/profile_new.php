@@ -28,8 +28,6 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
-$getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname', 'string'));
-$getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
 $getCopy      = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 $registrationOrgId = $gCurrentOrgId;
@@ -96,8 +94,8 @@ switch ($getNewUser) {
         }
 
         // If last name and first name are passed, then these are already preassigned
-        $user->setValue('LAST_NAME', $getLastname);
-        $user->setValue('FIRST_NAME', $getFirstname);
+        $user->setValue('LAST_NAME', stripslashes($_GET['lastname']));
+        $user->setValue('FIRST_NAME', stripslashes($_GET['firstname']));
         break;
 
     case 2: // fallthrough
@@ -244,6 +242,9 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 
         if (strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0) {
             $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
+            if (Language::isTranslationStringId($helpId)) {
+                $helpId = array($helpId, array($gProfileFields->getProperty($usfNameIntern, 'usf_name')));
+            }
         }
 
         if ($gProfileFields->getProperty($usfNameIntern, 'usf_description_inline')) {
@@ -302,7 +303,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 $gProfileFields->getProperty($usfNameIntern, 'usf_value_list'),
                 array(
                     'property'          => $fieldProperty,
-                    'defaultValue'      => $user->getValue($usfNameIntern, 'database'),
+                    'defaultValue'      => (int) $user->getValue($usfNameIntern, 'database'),
                     'showNoValueButton' => $showDummyRadioButton,
                     $helpTextMode       => $helpId,
                     'icon'              => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
@@ -312,7 +313,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             $form->addMultilineTextInput(
                 'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $user->getValue($usfNameIntern, 'database'),
+                $user->getValue($usfNameIntern),
                 3,
                 array(
                     'maxLength'       => 4000,
@@ -323,7 +324,6 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             );
         } else {
             $fieldType = 'text';
-            $format    = '';
 
             if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DATE') {
                 $fieldType = 'date';
@@ -340,16 +340,14 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 $maxlength = array(0, 9999999999, 1);
             } elseif ($gProfileFields->getProperty($usfNameIntern, 'cat_name_intern') === 'SOCIAL_NETWORKS') {
                 $maxlength = '255';
-                $format = 'database';
             } else {
                 $maxlength = '100';
-                $format = 'database';
             }
 
             $form->addInput(
                 'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $user->getValue($usfNameIntern, $format),
+                $user->getValue($usfNameIntern),
                 array(
                     'type'            => $fieldType,
                     'maxLength'       => $maxlength,
@@ -366,7 +364,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 $form->closeGroupBox();
 
 // if captchas are enabled then visitors of the website must resolve this
-if ($getNewUser === 2 && $gSettingsManager->getBool('enable_registration_captcha')) {
+if ($getNewUser === 2 && $gSettingsManager->getBool('registration_enable_captcha')) {
     $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');
     $form->closeGroupBox();

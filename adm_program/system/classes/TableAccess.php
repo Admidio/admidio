@@ -8,13 +8,13 @@
  */
 
 /*
- * Controls read and write access to datbase tables
+ * Controls read and write access to database tables
  *
  * This class should help you to read and write records of database tables.
- * You create an object for a special table and than you are able to read
- * a special record, manipulate him and write him back. Also new records can
+ * You create an object for a special table, and then you are able to read
+ * a special record, manipulate him and write him back. Also, new records can
  * be created with this class. The advantage of this class is that you are
- * independent from SQL. You can use @c getValue, @c setValue, @c readData
+ * independent of SQL. You can use @c getValue, @c setValue, @c readData
  * and @c save to handle the record.
  *
  * **Code example**
@@ -40,11 +40,11 @@ class TableAccess
      */
     protected $additionalTables = array();
     /**
-     * @var string Name of the database table of this object. This must be the table name with the installation specific praefix e.g. **demo_users**
+     * @var string Name of the database table of this object. This must be the table name with the installation specific prefix e.g. **demo_users**
      */
     protected $tableName;
     /**
-     * @var string The praefix of each column that this table has. E.g. the table adm_users has the column praefix **usr**
+     * @var string The prefix of each column that this table has. E.g. the table adm_users has the column prefix **usr**
      */
     protected $columnPrefix;
     /**
@@ -74,19 +74,19 @@ class TableAccess
     protected $columnsInfos = array();
     /**
      * @var bool If this flag is set then some right checks will be disabled, so that the object could be saved also
-     * if the current user doesn't has the right to do this.
+     * if the current user doesn't have the right to do this.
      */
     protected $saveChangesWithoutRights;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param Database   $database     Object of the class Database. This should be the default global object **$gDb**.
-     * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. **TBL_USERS**
-     * @param string     $columnPrefix The prefix of each column of that table. E.g. for table **adm_roles** this is **rol**
-     * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database   Object of the class Database. This should be the default global object **$gDb**.
+     * @param string $tableName    The name of the database table. Because of specific prefixes this should be the defined value e.g. **TBL_USERS**
+     * @param string $columnPrefix The prefix of each column of that table. E.g. for table **adm_roles** this is **rol**
+     * @param string|int $id       The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(Database $database, $tableName, $columnPrefix, $id = '')
+    public function __construct(Database $database, string $tableName, string $columnPrefix, $id = '')
     {
         $this->db          =& $database;
         $this->tableName    = $tableName;
@@ -97,7 +97,7 @@ class TableAccess
             $this->additionalTables = array();
         }
 
-        // if a id is commited, then read data out of database
+        // if an ID is committed, then read data out of database
         if ($id > 0) {
             $this->readDataById($id);
         } else {
@@ -119,7 +119,7 @@ class TableAccess
 
     /**
      * Initializes all class parameters and deletes all read data.
-     * Also the database structure of the associated table will be
+     * Also, the database structure of the associated table will be
      * read and stored in the arrays **dbColumns** and **columnsInfos**
      */
     public function clear()
@@ -136,18 +136,18 @@ class TableAccess
             }
             unset($fieldValue);
         } else {
-            // read all columns informations of the tables
+            // read all columns information of the tables
             $this->setColumnsInfos();
         }
     }
 
     /**
-     * Adds a table with the connected fields to a member array. This table will be add to the
+     * Adds a table with the connected fields to a member array. This table will be added to the
      * select statement if data is read and the connected record is available in this class.
      * The connected table must have a foreign key in the class table.
-     * @param string   $table                     Database table name that should be connected. This can be the define of the table.
-     * @param string   $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
-     * @param string   $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
+     * @param string $table                     Database table name that should be connected.
+     * @param string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
+     * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      *
      * **Code example**
      * ```
@@ -159,7 +159,7 @@ class TableAccess
      * }
      * ```
      */
-    public function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
+    public function connectAdditionalTable(string $table, string $columnNameAdditionalTable, string $columnNameClassTable)
     {
         $this->additionalTables[] = array(
             'table'                     => $table,
@@ -172,7 +172,7 @@ class TableAccess
      * Reads the number of all records of this table
      * @return int Number of records of this table
      */
-    public function countAllRecords()
+    public function countAllRecords(): int
     {
         $sql = 'SELECT COUNT(*) AS count FROM '.$this->tableName;
         $countStatement = $this->db->queryPrepared($sql);
@@ -184,7 +184,7 @@ class TableAccess
      * Deletes the selected record of the table and initializes the class
      * @return true Returns **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         if (array_key_exists($this->keyColumnName, $this->dbColumns) && $this->dbColumns[$this->keyColumnName] !== '') {
             $sql = 'DELETE FROM '.$this->tableName.'
@@ -206,7 +206,7 @@ class TableAccess
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @see TableAccess#setValue
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gSettingsManager;
 
@@ -221,7 +221,7 @@ class TableAccess
             }
         }
 
-        if (array_key_exists((string) $columnName, $this->columnsInfos) && array_key_exists('type', $this->columnsInfos[$columnName])) {
+        if (array_key_exists($columnName, $this->columnsInfos) && array_key_exists('type', $this->columnsInfos[$columnName])) {
             switch ($this->columnsInfos[$columnName]['type']) {
                 // String
                 case 'char': // fallthrough
@@ -235,7 +235,7 @@ class TableAccess
 
                 // Byte
                 case 'bytea':
-                    // in PostgreSQL we must encode the stored hex value back to binary
+                    // For Postgres, we must encode the stored hex value back to binary
                     if (is_string($columnValue) > 0) {
                         $columnValue = pack('H*', pack('H*', substr($columnValue, 2)));
                     }
@@ -257,7 +257,7 @@ class TableAccess
 
                         // try to format the date, else output the available data
                         try {
-                            $datetime = new \DateTime($columnValue);
+                            $datetime = new DateTime($columnValue);
                             $columnValue = $datetime->format($format);
                         } catch (Exception $e) {
                             $columnValue = $this->dbColumns[$columnName];
@@ -278,7 +278,7 @@ class TableAccess
      * @return bool Returns **true** if at least one value of one column has changed
      *              after the recordset was loaded otherwise **false**
      */
-    public function hasColumnsValueChanged()
+    public function hasColumnsValueChanged(): bool
     {
         return $this->columnsValueChanged;
     }
@@ -288,7 +288,7 @@ class TableAccess
      * then this method will return true otherwise false
      * @return bool Returns **true** if record is not stored in database
      */
-    public function isNewRecord()
+    public function isNewRecord(): bool
     {
         return $this->newRecord;
     }
@@ -297,14 +297,14 @@ class TableAccess
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
      * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition, array $queryParams = array())
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         $sqlAdditionalTables = '';
 
@@ -365,7 +365,7 @@ class TableAccess
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    public function readDataById($id)
+    public function readDataById(int $id): bool
     {
         // initialize the object, so that all fields are empty
         $this->clear();
@@ -383,14 +383,14 @@ class TableAccess
      * Reads a record out of the table in database selected by the unique uuid column in the table.
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
      * Per default all columns of the default table will be read and stored in the object.
-     * Not every Admidio table has a uuid. Please check the database structure before you use this method.
-     * @param int $uuid Unique uuid that should be searched.
+     * Not every Admidio table has a UUID. Please check the database structure before you use this method.
+     * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid($uuid)
+    public function readDataByUuid(string $uuid): bool
     {
         // initialize the object, so that all fields are empty
         $this->clear();
@@ -406,10 +406,10 @@ class TableAccess
 
     /**
      * Reads a record out of the table in database selected by different columns in the table.
-     * The columns are commited with an array where every element index is the column name and the value is the column value.
+     * The columns are committed with an array where every element index is the column name and the value is the column value.
      * If you want a column to be null than set the value to **NULL**
      * The columns and values must be selected so that they identify only one record.
-     * If the sql will find more than one record the method returns **false**.
+     * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
@@ -420,11 +420,12 @@ class TableAccess
      * $member = new TableAccess($gDb, TBL_MEMBERS, 'rol');
      * $member->readDataByColumn(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
      * ```
-     * @see TableAccess#readData
+     * @throws AdmException
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
+     * @see TableAccess#readData
      */
-    public function readDataByColumns(array $columnArray)
+    public function readDataByColumns(array $columnArray): bool
     {
         // initialize the object, so that all fields are empty
         $this->clear();
@@ -462,15 +463,16 @@ class TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For a new record if there is an uuid column a new uuid will be created and stored.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if (!$this->columnsValueChanged && $this->dbColumns[$this->keyColumnName] !== '') {
             return false;
@@ -502,6 +504,7 @@ class TableAccess
         $sqlFieldArray = array();
         $sqlSetArray = array();
         $queryParams = array();
+        $returnCode = false;
 
         // Loop over all DB fields and add them to the update
         foreach ($this->dbColumns as $key => $value) {
@@ -540,27 +543,29 @@ class TableAccess
         }
 
         if ($this->newRecord) {
-            // insert record and mark this object as not new and remember the new id
+            // insert record and remember the new id
             $sql = 'INSERT INTO '.$this->tableName.'
                            ('.implode(',', $sqlFieldArray).')
                     VALUES ('.Database::getQmForValues($sqlFieldArray).')';
-            $this->db->queryPrepared($sql, $queryParams);
-
-            $this->newRecord = false;
-            if ($this->keyColumnName !== '') {
-                $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+            if ($this->db->queryPrepared($sql, $queryParams) !== false) {
+                $returnCode = true;
+                if ($this->keyColumnName !== '') {
+                    $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+                }
             }
         } else {
             $sql = 'UPDATE '.$this->tableName.'
                        SET '.implode(', ', $sqlSetArray).'
                      WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
             $queryParams[] = $this->dbColumns[$this->keyColumnName];
-            $this->db->queryPrepared($sql, $queryParams);
+            if ($this->db->queryPrepared($sql, $queryParams) !== false) {
+                $returnCode = true;
+            }
         }
 
         $this->columnsValueChanged = false;
 
-        return true;
+        return $returnCode;
     }
 
     /**
@@ -575,9 +580,9 @@ class TableAccess
 
     /**
      * The method requires an array with all fields of one recordset of the table object.
-     * These fields will be add to the object as if you read one record with **readDataById**
-     * but without a separate SQL. This method is useful if you have several recordsets of the
-     * table and want to use an table object for each recordset. So you don't have to do an
+     * These fields will be added to the object as if you read one record with **readDataById**
+     * but without a separate SQL. This method is useful if you have several recordset of the
+     * table and want to use a table object for each recordset. So you don't have to do a
      * separate sql read for each record. This is a performant way to fill the object with
      * the necessary data.
      * @param array $fieldArray An array with all fields and their values of the table. If the object has
@@ -610,7 +615,7 @@ class TableAccess
     }
 
     /**
-     * Read all columns with their informations like **type** (integer, varchar, boolean),
+     * Read all columns with their information like **type** (integer, varchar, boolean),
      * **null** (or not), **key** and **serial**. Also the changed flag will be set to false.
      */
     protected function setColumnsInfos()
@@ -653,12 +658,12 @@ class TableAccess
      * column is set to 0 than this record will be a new record and all other columns are marked as changed.
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
-     * @throws AdmException If **columnName** doesn't exists. exception->text contains a string with the reason why the login failed.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException If **columnName** doesn't exists. exception->text contains a string with the reason why the login failed.
      * @see TableAccess#getValue
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         if (!array_key_exists($columnName, $this->dbColumns)) {
             throw new AdmException('Column ' . $columnName . ' doesn\'t exists in table ' . $this->tableName . '!');
@@ -690,13 +695,13 @@ class TableAccess
 
                 // Byte/Blob
                 case 'bytea':
-                    // PostgreSQL can only store hex values in bytea, so we must decode binary in hex
+                    // Postgres can only store hex values in bytea, so we must decode binary in hex
                     $newValue = bin2hex($newValue);
                     break;
             }
         }
 
-        // wurde das Schluesselfeld auf 0 gesetzt, dann soll ein neuer Datensatz angelegt werden
+        // if the key field was set to 0, then a new record is to be created
         if ($this->keyColumnName === $columnName && (int) $newValue === 0) {
             $this->newRecord = true;
 

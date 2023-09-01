@@ -26,7 +26,7 @@ if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
 
 // Initialize and check the parameters
 $getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
-$getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2)));
 
 // create announcement object
 $announcement = new TableAnnouncement($gDb);
@@ -86,14 +86,9 @@ if ($getMode === 1) {
             }
         }
 
-        $returnValue = $announcement->save();
-
-        if ($returnValue === true && $getAnnUuid === '' && $gSettingsManager->getBool('system_notifications_new_entries')) {
-            // Notification email for new entries
-            $message = $gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
-
-            $notification = new Email();
-            $notification->sendNotification($gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE'), $message);
+        if ($announcement->save()) {
+            // Notification email for new or changed entries to all members of the notification role
+            $announcement->sendNotification();
         }
     } catch (AdmException $e) {
         $e->showHtml();

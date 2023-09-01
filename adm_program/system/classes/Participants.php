@@ -76,6 +76,7 @@ class Participants
         $this->leader     = -1;
         $this->roleId     = -1;
         $this->order      = '';
+        $this->leaders    = array();
         $this->memberDate = array();
     }
 

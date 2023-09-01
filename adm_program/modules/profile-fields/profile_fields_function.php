@@ -25,7 +25,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUsfUuid  = admFuncVariableIsValid($_GET, 'usf_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 4)));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
 $getOrder    = admFuncVariableIsValid($_GET, 'order', 'array');
 
@@ -102,16 +102,6 @@ if ($getMode === 1) {
     && $_POST['usf_value_list'] === '') {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_VALUE_LIST'))));
         // => EXIT
-    }
-
-    // check if font awesome syntax is used or if it's a valid filename syntax
-    if ($_POST['usf_icon'] !== '' && !preg_match('/fa-[a-zA-z0-9]/', $_POST['usf_icon'])) {
-        try {
-            StringUtils::strIsValidFileName($_POST['usf_icon']);
-        } catch (AdmException $e) {
-            $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
-            // => EXIT
-        }
     }
 
     if ($_POST['usf_url'] !== '' && !StringUtils::strValidCharacters($_POST['usf_url'], 'url')) {

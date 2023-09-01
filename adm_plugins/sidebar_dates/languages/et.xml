@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Kõik sündmused</string>
+  <string name="PLG_DATES_HEADLINE">sündmused</string>
+  <string name="PLG_DATES_NO_ENTRIES_VISITORS">Külastajatele pole üritusi saadaval. Sündmuste vaatamiseks logige sisse.</string>
+</resources>

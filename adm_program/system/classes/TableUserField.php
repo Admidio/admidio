@@ -65,7 +65,7 @@ class TableUserField extends TableAccess
      * Also the gap in sequence will be closed. After that the class will be initialize.
      * @return true true if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gCurrentSession;
 
@@ -159,7 +159,7 @@ class TableUserField extends TableAccess
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         if ($columnName === 'usf_description') {
             if (!isset($this->dbColumns['usf_description'])) {
@@ -180,12 +180,7 @@ class TableUserField extends TableAccess
             return '';
         }
 
-        if ($format === 'database') {
-            if ($columnName === 'usf_icon' && $value !== '' && !preg_match('/fa-[a-zA-z0-9]/', $value)) {
-                // if not font awesome icon that create url with icon file
-                $value = THEME_URL . '/images/' . $value;
-            }
-        } else {
+        if ($format !== 'database') {
             switch ($columnName) {
                 case 'usf_name': // fallthrough
                 case 'cat_name':
@@ -372,10 +367,10 @@ class TableUserField extends TableAccess
      * with their timestamp will be updated.
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
-     * @throws AdmException
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     *@throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gCurrentUser;
 
@@ -388,7 +383,7 @@ class TableUserField extends TableAccess
         $fieldsChanged = $this->columnsValueChanged;
 
         // if new field than generate new name intern, otherwise no change will be made
-        if ($this->newRecord) {
+        if ($this->newRecord && $this->getValue('usf_name_intern') === '') {
             $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'database'), 1));
         }
 
@@ -407,11 +402,11 @@ class TableUserField extends TableAccess
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
-     * @throws AdmException
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     *@throws AdmException
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 
@@ -431,6 +426,11 @@ class TableUserField extends TableAccess
                             throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
                         }
                         $newValue = $category->getValue('cat_id');
+                    }
+                } elseif ($columnName === 'usf_icon' && $newValue !== '') {
+                    // check if font awesome syntax is used
+                    if (!preg_match('/fa-[a-zA-z0-9]/', $newValue)) {
+                        throw new AdmException('SYS_INVALID_FONT_AWESOME');
                     }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);

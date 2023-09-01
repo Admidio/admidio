@@ -8,17 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
-/**
- * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
- * Ein Ordner kann ueber diese Klasse in der Datenbank verwaltet werden
- */
 class TableFolder extends TableAccess
 {
-    /**
-     * @var Folder
-     */
-    protected $folderPath;
     /**
      * @var RolesRights|null Object with all roles that could view the current folder
      */
@@ -43,7 +34,7 @@ class TableFolder extends TableAccess
      * @param array<string,array<int,array<string,mixed>>> $completeFolder
      * @return array<string,array<int,array<string,mixed>>>
      */
-    private function addAdditionalToFolderContents(array $completeFolder)
+    private function addAdditionalToFolderContents(array $completeFolder): array
     {
         global $gCurrentUser;
 
@@ -112,8 +103,9 @@ class TableFolder extends TableAccess
     /**
      * Add a new file or subfolder of the current folder to the database. If a folder will be added all files and
      * subfolders of this folder will be added recursively with this method. The configured rights for viewing and
-     * uploading will be adopt to the subfolders.
+     * uploading will be adapted to the subfolders.
      * @param string $newFolderFileName Name of the folder or file that should be added to the database.
+     * @throws AdmException
      */
     public function addFolderOrFileToDatabase(string $newFolderFileName)
     {
@@ -165,13 +157,13 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Add all roles of the array to the current folder and all of the subfolders. The
+     * Add all roles of the array to the current folder and all the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
-     * @param string         $rolesRightNameIntern Name of the right where the roles should be added
+     * @param string $rolesRightNameIntern Name of the right where the roles should be added
      * @param array<int,int> $rolesArray
-     * @param bool           $recursive            If set to **true** than the rights will be set recursive to all subfolders
+     * @param bool $recursive            If set to **true** than the rights will be set recursive to all subfolders
      */
-    public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $recursive = true)
+    public function addRolesOnFolder(string $rolesRightNameIntern, array $rolesArray, bool $recursive = true)
     {
         $this->editRolesOnFolder('add', $rolesRightNameIntern, $rolesArray, $recursive);
     }
@@ -181,13 +173,13 @@ class TableFolder extends TableAccess
      * @param string $folderName
      * @return null|array<string,string>
      */
-    public function createFolder($folderName)
+    public function createFolder(string $folderName): ?array
     {
         $baseFolder = $this->getFullFolderPath();
 
         try {
             FileSystemUtils::createDirectoryIfNotExists($baseFolder . '/' . $folderName);
-        } catch (\RuntimeException $exception) {
+        } catch (RuntimeException $exception) {
             return array(
                 'text' => 'SYS_FOLDER_NOT_CREATED',
                 'path' => $baseFolder . '/' . $folderName
@@ -199,12 +191,12 @@ class TableFolder extends TableAccess
 
     /**
      * Deletes the selected record of the table and all references in other tables.
-     * Also all files, subfolders and the selected folder will be deleted in the file system.
-     * After that the class will be initialize.
+     * Also, all files, subfolders and the selected folder will be deleted in the file system.
+     * After that the class will be initialized.
      * @param int $folderId
      * @return bool **true** if no error occurred
      */
-    public function delete($folderId = 0)
+    public function delete(int $folderId = 0): bool
     {
         global $gLogger;
 
@@ -229,7 +221,7 @@ class TableFolder extends TableAccess
             $this->delete($rowFolId);
         }
 
-        // In der DB die Files der aktuellen folder_id loeschen
+        // In the database delete the files of the current folder_id
         $sqlDeleteFiles = 'DELETE FROM '.TBL_FILES.'
                             WHERE fil_fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlDeleteFiles, array($folderId));
@@ -245,16 +237,16 @@ class TableFolder extends TableAccess
             $folderUploadRoles->delete();
         }
 
-        // In der DB den Eintrag des Ordners selber loeschen
+        // Delete the entry of the folder itself in the database
         $sqlDeleteFolder = 'DELETE FROM '.TBL_FOLDERS.'
                              WHERE fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlDeleteFolder, array($folderId));
 
-        // Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
+        // physically delete the directory from the disk
         if ($folderPath !== '') {
             try {
                 FileSystemUtils::deleteDirectoryIfExists($folderPath, true);
-            } catch (\RuntimeException $exception) {
+            } catch (RuntimeException $exception) {
                 $gLogger->error('Could not delete directory!', array('directoryPath' => $folderPath));
                 // TODO
             }
@@ -262,7 +254,7 @@ class TableFolder extends TableAccess
 
         $returnCode = true;
 
-        // Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
+        // Even if the physical deletion fails, everything is deleted in the DB...
         if ($folderId === $folId) {
             $returnCode = parent::delete();
         }
@@ -273,15 +265,15 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Add all roles of the array to the current folder and all of the subfolders. The
+     * Add all roles of the array to the current folder and all the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
-     * @param string         $mode                 "mode" could be "add" or "remove"
-     * @param string         $rolesRightNameIntern Name of the right where the roles should be added
+     * @param string $mode                 "mode" could be "add" or "remove"
+     * @param string $rolesRightNameIntern Name of the right where the roles should be added
      * @param array<int,int> $rolesArray
-     * @param bool           $recursive            If set to **true** than the rights will be set recursive to all subfolders
-     * @param int            $folderId             The folder id of the subfolder if this method is called recursive
+     * @param bool $recursive            If set to **true** than the rights will be set recursive to all subfolders
+     * @param int $folderId             The folder id of the subfolder if this method is called recursive
      */
-    private function editRolesOnFolder($mode, $rolesRightNameIntern, array $rolesArray, $recursive, $folderId = 0)
+    private function editRolesOnFolder(string $mode, string $rolesRightNameIntern, array $rolesArray, bool $recursive, int $folderId = 0)
     {
         if (count($rolesArray) === 0) {
             return;
@@ -297,8 +289,8 @@ class TableFolder extends TableAccess
             $subfoldersStatement = $this->getSubfolderStatement($folderId);
 
             while ($folId = (int) $subfoldersStatement->fetchColumn()) {
-                // recursive call for every subfolder
-                $this->editRolesOnFolder($mode, $rolesRightNameIntern, $rolesArray, $recursive, $folId);
+                // recursive call for every sub-folder
+                $this->editRolesOnFolder($mode, $rolesRightNameIntern, $rolesArray, true, $folId);
             }
         }
 
@@ -314,48 +306,12 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
-     * und allen darin enthaltenen Unterordnern und Dateien rekursiv
-     * @param bool $lockedFlag
-     * @param int  $folderId
-     */
-    public function editLockedFlagOnFolder($lockedFlag, $folderId = 0)
-    {
-        if ($folderId === 0) {
-            $folderId = (int) $this->getValue('fol_id');
-            $this->setValue('fol_locked', (int) $lockedFlag);
-        }
-
-        $this->db->startTransaction();
-
-        $subfoldersStatement = $this->getSubfolderStatement($folderId);
-
-        while ($folId = (int) $subfoldersStatement->fetchColumn()) {
-            // rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->editLockedFlagOnFolder($lockedFlag, $folId);
-        }
-
-        // Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
-        $sqlUpdate = 'UPDATE '.TBL_FOLDERS.'
-                         SET fol_locked = ? -- $lockedFlag
-                       WHERE fol_id = ? -- $folderId';
-        $this->db->queryPrepared($sqlUpdate, array((int) $lockedFlag, $folderId));
-
-        // ...und natuerlich auch fuer alle Files die in diesem Ordner sind
-        $sqlUpdate = 'UPDATE '.TBL_FILES.'
-                         SET fil_locked = ? -- $lockedFlag
-                       WHERE fil_fol_id = ? -- $folderId';
-        $this->db->queryPrepared($sqlUpdate, array((int) $lockedFlag, $folderId));
-
-        $this->db->endTransaction();
-    }
-
-    /**
-     * Set the public flag to a folder and all subfolders.
+     * Set the public flag to a folder and all sub-folders.
      * @param bool $publicFlag If set to **1** then all users could see this folder.
-     * @param int  $folderId   The id of the folder where the public flag should be set.
+     * @param int $folderId The id of the folder where the public flag should be set.
+     * @throws AdmException
      */
-    public function editPublicFlagOnFolder($publicFlag, $folderId = 0)
+    public function editPublicFlagOnFolder(bool $publicFlag, int $folderId = 0)
     {
         if ($folderId === 0) {
             $folderId = (int) $this->getValue('fol_id');
@@ -365,11 +321,10 @@ class TableFolder extends TableAccess
         $subfoldersStatement = $this->getSubfolderStatement($folderId);
 
         while ($folId = (int) $subfoldersStatement->fetchColumn()) {
-            // rekursiver Aufruf mit jedem einzelnen Unterordner
+            // recursive call with every single subfolder
             $this->editPublicFlagOnFolder($publicFlag, $folId);
         }
 
-        // Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
         $sqlUpdate = 'UPDATE '.TBL_FOLDERS.'
                          SET fol_public = ? -- $publicFlag
                        WHERE fol_id = ? -- $folderId';
@@ -380,7 +335,7 @@ class TableFolder extends TableAccess
      * Gets the path of the folder (with folder-name)
      * @return string
      */
-    public function getFolderPath()
+    public function getFolderPath(): string
     {
         return $this->getValue('fol_path') . '/' . $this->getValue('fol_name');
     }
@@ -389,7 +344,7 @@ class TableFolder extends TableAccess
      * Gets the absolute path of the folder (with folder-name)
      * @return string
      */
-    public function getFullFolderPath()
+    public function getFullFolderPath(): string
     {
         return ADMIDIO_PATH . $this->getFolderPath();
     }
@@ -397,7 +352,7 @@ class TableFolder extends TableAccess
     /**
      * @return array<int,array<string,mixed>> All files with their properties
      */
-    private function getFilesWithProperties()
+    private function getFilesWithProperties(): array
     {
         global $gCurrentUser;
 
@@ -450,10 +405,10 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
-     * @return array<string,array<int,array<string,mixed>>>
+     * Return the contents of the current folder as an array, depending on the user rights.
+     * @return array<string,array<int,array<string,mixed>>> Return the contents of the current folder as an array.
      */
-    public function getFolderContentsForDownload()
+    public function getFolderContentsForDownload(): array
     {
         $completeFolder = array(
             'folders' => $this->getSubfoldersWithProperties(),
@@ -465,12 +420,12 @@ class TableFolder extends TableAccess
 
     /**
      * Reads the folder recordset from database table **adm_folders** and throws an
-     * AdmException if the user has no right to see the folder or the folder id doesn't exists.
+     * AdmException if the user has no right to see the folder or the folder id doesn't exist.
      * @param string $folderUuid The UUID of the folder. If the UUID is empty then the root folder will be shown.
-     * @throws AdmException
      * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
+     *@throws AdmException
      */
-    public function getFolderForDownload($folderUuid)
+    public function getFolderForDownload(string $folderUuid): bool
     {
         global $gCurrentUser, $gValidLogin;
 
@@ -529,9 +484,9 @@ class TableFolder extends TableAccess
      *                                      If no type is set than **documents** will be set.
      * @param string $organizationShortname The shortname of the organization for which the folder name should be returned
      *                                      If no shortname is set than shortname of the current organization will be set.
-     * @return string Returns the root foldername for the download module.
+     * @return string Returns the root folder name for the download module.
      */
-    public static function getRootFolderName($type = 'documents', $organizationShortname = '')
+    public static function getRootFolderName(string $type = 'documents', string $organizationShortname = ''): string
     {
         global $gCurrentOrganization;
 
@@ -545,32 +500,49 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Returns an array with all roles ids that have the right to view the folder.
+     * Returns an array with all role IDs that have the right to view the folder.
      * @return array<int,int> Returns an array with all role ids that have the right to view the folder.
      */
-    public function getRoleViewArrayOfFolder()
+    public function getViewRolesIds(): array
     {
         return $this->folderViewRolesObject->getRolesIds();
     }
 
     /**
-     * Returns an array with all roles ids that have the right to upload files to the folder.
+     * Returns an array with all role names that have the right to view the folder. If no role is assigned to the
+     * folder than everyone (also visitors) can view the folder. In this case the array will contain 1 entry with
+     * "All (also visitors)".
+     * @return array<int,int> Returns an array with all role names that have the right to view the folder.
+     */
+    public function getViewRolesNames(): array
+    {
+        global $gL10n;
+
+        $roleNames = $this->folderViewRolesObject->getRolesNames();
+        if(count($roleNames) === 0) {
+            $roleNames[] = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+        }
+        return $roleNames;
+    }
+
+    /**
+     * Returns an array with all role IDs that have the right to upload files to the folder.
      * @return array<int,int> Returns an array with all role ids that have the right to upload files to the folder.
      */
-    public function getRoleUploadArrayOfFolder()
+    public function getUploadRolesIds(): array
     {
         return $this->folderUploadRolesObject->getRolesIds();
     }
 
     /**
      * Return \PDOStatement with all subfolders of a parent folder id
-     * @param int               $folderId Folder ID
+     * @param int $folderId Folder ID
      * @param array<int,string> $columns  The columns that should be in the statement
-     * @return false|\PDOStatement SubfolderStatement with fol_id column
+     * @return false|PDOStatement Sub-folder statement with fol_id column
      */
-    private function getSubfolderStatement($folderId, array $columns = array('fol_id'))
+    private function getSubfolderStatement(int $folderId, array $columns = array('fol_id'))
     {
-        // select all subfolders of the current folder
+        // select all sub-folders of the current folder
         $sql = 'SELECT ' . implode(',', $columns) . '
                   FROM '.TBL_FOLDERS.'
                  WHERE fol_fol_id_parent = ? -- $folderId';
@@ -581,7 +553,7 @@ class TableFolder extends TableAccess
     /**
      * @return array<int,array<string,mixed>> All sub-folders with their properties
      */
-    private function getSubfoldersWithProperties()
+    private function getSubfoldersWithProperties(): array
     {
         global $gCurrentUser, $gValidLogin;
 
@@ -648,7 +620,7 @@ class TableFolder extends TableAccess
      * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         $value = parent::getValue($columnName, $format);
 
@@ -664,7 +636,7 @@ class TableFolder extends TableAccess
      * Checks if the current user has the right to upload files to the current folder.
      * @return bool Return **true** if the user has the right to upload files
      */
-    public function hasUploadRight()
+    public function hasUploadRight(): bool
     {
         global $gCurrentUser;
 
@@ -675,7 +647,7 @@ class TableFolder extends TableAccess
      * Checks if the current user has the right to view files of the current folder.
      * @return bool Return **true** if the user has the right to view files
      */
-    public function hasViewRight()
+    public function hasViewRight(): bool
     {
         global $gCurrentUser;
 
@@ -684,16 +656,16 @@ class TableFolder extends TableAccess
 
     /**
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
-     * If the sql will find more than one record the method returns **false**.
+     * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition, array $queryParams = array())
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             $folId = (int) $this->getValue('fol_id');
@@ -707,15 +679,15 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Remove all roles of the array from the current folder and all of the subfolders. The
+     * Remove all roles of the array from the current folder and all the subfolders. The
      * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
-     * @param string         $rolesRightNameIntern Name of the right where the roles should be removed
+     * @param string $rolesRightNameIntern Name of the right where the roles should be removed
      * @param array<int,int> $rolesArray
-     * @param bool           $recursive            If set to **true** than the rights will be set recursive to all subfolders
+     * @param bool $recursive            If set to **true** than the rights will be set recursive to all subfolders
      */
-    public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $recursive = true)
+    public function removeRolesOnFolder(string $rolesRightNameIntern, array $rolesArray, bool $recursive = true)
     {
-        $this->editRolesOnFolder('remove', $rolesRightNameIntern, $rolesArray, $recursive, 0);
+        $this->editRolesOnFolder('remove', $rolesRightNameIntern, $rolesArray, $recursive);
     }
 
     /**
@@ -723,8 +695,9 @@ class TableFolder extends TableAccess
      * @param string $newName
      * @param string $newPath
      * @param int $folderId
+     * @throws AdmException
      */
-    public function rename($newName, $newPath, $folderId = 0)
+    public function rename(string $newName, string $newPath, int $folderId = 0)
     {
         if ($folderId === 0) {
             $folderId = (int) $this->getValue('fol_id');
@@ -751,15 +724,16 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the user, organization and timestamp will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             $this->setValue('fol_timestamp', DATETIME_NOW);

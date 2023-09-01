@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Preview of ecard
+ * Preview of eCard
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
@@ -12,7 +12,18 @@
 // preview will be called before form is send, so there are now POST parameters available
 // then show nothing. Second call is with POST parameters then show preview
 require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/ecard_function.php');
+
+// check if the photo module is enabled and eCard is enabled
+if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 2) {
+    // only logged-in users can access the module
+    require(__DIR__ . '/../../system/login_valid.php');
+}
 
 $gMessage->showThemeBody(false);
 $gMessage->showInModalWindow();
@@ -39,9 +50,9 @@ $nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient', 'string');
 $emailRecipient   = admFuncVariableIsValid($_POST, 'email_recipient', 'string');
 $ecardMessage     = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
 
-$imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale')));
+$imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
 
-$funcClass = new FunctionClass($gL10n);
+$funcClass = new ECard($gL10n);
 
 // read content of template file
 $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);

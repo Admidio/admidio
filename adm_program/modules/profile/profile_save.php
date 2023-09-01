@@ -149,29 +149,6 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 // => EXIT
             }
 
-            // if social network then extract username from url
-            if (in_array($field->getValue('usf_name_intern'), array('FACEBOOK', 'GOOGLE_PLUS', 'TWITTER', 'XING'), true)) {
-                if (StringUtils::strValidCharacters($_POST[$postId], 'url') && str_contains($_POST[$postId], '/')) {
-                    if (strrpos($_POST[$postId], '/profile.php?id=') > 0) {
-                        // extract facebook id (not facebook unique name) from url
-                        $_POST[$postId] = substr($_POST[$postId], strrpos($_POST[$postId], '/profile.php?id=') + 16);
-                    } else {
-                        if (strrpos($_POST[$postId], '/posts') > 0) {
-                            $_POST[$postId] = substr($_POST[$postId], 0, strrpos($_POST[$postId], '/posts'));
-                        }
-                        // xing has the suffix /cv in the url
-                        if (strrpos($_POST[$postId], '/cv') > 0) {
-                            $_POST[$postId] = substr($_POST[$postId], 0, strrpos($_POST[$postId], '/cv'));
-                        }
-
-                        $_POST[$postId] = substr($_POST[$postId], strrpos($_POST[$postId], '/') + 1);
-                        if (strrpos($_POST[$postId], '?') > 0) {
-                            $_POST[$postId] = substr($_POST[$postId], 0, strrpos($_POST[$postId], '?'));
-                        }
-                    }
-                }
-            }
-
             // Write value from field to user class object
             try {
                 $user->setValue($field->getValue('usf_name_intern'), $_POST[$postId]);
@@ -219,7 +196,7 @@ if ($getNewUser === 2) {
     $user->setPassword($_POST['usr_password']);
 
     // At user registration with activated captcha check the captcha input
-    if ($gSettingsManager->getBool('enable_registration_captcha')) {
+    if ($gSettingsManager->getBool('registration_enable_captcha')) {
         try {
             FormValidation::checkCaptcha($_POST['captcha_code']);
         } catch (AdmException $e) {
@@ -265,7 +242,7 @@ if ($getNewUser === 1 || $getNewUser === 3) {
         try {
             // accept a registration, assign necessary roles and send a notification email
             $user->acceptRegistration();
-            $messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+            $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
         } catch (AdmException $e) {
             $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
             $e->showHtml();

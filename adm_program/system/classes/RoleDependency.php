@@ -289,7 +289,7 @@ class RoleDependency
      * the end date will be set to 31.12.9999.
      * @return bool Returns false if no parent or child row exists
      */
-    public function updateMembership()
+    public function updateMembership(): bool
     {
         if ($this->roleIdParent === 0 || $this->roleIdChild === 0) {
             return false;
@@ -303,10 +303,10 @@ class RoleDependency
         $membershipStatement = $this->db->queryPrepared($sql, array($this->roleIdChild, DATE_NOW, DATE_NOW));
 
         if ($membershipStatement->rowCount() > 0) {
-            $member = new TableMembers($this->db);
+            $parentRole = new TableRoles($this->db, $this->roleIdParent);
 
             while ($memberUserId = $membershipStatement->fetchColumn()) {
-                $member->startMembership($this->roleIdParent, (int) $memberUserId);
+                $parentRole->startMembership((int) $memberUserId);
             }
         }
 

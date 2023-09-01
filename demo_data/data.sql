@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step, com_update_completed)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.2.7', 0, 310, true)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.2.7', 0, 0, true)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.2.7', 0, 0, true)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.2.7', 0, 0, true)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.2.7', 0, 0, true)
-                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.2.7', 0, 0, true)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.2.7', 0, 0, true)
-                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.2.7', 0, 0, true)
-                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.2.7', 0, 0, true)
-                              , (100, 'MODULE', 'SYS_MEMBERS', 'MEMBERS', '4.2.7', 0, 0, true)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.2.7', 0, 0, true)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.2.7', 0, 0, true)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.2.7', 0, 0, true)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.2.7', 0, 0, true)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.2.7', 0, 0, true)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.2.7', 0, 0, true)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.2.7', 0, 0, true)
-                              , (190, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.2.7', 0, 0, true);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.2.11', 0, 310, true)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.2.11', 0, 0, true)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.2.11', 0, 0, true)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.2.11', 0, 0, true)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.2.11', 0, 0, true)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.2.11', 0, 0, true)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.2.11', 0, 0, true)
+                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.2.11', 0, 0, true)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.2.11', 0, 0, true)
+                              , (100, 'MODULE', 'SYS_MEMBERS', 'MEMBERS', '4.2.11', 0, 0, true)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.2.11', 0, 0, true)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.2.11', 0, 0, true)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.2.11', 0, 0, true)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.2.11', 0, 0, true)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.2.11', 0, 0, true)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.2.11', 0, 0, true)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.2.11', 0, 0, true)
+                              , (190, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.2.11', 0, 0, true);
 
 --
 -- Data for table adm_organizations
@@ -212,13 +212,16 @@ INSERT INTO %PREFIX%_users (usr_id, usr_uuid, usr_login_name, usr_password, usr_
 (348, 'd00f7e21-53a4-41bd-8324-52cfd7a01e99', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:20', NULL, NULL, true),
 (349, 'b50d8ea6-2afe-44ae-9721-dea54413724d', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:21', 1, '2009-02-14 20:47:21', true),
 (350, 'eace5159-f088-4af0-afa0-5e691f3d5cc8', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
-(351, '56920e00-761c-495a-b43d-082eda94a145', 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', true),
-(352, '4cae66ed-6c2f-4eac-be07-2635ddc1ceda', 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, false),
-(353, '386e8531-deb7-40ed-a06b-df4366d9bba6', 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, false),
+(351, '56920e00-761c-495a-b43d-082eda94a145', 'Demo', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', true),
+(352, '4cae66ed-6c2f-4eac-be07-2635ddc1ceda', 'Mustermann01', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, false),
+(353, '386e8531-deb7-40ed-a06b-df4366d9bba6', 'Dina', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, false),
 (354, '006bd130-34d4-4b86-9e82-b1464ad60a0b', 'DDT_CHAIRMAN', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', true),
 (355, '97f8346c-ca53-40de-857a-459d26d9df40', 'SYS_MEMBER', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', true),
 (356, '232a5ee7-4ed9-41de-b081-0b5090b00462', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
-(357, 'd1ba8d2b-ad8f-43bc-a22d-cbd71eed09a4', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true);
+(357, 'd1ba8d2b-ad8f-43bc-a22d-cbd71eed09a4', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
+(358, 'fc793b70-16c7-4ff7-b245-6df94d5d6057', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2019-04-26 20:47:22', NULL, NULL, true),
+(359, 'ac793b70-16c7-4ff8-b245-6df94d5d6123', 'bakers', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-26 20:47:22', NULL, NULL, false),
+(360, 'reg93b70-76c7-4fdf-b344-6df94re64343', 'smith', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-15 18:06:22', NULL, NULL, false);
 
 
 --
@@ -609,11 +612,10 @@ fa-mars-stroke-v|SYS_DIVERSE', NULL, NULL, false, false, false, 0, true, 12, 1, 
 (12, '09556bd3-0bc5-4e97-800a-4ed347f6327e', 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, false, NULL, NULL, NULL, true, false, false, 2, true, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, '627c57a6-f17b-44df-9d31-3d668634eb97', 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
 (14, 'd1b9314d-953c-4198-8250-d10f4661abe7', 1, 'CHECKBOX', 'DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION_DESC', true, NULL, NULL, NULL, false, false, false, 2, true, 15, 1, '2012-01-08 11:12:05', NULL, NULL),
-(22, '041f1bb5-4305-47d7-8538-c1e7163339a6', 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', false, NULL, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', false, false, false, 0, false, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
-(16, '37d17c5a-f134-4002-b25d-59ec671dc946', 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', false, NULL, 'icq.png', 'https://www.icq.com/people/#user_content#', false, false, false, 0, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
-(18, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', false, NULL, 'fab fa-skype', NULL, false, false, false, 0, false, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
-(23, '30d0f751-7b38-4704-b042-cf6fbe2f447d', 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', false, NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, 0, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
-(24, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', false, NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, 0, false, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
+(22, '041f1bb5-4305-47d7-8538-c1e7163339a6', 2, 'TEXT', 'FACEBOOK', 'SYS_FACEBOOK', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', false, false, false, 0, false, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
+(18, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 2, 'TEXT', 'SKYPE', 'SYS_SKYPE', 'SYS_SOCIAL_NETWORK_FIELD_DESC', false, NULL, 'fab fa-skype', NULL, false, false, false, 0, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
+(23, '30d0f751-7b38-4704-b042-cf6fbe2f447d', 2, 'TEXT', 'TWITTER', 'SYS_TWITTER', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, 0, false, 3, 1, '2012-01-08 11:11:40', NULL, NULL),
+(24, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 2, 'TEXT', 'XING', 'SYS_XING', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, 0, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
 (20, '89b33bc0-913a-404c-9899-e53ad5080fec', 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DDT_PRO_MEMBERSHIP_NUMBER', NULL, false, NULL, NULL, NULL, false, true, false, 0, false, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
 (21, '15b324bc-29d8-4b79-bee9-10072b8d7489', 8, 'TEXT', 'FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR_CONTENT', false, NULL, NULL, NULL, false, false, false, 0, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 
@@ -803,10 +805,9 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (40, 5, 1, 1, NULL, 'ASC', NULL),
 (41, 5, 2, 2, NULL, NULL, NULL),
 (43, 5, 4, 22, NULL, NULL, NULL),
-(45, 5, 6, 16, NULL, NULL, NULL),
-(46, 5, 7, 18, NULL, NULL, NULL),
-(47, 5, 8, 23, NULL, NULL, NULL),
-(49, 5, 10, 24, NULL, NULL, NULL),
+(46, 5, 6, 18, NULL, NULL, NULL),
+(47, 5, 7, 23, NULL, NULL, NULL),
+(49, 5, 8, 24, NULL, NULL, NULL),
 (60, 6, 1, 1, NULL, NULL, NULL),
 (61, 6, 2, 2, NULL, NULL, NULL),
 (62, 6, 3, 10, NULL, 'DESC', NULL),
@@ -1089,7 +1090,8 @@ INSERT INTO %PREFIX%_members (mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begi
 (526, 'd03a900b-4ac6-4ab8-963b-27a079b36303', 12, 310, '2018-06-04', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
 (540, 'fd47c224-6f9e-4689-8c9c-d36e6c0257c7', 11, 351, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
 (541, '34dd8ad2-3d96-465c-b7d0-2071fa79c9fb', 11, 354, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(542, '58cde084-6aa8-49c9-88ab-8238ca510bbf', 11, 240, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0);
+(542, '58cde084-6aa8-49c9-88ab-8238ca510bbf', 11, 240, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0),
+(543, 'bae36fe4-161b-438e-a99d-0a8df95ee29b', 7, 358, '2018-11-15', '9999-12-31', false, 2, '2022-05-03 07:43:02', NULL, NULL, NULL, NULL, 0);
 
 
 --
@@ -1150,9 +1152,10 @@ INSERT INTO %PREFIX%_messages_recipients (msr_id, msr_msg_id, msr_rol_id, msr_us
 --
 
 INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestamp) VALUES
-(1, 1, 352, '2013-03-28 13:43:02'),
-(2, 1, 353, '2013-03-25 18:05:32'),
-(3, 2, 352, '2013-03-28 13:44:02');
+(1, 1, 352, '2023-03-28 13:43:02'),
+(2, 1, 353, '2023-03-25 18:05:32'),
+(3, 2, 360, '2023-03-28 13:44:02'),
+(4, 1, 359, '2023-03-27 05:03:34');
 
 
 --
@@ -2853,7 +2856,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1792, 351, 20, '4711'),
 (17921, 351, 25, '3'),
 (1793, 352, 1, 'Suppenkasper'),
-(1794, 352, 2, 'Walter'),
+(1794, 352, 2, 'Walther'),
 (1795, 352, 3, 'Kurfürstendamm 21'),
 (1796, 352, 4, '10707'),
 (1797, 352, 5, 'Berlin'),
@@ -2861,6 +2864,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1799, 352, 10, '1972-08-10'),
 (1800, 352, 11, 1),
 (1801, 352, 12, 'kasper@example.com'),
+(18011, 352, 14, '1'),
 (1802, 352, 20, '025789'),
 (1803, 352, 21, 'grün'),
 (18031, 352, 25, '3'),
@@ -2869,7 +2873,8 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1806, 353, 6, 'DEU'),
 (1807, 353, 11, '2'),
 (1808, 353, 12, 'dina@example.com'),
-(18081, 353, 25, '9'),
+(18081, 353, 14, '1'),
+(18082, 353, 25, '9'),
 (1809, 354, 1, 'DDT_CHAIRMAN'),
 (1810, 354, 2, 'Eric'),
 (1811, 354, 6, 'DEU'),
@@ -2902,7 +2907,29 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1914, 357, 5, 'Berlin'),
 (1915, 357, 6, 'DEU'),
 (1916, 357, 10, '2014-01-21'),
-(1917, 357, 11, 1);
+(1917, 357, 11, 1),
+(2000, 358, 1, 'Suppenkasper'),
+(2001, 358, 2, 'Walter'),
+(2002, 358, 3, 'Heinrichsallee 254'),
+(2003, 358, 4, '10118'),
+(2004, 358, 5, 'Berlin'),
+(2005, 358, 6, 'DEU'),
+(2100, 359, 1, 'Bakers'),
+(2101, 359, 2, 'Colin'),
+(2102, 359, 3, 'Wallingtonstreet 73'),
+(2103, 359, 4, '3845'),
+(2104, 359, 5, 'Birmingham'),
+(2105, 359, 6, 'GBR'),
+(2106, 359, 12, 'c.bakers@example.com'),
+(2107, 359, 14, '1'),
+(2200, 360, 1, 'Smith'),
+(2201, 360, 2, 'Barbara'),
+(2202, 360, 3, 'Mainstreet 876'),
+(2203, 360, 4, '573545'),
+(2204, 360, 5, 'Boston'),
+(2205, 360, 6, 'USA'),
+(2206, 360, 12, 'bab.smith@example.com'),
+(2207, 360, 14, '1');
 
 
 --

@@ -19,7 +19,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2)));
 
 try {
     // check the CSRF token of the form against the session token
@@ -61,7 +61,6 @@ if ($getLinkUuid !== '') {
 
 if ($getMode === 1) {
     $_SESSION['links_request'] = $_POST;
-    $weblinkIsNew = $link->isNewRecord();
 
     if (strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LINK_NAME'))));
@@ -92,20 +91,12 @@ if ($getMode === 1) {
             $link->setValue('lnk_counter', 0);
         }
 
-        $returnCode = $link->save();
+        if ($link->save()) {
+            // Notification an email for new or changed entries to all members of the notification role
+            $link->sendNotification();
+        }
     } catch (AdmException $e) {
         $e->showHtml();
-    }
-
-    if ($returnCode === true && $weblinkIsNew && $gSettingsManager->getBool('system_notifications_new_entries')) {
-        // Notification email for new entries
-        $message = $gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
-        try {
-            $notification = new Email();
-            $notification->sendNotification($gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_TITLE'), $message);
-        } catch (AdmException $e) {
-            $e->showHtml();
-        }
     }
 
     unset($_SESSION['links_request']);
@@ -119,8 +110,4 @@ if ($getMode === 1) {
 
     // Delete successful -> Return for XMLHttpRequest
     echo 'done';
-} else {
-    // Falls der mode unbekannt ist, ist natürlich Ende...
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    // => EXIT
 }

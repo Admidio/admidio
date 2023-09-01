@@ -72,6 +72,10 @@ class User extends TableAccess
      * @var bool Flag if relationships for this user were checked
      */
     protected $relationshipsChecked = false;
+    /**
+     * @var bool Flag if the changes to the user data should be handled by the ChangeNotification service.
+     */
+    protected $changeNotificationEnabled;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -84,6 +88,8 @@ class User extends TableAccess
      */
     public function __construct(Database $database, ProfileFields $userFields = null, $userId = 0)
     {
+        $this->changeNotificationEnabled = true;
+
         if ($userFields !== null) {
             $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         }
@@ -99,7 +105,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedEditProfileField(self $user, $fieldNameIntern)
+    public function allowedEditProfileField(self $user, $fieldNameIntern): bool
     {
         return $this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -113,7 +119,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedViewProfileField(self $user, string $fieldNameIntern)
+    public function allowedViewProfileField(self $user, string $fieldNameIntern): bool
     {
         return $user->mProfileFieldsData->isVisible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -121,6 +127,7 @@ class User extends TableAccess
     /**
      * Assign the user to all roles that have set the flag **rol_default_registration**.
      * These flag should be set if you want that every new user should get this role.
+     * @throws AdmException
      */
     public function assignDefaultRoles()
     {
@@ -145,7 +152,8 @@ class User extends TableAccess
 
         while ($rolId = $defaultRolesStatement->fetchColumn()) {
             // starts a membership for role from now
-            $this->setRoleMembership($rolId);
+            $role = new TableRoles($this->db, $rolId);
+            $role->startMembership($this->getValue('usr_id'));
         }
 
         $this->db->endTransaction();
@@ -153,15 +161,16 @@ class User extends TableAccess
 
     /**
      * @param string $mode      'set' or 'edit'
-     * @param int $id           ID of the role for which the membership should be set,
+     * @param int $roleId       ID of the role for which the membership should be set,
      *                          or id of the current membership that should be edited.
      * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
      * @param string $endDate   New end date of the membership. Default will be **31.12.9999**
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added/edited.
+     * @deprecated 4.3.0:4.4.0 "changeRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
-    private function changeRoleMembership($mode, $id, $startDate, $endDate, $leader)
+    private function changeRoleMembership($mode, $roleId, $startDate, $endDate, $leader)
     {
         if ($startDate === '' || $endDate === '') {
             return false;
@@ -192,30 +201,30 @@ class User extends TableAccess
 
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = ? -- $id
+                     WHERE mem_rol_id = ? -- $roleId
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin';
             $queryParams = array(
-                $id,
+                $roleId,
                 $usrId,
                 $endDate,
                 $startDate
             );
         } else {
-            $member = new TableMembers($this->db, $id);
+            $member = new TableMembers($this->db, $roleId);
 
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_id    <> ? -- $id
+                     WHERE mem_id    <> ? -- $roleId
                        AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin';
             $queryParams = array(
-                $id,
+                $roleId,
                 $member->getValue('mem_rol_id'),
                 $usrId,
                 $endDate,
@@ -281,7 +290,7 @@ class User extends TableAccess
         } else {
             // save membership to database
             if ($mode === 'set') {
-                $member->setValue('mem_rol_id', $id);
+                $member->setValue('mem_rol_id', $roleId);
                 $member->setValue('mem_usr_id', $usrId);
             }
             $member->setValue('mem_begin', $minStartDate);
@@ -532,7 +541,7 @@ class User extends TableAccess
 
         $orgLongName = $this->getOrgLongname();
 
-        if (!$this->isMemberOfOrganization($orgLongName)) {
+        if (!$this->isMemberOfOrganization()) {
             throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName)));
         }
 
@@ -601,7 +610,7 @@ class User extends TableAccess
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gChangeNotification;
 
@@ -796,6 +805,18 @@ class User extends TableAccess
     }
 
     /**
+     * Changes to user data could be sent as a notification email to a specific role if this
+     * function is enabled in the settings. If you want to suppress this logic you can
+     * explicit disable it with this method for this user. So no changes to this user object will
+     * result in a notification email.
+     * @return void
+     */
+    public function disableChangeNotification()
+    {
+        $this->changeNotificationEnabled = false;
+    }
+
+    /**
      * Edit an existing role membership of the current user. If the new date range contains
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method is useful to end a membership earlier.
@@ -805,6 +826,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully edited.
+     * @deprecated 4.3.0:4.4.0 "editRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
     public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
@@ -1056,7 +1078,7 @@ class User extends TableAccess
      * $email = $gCurrentUser->getValue('EMAIL');
      * ```
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gSettingsManager;
 
@@ -1168,7 +1190,7 @@ class User extends TableAccess
      * Returns true if a column of user table or profile fields has changed
      * @return bool Returns true if a column of user table or profile fields has changed
      */
-    public function hasColumnsValueChanged()
+    public function hasColumnsValueChanged(): bool
     {
         return parent::hasColumnsValueChanged() || $this->mProfileFieldsData->hasColumnsValueChanged();
     }
@@ -1543,11 +1565,11 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if this user is a member of this organization.
-     * @param string $orgLongName The longname of this organization.
-     * @return bool Return true if user is member of this organization.
+     * Checks if this user is a member of the organization. The organization is the current organization of
+     * the session or the organization that was set to this object by setOrganization().
+     * @return bool Return true if user is member of the organization.
      */
-    private function isMemberOfOrganization($orgLongName)
+    public function isMemberOfOrganization(): bool
     {
         // Check if user is currently member of a role of an organisation
         $sql = 'SELECT mem_usr_id
@@ -1595,14 +1617,14 @@ class User extends TableAccess
      * Reads a user record out of the table adm_users in database selected by the unique user id.
      * All profile fields of the object **mProfileFieldsData** will also be read. If no user was
      * found than the default values of all profile fields will be set.
-     * @param int $userId Unique id of the user that should be read
+     * @param int $id Unique id of the user that should be read
      * @return bool Returns **true** if one record is found
      */
-    public function readDataById($userId)
+    public function readDataById(int $id): bool
     {
-        if (parent::readDataById($userId)) {
+        if (parent::readDataById($id)) {
             // read data of all user fields from current user
-            $this->mProfileFieldsData->readUserData($userId, $this->organizationId);
+            $this->mProfileFieldsData->readUserData($id, $this->organizationId);
             return true;
         } else {
             $this->setDefaultValues();
@@ -1617,12 +1639,12 @@ class User extends TableAccess
      * Per default all columns of the default table will be read and stored in the object. If no user
      * was found than the default values of all profile fields will be set.
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
-     * @param int $uuid Unique uuid that should be searched.
+     * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid($uuid)
+    public function readDataByUuid(string $uuid): bool
     {
         if (parent::readDataByUuid($uuid)) {
             // read data of all user fields from current user
@@ -1688,10 +1710,10 @@ class User extends TableAccess
      * If the user doesn't have the right to save data of this user than an exception will be thrown.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
-     * @throws AdmException
      * @return bool
+     *@throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gCurrentUser, $gChangeNotification;
 
@@ -1744,7 +1766,7 @@ class User extends TableAccess
         }
         // The record is a new record, which was just stored to the database
         // for the first time => record it as a user creation now
-        if ($newRecord && is_object($gChangeNotification)) {
+        if ($newRecord && $this->changeNotificationEnabled && is_object($gChangeNotification)) {
             // Register all non-empty fields for the notification
             $gChangeNotification->logUserCreation($usrId, $this);
         }
@@ -1796,7 +1818,7 @@ class User extends TableAccess
         global $gSettingsManager, $gPasswordHashAlgorithm, $gChangeNotification;
 
         if (!$doHashing) {
-            if (is_object($gChangeNotification)) {
+            if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
                     (int) $this->getValue('usr_id'),
                     'usr_password',
@@ -1820,7 +1842,7 @@ class User extends TableAccess
             return false;
         }
 
-        if (is_object($gChangeNotification)) {
+        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
             $gChangeNotification->logUserChange(
                 (int) $this->getValue('usr_id'),
                 'usr_password',
@@ -1863,6 +1885,7 @@ class User extends TableAccess
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added.
+     * @deprecated 4.3.0:4.4.0 "setRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
     public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
@@ -1877,7 +1900,7 @@ class User extends TableAccess
      * @param string $columnName The name of the database column whose value should get a new value or the
      *                           internal unique profile field name
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                           not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      *
@@ -1889,7 +1912,7 @@ class User extends TableAccess
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gSettingsManager, $gChangeNotification;
 
@@ -1914,7 +1937,7 @@ class User extends TableAccess
             // as the record might never be saved to the database (e.g. when
             // doing a check for an existing user)! => For new records,
             // log the changes only when $this->save is called!
-            if (!$this->newRecord && is_object($gChangeNotification)) {
+            if (!$this->newRecord && $this->changeNotificationEnabled && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
                     $this->getValue('usr_id'),
                     $columnName,

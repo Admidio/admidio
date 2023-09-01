@@ -13,7 +13,7 @@
  *               assign : Add membership of a specific user to the role.
  * role_uuid            : UUID of role to which members should be assigned or removed
  * user_uuid            : UUID of the user whose membership should be assigned or removed
- * filter_rol_id        : If set only users from this role will be shown in list.
+ * filter_rol_uuid      : If set only users from this role will be shown in list.
  * mem_show_all - true  : (Default) Show active and inactive members of all organizations in database
  *                false : Show only active members of the current organization
  *****************************************************************************/
@@ -29,7 +29,7 @@ if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
 $getMode           = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
 $getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
 $getUserUuid       = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('directOutput' => true));
-$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
+$getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'string');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 
 // create object of the commited role
@@ -51,12 +51,16 @@ if (!$role->allowedToAssignMembers($gCurrentUser)) {
 }
 
 if ($getMembersShowAll) {
-    $getFilterRoleId = 0;
+    $getFilterRoleUuid = 0;
 }
 
-if ($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId)) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
-    // => EXIT
+if ($getFilterRoleUuid !== '') {
+    $filterRole = new TableRoles($gDb);
+    $filterRole->readDataByUuid($getFilterRoleUuid);
+    if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
+        // => EXIT
+    }
 }
 
 if ($getMode === 'assign') {
@@ -64,55 +68,30 @@ if ($getMode === 'assign') {
     // this must be called as ajax request
 
     try {
-        $membership = false;
-        $leadership = false;
-        $memberApproved = null;
-
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
-        // if its an event the user must attend to the event
-        if ($role->getValue('cat_name_intern') === 'EVENTS') {
-            $memberApproved = 2;
-        }
-
-        if (isset($_POST['member_'.$getUserUuid]) && $_POST['member_'.$getUserUuid] === 'true') {
-            $membership = true;
-        }
-        if (isset($_POST['leader_'.$getUserUuid]) && $_POST['leader_'.$getUserUuid] === 'true') {
-            $membership = true;
+        $leadership = false;
+        if (isset($_POST['leaderFlag']) && $_POST['leaderFlag'] === 'true') {
             $leadership = true;
         }
 
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
 
-        $member = new TableMembers($gDb);
-        $memCount = $role->countMembers($user->getValue('usr_id'));
-
-        // If role would have less members than allowed or leader is to be added
-        if ($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0))) {
-            $member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), $leadership, $memberApproved);
-
-            // find the parent roles and assign user to parent roles
-            $dependencies = RoleDependency::getParentRoles($gDb, (int) $role->getValue('rol_id'));
-            $parentRoles  = array();
-
-            foreach ($dependencies as $tmpRole) {
-                $member->startMembership($tmpRole, $user->getValue('usr_id'), null, $memberApproved);
-            }
-            echo 'success';
-        } elseif (!$leadership && !$membership) {
-            $member->stopMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'));
-            echo 'success';
+        if ((isset($_POST['memberFlag']) && $_POST['memberFlag'] === 'true')
+        || $leadership) {
+            $role->startMembership($user->getValue('usr_id'), $leadership);
         } else {
-            $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name'))));
-            // => EXIT
+            $role->stopMembership($user->getValue('usr_id'));
         }
     } catch (AdmException $e) {
         $e->showText();
         // => EXIT
     }
+
+    echo 'success';
+    exit();
 } else {
     // show html list with all users and their membership to this role
 
@@ -139,8 +118,8 @@ if ($getMode === 'assign') {
         $("#menu_item_members_assign_create_user").attr("class", "nav-link btn btn-secondary openPopup");
 
         // change mode of users that should be shown
-        $("#filter_rol_id").change(function() {
-            window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $getRoleUuid, 'mem_show_all' => 0)).'&filter_rol_id=" + $("#filter_rol_id").val());
+        $("#filter_rol_uuid").change(function() {
+            window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $getRoleUuid, 'mem_show_all' => 0)).'&filter_rol_uuid=" + $("#filter_rol_uuid").val());
         });
 
         // change mode of users that should be shown
@@ -153,36 +132,36 @@ if ($getMode === 'assign') {
         });
 
         // if checkbox of user is clicked then change membership
-        $("#tbl_assign_role_membership").on("click", "input[type=checkbox].memlist_checkbox", function() {
+        $("#tbl_assign_role_membership").on("click", "input[type=checkbox]", function() {
             var checkbox = $(this);
-            var userUuid = $(this).attr("id").substring($(this).attr("id").search("_") + 1);
+            var userUuid = $(this).data("user");
 
-            var memberChecked = $("input[type=checkbox]#member_" + userUuid).prop("checked");
-            var leaderChecked = $("input[type=checkbox]#leader_" + userUuid).prop("checked");
+            var memberChecked = $("input[type=checkbox]#member-" + userUuid).prop("checked");
+            var leaderChecked = $("input[type=checkbox]#leader-" + userUuid).prop("checked");
 
             // If the group leader checkbox is set, the member checkbox must also be set
-            if (checkbox.hasClass("memlist_leader") && leaderChecked) {
-                $("input[type=checkbox]#member_" + userUuid).prop("checked", true);
+            if (checkbox.data("type") === "leader" && leaderChecked) {
+                $("input[type=checkbox]#member-" + userUuid).prop("checked", true);
                 memberChecked = true;
             }
 
             // When removing the membership also ends the leader assignment
-            if (checkbox.hasClass("memlist_member") && !memberChecked) {
-                $("input[type=checkbox]#leader_" + userUuid).prop("checked", false);
+            if (checkbox.data("type") === "member" && !memberChecked) {
+                $("input[type=checkbox]#leader-" + userUuid).prop("checked", false);
                 leaderChecked = false;
             }
 
             // change data in database
-            $.post("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('mode' => 'assign', 'role_uuid' => $getRoleUuid)).'&user_uuid=" + userUuid,
-                "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
+            $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid='.$getRoleUuid.'&user_uuid=" + userUuid,
+                "memberFlag=" + memberChecked + "&leaderFlag=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
                 function(data) {
                     // check if error occurs
                     if (data !== "success") {
                         // reset checkbox status
                         if (checkbox.prop("checked")) {
                             checkbox.prop("checked", false);
-                            if (checkbox.hasClass("memlist_leader")) {
-                                $("input[type=checkbox]#member_" + userUuid).prop("checked", false);
+                            if (checkbox.data("type") === "leader") {
+                                $("input[type=checkbox]#member-" + userUuid).prop("checked", false);
                             }
                         } else {
                             checkbox.prop("checked", true);
@@ -207,7 +186,7 @@ if ($getMode === 'assign') {
         );
     }
 
-    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+    $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
@@ -222,11 +201,11 @@ if ($getMode === 'assign') {
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form_roles', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxFromSql(
-        'filter_rol_id',
+        'filter_rol_uuid',
         $gL10n->get('SYS_ROLE'),
         $gDb,
         $sqlData,
-        array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL'))
+        array('defaultValue' => $getFilterRoleUuid, 'firstEntry' => $gL10n->get('SYS_ALL'))
     );
     $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), false, array('helpTextIdLabel' => 'SYS_SHOW_ALL_DESC'));
     $filterNavbar->addForm($form->show());
@@ -284,7 +263,7 @@ if ($getMode === 'assign') {
     $columnHeading[] = $gL10n->get('SYS_LEADER') . HtmlForm::getHelpTextIcon($htmlLeaderText);
     $columnAlignment[] = 'left';
 
-    $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_id' => $getFilterRoleId, 'mem_show_all' => $getMembersShowAll)));
+    $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_uuid' => $getFilterRoleUuid, 'mem_show_all' => $getMembersShowAll)));
     $table->setColumnAlignByArray($columnAlignment);
     $table->addRowHeadingByArray($columnHeading);
 

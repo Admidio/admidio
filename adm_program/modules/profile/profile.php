@@ -88,9 +88,6 @@ if (!isset($_GET['user_uuid'])) {
 // create html page object
 $page = new HtmlPage('admidio-profile', $headline);
 
-$page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/css/bootstrap-datepicker3.css');
-$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/bootstrap-datepicker.js');
-$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageLibs().'.min.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
@@ -186,11 +183,11 @@ $page->addJavascript(
     $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)).'");
     $("#menu_item_profile_password").attr("class", "nav-link btn btn-secondary openPopup");
 
-    $("input[data-provide=\'datepicker\']").datepicker({
-        language: "'.$gL10n->getLanguageLibs().'",
-        format: "'.DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')).'",
-        todayHighlight: true,
-        autoclose: true
+    $("body").on("hidden.bs.modal", ".modal", function() {
+        $(this).removeData("bs.modal");
+        profileJS.reloadRoleMemberships();
+        profileJS.reloadFormerRoleMemberships();
+        profileJS.reloadFutureRoleMemberships();
     });
 
     formSubmitEvent();',
@@ -590,7 +587,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
                 'icon'  => 'fa-calendar-alt'
             );
         }
-        if ($user->checkRolesRight('rol_photo') && (int) $gSettingsManager->get('enable_photo_module') > 0) {
+        if ($user->checkRolesRight('rol_photo') && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_photo'],
                 'right' => $gL10n->get('SYS_RIGHT_PHOTOS'),

@@ -201,7 +201,7 @@ label {
     margin-right: 15px;
 }
 
-input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
+input[type=date] {
     width: 200px;
 }
 

@@ -281,6 +281,7 @@ if ($datesResult['totalCount'] === 0) {
 
     foreach ($datesResult['recordset'] as $row) {
         // write of current event data to date object
+        $date->clear();
         $date->setArray($row);
 
         $dateUuid     = $date->getValue('dat_uuid');
@@ -537,7 +538,7 @@ if ($datesResult['totalCount'] === 0) {
                         } else {
                             $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-secondary openPopup" href="javascript:void(0);"
+                                <button class="btn btn-secondary openPopup ' . $buttonClass . '" href="javascript:void(0);"
                                     data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/popup_participation.php', array('dat_uuid' => $dateUuid)) . '">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                         }
@@ -623,13 +624,6 @@ if ($datesResult['totalCount'] === 0) {
 
             // show panel view of events
 
-            $cssClassHighlight = '';
-
-            // Change css if date is highlighted
-            if ($row['dat_highlight']) {
-                $cssClassHighlight = 'admidio-event-highlight';
-            }
-
             // Output of elements
             // always 2 then line break
             $firstElement = true;
@@ -658,7 +652,7 @@ if ($datesResult['totalCount'] === 0) {
             }
 
             $page->addHtml('
-                <div class="card admidio-blog ' . $cssClassHighlight . '" id="dat_' . $dateUuid . '">
+                <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="dat_' . $dateUuid . '">
                     <div class="card-header">
                         <i class="fas fa-calendar-alt"></i>' .
                         $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
@@ -809,7 +803,7 @@ if ($datesResult['totalCount'] === 0) {
                 $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
             }
 
-            $compactTable->addRowByArray($columnValues, null, array('class' => $cssClass));
+            $compactTable->addRowByArray($columnValues, 'dat_' . $date->getValue('dat_uuid'), array('class' => $cssClass));
         }
     }  // End foreach
 

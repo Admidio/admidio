@@ -233,7 +233,11 @@ class ListConfiguration extends TableLists
 
         // format value for csv export
         if ($format === 'csv') {
-            $outputContent = $content;
+            // replace tab and line feed
+            $content = preg_replace("/\t/", "\\t", $content);
+            $content = preg_replace("/\r?\n/", "\\n", $content);
+            // replace special chars in excel so no app or function could be implicit executed
+            $outputContent = preg_replace("/^[@=]/", "#", $content);
         }
         // pdf should show only text and not much html content
         elseif ($format === 'pdf') {
@@ -727,7 +731,14 @@ class ListConfiguration extends TableLists
 
         // Set state of membership
         if ($optionsAll['showFormerMembers']) {
-            $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'';
+            $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'
+                AND NOT EXISTS (
+                   SELECT 1
+                     FROM '.TBL_MEMBERS.' AS act
+                    WHERE act.mem_rol_id = mem.mem_rol_id
+                      AND act.mem_usr_id = mem.mem_usr_id
+                      AND \''.DATE_NOW.'\' BETWEEN act.mem_begin AND act.mem_end
+                )';
         } else {
             if ($optionsAll['startDate'] === null) {
                 $sqlMemberStatus = 'AND mem_begin <= \''.DATE_NOW.'\'';
@@ -770,7 +781,7 @@ class ListConfiguration extends TableLists
                            $sqlOrderBys;
         } else {
             $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, usr_uuid ' . $sqlColumnNames . '
-                      FROM '.TBL_MEMBERS.'
+                      FROM '.TBL_MEMBERS.' mem
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
                 INNER JOIN '.TBL_CATEGORIES.'
@@ -835,12 +846,12 @@ class ListConfiguration extends TableLists
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
      * Per default all columns of the default table will be read and stored in the object.
      * Not every Admidio table has a uuid. Please check the database structure before you use this method.
-     * @param int $uuid Unique uuid that should be searched.
+     * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid($uuid)
+    public function readDataByUuid(string $uuid): bool
     {
         $returnValue = parent::readDataByUuid($uuid);
 
@@ -904,7 +915,7 @@ class ListConfiguration extends TableLists
      * @param bool $updateFingerPrint
      * @return bool
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         $this->db->startTransaction();
 

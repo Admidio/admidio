@@ -48,12 +48,13 @@ class TableMembers extends TableAccess
      * This method also queues the changes to the field for admin notification
      * messages. Apart from this, the parent's setValue is used to set the new value.
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param mixed $newValue The new value that should be stored in the database field
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
      * @see TableAccess#getValue
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gChangeNotification, $gCurrentSession;
 
@@ -80,17 +81,18 @@ class TableMembers extends TableAccess
 
     /**
      * Deletes a membership for the assigned role and user. In opposite to removeMembership
-     * this method will delete the entry and you can't see any history assignment.
+     * this method will delete the entry, and you can't see any history assignment.
      * If the user is the current user then initiate a refresh of his role cache.
      * @param int $roleId Stops the membership of this role
-     * @param int $userId The user who should loose the member of the role.
-     * @return bool Return **true** if the membership was successful deleted.
+     * @param int $userId The user who should lose the member of the role.
+     * @return bool Return **true** if the membership was successfully deleted.
+     * @throws AdmException
      */
-    public function deleteMembership($roleId = 0, $userId = 0)
+    public function deleteMembership(int $roleId = 0, int $userId = 0): bool
     {
         global $gCurrentUser;
 
-        // if role and user is set, than search for this membership and load data into class
+        // if role and user is set, then search for this membership and load data into class
         if ($roleId > 0 && $userId > 0) {
             $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
         }
@@ -113,7 +115,7 @@ class TableMembers extends TableAccess
      * Deletes the selected record of the table and optionally sends an admin notification if configured
      * @return true Returns **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         // Queue admin notification about membership deletion
         global $gChangeNotification;
@@ -149,7 +151,7 @@ class TableMembers extends TableAccess
                     $usrId,
                     $memId,
                     $membership,
-                    'mem_leaderf',
+                    'mem_leader',
                     $this->getValue('mem_leader'),
                     null, // user=
                     null, // deleting=
@@ -165,16 +167,23 @@ class TableMembers extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
-        global $gCurrentSession, $gChangeNotification;
+        global $gCurrentSession, $gChangeNotification, $gCurrentUser;
+
+        // if role is administrator than only administrator can add new user,
+        // but don't change their own membership, because there must be at least one administrator
+        if ($this->getValue('rol_administrator') && !$gCurrentUser->isAdministrator()) {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
 
         $newRecord = $this->newRecord;
 
@@ -239,28 +248,29 @@ class TableMembers extends TableAccess
      * Starts a membership for the assigned role and user from now until 31.12.9999.
      * An existing membership will be extended if necessary. If the user is the
      * current user then initiate a refresh of his role cache.
-     * @param int  $roleId Assign the membership to this role
-     * @param int  $userId The user who should get a member of the role.
-     * @param bool $leader If value **1** then the user will be a leader of the role and get more rights.
-     * @param int  $approvalState Option for User to confirm and adjust the membership ( **1** = User confirmed membership but maybe disagreed, **2** = user accepted membership
+     * @param int $roleId Assign the membership to this role
+     * @param int $userId The user who should get a member of the role.
+     * @param bool|null $leader If value **1** then the user will be a leader of the role and get more rights.
+     * @param int|null $approvalState Option for User to confirm and adjust the membership ( **1** = User confirmed membership but maybe disagreed, **2** = user accepted membership
      * @return bool Return **true** if the assignment was successful.
+     * @throws AdmException
      */
-    public function startMembership($roleId = 0, $userId = 0, $leader = null, $approvalState = null)
+    public function startMembership(int $roleId = 0, int $userId = 0, bool $leader = null, int $approvalState = null): bool
     {
         global $gCurrentUser;
 
-        // if role and user is set, than search for this membership and load data into class
+        // if role and user is set, then search for this membership and load data into class
         if ($roleId > 0 && $userId > 0) {
             $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
         }
 
         if ($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
-            // Beginn nicht ueberschreiben, wenn schon existiert
+            // Do not overwrite start date if already exists
             if ($this->newRecord || strcmp($this->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0) {
                 $this->setValue('mem_begin', DATE_NOW);
             }
 
-            // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
+            // Leaders should not be overwritten if parameter not set
             if ($leader === null) {
                 if ($this->newRecord) {
                     $this->setValue('mem_leader', false);
@@ -271,7 +281,7 @@ class TableMembers extends TableAccess
 
             $this->setValue('mem_end', DATE_MAX);
 
-            // User hat Rollenmitgliedschaft bestätigt bzw. angepasst
+            // User has confirmed or adjusted role membership
             if ($approvalState > 0) {
                 $this->setValue('mem_approved', $approvalState);
             }
@@ -294,25 +304,26 @@ class TableMembers extends TableAccess
     /**
      * Stops a membership for the assigned role and user from now until 31.12.9999.
      * If the user is the current user then initiate a refresh of his role cache. If
-     * the last membership of a administrator role should be stopped then throw an exception.
+     * the last membership of an administrator role should be stopped then throw an exception.
      * @param int $roleId Stops the membership of this role
-     * @param int $userId The user who should loose the member of the role.
-     * @throws AdmException
+     * @param int $userId The user who should lose the member of the role.
      * @return bool Return **true** if the membership removal was successful.
+     * @throws AdmException
+     * @deprecated 4.3.0:4.4.0 "stopMembership()" is deprecated, use "TableRoles::stopMembership()" instead.
      */
-    public function stopMembership($roleId = 0, $userId = 0)
+    public function stopMembership(int $roleId = 0, int $userId = 0): bool
     {
         global $gCurrentUser;
 
-        // if role and user is set, than search for this membership and load data into class
+        // if role and user is set, then search for this membership and load data into class
         if ($roleId > 0 && $userId > 0) {
             $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
         }
 
         if (!$this->newRecord && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
             // subtract one day, so that user leaves role immediately
-            $now = new \DateTime();
-            $oneDayOffset = new \DateInterval('P1D');
+            $now = new DateTime();
+            $oneDayOffset = new DateInterval('P1D');
             $nowDate = $now->format('Y-m-d');
             $endDate = $now->sub($oneDayOffset)->format('Y-m-d');
 

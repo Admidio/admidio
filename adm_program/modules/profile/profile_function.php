@@ -10,7 +10,7 @@
  * Parameters:
  *
  * mode   :  1 - Export vCard of user
- *           2 - Cancel membership of role
+ *           2 - Stop membership of role
  *           3 - Remove former membership of role
  *           4 - reload Role Memberships
  *           5 - reload former role memberships
@@ -27,7 +27,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'string');
-$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int');
+$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int', array('validValues' => array(1, 2, 3, 4, 5, 6, 7)));
 
 if (in_array($getMode, array(2, 3, 7))) {
     try {
@@ -48,6 +48,11 @@ $user->readDataByUuid($getUserUuid);
 
 if ($getMode === 1) {
     // Export vCard of user
+
+    if (!$gCurrentUser->hasRightViewProfile($user)) {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        exit();
+    }
 
     $filename = $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
 
@@ -71,13 +76,12 @@ if ($getMode === 1) {
     // if user has the right then cancel membership
     if ($role->allowedToAssignMembers($gCurrentUser)) {
         try {
-            $member->stopMembership();
+            $role->stopMembership($getUserUuid);
         } catch (AdmException $e) {
             $e->showText();
             // => EXIT
         }
 
-        // Beendigung erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo 'done';
     } else {
         echo $gL10n->get('SYS_NO_RIGHTS');
@@ -89,7 +93,6 @@ if ($getMode === 1) {
         $member->readDataByUuid($getMemberUuid);
         $member->delete();
 
-        // Entfernen erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo 'done';
     }
 } elseif ($getMode === 4) {
@@ -133,15 +136,15 @@ if ($getMode === 1) {
         exit($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    // Check das Beginn Datum
-    $startDate = \DateTime::createFromFormat('Y-m-d', $postMembershipStart);
+    // Check the start date
+    $startDate = DateTime::createFromFormat('Y-m-d', $postMembershipStart);
     if ($startDate === false) {
         exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
     }
 
-    // Falls gesetzt wird das Enddatum gecheckt
+    // If set, the end date is checked
     if ($postMembershipEnd !== '') {
-        $endDate = \DateTime::createFromFormat('Y-m-d', $postMembershipEnd);
+        $endDate = DateTime::createFromFormat('Y-m-d', $postMembershipEnd);
         if ($endDate === false) {
             exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
         }
@@ -155,7 +158,12 @@ if ($getMode === 1) {
     }
 
     // save role membership
-    $user->editRoleMembership($member->getValue('mem_id'), $postMembershipStart, $postMembershipEnd);
+    try {
+        $role->setMembership($user->getValue('usr_id'), $postMembershipStart, $postMembershipEnd, $member->getValue('mem_leader'));
+    } catch (AdmException $e) {
+        $e->showText();
+        // => EXIT
+    }
 
     echo 'success';
 }

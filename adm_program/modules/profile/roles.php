@@ -57,6 +57,54 @@ if (isset($_SESSION['set_rol_id'])) {
 
 $page = null;
 
+$javascript = '
+    // if checkbox of role is clicked then change membership
+    $("#role_assignment_table input[type=checkbox]").click(function() {
+        var checkbox = $(this);
+        var roleUuid = $(this).data("role");
+
+        var roleChecked = $("input[type=checkbox]#role-" + roleUuid).prop("checked");
+        var leaderChecked = $("input[type=checkbox]#leader-" + roleUuid).prop("checked");
+
+        // If the group leader checkbox is set, the role checkbox must also be set
+        if (checkbox.data("type") === "leader" && leaderChecked) {
+            $("input[type=checkbox]#role-" + roleUuid).prop("checked", true);
+            roleChecked = true;
+        }
+
+        // When removing the membership also ends the leader assignment
+        if (checkbox.data("type") === "membership" && !roleChecked) {
+            $("input[type=checkbox]#leader-" + roleUuid).prop("checked", false);
+            leaderChecked = false;
+        }
+
+        // change data in database
+        $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=" + roleUuid + "&user_uuid='.$getUserUuid.'",
+            "memberFlag=" + roleChecked + "&leaderFlag=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
+            function(data) {
+                // check if error occurs
+                if (data === "success") {
+                    $("#admidio-profile-roles-alert").fadeOut();
+                } else {
+                    // reset checkbox status
+                    if (checkbox.prop("checked")) {
+                        checkbox.prop("checked", false);
+                        if (checkbox.data("type") === "leader") {
+                            $("input[type=checkbox]#role-" + roleUuid).prop("checked", false);
+                        }
+                    } else {
+                        checkbox.prop("checked", true);
+                    }
+
+                    $("#admidio-profile-roles-alert").fadeIn();
+                    $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                    return false;
+                }
+                return true;
+            }
+        );
+    });';
+
 if ($getInline) {
     header('Content-type: text/html; charset=utf-8');
 
@@ -65,39 +113,8 @@ if ($getInline) {
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this).attr("id"));
             });
-
-            $("#roles_assignment_form").submit(function(event) {
-                var action = $(this).attr("action");
-                var rolesFormAlert = $("#roles_assignment_form .form-alert");
-                rolesFormAlert.hide();
-
-                // disable default form submit
-                event.preventDefault();
-
-                $.post({
-                    url: action,
-                    data: $(this).serialize(),
-                    success: function(data) {
-                        if (data === "success") {
-                            rolesFormAlert.attr("class", "alert alert-success form-alert");
-                            rolesFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                            rolesFormAlert.fadeIn("slow");
-                            setTimeout(function() {
-                                $("#admidio-modal").modal("hide");
-                            }, 2000);
-
-                            profileJS.reloadRoleMemberships();
-                            profileJS.reloadFormerRoleMemberships();
-                            profileJS.reloadFutureRoleMemberships();
-                        } else {
-                            rolesFormAlert.attr("class", "alert alert-danger form-alert");
-                            rolesFormAlert.fadeIn();
-                            rolesFormAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
-                        }
-                    }
-                });
-            });
         });
+        '.$javascript.'
     </script>
 
     <div class="modal-header">
@@ -108,14 +125,36 @@ if ($getInline) {
 } else {
     // create html page object
     $page = new HtmlPage('admidio-profile-roles', $headline);
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
+    $page->addJavascript($javascript, true);
 
-    $page->addJavascript('var profileJS = new ProfileJS(gRootPath);');
+    if ($getNewUser === 3) {
+        $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
+    } else {
+        $messageId = 'SYS_SAVE_DATA';
+    }
+    $page->addJavascript('
+        $("#btn-next").click(function() {
+            $oneMembershipSet = false;
+            $("#role_assignment_table input[type=checkbox]").each(function(){
+                if($(this).data("type") === "membership" && $(this).prop("checked")) {
+                    $oneMembershipSet = true;
+                }
+            });
+
+            if($oneMembershipSet) {
+                $("#btn-next").prop("disabled", true) ;
+                $("#admidio-profile-roles-alert").attr("class", "alert alert-success form-alert");
+                $("#admidio-profile-roles-alert").fadeIn();
+                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-check\"></i>'.$gL10n->get($messageId).'");
+                setTimeout(function() {
+                    window.location.href = "'.$gNavigation->getPreviousUrl().'";
+                }, 3000);
+            } else {
+                $("#admidio-profile-roles-alert").fadeIn();
+                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>'.$gL10n->get('SYS_ASSIGN_ROLE_TO_USER').'");
+            }
+        });', true);
 }
-
-// show headline of module
-$html .= '<form id="roles_assignment_form" action="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles_save.php', array('user_uuid' => $getUserUuid, 'new_user' => $getNewUser, 'inline' => $getInline)).'" method="post">
-    <input type="text" name="admidio-csrf-token" id="admidio-csrf-token" value="' . $gCurrentSession->getCsrfToken() . '" class="form-control invisible" hidden="hidden">';
 
 // Create table
 $table = new HtmlTable('role_assignment_table');
@@ -130,8 +169,8 @@ $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
 $table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
 
 if ($gCurrentUser->manageRoles()) {
-    // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_leader_rights, mem_rol_id, mem_usr_id, mem_leader
+    // User with role rights may assign ALL roles
+    $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_uuid, rol_leader_rights, mem_rol_id, mem_usr_id, mem_leader
               FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
@@ -152,8 +191,8 @@ if ($gCurrentUser->manageRoles()) {
         $gCurrentOrgId
     );
 } else {
-    // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_leader_rights,
+    // Leader may only assign roles for which he is also the leader
+    $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_uuid, rol_leader_rights,
                    mgl.mem_rol_id AS mem_rol_id, mgl.mem_usr_id AS mem_usr_id, mgl.mem_leader AS mem_leader
               FROM '.TBL_MEMBERS.' AS bm
         INNER JOIN '.TBL_ROLES.'
@@ -213,19 +252,20 @@ while ($row = $statement->fetch()) {
         $memberDisabled = ' disabled="disabled" ';
     }
 
-    // if user is flagged as leader than check the ckeckbox ;)
+    // if user is flagged as leader than check the checkbox ;)
     if ($row['mem_leader'] > 0) {
         $leaderChecked = ' checked="checked" ';
     }
 
-    // the leader of administrator role can only be set by a administrator
+    // the leader of administrator role can only be set by an administrator
     if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
         $leaderDisabled = ' disabled="disabled" ';
     }
 
     $columnValues = array(
-        '<input type="checkbox" id="role-'.(int) $role->getValue('rol_id').'" name="role-'.(int) $role->getValue('rol_id').'" '.
-            $memberChecked.$memberDisabled.' onclick="profileJS.unMarkLeader(this);" value="1" />',
+        '<input type="checkbox" id="role-'.$role->getValue('rol_uuid').'" name="role-'.$role->getValue('rol_uuid').'"
+            data-role="'.$role->getValue('rol_uuid').'" data-type="membership" '.
+            $memberChecked.$memberDisabled.' value="1" />',
         '<label for="role-'.(int) $role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
         $role->getValue('rol_description')
     );
@@ -244,8 +284,9 @@ while ($row = $statement->fetch()) {
         $category = (int) $role->getValue('cat_id');
     }
 
-    $leaderRights = '<input type="checkbox" id="leader-'.(int) $role->getValue('rol_id').'" name="leader-'.(int) $role->getValue('rol_id').'" '.
-                       $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
+    $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_uuid').'" name="leader-'.$role->getValue('rol_uuid').'"
+                       data-role="'.$role->getValue('rol_uuid').'" data-type="leader" '.
+                       $leaderChecked.$leaderDisabled.' value="1" />';
 
     // show icon that leaders have no additional rights
     if ((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS) {
@@ -273,16 +314,12 @@ while ($row = $statement->fetch()) {
 
     $table->addRowByArray($columnValues);
 }
-$html .= $table->show();
-
-$html .= '
-    <button class="btn-primary btn" id="btn_save" type="submit"><i class="fas fa-check"></i>'.$gL10n->get('SYS_SAVE').'</button>
-    <div class="form-alert" style="display: none;">&nbsp;</div>
-</form>';
+$html .= $table->show() . '<div id="admidio-profile-roles-alert" class="alert alert-danger form-alert" style="display: none;">&nbsp;</div>';
 
 if ($getInline) {
     echo $html.'</div>';
 } else {
+    $html .= '<button class="btn-primary btn admidio-margin-bottom" id="btn-next" type="submit"><i class="fas fa-check"></i>'.$gL10n->get('SYS_NEXT').'</button>';
     $page->addHtml($html);
     $page->show();
 }

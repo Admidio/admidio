@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# saab #VAR3# aastaseks #VAR2# päeva pärast, #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# on #VAR2# päeva pärast sünnipäev</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Sünnipäevad</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Hr #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Täna on #VAR1# liikmetel sünnipäev.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Täna ei ole ühelgi liikmel sünnipäeva.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Täna on liikmel sünnipäev.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# sai #VAR3#-aastaseks #VAR2# päeva varem, kuupäeval #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# oli #VAR2# päeva tagasi sünnipäev</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# on täna #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# on täna sünnipäev</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# saab homme #VAR3# aastaseks, #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# on homme sünnipäev</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Proua #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# sai eile #VAR4# #VAR3# aastaseks</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# oli eile sünnipäev</string>
+</resources>

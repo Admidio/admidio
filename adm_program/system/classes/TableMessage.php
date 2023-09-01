@@ -48,7 +48,7 @@ class TableMessage extends TableAccess
     {
         parent::__construct($database, TBL_MESSAGES, 'msg', $msgId);
 
-        $this->getContent();
+        $this->getContent('database');
     }
 
     /**
@@ -101,18 +101,19 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * A user could be added to the class to which the email was send. This information will
-     * later be stored in the database. If you need the user name within the class before the
-     * data is stored in database than you should set the user name with the parameter $fullName.
-     * @param int    $userId   Id the user to which the message was send
+     * A user could be added to the class to which the email was sent. This information will
+     * later be stored in the database. If you need the users name within the class before the
+     * data is stored in database than you should set the users name with the parameter $fullName.
+     * @param int $userId Id the user to which the message was sent
      * @param string $fullName Optional the name of the user. Should be set if the name should be used within the class.
+     * @throws AdmException
      */
-    public function addUser($userId, $fullName = '')
+    public function addUser(int $userId, string $fullName = '')
     {
         // PM always update the recipient if the message exists
         if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM) {
             if (count($this->msgRecipientsObjectArray) === 1) {
-                $this->msgRecipientsObjectArray->setValue('msr_usr_id', $userId);
+                $this->msgRecipientsObjectArray[0]->setValue('msr_usr_id', $userId);
                 return;
             }
         } else { // EMAIL
@@ -147,7 +148,7 @@ class TableMessage extends TableAccess
      */
     public function addContent($content)
     {
-        $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
+        $this->msgContentObject = new TableMessageContent($this->db);
         $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
         $this->msgContentObject->setValue('msc_message', $content, false);
         $this->msgContentObject->setValue('msc_timestamp', DATETIME_NOW);
@@ -267,9 +268,10 @@ class TableMessage extends TableAccess
     /**
      * Get the content of the message or email. If it's a message conversation than only
      * the last content will be returned.
+     * @param string $format The format can be **database** that would return the original database value without any transformations
      * @return string Returns the content of the message.
      */
-    public function getContent()
+    public function getContent(string $format = ''): string
     {
         $content = '';
 
@@ -286,13 +288,13 @@ class TableMessage extends TableAccess
                            )';
             $messageContentStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
-            $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
+            $this->msgContentObject = new TableMessageContent($this->db);
             $this->msgContentObject->setArray($messageContentStatement->fetch());
         }
 
         // read content of the content object
         if (is_object($this->msgContentObject)) {
-            $content = $this->msgContentObject->getValue('msc_message', 'database');
+            $content = $this->msgContentObject->getValue('msc_message', $format);
         }
 
         return $content;
@@ -480,10 +482,10 @@ class TableMessage extends TableAccess
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if
      *                                table has columns like **usr_id_create** or **usr_id_changed**
-     * @throws AdmException
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     *@throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             // Insert

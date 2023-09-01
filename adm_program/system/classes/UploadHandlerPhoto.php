@@ -70,7 +70,7 @@ class UploadHandlerPhoto extends UploadHandler
 
                 $newPhotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
 
-                // read image size
+                // check if the file contains a valid image and read image properties
                 $imageProperties = getimagesize($fileLocation);
                 if ($imageProperties === false) {
                     throw new AdmException('PHO_PHOTO_FORMAT_INVALID');
@@ -97,7 +97,7 @@ class UploadHandlerPhoto extends UploadHandler
                 // create image object and scale image to defined size of preferences
                 $image = new Image($fileLocation);
                 $image->setImageType('jpeg');
-                $image->scaleLargerSide($gSettingsManager->getInt('photo_save_scale'));
+                $image->scale($gSettingsManager->getInt('photo_show_width'), $gSettingsManager->getInt('photo_show_height'));
                 $image->copyToFile(null, $albumFolder.'/'.$newPhotoFileNumber.'.jpg');
                 $image->delete();
 
@@ -143,12 +143,15 @@ class UploadHandlerPhoto extends UploadHandler
                     throw new AdmException('PHO_PHOTO_PROCESSING_ERROR');
                 }
             } catch (AdmException $e) {
-                $file->error = $e->getText();
-
                 try {
                     FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
-                } catch (\RuntimeException $exception) {
+                } catch (RuntimeException $exception) {
+                    $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'].$file->name));
+                    // TODO
                 }
+                // remove XSS from filename before the name will be shown in the error message
+                $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
+                $file->error = $e->getText();
 
                 return $file;
             }

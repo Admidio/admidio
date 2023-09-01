@@ -38,7 +38,7 @@ class TableWeblink extends TableAccess
      * @return int|string Returns the value of the database column.
      *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gL10n;
 
@@ -63,13 +63,13 @@ class TableWeblink extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to edit this weblink. Therefore
+     * This method checks if the current user is allowed to edit this weblink. Therefore,
      * the weblink must be visible to the user and must be of the current organization.
      * The user must be a member of at least one role that have the right to manage weblinks.
      * Global weblinks could be only edited by the parent organization.
      * @return bool Return true if the current user is allowed to edit this weblink
      */
-    public function isEditable()
+    public function isEditable(): bool
     {
         global $gCurrentOrganization, $gCurrentUser;
 
@@ -91,11 +91,11 @@ class TableWeblink extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to view this weblink. Therefore
+     * This method checks if the current user is allowed to view this weblink. Therefore,
      * the visibility of the category is checked.
      * @return bool Return true if the current user is allowed to view this weblink
      */
-    public function isVisible()
+    public function isVisible(): bool
     {
         global $gCurrentUser;
 
@@ -104,14 +104,15 @@ class TableWeblink extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentUser;
 
@@ -123,14 +124,54 @@ class TableWeblink extends TableAccess
     }
 
     /**
+     * Send a notification email that a new weblink was created or an existing weblink was changed
+     * to all members of the notification role. This role is configured within the global preference
+     * **system_notifications_role**. The email contains the weblink name, address, the name of the current user,
+     * the timestamp and the url to this weblink.
+     * @return bool Returns **true** if the notification was sent
+     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     */
+    public function sendNotification(): bool
+    {
+        global $gCurrentOrganization, $gCurrentUser, $gSettingsManager, $gL10n;
+
+        if ($gSettingsManager->getBool('system_notifications_new_entries')) {
+            $notification = new Email();
+
+            if ($this->isNewRecord()) {
+                $messageTitleText = 'SYS_LINK_CREATED_TITLE';
+                $messageUserText = 'SYS_CREATED_BY';
+                $messageDateText = 'SYS_CREATED_AT';
+            } else {
+                $messageTitleText = 'SYS_LINK_CHANGED_TITLE';
+                $messageUserText = 'SYS_CHANGED_BY';
+                $messageDateText = 'SYS_CHANGED_AT';
+            }
+
+            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
+                . $gL10n->get('SYS_LINK_NAME') . ': ' . $this->getValue('lnk_name') . '<br />'
+                . $gL10n->get('SYS_LINK_ADDRESS') . ': ' . $this->getValue('lnk_url') . '<br />'
+                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/links/links.php?link_uuid=' . $this->getValue('lnk_uuid') . '<br />';
+            return $notification->sendNotification(
+                $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
+                $message
+            );
+        }
+        return false;
+    }
+
+    /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param mixed $newValue The new value that should be stored in the database field
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 

@@ -92,7 +92,7 @@ class Organization extends TableAccess
      * this method will cache the value and will return the cached value on multiple calls.
      * @return int Number of all organizations in database.
      */
-    public function countAllRecords()
+    public function countAllRecords(): int
     {
         if ($this->countOrganizations === 0) {
             $this->countOrganizations = parent::countAllRecords();
@@ -105,8 +105,9 @@ class Organization extends TableAccess
      * It will create the basic categories, lists, roles, systemmails etc.
      * @param int $userId The id of the administrator who creates the new organization.
      *                    This will be the first valid user of the new organization.
+     * @throws AdmException
      */
-    public function createBasicData($userId)
+    public function createBasicData(int $userId)
     {
         global $gL10n, $gProfileFields, $gSettingsManager;
 
@@ -119,9 +120,10 @@ class Organization extends TableAccess
 
         // create all systemmail texts and write them into table adm_texts
         $systemmailsTexts = array(
-            'SYSMAIL_REGISTRATION_USER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
-            'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
-            'SYSMAIL_REFUSE_REGISTRATION' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
+            'SYSMAIL_REGISTRATION_CONFIRMATION' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_CONFIRMATION'),
+            'SYSMAIL_REGISTRATION_NEW' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
+            'SYSMAIL_REGISTRATION_APPROVED' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
+            'SYSMAIL_REGISTRATION_REFUSED' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
             'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
             'SYSMAIL_PASSWORD_RESET' => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
         );
@@ -130,9 +132,6 @@ class Organization extends TableAccess
         $orgId = (int)$this->getValue('org_id');
 
         foreach ($systemmailsTexts as $key => $value) {
-            // convert <br /> to a normal line feed
-            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13) . chr(10), $value);
-
             $text->clear();
             $text->setValue('txt_org_id', $orgId);
             $text->setValue('txt_name', $key);
@@ -257,9 +256,8 @@ class Organization extends TableAccess
         $roleManagement->save();
 
         // Create membership for user in role 'Administrator' and 'Members'
-        $member = new TableMembers($this->db);
-        $member->startMembership((int)$roleAdministrator->getValue('rol_id'), $userId);
-        $member->startMembership((int)$roleMember->getValue('rol_id'), $userId);
+        $roleAdministrator->startMembership($userId);
+        $roleMember->startMembership($userId);
 
         // create object with current user field structure
         $gProfileFields = new ProfileFields($this->db, $orgId);
@@ -511,10 +509,10 @@ class Organization extends TableAccess
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             // org_shortname shouldn't be edited

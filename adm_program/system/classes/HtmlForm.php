@@ -30,7 +30,7 @@
  * $form->show();
  * ```
  */
-class HtmlForm extends HtmlFormBasic
+class HtmlForm extends \Smarty
 {
     public const FIELD_DEFAULT  = 0;
     public const FIELD_REQUIRED = 1;
@@ -54,6 +54,10 @@ class HtmlForm extends HtmlFormBasic
      */
     protected $htmlPage;
     /**
+     * @var string String with prepared html
+     */
+    protected $htmlString = '';
+    /**
      * @var int Number of visible elements in this form. Hidden elements are not count because no interaction is possible.
      */
     protected $countElements = 0;
@@ -66,14 +70,22 @@ class HtmlForm extends HtmlFormBasic
      */
     protected $id;
     /**
+     * @var string Content of the action attribute ot the form
+     */
+    protected $action;
+    /**
+     * @var string CSS classes of the form
+     */
+    protected $attributes = array();
+    /**
      * @var bool Flag that indicates if a bootstrap button-group is open and should be closed later
      */
     protected $buttonGroupOpen = false;
 
     /**
      * Constructor creates the form element
-     * @param string   $id       ID of the form
-     * @param string   $action   Action attribute of the form
+     * @param string $id       ID of the form
+     * @param string|null $action   Action attribute of the form
      * @param HtmlPage|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
      * @param array    $options  (optional) An array with the following possible entries:
      *                           - **type** : Set the form type. Every type has some special features:
@@ -94,7 +106,7 @@ class HtmlForm extends HtmlFormBasic
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
      */
-    public function __construct($id, $action = null, HtmlPage $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $action = null, HtmlPage $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -106,21 +118,32 @@ class HtmlForm extends HtmlFormBasic
             'method'             => 'post'
         );
 
-        // navbar forms should send the data as GET if it's not explicit set
+        // navbar form should send the data as GET if it's not explicit set
         if (isset($options['type']) && $options['type'] === 'navbar' && !isset($options['method'])) {
             $options['method'] = 'get';
         }
 
         $optionsAll = array_replace($optionsDefault, $options);
 
-        parent::__construct($action, $id, $optionsAll['method']);
+        //parent::__construct($action, $id, $optionsAll['method']);
+        parent::__construct();
+        // initialize php template engine smarty
+        if (defined('THEME_PATH')) {
+            $this->setTemplateDir(THEME_PATH . '/templates/');
+        }
+
+        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
+        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
+        $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
 
         $this->showRequiredFields = $optionsAll['showRequiredFields'];
-        $this->type = $optionsAll['type'];
-        $this->id   = $id;
+        $this->type   = $optionsAll['type'];
+        $this->id     = $id;
+        $this->action = $action;
 
         // set specific Admidio css form class
-        $this->addAttribute('role', 'form');
+        $this->attributes['role'] = 'form';
+        $this->attributes['method'] = $optionsAll['method'];
 
         if ($this->type === 'default') {
             $optionsAll['class'] .= ' form-horizontal form-dialog';
@@ -131,12 +154,12 @@ class HtmlForm extends HtmlFormBasic
         }
 
         if ($optionsAll['class'] !== '') {
-            $this->addAttribute('class', $optionsAll['class']);
+            $this->attributes['class'] = $optionsAll['class'];
         }
 
         // Set specific parameters that are necessary for file upload with a form
         if ($optionsAll['enableFileUpload']) {
-            $this->addAttribute('enctype', 'multipart/form-data');
+            $this->attributes['enctype'] = 'multipart/form-data';
         }
 
         if ($optionsAll['method'] === 'post' && isset($GLOBALS['gCurrentSession'])) {
@@ -173,17 +196,17 @@ class HtmlForm extends HtmlFormBasic
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
      */
-    public function addButton($id, $text, array $options = array())
+    public function addButton(string $id, string $text, array $options = array())
     {
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
-            'icon' => '',
-            'link' => '',
-            'class' => '',
-            'type' => 'button',
+            'icon'         => '',
+            'link'         => '',
+            'class'        => '',
+            'type'         => 'button',
             'data-admidio' => '',
-            'id' => $id,
-            'value' => $text,
+            'id'           => $id,
+            'value'        => $text,
         );
         $optionsAll = array_replace($optionsDefault, $options);
         $attributes = array();
@@ -201,7 +224,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll['attributes'] = $attributes;
-        $this->addHtml($this->render('form.button', $optionsAll));
+        $this->render('form.button', $optionsAll);
     }
 
     /**
@@ -211,7 +234,7 @@ class HtmlForm extends HtmlFormBasic
      * @param string $class (optional) An additional css classname. The class **admTextInput**
      *                      is set as default and need not set with this parameter.
      */
-    public function addCaptcha($id, $class = '')
+    public function addCaptcha(string $id, string $class = '')
     {
         global $gL10n;
 
@@ -223,7 +246,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' ' . $class;
         }
 
-        $this->addHtml($this->render('form.captcha', ['attributes' => $attributes]));
+        $this->render('form.captcha', ['attributes' => $attributes]);
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,
@@ -238,7 +261,7 @@ class HtmlForm extends HtmlFormBasic
      * Add a new checkbox with a label to the form.
      * @param string $id      ID of the checkbox. This will also be the name of the checkbox.
      * @param string $label   The label of the checkbox.
-     * @param bool   $checked A value for the checkbox. The value could only be **0** or **1**. If the value is **1** then
+     * @param bool $checked A value for the checkbox. The value could only be **0** or **1**. If the value is **1** then
      *                        the checkbox will be checked when displayed.
      * @param array  $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
@@ -260,7 +283,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addCheckbox($id, $label, $checked = false, array $options = array())
+    public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
         $attributes   = array('class' => '');
         ++$this->countElements;
@@ -303,16 +326,16 @@ class HtmlForm extends HtmlFormBasic
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->addHtml($this->render('form.checkbox', $optionsAll));
+        $this->render('form.checkbox', $optionsAll);
     }
 
     /**
      * Add custom html content to the form within the default field structure.
      * The Label will be set but instead of a form control you can define any html.
      * If you don't need the field structure and want to add html then use the method addHtml()
-     * @param string $label   The label of the custom content.
+     * @param string $label The label of the custom content.
      * @param string $content A simple Text or html that would be placed instead of a form element.
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **referenceId** : Optional the id of a form control if this is defined within the custom content
      *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
@@ -329,7 +352,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addCustomContent($label, $content, array $options = array())
+    public function addCustomContent(string $label, string $content, array $options = array())
     {
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -344,18 +367,16 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $this->addHtml($this->render('form.customcontent', $optionsAll));
-
-
+        $this->render('form.customcontent', $optionsAll);
     }
 
     /**
      * Add a line with a custom description to the form. No form elements will be displayed in this line.
      * @param string $text The (html) text that should be displayed.
      */
-    public function addDescription($text)
+    public function addDescription(string $text)
     {
-        $this->addHtml('<p>' . $text . '</p>');
+        $this->htmlString .= '<p>' . $text . '</p>';
     }
 
     /**
@@ -385,7 +406,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addEditor($id, $label, $value, array $options = array())
+    public function addEditor(string $id, string $label, string $value, array $options = array())
     {
         global $gSettingsManager, $gL10n;
 
@@ -398,6 +419,7 @@ class HtmlForm extends HtmlFormBasic
             'property'         => self::FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
             'height'           => '300',
+            'alertWarning'     => '',
             'helpTextIdLabel'  => '',
             'helpTextIdInline' => '',
             'labelVertical'    => true,
@@ -448,7 +470,7 @@ class HtmlForm extends HtmlFormBasic
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->addHtml($this->render('form.editor', $optionsAll));
+        $this->render('form.editor', $optionsAll);
     }
 
     /**
@@ -484,7 +506,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addFileUpload($id, $label, array $options = array())
+    public function addFileUpload(string $id, string $label, array $options = array())
     {
         global $gSettingsManager;
 
@@ -555,7 +577,17 @@ class HtmlForm extends HtmlFormBasic
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->addHtml($this->render('form.file', $optionsAll));
+        $this->render('form.file', $optionsAll);
+    }
+
+    /**
+     * Add any string to the html output. If the main element wasn't written to the
+     * html string than this will be done before your string will be added.
+     * @param string $string Text as string in current string position
+     */
+    public function addHtml(string $string)
+    {
+        $this->htmlString .= $string;
     }
 
     /**
@@ -593,7 +625,7 @@ class HtmlForm extends HtmlFormBasic
      *                          is set as default and need not set with this parameter.
      *                        - **htmlAfter** : Add html code after the input field.
      */
-    public function addInput($id, $label, $value, array $options = array())
+    public function addInput(string $id, string $label, string $value, array $options = array())
     {
         global $gSettingsManager, $gLogger;
 
@@ -764,16 +796,16 @@ class HtmlForm extends HtmlFormBasic
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->addHtml($this->render("form.input", $optionsAll));
+        $this->render("form.input", $optionsAll);
     }
 
     /**
      * Adds any javascript content to the page. The javascript will be added to the page header or as inline script.
      * @param string $javascriptCode       A valid javascript code that will be added to the header of the page or as inline script.
-     * @param bool   $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
+     * @param bool $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
      *                                     the page is fully loaded.
      */
-    protected function addJavascriptCode($javascriptCode, $executeAfterPageLoad = false)
+    protected function addJavascriptCode(string $javascriptCode, bool $executeAfterPageLoad = false)
     {
         if ($this->htmlPage instanceof HtmlPage) {
             $this->htmlPage->addJavascript($javascriptCode, $executeAfterPageLoad);
@@ -783,7 +815,7 @@ class HtmlForm extends HtmlFormBasic
         if ($executeAfterPageLoad) {
             $javascriptCode = '$(function() { ' . $javascriptCode . ' });';
         }
-        $this->addHtml('<script type="text/javascript">' . $javascriptCode . '</script>');
+        $this->htmlString .= '<script type="text/javascript">' . $javascriptCode . '</script>';
     }
 
     /**
@@ -791,7 +823,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addLine()
     {
-        $this->addHtml('<hr />');
+        $this->htmlString .= '<hr />';
     }
 
     /**
@@ -799,7 +831,7 @@ class HtmlForm extends HtmlFormBasic
      * @param string $id      ID of the input field. This will also be the name of the input field.
      * @param string $label   The label of the input field.
      * @param string $value   A value for the text field. The field will be created with this value.
-     * @param int    $rows    The number of rows that the textarea field should have.
+     * @param int $rows    The number of rows that the textarea field should have.
      * @param array  $options (optional) An array with the following possible entries:
      *                        - **maxLength** : The maximum number of characters that are allowed in this field. If set
      *                          then show a counter how many characters still available
@@ -820,7 +852,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addMultilineTextInput($id, $label, $value, $rows, array $options = array())
+    public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
         ++$this->countElements;
         $attributes = array('class' => 'form-control');
@@ -892,7 +924,7 @@ class HtmlForm extends HtmlFormBasic
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->addHtml($this->render('form.multiline', $optionsAll));
+        $this->render('form.multiline', $optionsAll);
     }
 
     /**
@@ -926,7 +958,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addRadioButton($id, $label, array $values, array $options = array())
+    public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
         ++$this->countElements;
         $attributes = array('class' => '');
@@ -942,7 +974,7 @@ class HtmlForm extends HtmlFormBasic
             'class'             => '',
             'id'                => $id,
             'label'             => $label,
-            'values'             => $values
+            'values'            => $values
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
@@ -966,7 +998,7 @@ class HtmlForm extends HtmlFormBasic
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->addHtml($this->render('form.radio', $optionsAll));
+        $this->render('form.radio', $optionsAll);
     }
 
     /**
@@ -1020,13 +1052,12 @@ class HtmlForm extends HtmlFormBasic
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addSelectBox($id, $label, array $values, array $options = array())
+    public function addSelectBox(string $id, string $label, array $values, array $options = array())
     {
         global $gL10n;
 
         ++$this->countElements;
         $attributes = array('class' => 'form-control');
-        $name = $id;
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -1044,9 +1075,13 @@ class HtmlForm extends HtmlFormBasic
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
             'icon'                           => '',
-            'class'                          => ''
+            'class'                          => '',
+            'id'                             => $id,
+            'label'                          => $label
         );
         $optionsAll = array_replace($optionsDefault, $options);
+        $attributes['id'] = $id;
+        $attributes['name'] = $id;
 
         // set field properties
         switch ($optionsAll['property']) {
@@ -1069,9 +1104,31 @@ class HtmlForm extends HtmlFormBasic
                 break;
         }
 
+        // reorganize the values. Each value item should be an array with the following structure:
+        // array(0 => id, 1 => value name, 2 => option group name)
+        $valuesArray = array();
+        foreach($values as $arrayKey => $arrayValue) {
+            if (is_array($arrayValue)) {
+                if (array_key_exists(2, $arrayValue)) {
+                    $valuesArray[] = array(
+                        'id' => $arrayValue[0],
+                        'value' => Language::translateIfTranslationStrId($arrayValue[1]),
+                        'group' => Language::translateIfTranslationStrId($arrayValue[2])
+                    );
+                } else {
+                    $valuesArray[] = array(
+                        'id' => $arrayValue[0],
+                        'value' => Language::translateIfTranslationStrId($arrayValue[1])
+                    );
+                }
+            } else {
+                $valuesArray[] = array('id' => $arrayKey, 'value' => Language::translateIfTranslationStrId($arrayValue));
+            }
+        }
+
         if ($optionsAll['multiselect']) {
             $attributes['multiple'] = 'multiple';
-            $name = $id . '[]';
+            $attributes['name'] = $id . '[]';
 
             if ($optionsAll['defaultValue'] !== '' && !is_array($optionsAll['defaultValue'])) {
                 $optionsAll['defaultValue'] = array($optionsAll['defaultValue']);
@@ -1092,92 +1149,20 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
-        // now create html for the field
-        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
-
-        $this->addSelect($name, $id, $attributes);
-
-        // add an additional first entry to the select box and set this as preselected if necessary
-        $defaultEntry = false;
-        if ($optionsAll['firstEntry'] !== '' || $optionsAll['showContextDependentFirstEntry']) {
-            if ($optionsAll['defaultValue'] === '') {
-                $defaultEntry = true;
-            }
-        }
-
         if ($optionsAll['firstEntry'] !== '') {
             if (is_array($optionsAll['firstEntry'])) {
-                $this->addOption($optionsAll['firstEntry'][0], $optionsAll['firstEntry'][1], null, $defaultEntry);
+                array_unshift($valuesArray, array('id' => $optionsAll['firstEntry'][0], 'value' => $optionsAll['firstEntry'][1]));
             } else {
-                $this->addOption('', '- ' . $optionsAll['firstEntry'] . ' -', null, $defaultEntry);
+                array_unshift($valuesArray, array('id' => '', 'value' => '- ' . $optionsAll['firstEntry'] . ' -'));
             }
         } elseif ($optionsAll['showContextDependentFirstEntry']) {
             if ($optionsAll['property'] === self::FIELD_REQUIRED) {
-                $this->addOption('', '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -', null, $defaultEntry);
+                array_unshift($valuesArray, array('id' => '', 'value' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -'));
             } else {
-                $this->addOption('', ' ', null, $defaultEntry);
+                array_unshift($valuesArray, array('id' => '', 'value' => ''));
             }
-        } elseif (count($values) === 0) {
-            $this->addOption('', '');
-        }
-
-        $optionGroup = null;
-
-        foreach ($values as $key => $value) {
-            // create entry in html
-            $defaultEntry = false;
-
-            // if each array element is an array then create option groups
-            if (is_array($value)) {
-                // add optiongroup if necessary
-                if ($optionGroup !== $value[2]) {
-                    if ($optionGroup !== null) {
-                        $this->closeOptionGroup();
-                    }
-
-                    $this->addOptionGroup(Language::translateIfTranslationStrId($value[2]));
-                    $optionGroup = $value[2];
-                }
-
-                // if value is a translation string we must translate it
-                $value[1] = Language::translateIfTranslationStrId($value[1]);
-
-                // add option
-                if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $value[0]) {
-                    $defaultEntry = true;
-                }
-
-                if (is_array($optionsAll['valueAttributes'])) {
-                    $this->addOption((string) $value[0], $value[1], null, $defaultEntry, false, $optionsAll['valueAttributes'][$value[0]]);
-                } else {
-                    $this->addOption((string) $value[0], $value[1], null, $defaultEntry);
-                }
-            } else {
-                // if value is a translation string we must translate it
-                $value = Language::translateIfTranslationStrId($value);
-
-                // set the value attribute of the option tag
-                $optionValue = $key;
-
-                if ($optionsAll['arrayKeyIsNotValue']) {
-                    $optionValue = $value;
-                }
-
-                // array has only key and value then create a normal selectbox without optiongroups
-                if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $optionValue) {
-                    $defaultEntry = true;
-                }
-
-                if (is_array($optionsAll['valueAttributes'])) {
-                    $this->addOption((string) $optionValue, $value, null, $defaultEntry, false, $optionsAll['valueAttributes'][$key]);
-                } else {
-                    $this->addOption((string) $optionValue, $value, null, $defaultEntry);
-                }
-            }
-        }
-
-        if ($optionGroup !== null) {
-            $this->closeOptionGroup();
+        } elseif (count($valuesArray) === 0) {
+            $valuesArray[] = array('id' => '', 'value' => '');
         }
 
         if ($optionsAll['multiselect'] || $optionsAll['search']) {
@@ -1218,9 +1203,15 @@ class HtmlForm extends HtmlFormBasic
             $this->addJavascriptCode($javascriptCode, true);
         }
 
-        $this->closeSelect();
+        $optionsAll["values"] = $valuesArray;
+        $optionsAll["attributes"] = $attributes;
 
-        $this->closeControlStructure($optionsAll);
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
+        $this->render('form.select', $optionsAll);
     }
 
     /**
@@ -1230,8 +1221,8 @@ class HtmlForm extends HtmlFormBasic
      * column represents the label of each option of the selectbox. Optional you can add a third column
      * to the sql statement. This column will be used as label for an optiongroup. Each time the value
      * of the third column changed a new optiongroup will be created.
-     * @param string       $id       ID of the selectbox. This will also be the name of the selectbox.
-     * @param string       $label    The label of the selectbox.
+     * @param string $id       ID of the selectbox. This will also be the name of the selectbox.
+     * @param string $label    The label of the selectbox.
      * @param Database     $database Object of the class Database. This should be the default global object **$gDb**.
      * @param array|string $sql      Any SQL statement that return 2 columns. The first column will be the internal value of the
      *                               selectbox item and will be submitted with the form. The second column represents the
@@ -1257,7 +1248,7 @@ class HtmlForm extends HtmlFormBasic
      *                               - **maximumSelectionNumber** : If **multiselect** is enabled then you can configure the maximum number
      *                                 of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                               - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
-     *                                 onother array with the combination of attributes name and attributes value.
+     *                                 another array with the combination of attributes name and attributes value.
      *                               - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                                 e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                                 the user can see the text if he hovers over the icon. If you need an additional parameter
@@ -1281,7 +1272,7 @@ class HtmlForm extends HtmlFormBasic
      * $form->show();
      * ```
      */
-    public function addSelectBoxFromSql($id, $label, Database $database, $sql, array $options = array())
+    public function addSelectBoxFromSql(string $id, string $label, Database $database, $sql, array $options = array())
     {
         $selectBoxEntries = array();
 
@@ -1313,12 +1304,12 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a new selectbox with a label to the form. The selectbox could have
      * different values and a default value could be set.
-     * @param string $id          ID of the selectbox. This will also be the name of the selectbox.
-     * @param string $label       The label of the selectbox.
-     * @param string $xmlFile     Serverpath to the xml file
+     * @param string $id ID of the selectbox. This will also be the name of the selectbox.
+     * @param string $label The label of the selectbox.
+     * @param string $xmlFile Server path to the xml file
      * @param string $xmlValueTag Name of the xml tag that should contain the internal value of a selectbox entry
-     * @param string $xmlViewTag  Name of the xml tag that should contain the visual value of a selectbox entry
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param string $xmlViewTag Name of the xml tag that should contain the visual value of a selectbox entry
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
@@ -1339,7 +1330,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **maximumSelectionNumber** : If **multiselect** is enabled then you can configure the maximum number
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
-     *                          onother array with the combination of attributes name and attributes value.
+     *                          another array with the combination of attributes name and attributes value.
      *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hovers over the icon. If you need an additional parameter
@@ -1354,8 +1345,9 @@ class HtmlForm extends HtmlFormBasic
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws Exception
      */
-    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, array $options = array())
+    public function addSelectBoxFromXml(string $id, string $label, string $xmlFile, string $xmlValueTag, string $xmlViewTag, array $options = array())
     {
         $selectBoxEntries = array();
 
@@ -1390,16 +1382,16 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories.
      * You must define the category type (roles, dates, links ...). All categories of this type will be shown.
-     * @param string   $id             ID of the selectbox. This will also be the name of the selectbox.
-     * @param string   $label          The label of the selectbox.
+     * @param string $id             ID of the selectbox. This will also be the name of the selectbox.
+     * @param string $label          The label of the selectbox.
      * @param Database $database       A Admidio database object that contains a valid connection to a database
-     * @param string   $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown.
+     * @param string $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown.
      *                                 The type 'ROL' will ot list event role categories. Therefore, you need to set
      *                                 the type 'ROL_EVENT'. It's not possible to show role categories together with
      *                                 event categories.
-     * @param string   $selectBoxModus The selectbox could be shown in 2 different modus.
+     * @param string $selectBoxModus The selectbox could be shown in 2 different modus.
      *                                 - **EDIT_CATEGORIES** : First entry will be "Please choose" and default category will be preselected.
-     *                                 - **FILTER_CATEGORIES** : First entry will be "All" and only categories with childs will be shown.
+     *                                 - **FILTER_CATEGORIES** : First entry will be "All" and only categories with children will be shown.
      * @param array    $options        (optional) An array with the following possible entries:
      *                                 - **property** : With this param you can set the following properties:
      *                                   + **self::FIELD_DEFAULT**  : The field can accept an input.
@@ -1424,7 +1416,7 @@ class HtmlForm extends HtmlFormBasic
      *                                 - **class** : An additional css classname. The class **admSelectbox**
      *                                   is set as default and need not set with this parameter.
      */
-    public function addSelectBoxForCategories($id, $label, Database $database, $categoryType, $selectBoxModus, array $options = array())
+    public function addSelectBoxForCategories(string $id, string $label, Database $database, string $categoryType, string $selectBoxModus, array $options = array())
     {
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
@@ -1526,7 +1518,7 @@ class HtmlForm extends HtmlFormBasic
         $pdoStatement = $database->queryPrepared($sql, $queryParams);
         $countCategories = $pdoStatement->rowCount();
 
-        // if no or only one category exist and in filter modus, than don't show category
+        // if no or only one category exist and in filter modus, then don't show category
         if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && ($countCategories === 0 || $countCategories === 1)) {
             return;
         }
@@ -1586,13 +1578,22 @@ class HtmlForm extends HtmlFormBasic
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addStaticControl($id, $label, $value, array $options = array())
+    public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
         $attributes = array('class' => 'form-control-static');
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,'property' => '', 'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
+        $optionsDefault = array(
+            'formtype'         => $this->type,
+            'property'         => '',
+            'helpTextIdLabel'  => '',
+            'helpTextIdInline' => '',
+            'icon'             => '',
+            'class'            => '',
+            'id'               => $id,
+            'label'            => $label,
+            'value'            => $value);
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // set specific css class for this field
@@ -1600,21 +1601,19 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
-        // now create html for the field
-        $this->openControlStructure('', $label, self::FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
-        $this->addHtml('<p class="' . $attributes['class'] . '">' . $value . '</p>');
-        $this->closeControlStructure($optionsAll);
+        $optionsAll["attributes"] = $attributes;
+        $this->render('form.static', $optionsAll);
     }
 
     /**
      * Add a new button with a custom text to the form. This button could have
      * an icon in front of the text. Different to addButton this method adds an
-     * additional **div** around the button and the type of the button is **submit**.
+     * **div** around the button and the type of the button is **submit**.
      * @param string $id      ID of the button. This will also be the name of the button.
      * @param string $text    Text of the button
      * @param array  $options (optional) An array with the following possible entries:
      *                        - **icon** : Optional parameter. Path and filename of an icon.
-     *                          If set a icon will be shown in front of the text.
+     *                          If set an icon will be shown in front of the text.
      *                        - **link** : If set a javascript click event with a page load to this link
      *                          will be attached to the button.
      *                        - **class** : Optional an additional css classname. The class **admButton**
@@ -1622,7 +1621,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **type** : If set to true this button get the type **submit**. This will
      *                          be the default.
      */
-    public function addSubmitButton($id, $text, array $options = array())
+    public function addSubmitButton(string $id, string $text, array $options = array())
     {
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,'icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
@@ -1638,20 +1637,9 @@ class HtmlForm extends HtmlFormBasic
         $this->addButton($id, $text, $optionsAll);
 
         if (!$this->buttonGroupOpen) {
-            $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
+            $this->htmlString .= '<div class="form-alert" style="display: none;">&nbsp;</div>';
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Close an open bootstrap btn-group
@@ -1659,64 +1647,7 @@ class HtmlForm extends HtmlFormBasic
     public function closeButtonGroup()
     {
         $this->buttonGroupOpen = false;
-        $this->addHtml('</div><div class="form-alert" style="display: none;">&nbsp;</div>');
-    }
-
-    /**
-     * Closes a field structure that was added with the method openControlStructure.
-     * @param array $options (optional) An array with the following possible entries:
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
-     *                        - **alertWarning** : Add a bootstrap warning alert box after the select box. The value of this option
-     *                          will be the text of the alertbox
-     */
-
-    protected function closeControlStructure(array $options = array())
-    {
-        if ($options['property'] !== self::FIELD_HIDDEN) {
-            $parameters = array();
-            $helpTextId = $options['helpTextIdInline'];
-
-            if (is_array($options['helpTextIdInline'])) {
-                $parameters = $options['helpTextIdInline'][1];
-                $helpTextId = $options['helpTextIdInline'][0];
-            }
-
-            if ($helpTextId !== '') {
-                // if text is a translation-id then translate it
-                if (Language::isTranslationStringId($helpTextId)) {
-                    foreach ($parameters as &$parameter) {
-                        // parameters should be strings
-                        $parameter = (string)$parameter;
-
-                        // if parameter is a translation-id then translate it
-                        $parameter = Language::translateIfTranslationStrId($parameter);
-                    }
-                    unset($parameter);
-
-                    $helpText = $GLOBALS['gL10n']->get($helpTextId, $parameters);
-                } else {
-                    $helpText = $helpTextId;
-                }
-
-                $this->addHtml('<div class="help-block">' . $helpText . '</div>');
-            }
-
-            // add block with warning alert
-            if (isset($options['alertWarning']) && $options['alertWarning'] !== '') {
-                $this->addHtml('<div class="alert alert-warning mt-3" role="alert">
-                <i class="fas fa-exclamation-triangle"></i>' . $options['alertWarning'] . '
-            </div>');
-            }
-
-            if ($this->type === 'vertical' || $this->type === 'navbar') {
-                $this->addHtml('</div>');
-            } else {
-                $this->addHtml('</div></div>');
-            }
-        }
+        $this->htmlString .= '</div><div class="form-alert" style="display: none;">&nbsp;</div>';
     }
 
     /**
@@ -1725,7 +1656,7 @@ class HtmlForm extends HtmlFormBasic
 
     public function closeGroupBox()
     {
-        $this->addHtml('</div></div>');
+        $this->htmlString .= '</div></div>';
     }
 
     /**
@@ -1738,7 +1669,7 @@ class HtmlForm extends HtmlFormBasic
      * @param array $parameter If you need an additional parameters for the text you can set this parameter values within an array.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */
-    public static function getHelpTextIcon(string $string, string $title = 'SYS_NOTE', array $parameter = array())
+    public static function getHelpTextIcon(string $string, string $title = 'SYS_NOTE', array $parameter = array()): string
     {
         global $gL10n;
 
@@ -1793,102 +1724,46 @@ class HtmlForm extends HtmlFormBasic
     public function openButtonGroup()
     {
         $this->buttonGroupOpen = true;
-        $this->addHtml('<div class="btn-group" role="group">');
-    }
-
-    /**
-     * Creates a html structure for a form field. This structure contains the label and the div for the form element.
-     * After the form element is added the method closeControlStructure must be called.
-     * @param string $id         The id of this field structure.
-     * @param string $label      The label of the field. This string should already be translated.
-     * @param int    $property   (optional) With this param you can set the following properties:
-     *                           - **self::FIELD_DEFAULT**  : The field can accept an input.
-     *                           - **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
-     *                           - **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     * @param string $helpTextId (optional) A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
-     *                           If set a help icon will be shown where the user can see the text if he hovers over the icon.
-     *                           If you need an additional parameter for the text you can add an array. The first entry
-     *                           must be the unique text id and the second entry will be a parameter of the text id.
-     * @param string $icon       (optional) An icon can be set. This will be placed in front of the label.
-     * @param string $class      (optional) An additional css classname for the row. The class **admFieldRow**
-     *                           is set as default and need not set with this parameter.
-     */
-
-    protected function openControlStructure($id, $label, $property = self::FIELD_DEFAULT, $helpTextId = '', $icon = '', $class = '')
-    {
-        if ($property !== self::FIELD_HIDDEN) {
-            $cssClassRow = 'form-group';
-            $htmlIcon = '';
-            $htmlHelpIcon = '';
-            $htmlIdFor = '';
-
-            // set specific css class for this row
-            if ($class !== '') {
-                $cssClassRow .= ' ' . $class;
-            }
-
-            if ($this->type === 'default') {
-                $cssClassRow .= ' row';
-            }
-
-            // if necessary set css class for a mandatory element
-            if ($property === self::FIELD_REQUIRED && $this->showRequiredFields) {
-                $cssClassRow .= ' admidio-form-group-required';
-            }
-
-            if ($id !== '') {
-                $htmlIdFor = ' for="' . $id . '"';
-                $this->addHtml('<div id="' . $id . '_group" class="' . $cssClassRow . '">');
-            } else {
-                $this->addHtml('<div class="' . $cssClassRow . '">');
-            }
-
-            if ($icon !== '') {
-                // create html for icon
-                $htmlIcon = Image::getIconHtml($icon, $label);
-            }
-
-            if ($helpTextId !== '') {
-                $htmlHelpIcon = self::getHelpTextIcon($helpTextId);
-            }
-
-            // add label element
-            if ($this->type === 'vertical' || $this->type === 'navbar') {
-                if ($label !== '') {
-                    $this->addHtml('<label' . $htmlIdFor . '>' . $htmlIcon . $label . $htmlHelpIcon . '</label>');
-                }
-            } else {
-                if ($label !== '') {
-                    $this->addHtml(
-                        '<label' . $htmlIdFor . ' class="col-sm-3 control-label">' . $htmlIcon . $label . $htmlHelpIcon . '</label>
-                    <div class="col-sm-9">'
-                    );
-                } else {
-                    $this->addHtml('<div class="offset-sm-3 col-sm-9">');
-                }
-            }
-        }
+        $this->htmlString .= '<div class="btn-group" role="group">';
     }
 
     /**
      * Add a new groupbox to the form. This could be used to group some elements
      * together. There is also the option to set a headline to this group box.
-     * @param string $id       Id the the groupbox.
-     * @param string $headline (optional) A headline that will be shown to the user.
+     * @param string $id       ID of the groupbox.
+     * @param string|null $headline (optional) A headline that will be shown to the user.
      * @param string $class    (optional) An additional css classname for the row. The class **admFieldRow**
      *                         is set as default and need not set with this parameter.
      */
 
-    public function openGroupBox($id, $headline = null, $class = '')
+    public function openGroupBox(string $id, string $headline = null, string $class = '')
     {
-        $this->addHtml('<div id="' . $id . '" class="card admidio-field-group ' . $class . '">');
+        $this->htmlString .= '<div id="' . $id . '" class="card admidio-field-group ' . $class . '">';
         // add headline to groupbox
         if ($headline !== null) {
-            $this->addHtml('<div class="card-header">' . $headline . '</div>');
+            $this->htmlString .= '<div class="card-header">' . $headline . '</div>';
         }
-        $this->addHtml('<div class="card-body">');
+        $this->htmlString .= '<div class="card-body">';
     }
 
+    /**
+     * @param string $templateName
+     * @param array $assigns
+     * @return void
+     */
+    private function render(string $templateName, array $assigns) {
+        global $gL10n;
+
+        foreach($assigns as $key => $assign) {
+            $this->assign($key, $assign);
+        }
+        $this->assign("ADMIDIO_URL", ADMIDIO_URL);
+        $this->assign("FOLDER_LIBS_SERVER", FOLDER_LIBS_SERVER);
+        $this->assign("data", $assigns);
+
+        $this->assign('l10n', $gL10n);
+        $this->htmlString .= $this->fetch("sys-template-parts/".$templateName.'.tpl');
+    }
 
     /**
      * This method create the whole html code of the form. Call this method
@@ -1896,7 +1771,7 @@ class HtmlForm extends HtmlFormBasic
      * which marker represents the mandatory will be shown before the form.
      * @return string Return the html code of the form.
      */
-    public function show()
+    public function show(): string
     {
         global $gL10n;
 
@@ -1913,7 +1788,11 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // now get whole form html code
-        $html .= $this->getHtmlForm();
+        $html .= '<form id="'.$this->id.'" action="'.$this->action.'"';
+        foreach($this->attributes as $name => $value) {
+            $html .= ' '.$name.'="'.$value.'"';
+        }
+        $html .= '>' . $this->htmlString . '</form>';
 
         return $html;
     }

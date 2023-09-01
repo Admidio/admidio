@@ -24,7 +24,7 @@ require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3)));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
 
 // check rights
@@ -84,24 +84,19 @@ if ($getMode === 1) {
         // => EXIT
     }
 
-    // check if font awesome syntax is used
-    if ($postIcon !== '' && !preg_match('/fa-[a-zA-z0-9]/', $postIcon)) {
-        $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
-        // => EXIT
+    try {
+        $menu->setValue('men_icon', $postIcon);
+        $menu->setValue('men_men_id_parent', $postIdParent);
+        $menu->setValue('men_name', $postName);
+        $menu->setValue('men_description', $postDesc);
+        if (!$menu->getValue('men_standard')) {
+            $menu->setValue('men_url', $postUrl);
+            $menu->setValue('men_com_id', $postComId);
+        }
+        $returnCode = $menu->save();
+    } catch (AdmException $e) {
+        $e->showHtml();
     }
-
-    $menu->setValue('men_icon', $postIcon);
-    $menu->setValue('men_men_id_parent', $postIdParent);
-    $menu->setValue('men_name', $postName);
-    $menu->setValue('men_description', $postDesc);
-
-    if (!$menu->getValue('men_standard')) {
-        $menu->setValue('men_url', $postUrl);
-        $menu->setValue('men_com_id', $postComId);
-    }
-
-    // save Data to Table
-    $returnCode = $menu->save();
 
     // save changed roles rights of the menu
     if(isset($_POST['menu_view'])) {

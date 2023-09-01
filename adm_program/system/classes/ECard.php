@@ -1,14 +1,14 @@
 <?php
 /**
  ***********************************************************************************************
- * Ecard functions
+ * Class will handle some ECard functions
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-class FunctionClass
+class ECard
 {
     public $nameRecipientString      = '';
     public $emailRecipientString     = '';
@@ -197,7 +197,7 @@ class FunctionClass
                     $imgPhotoPath  = $imgServerPath;
 
                     $imageSized = new Image($photoServerPath);
-                    $imageSized->scale($gSettingsManager->getInt('ecard_card_picture_width'), $gSettingsManager->getInt('ecard_card_picture_height'));
+                    $imageSized->scale($gSettingsManager->getInt('photo_ecard_scale'), $gSettingsManager->getInt('photo_ecard_scale'));
                     $imageSized->copyToFile(null, $imgServerPath);
                 }
 

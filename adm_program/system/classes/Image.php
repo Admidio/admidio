@@ -38,7 +38,7 @@ class Image
     /**
      * @param string $pathAndFilename
      */
-    public function __construct($pathAndFilename = '')
+    public function __construct(string $pathAndFilename = '')
     {
         if ($pathAndFilename !== '') {
             $this->setImageFromPath($pathAndFilename);
@@ -46,12 +46,13 @@ class Image
     }
 
     /**
-     * Methode gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
-     * @param resource|null $imageResource eine andere Bild-Resource kann uebergeben werden
-     * @param int           $quality       die Qualitaet kann fuer jpeg-Dateien veraendert werden
+     * Method outputs the image directly so that it can be displayed in the browser. For jpeg files the
+     * quality could be changed through the second parameter.
+     * @param resource|null $imageResource another image resource can be set
+     * @param int $quality Quality in percent can be changed for jpeg files.
      * @return bool
      */
-    public function copyToBrowser($imageResource = null, $quality = 95)
+    public function copyToBrowser($imageResource = null, int $quality = 95): bool
     {
         if ($imageResource === null) {
             $imageResource = $this->imageResource;
@@ -74,13 +75,13 @@ class Image
     }
 
     /**
-     * Methode kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der hinterlegten Datei des Objekts
-     * @param resource|null $imageResource   eine andere Bild-Resource kann uebergeben werden
-     * @param string        $pathAndFilename ein andere Datei kann zur Ausgabe angegeben werden
-     * @param int           $quality         die Qualitaet kann fuer jpeg-Dateien veraendert werden
+     * method copies the given image resource to the given file or to the stored file of the object.
+     * @param resource|null $imageResource Another image resource can be set.
+     * @param string $pathAndFilename Other file can be specified for output.
+     * @param int $quality Quality in percent can be changed for jpeg files.
      * @return bool true, falls erfolgreich
      */
-    public function copyToFile($imageResource = null, $pathAndFilename = '', $quality = 95)
+    public function copyToFile($imageResource = null, string $pathAndFilename = '', int $quality = 95): bool
     {
         if ($imageResource === null) {
             $imageResource = $this->imageResource;
@@ -106,7 +107,7 @@ class Image
      * @param string $pathAndFilename
      * @return bool
      */
-    private function createResource($pathAndFilename)
+    private function createResource(string $pathAndFilename): bool
     {
         switch ($this->imageType) {
             case IMAGETYPE_JPEG:
@@ -142,15 +143,15 @@ class Image
     }
 
     /**
-     * Method creates a short html snippet that contains a image tag with an icon.
+     * Method creates a short html snippet that contains an image tag with an icon.
      * The icon itself could be a font awesome icon name or a full url to an icon
      * or only a filename than the icon must be in the theme folder **images**.
      * @param string $icon     The font-awesome icon-name or url or filename
      * @param string $text     A text that should be shown on mouseover
      * @param string $cssClass Optional an additional css class for the icon can be set
-     * @return string Html snippet that contains a image tag
+     * @return string Html snippet that contains an image tag
      */
-    public static function getIconHtml($icon, $text, $cssClass = '')
+    public static function getIconHtml(string $icon, string $text, string $cssClass = ''): string
     {
         global $gLogger;
 
@@ -201,16 +202,16 @@ class Image
     /**
      * @return array<int,int> Returns an array of the image width and height
      */
-    public function getImageSize()
+    public function getImageSize(): array
     {
         return array($this->imageWidth, $this->imageHeight);
     }
 
     /**
-     * gibt den Mime-Type (image/png) des Bildes zurueck
+     * returns the mime type of the image e.g. 'image/png'
      * @return string
      */
-    public function getMimeType()
+    public function getMimeType(): string
     {
         return image_type_to_mime_type($this->imageType);
     }
@@ -220,18 +221,18 @@ class Image
      * @param string $icon Font-Awesome icon name
      * @return bool Returns true if icon is a font-awesome icon
      */
-    public static function isFontAwesomeIcon($icon)
+    public static function isFontAwesomeIcon(string $icon): bool
     {
         return str_starts_with($icon, 'fa-') || str_starts_with($icon, 'fas fa-') || str_starts_with($icon, 'fab fa-');
     }
 
     /**
      * Checks if the given image filename is an allowed image type
-     * @param string            $image        Image filename
+     * @param string $image        Image filename
      * @param array<int,string> $allowedTypes Array of allowed image types
      * @return bool Returns true if image is an allowed image type
      */
-    public static function isImageFilename($image, array $allowedTypes = array('.png', '.jpg', '.jpeg'))
+    public static function isImageFilename(string $image, array $allowedTypes = array('.png', '.jpg', '.jpeg')): bool
     {
         foreach ($allowedTypes as $allowedType) {
             if (StringUtils::strEndsWith($image, $allowedType, false)) {
@@ -246,7 +247,7 @@ class Image
      * @param string $direction 'right' o. 'left' Richtung, in die gedreht wird
      * @return bool
      */
-    public function rotate($direction = self::ROTATE_DIRECTION_RIGHT)
+    public function rotate(string $direction = self::ROTATE_DIRECTION_RIGHT): bool
     {
         switch ($direction) {
             case self::ROTATE_DIRECTION_LEFT:
@@ -274,15 +275,15 @@ class Image
     }
 
     /**
-     * Scale an image to the new size of the parameters. Therefore the PHP instance may need
+     * Scale an image to the new size of the parameters. Therefore, the PHP instance may need
      * some memory which should be set through the PHP setting memory_limit.
-     * @param int  $newXSize            The new horizontal width in pixel. The image will be scaled to this size.
-     * @param int  $newYSize            The new vertical height in pixel. The image will be scaled to this size.
+     * @param int $newXSize            The new horizontal width in pixel. The image will be scaled to this size.
+     * @param int $newYSize            The new vertical height in pixel. The image will be scaled to this size.
      * @param bool $maintainAspectRatio If this is set to true, the image will be within the given size
      *                                  but maybe one side will be smaller than set with the parameters.
      * @return bool Return true if the image was scaled otherwise false.
      */
-    public function scale($newXSize, $newYSize, $maintainAspectRatio = true)
+    public function scale(int $newXSize, int $newYSize, bool $maintainAspectRatio = true): bool
     {
         if ($maintainAspectRatio) {
             if ($newXSize >= $this->imageWidth && $newYSize >= $this->imageHeight) {
@@ -330,7 +331,7 @@ class Image
      * @param int $newMaxSize New maximum size in pixel to which the image should be scaled.
      * @return bool Return true if the image was scaled otherwise false.
      */
-    public function scaleLargerSide($newMaxSize)
+    public function scaleLargerSide(int $newMaxSize): bool
     {
         if ($newMaxSize < $this->imageWidth || $newMaxSize < $this->imageHeight) {
             // calc aspect ratio
@@ -357,7 +358,7 @@ class Image
      * @param string $imageData String with binary image data
      * @return bool
      */
-    public function setImageFromData($imageData)
+    public function setImageFromData(string $imageData): bool
     {
         $imageResource = imagecreatefromstring($imageData);
 
@@ -379,7 +380,7 @@ class Image
      * @param string $pathAndFilename
      * @return bool
      */
-    public function setImageFromPath($pathAndFilename)
+    public function setImageFromPath(string $pathAndFilename): bool
     {
         if (!is_file($pathAndFilename)) {
             return false;
@@ -404,7 +405,7 @@ class Image
      * @param string $imageType
      * @return bool
      */
-    public function setImageType($imageType)
+    public function setImageType(string $imageType): bool
     {
         switch ($imageType) {
             case 'jpeg':

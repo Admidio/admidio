@@ -45,7 +45,7 @@ class TableMenu extends TableAccess
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gCurrentSession;
 
@@ -95,7 +95,7 @@ class TableMenu extends TableAccess
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gL10n;
 
@@ -158,12 +158,12 @@ class TableMenu extends TableAccess
     /**
      * Reads a menu out of the table in database selected by the unique menu id in the table.
      * Per default all columns of adm_menu will be read and stored in the object.
-     * @param int $menId Unique men_id
+     * @param int $id Unique men_id
      * @return bool Returns **true** if one record is found
      */
-    public function readDataById($menId)
+    public function readDataById(int $id): bool
     {
-        $returnValue = parent::readDataById($menId);
+        $returnValue = parent::readDataById($id);
 
         if ($returnValue) {
             $this->elementTable = TBL_MENU;
@@ -182,7 +182,7 @@ class TableMenu extends TableAccess
      * @param array $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
      */
-    public function readDataByColumns(array $columnArray)
+    public function readDataByColumns(array $columnArray): bool
     {
         $returnValue = parent::readDataByColumns($columnArray);
 
@@ -203,7 +203,7 @@ class TableMenu extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession;
 
@@ -233,5 +233,29 @@ class TableMenu extends TableAccess
         $this->db->endTransaction();
 
         return $returnValue;
+    }
+
+    /**
+     * Set a new value for a column of the database table.
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue The new value that should be stored in the database field
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     *@throws AdmException
+     */
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    {
+        if ($newValue !== parent::getValue($columnName) && $checkValue) {
+            if ($columnName === 'men_icon' && $newValue !== '') {
+                // check if font awesome syntax is used
+                if (!preg_match('/fa-[a-zA-z0-9]/', $newValue)) {
+                    throw new AdmException('SYS_INVALID_FONT_AWESOME');
+                }
+            }
+
+            return parent::setValue($columnName, $newValue, $checkValue);
+        }
+        return false;
     }
 }

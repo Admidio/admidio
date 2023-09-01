@@ -21,7 +21,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1, 'validValues' => array(1, 2, 3, 4, 5)));
 $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
 // in ajax mode only return simple text on error
@@ -41,6 +41,20 @@ if ($getMode === 1) {
 if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
+}
+
+function getTemplateFileName($folder, $templateName)
+{
+    // get all files from the folder
+    $files = array_keys(FileSystemUtils::getDirectoryContent($folder, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+    $templateFileName = '';
+
+    foreach ($files as $fileName) {
+        if ($templateName === ucfirst(preg_replace('/[_-]/', ' ', str_replace(array('.tpl', '.html', '.txt'), '', $fileName)))) {
+            $templateFileName = $fileName;
+        }
+    }
+    return $templateFileName;
 }
 
 switch ($getMode) {
@@ -126,7 +140,7 @@ switch ($getMode) {
                     break;
 
                 case 'registration':
-                    $checkboxes = array('registration_enable_module', 'enable_registration_captcha', 'registration_adopt_all_data', 'enable_registration_admin_mail');
+                    $checkboxes = array('registration_adopt_all_data', 'registration_enable_module', 'registration_enable_captcha', 'registration_manual_approval', 'registration_send_notification_email');
                     break;
 
                 case 'email_dispatch':
@@ -163,10 +177,6 @@ switch ($getMode) {
                                         'enable_intial_comments_loading');
                     break;
 
-                case 'ecards':
-                    $checkboxes = array('enable_ecard_module');
-                    break;
-
                 case 'groups-roles':
                     $checkboxes = array('groups_roles_enable_module');
                     break;
@@ -178,10 +188,20 @@ switch ($getMode) {
                 case 'messages':
                     $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha',
                                         'mail_send_to_all_addresses', 'mail_html_registered_users', 'mail_show_former', 'mail_save_attachments');
+
+                    // get real filename of the template file
+                    if ($_POST['mail_template'] !== $gSettingsManager->getString('mail_template')) {
+                        $_POST['mail_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $_POST['mail_template']);
+                    }
                     break;
 
                 case 'photos':
-                    $checkboxes = array('photo_download_enabled', 'photo_keep_original');
+                    $checkboxes = array('photo_download_enabled', 'photo_keep_original', 'photo_ecard_enabled');
+
+                    // get real filename of the template file
+                    if ($_POST['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
+                        $_POST['photo_ecard_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $_POST['photo_ecard_template']);
+                    }
                     break;
 
                 case 'profile':
@@ -423,7 +443,7 @@ switch ($getMode) {
 
         // set email data
         $email->setSender($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
-        $email->addRecipientsByUserId($gCurrentUserId);
+        $email->addRecipientsByUser($gCurrentUser->getValue('usr_uuid'));
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname'))));
         $email->setTemplateText(
             $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),

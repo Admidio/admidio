@@ -41,8 +41,9 @@ class TableRoles extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_roles.
      * If the id is set than the specific role will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $rolId    The recordset of the role with this id will be loaded.
+     * @param int $rolId The recordset of the role with this id will be loaded.
      *                           If id isn't set than an empty object of the table is created.
+     * @throws AdmException
      */
     public function __construct(Database $database, $rolId = 0)
     {
@@ -64,7 +65,7 @@ class TableRoles extends TableAccess
      * @param User $user UserObject of user who should be checked
      * @return bool
      */
-    public function allowedToAssignMembers(User $user)
+    public function allowedToAssignMembers(User $user): bool
     {
         // you aren't allowed to change membership of not active roles
         if ((int) $this->getValue('rol_valid') === 0) {
@@ -90,29 +91,6 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * checks if user is allowed to edit members of this role
-     * @param User $user UserObject of user who should be checked
-     * @return bool
-     */
-    public function allowedToEditMembers(User $user)
-    {
-        // you aren't allowed to edit users of not active roles
-        if ((int) $this->getValue('rol_valid') === 0) {
-            return false;
-        }
-
-        if ($user->editUsers()) {
-            return true;
-        }
-
-        $rolLeaderRights = (int) $this->getValue('rol_leader_rights');
-
-        // leader are allowed to assign members if it's configured in the role
-        return ($rolLeaderRights === ROLE_LEADER_MEMBERS_EDIT || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-            && $user->isMemberOfRole((int) $this->getValue('rol_id'));
-    }
-
-    /**
      * Calls clear() Method of parent class and initialize child class specific parameters
      */
     public function clear()
@@ -128,7 +106,7 @@ class TableRoles extends TableAccess
      * Method determines the number of active leaders of this role
      * @return int Returns the number of leaders of this role
      */
-    public function countLeaders()
+    public function countLeaders(): int
     {
         if ($this->countLeaders === -1) {
             $sql = 'SELECT COUNT(*) AS count
@@ -149,24 +127,21 @@ class TableRoles extends TableAccess
      * Method determines the number of active members (without leaders) of this role.
      * If it's an event role than the approved state will be considered and also the
      * additional guests.
-     * @param int $exceptUserId UserId witch shouldn't be counted
      * @return int Returns the number of members of this role
      */
-    public function countMembers($exceptUserId = null)
+    public function countMembers(): int
     {
         if ($this->countMembers === -1) {
             $sql = 'SELECT COUNT(*) + SUM(mem_count_guests) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id  = ? -- $this->getValue(\'rol_id\')
-                       AND mem_usr_id <> ? -- $exceptUserId
                        AND mem_leader  = false
-                       AND mem_begin  <= ? -- DATE_NOW
-                       AND mem_end     > ? -- DATE_NOW
+                       AND ? BETWEEN mem_begin AND mem_end -- DATE_NOW
                        AND (mem_approved IS NULL
                             OR mem_approved < 3)';
 
-            $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), $exceptUserId, DATE_NOW, DATE_NOW));
-
+            $pdoStatement = $this->db->queryPrepared($sql,
+                array((int) $this->getValue('rol_id'), DATE_NOW));
             $this->countMembers = (int) $pdoStatement->fetchColumn();
         }
 
@@ -179,7 +154,7 @@ class TableRoles extends TableAccess
      * @param bool $countLeaders Flag if the leaders should be count as participants. As per default they will not count.
      * @return int|float
      */
-    public function countVacancies($countLeaders = false)
+    public function countVacancies(bool $countLeaders = false)
     {
         $rolMaxMembers = $this->getValue('rol_max_members');
 
@@ -207,7 +182,7 @@ class TableRoles extends TableAccess
      * @throws AdmException
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gCurrentSession, $gL10n;
 
@@ -272,11 +247,11 @@ class TableRoles extends TableAccess
 
     /**
      * Returns an array with all cost periods with full name in the specific language.
-     * @param int $costPeriod The number of the cost period for which the name should be returned
+     * @param int|null $costPeriod The number of the cost period for which the name should be returned
      *                        (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
      * @return array<int,string>|string Array with all cost or if param costPeriod is set than the full name of that cost period
      */
-    public static function getCostPeriods($costPeriod = null)
+    public static function getCostPeriods(int $costPeriod = null)
     {
         global $gL10n;
 
@@ -300,7 +275,7 @@ class TableRoles extends TableAccess
      * If there is no list stored then the system default list will be returned
      * @return int Returns the default list id of this role
      */
-    public function getDefaultList()
+    public function getDefaultList(): int
     {
         global $gSettingsManager;
 
@@ -318,7 +293,7 @@ class TableRoles extends TableAccess
             try {
                 // read system default list configuration
                 $defaultListConfiguration = $gSettingsManager->getInt('groups_roles_default_configuration');
-            } catch (\InvalidArgumentException $exception) {
+            } catch (InvalidArgumentException $exception) {
                 // if no default list was set than load another global list of this organization
                 $sql = 'SELECT MIN(lst_id) as lst_id
                           FROM '.TBL_LISTS.'
@@ -345,7 +320,7 @@ class TableRoles extends TableAccess
      * @return int|float|string|bool Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gL10n;
 
@@ -367,7 +342,7 @@ class TableRoles extends TableAccess
      * Checks if this role has former members
      * @return bool Returns **true** if the role has former memberships
      */
-    public function hasFormerMembers()
+    public function hasFormerMembers(): bool
     {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
@@ -385,7 +360,7 @@ class TableRoles extends TableAccess
      * we also check if the user is a member of the roles that could participate at the event.
      * @return bool Return true if the current user is allowed to view this role
      */
-    public function isVisible()
+    public function isVisible(): bool
     {
         global $gCurrentUser, $gValidLogin;
 
@@ -418,14 +393,14 @@ class TableRoles extends TableAccess
      * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * If one record is found than the type of the role (ROLE_GROUP or ROLE_EVENT) is set.
-     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition, array $queryParams = array())
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             if($this->getValue('cat_name_intern') === 'EVENTS') {
@@ -446,8 +421,9 @@ class TableRoles extends TableAccess
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gCurrentUser;
 
@@ -476,7 +452,7 @@ class TableRoles extends TableAccess
      * Set the current role active.
      * @return bool Returns **true** if the role could be set to active.
      */
-    public function setActive()
+    public function setActive(): bool
     {
         return $this->toggleValid(true);
     }
@@ -498,15 +474,174 @@ class TableRoles extends TableAccess
     }
 
     /**
+     * Method will set a membership with the given start and end date. If there are cutting time periods these periods
+     * be adjusted. Periods within the new periods will be deleted. The leader flag will be respected and could lead
+     * to separate membership periods. If someone has already a membership and get a leader than he has two
+     * sequential periods. If the current role has dependent parent roles than the membership will be also assigned to
+     * the parent roles. After all a session refresh for the user will be initiated to get the new role
+     * assignments at once.
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @param string $startDate Date in format YYYY-MM-DD at which the role membership should start.
+     * @param string $endDate Date in format YYYY-MM-DD at which the role membership should end.
+     * @param bool $leader Flag if the user is assigned as a leader to this role.
+     * @return void
+     * @throws AdmException
+     */
+    public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = false)
+    {
+        global $gCurrentUser, $gCurrentUserId, $gCurrentSession;
+
+        $newMembershipSaved = false;
+        $updateNecessary = true;
+
+        // search for existing periods of membership and adjust them
+        $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
+              FROM ' . TBL_MEMBERS . '
+             WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+               AND mem_usr_id = ? -- $userId
+             ORDER BY mem_begin ASC';
+        $queryParams = array(
+            $this->getValue('rol_id'),
+            $userId
+        );
+        $membersStatement = $this->db->queryPrepared($sql, $queryParams);
+        $membersList = $membersStatement->fetchAll();
+        $this->db->startTransaction();
+
+        foreach ($membersList as $row) {
+            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin'] && $leader === $row['mem_leader']) {
+                // assignment already exists and must not be updated
+                $updateNecessary = false;
+            } else {
+                $tempStartDate = DateTime::createFromFormat('Y-m-d', $startDate);
+                $oneDayBeforeStartDate = $tempStartDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+
+                if ($startDate < $row['mem_end'] && $endDate >= $row['mem_end']) {
+                    // new period starts in existing period and ends after existing period
+                    if ($leader === (bool)$row['mem_leader']) {
+                        $newMembershipSaved = true;
+
+                        // save new membership period
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_begin', $startDate);
+                        $membership->setValue('mem_end', $endDate);
+                    } else {
+                        // End existing period and later add new period with changed leader flag
+                        $tempEndDate = DateTime::createFromFormat('Y-m-d', $startDate);
+                        $newEndDate = $tempEndDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_end', $newEndDate);
+                    }
+                    $membership->save();
+                } elseif ($startDate <= $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
+                    // new period starts before existing period and ends in existing period
+                    if ($leader === (bool) $row['mem_leader']) {
+                        $newMembershipSaved = true;
+
+                        // save new membership period
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_begin', $startDate);
+                        $membership->setValue('mem_end', $endDate);
+                    } else {
+                        // End existing period and later add new period with changed leader flag
+                        $tempStartDate = DateTime::createFromFormat('Y-m-d', $endDate);
+                        $newStartDate = $tempStartDate->add(new DateInterval('P1D'))->format('Y-m-d');
+
+                        $membership = new TableMembers($this->db);
+                        $membership->setArray($row);
+                        $membership->setValue('mem_end', $newStartDate);
+                    }
+                    $membership->save();
+                } elseif ($oneDayBeforeStartDate === $row['mem_end'] && $leader === (bool) $row['mem_leader']) {
+                    // existing period ends 1 day before new period than merge the two periods
+                    $newMembershipSaved = true;
+
+                    // save new membership period
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->setValue('mem_end', $endDate);
+                    $membership->save();
+                } elseif ($endDate === $row['mem_end'] && $startDate === $row['mem_begin'] && $leader !== $row['mem_leader']) {
+                    // exact same time period but the leader flag has changed than delete current period
+                    // and updated period later
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                } elseif ($startDate < $row['mem_begin'] && $endDate > $row['mem_end']) {
+                    // new time period surrounds existing time period than delete that period
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                } elseif ($startDate === $row['mem_begin'] && $startDate > $endDate) {
+                    // new time period is negative than search for equal start date and delete this period
+                    $newMembershipSaved = true;
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
+                    $membership->delete();
+                }
+            }
+        }
+
+        if (!$newMembershipSaved && $updateNecessary) {
+            // new existing period was adjusted to the new membership than save the new membership
+            $membership = new TableMembers($this->db);
+            $membership->setValue('mem_rol_id', $this->getValue('rol_id'));
+            $membership->setValue('mem_usr_id', $userId);
+            $membership->setValue('mem_begin', $startDate);
+            $membership->setValue('mem_end', $endDate);
+            $membership->setValue('mem_leader', $leader);
+            if ($this->getValue('cat_name_intern') === 'EVENTS') {
+                $membership->setValue('mem_approved', Participants::PARTICIPATION_YES);
+            }
+            $membership->save();
+        }
+
+        // if role is administrator than only administrator can add new user,
+        // but don't change their own membership, because there must be at least one administrator
+        if ($updateNecessary &&
+            (bool) $this->getValue('rol_administrator') === true
+            && !$gCurrentUser->isAdministrator()) {
+            $this->db->rollback();
+            if ($userId !== $gCurrentUserId) {
+                throw new AdmException('You could not edit your own membership to an administrator role!');
+            } else {
+                throw new AdmException('Members to administrator role could only be assigned by administrators!');
+            }
+        }
+
+        // reload session of that user because of changes to the assigned roles and rights
+        $gCurrentSession->reload($userId);
+
+        $this->db->endTransaction();
+    }
+
+    /**
+     * Set the type of the role. This could be a role that represents a group ROLE_GROUP that will be used in the
+     * groups and roles module or participants of an event ROLE_EVENT that will be used within the event module.
+     * @param int $type Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
+     * @return void
+     */
+    public function setType(int $type)
+    {
+        if($type === TableRoles::ROLE_GROUP || $type === TableRoles::ROLE_EVENT) {
+            $this->type = $type;
+        }
+    }
+
+    /**
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method **save** to store the new value to the database.
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
-     * @throws AdmException
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     *@throws AdmException
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gCurrentUser;
 
@@ -546,15 +681,60 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * Set the type of the role. This could be a role that represents a group ROLE_GROUP that will be used in the
-     * groups and roles module or participants of an event ROLE_EVENT that will be used within the event module.
-     * @param int $type Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
+     * Starts a new membership of the given user to the role of this class. The membership will start today
+     * and will "never" ends. End date is set to 9999-12-31.
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @param bool $leader Flag if the user is assigned as a leader to this role.
      * @return void
+     * @throws AdmException
      */
-    public function setType($type)
+    public function startMembership(int $userId, bool $leader = false)
     {
-        if($type === TableRoles::ROLE_GROUP || $type === TableRoles::ROLE_EVENT) {
-            $this->type = $type;
+        if ($this->getValue('rol_max_members') > $this->countMembers()
+            || (int) $this->getValue('rol_max_members') === 0) {
+            $this->db->startTransaction();
+            $this->setMembership($userId, DATE_NOW, '9999-12-31', $leader);
+
+            // find the parent roles and assign user to parent roles
+            $dependencies = RoleDependency::getParentRoles($this->db, $this->getValue('rol_id'));
+
+            foreach ($dependencies as $tmpRole) {
+                $parentRole = new TableRoles($this->db, $tmpRole);
+                $parentRole->startMembership($userId, $leader);
+            }
+            $this->db->endTransaction();
+        } else {
+            throw new AdmException('SYS_ROLE_MAX_MEMBERS', array($this->getValue('rol_name')));
+        }
+    }
+
+    /**
+     * Stops a current membership of the given user to the role of this class. The membership will stop
+     * yesterday.
+     * @param int $userId ID if the user who should get the membership to this role.
+     * @return void
+     * @throws AdmException
+     */
+    public function stopMembership(int $userId)
+    {
+        // search for existing periods of membership and adjust them
+        $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
+                  FROM ' . TBL_MEMBERS . '
+                 WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+                   AND mem_usr_id = ? -- $userId
+                   AND ? BETWEEN mem_begin AND mem_end ';
+        $queryParams = array(
+            $this->getValue('rol_id'),
+            $userId,
+            DATE_NOW
+        );
+        $membersStatement = $this->db->queryPrepared($sql, $queryParams);
+        $membersList = $membersStatement->fetchAll();
+
+        if (count($membersList) > 0) {
+            $endDate = DateTime::createFromFormat('Y-m-d', DATE_NOW);
+            $newEndDate = $endDate->sub(new DateInterval('P1D'))->format('Y-m-d');
+            $this->setMembership($userId, $membersList[0]['mem_begin'], $newEndDate);
         }
     }
 
@@ -562,7 +742,7 @@ class TableRoles extends TableAccess
      * @param bool $status
      * @return bool
      */
-    private function toggleValid($status)
+    private function toggleValid(bool $status): bool
     {
         global $gCurrentSession;
 
@@ -571,7 +751,7 @@ class TableRoles extends TableAccess
             $sql = 'UPDATE '.TBL_ROLES.'
                        SET rol_valid = ? -- $status
                      WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
-            $this->db->queryPrepared($sql, array((bool) $status, (int) $this->getValue('rol_id')));
+            $this->db->queryPrepared($sql, array($status, (int) $this->getValue('rol_id')));
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they were members of this role

@@ -23,7 +23,7 @@ $getMode      = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireVa
 $photoAlbumsArray = array('ALL' => $gL10n->get('PHO_PHOTO_ALBUMS'));
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
+if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -142,7 +142,7 @@ $form->addInput(
 );
 $form->addInput(
     'pho_photographers',
-    $gL10n->get('PHO_PHOTOGRAPHER'),
+    $gL10n->get('SYS_PHOTOS_BY'),
     $photoAlbum->getValue('pho_photographers'),
     array('maxLength' => 100)
 );

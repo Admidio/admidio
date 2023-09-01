@@ -38,14 +38,17 @@ if ($getMsgUuid !== '') {
     $delMessage = new TableMessage($gDb);
     $delMessage->readDataByUuid($getMsgUuid);
 
-    // Function to delete message
-    $returnCode = $delMessage->delete();
+    // only delete messages of the current user is allowed
+    if ($delMessage->getValue('msg_usr_id_sender') === $gCurrentUserId) {
+        $returnCode = $delMessage->delete();
 
-    if ($returnCode) {
-        echo 'done';
-    } else {
-        echo 'delete not OK';
+        if ($returnCode) {
+            echo 'done';
+            exit();
+        }
     }
+
+    echo 'delete not OK';
     exit();
 }
 
