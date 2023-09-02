@@ -285,7 +285,7 @@ class TableDate extends TableAccess
             'CREATED:' . $this->getValue('dat_timestamp_create', $dateTimeFormat)
         );
 
-        if ($this->getValue('dat_timestamp_change') !== null) {
+        if ((string) $this->getValue('dat_timestamp_change') !== '') {
             $iCalVEvent[] = 'LAST-MODIFIED:' . $this->getValue('dat_timestamp_change', $dateTimeFormat);
         }
 
