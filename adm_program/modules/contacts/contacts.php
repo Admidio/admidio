@@ -32,10 +32,10 @@ if (!$gCurrentUser->editUsers()) {
 }
 
 // set headline of the script
-$headline = $gL10n->get('SYS_MEMBERS');
+$headline = $gL10n->get('SYS_CONTACTS');
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-users-cog');
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
 $membersListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('members_list_configuration'));
 $_SESSION['members_list_config'] = $membersListConfig;
@@ -48,18 +48,18 @@ $page = new HtmlPage('admidio-members', $headline);
 
 $page->addJavascript('
     $("#menu_item_members_create_user").attr("href", "javascript:void(0);");
-    $("#menu_item_members_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php");
+    $("#menu_item_members_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php");
     $("#menu_item_members_create_user").attr("class", "nav-link btn btn-secondary openPopup");
 
     // change mode of users that should be shown
     $("#mem_show_all").click(function() {
-        window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php', array('members' => $flagShowMembers)).'");
+        window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts.php', array('members' => $flagShowMembers)).'");
     });', true);
 
 $page->addPageFunctionsMenuItem(
     'menu_item_members_create_user',
     $gL10n->get('SYS_CREATE_MEMBER'),
-    ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
+    ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php',
     'fa-plus-circle'
 );
 
@@ -119,7 +119,7 @@ $columnAlignment = $membersListConfig->getColumnAlignments();
 array_unshift($columnAlignment, 'left', 'left');
 array_push($columnAlignment, 'right');
 
-$membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));
+$membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_data.php', array('members' => $getMembers)));
 $membersTable->setColumnAlignByArray($columnAlignment);
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));

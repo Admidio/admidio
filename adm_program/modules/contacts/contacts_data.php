@@ -255,7 +255,7 @@ while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
     && !empty($row['loginname']) && (int) $row['usr_id'] !== $gCurrentUserId) {
         if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
             // if email is set and systemmails are activated then administrators can send a new password to user
-            $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
+            $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
                 '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
         } else {
             // if user has no email or send email is disabled then administrators could set a new password
@@ -290,7 +290,7 @@ while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
         || $memberOfThisOrganization)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
         && (int) $row['usr_id'] !== $gCurrentUserId) { // das eigene Profil darf keiner entfernen
         $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.
+                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.
                 '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_USER').'"></i>
             </a>';
     }

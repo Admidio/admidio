@@ -63,7 +63,7 @@ echo '
 <div class="modal-body">
     <p class="lead">'.$gL10n->get('SYS_INPUT_FIRSTNAME_LASTNAME').'</p>';
 
-    $form = new HtmlForm('form_members_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_assign.php', null, array('showRequiredFields' => false));
+    $form = new HtmlForm('form_members_create_user', ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_assign.php', null, array('showRequiredFields' => false));
     $form->addInput(
         'lastname',
         $gL10n->get('SYS_LASTNAME'),

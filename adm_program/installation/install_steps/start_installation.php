@@ -102,7 +102,7 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.'
              , (\'MODULE\', \'GBO_GUESTBOOK\',       \'GUESTBOOK\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_WEBLINKS\',        \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_GROUPS_ROLES\',    \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'SYS_MEMBERS\',         \'MEMBERS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_CONTACTS\',        \'CONTACTS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MESSAGES\',        \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MENU\',            \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_PHOTOS\',          \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -288,8 +288,8 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'fa-database\', \'SYS_DATABASE_BACKUP\', \'SYS_DATABASE_BACKUP_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 6, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'fa-cog\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, \'' . Uuid::uuid4() . '\', false, 4, true, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'fa-envelope\', \'SYS_EMAIL\', \'SYS_EMAIL_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'fa-address-card\', \'SYS_NEW_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'fa-users-cog\', \'SYS_MEMBERS\', \'SYS_MEMBERS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'fa-file-signature\', \'SYS_NEW_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CONTACTS\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'contacts\', \''.FOLDER_MODULES.'/contacts/contacts.php\', \'fa-address-card\', \'SYS_CONTACTS\', \'SYS_CONTACTS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 5, true, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'fa-stream\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
 $db->query($sql);
 

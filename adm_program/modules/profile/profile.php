@@ -220,7 +220,7 @@ if ($userId === $gCurrentUserId) {
         $page->addPageFunctionsMenuItem(
             'menu_item_profile_send_password',
             $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => '5')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => '5')),
             'fa-key'
         );
     } else {

@@ -38,5 +38,8 @@
     <step id="350">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_TWITTER' WHERE usf_name LIKE 'INS_TWITTER'</step>
     <step id="360">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_XING' WHERE usf_name LIKE 'INS_XING'</step>
     <step id="370">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_ICQ' WHERE usf_name LIKE 'INS_ICQ'</step>
+    <step id="380">UPDATE %PREFIX%_components SET com_name = 'SYS_CONTACTS', com_name_intern = 'CONTACTS' WHERE com_name_intern = 'MEMBERS'</step>
+    <step id="390">UPDATE %PREFIX%_menu SET men_name = 'SYS_CONTACTS', men_name_intern = 'contacts', men_icon='fa-address-card', men_url='/adm_program/modules/contacts/contacts.php', men_description='SYS_CONTACTS_DESC' WHERE men_name_intern = 'usrmgt'</step>
+    <step id="400">UPDATE %PREFIX%_menu SET men_icon='fa-file-signature' WHERE men_name_intern = 'newreg'</step>
     <step>stop</step>
 </update>

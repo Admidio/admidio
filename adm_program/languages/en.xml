@@ -585,6 +585,7 @@
   <string name="SYS_CONFIRM_REGISTRATION">Confirm registration</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
   <string name="SYS_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
+  <string name="SYS_CONTACTS">Contacts</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
   <string name="SYS_CONTENT">Content</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
@@ -987,7 +988,7 @@
   <string name="SYS_MEMBERS">Members</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">One of the configurations specified here can be used to display the members administration. The columns of the selected list configuration are then displayed in the members administration.</string>
-  <string name="SYS_MEMBERS_DESC">Display and organize all active and former members here. New members can be imported or created.</string>
+  <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Members displayed per page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Found #VAR1# members with a similar name.</string>

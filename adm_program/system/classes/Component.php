@@ -160,7 +160,7 @@ class Component extends TableAccess
                     }
                     break;
 
-                case 'MEMBERS':
+                case 'CONTACTS':
                     if ($gCurrentUser->editUsers()) {
                         return true;
                     }
@@ -266,7 +266,7 @@ class Component extends TableAccess
                 }
                 break;
 
-            case 'MEMBERS':
+            case 'CONTACTS':
                 if ($gCurrentUser->editUsers()) {
                     return true;
                 }
