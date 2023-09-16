@@ -76,7 +76,7 @@ if ($getMode === 1) {
     // if user has the right then cancel membership
     if ($role->allowedToAssignMembers($gCurrentUser)) {
         try {
-            $role->stopMembership($getUserUuid);
+            $role->stopMembership($member->getValue('mem_usr_id'));
         } catch (AdmException $e) {
             $e->showText();
             // => EXIT
