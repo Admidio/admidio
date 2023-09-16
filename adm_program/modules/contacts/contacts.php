@@ -14,6 +14,7 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../../system/login_valid.php');
 
 unset($_SESSION['import_request']);
 
@@ -23,12 +24,6 @@ $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultVal
 // if only active members should be shown then set parameter
 if (!$gSettingsManager->getBool('members_show_all_users')) {
     $getMembers = true;
-}
-
-// only legitimate users are allowed to call the user management
-if (!$gCurrentUser->editUsers()) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
 }
 
 // set headline of the script
@@ -46,50 +41,52 @@ $flagShowMembers = !$getMembers;
 // create html page object
 $page = new HtmlPage('admidio-members', $headline);
 
-$page->addJavascript('
-    $("#menu_item_members_create_user").attr("href", "javascript:void(0);");
-    $("#menu_item_members_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php");
-    $("#menu_item_members_create_user").attr("class", "nav-link btn btn-secondary openPopup");
+if ($gCurrentUser->editUsers()) {
+    $page->addJavascript('
+        $("#menu_item_members_create_user").attr("href", "javascript:void(0);");
+        $("#menu_item_members_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php");
+        $("#menu_item_members_create_user").attr("class", "nav-link btn btn-secondary openPopup");
 
-    // change mode of users that should be shown
-    $("#mem_show_all").click(function() {
-        window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts.php', array('members' => $flagShowMembers)).'");
-    });', true);
+        // change mode of users that should be shown
+        $("#mem_show_all").click(function() {
+            window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts.php', array('members' => $flagShowMembers)).'");
+        });', true);
 
-$page->addPageFunctionsMenuItem(
-    'menu_item_members_create_user',
-    $gL10n->get('SYS_CREATE_MEMBER'),
-    ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php',
-    'fa-plus-circle'
-);
-
-if ($gSettingsManager->getBool('profile_log_edit_fields')) {
-    // show link to view profile field change history
     $page->addPageFunctionsMenuItem(
-        'menu_item_members_change_history',
-        $gL10n->get('SYS_CHANGE_HISTORY'),
-        ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php',
-        'fa-history'
+        'menu_item_members_create_user',
+        $gL10n->get('SYS_CREATE_CONTACT'),
+        ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_new.php',
+        'fa-plus-circle'
+    );
+
+    if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+        // show link to view profile field change history
+        $page->addPageFunctionsMenuItem(
+            'menu_item_members_change_history',
+            $gL10n->get('SYS_CHANGE_HISTORY'),
+            ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php',
+            'fa-history'
+        );
+    }
+
+    // show checkbox to select all users or only active members
+    if ($gSettingsManager->getBool('members_show_all_users')) {
+        // create filter menu with elements for category
+        $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+        $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), $flagShowMembers, array('helpTextIdLabel' => 'SYS_SHOW_ALL_DESC'));
+        $filterNavbar->addForm($form->show());
+        $page->addHtml($filterNavbar->show());
+    }
+
+    // show link to import users
+    $page->addPageFunctionsMenuItem(
+        'menu_item_members_import_users',
+        $gL10n->get('SYS_IMPORT_CONTACTS'),
+        ADMIDIO_URL.FOLDER_MODULES.'/contacts/import.php',
+        'fa-upload'
     );
 }
-
-// show checkbox to select all users or only active members
-if ($gSettingsManager->getBool('members_show_all_users')) {
-    // create filter menu with elements for category
-    $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), $flagShowMembers, array('helpTextIdLabel' => 'SYS_SHOW_ALL_DESC'));
-    $filterNavbar->addForm($form->show());
-    $page->addHtml($filterNavbar->show());
-}
-
-// show link to import users
-$page->addPageFunctionsMenuItem(
-    'menu_item_members_import_users',
-    $gL10n->get('SYS_IMPORT_MEMBERS'),
-    ADMIDIO_URL.FOLDER_MODULES.'/members/import.php',
-    'fa-upload'
-);
 
 if ($gCurrentUser->isAdministrator()) {
     // show link to maintain profile fields

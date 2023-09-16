@@ -23,7 +23,7 @@ if (!PhpIniUtils::isFileUploadEnabled()) {
     // => EXIT
 }
 
-$headline = $gL10n->get('SYS_IMPORT_MEMBERS');
+$headline = $gL10n->get('SYS_IMPORT_CONTACTS');
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -62,7 +62,7 @@ if (!isset($formValues['import_role_id'])) {
 $page = new HtmlPage('admidio-members-import', $headline);
 
 // show form
-$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_read_file.php', $page, array('enableFileUpload' => true));
+$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/contacts/import_read_file.php', $page, array('enableFileUpload' => true));
 $formats = array(
     'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
     'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),
@@ -200,7 +200,7 @@ $selectBoxEntries = array(
 );
 $form->addSelectBox(
     'user_import_mode',
-    $gL10n->get('SYS_EXISTING_MEMBERS'),
+    $gL10n->get('SYS_EXISTING_CONTACTS'),
     $selectBoxEntries,
     array(
         'property'                       => HtmlForm::FIELD_REQUIRED,

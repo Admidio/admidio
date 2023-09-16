@@ -45,6 +45,7 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
@@ -60,12 +61,6 @@ header('Content-Type: application/json');
 // if only active members should be shown then set parameter
 if (!$gSettingsManager->getBool('members_show_all_users')) {
     $getMembers = true;
-}
-
-// only legitimate users are allowed to call the user management
-if (!$gCurrentUser->editUsers()) {
-    echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
-    exit();
 }
 
 if (isset($_SESSION['members_list_config'])) {
@@ -174,10 +169,12 @@ if ($gCurrentOrganization->countAllRecords() > 1) {
 }
 
 // create sql to show all members (not accepted users should not be shown)
-if ($getMembers) {
+if ($getMembers && $gCurrentUser->editUsers()) {
     $mainSql = $membersListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
-} else {
+} elseif ($gCurrentUser->editUsers()) {
     $mainSql = $membersListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
+} else {
+    $mainSql = $membersListConfig->getSql(array('showRolesMembers' => $gCurrentUser->getRolesViewProfiles(), 'useConditions' => false, 'useOrderBy' => $useOrderBy));
 }
 $mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_orga, '.$memberOfOtherOrganizationSelect.' AS member_other_orga, usr_login_name as loginname,
                 (SELECT email.usd_value FROM '.TBL_USER_DATA.' email

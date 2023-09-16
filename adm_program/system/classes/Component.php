@@ -267,9 +267,7 @@ class Component extends TableAccess
                 break;
 
             case 'CONTACTS':
-                if ($gCurrentUser->editUsers()) {
-                    return true;
-                }
+                return true;
                 break;
 
             case 'MESSAGES':
