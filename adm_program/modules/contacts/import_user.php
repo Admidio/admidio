@@ -149,6 +149,6 @@ $_SESSION['role']             = '';
 $_SESSION['user_import_mode'] = '';
 $_SESSION['import_data']      = '';
 
-$gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php');
+$gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts.php');
 $gMessage->show($gL10n->get('SYS_IMPORT_SUCCESSFUL', array($countImportNewUser, $countImportEditUser, $countImportEditRole)));
 // => EXIT

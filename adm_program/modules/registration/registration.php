@@ -76,7 +76,7 @@ if ($getMode === '' && $getUserUuid === '') {
     $headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
 
     // Navigation in module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-file-signature');
 
     try {
         // create html page object

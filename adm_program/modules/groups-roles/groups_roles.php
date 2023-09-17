@@ -173,7 +173,7 @@ $listsResult = $lists->getDataSet($getStart);
 
 if ($listsResult['totalCount'] === 0) {
     if ($gValidLogin) {
-        // If login valid, than show message for non available roles
+        // If login valid, then show message for not available roles
         if ($getRoleType === ROLE_TYPE_ACTIVE) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
         // => EXIT

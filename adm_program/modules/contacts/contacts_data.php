@@ -5,7 +5,7 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- * Server side script for Datatables to return the requested userlist
+ * Server side script for Datatables to return the requested the list of contacts
  *
  * This script will read all necessary users and their data from the database. It is optimized to
  * work with the javascript DataTables and will return the data in json format.
@@ -45,6 +45,7 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
@@ -60,12 +61,6 @@ header('Content-Type: application/json');
 // if only active members should be shown then set parameter
 if (!$gSettingsManager->getBool('members_show_all_users')) {
     $getMembers = true;
-}
-
-// only legitimate users are allowed to call the user management
-if (!$gCurrentUser->editUsers()) {
-    echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
-    exit();
 }
 
 if (isset($_SESSION['members_list_config'])) {
@@ -136,25 +131,6 @@ if ($getMembers) {
     $memberOfThisOrganizationSelect = $sqlSubSelect;
 }
 
-// get count of all found users
-$sql = 'SELECT COUNT(*) AS count_total
-          FROM '.TBL_USERS.'
-    INNER JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-    INNER JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-         WHERE usr_valid = true
-               '.$memberOfThisOrganizationCondition;
-$queryParams = array(
-    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
-);
-$countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
-
-$jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
-
 // create a subselect to check if the user is also an active member of another organization
 $memberOfOtherOrganizationSelect = ' 0 ';
 if ($gCurrentOrganization->countAllRecords() > 1) {
@@ -174,10 +150,12 @@ if ($gCurrentOrganization->countAllRecords() > 1) {
 }
 
 // create sql to show all members (not accepted users should not be shown)
-if ($getMembers) {
+if ($getMembers && $gCurrentUser->editUsers()) {
     $mainSql = $membersListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
-} else {
+} elseif ($gCurrentUser->editUsers()) {
     $mainSql = $membersListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
+} else {
+    $mainSql = $membersListConfig->getSql(array('showRolesMembers' => $gCurrentUser->getRolesViewProfiles(), 'useConditions' => false, 'useOrderBy' => $useOrderBy));
 }
 $mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_orga, '.$memberOfOtherOrganizationSelect.' AS member_other_orga, usr_login_name as loginname,
                 (SELECT email.usd_value FROM '.TBL_USER_DATA.' email
@@ -188,6 +166,7 @@ $mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_o
 $queryParamsEmail = array(
     $gProfileFields->getProperty('EMAIL', 'usf_id')
 ); // TODO add more params
+
 $limitCondition = '';
 if ($getLength > 0) {
     $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
@@ -195,7 +174,7 @@ if ($getLength > 0) {
 
 if ($getSearch === '') {
     // no search condition entered then return all records in dependence of order, limit and offset
-    $sql = $mainSql . $searchCondition . $orderCondition . $limitCondition;
+    $sql = $mainSql . $orderCondition . $limitCondition;
 } else {
     $sql = 'SELECT *
               FROM ('.$mainSql.') AS members
@@ -209,9 +188,14 @@ $mglStatement = $gDb->queryPrepared($sql, $queryParamsMain); // TODO add more pa
 $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = $getStart; // count for every row
 
+// get count of all members and store into json
+$countSql = 'SELECT COUNT(*) AS count_total FROM ('. $mainSql . ') contacts ';
+$countTotalStatement = $gDb->queryPrepared($countSql, $queryParamsEmail); // TODO add more params
+$jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
+
 $jsonArray['data'] = array();
 
-while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
+while ($row = $mglStatement->fetch()) {
     ++$rowNumber;
     $ColumnNumberSql = 7;
     $columnNumberJson = 2;
@@ -219,10 +203,10 @@ while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
     $memberOfThisOrganization  = (bool) $row['member_this_orga'];
     $memberOfOtherOrganization = (bool) $row['member_other_orga'];
 
-    // Create row and add first column "Rownumber"
+    // Create row and add first column
     $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_id'], '0' => $rowNumber);
 
-    // Add icon for "Orgamitglied" or "Nichtmitglied"
+    // Add icon for member or no member of the organization
     if ($memberOfThisOrganization) {
         $icon = 'fa-user';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName));
@@ -255,7 +239,7 @@ while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
     && !empty($row['loginname']) && (int) $row['usr_id'] !== $gCurrentUserId) {
         if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
             // if email is set and systemmails are activated then administrators can send a new password to user
-            $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
+            $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
                 '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
         } else {
             // if user has no email or send email is disabled then administrators could set a new password
@@ -286,11 +270,11 @@ while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
     }
 
     // add link to delete user btw. remove user from the current organization
-    if (((!$memberOfOtherOrganization && $gCurrentUser->isAdministrator()) // kein Mitglied einer anderen Orga, dann duerfen Administratoren loeschen
-        || $memberOfThisOrganization)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
-        && (int) $row['usr_id'] !== $gCurrentUserId) { // das eigene Profil darf keiner entfernen
+    if (((!$memberOfOtherOrganization && $gCurrentUser->isAdministrator()) // not a member of another organization, then administrators may delete
+        || $memberOfThisOrganization)                  // active members may be removed by authorized users
+        && (int) $row['usr_id'] !== $gCurrentUserId) { // no one is allowed to remove their own profile
         $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.
+                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.
                 '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_USER').'"></i>
             </a>';
     }

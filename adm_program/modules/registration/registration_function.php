@@ -159,6 +159,6 @@ if ($getMode === 1 || $getMode === 2) {
 
     // Resend access data
     $gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('mode' => '4', 'user_uuid' => $getUserUuid)));
+    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/contacts/contacts_function.php', array('mode' => '4', 'user_uuid' => $getUserUuid)));
     // => EXIT
 }

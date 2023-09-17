@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Search for existing user names and show users with similar names
+ * Search for existing usernames and show contacts with similar names
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/

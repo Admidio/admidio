@@ -220,7 +220,7 @@ if ($userId === $gCurrentUserId) {
         $page->addPageFunctionsMenuItem(
             'menu_item_profile_send_password',
             $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => '5')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => '5')),
             'fa-key'
         );
     } else {
@@ -239,7 +239,7 @@ if ($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasR
     $page->addPageFunctionsMenuItem(
         'menu_item_profile_change_history',
         $gL10n->get('SYS_CHANGE_HISTORY'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', array('user_uuid' => $getUserUuid)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('user_uuid' => $getUserUuid)),
         'fa-history'
     );
 }
