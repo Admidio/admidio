@@ -36,7 +36,7 @@ if (!$gCurrentUser->editUsers()) {
 }
 
 if ($getMode === 1) {
-    // ask if user should only be removed from organization or completly deleted
+    // ask if user should only be removed from organization or completely deleted
 
     echo '
     <div class="modal-header">
@@ -48,11 +48,11 @@ if ($getMode === 1) {
         <p><i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('SYS_REMOVE_USER_DESC', array($gL10n->get('SYS_DELETE'))).'</p>
 
         <button id="btnFormer" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)).'\'">
+            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)).'\'">
             <i class="fas fa-user-clock"></i>'.$gL10n->get('SYS_FORMER').'</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button id="btnDelete" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)).'\'">
+            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)).'\'">
             <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_DELETE').'</button>
     </div>';
 
@@ -167,7 +167,7 @@ if ($getMode === 2) {
 // => EXIT
 } elseif ($getMode === 5) {
     // Ask to send new login-data
-    $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 4)));
+    $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 4)));
     $gMessage->show($gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
 // => EXIT
 } elseif ($getMode === 6) {
@@ -175,18 +175,18 @@ if ($getMode === 2) {
 
     if (!$isAlsoInOtherOrgas && $gCurrentUser->isAdministrator()) {
         if (isMember($user->getValue('usr_id'))) {
-            // User is ONLY member of this organization -> ask if make to former member or delete completely
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 1)));
+            // User is ONLY member of this organization -> ask if user should make to former member or delete completely
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 1)));
         // => EXIT
         } else {
             // User is not member of any organization -> ask if delete completely
-            $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)));
+            $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)));
             $gMessage->show($gL10n->get('SYS_USER_DELETE_DESC', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))), $gL10n->get('SYS_DELETE'));
             // => EXIT
         }
     } else {
         // User could only be removed from this organization -> ask so
-        $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)));
+        $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)));
         $gMessage->show($gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))), $gL10n->get('SYS_REMOVE'));
         // => EXIT
     }

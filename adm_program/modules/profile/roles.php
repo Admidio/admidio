@@ -239,7 +239,7 @@ while ($row = $statement->fetch()) {
     $role->setArray($row);
 
     // if user is assigned to this role
-    // or if user is created in members.php of list module
+    // or if user is created in contacts.php of list module
     if ($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId)) {
         $memberChecked = ' checked="checked" ';
     }

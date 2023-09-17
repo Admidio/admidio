@@ -500,7 +500,7 @@
   <string name="SYS_ASSIGN_REGISTRATION">Assign registration</string>
   <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The member can now log on to the system.</string>
   <string name="SYS_ASSIGN_ROLE">Assign role</string>
-  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Select a role for all imported users.\n\nAvailable are only roles which you have user permission for.</string>
+  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Please select a role to which all imported contacts will be automatically assigned.\n\nYou can only select roles that you are allowed to see and do not have role assignment permission if you do not have it yourself.</string>
   <string name="SYS_ASSIGN_ROLE_TO_USER">The data cannot be saved.\nAt least one role must be assigned to the user.</string>
   <string name="SYS_ASSIGN_ROLES">Assign roles</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrical</string>
@@ -585,6 +585,7 @@
   <string name="SYS_CONFIRM_REGISTRATION">Confirm registration</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
   <string name="SYS_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
+  <string name="SYS_CONTACTS">Contacts</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
   <string name="SYS_CONTENT">Content</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
@@ -611,6 +612,7 @@
   <string name="SYS_CREATE">Create</string>
   <string name="SYS_CREATE_CALENDAR">Create calendar</string>
   <string name="SYS_CREATE_CATEGORY">Create category</string>
+  <string name="SYS_CREATE_CONTACT">Create contact</string>
   <string name="SYS_CREATE_ENTRY">Add entry</string>
   <string name="SYS_CREATE_FOLDER">Create folder</string>
   <string name="SYS_CREATE_FOLDER_DESC">A new folder will be created in folder #VAR1_BOLD#.</string>
@@ -793,7 +795,7 @@
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXECUTE_BACKUP">Execute backup</string>
-  <string name="SYS_EXISTING_MEMBERS">Existing members</string>
+  <string name="SYS_EXISTING_CONTACTS">Existing contacts</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Export to</string>
@@ -882,11 +884,11 @@
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_ICQ">ICQ</string>
-  <string name="SYS_IDENTIFY_USERS">Identification of existing users is made by means of first name and surname.</string>
+  <string name="SYS_IDENTIFY_USERS">Existing contacts are recognized by first name and last name.</string>
   <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_IMPORT">Import</string>
+  <string name="SYS_IMPORT_CONTACTS">Import contacts</string>
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Login data can only be imported by an administrator. The rules of the organization must be observed (e.g. password length and password strength). Users with already existing login data keep them. No login data will be overwritten by the import.</string>
-  <string name="SYS_IMPORT_MEMBERS">Import members</string>
   <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Import was successful..\n\n#VAR1# new users have been created.\n#VAR2# users have been edited.\n#VAR3# role memberships have been assigned.</string>
@@ -896,7 +898,7 @@
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info box</string>
   <string name="SYS_INFORMATIONS">Information</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new member. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new contact. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation successful</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">The installation and setup of the database was successfully completed.</string>
@@ -987,7 +989,7 @@
   <string name="SYS_MEMBERS">Members</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">One of the configurations specified here can be used to display the members administration. The columns of the selected list configuration are then displayed in the members administration.</string>
-  <string name="SYS_MEMBERS_DESC">Display and organize all active and former members here. New members can be imported or created.</string>
+  <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Members displayed per page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Found #VAR1# members with a similar name.</string>
