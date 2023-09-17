@@ -110,11 +110,11 @@ array_unshift(
     $gL10n->get('SYS_ABR_NO'),
     '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>'
 );
-array_push($columnHeading, '&nbsp;');
+$columnHeading[] = '&nbsp;';
 
 $columnAlignment = $membersListConfig->getColumnAlignments();
 array_unshift($columnAlignment, 'left', 'left');
-array_push($columnAlignment, 'right');
+$columnAlignment[] = 'right';
 
 $membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_data.php', array('members' => $getMembers)));
 $membersTable->setColumnAlignByArray($columnAlignment);

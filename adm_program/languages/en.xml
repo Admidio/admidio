@@ -898,7 +898,7 @@
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info box</string>
   <string name="SYS_INFORMATIONS">Information</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new member. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new contact. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation successful</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">The installation and setup of the database was successfully completed.</string>

@@ -36,7 +36,7 @@ if (!$gCurrentUser->editUsers()) {
 }
 
 if ($getMode === 1) {
-    // ask if user should only be removed from organization or completly deleted
+    // ask if user should only be removed from organization or completely deleted
 
     echo '
     <div class="modal-header">
@@ -175,7 +175,7 @@ if ($getMode === 2) {
 
     if (!$isAlsoInOtherOrgas && $gCurrentUser->isAdministrator()) {
         if (isMember($user->getValue('usr_id'))) {
-            // User is ONLY member of this organization -> ask if make to former member or delete completely
+            // User is ONLY member of this organization -> ask if user should make to former member or delete completely
             admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 1)));
         // => EXIT
         } else {
