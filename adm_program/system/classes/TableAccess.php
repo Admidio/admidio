@@ -61,6 +61,10 @@ class TableAccess
      */
     protected $newRecord;
     /**
+     * @var bool Flag if the data of this record must be inserted or updated
+     */
+    protected $insertRecord;
+    /**
      * @var bool Flag will be set to true if data in array dbColumns was changed
      */
     protected $columnsValueChanged;
@@ -125,6 +129,7 @@ class TableAccess
     public function clear()
     {
         $this->newRecord = true;
+        $this->insertRecord = true;
         $this->columnsValueChanged = false;
         $this->saveChangesWithoutRights = false;
 
@@ -331,6 +336,7 @@ class TableAccess
             if ($readDataStatement->rowCount() === 1) {
                 $row = $readDataStatement->fetch();
                 $this->newRecord = false;
+                $this->insertRecord = false;
 
                 // move data to class column value array
                 foreach ($row as $key => $value) {
@@ -479,7 +485,9 @@ class TableAccess
         }
 
         // if new role then set create the uuid
-        if ($this->isNewRecord() && array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
+        if ($this->isNewRecord()
+        && array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)
+        && (string) $this->getValue($this->columnPrefix . '_uuid') === '') {
             $this->setValue($this->columnPrefix . '_uuid', (string) Uuid::uuid4());
         }
 
@@ -488,7 +496,7 @@ class TableAccess
         if ($updateFingerPrint && isset($GLOBALS['gCurrentUserId']) && $GLOBALS['gCurrentUserId'] > 0) {
             // if the table has fields to store the creator and the last change,
             // then fill them here automatically
-            if ($this->newRecord && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns)) {
+            if ($this->newRecord && $this->insertRecord && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns)) {
                 $this->setValue($this->columnPrefix . '_timestamp_create', DATETIME_NOW);
                 $this->setValue($this->columnPrefix . '_usr_id_create', $GLOBALS['gCurrentUserId']);
             } elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns)) {
@@ -520,7 +528,7 @@ class TableAccess
 
                 // Auto-increment fields must not appear in insert/update
                 if (!$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed']) {
-                    if ($this->newRecord) {
+                    if ($this->insertRecord) {
                         // Prepare data for an insert
                         if ($value !== '') {
                             $sqlFieldArray[] = $key;
@@ -542,13 +550,14 @@ class TableAccess
             }
         }
 
-        if ($this->newRecord) {
+        if ($this->insertRecord) {
             // insert record and remember the new id
             $sql = 'INSERT INTO '.$this->tableName.'
                            ('.implode(',', $sqlFieldArray).')
                     VALUES ('.Database::getQmForValues($sqlFieldArray).')';
             if ($this->db->queryPrepared($sql, $queryParams) !== false) {
                 $returnCode = true;
+                $this->insertRecord = false;
                 if ($this->keyColumnName !== '') {
                     $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
                 }
@@ -612,6 +621,9 @@ class TableAccess
         }
 
         $this->newRecord = empty($this->dbColumns[$this->keyColumnName]);
+        if($this->newRecord) {
+            $this->insertRecord = true;
+        }
     }
 
     /**
@@ -704,6 +716,7 @@ class TableAccess
         // if the key field was set to 0, then a new record is to be created
         if ($this->keyColumnName === $columnName && (int) $newValue === 0) {
             $this->newRecord = true;
+            $this->insertRecord = true;
 
             // now mark all other columns with values of this object as changed
             foreach ($this->dbColumns as $column => $value) {
