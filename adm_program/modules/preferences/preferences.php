@@ -709,7 +709,7 @@ $formSystemNotification->addSelectBoxFromSql(
 
 $formSystemNotification->addCustomContent(
     $gL10n->get('SYS_SYSTEM_MAILS'),
-    '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>
+    '<p>'.$gL10n->get('SYS_SYSTEM_MAIL_TEXTS_DESC').':</p>
     <p><strong>#user_first_name#</strong> - '.$gL10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
     <strong>#user_last_name#</strong> - '.$gL10n->get('ORG_VARIABLE_LAST_NAME').'<br />
     <strong>#user_login_name#</strong> - '.$gL10n->get('ORG_VARIABLE_USERNAME').'<br />
