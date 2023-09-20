@@ -24,13 +24,13 @@
  *
  * // change existing event
  * $event = new TableDate($gDb, $dateId);
- * $event->setValue('dat_headline', 'My new headling');
+ * $event->setValue('dat_headline', 'My new headline');
  * $event->setValue('dat_description', 'This is the new description.');
  * $event->save();
  *
  * // create new event
  * $event = new TableDate($gDb);
- * $event->setValue('dat_headline', 'My new headling');
+ * $event->setValue('dat_headline', 'My new headline');
  * $event->setValue('dat_description', 'This is the new description.');
  * $event->save();
  * ```
@@ -123,15 +123,16 @@ class TableDate extends TableAccess
      * if the deadline is in the past than return true.
      * @return bool Return true if the deadline is exceeded.
      */
-    public function deadlineExceeded()
+    public function deadlineExceeded(): bool
     {
         return $this->getValidDeadline() < DATETIME_NOW;
     }
 
     /**
      * Deletes the selected record of the table and all references in other tables.
-     * After that the class will be initialize.
+     * After that the class will be initialized.
      * @return bool **true** if no error occurred
+     * @throws AdmException
      */
     public function delete(): bool
     {
@@ -140,7 +141,7 @@ class TableDate extends TableAccess
 
         $this->db->startTransaction();
 
-        // delete all roles assignments that could participate to the event
+        // delete all roles assignments that could participate in the event
         $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $datId);
         $eventParticipationRoles->delete();
 
@@ -165,7 +166,7 @@ class TableDate extends TableAccess
      * @param string $text
      * @return string
      */
-    private function escapeIcalText($text)
+    private function escapeIcalText(string $text): string
     {
         $replaces = array(
             '\\' => '\\\\',
@@ -181,11 +182,11 @@ class TableDate extends TableAccess
 
     /**
      * This Method will return a string with the date and time period of the current event.
-     * If the begin and end of the date is at the same day than the date will only included once.
-     * Also the all-day flag will be considered.
-     * @return string Returns a formated date and time string corresponding to the event settings.
+     * If the start and end of the event is at the same day then the date will only include once.
+     * Also, the all-day flag will be considered.
+     * @return string Returns a formatted date and time string corresponding to the event settings.
      */
-    public function getDateTimePeriod($showPeriodEnd = true)
+    public function getDateTimePeriod($showPeriodEnd = true): string
     {
         global $gSettingsManager;
 
@@ -213,28 +214,25 @@ class TableDate extends TableAccess
     }
 
     /**
-     * gibt einen Termin im iCal-Format zurueck
-     * @param string $domain
-     * @return string
+     * Returns the event in the iCal format.
+     * @return string Returns the event in the iCal format.
      */
-    public function getIcal($domain)
+    public function getIcal(): string
     {
-        $iCal = $this->getIcalHeader().
-                $this->getIcalVEvent($domain).
+        return $this->getIcalHeader().
+                $this->getIcalVEvent().
                 $this->getIcalFooter();
-
-        return $iCal;
     }
 
     /**
      * gibt den Kopf eines iCalCalenders aus
      * @return string
      */
-    public function getIcalHeader()
+    public function getIcalHeader(): string
     {
         $defaultTimezone = date_default_timezone_get();
 
-        $icalHeader = array(
+        $iCalHeader = array(
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
             'PRODID:-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE',
@@ -261,24 +259,23 @@ class TableDate extends TableAccess
             'END:VTIMEZONE'
         );
 
-        return implode("\r\n", $icalHeader) . "\r\n";
+        return implode("\r\n", $iCalHeader) . "\r\n";
     }
 
     /**
-     * gibt den Fuß eines iCalCalenders aus
-     * @return string
+     * Outputs the footer of an iCalCalendar
+     * @return string Returns the footer of an iCalCalendar
      */
-    public function getIcalFooter()
+    public function getIcalFooter(): string
     {
         return 'END:VCALENDAR';
     }
 
     /**
-     * gibt einen einzelnen Termin im iCal-Format zurück
-     * @param string $domain
-     * @return string
+     * Returns a single event in iCal format
+     * @return string Returns a single event in iCal format
      */
-    public function getIcalVEvent($domain)
+    public function getIcalVEvent(): string
     {
         $dateTimeFormat = 'Ymd\THis';
 
@@ -293,18 +290,18 @@ class TableDate extends TableAccess
             $iCalVEvent[] = 'LAST-MODIFIED:' . $this->getValue('dat_timestamp_change', $dateTimeFormat);
         }
 
-        // Semicolons herausfiltern
-        $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . (int) $this->getValue('dat_usr_id_create') . '@' . $domain;
+        // Filter out semicolons
+        $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . (int) $this->getValue('dat_usr_id_create') . '@' . DOMAIN;
         $iCalVEvent[] = 'SUMMARY:' . $this->escapeIcalText($this->getValue('dat_headline'));
         $iCalVEvent[] = 'DESCRIPTION:' . StringUtils::strStripTags($this->escapeIcalText(html_entity_decode($this->getValue('dat_description'), ENT_QUOTES, 'UTF-8')));
         $iCalVEvent[] = 'DTSTAMP:' . date($dateTimeFormat);
         $iCalVEvent[] = 'LOCATION:' . $this->escapeIcalText($this->getValue('dat_location'));
 
         if ((int) $this->getValue('dat_all_day') === 1) {
-            // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
-            // Outlook und Co. zeigen es erst dann korrekt an
-            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
-            $oneDayOffset = new \DateInterval('P1D');
+            // The end date for multi-day appointments must also be + 1 day in iCal.
+            // Outlook and Co. show it correctly only then.
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
+            $oneDayOffset = new DateInterval('P1D');
 
             $iCalVEvent[] = 'DTSTART;VALUE=DATE:' . $this->getValue('dat_begin', 'Ymd');
             $iCalVEvent[] = 'DTEND;VALUE=DATE:' . $dateTime->add($oneDayOffset)->format('Ymd');
@@ -359,10 +356,10 @@ class TableDate extends TableAccess
     }
 
     /**
-     * This function reads the deadline for participation. If no deadline is set as default the the startdate of the event will be set.
-     * return string $dateDeadline Returns a string with formated date and time
+     * This function reads the deadline for participation. If no deadline is set as default the startdate of the event will be set.
+     * return string $dateDeadline Returns a string with formatted date and time
      */
-    public function getValidDeadline()
+    public function getValidDeadline(): string
     {
         global $gSettingsManager;
 
@@ -372,19 +369,19 @@ class TableDate extends TableAccess
             $validDeadline = $this->getValue('dat_deadline');
         }
 
-        $objDateDeadline = \DateTime::createFromFormat($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), $validDeadline);
+        $objDateDeadline = DateTime::createFromFormat($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), $validDeadline);
 
         return $objDateDeadline->format('Y-m-d H:i:s');
     }
 
     /**
-     * This method checks if the current user is allowed to edit this event. Therefore
+     * This method checks if the current user is allowed to edit this event. Therefore,
      * the event must be visible to the user and must be of the current organization.
      * The user must be a member of at least one role that have the right to manage events.
      * Global events could be only edited by the parent organization.
      * @return bool Return true if the current user is allowed to edit this event
      */
-    public function isEditable()
+    public function isEditable(): bool
     {
         global $gCurrentOrganization, $gCurrentUser;
 
@@ -406,11 +403,11 @@ class TableDate extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to view this event. Therefore
+     * This method checks if the current user is allowed to view this event. Therefore,
      * the visibility of the category is checked.
      * @return bool Return true if the current user is allowed to view this event
      */
-    public function isVisible()
+    public function isVisible(): bool
     {
         global $gCurrentUser;
 
@@ -439,7 +436,7 @@ class TableDate extends TableAccess
     /* Read an event that has the given role has stored as participant role.
      * @param $roleId Id of the participants role of the event.
      */
-    public function readDataByRoleId($roleId)
+    public function readDataByRoleId($roleId): bool
     {
         // initialize the object, so that all fields are empty
         $this->clear();
@@ -454,12 +451,13 @@ class TableDate extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
     public function save(bool $updateFingerPrint = true): bool
     {

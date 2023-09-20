@@ -83,7 +83,7 @@ if ($datesResult['numResults'] > 0) {
     foreach ($datesResult['recordset'] as $row) {
         $date->clear();
         $date->setArray($row);
-        $iCal .= $date->getIcalVEvent(DOMAIN);
+        $iCal .= $date->getIcalVEvent();
     }
 }
 

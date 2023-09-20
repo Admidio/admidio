@@ -435,7 +435,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     header('Cache-Control: private');
     header('Pragma: public');
 
-    echo $date->getIcal(DOMAIN);
+    echo $date->getIcal();
     exit();
 }
 // If participation mode: Set status and write optional parameter from user and show current status message
