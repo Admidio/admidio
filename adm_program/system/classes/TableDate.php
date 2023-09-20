@@ -93,7 +93,8 @@ class TableDate extends TableAccess
      * Check if it's possible for the current user to participate in this event.
      * Therefore, we check if the user is allowed to participate and if the deadline of the event isn't exceeded.
      * There should be no participants limit or the limit is not reached or the current user is already member
-     * of the event.
+     * of the event. If the user is already a member of the event, then this method will return true, if the
+     * deadline is not reached.
      * @return bool Return true if it's possible for the current user to participate in the event.
      */
     public function possibleToParticipate(): bool
@@ -105,11 +106,12 @@ class TableDate extends TableAccess
                 $this->mParticipants = new Participants($this->db, $this->getValue('dat_rol_id'));
             }
 
-            if ($this->allowedToParticipate() || $this->mParticipants->isMemberOfEvent($gCurrentUserId)) {
-                if ((int) $this->getValue('dat_max_members') === 0
-                    || ($this->mParticipants->getCount() < (int) $this->getValue('dat_max_members'))) {
-                    return true;
-                }
+            if ($this->mParticipants->isMemberOfEvent($gCurrentUserId)) {
+                return true;
+            } elseif ($this->allowedToParticipate()
+                && ((int) $this->getValue('dat_max_members') === 0
+                    || $this->mParticipants->getCount() < (int) $this->getValue('dat_max_members'))) {
+                return true;
             }
         }
 
