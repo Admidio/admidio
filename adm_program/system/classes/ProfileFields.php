@@ -710,7 +710,7 @@ class ProfileFields
             }
 
             if($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') !== ''
-            && preg_match($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex'), $fieldValue) === 0) {
+            && preg_match('/'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_regex').'/', $fieldValue) === 0) {
                 throw new AdmException($gL10n->get('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
             }
         }
