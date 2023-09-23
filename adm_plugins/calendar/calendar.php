@@ -138,7 +138,7 @@ if (isset($page) && $page instanceof HtmlPage) {
 
 // query of all events
 if ($plg_ter_aktiv) {
-    $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+    $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('EVT'));
     $queryParams = array_merge($catIdParams, array($dateMonthEnd, $dateMonthStart));
 
     // check if special calendars should be shown

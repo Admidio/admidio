@@ -1753,7 +1753,7 @@ $formEvents->addCheckbox(
     (bool) $formValues['dates_may_take_part'],
     array('helpTextIdInline' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
 );
-$html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')).'">
+$html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'EVT')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
 $formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => 'DAT_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addCheckbox(

@@ -164,7 +164,7 @@ class ModuleEvents extends Modules
             $limit = $gSettingsManager->getInt('dates_per_page');
         }
 
-        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('EVT'));
         $additional = $this->sqlGetAdditional();
         $sqlConditions = $this->getSqlConditions();
 
@@ -227,7 +227,7 @@ class ModuleEvents extends Modules
             return 1;
         }
 
-        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('EVT'));
         $sqlConditions = $this->getSqlConditions();
 
         $sql = 'SELECT COUNT(DISTINCT dat_id) AS count

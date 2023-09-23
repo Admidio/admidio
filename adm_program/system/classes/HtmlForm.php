@@ -1385,7 +1385,7 @@ class HtmlForm extends \Smarty
      * @param string $id             ID of the selectbox. This will also be the name of the selectbox.
      * @param string $label          The label of the selectbox.
      * @param Database $database       A Admidio database object that contains a valid connection to a database
-     * @param string $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown.
+     * @param string $categoryType   Type of category ('EVT', 'LNK', 'ROL', 'USF') that should be shown.
      *                                 The type 'ROL' will ot list event role categories. Therefore, you need to set
      *                                 the type 'ROL_EVENT'. It's not possible to show role categories together with
      *                                 event categories.
@@ -1462,7 +1462,7 @@ class HtmlForm extends \Smarty
             $optionsAll['showContextDependentFirstEntry'] = false;
 
             switch ($categoryType) {
-                case 'DAT':
+                case 'EVT':
                     $sqlTables = ' INNER JOIN ' . TBL_DATES . ' ON cat_id = dat_cat_id ';
                     break;
                 case 'LNK':

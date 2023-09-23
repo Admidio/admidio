@@ -130,7 +130,7 @@ class Component extends TableAccess
                     }
                     break;
 
-                case 'DATES':
+                case 'EVENTS':
                     if ($gCurrentUser->editDates()) {
                         return true;
                     }
@@ -233,7 +233,7 @@ class Component extends TableAccess
                 }
                 break;
 
-            case 'DATES':
+            case 'EVENTS':
                 if ((int) $gSettingsManager->get('enable_dates_module') === 1
                 || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin)) {
                     return true;

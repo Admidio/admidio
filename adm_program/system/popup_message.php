@@ -41,7 +41,7 @@ switch ($getType) {
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_uuid' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
 
         // get special message for calendars
-        if ($getDatabaseId2 === 'DAT') {
+        if ($getDatabaseId2 === 'EVT') {
             $text = 'SYS_DELETE_ENTRY';
         } else {
             $text = 'SYS_WANT_DELETE_CATEGORY';

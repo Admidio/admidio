@@ -15,14 +15,14 @@
  *            LNK = Categories for weblinks
  *            ANN = Categories for announcements
  *            USF = Categories for profile fields
- *            DAT = Calendars for events
+ *            EVT = Calendars for events
  ****************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-$getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
+$getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'EVT', 'AWA')));
 
 $roleViewSet = array(0);
 $roleEditSet = array(0);
@@ -30,13 +30,13 @@ $addButtonText = $gL10n->get('SYS_CATEGORY');
 
 // set headline of the script
 if ($getCatUuid !== '') {
-    if ($getType === 'DAT') {
+    if ($getType === 'EVT') {
         $headlineSuffix = $gL10n->get('SYS_EDIT_CALENDAR');
     } else {
         $headlineSuffix = $gL10n->get('SYS_EDIT_CATEGORY');
     }
 } else {
-    if ($getType === 'DAT') {
+    if ($getType === 'EVT') {
         $headlineSuffix = $gL10n->get('SYS_CREATE_CALENDAR');
     } else {
         $headlineSuffix = $gL10n->get('SYS_CREATE_CATEGORY');
@@ -53,8 +53,8 @@ switch ($getType) {
         $rolesRightsName    = 'SYS_RIGHT_ANNOUNCEMENTS';
         break;
 
-    case 'DAT':
-        $component = 'DATES';
+    case 'EVT':
+        $component = 'EVENTS';
         $headline = $gL10n->get('DAT_DATES') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'DAT_EDIT_EVENTS';
         $rolesRightsColumn  = 'rol_dates';

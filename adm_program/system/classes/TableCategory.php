@@ -215,7 +215,7 @@ class TableCategory extends TableAccess
         || ($categoryType === 'LNK' && !$gCurrentUser->editWeblinksRight())
         || ($categoryType === 'ANN' && !$gCurrentUser->editAnnouncements())
         || ($categoryType === 'USF' && !$gCurrentUser->editUsers())
-        || ($categoryType === 'DAT' && !$gCurrentUser->editDates())
+        || ($categoryType === 'EVT' && !$gCurrentUser->editDates())
         || ($categoryType === 'AWA' && !$gCurrentUser->editUsers())) {
             return false;
         }
@@ -450,7 +450,7 @@ class TableCategory extends TableAccess
                 $this->elementTable = TBL_USER_FIELDS;
                 $this->elementColumn = 'usf_cat_id';
                 break;
-            case 'DAT':
+            case 'EVT':
                 $this->elementTable = TBL_DATES;
                 $this->elementColumn = 'dat_cat_id';
                 break;

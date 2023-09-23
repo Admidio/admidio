@@ -71,7 +71,7 @@ if (in_array($getMode, array(1, 2), true)) {
         }
     } else {
         // check if the user has the right to edit at least one category
-        if (count($gCurrentUser->getAllEditableCategories('DAT')) === 0) {
+        if (count($gCurrentUser->getAllEditableCategories('EVT')) === 0) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }

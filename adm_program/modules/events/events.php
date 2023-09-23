@@ -125,7 +125,7 @@ if ($getViewMode === 'html') {
     }
 
     // Add new event
-    if (count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getDateUuid === '') {
+    if (count($gCurrentUser->getAllEditableCategories('EVT')) > 0 && $getDateUuid === '') {
         $page->addPageFunctionsMenuItem(
             'menu_item_event_add',
             $gL10n->get('SYS_CREATE_VAR', array($getHeadline)),
@@ -153,7 +153,7 @@ if ($getViewMode === 'html') {
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_categories',
                 $gL10n->get('SYS_EDIT_CALENDARS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'EVT')),
                 'fa-th-large'
             );
         }
@@ -188,7 +188,7 @@ if ($getViewMode === 'html') {
             'cat_uuid',
             $gL10n->get('DAT_CALENDAR'),
             $gDb,
-            'DAT',
+            'EVT',
             HtmlForm::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $getCatUuid)
         );

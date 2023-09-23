@@ -621,9 +621,7 @@ class TableAccess
         }
 
         $this->newRecord = empty($this->dbColumns[$this->keyColumnName]);
-        if($this->newRecord) {
-            $this->insertRecord = true;
-        }
+        $this->insertRecord = $this->newRecord;
     }
 
     /**

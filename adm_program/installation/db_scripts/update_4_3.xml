@@ -41,5 +41,8 @@
     <step id="380">UPDATE %PREFIX%_components SET com_name = 'SYS_CONTACTS', com_name_intern = 'CONTACTS' WHERE com_name_intern = 'MEMBERS'</step>
     <step id="390">UPDATE %PREFIX%_menu SET men_name = 'SYS_CONTACTS', men_name_intern = 'contacts', men_icon='fa-address-card', men_url='/adm_program/modules/contacts/contacts.php', men_description='SYS_CONTACTS_DESC', men_men_id_parent = 1 WHERE men_name_intern = 'usrmgt'</step>
     <step id="400">UPDATE %PREFIX%_menu SET men_icon='fa-file-signature' WHERE men_name_intern = 'newreg'</step>
+    <step id="410">UPDATE %PREFIX%_components SET com_name_intern = 'EVENTS' WHERE com_name_intern = 'DATES'</step>
+    <step id="420">UPDATE %PREFIX%_menu SET men_name = 'SYS_CONTACTS', men_name_intern = 'events', men_url='/adm_program/modules/events/events.php' WHERE men_name_intern = 'dates'</step>
+    <step id="430">UPDATE %PREFIX%_categories SET cat_type = 'EVT' WHERE cat_type = 'DAT'</step>
     <step>stop</step>
 </update>

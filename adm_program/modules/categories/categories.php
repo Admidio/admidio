@@ -17,7 +17,7 @@
  *         LNK = Categories for weblinks
  *         ANN = Categories for announcements
  *         USF = Categories for profile fields
- *         DAT = Calendars for events
+ *         EVT = Calendars for events
  *
  ****************************************************************************/
 
@@ -25,14 +25,14 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getType = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
+$getType = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'EVT', 'AWA')));
 
 // Modus und Rechte pruefen
 if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
 ||  ($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
 ||  ($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
 ||  ($getType === 'USF' && !$gCurrentUser->editUsers())
-||  ($getType === 'DAT' && !$gCurrentUser->editDates())
+||  ($getType === 'EVT' && !$gCurrentUser->editDates())
 ||  ($getType === 'AWA' && !$gCurrentUser->editUsers())) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -60,8 +60,8 @@ switch ($getType) {
         $editableHeadline = $gL10n->get('SYS_EDIT_ANNOUNCEMENTS');
         break;
 
-    case 'DAT':
-        $component = 'DATES';
+    case 'EVT':
+        $component = 'EVENTS';
         $rolesRightsColumn = 'rol_dates';
         $headline = $gL10n->get('DAT_DATES') . ' - ' . $gL10n->get('SYS_CALENDARS');
         $navigationHeadline = $gL10n->get('SYS_CALENDARS');

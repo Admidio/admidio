@@ -108,7 +108,7 @@ if (isset($_SESSION['dates_request'])) {
         $dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id'));
     } else {
         // check if the user has the right to edit at least one category
-        if (count($gCurrentUser->getAllEditableCategories('DAT')) === 0) {
+        if (count($gCurrentUser->getAllEditableCategories('EVT')) === 0) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -291,7 +291,7 @@ $form->addSelectBoxForCategories(
     'dat_cat_id',
     $gL10n->get('DAT_CALENDAR'),
     $gDb,
-    'DAT',
+    'EVT',
     HtmlForm::SELECT_BOX_MODUS_EDIT,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $date->getValue('cat_uuid'))
 );

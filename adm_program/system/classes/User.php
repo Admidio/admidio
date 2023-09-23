@@ -843,7 +843,7 @@ class User extends TableAccess
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-        || ($categoryType === 'DAT' && $this->editDates())
+        || ($categoryType === 'EVT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers())
         || ($categoryType === 'ROL' && $this->manageRoles())) {
@@ -898,7 +898,7 @@ class User extends TableAccess
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-        || ($categoryType === 'DAT' && $this->editDates())
+        || ($categoryType === 'EVT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers())
         || ($categoryType === 'ROL' && $this->assignRoles())) {

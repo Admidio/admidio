@@ -386,7 +386,7 @@ class Event extends TableAccess
         global $gCurrentOrganization, $gCurrentUser;
 
         if ($gCurrentUser->editDates()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true)) {
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)) {
             // if category belongs to current organization than events are editable
             if ($this->getValue('cat_org_id') > 0
             && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
@@ -412,7 +412,7 @@ class Event extends TableAccess
         global $gCurrentUser;
 
         // check if the current user could view the category of the event
-        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('DAT'), true);
+        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('EVT'), true);
     }
 
     /**
@@ -463,7 +463,7 @@ class Event extends TableAccess
     {
         global $gCurrentUser;
 
-        if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('dat_cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true)) {
+        if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('dat_cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)) {
             throw new AdmException('Event could not be saved because you are not allowed to edit events of this category.');
         }
 
