@@ -1771,7 +1771,7 @@ $formEvents->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'events', 'accordion_modules', $gL10n->get('DAT_DATES'), 'fas fa-calendar-alt', $formEvents->show()));
+$page->addHtml(getPreferencePanel('modules', 'events', 'accordion_modules', $gL10n->get('SYS_EVENTS'), 'fas fa-calendar-alt', $formEvents->show()));
 
 // PANEL: WEBLINKS
 

@@ -55,7 +55,7 @@ switch ($getType) {
 
     case 'EVT':
         $component = 'EVENTS';
-        $headline = $gL10n->get('DAT_DATES') . ' - ' . $headlineSuffix;
+        $headline = $gL10n->get('SYS_EVENTS') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'DAT_EDIT_EVENTS';
         $rolesRightsColumn  = 'rol_dates';
         $rolesRightsName    = 'SYS_RIGHT_DATES';

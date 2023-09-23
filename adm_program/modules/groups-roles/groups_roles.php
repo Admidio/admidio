@@ -305,7 +305,7 @@ foreach ($listsResult['recordset'] as $row) {
         // block with informations about events and meeting-point
         if ($role->getValue('rol_start_date') !== '' || $role->getValue('rol_weekday') > 0
             || $role->getValue('rol_start_time') !== '' || $role->getValue('rol_location') !== '') {
-            $page->addHtml('<li class="list-group-item"><h6>'.$gL10n->get('DAT_DATES').' / '.$gL10n->get('SYS_MEETINGS').'</h6>');
+            $page->addHtml('<li class="list-group-item"><h6>'.$gL10n->get('SYS_APPOINTMENTS').' / '.$gL10n->get('SYS_MEETINGS').'</h6>');
             if ($role->getValue('rol_start_date') !== '') {
                 $page->addHtml('<span class="d-block">'.$gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))).'</span>');
             }

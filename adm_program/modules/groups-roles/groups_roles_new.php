@@ -350,7 +350,7 @@ if (!$eventRole) {
         );
     }
     $form->closeGroupBox();
-    $form->openGroupBox('gb_dates_meetings', $gL10n->get('DAT_DATES').' / '.$gL10n->get('SYS_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
+    $form->openGroupBox('gb_dates_meetings', $gL10n->get('SYS_APPOINTMENTS').' / '.$gL10n->get('SYS_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
     $form->addInput('rol_start_date', $gL10n->get('SYS_VALID_FROM'), $role->getValue('rol_start_date'), array('type' => 'date'));
     $form->addInput('rol_end_date', $gL10n->get('SYS_VALID_TO'), $role->getValue('rol_end_date'), array('type' => 'date'));
     $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));

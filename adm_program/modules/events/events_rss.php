@@ -24,7 +24,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
 if (!$gSettingsManager->getBool('enable_rss')) {

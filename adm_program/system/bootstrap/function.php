@@ -278,8 +278,8 @@ function admFuncProcessableImageSize()
  * // numeric value that would get a default value 0 if not set
  * $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));
  *
- * // string that will be initialized with text of id DAT_DATES
- * $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
+ * // string that will be initialized with text of id SYS_EVENTS
+ * $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
  *
  * // string initialized with actual and the only allowed values are actual and old
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));

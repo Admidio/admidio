@@ -735,7 +735,7 @@ elseif ($getMode === 'pdf') {
                 $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))));
             }
 
-            // Event
+            // Appointment
             $value = '';
             if ($role->getValue('rol_weekday') > 0) {
                 $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
@@ -744,7 +744,7 @@ elseif ($getMode === 'pdf') {
                 $value = $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
             }
             if ($role->getValue('rol_weekday') > 0 || (string) $role->getValue('rol_start_time') !== '') {
-                $form->addStaticControl('infobox_date', $gL10n->get('DAT_DATE'), $value);
+                $form->addStaticControl('infobox_date', $gL10n->get('SYS_APPOINTMENT'), $value);
             }
 
             // Meeting Point

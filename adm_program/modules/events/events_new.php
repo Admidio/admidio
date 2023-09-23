@@ -20,7 +20,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getDateUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
 $getCopy     = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 // check if module is active

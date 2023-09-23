@@ -14,8 +14,6 @@
   <string name="DAT_CANCEL">Cancel</string>
   <string name="DAT_CANCEL_DATE">You canceled the participation for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="DAT_CURRENT_DATES_OF_ORGA">Current events of organizations #VAR1#</string>
-  <string name="DAT_DATE">Event</string>
-  <string name="DAT_DATES">Events</string>
   <string name="DAT_DEADLINE">Deadline</string>
   <string name="DAT_DEADLINE_ATTENTION">Your registration can not be changed because the given end date for registrations has been reached or the date is in the past. Please contact a leader of the event or an administrator!</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Default configuration of participants list</string>
@@ -487,6 +485,8 @@
   <string name="SYS_ANNOUNCEMENTS">Announcements</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Display or edit announcements, news and other information.</string>
   <string name="SYS_APPLY">Apply</string>
+  <string name="SYS_APPOINTMENT">Appointment</string>
+  <string name="SYS_APPOINTMENTS">Appointments</string>
   <string name="SYS_ANNUALLY">Annually</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="SYS_ASSIGN_FIELDS">Assign fields</string>
@@ -787,6 +787,8 @@
   <string name="SYS_EVENT_CHANGED_TITLE">An event was changed at #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">A new event was created at #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Participants can register at the event until this date. Leaders and members with the right to edit events can still assign participants. If no date is specified, the start date of the event is taken as the registration deadline.</string>
+  <string name="SYS_EVENT">Event</string>
+  <string name="SYS_EVENTS">Events</string>
   <string name="SYS_EVENTS_DESC">Events can be created and viewed. Members can register for special events if they wish.</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Events - Confirmation of attendance</string>
   <string name="SYS_EXAMPLE">Example</string>
