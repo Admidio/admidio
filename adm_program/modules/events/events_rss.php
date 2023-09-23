@@ -16,7 +16,7 @@
  *
  * Parameters:
  *
- * headline  - Headline for the rss feed
+ * headline - Headline for the rss feed
  *             (Default) Events
  *
  *****************************************************************************/
@@ -26,7 +26,7 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
 
-// Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
+// Check if RSS is active...
 if (!$gSettingsManager->getBool('enable_rss')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -40,11 +40,11 @@ if ((int) $gSettingsManager->get('enable_dates_module') !== 1) {
 }
 
 // create Object
-$dates = new ModuleEvents();
-$dates->setDateRange();
+$events = new ModuleEvents();
+$events->setDateRange();
 
 // read events for output
-$datesResult = $dates->getDataSet(0, 10);
+$eventsResult = $events->getDataSet(0, 10);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
@@ -56,64 +56,64 @@ $rss  = new RssFeed(
     $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', array($orgLongname)),
     $orgLongname
 );
-$date = new Event($gDb);
+$event = new Event($gDb);
 
 // Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-if ($datesResult['numResults'] > 0) {
-    $date = new Event($gDb);
-    foreach ($datesResult['recordset'] as $row) {
+if ($eventsResult['numResults'] > 0) {
+    $event = new Event($gDb);
+    foreach ($eventsResult['recordset'] as $row) {
         // ausgelesene Termindaten in Date-Objekt schieben
-        $date->clear();
-        $date->setArray($row);
+        $event->clear();
+        $event->setArray($row);
 
-        $dateUuid     = $date->getValue('dat_uuid');
-        $dateFrom     = $date->getValue('dat_begin', $gSettingsManager->getString('system_date'));
-        $dateTo       = $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
-        $dateLocation = $date->getValue('dat_location');
+        $eventUuid     = $event->getValue('dat_uuid');
+        $eventFrom     = $event->getValue('dat_begin', $gSettingsManager->getString('system_date'));
+        $eventTo       = $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
+        $eventLocation = $event->getValue('dat_location');
 
         // set data for attributes of this entry
-        $title = $dateFrom;
-        if ($dateFrom !== $dateTo) {
-            $title .= ' - ' . $dateTo;
+        $title = $eventFrom;
+        if ($eventFrom !== $eventTo) {
+            $title .= ' - ' . $eventTo;
         }
-        $title  .= ' ' . $date->getValue('dat_headline');
+        $title  .= ' ' . $event->getValue('dat_headline');
 
         // add additional information about the event to the description
-        $descDateFrom = $dateFrom;
-        $descDateTo   = '';
-        $description  = $descDateFrom;
+        $descEventFrom = $eventFrom;
+        $descEventTo   = '';
+        $description  = $descEventFrom;
 
-        if ($date->getValue('dat_all_day') == 0) {
-            $descDateFrom .= ' ' . $date->getValue('dat_begin', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
+        if ($event->getValue('dat_all_day') == 0) {
+            $descEventFrom .= ' ' . $event->getValue('dat_begin', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
 
-            if ($dateFrom !== $dateTo) {
-                $descDateTo = $dateTo . ' ';
+            if ($eventFrom !== $eventTo) {
+                $descEventTo = $eventTo . ' ';
             }
-            $descDateTo  .= ' ' . $date->getValue('dat_end', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
-            $description = $gL10n->get('SYS_DATE_FROM_TO', array($descDateFrom, $descDateTo));
+            $descEventTo  .= ' ' . $event->getValue('dat_end', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
+            $description = $gL10n->get('SYS_DATE_FROM_TO', array($descEventFrom, $descEventTo));
         } else {
-            if ($dateFrom !== $dateTo) {
-                $description = $gL10n->get('SYS_DATE_FROM_TO', array($descDateFrom, $dateTo));
+            if ($eventFrom !== $eventTo) {
+                $description = $gL10n->get('SYS_DATE_FROM_TO', array($descEventFrom, $eventTo));
             }
         }
 
-        if ($dateLocation !== '') {
-            $description .= '<br /><br />' . $gL10n->get('DAT_LOCATION') . ': ' . $dateLocation;
+        if ($eventLocation !== '') {
+            $description .= '<br /><br />' . $gL10n->get('DAT_LOCATION') . ': ' . $eventLocation;
         }
 
-        $description .= '<br /><br />' . $date->getValue('dat_description');
+        $description .= '<br /><br />' . $event->getValue('dat_description');
 
         // i-cal downloadlink
-        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => '6')).'">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
+        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $eventUuid, 'mode' => '6')).'">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
 
         // add entry to RSS feed
         $rss->addItem(
             $title,
             $description,
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('dat_uuid' => $dateUuid, 'view' => 'detail')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('dat_uuid' => $eventUuid, 'view' => 'detail')),
             $row['create_name'],
-            \DateTime::createFromFormat('Y-m-d H:i:s', $date->getValue('dat_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
-            $date->getValue('cat_name')
+            \DateTime::createFromFormat('Y-m-d H:i:s', $event->getValue('dat_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
+            $event->getValue('cat_name')
         );
     }
 }

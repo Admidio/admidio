@@ -15,8 +15,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getDatUuid  = admFuncVariableIsValid($_GET, 'dat_uuid', 'string', array('requireValue' => true));
-$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
+$getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string', array('requireValue' => true));
+$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
 // Initialize local variables
 $disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;
@@ -24,30 +24,30 @@ $disableComments         = HtmlForm::FIELD_HIDDEN;
 $gMessage->showThemeBody(false);
 
 // Get the date object
-$date = new Event($gDb);
-$date->readDataByUuid($getDatUuid);
+$event = new Event($gDb);
+$event->readDataByUuid($getEventUuid);
 
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
 if ($gCurrentUser->getValue('usr_uuid') === $getUserUuid) {
-    if (!$date->allowedToParticipate()) {
+    if (!$event->allowedToParticipate()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 } else {
-    if (!$gCurrentUser->isAdministrator() && !$gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id'))) {
+    if (!$gCurrentUser->isAdministrator() && !$gCurrentUser->isLeaderOfRole((int) $event->getValue('dat_rol_id'))) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 
 // Read participants
-$participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
+$participants = new Participants($gDb, (int) $event->getValue('dat_rol_id'));
 $participantsArray = $participants->getParticipantsArray();
 
 // If extended options for participation are allowed then show in form
-if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1) {
-    if ((int) $date->getValue('dat_allow_comments') === 1) {
+if ((int) $event->getValue('dat_allow_comments') === 1 || (int) $event->getValue('dat_additional_guests') === 1) {
+    if ((int) $event->getValue('dat_allow_comments') === 1) {
         $disableComments = HtmlForm::FIELD_DEFAULT;
     }
-    if ((int) $date->getValue('dat_additional_guests') === 1) {
+    if ((int) $event->getValue('dat_additional_guests') === 1) {
         $disableAdditionalGuests = HtmlForm::FIELD_DEFAULT;
     }
 }
@@ -56,7 +56,7 @@ $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 
 $member = new TableMembers($gDb);
-$member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+$member->readDataByColumns(array('mem_rol_id' => (int) $event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
 
 // Write header with charset utf8
 header('Content-type: text/html; charset=utf-8');
@@ -92,8 +92,8 @@ echo '<script>
 
 // Define form
 $participationForm = new HtmlForm(
-    'participate_form_'. $getDatUuid,
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getDatUuid, 'user_uuid' => $getUserUuid, 'mode' => '')),
+    'participate_form_'. $getEventUuid,
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getEventUuid, 'user_uuid' => $getUserUuid, 'mode' => '')),
     null,
     array('type' => 'default', 'method' => 'post', 'setFocus' => false)
 );
@@ -103,7 +103,7 @@ $participationForm->addHtml('
         <button type="button" class="close" data-dismiss="modal">&times;</button>
     </div>
     <div class="modal-body">
-        <h5>' .$date->getValue('dat_headline'). ': ' .$date->getDateTimePeriod(). '</h5>
+        <h5>' .$event->getValue('dat_headline'). ': ' .$event->getDateTimePeriod(). '</h5>
     ');
 $participationForm->addMultilineTextInput(
     'dat_comment',
@@ -121,21 +121,21 @@ $participationForm->addInput(
 $participationForm->addHtml('</div><div class="modal-footer">');
 $participationForm->openButtonGroup();
 $participationForm->addButton(
-    'btn_attend_' . $getDatUuid,
+    'btn_attend_' . $getEventUuid,
     $gL10n->get('SYS_PARTICIPATE'),
     array('icon' => 'fa-check-circle', 'class' => 'admidio-event-approval-state-attend')
 );
 
 if ($gSettingsManager->getBool('dates_may_take_part')) {
     $participationForm->addButton(
-        'btn_tentative_' . $getDatUuid,
+        'btn_tentative_' . $getEventUuid,
         $gL10n->get('DAT_USER_TENTATIVE'),
         array('icon' => 'fa-question-circle', 'class' => 'admidio-event-approval-state-tentative')
     );
 }
 
 $participationForm->addButton(
-    'btn_refuse_' . $getDatUuid,
+    'btn_refuse_' . $getEventUuid,
     $gL10n->get('DAT_CANCEL'),
     array('icon' => 'fa-times-circle', 'class' => 'admidio-event-approval-state-cancel')
 );

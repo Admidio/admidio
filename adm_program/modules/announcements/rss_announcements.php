@@ -16,7 +16,7 @@
  *
  * Parameters:
  *
- * headline  - Headline for RSS-Feed
+ * headline - Headline for RSS-Feed
  *             (Default) Announcements
  *
  *****************************************************************************/
@@ -26,7 +26,7 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 
-// Nachschauen ob RSS ueberhaupt aktiviert ist...
+// Check if RSS is active...
 if (!$gSettingsManager->getBool('enable_rss')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));

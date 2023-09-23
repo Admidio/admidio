@@ -23,7 +23,7 @@
 
 require_once(__DIR__ . '/../../system/common.php');
 
-// Nachschauen ob RSS ueberhaupt aktiviert ist...
+// Check if RSS is active...
 if (!$gSettingsManager->getBool('enable_rss')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));

@@ -33,16 +33,16 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
-$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-$getDateUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
-$getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
-$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
-$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
-$getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
-$getView     = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => $gSettingsManager->getString('dates_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
+$getMode      = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
+$getStart     = admFuncVariableIsValid($_GET, 'start', 'int');
+$getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
+$getCatUuid   = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
+$getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
+$getShow      = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
+$getDateFrom  = admFuncVariableIsValid($_GET, 'date_from', 'date');
+$getDateTo    = admFuncVariableIsValid($_GET, 'date_to', 'date');
+$getViewMode  = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
+$getView      = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => $gSettingsManager->getString('dates_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
 
 // check if module is active
 if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
@@ -63,13 +63,13 @@ if ($getCatUuid !== '') {
 }
 
 try {
-    $dates = new ModuleEvents();
-    $dates->setParameter('mode', $getMode);
-    $dates->setParameter('cat_id', $calendar->getValue('cat_id'));
-    $dates->setParameter('dat_uuid', $getDateUuid);
-    $dates->setParameter('show', $getShow);
-    $dates->setParameter('view_mode', $getViewMode);
-    $dates->setDateRange($getDateFrom, $getDateTo);
+    $events = new ModuleEvents();
+    $events->setParameter('mode', $getMode);
+    $events->setParameter('cat_id', $calendar->getValue('cat_id'));
+    $events->setParameter('dat_uuid', $getEventUuid);
+    $events->setParameter('show', $getShow);
+    $events->setParameter('view_mode', $getViewMode);
+    $events->setDateRange($getDateFrom, $getDateTo);
 } catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
@@ -77,25 +77,25 @@ try {
 
 // Number of events each page for default view 'html' or 'compact' view
 if ($getViewMode === 'html' && $getView === 'detail') {
-    $datesPerPage = $gSettingsManager->getInt('dates_per_page');
+    $eventsPerPage = $gSettingsManager->getInt('dates_per_page');
 } else {
-    $datesPerPage = $dates->getDataSetCount();
+    $eventsPerPage = $events->getDataSetCount();
 }
 
 // read relevant events from database
-$datesResult = $dates->getDataSet($getStart, $datesPerPage);
+$eventsResult = $events->getDataSet($getStart, $eventsPerPage);
 
 if ($getViewMode === 'html') {
-    if ($getDateUuid !== '') {
-        $gNavigation->addUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
+    if ($getEventUuid !== '') {
+        $gNavigation->addUrl(CURRENT_URL, $events->getHeadline($getHeadline));
     } else {
         // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline), 'fa-calendar-alt');
+        $gNavigation->addStartUrl(CURRENT_URL, $events->getHeadline($getHeadline), 'fa-calendar-alt');
     }
 }
 
 // create html page object
-$page = new HtmlPage('admidio-events', $dates->getHeadline($getHeadline));
+$page = new HtmlPage('admidio-events', $events->getHeadline($getHeadline));
 
 if ($getViewMode === 'html') {
     $datatable  = true;
@@ -111,21 +111,21 @@ if ($getViewMode === 'html') {
 
     $page->addJavascript('
         $("#sel_change_view").change(function() {
-            self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('mode' => $getMode, 'headline' => $getHeadline, 'date_from' => $dates->getParameter('dateStartFormatAdmidio'), 'date_to' => $dates->getParameter('dateEndFormatAdmidio'), 'cat_uuid' => $getCatUuid)) . '&view=" + $("#sel_change_view").val();
+            self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('mode' => $getMode, 'headline' => $getHeadline, 'date_from' => $events->getParameter('dateStartFormatAdmidio'), 'date_to' => $events->getParameter('dateEndFormatAdmidio'), 'cat_uuid' => $getCatUuid)) . '&view=" + $("#sel_change_view").val();
         });
 
         $("#menu_item_event_print_view").click(function() {
-            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'dat_uuid' => $getDateUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'))) . '", "_blank");
+            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'dat_uuid' => $getEventUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'))) . '", "_blank");
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
-    if ($getDateUuid !== '') {
+    if ($getEventUuid !== '') {
         // add back link to module menu
         $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
     }
 
     // Add new event
-    if (count($gCurrentUser->getAllEditableCategories('EVT')) > 0 && $getDateUuid === '') {
+    if (count($gCurrentUser->getAllEditableCategories('EVT')) > 0 && $getEventUuid === '') {
         $page->addPageFunctionsMenuItem(
             'menu_item_event_add',
             $gL10n->get('SYS_CREATE_VAR', array($getHeadline)),
@@ -134,7 +134,7 @@ if ($getViewMode === 'html') {
         );
     }
 
-    if ($getDateUuid === '') {
+    if ($getEventUuid === '') {
         // show print button
         $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
 
@@ -195,13 +195,13 @@ if ($getViewMode === 'html') {
         $form->addInput(
             'date_from',
             $gL10n->get('SYS_START'),
-            $dates->getParameter('dateStartFormatAdmidio'),
+            $events->getParameter('dateStartFormatAdmidio'),
             array('type' => 'date', 'maxLength' => 10)
         );
         $form->addInput(
             'date_to',
             $gL10n->get('SYS_END'),
-            $dates->getParameter('dateEndFormatAdmidio'),
+            $events->getParameter('dateEndFormatAdmidio'),
             array('type' => 'date', 'maxLength' => 10)
         );
         $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
@@ -217,14 +217,14 @@ if ($getViewMode === 'html') {
     // create html page object without the custom theme files
     $page->setPrintMode();
 
-    if ($getDateUuid === '') {
-        $page->addHtml('<h3>' . $gL10n->get('DAT_PERIOD_FROM_TO', array($dates->getParameter('dateStartFormatAdmidio'), $dates->getParameter('dateEndFormatAdmidio'))) . '</h3>');
+    if ($getEventUuid === '') {
+        $page->addHtml('<h3>' . $gL10n->get('DAT_PERIOD_FROM_TO', array($events->getParameter('dateStartFormatAdmidio'), $events->getParameter('dateEndFormatAdmidio'))) . '</h3>');
     }
 }
 
-if ($datesResult['totalCount'] === 0) {
+if ($eventsResult['totalCount'] === 0) {
     // No events found
-    if ($getDateUuid !== '') {
+    if ($getEventUuid !== '') {
         $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRY') . '</p>');
     } else {
         $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
@@ -277,16 +277,16 @@ if ($datesResult['totalCount'] === 0) {
     }
 
     // create dummy date object
-    $date = new Event($gDb);
+    $event = new Event($gDb);
 
-    foreach ($datesResult['recordset'] as $row) {
+    foreach ($eventsResult['recordset'] as $row) {
         // write of current event data to date object
-        $date->clear();
-        $date->setArray($row);
+        $event->clear();
+        $event->setArray($row);
 
-        $dateUuid     = $date->getValue('dat_uuid');
-        $dateRolId    = $date->getValue('dat_rol_id');
-        $dateHeadline = $date->getValue('dat_headline');
+        $dateUuid     = $event->getValue('dat_uuid');
+        $eventRolId    = $event->getValue('dat_rol_id');
+        $dateHeadline = $event->getValue('dat_headline');
 
         // initialize all output elements
         $attentionDeadline  = '';
@@ -304,18 +304,18 @@ if ($datesResult['totalCount'] === 0) {
         $outputNumberMembers   = '';
         $outputNumberLeaders   = '';
         $outputDeadline        = '';
-        $dateElements          = array();
+        $eventElements          = array();
         $participantsArray     = array();
         $participateModalForm  = false;
 
         // If extended options for participation are allowed then use a modal form instead the dropdown button
-        if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1) {
+        if ((int) $event->getValue('dat_allow_comments') === 1 || (int) $event->getValue('dat_additional_guests') === 1) {
             $participateModalForm = true;
         }
 
         // set end date of event
-        if ($date->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $date->getValue('dat_end', $gSettingsManager->getString('system_date'))) {
-            $outputEndDate = ' - ' . $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
+        if ($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $event->getValue('dat_end', $gSettingsManager->getString('system_date'))) {
+            $outputEndDate = ' - ' . $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
         }
 
         if ($getViewMode === 'html') {
@@ -327,7 +327,7 @@ if ($datesResult['totalCount'] === 0) {
             }
 
             // change and delete is only for users with additional rights
-            if ($date->isEditable()) {
+            if ($event->isEditable()) {
                 $outputButtonCopy = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1, 'headline' => $getHeadline)) . '">
                         <i class="fas fa-clone" data-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>';
@@ -337,34 +337,34 @@ if ($datesResult['totalCount'] === 0) {
                 $outputButtonDelete = '
                     <a class="openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
-                        'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
+                        'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
         }
 
-        $dateLocation = $date->getValue('dat_location');
-        if ($dateLocation !== '') {
+        $eventLocation = $event->getValue('dat_location');
+        if ($eventLocation !== '') {
             // Show map link, when at least 2 words available
             // having more than 3 characters each
             $countLocationWords = 0;
-            foreach (preg_split('/[,; ]/', $dateLocation) as $value) {
+            foreach (preg_split('/[,; ]/', $eventLocation) as $value) {
                 if (strlen($value) > 3) {
                     ++$countLocationWords;
                 }
             }
 
             if ($gSettingsManager->getBool('dates_show_map_link') && $countLocationWords > 1 && $getViewMode === 'html') {
-                $urlParam = $dateLocation;
+                $urlParam = $eventLocation;
 
-                $dateCountry = $date->getValue('dat_country');
-                if ($dateCountry) {
+                $eventCountry = $event->getValue('dat_country');
+                if ($eventCountry) {
                     // Better results with additional country information
-                    $urlParam .= ', ' . $dateCountry;
+                    $urlParam .= ', ' . $eventCountry;
                 }
                 $locationUrl = SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => $urlParam));
 
                 $outputLinkLocation = '
-                    <a href="' . $locationUrl . '" target="_blank" title="' . $gL10n->get('DAT_SHOW_ON_MAP') . '">' . $dateLocation . '</a>';
+                    <a href="' . $locationUrl . '" target="_blank" title="' . $gL10n->get('DAT_SHOW_ON_MAP') . '">' . $eventLocation . '</a>';
 
                 // if valid login and enough information about address exist - calculate the route
                 if ($gValidLogin && $gCurrentUser->getValue('STREET') !== ''
@@ -389,31 +389,31 @@ if ($datesResult['totalCount'] === 0) {
                         </a>';
                 }
             } else {
-                $outputLinkLocation = $dateLocation;
+                $outputLinkLocation = $eventLocation;
             }
         }
 
         // if active, then show room information
-        $dateRoomId = $date->getValue('dat_room_id');
-        if ($dateRoomId > 0) {
-            $room = new TableRooms($gDb, $dateRoomId);
+        $eventRoomId = $event->getValue('dat_room_id');
+        if ($eventRoomId > 0) {
+            $room = new TableRooms($gDb, $eventRoomId);
 
             if ($getViewMode === 'html') {
-                $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'DAT_ROOM_INFORMATIONS', 'message_var1' => $dateRoomId, 'inline' => 'true'));
+                $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'DAT_ROOM_INFORMATIONS', 'message_var1' => $eventRoomId, 'inline' => 'true'));
                 $outputLinkRoom = '<a class="openPopup" href="javascript:void(0);" data-href="' . $roomLink . '">' . $room->getValue('room_name') . '</a>';
             } else { // $getViewMode = 'print'
                 $outputLinkRoom = $room->getValue('room_name');
             }
         }
 
-        if ($dateRolId > 0) {
-            $participants = new Participants($gDb, $dateRolId);
+        if ($eventRolId > 0) {
+            $participants = new Participants($gDb, $eventRolId);
 
             // check the rights if the user is allowed to view the participants, or he is allowed to participate
-            if ($gCurrentUser->hasRightViewRole((int)$date->getValue('dat_rol_id'))
+            if ($gCurrentUser->hasRightViewRole((int)$event->getValue('dat_rol_id'))
                 || $row['mem_leader'] == 1
                 || $gCurrentUser->editDates()
-                || $date->allowedToParticipate()) {
+                || $event->allowedToParticipate()) {
                 $outputNumberMembers = $participants->getCount();
                 $outputNumberLeaders = $participants->getNumLeaders();
                 $participantsArray = $participants->getParticipantsArray();
@@ -459,7 +459,7 @@ if ($datesResult['totalCount'] === 0) {
 
             // show notice that no new participation could be assigned to the event because the deadline exceeded or
             // the max number of participants is reached.
-            if ($date->deadlineExceeded() || $date->participantLimitReached()) {
+            if ($event->deadlineExceeded() || $event->participantLimitReached()) {
                 // Show warning for member of the date role if deadline is exceeded and now no changes are possible anymore
                 if ($participants->isMemberOfEvent($gCurrentUserId)) {
                     if ($getView !== 'detail') {
@@ -472,28 +472,28 @@ if ($datesResult['totalCount'] === 0) {
                                     data-html="true" data-trigger="hover click" data-placement="auto"
                                     title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($gL10n->get('DAT_DEADLINE_ATTENTION')) . '"></i>
                             </div>';
-                } elseif ($date->allowedToParticipate()) {
+                } elseif ($event->allowedToParticipate()) {
                     $attentionDeadline = '<div class="alert alert-info" role="alert">' . $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE') . '</div>';
                     $iconParticipationStatus = '';
                 }
             }
 
             // if current user is allowed to participate or user could edit this event then show buttons for participation
-            if ($date->possibleToParticipate() || $gCurrentUser->editDates() || $participants->isLeader($gCurrentUserId)) {
-                if ($date->getValue('dat_deadline') !== null) {
-                    $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            if ($event->possibleToParticipate() || $gCurrentUser->editDates() || $participants->isLeader($gCurrentUserId)) {
+                if ($event->getValue('dat_deadline') !== null) {
+                    $outputDeadline = $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                 }
 
                 // Links for the participation only in html mode
                 if ($getViewMode === 'html') {
-                    if($date->possibleToParticipate()) {
+                    if($event->possibleToParticipate()) {
 
 
                         $disableStatusAttend = '';
                         $disableStatusTentative = '';
 
                         // Check limit of participants
-                        if ($date->participantLimitReached()) {
+                        if ($event->participantLimitReached()) {
                             // Check current user. If user is member of the event role then get his current approval status and set the options
                             if (array_key_exists($gCurrentUserId, $participantsArray)) {
                                 switch ($participantsArray[$gCurrentUserId]['approved']) {
@@ -545,9 +545,9 @@ if ($datesResult['totalCount'] === 0) {
                     }
 
                     // Link to participants list
-                    if ($gCurrentUser->hasRightViewRole($dateRolId)) {
+                    if ($gCurrentUser->hasRightViewRole($eventRolId)) {
                         if ($outputNumberMembers > 0 || $outputNumberLeaders > 0) {
-                            $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $dateRolId));
+                            $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $eventRolId));
 
                             if ($getView === 'detail') {
                                 $outputButtonParticipants = '
@@ -562,9 +562,9 @@ if ($datesResult['totalCount'] === 0) {
                     }
 
                     // Link to send email to participants
-                    if ($gCurrentUser->hasRightSendMailToRole($dateRolId)) {
+                    if ($gCurrentUser->hasRightSendMailToRole($eventRolId)) {
                         if ($outputNumberMembers > 0 || $outputNumberLeaders > 0) {
-                            $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $date->getValue('rol_uuid')));
+                            $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $event->getValue('rol_uuid')));
 
                             if ($getView === 'detail') {
                                 $outputButtonParticipantsEmail = '
@@ -580,7 +580,7 @@ if ($datesResult['totalCount'] === 0) {
 
                     // Link for managing new participants
                     if ($participants->isLeader($gCurrentUserId)) {
-                        $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment.php', array('role_uuid' => $date->getValue('rol_uuid')));
+                        $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment.php', array('role_uuid' => $event->getValue('rol_uuid')));
 
                         if ($getView === 'detail') {
                             $outputButtonParticipantsAssign = '
@@ -597,29 +597,29 @@ if ($datesResult['totalCount'] === 0) {
         }
 
         if ($getView === 'detail') {
-            if (!$date->getValue('dat_all_day')) {
+            if (!$event->getValue('dat_all_day')) {
                 // Write start in array
-                $dateElements[] = array($gL10n->get('SYS_START'), '<strong>' . $date->getValue('dat_begin', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                $eventElements[] = array($gL10n->get('SYS_START'), '<strong>' . $event->getValue('dat_begin', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
                 // Write end in array
-                $dateElements[] = array($gL10n->get('SYS_END'), '<strong>' . $date->getValue('dat_end', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                $eventElements[] = array($gL10n->get('SYS_END'), '<strong>' . $event->getValue('dat_end', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
             }
 
-            $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>' . $date->getValue('cat_name') . '</strong>');
+            $eventElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>' . $event->getValue('cat_name') . '</strong>');
             if ($outputLinkLocation !== '') {
-                $dateElements[] = array($gL10n->get('DAT_LOCATION'), $outputLinkLocation);
+                $eventElements[] = array($gL10n->get('DAT_LOCATION'), $outputLinkLocation);
             }
             if ($outputLinkRoom !== '') {
-                $dateElements[] = array($gL10n->get('SYS_ROOM'), $outputLinkRoom);
+                $eventElements[] = array($gL10n->get('SYS_ROOM'), $outputLinkRoom);
             }
             if ($outputDeadline !== '') {
-                $dateElements[] = array($gL10n->get('DAT_DEADLINE'), '<strong>'.$outputDeadline.'</strong>');
+                $eventElements[] = array($gL10n->get('DAT_DEADLINE'), '<strong>'.$outputDeadline.'</strong>');
             }
 
             if ($outputNumberLeaders !== '') {
-                $dateElements[] = array($gL10n->get('SYS_LEADERS'), '<strong>' . $outputNumberLeaders . '</strong>');
+                $eventElements[] = array($gL10n->get('SYS_LEADERS'), '<strong>' . $outputNumberLeaders . '</strong>');
             }
             if ($outputNumberMembers !== '') {
-                $dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), '<strong>' . $outputNumberMembers . '</strong>');
+                $eventElements[] = array($gL10n->get('SYS_PARTICIPANTS'), '<strong>' . $outputNumberMembers . '</strong>');
             }
 
             // show panel view of events
@@ -629,7 +629,7 @@ if ($datesResult['totalCount'] === 0) {
             $firstElement = true;
             $htmlDateElements = '';
 
-            foreach ($dateElements as $element) {
+            foreach ($eventElements as $element) {
                 if ($element[1] !== '') {
                     if ($firstElement) {
                         $htmlDateElements .= '<div class="row">';
@@ -655,9 +655,9 @@ if ($datesResult['totalCount'] === 0) {
                 <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="dat_' . $dateUuid . '">
                     <div class="card-header">
                         <i class="fas fa-calendar-alt"></i>' .
-                        $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
+                        $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
 
-            if ($date->isEditable() || $gSettingsManager->getBool('enable_dates_ical')) {
+            if ($event->isEditable() || $gSettingsManager->getBool('enable_dates_ical')) {
                 $page->addHtml('
                             <div class="dropdown float-right">
                                 <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -671,7 +671,7 @@ if ($datesResult['totalCount'] === 0) {
                 }
 
                 // change and delete is only for users with additional rights
-                if ($date->isEditable()) {
+                if ($event->isEditable()) {
                     $page->addHtml('
                                             <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1, 'headline' => $getHeadline)) . '">
                                                 <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
@@ -679,7 +679,7 @@ if ($datesResult['totalCount'] === 0) {
                                                 <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                                             <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
-                                                'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
+                                                'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
                                                 <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>');
                 }
                 $page->addHtml('</div>
@@ -689,7 +689,7 @@ if ($datesResult['totalCount'] === 0) {
 
                     <div class="card-body">
                         ' . $htmlDateElements . '<br />
-                        <p>' . $date->getValue('dat_description') . '</p>' .$attentionDeadline);
+                        <p>' . $event->getValue('dat_description') . '</p>' .$attentionDeadline);
 
             if ($outputButtonParticipation !== '' || $outputButtonParticipants !== ''
             || $outputButtonParticipantsEmail !== '' || $outputButtonParticipantsAssign !== '') {
@@ -701,9 +701,9 @@ if ($datesResult['totalCount'] === 0) {
                     // show information about user who created the recordset and changed it
                     admFuncShowCreateChangeInfoByName(
                         $row['create_name'],
-                        $date->getValue('dat_timestamp_create'),
+                        $event->getValue('dat_timestamp_create'),
                         $row['change_name'],
-                        $date->getValue('dat_timestamp_change'),
+                        $event->getValue('dat_timestamp_change'),
                         $row['create_uuid'],
                         $row['change_uuid']
                     ).'
@@ -718,10 +718,10 @@ if ($datesResult['totalCount'] === 0) {
                 $cssClass = 'admidio-event-highlight';
             }
 
-            $dateBegin = $date->getValue('dat_begin', $gSettingsManager->getString('system_date'));
-            $timeBegin = $date->getValue('dat_begin', $gSettingsManager->getString('system_time'));
-            $dateEnd = $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
-            $timeEnd = $date->getValue('dat_end', $gSettingsManager->getString('system_time'));
+            $dateBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_date'));
+            $timeBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_time'));
+            $dateEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
+            $timeEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_time'));
 
             $columnValues = array();
 
@@ -731,7 +731,7 @@ if ($datesResult['totalCount'] === 0) {
                 $columnValues[] = '';
             }
 
-            $columnValues[] = $date->getDateTimePeriod();
+            $columnValues[] = $event->getDateTimePeriod();
 
             if ($getViewMode === 'html') {
                 if ($outputDeadline !== '') {
@@ -751,9 +751,9 @@ if ($datesResult['totalCount'] === 0) {
             switch ($getView) {
                 case 'compact': // fallthrough
                 case 'room':
-                    if ($dateRolId > 0) {
-                        if ($date->getValue('dat_max_members') > 0) {
-                            $htmlParticipants = $outputNumberMembers . ' / ' . $date->getValue('dat_max_members');
+                    if ($eventRolId > 0) {
+                        if ($event->getValue('dat_max_members') > 0) {
+                            $htmlParticipants = $outputNumberMembers . ' / ' . $event->getValue('dat_max_members');
                         } else {
                             $htmlParticipants = $outputNumberMembers . '&nbsp;';
                         }
@@ -772,7 +772,7 @@ if ($datesResult['totalCount'] === 0) {
 
                     if (is_array($participantsArray)) {
                         // Only show participants if user has right to view the list, is leader or has permission to create/edit events
-                        if ($gCurrentUser->hasRightViewRole((int) $date->getValue('dat_rol_id'))
+                        if ($gCurrentUser->hasRightViewRole((int) $event->getValue('dat_rol_id'))
                             || $row['mem_leader'] == 1
                             || $gCurrentUser->editDates()) {
                             foreach ($participantsArray as $participant) {
@@ -787,7 +787,7 @@ if ($datesResult['totalCount'] === 0) {
                     $columnValues[] = implode(', ', $columnValue);
                     break;
                 case 'description':
-                    $columnValues[] = $date->getValue('dat_description');
+                    $columnValues[] = $event->getValue('dat_description');
                     break;
             }
 
@@ -803,7 +803,7 @@ if ($datesResult['totalCount'] === 0) {
                 $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
             }
 
-            $compactTable->addRowByArray($columnValues, 'dat_' . $date->getValue('dat_uuid'), array('class' => $cssClass));
+            $compactTable->addRowByArray($columnValues, 'dat_' . $event->getValue('dat_uuid'), array('class' => $cssClass));
         }
     }  // End foreach
 
@@ -815,7 +815,7 @@ if ($datesResult['totalCount'] === 0) {
 
 if ($getView === 'detail') {
     // If necessary show links to navigate to next and previous recordset of the query
-    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
-    $page->addHtml(admFuncGeneratePagination($baseUrl, $datesResult['totalCount'], $datesResult['limit'], $getStart));
+    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
+    $page->addHtml(admFuncGeneratePagination($baseUrl, $eventsResult['totalCount'], $eventsResult['limit'], $getStart));
 }
 $page->show();

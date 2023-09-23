@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * members - true : (Default) Show only active members of the current organization
- *           false  : Show active and inactive members of all organizations in database
+ * members - true : (Default) Show only active contacts of the current organization
+ *           false  : Show active and inactive contacts of all organizations in database
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -32,8 +32,8 @@ $headline = $gL10n->get('SYS_CONTACTS');
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
-$membersListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('members_list_configuration'));
-$_SESSION['members_list_config'] = $membersListConfig;
+$contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('members_list_configuration'));
+$_SESSION['members_list_config'] = $contactsListConfig;
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 $flagShowMembers = !$getMembers;
@@ -101,10 +101,10 @@ if ($gCurrentUser->isAdministrator()) {
 $orgName = $gCurrentOrganization->getValue('org_longname');
 
 // Create table object
-$membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
+$contactsTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values
-$columnHeading = $membersListConfig->getColumnNames();
+$columnHeading = $contactsListConfig->getColumnNames();
 array_unshift(
     $columnHeading,
     $gL10n->get('SYS_ABR_NO'),
@@ -112,19 +112,19 @@ array_unshift(
 );
 $columnHeading[] = '&nbsp;';
 
-$columnAlignment = $membersListConfig->getColumnAlignments();
+$columnAlignment = $contactsListConfig->getColumnAlignments();
 array_unshift($columnAlignment, 'left', 'left');
 $columnAlignment[] = 'right';
 
-$membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_data.php', array('members' => $getMembers)));
-$membersTable->setColumnAlignByArray($columnAlignment);
-$membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
-$membersTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
-$membersTable->addRowHeadingByArray($columnHeading);
-$membersTable->setDatatablesRowsPerPage($gSettingsManager->getInt('members_users_per_page'));
-$membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
+$contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_data.php', array('members' => $getMembers)));
+$contactsTable->setColumnAlignByArray($columnAlignment);
+$contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
+$contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
+$contactsTable->addRowHeadingByArray($columnHeading);
+$contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('members_users_per_page'));
+$contactsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
-$page->addHtml($membersTable->show());
+$page->addHtml($contactsTable->show());
 
 // show html of complete page
 $page->show();

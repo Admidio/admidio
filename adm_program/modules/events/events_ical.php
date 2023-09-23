@@ -64,30 +64,30 @@ if ($getCatUuid !== '') {
 }
 
 try {
-    $dates = new ModuleEvents();// set mode, viewmode, calendar, startdate and enddate manually
-    $dates->setParameter('view_mode', 'period');
-    $dates->setParameter('cat_id', $calendar->getValue('cat_id'));
-    $dates->setDateRange($getDateFrom, $getDateTo);// read events for output
-    $datesResult = $dates->getDataSet(0, 0);// get parameters fom $_GET Array stored in class
-    $parameters = $dates->getParameters();
+    $events = new ModuleEvents();// set mode, viewmode, calendar, startdate and enddate manually
+    $events->setParameter('view_mode', 'period');
+    $events->setParameter('cat_id', $calendar->getValue('cat_id'));
+    $events->setDateRange($getDateFrom, $getDateTo);// read events for output
+    $datesResult = $events->getDataSet(0, 0);// get parameters fom $_GET Array stored in class
+    $parameters = $events->getParameters();
 
-    $date = new Event($gDb);
-    $iCal = $date->getIcalHeader();
+    $event = new Event($gDb);
+    $iCal = $event->getIcalHeader();
 } catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
 }
 
 if ($datesResult['numResults'] > 0) {
-    $date = new Event($gDb);
+    $event = new Event($gDb);
     foreach ($datesResult['recordset'] as $row) {
-        $date->clear();
-        $date->setArray($row);
-        $iCal .= $date->getIcalVEvent();
+        $event->clear();
+        $event->setArray($row);
+        $iCal .= $event->getIcalVEvent();
     }
 }
 
-$iCal .= $date->getIcalFooter();
+$iCal .= $event->getIcalFooter();
 
 header('Content-Type: text/calendar; charset=utf-8');
 header('Content-Disposition: attachment; filename="'. $filename. '.ics"');
