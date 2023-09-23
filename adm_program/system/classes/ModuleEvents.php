@@ -156,12 +156,12 @@ class ModuleEvents extends Modules
      * @param int $limit        Limit of query rows (default: 0)
      * @return array<string,mixed> Array with all results, events and parameters.
      */
-    public function getDataSet($startElement = 0, $limit = null)
+    public function getDataSet($startElement = 0, $limit = null): array
     {
         global $gDb, $gSettingsManager, $gCurrentUser;
 
         if ($limit === null) {
-            $limit = $gSettingsManager->getInt('dates_per_page');
+            $limit = $gSettingsManager->getInt('events_per_page');
         }
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('EVT'));

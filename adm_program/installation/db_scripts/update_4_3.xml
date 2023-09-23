@@ -44,5 +44,38 @@
     <step id="410">UPDATE %PREFIX%_components SET com_name = 'SYS_EVENTS', com_name_intern = 'EVENTS' WHERE com_name_intern = 'DATES'</step>
     <step id="420">UPDATE %PREFIX%_menu SET men_name = 'SYS_EVENTS', men_name_intern = 'events', men_url='/adm_program/modules/events/events.php' WHERE men_name_intern = 'dates'</step>
     <step id="430">UPDATE %PREFIX%_categories SET cat_type = 'EVT' WHERE cat_type = 'DAT'</step>
+    <step id="440" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_dates_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_module_enabled'</step>
+    <step id="450" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_dates_module' AND pr1.prf_name = 'events_module_enabled'</step>
+    <step id="460">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_dates_module'</step>
+    <step id="470" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_per_page' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_per_page'</step>
+    <step id="480" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_per_page' AND pr1.prf_name = 'events_per_page'</step>
+    <step id="490">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_per_page'</step>
+    <step id="500" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_view' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_view'</step>
+    <step id="510" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_view' AND pr1.prf_name = 'events_view'</step>
+    <step id="520">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_view'</step>
+    <step id="530" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_show_map_link' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_show_map_link'</step>
+    <step id="540" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_show_map_link' AND pr1.prf_name = 'events_show_map_link'</step>
+    <step id="550">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_show_map_link'</step>
+    <step id="560" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_show_rooms' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_rooms_enabled'</step>
+    <step id="570" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_show_rooms' AND pr1.prf_name = 'events_rooms_enabled'</step>
+    <step id="580">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_show_rooms'</step>
+    <step id="590" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_dates_ical' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_ical_export_enabled'</step>
+    <step id="600" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_dates_ical' AND pr1.prf_name = 'events_ical_export_enabled'</step>
+    <step id="610">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_dates_ical'</step>
+    <step id="620" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_ical_days_past' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_ical_days_past'</step>
+    <step id="630" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_ical_days_past' AND pr1.prf_name = 'events_ical_days_past'</step>
+    <step id="640">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_ical_days_past'</step>
+    <step id="650" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_ical_days_future' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_ical_days_future'</step>
+    <step id="660" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_ical_days_future' AND pr1.prf_name = 'events_ical_days_future'</step>
+    <step id="670">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_ical_days_future'</step>
+    <step id="680" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_default_list_configuration' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_default_list_configuration'</step>
+    <step id="690" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_default_list_configuration' AND pr1.prf_name = 'events_default_list_configuration'</step>
+    <step id="700">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_default_list_configuration'</step>
+    <step id="710" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_save_all_confirmations' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_save_cancellations'</step>
+    <step id="720" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_save_all_confirmations' AND pr1.prf_name = 'events_save_cancellations'</step>
+    <step id="730">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_save_all_confirmations'</step>
+    <step id="740" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'dates_may_take_part' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_may_take_part'</step>
+    <step id="750" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'dates_may_take_part' AND pr1.prf_name = 'events_may_take_part'</step>
+    <step id="760">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'dates_may_take_part'</step>
     <step>stop</step>
 </update>

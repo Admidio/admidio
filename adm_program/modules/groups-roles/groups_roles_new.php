@@ -300,7 +300,7 @@ if (!$eventRole) {
             array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-newspaper')
         );
     }
-    if ((int) $gSettingsManager->get('enable_dates_module') > 0) {
+    if ((int) $gSettingsManager->get('events_module_enabled') > 0) {
         $form->addCheckbox(
             'rol_dates',
             $gL10n->get('SYS_RIGHT_DATES'),

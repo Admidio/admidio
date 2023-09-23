@@ -126,7 +126,7 @@ $participationForm->addButton(
     array('icon' => 'fa-check-circle', 'class' => 'admidio-event-approval-state-attend')
 );
 
-if ($gSettingsManager->getBool('dates_may_take_part')) {
+if ($gSettingsManager->getBool('events_may_take_part')) {
     $participationForm->addButton(
         'btn_tentative_' . $getEventUuid,
         $gL10n->get('DAT_USER_TENTATIVE'),

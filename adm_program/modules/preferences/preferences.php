@@ -1669,12 +1669,12 @@ $selectBoxEntries = array(
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formEvents->addSelectBox(
-    'enable_dates_module',
+    'events_module_enabled',
     $gL10n->get('ORG_ACCESS_TO_MODULE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['enable_dates_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
+    array('defaultValue' => $formValues['events_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
-if ($gSettingsManager->getBool('dates_show_rooms')) {
+if ($gSettingsManager->getBool('events_rooms_enabled')) {
     $selectBoxEntries = array(
         'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
         'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
@@ -1691,40 +1691,40 @@ if ($gSettingsManager->getBool('dates_show_rooms')) {
     );
 }
 $formEvents->addSelectBox(
-    'dates_view',
+    'events_view',
     $gL10n->get('DAT_VIEW_MODE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['dates_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('DAT_VIEW_MODE_DESC', array('DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT')))
+    array('defaultValue' => $formValues['events_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('DAT_VIEW_MODE_DESC', array('DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT')))
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formEvents->addSelectBox(
-    'dates_per_page',
+    'events_per_page',
     $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['dates_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+    array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formEvents->addCheckbox(
-    'enable_dates_ical',
+    'events_ical_export_enabled',
     $gL10n->get('DAT_ENABLE_ICAL'),
-    (bool) $formValues['enable_dates_ical'],
+    (bool) $formValues['events_ical_export_enabled'],
     array('helpTextIdInline' => 'DAT_ENABLE_ICAL_DESC')
 );
 $formEvents->addInput(
-    'dates_ical_days_past',
+    'events_ical_days_past',
     $gL10n->get('DAT_ICAL_DAYS_PAST'),
-    $formValues['dates_ical_days_past'],
+    $formValues['events_ical_days_past'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_PAST_DESC')
 );
 $formEvents->addInput(
-    'dates_ical_days_future',
+    'events_ical_days_future',
     $gL10n->get('DAT_ICAL_DAYS_FUTURE'),
-    $formValues['dates_ical_days_future'],
+    $formValues['events_ical_days_future'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_FUTURE_DESC')
 );
 $formEvents->addCheckbox(
-    'dates_show_map_link',
+    'events_show_map_link',
     $gL10n->get('DAT_SHOW_MAP_LINK'),
-    (bool) $formValues['dates_show_map_link'],
+    (bool) $formValues['events_show_map_link'],
     array('helpTextIdInline' => 'DAT_SHOW_MAP_LINK_DESC')
 );
 $sqlData = array();
@@ -1735,31 +1735,31 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($gCurrentOrgId);
 $formEvents->addSelectBoxFromSql(
-    'dates_default_list_configuration',
+    'events_default_list_configuration',
     $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['dates_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
+    array('defaultValue' => $formValues['events_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
 );
 $formEvents->addCheckbox(
-    'dates_save_all_confirmations',
+    'events_save_cancellations',
     $gL10n->get('DAT_SAVE_ALL_CONFIRMATIONS'),
-    (bool) $formValues['dates_save_all_confirmations'],
+    (bool) $formValues['events_save_cancellations'],
     array('helpTextIdInline' => 'DAT_SAVE_ALL_CONFIRMATIONS_DESC')
 );
 $formEvents->addCheckbox(
-    'dates_may_take_part',
+    'events_may_take_part',
     $gL10n->get('SYS_MAYBE_PARTICIPATE'),
-    (bool) $formValues['dates_may_take_part'],
+    (bool) $formValues['events_may_take_part'],
     array('helpTextIdInline' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'EVT')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
 $formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => 'DAT_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addCheckbox(
-    'dates_show_rooms',
+    'events_rooms_enabled',
     $gL10n->get('DAT_ROOM_SELECTABLE'),
-    (bool) $formValues['dates_show_rooms'],
+    (bool) $formValues['events_rooms_enabled'],
     array('helpTextIdInline' => 'DAT_ROOM_SELECTABLE_DESC')
 );
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php">

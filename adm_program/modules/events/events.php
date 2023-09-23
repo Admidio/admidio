@@ -42,14 +42,14 @@ $getShow      = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultVa
 $getDateFrom  = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo    = admFuncVariableIsValid($_GET, 'date_to', 'date');
 $getViewMode  = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
-$getView      = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => $gSettingsManager->getString('dates_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
+$getView      = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => $gSettingsManager->getString('events_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
 
 // check if module is active
-if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
+if ((int) $gSettingsManager->get('events_module_enabled') === 0) {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 // => EXIT
-} elseif ((int) $gSettingsManager->get('enable_dates_module') === 2) {
+} elseif ((int) $gSettingsManager->get('events_module_enabled') === 2) {
     // module only for valid Users
     require(__DIR__ . '/../../system/login_valid.php');
 }
@@ -77,7 +77,7 @@ try {
 
 // Number of events each page for default view 'html' or 'compact' view
 if ($getViewMode === 'html' && $getView === 'detail') {
-    $eventsPerPage = $gSettingsManager->getInt('dates_per_page');
+    $eventsPerPage = $gSettingsManager->getInt('events_per_page');
 } else {
     $eventsPerPage = $events->getDataSetCount();
 }
@@ -102,7 +102,7 @@ if ($getViewMode === 'html') {
     $hoverRows  = true;
     $classTable = 'table';
 
-    if ($gSettingsManager->getBool('enable_rss') && (int) $gSettingsManager->get('enable_dates_module') === 1) {
+    if ($gSettingsManager->getBool('enable_rss') && (int) $gSettingsManager->get('events_module_enabled') === 1) {
         $page->addRssFile(
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_rss.php', array('headline' => $getHeadline)),
             $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $getHeadline))
@@ -139,7 +139,7 @@ if ($getViewMode === 'html') {
         $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
 
         // iCal Download
-        if ($gSettingsManager->getBool('enable_dates_ical')) {
+        if ($gSettingsManager->getBool('events_ical_export_enabled')) {
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_ical',
                 $gL10n->get('DAT_EXPORT_ICAL'),
@@ -162,7 +162,7 @@ if ($getViewMode === 'html') {
         $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
-        if ($gSettingsManager->getBool('dates_show_rooms')) {
+        if ($gSettingsManager->getBool('events_rooms_enabled')) {
             $selectBoxEntries = array(
                 'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
                 'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
@@ -233,7 +233,7 @@ if ($eventsResult['totalCount'] === 0) {
     // Output table header for compact view
     if ($getView !== 'detail') { // $getView = 'compact' or 'room' or 'participants' or 'description'
         $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable, $classTable);
-        $compactTable->setDatatablesRowsPerPage($gSettingsManager->getInt('dates_per_page'));
+        $compactTable->setDatatablesRowsPerPage($gSettingsManager->getInt('events_per_page'));
 
         $columnHeading = array();
         $columnAlign   = array();
@@ -320,7 +320,7 @@ if ($eventsResult['totalCount'] === 0) {
 
         if ($getViewMode === 'html') {
             // iCal Download
-            if ($gSettingsManager->getBool('enable_dates_ical')) {
+            if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                 $outputButtonICal = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
                         <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"></i></a>';
@@ -353,7 +353,7 @@ if ($eventsResult['totalCount'] === 0) {
                 }
             }
 
-            if ($gSettingsManager->getBool('dates_show_map_link') && $countLocationWords > 1 && $getViewMode === 'html') {
+            if ($gSettingsManager->getBool('events_show_map_link') && $countLocationWords > 1 && $getViewMode === 'html') {
                 $urlParam = $eventLocation;
 
                 $eventCountry = $event->getValue('dat_country');
@@ -521,7 +521,7 @@ if ($eventsResult['totalCount'] === 0) {
                                             <i class="fas fa-check-circle" data-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
                                         </a>
                                     </li>';
-                            if ($gSettingsManager->getBool('dates_may_take_part')) {
+                            if ($gSettingsManager->getBool('events_may_take_part')) {
                                 $outputButtonParticipation .= '<li>
                                             <a class="btn admidio-event-approval-state-tentative ' . $disableStatusTentative . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
                                                 <i class="fas fa-question-circle" data-toggle="tooltip" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
@@ -657,14 +657,14 @@ if ($eventsResult['totalCount'] === 0) {
                         <i class="fas fa-calendar-alt"></i>' .
                         $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
 
-            if ($event->isEditable() || $gSettingsManager->getBool('enable_dates_ical')) {
+            if ($event->isEditable() || $gSettingsManager->getBool('events_ical_export_enabled')) {
                 $page->addHtml('
                             <div class="dropdown float-right">
                                 <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">');
                 // iCal Download
-                if ($gSettingsManager->getBool('enable_dates_ical')) {
+                if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                     $page->addHtml('
                                             <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
                                                 <i class="fas fa-file-export" data-toggle="tooltip"></i> '.$gL10n->get('DAT_EXPORT_ICAL').'</a>');

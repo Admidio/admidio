@@ -154,17 +154,17 @@ $defaultOrgPreferences = array(
     'profile_photo_storage'     => '0',
 
     // Events
-    'enable_dates_module'               => '1',
-    'dates_per_page'                    => '10',
-    'dates_view'                        => 'detail',
-    'dates_show_map_link'               => '1',
-    'dates_show_rooms'                  => '0',
-    'enable_dates_ical'                 => '1',
-    'dates_ical_days_past'              => '30',
-    'dates_ical_days_future'            => '365',
-    'dates_default_list_configuration'  => '',
-    'dates_save_all_confirmations'      => '1',
-    'dates_may_take_part'               => '0',
+    'events_default_list_configuration' => '',
+    'events_ical_export_enabled'        => '1',
+    'events_ical_days_past'             => '30',
+    'events_ical_days_future'           => '365',
+    'events_may_take_part'              => '0',
+    'events_module_enabled'             => '1',
+    'events_per_page'                   => '10',
+    'events_rooms_enabled'              => '0',
+    'events_save_cancellations'         => '1',
+    'events_show_map_link'              => '1',
+    'events_view'                       => 'detail',
 
     // Category-Report
     'category_report_enable_module'         => '1',

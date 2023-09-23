@@ -46,7 +46,7 @@ class TableLists extends TableAccess
         if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration')) {
             throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_GROUPS_ROLES')));
         }
-        if ($lstId === $gSettingsManager->getInt('dates_default_list_configuration')) {
+        if ($lstId === $gSettingsManager->getInt('events_default_list_configuration')) {
             throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_EVENTS')));
         }
         if ($lstId === $gSettingsManager->getInt('members_list_configuration')) {

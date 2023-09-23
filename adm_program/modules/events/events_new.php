@@ -24,7 +24,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $getCopy     = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 // check if module is active
-if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
+if ((int) $gSettingsManager->get('events_module_enabled') === 0) {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -226,7 +226,7 @@ $form->addInput(
 );
 
 // if a map link should be shown in the event then show help text and a field where the user could choose the country
-if ($gSettingsManager->getBool('dates_show_map_link')) {
+if ($gSettingsManager->getBool('events_show_map_link')) {
     $form->addInput(
         'dat_location',
         $gL10n->get('DAT_LOCATION'),
@@ -253,7 +253,7 @@ if ($gSettingsManager->getBool('dates_show_map_link')) {
 }
 
 // if room selection is activated then show a select box with all rooms
-if ($gSettingsManager->getBool('dates_show_rooms')) {
+if ($gSettingsManager->getBool('events_rooms_enabled')) {
     if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
         $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
                   FROM '.TBL_ROOMS.'

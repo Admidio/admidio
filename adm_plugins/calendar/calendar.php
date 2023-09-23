@@ -375,8 +375,8 @@ while ($currentDay <= $lastDayCurrentMonth) {
     if ($plg_ter_aktiv) {
         // only show events in dependence of the events module view settings
         if (array_key_exists($currentDay, $eventsMonthDayArray)
-        && ($gSettingsManager->getInt('enable_dates_module') === 1
-           || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin))) {
+        && ($gSettingsManager->getInt('events_module_enabled') === 1
+           || ($gSettingsManager->getInt('events_module_enabled') === 2 && $gValidLogin))) {
             $hasEvents = true;
 
             foreach ($eventsMonthDayArray[$currentDay] as $eventArray) {

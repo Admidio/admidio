@@ -234,8 +234,8 @@ class Component extends TableAccess
                 break;
 
             case 'EVENTS':
-                if ((int) $gSettingsManager->get('enable_dates_module') === 1
-                || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin)) {
+                if ((int) $gSettingsManager->get('events_module_enabled') === 1
+                || ((int) $gSettingsManager->get('events_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;

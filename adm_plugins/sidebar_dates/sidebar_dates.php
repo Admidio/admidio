@@ -64,7 +64,7 @@ if (!isset($plg_link_url) || $plg_link_url === '') {
     $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/events/events.php';
 }
 
-if ($gSettingsManager->getInt('enable_dates_module') > 0) {
+if ($gSettingsManager->getInt('events_module_enabled') > 0) {
     // create Object
     $plgDates = new ModuleEvents();
 
@@ -80,8 +80,8 @@ if ($gSettingsManager->getInt('enable_dates_module') > 0) {
         echo '<h3>'.$gL10n->get('PLG_DATES_HEADLINE').'</h3>';
     }
 
-    if ($gSettingsManager->getInt('enable_dates_module') === 1
-    || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin)) {
+    if ($gSettingsManager->getInt('events_module_enabled') === 1
+    || ($gSettingsManager->getInt('events_module_enabled') === 2 && $gValidLogin)) {
         if ($plgDatesResult['numResults'] > 0) {
             echo '<ul class="list-group list-group-flush">';
 

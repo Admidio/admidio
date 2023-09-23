@@ -38,13 +38,13 @@ $participationPossible = true;
 $originalEventUuid      = 0;
 
 // check if module is active
-if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
+if ((int) $gSettingsManager->get('events_module_enabled') === 0) {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if ($getMode !== 6 || (int) $gSettingsManager->get('enable_dates_module') === 2) {
+if ($getMode !== 6 || (int) $gSettingsManager->get('events_module_enabled') === 2) {
     // All functions, except export and login, are only available for logged-in users.
     require(__DIR__ . '/../../system/login_valid.php');
 }
@@ -249,7 +249,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // Check if the selected room is already reserved for the appointment
     // ------------------------------------------------
 
-    if ($gSettingsManager->getBool('dates_show_rooms')) {
+    if ($gSettingsManager->getBool('events_rooms_enabled')) {
         $eventRoomId = (int) $_POST['dat_room_id'];
 
         if ($eventRoomId > 0) {
@@ -495,7 +495,7 @@ if (in_array($getMode, array(3, 4, 7), true)) {
                     break;
 
                 case 4:  // User cancel the event
-                    if ($gSettingsManager->getBool('dates_save_all_confirmations')) {
+                    if ($gSettingsManager->getBool('events_save_cancellations')) {
                         // Set user status to refused
                         $member->startMembership((int) $event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_NO);
                     } else {

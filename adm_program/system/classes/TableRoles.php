@@ -288,7 +288,7 @@ class TableRoles extends TableAccess
 
         if ($this->type === TableRoles::ROLE_EVENT) {
             // read system default list configuration for events
-            return $gSettingsManager->getInt('dates_default_list_configuration');
+            return $gSettingsManager->getInt('events_default_list_configuration');
         } else {
             try {
                 // read system default list configuration

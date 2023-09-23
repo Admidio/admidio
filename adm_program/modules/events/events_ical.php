@@ -28,8 +28,8 @@ $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 if ($getDateFrom === '') {
     try {
         $now = new DateTime();
-        $dayOffsetPast = new DateInterval('P' . $gSettingsManager->getInt('dates_ical_days_past') . 'D');
-        $dayOffsetFuture = new DateInterval('P' . $gSettingsManager->getInt('dates_ical_days_future') . 'D');
+        $dayOffsetPast = new DateInterval('P' . $gSettingsManager->getInt('events_ical_days_past') . 'D');
+        $dayOffsetFuture = new DateInterval('P' . $gSettingsManager->getInt('events_ical_days_future') . 'D');
         $getDateFrom = $now->sub($dayOffsetPast)->format('Y-m-d');
         $getDateTo = $now->add($dayOffsetFuture)->format('Y-m-d');
     } catch (Exception $e) {
@@ -39,17 +39,17 @@ if ($getDateFrom === '') {
 }
 
 // Message if module is disabled
-if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
+if ((int) $gSettingsManager->get('events_module_enabled') === 0) {
     // Module disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 // => EXIT
-} elseif ((int) $gSettingsManager->get('enable_dates_module') === 2) {
+} elseif ((int) $gSettingsManager->get('events_module_enabled') === 2) {
     // only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // If iCal enabled and module is public
-if (!$gSettingsManager->getBool('enable_dates_ical')) {
+if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_ICAL_DISABLED'));
     // => EXIT
