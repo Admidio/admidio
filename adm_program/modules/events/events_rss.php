@@ -104,7 +104,7 @@ if ($datesResult['numResults'] > 0) {
         $description .= '<br /><br />' . $date->getValue('dat_description');
 
         // i-cal downloadlink
-        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/dates_function.php', array('dat_uuid' => $dateUuid, 'mode' => '6')).'">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
+        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => '6')).'">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
 
         // add entry to RSS feed
         $rss->addItem(

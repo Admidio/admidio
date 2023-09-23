@@ -48,7 +48,7 @@ switch ($getType) {
         }
         break;
     case 'dat':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/dates_function.php', array('mode' => 2, 'dat_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 2, 'dat_uuid' => $getDatabaseId));
         break;
     case 'fil':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 2, 'file_uuid' => $getDatabaseId, 'folder_uuid' => $getDatabaseId2));

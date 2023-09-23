@@ -93,7 +93,7 @@ echo '<script>
 // Define form
 $participationForm = new HtmlForm(
     'participate_form_'. $getDatUuid,
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/dates_function.php', array('dat_uuid' => $getDatUuid, 'user_uuid' => $getUserUuid, 'mode' => '')),
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getDatUuid, 'user_uuid' => $getUserUuid, 'mode' => '')),
     null,
     array('type' => 'default', 'method' => 'post', 'setFocus' => false)
 );
