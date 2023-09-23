@@ -8,7 +8,7 @@
  */
 
 /**
- * This class reads date recordsets from database
+ * This class reads event recordsets from database
  *
  * This class reads all available recordsets from table events.
  * and returns an Array with results, recordsets and validated parameters from $_GET Array.
@@ -153,8 +153,9 @@ class ModuleEvents extends Modules
     /**
      * SQL query returns an array with available events.
      * @param int $startElement Defines the offset of the query (default: 0)
-     * @param int $limit        Limit of query rows (default: 0)
+     * @param int $limit Limit of query rows (default: 0)
      * @return array<string,mixed> Array with all results, events and parameters.
+     * @throws AdmException
      */
     public function getDataSet($startElement = 0, $limit = null): array
     {
@@ -218,8 +219,9 @@ class ModuleEvents extends Modules
     /**
      * Get number of available events.
      * @return int
+     * @throws AdmException
      */
-    public function getDataSetCount()
+    public function getDataSetCount(): int
     {
         global $gDb, $gCurrentUser;
 
@@ -247,7 +249,7 @@ class ModuleEvents extends Modules
      * @param string $headline The initial headline of the module.
      * @return string Returns the full headline of the module
      */
-    public function getHeadline($headline)
+    public function getHeadline(string $headline): string
     {
         global $gDb, $gL10n, $gCurrentOrganization;
 
@@ -274,9 +276,10 @@ class ModuleEvents extends Modules
 
     /**
      * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
-     * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions and it's query params.
+     * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions, and it's query params.
+     * @throws AdmException
      */
-    private function getSqlConditions()
+    private function getSqlConditions(): array
     {
         global $gCurrentUser;
 
@@ -353,7 +356,7 @@ class ModuleEvents extends Modules
      * Method will set an array with all names of the calendars whose events should be shown
      * @param array $arrCalendarNames An array with all names of the calendars whose events should be shown
      */
-    public function setCalendarNames($arrCalendarNames)
+    public function setCalendarNames(array $arrCalendarNames)
     {
         $this->calendarNames = $arrCalendarNames;
     }
@@ -365,10 +368,10 @@ class ModuleEvents extends Modules
      * getParameter and could be used in the script.
      * @param string $dateRangeStart A date in english or Admidio format that will be the start date of the range.
      * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
-     * @throws AdmException SYS_DATE_END_BEFORE_BEGIN
      * @return bool Returns false if invalid date format is submitted
+     *@throws AdmException SYS_DATE_END_BEFORE_BEGIN
      */
-    public function setDateRange($dateRangeStart = '', $dateRangeEnd = '')
+    public function setDateRange(string $dateRangeStart = '', string $dateRangeEnd = ''): bool
     {
         global $gSettingsManager;
 
@@ -376,7 +379,7 @@ class ModuleEvents extends Modules
             $dateStart = '1970-01-01';
             $dateEnd   = (date('Y') + 10) . '-12-31';
 
-            // set date_from and date_to regarding to current mode
+            // set date_from and date_to regard to current mode
             switch ($this->mode) {
                 case 'actual':
                     $dateRangeStart = DATE_NOW;
@@ -398,11 +401,11 @@ class ModuleEvents extends Modules
         }
 
         // Create date object and format date_from in English format and system format and push to daterange array
-        $objDateFrom = \DateTime::createFromFormat('Y-m-d', $dateRangeStart);
+        $objDateFrom = DateTime::createFromFormat('Y-m-d', $dateRangeStart);
 
         if ($objDateFrom === false) {
             // check if date_from has system format
-            $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $dateRangeStart);
+            $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $dateRangeStart);
         }
 
         if ($objDateFrom === false) {
@@ -413,11 +416,11 @@ class ModuleEvents extends Modules
         $this->setParameter('dateStartFormatAdmidio', $objDateFrom->format($gSettingsManager->getString('system_date')));
 
         // Create date object and format date_to in English format and system format and push to daterange array
-        $objDateTo = \DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
+        $objDateTo = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
 
         if ($objDateTo === false) {
             // check if date_from  has system format
-            $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $dateRangeEnd);
+            $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $dateRangeEnd);
         }
 
         if ($objDateTo === false) {
@@ -437,9 +440,9 @@ class ModuleEvents extends Modules
 
     /**
      * Get additional tables for sql statement
-     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins and it's query params.
+     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins, and it's query params.
      */
-    private function sqlGetAdditional()
+    private function sqlGetAdditional(): array
     {
         global $gSettingsManager, $gProfileFields;
 

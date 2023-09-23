@@ -44,9 +44,9 @@ class Event extends TableAccess
 
     /**
      * Constructor that will create an object of a recordset of the table adm_dates.
-     * If the id is set than the specific date will be loaded.
+     * If the id is set than the specific event will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $datId    The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int      $datId    The recordset of the event with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $datId = 0)
     {
@@ -145,15 +145,15 @@ class Event extends TableAccess
         $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $datId);
         $eventParticipationRoles->delete();
 
-        // if date has participants then the role with their memberships must be deleted
+        // if event has participants then the role with their memberships must be deleted
         if ($datRoleId > 0) {
             $sql = 'UPDATE '.TBL_DATES.'
                        SET dat_rol_id = NULL
                      WHERE dat_id = ? -- $datId';
             $this->db->queryPrepared($sql, array($datId));
 
-            $dateRole = new TableRoles($this->db, $datRoleId);
-            $dateRole->delete(); // TODO Exception handling
+            $eventRole = new TableRoles($this->db, $datRoleId);
+            $eventRole->delete(); // TODO Exception handling
         }
 
         // now delete event
@@ -356,8 +356,8 @@ class Event extends TableAccess
     }
 
     /**
-     * This function reads the deadline for participation. If no deadline is set as default the startdate of the event will be set.
-     * return string $dateDeadline Returns a string with formatted date and time
+     * This function reads the deadline for participation. If no deadline is set as default the start date of the event will be set.
+     * return string Returns a string with formatted date and time
      */
     public function getValidDeadline(): string
     {
@@ -434,7 +434,7 @@ class Event extends TableAccess
     }
 
     /* Read an event that has the given role has stored as participant role.
-     * @param $roleId Id of the participants role of the event.
+     * @param $roleId ID of the participants role of the event.
      */
     public function readDataByRoleId($roleId): bool
     {
