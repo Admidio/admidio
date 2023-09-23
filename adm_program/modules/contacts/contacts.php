@@ -39,13 +39,13 @@ $_SESSION['contacts_list_configuration'] = $contactsListConfig;
 $flagShowMembers = !$getMembers;
 
 // create html page object
-$page = new HtmlPage('admidio-members', $headline);
+$page = new HtmlPage('admidio-contacts', $headline);
 
 if ($gCurrentUser->editUsers()) {
     $page->addJavascript('
-        $("#menu_item_members_create_user").attr("href", "javascript:void(0);");
-        $("#menu_item_members_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php");
-        $("#menu_item_members_create_user").attr("class", "nav-link btn btn-secondary openPopup");
+        $("#menu_item_contacts_create_contact").attr("href", "javascript:void(0);");
+        $("#menu_item_contacts_create_contact").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php");
+        $("#menu_item_contacts_create_contact").attr("class", "nav-link btn btn-secondary openPopup");
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function() {
@@ -53,7 +53,7 @@ if ($gCurrentUser->editUsers()) {
         });', true);
 
     $page->addPageFunctionsMenuItem(
-        'menu_item_members_create_user',
+        'menu_item_contacts_create_contact',
         $gL10n->get('SYS_CREATE_CONTACT'),
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_new.php',
         'fa-plus-circle'
@@ -62,7 +62,7 @@ if ($gCurrentUser->editUsers()) {
     if ($gSettingsManager->getBool('profile_log_edit_fields')) {
         // show link to view profile field change history
         $page->addPageFunctionsMenuItem(
-            'menu_item_members_change_history',
+            'menu_item_contacts_change_history',
             $gL10n->get('SYS_CHANGE_HISTORY'),
             ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php',
             'fa-history'
@@ -81,7 +81,7 @@ if ($gCurrentUser->editUsers()) {
 
     // show link to import users
     $page->addPageFunctionsMenuItem(
-        'menu_item_members_import_users',
+        'menu_item_contacts_import_users',
         $gL10n->get('SYS_IMPORT_CONTACTS'),
         ADMIDIO_URL.FOLDER_MODULES.'/contacts/import.php',
         'fa-upload'
@@ -91,7 +91,7 @@ if ($gCurrentUser->editUsers()) {
 if ($gCurrentUser->isAdministrator()) {
     // show link to maintain profile fields
     $page->addPageFunctionsMenuItem(
-        'menu_item_members_profile_fields',
+        'menu_item_contacts_profile_fields',
         $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
         ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
         'fa-th-list'
@@ -101,7 +101,7 @@ if ($gCurrentUser->isAdministrator()) {
 $orgName = $gCurrentOrganization->getValue('org_longname');
 
 // Create table object
-$contactsTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
+$contactsTable = new HtmlTable('tbl_contacts', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values
 $columnHeading = $contactsListConfig->getColumnNames();

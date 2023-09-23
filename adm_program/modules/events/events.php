@@ -159,7 +159,7 @@ if ($getViewMode === 'html') {
         }
 
         // create filter menu with elements for calendar and start/end date
-        $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
+        $filterNavbar = new HtmlNavbar('menu_events_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
         if ($gSettingsManager->getBool('events_rooms_enabled')) {
