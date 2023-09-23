@@ -66,14 +66,14 @@ if (!isset($plg_link_url) || $plg_link_url === '') {
 
 if ($gSettingsManager->getInt('enable_dates_module') > 0) {
     // create Object
-    $plgDates = new ModuleDates();
+    $plgDates = new ModuleEvents();
 
     // read events for output
     $plgDates->setDateRange();
     $plgDates->setCalendarNames($plg_kal_cat);
     $plgDatesResult = $plgDates->getDataSet(0, $plg_dates_count);
 
-    $plgDate = new TableDate($gDb);
+    $plgDate = new Event($gDb);
 
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if ($plg_show_headline) {

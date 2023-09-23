@@ -55,7 +55,7 @@ if ($getCopy) {
 }
 
 // create event object
-$date = new TableDate($gDb);
+$date = new Event($gDb);
 $date->readDataByUuid($getDateUuid);
 
 // read user data

@@ -40,7 +40,7 @@ if ((int) $gSettingsManager->get('enable_dates_module') !== 1) {
 }
 
 // create Object
-$dates = new ModuleDates();
+$dates = new ModuleEvents();
 $dates->setDateRange();
 
 // read events for output
@@ -56,11 +56,11 @@ $rss  = new RssFeed(
     $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', array($orgLongname)),
     $orgLongname
 );
-$date = new TableDate($gDb);
+$date = new Event($gDb);
 
 // Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 if ($datesResult['numResults'] > 0) {
-    $date = new TableDate($gDb);
+    $date = new Event($gDb);
     foreach ($datesResult['recordset'] as $row) {
         // ausgelesene Termindaten in Date-Objekt schieben
         $date->clear();

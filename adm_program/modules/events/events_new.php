@@ -49,7 +49,7 @@ if ($getCopy) {
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create date object
-$date = new TableDate($gDb);
+$date = new Event($gDb);
 
 if (isset($_SESSION['dates_request'])) {
     // By wrong input, the user returned to this form now write the previously entered contents into the object

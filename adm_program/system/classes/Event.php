@@ -18,24 +18,24 @@
  * **Code examples**
  * ```
  * // get data from an existing event
- * $event       = new TableDate($gDb, $dateId);
+ * $event       = new Event($gDb, $dateId);
  * $headline    = $event->getValue('dat_headline');
  * $description = $event->getValue('dat_description');
  *
  * // change existing event
- * $event = new TableDate($gDb, $dateId);
+ * $event = new Event($gDb, $dateId);
  * $event->setValue('dat_headline', 'My new headline');
  * $event->setValue('dat_description', 'This is the new description.');
  * $event->save();
  *
  * // create new event
- * $event = new TableDate($gDb);
+ * $event = new Event($gDb);
  * $event->setValue('dat_headline', 'My new headline');
  * $event->setValue('dat_description', 'This is the new description.');
  * $event->save();
  * ```
  */
-class TableDate extends TableAccess
+class Event extends TableAccess
 {
     /**
      * @var Participants object to handle all participants of this event

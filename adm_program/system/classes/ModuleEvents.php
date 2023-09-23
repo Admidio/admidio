@@ -127,7 +127,7 @@
  * )
  * ```
  */
-class ModuleDates extends Modules
+class ModuleEvents extends Modules
 {
     public const MEMBER_APPROVAL_STATE_INVITED   = 0;
     public const MEMBER_APPROVAL_STATE_TENTATIVE = 1;

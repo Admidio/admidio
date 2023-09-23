@@ -104,7 +104,7 @@ if ($numberRoles === 1) {
 
     // If it's an event list and user has right to edit user states then an additional column with edit link is shown
     if ($role->getValue('cat_name_intern') === 'EVENTS') {
-        $event = new TableDate($gDb);
+        $event = new Event($gDb);
         $event->readDataByRoleId($roleIds[0]);
 
         $showComment = $event->getValue('dat_allow_comments');

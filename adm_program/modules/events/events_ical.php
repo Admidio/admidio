@@ -64,14 +64,14 @@ if ($getCatUuid !== '') {
 }
 
 try {
-    $dates = new ModuleDates();// set mode, viewmode, calendar, startdate and enddate manually
+    $dates = new ModuleEvents();// set mode, viewmode, calendar, startdate and enddate manually
     $dates->setParameter('view_mode', 'period');
     $dates->setParameter('cat_id', $calendar->getValue('cat_id'));
     $dates->setDateRange($getDateFrom, $getDateTo);// read events for output
     $datesResult = $dates->getDataSet(0, 0);// get parameters fom $_GET Array stored in class
     $parameters = $dates->getParameters();
 
-    $date = new TableDate($gDb);
+    $date = new Event($gDb);
     $iCal = $date->getIcalHeader();
 } catch (AdmException $e) {
     $e->showHtml();
@@ -79,7 +79,7 @@ try {
 }
 
 if ($datesResult['numResults'] > 0) {
-    $date = new TableDate($gDb);
+    $date = new Event($gDb);
     foreach ($datesResult['recordset'] as $row) {
         $date->clear();
         $date->setArray($row);
