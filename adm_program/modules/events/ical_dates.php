@@ -9,7 +9,7 @@
  ***********************************************************************************************
  * Parameters:
  *
- * cat_uuid  - show all dates of calendar with this UUID
+ * cat_uuid  - show all events of calendar with this UUID
  * date_from - set the minimum date of the events that should be shown
  *             if this parameter is not set than the actual date is set
  * date_to   - set the maximum date of the events that should be shown

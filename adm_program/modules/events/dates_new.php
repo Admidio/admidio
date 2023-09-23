@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Create and edit dates
+ * Create and edit events
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
@@ -215,7 +215,7 @@ $page->addJavascript(
 );
 
 // show form
-$form = new HtmlForm('dates_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_uuid' => $getDateUuid, 'mode' => 1, 'copy' => $getCopy)), $page);
+$form = new HtmlForm('dates_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/dates_function.php', array('dat_uuid' => $getDateUuid, 'mode' => 1, 'copy' => $getCopy)), $page);
 
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
 $form->addInput(

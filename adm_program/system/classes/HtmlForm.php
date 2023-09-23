@@ -1381,7 +1381,7 @@ class HtmlForm extends \Smarty
 
     /**
      * Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories.
-     * You must define the category type (roles, dates, links ...). All categories of this type will be shown.
+     * You must define the category type (roles, events, links ...). All categories of this type will be shown.
      * @param string $id             ID of the selectbox. This will also be the name of the selectbox.
      * @param string $label          The label of the selectbox.
      * @param Database $database       A Admidio database object that contains a valid connection to a database

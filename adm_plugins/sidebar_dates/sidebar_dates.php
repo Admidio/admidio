@@ -61,7 +61,7 @@ if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
 // Prüfen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
 if (!isset($plg_link_url) || $plg_link_url === '') {
-    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
+    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/events/events.php';
 }
 
 if ($gSettingsManager->getInt('enable_dates_module') > 0) {

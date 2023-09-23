@@ -90,7 +90,7 @@ if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) >
 // check if the link url was set or is empty
 // otherwise the default url to the Admidio event module will be set
 if (!isset($plg_link_url) || $plg_link_url === '') {
-    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
+    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/events/events.php';
 }
 
 // add header content type if in ajax mode

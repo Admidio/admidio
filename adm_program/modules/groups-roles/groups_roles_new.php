@@ -251,7 +251,7 @@ if (!$eventRole) {
 }
 $form->closeGroupBox();
 
-// event roles should not set rights, dates meetings and dependencies
+// event roles should not set rights, events meetings and dependencies
 if (!$eventRole) {
     $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
     $form->addCheckbox(

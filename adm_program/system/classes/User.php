@@ -195,7 +195,7 @@ class User extends TableAccess
 
         $this->db->startTransaction();
 
-        // search for membership with same role and user and overlapping dates
+        // search for membership with same role and user and overlapping events
         if ($mode === 'set') {
             $member = new TableMembers($this->db);
 
@@ -412,7 +412,7 @@ class User extends TableAccess
                         $this->rolesMembershipLeader[$roleId] = $rolLeaderRights;
 
                         // if role leader could assign new members then remember this setting
-                        // roles for confirmation of dates should be ignored
+                        // roles for confirmation of events should be ignored
                         if ($row['cat_name_intern'] !== 'EVENTS'
                             && ($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)) {
                             $this->assignRoles = true;
@@ -570,7 +570,7 @@ class User extends TableAccess
             $gCurrentSession->regenerateId();
             Session::setCookie(COOKIE_PREFIX . '_SESSION_ID', $gCurrentSession->getValue('ses_session_id'));
 
-            // count logins and update login dates
+            // count logins and update login events
             $this->saveChangesWithoutRights();
             $this->updateLoginData();
         }

@@ -113,7 +113,7 @@ $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.'
                     SET ann_timestamp_create = \''.addDaysToDate(0).' 00:15:33\'
                   WHERE ann_id = 3 ';
 
-// set dates of events
+// set events of events
 $sqlQueries[] = 'UPDATE '.TBL_DATES.'
                     SET dat_begin = \''.addDaysToDate(14).' 16:00:00\'
                       , dat_end   = \''.addDaysToDate(14).' 18:00:00\'

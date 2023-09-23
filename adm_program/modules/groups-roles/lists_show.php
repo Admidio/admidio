@@ -123,7 +123,7 @@ if (!$hasRightViewFormerMembers) {
     $getDateTo   = DATE_NOW;
 }
 
-// Create date objects and format dates in system format
+// Create date objects and format events in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false) {
     // check if date_from  has system format
@@ -638,7 +638,7 @@ foreach ($membersList as $member) {
         $dateUuid       = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_uuid' => $dateUuid, 'user_uuid' => $member['usr_uuid'])) . '">
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/popup_participation.php', array('dat_uuid' => $dateUuid, 'user_uuid' => $member['usr_uuid'])) . '">
                                 <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 

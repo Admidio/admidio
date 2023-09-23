@@ -536,7 +536,7 @@ class TableDate extends TableAccess
                 . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/events/events.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message

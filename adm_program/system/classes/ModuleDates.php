@@ -10,7 +10,7 @@
 /**
  * This class reads date recordsets from database
  *
- * This class reads all available recordsets from table dates.
+ * This class reads all available recordsets from table events.
  * and returns an Array with results, recordsets and validated parameters from $_GET Array.
  *
  * **Returned array:**
@@ -151,10 +151,10 @@ class ModuleDates extends Modules
     }
 
     /**
-     * SQL query returns an array with available dates.
+     * SQL query returns an array with available events.
      * @param int $startElement Defines the offset of the query (default: 0)
      * @param int $limit        Limit of query rows (default: 0)
-     * @return array<string,mixed> Array with all results, dates and parameters.
+     * @return array<string,mixed> Array with all results, events and parameters.
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
@@ -168,7 +168,7 @@ class ModuleDates extends Modules
         $additional = $this->sqlGetAdditional();
         $sqlConditions = $this->getSqlConditions();
 
-        // read dates from database
+        // read events from database
         $sql = 'SELECT DISTINCT cat.*, dat.*, rol_uuid, mem.mem_usr_id AS member_date_role, mem.mem_approved AS member_approval_state,
                        mem.mem_leader, mem.mem_comment AS comment, mem.mem_count_guests AS additional_guests,' . $additional['fields'] . '
                   FROM ' . TBL_DATES . ' AS dat
@@ -216,7 +216,7 @@ class ModuleDates extends Modules
     }
 
     /**
-     * Get number of available dates.
+     * Get number of available events.
      * @return int
      */
     public function getDataSetCount()
@@ -257,7 +257,7 @@ class ModuleDates extends Modules
             $headline .= ' - ' . $category->getValue('cat_name');
         }
 
-        // check time period if old dates are chosen, then set headline to previous dates
+        // check time period if old events are chosen, then set headline to previous events
         // Define a prefix
         if ($this->getParameter('mode') === 'old'
         ||    ($this->getParameter('dateStartFormatEnglish') < DATE_NOW
@@ -359,7 +359,7 @@ class ModuleDates extends Modules
     }
 
     /**
-     * Set a date range in which the dates should be searched. The method will fill
+     * Set a date range in which the events should be searched. The method will fill
      * 4 parameters **dateStartFormatEnglish**, **dateStartFormatEnglish**,
      * **dateEndFormatEnglish** and **dateEndFormatAdmidio** that could be read with
      * getParameter and could be used in the script.
