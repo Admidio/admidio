@@ -11,7 +11,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-if (!$gSettingsManager->getBool('members_enable_user_relations')) {
+if (!$gSettingsManager->getBool('contacts_user_relations_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

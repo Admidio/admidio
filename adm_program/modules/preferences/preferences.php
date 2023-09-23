@@ -1071,10 +1071,10 @@ $selectBoxEntries = array(
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formAnnouncements->addSelectBox(
-    'enable_announcements_module',
+    'announcements_module_enabled',
     $gL10n->get('ORG_ACCESS_TO_MODULE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['enable_announcements_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
+    array('defaultValue' => $formValues['announcements_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
 $formAnnouncements->addInput(
     'announcements_per_page',
@@ -1119,35 +1119,35 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($gCurrentOrgId);
 $formUserManagement->addSelectBoxFromSql(
-    'members_list_configuration',
+    'contacts_list_configuration',
     $gL10n->get('SYS_CONFIGURATION_LIST'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['members_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MEMBERS_CONFIGURATION_DESC')
+    array('defaultValue' => $formValues['contacts_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MEMBERS_CONFIGURATION_DESC')
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formUserManagement->addSelectBox(
-    'members_users_per_page',
+    'contacts_per_page',
     $gL10n->get('SYS_USERS_PER_PAGE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
+    array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
 );
 $formUserManagement->addInput(
-    'members_days_field_history',
+    'contacts_field_history_days',
     $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
-    $formValues['members_days_field_history'],
+    $formValues['contacts_field_history_days'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextIdInline' => 'SYS_DAYS_FIELD_HISTORY_DESC')
 );
 $formUserManagement->addCheckbox(
-    'members_show_all_users',
+    'contacts_show_all',
     $gL10n->get('ORG_SHOW_ALL_USERS'),
-    (bool) $formValues['members_show_all_users'],
+    (bool) $formValues['contacts_show_all'],
     array('helpTextIdInline' => 'ORG_SHOW_ALL_USERS_DESC')
 );
 $formUserManagement->addCheckbox(
-    'members_enable_user_relations',
+    'contacts_user_relations_enabled',
     $gL10n->get('SYS_ENABLE_USER_RELATIONS'),
-    (bool) $formValues['members_enable_user_relations'],
+    (bool) $formValues['contacts_user_relations_enabled'],
     array('helpTextIdInline' => 'SYS_ENABLE_USER_RELATIONS_DESC')
 );
 
@@ -1173,15 +1173,15 @@ $formDownloads = new HtmlForm(
 );
 
 $formDownloads->addCheckbox(
-    'documents_files_enable_module',
+    'documents_files_module_enabled',
     $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'),
-    (bool) $formValues['documents_files_enable_module'],
+    (bool) $formValues['documents_files_module_enabled'],
     array('helpTextIdInline' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
 );
 $formDownloads->addInput(
-    'max_file_upload_size',
+    'documents_files_max_upload_size',
     $gL10n->get('SYS_MAXIMUM_FILE_SIZE').' (MB)',
-    $formValues['max_file_upload_size'],
+    $formValues['documents_files_max_upload_size'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextIdInline' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
 );
 $formDownloads->addSubmitButton(
@@ -1735,11 +1735,11 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($gCurrentOrgId);
 $formEvents->addSelectBoxFromSql(
-    'events_default_list_configuration',
+    'events_list_configuration',
     $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['events_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
+    array('defaultValue' => $formValues['events_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
 );
 $formEvents->addCheckbox(
     'events_save_cancellations',

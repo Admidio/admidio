@@ -48,8 +48,8 @@ class UploadHandlerDownload extends UploadHandler
         if (!isset($file->error)) {
             try {
                 // check filesize against module settings
-                if ($file->size > $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024) {
-                    throw new AdmException('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('max_file_upload_size')));
+                if ($file->size > $gSettingsManager->getInt('documents_files_max_upload_size') * 1024 * 1024) {
+                    throw new AdmException('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('documents_files_max_upload_size')));
                 }
 
                 // check filename and throw exception if something is wrong

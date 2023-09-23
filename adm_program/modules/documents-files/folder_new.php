@@ -21,7 +21,7 @@ $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string', array('r
 $headline = $gL10n->get('SYS_CREATE_FOLDER');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('documents_files_enable_module')) {
+if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

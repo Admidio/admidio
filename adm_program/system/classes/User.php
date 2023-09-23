@@ -314,11 +314,11 @@ class User extends TableAccess
      * for later checks within this class.
      * @return bool Return true if relationships could be checked.
      */
-    private function checkRelationshipsRights()
+    private function checkRelationshipsRights(): bool
     {
         global $gSettingsManager;
 
-        if ((int) $this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('members_enable_user_relations')) {
+        if ((int) $this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('contacts_user_relations_enabled')) {
             return false;
         }
 

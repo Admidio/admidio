@@ -404,7 +404,7 @@ foreach ($listsResult['recordset'] as $row) {
         if ($role->getValue('rol_profile') == 1) {
             $assignRoles .= '<i class="admidio-icon-chain fas fa-user" data-toggle="tooltip" title="'.$gL10n->get('SYS_RIGHT_PROFILE').'"></i>';
         }
-        if ($role->getValue('rol_announcements') == 1 && (int) $gSettingsManager->get('enable_announcements_module') > 0) {
+        if ($role->getValue('rol_announcements') == 1 && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
             $assignRoles .= '<i class="admidio-icon-chain fas fa-newspaper" data-toggle="tooltip" title="'.$gL10n->get('SYS_RIGHT_ANNOUNCEMENTS').'"></i>';
         }
         if ($role->getValue('rol_dates') == 1 && (int) $gSettingsManager->get('events_module_enabled') > 0) {
@@ -413,7 +413,7 @@ foreach ($listsResult['recordset'] as $row) {
         if ($role->getValue('rol_photo') == 1 && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
             $assignRoles .= '<i class="admidio-icon-chain fas fa-image" data-toggle="tooltip" title="'.$gL10n->get('SYS_RIGHT_PHOTOS').'"></i>';
         }
-        if ($role->getValue('rol_documents_files') == 1 && (int) $gSettingsManager->getBool('documents_files_enable_module')) {
+        if ($role->getValue('rol_documents_files') == 1 && (int) $gSettingsManager->getBool('documents_files_module_enabled')) {
             $assignRoles .= '<i class="admidio-icon-chain fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_RIGHT_DOCUMENTS_FILES').'"></i>';
         }
         if ($role->getValue('rol_guestbook') == 1 && (int) $gSettingsManager->get('enable_guestbook_module') > 0) {

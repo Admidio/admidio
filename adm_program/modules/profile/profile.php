@@ -253,7 +253,7 @@ $page->addPageFunctionsMenuItem(
 );
 
 // show link to create relations
-if ($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers()) {
+if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->editUsers()) {
     $page->addPageFunctionsMenuItem(
         'menu_item_profile_user_relation_types',
         $gL10n->get('SYS_CREATE_RELATIONSHIP'),
@@ -573,7 +573,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
                 'icon'  => 'fa-user'
             );
         }
-        if ($user->checkRolesRight('rol_announcements') && (int) $gSettingsManager->get('enable_announcements_module') > 0) {
+        if ($user->checkRolesRight('rol_announcements') && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_announcements'],
                 'right' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
@@ -594,7 +594,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
                 'icon'  => 'fa-image'
             );
         }
-        if ($user->checkRolesRight('rol_documents_files') && (int) $gSettingsManager->getBool('documents_files_enable_module')) {
+        if ($user->checkRolesRight('rol_documents_files') && (int) $gSettingsManager->getBool('documents_files_module_enabled')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_documents_files'],
                 'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
@@ -796,7 +796,7 @@ if ($gSettingsManager->getBool('profile_show_extern_roles')
     }
 }
 
-if ($gSettingsManager->getBool('members_enable_user_relations')) {
+if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
     // *******************************************************************************
     // user relations block
     // *******************************************************************************
@@ -816,7 +816,7 @@ if ($gSettingsManager->getBool('members_enable_user_relations')) {
         <div class="card admidio-field-group" id="profile_user_relations_box">
             <div class="card-header">' . $gL10n->get('SYS_USER_RELATIONS'));
         // show link to create relations
-        if ($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers()) {
+        if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->editUsers()) {
             $page->addHtml('
                         <a class="admidio-icon-link float-right" id="profile_relations_new_entry" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)).'">
                             <i class="fas fa-plus-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_CREATE_RELATIONSHIP').'"></i></a>');

@@ -165,11 +165,11 @@ switch ($getMode) {
                     break;
 
                 case 'user_management':
-                    $checkboxes = array('members_show_all_users', 'members_enable_user_relations');
+                    $checkboxes = array('contacts_show_all', 'contacts_user_relations_enabled');
                     break;
 
                 case 'documents-files':
-                    $checkboxes = array('documents_files_enable_module');
+                    $checkboxes = array('documents_files_module_enabled');
                     break;
 
                 case 'guestbook':

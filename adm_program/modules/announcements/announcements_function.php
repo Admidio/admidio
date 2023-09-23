@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // check if the module is enabled for use
-if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
+if ((int) $gSettingsManager->get('announcements_module_enabled') === 0) {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

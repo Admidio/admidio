@@ -21,7 +21,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // calculate default date from which the profile fields history should be shown
 $filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
-$filterDateFrom->modify('-'.$gSettingsManager->getInt('members_days_field_history').' day');
+$filterDateFrom->modify('-'.$gSettingsManager->getInt('contacts_field_history_days').' day');
 
 // Initialize and check the parameters
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');

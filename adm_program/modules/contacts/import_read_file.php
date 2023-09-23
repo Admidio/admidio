@@ -64,7 +64,7 @@ if (strlen($importfile) === 0) {
 // => EXIT
 } elseif ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
     // check the filesize against the server settings
-    $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('max_file_upload_size'))));
+    $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array(ini_get('upload_max_filesize'))));
 // => EXIT
 } elseif (!file_exists($importfile) || !is_uploaded_file($importfile)) {
     // check if a file was really uploaded

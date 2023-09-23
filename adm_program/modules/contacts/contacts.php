@@ -22,7 +22,7 @@ unset($_SESSION['import_request']);
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
 
 // if only active members should be shown then set parameter
-if (!$gSettingsManager->getBool('members_show_all_users')) {
+if (!$gSettingsManager->getBool('contacts_show_all')) {
     $getMembers = true;
 }
 
@@ -32,7 +32,7 @@ $headline = $gL10n->get('SYS_CONTACTS');
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
-$contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('members_list_configuration'));
+$contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('contacts_list_configuration'));
 $_SESSION['members_list_config'] = $contactsListConfig;
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
@@ -70,7 +70,7 @@ if ($gCurrentUser->editUsers()) {
     }
 
     // show checkbox to select all users or only active members
-    if ($gSettingsManager->getBool('members_show_all_users')) {
+    if ($gSettingsManager->getBool('contacts_show_all')) {
         // create filter menu with elements for category
         $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
@@ -121,7 +121,7 @@ $contactsTable->setColumnAlignByArray($columnAlignment);
 $contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
 $contactsTable->addRowHeadingByArray($columnHeading);
-$contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('members_users_per_page'));
+$contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
 $contactsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
 $page->addHtml($contactsTable->show());

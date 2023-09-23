@@ -292,7 +292,7 @@ if (!$eventRole) {
         (bool) $role->getValue('rol_profile'),
         array('icon' => 'fa-user')
     );
-    if ((int) $gSettingsManager->get('enable_announcements_module') > 0) {
+    if ((int) $gSettingsManager->get('announcements_module_enabled') > 0) {
         $form->addCheckbox(
             'rol_announcements',
             $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
@@ -316,7 +316,7 @@ if (!$eventRole) {
             array('icon' => 'fa-image')
         );
     }
-    if ($gSettingsManager->getBool('documents_files_enable_module')) {
+    if ($gSettingsManager->getBool('documents_files_module_enabled')) {
         $form->addCheckbox(
             'rol_documents_files',
             $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),

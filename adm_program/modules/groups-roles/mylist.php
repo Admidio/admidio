@@ -658,7 +658,7 @@ $form->addSelectBoxFromSql(
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true)
 );
 
-if ($gSettingsManager->getBool('members_enable_user_relations')) {
+if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
     // select box showing all relation types
     $sql = 'SELECT urt_id, urt_name, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'

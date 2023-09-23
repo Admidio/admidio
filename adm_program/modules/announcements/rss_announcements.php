@@ -34,7 +34,7 @@ if (!$gSettingsManager->getBool('enable_rss')) {
 }
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if ((int) $gSettingsManager->get('enable_announcements_module') !== 1) {
+if ((int) $gSettingsManager->get('announcements_module_enabled') !== 1) {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

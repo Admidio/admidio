@@ -63,7 +63,7 @@ if (!isset($plg_headline) || $plg_headline === '') {
     $plg_headline = $gL10n->get($plg_headline);
 }
 
-if ($gSettingsManager->getInt('enable_announcements_module') > 0) {
+if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
     // create announcements object
     $plgAnnouncements = new ModuleAnnouncements();
     $plgAnnouncements->setParameter('cat_id', $getCatId);
@@ -76,8 +76,8 @@ if ($gSettingsManager->getInt('enable_announcements_module') > 0) {
         echo '<h3>'.$plg_headline.'</h3>';
     }
 
-    if ($gSettingsManager->getInt('enable_announcements_module') === 1
-    || ($gSettingsManager->getInt('enable_announcements_module') === 2 && $gValidLogin)) {
+    if ($gSettingsManager->getInt('announcements_module_enabled') === 1
+    || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) {
         if ($plgAnnouncements->getDataSetCount() > 0) {
             // get announcements data
             $plgGetAnnouncements = $plgAnnouncements->getDataSet(0, $plg_announcements_count);

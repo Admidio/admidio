@@ -487,7 +487,7 @@ class HtmlForm extends \Smarty
      *                          If this is set then the user can only choose the specified files with the browser file dialog.
      *                          You should check the uploaded file against the MIME type because the file could be manipulated.
      *                        - **maxUploadSize** : The size in byte that could be maximum uploaded.
-     *                          The default will be $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024.
+     *                          The default will be $gSettingsManager->getInt('documents_files_max_upload_size') * 1024 * 1024.
      *                        - **enableMultiUploads** : If set to true a button will be added where the user can
      *                          add new upload fields to upload more than one file.
      *                        - **multiUploadLabel** : The label for the button who will add new upload fields to the form.
@@ -516,7 +516,7 @@ class HtmlForm extends \Smarty
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
             'property'           => self::FIELD_DEFAULT,
-            'maxUploadSize'      => $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024, // MiB
+            'maxUploadSize'      => ini_get('upload_max_filesize') * 1024 * 1024, // MiB
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
             'hideUploadField'    => false,

@@ -59,7 +59,7 @@ $jsonArray = array('draw' => $getDraw);
 header('Content-Type: application/json');
 
 // if only active members should be shown then set parameter
-if (!$gSettingsManager->getBool('members_show_all_users')) {
+if (!$gSettingsManager->getBool('contacts_show_all')) {
     $getMembers = true;
 }
 
@@ -195,7 +195,7 @@ $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
 $jsonArray['data'] = array();
 
-while ($row = $mglStatement->fetch()) {
+while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
     ++$rowNumber;
     $ColumnNumberSql = 7;
     $columnNumberJson = 2;
