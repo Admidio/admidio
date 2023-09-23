@@ -33,7 +33,7 @@ $headline = $gL10n->get('SYS_CONTACTS');
 $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
 $contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('contacts_list_configuration'));
-$_SESSION['members_list_config'] = $contactsListConfig;
+$_SESSION['contacts_list_configuration'] = $contactsListConfig;
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 $flagShowMembers = !$getMembers;

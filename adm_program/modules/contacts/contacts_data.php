@@ -63,8 +63,8 @@ if (!$gSettingsManager->getBool('contacts_show_all')) {
     $getMembers = true;
 }
 
-if (isset($_SESSION['members_list_config'])) {
-    $contactsListConfig = $_SESSION['members_list_config'];
+if (isset($_SESSION['contacts_list_configuration'])) {
+    $contactsListConfig = $_SESSION['contacts_list_configuration'];
 }
 
 // create order statement

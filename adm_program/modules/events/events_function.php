@@ -79,7 +79,7 @@ if (in_array($getMode, array(1, 2), true)) {
 }
 
 if ($getMode === 1) {  // Create a new event or edit an existing event
-    $_SESSION['dates_request'] = $_POST;
+    $_SESSION['events_request'] = $_POST;
 
     try {
         // check the CSRF token of the form against the session token
@@ -93,12 +93,12 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // check if all necessary fields are filled
     // ------------------------------------------------
 
-    if (!isset($_POST['date_participation_possible'])) {
-        $_POST['date_participation_possible'] = 0;
+    if (!isset($_POST['event_participation_possible'])) {
+        $_POST['event_participation_possible'] = 0;
     }
-    if ($_POST['date_participation_possible'] == 1
+    if ($_POST['event_participation_possible'] == 1
     && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)) {
-        $_SESSION['dates_request']['adm_event_participation_right'] = '';
+        $_SESSION['events_request']['adm_event_participation_right'] = '';
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR'))));
         // => EXIT
     }
@@ -107,19 +107,19 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TITLE'))));
         // => EXIT
     }
-    if (strlen($_POST['date_from']) === 0) {
+    if (strlen($_POST['event_from']) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_START'))));
         // => EXIT
     }
-    if (strlen($_POST['date_to']) === 0 && $_POST['dat_repeat_type'] == 0) {
+    if (strlen($_POST['event_to']) === 0 && $_POST['dat_repeat_type'] == 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_END'))));
         // => EXIT
     }
-    if (strlen($_POST['date_from_time']) === 0 && !isset($_POST['dat_all_day'])) {
+    if (strlen($_POST['event_from_time']) === 0 && !isset($_POST['dat_all_day'])) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'))));
         // => EXIT
     }
-    if (strlen($_POST['date_to_time']) === 0 && !isset($_POST['dat_all_day'])) {
+    if (strlen($_POST['event_to_time']) === 0 && !isset($_POST['dat_all_day'])) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'))));
         // => EXIT
     }
@@ -129,8 +129,8 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     }
 
     if (isset($_POST['dat_all_day'])) {
-        $_POST['date_from_time']        = '00:00';
-        $_POST['date_to_time']          = '00:00';
+        $_POST['event_from_time']        = '00:00';
+        $_POST['event_to_time']          = '00:00';
         $event->setValue('dat_all_day', 1);
     } else {
         $event->setValue('dat_all_day', 0);
@@ -145,10 +145,10 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // Check valid format of date and time input
     // ------------------------------------------------
 
-    $startDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['date_from'].' '.$_POST['date_from_time']);
+    $startDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['event_from'].' '.$_POST['event_from_time']);
     if (!$startDateTime) {
         // Error: now check if date format or time format was wrong and show message
-        $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['date_from']);
+        $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['event_from']);
 
         if (!$startDateTime) {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), 'YYYY-MM-DD')));
@@ -159,22 +159,22 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         }
     } else {
         // now write date and time with database format to date object
-        $_POST['dat_begin'] = $_POST['date_from'].' '.$_POST['date_from_time'];
+        $_POST['dat_begin'] = $_POST['event_from'].' '.$_POST['event_from_time'];
     }
 
     // if date-to is not filled then take date-from
-    if (strlen($_POST['date_to']) === 0) {
-        $_POST['date_to'] = $_POST['date_from'];
+    if (strlen($_POST['event_to']) === 0) {
+        $_POST['event_to'] = $_POST['event_from'];
     }
-    if (strlen($_POST['date_to_time']) === 0) {
-        $_POST['date_to_time'] = $_POST['date_from_time'];
+    if (strlen($_POST['event_to_time']) === 0) {
+        $_POST['event_to_time'] = $_POST['event_from_time'];
     }
 
-    $endDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['date_to'].' '.$_POST['date_to_time']);
+    $endDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['event_to'].' '.$_POST['event_to_time']);
 
     if (!$endDateTime) {
         // Error: now check if date format or time format was wrong and show message
-        $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['date_to']);
+        $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['event_to']);
 
         if (!$endDateTime) {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), 'YYYY-MM-DD')));
@@ -185,7 +185,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         }
     } else {
         // now write date and time with database format to date object
-        $_POST['dat_end'] = $_POST['date_to'].' '.$_POST['date_to_time'];
+        $_POST['dat_end'] = $_POST['event_to'].' '.$_POST['event_to_time'];
     }
 
     // DateTo should be greater than DateFrom (Timestamp must be less)
@@ -223,8 +223,8 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $_POST['dat_additional_guests'] = 0;
     }
 
-    if ($_POST['date_participation_possible'] == 1 && (string) $_POST['date_deadline'] !== '') {
-        $_POST['dat_deadline'] = $_POST['date_deadline'].' '.((string) $_POST['date_deadline_time'] === '' ? '00:00' : $_POST['date_deadline_time']);
+    if ($_POST['event_participation_possible'] == 1 && (string) $_POST['event_deadline'] !== '') {
+        $_POST['dat_deadline'] = $_POST['event_deadline'].' '.((string) $_POST['event_deadline_time'] === '' ? '00:00' : $_POST['event_deadline_time']);
     } else {
         $_POST['dat_deadline'] = null;
     }
@@ -319,7 +319,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // ----------------------------------------------
 
     try {
-        if($_POST['date_participation_possible'] == 1) {
+        if($_POST['event_participation_possible'] == 1) {
             if ($event->getValue('dat_rol_id') > 0) {
                 // if event exists, and you could register to this event then we must check
                 // if the data of the role must be changed
@@ -328,9 +328,9 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
-                $role->setValue('rol_view_memberships', isset($_POST['date_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
+                $role->setValue('rol_view_memberships', isset($_POST['event_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
                 // role members are allowed to send mail to this role
-                $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
+                $role->setValue('rol_mail_this_role', isset($_POST['event_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
                 $role->setValue('rol_max_members', (int)$event->getValue('dat_max_members'));
 
                 $role->save();
@@ -355,12 +355,12 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                     $role = new TableRoles($gDb);
                     $role->setType(TableRoles::ROLE_EVENT);
 
-                    // these are the default settings for a date role
+                    // these are the default settings for a event role
                     $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
                     // role members are allowed to view lists
-                    $role->setValue('rol_view_memberships', isset($_POST['date_right_list_view']) ? 1 : 3);
+                    $role->setValue('rol_view_memberships', isset($_POST['event_right_list_view']) ? 1 : 3);
                     // role members are allowed to send mail to this role
-                    $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
+                    $role->setValue('rol_mail_this_role', isset($_POST['event_right_send_mail']) ? 1 : 0);
                     $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
                     $role->setValue('rol_max_members', (int)$_POST['dat_max_members']);
                 }
@@ -375,12 +375,12 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $event->save();
             }
 
-            // check if flag is set that current user wants to participate as leader to the date
-            if (isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
+            // check if flag is set that current user wants to participate as leader to the event
+            if (isset($_POST['event_right_send_mail']) && $_POST['event_current_user_assigned'] == 1
                 && !$gCurrentUser->isLeaderOfRole((int)$event->getValue('dat_rol_id'))) {
-                // user wants to participate -> add him to date and set approval state to 2 ( user attend )
+                // user wants to participate -> add him to event and set approval state to 2 ( user attend )
                 $role->startMembership($user->getValue('usr_id'), true);
-            } elseif (!isset($_POST['date_current_user_assigned'])
+            } elseif (!isset($_POST['event_current_user_assigned'])
                 && $gCurrentUser->isMemberOfRole((int)$event->getValue('dat_rol_id'))) {
                 // user doesn't want to participate as leader -> remove his participation as leader from the event,
                 // don't remove the participation itself!
@@ -391,7 +391,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             }
         } else {
             if($event->getValue('dat_rol_id') > 0) {
-                // date participation was deselected -> delete flag in event and than delete role
+                // event participation was deselected -> delete flag in event and than delete role
                 $role = new TableRoles($gDb, (int)$event->getValue('dat_rol_id'));
                 $event->setValue('dat_rol_id', '');
                 $event->save();
@@ -404,7 +404,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
 
     $gDb->endTransaction();
 
-    unset($_SESSION['dates_request']);
+    unset($_SESSION['events_request']);
     $gNavigation->deleteLastUrl();
 
     admRedirect($gNavigation->getUrl());

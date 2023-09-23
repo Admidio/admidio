@@ -48,39 +48,39 @@ if ($getCopy) {
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// create date object
+// create event object
 $event = new Event($gDb);
 
-if (isset($_SESSION['dates_request'])) {
+if (isset($_SESSION['events_request'])) {
     // By wrong input, the user returned to this form now write the previously entered contents into the object
 
-    // first set date and time field to a datetime within system format and add this to date class
-    $_SESSION['dates_request']['dat_begin']    = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
-    $_SESSION['dates_request']['dat_end']      = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
-    if ((string) $_SESSION['dates_request']['date_deadline'] !== '') {
-        $_SESSION['dates_request']['dat_deadline'] = $_SESSION['dates_request']['date_deadline'] . ' ' . $_SESSION['dates_request']['date_deadline_time'];
+    // first set date and time field to a datetime within system format and add this to event class
+    $_SESSION['events_request']['dat_begin']    = $_SESSION['events_request']['event_from'].' '.$_SESSION['events_request']['event_from_time'];
+    $_SESSION['events_request']['dat_end']      = $_SESSION['events_request']['event_to'].' '.$_SESSION['events_request']['event_to_time'];
+    if ((string) $_SESSION['events_request']['event_deadline'] !== '') {
+        $_SESSION['events_request']['dat_deadline'] = $_SESSION['events_request']['event_deadline'] . ' ' . $_SESSION['events_request']['event_deadline_time'];
     }
-    $event->setArray($_SESSION['dates_request']);
+    $event->setArray($_SESSION['events_request']);
 
     // get the selected roles for visibility
-    if (isset($_SESSION['dates_request']['adm_event_participation_right']) && $_SESSION['dates_request']['adm_event_participation_right'] !== '') {
-        $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];
+    if (isset($_SESSION['events_request']['adm_event_participation_right']) && $_SESSION['events_request']['adm_event_participation_right'] !== '') {
+        $roleViewSet = $_SESSION['events_request']['adm_event_participation_right'];
     }
 
-    if (array_key_exists('date_participation_possible', $_SESSION['dates_request'])) {
-        $eventParticipationPossible = (bool) $_SESSION['dates_request']['date_participation_possible'];
+    if (array_key_exists('event_participation_possible', $_SESSION['events_request'])) {
+        $eventParticipationPossible = (bool) $_SESSION['events_request']['event_participation_possible'];
     }
-    if (array_key_exists('date_current_user_assigned', $_SESSION['dates_request'])) {
-        $eventCurrentUserAssigned = (bool) $_SESSION['dates_request']['date_current_user_assigned'];
+    if (array_key_exists('event_current_user_assigned', $_SESSION['events_request'])) {
+        $eventCurrentUserAssigned = (bool) $_SESSION['events_request']['event_current_user_assigned'];
     }
-    if (array_key_exists('date_right_list_view', $_SESSION['dates_request'])) {
-        $flagDateRightListView = (bool) $_SESSION['dates_request']['date_right_list_view'];
+    if (array_key_exists('event_right_list_view', $_SESSION['events_request'])) {
+        $flagDateRightListView = (bool) $_SESSION['events_request']['event_right_list_view'];
     }
-    if (array_key_exists('date_right_send_mail', $_SESSION['dates_request'])) {
-        $flagDateRightSendMail = (bool) $_SESSION['dates_request']['date_right_send_mail'];
+    if (array_key_exists('event_right_send_mail', $_SESSION['events_request'])) {
+        $flagDateRightSendMail = (bool) $_SESSION['events_request']['event_right_send_mail'];
     }
 
-    unset($_SESSION['dates_request']);
+    unset($_SESSION['events_request']);
 } else {
     if ($getEventUuid !== '') {
         // read data from database
@@ -104,7 +104,7 @@ if (isset($_SESSION['dates_request'])) {
             $flagDateRightSendMail = (bool) $role->getValue('rol_mail_this_role');
         }
 
-        // check if current user is assigned to this date
+        // check if current user is assigned to this event
         $eventCurrentUserAssigned = $gCurrentUser->isLeaderOfRole((int) $event->getValue('dat_rol_id'));
     } else {
         // check if the user has the right to edit at least one category
@@ -113,7 +113,7 @@ if (isset($_SESSION['dates_request'])) {
             // => EXIT
         }
 
-        // For new events preset date with current date
+        // For new events preset event with current event
         $now = new DateTime();
         $oneHourOffset = new DateInterval('PT1H');
         $twoHourOffset = new DateInterval('PT2H');
@@ -134,34 +134,34 @@ $page->addJavascript('
      */
     function setAllDay() {
         if ($("#dat_all_day:checked").val() !== undefined) {
-            $("#date_from_time").hide();
-            $("#date_to_time").hide();
+            $("#event_from_time").hide();
+            $("#event_to_time").hide();
         } else {
-            $("#date_from_time").show("slow");
-            $("#date_to_time").show("slow");
+            $("#event_from_time").show("slow");
+            $("#event_to_time").show("slow");
         }
     }
 
-    function setDateParticipation() {
-        if ($("#date_participation_possible:checked").val() !== undefined) {
+    function setEventParticipation() {
+        if ($("#event_participation_possible:checked").val() !== undefined) {
             $("#adm_event_participation_right_group").addClass("admidio-form-group-required");
             $("#adm_event_participation_right_group").show("slow");
-            $("#date_current_user_assigned_group").show("slow");
+            $("#event_current_user_assigned_group").show("slow");
             $("#dat_max_members_group").show("slow");
-            $("#date_right_list_view_group").show("slow");
-            $("#date_right_send_mail_group").show("slow");
+            $("#event_right_list_view_group").show("slow");
+            $("#event_right_send_mail_group").show("slow");
             $("#dat_allow_comments_group").show("slow");
             $("#dat_additional_guests_group").show("slow");
-            $("#date_deadline_group").show("slow");
+            $("#event_deadline_group").show("slow");
         } else {
             $("#adm_event_participation_right_group").hide();
-            $("#date_current_user_assigned_group").hide();
+            $("#event_current_user_assigned_group").hide();
             $("#dat_max_members_group").hide();
-            $("#date_right_list_view_group").hide();
-            $("#date_right_send_mail_group").hide();
+            $("#event_right_list_view_group").hide();
+            $("#event_right_send_mail_group").hide();
             $("#dat_allow_comments_group").hide();
             $("#dat_additional_guests_group").hide();
-            $("#date_deadline_group").hide("slow");
+            $("#event_deadline_group").hide("slow");
         }
     }
 
@@ -177,14 +177,14 @@ $page->addJavascript('
 
 $page->addJavascript(
     '
-    var dateParticipationPossible = ' . ($eventParticipationPossible ? 1 : 0) .';
+    var eventParticipationPossible = ' . ($eventParticipationPossible ? 1 : 0) .';
 
     setAllDay();
-    setDateParticipation();
+    setEventParticipation();
     setLocationCountry();
 
-    $("#date_participation_possible").click(function() {
-        setDateParticipation();
+    $("#event_participation_possible").click(function() {
+        setEventParticipation();
     });
     $("#dat_all_day").click(function() {
         setAllDay();
@@ -192,30 +192,30 @@ $page->addJavascript(
     $("#dat_location").change(function() {
         setLocationCountry();
     });
-    $("#date_from").change(function() {
-        if ($("#date_from").val() > $("#date_to").val()) {
-            $("#date_to").val($("#date_from").val());
+    $("#event_from").change(function() {
+        if ($("#event_from").val() > $("#event_to").val()) {
+            $("#event_to").val($("#event_from").val());
         }
     });
 
-    // if date participation should be removed than ask user
+    // if event participation should be removed than ask user
     $("#btn_save").click(function(event) {
         event.preventDefault();
 
-        if (dateParticipationPossible == 1 && $("#date_participation_possible").is(":checked") === false) {
+        if (eventParticipationPossible == 1 && $("#event_participation_possible").is(":checked") === false) {
             var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
             if (msg_result) {
-                $("#dates_edit_form").submit();
+                $("#event_edit_form").submit();
             }
         } else {
-            $("#dates_edit_form").submit();
+            $("#event_edit_form").submit();
         }
     });',
     true
 );
 
 // show form
-$form = new HtmlForm('dates_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 1, 'copy' => $getCopy)), $page);
+$form = new HtmlForm('event_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 1, 'copy' => $getCopy)), $page);
 
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
 $form->addInput(
@@ -276,13 +276,13 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
 $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), (bool) $event->getValue('dat_all_day'));
 $form->addInput(
-    'date_from',
+    'event_from',
     $gL10n->get('SYS_START'),
     $event->getValue('dat_begin', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
     array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'date_to',
+    'event_to',
     $gL10n->get('SYS_END'),
     $event->getValue('dat_end', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
     array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
@@ -300,7 +300,7 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
 $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $event->getValue('dat_highlight'));
 $form->addCheckbox(
-    'date_participation_possible',
+    'event_participation_possible',
     $gL10n->get('DAT_REGISTRATION_POSSIBLE'),
     $eventParticipationPossible,
     array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE')
@@ -334,7 +334,7 @@ $form->addSelectBoxFromSql(
     )
 );
 $form->addCheckbox(
-    'date_current_user_assigned',
+    'event_current_user_assigned',
     $gL10n->get('DAT_PARTICIPATE_AT_DATE'),
     $eventCurrentUserAssigned,
     array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC')
@@ -358,13 +358,13 @@ $form->addInput(
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS')
 );
 $form->addInput(
-    'date_deadline',
+    'event_deadline',
     $gL10n->get('DAT_DEADLINE'),
     $event->getValue('dat_deadline', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
     array('type' => 'datetime', 'helpTextIdLabel' => 'SYS_EVENT_DEADLINE_DESC')
 );
-$form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
-$form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
+$form->addCheckbox('event_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
+$form->addCheckbox('event_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');

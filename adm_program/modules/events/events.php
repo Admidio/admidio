@@ -30,7 +30,7 @@
  *****************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
 
-unset($_SESSION['dates_request']);
+unset($_SESSION['events_request']);
 
 // Initialize and check the parameters
 $getMode      = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
