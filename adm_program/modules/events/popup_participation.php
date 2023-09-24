@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Particpation modal window for events
+ * Participation modal window for events
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
@@ -55,8 +55,12 @@ if ((int) $event->getValue('dat_allow_comments') === 1 || (int) $event->getValue
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 
-$member = new TableMembers($gDb);
-$member->readDataByColumns(array('mem_rol_id' => (int) $event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+try {
+    $member = new TableMembers($gDb);
+    $member->readDataByColumns(array('mem_rol_id' => (int)$event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+} catch (AdmException $e) {
+    $e->showHtml();
+}
 
 // Write header with charset utf8
 header('Content-type: text/html; charset=utf-8');
