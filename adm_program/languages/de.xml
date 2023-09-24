@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in event module-->
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Veranstaltung in den Kalender übernehmen</string>
   <string name="SYS_ALL_DAY">Ganztägig</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
@@ -81,10 +80,6 @@
   <string name="GBO_COMMENTS4ALL_DESC">Nicht angemeldete Benutzer:innen können nach Aktivierung dieser Option Einträge im Gästebuch kommentieren. Die Rechtevergabe für diese Funktion über die Rollenverwaltung wird dann ignoriert. (Voreinstellung: nein)</string>
   <string name="GBO_CREATE_COMMENT">Kommentar anlegen</string>
   <string name="GBO_EDIT_COMMENT">Kommentar bearbeiten</string>
-  <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Ein neuer Gästebuchkommentar wurde angelegt</string>
-  <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Es wurde ein neuer Gästebuchkommentar bei #VAR1# angelegt.\n\nText: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="GBO_EMAIL_NOTIFICATION_TITLE">Ein neuer Gästebucheintrag wurde angelegt</string>
-  <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Gästebucheintrag bei #VAR1# angelegt.\n\nText: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="GBO_ENTRY_QUEUED">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einer Moderatorin oder einem Moderator freigeschaltet wurde.</string>
   <string name="GBO_FLOODING_PROTECTION">Dein letzter Eintrag im Gästebuch liegt weniger als #VAR1# Sekunden zurück.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
@@ -140,18 +135,14 @@
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Gib in diesem Formular Name, E-Mail und die Zugangsdaten einer Administratorin oder eines Administrators an. Mit diesen Daten kannst du dich nach der Installation bei Admidio anmelden.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Daten der Organisation</string>
   <string name="INS_DESCRIPTION_BOARD">Vorstand des Vereins</string>
-  <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</string>
+  <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Hier können Besprechungen stattfinden.</string>
   <string name="INS_DESCRIPTION_MEMBER">Alle Mitglieder der Organisation</string>
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Gruppe aller Administratorinnen und Administratoren des Systems</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
-  <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Willst du dein Facebook-Profil hier verlinken? Dazu benötigst du deinen Nutzernamen bei Facebook. Melde dich bei Facebook an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher:innen aus deinem Profil direkt dein Facebook-Profil aufrufen.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt keine Schreibrechte. Ohne Schreibrechte können keine Dateien oder Fotos von den Anwendern hochgeladen werden.</string>
   <string name="INS_GROUPS">Gruppen</string>
   <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Gib einen gültigen Hostnamen oder IP-Adresse ein.</string>
-  <string name="INS_ICQ">ICQ</string>
-  <string name="INS_ICQ_DESC">Gib hier deine ICQ-Nummer ein. Hast du in ICQ deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</string>
   <string name="INS_INSTALL_ADMIDIO">Admidio installieren</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</string>
@@ -161,7 +152,6 @@
   <string name="INS_INTERN">Intern</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">Es wurde keine Sprache ausgewählt.</string>
   <string name="INS_MEMBERSHIP">Mitgliedschaft</string>
-  <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version #VAR1#. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Eine Organisation mit dem Namen #VAR1_BOLD# existiert bereits. Wähle bitte einen anderen Namen aus.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</string>
@@ -170,15 +160,11 @@
   <string name="INS_SET_ORGANIZATION">Organisation festlegen</string>
   <string name="INS_SET_UP_ORGANIZATION">Organisation einrichten</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Die Einrichtung war erfolgreich</string>
-  <string name="SYS_SKYPE">Skype</string>
-  <string name="SYS_SKYPE_DESC">Gib hier deinen eindeutigen Skype-Namen ein. Hast du in Skype deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">Wir würden uns freuen, wenn du die weitere Entwicklung von Admidio mit einer Spende unterstützen würdest!</string>
   <string name="INS_TABLE_PREFIX">Tabellenpräfix</string>
   <string name="INS_TABLE_PREFIX_INVALID">Das Tabellenpräfix enthält ungültige Zeichen!</string>
   <string name="INS_TEAMS">Mannschaften</string>
   <string name="INS_TRAINING">Training</string>
-  <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Willst du dein Twitter-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Twitter. Melde dich bei Twitter an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher:innen aus deinem Profil direkt dein Twitter-Profil aufrufen.</string>
   <string name="INS_UPDATE">Update</string>
   <string name="INS_UPDATE_DATABASE">Datenbank aktualisieren</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Eine Aktualisierung der Datenbank ist nicht möglich!</string>
@@ -191,8 +177,6 @@
   <string name="INS_WELCOME_TEXT">Dieser Assistent hilft dir die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und du dich als Administrator:in anmelden kannst.\n\nHast du Fragen oder Probleme mit der Installation, schau dir bitte #VAR1#unsere Installationsanleitung#VAR2# an oder wende dich an #VAR3#unser Supportforum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Du hast bereits die Verzeichnisse von Admidio mit einer neuen Version aktualisiert. Nun muss noch die Datenbank von der aktuellen Version #VAR2# auf die Version #VAR1# aktualisiert werden, damit Admidio mit der neuen Version laufen kann.\n\nHast du Fragen oder Probleme mit dem Update, schau dir bitte #VAR3#unsere Update-Anleitung#VAR4# an oder wende dich an #VAR5#unser Supportforum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MySQL-Version #VAR2# voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu deiner Datenbank ist.</string>
-  <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher:innen aus deinem Profil direkt dein Xing-Profil aufrufen.</string>
   <string name="INS_BOYFRIEND">Freund</string>
   <string name="INS_BROTHER">Bruder</string>
   <string name="INS_CHILD">Kind</string>
@@ -323,7 +307,6 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
-  <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder E-Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch den entsprechenden Inhalt ersetzt werden</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="ORG_TIME_FORMAT">Zeitformat</string>
   <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Voreinstellung: H:i)</string>
@@ -357,8 +340,6 @@
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-Datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">Bei der Erstellung der Zip-Datei ist ein Fehler aufgetreten.</string>
   <string name="PHO_EDIT_ALBUM">Album bearbeiten</string>
-  <string name="PHO_EMAIL_NOTIFICATION_TITLE">Ein neues Fotoalbum wurde angelegt</string>
-  <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neues Fotoalbum bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="PHO_FILE_UPLOADED">Das Bild #VAR1_BOLD# wurde hochgeladen.</string>
   <string name="PHO_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesucher:innen der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</string>
   <string name="PHO_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
@@ -378,20 +359,15 @@
   <string name="PHO_PHOTO_SEND_ECARD">Foto als Grußkarte versenden</string>
   <string name="PHO_PHOTO_UPLOAD_DESC">Wähle bitte alle Fotos aus, die du in das Album #VAR1_BOLD# hochladen möchtest.</string>
   <string name="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Fotos erfolgreich hochgeladen.</string>
-  <string name="PHO_PHOTOGRAPHER">Fotos von</string>
   <string name="PHO_PHOTOS_DESC">Fotos zu Veranstaltungen können hochgeladen und betrachtet werden. Die Fotos werden in Alben zusammengefasst, welche wiederum beliebig verschachtelt werden können.</string>
   <string name="PHO_POPUP_WINDOW">Popup-Fenster</string>
   <string name="PHO_PREVIOUS_PHOTO">Vorheriges Foto</string>
   <string name="PHO_RECENT_ALBUMS_OF_ORGA">Neuesten Fotoalben der Organisation #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Auflösung größer als</string>
   <string name="PHO_SAME_WINDOW">Gleiches Fenster</string>
-  <string name="PHO_SCALE_AT_UPLOAD">Skalierung beim Hochladen</string>
-  <string name="PHO_SCALE_AT_UPLOAD_DESC">Beim Hochladen werden alle Fotos neu skaliert. Der eingegebene Pixelwert ist der Parameter für die längere Seite des Fotos, egal ob das Foto im Hoch- oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Voreinstellung: 640 Pixel)</string>
   <string name="PHO_SCALE_THUMBNAILS">Skalierung Vorschaubild</string>
   <string name="PHO_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite des Vorschaubildes skaliert werden soll. Vorsicht: Werden die Vorschaubilder zu breit, passen weniger nebeneinander. Ggf. weniger Vorschaubildspalten einstellen. (Voreinstellung: 160Pixel)</string>
   <string name="PHO_SELECT_FOTOS">Fotos auswählen</string>
-  <string name="PHO_SHOW_CAPTION">Bildtext einblenden</string>
-  <string name="PHO_SHOW_CAPTION_DESC">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Voreinstellung: © #VAR1#)</string>
   <string name="PHO_SHOWN_ON_READY">Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</string>
   <string name="PHO_THUMBNAILS_PER_PAGE">Vorschaubilder pro Seite</string>
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Voreinstellung: 16)</string>
@@ -452,7 +428,6 @@
   <string name="PRO_RESTRICTIONS_HELP_3">Der Server kann Fotos mit einer maximalen Auflösung von #VAR1# MegaPixeln verarbeiten.</string>
   <string name="PRO_RESTRICTIONS_HELP_4">Die hochgeladene Datei darf nicht größer als #VAR1# MB sein.</string>
   <string name="PRO_ROLE_MEMBERSHIP_OTHER_ORG">Rollenmitgliedschaften anderer Organisationen</string>
-  <string name="PRO_ROLE_NOT_ASSIGNED">Die Daten können nicht gespeichert werden.\nDer Benutzerin bzw. dem Benutzer wurden keine Rollen zugeordnet.</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Ehemalige Rollenmitgliedschaften anzeigen</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen die Benutzerin oder der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Voreinstellung: ja)</string>
   <string name="PRO_SHOW_MAP_LINK">Kartenlink anzeigen</string>
@@ -498,12 +473,16 @@
   <string name="SYS_ADMINISTRATORS">Administrierende</string>
   <string name="SYS_ADMINISTRATORS_DESC">Mitglieder dieser Rollen sind Administrierende des Dokumente und Dateien Moduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zu einer administrierende Rolle gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
+  <string name="SYS_ALBUM_CREATED_TITLE">Ein neues Fotoalbum wurde angelegt auf #VAR1#</string>
+  <string name="SYS_ALBUM_CHANGED_TITLE">Ein Fotoalbum wurde geändert auf #VAR1#</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Termin, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
   <string name="SYS_ALSO_VISITORS">auch Besucher:innen</string>
   <string name="SYS_ANNOUNCEMENT">Ankündigung</string>
+  <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Eine Ankündigung wurde geändert auf #VAR1#</string>
+  <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Eine neue Ankündigung wurde angelegt auf #VAR1#</string>
   <string name="SYS_ANNOUNCEMENTS">Ankündigungen</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
   <string name="SYS_APPLY">Übernehmen</string>
@@ -519,7 +498,8 @@
   <string name="SYS_ASSIGN_REGISTRATION">Registrierung zuordnen</string>
   <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Das Mitglied kann sich jetzt am System anmelden.</string>
   <string name="SYS_ASSIGN_ROLE">Rolle zuordnen</string>
-  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Wähle bitte eine Rolle aus, der alle importierten Benutzer:innen automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</string>
+  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Wähle bitte eine Rolle aus, der alle importierten Kontakte automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</string>
+  <string name="SYS_ASSIGN_ROLE_TO_USER">Die Daten können nicht gespeichert werden.\nDem Kontakt muss mindestens eine Rolle zugewiesen sein.</string>
   <string name="SYS_ASSIGN_ROLES">Rollen zuordnen</string>
   <string name="SYS_ASYMMETRICAL">asymmetrisch</string>
   <string name="SYS_ATTACHMENT">Anhang</string>
@@ -597,10 +577,13 @@
   <string name="SYS_CONFIGURATION_DELETE">Willst du die aktuelle Listenkonfiguration wirklich löschen?</string>
   <string name="SYS_CONFIGURATION_LIST">Listenkonfiguration</string>
   <string name="SYS_CONFIGURATION_SAVE">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</string>
+  <string name="SYS_CONFIGURE_LISTS">Listen konfigurieren</string>
+  <string name="SYS_CONFIGURE_LISTS_DESC">Benutzer können ihre eigenen Listen mit ausgewählten Profilfeldern erstellen und diese dann auf Gruppen und Rollen anwenden. Es sind nur Profilfelder und Gruppen oder Rollen verfügbar, die der aktuelle Benutzer sehen darf. Mit dieser Einstellung können Sie festlegen, wer solche Listen erstellen darf. (Voreinstellung: Alle)</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
   <string name="SYS_CONFIRM_REGISTRATION">Registrierung bestätigen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
   <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
+  <string name="SYS_CONTACTS">Kontakte</string>
   <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
   <string name="SYS_CONTENT">Inhalt</string>
   <string name="SYS_CONTRIBUTION">Beitrag</string>
@@ -627,6 +610,7 @@
   <string name="SYS_CREATE">Anlegen</string>
   <string name="SYS_CREATE_CALENDAR">Kalender anlegen</string>
   <string name="SYS_CREATE_CATEGORY">Kategorie anlegen</string>
+  <string name="SYS_CREATE_CONTACT">Kontakt anlegen</string>
   <string name="SYS_CREATE_ENTRY">Eintrag anlegen</string>
   <string name="SYS_CREATE_FOLDER">Ordner anlegen</string>
   <string name="SYS_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
@@ -745,8 +729,6 @@
   <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
   <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
   <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
-  <string name="SYS_CONFIGURE_LISTS">Listen konfigurieren</string>
-  <string name="SYS_CONFIGURE_LISTS_DESC">Benutzer können ihre eigenen Listen mit ausgewählten Profilfeldern erstellen und diese dann auf Gruppen und Rollen anwenden. Es sind nur Profilfelder und Gruppen oder Rollen verfügbar, die der aktuelle Benutzer sehen darf. Mit dieser Einstellung können Sie festlegen, wer solche Listen erstellen darf. (Voreinstellung: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Profilfelder bearbeiten</string>
   <string name="SYS_EDIT_ROLE">Rolle bearbeiten</string>
@@ -758,19 +740,13 @@
   <string name="SYS_EMAIL">E-Mail</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">E-Mail Administrator:in</string>
   <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Die E-Mail-Adresse eines Administrierenden wird im System immer dann angezeigt, wenn ein unerwartetes Ereignis eingetreten ist. Es erfolgt der Hinweis, das man Kontakt mit einem Administrator aufnehmen sollte.</string>
-  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
-  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="SYS_EMAIL_CHANGE_EVENT_NOTIFICATION_TITLE">Ein Termin bei #VAR1# wurde geändert</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde geändert</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildaten von #VAR1# #VAR2# (Login: #VAR3#) wurden geändert durch #VAR4#.</string>
-  <string name="SYS_EMAIL_CREATE_EVENT_NOTIFICATION_TITLE">Ein Termin bei #VAR1# wurde angelegt</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde erstellt</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde von #VAR4# erstellt.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde gelöscht</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde gelöscht von #VAR4#.</string>
   <string name="SYS_EMAIL_DESC">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</string>
-  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Eine neue Datei wurde hochgeladen</string>
-  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei #VAR1# hochgeladen.\n\nDatei: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# Funktionstest E-Mail</string>
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Diese E-Mail wurde über die Webseite #VAR1# der Organisation #VAR2# mit den dort hinterlegten E-Mail-Einstellungen versendet.</string>
   <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
@@ -807,6 +783,8 @@
   <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist als Standardkonfiguration für das Modul #VAR1# in dieser Organisation hinterlegt und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Seite nicht gefunden!</string>
+  <string name="SYS_EVENT_CHANGED_TITLE">Ein Termin wurde geändert auf #VAR1#</string>
+  <string name="SYS_EVENT_CREATED_TITLE">Ein neuer Termin wurde angelegt auf #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Teilnehmende können sich bis zu diesem Datum am Termin anmelden. Leiter:innen und Mitglieder mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmende zuordnen. Wenn kein Datum angegeben wird, dann wird das Startdatum des Termins als Anmeldeschluss angenommen.</string>
   <string name="SYS_EVENTS_DESC">Es können Termine angelegt und angeschaut werden. Mitglieder können sich auf Wunsch zu speziellen Terminen anmelden.</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Termine - Teilnahmebestätigung</string>
@@ -815,10 +793,11 @@
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXECUTE_BACKUP">Backup durchführen</string>
-  <string name="SYS_EXISTING_MEMBERS">Existierende Mitglieder</string>
+  <string name="SYS_EXISTING_CONTACTS">Existierende Konakte</string>
   <string name="SYS_EXPORT_LISTS">Listen exportieren</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listen von Gruppen und Rollen können von Benutzerinnen und Benutzern exportiert werden, sofern sie das Recht haben diese Listen zu sehen. Mit dieser Einstellung kann die Exportfunktion eingeschränkt werden. (Voreinstellung: Alle)</string>
   <string name="SYS_EXPORT_TO">Exportieren nach</string>
+  <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FADE_IN">Einblenden</string>
   <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Weiblich</string>
@@ -830,13 +809,13 @@
   <string name="SYS_FIELD_INVALID_REGEX">Der eingegebene Wert in dem Feld #VAR1_BOLD# enthält Zeichen, welche nicht dem entsprechenden regulären Ausdruck des Feldes entsprechen. Bitte schaue in die Feldbeschreibung, welche Zeichen erlaubt sind.</string>
   <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
   <string name="SYS_FILE">Datei</string>
+  <string name="SYS_FILE_CREATED_TITLE">Eine neue Datei wurde hochgeladen auf #VAR1#</string>
   <string name="SYS_FILE_COLUMN">Dateispalte</string>
   <string name="SYS_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
   <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
   <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</string>
-  <string name="SYS_FILE_RENAME">Die Datei #VAR1# wurde umbenannt.</string>
   <string name="SYS_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
   <string name="SYS_FILE_TYPE">Dateityp</string>
@@ -854,7 +833,6 @@
   <string name="SYS_FIRSTNAME">Vorname</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Vorname und Nachname</string>
   <string name="SYS_FOLDER">Ordner</string>
-  <string name="SYS_FOLDER_CREATED">Der Ordner #VAR1_BOLD# wurde angelegt.</string>
   <string name="SYS_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</string>
   <string name="SYS_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du besitzt keine Rechte den gewählten Ordner zu sehen.</string>
@@ -862,7 +840,6 @@
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Der Ordner (ID #VAR1#) konnte nicht gefunden werden.</string>
-  <string name="SYS_FOLDER_RENAME">Der Ordner #VAR1# wurde umbenannt.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
   <string name="SYS_FONT">Schriftart</string>
@@ -884,9 +861,12 @@
   <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
   <string name="SYS_GREETING_CARD">Grußkarte</string>
-  <string name="SYS_GREETING_CARDS">Grußkarten</string>
   <string name="SYS_GROUPS_ROLES">Gruppen &amp; Rollen</string>
   <string name="SYS_GROUPS_ROLES_DESC">Übersicht und Verwaltung aller Gruppen und Rollen der Organisation. Es können verschiedene Mitgliederlisten angezeigt, exportiert und eigene Listen erstellt werden.</string>
+  <string name="SYS_GUESTBOOK_COMMENT_CHANGED_TITLE">Ein Gästebuchkommentar wurde geändert auf #VAR1#</string>
+  <string name="SYS_GUESTBOOK_COMMENT_CREATED_TITLE">Ein neuer Gästebuchkommentar wurde angelegt auf #VAR1#</string>
+  <string name="SYS_GUESTBOOK_ENTRY_CHANGED_TITLE">Ein Gästebucheintrag wurde geändert auf #VAR1#</string>
+  <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">Ein neuer Gästebucheintrag wurde angelegt auf #VAR1#</string>
   <string name="SYS_HALF_YEARLY">Halbjährlich</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
   <string name="SYS_HEADLINE">Überschrift</string>
@@ -901,11 +881,12 @@
   <string name="SYS_HTML_TABLE">HTML-Tabelle</string>
   <string name="SYS_ICAL_DISABLED">Die iCal-Funktion ist deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
-  <string name="SYS_IDENTIFY_USERS">Existierende Benutzer:innen werden anhand von Vornamen und Nachnamen erkannt.</string>
+  <string name="SYS_ICQ">ICQ</string>
+  <string name="SYS_IDENTIFY_USERS">Existierende Kontakte werden anhand von Vornamen und Nachnamen erkannt.</string>
   <string name="SYS_IMPORTANT">Wichtig</string>
   <string name="SYS_IMPORT">Importieren</string>
+  <string name="SYS_IMPORT_CONTACTS">Kontakte importieren</string>
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einer Administatorin oder einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer:innen mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
-  <string name="SYS_IMPORT_MEMBERS">Mitglieder importieren</string>
   <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer:innen wurden angelegt.\n#VAR2# Benutzer:innen wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
@@ -915,7 +896,7 @@
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive Gruppen und Rollen</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Mitglieds ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Person mit einem ähnlichen Namen bereits in der Datenbank existiert.</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Kontakts ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Person mit einem ähnlichen Namen bereits in der Datenbank existiert.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation erfolgreich</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten eines Administrienden anmelden.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Die Installation und Einrichtung der Datenbank wurde erfolgreich durchgeführt.</string>
@@ -924,7 +905,7 @@
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
   <string name="SYS_INTO_TO">Empfänger:innen im TO-Feld und nicht im BCC-Feld auflisten</string>
   <string name="SYS_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, dann werden die Empfänger:innen bei gesetzter Einstellung alle im TO-Feld der E-Mail aufgelistet. Dadurch kann jeder Empfangende die Namen und E-Mail-Adressen der anderen Empfangenden sehen. Außerdem hat er die Möglichkeit auf diese E-Mail an alle anderen Empfänger:innen zu antworten. (Voreinstellung: nein)</string>
-  <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der erwarteten Syntax. Ein Icon von Font Awesome muss dem Schema fa-iconname entsprechen. Eine Datei muss im Themeordner images abgelegt sein und eine png oder jpg Endung besitzen.</string>
+  <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der erwarteten Syntax. Ein Icon von Font Awesome muss dem Schema fa-iconname entsprechen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_IO_ERROR">E/A Fehler</string>
   <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
@@ -944,15 +925,16 @@
   <string name="SYS_LEADER_ASSIGN_MEMBERS">Leiter:innen dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
   <string name="SYS_LEADER_RIGHTS_DESC">Rollenmitglieder können zu Leiterinnen oder Leitern einer Rolle ernannt werden und optional erweiterte Rechte bekommen.\nSie können das Recht bekommen Profildaten aller Rollenmitglieder zu bearbeiten und/oder das Recht Mitglieder der Rolle hinzuzufügen oder zu entfernen. Bekommen sie beide Rechte zugewiesen wären sie dadurch allerdings indirekt in der Lage Profildaten aller Mitglieder zu bearbeiten.</string>
   <string name="SYS_LEADERS">Leiter:innen</string>
-  <string name="SYS_LINK_COLLECTION_FROM">Linksammlung von #VAR1#</string>
-  <string name="SYS_LINK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
-  <string name="SYS_LINK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="SYS_LINK_ADDRESS">Linkadresse</string>
   <string name="SYS_LINK_MEMBERSHIP_DELETE">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich entfernen?</string>
   <string name="SYS_LINK_NAME">Linkname</string>
+  <string name="SYS_LINK_CHANGED_TITLE">Ein Weblink wurde geändert auf #VAR1#</string>
+  <string name="SYS_LINK_COLLECTION_FROM">Linksammlung von #VAR1#</string>
+  <string name="SYS_LINK_CREATED_TITLE">Ein neuer Weblink wurde angelegt auf #VAR1#</string>
   <string name="SYS_LINK_TARGET">Linkziel</string>
   <string name="SYS_LINK_TARGET_DESC">Hier wird angegeben, ob die ausgewählte Webseite im selben Browserfenster wie Admidio oder in einem neuen Browserfenster angezeigt werden soll.</string>
   <string name="SYS_LINK_TO">Link auf #VAR1#</string>
+  <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
   <string name="SYS_LOADING_CONTENT">Inhalt wird geladen ...</string>
   <string name="SYS_LOCK">Sperren</string>
@@ -998,12 +980,13 @@
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Mitglied</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
+  <string name="SYS_MEMBER_NO_VALID_LOGIN">Dieses Mitglied besitzt noch keine Anmeldung.\nMöchtest du die Daten dieser Registrierung zuordnen?</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
   <string name="SYS_MEMBER_SIMILAR_NAME">Es wurde ein Mitglied mit einem ähnlichen Namen gefunden.</string>
   <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
-  <string name="SYS_MEMBERS_DESC">Alle aktiven und ehemaligen Mitglieder können hier eingesehen und verwaltet werden. Neue Mitglieder können angelegt oder importiert werden.</string>
+  <string name="SYS_CONTACTS_DESC">Hier können alle aktiven und ehemaligen Mitglieder angezeigt und organisiert werden. Neue Kontakte können importiert oder erstellt werden.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmende pro Seite</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Es wurden #VAR1# Mitglieder mit einem ähnlichen Namen gefunden.</string>
@@ -1087,12 +1070,12 @@
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Benachrichtigung nach einer neuen Registrierung</string>
   <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Benachrichtigung zur Freigabe einer Registrierung</string>
   <string name="SYS_NOTIFICATION_REGISTRATION_CONFIRMATION">Benachrichtigung zur Bestätigung der Registrierung</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kann eine Systembenachrichtigung für neue Einträge in den Modulen Ankündigungen, Termine, Dokumente &amp; Dateien, Fotos, Weblinks und Gästebuch aktiviert werden. Mitglieder der hinterlegten Benachrichtigungsrolle erhalten so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen. (Voreinstellung: nein)</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Benachrichtigung bei neuen oder geänderten Einträgen</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Mitglieder mit der hinterlegten Benachrichtigungsrolle erhalten eine Systembenachrichtigung bei neuen oder geänderten Einträgen in den Modulen Ankündigungen, Veranstaltungen, Dokumente &amp; Dateien, Fotos, Weblinks und Gästebuch. (Standard: nein)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Benachrichtigung bei Profiländerungen</string>
-  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Hier kann eine Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einer Benutzerin oder einem Benutzer Profildaten erstellt, geändert oder gelöscht, erfolgt eine Benachrichtigung an die Mitglieder der hinterlegten Benachrichtigungsrolle per E-Mail. (Voreinstellung: nein)</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Mitglieder der hinterlegten Rolle für Benachrichtigungen erhalten eine Systembenachrichtigung, wenn die Profildaten eines Mitglieds von einem Benutzer erstellt, geändert oder gelöscht werden. (Voreinstellung: nein)</string>
   <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtigungen</string>
-  <string name="SYS_NOTIFICATION_ROLE_DESC">Benachrichtigungen über neue Einträge oder Profiländerungen werden an alle Mitglieder dieser Rolle gesendet.</string>
+  <string name="SYS_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rolle erhalten die Benachrichtigungen über neue oder geänderte Einträge in den Modulen und Änderungen in den Profildaten der Mitglieder. Aus Datenschutzgründen können nur Rollen hinterlegt werden, die das Rollenrecht #VAR1_BOLD# haben.</string>
   <string name="SYS_NUMBER">Zahl</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge, so werden Navigationselemente angezeigt, um zwischen den Seiten zu blättern. (Voreinstellung: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
@@ -1137,7 +1120,8 @@
   <string name="SYS_PHOTO">Foto</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTOS">Fotos</string>
-  <string name="SYS_PHOTO_OF_VAR">Foto von #VAR1#</string>
+  <string name="SYS_PHOTOS_BY">Fotos von</string>
+  <string name="SYS_PHOTOS_BY_VAR">Fotos von #VAR1#</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">alle PHP-Einstellungen</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>
@@ -1183,15 +1167,15 @@
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist nicht gültig.</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
-  <string name="SYS_REGISTRATION_VALIDATION_OK">Du hast deine Registrierung erfolgreich bestätigt. Diese wird nun von einem Mitglied aus dem Team von #VAR1# geprüft. Du erhältst anschließend eine E-Mail, ob deine Registrierung angenommen oder abgelehnt wurde.</string>
-  <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Du hast deine Registrierung erfolgreich bestätigt. Du kannst dich jetzt mit deinem Anmeldenamen und Passwort anmelden.</string>
-  <string name="SYS_REGISTRATION_VALIDATION_FAILED">Der aufgerufene Link ist ungültig. Ein Registrierungslink ist nur bis zu 24 Stunden nach der Registrierung gültig. Bitte registriere dich erneut auf der Seite und bestätige deine Registrierung, sobald du die E-Mail mit dem Link erhältst.</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer:innen übernehmen</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert eine neu registrierte Benutzerin oder ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Datensatz übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Anmeldename und das Passwort übernommen. Bei Benutzerinnen und Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
   <string name="SYS_REGISTRATION_AT">Registrierung am #VAR1# um #VAR2# Uhr</string>
   <string name="SYS_REGISTRATION_CONFIRMED">Registrierung wurde durch den Benutzer bestätigt.</string>
   <string name="SYS_REGISTRATION_NOT_CONFIRMED">Registrierung wurde durch den Benutzer noch nicht bestätigt.</string>
   <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nDu erhältst nun eine E-Mail mit einem Bestätigungslink. Nachdem du diesen Link ausgeführt hast, kann deine Registrierung weiter bearbeitet werden.</string>
-  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer:innen übernehmen</string>
-  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert eine neu registrierte Benutzerin oder ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Datensatz übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Anmeldename und das Passwort übernommen. Bei Benutzerinnen und Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
+  <string name="SYS_REGISTRATION_VALIDATION_FAILED">Der aufgerufene Link ist ungültig. Ein Registrierungslink ist nur bis zu 24 Stunden nach der Registrierung gültig. Bitte registriere dich erneut auf der Seite und bestätige deine Registrierung, sobald du die E-Mail mit dem Link erhältst.</string>
+  <string name="SYS_REGISTRATION_VALIDATION_OK">Du hast deine Registrierung erfolgreich bestätigt. Diese wird nun von einem Mitglied aus dem Team von #VAR1# geprüft. Du erhältst anschließend eine E-Mail, ob deine Registrierung angenommen oder abgelehnt wurde.</string>
+  <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Du hast deine Registrierung erfolgreich bestätigt. Du kannst dich jetzt mit deinem Anmeldenamen und Passwort anmelden.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulärer Ausdruck</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Es kann ein beliebiger regulärer Ausdruck hinterlegt werden, der auf den eingegebenen Inhalt des Benutzers in dieses Profilfeld angewendet wird. Der Inhalt muss den Bedingungen des regulären Ausdrucks entsprechen, damit der eingegebene Wert in dem Feld gespeichert werden kann. Der reguläre Ausdruck wird zusätzlich zu den allgemeinen Bedingungen des Datentyps geprüft.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
@@ -1263,7 +1247,6 @@
   <string name="SYS_SAVE_CHANGES">Änderungen speichern</string>
   <string name="SYS_SAVE_CONFIGURATION">Konfiguration speichern</string>
   <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
-  <string name="SYS_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite des Vorschaubildes skaliert werden soll. (Voreinstellung: 250 Pixel)</string>
   <string name="SYS_SEARCH">Suche</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18j</string>
   <string name="SYS_SEARCH_AGE_DESC">Sucht alle Benutzer:innen, die älter als 18 Jahre sind</string>
@@ -1339,12 +1322,15 @@
   <string name="SYS_SHOW_PERMISSIONS">Berechtigungen anzeigen</string>
   <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
   <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
+  <string name="SYS_SHOW_WATERMARK">Zeige Wasserzeichen</string>
+  <string name="SYS_SHOW_WATERMARK_DESC">Der eingegebene Text wird in allen angezeigten Fotos angezeigt, ab einer Größe von 200 Pixel der längeren Seite. Wenn der Fotograf im Album hinterlegt wurde, wird anstelle dieses Textes der Name des Fotografen mit Copyright angezeigt. Wenn kein Bildtext angezeigt werden soll, kann dieses Feld leer gelassen werden (Standard: #VAR1#).</string>
   <string name="SYS_SIMILAR_MEMBERS_FOUND">Ähnliche Mitglieder gefunden</string>
   <string name="SYS_SIMILAR_MEMBERS_FOUND_ASSIGN">Es wurden Mitglieder mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden.</string>
   <string name="SYS_SIMILAR_MEMBERS_FOUND_REGISTRATION">Es wurden Mitglieder mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden. Prüfe die Registrierung und ordne diese einem gefunden Mitglied zu oder lege ein neues Mitglied an.</string>
   <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SIZE">Größe</string>
+  <string name="SYS_SKYPE">Skype</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP Authentifizierung</string>
   <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden.  (Voreinstellung: Ja)</string>
@@ -1367,6 +1353,8 @@
   <string name="SYS_SMTP_USER">SMTP Anmeldename</string>
   <string name="SYS_SMTP_USER_DESC">Der Anmeldename, der bei der SMTP-Authentifizierung verwendet wird.</string>
   <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Hier kannst du deinen Benutzernamen eingeben, den du in diesem sozialen Netzwerk verwendest. Andere Mitglieder können dich dann in diesem Netzwerk finden.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Möchtest du einen Link zu deinem #VAR1# Profil setzen? Dein #VAR1# Login-Name ist erforderlich. Logge dich in dein #VAR1# Konto ein und gehe zu deinem Profil. Kopiere nun die URL in dieses Feld und speicher dein Profil hier. Besucher:innen deines Profils können nun direkt dein #VAR1#-Profil öffnen.</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
   <string name="SYS_START_BACKUP">Backup starten</string>
   <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
@@ -1404,11 +1392,12 @@
   <string name="SYS_TO" description="E-Mail">An</string>
   <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
+  <string name="SYS_TWITTER">Twitter</string>
   <string name="SYS_TYPE">Typ</string>
   <string name="SYS_UNIQUE_ID">Eindeutige ID</string>
   <string name="SYS_UNIX">UNIX</string>
-  <string name="SYS_UNKNOWN">Unbekannt</string>
   <string name="SYS_UNLIMITED">Unbegrenzt</string>
+  <string name="SYS_UNKNOWN">Unbekannt</string>
   <string name="SYS_UNLOCK">Freigeben</string>
   <string name="SYS_UNIDIRECTIONAL">unidirektional</string>
   <string name="SYS_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
@@ -1427,7 +1416,6 @@
   <string name="SYS_USER_NO_MEMBERSHIP">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten. Möchtest du die neuen Zugangsdaten, sowie die entsprechenden Rollen dieser Person zuordnen?</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1# und hat auch noch keine Zugangsdaten. Möchtest du die Zugangsdaten, sowie die entsprechenden Rollen dieser Person zuordnen?</string>
-  <string name="SYS_MEMBER_NO_VALID_LOGIN">Dieses Mitglied besitzt noch keine Anmeldung.\nMöchtest du die Daten dieser Registrierung zuordnen?</string>
   <string name="SYS_USER_RELATION">Beziehung</string>
   <string name="SYS_USER_RELATIONS">Beziehungen</string>
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
@@ -1473,6 +1461,7 @@
   <string name="SYS_WRITE_EMAIL">E-Mail schreiben</string>
   <string name="SYS_WRITE_ENTRY">Eintrag schreiben</string>
   <string name="SYS_WRITE_PM">Private Nachricht schreiben</string>
+  <string name="SYS_XING">Xing</string>
   <string name="SYS_YES">Ja</string>
   <string name="SYS_YOUR_CONFIGURATION">Deine Konfigurationen</string>
   <string name="SYS_YOUR_EMAIL">Deine E-Mail</string>
