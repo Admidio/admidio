@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENTS_ALL_EVENTS">Todas las citas</string>
+  <string name="PLG_EVENTS_HEADLINE">Citas</string>
+</resources>

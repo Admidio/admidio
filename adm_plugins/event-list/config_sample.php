@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Configuration file for Admidio plugin Sidebar-Dates
+ * Configuration file for Admidio plugin event list
  *
  * Rename this file to config.php if you want to change some of the preferences below. The plugin
  * will only read the parameters from config.php and not the example file.
@@ -13,7 +13,7 @@
  */
 
 // Number of events to be displayed (Default = 2)
-$plg_dates_count = 2;
+$plg_max_number_events_shown = 2;
 
 // Also show the to time/to date
 // 0 - Do not display to-date and to-time
@@ -23,7 +23,7 @@ $plg_show_date_end = 1;
 // Shows a short preview text of the event.
 // 0  - no short preview
 // 70 - Number of characters of the preview text
-$plg_dates_show_preview = 70;
+$plg_events_show_preview = 70;
 
 // If this option is set to true (1) than the full content of the
 // description will be shown. Also images and other html content.
