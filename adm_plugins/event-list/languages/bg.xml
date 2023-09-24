@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_EVENTS_ALL_EVENTS">Всички събития</string>
-  <string name="PLG_EVENTS_HEADLINE">Събития</string>
-  <string name="PLG_EVENTS_NO_ENTRIES_VISITORS">Събитията не са достъпни за посетители. Влезте за да видите събития.</string>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Всички събития</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Събития</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Събитията не са достъпни за посетители. Влезте за да видите събития.</string>
 </resources>

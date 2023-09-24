@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_EVENTS_ALL_EVENTS">Kaikki tapahtumat</string>
-  <string name="PLG_EVENTS_HEADLINE">Tapahtumat</string>
-  <string name="PLG_EVENTS_NO_ENTRIES_VISITORS">Vierailijoille ei ole saatavilla tapahtumia. Kirjaudu sisään nähdäksesi tapahtumat.</string>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Kaikki tapahtumat</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Tapahtumat</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Vierailijoille ei ole saatavilla tapahtumia. Kirjaudu sisään nähdäksesi tapahtumat.</string>
 </resources>

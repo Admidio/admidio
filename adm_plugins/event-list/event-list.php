@@ -75,7 +75,7 @@ if ($gSettingsManager->getInt('events_module_enabled') > 0) {
 
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if ($plg_show_headline) {
-        echo '<h3>'.$gL10n->get('PLG_EVENTS_HEADLINE').'</h3>';
+        echo '<h3>'.$gL10n->get('PLG_EVENT_LIST_HEADLINE').'</h3>';
     }
 
     if ($gSettingsManager->getInt('events_module_enabled') === 1
@@ -139,13 +139,13 @@ if ($gSettingsManager->getInt('events_module_enabled') > 0) {
 
             // forward to $plg_link_url without any additional parameters
             echo '<li class="list-group-item">
-                <a href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_EVENTS_ALL_EVENTS').'</a>
+                <a href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_EVENT_LIST_ALL_EVENTS').'</a>
             </li></ul>';
         } else {
             echo $gL10n->get('SYS_NO_ENTRIES');
         }
     } else {
-        echo $gL10n->get('PLG_EVENTS_NO_ENTRIES_VISITORS');
+        echo $gL10n->get('PLG_EVENT_LIST_NO_ENTRIES_VISITORS');
     }
 
     echo '</div>';
