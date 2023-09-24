@@ -553,6 +553,7 @@
   <string name="SYS_CREATE_CATEGORY">Create category</string>
   <string name="SYS_CREATE_CONTACT">Create contact</string>
   <string name="SYS_CREATE_ENTRY">Add entry</string>
+  <string name="SYS_CREATE_EVENT">Create event</string>
   <string name="SYS_CREATE_FOLDER">Create folder</string>
   <string name="SYS_CREATE_FOLDER_DESC">A new folder will be created in folder #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>

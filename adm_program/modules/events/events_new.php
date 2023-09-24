@@ -10,8 +10,6 @@
  * Parameters:
  *
  * dat_uuid - UUID of the event that should be edited
- * headline - Headline for the event
- *            (Default) Events
  * copy : true - The event of the dat_id will be copied and the base for this new event
  ***********************************************************************************************
  */
@@ -20,7 +18,6 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
 $getCopy     = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 // check if module is active
@@ -39,11 +36,11 @@ $flagDateRightSendMail      = false;
 
 // set headline of the script
 if ($getCopy) {
-    $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
+    $headline = $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_EVENT')));
 } elseif ($getEventUuid !== '') {
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_EVENT')));
 } else {
-    $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
+    $headline = $gL10n->get('SYS_CREATE_EVENT');
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

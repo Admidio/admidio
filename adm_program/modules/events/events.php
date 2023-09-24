@@ -13,8 +13,6 @@
  *             old    : shows events in the past
  *             all    : shows all events in past and future
  * start     - Position of query recordset where the visual output should start
- * headline  - Headline shown over events
- *             (Default) Events
  * cat_uuid  - show all events of calendar with this UUID
  * dat_uuid  - UUID of a single event that should be shown
  * show      - all               : (Default) show all events
@@ -35,7 +33,6 @@ unset($_SESSION['events_request']);
 // Initialize and check the parameters
 $getMode      = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getStart     = admFuncVariableIsValid($_GET, 'start', 'int');
-$getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
 $getCatUuid   = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
 $getShow      = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
@@ -87,15 +84,15 @@ $eventsResult = $events->getDataSet($getStart, $eventsPerPage);
 
 if ($getViewMode === 'html') {
     if ($getEventUuid !== '') {
-        $gNavigation->addUrl(CURRENT_URL, $events->getHeadline($getHeadline));
+        $gNavigation->addUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')));
     } else {
         // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $events->getHeadline($getHeadline), 'fa-calendar-alt');
+        $gNavigation->addStartUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')), 'fa-calendar-alt');
     }
 }
 
 // create html page object
-$page = new HtmlPage('admidio-events', $events->getHeadline($getHeadline));
+$page = new HtmlPage('admidio-events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
 
 if ($getViewMode === 'html') {
     $datatable  = true;
@@ -104,18 +101,18 @@ if ($getViewMode === 'html') {
 
     if ($gSettingsManager->getBool('enable_rss') && (int) $gSettingsManager->get('events_module_enabled') === 1) {
         $page->addRssFile(
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_rss.php', array('headline' => $getHeadline)),
-            $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $getHeadline))
+            ADMIDIO_URL.FOLDER_MODULES.'/events/events_rss.php',
+            $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_EVENTS')))
         );
     }
 
     $page->addJavascript('
         $("#sel_change_view").change(function() {
-            self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('mode' => $getMode, 'headline' => $getHeadline, 'date_from' => $events->getParameter('dateStartFormatAdmidio'), 'date_to' => $events->getParameter('dateEndFormatAdmidio'), 'cat_uuid' => $getCatUuid)) . '&view=" + $("#sel_change_view").val();
+            self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('mode' => $getMode, 'date_from' => $events->getParameter('dateStartFormatAdmidio'), 'date_to' => $events->getParameter('dateEndFormatAdmidio'), 'cat_uuid' => $getCatUuid)) . '&view=" + $("#sel_change_view").val();
         });
 
         $("#menu_item_event_print_view").click(function() {
-            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'dat_uuid' => $getEventUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'))) . '", "_blank");
+            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'cat_uuid' => $getCatUuid, 'dat_uuid' => $getEventUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'))) . '", "_blank");
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
@@ -128,8 +125,8 @@ if ($getViewMode === 'html') {
     if (count($gCurrentUser->getAllEditableCategories('EVT')) > 0 && $getEventUuid === '') {
         $page->addPageFunctionsMenuItem(
             'menu_item_event_add',
-            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('headline' => $getHeadline)),
+            $gL10n->get('SYS_CREATE_EVENT'),
+            ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php',
             'fa-plus-circle'
         );
     }
@@ -161,7 +158,6 @@ if ($getViewMode === 'html') {
         // create filter menu with elements for calendar and start/end date
         $filterNavbar = new HtmlNavbar('menu_events_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', $page, array('type' => 'navbar', 'setFocus' => false));
-        $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
         if ($gSettingsManager->getBool('events_rooms_enabled')) {
             $selectBoxEntries = array(
                 'detail'       => $gL10n->get('SYS_DETAILED'),
@@ -329,10 +325,10 @@ if ($eventsResult['totalCount'] === 0) {
             // change and delete is only for users with additional rights
             if ($event->isEditable()) {
                 $outputButtonCopy = '
-                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1, 'headline' => $getHeadline)) . '">
+                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1)) . '">
                         <i class="fas fa-clone" data-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>';
                 $outputButtonEdit = '
-                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'headline' => $getHeadline)) . '">
+                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid)) . '">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
                 $outputButtonDelete = '
                     <a class="openPopup" href="javascript:void(0);"
@@ -673,9 +669,9 @@ if ($eventsResult['totalCount'] === 0) {
                 // change and delete is only for users with additional rights
                 if ($event->isEditable()) {
                     $page->addHtml('
-                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1, 'headline' => $getHeadline)) . '">
+                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1)) . '">
                                                 <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
-                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'headline' => $getHeadline)) . '">
+                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid)) . '">
                                                 <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                                             <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
@@ -815,7 +811,7 @@ if ($eventsResult['totalCount'] === 0) {
 
 if ($getView === 'detail') {
     // If necessary show links to navigate to next and previous recordset of the query
-    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
+    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('view' => $getView, 'mode' => $getMode, 'cat_uuid' => $getCatUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
     $page->addHtml(admFuncGeneratePagination($baseUrl, $eventsResult['totalCount'], $eventsResult['limit'], $getStart));
 }
 $page->show();

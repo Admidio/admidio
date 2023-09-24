@@ -14,17 +14,9 @@
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
- * Parameters:
- *
- * headline - Headline for the rss feed
- *             (Default) Events
- *
  *****************************************************************************/
 
 require_once(__DIR__ . '/../../system/common.php');
-
-// Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_EVENTS')));
 
 // Check if RSS is active...
 if (!$gSettingsManager->getBool('enable_rss')) {
@@ -51,7 +43,7 @@ $eventsResult = $events->getDataSet(0, 10);
 $orgLongname = $gCurrentOrganization->getValue('org_longname');
 // create RSS feed object with channel information
 $rss  = new RssFeed(
-    $orgLongname . ' - ' . $getHeadline,
+    $orgLongname . ' - ' . $gL10n->get('SYS_EVENTS'),
     $gCurrentOrganization->getValue('org_homepage'),
     $gL10n->get('SYS_CURRENT_EVENTS_OF_ORGA', array($orgLongname)),
     $orgLongname
