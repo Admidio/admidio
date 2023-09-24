@@ -99,7 +99,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     if ($_POST['event_participation_possible'] == 1
     && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)) {
         $_SESSION['events_request']['adm_event_participation_right'] = '';
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_REGISTRATION_POSSIBLE_FOR'))));
         // => EXIT
     }
 
@@ -124,7 +124,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         // => EXIT
     }
     if (strlen($_POST['dat_cat_id']) === 0) {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_CALENDAR'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CALENDAR'))));
         // => EXIT
     }
 
@@ -237,7 +237,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         // are within the visibility roles set otherwise show error
         if (count($rightCategoryView->getRolesIds()) > 0
         && count(array_intersect(array_map('intval', $_POST['adm_event_participation_right']), $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right'])) {
-            $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', array(implode(', ', $rightCategoryView->getRolesNames()))));
+            $gMessage->show($gL10n->get('SYS_EVENT_CATEGORIES_ROLES_DIFFERENT', array(implode(', ', $rightCategoryView->getRolesNames()))));
             // => EXIT
         }
     }
@@ -268,7 +268,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             $eventsStatement = $gDb->queryPrepared($sql, $queryParams);
 
             if ($eventsStatement->fetchColumn()) {
-                $gMessage->show($gL10n->get('DAT_ROOM_RESERVED'));
+                $gMessage->show($gL10n->get('SYS_ROOM_RESERVED'));
                 // => EXIT
             }
 
@@ -490,7 +490,7 @@ if (in_array($getMode, array(3, 4, 7), true)) {
             switch ($getMode) {
                 case 3:  // User attends to the event
                     $member->startMembership((int) $event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);
-                    $outputMessage = $gL10n->get('DAT_ATTEND_DATE', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
+                    $outputMessage = $gL10n->get('SYS_ATTEND_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                     // => EXIT
                     break;
 
@@ -503,19 +503,19 @@ if (in_array($getMode, array(3, 4, 7), true)) {
                         $member->deleteMembership((int) $event->getValue('dat_rol_id'), $user->getValue('usr_id'));
                     }
 
-                    $outputMessage = $gL10n->get('DAT_CANCEL_DATE', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
+                    $outputMessage = $gL10n->get('SYS_CANCEL_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                     // => EXIT
                     break;
 
                 case 7:  // User may participate in the event
                     $member->startMembership((int) $event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_MAYBE);
-                    $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
+                    $outputMessage = $gL10n->get('SYS_ATTEND_POSSIBLY', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                     // => EXIT
                     break;
             }
         }
     } else {
-        $outputMessage = $gL10n->get('DAT_PARTICIPATE_NO_RIGHTS');
+        $outputMessage = $gL10n->get('SYS_PARTICIPATE_NO_RIGHTS');
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());

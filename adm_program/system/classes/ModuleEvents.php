@@ -264,7 +264,7 @@ class ModuleEvents extends Modules
         if ($this->getParameter('mode') === 'old'
         ||    ($this->getParameter('dateStartFormatEnglish') < DATE_NOW
             && $this->getParameter('dateEndFormatEnglish')   < DATE_NOW)) {
-            $headline = $gL10n->get('DAT_PREVIOUS_DATES', array('')) . $headline;
+            $headline = $gL10n->get('SYS_PREVIOUS_EVENTS', array('')) . $headline;
         }
 
         if ($this->getParameter('view_mode') === 'print') {

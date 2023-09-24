@@ -53,7 +53,7 @@ $orgLongname = $gCurrentOrganization->getValue('org_longname');
 $rss  = new RssFeed(
     $orgLongname . ' - ' . $getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', array($orgLongname)),
+    $gL10n->get('SYS_CURRENT_EVENTS_OF_ORGA', array($orgLongname)),
     $orgLongname
 );
 $event = new Event($gDb);
@@ -98,13 +98,13 @@ if ($eventsResult['numResults'] > 0) {
         }
 
         if ($eventLocation !== '') {
-            $description .= '<br /><br />' . $gL10n->get('DAT_LOCATION') . ': ' . $eventLocation;
+            $description .= '<br /><br />' . $gL10n->get('SYS_LOCATION') . ': ' . $eventLocation;
         }
 
         $description .= '<br /><br />' . $event->getValue('dat_description');
 
         // i-cal downloadlink
-        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $eventUuid, 'mode' => '6')).'">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
+        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $eventUuid, 'mode' => '6')).'">' . $gL10n->get('SYS_ADD_EVENT_TO_CALENDAR') . '</a>';
 
         // add entry to RSS feed
         $rss->addItem(

@@ -1,32 +1,32 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in Datesmodule-->
-  <string name="DAT_ADD_DATE_TO_CALENDAR">Πρόσθεσε εκδήλωση στο ημερολόγιο</string>
-  <string name="DAT_ALL_DAY">Πλήρους απασχόλησης</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Οι συμμετέχοντες μπορούν να εγγράψουν ανώνυμους επισκέπτες</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Οι συμμετέχοντες μπορούν να προσθέσουν επιπλέον θέσεις στην εγγραφή τους. Στη συνέχεια αφαιρούνται από τον μέγιστο αριθμό συμμετεχόντων και οι υπόλοιπες ελεύθερες θέσεις μειώνονται. Αυτό είναι π.χ. χρήσιμο εάν ένας συμμετέχων μπορεί να φέρει περισσότερους επισκέπτες και συνεπώς απαιτούνται περισσότερες ελεύθερες θέσεις.</string>
-  <string name="DAT_ALLOW_USER_COMMENTS">Να επιτρέπονται σχόλια στο πλαίσιο της συμμετοχής</string>
-  <string name="DAT_ALLOW_USER_COMMENTS_DESC">Οι συμμετέχοντες μπορούν να σχολιάσουν τη συμμετοχή τους. Τα σχόλια μπορούν να προβληθούν μέσω της λίστας συμμετεχόντων</string>
-  <string name="DAT_ASSIGN_PARTICIPANTS">Πρόσθεση συμμετεχόντων</string>
+  <string name="SYS_ADD_EVENT_TO_CALENDAR">Πρόσθεσε εκδήλωση στο ημερολόγιο</string>
+  <string name="SYS_ALL_DAY">Πλήρους απασχόλησης</string>
+  <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Οι συμμετέχοντες μπορούν να εγγράψουν ανώνυμους επισκέπτες</string>
+  <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Οι συμμετέχοντες μπορούν να προσθέσουν επιπλέον θέσεις στην εγγραφή τους. Στη συνέχεια αφαιρούνται από τον μέγιστο αριθμό συμμετεχόντων και οι υπόλοιπες ελεύθερες θέσεις μειώνονται. Αυτό είναι π.χ. χρήσιμο εάν ένας συμμετέχων μπορεί να φέρει περισσότερους επισκέπτες και συνεπώς απαιτούνται περισσότερες ελεύθερες θέσεις.</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Να επιτρέπονται σχόλια στο πλαίσιο της συμμετοχής</string>
+  <string name="SYS_ALLOW_USER_COMMENTS_DESC">Οι συμμετέχοντες μπορούν να σχολιάσουν τη συμμετοχή τους. Τα σχόλια μπορούν να προβληθούν μέσω της λίστας συμμετεχόντων</string>
+  <string name="SYS_ASSIGN_PARTICIPANTS">Πρόσθεση συμμετεχόντων</string>
   <string name="SYS_PARTICIPATE">Συμμετοχή</string>
-  <string name="DAT_ATTEND_DATE">Εγγραφήκατε στην εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
-  <string name="DAT_ATTEND_POSSIBLY">Εγγραφήκατε υπό αίρεση στην εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
-  <string name="DAT_CALENDAR">Ημερολόγιο</string>
-  <string name="DAT_CANCEL">Ακύρωση</string>
-  <string name="DAT_CANCEL_DATE">Ακυρώσατε τη συμμετοχή για την εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
-  <string name="DAT_CURRENT_DATES_OF_ORGA">Τρέχουσες εκδηλώσεις συλλόγου #VAR1#</string>
-  <string name="DAT_DATE">Εκδήλωση</string>
-  <string name="DAT_DATES">Εκδηλώσεις</string>
-  <string name="DAT_DATES_DESC">Εδώ μπορείτε να δημιουργήσετε και να επεξεργαστείτε εκδηλώσεις. Σε αυτές τις εκδηλώσεις μπορούν να εγγραφούν οι χρήστες.</string>
-  <string name="DAT_DEADLINE">Τελική προθεσμία</string>
-  <string name="DAT_DEADLINE_ATTENTION">Η εγγραφή σας δεν μπορεί να αλλάξει επειδή έχει λήξει η ημερομηνία λήξης για τις εγγραφές ή η ημερομηνία είναι στο παρελθόν. Επικοινωνήστε με τον υπεύθυνο της εκδήλωσης ή έναν διαχειριστή!</string>
-  <string name="DAT_DEADLINE_DESC">Οι συμμετέχοντες μπορούν να εγγραφούν μέχρι αυτήν την ημερομηνία στην εκδήλωση. Οι υπεύθυνοι και οι χρήστες με άδεια επεξεργασίας των εκδηλώσεων μπορούν ακόμη να προσθέσουν συμμετέχοντες. Εάν δεν έχει καθοριστεί ημερομηνία, τότε ως ημερομηνία έναρξης της εκδήλωσης θεωρείται ως η προεπιλεγμένη τιμή.</string>
-  <string name="DAT_DEFAULT_LIST_CONFIGURATION">Προεπιλεγμένη διαμόρφωση της λίστας συμμετεχόντων</string>
-  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Μία από τις διαμορφώσεις που δίνονται εδώ μπορεί να οριστεί ως τυπική διαμόρφωση για τη λίστα συμμετεχόντων σε εκδηλώσεις αυτού του συλλόγου. Οι συμμετέχοντες σε εκδηλώσεις προβάλλονται με αυτήν τη διαμόρφωση.</string>
-  <string name="DAT_EDIT_CALENDAR_DESC">Εδώ μπορούν να δημιουργηθούν νέα και να τροποποιηθούν υπάρχοντα ημερολόγια.</string>
-  <string name="DAT_EDIT_EVENTS">Τροποποίηση εκδηλώσεων</string>
-  <string name="DAT_EDIT_ROOMS">Τροποποίηση χώρων/αιθουσών</string>
-  <string name="DAT_EDIT_ROOMS_DESC">Εδώ μπορείτε να δημιουργήσετε και να επεξεργαστείτε χώρους/αίθουσες για τις εκδηλώσεις.</string>
+  <string name="SYS_ATTEND_EVENT">Εγγραφήκατε στην εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
+  <string name="SYS_ATTEND_POSSIBLY">Εγγραφήκατε υπό αίρεση στην εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
+  <string name="SYS_CALENDAR">Ημερολόγιο</string>
+  <string name="SYS_CANCEL">Ακύρωση</string>
+  <string name="SYS_CANCEL_EVENT">Ακυρώσατε τη συμμετοχή για την εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
+  <string name="SYS_CURRENT_EVENTS_OF_ORGA">Τρέχουσες εκδηλώσεις συλλόγου #VAR1#</string>
+  <string name="SYS_EVENT">Εκδήλωση</string>
+  <string name="SYS_EVENTS">Εκδηλώσεις</string>
+  <string name="SYS_EVENTS_DESC">Εδώ μπορείτε να δημιουργήσετε και να επεξεργαστείτε εκδηλώσεις. Σε αυτές τις εκδηλώσεις μπορούν να εγγραφούν οι χρήστες.</string>
+  <string name="SYS_DEADLINE">Τελική προθεσμία</string>
+  <string name="SYS_DEADLINE_ATTENTION">Η εγγραφή σας δεν μπορεί να αλλάξει επειδή έχει λήξει η ημερομηνία λήξης για τις εγγραφές ή η ημερομηνία είναι στο παρελθόν. Επικοινωνήστε με τον υπεύθυνο της εκδήλωσης ή έναν διαχειριστή!</string>
+  <string name="SYS_DEADLINE_DESC">Οι συμμετέχοντες μπορούν να εγγραφούν μέχρι αυτήν την ημερομηνία στην εκδήλωση. Οι υπεύθυνοι και οι χρήστες με άδεια επεξεργασίας των εκδηλώσεων μπορούν ακόμη να προσθέσουν συμμετέχοντες. Εάν δεν έχει καθοριστεί ημερομηνία, τότε ως ημερομηνία έναρξης της εκδήλωσης θεωρείται ως η προεπιλεγμένη τιμή.</string>
+  <string name="SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION">Προεπιλεγμένη διαμόρφωση της λίστας συμμετεχόντων</string>
+  <string name="SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION_DESC">Μία από τις διαμορφώσεις που δίνονται εδώ μπορεί να οριστεί ως τυπική διαμόρφωση για τη λίστα συμμετεχόντων σε εκδηλώσεις αυτού του συλλόγου. Οι συμμετέχοντες σε εκδηλώσεις προβάλλονται με αυτήν τη διαμόρφωση.</string>
+  <string name="SYS_EDIT_CALENDAR_DESC">Εδώ μπορούν να δημιουργηθούν νέα και να τροποποιηθούν υπάρχοντα ημερολόγια.</string>
+  <string name="SYS_EDIT_EVENTS">Τροποποίηση εκδηλώσεων</string>
+  <string name="SYS_EDIT_ROOMS">Τροποποίηση χώρων/αιθουσών</string>
+  <string name="SYS_EDIT_ROOMS_DESC">Εδώ μπορείτε να δημιουργήσετε και να επεξεργαστείτε χώρους/αίθουσες για τις εκδηλώσεις.</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Μια εκδήλωση έχει αλλάξει</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Έχει αλλάξει μία εκδήλωση στις #VAR1#.\n\nΤίτλος: #VAR2#\nΗμερομηνία: #VAR3#\nΗμερολόγιο: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Τοποθεσία: #VAR1#\nΔωμάτιο: #VAR2#\nΣυμμετέχοντες: #VAR3#\nΑλλαγές από: #VAR4#\n</string>
@@ -35,55 +35,55 @@
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Δημιουργήθηκε μια νέα εκδήλωση στις #VAR1#.\n\nΤίτλος: #VAR2#\nΗμερομηνία: #VAR3#\nΗμερολόγιο: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Τοποθεσία: #VAR1#\nΧώρος/αίθουσα: #VAR2#\nΣυμμετέχοντες: #VAR3#\nΔημιουργήθηκε από: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Δημιουργήθηκε στις: #VAR1#</string>
-  <string name="DAT_ENABLE_ICAL">Ενεργοποίηση λειτουργίας iCal</string>
-  <string name="DAT_ENABLE_ICAL_DESC">Εάν είναι ενεργοποιημένο το iCal, μπορoύν να φορτωθούν μεμονωμένες ή όλες τις εκδηλώσεις εντός μιας δεδομένης χρονικής περιόδου. Επίσης, οι χρήστες θα μπορούν να εγγραφούν σε εκδηλώσεις χρησιμοποιώντας το δικό τους λογισμικό ημερολογίου. (προεπιλογή: ναι)</string>
-  <string name="DAT_EXPORT_ICAL">Εξαγωγή (iCal)</string>
-  <string name="DAT_HIGHLIGHT_DATE">Επισήμανση ημερομηνίας</string>
-  <string name="DAT_ICAL_DAYS_FUTURE">Αριθμός ημερών iCal στο μέλλον</string>
-  <string name="DAT_ICAL_DAYS_FUTURE_DESC">Αριθμός ημερών στο μέλλον, που θα συμπεριληφθούν σε μία iCal λήψη ή abo. Εάν η λήψη iCal ξεκινά μέσα στη μονάδα εκδηλώσεων, τότε αυτή η ρύθμιση αγνοείται και εξάγονται τα φιλτραρισμένα ραντεβού. (Προεπιλογή: 365)</string>
-  <string name="DAT_ICAL_DAYS_PAST">Αριθμός ημερών iCal στο παρελθόν</string>
-  <string name="DAT_ICAL_DAYS_PAST_DESC">Αριθμός ημερών στο παρελθόν, που θα συμπεριληφθούν σε μία iCal λήψη ή abo. Εάν η λήψη iCal ξεκίνησε μέσα από ένα Event module, τότε αυτή η ρύθμιση αγνοείται και εξάγονται τα φιλτραρισμένα ραντεβού. (Προεπιλογή: 30)</string>
-  <string name="DAT_LOCATION">Τοποθεσία</string>
-  <string name="DAT_LOCATION_LINK">Εάν παρέχονται αρκετές πληροφορίες σχετικά με την τοποθεσία (οδός, πόλη, τοποθεσία), οι Χάρτες Google μπορούν να υπολογίσουν τη διαδρομή προς την τοποθεσία.</string>
-  <string name="DAT_LOGIN_POSSIBLE">Θέλετε να ενεργοποιήσετε την εγγραφή συμβάντων;\nΕάν το συμβάν διαγραφεί, όλοι οι εγγεγραμμένοι συμμετέχοντες θα αφαιρεθούν επίσης.\nΘέλετε να μπλοκάρετε επιπλέον εγγραφές, παρακαλούμε μειώστε τον αριθμό των επιτρεπόμενων συμμετεχόντων.</string>
-  <string name="DAT_MAINTAIN_CATEGORIES_DESC">Εδώ μπορείτε να δημιουργήσετε ή να τροποποιήσετε κατηγορίες</string>
-  <string name="DAT_MAX_MEMBERS">Μειώστε τον αριθμό των συμμετεχόντων για αυτήν την εκδήλωση. Αφήστε το πεδίο κενό για απεριόριστους συμμετέχοντες.</string>
-  <string name="DAT_PARTICIPANTS_LIMIT">Περιορισμένος αριθμός συμμετεχόντων</string>
-  <string name="DAT_PARTICIPATE_NO_RIGHTS">Δεν έχετε το δικαίωμα να εγγραφείτε για αυτό.</string>
-  <string name="DAT_PARTICIPATE_AT_DATE">Λάβετε μέρος στην εκδήλωση ως διοργανωτής</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Γίνεστε ο διοργανωτής του ραντεβού και λαμβάνετε το δικαίωμα να προσθέσετε ή να αφαιρέσετε επιπλέον συμμετέχοντες. Μπορείτε επίσης να ορίσετε άλλα άτομα ως διοργανωτές.</string>
-  <string name="DAT_PERIOD_FROM_TO">Περίοδος χρόνου από #VAR1# έως #VAR2#</string>
-  <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Προηγούμεν. #VAR1#</string>
-  <string name="DAT_REGISTRATION_POSSIBLE_FOR">Η εγγραφή είναι διαθέσιμη για</string>
-  <string name="DAT_REGISTRATION_NOT_POSSIBLE">Η εγγραφή έχει κλείσει.</string>
-  <string name="DAT_REGISTRATION_POSSIBLE">Ενεργοποίηση εγγραφής σε αυτή την εκδήλωση.</string>
-  <string name="DAT_REMOVE_APPLICATION">Θέλετε να καταργήσετε αυτό το συμβάν; Όλοι οι συμμετέχοντες θα αφαιρεθούν.</string>
-  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Οι συμμετέχοντες μπορούν να δουν τη λίστα των συμμετεχόντων</string>
-  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Οι συμμετέχοντες μπορούν να στείλουν email σε όλους τους συμμετέχοντες</string>
-  <string name="DAT_ROLES_DIFFERENT">Έχετε αναθέσει ρόλους στους συμμετέχοντες που δεν επιτρέπεται να δουν τις ημερομηνίες στην επιλεγμένη κατηγορία. Επιλέξτε έναν από τους παρακάτω ρόλους για τους συμμετέχοντες: # VAR1_BOLD #.</string>
-  <string name="DAT_ROOM_INFORMATIONS">Πληροφορίες δωματίου</string>
-  <string name="DAT_ROOM_OVERHANG">Σε περίπτωση οποιουδήποτε επιπλέον διαθέσιμου χώρου (π.χ. πρόσθετες θέσεις, όρθιοι), ο αριθμός των πρόσθετων χώρων μπορεί να οριστεί εδώ.</string>
-  <string name="DAT_ROOM_RESERVED">Το επιλεγμένο δωμάτιο χρησιμοποιείται ήδη αυτήν τη στιγμή.</string>
-  <string name="DAT_ROOM_SELECTABLE">Ο χώρος/αίθουσα είναι διαθέσιμη</string>
-  <string name="DAT_ROOM_SELECTABLE_DESC">Διατίθεται πλαίσιο επιλογής για διαθέσιμα δωμάτια. Επιλέξτε δωμάτιο και δημιουργήστε εκδήλωση για την επιλεγμένη αίθουσα. (standard answer: no)</string>
-  <string name="DAT_SAVE_ALL_CONFIRMATIONS">Αποθήκευση ακυρώσεων των εκδηλώσεων</string>
-  <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Η ακύρωση των συμμετεχόντων σε εκδηλώσεις μπορεί να αποθηκευτεί. Στη συνέχεια, οι ακυρώσεις εμφανίζονται επίσης στη λίστα συμμετεχόντων. Εάν αυτή η επιλογή είναι απενεργοποιημένη, οι ακυρώσεις δεν αποθηκεύονται και δεν μπορούν να προβληθούν στη λίστα συμμετεχόντων. Αυτή η επιλογή ισχύει από τη στιγμή της ρύθμισης και δεν μπορεί να εφαρμοστεί αναδρομικά! (Default: Yes)</string>
-  <string name="DAT_SHOW_MAP_LINK">Εμφάνιση συνδέσμου σε χάρτη</string>
-  <string name="DAT_SHOW_MAP_LINK_DESC">Εάν έχει οριστεί τοποθεσία, οι Χάρτες Google χρησιμοποιούνται για την εμφάνιση τοποθεσίας και διαδρομής από τη δική σας τοποθεσία. (default: yes)</string>
-  <string name="DAT_SHOW_ON_MAP">Εμφάνιση χάρτη</string>
-  <string name="DAT_SHOW_PARTICIPANTS">Εμφάνιση συμμετεχόντων</string>
-  <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Μετάβαση στη διαχείριση ημερολογίου</string>
-  <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Διαχείριση ανοιχτού χώρου/αίθουσας</string>
-  <string name="DAT_VIEW_MODE">Προεπιλεγμένη προβολή</string>
-  <string name="DAT_USER_ATTEND">Συμμετέχω</string>
-  <string name="DAT_USER_TENTATIVE">Ίσως συμμετάσχω</string>
-  <string name="DAT_USER_INVITED">Προσεκλήθη</string>
-  <string name="DAT_USER_REFUSED">Ακυρώθηκε η συμμετοχή</string>
+  <string name="SYS_ENABLE_ICAL_EXPORT">Ενεργοποίηση λειτουργίας iCal</string>
+  <string name="SYS_ENABLE_ICAL_EXPORT_DESC">Εάν είναι ενεργοποιημένο το iCal, μπορoύν να φορτωθούν μεμονωμένες ή όλες τις εκδηλώσεις εντός μιας δεδομένης χρονικής περιόδου. Επίσης, οι χρήστες θα μπορούν να εγγραφούν σε εκδηλώσεις χρησιμοποιώντας το δικό τους λογισμικό ημερολογίου. (προεπιλογή: ναι)</string>
+  <string name="SYS_EXPORT_ICAL">Εξαγωγή (iCal)</string>
+  <string name="SYS_HIGHLIGHT_EVENT">Επισήμανση ημερομηνίας</string>
+  <string name="SYS_ICAL_DAYS_FUTURE">Αριθμός ημερών iCal στο μέλλον</string>
+  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Αριθμός ημερών στο μέλλον, που θα συμπεριληφθούν σε μία iCal λήψη ή abo. Εάν η λήψη iCal ξεκινά μέσα στη μονάδα εκδηλώσεων, τότε αυτή η ρύθμιση αγνοείται και εξάγονται τα φιλτραρισμένα ραντεβού. (Προεπιλογή: 365)</string>
+  <string name="SYS_ICAL_DAYS_PAST">Αριθμός ημερών iCal στο παρελθόν</string>
+  <string name="SYS_ICAL_DAYS_PAST_DESC">Αριθμός ημερών στο παρελθόν, που θα συμπεριληφθούν σε μία iCal λήψη ή abo. Εάν η λήψη iCal ξεκίνησε μέσα από ένα Event module, τότε αυτή η ρύθμιση αγνοείται και εξάγονται τα φιλτραρισμένα ραντεβού. (Προεπιλογή: 30)</string>
+  <string name="SYS_LOCATION">Τοποθεσία</string>
+  <string name="SYS_LOCATION_LINK">Εάν παρέχονται αρκετές πληροφορίες σχετικά με την τοποθεσία (οδός, πόλη, τοποθεσία), οι Χάρτες Google μπορούν να υπολογίσουν τη διαδρομή προς την τοποθεσία.</string>
+  <string name="SYS_ENABLE_EVENT_REGISTRATION">Θέλετε να ενεργοποιήσετε την εγγραφή συμβάντων;\nΕάν το συμβάν διαγραφεί, όλοι οι εγγεγραμμένοι συμμετέχοντες θα αφαιρεθούν επίσης.\nΘέλετε να μπλοκάρετε επιπλέον εγγραφές, παρακαλούμε μειώστε τον αριθμό των επιτρεπόμενων συμμετεχόντων.</string>
+  <string name="SYS_MAINTAIN_CATEGORIES_DESC">Εδώ μπορείτε να δημιουργήσετε ή να τροποποιήσετε κατηγορίες</string>
+  <string name="SYS_EVENT_MAX_MEMBERS">Μειώστε τον αριθμό των συμμετεχόντων για αυτήν την εκδήλωση. Αφήστε το πεδίο κενό για απεριόριστους συμμετέχοντες.</string>
+  <string name="SYS_PARTICIPANTS_LIMIT">Περιορισμένος αριθμός συμμετεχόντων</string>
+  <string name="SYS_PARTICIPATE_NO_RIGHTS">Δεν έχετε το δικαίωμα να εγγραφείτε για αυτό.</string>
+  <string name="SYS_PARTICIPATE_AT_EVENT">Λάβετε μέρος στην εκδήλωση ως διοργανωτής</string>
+  <string name="SYS_PARTICIPATE_AT_EVENT_DESC" translation="edited">Γίνεστε ο διοργανωτής του ραντεβού και λαμβάνετε το δικαίωμα να προσθέσετε ή να αφαιρέσετε επιπλέον συμμετέχοντες. Μπορείτε επίσης να ορίσετε άλλα άτομα ως διοργανωτές.</string>
+  <string name="SYS_PERIOD_FROM_TO">Περίοδος χρόνου από #VAR1# έως #VAR2#</string>
+  <string name="SYS_PREVIOUS_EVENTS" description="Vergangene Termine">Προηγούμεν. #VAR1#</string>
+  <string name="SYS_REGISTRATION_POSSIBLE_FOR">Η εγγραφή είναι διαθέσιμη για</string>
+  <string name="SYS_REGISTRATION_NOT_POSSIBLE">Η εγγραφή έχει κλείσει.</string>
+  <string name="SYS_REGISTRATION_POSSIBLE">Ενεργοποίηση εγγραφής σε αυτή την εκδήλωση.</string>
+  <string name="SYS_REMOVE_EVENT_REGISTRATION">Θέλετε να καταργήσετε αυτό το συμβάν; Όλοι οι συμμετέχοντες θα αφαιρεθούν.</string>
+  <string name="SYS_RIGHT_VIEW_PARTICIPANTS">Οι συμμετέχοντες μπορούν να δουν τη λίστα των συμμετεχόντων</string>
+  <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Οι συμμετέχοντες μπορούν να στείλουν email σε όλους τους συμμετέχοντες</string>
+  <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">Έχετε αναθέσει ρόλους στους συμμετέχοντες που δεν επιτρέπεται να δουν τις ημερομηνίες στην επιλεγμένη κατηγορία. Επιλέξτε έναν από τους παρακάτω ρόλους για τους συμμετέχοντες: # VAR1_BOLD #.</string>
+  <string name="SYS_ROOM_INFORMATION">Πληροφορίες δωματίου</string>
+  <string name="SYS_ROOM_OVERHANG">Σε περίπτωση οποιουδήποτε επιπλέον διαθέσιμου χώρου (π.χ. πρόσθετες θέσεις, όρθιοι), ο αριθμός των πρόσθετων χώρων μπορεί να οριστεί εδώ.</string>
+  <string name="SYS_ROOM_RESERVED">Το επιλεγμένο δωμάτιο χρησιμοποιείται ήδη αυτήν τη στιγμή.</string>
+  <string name="SYS_ROOM_SELECTABLE">Ο χώρος/αίθουσα είναι διαθέσιμη</string>
+  <string name="SYS_ROOM_SELECTABLE_DESC">Διατίθεται πλαίσιο επιλογής για διαθέσιμα δωμάτια. Επιλέξτε δωμάτιο και δημιουργήστε εκδήλωση για την επιλεγμένη αίθουσα. (standard answer: no)</string>
+  <string name="SYS_SAVE_ALL_CANCELLATIONS">Αποθήκευση ακυρώσεων των εκδηλώσεων</string>
+  <string name="SYS_SAVE_ALL_CANCELLATIONS_DESC">Η ακύρωση των συμμετεχόντων σε εκδηλώσεις μπορεί να αποθηκευτεί. Στη συνέχεια, οι ακυρώσεις εμφανίζονται επίσης στη λίστα συμμετεχόντων. Εάν αυτή η επιλογή είναι απενεργοποιημένη, οι ακυρώσεις δεν αποθηκεύονται και δεν μπορούν να προβληθούν στη λίστα συμμετεχόντων. Αυτή η επιλογή ισχύει από τη στιγμή της ρύθμισης και δεν μπορεί να εφαρμοστεί αναδρομικά! (Default: Yes)</string>
+  <string name="SYS_SHOW_MAP_LINK">Εμφάνιση συνδέσμου σε χάρτη</string>
+  <string name="SYS_SHOW_MAP_LINK_DESC">Εάν έχει οριστεί τοποθεσία, οι Χάρτες Google χρησιμοποιούνται για την εμφάνιση τοποθεσίας και διαδρομής από τη δική σας τοποθεσία. (default: yes)</string>
+  <string name="SYS_SHOW_MAP">Εμφάνιση χάρτη</string>
+  <string name="SYS_SHOW_PARTICIPANTS">Εμφάνιση συμμετεχόντων</string>
+  <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Μετάβαση στη διαχείριση ημερολογίου</string>
+  <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Διαχείριση ανοιχτού χώρου/αίθουσας</string>
+  <string name="SYS_DEFAULT_VIEW">Προεπιλεγμένη προβολή</string>
+  <string name="SYS_EVENT_PARTICIPATION_ATTEND">Συμμετέχω</string>
+  <string name="SYS_EVENT_PARTICIPATION_TENTATIVE">Ίσως συμμετάσχω</string>
+  <string name="SYS_EVENT_PARTICIPATION_INVITED">Προσεκλήθη</string>
+  <string name="SYS_EVENT_PARTICIPATION_CANCELED">Ακυρώθηκε η συμμετοχή</string>
   <string name="DAT_USER_WILL_ATTEND">Συμμετέχει</string>
-  <string name="DAT_VIEW_MODE_DESC">Προβολή τύπου συμβάντος. Με κατάσταση #VAR1_BOLD# όλα τα συμβάντα θα εμφανίζονται μέσα στο κουτί. Με κατάσταση #VAR2_BOLD# οι πληροφορίες από το πιο σημαντικό συμβάν θα εμφανίζονται σε μια συμπαγή λίστα. (Default: Detailed)</string>
-  <string name="DAT_VIEW_MODE_DETAIL">Λεπτομερής</string>
-  <string name="DAT_VIEW_MODE_COMPACT">Συμπαγής</string>
-  <string name="DAT_VISIBILITY">Ορατότης</string>
+  <string name="SYS_DEFAULT_VIEW_DESC">Προβολή τύπου συμβάντος. Με κατάσταση #VAR1_BOLD# όλα τα συμβάντα θα εμφανίζονται μέσα στο κουτί. Με κατάσταση #VAR2_BOLD# οι πληροφορίες από το πιο σημαντικό συμβάν θα εμφανίζονται σε μια συμπαγή λίστα. (Default: Detailed)</string>
+  <string name="SYS_DETAILED">Λεπτομερής</string>
+  <string name="SYS_COMPACT">Συμπαγής</string>
+  <string name="SYS_VISIBILITY">Ορατότης</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Πίσω στο βιβλίο επισκεπτών</string>
   <string name="GBO_CAPTCHA_DESC">Εάν ενεργοποιηθεί αυτή η επιλογή, οι χρήστες που δεν είναι συνδεδεμένοι θα λάβουν μια εικόνα με έναν κωδικό captcha ή έναν απλό υπολογισμό. Είναι απαραίτητο να συμπληρώσετε τον σωστό κωδικό ή αποτέλεσμα για να αποθηκεύσετε την καταχώριση. Το captcha είναι μέρος της λύσης antispam στο Admidio. (default: yes)</string>
@@ -968,7 +968,6 @@
   <string name="SYS_LINK_TO">Σύνδεσμος στο #VAR1#</string>
   <string name="SYS_LIST">Λίστα</string>
   <string name="SYS_LOADING_CONTENT">Φόρτωση περιεχομένου</string>
-  <string name="SYS_LOCATION" description="Location of a date">Πόλη</string>
   <string name="SYS_LOCK">Κλείδωμα</string>
   <string name="SYS_LOCKED">Κλειδωμένο</string>
   <string name="SYS_LOGIN">Είσοδος</string>

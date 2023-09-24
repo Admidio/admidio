@@ -530,8 +530,8 @@ class Event extends TableAccess
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
                 . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '<br />'
                 . $gL10n->get('SYS_DATE') . ': ' . $this->getDateTimePeriod() . '<br />'
-                . $gL10n->get('DAT_CALENDAR') . ': ' . $calendar . '<br />'
-                . $gL10n->get('DAT_LOCATION') . ': ' . $location . '<br />'
+                . $gL10n->get('SYS_CALENDAR') . ': ' . $calendar . '<br />'
+                . $gL10n->get('SYS_LOCATION') . ': ' . $location . '<br />'
                 . $gL10n->get('SYS_ROOM') . ': ' . $room . '<br />'
                 . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '<br />'
@@ -575,7 +575,7 @@ class Event extends TableAccess
                 }
             } elseif ($columnName === 'dat_deadline' && (string) $newValue !== '') {
                 if(!DateTime::createFromFormat('Y-m-d H:i', $newValue)) {
-                    throw new AdmException($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('DAT_DEADLINE'), 'YYYY-MM-DD')));
+                    throw new AdmException($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_DEADLINE'), 'YYYY-MM-DD')));
                 } elseif (strtotime($newValue) > strtotime($this->getValue('dat_begin'))) {
                     throw new AdmException('SYS_DEADLINE_AFTER_START');
                 }

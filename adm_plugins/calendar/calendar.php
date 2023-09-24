@@ -312,7 +312,7 @@ if ($firstWeekdayOfMonth === 0) {
 }
 
 echo '<div id="plgCalendarContent" class="admidio-plugin-content">
-<h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
+<h3>'.$gL10n->get('SYS_CALENDAR').'</h3>
 
 <table id="plgCalendarTable">
     <tr>';
@@ -390,8 +390,8 @@ while ($currentDay <= $lastDayCurrentMonth) {
                     }
                     if ($eventArray['all_day'] == 1) {
                         if ($eventArray['one_day']) {
-                            $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
-                            $textContent .= $gL10n->get('DAT_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
+                            $htmlContent .= '<strong>'.$gL10n->get('SYS_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
+                            $textContent .= $gL10n->get('SYS_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
                         } else {
                             $htmlContent .= '<strong>'.$gL10n->get('PLG_CALENDAR_SEVERAL_DAYS').'</strong> '.$eventArray['headline'].$eventArray['location'];
                             $textContent .= $gL10n->get('PLG_CALENDAR_SEVERAL_DAYS').' '.$eventArray['headline'].$eventArray['location'];

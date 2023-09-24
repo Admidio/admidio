@@ -129,14 +129,14 @@ $participationForm->addButton(
 if ($gSettingsManager->getBool('events_may_take_part')) {
     $participationForm->addButton(
         'btn_tentative_' . $getEventUuid,
-        $gL10n->get('DAT_USER_TENTATIVE'),
+        $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE'),
         array('icon' => 'fa-question-circle', 'class' => 'admidio-event-approval-state-tentative')
     );
 }
 
 $participationForm->addButton(
     'btn_refuse_' . $getEventUuid,
-    $gL10n->get('DAT_CANCEL'),
+    $gL10n->get('SYS_CANCEL'),
     array('icon' => 'fa-times-circle', 'class' => 'admidio-event-approval-state-cancel')
 );
 $participationForm->closeButtonGroup();

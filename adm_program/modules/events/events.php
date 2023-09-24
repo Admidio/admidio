@@ -142,7 +142,7 @@ if ($getViewMode === 'html') {
         if ($gSettingsManager->getBool('events_ical_export_enabled')) {
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_ical',
-                $gL10n->get('DAT_EXPORT_ICAL'),
+                $gL10n->get('SYS_EXPORT_ICAL'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_ical.php', array('cat_uuid' => $getCatUuid, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
                 'fa-file-export'
             );
@@ -164,18 +164,18 @@ if ($getViewMode === 'html') {
         $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
         if ($gSettingsManager->getBool('events_rooms_enabled')) {
             $selectBoxEntries = array(
-                'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-                'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-                'room'         => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
-                'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-                'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+                'detail'       => $gL10n->get('SYS_DETAILED'),
+                'compact'      => $gL10n->get('SYS_COMPACT'),
+                'room'         => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
+                'participants' => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+                'description'  => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
             );
         } else {
             $selectBoxEntries = array(
-                'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-                'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-                'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-                'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+                'detail'       => $gL10n->get('SYS_DETAILED'),
+                'compact'      => $gL10n->get('SYS_COMPACT'),
+                'participants' => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+                'description'  => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
             );
         }
         $form->addSelectBox(
@@ -186,7 +186,7 @@ if ($getViewMode === 'html') {
         );
         $form->addSelectBoxForCategories(
             'cat_uuid',
-            $gL10n->get('DAT_CALENDAR'),
+            $gL10n->get('SYS_CALENDAR'),
             $gDb,
             'EVT',
             HtmlForm::SELECT_BOX_MODUS_FILTER,
@@ -218,7 +218,7 @@ if ($getViewMode === 'html') {
     $page->setPrintMode();
 
     if ($getEventUuid === '') {
-        $page->addHtml('<h3>' . $gL10n->get('DAT_PERIOD_FROM_TO', array($events->getParameter('dateStartFormatAdmidio'), $events->getParameter('dateEndFormatAdmidio'))) . '</h3>');
+        $page->addHtml('<h3>' . $gL10n->get('SYS_PERIOD_FROM_TO', array($events->getParameter('dateStartFormatAdmidio'), $events->getParameter('dateEndFormatAdmidio'))) . '</h3>');
     }
 }
 
@@ -240,7 +240,7 @@ if ($eventsResult['totalCount'] === 0) {
 
         switch ($getView) {
             case 'compact':
-                $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
+                $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_LOCATION'));
                 $columnAlign   = array('center', 'left', 'left', 'left', 'left');
                 $compactTable->disableDatatablesColumnsSort(array(6));
                 $compactTable->setDatatablesColumnsNotHideResponsive(array(6));
@@ -323,7 +323,7 @@ if ($eventsResult['totalCount'] === 0) {
             if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                 $outputButtonICal = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
-                        <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"></i></a>';
+                        <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_EXPORT_ICAL').'"></i></a>';
             }
 
             // change and delete is only for users with additional rights
@@ -364,7 +364,7 @@ if ($eventsResult['totalCount'] === 0) {
                 $locationUrl = SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => $urlParam));
 
                 $outputLinkLocation = '
-                    <a href="' . $locationUrl . '" target="_blank" title="' . $gL10n->get('DAT_SHOW_ON_MAP') . '">' . $eventLocation . '</a>';
+                    <a href="' . $locationUrl . '" target="_blank" title="' . $gL10n->get('SYS_SHOW_MAP') . '">' . $eventLocation . '</a>';
 
                 // if valid login and enough information about address exist - calculate the route
                 if ($gValidLogin && $gCurrentUser->getValue('STREET') !== ''
@@ -399,7 +399,7 @@ if ($eventsResult['totalCount'] === 0) {
             $room = new TableRooms($gDb, $eventRoomId);
 
             if ($getViewMode === 'html') {
-                $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'DAT_ROOM_INFORMATIONS', 'message_var1' => $eventRoomId, 'inline' => 'true'));
+                $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'SYS_ROOM_INFORMATION', 'message_var1' => $eventRoomId, 'inline' => 'true'));
                 $outputLinkRoom = '<a class="openPopup" href="javascript:void(0);" data-href="' . $roomLink . '">' . $room->getValue('room_name') . '</a>';
             } else { // $getViewMode = 'print'
                 $outputLinkRoom = $room->getValue('room_name');
@@ -432,17 +432,17 @@ if ($eventsResult['totalCount'] === 0) {
                     $iconParticipationStatus = '<i class="fas fa-user-plus"></i>';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
-                    $buttonText = $gL10n->get('DAT_USER_ATTEND');
+                    $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
                     $buttonClass = 'admidio-event-approval-state-attend';
                     $iconParticipationStatus = '<i class="fas fa-check-circle"></i>';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
-                    $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
+                    $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE');
                     $buttonClass = 'admidio-event-approval-state-tentative';
                     $iconParticipationStatus = '<i class="fas fa-question-circle"></i>';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED:
-                    $buttonText = $gL10n->get('DAT_USER_REFUSED');
+                    $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_CANCELED');
                     $buttonClass = 'admidio-event-approval-state-cancel';
                     $iconParticipationStatus = '<i class="fas fa-times-circle"></i>';
                     break;
@@ -470,10 +470,10 @@ if ($eventsResult['totalCount'] === 0) {
                                 <span class="' . $buttonClass . '">' . $iconParticipationStatus . ' ' . $buttonText . '</span>
                                 <i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
                                     data-html="true" data-trigger="hover click" data-placement="auto"
-                                    title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($gL10n->get('DAT_DEADLINE_ATTENTION')) . '"></i>
+                                    title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($gL10n->get('SYS_DEADLINE_ATTENTION')) . '"></i>
                             </div>';
                 } elseif ($event->allowedToParticipate()) {
-                    $attentionDeadline = '<div class="alert alert-info" role="alert">' . $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE') . '</div>';
+                    $attentionDeadline = '<div class="alert alert-info" role="alert">' . $gL10n->get('SYS_REGISTRATION_NOT_POSSIBLE') . '</div>';
                     $iconParticipationStatus = '';
                 }
             }
@@ -524,13 +524,13 @@ if ($eventsResult['totalCount'] === 0) {
                             if ($gSettingsManager->getBool('events_may_take_part')) {
                                 $outputButtonParticipation .= '<li>
                                             <a class="btn admidio-event-approval-state-tentative ' . $disableStatusTentative . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
-                                                <i class="fas fa-question-circle" data-toggle="tooltip" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
+                                                <i class="fas fa-question-circle" data-toggle="tooltip" title="' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '"></i>' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '
                                             </a>
                                         </li>';
                             }
                             $outputButtonParticipation .= '<li>
                                         <a class="btn admidio-event-approval-state-cancel" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '4', 'dat_uuid' => $dateUuid)) . '">
-                                            <i class="fas fa-times-circle" data-toggle="tooltip" title="' . $gL10n->get('DAT_CANCEL') . '"></i>' . $gL10n->get('DAT_CANCEL') . '
+                                            <i class="fas fa-times-circle" data-toggle="tooltip" title="' . $gL10n->get('SYS_CANCEL') . '"></i>' . $gL10n->get('SYS_CANCEL') . '
                                         </a>
                                     </li>
                                 </ul>
@@ -552,11 +552,11 @@ if ($eventsResult['totalCount'] === 0) {
                             if ($getView === 'detail') {
                                 $outputButtonParticipants = '
                                     <button class="btn btn-secondary" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                        <i class="fas fa-list"></i>' . $gL10n->get('DAT_SHOW_PARTICIPANTS') . '</button>';
+                                        <i class="fas fa-list"></i>' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '</button>';
                             } else {
                                 $outputButtonParticipants = '
                                     <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                        <i class="fas fa-list" data-toggle="tooltip" title="' . $gL10n->get('DAT_SHOW_PARTICIPANTS') . '"></i></a>';
+                                        <i class="fas fa-list" data-toggle="tooltip" title="' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '"></i></a>';
                             }
                         }
                     }
@@ -585,11 +585,11 @@ if ($eventsResult['totalCount'] === 0) {
                         if ($getView === 'detail') {
                             $outputButtonParticipantsAssign = '
                                 <button class="btn btn-secondary" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                    <i class="fas fa-user-plus"></i>' . $gL10n->get('DAT_ASSIGN_PARTICIPANTS') . '</button>';
+                                    <i class="fas fa-user-plus"></i>' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '</button>';
                         } else {
                             $outputButtonParticipantsAssign = '
                                 <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                    <i class="fas fa-user-plus" data-toggle="tooltip" title="' . $gL10n->get('DAT_ASSIGN_PARTICIPANTS') . '"></i></a>';
+                                    <i class="fas fa-user-plus" data-toggle="tooltip" title="' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '"></i></a>';
                         }
                     }
                 }
@@ -604,15 +604,15 @@ if ($eventsResult['totalCount'] === 0) {
                 $eventElements[] = array($gL10n->get('SYS_END'), '<strong>' . $event->getValue('dat_end', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
             }
 
-            $eventElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>' . $event->getValue('cat_name') . '</strong>');
+            $eventElements[] = array($gL10n->get('SYS_CALENDAR'), '<strong>' . $event->getValue('cat_name') . '</strong>');
             if ($outputLinkLocation !== '') {
-                $eventElements[] = array($gL10n->get('DAT_LOCATION'), $outputLinkLocation);
+                $eventElements[] = array($gL10n->get('SYS_LOCATION'), $outputLinkLocation);
             }
             if ($outputLinkRoom !== '') {
                 $eventElements[] = array($gL10n->get('SYS_ROOM'), $outputLinkRoom);
             }
             if ($outputDeadline !== '') {
-                $eventElements[] = array($gL10n->get('DAT_DEADLINE'), '<strong>'.$outputDeadline.'</strong>');
+                $eventElements[] = array($gL10n->get('SYS_DEADLINE'), '<strong>'.$outputDeadline.'</strong>');
             }
 
             if ($outputNumberLeaders !== '') {
@@ -667,7 +667,7 @@ if ($eventsResult['totalCount'] === 0) {
                 if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                     $page->addHtml('
                                             <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
-                                                <i class="fas fa-file-export" data-toggle="tooltip"></i> '.$gL10n->get('DAT_EXPORT_ICAL').'</a>');
+                                                <i class="fas fa-file-export" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EXPORT_ICAL').'</a>');
                 }
 
                 // change and delete is only for users with additional rights
@@ -735,7 +735,7 @@ if ($eventsResult['totalCount'] === 0) {
 
             if ($getViewMode === 'html') {
                 if ($outputDeadline !== '') {
-                    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('dat_uuid' => $dateUuid, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '<br />' . $gL10n->get('DAT_DEADLINE') . ': ' . $outputDeadline . '</a>';
+                    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('dat_uuid' => $dateUuid, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '<br />' . $gL10n->get('SYS_DEADLINE') . ': ' . $outputDeadline . '</a>';
                 } else {
                     $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events.php', array('dat_uuid' => $dateUuid, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>';
                 }
@@ -779,7 +779,7 @@ if ($eventsResult['totalCount'] === 0) {
                                 if($participant['approved'] === Participants::PARTICIPATION_YES) {
                                     $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'];
                                 } elseif($participant['approved'] === Participants::PARTICIPATION_MAYBE) {
-                                    $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'] . ' (' . $gL10n->get('DAT_USER_TENTATIVE') . ')';
+                                    $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'] . ' (' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . ')';
                                 }
                             }
                         }

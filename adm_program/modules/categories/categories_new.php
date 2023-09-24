@@ -56,10 +56,10 @@ switch ($getType) {
     case 'EVT':
         $component = 'EVENTS';
         $headline = $gL10n->get('SYS_EVENTS') . ' - ' . $headlineSuffix;
-        $rolesRightEditName = 'DAT_EDIT_EVENTS';
+        $rolesRightEditName = 'SYS_EDIT_EVENTS';
         $rolesRightsColumn  = 'rol_dates';
         $rolesRightsName    = 'SYS_RIGHT_DATES';
-        $addButtonText      = $gL10n->get('DAT_CALENDAR');
+        $addButtonText      = $gL10n->get('SYS_CALENDAR');
         break;
 
     case 'LNK':

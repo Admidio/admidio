@@ -203,7 +203,7 @@ $page->addJavascript(
         event.preventDefault();
 
         if (eventParticipationPossible == 1 && $("#event_participation_possible").is(":checked") === false) {
-            var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
+            var msg_result = confirm("'.$gL10n->get('SYS_REMOVE_EVENT_REGISTRATION').'");
             if (msg_result) {
                 $("#event_edit_form").submit();
             }
@@ -217,7 +217,7 @@ $page->addJavascript(
 // show form
 $form = new HtmlForm('event_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 1, 'copy' => $getCopy)), $page);
 
-$form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
+$form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('SYS_LOCATION'));
 $form->addInput(
     'dat_headline',
     $gL10n->get('SYS_TITLE'),
@@ -229,9 +229,9 @@ $form->addInput(
 if ($gSettingsManager->getBool('events_show_map_link')) {
     $form->addInput(
         'dat_location',
-        $gL10n->get('DAT_LOCATION'),
+        $gL10n->get('SYS_LOCATION'),
         $event->getValue('dat_location'),
-        array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK')
+        array('maxLength' => 100, 'helpTextIdLabel' => 'SYS_LOCATION_LINK')
     );
 
     if (!$event->getValue('dat_country') && $getEventUuid === '') {
@@ -246,7 +246,7 @@ if ($gSettingsManager->getBool('events_show_map_link')) {
 } else {
     $form->addInput(
         'dat_location',
-        $gL10n->get('DAT_LOCATION'),
+        $gL10n->get('SYS_LOCATION'),
         $event->getValue('dat_location'),
         array('maxLength' => 100)
     );
@@ -273,8 +273,8 @@ if ($gSettingsManager->getBool('events_rooms_enabled')) {
 }
 $form->closeGroupBox();
 
-$form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
-$form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), (bool) $event->getValue('dat_all_day'));
+$form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('SYS_CALENDAR'));
+$form->addCheckbox('dat_all_day', $gL10n->get('SYS_ALL_DAY'), (bool) $event->getValue('dat_all_day'));
 $form->addInput(
     'event_from',
     $gL10n->get('SYS_START'),
@@ -289,7 +289,7 @@ $form->addInput(
 );
 $form->addSelectBoxForCategories(
     'dat_cat_id',
-    $gL10n->get('DAT_CALENDAR'),
+    $gL10n->get('SYS_CALENDAR'),
     $gDb,
     'EVT',
     HtmlForm::SELECT_BOX_MODUS_EDIT,
@@ -297,13 +297,13 @@ $form->addSelectBoxForCategories(
 );
 $form->closeGroupBox();
 
-$form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
-$form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $event->getValue('dat_highlight'));
+$form->openGroupBox('gb_visibility_registration', $gL10n->get('SYS_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
+$form->addCheckbox('dat_highlight', $gL10n->get('SYS_HIGHLIGHT_EVENT'), (bool) $event->getValue('dat_highlight'));
 $form->addCheckbox(
     'event_participation_possible',
-    $gL10n->get('DAT_REGISTRATION_POSSIBLE'),
+    $gL10n->get('SYS_REGISTRATION_POSSIBLE'),
     $eventParticipationPossible,
-    array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE')
+    array('helpTextIdLabel' => 'SYS_ENABLE_EVENT_REGISTRATION')
 );
 
 // add a multi select box to the form where the user can choose all roles whose members could participate in this event
@@ -325,7 +325,7 @@ $sqlDataView = array(
 // show select box with all assigned roles
 $form->addSelectBoxFromSql(
     'adm_event_participation_right',
-    $gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR'),
+    $gL10n->get('SYS_REGISTRATION_POSSIBLE_FOR'),
     $gDb,
     $sqlDataView,
     array(
@@ -335,36 +335,36 @@ $form->addSelectBoxFromSql(
 );
 $form->addCheckbox(
     'event_current_user_assigned',
-    $gL10n->get('DAT_PARTICIPATE_AT_DATE'),
+    $gL10n->get('SYS_PARTICIPATE_AT_EVENT'),
     $eventCurrentUserAssigned,
-    array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC')
+    array('helpTextIdLabel' => 'SYS_PARTICIPATE_AT_EVENT_DESC')
 );
 $form->addCheckbox(
     'dat_allow_comments',
-    $gL10n->get('DAT_ALLOW_USER_COMMENTS'),
+    $gL10n->get('SYS_ALLOW_USER_COMMENTS'),
     (bool) $event->getValue('dat_allow_comments'),
-    array('helpTextIdLabel' => 'DAT_ALLOW_USER_COMMENTS_DESC')
+    array('helpTextIdLabel' => 'SYS_ALLOW_USER_COMMENTS_DESC')
 );
 $form->addCheckbox(
     'dat_additional_guests',
-    $gL10n->get('DAT_ALLOW_ADDITIONAL_GUESTS'),
+    $gL10n->get('SYS_ALLOW_ADDITIONAL_GUESTS'),
     (bool) $event->getValue('dat_additional_guests'),
-    array('helpTextIdLabel' => 'DAT_ALLOW_ADDITIONAL_GUESTS_DESC')
+    array('helpTextIdLabel' => 'SYS_ALLOW_ADDITIONAL_GUESTS_DESC')
 );
 $form->addInput(
     'dat_max_members',
-    $gL10n->get('DAT_PARTICIPANTS_LIMIT'),
+    $gL10n->get('SYS_PARTICIPANTS_LIMIT'),
     (int) $event->getValue('dat_max_members'),
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS')
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'SYS_EVENT_MAX_MEMBERS')
 );
 $form->addInput(
     'event_deadline',
-    $gL10n->get('DAT_DEADLINE'),
+    $gL10n->get('SYS_DEADLINE'),
     $event->getValue('dat_deadline', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
     array('type' => 'datetime', 'helpTextIdLabel' => 'SYS_EVENT_DEADLINE_DESC')
 );
-$form->addCheckbox('event_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
-$form->addCheckbox('event_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
+$form->addCheckbox('event_right_list_view', $gL10n->get('SYS_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
+$form->addCheckbox('event_right_send_mail', $gL10n->get('SYS_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');

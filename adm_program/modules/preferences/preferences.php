@@ -1087,7 +1087,7 @@ $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_
 $formAnnouncements->addCustomContent(
     $gL10n->get('SYS_EDIT_CATEGORIES'),
     $html,
-    array('helpTextIdInline' =>'DAT_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+    array('helpTextIdInline' =>'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
 );
 $formAnnouncements->addSubmitButton(
     'btn_save_announcements',
@@ -1452,7 +1452,7 @@ $formGroupsRoles->addSelectBox(
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
-$formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, array('helpTextIdInline' => 'DAT_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, array('helpTextIdInline' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formGroupsRoles->addSubmitButton(
     'btn_save_lists',
     $gL10n->get('SYS_SAVE'),
@@ -1676,25 +1676,25 @@ $formEvents->addSelectBox(
 );
 if ($gSettingsManager->getBool('events_rooms_enabled')) {
     $selectBoxEntries = array(
-        'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-        'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-        'room'         => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
-        'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-        'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+        'detail'       => $gL10n->get('SYS_DETAILED'),
+        'compact'      => $gL10n->get('SYS_COMPACT'),
+        'room'         => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
+        'participants' => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+        'description'  => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
     );
 } else {
     $selectBoxEntries = array(
-        'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-        'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-        'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-        'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+        'detail'       => $gL10n->get('SYS_DETAILED'),
+        'compact'      => $gL10n->get('SYS_COMPACT'),
+        'participants' => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+        'description'  => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
     );
 }
 $formEvents->addSelectBox(
     'events_view',
-    $gL10n->get('DAT_VIEW_MODE'),
+    $gL10n->get('SYS_DEFAULT_VIEW'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['events_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('DAT_VIEW_MODE_DESC', array('DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT')))
+    array('defaultValue' => $formValues['events_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_DEFAULT_VIEW_DESC', array('SYS_DETAILED', 'SYS_COMPACT')))
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formEvents->addSelectBox(
@@ -1705,27 +1705,27 @@ $formEvents->addSelectBox(
 );
 $formEvents->addCheckbox(
     'events_ical_export_enabled',
-    $gL10n->get('DAT_ENABLE_ICAL'),
+    $gL10n->get('SYS_ENABLE_ICAL_EXPORT'),
     (bool) $formValues['events_ical_export_enabled'],
-    array('helpTextIdInline' => 'DAT_ENABLE_ICAL_DESC')
+    array('helpTextIdInline' => 'SYS_ENABLE_ICAL_EXPORT_DESC')
 );
 $formEvents->addInput(
     'events_ical_days_past',
-    $gL10n->get('DAT_ICAL_DAYS_PAST'),
+    $gL10n->get('SYS_ICAL_DAYS_PAST'),
     $formValues['events_ical_days_past'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_PAST_DESC')
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ICAL_DAYS_PAST_DESC')
 );
 $formEvents->addInput(
     'events_ical_days_future',
-    $gL10n->get('DAT_ICAL_DAYS_FUTURE'),
+    $gL10n->get('SYS_ICAL_DAYS_FUTURE'),
     $formValues['events_ical_days_future'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_FUTURE_DESC')
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ICAL_DAYS_FUTURE_DESC')
 );
 $formEvents->addCheckbox(
     'events_show_map_link',
-    $gL10n->get('DAT_SHOW_MAP_LINK'),
+    $gL10n->get('SYS_SHOW_MAP_LINK'),
     (bool) $formValues['events_show_map_link'],
-    array('helpTextIdInline' => 'DAT_SHOW_MAP_LINK_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_MAP_LINK_DESC')
 );
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
@@ -1736,35 +1736,35 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
 $sqlData['params'] = array($gCurrentOrgId);
 $formEvents->addSelectBoxFromSql(
     'events_list_configuration',
-    $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'),
+    $gL10n->get('SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['events_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
+    array('defaultValue' => $formValues['events_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION_DESC')
 );
 $formEvents->addCheckbox(
     'events_save_cancellations',
-    $gL10n->get('DAT_SAVE_ALL_CONFIRMATIONS'),
+    $gL10n->get('SYS_SAVE_ALL_CANCELLATIONS'),
     (bool) $formValues['events_save_cancellations'],
-    array('helpTextIdInline' => 'DAT_SAVE_ALL_CONFIRMATIONS_DESC')
+    array('helpTextIdInline' => 'SYS_SAVE_ALL_CANCELLATIONS_DESC')
 );
 $formEvents->addCheckbox(
     'events_may_take_part',
     $gL10n->get('SYS_MAYBE_PARTICIPATE'),
     (bool) $formValues['events_may_take_part'],
-    array('helpTextIdInline' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
+    array('helpTextIdInline' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'SYS_CANCEL', 'SYS_EVENT_PARTICIPATION_TENTATIVE')))
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'EVT')).'">
-            <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
-$formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => 'DAT_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+            <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CALENDAR_MANAGEMENT').'</a>';
+$formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => 'SYS_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addCheckbox(
     'events_rooms_enabled',
-    $gL10n->get('DAT_ROOM_SELECTABLE'),
+    $gL10n->get('SYS_ROOM_SELECTABLE'),
     (bool) $formValues['events_rooms_enabled'],
-    array('helpTextIdInline' => 'DAT_ROOM_SELECTABLE_DESC')
+    array('helpTextIdInline' => 'SYS_ROOM_SELECTABLE_DESC')
 );
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php">
-            <i class="fas fa-home"></i>'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
-$formEvents->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => 'DAT_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+            <i class="fas fa-home"></i>'.$gL10n->get('SYS_SWITCH_TO_ROOM_MANAGEMENT').'</a>';
+$formEvents->addCustomContent($gL10n->get('SYS_EDIT_ROOMS'), $html, array('helpTextIdInline' => 'SYS_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addSubmitButton(
     'btn_save_events',
     $gL10n->get('SYS_SAVE'),
@@ -1817,7 +1817,7 @@ $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_
 $formWeblinks->addCustomContent(
     $gL10n->get('SYS_EDIT_CATEGORIES'),
     $html,
-    array('helpTextIdInline' => $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+    array('helpTextIdInline' => $gL10n->get('SYS_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
 );
 $formWeblinks->addSubmitButton(
     'btn_save_links',

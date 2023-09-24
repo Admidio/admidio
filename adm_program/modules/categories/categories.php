@@ -65,7 +65,7 @@ switch ($getType) {
         $rolesRightsColumn = 'rol_dates';
         $headline = $gL10n->get('SYS_EVENTS') . ' - ' . $gL10n->get('SYS_CALENDARS');
         $navigationHeadline = $gL10n->get('SYS_CALENDARS');
-        $editableHeadline = $gL10n->get('DAT_EDIT_EVENTS');
+        $editableHeadline = $gL10n->get('SYS_EDIT_EVENTS');
         $addButtonText    = $gL10n->get('SYS_CREATE_CALENDAR');
         break;
 

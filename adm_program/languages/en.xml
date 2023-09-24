@@ -1,76 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in event module-->
-  <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
-  <string name="DAT_ALL_DAY">Full time</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Participants can register anonymous guests</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Participants may add additional seats to their registration. These are then subtracted from the maximum number of participants and the remaining free seats are thereby reduced. This is e.g. useful if a participant can bring more visitors and thus requires a total number of free places.</string>
-  <string name="DAT_ALLOW_USER_COMMENTS">Allow comments within participation</string>
-  <string name="DAT_ALLOW_USER_COMMENTS_DESC">Participants can comment on their participation. The comments can be viewed via the participant list</string>
-  <string name="DAT_ASSIGN_PARTICIPANTS">Add participants</string>
-  <string name="DAT_ATTEND_DATE">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
-  <string name="DAT_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#.</string>
-  <string name="DAT_CALENDAR">Calendar</string>
-  <string name="DAT_CANCEL">Cancel</string>
-  <string name="DAT_CANCEL_DATE">You canceled the participation for the event #VAR1_BOLD# on #VAR2#.</string>
-  <string name="DAT_CURRENT_DATES_OF_ORGA">Current events of organizations #VAR1#</string>
-  <string name="DAT_DEADLINE">Deadline</string>
-  <string name="DAT_DEADLINE_ATTENTION">Your registration can not be changed because the given end date for registrations has been reached or the date is in the past. Please contact a leader of the event or an administrator!</string>
-  <string name="DAT_DEFAULT_LIST_CONFIGURATION">Default configuration of participants list</string>
-  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">One of the configurations given here can be set as standard configuration for the participant list on events of this organization. Participants of events are viewed with this configuration.</string>
-  <string name="DAT_EDIT_CALENDAR_DESC">Here you can create and edit calendars.</string>
-  <string name="DAT_EDIT_EVENTS">Edit events</string>
-  <string name="DAT_EDIT_ROOMS">Edit rooms</string>
-  <string name="DAT_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
-  <string name="DAT_ENABLE_ICAL">Enable iCal export</string>
-  <string name="DAT_ENABLE_ICAL_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
-  <string name="DAT_EXPORT_ICAL">Export (iCal)</string>
-  <string name="DAT_HIGHLIGHT_DATE">Highlight date</string>
-  <string name="DAT_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
-  <string name="DAT_ICAL_DAYS_FUTURE_DESC">Number of days in the future, to be included in an iCal download or abo. If the iCal download is started within the event module, then this setting is ignored and the filtered appointments are exported. (Default: 365)</string>
-  <string name="DAT_ICAL_DAYS_PAST">Number of iCal days in the past</string>
-  <string name="DAT_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or subscription. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
-  <string name="DAT_LOCATION">Location</string>
-  <string name="DAT_LOCATION_LINK">If enough information regarding location is provided (street, city, location), Google Maps is able to calculate route to location.</string>
-  <string name="DAT_LOGIN_POSSIBLE">Do you want to enable event registration?\nIf event is deleted, all registered participants will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</string>
-  <string name="DAT_MAINTAIN_CATEGORIES_DESC">Here you can create and edit categories.</string>
-  <string name="DAT_MAX_MEMBERS">Reduce number of participants for this event. Please leave field empty for unlimited participants.</string>
-  <string name="DAT_PARTICIPANTS_LIMIT">Limited number of participants</string>
-  <string name="DAT_PARTICIPATE_NO_RIGHTS">You do not have the right to sign up for this appointment.</string>
-  <string name="DAT_PARTICIPATE_AT_DATE">Join the event as organizer</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You become the organizer of the appointment and receive the right to add or remove additional participants. You can also appoint other people as organizers.</string>
-  <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2#</string>
-  <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Previous #VAR1#</string>
-  <string name="DAT_REGISTRATION_POSSIBLE_FOR">Registration possible for</string>
-  <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registration is closed.</string>
-  <string name="DAT_REGISTRATION_POSSIBLE">Enable registration to this event.</string>
-  <string name="DAT_REMOVE_APPLICATION">Would you like to remove this event? All participants will be removed.</string>
-  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Participants can view the list of participants</string>
-  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Participants can send emails to all participants</string>
-  <string name="DAT_ROLES_DIFFERENT">You have assigned roles to the participants who are not allowed to see the dates in the selected category. Please choose one of the following roles for the participants: # VAR1_BOLD #.</string>
-  <string name="DAT_ROOM_INFORMATIONS">Room information</string>
-  <string name="DAT_ROOM_OVERHANG">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined here.</string>
-  <string name="DAT_ROOM_RESERVED">Selected room is already in use at this time.</string>
-  <string name="DAT_ROOM_SELECTABLE">Room is available</string>
-  <string name="DAT_ROOM_SELECTABLE_DESC">Selection box for available rooms is available. Select room and create event for selected room. (standard answer: no)</string>
-  <string name="DAT_SAVE_ALL_CONFIRMATIONS">Save cancellations to events</string>
-  <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Cancellation of participants to events can be saved. The cancellations are then also displayed in the participant list. If this option is deactivated, cancellations are not saved and can not be viewed in the participant list. This option is valid from the time of the setting and can not be applied retrospectively! (Default: Yes)</string>
-  <string name="DAT_SHOW_MAP_LINK">Display link to map</string>
-  <string name="DAT_SHOW_MAP_LINK_DESC">If location is set, Google Maps is used to display location and route from own location. (default: yes)</string>
-  <string name="DAT_SHOW_ON_MAP">Show map</string>
-  <string name="DAT_SHOW_PARTICIPANTS">Show participants</string>
-  <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Switch to calendar management</string>
-  <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Open room administration</string>
-  <string name="DAT_VIEW_MODE">Default view</string>
-  <string name="DAT_USER_ATTEND">I take part</string>
-  <string name="DAT_USER_TENTATIVE">I may take part</string>
-  <string name="DAT_USER_INVITED">Invited</string>
-  <string name="DAT_USER_REFUSED">Participation canceled</string>
-  <string name="DAT_USER_WILL_ATTEND">Takes part</string>
-  <string name="DAT_VIEW_MODE_DESC">Display type for events. With mode #VAR1_BOLD# all event details will be displayed within a box. With mode #VAR2_BOLD# the most important event details will be displayed in a compact list. (Default: Detailed)</string>
-  <string name="DAT_VIEW_MODE_DETAIL">Detailed</string>
-  <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
-  <string name="DAT_VISIBILITY">Visibility</string>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Back to guestbook</string>
   <string name="GBO_CAPTCHA_DESC">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It\'s necessary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (default: yes)</string>
@@ -458,6 +387,7 @@
   <string name="SYS_ADD_ATTACHMENT">Attach attachment</string>
   <string name="SYS_ADD_COLUMN">Add column</string>
   <string name="SYS_ADD_COLUMNS_DESC">Assign any number of columns corresponding to profile fields in the table below. In addition, you can specify the default sorting and add conditions under which the respective members are to be filtered.</string>
+  <string name="SYS_ADD_EVENT_TO_CALENDAR">Add event to calendar</string>
   <string name="SYS_ADD_RECIPIENTS">Add recipient</string>
   <string name="SYS_ADD_TO_DATABASE">Add to database</string>
   <string name="SYS_ADDRESS">Address</string>
@@ -475,9 +405,14 @@
   <string name="SYS_ALBUM_CREATED_TITLE">A new photo album was created at #VAR1#</string>
   <string name="SYS_ALBUM_CHANGED_TITLE">A photo album was changed at #VAR1#</string>
   <string name="SYS_ALL">All</string>
+  <string name="SYS_ALL_DAY">Full time</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, weblink, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">All members of this organization</string>
+  <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Participants can register anonymous guests</string>
+  <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Participants may add additional seats to their registration. These are then subtracted from the maximum number of participants and the remaining free seats are thereby reduced. This is e.g. useful if a participant can bring more visitors and thus requires a total number of free places.</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Allow comments within participation</string>
+  <string name="SYS_ALLOW_USER_COMMENTS_DESC">Participants can comment on their participation. The comments can be viewed via the participant list</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
   <string name="SYS_ANNOUNCEMENT">Announcement</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
@@ -496,6 +431,7 @@
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login data has been successfully assigned and user has been informed via e-mail.</string>
   <string name="SYS_ASSIGN_MEMBERS">Assign members</string>
   <string name="SYS_ASSIGN_MEMBERSHIP">Assign membership</string>
+  <string name="SYS_ASSIGN_PARTICIPANTS">Add participants</string>
   <string name="SYS_ASSIGN_REGISTRATION">Assign registration</string>
   <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The member can now log on to the system.</string>
   <string name="SYS_ASSIGN_ROLE">Assign role</string>
@@ -509,6 +445,8 @@
   <string name="SYS_ATTACHMENT_SIZE_DESC">Users can only attach files where the file size is less than the value specified here. If there is 0 here, no attachments are possible in the e-mail module. (Default: 5MB)</string>
   <string name="SYS_ATTACHMENT_TO_LARGE">E-mail attachment upload error.\nFile size is most likely to large!</string>
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# attachments</string>
+  <string name="SYS_ATTEND_EVENT">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
+  <string name="SYS_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_AUTO_DETECT">Auto-detect</string>
   <string name="SYS_AVAILABLE">Available</string>
   <string name="SYS_AVAILABLE_BETA">Available Beta</string>
@@ -523,7 +461,10 @@
   <string name="SYS_BACKUP_ONLY_MYSQL">The backup module can only be used in combination with a MySQL database.</string>
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
+  <string name="SYS_CALENDAR">Calendar</string>
   <string name="SYS_CALENDARS">Calendars</string>
+  <string name="SYS_CANCEL">Cancel</string>
+  <string name="SYS_CANCEL_EVENT">You canceled the participation for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_CANT_DELETE_ROLE">You can not delete the role #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Capacity</string>
   <string name="SYS_CAPTCHA">Captcha</string>
@@ -565,6 +506,7 @@
   <string name="SYS_COLUMN">Column</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
+  <string name="SYS_COMPACT">Compact</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
   <string name="SYS_COMMA">Comma (,)</string>
@@ -599,8 +541,6 @@
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
-  <string name="SYS_NUMBER_RECIPIENTS">Number of recipients</string>
-  <string name="SYS_NUMBER_RECIPIENTS_DESC">The number in this field indicates the maximum number of recipients in an email. This number can be limited by providers. If an e-mail should be sent to more recipients than the number set here, multiple e-mails will be generated. The number of possible e-mails to be sent within a period can also be limited by providers. (Default: 50)</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individual recipient</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individual recipients</string>
   <string name="SYS_COUNTER">Counter</string>
@@ -628,6 +568,7 @@
   <string name="SYS_CREATED_BY_AND_AT">Created by #VAR1# at #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Current database version</string>
+  <string name="SYS_CURRENT_EVENTS_OF_ORGA">Current events of organizations #VAR1#</string>
   <string name="SYS_CURRENT_MEMBER">Current member</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, web links ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
@@ -659,7 +600,9 @@
   <string name="SYS_DAYS_VAR">#VAR1# days</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate role #VAR1_BOLD#, the role can no longer be used and assigned to objects. Likewise, all rights of this role are no longer effective. However, the role with its setting and all member mappings remains and can be reactivated at a later date.</string>
+  <string name="SYS_DEADLINE">Deadline</string>
   <string name="SYS_DEADLINE_AFTER_START">The deadline for registration is after the start of the event.</string>
+  <string name="SYS_DEADLINE_ATTENTION">Your registration can not be changed because the given end date for registrations has been reached or the date is in the past. Please contact a leader of the event or an administrator!</string>
   <string name="SYS_DEBUG_OUTPUT">Debug output</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
@@ -670,10 +613,14 @@
   <string name="SYS_DEFAULT_ENCODING_UTF8">Default encoding (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Default list</string>
   <string name="SYS_DEFAULT_LIST_DESC">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</string>
+  <string name="SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION">Default configuration of participants list</string>
+  <string name="SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION_DESC">One of the configurations given here can be set as standard configuration for the participant list on events of this organization. Participants of events are viewed with this configuration.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
   <string name="SYS_DEFAULT_VALUE">Default value</string>
   <string name="SYS_DEFAULT_VALUE_DESC">You can set a default value for this profile field. This value will be preset directly for a new user in the field. To do this, enter the value in the field that you would also enter in the profile itself.\n\nFor the checkbox data type, you can enter 1 for activated and 0 for deactivated. For the data types dropdown list field and radio button you enter the number of the line from the value list in which the desired value is located.</string>
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
+  <string name="SYS_DEFAULT_VIEW">Default view</string>
+  <string name="SYS_DEFAULT_VIEW_DESC">Display type for events. With mode #VAR1_BOLD# all event details will be displayed within a box. With mode #VAR2_BOLD# the most important event details will be displayed in a compact list. (Default: Detailed)</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="SYS_DELETE_FILE">Delete file</string>
@@ -696,6 +643,7 @@
   <string name="SYS_DESCRIPTION_POPOVER_DESC">The description is displayed in a small window, which can be accessed via a question mark icon next to the field label.</string>
   <string name="SYS_DESCRIPTION_INLINE_DESC">Display the description below the field directly in the form.</string>
   <string name="SYS_DESIGNATION">Name</string>
+  <string name="SYS_DETAILED">Detailed</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISABLED">Disabled</string>
@@ -724,15 +672,19 @@
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Edit announcements</string>
   <string name="SYS_EDIT_CALENDAR">Edit calendar</string>
+  <string name="SYS_EDIT_CALENDAR_DESC">Here you can create and edit calendars.</string>
   <string name="SYS_EDIT_CALENDARS">Edit calendars</string>
   <string name="SYS_EDIT_CATEGORIES">Edit categories</string>
   <string name="SYS_EDIT_CATEGORY">Edit category</string>
   <string name="SYS_EDIT_ENTRY">Edit entry</string>
+  <string name="SYS_EDIT_EVENTS">Edit events</string>
   <string name="SYS_EDIT_FILE">Edit file</string>
   <string name="SYS_EDIT_FOLDER">Edit folder</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Edit profile fields</string>
   <string name="SYS_EDIT_ROLE">Edit role</string>
+  <string name="SYS_EDIT_ROOMS">Edit rooms</string>
+  <string name="SYS_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
   <string name="SYS_EDIT_USER">Edit user</string>
   <string name="SYS_EDIT_USER_IN_RELATION">User profile of this relationship can be edited</string>
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
@@ -766,10 +718,13 @@
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_EMAILS">Enable e-mails</string>
   <string name="SYS_ENABLE_EMAILS_DESC">E-mails within messages module can be enabled or disabled via this setting. If the server does not support e-mail, the option should be disabled. (Default: enabled)</string>
+  <string name="SYS_ENABLE_EVENT_REGISTRATION">Do you want to enable event registration?\nIf event is deleted, all registered participants will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Enable greeting cards</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">The greeting cards can be enabled or disabled via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES">Enable groups &amp; roles</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Displays the groups and roles of the organization and allows free configuration of groups and roles. Own list can be configured and applied. This module is generally only available for logged in users. (Default: yes)</string>
+  <string name="SYS_ENABLE_ICAL_EXPORT">Enable iCal export</string>
+  <string name="SYS_ENABLE_ICAL_EXPORT_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
   <string name="SYS_ENABLE_NOTIFICATIONS">Enable system notifications</string>
   <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Here you can enable or disable the system notifications of Admidio. They can be sent, if for example a new user has registered. Registration confirmations will also be sent as system notifications. In general, this feature should not be disabled unless the server does not support e-mail delivery. The e-mail module is not affected by the deactivation. (Default: yes)</string>
   <string name="SYS_ENABLE_PM_MODULE">Enable private messages</string>
@@ -784,10 +739,16 @@
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is stored as default configuration for the module #VAR1# in this organization and cannot be deleted. Set another configuration to the default configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - PAGE NOT FOUND!</string>
+  <string name="SYS_EVENT">Event</string>
+  <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">You have assigned roles to the participants who are not allowed to see the events in the selected category. Please choose one of the following roles for the participants: #VAR1_BOLD#.</string>
   <string name="SYS_EVENT_CHANGED_TITLE">An event was changed at #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">A new event was created at #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Participants can register at the event until this date. Leaders and members with the right to edit events can still assign participants. If no date is specified, the start date of the event is taken as the registration deadline.</string>
-  <string name="SYS_EVENT">Event</string>
+  <string name="SYS_EVENT_MAX_MEMBERS">Reduce number of participants for this event. Please leave field empty for unlimited participants.</string>
+  <string name="SYS_EVENT_PARTICIPATION_ATTEND">I take part</string>
+  <string name="SYS_EVENT_PARTICIPATION_TENTATIVE">I may take part</string>
+  <string name="SYS_EVENT_PARTICIPATION_INVITED">Invited</string>
+  <string name="SYS_EVENT_PARTICIPATION_CANCELED">Participation canceled</string>
   <string name="SYS_EVENTS">Events</string>
   <string name="SYS_EVENTS_DESC">Events can be created and viewed. Members can register for special events if they wish.</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Events - Confirmation of attendance</string>
@@ -797,6 +758,7 @@
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXECUTE_BACKUP">Execute backup</string>
   <string name="SYS_EXISTING_CONTACTS">Existing contacts</string>
+  <string name="SYS_EXPORT_ICAL">Export (iCal)</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Export to</string>
@@ -876,12 +838,17 @@
   <string name="SYS_HELP">Help</string>
   <string name="SYS_HIDE">Hide</string>
   <string name="SYS_HIDDEN">Hidden</string>
+  <string name="SYS_HIGHLIGHT_EVENT">Highlight event</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
   <string name="SYS_HOST">Host</string>
   <string name="SYS_HOURS_VAR">#VAR1# hours</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</string>
   <string name="SYS_HTML_TABLE">HTML table</string>
+  <string name="SYS_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
+  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Number of days in the future, to be included in an iCal download or abo. If the iCal download is started within the event module, then this setting is ignored and the filtered appointments are exported. (Default: 365)</string>
+  <string name="SYS_ICAL_DAYS_PAST">Number of iCal days in the past</string>
+  <string name="SYS_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or subscription. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_ICQ">ICQ</string>
@@ -940,7 +907,7 @@
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">List</string>
   <string name="SYS_LOADING_CONTENT">Loading content ...</string>
-  <string name="SYS_LOCATION" description="Location of a date">City</string>
+  <string name="SYS_LOCATION_LINK">If enough information regarding location is provided (street, city, location), Google Maps is able to calculate route to location.</string>
   <string name="SYS_LOCK">Lock</string>
   <string name="SYS_LOCKED">Locked</string>
   <string name="SYS_LOGIN">Sign in</string>
@@ -957,6 +924,7 @@
   <string name="SYS_LOSTPW_SEND_USERNAME">The new password has been sent to the user #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
+  <string name="SYS_MAINTAIN_CATEGORIES_DESC">Here you can create and edit categories.</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">You can define relationship types (parent - child). For each defined relationship, the type (asymmetric, symmetric or unidirectional) is defined and the profile editing rights are defined within the relationship.</string>
   <string name="SYS_MAKE_FORMER">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</string>
   <string name="SYS_MALE">Male</string>
@@ -1081,8 +1049,10 @@
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Members of this role receive the notifications about new or changed entries in the modules and changes in the members' profile data. For data protection reasons only roles can be deposited, which have the role right #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Number</string>
-  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries displayed on a page. If there are more entries, navigation elements are displayed to scroll between the pages. (Default: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries displayed on a page. If there are more entries, navigation elements are displayed to scroll between the pages. (Default: #VAR1#)</string>
+  <string name="SYS_NUMBER_RECIPIENTS">Number of recipients</string>
+  <string name="SYS_NUMBER_RECIPIENTS_DESC">The number in this field indicates the maximum number of recipients in an email. This number can be limited by providers. If an e-mail should be sent to more recipients than the number set here, multiple e-mails will be generated. The number of possible e-mails to be sent within a period can also be limited by providers. (Default: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Off</string>
   <string name="SYS_OK">OK</string>
@@ -1103,7 +1073,11 @@
   <string name="SYS_PAGE_NEXT">Next</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Members</string>
+  <string name="SYS_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="SYS_PARTICIPATE">Participate</string>
+  <string name="SYS_PARTICIPATE_NO_RIGHTS">You do not have the right to sign up for this appointment.</string>
+  <string name="SYS_PARTICIPATE_AT_EVENT">Join the event as organizer</string>
+  <string name="SYS_PARTICIPATE_AT_EVENT_DESC">You become the organizer of the appointment and receive the right to add or remove additional participants. You can also appoint other people as organizers.</string>
   <string name="SYS_PARTICIPATE_QUESTION">Participate?</string>
   <string name="SYS_PARTICIPATION_INFORMATION">Participant information</string>
   <string name="SYS_PARTICIPATION_STATUS">Participant Status</string>
@@ -1117,6 +1091,7 @@
   <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
   <string name="SYS_PERIOD">Time period</string>
+  <string name="SYS_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2#</string>
   <string name="SYS_PERMISSIONS">Permissions</string>
   <string name="SYS_PDF">PDF</string>
   <string name="SYS_PHONE">Phone</string>
@@ -1145,6 +1120,7 @@
   <string name="SYS_PRESET_CONFIGURATION_DESC">Administrators are able to define default configurations for all users. Configure columns and conditions and save them by naming the configuration set.</string>
   <string name="SYS_PREVIEW">Preview</string>
   <string name="SYS_PREVIOUS">Previous</string>
+  <string name="SYS_PREVIOUS_EVENTS">Previous #VAR1#</string>
   <string name="SYS_PREVIOUS_NAME">Previous name</string>
   <string name="SYS_PREVIOUS_VALUE">Previous value</string>
   <string name="SYS_PRINT_PREVIEW">Print preview</string>
@@ -1176,6 +1152,9 @@
   <string name="SYS_REGISTRATION_AT">Registration on #VAR1# at #VAR2#</string>
   <string name="SYS_REGISTRATION_CONFIRMED">Registration has been confirmed by the user.</string>
   <string name="SYS_REGISTRATION_NOT_CONFIRMED">Registration has not yet been confirmed by the user.</string>
+  <string name="SYS_REGISTRATION_NOT_POSSIBLE">Registration is closed.</string>
+  <string name="SYS_REGISTRATION_POSSIBLE_FOR">Registration possible for</string>
+  <string name="SYS_REGISTRATION_POSSIBLE">Enable registration to this event.</string>
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nYou will now receive an email with a confirmation link. After you have executed this link, your registration can be processed further.</string>
   <string name="SYS_REGISTRATION_VALIDATION_FAILED">The called link is invalid. A registration link is valid only up to 24 hours after registration. Please register again on the site and confirm your registration as soon as you receive the email with the link.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK">You have successfully confirmed your registration. The registration will now be checked by a member of the #VAR1# team. You will then receive an email whether your registration has been accepted or rejected.</string>
@@ -1191,6 +1170,7 @@
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMINDER_SEND_LOGIN">Would you like to send the member their login data with a new password as a reminder?</string>
   <string name="SYS_REMOVE">Remove</string>
+  <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REMOVE_USER">Remove user</string>
   <string name="SYS_REMOVE_USER_DESC">By choosing #VAR1_BOLD#, all data will be deleted and this information wont be available anymore.</string>
@@ -1211,10 +1191,12 @@
   <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other members (except passwords).\n In addition they have access to the members administration and can add or delete members.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
+  <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Participants can send emails to all participants</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send emails to this role via the message module. The role right #VAR1_BOLD# is still above this setting.</string>
   <string name="SYS_RIGHT_MAIL_TO_ALL">Send e-mails to all roles</string>
   <string name="SYS_RIGHT_PHOTOS">Upload and edit photos</string>
   <string name="SYS_RIGHT_PROFILE">Edit own profile</string>
+  <string name="SYS_RIGHT_VIEW_PARTICIPANTS">Participants can view the list of participants</string>
   <string name="SYS_RIGHT_WEBLINKS">Manage web links</string>
   <string name="SYS_ROLE">Role</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can configure who can view the folder #VAR1_BOLD#, download files or upload files. The permissions are inherited to all subfolders, and existing permissions in subfolders are overwritten. Only roles with access to the parent folder are selectable. Administrators have all permissions for the folder.</string>
@@ -1237,7 +1219,12 @@
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Roles - Confirmation of attendance</string>
   <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights.</string>
   <string name="SYS_ROOM">Room</string>
+  <string name="SYS_ROOM_INFORMATION">Room information</string>
   <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
+  <string name="SYS_ROOM_OVERHANG">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined here.</string>
+  <string name="SYS_ROOM_RESERVED">Selected room is already in use at this time.</string>
+  <string name="SYS_ROOM_SELECTABLE">Room is available</string>
+  <string name="SYS_ROOM_SELECTABLE_DESC">Selection box for available rooms is available. Select room and create event for selected room. (standard answer: no)</string>
   <string name="SYS_ROW">Row</string>
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
@@ -1246,6 +1233,8 @@
   <string name="SYS_SAME_WINDOW">Same window</string>
   <string name="SYS_SATURDAY">Saturday</string>
   <string name="SYS_SAVE">Save</string>
+  <string name="SYS_SAVE_ALL_CANCELLATIONS">Save cancellations to events</string>
+  <string name="SYS_SAVE_ALL_CANCELLATIONS_DESC">Cancellation of participants to events can be saved. The cancellations are then also displayed in the participant list. If this option is deactivated, cancellations are not saved and can not be viewed in the participant list. This option is valid from the time of the setting and can not be applied retrospectively! (Default: Yes)</string>
   <string name="SYS_SAVE_ATTACHMENTS">Save attachments</string>
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Email attachments are saved on the web space and can still be accessed in the saved email after sending. (Default: enabled)</string>
   <string name="SYS_SAVE_CHANGES">Save changes</string>
@@ -1322,7 +1311,11 @@
   <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Only show former members</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">User with permission #VAR1_BOLD#</string>
   <string name="SYS_SHOW_LIST">Display list</string>
+  <string name="SYS_SHOW_MAP_LINK">Display link to map</string>
+  <string name="SYS_SHOW_MAP_LINK_DESC">If location is set, Google Maps is used to display location and route from own location. (default: yes)</string>
+  <string name="SYS_SHOW_MAP">Show map</string>
   <string name="SYS_SHOW_MEMBER_LIST">Show member list</string>
+  <string name="SYS_SHOW_PARTICIPANTS">Show participants</string>
   <string name="SYS_SHOW_PERMISSIONS">Show permissions</string>
   <string name="SYS_SHOW_PROFILE">Show profile</string>
   <string name="SYS_SHOW_ROUTE">Show route</string>
@@ -1368,8 +1361,10 @@
   <string name="SYS_SUBJECT">Subject</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
+  <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Switch to calendar management</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Switch to relationship configuration</string>
+  <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Switch to room management</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login data for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your login data for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nRegards,\nThe team of #organization_long_name#</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Reset password for #organization_long_name#\n#content# Hello #user_first_name#,\n\nWe have received a request to reset your password on #organization_homepage#.\n\nIf the request came from you, you can use the following link to reset your password and set a new one: \n#variable1#\n\nRegards,\nThe team of #organization_long_name#</string>
@@ -1447,6 +1442,7 @@
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">With this setting you can define who can see the members of this role. The user can see the role membership in the profile of the respective person and in lists for the role. This setting does not allow access to the role members profile. In lists only name and first name are displayed. The role right #VAR1_BOLD# overrides this setting.</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">View profiles of role members</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">This setting can be used to define who can see the profiles of the members of this role. The user can call the profile of the respective person and see all stored columns in lists for the role. The role right #VAR1_BOLD# overrides this setting.</string>
+  <string name="SYS_VISIBILITY">Visibility</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# visible only to logged in users</string>

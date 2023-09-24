@@ -44,7 +44,7 @@
                          VALUES ('MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.0.0', 0)
                               , ('MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '3.0.0', 0)
                               , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.0.0', 0)
-                              , ('MODULE', 'DAT_DATES', 'DATES', '3.0.0', 0)
+                              , ('MODULE', 'SYS_EVENTS', 'DATES', '3.0.0', 0)
                               , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.0.0', 0)
                               , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.0.0', 0)
                               , ('MODULE', 'SYS_WEBLINKS', 'LINKS', '3.0.0', 0)
