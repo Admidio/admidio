@@ -4,14 +4,14 @@
  * Event list
  *
  * Plugin that lists the latest events in a slim interface and
- * can thus be ideally used in a overview page.
+ * can thus be ideally used in an overview page.
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
@@ -56,20 +56,21 @@ if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
     $plg_show_headline = 1;
 }
 
-// Prüfen ob the Link-URL gesetzt wurde oder leer ist
-// wenn leer, dann Standardpfad zum Admidio-Modul
+// Check if the link URL is set or empty, if empty use the default path to the Admidio module.
 if (!isset($plg_link_url) || $plg_link_url === '') {
     $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/events/events.php';
 }
 
 if ($gSettingsManager->getInt('events_module_enabled') > 0) {
-    // create Object
-    $plgEvents = new ModuleEvents();
-
-    // read events for output
-    $plgEvents->setDateRange();
-    $plgEvents->setCalendarNames($plg_kal_cat);
-    $plgEventsResult = $plgEvents->getDataSet(0, $plg_max_number_events_shown);
+    try {
+        // read events for output
+        $plgEvents = new ModuleEvents();
+        $plgEvents->setDateRange();
+        $plgEvents->setCalendarNames($plg_kal_cat);
+        $plgEventsResult = $plgEvents->getDataSet(0, $plg_max_number_events_shown);
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
 
     $plgEvent = new Event($gDb);
 
