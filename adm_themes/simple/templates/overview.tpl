@@ -38,7 +38,7 @@
     <div class="admidio-overview-plugin col-sm-6 col-lg-4 col-xl-3" id="admidio-plugin-sidebar-announcements">
         <div class="card admidio-card">
             <div class="card-body">
-                {load_admidio_plugin plugin="sidebar_announcements" file="sidebar_announcements.php"}
+                {load_admidio_plugin plugin="announcement-list" file="announcement-list.php"}
             </div>
         </div>
     </div>
@@ -49,10 +49,10 @@
             </div>
         </div>
     </div>
-    <div class="admidio-overview-plugin col-sm-6 col-lg-4 col-xl-3" id="admidio-plugin-sidebar-online">
+    <div class="admidio-overview-plugin col-sm-6 col-lg-4 col-xl-3" id="admidio-plugin-who-is-online">
         <div class="card admidio-card">
             <div class="card-body">
-                {load_admidio_plugin plugin="sidebar_online" file="sidebar_online.php"}
+                {load_admidio_plugin plugin="who-is-online" file="who-is-online.php"}
             </div>
         </div>
     </div>

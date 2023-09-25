@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Sidebar Online
+ * Who is online
  *
  * Plugin shows visitors and registered members of the homepage
  *
@@ -10,7 +10,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
@@ -20,7 +20,7 @@ if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
-// set default values if there no value has been stored in the config.php
+// set default values if there has been no value stored in the config.php
 if (!isset($plg_time_online) || !is_numeric($plg_time_online)) {
     $plg_time_online = 10;
 }
@@ -51,12 +51,15 @@ if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
     $plg_show_headline = 1;
 }
 
-// Referenzzeit setzen
-$now = new \DateTime();
-$minutesOffset = new \DateInterval('PT' . $plg_time_online . 'M');
-$refDate = $now->sub($minutesOffset)->format('Y-m-d H:i:s');
+try {// Set reference time
+    $now = new DateTime();
+    $minutesOffset = new DateInterval('PT' . $plg_time_online . 'M');
+    $refDate = $now->sub($minutesOffset)->format('Y-m-d H:i:s');
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
-// User IDs alles Sessons finden, die in genannter aktueller und referenz Zeit sind
+// Find user IDs of all sessions that are in the specified current and reference time
 $sql = 'SELECT ses_usr_id, usr_uuid, usr_login_name
           FROM '.TBL_SESSIONS.'
      LEFT JOIN '.TBL_USERS.'

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Усі записи</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Оголошення</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Немає оголошень для відвідувачів. Увійдіть, щоб побачити оголошення.</string>
+</resources>

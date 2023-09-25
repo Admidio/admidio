@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Sidebar Announcements
+ * Announcement list
  *
  * Plugin that lists the latest announcements in a slim interface and
  * can thus be ideally used in a sidebar
@@ -57,7 +57,7 @@ if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
 }
 
 if (!isset($plg_headline) || $plg_headline === '') {
-    $plg_headline = $gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE');
+    $plg_headline = $gL10n->get('PLG_ANNOUNCEMENT_LIST_HEADLINE');
 } elseif (Language::isTranslationStringId($plg_headline)) {
     // if text is a translation-id then translate it
     $plg_headline = $gL10n->get($plg_headline);
@@ -137,13 +137,13 @@ if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
             }
 
             echo '<li class="list-group-item">
-                <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $plg_headline)).'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>
+                <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $plg_headline)).'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES').'</a>
             </li></ul>';
         } else {
             echo $gL10n->get('SYS_NO_ENTRIES');
         }
     } else {
-        echo $gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_NO_ENTRIES_VISITORS');
+        echo $gL10n->get('PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS');
     }
     echo '</div>';
 }
