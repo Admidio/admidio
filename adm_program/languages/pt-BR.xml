@@ -157,7 +157,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Insira as informações de acesso ao banco de dados</string>
   <string name="INS_ERROR_OPEN_FILE">O arquivo #VAR1_BOLD# não pôde ser aberto.</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Facebook? Teu nome de usuário é necessário. Inicie a sessão no Facebook e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">A pasta #VAR1_BOLD# não possui permissão de escrita. Conceda permissão de escrita para carregar fotos e arquivos para o módulo de download.</string>
   <string name="INS_GROUPS">Grupos</string>
   <string name="INS_HOST_INVALID">O servidor não é válido. Insira um nome ou endereço IP válido.</string>
@@ -189,7 +188,6 @@
   <string name="INS_TEAMS">Equipes</string>
   <string name="INS_TRAINING">Treinamento</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Twitter? Teu nome de usuário é necessário. Inicie a sessão no Twitter e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_UPDATE">Atualizar</string>
   <string name="INS_UPDATE_DATABASE">Atualizar banco de dados</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Não é possível atualizar o banco de dados agora!</string>
@@ -203,7 +201,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">As pastas do Admidio já estão atualizadas. Agora o banco de dados precisa ser atualizado da versão atual #VAR2# para a versão #VAR1#, assim Admidio poderá funcionar com a nova versão.\n\nEm caso de dúvidas ou problemas com a atualização, por favor confira #VAR3#nossas instruções de atualização#VAR4# ou entre em contato conosco em #VAR5#nosso fórum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requer o MySQL versão #VAR2# ou superior. Por favor, atualize o banco de dados do MySQL ou utilize uma #VAR3# versão mais antiga do Admidio #VAR4# para garantir compatibilidade.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Xing? Teu nome de usuário é necessário. Inicie a sessão no Xing e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_BOYFRIEND">Amigo</string>
   <string name="INS_BROTHER">Irmão</string>
   <string name="INS_CHILD">Criança</string>
@@ -392,7 +389,6 @@
   <string name="SYS_PARENT_ALBUM">Álbum pai</string>
   <string name="SYS_PARENT_ALBUM_DESC">Um álbum pode ser parte de outro. Selecione um álbum pai na lista. Se queres exibir o álbum no nível mais alto, então selecione #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Álbuns de fotografias</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Apenas fotos em JPG e PNG são permitidas.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Erro no processamento da fotografia</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Girar foto no sentido anti-horário</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Girar foto no sentido horário</string>
@@ -405,7 +401,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Imagem anterior</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Último álbum de fotografias da organização #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Resolução maior que</string>
-  <string name="SYS_SAME_WINDOW">Mesma janela</string>
   <string name="PHO_SCALE_AT_UPLOAD">Redimensionamento no envio</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">As fotografias serão ser redimensionadas durante o envio. O valor de pixel define o maior lado dos formatos retrato e paisagem. O outro lado permanece proporcional ao maior lado. (padrão: 640 pixels)</string>
   <string name="SYS_THUMBNAIL_SCALING">Escala de miniatura</string>
@@ -417,7 +412,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Miniaturas por página</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Esta opção define quantas miniaturas serão exibidas em cada página. Se há mais imagens neste álbum, uma barra de navegação de página será automaticamente adicionada. (padrão: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Enviar fotos</string>
-  <string name="SYS_WANT_DELETE_PHOTO">A foto selecionada será removida. Prosseguir?</string>
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Confirme a nova foto de perfil</string>
   <string name="PRO_ADD_USER">Criar usuário</string>
@@ -438,7 +432,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Editar a minha foto de perfil</string>
   <string name="SYS_EDIT_PASSWORD">Editar senha</string>
   <string name="SYS_EDIT_PROFILE">Editar perfil</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Edite os campos de perfil</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Edite os campos de perfil</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Editar foto de perfil de #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">Exportar vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Exportar vCard de #VAR1#</string>
@@ -455,7 +449,7 @@
   <string name="SYS_MY_PROFILE">Meu perfil</string>
   <string name="SYS_NEW_PASSWORD">Nova senha</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Nova foto de perfil</string>
-  <string name="SYS_NO_DEFAULT_ROLE">O gerenciamento de cargos não possui cargo padrão para novos usuários. Por favor, contacte um administrador que possa editar esta configuração.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">O gerenciamento de cargos não possui cargo padrão para novos usuários. Por favor, contacte um administrador que possa editar esta configuração.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Nenhuma permissão foi atribuída</string>
   <string name="SYS_NO_ROLES_VISIBLE">Nenhum cargo foi encontrado. Possivelmente, não tens permissão para ver determinados cargos.</string>
   <string name="SYS_PASSWORD_CHANGED">A senha foi alterada com sucesso.</string>

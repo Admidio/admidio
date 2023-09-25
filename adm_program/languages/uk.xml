@@ -156,7 +156,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Ввести інформацію про доступ до бази даних</string>
   <string name="INS_ERROR_OPEN_FILE">Файл #VAR1_BOLD# не вдалося відкрити.</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Бажаєте встановити посилання на свій профіль у Facebook? Необхідно ввести ім\'я для входу в Facebook. Увійдіть у свій обліковий запис Facebook і відобразіть свій профіль. Скопіюйте URL-адресу в цьому полі та збережіть свій профіль тут. Відвідувачі вашого профілю тепер можуть безпосередньо відкрити ваш профіль у Facebook.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Папка #VAR1_BOLD# не має дозволу на запис. Без дозволу на запис користувачі не можуть завантажувати файли або фотографії.</string>
   <string name="INS_GROUPS">Групи</string>
   <string name="INS_HOST_INVALID">Ім\'я хоста невірне. Введіть дійсне ім\'я хоста або IP-адресу.</string>
@@ -188,7 +187,6 @@
   <string name="INS_TEAMS">Команди</string>
   <string name="INS_TRAINING">Навчання</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Бажаєте встановити посилання на свій профіль у Twitter? Необхідно ввести ім\'я для входу в Twitter. Увійдіть до свого облікового запису Twitter та відобразіть свій профіль. Скопіюйте URL-адресу в цьому полі та збережіть свій профіль тут. Відвідувачі вашого профілю тепер можуть безпосередньо відкрити ваш профіль у Twitter.</string>
   <string name="INS_UPDATE">Оновлення</string>
   <string name="INS_UPDATE_DATABASE">Оновлення бази даних</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Оновлення бази даних наразі неможливе!</string>
@@ -202,7 +200,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Ви вже оновили каталоги Admidio новою версією. Наразі базу даних необхідно оновити з поточної версії #VAR2#до версії #VAR1#, щоб Admidio міг працювати з новою версією.\n\nЯкщо у вас виникли питання або проблеми з оновленням, будь ласка, перевірте #VAR3#наша інструкція по оновленню#VAR4# або зв\'яжіться з нами через #VAR5#наш форум підтримки#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# вимагає щонайменше MySQL версія #VAR2#. Будь ласка, спробуйте оновити базу даних MySQL або скористайтеся #VAR3#старішою версією Admidio#VAR4# з метою забезпечення взаємосумісності.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Бажаєте встановити посилання на свій профіль на Xing? Потрібно ввести своє ім\'я для входу в Xing. Увійдіть у свій обліковий запис Xing і відобразіть свій профіль. Скопіюйте URL-адресу в цьому полі і збережіть свій профіль тут. Відвідувачі вашого профілю тепер можуть відкрити ваш профіль Xing безпосередньо.</string>
   <string name="INS_BOYFRIEND">Друг</string>
   <string name="INS_BROTHER">Брат</string>
   <string name="INS_CHILD">Дитина</string>
@@ -385,7 +382,6 @@
   <string name="SYS_PARENT_ALBUM">Батьківський альбом</string>
   <string name="SYS_PARENT_ALBUM_DESC">Один альбом може бути частиною іншого альбому. Будь ласка, виберіть батьківський альбом зі списку вибору. Якщо ви хочете відобразити альбом на найвищому рівні, виберіть #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Фотоальбоми</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Допускаються лише фотографії у форматі JPG та PNG.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Помилка обробки фотографій</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Повернути фото вліво</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Повернути фото вправо</string>
@@ -398,7 +394,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Попереднє фото</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Останній фотоальбом організації #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Роздільна здатність більше ніж</string>
-  <string name="SYS_SAME_WINDOW">Те саме вікно</string>
   <string name="PHO_SCALE_AT_UPLOAD">Масштабування завантаження</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Розмір фотографій буде змінено під час завантаження. Значення в пікселях визначає довгий край фотографій книжкового та альбомного формату. Інша сторона залишається пропорційною довгій стороні. (за замовчуванням: 640 пікселів)</string>
   <string name="SYS_THUMBNAIL_SCALING">Масштабування мініатюр</string>
@@ -410,7 +405,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Кількість мініатюр на сторінку</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Цей параметр визначає, скільки мініатюр буде відображатися на кожній сторінці. Якщо в альбомі більше зображень, навігація сторінками буде додана автоматично. (За замовчуванням: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Завантажити фото</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Вибране фото буде видалено. Ви впевнені?</string>
   <!--Phrases only in profile module-->
   <string name="SYS_ASSIGNED_BY_ROLES">Розподіл за ролями</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Реєстрація підтверджена. Тепер користувач може увійти в систему.</string>
@@ -429,7 +423,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Редагувати власне зображення профілю</string>
   <string name="SYS_EDIT_PASSWORD">Редагувати пароль</string>
   <string name="SYS_EDIT_PROFILE">Редагувати профіль</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Редагувати поля профілю в профілі</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Редагувати поля профілю в профілі</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Редагувати фотографію профілю #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">Експорт vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Експорт vCard користувача #VAR1#</string>
@@ -446,7 +440,7 @@
   <string name="SYS_MY_PROFILE">Мій профіль</string>
   <string name="SYS_NEW_PASSWORD">Новий пароль</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Нове зображення профілю</string>
-  <string name="SYS_NO_DEFAULT_ROLE">Управління ролями не містить ролі за замовчуванням для нових користувачів. Зверніться до адміністратора, який може змінити це налаштування.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Управління ролями не містить ролі за замовчуванням для нових користувачів. Зверніться до адміністратора, який може змінити це налаштування.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Не було надано жодних дозволів.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Не знайдено жодної ролі. Можливо, ви не маєте прав для перегляду певних ролей.</string>
   <string name="SYS_PASSWORD_CHANGED">Пароль успішно змінено.</string>

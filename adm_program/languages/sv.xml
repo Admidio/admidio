@@ -157,7 +157,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Ange databasåtkomstinformation</string>
   <string name="INS_ERROR_OPEN_FILE">Fil #VAR1_BOLD# kunde inte öppnas.</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vill du ställa in en länk till din Facebook-profil? Ditt Facebook-inloggningsnamn krävs. Logga in på ditt Facebook-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Facebook-profil direkt.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Mapp #VAR1_BOLD# är inte skrivbar. Vänligen ge skrivåtkomst för att ladda upp foton och filer för att ladda ner modulen.</string>
   <string name="INS_GROUPS">Grupper</string>
   <string name="INS_HOST_INVALID">Värdnamnet är inte giltigt. Ange ett giltigt värdnamn eller IP-adress.</string>
@@ -189,7 +188,6 @@
   <string name="INS_TEAMS">Team</string>
   <string name="INS_TRAINING">Utbildning</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vill du ställa in en länk till din Twitter-profil? Ditt inloggningsnamn på Twitter krävs. Logga in på ditt Twitter-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Twitter-profil direkt.</string>
   <string name="INS_UPDATE">Uppdatera</string>
   <string name="INS_UPDATE_DATABASE">Uppdatera databas</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Det är för närvarande inte möjligt att uppdatera databasen!</string>
@@ -203,7 +201,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Du har redan uppdaterat Admidios kataloger med en ny version. Nu måste databasen uppdateras från den aktuella versionen #VAR2# till versionen #VAR1#, så Admidio kan köras med den nya versionen. \n\nOm du har frågor eller problem med uppdateringen, vänligen kontrollera #VAR3# vår uppdatera instruktionen #VAR4# eller kontakta # VAR5 # vårt supportforum # VAR6 #.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# kräver minst MySQL-version #VAR2#. Försök att uppdatera din MySQL-databas eller använd en #VAR3# äldre Admidio-version #VAR4# för att säkerställa kompatibilitet.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vill du ställa in en länk till din Xing-profil? Ditt inloggningsnamn för Xing krävs. Logga in på ditt Xing-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Xing-profil direkt.</string>
   <string name="INS_BOYFRIEND">Vän</string>
   <string name="INS_BROTHER">Syskon</string>
   <string name="INS_CHILD">Barn</string>
@@ -396,7 +393,6 @@
   <string name="SYS_PARENT_ALBUM">Föräldraalbum:</string>
   <string name="SYS_PARENT_ALBUM_DESC">Ett album kan vara en del av ett annat album. Välj ett överordnat album från urvalslistan. Om du vill visa albumet på den högsta nivån väljer du #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Fotoalbum</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Endast JPG- och PNG-foton är tillåtna.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Fotobearbetningsfel</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotera foto</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotera fotot åt höger</string>
@@ -409,7 +405,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Föregående bild</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Organisationens senaste fotoalbum #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Upplösning större än</string>
-  <string name="SYS_SAME_WINDOW">Samma fönster</string>
   <string name="PHO_SCALE_AT_UPLOAD">Ladda upp skalning</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Storleken på bilderna ändras under uppladdningen. Pixelvärde definierar den långa kanten på fotografier i stående och liggande format. Den andra sidan förblir proportionell mot långkanten. (standard: 640 pixlar)</string>
   <string name="SYS_THUMBNAIL_SCALING">Miniatyrskalning</string>
@@ -421,7 +416,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Miniatyrbilder per sida</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Det här alternativet definierar hur många miniatyrförhandsvisningar som ska visas på varje sida. Om det finns fler bilder i detta album läggs en sidavigering automatiskt till. (Standard: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Ladda upp foton</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Valt foto kommer att raderas. Är du säker?</string>
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Bekräfta ny profilbild</string>
   <string name="PRO_ADD_USER">Lägg till användare</string>
@@ -442,7 +436,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Profilbild</string>
   <string name="SYS_EDIT_PASSWORD">Redigera Lösenord</string>
   <string name="SYS_EDIT_PROFILE">Redigera profil</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Redigera profilfält i profilen</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Redigera profilfält i profilen</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Redigera profilbild av #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">&quot;Exportera vCard&quot;</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Exportera vCard för #VAR1#</string>
@@ -459,7 +453,7 @@
   <string name="SYS_MY_PROFILE">Min profil</string>
   <string name="SYS_NEW_PASSWORD">Nytt lösenord</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Profilbild</string>
-  <string name="SYS_NO_DEFAULT_ROLE">Rollhanteringen innehåller ingen standardroll för nya användare. Kontakta en administratör som kan redigera den här inställningen.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Rollhanteringen innehåller ingen standardroll för nya användare. Kontakta en administratör som kan redigera den här inställningen.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Inga behörigheter har tilldelats.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Inga roller hittades. Eventuellt har du inte rätten att se vissa roller.</string>
   <string name="SYS_PASSWORD_CHANGED">Lösenordet har ändrats</string>

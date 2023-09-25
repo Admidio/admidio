@@ -353,7 +353,6 @@
   <string name="SYS_PARENT_ALBUM">Forældre album</string>
   <string name="SYS_PARENT_ALBUM_DESC">Et album kan være en del af et andet album. Vælg venligst et forældre album fra listen. Hvis du vil vise albummet i højeste niveau så skal du vælge #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Billede albums</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Kun JPG og PNG billeder er tilladt.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Billede behandlings fejl</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotér billede mod venstre</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotér billede mod højre</string>
@@ -365,7 +364,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Forrige billede</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Seneste fotoalbum for organisationen #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Opløsning større end</string>
-  <string name="SYS_SAME_WINDOW">Samme vindue</string>
   <string name="SYS_THUMBNAIL_SCALING">Minibillede skalering</string>
   <string name="SYS_THUMBNAIL_SCALING_DESC">Indstil langkanten af miniaturer. Bemærk: Skaler ikke bredden for stor for at undgå konflikt med miniature-række og kolonne-præference. Ellers kan du prøve justering af miniaturerække- og søjlepræferencer. (standard: 160 pixels)</string>
   <string name="SYS_SELECT_PHOTOS">Vælg billede</string>
@@ -373,7 +371,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Minibilleder pr. side</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Denne indstilling definerer hvor mange thumbnail billeder der vil blive vist pr. side. Hvis der er flere billeder i albummet, vil der automatisk blive tilføjet side navigation. (Standard: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Overfør billede</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Det valgte billede bliver slettet. Er du sikker?</string>
   <!--Phrases only in profile module-->
   <string name="SYS_ASSIGNED_BY_ROLES">Sat af rollerne</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Afslut medlemsskab</string>
@@ -391,7 +388,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Rediger eget profil billede</string>
   <string name="SYS_EDIT_PASSWORD">Rediger kodeord</string>
   <string name="SYS_EDIT_PROFILE">Rediger profil</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Rediger profilfelter i profilen</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Rediger profilfelter i profilen</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Rediger profil billede for #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">Eksporter vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Eksporter vCard for #VAR1#</string>
@@ -408,7 +405,7 @@
   <string name="SYS_MY_PROFILE">Min profil</string>
   <string name="SYS_NEW_PASSWORD">Nyt kodeord</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Nyt profil billede</string>
-  <string name="SYS_NO_DEFAULT_ROLE">Rolle administrationen indeholder ikke nogen standard rolle for nye brugere. Venligst kontakt en administrator der kan redigere denne indstilling.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Rolle administrationen indeholder ikke nogen standard rolle for nye brugere. Venligst kontakt en administrator der kan redigere denne indstilling.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Ingen rettigheder er blevet tildelt.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Ingen roller blev fundet. Der er muligvis roller som du ikke har rettigheder nok til at se.</string>
   <string name="SYS_PASSWORD_CHANGED">Kodeordet er blevet ændret.</string>

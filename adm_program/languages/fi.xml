@@ -157,7 +157,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Anna tietokannan käyttötiedot</string>
   <string name="INS_ERROR_OPEN_FILE">Tiedostoa #VAR1_BOLD# ei voitu avata.</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Haluatko asettaa linkin Facebook -profiiliisi? Facebook -kirjautumisnimesi on pakollinen. Kirjaudu Facebook -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Facebook -profiilisi suoraan.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Kansiolla #VAR1_BOLD# ei ole kirjoitusoikeuksia. Ilman kirjoitusoikeuksia käyttäjät eivät voi ladata tiedostoja tai valokuvia.</string>
   <string name="INS_GROUPS">Ryhmät</string>
   <string name="INS_HOST_INVALID">Isäntänimi ei kelpaa. Anna kelvollinen isäntänimi tai IP -osoite.</string>
@@ -189,7 +188,6 @@
   <string name="INS_TEAMS">Joukkueet</string>
   <string name="INS_TRAINING">Koulutus</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Haluatko asettaa linkin Twitter -profiiliisi? Twitter -kirjautumisnimesi on pakollinen. Kirjaudu Twitter -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Twitter -profiilisi suoraan.</string>
   <string name="INS_UPDATE">Päivitä</string>
   <string name="INS_UPDATE_DATABASE">Päivitä tietokanta</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Tietokannan päivittäminen ei ole tällä hetkellä mahdollista!</string>
@@ -203,7 +201,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Olet jo päivittänyt Admidion hakemistot uudella versiolla. Nyt tietokanta on päivitettävä nykyisestä versiosta #VAR2# versioon #VAR1#, jotta Admidio voi käyttää uutta versiota. \n\nJos sinulla on kysymyksiä tai ongelmia päivityksen kanssa, tarkista #VAR3# meidän päivitysohje #VAR4# tai ota yhteyttä #VAR5# tukifoorumiimme #VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# vaatii vähintään MySQL -version #VAR2#. Yritä päivittää MySQL -tietokanta tai käytä #VAR3# vanhempaa Admidio -versiota #VAR4# varmistaaksesi yhteensopivuuden.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Haluatko asettaa linkin Xing -profiiliisi? Xing -kirjautumisnimesi on pakollinen. Kirjaudu Xing -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Xing -profiilisi suoraan.</string>
   <string name="INS_BOYFRIEND">Ystävä</string>
   <string name="INS_BROTHER">Veli</string>
   <string name="INS_CHILD">Lapsi</string>
@@ -398,7 +395,6 @@
   <string name="SYS_PARENT_ALBUM">Pääalbumi</string>
   <string name="SYS_PARENT_ALBUM_DESC">Yksi albumi voi olla osa toista albumia. Valitse vanhempi albumi valintaluettelosta. Jos haluat näyttää albumin korkeimmalla tasolla, valitse #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Valokuva -albumit</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Vain JPG- ja PNG -valokuvat ovat sallittuja.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Virhe valokuvien käsittelyssä</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Kierrä kuvaa vasemmalle</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Kierrä kuvaa oikealle</string>
@@ -411,7 +407,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Edellinen kuva</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Organisaation uusin valokuva -albumi #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Resoluutio suurempi kuin</string>
-  <string name="SYS_SAME_WINDOW">Sama ikkuna</string>
   <string name="PHO_SCALE_AT_UPLOAD">Latauksen skaalaus</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Valokuvien kokoa muutetaan latauksen aikana. Pikseliarvo määrittää pysty- ja vaakasuuntaisten valokuvien pitkän reunan. Toinen puoli pysyy suhteessa pitkään reunaan. (oletus: 640 pikseliä)</string>
   <string name="SYS_THUMBNAIL_SCALING">Pikkukuvan skaalaus</string>
@@ -423,7 +418,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Pikkukuvia sivulla</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Tämä vaihtoehto määrittää, kuinka monta esikatselukuvaa näytetään kullakin sivulla. Jos tässä albumissa on enemmän kuvia, sivulle siirtyminen lisätään automaattisesti. (Oletus: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Lähetä kuvia</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Valittu valokuva poistetaan. Oletko varma?</string>
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Vahvista uusi profiilikuva</string>
   <string name="PRO_ADD_USER">Lisää käyttäjä</string>
@@ -444,7 +438,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Muokkaa omaa profiilikuvaa</string>
   <string name="SYS_EDIT_PASSWORD">Muokkaa salasanaa</string>
   <string name="SYS_EDIT_PROFILE">Muokkaa profiilia</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Muokkaa profiilikenttiä</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Muokkaa profiilikenttiä</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Muokkaa profiilikuva #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">Vie vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Vie vCard #VAR1#</string>
@@ -461,7 +455,7 @@
   <string name="SYS_MY_PROFILE">Oma profiilini</string>
   <string name="SYS_NEW_PASSWORD">Uusi salasana</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Uusi profiilikuva</string>
-  <string name="SYS_NO_DEFAULT_ROLE">Roolinhallinta ei sisällä oletusroolia uusille käyttäjille. Ota yhteyttä järjestelmänvalvojaan, joka voi muokata tätä asetusta.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Roolinhallinta ei sisällä oletusroolia uusille käyttäjille. Ota yhteyttä järjestelmänvalvojaan, joka voi muokata tätä asetusta.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Käyttöoikeuksia ei ole annettu.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Roolia ei löytynyt. Mahdollisesti sinulla ei ole oikeutta nähdä tiettyjä rooleja.</string>
   <string name="SYS_PASSWORD_CHANGED">Salasana on vaihdettu.</string>

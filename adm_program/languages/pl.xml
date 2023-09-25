@@ -376,7 +376,6 @@
   <string name="SYS_PARENT_ALBUM">Album nadrzędny</string>
   <string name="SYS_PARENT_ALBUM_DESC">Pojedynczy album może być częścią innego albumu. Proszę wybrać nadrzędny album z listy wyboru. Jeśli chcesz wyświetlać ten album na najwyższym poziomie wybierz #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Albumy zdjęć</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Tylko obrazki .jpg i .png są dozwolone.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Błąd przy przetwarzaniu zdjęcia </string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Obróć obrazek w lewo</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Obróć obrazek w prawo</string>
@@ -389,7 +388,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Poprzedni obrazek</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Najnowszy fotoalbum organizacji #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Rozdzielczość większa niż</string>
-  <string name="SYS_SAME_WINDOW">To samo okno</string>
   <string name="PHO_SCALE_AT_UPLOAD">Prześlij skalowanie</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Zdjęcia będą miały zmieniony rozmiar w trakcie ich przesyłania. Wartość pikseli wyraża dłuższą krawędź zdjęć portretowych i pejzaży. Druga krawędź zachowuje proporcje w odniesieniu do dłuższej krawędzi. (domyślnie: 640 pikseli)</string>
   <string name="SYS_THUMBNAIL_SCALING">Skalowanie miniatur</string>
@@ -401,7 +399,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Miniatury na stronie</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Ta opcja definiuje ile podglądów miniaturki będzie wyświetlane na każdej stronie, Jeśli w tym albumie znajduje się więcej obrazów, automatycznie dodana zostanie nawigacja strony. (Domyślnie: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Prześlij zdjęcia</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Wybrane zdjęcie zostanie usunięte. Na pewno?</string>
   <!--Phrases only in profile module-->
   <string name="SYS_ASSIGNED_BY_ROLES">Przypisane poprzez role</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Rejestracja potwierdzona. Użytkownik może teraz logować się do systemu.</string>
@@ -420,7 +417,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Edytuj własne zdjęcie profilowe</string>
   <string name="SYS_EDIT_PASSWORD">Zmień hasło</string>
   <string name="SYS_EDIT_PROFILE">Edytuj profil</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Edytuj pola profilu</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Edytuj pola profilu</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Edytuj profil #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">Eksportuj vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Eksportuj vCard kontaktu #VAR1#</string>
@@ -437,7 +434,7 @@
   <string name="SYS_MY_PROFILE">Mój profil</string>
   <string name="SYS_NEW_PASSWORD">Nowe hasło</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Nowe zdjęcie profilowe</string>
-  <string name="SYS_NO_DEFAULT_ROLE">Zarządzanie rolami nie ma ustawionej domyślnej roli dla nowych użytkowników. Skontaktuj się z administratorem który może zmienić to ustawienie.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Zarządzanie rolami nie ma ustawionej domyślnej roli dla nowych użytkowników. Skontaktuj się z administratorem który może zmienić to ustawienie.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Nie przypisano uprawnień.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Nie znaleziono ról. Możesz nie mieć dostępu do wyświetlania niektórych ról.</string>
   <string name="SYS_PASSWORD_CHANGED">Hasło zostało pomyślnie zmienione.</string>

@@ -352,7 +352,6 @@
   <string name="SYS_PARENT_ALBUM">Elternalbum</string>
   <string name="SYS_PARENT_ALBUM_DESC">Ein Album kann einem anderen Album untergeordnet sein. Wähle dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Willst du das Album auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
   <string name="SYS_PHOTO_ALBUMS">Fotoalben</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Fehler bei der Bildverarbeitung</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Foto gegen den Uhrzeigersinn drehen</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Foto im Uhrzeigersinn drehen</string>
@@ -364,7 +363,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Vorheriges Foto</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Neuesten Fotoalben der Organisation #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Auflösung größer als</string>
-  <string name="SYS_SAME_WINDOW">Gleiches Fenster</string>
   <string name="SYS_THUMBNAIL_SCALING">Skalierung Vorschaubild</string>
   <string name="SYS_THUMBNAIL_SCALING_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite des Vorschaubildes skaliert werden soll. Vorsicht: Werden die Vorschaubilder zu breit, passen weniger nebeneinander. Ggf. weniger Vorschaubildspalten einstellen. (Voreinstellung: 160Pixel)</string>
   <string name="SYS_SELECT_PHOTOS">Fotos auswählen</string>
@@ -372,7 +370,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Vorschaubilder pro Seite</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Voreinstellung: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Fotos hochladen</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <!--Phrases only in profile module-->
   <string name="SYS_ASSIGNED_BY_ROLES">Vergeben durch die Rollen</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
@@ -390,7 +387,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Mein Profilfoto bearbeiten</string>
   <string name="SYS_EDIT_PASSWORD">Passwort bearbeiten</string>
   <string name="SYS_EDIT_PROFILE">Profil bearbeiten</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Profilfelder im Profil bearbeiten</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Profilfelder im Profil bearbeiten</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Profilfoto von #VAR1# #VAR2# bearbeiten</string>
   <string name="SYS_EXPORT_VCARD">vCard exportieren</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">vCard von #VAR1# exportieren</string>
@@ -407,7 +404,7 @@
   <string name="SYS_MY_PROFILE">Mein Profil</string>
   <string name="SYS_NEW_PASSWORD">Neues Passwort</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Neues Profilfoto</string>
-  <string name="SYS_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer:innen hinterlegt. Wende dich bitte an eine:n Administrator:in, der diese Einstellung vornehmen kann.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer:innen hinterlegt. Wende dich bitte an eine:n Administrator:in, der diese Einstellung vornehmen kann.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
   <string name="SYS_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>

@@ -157,7 +157,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Въведете информация за достъп до базата данни</string>
   <string name="INS_ERROR_OPEN_FILE">Файл #VAR1_BOLD# не може да бъде отворен.</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Искате ли да сложите хипервръзка към вашия профил във Facebook? Изисква се вашето име за влизане във Facebook. Влезте в свой профил във Facebook. Копирайте от там адреса на профила и го поставете тук. Посетителите на вашия профил тук ще могат директно да отворят вашия профил във Facebook.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Папката #VAR1_BOLD# няма разрешения за запис. Без разрешение за запис, никакви файлове или снимки не могат да бъдат качвани от потребителите.</string>
   <string name="INS_GROUPS">Групи</string>
   <string name="INS_HOST_INVALID">Името на хост не е валидно. Въведете валидно име на хост или IP адрес.</string>
@@ -189,7 +188,6 @@
   <string name="INS_TEAMS">Екипи</string>
   <string name="INS_TRAINING">Обучение</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Искате ли да сложите хипервръзка към вашия профил във Twitter? Изисква се вашето име за влизане във Twitter. Влезте в свой профил във Twitter. Копирайте от там адреса на профила и го поставете тук. Посетителите на вашия профил тук ще могат директно да отворят вашия профил във Twitter.</string>
   <string name="INS_UPDATE">Обновяване</string>
   <string name="INS_UPDATE_DATABASE">Обновяване на базата данни</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Обновяване на базата данни не е възможно в момента!</string>
@@ -203,7 +201,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Вече сте актуализирали директориите на Admidio с нова версия. Сега базата данни трябва да бъде актуализирана от текущата версия #VAR2# до версия #VAR1#, за да може Admidio да работи с новата версия.\n\nАко имате въпроси или проблеми с актуализацията, моля, проверете #VAR3#нашата актуализирайте инструкцията#VAR4# или се свържете с #VAR5#нашия форум за поддръжка#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# изисква поне версия на MySQL #VAR2#. Моля, опитайте да актуализирате вашата MySQL база данни или използвайте #VAR3#по-стара версия на Admidio#VAR4#, за да осигурите съвместимост.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Искате ли да сложите хипервръзка към вашия профил във Xing? Изисква се вашето име за влизане във Xing. Влезте в свой профил във Xing. Копирайте от там адреса на профила и го поставете тук. Посетителите на вашия профил тук ще могат директно да отворят вашия профил във Xing.</string>
   <string name="INS_BOYFRIEND">Приятел</string>
   <string name="INS_BROTHER">Брат</string>
   <string name="INS_CHILD">Дете</string>
@@ -398,7 +395,6 @@
   <string name="SYS_PARENT_ALBUM">Съдъжащ албум</string>
   <string name="SYS_PARENT_ALBUM_DESC">Един албум може да е част от друг албум. Изберете от списъка съдържащия албум. Ако искате албума да е в най-високото ниво изберете  #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Фотоалбуми</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Позволени са само типове JPG и PNG.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Грешка при обработката на снимки</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Завъртане на снимката наляво</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Завъртане на снимката надясно</string>
@@ -423,7 +419,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Миниатюри на страница</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Тази опция определя колко визуализации на миниатюри ще се показват на всяка страница. Ако има повече изображения в този албум, автоматично ще се добави навигация в страницата. (По подразбиране: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Качване на снимки</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Избраната снимка ще бъде изтрита. Сигурни ли сте?</string>
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Одобряване на снимката на профила</string>
   <string name="PRO_ADD_USER">Добавяне на потребител</string>
@@ -444,7 +439,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Редактиране на вашата собствена снимка</string>
   <string name="SYS_EDIT_PASSWORD">Редактиране на парола</string>
   <string name="SYS_EDIT_PROFILE">Редактиране на профила</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Редактиране на полетата в профила</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Редактиране на полетата в профила</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Редактиране изображението на профила на #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">Редактиране на vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Еспортиране на vCard на #VAR1#</string>
@@ -461,7 +456,7 @@
   <string name="SYS_MY_PROFILE">Моят профил</string>
   <string name="SYS_NEW_PASSWORD">Нова парола</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Нова профилна снимка</string>
-  <string name="SYS_NO_DEFAULT_ROLE">Управлението на ролите не съдържа роля за нови потребители. Моля, свържете се с администратор, който може да редактира тази настройка.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Управлението на ролите не съдържа роля за нови потребители. Моля, свържете се с администратор, който може да редактира тази настройка.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Не са зададени позволения.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Не са намерени роли. Вероятно вие нямата право да виждате тези роли.</string>
   <string name="SYS_PASSWORD_CHANGED">Паролата е променена успешно.</string>
@@ -1239,7 +1234,6 @@
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">Might cause problems with file uploads</string>
-  <string name="SYS_SAME_WINDOW">Same window</string>
   <string name="SYS_SATURDAY">Saturday</string>
   <string name="SYS_SAVE">Запазване</string>
   <string name="SYS_SAVE_ATTACHMENTS">Save attachments</string>

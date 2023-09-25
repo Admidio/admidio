@@ -157,7 +157,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Inserisci le informazioni di accesso al database</string>
   <string name="INS_ERROR_OPEN_FILE">Il file #VAR1_BOLD# non può essere aperto.</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vorresti impostare un link al tuo profilo Facebook? E\' necessario il tuo username per l\'accesso a Facebook. Accedi al tuo account Facebook e visualizza il tuo profilo. Copia l\'URL in questo campo e salva il tuo profilo qui. I visitatori del tuo profilo sono ora abilitati ad aprire il tuo profilo Facebook direttamente.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">La cartella #VAR1_BOLD# non è abilitata alla scrittura. Per favore definisci i permessi per la scrittura per caricare le foto e i file per il modulo per scaricare.</string>
   <string name="INS_GROUPS">Gruppi</string>
   <string name="INS_HOST_INVALID">Il nome dell\'host non è valido. Inserisci un nome host valido o un indirizzo IP.</string>
@@ -189,7 +188,6 @@
   <string name="INS_TEAMS">Team</string>
   <string name="INS_TRAINING">Formazione</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vorresti impostare un link al tuo profilo Twitter?  E\' necessario il tuo username per l\'accesso a Twitter. Accedi al tuo account Twitter e visualizza il tuo profilo. Copia l\'URL in questo campo e salva il tuo profilo qui. I visitatori del tuo profilo sono ora abilitati ad aprire il tuo profilo Twitter direttamente.</string>
   <string name="INS_UPDATE">Aggiornamento</string>
   <string name="INS_UPDATE_DATABASE">Aggiorna database</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">L\'aggiornamento del database corrente non è possibile!</string>
@@ -203,7 +201,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Hai già aggiornato le directory di Admidio con una nuova versione. Ora il database deve essere aggiornato dalla versione corrente #VAR2# alla versione #VAR1#, in modo che Admidio possa funzionare con la nuova versione. Se hai domande o problemi con l\'aggiornamento, controlla #VAR3# le nostre istruzioni di aggiornamento#VAR4# o contatta #VAR5# il nostro forum di supporto#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# richiede l\'ultima versione MySQL #VAR2#. Per favore prova ad aggiornare il tuo database MySQL o usa una versione più vecchia di Admidio #VAR3# #VAR4# in modo da essere sicuro della compatibilità.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vorresti impostare un link al tuo profilo Xing?  E\' necessario il tuo username per l\'accesso a Xing. Accedi al tuo account Xing e visualizza il tuo profilo. Copia l\'URL in questo campo e salva il tuo profilo qui. I visitatori del tuo profilo sono ora abilitati ad aprire il tuo profilo Xing direttamente.</string>
   <string name="INS_BOYFRIEND">Amico</string>
   <string name="INS_BROTHER">Fratello</string>
   <string name="INS_CHILD">Figlio</string>
@@ -397,7 +394,6 @@
   <string name="SYS_PARENT_ALBUM">Album genitore</string>
   <string name="SYS_PARENT_ALBUM_DESC">Un album può essere parte di un altro album. Per favore seleziona l\'album padre dalla lista di selezione. Se vuoi mostrare l\'album al livello più alto seleziona #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Album di foto</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Solo foto JPG e PNG sono consentite.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Errore nel processare la foto</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Ruota foto a sinistra</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Ruota foto a destra</string>
@@ -410,7 +406,6 @@
   <string name="SYS_PREVIOUS_PHOTO">immagine precedente</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Ultimi album fotografici dell\'organizzazione #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Risoluzione più grande di</string>
-  <string name="SYS_SAME_WINDOW">Stessa finestra</string>
   <string name="PHO_SCALE_AT_UPLOAD">Scala durante il caricamento</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Le foto verranno ridimensionate durante il caricamento. Il valore in pixel definisce il lato lungo verticale e orizzontale del formato della foto. L\'altra dimensione rimane proporzionale al lato lungo. (predefinito: 640 pixel)</string>
   <string name="SYS_THUMBNAIL_SCALING">Scalatura delle miniature</string>
@@ -422,7 +417,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Miniature per pagina</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Questa opzione definisce come le molte anteprime delle miniature delle immagini saranno mostrate su ogni pagina. Se ci sono più immagini in questo album una pagina di navigazione sarà aggiunta automaticamente. (Predefinita: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Carica foto</string>
-  <string name="SYS_WANT_DELETE_PHOTO">La foto selezionata sta per essere cancellata. Confermi?</string>
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Conferma la nuova foto del profilo</string>
   <string name="PRO_ADD_USER">Aggiungi utente</string>
@@ -674,7 +668,7 @@
   <string name="SYS_EDIT_FOLDER">Modifica cartella</string>
   <string name="SYS_EDIT_LISTS_DESC">Gli utenti possono creare i propri elenchi selezionando i campi del profilo e poi applicarli a gruppi e ruoli. Sono disponibili solo i campi del profilo e i gruppi o ruoli che l\'utente corrente è autorizzato a vedere. Questa impostazione può essere usata per specificare chi può creare tali elenchi (predefinito: Tutti)</string>
   <string name="SYS_EDIT_MEMBERS">Modifica membri</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Modifica i campi del profilo</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Modifica i campi del profilo</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Modifica le relazioni</string>
   <string name="SYS_EDIT_ROLE">Modifica ruolo</string>
   <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Modifica l\'apprtenenza ai ruoli</string>

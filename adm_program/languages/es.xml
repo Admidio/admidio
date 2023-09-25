@@ -157,7 +157,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Introduzca el acceso a la base de datos</string>
   <string name="INS_ERROR_OPEN_FILE">El archivo #VAR1_BOLD# no pudo abrirse.</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">¿Quisiera establecer un enlace a su perfil de Facebook? Se le solicitará su nombre de usuario. Entre a su cuenta de Facebook y visualice su perfil. Copie la dirección web - URL en este campo y guarde los cambios. Los visitantes de su perfil en Admidio ahora podrán abrir directamente su perfil de Facebook.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">La carpeta #VAR1_BOLD# no tiene permisos de escritura. Por favor habilite los privilegios para cargar fotos y archivos en el módulo de descargas.</string>
   <string name="INS_GROUPS">grupos</string>
   <string name="INS_HOST_INVALID">El hostname no es válido. Escriba un nombre correcto o una dirección IP válida.</string>
@@ -189,7 +188,6 @@
   <string name="INS_TEAMS">equipos</string>
   <string name="INS_TRAINING">entrenamiento</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">¿Quisiera establecer un enlace a su perfil de Twitter? Para ello necesitará su nombre de usuario. Entre a su cuenta de Twitter y visualice su perfil. Copie la dirección web - URL en este campo y guarde los cambios. Los visitantes de su perfil en Admidio ahora podrán abrir directamente su perfil de Twitter.</string>
   <string name="INS_UPDATE">actualización</string>
   <string name="INS_UPDATE_DATABASE">actualizar base de datos</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">En este momento no es posible actualizar la base de datos.</string>
@@ -201,7 +199,6 @@
   <string name="INS_WELCOME_TEXT">Este asistente le ayudará a configurar la administración de Admidio. Se le solicitará toda la información necesaria para que se pueda configurar el sistema e iniciar sesión como Administrador. Si tiene preguntas o problemas, no dude en ponerse en contacto con nosotros en #VAR1# nuestro foro de ayuda #VAR2#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requiere por lo menos MySQL versión #VAR2# . Por favor intente actualizar su base de datos MySQL o usar una versión antigua #VAR3# de Admidio #VAR4# para asegurar la compatibilidad.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">¿Quisiera establecer un enlace a su perfil de Xing? Se le solicitará su nombre de usuario. Entre a su cuenta de Xing y visualice su perfil. Copie la dirección web - URL en este campo y guarde los cambios. Los visitantes de su perfil en Admidio ahora podrán abrir directamente su perfil de Xing.</string>
   <string name="INS_BOYFRIEND">Amigo</string>
   <string name="INS_BROTHER">Hermano</string>
   <string name="INS_CHILD">Infantil</string>

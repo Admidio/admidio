@@ -156,7 +156,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Geef database toegangsgegevens door</string>
   <string name="INS_ERROR_OPEN_FILE">Bestand #VAR1_BOLD# kan niet geopend worden.</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Wilt u een link naar uw Facebook profiel plaatsen? Uw Facebook login naam is noodzakelijk. Log in op uw Facebook account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Facebook profiel direct openen.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">De map #VAR1_BOLD# heeft geen schrijfrechten. Zonder schrijfrechten kunnen gebruikers geen bestanden of foto\'s uploaden.</string>
   <string name="INS_GROUPS">Groepen</string>
   <string name="INS_HOST_INVALID">Hostnaam is niet geldig. Voer een geldige naam of geldig IP-adres in.</string>
@@ -188,7 +187,6 @@
   <string name="INS_TEAMS">Teams</string>
   <string name="INS_TRAINING">Training</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Wilt u een link naar uw Twitter profiel plaatsen? Uw Twitter login naam is noodzakelijk. Log in op uw Twitter account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Twitter profiel direct openen.</string>
   <string name="INS_UPDATE">Update</string>
   <string name="INS_UPDATE_DATABASE">Update database</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Een update van de database is momenteel niet mogelijk!</string>
@@ -202,7 +200,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">U hebt de mappen van Admidio al bijgewerkt naar een nieuwe versie. Nu moet de database worden bijgewerkt van de huidige versie #VAR2# naar de versie #VAR1#, zodat Admidio de nieuwe versie kan gebruiken.\n\nAls u vragen of problemen met deze update hebt, bekijk #VAR3#onze update handleiding#VAR4# of bezoek #VAR5#ons support forum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# heeft minimaal MySQL versie #VAR2# nodig. Probeer svp uw MySQL database te updaten of gebruik een #VAR3#oudere Admidio versie#VAR4# die compatibel is.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Wilt u een link naar uw Xing profiel plaatsen? Uw Xing login naam is noodzakelijk. Log in op uw Xing account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Xing profiel direct openen.</string>
   <string name="INS_BOYFRIEND">Vriend</string>
   <string name="INS_BROTHER">Broer</string>
   <string name="INS_CHILD">Kind</string>
@@ -385,7 +382,6 @@
   <string name="SYS_PARENT_ALBUM">Hoofdalbum</string>
   <string name="SYS_PARENT_ALBUM_DESC">Een album kan onderdeel van een ander album zijn. Selecteer svp het hoofdalbum in de selectielijst. Als u het album op het hoogste niveau wilt weergeven, selecteer #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Foto albums</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Alleen JPG en PNG foto\'s zijn toegestaan.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Fout tijdens verwerken van foto</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Foto naar links draaien</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Foto naar rechts draaien</string>
@@ -398,7 +394,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Vorige foto</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Nieuwste foto album van organisatie #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Resolutie groter dan</string>
-  <string name="SYS_SAME_WINDOW">Hetzelfde venster</string>
   <string name="PHO_SCALE_AT_UPLOAD">Upload schalen</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Foto\'s worden herschaald tijdens uploaden. Opgegeven pixels betreft de lange zijde van de foto. De korte zijde blijft in verhouding gelijk aan de lange zijde. (Standaard: 640 pixels)</string>
   <string name="SYS_THUMBNAIL_SCALING">Miniatuur schalen</string>
@@ -410,7 +405,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Miniaturen per pagina</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">De ingevoerde waarde bepaalt hoeveel miniaturen op een pagina te zien zijn. Als een album meer foto\'s heeft dan wordt er automatisch een paginanavigatie toegevoegd. (Standaard: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Foto\'s uploaden</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Geselecteerde foto wordt verwijderd. Doorgaan?</string>
   <!--Phrases only in profile module-->
   <string name="SYS_ASSIGNED_BY_ROLES">Ingesteld door de rollen</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registratie werd bevestigd. De gebruiker kan nu inloggen bij het systeem.</string>
@@ -429,7 +423,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Bewerk eigen profielfoto</string>
   <string name="SYS_EDIT_PASSWORD">Bewerk wachtwoord</string>
   <string name="SYS_EDIT_PROFILE">Bewerk profiel</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Profielvelden in profiel bewerken</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Profielvelden in profiel bewerken</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Bewerk profielfoto van #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">vCard exporteren</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Exporteer vCard van #VAR1#</string>
@@ -446,7 +440,7 @@
   <string name="SYS_MY_PROFILE">Mijn profiel</string>
   <string name="SYS_NEW_PASSWORD">Nieuw wachtwoord</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Nieuwe profielfoto</string>
-  <string name="SYS_NO_DEFAULT_ROLE">Het rolbeheer bevat geen standaard rol voor nieuwe gebruikers. Gelieve contact op te nemen met een beheerder die deze instelling kan aanpassen.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Het rolbeheer bevat geen standaard rol voor nieuwe gebruikers. Gelieve contact op te nemen met een beheerder die deze instelling kan aanpassen.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Er zijn geen rechten toegewezen.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Geen rollen gevonden. Mogelijks heeft u niet de rechten om bepaalde rollen te zien.</string>
   <string name="SYS_PASSWORD_CHANGED">Wachtwoord is succesvol gewijzigd.</string>

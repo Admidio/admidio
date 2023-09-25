@@ -157,7 +157,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Εισάγετε τις πληροφορίες πρόσβασης για τη βάση δεδομένων</string>
   <string name="INS_ERROR_OPEN_FILE">Το αρχείο #VAR1_BOLD# δεν ήταν δυνατό να ανοιχτεί</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Θα θέλατε να ορίσετε έναν σύνδεσμο προς το προφίλ σας στο Facebook; Απαιτείται το όνομα σύνδεσής σας στο Facebook. Συνδεθείτε στον λογαριασμό σας στο Facebook και εμφανίστε το προφίλ σας. Αντιγράψτε τη διεύθυνση URL σε αυτό το πεδίο και αποθηκεύστε το προφίλ σας εδώ. Οι επισκέπτες του προφίλ σας μπορούν πλέον να ανοίξουν απευθείας το προφίλ σας στο Facebook.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Ο φάκελος #VAR1_BOLD# δεν έχει δικαιώματα εγγραφής. Χωρίς δικαιώματα εγγραφής, δεν μπορούν να μεταφορτωθούν αρχεία ή φωτογραφίες από τους χρήστες.</string>
   <string name="INS_GROUPS">Γκρουπ</string>
   <string name="INS_HOST_INVALID">Το όνομα κεντρικού υπολογιστή δεν είναι έγκυρο. Εισαγάγετε ένα έγκυρο όνομα κεντρικού υπολογιστή ή διεύθυνση IP.</string>
@@ -189,7 +188,6 @@
   <string name="INS_TEAMS">Ομάδες</string>
   <string name="INS_TRAINING">Προπόνηση</string>
   <string name="SYS_TWITTER">Twitter</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Θέλετε να ορίσετε έναν σύνδεσμο προς το προφίλ σας στο Twitter; Απαιτείται το όνομα σύνδεσής σας στο Twitter. Συνδεθείτε στον λογαριασμό σας στο Twitter και εμφανίστε το προφίλ σας. Αντιγράψτε τη διεύθυνση URL σε αυτό το πεδίο και αποθηκεύστε το προφίλ σας εδώ. Οι επισκέπτες του προφίλ σας μπορούν πλέον να ανοίξουν απευθείας το προφίλ σας στο Twitter.</string>
   <string name="INS_UPDATE">Ενημέρωση</string>
   <string name="INS_UPDATE_DATABASE">Ενημέρωση βάσης δεδομένων</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Προς το παρόν δεν είναι δυνατή η ενημέρωση της βάσης δεδομένων!</string>
@@ -203,7 +201,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Έχετε ήδη ενημερώσει τους καταλόγους του Admidio με νέα έκδοση. Τώρα η βάση δεδομένων πρέπει να ενημερωθεί από την τρέχουσα έκδοση #VAR2# στην έκδοση #VAR1#, ώστε το Admidio να μπορεί να εκτελείται με τη νέα έκδοση.\n\nΕάν έχετε ερωτήσεις ή προβλήματα με την ενημέρωση, ελέγξτε το #VAR3#μας ενημερώστε την οδηγία#VAR4# ή επικοινωνήστε με το #VAR5#το φόρουμ υποστήριξης#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Το Admidio #VAR1# απαιτεί τουλάχιστον την έκδοση MySQL #VAR2#. Δοκιμάστε να ενημερώσετε τη βάση δεδομένων MySQL ή χρησιμοποιήστε μια #VAR3#παλαιότερη έκδοση Admidio#VAR4# για να διασφαλίσετε τη συμβατότητα.</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Θα θέλατε να ορίσετε έναν σύνδεσμο προς το προφίλ σας Xing; Απαιτείται το όνομα σύνδεσής σας στο Xing. Συνδεθείτε στον λογαριασμό σας Xing και εμφανίστε το προφίλ σας. Αντιγράψτε τη διεύθυνση URL σε αυτό το πεδίο και αποθηκεύστε το προφίλ σας εδώ. Οι επισκέπτες του προφίλ σας μπορούν πλέον να ανοίξουν απευθείας το προφίλ σας Xing.</string>
   <string name="INS_BOYFRIEND">Φίλος,-η</string>
   <string name="INS_BROTHER">Αδερφός</string>
   <string name="INS_CHILD">Παιδί</string>
@@ -399,7 +396,6 @@
   <string name="SYS_PARENT_ALBUM">Γονικό άλμπουμ</string>
   <string name="SYS_PARENT_ALBUM_DESC">Ένα άλμπουμ μπορεί να είναι μέρος ενός άλλου άλμπουμ. Επιλέξτε ένα γονικό άλμπουμ από τη λίστα επιλογής. Εάν θέλετε να εμφανίσετε το άλμπουμ στο υψηλότερο επίπεδο, επιλέξτε #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_ALBUMS">Άλμπουμ φωτογραφιών</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Επιτρέπονται μόνο φωτογραφίες τύπου JPG και PNG.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Σφάλμα επεξεργασίας φωτογραφιών</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Περιστρέψτε τη φωτογραφία προς τα αριστερά</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Περιστρέψτε τη φωτογραφία δεξιά</string>
@@ -412,7 +408,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Προηγούμενη εικόνα</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Τελευταίο άλμπουμ φωτογραφιών του συλλόγου #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Ανάλυση μεγαλύτερη από</string>
-  <string name="SYS_SAME_WINDOW">Ίδιο παράθυρο</string>
   <string name="PHO_SCALE_AT_UPLOAD">Μεταφόρτωση κλιμάκωσης</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Το μέγεθος των φωτογραφιών θα αλλάξει κατά τη μεταφόρτωση. Η τιμή εικονοστοιχείων καθορίζει τη μεγάλη πλευρά των φωτογραφιών κατακόρυφων και οριζόντιων μορφών. Η άλλη πλευρά παραμένει ανάλογη με τη μακριά άκρη. (default: 640 pixels)</string>
   <string name="SYS_THUMBNAIL_SCALING">Κλιμάκωση μικρογραφιών</string>
@@ -424,7 +419,6 @@
   <string name="SYS_THUMBNAILS_PER_PAGE">Μικρογραφίες ανά σελίδα</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">Αυτή η επιλογή ορίζει πόσες προεπισκοπήσεις μικρογραφιών θα εμφανίζονται σε κάθε σελίδα. Εάν υπάρχουν περισσότερες εικόνες σε αυτό το άλμπουμ, μια πλοήγηση σελίδας θα προστεθεί αυτόματα. (Default: 16)</string>
   <string name="SYS_UPLOAD_PHOTOS">Μεταφόρτωση (upload) φωτογραφιών</string>
-  <string name="SYS_WANT_DELETE_PHOTO">Η επιλεγμένη φωτογραφία θα διαγραφεί. Είσαι σίγουρος?</string>
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Επιβεβαιώστε τη νέα εικόνα προφίλ</string>
   <string name="PRO_ADD_USER">Προσθήκη χρήστη</string>
@@ -445,7 +439,7 @@
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Επεξεργασία εικόνας προφίλ</string>
   <string name="SYS_EDIT_PASSWORD">Επεξεργασία κωδικού πρόσβασης</string>
   <string name="SYS_EDIT_PROFILE">Επεξεργασία προφίλ</string>
-  <string name="SYS_EDIT_PROFILE_FIELDS">Επεξεργασία πεδίων προφίλ στη καρτέλα προφίλ</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Επεξεργασία πεδίων προφίλ στη καρτέλα προφίλ</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Επεξεργασία εικόνας προφίλ από #VAR1# #VAR2#</string>
   <string name="SYS_EXPORT_VCARD">Εξαγωγή vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Εξαγωγή vCard από #VAR1#</string>
@@ -462,7 +456,7 @@
   <string name="SYS_MY_PROFILE">Το προφίλ μου</string>
   <string name="SYS_NEW_PASSWORD">Νέος κωδικός πρόσβασης</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Νέα εικόνα προφίλ</string>
-  <string name="SYS_NO_DEFAULT_ROLE">Η διαχείριση ρόλων δεν περιέχει προεπιλεγμένο ρόλο για νέους χρήστες. Επικοινωνήστε με έναν διαχειριστή που μπορεί να επεξεργαστεί αυτήν τη ρύθμιση.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Η διαχείριση ρόλων δεν περιέχει προεπιλεγμένο ρόλο για νέους χρήστες. Επικοινωνήστε με έναν διαχειριστή που μπορεί να επεξεργαστεί αυτήν τη ρύθμιση.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Δεν έχουν εκχωρηθεί δικαιώματα.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Δεν βρέθηκαν ρόλοι. Ενδεχομένως να μην έχετε τα δικαιώματα να δείτε ορισμένους ρόλους.</string>
   <string name="SYS_PASSWORD_CHANGED">Ο κωδικός πρόσβασης άλλαξε με επιτυχία.</string>
