@@ -68,7 +68,7 @@
   <string name="INS_SET_ORGANIZATION">定义部门</string>
   <string name="INS_SET_UP_ORGANIZATION">设置部门</string>
   <string name="ORG_FIELD_EXIST">在这个类别中已经有相同字段。</string>
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">您可以创建和编辑能在类别中合并的个人资料字段。</string>
+  <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">您可以创建和编辑能在类别中合并的个人资料字段。</string>
   <string name="SYS_A_TO_Z">A到Z</string>
   <string name="SYS_ADD_TO_DATABASE">添加到数据库</string>
   <string name="SYS_ADDITIONAL_FILES">此列表旨在提供未导入数据库的文件和文件夹的概述。它们可以添加到数据库中。将从选定的文件夹复制访问权限。</string>

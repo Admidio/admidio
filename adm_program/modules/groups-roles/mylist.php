@@ -646,7 +646,7 @@ if ($getActiveRole) {
     // check if there are roles that the current user could view
     $inactiveRolesStatement = $gDb->queryPrepared($sqlData['query'], $sqlData['params']);
     if ($inactiveRolesStatement->rowCount() === 0) {
-        $gMessage->show($gL10n->get('PRO_NO_ROLES_VISIBLE'));
+        $gMessage->show($gL10n->get('SYS_NO_ROLES_VISIBLE'));
         // => EXIT
     }
 }

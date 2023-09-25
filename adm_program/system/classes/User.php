@@ -146,7 +146,7 @@ class User extends TableAccess
         $defaultRolesStatement = $this->db->queryPrepared($sql, array($this->organizationId));
 
         if ($defaultRolesStatement->rowCount() === 0) {
-            $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
+            $gMessage->show($gL10n->get('SYS_NO_DEFAULT_ROLE_FOR_USER'));
             // => EXIT
         }
 

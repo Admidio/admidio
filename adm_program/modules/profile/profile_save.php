@@ -106,7 +106,7 @@ if ($getNewUser === 2) {
 
     // Passwort muss mindestens 8 Zeichen lang sein
     if (strlen($_POST['usr_password']) < PASSWORD_MIN_LENGTH) {
-        $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH'));
+        $gMessage->show($gL10n->get('SYS_PASSWORD_LENGTH'));
         // => EXIT
     }
 
@@ -117,7 +117,7 @@ if ($getNewUser === 2) {
     }
 
     if (PasswordUtils::passwordStrength($_POST['usr_password'], $user->getPasswordUserData()) < $gSettingsManager->getInt('password_min_strength')) {
-        $gMessage->show($gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'));
+        $gMessage->show($gL10n->get('SYS_PASSWORD_NOT_STRONG_ENOUGH'));
         // => EXIT
     }
 }
@@ -179,7 +179,7 @@ if ($gCurrentUser->isAdministrator() || $getNewUser > 0) {
             $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
 
             if ($pdoStatement->rowCount() > 0 && $pdoStatement->fetchColumn() !== $getUserUuid) {
-                $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
+                $gMessage->show($gL10n->get('SYS_LOGIN_NAME_EXIST'));
                 // => EXIT
             }
         }

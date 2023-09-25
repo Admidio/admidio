@@ -168,7 +168,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                 // do not edit administrator role
                 if ($row['rol_administrator'] == 0) {
                     $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" href="javascript:profileJS.toggleDetailsOn(\''.$memberUuid.'\')"><i
-                                        class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('PRO_CHANGE_DATE').'"></i></a>';
+                                        class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_CHANGE_DATE').'"></i></a>';
                 } else {
                     $roleMemHTML .= '<a><i class="fas fa-edit invisible"></i></a>';
                 }
@@ -178,7 +178,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 || ($role->getValue('rol_administrator') == 0)) {
                     $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberUuid, 'name' => $role->getValue('rol_name'))).'"><i
-                                        class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'"></i></a>';
+                                        class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
                 } else {
                     $roleMemHTML .= '<a><i class="fas fa-trash-alt invisible"></i></a>';
                 }
@@ -232,7 +232,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
         }
     }
     if ($countShowRoles === 0) {
-        $roleMemHTML = '<div class="block-padding">'.$gL10n->get('PRO_NO_ROLES_VISIBLE').'</div>';
+        $roleMemHTML = '<div class="block-padding">'.$gL10n->get('SYS_NO_ROLES_VISIBLE').'</div>';
     } else {
         $roleMemHTML .= '</ul>';
     }

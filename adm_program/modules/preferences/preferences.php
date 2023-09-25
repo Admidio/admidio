@@ -434,9 +434,9 @@ $formRegionalSettings->addSelectBox(
 );
 $formRegionalSettings->addSelectBox(
     'default_country',
-    $gL10n->get('PRO_DEFAULT_COUNTRY'),
+    $gL10n->get('SYS_DEFAULT_COUNTRY'),
     $gL10n->getCountries(),
-    array('defaultValue' => $formValues['default_country'], 'helpTextIdInline' => 'PRO_DEFAULT_COUNTRY_DESC')
+    array('defaultValue' => $formValues['default_country'], 'helpTextIdInline' => 'SYS_DEFAULT_COUNTRY_DESC')
 );
 $formRegionalSettings->addInput(
     'system_date',
@@ -1603,48 +1603,48 @@ $formProfile = new HtmlForm(
 );
 
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile-fields/profile_fields.php">
-            <i class="fas fa-th-list"></i>'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
-$formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextIdInline' => 'PRO_MAINTAIN_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+            <i class="fas fa-th-list"></i>'.$gL10n->get('SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION').'</a>';
+$formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextIdInline' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formProfile->addCheckbox(
     'profile_log_edit_fields',
-    $gL10n->get('PRO_LOG_EDIT_FIELDS'),
+    $gL10n->get('SYS_LOG_ALL_CHANGES'),
     (bool) $formValues['profile_log_edit_fields'],
-    array('helpTextIdInline' => 'PRO_LOG_EDIT_FIELDS_DESC')
+    array('helpTextIdInline' => 'SYS_LOG_ALL_CHANGES_DESC')
 );
 $formProfile->addCheckbox(
     'profile_show_map_link',
-    $gL10n->get('PRO_SHOW_MAP_LINK'),
+    $gL10n->get('SYS_SHOW_MAP_LINK'),
     (bool) $formValues['profile_show_map_link'],
-    array('helpTextIdInline' => 'PRO_SHOW_MAP_LINK_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_MAP_LINK_PROFILE_DESC')
 );
 $formProfile->addCheckbox(
     'profile_show_roles',
-    $gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP'),
+    $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP'),
     (bool) $formValues['profile_show_roles'],
-    array('helpTextIdInline' => 'PRO_SHOW_ROLE_MEMBERSHIP_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_ROLE_MEMBERSHIP_DESC')
 );
 $formProfile->addCheckbox(
     'profile_show_former_roles',
-    $gL10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP'),
+    $gL10n->get('SYS_SHOW_FORMER_ROLE_MEMBERSHIP'),
     (bool) $formValues['profile_show_former_roles'],
-    array('helpTextIdInline' => 'PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
 );
 
 if ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization()) {
     $formProfile->addCheckbox(
         'profile_show_extern_roles',
-        $gL10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS'),
+        $gL10n->get('SYS_SHOW_ROLES_OTHER_ORGANIZATIONS'),
         (bool) $formValues['profile_show_extern_roles'],
-        array('helpTextIdInline' => 'PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC')
+        array('helpTextIdInline' => 'SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC')
     );
 }
 
 $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
 $formProfile->addSelectBox(
     'profile_photo_storage',
-    $gL10n->get('PRO_LOCATION_PROFILE_PICTURES'),
+    $gL10n->get('SYS_LOCATION_PROFILE_PICTURES'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['profile_photo_storage'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PRO_LOCATION_PROFILE_PICTURES_DESC')
+    array('defaultValue' => $formValues['profile_photo_storage'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_LOCATION_PROFILE_PICTURES_DESC')
 );
 $formProfile->addSubmitButton(
     'btn_save_profile',
@@ -1652,7 +1652,7 @@ $formProfile->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'profile', 'accordion_modules', $gL10n->get('PRO_PROFILE'), 'fas fa-user', $formProfile->show()));
+$page->addHtml(getPreferencePanel('modules', 'profile', 'accordion_modules', $gL10n->get('SYS_PROFILE'), 'fas fa-user', $formProfile->show()));
 
 // PANEL: EVENTS
 

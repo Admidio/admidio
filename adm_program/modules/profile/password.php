@@ -86,16 +86,16 @@ if ($getMode === 'change') {
 
                         $phrase = 'success';
                     } else {
-                        $phrase = $gL10n->get('PRO_PASSWORD_OLD_WRONG');
+                        $phrase = $gL10n->get('SYS_PASSWORD_OLD_WRONG');
                     }
                 } else {
                     $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
                 }
             } else {
-                $phrase = $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH');
+                $phrase = $gL10n->get('SYS_PASSWORD_NOT_STRONG_ENOUGH');
             }
         } else {
-            $phrase = $gL10n->get('PRO_PASSWORD_LENGTH');
+            $phrase = $gL10n->get('SYS_PASSWORD_LENGTH');
         }
     } else {
         $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
@@ -144,7 +144,7 @@ if ($getMode === 'change') {
                 $.post(action, $(this).serialize(), function(data) {
                     if (data === "success") {
                         passwordFormAlert.attr("class", "alert alert-success form-alert");
-                        passwordFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
+                        passwordFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_PASSWORD_CHANGED').'</strong>");
                         passwordFormAlert.fadeIn("slow");
                         setTimeout(function() {
                             $("#admidio-modal").modal("hide");
@@ -160,7 +160,7 @@ if ($getMode === 'change') {
     </script>
 
     <div class="modal-header">
-        <h3 class="modal-title">'.$gL10n->get('PRO_EDIT_PASSWORD').'</h3>
+        <h3 class="modal-title">'.$gL10n->get('SYS_EDIT_PASSWORD').'</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">';
@@ -170,7 +170,7 @@ if ($getMode === 'change') {
         // to change own password user must enter the valid old password for verification
         $form->addInput(
             'old_password',
-            $gL10n->get('PRO_CURRENT_PASSWORD'),
+            $gL10n->get('SYS_CURRENT_PASSWORD'),
             '',
             array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
         );
@@ -178,7 +178,7 @@ if ($getMode === 'change') {
     }
     $form->addInput(
         'new_password',
-        $gL10n->get('PRO_NEW_PASSWORD'),
+        $gL10n->get('SYS_NEW_PASSWORD'),
         '',
         array(
                 'type'             => 'password',
@@ -186,7 +186,7 @@ if ($getMode === 'change') {
                 'minLength'        => PASSWORD_MIN_LENGTH,
                 'passwordStrength' => true,
                 'passwordUserData' => $user->getPasswordUserData(),
-                'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'
+                'helpTextIdInline' => 'SYS_PASSWORD_DESCRIPTION'
             )
     );
     $form->addInput(

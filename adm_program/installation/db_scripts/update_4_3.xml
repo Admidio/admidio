@@ -101,5 +101,6 @@
     <step id="980" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'max_file_upload_size' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'documents_files_max_upload_size'</step>
     <step id="990" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'max_file_upload_size' AND pr1.prf_name = 'documents_files_max_upload_size'</step>
     <step id="1000">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'max_file_upload_size'</step>
+    <step id="1010">UPDATE %PREFIX%_components SET com_name = 'SYS_PROFILE' WHERE com_name_intern = 'PROFILE'</step>
     <step>stop</step>
 </update>

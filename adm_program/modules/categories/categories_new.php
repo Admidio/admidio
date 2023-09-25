@@ -78,7 +78,7 @@ switch ($getType) {
     case 'USF':
         $component = 'CORE';
         $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $headlineSuffix;
-        $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
+        $rolesRightEditName = 'SYS_EDIT_PROFILE_FIELDS_PREF';
         $rolesRightsColumn  = 'rol_edit_user';
         $rolesRightsName    = 'SYS_RIGHT_EDIT_USER';
         break;

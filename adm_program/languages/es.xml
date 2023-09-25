@@ -261,14 +261,14 @@
   <string name="ORG_CAPTCHA_TYPE_TEXT">Aquí puede definir el tipo de captcha. El captcha se muestra como una imagen y puede consistir en caracteres aleatorios, un pequeño problema matemático o 2 palabras. Con las otras configuraciones, la imagen se puede ajustar. (Predeterminado: caracteres aleatorios)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Especificación del ancho en píxeles de la imagen de captcha. La altura se calcula proporcionalmente al ancho. Esta configuración también determina el tamaño de los caracteres. (Predeterminado: 215)</string>
   <string name="PHO_CREATE_ALBUM">Crear álbum</string>
-  <string name="PRO_DELETE_PROFILE_PICTURE">Eliminar imagen de perfil</string>
-  <string name="PRO_EDIT_MY_PROFILE">Editar mi perfil</string>
-  <string name="PRO_EDIT_MY_PROFILE_PICTURE">Editar la foto de mi perfil</string>
-  <string name="PRO_MY_PROFILE">Mi Perfil</string>
-  <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">La contraseña no es lo suficientemente seguro.</string>
+  <string name="SYS_DELETE_PROFILE_PICTURE">Eliminar imagen de perfil</string>
+  <string name="SYS_EDIT_MY_PROFILE">Editar mi perfil</string>
+  <string name="SYS_EDIT_MY_PROFILE_PICTURE">Editar la foto de mi perfil</string>
+  <string name="SYS_MY_PROFILE">Mi Perfil</string>
+  <string name="SYS_PASSWORD_NOT_STRONG_ENOUGH">La contraseña no es lo suficientemente seguro.</string>
   <string name="PRO_PHOTO_DELETED">La foto de su perfil ha sido eliminado.</string>
-  <string name="PRO_PROFILE">Perfil</string>
-  <string name="PRO_PROFILE_FROM">Perfil de #VAR1# #VAR2#</string>
+  <string name="SYS_PROFILE">Perfil</string>
+  <string name="SYS_PROFILE_FROM">Perfil de #VAR1# #VAR2#</string>
   <string name="PRO_UPLOAD_PHOTO">Subir foto</string>
   <string name="SYS_A_TO_Z">A hasta Z</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>

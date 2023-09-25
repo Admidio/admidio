@@ -80,7 +80,7 @@ switch ($getType) {
         $component = 'CORE';
         $rolesRightsColumn = 'rol_edit_user';
         $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
-        $editableHeadline = $gL10n->get('PRO_EDIT_PROFILE_FIELDS');
+        $editableHeadline = $gL10n->get('SYS_EDIT_PROFILE_FIELDS_PREF');
         break;
 
     case 'AWA':

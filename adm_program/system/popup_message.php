@@ -84,7 +84,7 @@ switch ($getType) {
         break;
     case 'pro_pho':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getDatabaseId));
-        $text = 'PRO_WANT_DELETE_PHOTO';
+        $text = 'SYS_WANT_DELETE_PHOTO';
         $callbackFunction = 'callbackProfilePhoto';
         break;
     case 'pro_role':

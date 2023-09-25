@@ -178,7 +178,7 @@ if ($listsResult['totalCount'] === 0) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
         // => EXIT
         } else {
-            $gMessage->show($gL10n->get('PRO_NO_ROLES_VISIBLE'));
+            $gMessage->show($gL10n->get('SYS_NO_ROLES_VISIBLE'));
             // => EXIT
         }
     } else {
@@ -252,7 +252,7 @@ foreach ($listsResult['recordset'] as $row) {
         if ($row['num_members'] > 0 || $row['num_leader'] > 0) {
             $html .= '
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('mode' => '6', 'role_uuid' => $roleUuid)).'">'.
-                            '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>';
+                            '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>';
         }
 
         // link to assign or remove members if you are allowed to do it
@@ -494,7 +494,7 @@ foreach ($listsResult['recordset'] as $row) {
         $rolName = $role->getValue('rol_name');
 
         $linkAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)).'">'.
-                                    '<i class="fas fa-list-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP').'"></i></a>';
+                                    '<i class="fas fa-list-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP').'"></i></a>';
         if ($getRoleType === ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
             $linkAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$roleUuid, 'name' => $role->getValue('rol_name'), 'database_id' => $roleUuid)).'">'.

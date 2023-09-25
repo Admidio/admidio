@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    <div class="admidio-overview-plugin col-sm-6 col-lg-4 col-xl-3" id="admidio-plugin-sidebar-announcements">
+    <div class="admidio-overview-plugin col-sm-6 col-lg-4 col-xl-3" id="admidio-plugin-announcement-list">
         <div class="card admidio-card">
             <div class="card-body">
                 {load_admidio_plugin plugin="announcement-list" file="announcement-list.php"}
