@@ -4,7 +4,7 @@
  * RSS feed of events
  * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
