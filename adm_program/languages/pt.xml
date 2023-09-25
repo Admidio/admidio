@@ -151,7 +151,7 @@
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Entre com o nome, e-mail e credenciais de acesso do administrador. Inicie a sessão com o mesmo nome de usuário após a instalação.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Dados da organização</string>
   <string name="INS_DESCRIPTION_BOARD">Quadro administrativo de associação </string>
-  <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Encontros podem ter lugar aqui. Uma sala precisa ser reservada antes. Beamer tem uso livre.</string>
+    <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Os encontros podem ser realizados aqui.</string>
   <string name="INS_DESCRIPTION_MEMBER">Todos os membros da organização </string>
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Grupo de administradores do sistema </string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Insira as informações de acesso à base de dados</string>
@@ -286,8 +286,8 @@
   <string name="ORG_FIELD_EXIST">Já existe um campo com esse nome nessa categoria.</string>
   <string name="ORG_FIELD_HIDDEN">Campo visível apenas para usuários autorizados (próprio perfil &amp; autorização de cargo)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Geralmente um campo é visível para todos que possuem permissão para ver o perfil. Se esta opção estiver desmarcada, apenas usuários que podem editar o perfil podem ver o campo.</string>
-  <string name="ORG_FIELD_NOT_DISABLED">O campo pode ser editado pelos próprios usuários.</string>
-  <string name="ORG_FIELD_NOT_HIDDEN">Campo visível para todos os usuários.</string>
+  <string name="ORG_FIELD_NOT_DISABLED">O campo pode ser editado pelos próprios membros.</string>
+  <string name="ORG_FIELD_NOT_HIDDEN">Campo visível para todos os membros.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">O campo é obrigatório e deve ser preenchido.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">O campo não é mostrado durante o registro</string>
   <string name="ORG_FIELD_REGISTRATION">O campo é mostrado durante o registro</string>
@@ -534,7 +534,7 @@
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">A atribuir informação de sessão</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">As informações de sessão foram atribuídas com sucesso.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">As informações de sessão foram atribuídas com sucesso e o usuário foi informado via e-mail.</string>
-  <string name="SYS_ASSIGN_MEMBERS">Membros atribuídos</string>
+  <string name="SYS_ASSIGN_MEMBERS">Atribuir membros</string>
   <string name="SYS_ASSIGN_MEMBERSHIP">Atribuir filiação</string>
   <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Atribuindo filiação e informações de sessão ao usuário selecionado.</string>
   <string name="SYS_ASSIGN_REGISTRATION">Atribuir registo</string>
@@ -577,7 +577,7 @@
   <string name="SYS_CHANGE_HISTORY">Histórico de alterações</string>
   <string name="SYS_CHANGE_HISTORY_OF">Histórico de alterações de #VAR1#</string>
   <string name="SYS_CHANGE_PASSWORD">Alterar palavra passe</string>
-  <string name="SYS_CHANGED_AT">Última revisão</string>
+  <string name="SYS_CHANGED_AT">Última modificação</string>
   <string name="SYS_CHANGED_BY">Alterado por</string>
   <string name="SYS_CHARACTER_ENCODING">Codificação de caracteres</string>
   <string name="SYS_CHARACTER_ENCODING_DESC">Codificação de caracteres usada nos e-mails enviados pelo Admidio. Nem todos os clientes de e-mail suportam UTF-8. Portanto ISO-8859-1 pode ser definido alternativamente.</string>
@@ -594,7 +594,7 @@
   <string name="SYS_COMMENT">Comentar</string>
   <string name="SYS_COMMON">Geral</string>
   <string name="SYS_COMPLEMENT">Complemento</string>
-  <string name="SYS_CONDITION">Requisitos</string>
+  <string name="SYS_CONDITION">Condição</string>
   <string name="SYS_CONFIGURATION">Configuração</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Permissão para usar a configuração para todos os membros</string>
   <string name="SYS_CONFIGURATION_DELETE">Remover a configuração de lista selecionada?</string>
@@ -813,7 +813,7 @@
   <string name="SYS_HOURS_VAR">#VAR1# horas</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">e-mail HTML</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Criar e enviar e-mails baseado em HTML pode ser ativado para usuários registrados. Um editor JavaScript será exibido para uma ediçao confortável, ao invés do campo de texto padrão. Ela não está disponível para visitantes por razões de segurança.</string>
-  <string name="SYS_ICAL_DISABLED">O iCal foi desativado pelo administrador do sistema.</string>
+  <string name="SYS_ICAL_DISABLED">A função iCal está desativada.</string>
   <string name="SYS_ICON">Ícone</string>
   <string name="SYS_IDENTIFY_USERS">A identificação de usuários existentes é feita em termos de nome e sobrenome.</string>
   <string name="SYS_IMPORTANT">Importante</string>
@@ -1062,7 +1062,7 @@
   <string name="SYS_RIGHT_ASSIGN_ROLES">Organizar e atribuir funções</string>
   <string name="SYS_RIGHT_ASSIGN_ROLES_DESC">Os utilizadores desta função têm acesso para a gestão de funções e podem criar novas funções, gerir e atribuir funções para os outros utilizadores.</string>
   <string name="SYS_RIGHT_DATES">Gerenciar eventos</string>
-  <string name="SYS_RIGHT_EDIT_USER">Editar perfil de todos os usuários</string>
+  <string name="SYS_RIGHT_EDIT_USER">Editar perfil de todos os membros</string>
   <string name="SYS_RIGHT_EDIT_USER_DESC">Cargos com esta permissão podem alterar os dados de outros usuários (exceto palavras passe).\n Adicionalmente, também possuem acesso à Administração de usuários e podem adicionar/remover usuários.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Editar e apagar notas no livro de visitas</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Criar comentários nas notas do livro de visitas</string>
@@ -1191,7 +1191,7 @@
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
   <string name="SYS_SMTP_USER">Nome de utilizador de SMTP</string>
   <string name="SYS_SMTP_USER_DESC">O nome de usuário a ser usado na autenticação SMTP.</string>
-  <string name="SYS_SOCIAL_NETWORKS">Redes sociais</string>
+  <string name="SYS_SOCIAL_NETWORKS">Redes Sociais</string>
   <string name="SYS_START" description="Start of a date">Início</string>
   <string name="SYS_START_BACKUP">Iniciar cópia de segurança</string>
   <string name="SYS_STATUS_CODE_INVALID">Código de estado inválido!</string>
@@ -1255,7 +1255,7 @@
   <string name="SYS_USERS_PER_PAGE_DESC">Número de usuários listados em cada página. (padrão: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Usando a versão #VAR1# do Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
-  <string name="SYS_VALID_FROM" description="Date valid from">Validade com início em</string>
+  <string name="SYS_VALID_FROM" description="Date valid from">Válido de</string>
   <string name="SYS_VALID_TO" description="Date valid to">Válido até</string>
   <string name="SYS_VARIOUS_ROLES">Várias funções</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Várias relações</string>
@@ -1287,4 +1287,25 @@
   <string name="SYS_YOUR_LISTS">Minhas listas</string>
   <string name="SYS_YOUR_NAME">Teu nome</string>
   <string name="SYS_Z_TO_A">Z à A</string>
+    <string name="SYS_ACTIVE_GROUPS_ROLES">Grupos e funções ativos</string>
+    <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# recipiente individual</string>
+    <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# recipientes individuais</string>
+    <string name="SYS_CREATED_BY">Criado por</string>
+    <string name="SYS_CURRENT_DATABASE_VERSION">Versão da base de dados atual</string>
+    <string name="SYS_DELETE_FILE">Eliminar ficheiro</string>
+    <string name="SYS_DELETE_FOLDER">Eliminar pasta</string>
+    <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Ativar documentos e ficheiros</string>
+    <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Ativar documentos e ficheiros</string>
+    <string name="SYS_GROUPS_ROLES">Grupos e funções</string>
+    <string name="SYS_INACTIVE_GROUPS_ROLES">Grupos e funções inativos</string>
+    <string name="SYS_INSTALLATION_SUCCESSFUL">Instalação bem-sucedida</string>
+    <string name="SYS_LINK_COLLECTION_FROM">Links de #VAR1#</string>
+    <string name="SYS_LOCATION" description="Location of a date">Local</string>
+    <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# de máx. de participantes: #VAR2#</string>
+    <string name="SYS_QUANTITY">Quantidade</string>
+    <string name="SYS_ROLE_TYPES">Tipos de função</string>
+    <string name="SYS_SHOW_MEMBER_LIST">Mostrar lista de membros</string>
+    <string name="SYS_SHOW_PERMISSIONS">Mostrar permissões</string>
+    <string name="SYS_UPDATE_SUCCESSFUL">Atualização bem-sucedida</string>
+    <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# em #VAR2# às #VAR3#</string>
 </resources>
