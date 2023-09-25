@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * members - true : (Default) Show only active members of the current organization
- *           false  : Show active and inactive members of all organizations in database
+ * members - true : (Default) Show only active contacts of the current organization
+ *           false  : Show active and inactive contacts of all organizations in database
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -22,7 +22,7 @@ unset($_SESSION['import_request']);
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
 
 // if only active members should be shown then set parameter
-if (!$gSettingsManager->getBool('members_show_all_users')) {
+if (!$gSettingsManager->getBool('contacts_show_all')) {
     $getMembers = true;
 }
 
@@ -32,20 +32,20 @@ $headline = $gL10n->get('SYS_CONTACTS');
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
-$membersListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('members_list_configuration'));
-$_SESSION['members_list_config'] = $membersListConfig;
+$contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('contacts_list_configuration'));
+$_SESSION['contacts_list_configuration'] = $contactsListConfig;
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 $flagShowMembers = !$getMembers;
 
 // create html page object
-$page = new HtmlPage('admidio-members', $headline);
+$page = new HtmlPage('admidio-contacts', $headline);
 
 if ($gCurrentUser->editUsers()) {
     $page->addJavascript('
-        $("#menu_item_members_create_user").attr("href", "javascript:void(0);");
-        $("#menu_item_members_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php");
-        $("#menu_item_members_create_user").attr("class", "nav-link btn btn-secondary openPopup");
+        $("#menu_item_contacts_create_contact").attr("href", "javascript:void(0);");
+        $("#menu_item_contacts_create_contact").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php");
+        $("#menu_item_contacts_create_contact").attr("class", "nav-link btn btn-secondary openPopup");
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function() {
@@ -53,7 +53,7 @@ if ($gCurrentUser->editUsers()) {
         });', true);
 
     $page->addPageFunctionsMenuItem(
-        'menu_item_members_create_user',
+        'menu_item_contacts_create_contact',
         $gL10n->get('SYS_CREATE_CONTACT'),
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_new.php',
         'fa-plus-circle'
@@ -62,7 +62,7 @@ if ($gCurrentUser->editUsers()) {
     if ($gSettingsManager->getBool('profile_log_edit_fields')) {
         // show link to view profile field change history
         $page->addPageFunctionsMenuItem(
-            'menu_item_members_change_history',
+            'menu_item_contacts_change_history',
             $gL10n->get('SYS_CHANGE_HISTORY'),
             ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php',
             'fa-history'
@@ -70,7 +70,7 @@ if ($gCurrentUser->editUsers()) {
     }
 
     // show checkbox to select all users or only active members
-    if ($gSettingsManager->getBool('members_show_all_users')) {
+    if ($gSettingsManager->getBool('contacts_show_all')) {
         // create filter menu with elements for category
         $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
@@ -81,7 +81,7 @@ if ($gCurrentUser->editUsers()) {
 
     // show link to import users
     $page->addPageFunctionsMenuItem(
-        'menu_item_members_import_users',
+        'menu_item_contacts_import_users',
         $gL10n->get('SYS_IMPORT_CONTACTS'),
         ADMIDIO_URL.FOLDER_MODULES.'/contacts/import.php',
         'fa-upload'
@@ -91,7 +91,7 @@ if ($gCurrentUser->editUsers()) {
 if ($gCurrentUser->isAdministrator()) {
     // show link to maintain profile fields
     $page->addPageFunctionsMenuItem(
-        'menu_item_members_profile_fields',
+        'menu_item_contacts_profile_fields',
         $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
         ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
         'fa-th-list'
@@ -101,10 +101,10 @@ if ($gCurrentUser->isAdministrator()) {
 $orgName = $gCurrentOrganization->getValue('org_longname');
 
 // Create table object
-$membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
+$contactsTable = new HtmlTable('tbl_contacts', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values
-$columnHeading = $membersListConfig->getColumnNames();
+$columnHeading = $contactsListConfig->getColumnNames();
 array_unshift(
     $columnHeading,
     $gL10n->get('SYS_ABR_NO'),
@@ -112,19 +112,19 @@ array_unshift(
 );
 $columnHeading[] = '&nbsp;';
 
-$columnAlignment = $membersListConfig->getColumnAlignments();
+$columnAlignment = $contactsListConfig->getColumnAlignments();
 array_unshift($columnAlignment, 'left', 'left');
 $columnAlignment[] = 'right';
 
-$membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_data.php', array('members' => $getMembers)));
-$membersTable->setColumnAlignByArray($columnAlignment);
-$membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
-$membersTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
-$membersTable->addRowHeadingByArray($columnHeading);
-$membersTable->setDatatablesRowsPerPage($gSettingsManager->getInt('members_users_per_page'));
-$membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
+$contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_data.php', array('members' => $getMembers)));
+$contactsTable->setColumnAlignByArray($columnAlignment);
+$contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
+$contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
+$contactsTable->addRowHeadingByArray($columnHeading);
+$contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
+$contactsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
-$page->addHtml($membersTable->show());
+$page->addHtml($contactsTable->show());
 
 // show html of complete page
 $page->show();

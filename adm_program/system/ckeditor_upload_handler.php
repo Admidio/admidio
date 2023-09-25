@@ -81,7 +81,7 @@ if ($message === '') {
 
         // check if the file contains a valid image
         if (!getimagesize($fileNamePath)) {
-            $message = $gL10n->get('PHO_PHOTO_FORMAT_INVALID');
+            $message = $gL10n->get('SYS_PHOTO_FORMAT_INVALID');
             FileSystemUtils::deleteFileIfExists($fileNamePath);
         }
 

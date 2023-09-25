@@ -34,7 +34,7 @@ if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
 
 // check if current user has right to upload photos
 if (!$gCurrentUser->editPhotoRight()) {
-    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
@@ -134,7 +134,7 @@ $photoAlbum->readDataByUuid($getPhotoUuid);
 
 // check if the user is allowed to edit this photo album
 if (!$photoAlbum->isEditable()) {
-    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 

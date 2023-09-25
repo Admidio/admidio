@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Minden esemény</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Események</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">A látogatók számára nincsenek elérhető események. Jelentkezzen be az események megtekintéséhez.</string>
+</resources>

@@ -8,9 +8,9 @@
  */
 
 /**
- * This class gets information about participants and leaders of dates.
+ * This class gets information about participants and leaders of events.
  *
- * This function is developed, to  read the participants and leaders of dates from database.
+ * This function is developed, to  read the participants and leaders of events from database.
  * Participants and leaders can be counted or be written in an array with surname, firstname and leader-status.
  * Also, the limit of participation can to be calculated.
  * This class is flexible in usage. It is possible to pass the parameter of the rolId when creating an instance

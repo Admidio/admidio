@@ -22,7 +22,7 @@
  *                                               'upload_url' => $uploadUrl,
  *                                               'image_versions' => array(),
  *                                               'accept_file_types' => '/\.(jpe?g|png)$/i'), true,
- *                                               'array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
+ *                                               'array('accept_file_types' => $gL10n->get('SYS_PHOTO_FORMAT_INVALID')));
  * ```
  */
 
@@ -73,7 +73,7 @@ class UploadHandlerPhoto extends UploadHandler
                 // check if the file contains a valid image and read image properties
                 $imageProperties = getimagesize($fileLocation);
                 if ($imageProperties === false) {
-                    throw new AdmException('PHO_PHOTO_FORMAT_INVALID');
+                    throw new AdmException('SYS_PHOTO_FORMAT_INVALID');
                 }
 
                 // check mime type and set file extension
@@ -85,13 +85,13 @@ class UploadHandlerPhoto extends UploadHandler
                         $fileExtension = 'png';
                         break;
                     default:
-                        throw new AdmException('PHO_PHOTO_FORMAT_INVALID');
+                        throw new AdmException('SYS_PHOTO_FORMAT_INVALID');
                 }
 
                 $imageDimensions = $imageProperties[0] * $imageProperties[1];
                 $processableImageSize = SystemInfoUtils::getProcessableImageSize();
                 if ($imageDimensions > $processableImageSize) {
-                    throw new AdmException($gL10n->get('PHO_RESOLUTION_MORE_THAN') . ' ' . round($processableImageSize / 1000000, 2) . ' ' . $gL10n->get('SYS_MEGAPIXEL'));
+                    throw new AdmException($gL10n->get('SYS_RESOLUTION_TOO_LARGE', array(round($processableImageSize / 1000000, 2))));
                 }
 
                 // create image object and scale image to defined size of preferences
@@ -140,7 +140,7 @@ class UploadHandlerPhoto extends UploadHandler
                     $photoAlbum->setValue('pho_quantity', (int) $photoAlbum->getValue('pho_quantity') + 1);
                     $photoAlbum->save();
                 } else {
-                    throw new AdmException('PHO_PHOTO_PROCESSING_ERROR');
+                    throw new AdmException('SYS_PHOTO_PROCESSING_ERROR');
                 }
             } catch (AdmException $e) {
                 try {

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Alle aktiviteter</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Aktivitet</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Der er ingen arrangementer tilgængelige for besøgende. Log ind for at se begivenhederne.</string>
+</resources>

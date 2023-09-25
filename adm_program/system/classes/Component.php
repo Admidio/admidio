@@ -17,14 +17,11 @@
  * **Code example**
  * ```
  * // check if database and filesystem have same version
- * try
- * {
+ * try {
  *     $systemComponent = new Component($gDb);
  *     $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
  *     $systemComponent->checkDatabaseVersion(true, 'administrator@example.com');
- * }
- * catch(AdmException $e)
- * {
+ * } catch(AdmException $e) {
  *     $e->showHtml();
  * }
  * ```
@@ -105,16 +102,16 @@ class Component extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to edit and administrate the component. Therefore
+     * This method checks if the current user is allowed to edit and administrate the component. Therefore,
      * special checks for each component were done.
      * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. GROUPS-ROLES
-     * @throws \UnexpectedValueException
-     * @throws \InvalidArgumentException
      * @return bool Return true if the current user is allowed to view the component
+     *@throws InvalidArgumentException
+     * @throws UnexpectedValueException
      */
-    public static function isAdministrable($componentName)
+    public static function isAdministrable(string $componentName): bool
     {
-        global $gValidLogin, $gCurrentUser, $gSettingsManager;
+        global $gCurrentUser;
 
         if (self::isVisible($componentName)) {
             switch ($componentName) {
@@ -130,7 +127,7 @@ class Component extends TableAccess
                     }
                     break;
 
-                case 'DATES':
+                case 'EVENTS':
                     if ($gCurrentUser->editDates()) {
                         return true;
                     }
@@ -202,14 +199,14 @@ class Component extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to view the component. Therefore
+     * This method checks if the current user is allowed to view the component. Therefore,
      * special checks for each component were done.
      * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. GROUPS-ROLES
-     * @throws \UnexpectedValueException
-     * @throws \InvalidArgumentException
      * @return bool Return true if the current user is allowed to view the component
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      */
-    public static function isVisible($componentName)
+    public static function isVisible(string $componentName): bool
     {
         global $gValidLogin, $gCurrentUser, $gSettingsManager;
 
@@ -221,8 +218,8 @@ class Component extends TableAccess
                 break;
 
             case 'ANNOUNCEMENTS':
-                if ((int) $gSettingsManager->get('enable_announcements_module') === 1
-                || ((int) $gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin)) {
+                if ((int) $gSettingsManager->get('announcements_module_enabled') === 1
+                || ((int) $gSettingsManager->get('announcements_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
@@ -233,15 +230,15 @@ class Component extends TableAccess
                 }
                 break;
 
-            case 'DATES':
-                if ((int) $gSettingsManager->get('enable_dates_module') === 1
-                || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin)) {
+            case 'EVENTS':
+                if ((int) $gSettingsManager->get('events_module_enabled') === 1
+                || ((int) $gSettingsManager->get('events_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
 
             case 'DOCUMENTS-FILES':
-                if ($gSettingsManager->getBool('documents_files_enable_module')) {
+                if ($gSettingsManager->getBool('documents_files_module_enabled')) {
                     return true;
                 }
                 break;
@@ -268,7 +265,6 @@ class Component extends TableAccess
 
             case 'CONTACTS':
                 return true;
-                break;
 
             case 'MESSAGES':
                 if ($gSettingsManager->getBool('enable_mail_module')

@@ -184,7 +184,7 @@ class Organization extends TableAccess
             $categoryAnnouncement->save();
 
             $categoryEvents = new TableCategory($this->db);
-            $categoryEvents->setValue('cat_type', 'DAT');
+            $categoryEvents->setValue('cat_type', 'EVT');
             $categoryEvents->setValue('cat_name_intern', 'DAT_ALL_ORGANIZATIONS');
             $categoryEvents->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
             $categoryEvents->save();
@@ -356,8 +356,8 @@ class Organization extends TableAccess
         $organizationSettings->getAll();
         $organizationSettings->set('system_notifications_role', $roleAdministrator->getValue('rol_uuid'));
         $organizationSettings->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
-        $organizationSettings->set('dates_default_list_configuration', $participantList->getValue('lst_id'));
-        $organizationSettings->set('members_list_configuration', $userManagementList->getValue('lst_id'));
+        $organizationSettings->set('events_list_configuration', $participantList->getValue('lst_id'));
+        $organizationSettings->set('contacts_list_configuration', $userManagementList->getValue('lst_id'));
         $organizationSettings->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
         if ($this->countAllRecords() > 1) {
             $organizationSettings->set('system_organization_select', true);

@@ -32,8 +32,8 @@
  *
  * Parameters:
  *
- * members - true : (Default) Show only active members of the current organization
- *           false  : Show active and inactive members of all organizations in database
+ * members - true : (Default) Show only active contacts of the current organization
+ *           false  : Show active and inactive contacts of all organizations in database
  * draw    - Number to validate the right inquiry from DataTables.
  * start   - Paging first record indicator. This is the start point in the current data set
  *           (0 index based - i.e. 0 is the first record).
@@ -59,18 +59,18 @@ $jsonArray = array('draw' => $getDraw);
 header('Content-Type: application/json');
 
 // if only active members should be shown then set parameter
-if (!$gSettingsManager->getBool('members_show_all_users')) {
+if (!$gSettingsManager->getBool('contacts_show_all')) {
     $getMembers = true;
 }
 
-if (isset($_SESSION['members_list_config'])) {
-    $membersListConfig = $_SESSION['members_list_config'];
+if (isset($_SESSION['contacts_list_configuration'])) {
+    $contactsListConfig = $_SESSION['contacts_list_configuration'];
 }
 
 // create order statement
 $useOrderBy = false;
 $orderCondition = '';
-$orderColumns = array_merge(array('no', 'member_this_orga'), $membersListConfig->getColumnNamesSql());
+$orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
 
 if (array_key_exists('order', $_GET)) {
     foreach ($_GET['order'] as $order) {
@@ -95,7 +95,7 @@ if (array_key_exists('order', $_GET)) {
 // create search conditions
 $searchCondition = '';
 $queryParamsSearch = array();
-$searchColumns = $membersListConfig->getSearchConditions();
+$searchColumns = $contactsListConfig->getSearchConditions();
 
 if ($getSearch !== '' && count($searchColumns) > 0) {
     $searchString = explode(' ', $getSearch);
@@ -124,17 +124,17 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                          OR cat_org_id IS NULL ))';
 
 if ($getMembers) {
-    $memberOfThisOrganizationCondition = ' AND '.$sqlSubSelect.' > 0 ';
-    $memberOfThisOrganizationSelect = ' 1 ';
+    $contactsOfThisOrganizationCondition = ' AND '.$sqlSubSelect.' > 0 ';
+    $contactsOfThisOrganizationSelect = ' 1 ';
 } else {
-    $memberOfThisOrganizationCondition = '';
-    $memberOfThisOrganizationSelect = $sqlSubSelect;
+    $contactsOfThisOrganizationCondition = '';
+    $contactsOfThisOrganizationSelect = $sqlSubSelect;
 }
 
 // create a subselect to check if the user is also an active member of another organization
-$memberOfOtherOrganizationSelect = ' 0 ';
+$contactsOfOtherOrganizationSelect = ' 0 ';
 if ($gCurrentOrganization->countAllRecords() > 1) {
-    $memberOfOtherOrganizationSelect = '
+    $contactsOfOtherOrganizationSelect = '
         (SELECT COUNT(*) AS count_other
            FROM '.TBL_MEMBERS.'
      INNER JOIN '.TBL_ROLES.'
@@ -151,13 +151,13 @@ if ($gCurrentOrganization->countAllRecords() > 1) {
 
 // create sql to show all members (not accepted users should not be shown)
 if ($getMembers && $gCurrentUser->editUsers()) {
-    $mainSql = $membersListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
+    $mainSql = $contactsListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
 } elseif ($gCurrentUser->editUsers()) {
-    $mainSql = $membersListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
+    $mainSql = $contactsListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
 } else {
-    $mainSql = $membersListConfig->getSql(array('showRolesMembers' => $gCurrentUser->getRolesViewProfiles(), 'useConditions' => false, 'useOrderBy' => $useOrderBy));
+    $mainSql = $contactsListConfig->getSql(array('showRolesMembers' => $gCurrentUser->getRolesViewProfiles(), 'useConditions' => false, 'useOrderBy' => $useOrderBy));
 }
-$mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_orga, '.$memberOfOtherOrganizationSelect.' AS member_other_orga, usr_login_name as loginname,
+$mainSql = 'SELECT DISTINCT '.$contactsOfThisOrganizationSelect.' AS member_this_orga, '.$contactsOfOtherOrganizationSelect.' AS member_other_orga, usr_login_name as loginname,
                 (SELECT email.usd_value FROM '.TBL_USER_DATA.' email
                   WHERE  email.usd_usr_id = usr_id
                     AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
@@ -195,19 +195,19 @@ $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
 $jsonArray['data'] = array();
 
-while ($row = $mglStatement->fetch()) {
+while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
     ++$rowNumber;
     $ColumnNumberSql = 7;
     $columnNumberJson = 2;
 
-    $memberOfThisOrganization  = (bool) $row['member_this_orga'];
-    $memberOfOtherOrganization = (bool) $row['member_other_orga'];
+    $contactsOfThisOrganization  = (bool) $row['member_this_orga'];
+    $contactsOfOtherOrganization = (bool) $row['member_other_orga'];
 
     // Create row and add first column
     $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_id'], '0' => $rowNumber);
 
     // Add icon for member or no member of the organization
-    if ($memberOfThisOrganization) {
+    if ($contactsOfThisOrganization) {
         $icon = 'fa-user';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName));
     } else {
@@ -220,9 +220,9 @@ while ($row = $mglStatement->fetch()) {
 
     // add all columns of the list configuration to the json array
     // start columnNumber with 4 because the first 2 columns are not of the list configuration
-    for ($columnNumber = 1; $columnNumber <= $membersListConfig->countColumns(); $columnNumber++) {
+    for ($columnNumber = 1; $columnNumber <= $contactsListConfig->countColumns(); $columnNumber++) {
         if (!empty($row[$ColumnNumberSql])) {
-            $columnValues[(string) $columnNumberJson] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_uuid']);
+            $columnValues[(string) $columnNumberJson] = $contactsListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_uuid']);
         } else {
             $columnValues[(string) $columnNumberJson] = '';
         }
@@ -235,7 +235,7 @@ while ($row = $mglStatement->fetch()) {
     $userAdministration = '';
 
     // Administrators can change or send password if login is configured and user is member of current organization
-    if ($memberOfThisOrganization && $gCurrentUser->isAdministrator()
+    if ($contactsOfThisOrganization && $gCurrentUser->isAdministrator()
     && !empty($row['loginname']) && (int) $row['usr_id'] !== $gCurrentUserId) {
         if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
             // if email is set and systemmails are activated then administrators can send a new password to user
@@ -264,14 +264,14 @@ while ($row = $mglStatement->fetch()) {
         '<i class="fas fa-clone" data-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
 
     // add link to edit user, but only edit users who are members of the current organization
-    if ($memberOfThisOrganization || !$memberOfOtherOrganization) {
+    if ($contactsOfThisOrganization || !$contactsOfOtherOrganization) {
         $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])).'">'.
             '<i class="fas fa-edit" data-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
     }
 
     // add link to delete user btw. remove user from the current organization
-    if (((!$memberOfOtherOrganization && $gCurrentUser->isAdministrator()) // not a member of another organization, then administrators may delete
-        || $memberOfThisOrganization)                  // active members may be removed by authorized users
+    if (((!$contactsOfOtherOrganization && $gCurrentUser->isAdministrator()) // not a member of another organization, then administrators may delete
+        || $contactsOfThisOrganization)                  // active members may be removed by authorized users
         && (int) $row['usr_id'] !== $gCurrentUserId) { // no one is allowed to remove their own profile
         $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.

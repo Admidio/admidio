@@ -487,7 +487,7 @@ class HtmlForm extends \Smarty
      *                          If this is set then the user can only choose the specified files with the browser file dialog.
      *                          You should check the uploaded file against the MIME type because the file could be manipulated.
      *                        - **maxUploadSize** : The size in byte that could be maximum uploaded.
-     *                          The default will be $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024.
+     *                          The default will be $gSettingsManager->getInt('documents_files_max_upload_size') * 1024 * 1024.
      *                        - **enableMultiUploads** : If set to true a button will be added where the user can
      *                          add new upload fields to upload more than one file.
      *                        - **multiUploadLabel** : The label for the button who will add new upload fields to the form.
@@ -516,7 +516,7 @@ class HtmlForm extends \Smarty
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
             'property'           => self::FIELD_DEFAULT,
-            'maxUploadSize'      => $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024, // MiB
+            'maxUploadSize'      => ini_get('upload_max_filesize') * 1024 * 1024, // MiB
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
@@ -1381,11 +1381,11 @@ class HtmlForm extends \Smarty
 
     /**
      * Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories.
-     * You must define the category type (roles, dates, links ...). All categories of this type will be shown.
+     * You must define the category type (roles, events, links ...). All categories of this type will be shown.
      * @param string $id             ID of the selectbox. This will also be the name of the selectbox.
      * @param string $label          The label of the selectbox.
      * @param Database $database       A Admidio database object that contains a valid connection to a database
-     * @param string $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown.
+     * @param string $categoryType   Type of category ('EVT', 'LNK', 'ROL', 'USF') that should be shown.
      *                                 The type 'ROL' will ot list event role categories. Therefore, you need to set
      *                                 the type 'ROL_EVENT'. It's not possible to show role categories together with
      *                                 event categories.
@@ -1462,7 +1462,7 @@ class HtmlForm extends \Smarty
             $optionsAll['showContextDependentFirstEntry'] = false;
 
             switch ($categoryType) {
-                case 'DAT':
+                case 'EVT':
                     $sqlTables = ' INNER JOIN ' . TBL_DATES . ' ON cat_id = dat_cat_id ';
                     break;
                 case 'LNK':

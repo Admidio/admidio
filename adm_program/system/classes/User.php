@@ -146,7 +146,7 @@ class User extends TableAccess
         $defaultRolesStatement = $this->db->queryPrepared($sql, array($this->organizationId));
 
         if ($defaultRolesStatement->rowCount() === 0) {
-            $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
+            $gMessage->show($gL10n->get('SYS_NO_DEFAULT_ROLE_FOR_USER'));
             // => EXIT
         }
 
@@ -195,7 +195,7 @@ class User extends TableAccess
 
         $this->db->startTransaction();
 
-        // search for membership with same role and user and overlapping dates
+        // search for membership with same role and user and overlapping events
         if ($mode === 'set') {
             $member = new TableMembers($this->db);
 
@@ -314,11 +314,11 @@ class User extends TableAccess
      * for later checks within this class.
      * @return bool Return true if relationships could be checked.
      */
-    private function checkRelationshipsRights()
+    private function checkRelationshipsRights(): bool
     {
         global $gSettingsManager;
 
-        if ((int) $this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('members_enable_user_relations')) {
+        if ((int) $this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('contacts_user_relations_enabled')) {
             return false;
         }
 
@@ -412,7 +412,7 @@ class User extends TableAccess
                         $this->rolesMembershipLeader[$roleId] = $rolLeaderRights;
 
                         // if role leader could assign new members then remember this setting
-                        // roles for confirmation of dates should be ignored
+                        // roles for confirmation of events should be ignored
                         if ($row['cat_name_intern'] !== 'EVENTS'
                             && ($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)) {
                             $this->assignRoles = true;
@@ -570,7 +570,7 @@ class User extends TableAccess
             $gCurrentSession->regenerateId();
             Session::setCookie(COOKIE_PREFIX . '_SESSION_ID', $gCurrentSession->getValue('ses_session_id'));
 
-            // count logins and update login dates
+            // count logins and update login events
             $this->saveChangesWithoutRights();
             $this->updateLoginData();
         }
@@ -843,7 +843,7 @@ class User extends TableAccess
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-        || ($categoryType === 'DAT' && $this->editDates())
+        || ($categoryType === 'EVT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers())
         || ($categoryType === 'ROL' && $this->manageRoles())) {
@@ -898,7 +898,7 @@ class User extends TableAccess
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-        || ($categoryType === 'DAT' && $this->editDates())
+        || ($categoryType === 'EVT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers())
         || ($categoryType === 'ROL' && $this->assignRoles())) {

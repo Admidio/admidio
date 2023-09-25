@@ -251,7 +251,7 @@ if (!$eventRole) {
 }
 $form->closeGroupBox();
 
-// event roles should not set rights, dates meetings and dependencies
+// event roles should not set rights, events meetings and dependencies
 if (!$eventRole) {
     $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
     $form->addCheckbox(
@@ -292,7 +292,7 @@ if (!$eventRole) {
         (bool) $role->getValue('rol_profile'),
         array('icon' => 'fa-user')
     );
-    if ((int) $gSettingsManager->get('enable_announcements_module') > 0) {
+    if ((int) $gSettingsManager->get('announcements_module_enabled') > 0) {
         $form->addCheckbox(
             'rol_announcements',
             $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
@@ -300,7 +300,7 @@ if (!$eventRole) {
             array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-newspaper')
         );
     }
-    if ((int) $gSettingsManager->get('enable_dates_module') > 0) {
+    if ((int) $gSettingsManager->get('events_module_enabled') > 0) {
         $form->addCheckbox(
             'rol_dates',
             $gL10n->get('SYS_RIGHT_DATES'),
@@ -316,7 +316,7 @@ if (!$eventRole) {
             array('icon' => 'fa-image')
         );
     }
-    if ($gSettingsManager->getBool('documents_files_enable_module')) {
+    if ($gSettingsManager->getBool('documents_files_module_enabled')) {
         $form->addCheckbox(
             'rol_documents_files',
             $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
@@ -350,7 +350,7 @@ if (!$eventRole) {
         );
     }
     $form->closeGroupBox();
-    $form->openGroupBox('gb_dates_meetings', $gL10n->get('DAT_DATES').' / '.$gL10n->get('SYS_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
+    $form->openGroupBox('gb_dates_meetings', $gL10n->get('SYS_APPOINTMENTS').' / '.$gL10n->get('SYS_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
     $form->addInput('rol_start_date', $gL10n->get('SYS_VALID_FROM'), $role->getValue('rol_start_date'), array('type' => 'date'));
     $form->addInput('rol_end_date', $gL10n->get('SYS_VALID_TO'), $role->getValue('rol_end_date'), array('type' => 'date'));
     $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));

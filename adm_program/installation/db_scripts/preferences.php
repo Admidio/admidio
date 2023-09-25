@@ -83,19 +83,68 @@ $defaultOrgPreferences = array(
     'captcha_signature'           => 'Powered by Admidio.org',
 
     // Announcements
-    'enable_announcements_module' => '1',
-    'announcements_per_page'      => '10',
+    'announcements_module_enabled' => '1',
+    'announcements_per_page'       => '10',
 
-    // User management
-    'members_enable_user_relations' => '1',
-    'members_days_field_history'    => '365',
-    'members_list_configuration'    => '',
-    'members_show_all_users'        => '1',
-    'members_users_per_page'        => '25',
+    // Category-Report
+    'category_report_enable_module'         => '1',
+    'category_report_default_configuration' => '',
+
+    // Contacts
+    'contacts_field_history_days'     => '365',
+    'contacts_list_configuration'     => '',
+    'contacts_per_page'               => '25',
+    'contacts_show_all'               => '1',
+    'contacts_user_relations_enabled' => '1',
 
     // Documents and files
-    'documents_files_enable_module' => '1',
-    'max_file_upload_size'          => '3',
+    'documents_files_module_enabled'  => '1',
+    'documents_files_max_upload_size' => '3',
+
+    // Events
+    'events_list_configuration'   => '',
+    'events_ical_export_enabled'  => '1',
+    'events_ical_days_past'       => '30',
+    'events_ical_days_future'     => '365',
+    'events_may_take_part'        => '0',
+    'events_module_enabled'       => '1',
+    'events_per_page'             => '10',
+    'events_rooms_enabled'        => '0',
+    'events_save_cancellations'   => '1',
+    'events_show_map_link'        => '1',
+    'events_view'                 => 'detail',
+
+    // Groups and roles
+    'groups_roles_default_configuration' => '',
+    'groups_roles_enable_module'         => '1',
+    'groups_roles_export'                => '1',
+    'groups_roles_edit_lists'            => '1',
+    'groups_roles_members_per_page'      => '25',
+    'groups_roles_show_former_members'   => '2',
+
+    // Guestbook
+    'enable_guestbook_module'        => '0',
+    'guestbook_entries_per_page'     => '10',
+    'enable_guestbook_captcha'       => '1',
+    'flooding_protection_time'       => '60',
+    'enable_gbook_comments4all'      => '0',
+    'enable_intial_comments_loading' => '0',
+    'enable_guestbook_moderation'    => '0',
+
+    // Messages
+    'enable_mail_module'          => '1',
+    'enable_pm_module'            => '1',
+    'enable_mail_captcha'         => '1',
+    'mail_delivery_confirmation'  => '0',
+    'mail_html_registered_users'  => '1',
+    'mail_max_receiver'           => '10',
+    'mail_save_attachments'       => '1',
+    'mail_send_to_all_addresses'  => '1',
+    'mail_sendmail_address'       => '',
+    'mail_sendmail_name'          => '',
+    'mail_show_former'            => '1',
+    'mail_template'               => 'default.html',
+    'max_email_attachment_size'   => '1',
 
     // Photos
     'photo_albums_per_page'  => '24',
@@ -113,38 +162,6 @@ $defaultOrgPreferences = array(
     'photo_thumbs_page'      => '16',
     'photo_thumbs_scale'     => '200',
 
-    // Guestbook
-    'enable_guestbook_module'        => '0',
-    'guestbook_entries_per_page'     => '10',
-    'enable_guestbook_captcha'       => '1',
-    'flooding_protection_time'       => '60',
-    'enable_gbook_comments4all'      => '0',
-    'enable_intial_comments_loading' => '0',
-    'enable_guestbook_moderation'    => '0',
-
-    // Groups and roles
-    'groups_roles_default_configuration' => '',
-    'groups_roles_enable_module'         => '1',
-    'groups_roles_export'                => '1',
-    'groups_roles_edit_lists'            => '1',
-    'groups_roles_members_per_page'      => '25',
-    'groups_roles_show_former_members'   => '2',
-
-    // Messages
-    'enable_mail_module'          => '1',
-    'enable_pm_module'            => '1',
-    'enable_mail_captcha'         => '1',
-    'mail_delivery_confirmation'  => '0',
-    'mail_html_registered_users'  => '1',
-    'mail_max_receiver'           => '10',
-    'mail_save_attachments'       => '1',
-    'mail_send_to_all_addresses'  => '1',
-    'mail_sendmail_address'       => '',
-    'mail_sendmail_name'          => '',
-    'mail_show_former'            => '1',
-    'mail_template'               => 'default.html',
-    'max_email_attachment_size'   => '1',
-
     // Profile
     'profile_log_edit_fields'   => '1',
     'profile_show_map_link'     => '0',
@@ -152,23 +169,6 @@ $defaultOrgPreferences = array(
     'profile_show_former_roles' => '1',
     'profile_show_extern_roles' => '1',
     'profile_photo_storage'     => '0',
-
-    // Events
-    'enable_dates_module'               => '1',
-    'dates_per_page'                    => '10',
-    'dates_view'                        => 'detail',
-    'dates_show_map_link'               => '1',
-    'dates_show_rooms'                  => '0',
-    'enable_dates_ical'                 => '1',
-    'dates_ical_days_past'              => '30',
-    'dates_ical_days_future'            => '365',
-    'dates_default_list_configuration'  => '',
-    'dates_save_all_confirmations'      => '1',
-    'dates_may_take_part'               => '0',
-
-    // Category-Report
-    'category_report_enable_module'         => '1',
-    'category_report_default_configuration' => '',
 
     // Weblinks
     'enable_weblinks_module'    => '1',

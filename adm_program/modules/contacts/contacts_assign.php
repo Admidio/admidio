@@ -95,9 +95,9 @@ $queryParams = array(
     $getLastname
 );
 $usrStatement = $gDb->queryPrepared($sql, $queryParams);
-$memberCount = $usrStatement->rowCount();
+$contactsCount = $usrStatement->rowCount();
 
-if ($memberCount === 0) {
+if ($contactsCount === 0) {
     // no user with that name found so go back and allow to create a new user
     echo 'success';
     exit();

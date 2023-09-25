@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">All entries</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Announcements</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">There are no announcements available for visitors. Log in to see the announcements.</string>
+</resources>

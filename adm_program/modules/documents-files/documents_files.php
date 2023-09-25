@@ -20,7 +20,7 @@ unset($_SESSION['documents_files_request']);
 $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
 
 // Check if module is activated
-if (!$gSettingsManager->getBool('documents_files_enable_module')) {
+if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -59,7 +59,7 @@ $page = new HtmlPage('admidio-documents-files', $headline);
 
 if ($currentFolder->hasUploadRight()) {
     // upload only possible if upload filesize > 0
-    if ($gSettingsManager->getInt('max_file_upload_size') > 0) {
+    if ($gSettingsManager->getInt('documents_files_max_upload_size') > 0) {
         // show links for upload, create folder and folder configuration
         $page->addPageFunctionsMenuItem(
             'menu_item_documents_upload_files',

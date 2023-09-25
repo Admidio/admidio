@@ -55,7 +55,7 @@ if (!$photoAlbum->isVisible()) {
 }
 
 if ((int) $photoAlbum->getValue('pho_quantity') === 0) {
-    $gMessage->show($gL10n->get('PHO_NO_ALBUM_CONTENT'));
+    $gMessage->show($gL10n->get('SYS_ALBUM_CONTAINS_NO_PHOTOS'));
     // => EXIT
 }
 
@@ -78,7 +78,7 @@ if ($getPhotoNr == null) {
     $zipOpenCode = $zip->open($zipTempName, ZipArchive::CREATE);
 
     if ($zipOpenCode !== true) {
-        $gMessage->show($gL10n->get('PHP_DOWNLOAD_ZIP_ERROR'));
+        $gMessage->show($gL10n->get('SYS_DOWNLOAD_ZIP_ERROR'));
         // => EXIT
     }
 
@@ -156,7 +156,7 @@ if ($getPhotoNr == null) {
 
     $zipCloseValue = $zip->close();
     if ($zipCloseValue === false) {
-        $gMessage->show($gL10n->get('PHP_DOWNLOAD_ZIP_ERROR'));
+        $gMessage->show($gL10n->get('SYS_DOWNLOAD_ZIP_ERROR'));
         // => EXIT
     }
 
