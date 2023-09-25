@@ -46,8 +46,8 @@ class FileUpload
         global $gL10n;
 
         if ($this->module === 'photos') {
-            $textUploadDescription = $gL10n->get('PHO_PHOTO_UPLOAD_DESC', array($destinationName));
-            $textSelectFiles = $gL10n->get('PHO_SELECT_FOTOS');
+            $textUploadDescription = $gL10n->get('SYS_PHOTO_UPLOAD_DESC', array($destinationName));
+            $textSelectFiles = $gL10n->get('SYS_SELECT_PHOTOS');
             $textBackButton = $gL10n->get('SYS_BACK_TO_ALBUM');
         } elseif ($this->module === 'documents_files') {
             $textUploadDescription = $gL10n->get('SYS_FILES_UPLOAD_DESC', array($destinationName));
@@ -76,9 +76,9 @@ class FileUpload
     public function setHeaderData()
     {
         if ($this->module === 'photos') {
-            $textFileUploaded = $GLOBALS['gL10n']->get('PHO_FILE_UPLOADED');
+            $textFileUploaded = $GLOBALS['gL10n']->get('SYS_PHOTO_FILE_UPLOADED');
             $textUploadSuccessful = $GLOBALS['gL10n']->get('SYS_PHOTO_UPLOAD_SUCCESSFUL');
-            $textUploadNotSuccessful = $GLOBALS['gL10n']->get('PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL');
+            $textUploadNotSuccessful = $GLOBALS['gL10n']->get('SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL');
         } elseif ($this->module === 'documents_files') {
             $textFileUploaded = $GLOBALS['gL10n']->get('SYS_FILE_UPLOADED');
             $textUploadSuccessful = $GLOBALS['gL10n']->get('SYS_FILES_UPLOAD_SUCCESSFUL');

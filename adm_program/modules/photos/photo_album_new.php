@@ -20,7 +20,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
 $getMode      = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('new', 'change')));
 
-$photoAlbumsArray = array('ALL' => $gL10n->get('PHO_PHOTO_ALBUMS'));
+$photoAlbumsArray = array('ALL' => $gL10n->get('SYS_PHOTO_ALBUMS'));
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
@@ -30,9 +30,9 @@ if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
 
 $headline = '';
 if ($getMode === 'new') {
-    $headline = $gL10n->get('PHO_CREATE_ALBUM');
+    $headline = $gL10n->get('SYS_CREATE_ALBUM');
 } elseif ($getMode === 'change') {
-    $headline = $gL10n->get('PHO_EDIT_ALBUM');
+    $headline = $gL10n->get('SYS_EDIT_ALBUM');
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -51,7 +51,7 @@ if ($getMode === 'new') {
 
 // check if the user is allowed to edit this photo album
 if (!$photoAlbum->isEditable()) {
-    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
@@ -112,20 +112,20 @@ $page = new HtmlPage('admidio-photo-album-edit', $headline);
 $form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => $getMode)), $page);
 $form->addInput(
     'pho_name',
-    $gL10n->get('PHO_ALBUM'),
+    $gL10n->get('SYS_ALBUM'),
     $photoAlbum->getValue('pho_name'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)
 );
 subfolder(0, '', $photoAlbum->getValue('pho_id'));
 $form->addSelectBox(
     'parent_album_uuid',
-    $gL10n->get('PHO_PARENT_ALBUM'),
+    $gL10n->get('SYS_PARENT_ALBUM'),
     $photoAlbumsArray,
     array(
         'property'                       => HtmlForm::FIELD_REQUIRED,
         'defaultValue'                   => $parentAlbumUuid,
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => $gL10n->get('PHO_PARENT_ALBUM_DESC', array('PHO_PHOTO_ALBUMS'))
+        'helpTextIdLabel'                => $gL10n->get('SYS_PARENT_ALBUM_DESC', array('SYS_PHOTO_ALBUMS'))
     )
 );
 $form->addInput(
@@ -155,9 +155,9 @@ $form->addMultilineTextInput(
 );
 $form->addCheckbox(
     'pho_locked',
-    $gL10n->get('PHO_ALBUM_LOCK'),
+    $gL10n->get('SYS_LOCK_ALBUM'),
     (bool) $photoAlbum->getValue('pho_locked'),
-    array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC')
+    array('helpTextIdLabel' => 'SYS_LOCK_ALBUM_DESC')
 );
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));

@@ -77,7 +77,7 @@ switch ($getType) {
         break;
     case 'pho':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'photo_uuid' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));
-        $text = 'PHO_WANT_DELETE_PHOTO';
+        $text = 'SYS_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'photo_uuid' => $getDatabaseId));

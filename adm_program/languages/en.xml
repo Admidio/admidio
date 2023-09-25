@@ -252,55 +252,6 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Short name of the organization</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL of the organization</string>
   <string name="ORG_VARIABLE_USERNAME">Username of the user from the respective e-mail context</string>
-  <!--Phrases only in photo module-->
-  <string name="PHO_ALBUM">Album</string>
-  <string name="PHO_ALBUM_DELETE">Delete album</string>
-  <string name="PHO_ALBUM_LOCK">Lock album</string>
-  <string name="PHO_ALBUM_LOCK_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors and members for this reason.</string>
-  <string name="PHO_ALBUM_UNLOCK">Unlock album</string>
-  <string name="PHO_CAPTION_SIZE">Caption size</string>
-  <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor, the font size will be reduced. (Default: 40)</string>
-  <string name="PHO_CREATE_ALBUM">Create album</string>
-  <string name="PHO_DISPLAY_PHOTOS">Photo display</string>
-  <string name="PHO_DISPLAY_PHOTOS_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
-  <string name="PHO_DOWNLOAD_ENABLED">Enable download</string>
-  <string name="PHO_DOWNLOAD_ENABLED_DESC">Allows to download single photos or complete albums as zip file. A hyperlink will be displayed for each photo or album. If option #VAR1_BOLD# is active only original photos will be downloaded.</string>
-  <string name="PHP_DOWNLOAD_ZIP_ERROR">An error occurred when creating the zip file.</string>
-  <string name="PHO_EDIT_ALBUM">Edit album</string>
-  <string name="PHO_FILE_UPLOADED">The photo #VAR1_BOLD# was uploaded.</string>
-  <string name="PHO_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be  inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
-  <string name="PHO_KEEP_ORIGINAL">Save original files additionally</string>
-  <string name="PHO_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
-  <string name="PHO_MODAL_WINDOW">Modal window</string>
-  <string name="PHO_NEXT_PHOTO">Next picture</string>
-  <string name="PHO_NO_ALBUM_CONTENT">Album contains no photos.</string>
-  <string name="PHO_NO_RIGHTS">You have no permissions to perform this action.\n\nOnly logged in users with photo management permissions are enabled to manage photos.</string>
-  <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Number of albums per page</string>
-  <string name="PHO_PARENT_ALBUM">Parent album</string>
-  <string name="PHO_PARENT_ALBUM_DESC">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest level then select #VAR1_BOLD#.</string>
-  <string name="PHO_PHOTO_ALBUMS">Photo albums</string>
-  <string name="PHO_PHOTO_FORMAT_INVALID">Only JPG and PNG photos are allowed.</string>
-  <string name="PHO_PHOTO_PROCESSING_ERROR">Photo processing error</string>
-  <string name="PHO_PHOTO_ROTATE_LEFT">Rotate photo left</string>
-  <string name="PHO_PHOTO_ROTATE_RIGHT">Rotate photo right</string>
-  <string name="PHO_PHOTO_SEND_ECARD">Send photo as greeting card</string>
-  <string name="PHO_PHOTO_UPLOAD_DESC">Please select the images which you want to upload to album #VAR1_BOLD#.</string>
-  <string name="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL">Not all photos were successfully uploaded.</string>
-  <string name="PHO_PHOTOS_DESC">Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.</string>
-  <string name="PHO_POPUP_WINDOW">Popup window</string>
-  <string name="PHO_PREVIOUS_PHOTO">Previous picture</string>
-  <string name="PHO_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
-  <string name="PHO_RESOLUTION_MORE_THAN">Resolution greater than</string>
-  <string name="PHO_SAME_WINDOW">Same window</string>
-  <string name="PHO_SCALE_THUMBNAILS">Thumbnail scaling</string>
-  <string name="PHO_SCALE_THUMBNAILS_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (default: 160 pixels)</string>
-  <string name="PHO_SELECT_FOTOS">Select image</string>
-  <string name="PHO_SHOWN_ON_READY">Photos have been successfully added to album if they appear on this page.</string>
-  <string name="PHO_THUMBNAILS_PER_PAGE">Thumbnails per page</string>
-  <string name="PHO_THUMBNAILS_PER_PAGE_DESC">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: 16)</string>
-  <string name="PHO_UPLOAD_PHOTOS">Upload photos</string>
-  <string name="PHO_WANT_DELETE_PHOTO">Selected photo will be deleted. Are you sure?</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_A_TO_Z">A to Z</string>
@@ -331,8 +282,12 @@
   <string name="SYS_ADMINISTRATORS">Administrators</string>
   <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the Documents and Files module and therefore have access to all folders and files. They can upload and download files and assign access rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
+  <string name="SYS_ALBUM">Album</string>
+  <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Album contains no photos.</string>
   <string name="SYS_ALBUM_CREATED_TITLE">A new photo album was created at #VAR1#</string>
   <string name="SYS_ALBUM_CHANGED_TITLE">A photo album was changed at #VAR1#</string>
+  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be  inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
+  <string name="SYS_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors and members for this reason.</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALL_DAY">Full time</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
@@ -406,6 +361,8 @@
   <string name="SYS_CAPTCHA_CODE_INVALID">The authentication code was invalid.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Authentication code</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</string>
+  <string name="SYS_CAPTION_SIZE">Caption size</string>
+  <string name="SYS_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor, the font size will be reduced. (Default: 40)</string>
   <string name="SYS_CARBON_COPY">Carbon copy (CC)</string>
   <string name="SYS_CAT_SELECTION">Category selection</string>
   <string name="SYS_CAT_SELECTION_CONF_DESC">The category selection can be used to restrict a configuration to the members of roles of the selected categories.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
@@ -482,6 +439,7 @@
   <string name="SYS_COUNTRY_ISO">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</string>
   <string name="SYS_CP1252">CP1252</string>
   <string name="SYS_CREATE">Create</string>
+  <string name="SYS_CREATE_ALBUM">Create album</string>
   <string name="SYS_CREATE_CALENDAR">Create calendar</string>
   <string name="SYS_CREATE_CATEGORY">Create category</string>
   <string name="SYS_CREATE_CONTACT">Create contact</string>
@@ -560,6 +518,7 @@
   <string name="SYS_DEFAULT_VIEW">Default view</string>
   <string name="SYS_DEFAULT_VIEW_DESC">Display type for events. With mode #VAR1_BOLD# all event details will be displayed within a box. With mode #VAR2_BOLD# the most important event details will be displayed in a compact list. (Default: Detailed)</string>
   <string name="SYS_DELETE">Delete</string>
+  <string name="SYS_DELETE_ALBUM">Delete album</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="SYS_DELETE_FILE">Delete file</string>
   <string name="SYS_DELETE_FOLDER">Delete folder</string>
@@ -603,12 +562,14 @@
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
+  <string name="SYS_DOWNLOAD_ZIP_ERROR">An error occurred when creating the zip file.</string>
   <string name="SYS_DUPLICATE">Duplicate</string>
   <string name="SYS_ECARD_FROM">Greeting card sent by</string>
   <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">The specified value determine the maximum size in pixel that the longer side of the image may have in the greeting card. (Default: #VAR1# pixels)</string>
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Your greeting card could not be sent!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Your greeting card was sent.</string>
   <string name="SYS_EDIT">Edit</string>
+  <string name="SYS_EDIT_ALBUM">Edit album</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Edit announcements</string>
   <string name="SYS_EDIT_CALENDAR">Edit calendar</string>
   <string name="SYS_EDIT_CALENDAR_DESC">Here you can create and edit calendars.</string>
@@ -661,6 +622,8 @@
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Enable documents &amp; files</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
+  <string name="SYS_ENABLE_DOWNLOAD">Enable download</string>
+  <string name="SYS_ENABLE_DOWNLOAD_DESC">Allows to download single photos or complete albums as zip file. A hyperlink will be displayed for each photo or album. If option #VAR1_BOLD# is active only original photos will be downloaded.</string>
   <string name="SYS_ENABLE_EMAILS">Enable e-mails</string>
   <string name="SYS_ENABLE_EMAILS_DESC">E-mails within messages module can be enabled or disabled via this setting. If the server does not support e-mail, the option should be disabled. (Default: enabled)</string>
   <string name="SYS_ENABLE_EVENT_REGISTRATION">Do you want to enable event registration?\nIf event is deleted, all registered participants will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</string>
@@ -831,6 +794,8 @@
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Item name</string>
+  <string name="SYS_KEEP_ORIGINAL">Save original files additionally</string>
+  <string name="SYS_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
   <string name="SYS_LANGUAGE">Language</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Is your language missing or do you want to translate more texts or improve existing translations? Then have a look at #VAR1#Wiki page of Admidio#VAR2# to see how you can help with the translation.</string>
@@ -861,6 +826,8 @@
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Please define where to store profile picture (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. (default: database)</string>
   <string name="SYS_LOCK">Lock</string>
+  <string name="SYS_LOCK_ALBUM">Lock album</string>
+  <string name="SYS_LOCK_ALBUM_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
   <string name="SYS_LOCKED">Locked</string>
   <string name="SYS_LOG_ALL_CHANGES">Log all changes</string>
   <string name="SYS_LOG_ALL_CHANGES_DESC">Changes in profil fields are recorded for each user and each field. The previous and the new value will be logged as well as the user who performed the change and the time stamp. (Default: yes)</string>
@@ -935,6 +902,7 @@
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="SYS_MINUTES_VAR">#VAR1# minutes</string>
   <string name="SYS_MOBILE">Mobile</string>
+  <string name="SYS_MODAL_WINDOW">Modal window</string>
   <string name="SYS_MODULE_DISABLED">This module is disabled.</string>
   <string name="SYS_MODULE_RIGHTS">Module rights</string>
   <string name="SYS_MODULES">Modules</string>
@@ -967,6 +935,7 @@
   <string name="SYS_NEW_VERSION_AVAILABLE">A new stable version is available!</string>
   <string name="SYS_NEW_WINDOW">New window</string>
   <string name="SYS_NEXT">Next</string>
+  <string name="SYS_NEXT_PHOTO">Next picture</string>
   <string name="SYS_NO">No</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
@@ -1013,6 +982,7 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">Members of this role receive the notifications about new or changed entries in the modules and changes in the members' profile data. For data protection reasons only roles can be deposited, which have the role right #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Number</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
+  <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Number of albums per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries displayed on a page. If there are more entries, navigation elements are displayed to scroll between the pages. (Default: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Number of recipients</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">The number in this field indicates the maximum number of recipients in an email. This number can be limited by providers. If an e-mail should be sent to more recipients than the number set here, multiple e-mails will be generated. The number of possible e-mails to be sent within a period can also be limited by providers. (Default: 50)</string>
@@ -1035,6 +1005,8 @@
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
   <string name="SYS_PAGE_NEXT">Next</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
+  <string name="SYS_PARENT_ALBUM">Parent album</string>
+  <string name="SYS_PARENT_ALBUM_DESC">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest level then select #VAR1_BOLD#.</string>
   <string name="SYS_PARTICIPANTS">Members</string>
   <string name="SYS_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="SYS_PARTICIPATE">Participate</string>
@@ -1065,6 +1037,15 @@
   <string name="SYS_PHONE">Phone</string>
   <string name="SYS_PHONE_INVALID_CHAR">The phone number in the field #VAR1_BOLD# has invalid characters.\n\nAllowed are only numbers 0-9 and the special characters +-/ ().</string>
   <string name="SYS_PHOTO">Photo</string>
+    <string name="SYS_PHOTO_ALBUMS">Photo albums</string>
+    <string name="SYS_PHOTO_FILE_UPLOADED">The photo #VAR1_BOLD# was uploaded.</string>
+    <string name="SYS_PHOTO_FORMAT_INVALID">Only JPG and PNG photos are allowed.</string>
+    <string name="SYS_PHOTO_PROCESSING_ERROR">Photo processing error</string>
+    <string name="SYS_PHOTO_UPLOAD_DESC">Please select the images which you want to upload to album #VAR1_BOLD#.</string>
+    <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Not all photos were successfully uploaded.</string>
+    <string name="SYS_PHOTOS_DESC">Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.</string>
+    <string name="PHO_PHOTOS_PRESENTATION">Photo presentation</string>
+    <string name="PHO_PHOTOS_PRESENTATION_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
   <string name="SYS_PHOTO_FILE_TO_LARGE">Size of uploaded photo exceeds server allowed file size of #VAR1# B.</string>
   <string name="SYS_PHOTO_FORMAT_INVALID">Only JPG and PNG formated photos are allowed.</string>
   <string name="SYS_PHOTO_RESOLUTION_TO_LARGE">Uploaded picture\'s size exceeds server allowed resolution of #VAR1# megapixels.</string>
@@ -1082,6 +1063,7 @@
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLEASE_WAIT">Please wait</string>
   <string name="SYS_PLUGINS">Plugins</string>
+  <string name="SYS_POPUP_WINDOW">Popup window</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
@@ -1093,6 +1075,7 @@
   <string name="SYS_PREVIOUS">Previous</string>
   <string name="SYS_PREVIOUS_EVENTS">Previous #VAR1#</string>
   <string name="SYS_PREVIOUS_NAME">Previous name</string>
+  <string name="SYS_PREVIOUS_PHOTO">Previous picture</string>
   <string name="SYS_PREVIOUS_VALUE">Previous value</string>
   <string name="SYS_PRINT_PREVIEW">Print preview</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Private message has been send to #VAR1_BOLD#.</string>
@@ -1116,6 +1099,7 @@
   <string name="SYS_QUARTERLY">Quarterly</string>
   <string name="SYS_QUOTE">Single quote (')</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
+  <string name="SYS_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail recipient</string>
@@ -1155,6 +1139,7 @@
   <string name="SYS_REPLACE">Replace</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
+  <string name="SYS_RESOLUTION_TOO_LARGE">Image could not processed because the resolution is greater than #VAR1# Megapixel.</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
@@ -1203,6 +1188,8 @@
   <string name="SYS_ROOM_RESERVED">Selected room is already in use at this time.</string>
   <string name="SYS_ROOM_SELECTABLE">Room is available</string>
   <string name="SYS_ROOM_SELECTABLE_DESC">Selection box for available rooms is available. Select room and create event for selected room. (standard answer: no)</string>
+  <string name="SYS_ROTATE_PHOTO_LEFT">Rotate photo left</string>
+  <string name="SYS_ROTATE_PHOTO_RIGHT">Rotate photo right</string>
   <string name="SYS_ROW">Row</string>
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
@@ -1249,6 +1236,7 @@
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SELECT_MEMBERS">Select members</string>
   <string name="SYS_SELECT_PHOTO">Select photo</string>
+  <string name="SYS_SELECT_PHOTOS">Select photos</string>
   <string name="SYS_SEMICOLON">Semicolon (;)</string>
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_COPY">Send copy of e-mail to my address</string>
@@ -1266,6 +1254,7 @@
   <string name="SYS_SEND_METHOD_DESC">PHP\'s mail() method might be restricted by some providers and can be a reason for spam suspicion. Hence it is recommended to send mails by using an existing mail address and SMTP server. You can configure the SMTP settings below (default: PHP mail()).</string>
   <string name="SYS_SEND_NEW_LOGIN">Do you want to send #VAR1_BOLD# an email with the current username and a new password?</string>
   <string name="SYS_SEND_NEW_PW">Send new password</string>
+  <string name="SYS_SEND_PHOTO_AS_ECARD">Send photo as greeting card</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Send private message</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Your PM will be sent to the selected recipient.</string>
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
@@ -1370,6 +1359,10 @@
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Before you call this function, all settings for email sending must be saved!\nA simple email with the subject #VAR1_BOLD# will be sent to the email address of the logged in user based on the saved email settings. In the process, a dispatch log is output during SMTP dispatch, which can help in case of problems.</string>
   <string name="SYS_TEXT">Text</string>
+  <string name="SYS_THUMBNAIL_SCALING">Thumbnail scaling</string>
+  <string name="SYS_THUMBNAIL_SCALING_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (default: 160 pixels)</string>
+  <string name="SYS_THUMBNAILS_PER_PAGE">Thumbnails per page</string>
+  <string name="SYS_THUMBNAILS_PER_PAGE_DESC">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: 16)</string>
   <string name="SYS_THURSDAY">Thursday</string>
   <string name="SYS_TIME">Time</string>
   <string name="SYS_TIME_FROM">Time from</string>
@@ -1386,12 +1379,14 @@
   <string name="SYS_UNLIMITED">Unlimited</string>
   <string name="SYS_UNKNOWN">Unknown</string>
   <string name="SYS_UNLOCK">Unlock</string>
+  <string name="SYS_UNLOCK_ALBUM">Unlock album</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNMANAGED_FILES">Unmanaged files</string>
   <string name="SYS_UPDATE">Update</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>
+  <string name="SYS_UPLOAD_PHOTOS">Upload photos</string>
   <string name="SYS_UPLOAD_PROFILE_PICTURE">Upload profile picture</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
   <string name="SYS_URL">URL</string>

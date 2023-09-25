@@ -288,7 +288,7 @@ class TablePhotos extends TableAccess
             }
 
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
-                . $gL10n->get('PHO_ALBUM') . ': ' . $this->getValue('pho_name') . '<br />'
+                . $gL10n->get('SYS_ALBUM') . ': ' . $this->getValue('pho_name') . '<br />'
                 . $gL10n->get('SYS_START') . ': ' . $this->getValue('pho_begin') . '<br />'
                 . $gL10n->get('SYS_END') . ': ' . $this->getValue('pho_end') . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'

@@ -42,7 +42,7 @@ if ($getPhotoUuid !== '') {
 
 // check if the user is allowed to edit this photo album
 if (!$photoAlbum->isEditable()) {
-    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
@@ -64,7 +64,7 @@ if ($getMode === 'new' || $getMode === 'change') {
     }
 
     if (strlen($_POST['pho_name']) === 0) {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('PHO_ALBUM'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ALBUM'))));
         // => EXIT
     }
 

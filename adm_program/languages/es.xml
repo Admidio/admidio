@@ -260,7 +260,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Palabras (Inglés)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Aquí puede definir el tipo de captcha. El captcha se muestra como una imagen y puede consistir en caracteres aleatorios, un pequeño problema matemático o 2 palabras. Con las otras configuraciones, la imagen se puede ajustar. (Predeterminado: caracteres aleatorios)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Especificación del ancho en píxeles de la imagen de captcha. La altura se calcula proporcionalmente al ancho. Esta configuración también determina el tamaño de los caracteres. (Predeterminado: 215)</string>
-  <string name="PHO_CREATE_ALBUM">Crear álbum</string>
+  <string name="SYS_CREATE_ALBUM">Crear álbum</string>
   <string name="SYS_DELETE_PROFILE_PICTURE">Eliminar imagen de perfil</string>
   <string name="SYS_EDIT_MY_PROFILE">Editar mi perfil</string>
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Editar la foto de mi perfil</string>

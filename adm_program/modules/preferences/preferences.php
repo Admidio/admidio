@@ -1213,33 +1213,33 @@ $formPhotos->addSelectBox(
     array('defaultValue' => $formValues['photo_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
 $selectBoxEntries = array(
-    '1' => $gL10n->get('PHO_MODAL_WINDOW'),
-    '2' => $gL10n->get('PHO_SAME_WINDOW'),
-    '0' => $gL10n->get('PHO_POPUP_WINDOW')
+    '1' => $gL10n->get('SYS_MODAL_WINDOW'),
+    '2' => $gL10n->get('SYS_SAME_WINDOW'),
+    '0' => $gL10n->get('SYS_POPUP_WINDOW')
 );
 $formPhotos->addSelectBox(
     'photo_show_mode',
-    $gL10n->get('PHO_DISPLAY_PHOTOS'),
+    $gL10n->get('PHO_PHOTOS_PRESENTATION'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PHO_DISPLAY_PHOTOS_DESC')
+    array('defaultValue' => $formValues['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PHO_PHOTOS_PRESENTATION_DESC')
 );
 $formPhotos->addInput(
     'photo_albums_per_page',
-    $gL10n->get('PHO_NUMBER_OF_ALBUMS_PER_PAGE'),
+    $gL10n->get('SYS_NUMBER_OF_ALBUMS_PER_PAGE'),
     $formValues['photo_albums_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formPhotos->addInput(
     'photo_thumbs_page',
-    $gL10n->get('PHO_THUMBNAILS_PER_PAGE'),
+    $gL10n->get('SYS_THUMBNAILS_PER_PAGE'),
     $formValues['photo_thumbs_page'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_THUMBNAILS_PER_PAGE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_THUMBNAILS_PER_PAGE_DESC')
 );
 $formPhotos->addInput(
     'photo_thumbs_scale',
-    $gL10n->get('PHO_SCALE_THUMBNAILS'),
+    $gL10n->get('SYS_THUMBNAIL_SCALING'),
     $formValues['photo_thumbs_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_SCALE_THUMBNAILS_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_THUMBNAIL_SCALING_DESC')
 );
 $formPhotos->addInput(
     'photo_show_width',
@@ -1261,21 +1261,21 @@ $formPhotos->addInput(
 );
 $formPhotos->addInput(
     'photo_image_text_size',
-    $gL10n->get('PHO_CAPTION_SIZE'),
+    $gL10n->get('SYS_CAPTION_SIZE'),
     $formValues['photo_image_text_size'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_CAPTION_SIZE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_CAPTION_SIZE_DESC')
 );
 $formPhotos->addCheckbox(
     'photo_download_enabled',
-    $gL10n->get('PHO_DOWNLOAD_ENABLED'),
+    $gL10n->get('SYS_ENABLE_DOWNLOAD'),
     (bool) $formValues['photo_download_enabled'],
-    array('helpTextIdInline' => array('PHO_DOWNLOAD_ENABLED_DESC', array('PHO_KEEP_ORIGINAL')))
+    array('helpTextIdInline' => array('SYS_ENABLE_DOWNLOAD_DESC', array('SYS_KEEP_ORIGINAL')))
 );
 $formPhotos->addCheckbox(
     'photo_keep_original',
-    $gL10n->get('PHO_KEEP_ORIGINAL'),
+    $gL10n->get('SYS_KEEP_ORIGINAL'),
     (bool) $formValues['photo_keep_original'],
-    array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', array('PHO_DOWNLOAD_ENABLED')))
+    array('helpTextIdInline' => array('SYS_KEEP_ORIGINAL_DESC', array('SYS_ENABLE_DOWNLOAD')))
 );
 $formPhotos->addCheckbox(
     'photo_ecard_enabled',
@@ -1285,7 +1285,7 @@ $formPhotos->addCheckbox(
 );
 $formPhotos->addInput(
     'photo_ecard_scale',
-    $gL10n->get('PHO_SCALE_THUMBNAILS'),
+    $gL10n->get('SYS_THUMBNAIL_SCALING'),
     $formValues['photo_ecard_scale'],
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
 );
