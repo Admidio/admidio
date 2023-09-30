@@ -304,6 +304,8 @@
   <string name="SYS_ANNOUNCEMENTS">Meddelelser</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Vis eller rediger meddelelser, nyheder og anden information.</string>
   <string name="SYS_APPLY">Udfør</string>
+  <string name="SYS_APPOINTMENT">Aftale</string>
+  <string name="SYS_APPOINTMENTS">Aftaler</string>
   <string name="SYS_ANNUALLY">Årligt</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Sat af rollerne</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tildel og rediger medlemmer</string>
@@ -318,6 +320,8 @@
   <string name="SYS_ASSIGN_REGISTRATION">Tildel registrering</string>
   <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Tilmeldingen er bekræftet. Medlemmet kan nu logge på systemet.</string>
   <string name="SYS_ASSIGN_ROLE">Tildel rolle</string>
+  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Vælg venligst en rolle, som alle importerede kontakter automatisk vil blive tildelt.\n\nDu kan kun vælge roller, som du har tilladelse til at se, og som ikke har tilladelse til rolletildeling, hvis du ikke selv har det.</string>
+  <string name="SYS_ASSIGN_ROLE_TO_USER">Dataene kan ikke gemmes.\nMindst én rolle skal tildeles kontakten.</string>
   <string name="SYS_ASSIGN_ROLES">Tildel roller</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrisk</string>
   <string name="SYS_ATTACHMENT">Vedhæftet:</string>
@@ -412,6 +416,7 @@
   <string name="SYS_CONFIRM_REGISTRATION">Bekræft registreringen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bekræft værdi</string>
   <string name="SYS_CONNECTION_ERROR">Forbindelse til Admidio opdaterings side kunne ikke etableres. Check din internetforbindelse og prøv igen senere. Du kan også checke #VAR1# hjemmesiden for manuelle opdateringer.</string>
+  <string name="SYS_CONTACTS">Kontaktpersoner</string>
   <string name="SYS_CONTACT_DETAILS">Kontakt information</string>
   <string name="SYS_CONTENT">Indhold</string>
   <string name="SYS_CONTRIBUTION">Kontingent</string>
@@ -437,7 +442,9 @@
   <string name="SYS_CREATE_ALBUM">Opret album</string>
   <string name="SYS_CREATE_CALENDAR">Opret kalender</string>
   <string name="SYS_CREATE_CATEGORY">Opret kategori</string>
+  <string name="SYS_CREATE_CONTACT">Opret kontaktperson</string>
   <string name="SYS_CREATE_ENTRY">Tilføj emne</string>
+  <string name="SYS_CREATE_EVENT">Opret begivenhed</string>
   <string name="SYS_CREATE_FOLDER">Opret folder</string>
   <string name="SYS_CREATE_FOLDER_DESC">En ny folder vil blive oprettet i folderen #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Opret .htaccess</string>
@@ -658,6 +665,7 @@
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXECUTE_BACKUP">Start backup</string>
+  <string name="SYS_EXISTING_CONTACTS">Eksisterende kontaktpersoner</string>
   <string name="SYS_EXPORT_ICAL">Eksport (iCal)</string>
   <string name="SYS_EXPORT_LISTS">‎Eksportere lister‎</string>
   <string name="SYS_EXPORT_LISTS_DESC">‎Lister over grupper og roller kan eksporteres af brugere, forudsat at du har ret til at få vist disse lister. Denne indstilling kan bruges til at begrænse eksportfunktionen. (Standard: Alle)‎</string>
@@ -757,8 +765,10 @@
   <string name="SYS_ICAL_DISABLED">iCal-funktionen er deaktiveret.</string>
   <string name="SYS_ICON">Ikon</string>
   <string name="SYS_ICQ">ICQ</string>
+  <string name="SYS_IDENTIFY_USERS">Eksisterende kontaktpersoner genkendes på fornavn og efternavn.</string>
   <string name="SYS_IMPORTANT">Vigtigt</string>
   <string name="SYS_IMPORT">Importer</string>
+  <string name="SYS_IMPORT_CONTACTS">Importer kontaktpersoner</string>
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">‎Logondata kan kun importeres af en administrator. Organisationens regler skal overholdes (f.eks. adgangskodelængde og adgangskodestyrke). Brugere med allerede eksisterende logindata beholder dem. Ingen logindata overskrives af importen.‎</string>
   <string name="SYS_IMPORT_MODE">Import tilstand</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">‎Regnearket #VAR1# findes ikke i den importerede fil!‎</string>
@@ -769,6 +779,7 @@
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive grupper og roller</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info boks</string>
   <string name="SYS_INFORMATIONS">Information</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Indtast venligst for- og efternavnet på den nye kontaktperson. Inden posten oprettes, foretages der et check for at se, om der allerede findes en person med lignende navn i databasen.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Sucessfuld installation</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Admidio databasen er nu installeret og fuldstændigt konfigureret. Konfigurations filen med adgangsdata til databasen er oprettet og gemt. Du kan nu arbejde med Admidio og logge på med dine administrator oplysninger.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Installationen og opsætningen af databasen blev sucessfuldt afsluttet.</string>
@@ -870,6 +881,7 @@
   <string name="SYS_MEMBERS">Medlemmer</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Medlemmer imellem #VAR1# og #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">En af de her specificerede konfigurationer kan bruges til at vise medlemsadministrationen. Kolonnerne i den valgte listekonfiguration vises derefter i medlemsadministrationen.</string>
+  <string name="SYS_CONTACTS_DESC">Vis og organiser alle aktive og tidligere medlemmer her. Nye kontaktpersoner kan importeres eller oprettes.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Medlemmer vist pr. side</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Antal medlemmer som vises i HTML visningen. Flere medlemmer kan vises ved at bruge side opdelings funktionen. Denne værdi vil ikke påvirke print visning eller eksport funktionalitet (Standard: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Fandt #VAR1# medlemmer med et lignende navn.</string>
@@ -1126,6 +1138,7 @@
   <string name="SYS_REPLACE">Udskift</string>
   <string name="SYS_REQUIRED_INPUT">Påkrævet indtastning</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">‎Du er allerede logget på systemet. Det er ikke nødvendigt at anmode om en ny adgangskode.‎</string>
+  <string name="SYS_RESOLUTION_TOO_LARGE">Billedet kunne ikke behandles, fordi opløsningen er større end #VAR1# Megapixel.</string>
   <string name="SYS_RESTRICTIONS">Begrænsninger</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Se medlemslister over alle roller og alle medlemsprofiler</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Administrer meddelelser</string>
@@ -1324,6 +1337,7 @@
   <string name="SYS_SUPPORT_ADMIDIO">Støt Admidio</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Skift til kalender administration</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Skift til kategori administration</string>
+  <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Skift til profilfeltkonfiguration</string>
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Skift til relations konfiguration</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Åbn lokale administration</string>
   <string name="SYS_SYMMETRICAL">Symmetrisk</string>
@@ -1336,6 +1350,7 @@
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System Standard liste</string>
   <string name="SYS_SYSTEM_MAILS">System beskeder</string>
+  <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Her kan du begrunde teksten i hver systemmeddelelse. Teksterne er opdelt i to dele (emne og indhold) og identificeres med #emne# og #indhold#. Indholdet for hvert afsnit følger det. Hvis du ikke ønsker at sende nogen af disse meddelelser, skal du lade tekstfeltet stå tomt.\n\nI hver mail kan følgende jokertegn bruges. De vil blive erstattet med det tilsvarende indhold under kørsel.</string>
   <string name="SYS_TAB">Tab</string>
   <string name="SYS_TEMPLATE">Skabelon</string>
   <string name="SYS_TEMPLATE_DESC">Her bliver standard skabelonen fastlagt. (Standard: postkort)</string>
