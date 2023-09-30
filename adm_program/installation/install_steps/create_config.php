@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Installation step: create_config
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -71,7 +71,7 @@ if (isset($_POST['user_last_name'])) {
         $page->showMessage(
             'error',
             $gL10n->get('SYS_NOTE'),
-            $gL10n->get('PRO_PASSWORD_LENGTH'),
+            $gL10n->get('SYS_PASSWORD_LENGTH'),
             $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
@@ -92,7 +92,7 @@ if (isset($_POST['user_last_name'])) {
         $page->showMessage(
             'error',
             $gL10n->get('SYS_NOTE'),
-            $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'),
+            $gL10n->get('SYS_PASSWORD_NOT_STRONG_ENOUGH'),
             $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))

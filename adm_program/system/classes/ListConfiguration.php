@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages the list configuration
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -187,23 +187,23 @@ class ListConfiguration extends TableLists
         } elseif ($column->getValue('lsc_special_field') === 'mem_approved') {
             // Assign Integer to Language strings
             switch ((int) $content) {
-                case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
-                    $text = $gL10n->get('DAT_USER_INVITED');
+                case ModuleEvents::MEMBER_APPROVAL_STATE_INVITED:
+                    $text = $gL10n->get('SYS_EVENT_PARTICIPATION_INVITED');
                     $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
                     $buttonClass = '';
                     break;
-                case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
-                    $text = $gL10n->get('DAT_USER_ATTEND');
+                case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
+                    $text = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
                     $htmlText = '<i class="fas fa-check-circle admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-attend';
                     break;
-                case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
-                    $text = $gL10n->get('DAT_USER_TENTATIVE');
+                case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
+                    $text = $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE');
                     $htmlText = '<i class="fas fa-question-circle admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-tentative';
                     break;
-                case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
-                    $text = $gL10n->get('DAT_USER_REFUSED');
+                case ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED:
+                    $text = $gL10n->get('SYS_EVENT_PARTICIPATION_CANCELED');
                     $htmlText = '<i class="fas fa-times-circle admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-cancel';
                     break;

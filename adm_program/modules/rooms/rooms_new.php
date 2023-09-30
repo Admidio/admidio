@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create and edit rooms
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -70,7 +70,7 @@ $form->addInput(
     'room_overhang',
     $gL10n->get('SYS_OVERHANG'),
     (int) $room->getValue('room_overhang'),
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG')
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'SYS_ROOM_OVERHANG')
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');

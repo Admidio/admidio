@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Todas as entradas</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Anúncios</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Não há anúncios disponíveis para os visitantes. Inicie a sessão para ver os anúncios.</string>
+</resources>

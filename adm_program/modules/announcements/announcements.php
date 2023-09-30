@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show a list of all announcements
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -33,11 +33,11 @@ $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 
 // check if module is enabled
-if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
+if ((int) $gSettingsManager->get('announcements_module_enabled') === 0) {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 // => EXIT
-} elseif ((int) $gSettingsManager->get('enable_announcements_module') === 2) {
+} elseif ((int) $gSettingsManager->get('announcements_module_enabled') === 2) {
     // Access only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
 }

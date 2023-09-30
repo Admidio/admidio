@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Save organization preferences
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -165,11 +165,11 @@ switch ($getMode) {
                     break;
 
                 case 'user_management':
-                    $checkboxes = array('members_show_all_users', 'members_enable_user_relations');
+                    $checkboxes = array('contacts_show_all', 'contacts_user_relations_enabled');
                     break;
 
                 case 'documents-files':
-                    $checkboxes = array('documents_files_enable_module');
+                    $checkboxes = array('documents_files_module_enabled');
                     break;
 
                 case 'guestbook':
@@ -210,7 +210,7 @@ switch ($getMode) {
                     break;
 
                 case 'events':
-                    $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_rooms', 'dates_save_all_confirmations', 'dates_may_take_part');
+                    $checkboxes = array('events_ical_export_enabled', 'events_show_map_link', 'events_rooms_enabled', 'events_save_cancellations', 'events_may_take_part');
                     break;
 
                 case 'links':

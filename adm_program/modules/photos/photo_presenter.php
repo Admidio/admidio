@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show the photo within the Admidio html
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -94,12 +94,12 @@ if ((int) $gSettingsManager->get('photo_show_mode') !== PHOTO_SHOW_MODAL) {
     if ($previousImage > 0) {
         $page->addHtml('
         <button class="btn btn-secondary" onclick="window.location.href=\''.$urlPreviousImage.'\'">
-            <i class="fas fa-arrow-alt-circle-left"></i>'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</button>');
+            <i class="fas fa-arrow-alt-circle-left"></i>'.$gL10n->get('SYS_PREVIOUS_PHOTO').'</button>');
     }
     if ($nextImage <= $photoAlbum->getValue('pho_quantity')) {
         $page->addHtml('
         <button class="btn btn-primary" onclick="window.location.href=\''.$urlNextImage.'\'">
-            <i class="fas fa-arrow-alt-circle-right"></i>'.$gL10n->get('PHO_NEXT_PHOTO').'</button>');
+            <i class="fas fa-arrow-alt-circle-right"></i>'.$gL10n->get('SYS_NEXT_PHOTO').'</button>');
     }
     $page->addHtml('</div>');
 } elseif ((int) $gSettingsManager->get('photo_show_mode') === PHOTO_SHOW_PAGE) {

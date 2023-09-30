@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -207,7 +207,7 @@ class ModuleAnnouncements extends Modules
     }
 
     /**
-     * Set a date range in which the dates should be searched. The method will fill
+     * Set a date range in which the events should be searched. The method will fill
      * 4 parameters **dateStartFormatEnglish**, **dateStartFormatEnglish**,
      * **dateEndFormatEnglish** and **dateEndFormatAdmidio** that could be read with
      * getParameter and could be used in the script.

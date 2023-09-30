@@ -8,7 +8,7 @@
  * guestbook entries could be created or existing guestbook entries could be edited. Special properties of
  * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************

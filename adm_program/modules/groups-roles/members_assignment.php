@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Assign or remove members to role
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -114,7 +114,7 @@ if ($getMode === 'assign') {
 
     $javascriptCode .= '
         $("#menu_item_members_assign_create_user").attr("href", "javascript:void(0);");
-        $("#menu_item_members_assign_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php");
+        $("#menu_item_members_assign_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php");
         $("#menu_item_members_assign_create_user").attr("class", "nav-link btn btn-secondary openPopup");
 
         // change mode of users that should be shown
@@ -181,7 +181,7 @@ if ($getMode === 'assign') {
         $page->addPageFunctionsMenuItem(
             'menu_item_members_assign_create_user',
             $gL10n->get('SYS_CREATE_MEMBER'),
-            ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
+            ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php',
             'fa-plus-circle'
         );
     }

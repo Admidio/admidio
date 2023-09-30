@@ -80,7 +80,7 @@
             <ul class="navbar-nav ml-auto">
             {if $validLogin}
                 <li class="nav-item">
-                    <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/profile/profile.php">{$l10n->get('PRO_MY_PROFILE')}</a>
+                    <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/profile/profile.php">{$l10n->get('SYS_MY_PROFILE')}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{$urlAdmidio}/adm_program/system/logout.php">{$l10n->get('SYS_LOGOUT')}</a>

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Approve new registrations - functions
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -159,6 +159,6 @@ if ($getMode === 1 || $getMode === 2) {
 
     // Resend access data
     $gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('mode' => '4', 'user_uuid' => $getUserUuid)));
+    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/contacts/contacts_function.php', array('mode' => '4', 'user_uuid' => $getUserUuid)));
     // => EXIT
 }

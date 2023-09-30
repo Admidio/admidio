@@ -6,9 +6,7 @@
  * The plugin lists all users who have birthday on the current day. In the configuration
  * file you can set that also past or future birthdays are displayed.
  *
- * Compatible with Admidio version 4.1
- *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************

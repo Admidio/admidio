@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Content for modal windows
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -41,14 +41,14 @@ switch ($getType) {
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_uuid' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
 
         // get special message for calendars
-        if ($getDatabaseId2 === 'DAT') {
+        if ($getDatabaseId2 === 'EVT') {
             $text = 'SYS_DELETE_ENTRY';
         } else {
             $text = 'SYS_WANT_DELETE_CATEGORY';
         }
         break;
     case 'dat':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates_function.php', array('mode' => 2, 'dat_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 2, 'dat_uuid' => $getDatabaseId));
         break;
     case 'fil':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 2, 'file_uuid' => $getDatabaseId, 'folder_uuid' => $getDatabaseId2));
@@ -77,14 +77,14 @@ switch ($getType) {
         break;
     case 'pho':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'photo_uuid' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));
-        $text = 'PHO_WANT_DELETE_PHOTO';
+        $text = 'SYS_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'photo_uuid' => $getDatabaseId));
         break;
     case 'pro_pho':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getDatabaseId));
-        $text = 'PRO_WANT_DELETE_PHOTO';
+        $text = 'SYS_WANT_DELETE_PHOTO';
         $callbackFunction = 'callbackProfilePhoto';
         break;
     case 'pro_role':

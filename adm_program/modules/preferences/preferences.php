@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Organization preferences
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -434,9 +434,9 @@ $formRegionalSettings->addSelectBox(
 );
 $formRegionalSettings->addSelectBox(
     'default_country',
-    $gL10n->get('PRO_DEFAULT_COUNTRY'),
+    $gL10n->get('SYS_DEFAULT_COUNTRY'),
     $gL10n->getCountries(),
-    array('defaultValue' => $formValues['default_country'], 'helpTextIdInline' => 'PRO_DEFAULT_COUNTRY_DESC')
+    array('defaultValue' => $formValues['default_country'], 'helpTextIdInline' => 'SYS_DEFAULT_COUNTRY_DESC')
 );
 $formRegionalSettings->addInput(
     'system_date',
@@ -709,7 +709,7 @@ $formSystemNotification->addSelectBoxFromSql(
 
 $formSystemNotification->addCustomContent(
     $gL10n->get('SYS_SYSTEM_MAILS'),
-    '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>
+    '<p>'.$gL10n->get('SYS_SYSTEM_MAIL_TEXTS_DESC').':</p>
     <p><strong>#user_first_name#</strong> - '.$gL10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
     <strong>#user_last_name#</strong> - '.$gL10n->get('ORG_VARIABLE_LAST_NAME').'<br />
     <strong>#user_login_name#</strong> - '.$gL10n->get('ORG_VARIABLE_USERNAME').'<br />
@@ -1071,10 +1071,10 @@ $selectBoxEntries = array(
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formAnnouncements->addSelectBox(
-    'enable_announcements_module',
+    'announcements_module_enabled',
     $gL10n->get('ORG_ACCESS_TO_MODULE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['enable_announcements_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
+    array('defaultValue' => $formValues['announcements_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
 $formAnnouncements->addInput(
     'announcements_per_page',
@@ -1087,7 +1087,7 @@ $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_
 $formAnnouncements->addCustomContent(
     $gL10n->get('SYS_EDIT_CATEGORIES'),
     $html,
-    array('helpTextIdInline' =>'DAT_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+    array('helpTextIdInline' =>'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
 );
 $formAnnouncements->addSubmitButton(
     'btn_save_announcements',
@@ -1119,35 +1119,35 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($gCurrentOrgId);
 $formUserManagement->addSelectBoxFromSql(
-    'members_list_configuration',
+    'contacts_list_configuration',
     $gL10n->get('SYS_CONFIGURATION_LIST'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['members_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MEMBERS_CONFIGURATION_DESC')
+    array('defaultValue' => $formValues['contacts_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MEMBERS_CONFIGURATION_DESC')
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formUserManagement->addSelectBox(
-    'members_users_per_page',
+    'contacts_per_page',
     $gL10n->get('SYS_USERS_PER_PAGE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
+    array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
 );
 $formUserManagement->addInput(
-    'members_days_field_history',
+    'contacts_field_history_days',
     $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
-    $formValues['members_days_field_history'],
+    $formValues['contacts_field_history_days'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextIdInline' => 'SYS_DAYS_FIELD_HISTORY_DESC')
 );
 $formUserManagement->addCheckbox(
-    'members_show_all_users',
+    'contacts_show_all',
     $gL10n->get('ORG_SHOW_ALL_USERS'),
-    (bool) $formValues['members_show_all_users'],
+    (bool) $formValues['contacts_show_all'],
     array('helpTextIdInline' => 'ORG_SHOW_ALL_USERS_DESC')
 );
 $formUserManagement->addCheckbox(
-    'members_enable_user_relations',
+    'contacts_user_relations_enabled',
     $gL10n->get('SYS_ENABLE_USER_RELATIONS'),
-    (bool) $formValues['members_enable_user_relations'],
+    (bool) $formValues['contacts_user_relations_enabled'],
     array('helpTextIdInline' => 'SYS_ENABLE_USER_RELATIONS_DESC')
 );
 
@@ -1173,15 +1173,15 @@ $formDownloads = new HtmlForm(
 );
 
 $formDownloads->addCheckbox(
-    'documents_files_enable_module',
+    'documents_files_module_enabled',
     $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'),
-    (bool) $formValues['documents_files_enable_module'],
+    (bool) $formValues['documents_files_module_enabled'],
     array('helpTextIdInline' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
 );
 $formDownloads->addInput(
-    'max_file_upload_size',
+    'documents_files_max_upload_size',
     $gL10n->get('SYS_MAXIMUM_FILE_SIZE').' (MB)',
-    $formValues['max_file_upload_size'],
+    $formValues['documents_files_max_upload_size'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextIdInline' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
 );
 $formDownloads->addSubmitButton(
@@ -1213,33 +1213,33 @@ $formPhotos->addSelectBox(
     array('defaultValue' => $formValues['photo_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
 $selectBoxEntries = array(
-    '1' => $gL10n->get('PHO_MODAL_WINDOW'),
-    '2' => $gL10n->get('PHO_SAME_WINDOW'),
-    '0' => $gL10n->get('PHO_POPUP_WINDOW')
+    '1' => $gL10n->get('SYS_MODAL_WINDOW'),
+    '2' => $gL10n->get('SYS_SAME_WINDOW'),
+    '0' => $gL10n->get('SYS_POPUP_WINDOW')
 );
 $formPhotos->addSelectBox(
     'photo_show_mode',
-    $gL10n->get('PHO_DISPLAY_PHOTOS'),
+    $gL10n->get('PHO_PHOTOS_PRESENTATION'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PHO_DISPLAY_PHOTOS_DESC')
+    array('defaultValue' => $formValues['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PHO_PHOTOS_PRESENTATION_DESC')
 );
 $formPhotos->addInput(
     'photo_albums_per_page',
-    $gL10n->get('PHO_NUMBER_OF_ALBUMS_PER_PAGE'),
+    $gL10n->get('SYS_NUMBER_OF_ALBUMS_PER_PAGE'),
     $formValues['photo_albums_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formPhotos->addInput(
     'photo_thumbs_page',
-    $gL10n->get('PHO_THUMBNAILS_PER_PAGE'),
+    $gL10n->get('SYS_THUMBNAILS_PER_PAGE'),
     $formValues['photo_thumbs_page'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_THUMBNAILS_PER_PAGE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_THUMBNAILS_PER_PAGE_DESC')
 );
 $formPhotos->addInput(
     'photo_thumbs_scale',
-    $gL10n->get('PHO_SCALE_THUMBNAILS'),
+    $gL10n->get('SYS_THUMBNAIL_SCALING'),
     $formValues['photo_thumbs_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_SCALE_THUMBNAILS_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_THUMBNAIL_SCALING_DESC')
 );
 $formPhotos->addInput(
     'photo_show_width',
@@ -1261,21 +1261,21 @@ $formPhotos->addInput(
 );
 $formPhotos->addInput(
     'photo_image_text_size',
-    $gL10n->get('PHO_CAPTION_SIZE'),
+    $gL10n->get('SYS_CAPTION_SIZE'),
     $formValues['photo_image_text_size'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_CAPTION_SIZE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_CAPTION_SIZE_DESC')
 );
 $formPhotos->addCheckbox(
     'photo_download_enabled',
-    $gL10n->get('PHO_DOWNLOAD_ENABLED'),
+    $gL10n->get('SYS_ENABLE_DOWNLOAD'),
     (bool) $formValues['photo_download_enabled'],
-    array('helpTextIdInline' => array('PHO_DOWNLOAD_ENABLED_DESC', array('PHO_KEEP_ORIGINAL')))
+    array('helpTextIdInline' => array('SYS_ENABLE_DOWNLOAD_DESC', array('SYS_KEEP_ORIGINAL')))
 );
 $formPhotos->addCheckbox(
     'photo_keep_original',
-    $gL10n->get('PHO_KEEP_ORIGINAL'),
+    $gL10n->get('SYS_KEEP_ORIGINAL'),
     (bool) $formValues['photo_keep_original'],
-    array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', array('PHO_DOWNLOAD_ENABLED')))
+    array('helpTextIdInline' => array('SYS_KEEP_ORIGINAL_DESC', array('SYS_ENABLE_DOWNLOAD')))
 );
 $formPhotos->addCheckbox(
     'photo_ecard_enabled',
@@ -1285,7 +1285,7 @@ $formPhotos->addCheckbox(
 );
 $formPhotos->addInput(
     'photo_ecard_scale',
-    $gL10n->get('PHO_SCALE_THUMBNAILS'),
+    $gL10n->get('SYS_THUMBNAIL_SCALING'),
     $formValues['photo_ecard_scale'],
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
 );
@@ -1452,7 +1452,7 @@ $formGroupsRoles->addSelectBox(
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
-$formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, array('helpTextIdInline' => 'DAT_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, array('helpTextIdInline' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formGroupsRoles->addSubmitButton(
     'btn_save_lists',
     $gL10n->get('SYS_SAVE'),
@@ -1603,48 +1603,48 @@ $formProfile = new HtmlForm(
 );
 
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile-fields/profile_fields.php">
-            <i class="fas fa-th-list"></i>'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
-$formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextIdInline' => 'PRO_MAINTAIN_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+            <i class="fas fa-th-list"></i>'.$gL10n->get('SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION').'</a>';
+$formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextIdInline' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formProfile->addCheckbox(
     'profile_log_edit_fields',
-    $gL10n->get('PRO_LOG_EDIT_FIELDS'),
+    $gL10n->get('SYS_LOG_ALL_CHANGES'),
     (bool) $formValues['profile_log_edit_fields'],
-    array('helpTextIdInline' => 'PRO_LOG_EDIT_FIELDS_DESC')
+    array('helpTextIdInline' => 'SYS_LOG_ALL_CHANGES_DESC')
 );
 $formProfile->addCheckbox(
     'profile_show_map_link',
-    $gL10n->get('PRO_SHOW_MAP_LINK'),
+    $gL10n->get('SYS_SHOW_MAP_LINK'),
     (bool) $formValues['profile_show_map_link'],
-    array('helpTextIdInline' => 'PRO_SHOW_MAP_LINK_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_MAP_LINK_PROFILE_DESC')
 );
 $formProfile->addCheckbox(
     'profile_show_roles',
-    $gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP'),
+    $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP'),
     (bool) $formValues['profile_show_roles'],
-    array('helpTextIdInline' => 'PRO_SHOW_ROLE_MEMBERSHIP_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_ROLE_MEMBERSHIP_DESC')
 );
 $formProfile->addCheckbox(
     'profile_show_former_roles',
-    $gL10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP'),
+    $gL10n->get('SYS_SHOW_FORMER_ROLE_MEMBERSHIP'),
     (bool) $formValues['profile_show_former_roles'],
-    array('helpTextIdInline' => 'PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
 );
 
 if ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization()) {
     $formProfile->addCheckbox(
         'profile_show_extern_roles',
-        $gL10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS'),
+        $gL10n->get('SYS_SHOW_ROLES_OTHER_ORGANIZATIONS'),
         (bool) $formValues['profile_show_extern_roles'],
-        array('helpTextIdInline' => 'PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC')
+        array('helpTextIdInline' => 'SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC')
     );
 }
 
 $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
 $formProfile->addSelectBox(
     'profile_photo_storage',
-    $gL10n->get('PRO_LOCATION_PROFILE_PICTURES'),
+    $gL10n->get('SYS_LOCATION_PROFILE_PICTURES'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['profile_photo_storage'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PRO_LOCATION_PROFILE_PICTURES_DESC')
+    array('defaultValue' => $formValues['profile_photo_storage'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_LOCATION_PROFILE_PICTURES_DESC')
 );
 $formProfile->addSubmitButton(
     'btn_save_profile',
@@ -1652,7 +1652,7 @@ $formProfile->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'profile', 'accordion_modules', $gL10n->get('PRO_PROFILE'), 'fas fa-user', $formProfile->show()));
+$page->addHtml(getPreferencePanel('modules', 'profile', 'accordion_modules', $gL10n->get('SYS_PROFILE'), 'fas fa-user', $formProfile->show()));
 
 // PANEL: EVENTS
 
@@ -1669,63 +1669,63 @@ $selectBoxEntries = array(
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formEvents->addSelectBox(
-    'enable_dates_module',
+    'events_module_enabled',
     $gL10n->get('ORG_ACCESS_TO_MODULE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['enable_dates_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
+    array('defaultValue' => $formValues['events_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
-if ($gSettingsManager->getBool('dates_show_rooms')) {
+if ($gSettingsManager->getBool('events_rooms_enabled')) {
     $selectBoxEntries = array(
-        'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-        'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-        'room'         => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
-        'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-        'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+        'detail'       => $gL10n->get('SYS_DETAILED'),
+        'compact'      => $gL10n->get('SYS_COMPACT'),
+        'room'         => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
+        'participants' => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+        'description'  => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
     );
 } else {
     $selectBoxEntries = array(
-        'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-        'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-        'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-        'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+        'detail'       => $gL10n->get('SYS_DETAILED'),
+        'compact'      => $gL10n->get('SYS_COMPACT'),
+        'participants' => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+        'description'  => $gL10n->get('SYS_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
     );
 }
 $formEvents->addSelectBox(
-    'dates_view',
-    $gL10n->get('DAT_VIEW_MODE'),
+    'events_view',
+    $gL10n->get('SYS_DEFAULT_VIEW'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['dates_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('DAT_VIEW_MODE_DESC', array('DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT')))
+    array('defaultValue' => $formValues['events_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_DEFAULT_VIEW_DESC', array('SYS_DETAILED', 'SYS_COMPACT')))
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formEvents->addSelectBox(
-    'dates_per_page',
+    'events_per_page',
     $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['dates_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+    array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formEvents->addCheckbox(
-    'enable_dates_ical',
-    $gL10n->get('DAT_ENABLE_ICAL'),
-    (bool) $formValues['enable_dates_ical'],
-    array('helpTextIdInline' => 'DAT_ENABLE_ICAL_DESC')
+    'events_ical_export_enabled',
+    $gL10n->get('SYS_ENABLE_ICAL_EXPORT'),
+    (bool) $formValues['events_ical_export_enabled'],
+    array('helpTextIdInline' => 'SYS_ENABLE_ICAL_EXPORT_DESC')
 );
 $formEvents->addInput(
-    'dates_ical_days_past',
-    $gL10n->get('DAT_ICAL_DAYS_PAST'),
-    $formValues['dates_ical_days_past'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_PAST_DESC')
+    'events_ical_days_past',
+    $gL10n->get('SYS_ICAL_DAYS_PAST'),
+    $formValues['events_ical_days_past'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ICAL_DAYS_PAST_DESC')
 );
 $formEvents->addInput(
-    'dates_ical_days_future',
-    $gL10n->get('DAT_ICAL_DAYS_FUTURE'),
-    $formValues['dates_ical_days_future'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_FUTURE_DESC')
+    'events_ical_days_future',
+    $gL10n->get('SYS_ICAL_DAYS_FUTURE'),
+    $formValues['events_ical_days_future'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ICAL_DAYS_FUTURE_DESC')
 );
 $formEvents->addCheckbox(
-    'dates_show_map_link',
-    $gL10n->get('DAT_SHOW_MAP_LINK'),
-    (bool) $formValues['dates_show_map_link'],
-    array('helpTextIdInline' => 'DAT_SHOW_MAP_LINK_DESC')
+    'events_show_map_link',
+    $gL10n->get('SYS_SHOW_MAP_LINK'),
+    (bool) $formValues['events_show_map_link'],
+    array('helpTextIdInline' => 'SYS_SHOW_MAP_LINK_DESC')
 );
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
@@ -1735,43 +1735,43 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($gCurrentOrgId);
 $formEvents->addSelectBoxFromSql(
-    'dates_default_list_configuration',
-    $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'),
+    'events_list_configuration',
+    $gL10n->get('SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['dates_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
+    array('defaultValue' => $formValues['events_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION_DESC')
 );
 $formEvents->addCheckbox(
-    'dates_save_all_confirmations',
-    $gL10n->get('DAT_SAVE_ALL_CONFIRMATIONS'),
-    (bool) $formValues['dates_save_all_confirmations'],
-    array('helpTextIdInline' => 'DAT_SAVE_ALL_CONFIRMATIONS_DESC')
+    'events_save_cancellations',
+    $gL10n->get('SYS_SAVE_ALL_CANCELLATIONS'),
+    (bool) $formValues['events_save_cancellations'],
+    array('helpTextIdInline' => 'SYS_SAVE_ALL_CANCELLATIONS_DESC')
 );
 $formEvents->addCheckbox(
-    'dates_may_take_part',
+    'events_may_take_part',
     $gL10n->get('SYS_MAYBE_PARTICIPATE'),
-    (bool) $formValues['dates_may_take_part'],
-    array('helpTextIdInline' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
+    (bool) $formValues['events_may_take_part'],
+    array('helpTextIdInline' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'SYS_CANCEL', 'SYS_EVENT_PARTICIPATION_TENTATIVE')))
 );
-$html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')).'">
-            <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
-$formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => 'DAT_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'EVT')).'">
+            <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CALENDAR_MANAGEMENT').'</a>';
+$formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => 'SYS_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addCheckbox(
-    'dates_show_rooms',
-    $gL10n->get('DAT_ROOM_SELECTABLE'),
-    (bool) $formValues['dates_show_rooms'],
-    array('helpTextIdInline' => 'DAT_ROOM_SELECTABLE_DESC')
+    'events_rooms_enabled',
+    $gL10n->get('SYS_ROOM_SELECTABLE'),
+    (bool) $formValues['events_rooms_enabled'],
+    array('helpTextIdInline' => 'SYS_ROOM_SELECTABLE_DESC')
 );
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php">
-            <i class="fas fa-home"></i>'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
-$formEvents->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => 'DAT_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+            <i class="fas fa-home"></i>'.$gL10n->get('SYS_SWITCH_TO_ROOM_MANAGEMENT').'</a>';
+$formEvents->addCustomContent($gL10n->get('SYS_EDIT_ROOMS'), $html, array('helpTextIdInline' => 'SYS_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addSubmitButton(
     'btn_save_events',
     $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'events', 'accordion_modules', $gL10n->get('DAT_DATES'), 'fas fa-calendar-alt', $formEvents->show()));
+$page->addHtml(getPreferencePanel('modules', 'events', 'accordion_modules', $gL10n->get('SYS_EVENTS'), 'fas fa-calendar-alt', $formEvents->show()));
 
 // PANEL: WEBLINKS
 
@@ -1817,7 +1817,7 @@ $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_
 $formWeblinks->addCustomContent(
     $gL10n->get('SYS_EDIT_CATEGORIES'),
     $html,
-    array('helpTextIdInline' => $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+    array('helpTextIdInline' => $gL10n->get('SYS_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
 );
 $formWeblinks->addSubmitButton(
     'btn_save_links',

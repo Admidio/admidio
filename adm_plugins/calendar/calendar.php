@@ -7,9 +7,7 @@
  * coming. This plugin can be used to show the Admidio events and birthdays in a
  * sidebar within Admidio or in an external website.
  *
- * Compatible with Admidio version 4.1
- *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -90,7 +88,7 @@ if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) >
 // check if the link url was set or is empty
 // otherwise the default url to the Admidio event module will be set
 if (!isset($plg_link_url) || $plg_link_url === '') {
-    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
+    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/events/events.php';
 }
 
 // add header content type if in ajax mode
@@ -138,7 +136,7 @@ if (isset($page) && $page instanceof HtmlPage) {
 
 // query of all events
 if ($plg_ter_aktiv) {
-    $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+    $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('EVT'));
     $queryParams = array_merge($catIdParams, array($dateMonthEnd, $dateMonthStart));
 
     // check if special calendars should be shown
@@ -312,7 +310,7 @@ if ($firstWeekdayOfMonth === 0) {
 }
 
 echo '<div id="plgCalendarContent" class="admidio-plugin-content">
-<h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
+<h3>'.$gL10n->get('SYS_CALENDAR').'</h3>
 
 <table id="plgCalendarTable">
     <tr>';
@@ -375,8 +373,8 @@ while ($currentDay <= $lastDayCurrentMonth) {
     if ($plg_ter_aktiv) {
         // only show events in dependence of the events module view settings
         if (array_key_exists($currentDay, $eventsMonthDayArray)
-        && ($gSettingsManager->getInt('enable_dates_module') === 1
-           || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin))) {
+        && ($gSettingsManager->getInt('events_module_enabled') === 1
+           || ($gSettingsManager->getInt('events_module_enabled') === 2 && $gValidLogin))) {
             $hasEvents = true;
 
             foreach ($eventsMonthDayArray[$currentDay] as $eventArray) {
@@ -390,8 +388,8 @@ while ($currentDay <= $lastDayCurrentMonth) {
                     }
                     if ($eventArray['all_day'] == 1) {
                         if ($eventArray['one_day']) {
-                            $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
-                            $textContent .= $gL10n->get('DAT_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
+                            $htmlContent .= '<strong>'.$gL10n->get('SYS_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
+                            $textContent .= $gL10n->get('SYS_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
                         } else {
                             $htmlContent .= '<strong>'.$gL10n->get('PLG_CALENDAR_SEVERAL_DAYS').'</strong> '.$eventArray['headline'].$eventArray['location'];
                             $textContent .= $gL10n->get('PLG_CALENDAR_SEVERAL_DAYS').' '.$eventArray['headline'].$eventArray['location'];

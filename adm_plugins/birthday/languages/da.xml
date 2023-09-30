@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_BIRTHDAY_FUTURE">#VAR1# bliver om #VAR2# dage #VAR3# år, den #VAR4#</string>
-  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# har sin fødselsdag om #VAR2# dage</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# har fødselsdag om #VAR2# dage</string>
   <string name="PLG_BIRTHDAY_HEADLINE">Fødselsdag</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">Hr. #VAR1#</string>
   <string name="PLG_BIRTHDAY_MORE_MEMBERS">I dag har #VAR1# medlemmer fødselsdag.</string>
   <string name="PLG_BIRTHDAY_NO_MEMBERS">I dag er der ingen medlemmer der har fødselsdag.</string>
   <string name="PLG_BIRTHDAY_ONE_MEMBER">I dag er der et medlem der har fødselsdag.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# blev for #VAR2# dage siden #VAR3# år, den #VAR4#</string>
-  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# havde sin fødselsdag for #VAR2# dage siden</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# havde fødselsdag for #VAR2# dage siden</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# bliver idag #VAR2#</string>
-  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# har sin fødselsdag i dag</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# har fødselsdag i dag</string>
   <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# bliver imorgen #VAR3# år, den #VAR4#</string>
-  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# har sin fødselsdag i morgen</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# har fødselsdag i morgen</string>
   <string name="PLG_BIRTHDAY_WOMAN_VAR">Fru #VAR1#</string>
   <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# blev igår #VAR3# år, den #VAR4#</string>
-  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# havde sin fødselsdag i går</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# havde fødselsdag i går</string>
 </resources>

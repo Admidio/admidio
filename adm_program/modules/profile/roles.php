@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show a list with all roles where the user can assign or remove membership
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -239,7 +239,7 @@ while ($row = $statement->fetch()) {
     $role->setArray($row);
 
     // if user is assigned to this role
-    // or if user is created in members.php of list module
+    // or if user is created in contacts.php of list module
     if ($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId)) {
         $memberChecked = ' checked="checked" ';
     }

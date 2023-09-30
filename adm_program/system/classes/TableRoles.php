@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages access to database table adm_roles
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -288,7 +288,7 @@ class TableRoles extends TableAccess
 
         if ($this->type === TableRoles::ROLE_EVENT) {
             // read system default list configuration for events
-            return $gSettingsManager->getInt('dates_default_list_configuration');
+            return $gSettingsManager->getInt('events_list_configuration');
         } else {
             try {
                 // read system default list configuration

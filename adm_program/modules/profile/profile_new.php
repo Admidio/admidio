@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create or edit a user profile
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -71,9 +71,9 @@ if ($getCopy) {
 } elseif ($getNewUser === 2) {
     $headline = $gL10n->get('SYS_REGISTRATION');
 } elseif ($userId === $gCurrentUserId) {
-    $headline = $gL10n->get('PRO_EDIT_MY_PROFILE');
+    $headline = $gL10n->get('SYS_EDIT_MY_PROFILE');
 } else {
-    $headline = $gL10n->get('PRO_EDIT_PROFILE');
+    $headline = $gL10n->get('SYS_EDIT_PROFILE');
 }
 
 // check if module may be called
@@ -180,7 +180,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'usr_login_name',
                     $gL10n->get('SYS_USERNAME'),
                     $user->getValue('usr_login_name'),
-                    array('maxLength' => 254, 'property' => $fieldProperty, 'helpTextIdLabel' => 'PRO_USERNAME_DESCRIPTION', 'class' => 'form-control-small')
+                    array('maxLength' => 254, 'property' => $fieldProperty, 'helpTextIdLabel' => 'SYS_USERNAME_DESCRIPTION', 'class' => 'form-control-small')
                 );
 
                 if ($getNewUser === 2) {
@@ -194,7 +194,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                             'property'         => HtmlForm::FIELD_REQUIRED,
                             'minLength'        => PASSWORD_MIN_LENGTH,
                             'passwordStrength' => true,
-                            'helpTextIdLabel'  => 'PRO_PASSWORD_DESCRIPTION',
+                            'helpTextIdLabel'  => 'SYS_PASSWORD_DESCRIPTION',
                             'class'            => 'form-control-small'
                         )
                     );

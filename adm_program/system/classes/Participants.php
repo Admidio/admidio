@@ -1,16 +1,16 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
 
 /**
- * This class gets information about participants and leaders of dates.
+ * This class gets information about participants and leaders of events.
  *
- * This function is developed, to  read the participants and leaders of dates from database.
+ * This function is developed, to  read the participants and leaders of events from database.
  * Participants and leaders can be counted or be written in an array with surname, firstname and leader-status.
  * Also, the limit of participation can to be calculated.
  * This class is flexible in usage. It is possible to pass the parameter of the rolId when creating an instance

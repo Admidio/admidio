@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Tous les événements</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Événements</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Il n\'y a pas d\'événements disponibles pour les visiteurs. Veuillez vous connecter pour voir les événements.</string>
+</resources>

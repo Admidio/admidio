@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various functions for categories
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -15,7 +15,7 @@
  *            LNK = Categories for weblinks
  *            ANN = Categories for announcements
  *            USF = Categories for profile fields
- *            DAT = Calendars for events
+ *            EVT = Calendars for events
  * mode     : 1 - Create or edit categories
  *            2 - Delete category
  *            4 - Change sequence for parameter cat_id
@@ -26,7 +26,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-$getType    = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'AWA')));
+$getType    = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'EVT', 'AWA')));
 $getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 4)));
 
 // set text strings for the different modules
@@ -35,8 +35,8 @@ switch ($getType) {
         $component = 'ANNOUNCEMENTS';
         break;
 
-    case 'DAT':
-        $component = 'DATES';
+    case 'EVT':
+        $component = 'EVENTS';
         break;
 
     case 'LNK':

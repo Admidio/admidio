@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create and edit categories
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ******************************************************************************
@@ -15,14 +15,14 @@
  *            LNK = Categories for weblinks
  *            ANN = Categories for announcements
  *            USF = Categories for profile fields
- *            DAT = Calendars for events
+ *            EVT = Calendars for events
  ****************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-$getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
+$getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'EVT', 'AWA')));
 
 $roleViewSet = array(0);
 $roleEditSet = array(0);
@@ -30,13 +30,13 @@ $addButtonText = $gL10n->get('SYS_CATEGORY');
 
 // set headline of the script
 if ($getCatUuid !== '') {
-    if ($getType === 'DAT') {
+    if ($getType === 'EVT') {
         $headlineSuffix = $gL10n->get('SYS_EDIT_CALENDAR');
     } else {
         $headlineSuffix = $gL10n->get('SYS_EDIT_CATEGORY');
     }
 } else {
-    if ($getType === 'DAT') {
+    if ($getType === 'EVT') {
         $headlineSuffix = $gL10n->get('SYS_CREATE_CALENDAR');
     } else {
         $headlineSuffix = $gL10n->get('SYS_CREATE_CATEGORY');
@@ -53,13 +53,13 @@ switch ($getType) {
         $rolesRightsName    = 'SYS_RIGHT_ANNOUNCEMENTS';
         break;
 
-    case 'DAT':
-        $component = 'DATES';
-        $headline = $gL10n->get('DAT_DATES') . ' - ' . $headlineSuffix;
-        $rolesRightEditName = 'DAT_EDIT_EVENTS';
+    case 'EVT':
+        $component = 'EVENTS';
+        $headline = $gL10n->get('SYS_EVENTS') . ' - ' . $headlineSuffix;
+        $rolesRightEditName = 'SYS_EDIT_EVENTS';
         $rolesRightsColumn  = 'rol_dates';
         $rolesRightsName    = 'SYS_RIGHT_DATES';
-        $addButtonText      = $gL10n->get('DAT_CALENDAR');
+        $addButtonText      = $gL10n->get('SYS_CALENDAR');
         break;
 
     case 'LNK':
@@ -78,7 +78,7 @@ switch ($getType) {
     case 'USF':
         $component = 'CORE';
         $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $headlineSuffix;
-        $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
+        $rolesRightEditName = 'SYS_EDIT_PROFILE_FIELDS_PREF';
         $rolesRightsColumn  = 'rol_edit_user';
         $rolesRightsName    = 'SYS_RIGHT_EDIT_USER';
         break;

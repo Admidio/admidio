@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -679,7 +679,7 @@ class ProfileFields
                 case 'NUMBER':
                     // A number must be numeric
                     if (!$this->noValueCheck && !is_numeric($fieldValue)) {
-                        throw new AdmException($gL10n->get('PRO_FIELD_NUMERIC', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
+                        throw new AdmException($gL10n->get('SYS_FIELD_NUMERIC', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
                     }
 
                     // numbers don't have leading zero
@@ -688,7 +688,7 @@ class ProfileFields
                 case 'DECIMAL':
                     // A decimal must be numeric
                     if (!$this->noValueCheck && !is_numeric(str_replace(',', '.', $fieldValue))) {
-                        throw new AdmException($gL10n->get('PRO_FIELD_NUMERIC', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
+                        throw new AdmException($gL10n->get('SYS_FIELD_NUMERIC', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
                     }
 
                     // decimals don't have leading zero
@@ -734,7 +734,7 @@ class ProfileFields
             }
 
             if($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') !== ''
-            && preg_match($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex'), $fieldValue) === 0) {
+            && preg_match('/'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_regex').'/', $fieldValue) === 0) {
                 throw new AdmException($gL10n->get('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
             }
         }

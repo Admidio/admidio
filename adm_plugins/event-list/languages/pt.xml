@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Todos os eventos</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Eventos</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Não há eventos disponíveis para os visitantes. Inicie a sessão para ver os eventos.</string>
+</resources>

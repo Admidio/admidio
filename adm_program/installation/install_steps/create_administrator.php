@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Installation step: create_administrator
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -116,7 +116,7 @@ $form->addInput(
     'user_password',
     $gL10n->get('SYS_PASSWORD'),
     '',
-    array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION')
+    array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdLabel' => 'SYS_PASSWORD_DESCRIPTION')
 );
 $form->addInput(
     'user_password_confirm',

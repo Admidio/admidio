@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Default file upload dialog
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -39,7 +39,7 @@ if ($getModule === 'photos') {
 
     // check if current user has right to upload photos
     if (!$gCurrentUser->editPhotoRight()) {
-        $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
@@ -61,7 +61,7 @@ if ($getModule === 'photos') {
     $uploadDir = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/';
     $uploadUrl = ADMIDIO_URL . FOLDER_DATA . '/photos/upload/';
     $destinationName = $photoAlbum->getValue('pho_name');
-    $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
+    $headline = $gL10n->get('SYS_UPLOAD_PHOTOS');
 
     if($getMode === 'choose_files') {
         // delete old stuff in upload folder
@@ -73,7 +73,7 @@ if ($getModule === 'photos') {
         }
     }
 } elseif ($getModule === 'documents_files') {
-    if (!$gSettingsManager->getBool('documents_files_enable_module')) {
+    if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         // => EXIT
     }
@@ -88,7 +88,7 @@ if ($getModule === 'photos') {
     }
 
     // upload only possible if upload filesize > 0
-    if ($gSettingsManager->getInt('max_file_upload_size') === 0) {
+    if ($gSettingsManager->getInt('documents_files_max_upload_size') === 0) {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
@@ -135,7 +135,7 @@ if ($getMode === 'choose_files') {
                 'accept_file_types' => '/\.(jpe?g|png)$/i'
             ),
             true,
-            array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID'))
+            array('accept_file_types' => $gL10n->get('SYS_PHOTO_FORMAT_INVALID'))
         );
     } elseif ($getModule === 'documents_files') {
         $uploadHandler = new UploadHandlerDownload(array(

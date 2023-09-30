@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show registration dialog or the list with new registrations
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -76,7 +76,7 @@ if ($getMode === '' && $getUserUuid === '') {
     $headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
 
     // Navigation in module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-file-signature');
 
     try {
         // create html page object

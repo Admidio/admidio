@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES">Alle berichten</string>
-  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Aankondigingen</string>
-  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_NO_ENTRIES_VISITORS">Er zijn geen mededelingen beschikbaar voor bezoekers. Log in om de mededelingen te zien.</string>
-</resources>

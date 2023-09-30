@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Upload and save new user photo
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -178,9 +178,9 @@ if ($getMode === 'save') {
 if ($getMode === 'choose') {
     // set headline
     if ((int) $user->getValue('usr_id') === $gCurrentUserId) {
-        $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
+        $headline = $gL10n->get('SYS_EDIT_MY_PROFILE_PICTURE');
     } else {
-        $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
+        $headline = $gL10n->get('SYS_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
     }
 
     $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -190,10 +190,10 @@ if ($getMode === 'choose') {
 
     // show form
     $form = new HtmlForm('upload_files_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'upload', 'user_uuid' => $getUserUuid)), $page, array('enableFileUpload' => true));
-    $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+    $form->addCustomContent($gL10n->get('SYS_CURRENT_PROFILE_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('SYS_CURRENT_PROFILE_PICTURE').'" />');
     $form->addFileUpload(
         'foto_upload_file',
-        $gL10n->get('PRO_CHOOSE_PHOTO'),
+        $gL10n->get('SYS_SELECT_PHOTO'),
         array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help')
     );
     $form->addSubmitButton(
@@ -218,27 +218,27 @@ if ($getMode === 'choose') {
 
     // File size
     if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
-        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', array(round(PhpIniUtils::getUploadMaxSize()/1024** 2))));
+        $gMessage->show($gL10n->get('SYS_PHOTO_FILE_TO_LARGE', array(round(PhpIniUtils::getUploadMaxSize()/1024** 2))));
         // => EXIT
     }
 
     // check if a file was really uploaded
     if (!file_exists($_FILES['userfile']['tmp_name'][0]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][0])) {
-        $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOSEN'));
+        $gMessage->show($gL10n->get('SYS_NO_PICTURE_SELECTED'));
         // => EXIT
     }
 
     // File ending
     $imageProperties = getimagesize($_FILES['userfile']['tmp_name'][0]);
     if ($imageProperties === false || !in_array($imageProperties['mime'], array('image/jpeg', 'image/png'), true)) {
-        $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
+        $gMessage->show($gL10n->get('SYS_PHOTO_FORMAT_INVALID'));
         // => EXIT
     }
 
     // Auflösungskontrolle
     $imageDimensions = $imageProperties[0] * $imageProperties[1];
     if ($imageDimensions > SystemInfoUtils::getProcessableImageSize()) {
-        $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', array(round(SystemInfoUtils::getProcessableImageSize()/1000000, 2))));
+        $gMessage->show($gL10n->get('SYS_PHOTO_RESOLUTION_TO_LARGE', array(round(SystemInfoUtils::getProcessableImageSize()/1000000, 2))));
         // => EXIT
     }
 
@@ -267,9 +267,9 @@ if ($getMode === 'choose') {
     $userImage->delete();
 
     if ((int) $user->getValue('usr_id') === $gCurrentUserId) {
-        $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
+        $headline = $gL10n->get('SYS_EDIT_MY_PROFILE_PICTURE');
     } else {
-        $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
+        $headline = $gL10n->get('SYS_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
     }
 
     // create html page object
@@ -280,8 +280,8 @@ if ($getMode === 'choose') {
 
     // show form
     $form = new HtmlForm('show_new_profile_picture_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'save', 'user_uuid' => $getUserUuid)), $page);
-    $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
-    $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)).'" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
+    $form->addCustomContent($gL10n->get('SYS_CURRENT_PROFILE_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('SYS_CURRENT_PROFILE_PICTURE').'" />');
+    $form->addCustomContent($gL10n->get('SYS_NEW_PROFILE_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)).'" alt="'.$gL10n->get('SYS_NEW_PROFILE_PICTURE').'" />');
     $form->addLine();
     $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'fa-upload', 'class' => ' offset-sm-3'));
 

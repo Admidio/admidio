@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show role members list
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -108,7 +108,7 @@ if ($numberRoles === 1) {
 
     // If it's an event list and user has right to edit user states then an additional column with edit link is shown
     if ($role->getValue('cat_name_intern') === 'EVENTS') {
-        $event = new TableDate($gDb);
+        $event = new Event($gDb);
         $event->readDataByRoleId($roleIds[0]);
 
         $showComment = $event->getValue('dat_allow_comments');
@@ -127,7 +127,7 @@ if (!$hasRightViewFormerMembers) {
     $getDateTo   = DATE_NOW;
 }
 
-// Create date objects and format dates in system format
+// Create date objects and format events in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false) {
     // check if date_from  has system format
@@ -681,7 +681,7 @@ foreach ($membersList as $member) {
         $dateUuid       = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_uuid' => $dateUuid, 'user_uuid' => $member['usr_uuid'])) . '">
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/popup_participation.php', array('dat_uuid' => $dateUuid, 'user_uuid' => $member['usr_uuid'])) . '">
                                 <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 
@@ -778,7 +778,7 @@ elseif ($getMode === 'pdf') {
                 $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))));
             }
 
-            // Event
+            // Appointment
             $value = '';
             if ($role->getValue('rol_weekday') > 0) {
                 $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
@@ -787,7 +787,7 @@ elseif ($getMode === 'pdf') {
                 $value = $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
             }
             if ($role->getValue('rol_weekday') > 0 || (string) $role->getValue('rol_start_time') !== '') {
-                $form->addStaticControl('infobox_date', $gL10n->get('DAT_DATE'), $value);
+                $form->addStaticControl('infobox_date', $gL10n->get('SYS_APPOINTMENT'), $value);
             }
 
             // Meeting Point

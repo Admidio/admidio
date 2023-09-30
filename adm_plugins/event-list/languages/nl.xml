@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Alle evenementen</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Evenementen</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Er zijn geen evenementen beschikbaar voor bezoekers. Log in om de evenementen te zien.</string>
+</resources>

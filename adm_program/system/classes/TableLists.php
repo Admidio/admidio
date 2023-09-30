@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages access to database table adm_lists
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -46,11 +46,11 @@ class TableLists extends TableAccess
         if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration')) {
             throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_GROUPS_ROLES')));
         }
-        if ($lstId === $gSettingsManager->getInt('dates_default_list_configuration')) {
-            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('DAT_DATES')));
+        if ($lstId === $gSettingsManager->getInt('events_list_configuration')) {
+            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_EVENTS')));
         }
-        if ($lstId === $gSettingsManager->getInt('members_list_configuration')) {
-            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_MEMBERS')));
+        if ($lstId === $gSettingsManager->getInt('contacts_list_configuration')) {
+            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_CONTACTS')));
         }
 
         $this->db->startTransaction();

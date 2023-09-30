@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * RSS feed for photos
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -40,7 +40,7 @@ if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
 }
 
 // Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_PHOTO_ALBUMS')));
 
 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
     // show firstname and lastname of create and last change user
@@ -85,7 +85,7 @@ $orgLongname = $gCurrentOrganization->getValue('org_longname');
 $rss = new RssFeed(
     $orgLongname . ' - ' . $getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('PHO_RECENT_ALBUMS_OF_ORGA', array($orgLongname)),
+    $gL10n->get('SYS_RECENT_ALBUMS_OF_ORGA', array($orgLongname)),
     $orgLongname
 );
 

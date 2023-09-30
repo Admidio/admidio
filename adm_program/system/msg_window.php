@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Popup window with information
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -141,10 +141,10 @@ switch ($getMessageId) {
         echo '
             <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
             <ul>
-                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_1').'</li>
-                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_2').'</li>
-                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_3', array(round(SystemInfoUtils::getProcessableImageSize()/1000000, 2))).'</li>
-                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_4', array(round(PhpIniUtils::getUploadMaxSize()/1024** 2, 2))).'</li>
+                <li>'.$gL10n->get('SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1').'</li>
+                <li>'.$gL10n->get('SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2').'</li>
+                <li>'.$gL10n->get('SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3', array(round(SystemInfoUtils::getProcessableImageSize()/1000000, 2))).'</li>
+                <li>'.$gL10n->get('SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4', array(round(PhpIniUtils::getUploadMaxSize()/1024** 2, 2))).'</li>
             </ul>';
         break;
 

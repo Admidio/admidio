@@ -8,7 +8,7 @@
  * photo albums could be created or existing photo albums could be edited. Special properties of
  * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -288,7 +288,7 @@ class TablePhotos extends TableAccess
             }
 
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
-                . $gL10n->get('PHO_ALBUM') . ': ' . $this->getValue('pho_name') . '<br />'
+                . $gL10n->get('SYS_ALBUM') . ': ' . $this->getValue('pho_name') . '<br />'
                 . $gL10n->get('SYS_START') . ': ' . $this->getValue('pho_begin') . '<br />'
                 . $gL10n->get('SYS_END') . ': ' . $this->getValue('pho_end') . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'

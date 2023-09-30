@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show form where user can request a new password and handle the request
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -97,10 +97,10 @@ if ($getUserUuid !== '') {
                             $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
                         }
                     } else {
-                        $phrase = $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH');
+                        $phrase = $gL10n->get('SYS_PASSWORD_NOT_STRONG_ENOUGH');
                     }
                 } else {
-                    $phrase = $gL10n->get('PRO_PASSWORD_LENGTH');
+                    $phrase = $gL10n->get('SYS_PASSWORD_LENGTH');
                 }
             } else {
                 $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
@@ -121,7 +121,7 @@ if ($getUserUuid !== '') {
         $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_SYSTEM.'/password_reset.php', array('user_uuid' => $getUserUuid, 'id' => $getResetId)), $page);
         $form->addInput(
             'new_password',
-            $gL10n->get('PRO_NEW_PASSWORD'),
+            $gL10n->get('SYS_NEW_PASSWORD'),
             '',
             array(
                 'type'             => 'password',
@@ -129,7 +129,7 @@ if ($getUserUuid !== '') {
                 'minLength'        => PASSWORD_MIN_LENGTH,
                 'passwordStrength' => true,
                 'passwordUserData' => $user->getPasswordUserData(),
-                'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'
+                'helpTextIdInline' => 'SYS_PASSWORD_DESCRIPTION'
             )
         );
         $form->addInput(

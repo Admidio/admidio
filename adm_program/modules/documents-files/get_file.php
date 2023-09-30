@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Read a file from the adm_my_files folder
  *
- * @copyright 2004-2023 The Admidio Team
+ * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -20,7 +20,7 @@ $getFileUuid = admFuncVariableIsValid($_GET, 'file_uuid', 'string', array('requi
 $getView     = admFuncVariableIsValid($_GET, 'view', 'bool');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('documents_files_enable_module')) {
+if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
