@@ -32,6 +32,11 @@ class ListExport
     {
     }
 
+    /**
+     * Set the column headline for each column of the data array.
+     * @param array $headlines Array with the column headline for each column.
+     * @return void
+     */
     public function setColumnHeadlines(array $headlines)
     {
         if (count($this->data) > 0) {
@@ -41,10 +46,23 @@ class ListExport
         }
     }
 
+    /**
+     * Set an array filled with data that should be exported.
+     * @param array $dataArray The array with the data that should be exported.
+     * @return void
+     */
     public function setDataByArray(array $dataArray)
     {
         $this->data = array_merge($this->data, $dataArray);
     }
+
+    /**
+     * The data array will be filled from the result of a sql statement. Each row of the sql statement will be a
+     * sub array where each column of the sql statement will be an array value.
+     * @param string $sql Sql statement that will return the content for the export.
+     * @param array $parameters Parameters for the sql statement.
+     * @return void
+     */
     public function setDataBySql(string $sql, array $parameters = array())
     {
         global $gDb;
@@ -56,14 +74,19 @@ class ListExport
 
     /**
      * Export the data that was added to this class to different file formats. The following file formats
-     * are supported: xlsx, csv.
+     * are supported: xlsx, csv. The default export will be a csv file.
      * @param string $filename The name of the file without file extension that should be exported.
      * @param string $format The following values are allows: "xlsx", "csv"
      * @return void
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws AdmException
      */
-    public function export(string $filename, string $format)
+    public function export(string $filename, string $format = 'csv')
     {
+        if (count($this->data) === 0) {
+            throw new AdmException('The export file will contain no data.');
+        }
+
         $spreadsheet = new Spreadsheet();
         $activeWorksheet = $spreadsheet->getActiveSheet();
         $activeWorksheet->fromArray($this->data);
@@ -74,7 +97,7 @@ class ListExport
                 $filename .= '.xlsx';
                 break;
 
-            case 'csv':
+            default:
                 $writer = new Csv($spreadsheet);
                 $filename .= '.csv';
                 break;

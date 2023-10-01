@@ -20,9 +20,6 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
 require_once(__DIR__ . '/../../system/common.php');
 
 unset($list);
@@ -259,28 +256,35 @@ $mainSql = $list->getSQL(
 );
 
 if($getMode !== 'html') {
-    $listExport = new ListExport();
-    $listExport->setDataBySql($mainSql);
-    $listExport->setColumnHeadlines($list->getColumnNames());
 
-    $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
-    if ((string) $list->getValue('lst_name') !== '') {
-        $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
-    }
-    $filename = FileSystemUtils::getSanitizedPathEntry($filename);
+    try {
+        $listExport = new ListExport();
+        $listExport->setDataBySql($mainSql);
+        $listExport->setColumnHeadlines($list->getColumnNames());
+        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
+        if ((string)$list->getValue('lst_name') !== '') {
+            $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
+        }
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
 
-    switch ($getMode) {
-        case 'csv-ms':
-            $listExport->export($filename, 'xlsx');
-            break;
-        case 'csv-oo':
-            $listExport->export($filename, 'csv');
-            break;
-        case 'pdf':
-            break;
-        case 'pdfl':
-            break;
-        default:
+        switch ($getMode) {
+            case 'csv-ms':
+                $listExport->export($filename, 'xlsx');
+                break;
+            case 'csv-oo':
+                break;
+            case 'pdf':
+                break;
+            case 'pdfl':
+                break;
+            default:
+                // the default will be a csv file
+                $listExport->export($filename);
+        }
+    } catch (AdmException $e) {
+        $e->showHtml();
+    } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
+        echo $e->getMessage();
     }
     exit();
 }
@@ -323,41 +327,6 @@ if (count($relationTypeIds) === 1) {
 // if html mode and last url was not a list view then save this url to navigation stack
 if ($getMode === 'html' && !str_contains($gNavigation->getUrl(), 'lists_show.php')) {
     $gNavigation->addUrl(CURRENT_URL, $headline);
-}
-
-if($getMode === 'csv') {
-    $spreadsheet = new Spreadsheet();
-    $activeWorksheet = $spreadsheet->getActiveSheet();
-    $activeWorksheet->fromArray($membersList);
-
-    $writer = new Xlsx($spreadsheet);
-    //$writer = new Xls($spreadsheet);
-
-
-    $file = ADMIDIO_PATH . FOLDER_DATA . '/test.xlsx';
-    $writer->save($file);
-    $fileSize = filesize($file);
-
-    // Redirect
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment; filename="test.xlsx"');
-    header('Cache-Control: max-age=0');
-    readfile($file);
-    exit();
-
-    header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="test.xls"');
-    try {
-        $writer->save($file);
-        ob_start();
-        $writer->save('php://output');
-        $ret['data'] = base64_encode(ob_get_contents());
-        ob_end_clean();
-    } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
-        echo $e->getMessage();
-    }
-
-    exit();
 }
 
 if ($getMode !== 'csv') {
