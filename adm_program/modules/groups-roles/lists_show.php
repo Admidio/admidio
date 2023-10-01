@@ -22,7 +22,6 @@
  */
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -170,18 +169,19 @@ $valueQuotes = '';
 $charset     = '';
 $classTable  = '';
 $orientation = '';
+$showIdColumns = false;
 
 switch ($getMode) {
     case 'csv-ms':
         $separator   = ';';  // Microsoft Excel 2007 or new needs a semicolon
         $valueQuotes = '"';  // all values should be set with quotes
-        $getMode     = 'csv';
+        //$getMode     = 'csv';
         $charset     = 'iso-8859-1';
         break;
     case 'csv-oo':
         $separator   = ',';  // a CSV file should have a comma
         $valueQuotes = '"';  // all values should be set with quotes
-        $getMode     = 'csv';
+        //$getMode     = 'csv';
         $charset     = 'utf-8';
         break;
     case 'pdf':
@@ -196,9 +196,11 @@ switch ($getMode) {
         break;
     case 'html':
         $classTable  = 'table table-condensed';
+        $showIdColumns = true;
         break;
     case 'print':
         $classTable  = 'table table-condensed table-striped';
+        $showIdColumns = true;
         break;
     default:
 }
@@ -249,11 +251,39 @@ if (!$showCountGuests) {
 $mainSql = $list->getSQL(
     array('showRolesMembers'  => $roleIds,
           'showFormerMembers' => $getShowFormerMembers,
+          'showIdColumns' => $showIdColumns,
           'showRelationTypes' => $relationTypeIds,
           'startDate' => $startDateEnglishFormat,
           'endDate'   => $endDateEnglishFormat
     )
 );
+
+if($getMode !== 'html') {
+    $listExport = new ListExport();
+    $listExport->setDataBySql($mainSql);
+    $listExport->setColumnHeadlines($list->getColumnNames());
+
+    $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
+    if ((string) $list->getValue('lst_name') !== '') {
+        $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
+    }
+    $filename = FileSystemUtils::getSanitizedPathEntry($filename);
+
+    switch ($getMode) {
+        case 'csv-ms':
+            $listExport->export($filename, 'xlsx');
+            break;
+        case 'csv-oo':
+            $listExport->export($filename, 'csv');
+            break;
+        case 'pdf':
+            break;
+        case 'pdfl':
+            break;
+        default:
+    }
+    exit();
+}
 
 // determine the number of users in this list
 $listStatement = $gDb->query($mainSql); // TODO add more params

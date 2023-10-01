@@ -52,14 +52,15 @@ class ListConfiguration extends TableLists
     /**
      * Add new column to column array. The number of the column will be the maximum number of the current
      * array plus one. The special field usr_uuid could only be added by users with the right to edit all users.
-     * @param int|string $field  Usf-Id of a profile field or the name of a special field.
-     * @param int        $number Optional the number of the column. This is useful if the list already exists
+     * @param int|string $field Usf-Id of a profile field or the name of a special field.
+     * @param int $number Optional the number of the column. This is useful if the list already exists
      *                           and maybe the profile field changed the position within the list.
-     * @param string     $sort   Optional the value **ASC** for ascending and **DESC** for descending.
-     * @param string     $filter Optional a filter for the values of that column.
+     * @param string $sort Optional the value **ASC** for ascending and **DESC** for descending.
+     * @param string $filter Optional a filter for the values of that column.
      * @return bool Returns true if the field was added to the column list.
+     * @throws AdmException
      */
-    public function addColumn($field, $number = 0, $sort = '', $filter = '')
+    public function addColumn($field, int $number = 0, string $sort = '', string $filter = ''): bool
     {
         global $gCurrentUser;
 
@@ -113,7 +114,7 @@ class ListConfiguration extends TableLists
      * Return count of columns
      * @return int
      */
-    public function countColumns()
+    public function countColumns(): int
     {
         return count($this->columns);
     }
@@ -133,8 +134,8 @@ class ListConfiguration extends TableLists
         global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
         $column = $this->getColumnObject($columnNumber);
+        $usfId  = 0;
 
-        $usfId = 0;
         if ($column->getValue('lsc_usf_id') > 0) {
             // check if customs field and remember
             $usfId = (int) $column->getValue('lsc_usf_id');
@@ -166,22 +167,22 @@ class ListConfiguration extends TableLists
         || $column->getValue('lsc_special_field') === 'mem_begin'
         || $column->getValue('lsc_special_field') === 'mem_end') {
             if (strlen($content) > 0) {
-                // date must be formated
-                $date = \DateTime::createFromFormat('Y-m-d', $content);
+                // date must be formatted
+                $date = DateTime::createFromFormat('Y-m-d', $content);
                 $content = $date->format($gSettingsManager->getString('system_date'));
             }
         } elseif (in_array($format, array('csv', 'pdf'), true)
         &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
             || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON')) {
             if (strlen($content) > 0) {
-                // show selected text of optionfield or combobox
+                // show selected text of option field or combobox
                 $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
                 $content = $arrListValues[$content];
             }
         } elseif (in_array($column->getValue('lsc_special_field'), array('usr_timestamp_create', 'usr_timestamp_change', 'mem_timestamp_change'))) {
             if (strlen($content) > 0) {
-                // date must be formated
-                $date = \DateTime::createFromFormat('Y-m-d H:i:s', $content);
+                // date must be formatted
+                $date = DateTime::createFromFormat('Y-m-d H:i:s', $content);
                 $content = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
             }
         } elseif ($column->getValue('lsc_special_field') === 'mem_approved') {
@@ -207,6 +208,10 @@ class ListConfiguration extends TableLists
                     $htmlText = '<i class="fas fa-times-circle admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-cancel';
                     break;
+                default:
+                    $text = '';
+                    $htmlText = '';
+                    $buttonClass = '';
             }
 
             if ($format === 'csv') {
@@ -236,7 +241,7 @@ class ListConfiguration extends TableLists
             // replace tab and line feed
             $content = preg_replace("/\t/", "\\t", $content);
             $content = preg_replace("/\r?\n/", "\\n", $content);
-            // replace special chars in excel so no app or function could be implicit executed
+            // replace special chars in Excel so no app or function could be implicit executed
             $outputContent = preg_replace("/^[@=]/", "#", $content);
         }
         // pdf should show only text and not much html content
@@ -274,11 +279,12 @@ class ListConfiguration extends TableLists
 
     /**
      * Delete pointed columns out of configuration
-     * @param int  $number
-     * @param bool $all    Define all columns to be deleted
+     * @param int $number
+     * @param bool $all Define all columns to be deleted
      * @return bool
+     * @throws AdmException
      */
-    public function deleteColumn($number, $all = false)
+    public function deleteColumn(int $number, bool $all = false): bool
     {
         if ($number > $this->countColumns()) {
             return false;
@@ -291,7 +297,7 @@ class ListConfiguration extends TableLists
                 array_pop($this->columns);
             }
         } else {
-            // only 1 columns is deleted and following are going 1 step up
+            // only one column is deleted and following are going one step up
             for ($newColumnNumber = $number, $max = $this->countColumns(); $newColumnNumber < $max; ++$newColumnNumber) {
                 $newColumn = $this->columns[$newColumnNumber];
                 $oldColumn = $this->columns[$newColumnNumber + 1];
@@ -312,7 +318,7 @@ class ListConfiguration extends TableLists
      * Returns an array with all alignments (center, left or right) from all columns of this list.
      * @return array Array with alignments from all columns of this list configuration.
      */
-    public function getColumnAlignments()
+    public function getColumnAlignments(): array
     {
         global $gProfileFields;
 
@@ -366,7 +372,7 @@ class ListConfiguration extends TableLists
      * to the current language.
      * @return array Array with all column names of this list configuration.
      */
-    public function getColumnNames()
+    public function getColumnNames(): array
     {
         global $gL10n, $gProfileFields;
 
@@ -411,7 +417,7 @@ class ListConfiguration extends TableLists
      * of the special field e.g. **mem_begin**
      * @return array Array with all column names of this sql select clause.
      */
-    public function getColumnNamesSql()
+    public function getColumnNamesSql(): array
     {
         global $gProfileFields;
 
@@ -433,13 +439,13 @@ class ListConfiguration extends TableLists
     /**
      * Returns the column object with the corresponding number.
      * The numbers will start with 1 and end with the count of all columns.
-     * If that column doesn't exists the method try to repair the
-     * column list. If that won't help then **null** will be returned.
+     * If that column doesn't exist the method try to repair the
+     * column list. If that doesn't help then **null** will be returned.
      * @param int $number The internal number of the column.
      *                    This will be the position of the column in the list.
      * @return TableAccess|null Returns a TableAccess object of the database table **adm_list_columns**.
      */
-    public function getColumnObject($number)
+    public function getColumnObject(int $number): ?TableAccess
     {
         if (array_key_exists($number, $this->columns)) {
             return $this->columns[$number];
@@ -459,9 +465,9 @@ class ListConfiguration extends TableLists
      * will be replaced with a default value. This array can than be used to add it to the main sql statement.
      * @return array<int,string> Returns an array with all list columns and a search condition for each column.
      */
-    public function getSearchConditions()
+    public function getSearchConditions(): array
     {
-        global $gProfileFields, $gL10n;
+        global $gProfileFields;
 
         $arrSearchConditions = array();
 
@@ -518,12 +524,12 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * Prepare SQL of the current list configuration. Therefore all roles of the array and there users will be selected
+     * Prepare SQL of the current list configuration. Therefore, all roles of the array and there users will be selected
      * and joined with the columns of the list configuration. The time period of the membership will be considered and
-     * could be influenced with parameters. There is also a possiblity to join users of a relationship and hide special
+     * could be influenced with parameters. There is also a possibility to join users of a relationship and hide special
      * columns of event roles. Each profile field of the select list will have their internal profile field name as column
      * name. The special field will still have their database column name.
-     * @param array          $options  (optional) An array with the following possible entries:
+     * @param array $options (optional) An array with the following possible entries:
      *                                 - **showAllMembersThisOrga** : Set to true all users with an active membership
      *                                   to at least one role of the current organization will be shown.
      *                                   This setting could be combined with **showFormerMembers** or **showRelationTypes**.
@@ -536,6 +542,8 @@ class ListConfiguration extends TableLists
      *                                   should be shown and also former members should be listed
      *                                 - **showRelationTypes** : An array with relation types. The sql will be expanded with
      *                                   all users who are in such a relationship to the selected role users.
+     *                                 - **showIdColumns** : The following columns will be added to the SQL result.
+     *                                   They will be the first columns of the result: mem_leaders, usr_id, usr_uuid.
      *                                 - **useConditions** : false - Don't add additional conditions to the SQL
      *                                                       true  - Conditions will be added as stored in the settings
      *                                 - **useOrderBy** : false - Don't add the sorting to the SQL
@@ -545,8 +553,9 @@ class ListConfiguration extends TableLists
      *                                 - **endDate** : The end date if memberships that should be considered.The time period of
      *                                   the membership must be at least one day before this date.
      * @return string Returns a valid sql that represents all users with the columns of the list configuration.
+     * @throws AdmException
      */
-    public function getSQL(array $options = array())
+    public function getSQL(array $options = array()): string
     {
         global $gL10n, $gProfileFields;
 
@@ -567,6 +576,7 @@ class ListConfiguration extends TableLists
         $arrSqlColumnNames = array();
         $arrOrderByColumns = array();
         $sqlColumnNames = '';
+        $sqlIdColumns = '';
         $sqlOrderBys = '';
         $sqlJoin  = '';
         $sqlWhere = '';
@@ -623,7 +633,6 @@ class ListConfiguration extends TableLists
                 // Handle the conditions for the columns
                 if ($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '') {
                     $value = $listColumn->getValue('lsc_filter');
-                    $type = '';
 
                     // custom profile field
                     if ($lscUsfId > 0) {
@@ -704,7 +713,7 @@ class ListConfiguration extends TableLists
             $sqlOrderBys = implode(', ', $arrOrderByColumns);
 
             // if roles should be shown than sort by leaders
-            if (count($optionsAll['showRolesMembers']) > 0) {
+            if (count($optionsAll['showRolesMembers']) > 0 && $optionsAll['showIdColumns']) {
                 if (strlen($sqlOrderBys) > 0) {
                     $sqlOrderBys = 'mem_leader DESC, ' . $sqlOrderBys;
                 } else {
@@ -755,9 +764,16 @@ class ListConfiguration extends TableLists
 
         // check if mem_leaders should be shown
         if (count($optionsAll['showRolesMembers']) === 1) {
-            $sqlMemLeader = ' mem_leader, ';
+            $sqlMemLeader = ' mem_leader ';
         } else {
-            $sqlMemLeader = ' false AS mem_leader, ';
+            $sqlMemLeader = ' false AS mem_leader ';
+        }
+
+        // add columns usr_id, usr_uuid, mem_leaders to the sql
+        if ($optionsAll['showIdColumns']) {
+            $sqlIdColumns = $sqlMemLeader . ', usr_id, usr_uuid ';
+        } else {
+            $sqlColumnNames = substr($sqlColumnNames, 1);
         }
 
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
@@ -773,14 +789,14 @@ class ListConfiguration extends TableLists
 
         // Set SQL-Statement
         if ($optionsAll['showAllMembersDatabase']) {
-            $sql = 'SELECT DISTINCT false AS mem_leader, usr_id, usr_uuid ' . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT ' . $sqlIdColumns . $sqlColumnNames . '
                       FROM '.TBL_USERS.'
                            '.$sqlJoin.'
                      WHERE usr_valid = true '.
                            $sqlWhere.
                            $sqlOrderBys;
         } else {
-            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, usr_uuid ' . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT ' . $sqlIdColumns . $sqlColumnNames . '
                       FROM '.TBL_MEMBERS.' mem
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
@@ -825,7 +841,7 @@ class ListConfiguration extends TableLists
             // only add columns to the array if the current user is allowed to view them
             if ($usfId === 0
             || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers())) {
-                // if only names should be shown, than check if it's a name field
+                // if only names should be shown, then check if it's a name field
                 if (!$this->showOnlyNames
                     || ($usfId > 0 && in_array($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), array('FIRST_NAME', 'LAST_NAME')))
                     || ($usfId === 0 && in_array($lscRow['lsc_special_field'], array('mem_begin', 'mem_end', 'mem_leader', 'mem_usr_id_change', 'mem_timestamp_change', 'mem_approved', 'mem_comment', 'mem_count_guests')))) {
@@ -845,7 +861,7 @@ class ListConfiguration extends TableLists
      * Reads a record out of the table in database selected by the unique uuid column in the table.
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
      * Per default all columns of the default table will be read and stored in the object.
-     * Not every Admidio table has a uuid. Please check the database structure before you use this method.
+     * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
@@ -914,6 +930,7 @@ class ListConfiguration extends TableLists
     /**
      * @param bool $updateFingerPrint
      * @return bool
+     * @throws AdmException
      */
     public function save(bool $updateFingerPrint = true): bool
     {
