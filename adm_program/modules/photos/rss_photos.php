@@ -63,8 +63,6 @@ $statement = $gDb->queryPrepared($sql, $queryParams);
 
 $photoAlbum = new TablePhotos($gDb);
 
-// ab hier wird der RSS-Feed zusammengestellt
-
 // add the RSS items to the RssFeed object
 $organizationName = $gCurrentOrganization->getValue('org_longname');
 $rss = new RssFeed(
@@ -76,7 +74,6 @@ $rss = new RssFeed(
 
 // add the RSS items to the RssFeed object
 while ($row = $statement->fetch()) {
-    // Daten in ein Photo-Objekt uebertragen
     $photoAlbum->clear();
     $photoAlbum->setArray($row);
 
@@ -84,7 +81,7 @@ while ($row = $statement->fetch()) {
 
     // read folder structure to put them together and write to title
     $parents = '';
-    $phoId       = (int) $photoAlbum->getValue('pho_id');
+    $phoUuid     = $photoAlbum->getValue('pho_uuid');
     $phoParentId = (int) $photoAlbum->getValue('pho_pho_id_parent');
 
     while ($phoParentId > 0) {
@@ -95,16 +92,12 @@ while ($row = $statement->fetch()) {
         $parentsStatement = $gDb->queryPrepared($sql, array($phoParentId));
         $admPhotoParent = $parentsStatement->fetch();
 
-        // Link zusammensetzen
         $parents = $admPhotoParent['pho_name'].' > '.$parents;
-
-        // Elternveranst
         $phoParentId = $admPhotoParent['pho_pho_id_parent'];
     }
 
-    // Inhalt zusammensetzen
     $description = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
-    // Enddatum nur wenn anders als startdatum
+    // Show end date only if different from start date
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin')) {
         $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'))));
     }
@@ -118,13 +111,13 @@ while ($row = $statement->fetch()) {
     if ($photoAlbum->getValue('pho_quantity') > 0) {
         $description .= '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
         for ($photoNr = $photoAlbum->getValue('pho_quantity'); $photoNr >= $photoAlbum->getValue('pho_quantity')-4 && $photoNr > 0; --$photoNr) {
-            $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $phoId . '/' . $photoNr . '.jpg';
+            $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/' . $photoNr . '.jpg';
 
             // show only photo if that photo exists
             if (is_file($photoPath)) {
                 $description .=
-                    '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr)).'"><img
-                    src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr,
+                    '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_uuid' => $phoUuid, 'photo_nr' => $photoNr)).'"><img
+                    src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $phoUuid, 'photo_nr' => $photoNr,
                     'pho_begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d'), 'thumb' => '1')).'" alt="'.$photoNr.'" /></a>&nbsp;';
             }
         }
@@ -134,7 +127,7 @@ while ($row = $statement->fetch()) {
     $rss->addItem(
         $parents . $photoAlbum->getValue('pho_name'),
         $description,
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('pho_id' => $phoId)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('photo_uuid' => $phoUuid)),
         $row['create_name'],
         DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );
