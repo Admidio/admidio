@@ -7,15 +7,8 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- *  Parameters:
- *
- *  headline - Headline for RSS-Feed
- *              (Default) Announcements
  ***********************************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
-
-// Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 
 // Check if RSS is active...
 if (!$gSettingsManager->getBool('enable_rss')) {
@@ -39,7 +32,7 @@ $organizationName = $gCurrentOrganization->getValue('org_longname');
 
 // create RSS feed object with channel information
 $rss = new RssFeed(
-    $organizationName.' - '.$getHeadline,
+    $organizationName . ' - ' . $gL10n->get('SYS_ANNOUNCEMENTS'),
     $gCurrentOrganization->getValue('org_homepage'),
     $gL10n->get('SYS_RECENT_ANNOUNCEMENTS_OF_ORGA', array($organizationName)),
     $organizationName
@@ -58,7 +51,7 @@ if ($announcements->getDataSetCount() > 0) {
         $rss->addItem(
             $announcement->getValue('ann_headline'),
             $announcement->getValue('ann_description'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('ann_uuid' => $announcement->getValue('ann_uuid'), 'headline' => $getHeadline)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('ann_uuid' => $announcement->getValue('ann_uuid'))),
             $row['create_name'],
             DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
             $announcement->getValue('cat_name')

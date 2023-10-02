@@ -10,8 +10,6 @@
  * Parameters:
  *
  * start     - Position of query recordset where the visual output should start
- * headline  - Title of the announcement module. This will be shown in the whole module.
- *             (Default) SYS_ANNOUNCEMENTS
  * cat_uuid  - Show only announcements of this category, if UUID is not set than show all announcements.
  * ann_uuid  - Uuid of a single announcement that should be shown.
  * date_from - is set to 01.01.1970,
@@ -26,7 +24,6 @@ unset($_SESSION['announcements_request']);
 
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 $getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
@@ -42,11 +39,12 @@ if ((int) $gSettingsManager->get('announcements_module_enabled') === 0) {
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
+$headline = $gL10n->get('SYS_ANNOUNCEMENTS');
 $category = new TableCategory($gDb);
 
 if ($getCatUuid !== '') {
     $category->readDataByUuid($getCatUuid);
-    $getHeadline .= ' - '.$category->getValue('cat_name');
+    $headline .= ' - '.$category->getValue('cat_name');
 }
 
 // create object for announcements
@@ -61,22 +59,22 @@ $announcementsCount = $announcements->getDataSetCount();
 try {
     // add url to navigation stack
     if ($getAnnUuid !== '') {
-        $gNavigation->addUrl(CURRENT_URL, $getHeadline);
+        $gNavigation->addUrl(CURRENT_URL, $headline);
     } else {
-        $gNavigation->addStartUrl(CURRENT_URL, $getHeadline, 'fa-newspaper');
+        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-newspaper');
     }
 } catch (AdmException $e) {
     $e->showHtml();
 }
 
 // create html page object
-$page = new HtmlPage('admidio-announcements', $getHeadline);
+$page = new HtmlPage('admidio-announcements', $headline);
 
 // add rss feed to announcements
 if ($gSettingsManager->getBool('enable_rss')) {
     $page->addRssFile(
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php', array('headline' => $getHeadline)),
-        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline))
+        ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php',
+        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $headline))
     );
 }
 
@@ -93,7 +91,7 @@ if (count($gCurrentUser->getAllEditableCategories('ANN')) > 0) {
     $page->addPageFunctionsMenuItem(
         'menu_item_announcement_add',
         $gL10n->get('SYS_CREATE_ENTRY'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
+        ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php',
         'fa-plus-circle'
     );
 }
@@ -120,7 +118,6 @@ if ($getAnnUuid === '') {
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSelectBoxForCategories(
         'cat_uuid',
         $gL10n->get('SYS_CATEGORY'),
@@ -164,9 +161,9 @@ if ($announcementsCount === 0) {
                         <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid, 'copy' => '1', 'headline' => $getHeadline)).'">
+                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid, 'copy' => '1')).'">
                                 <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
-                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid, 'headline' => $getHeadline)).'">
+                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid)).'">
                                 <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                             <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annUuid, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annUuid)).'">
@@ -191,14 +188,14 @@ if ($announcementsCount === 0) {
                 ) .
                 '<div class="admidio-info-category">' .
                     $gL10n->get('SYS_CATEGORY') .
-                    '&nbsp;<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_uuid' => $announcement->getValue('cat_uuid'))).'">' . $announcement->getValue('cat_name').'</a>
+                    '&nbsp;<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('cat_uuid' => $announcement->getValue('cat_uuid'))).'">' . $announcement->getValue('cat_name').'</a>
                 </div>
             </div>
         </div>');
     }  // Ende foreach
 
     // If necessary show links to navigate to next and previous recordsets of the query
-    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_uuid' => $getCatUuid));
+    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('cat_uuid' => $getCatUuid));
     $page->addHtml(admFuncGeneratePagination($baseUrl, $announcementsCount, $announcementsPerPage, $getStart));
 }
 
