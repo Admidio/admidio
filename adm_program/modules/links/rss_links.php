@@ -1,24 +1,14 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed for weblinks
+ * RSS feed of weblinks. Lists the newest 10 weblinks.
+ * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- *
- * Spezification of RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
- *
- * Parameters:
- *
- * headline  - Headline for RSS-Feed
- *             (Default) Weblinks
- *****************************************************************************/
+ ***********************************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
-
-// Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 
 // Check if RSS is active...
 if (!$gSettingsManager->getBool('enable_rss')) {
@@ -71,19 +61,19 @@ $statement = $gDb->queryPrepared($sql, $queryParams);
 
 // start defining the RSS Feed
 
-$orgLongname = $gCurrentOrganization->getValue('org_longname');
+$organizationName = $gCurrentOrganization->getValue('org_longname');
 
 // create RSS feed object with channel information
 $rss = new RssFeed(
-    $orgLongname.' - '.$getHeadline,
+    $organizationName . ' - ' . $gL10n->get('SYS_WEBLINKS'),
     $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('SYS_LINK_COLLECTION_FROM', array($orgLongname)),
-    $orgLongname
+    $gL10n->get('SYS_LINK_COLLECTION_FROM', array($organizationName)),
+    $organizationName
 );
 
 $weblink = new TableWeblink($gDb);
 
-// Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
+// add the RSS items to the RssFeed object
 while ($row = $statement->fetch()) {
     // submit links to object
     $weblink->clear();
@@ -97,10 +87,9 @@ while ($row = $statement->fetch()) {
         '<a href="'.$lnkUrl.'" target="_blank">'.$lnkUrl.'</a><br /><br />'. $weblink->getValue('lnk_description'),
         SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/links.php', array('id' => (int) $weblink->getValue('lnk_id'))),
         $row['create_name'],
-        \DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
+        DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
         $weblink->getValue('cat_name')
     );
 }
 
-// jetzt nur noch den Feed generieren lassen
 $rss->getRssFeed();
