@@ -10,8 +10,6 @@
  * Parameters:
  *
  * start      : Position of query recordset where the visual output should start
- * headline   : Title of the guestbook module. This will be shown in the whole module.
- *              (Default) GBO_GUESTBOOK
  * moderation : false (Default) - Guestbookviww
  *              true - Moderation mode, every entry could be released
  * gbo_uuid   : UUID of one guestbook entry that should be shown
@@ -32,7 +30,6 @@ if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
 
 // Initialize and check the parameters
 $getStart      = admFuncVariableIsValid($_GET, 'start', 'int');
-$getHeadline   = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 $getGboUuid    = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
 
@@ -43,19 +40,19 @@ if ($getModeration && !$gCurrentUser->editGuestbookRight()) {
 
 // add url to navigation stack
 if ($getGboUuid !== '') {
-    $gNavigation->addUrl(CURRENT_URL, $getHeadline);
+    $gNavigation->addUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'));
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline, 'fa-book');
+    $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'), 'fa-book');
 }
 
 // create html page object
 $page = new HtmlPage('admidio-guestbook');
 
 // add rss feed to guestbook
-if ($gSettingsManager->getBool('enable_rss')) {
+if ($gSettingsManager->getBool('enable_rss') && (int) $gSettingsManager->get('enable_guestbook_module') === 1) {
     $page->addRssFile(
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/rss_guestbook.php', array('headline' => $getHeadline)),
-        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline))
+        ADMIDIO_URL.FOLDER_MODULES.'/guestbook/rss_guestbook.php',
+        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('GBO_GUESTBOOK')))
     );
 }
 
@@ -99,9 +96,9 @@ $page->addJavascript('
 
 // add headline and title of module
 if ($getModeration) {
-    $page->setHeadline($gL10n->get('GBO_MODERATE_VAR', array($getHeadline)));
+    $page->setHeadline($gL10n->get('GBO_MODERATE_VAR', array($gL10n->get('GBO_GUESTBOOK'))));
 } else {
-    $page->setHeadline($getHeadline);
+    $page->setHeadline($gL10n->get('GBO_GUESTBOOK'));
 }
 
 // ------------------------------------------------------
@@ -147,7 +144,7 @@ if ($getGboUuid === '' && !$getModeration) {
     $page->addPageFunctionsMenuItem(
         'menu_item_guestbook_new_entry',
         $gL10n->get('SYS_WRITE_ENTRY'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('headline' => $getHeadline)),
+        ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php',
         'fa-pencil-alt'
     );
 }
@@ -174,14 +171,10 @@ if (!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMa
         $page->addPageFunctionsMenuItem(
             'menu_item_guestbook_moderate',
             $gL10n->get('GBO_MODERATE_ENTRIES'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1', 'headline' => $getHeadline)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1')),
             'fa-tasks',
             $countLockedEntries
         );
-        /*$guestbookMenu->addItem(
-            'admMenuItemModerate', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1', 'headline' => $getHeadline)),
-            $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'fa-tasks'
-        );*/
     }
 }
 
@@ -247,7 +240,7 @@ if ($countGuestbookEntries === 0) {
                         <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid, 'headline' => $getHeadline)). '">
+                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
                                 <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
                             <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
@@ -362,7 +355,7 @@ if ($countGuestbookEntries === 0) {
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline, 'moderation' => $getModeration));
+$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => $getModeration));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $guestbookEntries, $guestbookEntriesPerPage, $getStart));
 
 // show html of complete page
