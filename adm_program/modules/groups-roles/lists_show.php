@@ -632,7 +632,7 @@ foreach ($membersList as $member) {
     if ($editUserStatus) {
         // Get the matching event
         $sql = 'SELECT dat_uuid
-                  FROM '.TBL_DATES.'
+                  FROM '.TBL_EVENTS.'
                  WHERE dat_rol_id = ? -- $roleIds[0]';
         $datesStatement = $gDb->queryPrepared($sql, $roleIds);
         $dateUuid       = $datesStatement->fetchColumn();

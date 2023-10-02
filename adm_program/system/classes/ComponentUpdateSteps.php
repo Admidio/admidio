@@ -9,6 +9,9 @@
 
 use Ramsey\Uuid\Uuid;
 
+// this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
+const TBL_DATES = TABLE_PREFIX . '_dates';
+
 final class ComponentUpdateSteps
 {
     /**

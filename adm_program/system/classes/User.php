@@ -642,11 +642,11 @@ class User extends TableAccess
                             SET ann_usr_id_change = NULL
                           WHERE ann_usr_id_change = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_DATES.'
+        $sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                             SET dat_usr_id_create = NULL
                           WHERE dat_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_DATES.'
+        $sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                             SET dat_usr_id_change = NULL
                           WHERE dat_usr_id_change = '.$usrId;
 

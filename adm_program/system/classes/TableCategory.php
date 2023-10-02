@@ -451,7 +451,7 @@ class TableCategory extends TableAccess
                 $this->elementColumn = 'usf_cat_id';
                 break;
             case 'EVT':
-                $this->elementTable = TBL_DATES;
+                $this->elementTable = TBL_EVENTS;
                 $this->elementColumn = 'dat_cat_id';
                 break;
             case 'ANN':

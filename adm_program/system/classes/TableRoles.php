@@ -223,7 +223,7 @@ class TableRoles extends TableAccess
                  WHERE mem_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
 
-        $sql = 'UPDATE '.TBL_DATES.'
+        $sql = 'UPDATE '.TBL_EVENTS.'
                    SET dat_rol_id = NULL
                  WHERE dat_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
@@ -380,7 +380,7 @@ class TableRoles extends TableAccess
 
         // check if user is member of a role who could view the event
         $sql = 'SELECT dat_id
-                  FROM '.TBL_DATES.'
+                  FROM '.TBL_EVENTS.'
                  WHERE dat_rol_id = ? -- $rolId';
         $pdoStatement = $this->db->queryPrepared($sql, array($rolId));
         $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $pdoStatement->fetchColumn());

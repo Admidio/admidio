@@ -254,7 +254,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
 
         if ($eventRoomId > 0) {
             $sql = 'SELECT COUNT(*) AS count
-                      FROM '.TBL_DATES.'
+                      FROM '.TBL_EVENTS.'
                      WHERE dat_begin  <= ? -- $endDateTime->format(\'Y-m-d H:i:s\')
                        AND dat_end    >= ? -- $startDateTime->format(\'Y-m-d H:i:s\')
                        AND dat_room_id = ? -- $datRoomId
@@ -339,7 +339,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 if ($getCopy) {
                     // copy original role with their settings
                     $sql = 'SELECT dat_rol_id
-                      FROM ' . TBL_DATES . '
+                      FROM ' . TBL_EVENTS . '
                      WHERE dat_uuid = ?';
                     $pdoStatement = $gDb->queryPrepared($sql, array($originalEventUuid));
 

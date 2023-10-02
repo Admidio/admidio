@@ -77,7 +77,7 @@ if ($getMode === 1) {
 // delete the room
 elseif ($getMode === 2) {
     $sql = 'SELECT 1
-              FROM '.TBL_DATES.'
+              FROM '.TBL_EVENTS.'
              WHERE dat_room_id = ? -- $room->getValue(\'room_id\') ';
     $statement = $gDb->queryPrepared($sql, array($room->getValue('room_id')));
 
