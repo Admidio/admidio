@@ -8,8 +8,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * start     : Position of query recordset where the visual output should start
- * headline  : Ueberschrift, die ueber den Links steht
- *             (Default) Links
  * cat_uuid  : show only links of this category, if UUID is not set than show all links
  * link_uuid : Uuid of a single link that should be shown.
  ***********************************************************************************************
@@ -20,7 +18,6 @@ unset($_SESSION['links_request']);
 
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 $getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
 
@@ -34,11 +31,13 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
+$headline = $gL10n->get('SYS_WEBLINKS');
+
 $category = new TableCategory($gDb);
 
 if ($getCatUuid !== '') {
     $category->readDataByUuid($getCatUuid);
-    $getHeadline .= ' - '.$category->getValue('cat_name');
+    $headline .= ' - '.$category->getValue('cat_name');
 }
 
 // Create Link object
@@ -56,18 +55,18 @@ if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
 
 // add url to navigation stack
 if ($getLinkUuid  !== '') {
-    $gNavigation->addUrl(CURRENT_URL, $getHeadline);
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline, 'fa-link');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-link');
 }
 
 // create html page object
-$page = new HtmlPage('admidio-weblinks', $getHeadline);
+$page = new HtmlPage('admidio-weblinks', $headline);
 
 if ($gSettingsManager->getBool('enable_rss')) {
     $page->addRssFile(
-        SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php', array('headline' => $getHeadline)),
-        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline))
+        ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php',
+        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $headline))
     );
 }
 
@@ -81,7 +80,7 @@ if ($weblinks->getId() === 0) {
         $page->addPageFunctionsMenuItem(
             'menu_item_links_add',
             $gL10n->get('SYS_CREATE_LINK'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('headline' => $getHeadline)),
+            ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php',
             'fa-plus-circle'
         );
     }
@@ -91,7 +90,7 @@ if ($weblinks->getId() === 0) {
         $page->addPageFunctionsMenuItem(
             'menu_item_links_maintain_categories',
             $gL10n->get('SYS_EDIT_CATEGORIES'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK', 'title' => $getHeadline)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')),
             'fa-th-large'
         );
     }
@@ -107,7 +106,6 @@ if ($weblinks->getId() === 0) {
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSelectBoxForCategories(
         'cat_uuid',
         $gL10n->get('SYS_CATEGORY'),
@@ -170,7 +168,7 @@ if ($weblinksCount === 0) {
             // change and delete only users with rights
             if ($weblink->isEditable()) {
                 $page->addHtml('
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $lnkUuid, 'headline' => $getHeadline)). '">
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $lnkUuid)). '">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'lnk',
@@ -205,7 +203,7 @@ if ($weblinksCount === 0) {
 $page->addHtml('</div>');
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline, 'cat_uuid' => $getCatUuid));
+$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('cat_uuid' => $getCatUuid));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement()));
 
 // show html of complete page
