@@ -10,8 +10,6 @@
  * Parameters:
  *
  * photo_uuid : UUID of album which photos should be shown
- * headline   : Headline of the module that will be displayed
- *              (Default) SYS_PHOTO_ALBUMS
  * start_thumbnail : Number of the thumbnail which is the first that should be shown
  * start      : Position of query recordset where the visual output should start
  *
@@ -29,7 +27,6 @@ if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
 
 // Initialize and check the parameters
 $getPhotoUuid      = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
-$getHeadline       = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_PHOTO_ALBUMS')));
 $getStart          = admFuncVariableIsValid($_GET, 'start', 'int');
 $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
 $getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
@@ -62,7 +59,7 @@ if ($getPhotoUuid !== '') {
     // Drop URL on navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
 } else {
-    $headline = $getHeadline;
+    $headline = $gL10n->get('SYS_PHOTO_ALBUMS');
 
     // Navigation of the module starts here
     $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-image');
@@ -74,8 +71,8 @@ $page = new HtmlPage('admidio-photos', $headline);
 // add rss feed to photos
 if ($gSettingsManager->getBool('enable_rss')) {
     $page->addRssFile(
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/rss_photos.php', array('headline' => $getHeadline)),
-        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline))
+        ADMIDIO_URL.FOLDER_MODULES.'/photos/rss_photos.php',
+        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_PHOTO_ALBUMS')))
     );
 }
 

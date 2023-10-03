@@ -10,8 +10,6 @@
  * Parameters:
  *
  * room_uuid : UUID of room, that should be shown
- * headline  : headline for room module
- *             (Default) SYS_ROOM
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -19,7 +17,6 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid', 'string');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ROOM')));
 
 // only authorized users are allowed to edit the rooms
 if (!$gCurrentUser->isAdministrator()) {
@@ -31,11 +28,11 @@ if (!$gCurrentUser->isAdministrator()) {
 $room = new TableRooms($gDb);
 
 if ($getRoomUuid !== '') {
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_ROOM')));
 
     $room->readDataByUuid($getRoomUuid);
 } else {
-    $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_ROOM')));
 }
 
 // add current url to navigation stack

@@ -11,8 +11,6 @@
  *
  * gbo_uuid      - UUID of the guestbook entry that should get a new comment
  * gbc_uuid      - UUID of the comment that should be edited
- * headline      - Title of the announcement module. This will be shown in the whole module.
- *                 (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -20,7 +18,6 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
 $getGbcUuid  = admFuncVariableIsValid($_GET, 'gbc_uuid', 'string');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
@@ -118,7 +115,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0) 
 $page = new HtmlPage('admidio-guestbook-comment-new', $headline);
 
 // show form
-$form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'gbc_uuid' => $getGbcUuid, 'headline' => $getHeadline, 'mode' => $mode)), $page);
+$form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'gbc_uuid' => $getGbcUuid, 'mode' => $mode)), $page);
 if ($gCurrentUserId > 0) {
     // registered users should not change their name
     $form->addInput(

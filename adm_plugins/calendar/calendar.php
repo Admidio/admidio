@@ -150,7 +150,7 @@ if ($plg_ter_aktiv) {
     }
 
     $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_end, dat_all_day, dat_location, dat_headline
-              FROM '.TBL_DATES.'
+              FROM '.TBL_EVENTS.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = dat_cat_id
              WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')

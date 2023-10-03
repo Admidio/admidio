@@ -10,8 +10,6 @@
  * Parameters:
  *
  * link_uuid - UUID of the weblink that should be edited
- * headline  - Title of the weblink module. This will be shown in the whole module.
- *             (Default) SYS_WEBLINKS
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -19,7 +17,6 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
@@ -55,9 +52,9 @@ if (isset($_SESSION['links_request'])) {
 }
 
 if ($getLinkUuid !== '') {
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
+    $headline = $gL10n->get('SYS_EDIT_WEBLINK');
 } else {
-    $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
+    $headline = $gL10n->get('SYS_CREATE_WEBLINK');
 }
 
 // add current url to navigation stack
@@ -67,7 +64,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-weblinks-edit', $headline);
 
 // show form
-$form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('link_uuid' => $getLinkUuid, 'headline' => $getHeadline, 'mode' => 1)), $page);
+$form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('link_uuid' => $getLinkUuid, 'mode' => 1)), $page);
 $form->addInput(
     'lnk_name',
     $gL10n->get('SYS_LINK_NAME'),

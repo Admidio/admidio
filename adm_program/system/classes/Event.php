@@ -53,7 +53,7 @@ class Event extends TableAccess
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
 
-        parent::__construct($database, TBL_DATES, 'dat', $datId);
+        parent::__construct($database, TBL_EVENTS, 'dat', $datId);
     }
 
     /**
@@ -147,7 +147,7 @@ class Event extends TableAccess
 
         // if event has participants then the role with their memberships must be deleted
         if ($datRoleId > 0) {
-            $sql = 'UPDATE '.TBL_DATES.'
+            $sql = 'UPDATE '.TBL_EVENTS.'
                        SET dat_rol_id = NULL
                      WHERE dat_id = ? -- $datId';
             $this->db->queryPrepared($sql, array($datId));

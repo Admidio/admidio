@@ -10,15 +10,12 @@
  * Parameters:
  *
  * gbo_uuid   - UUID of one guestbook entry that should be shown
- * headline   - Title of the guestbook module. This will be shown in the whole module.
- *              (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
@@ -96,7 +93,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0) 
 }
 
 // create html page object
-$page = new HtmlPage('admidio-guestbook-new', $getHeadline . ' - ' . $headline);
+$page = new HtmlPage('admidio-guestbook-new', $gL10n->get('GBO_GUESTBOOK') . ' - ' . $headline);
 
 // Html des Modules ausgeben
 if ($getGboUuid !== '') {
@@ -106,7 +103,7 @@ if ($getGboUuid !== '') {
 }
 
 // show form
-$form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'headline' => $getHeadline, 'mode' => $mode)), $page);
+$form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'mode' => $mode)), $page);
 if ($gCurrentUserId > 0) {
     // registered users should not change their name
     $form->addInput(

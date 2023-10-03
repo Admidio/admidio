@@ -105,10 +105,10 @@ if ($contactsCount === 0) {
 
 // html output
 echo '
-<p class="lead">'.$gL10n->get('SYS_SIMILAR_MEMBERS_FOUND_ASSIGN', array($getFirstname. ' '. $getLastname)).'</p>
+<p class="lead">'.$gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_ASSIGN', array($getFirstname. ' '. $getLastname)).'</p>
 
 <div class="card">
-    <div class="card-header">'.$gL10n->get('SYS_USER_FOUND').'</div>
+    <div class="card-header">'.$gL10n->get('SYS_SIMILAR_CONTACTS_FOUND').'</div>
     <div class="card-body">';
 
         // show all found users with their address who have a similar name and show link for further handling
@@ -156,11 +156,11 @@ echo '
     echo '</div>
 </div>
 <div class="card">
-    <div class="card-header">'.$gL10n->get('SYS_CREATE_MEMBER').'</div>
+    <div class="card-header">'.$gL10n->get('SYS_CREATE_CONTACT').'</div>
     <div class="card-body">
-        <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
+        <p>'. $gL10n->get('SYS_CONTACT_NOT_FOUND_CREATE_NEW').'</p>
 
         <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1, 'lastname' => $getLastname, 'firstname' => $getFirstname)).'\'">
-            <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_MEMBER').'</button>
+            <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_CONTACT').'</button>
     </div>
 </div>';

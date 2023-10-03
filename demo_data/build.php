@@ -34,6 +34,9 @@ if (!isset($gImportDemoData) || !$gImportDemoData) {
 
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 
+// this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
+const TBL_DATES = TABLE_PREFIX . '_dates';
+
 /**
  * Deletes all files and folder within adm_my_files except the config.php . After that all
  * files and folder of the demo_data folder adm_my_files will be copied to the original adm_my_files folder.

@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed of events
+ * RSS feed of events. Lists the newest 10 events.
  * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
@@ -34,13 +34,13 @@ try {
 
 // from here the RSS feed is compiled
 
-$orgLongname = $gCurrentOrganization->getValue('org_longname');
+$organizationName = $gCurrentOrganization->getValue('org_longname');
 // create RSS feed object with channel information
 $rss  = new RssFeed(
-    $orgLongname . ' - ' . $gL10n->get('SYS_EVENTS'),
+    $organizationName . ' - ' . $gL10n->get('SYS_EVENTS'),
     $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('SYS_CURRENT_EVENTS_OF_ORGA', array($orgLongname)),
-    $orgLongname
+    $gL10n->get('SYS_CURRENT_EVENTS_OF_ORGA', array($organizationName)),
+    $organizationName
 );
 $event = new Event($gDb);
 

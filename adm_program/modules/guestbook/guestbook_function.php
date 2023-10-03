@@ -19,8 +19,6 @@
  *          8 - Edit guestbook comment
  *          9 - Moderate guestbook entry
  *          10 - Moderate guestbook comment
- * headline : Title of the guestbook module. This will be shown in the whole module.
- *            (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -29,7 +27,6 @@ require_once(__DIR__ . '/../../system/common.php');
 $getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
 $getGbcUuid  = admFuncVariableIsValid($_GET, 'gbc_uuid', 'string');
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 5, 6, 8, 9, 10)));
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
@@ -191,7 +188,7 @@ if ($getMode === 1 || $getMode === 3) {
     unset($_SESSION['guestbook_entry_request']);
     $gNavigation->deleteLastUrl();
 
-    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline));
+    $url = ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php';
 
     // In the case of moderation, output a note that the message still has to be checked first
     if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
@@ -310,7 +307,7 @@ if ($getMode === 1 || $getMode === 3) {
         unset($_SESSION['guestbook_comment_request']);
         $gNavigation->deleteLastUrl();
 
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => (int) $gbComment->getValue('gbc_gbo_id'), 'headline' => $getHeadline));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => (int) $gbComment->getValue('gbc_gbo_id')));
 
         // In the case of moderation, output a note that the comment still has to be checked first
         if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)

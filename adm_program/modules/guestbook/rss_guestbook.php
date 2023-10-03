@@ -1,26 +1,14 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed for the guestbook
+ * RSS feed of guestbook. Lists the newest 10 guestbook entries.
+ * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
-/******************************************************************************
- * Creates a RSS 2.0 feed for guestbook entries with help of the RSS class
- *
- * Spezification of RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
- *
- * Parameters:
- *
- * headline - Headline of RSS feed
- *            (Default) Guestbook
- *
- *****************************************************************************/
-
 require_once(__DIR__ . '/../../system/common.php');
 
 // Check if RSS is active...
@@ -36,10 +24,7 @@ if ((int) $gSettingsManager->get('enable_guestbook_module') !== 1) {
     // => EXIT
 }
 
-// Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
-
-// die 10 letzten Eintraege aus der DB fischen...
+// get the latest 10 guestbook entries
 $sql = 'SELECT *
           FROM '.TBL_GUESTBOOK.'
          WHERE gbo_org_id = ? -- $gCurrentOrgId
@@ -48,21 +33,18 @@ $sql = 'SELECT *
          LIMIT 10';
 $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
-// ab hier wird der RSS-Feed zusammengestellt
-
 // create RSS feed object with channel information
-$orgLongname = $gCurrentOrganization->getValue('org_longname');
+$organizationName = $gCurrentOrganization->getValue('org_longname');
 $rss = new RssFeed(
-    $orgLongname . ' - ' . $getHeadline,
+    $organizationName . ' - ' . $gL10n->get('GBO_GUESTBOOK'),
     $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', array($orgLongname)),
-    $orgLongname
+    $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', array($organizationName)),
+    $organizationName
 );
 $guestbook = new TableGuestbook($gDb);
 
-// Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
+// add the RSS items to the RssFeed object
 while ($row = $statement->fetch()) {
-    // ausgelesene Gaestebuchdaten in Guestbook-Objekt schieben
     $guestbook->clear();
     $guestbook->setArray($row);
 
@@ -76,5 +58,4 @@ while ($row = $statement->fetch()) {
     );
 }
 
-// jetzt nur noch den Feed generieren lassen
 $rss->getRssFeed();

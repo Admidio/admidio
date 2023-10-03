@@ -289,7 +289,7 @@ class ModuleLists extends Modules
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = rol_cat_id
-             LEFT JOIN '.TBL_DATES.' ON dat_rol_id = rol_id
+             LEFT JOIN '.TBL_EVENTS.' ON dat_rol_id = rol_id
                  WHERE (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )
                        '.$sqlConditions;

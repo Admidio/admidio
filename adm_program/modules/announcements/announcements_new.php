@@ -10,8 +10,6 @@
  * Parameters:
  *
  * ann_uuid  : UUID of the announcement that should be edited
- * headline  : Title of the announcement module. This will be shown in the whole module.
- *             (Default) SYS_ANNOUNCEMENTS
  * copy = true : The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
@@ -26,7 +24,6 @@ if ((int) $gSettingsManager->get('announcements_module_enabled') === 0) {
 
 // Initialize and check the parameters
 $getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 $getCopy     = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 // set headline of the script
@@ -76,10 +73,10 @@ if (isset($_SESSION['announcements_request'])) {
 }
 
 // create html page object
-$page = new HtmlPage('admidio-announcements-edit', $getHeadline . ' - ' . $headline);
+$page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
 
 // show form
-$form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'headline' => $getHeadline, 'mode' => '1')), $page);
+$form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => '1')), $page);
 $form->addInput(
     'ann_headline',
     $gL10n->get('SYS_TITLE'),

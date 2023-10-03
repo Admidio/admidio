@@ -1463,7 +1463,7 @@ class HtmlForm extends \Smarty
 
             switch ($categoryType) {
                 case 'EVT':
-                    $sqlTables = ' INNER JOIN ' . TBL_DATES . ' ON cat_id = dat_cat_id ';
+                    $sqlTables = ' INNER JOIN ' . TBL_EVENTS . ' ON cat_id = dat_cat_id ';
                     break;
                 case 'LNK':
                     $sqlTables = ' INNER JOIN ' . TBL_LINKS . ' ON cat_id = lnk_cat_id ';
