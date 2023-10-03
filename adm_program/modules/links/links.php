@@ -79,7 +79,7 @@ if ($weblinks->getId() === 0) {
         // show link to create new weblink
         $page->addPageFunctionsMenuItem(
             'menu_item_links_add',
-            $gL10n->get('SYS_CREATE_LINK'),
+            $gL10n->get('SYS_CREATE_WEBLINK'),
             ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php',
             'fa-plus-circle'
         );

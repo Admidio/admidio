@@ -52,9 +52,9 @@ if (isset($_SESSION['links_request'])) {
 }
 
 if ($getLinkUuid !== '') {
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_WEBLINKS')));
+    $headline = $gL10n->get('SYS_EDIT_WEBLINK');
 } else {
-    $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_WEBLINKS')));
+    $headline = $gL10n->get('SYS_CREATE_WEBLINK');
 }
 
 // add current url to navigation stack

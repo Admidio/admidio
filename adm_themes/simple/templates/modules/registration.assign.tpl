@@ -1,6 +1,6 @@
 <p class="lead admidio-max-with">{$description}</p>
 <div class="card admidio-blog">
-    <div class="card-header">{$l10n->get('SYS_SIMILAR_MEMBERS_FOUND')}</div>
+    <div class="card-header">{$l10n->get('SYS_SIMILAR_CONTACTS_FOUND')}</div>
     <div class="card-body">
         <ul class="list-group list-group-flush">
             {foreach $similarUsers as $similarUser}
@@ -27,11 +27,11 @@
     </div>
 </div>
 <div class="card admidio-blog">
-    <div class="card-header">{$l10n->get('SYS_CREATE_MEMBER')}</div>
+    <div class="card-header">{$l10n->get('SYS_CREATE_CONTACT')}</div>
     <div class="card-body">
-        <p>{$l10n->get('SYS_CREATE_NOT_FOUND_USER')}</p>
+        <p>{$l10n->get('SYS_CONTACT_NOT_FOUND_CREATE_NEW')}</p>
 
         <button class="btn btn-primary" onclick="window.location.href='{$createNewUserUrl}'">
-            <i class="fas fa-plus-circle"></i>{$l10n->get('SYS_CREATE_MEMBER')}</button>
+            <i class="fas fa-plus-circle"></i>{$l10n->get('SYS_CREATE_CONTACT')}</button>
     </div>
 </div>

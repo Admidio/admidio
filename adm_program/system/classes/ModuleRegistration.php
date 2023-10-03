@@ -71,7 +71,7 @@ class ModuleRegistration extends HtmlPage
         $user->readDataByUuid($userUuid);
         $similarUserIDs = $user->searchSimilarUsers();
 
-        $this->assign('description', $gL10n->get('SYS_SIMILAR_MEMBERS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
+        $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
 
         // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
         if ($gCurrentUser->editUsers()) {
@@ -102,7 +102,7 @@ class ModuleRegistration extends HtmlPage
                     $button['url']  = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => '6'));
                 } else {
                     // Login data are NOT available -> assign them now
-                    $button['description'] = $gL10n->get('SYS_MEMBER_NO_VALID_LOGIN');
+                    $button['description'] = $gL10n->get('SYS_CONTACT_NO_VALID_LOGIN');
                     $button['label'] = $gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION');
                     $button['icon'] = 'fa-user-check';
                     $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => '1'));
@@ -170,7 +170,7 @@ class ModuleRegistration extends HtmlPage
             }
 
             if (count($similarUserIDs) > 0) {
-                $templateRow['information'][] = '<div class="alert alert-info"><i class="fas fa-info-circle"></i>' . (count($similarUserIDs) === 1 ? $gL10n->get('SYS_MEMBER_SIMILAR_NAME') : $gL10n->get('SYS_MEMBERS_SIMILAR_NAME') ) . '</div>';
+                $templateRow['information'][] = '<div class="alert alert-info"><i class="fas fa-info-circle"></i>' . (count($similarUserIDs) === 1 ? $gL10n->get('SYS_CONTACT_SIMILAR_NAME') : $gL10n->get('SYS_MEMBERS_SIMILAR_NAME') ) . '</div>';
             }
 
             $templateRow['actions'][] = array(

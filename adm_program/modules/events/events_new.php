@@ -38,7 +38,7 @@ $flagDateRightSendMail      = false;
 if ($getCopy) {
     $headline = $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_EVENT')));
 } elseif ($getEventUuid !== '') {
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_EVENT')));
+    $headline = $gL10n->get('SYS_EDIT_EVENT');
 } else {
     $headline = $gL10n->get('SYS_CREATE_EVENT');
 }
