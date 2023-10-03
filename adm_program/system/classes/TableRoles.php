@@ -494,6 +494,16 @@ class TableRoles extends TableAccess
         $newMembershipSaved = false;
         $updateNecessary = true;
 
+        // if role is administrator than only administrator can add new user,
+        // but don't change their own membership, because there must be at least one administrator
+        if ((bool) $this->getValue('rol_administrator') === true) {
+            if (!$gCurrentUser->isAdministrator()) {
+                throw new AdmException('Members to administrator role could only be assigned by administrators!');
+            } elseif ($gCurrentUser->isAdministrator() && $userId === $gCurrentUserId) {
+                throw new AdmException('You cannot edit your own membership in an administrator role!');
+            }
+        }
+
         // search for existing periods of membership and adjust them
         $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
               FROM ' . TBL_MEMBERS . '
@@ -598,19 +608,6 @@ class TableRoles extends TableAccess
                 $membership->setValue('mem_approved', Participants::PARTICIPATION_YES);
             }
             $membership->save();
-        }
-
-        // if role is administrator than only administrator can add new user,
-        // but don't change their own membership, because there must be at least one administrator
-        if ($updateNecessary &&
-            (bool) $this->getValue('rol_administrator') === true
-            && !$gCurrentUser->isAdministrator()) {
-            $this->db->rollback();
-            if ($userId !== $gCurrentUserId) {
-                throw new AdmException('You could not edit your own membership to an administrator role!');
-            } else {
-                throw new AdmException('Members to administrator role could only be assigned by administrators!');
-            }
         }
 
         // reload session of that user because of changes to the assigned roles and rights
