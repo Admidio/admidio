@@ -18,12 +18,22 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use PhpOffice\PhpSpreadsheet\Writer\Ods;
+
 class ListExport
 {
     /**
-     * @var array<string,string> Array with all data that should be handled in this class
+     * @var array<int,array> Array with all data that should be handled in this class
      */
     protected $data = array();
+    /**
+     * @var Spreadsheet An object of the PhpSpreadsheet which will handle the export
+     */
+    protected $spreadsheet;
+    /**
+     * @var boolean Flag if the spreadsheet contains a headline for each column.
+     */
+    protected $containsHeadline = false;
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -32,18 +42,50 @@ class ListExport
     {
     }
 
+    protected function format()
+    {
+        $alphabet = range('A', 'Z');
+        $column = $alphabet[count($this->data[0])-1];
+
+        if ($this->containsHeadline) {
+            $this->spreadsheet
+                ->getActiveSheet()
+                ->getStyle('A1:'.$column.'1')
+                ->getFill()
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setARGB('ffdddddd');
+            $this->spreadsheet
+                ->getActiveSheet()
+                ->getStyle('A1:'.$column.'1')
+                ->getFont()
+                ->setBold(true);
+        }
+
+        for($number = 0; $number < count($this->data[0]); $number++) {
+            $this->spreadsheet->getActiveSheet()->getColumnDimension($alphabet[$number])->setAutoSize(true);
+        }
+    }
+
     /**
      * Set the column headline for each column of the data array.
      * @param array $headlines Array with the column headline for each column.
      * @return void
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function setColumnHeadlines(array $headlines)
     {
         if (count($this->data) > 0) {
             array_unshift($this->data, $headlines);
+            $this->spreadsheet->getActiveSheet()->insertNewRowBefore(1);
+            $this->spreadsheet->getActiveSheet()->fromArray($headlines);
         } else {
             $this->data[] = $headlines;
+
+            $this->spreadsheet = new Spreadsheet();
+            $this->spreadsheet->getActiveSheet()->fromArray($this->data);
         }
+        $this->containsHeadline = true;
     }
 
     /**
@@ -54,6 +96,9 @@ class ListExport
     public function setDataByArray(array $dataArray)
     {
         $this->data = array_merge($this->data, $dataArray);
+
+        $this->spreadsheet = new Spreadsheet();
+        $this->spreadsheet->getActiveSheet()->fromArray($this->data);
     }
 
     /**
@@ -70,6 +115,9 @@ class ListExport
         $listStatement = $gDb->queryPrepared($sql, $parameters);
         $dataSql = $listStatement->fetchAll(\PDO::FETCH_ASSOC);
         $this->data = array_merge($this->data, $dataSql);
+
+        $this->spreadsheet = new Spreadsheet();
+        $this->spreadsheet->getActiveSheet()->fromArray($this->data);
     }
 
     /**
@@ -87,18 +135,24 @@ class ListExport
             throw new AdmException('The export file will contain no data.');
         }
 
-        $spreadsheet = new Spreadsheet();
-        $activeWorksheet = $spreadsheet->getActiveSheet();
-        $activeWorksheet->fromArray($this->data);
-
         switch ($format) {
             case 'xlsx':
-                $writer = new Xlsx($spreadsheet);
+                $this->format();
+                $writer = new Xlsx($this->spreadsheet);
                 $filename .= '.xlsx';
                 break;
-
+            case 'ods':
+                $this->format();
+                $writer = new Ods($this->spreadsheet);
+                $filename .= '.ods';
+                break;
+            case 'pdf':
+                $this->format();
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf($this->spreadsheet);
+                $filename .= '.pdf';
+                break;
             default:
-                $writer = new Csv($spreadsheet);
+                $writer = new Csv($this->spreadsheet);
                 $filename .= '.csv';
                 break;
         }

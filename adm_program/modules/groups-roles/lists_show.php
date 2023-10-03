@@ -28,7 +28,7 @@ unset($list);
 $editUserStatus       = false;
 $getDateFrom          = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
 $getDateTo            = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_NOW));
-$getMode              = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
+$getMode              = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'ods', 'csv', 'html', 'print', 'pdf', 'pdfl')));
 $getListUuid          = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
 $getRoleIds           = admFuncVariableIsValid($_GET, 'rol_ids', 'string'); // could be int or int[], so string is necessary
 $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
@@ -268,12 +268,14 @@ if($getMode !== 'html') {
         $filename = FileSystemUtils::getSanitizedPathEntry($filename);
 
         switch ($getMode) {
-            case 'csv-ms':
+            case 'xlsx':
                 $listExport->export($filename, 'xlsx');
                 break;
-            case 'csv-oo':
+            case 'ods':
+                $listExport->export($filename, 'ods');
                 break;
             case 'pdf':
+                $listExport->export($filename, 'pdf');
                 break;
             case 'pdfl':
                 break;
@@ -485,8 +487,15 @@ if ($getMode !== 'csv') {
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_csv_ms',
                 $gL10n->get('SYS_MICROSOFT_EXCEL'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
                 'fa-file-excel',
+                'menu_item_lists_export'
+            );
+            $page->addPageFunctionsMenuItem(
+                'menu_item_lists_csv_ms',
+                $gL10n->get('SYS_ODF_SPREADSHEET'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
+                'fa-file-alt',
                 'menu_item_lists_export'
             );
             $page->addPageFunctionsMenuItem(
@@ -506,7 +515,7 @@ if ($getMode !== 'csv') {
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_csv',
                 $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-oo')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
                 'fa-file-csv',
                 'menu_item_lists_export'
             );
