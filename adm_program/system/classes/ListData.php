@@ -20,12 +20,17 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 
-class ListExport
+class ListData
 {
     /**
      * @var array<int,array> Array with all data that should be handled in this class
      */
     protected $data = array();
+    /**
+     * @var ListConfiguration An object of the ListConfiguration that could be used to read data
+     * and to format data to different output formats.
+     */
+    protected $listConfiguration;
     /**
      * @var Spreadsheet An object of the PhpSpreadsheet which will handle the export
      */
@@ -40,6 +45,43 @@ class ListExport
      */
     public function __construct()
     {
+    }
+
+    /**
+     * Returns an array with all the data prepared for the destination output format.
+     * @param string $outputFormat
+     * @return array[]
+     */
+    public function getData(string $outputFormat): array
+    {
+        return $this->prepareOutputFormat($outputFormat);
+    }
+
+    /**
+     * Prepares the internal data array for the submitted output format and returns that formatted array.
+     * @param string $outputFormat The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
+     * @return array Returns copy of the data array with formatted data.
+     */
+    protected function prepareOutputFormat(string $outputFormat): array
+    {
+        $outputData = array();
+        $startRow = 0;
+
+        if($this->containsHeadline) {
+            $startRow = 1;
+            $outputData[0] = $this->data[0];
+        }
+
+        for($rowNumber = $startRow; $rowNumber < count($this->data); $rowNumber++) {
+            $columnNumber = 1;
+
+            foreach($this->data[$rowNumber] as $columnNameInternal => $columnValue) {
+                $outputData[$rowNumber][$columnNumber] = $this->listConfiguration->convertColumnContentForOutput($columnNumber, $outputFormat, (string) $columnValue, '4711');
+                $columnNumber++;
+            }
+        }
+
+        return $outputData;
     }
 
     protected function format()
@@ -77,13 +119,8 @@ class ListExport
     {
         if (count($this->data) > 0) {
             array_unshift($this->data, $headlines);
-            $this->spreadsheet->getActiveSheet()->insertNewRowBefore(1);
-            $this->spreadsheet->getActiveSheet()->fromArray($headlines);
         } else {
             $this->data[] = $headlines;
-
-            $this->spreadsheet = new Spreadsheet();
-            $this->spreadsheet->getActiveSheet()->fromArray($this->data);
         }
         $this->containsHeadline = true;
     }
@@ -96,9 +133,45 @@ class ListExport
     public function setDataByArray(array $dataArray)
     {
         $this->data = array_merge($this->data, $dataArray);
+    }
 
-        $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet->getActiveSheet()->fromArray($this->data);
+    /**
+     * Read the data by a configuration of the table **adm_lists**. With this method it's possible
+     * to format the output for visual html presentation or for the different export formats.
+     * @param string $listUUID UUID of the list configuration that should be loaded.
+     * @param array $options (optional) An array with the following possible entries:
+     *                                  - **showAllMembersThisOrga** : Set to true all users with an active membership
+     *                                    to at least one role of the current organization will be shown.
+     *                                    This setting could be combined with **showFormerMembers** or **showRelationTypes**.
+     *                                  - **showAllMembersDatabase** : Set to true all users of the database will be shown
+     *                                    independent of the membership to roles or organizations
+     *                                  - **showRolesMembers** : An array with all roles ids could be set and only members
+     *                                    of this roles will be shown.
+     *                                    This setting could be combined with **showFormerMembers** or **showRelationTypes**.
+     *                                  - **showFormerMembers** : Set to true if roles members or members of the organization
+     *                                    should be shown and also former members should be listed
+     *                                  - **showRelationTypes** : An array with relation types. The sql will be expanded with
+     *                                    all users who are in such a relationship to the selected role users.
+     *                                  - **showIdColumns** : The following columns will be added to the SQL result.
+     *                                    They will be the first columns of the result: mem_leaders, usr_id, usr_uuid.
+     *                                  - **useConditions** : false - Don't add additional conditions to the SQL
+     *                                                        true  - Conditions will be added as stored in the settings
+     *                                  - **useOrderBy** : false - Don't add the sorting to the SQL
+     *                                                  true  - Sorting is added as stored in the settings
+     *                                  - **startDate** : The start date if memberships that should be considered. The time period of
+     *                                    the membership must be at least one day after this date.
+     *                                  - **endDate** : The end date if memberships that should be considered.The time period of
+     *                                    the membership must be at least one day before this date.
+     * @return void
+     * @throws AdmException
+     */
+    public function setDataByConfiguration(string $listUUID, array $options = array())
+    {
+        global $gDb;
+
+        $this->listConfiguration = new ListConfiguration($gDb);
+        $this->listConfiguration->readDataByUuid($listUUID);
+        $this->setDataBySql($this->listConfiguration->getSQL($options));
     }
 
     /**
@@ -115,9 +188,6 @@ class ListExport
         $listStatement = $gDb->queryPrepared($sql, $parameters);
         $dataSql = $listStatement->fetchAll(\PDO::FETCH_ASSOC);
         $this->data = array_merge($this->data, $dataSql);
-
-        $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet->getActiveSheet()->fromArray($this->data);
     }
 
     /**
@@ -134,6 +204,9 @@ class ListExport
         if (count($this->data) === 0) {
             throw new AdmException('The export file will contain no data.');
         }
+
+        $this->spreadsheet = new Spreadsheet();
+        $this->spreadsheet->getActiveSheet()->fromArray($this->prepareOutputFormat($format));
 
         switch ($format) {
             case 'xlsx':

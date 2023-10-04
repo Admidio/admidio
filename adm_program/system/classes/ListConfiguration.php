@@ -123,8 +123,8 @@ class ListConfiguration extends TableLists
      * Convert the content of the column independence of the output format.
      * Therefore, the method will check which datatype the column has and which format the
      * output should have.
-     * @param int $columnNumber Number of the column for which the content should be converted.
-     * @param string $format    The following formats are possible 'html', 'print', 'csv' or 'pdf'
+     * @param int $columnNumber Number of the column for which the content should be converted. The column number starts with 1.
+     * @param string $format    The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
      * @param string $content   The content that should be converted.
      * @param string $userUuid  Uuid of the user for which the content should be converted. This is not the login user.
      * @return string Returns the converted content.
@@ -150,11 +150,11 @@ class ListConfiguration extends TableLists
             if (in_array($format, array('html', 'print'), true)) {
                 $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $userUuid)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_PROFILE_PHOTO').'" />';
             }
-            if (in_array($format, array('csv', 'pdf'), true) && $content != null) {
+            if (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true) && $content != null) {
                 $content = $gL10n->get('SYS_PROFILE_PHOTO');
             }
         } elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX') {
-            if (in_array($format, array('csv', 'pdf'), true)) {
+            if (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true)) {
                 if ($content == 1) {
                     $content = $gL10n->get('SYS_YES');
                 } else {
@@ -171,7 +171,7 @@ class ListConfiguration extends TableLists
                 $date = DateTime::createFromFormat('Y-m-d', $content);
                 $content = $date->format($gSettingsManager->getString('system_date'));
             }
-        } elseif (in_array($format, array('csv', 'pdf'), true)
+        } elseif (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true)
         &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
             || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON')) {
             if (strlen($content) > 0) {
@@ -214,7 +214,7 @@ class ListConfiguration extends TableLists
                     $buttonClass = '';
             }
 
-            if ($format === 'csv') {
+            if (in_array($format, array('csv', 'xlsx', 'ods'))) {
                 $content = $text;
             } else {
                 if ($format === 'html') {
@@ -237,7 +237,7 @@ class ListConfiguration extends TableLists
         }
 
         // format value for csv export
-        if ($format === 'csv') {
+        if (in_array($format, array('csv', 'xlsx', 'ods'))) {
             // replace tab and line feed
             $content = preg_replace("/\t/", "\\t", $content);
             $content = preg_replace("/\r?\n/", "\\n", $content);
@@ -441,7 +441,7 @@ class ListConfiguration extends TableLists
      * The numbers will start with 1 and end with the count of all columns.
      * If that column doesn't exist the method try to repair the
      * column list. If that doesn't help then **null** will be returned.
-     * @param int $number The internal number of the column.
+     * @param int $number The internal number of the column. The column number start with 1.
      *                    This will be the position of the column in the list.
      * @return TableAccess|null Returns a TableAccess object of the database table **adm_list_columns**.
      */

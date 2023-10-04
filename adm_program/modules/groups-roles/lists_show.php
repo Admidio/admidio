@@ -258,8 +258,18 @@ $mainSql = $list->getSQL(
 if($getMode !== 'html') {
 
     try {
-        $listExport = new ListExport();
-        $listExport->setDataBySql($mainSql);
+        $listExport = new ListData();
+        $listExport->setDataByConfiguration(
+            $getListUuid,
+            array(
+                'showRolesMembers' => $roleIds,
+                'showFormerMembers' => $getShowFormerMembers,
+                'showIdColumns' => $showIdColumns,
+                'showRelationTypes' => $relationTypeIds,
+                'startDate' => $startDateEnglishFormat,
+                'endDate' => $endDateEnglishFormat
+            )
+        );
         $listExport->setColumnHeadlines($list->getColumnNames());
         $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
         if ((string)$list->getValue('lst_name') !== '') {
