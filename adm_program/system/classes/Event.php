@@ -363,7 +363,7 @@ class Event extends TableAccess
     {
         global $gSettingsManager;
 
-        if ($this->getValue('dat_deadline') == null) {
+        if ((string) $this->getValue('dat_deadline') === '') {
             $validDeadline = $this->getValue('dat_begin');
         } else {
             $validDeadline = $this->getValue('dat_deadline');
