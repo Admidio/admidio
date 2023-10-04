@@ -474,6 +474,8 @@ class Database
                     $props['type'] = 'smallint';
                 } elseif (str_contains($properties['Type'], 'int')) {
                     $props['type'] = 'integer';
+                } elseif (str_contains($properties['Type'], 'timestamp /* mariadb-5.3 */')) {
+                    $props['type'] = 'timestamp';
                 } else {
                     $props['type'] = $properties['Type'];
                 }
