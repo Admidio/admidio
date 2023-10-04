@@ -49,18 +49,24 @@ class ListData
 
     /**
      * Returns an array with all the data prepared for the destination output format.
-     * @param string $outputFormat
+     * @param string $outputFormat Optional output format. The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
      * @return array[]
+     * @throws AdmException
      */
-    public function getData(string $outputFormat): array
+    public function getData(string $outputFormat = ''): array
     {
-        return $this->prepareOutputFormat($outputFormat);
+        if ($outputFormat !== '') {
+            return $this->prepareOutputFormat($outputFormat);
+        } else {
+            return $this->data;
+        }
     }
 
     /**
      * Prepares the internal data array for the submitted output format and returns that formatted array.
      * @param string $outputFormat The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
      * @return array Returns copy of the data array with formatted data.
+     * @throws AdmException
      */
     protected function prepareOutputFormat(string $outputFormat): array
     {
@@ -75,7 +81,7 @@ class ListData
         for($rowNumber = $startRow; $rowNumber < count($this->data); $rowNumber++) {
             $columnNumber = 1;
 
-            foreach($this->data[$rowNumber] as $columnNameInternal => $columnValue) {
+            foreach($this->data[$rowNumber] as $columnValue) {
                 $outputData[$rowNumber][$columnNumber] = $this->listConfiguration->convertColumnContentForOutput($columnNumber, $outputFormat, (string) $columnValue, '4711');
                 $columnNumber++;
             }
@@ -113,7 +119,6 @@ class ListData
      * Set the column headline for each column of the data array.
      * @param array $headlines Array with the column headline for each column.
      * @return void
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function setColumnHeadlines(array $headlines)
     {
