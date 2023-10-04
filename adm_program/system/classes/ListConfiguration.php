@@ -124,10 +124,11 @@ class ListConfiguration extends TableLists
      * Therefore, the method will check which datatype the column has and which format the
      * output should have.
      * @param int $columnNumber Number of the column for which the content should be converted. The column number starts with 1.
-     * @param string $format    The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
-     * @param string $content   The content that should be converted.
-     * @param string $userUuid  Uuid of the user for which the content should be converted. This is not the login user.
+     * @param string $format The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
+     * @param string $content The content that should be converted.
+     * @param string $userUuid Uuid of the user for which the content should be converted. This is not the login user.
      * @return string Returns the converted content.
+     * @throws AdmException
      */
     public function convertColumnContentForOutput(int $columnNumber, string $format, string $content, string $userUuid)
     {
@@ -317,6 +318,7 @@ class ListConfiguration extends TableLists
     /**
      * Returns an array with all alignments (center, left or right) from all columns of this list.
      * @return array Array with alignments from all columns of this list configuration.
+     * @throws AdmException
      */
     public function getColumnAlignments(): array
     {
@@ -371,6 +373,7 @@ class ListConfiguration extends TableLists
      * Returns an array with all column names of this list. The names within the array are translated
      * to the current language.
      * @return array Array with all column names of this list configuration.
+     * @throws AdmException
      */
     public function getColumnNames(): array
     {
@@ -444,6 +447,7 @@ class ListConfiguration extends TableLists
      * @param int $number The internal number of the column. The column number start with 1.
      *                    This will be the position of the column in the list.
      * @return TableAccess|null Returns a TableAccess object of the database table **adm_list_columns**.
+     * @throws AdmException
      */
     public function getColumnObject(int $number): ?TableAccess
     {
@@ -905,6 +909,7 @@ class ListConfiguration extends TableLists
      * The method will clear all column data of this object and restore all
      * columns from the database. Then the column number will be renewed for all columns.
      * This is in some cases a necessary fix if a column number was lost.
+     * @throws AdmException
      */
     public function repair()
     {
