@@ -23,7 +23,7 @@ final class PhpIniUtils
      * @return array<int,string> Returns the disabled function names
      * @see https://www.php.net/manual/en/ini.core.php#ini.disable-functions
      */
-    public static function getDisabledFunctions()
+    public static function getDisabledFunctions(): array
     {
         if (self::$disabledFunctions === null) {
             self::$disabledFunctions = explode(',', ini_get('disable_functions'));
@@ -36,7 +36,7 @@ final class PhpIniUtils
      * Checks if the size limits have valid values because they depend on each other
      * @return bool
      */
-    public static function checkSizeLimits()
+    public static function checkSizeLimits(): bool
     {
         return (is_infinite(self::getMemoryLimit()) || self::getMemoryLimit() >= self::getPostMaxSize())
             && (is_infinite(self::getPostMaxSize()) || self::getPostMaxSize() >= self::getFileUploadMaxFileSize());
@@ -46,10 +46,10 @@ final class PhpIniUtils
      * Returns the calculated bytes of a string or INF if unlimited.
      * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit.
      *                      Units could be K for Kilobyte, M for Megabyte, G for Gigabyte or T for Terabyte.
-     * @param int    $multi Factor to multiply. Default: 1024
+     * @param int $multi Factor to multiply. Default: 1024
      * @return int Returns the bytes of the data string.
      */
-    private static function getBytesFromSize($data, $multi = self::BYTES_UNIT_FACTOR_1024)
+    private static function getBytesFromSize(string $data, int $multi = self::BYTES_UNIT_FACTOR_1024): int
     {
         if ($data === '' || $data === '-1') {
             return INF;
@@ -80,7 +80,7 @@ final class PhpIniUtils
      * @return array<string,string>
      * @see https://www.php.net/manual/en/ini.core.php#ini.open-basedir
      */
-    public static function getBaseDirs()
+    public static function getBaseDirs(): array
     {
         return explode(PATH_SEPARATOR, ini_get('open_basedir'));
     }
@@ -90,7 +90,7 @@ final class PhpIniUtils
      * @return int
      * @see https://www.php.net/manual/en/ini.core.php#ini.memory-limit
      */
-    public static function getMemoryLimit()
+    public static function getMemoryLimit(): int
     {
         return self::getBytesFromSize(ini_get('memory_limit'));
     }
@@ -100,7 +100,7 @@ final class PhpIniUtils
      * @return int
      * @see https://www.php.net/manual/en/ini.core.php#ini.post-max-size
      */
-    public static function getPostMaxSize()
+    public static function getPostMaxSize(): int
     {
         return self::getBytesFromSize(ini_get('post_max_size'));
     }
@@ -110,7 +110,7 @@ final class PhpIniUtils
      * @return string
      * @see https://www.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
-    public static function getFileUploadTmpDir()
+    public static function getFileUploadTmpDir(): string
     {
         return ini_get('upload_tmp_dir');
     }
@@ -120,7 +120,7 @@ final class PhpIniUtils
      * @return int
      * @see https://www.php.net/manual/en/ini.core.php#ini.upload-max-filesize
      */
-    public static function getFileUploadMaxFileSize()
+    public static function getFileUploadMaxFileSize(): int
     {
         return self::getBytesFromSize(ini_get('upload_max_filesize'));
     }
@@ -130,7 +130,7 @@ final class PhpIniUtils
      * @return int
      * @see https://www.php.net/manual/en/ini.core.php#ini.max-file-uploads
      */
-    public static function getFileUploadMaxFileCount()
+    public static function getFileUploadMaxFileCount(): int
     {
         return (int) ini_get('max_file_uploads');
     }
@@ -139,7 +139,7 @@ final class PhpIniUtils
      * Returns the maximum upload size out of memory-limit, max-post-size and max-file-size
      * @return int
      */
-    public static function getUploadMaxSize()
+    public static function getUploadMaxSize(): int
     {
         return min(self::getMemoryLimit(), self::getPostMaxSize(), self::getFileUploadMaxFileSize());
     }
@@ -149,7 +149,7 @@ final class PhpIniUtils
      * @return bool
      * @see https://www.php.net/manual/en/ini.core.php#ini.file-uploads
      */
-    public static function isFileUploadEnabled()
+    public static function isFileUploadEnabled(): bool
     {
         return (bool) ini_get('file_uploads');
     }
@@ -159,7 +159,7 @@ final class PhpIniUtils
      * @param string $directoryPath The directory path to check
      * @return bool
      */
-    private static function isInBaseDirs($directoryPath)
+    private static function isInBaseDirs(string $directoryPath): bool
     {
         $baseDirs = self::getBaseDirs();
 
@@ -179,26 +179,26 @@ final class PhpIniUtils
     /**
      * Checks if a given directory path exists and is in the base-directories
      * @param string $directoryPath The directory path to check
-     * @throws \UnexpectedValueException Throws if a given directory does not exist
-     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
+     * @throws UnexpectedValueException Throws if a given directory does not exist
+     * @throws RuntimeException         Throws if a given directory is not in the base-directories
      */
-    private static function checkIsValidDir(&$directoryPath)
+    private static function checkIsValidDir(string &$directoryPath)
     {
         $directoryPath = FileSystemUtils::getNormalizedPath($directoryPath);
 
         if (!is_dir($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
         if (!self::isInBaseDirs($directoryPath)) {
-            throw new \RuntimeException('Directory "' . $directoryPath . '" is not in base-directories!');
+            throw new RuntimeException('Directory "' . $directoryPath . '" is not in base-directories!');
         }
     }
 
     /**
      * Sets the allowed base-directories
      * @param array<int,string> $directoryPaths The directory paths to set as allowed base-dirs
-     * @throws \UnexpectedValueException Throws if a given directory does not exist
-     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
+     * @throws UnexpectedValueException Throws if a given directory does not exist
+     * @throws RuntimeException         Throws if a given directory is not in the base-directories
      * @return bool|string
      * @see https://www.php.net/manual/en/ini.core.php#ini.open-basedir
      */
@@ -215,12 +215,12 @@ final class PhpIniUtils
     /**
      * Sets the file upload temporary directory
      * @param string $directoryPath The directory path to set the file upload temporary directory
-     * @throws \UnexpectedValueException Throws if a given directory does not exist
-     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      * @return bool|string
+     * @throws RuntimeException         Throws if a given directory is not in the base-directories
+     * @throws UnexpectedValueException Throws if a given directory does not exist
      * @see https://www.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
-    public static function setUploadTmpDir($directoryPath)
+    public static function setUploadTmpDir(string $directoryPath)
     {
         self::checkIsValidDir($directoryPath);
 
@@ -230,11 +230,11 @@ final class PhpIniUtils
     /**
      * Starts a new execution time limit
      * @param int $seconds Execution time limit in seconds
-     * @throws \RuntimeException Throws if starting a new execution time limit failed
+     * @throws RuntimeException Throws if starting a new execution time limit failed
      * @see https://www.php.net/manual/en/function.set-time-limit.php
      * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
      */
-    public static function startNewExecutionTimeLimit($seconds)
+    public static function startNewExecutionTimeLimit(int $seconds)
     {
         global $gDebug, $gLogger;
 
