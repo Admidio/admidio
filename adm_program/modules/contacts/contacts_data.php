@@ -149,14 +149,41 @@ if ($gCurrentOrganization->countAllRecords() > 1) {
             AND cat_org_id <> '.$gCurrentOrgId.')';
 }
 
-// create sql to show all members (not accepted users should not be shown)
-if ($getMembers && $gCurrentUser->editUsers()) {
-    $mainSql = $contactsListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
-} elseif ($gCurrentUser->editUsers()) {
-    $mainSql = $contactsListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
-} else {
-    $mainSql = $contactsListConfig->getSql(array('showRolesMembers' => $gCurrentUser->getRolesViewProfiles(), 'useConditions' => false, 'useOrderBy' => $useOrderBy));
+try {// create sql to show all members (not accepted users should not be shown)
+    if ($getMembers && $gCurrentUser->editUsers()) {
+        $mainSql = $contactsListConfig->getSql(
+            array(
+                'showAllMembersThisOrga' => true,
+                'showUserUUID' => true,
+                'useConditions' => false,
+                'useOrderBy' => $useOrderBy
+            )
+        );
+    } elseif ($gCurrentUser->editUsers()) {
+        $mainSql = $contactsListConfig->getSql(
+            array(
+                'showAllMembersDatabase' => true,
+                'showUserUUID' => true,
+                'useConditions' => false,
+                'useOrderBy' => $useOrderBy
+            )
+        );
+    } else {
+        $mainSql = $contactsListConfig->getSql(
+            array(
+                'showRolesMembers' => $gCurrentUser->getRolesViewProfiles(),
+                'showUserUUID' => true,
+                'useConditions' => false,
+                'useOrderBy' => $useOrderBy
+            )
+        );
+    }
+} catch (AdmException $e) {
+    $jsonArray['error'] = $e->getMessage();
+    echo json_encode($jsonArray);
+    exit();
 }
+
 $mainSql = 'SELECT DISTINCT '.$contactsOfThisOrganizationSelect.' AS member_this_orga, '.$contactsOfOtherOrganizationSelect.' AS member_other_orga, usr_login_name as loginname,
                 (SELECT email.usd_value FROM '.TBL_USER_DATA.' email
                   WHERE  email.usd_usr_id = usr_id
@@ -197,14 +224,14 @@ $jsonArray['data'] = array();
 
 while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
     ++$rowNumber;
-    $ColumnNumberSql = 7;
+    $ColumnNumberSql = 5;
     $columnNumberJson = 2;
 
     $contactsOfThisOrganization  = (bool) $row['member_this_orga'];
     $contactsOfOtherOrganization = (bool) $row['member_other_orga'];
 
     // Create row and add first column
-    $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_id'], '0' => $rowNumber);
+    $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => $rowNumber);
 
     // Add icon for member or no member of the organization
     if ($contactsOfThisOrganization) {
@@ -236,7 +263,7 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
 
     // Administrators can change or send password if login is configured and user is member of current organization
     if ($contactsOfThisOrganization && $gCurrentUser->isAdministrator()
-    && !empty($row['loginname']) && (int) $row['usr_id'] !== $gCurrentUserId) {
+    && !empty($row['loginname']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
         if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
@@ -272,7 +299,7 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
     // add link to delete user btw. remove user from the current organization
     if (((!$contactsOfOtherOrganization && $gCurrentUser->isAdministrator()) // not a member of another organization, then administrators may delete
         || $contactsOfThisOrganization)                  // active members may be removed by authorized users
-        && (int) $row['usr_id'] !== $gCurrentUserId) { // no one is allowed to remove their own profile
+        && $row['usr_uuid'] !== $gCurrentUserUUID) { // no one is allowed to remove their own profile
         $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.
                 '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_USER').'"></i>

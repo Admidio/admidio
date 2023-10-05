@@ -166,7 +166,7 @@ $valueQuotes = '';
 $charset     = '';
 $classTable  = '';
 $orientation = '';
-$showIdColumns = false;
+$showUserUUID = false;
 
 switch ($getMode) {
     case 'csv-ms':
@@ -193,11 +193,11 @@ switch ($getMode) {
         break;
     case 'html':
         $classTable  = 'table table-condensed';
-        $showIdColumns = true;
+        $showUserUUID = true;
         break;
     case 'print':
         $classTable  = 'table table-condensed table-striped';
-        $showIdColumns = true;
+        $showUserUUID = true;
         break;
     default:
 }
@@ -248,7 +248,8 @@ if (!$showCountGuests) {
 $mainSql = $list->getSQL(
     array('showRolesMembers'  => $roleIds,
           'showFormerMembers' => $getShowFormerMembers,
-          'showIdColumns' => $showIdColumns,
+          'showUserUUID' => $showUserUUID,
+          'showLeaderFlag' => true,
           'showRelationTypes' => $relationTypeIds,
           'startDate' => $startDateEnglishFormat,
           'endDate'   => $endDateEnglishFormat
@@ -264,7 +265,6 @@ if($getMode !== 'html') {
             array(
                 'showRolesMembers' => $roleIds,
                 'showFormerMembers' => $getShowFormerMembers,
-                'showIdColumns' => $showIdColumns,
                 'showRelationTypes' => $relationTypeIds,
                 'startDate' => $startDateEnglishFormat,
                 'endDate' => $endDateEnglishFormat
@@ -314,10 +314,11 @@ if($getMode === 'csv') {
 
 $userUuidList = array();
 foreach ($membersList as $member) {
-    $user = new User($gDb, $gProfileFields, $member['usr_id']);
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($member['usr_uuid']);
 
     // only users with a valid email address should be added to the email list
-    if (StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUserId !== (int) $member['usr_id']) {
+    if (StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUserUUID !== $member['usr_uuid']) {
         $userUuidList[] = $member['usr_uuid'];
     }
 }
@@ -610,7 +611,10 @@ $lastGroupHead = null; // Mark for change between leader and member
 $listRowNumber = 1;
 
 foreach ($membersList as $member) {
-    $memberIsLeader = (bool) $member['mem_leader'];
+    $memberIsLeader = false;
+    if (isset($member['mem_leader'])) {
+        $memberIsLeader = (bool)$member['mem_leader'];
+    }
 
     if ($getMode !== 'csv') {
         // in print preview and pdf we group the role leaders and the members and
@@ -647,9 +651,9 @@ foreach ($membersList as $member) {
     for ($columnNumber = 1, $max = $list->countColumns(); $columnNumber <= $max; ++$columnNumber) {
         $column = $list->getColumnObject($columnNumber);
 
-        // in the SQL mem_leader, usr_id and usr_uuid starts before the column
-        // the Index to the row must be set to 3 directly
-        $sqlColumnNumber = $columnNumber + 2;
+        // in the SQL mem_leader and usr_uuid starts before the column
+        // the Index to the row must be set to 2 directly
+        $sqlColumnNumber = $columnNumber + 1;
 
         $usfId = 0;
         if ($column->getValue('lsc_usf_id') > 0) {

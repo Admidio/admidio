@@ -546,8 +546,9 @@ class ListConfiguration extends TableLists
      *                                   should be shown and also former members should be listed
      *                                 - **showRelationTypes** : An array with relation types. The sql will be expanded with
      *                                   all users who are in such a relationship to the selected role users.
-     *                                 - **showIdColumns** : The following columns will be added to the SQL result.
-     *                                   They will be the first columns of the result: mem_leaders, usr_id, usr_uuid.
+     *                                 - **showUserUUID** : If set to true the first column of the SQL will be the usr_uuid.
+     *                                 - **showLeaderFlag** : If set to true the first columns of the SQL will be
+     *                                   the flag if a user is a leader in the role or not.
      *                                 - **useConditions** : false - Don't add additional conditions to the SQL
      *                                                       true  - Conditions will be added as stored in the settings
      *                                 - **useOrderBy** : false - Don't add the sorting to the SQL
@@ -569,9 +570,11 @@ class ListConfiguration extends TableLists
             'showAllMembersDatabase' => false,
             'showRolesMembers'  => array(),
             'showFormerMembers' => false,
+            'showUserUUID'      => false,
+            'showLeaderFlag'    => false,
             'showRelationTypes' => array(),
             'useConditions'     => true,
-            'useOrderBy'           => true,
+            'useOrderBy'        => true,
             'startDate'         => null,
             'endDate'           => null
         );
@@ -581,6 +584,7 @@ class ListConfiguration extends TableLists
         $arrOrderByColumns = array();
         $sqlColumnNames = '';
         $sqlIdColumns = '';
+        $sqlMemLeader = '';
         $sqlOrderBys = '';
         $sqlJoin  = '';
         $sqlWhere = '';
@@ -710,6 +714,7 @@ class ListConfiguration extends TableLists
 
         if(count($arrSqlColumnNames) > 0) {
             $sqlColumnNames = ', ' . implode(', ', $arrSqlColumnNames);
+            $sqlColumnNames = substr($sqlColumnNames, 1);
         }
 
         // add sorting if option is set and sorting columns are stored
@@ -717,7 +722,7 @@ class ListConfiguration extends TableLists
             $sqlOrderBys = implode(', ', $arrOrderByColumns);
 
             // if roles should be shown than sort by leaders
-            if (count($optionsAll['showRolesMembers']) > 0 && $optionsAll['showIdColumns']) {
+            if (count($optionsAll['showRolesMembers']) > 0 && $optionsAll['showLeaderFlag']) {
                 if (strlen($sqlOrderBys) > 0) {
                     $sqlOrderBys = 'mem_leader DESC, ' . $sqlOrderBys;
                 } else {
@@ -767,17 +772,13 @@ class ListConfiguration extends TableLists
         }
 
         // check if mem_leaders should be shown
-        if (count($optionsAll['showRolesMembers']) === 1) {
-            $sqlMemLeader = ' mem_leader ';
-        } else {
-            $sqlMemLeader = ' false AS mem_leader ';
+        if (count($optionsAll['showRolesMembers']) === 1 && $optionsAll['showLeaderFlag']) {
+            $sqlMemLeader = ' mem_leader, ';
         }
 
         // add columns usr_id, usr_uuid, mem_leaders to the sql
-        if ($optionsAll['showIdColumns']) {
-            $sqlIdColumns = $sqlMemLeader . ', usr_id, usr_uuid ';
-        } else {
-            $sqlColumnNames = substr($sqlColumnNames, 1);
+        if ($optionsAll['showUserUUID']) {
+            $sqlIdColumns = ' usr_uuid, ';
         }
 
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
@@ -793,14 +794,14 @@ class ListConfiguration extends TableLists
 
         // Set SQL-Statement
         if ($optionsAll['showAllMembersDatabase']) {
-            $sql = 'SELECT DISTINCT ' . $sqlIdColumns . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . '
                       FROM '.TBL_USERS.'
                            '.$sqlJoin.'
                      WHERE usr_valid = true '.
                            $sqlWhere.
                            $sqlOrderBys;
         } else {
-            $sql = 'SELECT DISTINCT ' . $sqlIdColumns . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . '
                       FROM '.TBL_MEMBERS.' mem
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id

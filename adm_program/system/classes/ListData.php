@@ -157,8 +157,9 @@ class ListData
      *                                    should be shown and also former members should be listed
      *                                  - **showRelationTypes** : An array with relation types. The sql will be expanded with
      *                                    all users who are in such a relationship to the selected role users.
-     *                                  - **showIdColumns** : The following columns will be added to the SQL result.
-     *                                    They will be the first columns of the result: mem_leaders, usr_id, usr_uuid.
+     *                                  - **showUserUUID** : If set to true the first column of the SQL will be the usr_uuid.
+     *                                  - **showLeaderFlag** : If set to true the first columns of the SQL will be
+     *                                    the flag if a user is a leader in the role or not.
      *                                  - **useConditions** : false - Don't add additional conditions to the SQL
      *                                                        true  - Conditions will be added as stored in the settings
      *                                  - **useOrderBy** : false - Don't add the sorting to the SQL
