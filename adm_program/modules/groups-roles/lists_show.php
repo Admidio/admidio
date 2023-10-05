@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * mode:            Output(html, print, csv-ms, csv-oo, pdf, pdfl)
+ * mode:            Output(html, print, csv, xlsx, ods, pdf, pdfl)
  * date_from:       Value for the start date of the date range filter (default: current date)
  * date_to:         Value for the end date of the date range filter (default: current date)
  * list_uuid:       UUID of the list configuration that should be shown.
@@ -96,24 +96,28 @@ foreach ($rolesData as $role) {
 
 $htmlSubHeadline = substr($htmlSubHeadline, 2);
 
-if ($numberRoles === 1) {
-    $role = new TableRoles($gDb, $roleIds[0]);
-    $roleName        = $role->getValue('rol_name');
-    $htmlSubHeadline = $role->getValue('cat_name');
-    $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
+try {
+    if ($numberRoles === 1) {
+        $role = new TableRoles($gDb, $roleIds[0]);
+        $roleName = $role->getValue('rol_name');
+        $htmlSubHeadline = $role->getValue('cat_name');
+        $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
 
-    // If it's an event list and user has right to edit user states then an additional column with edit link is shown
-    if ($role->getValue('cat_name_intern') === 'EVENTS') {
-        $event = new Event($gDb);
-        $event->readDataByRoleId($roleIds[0]);
+        // If it's an event list and user has right to edit user states then an additional column with edit link is shown
+        if ($role->getValue('cat_name_intern') === 'EVENTS') {
+            $event = new Event($gDb);
+            $event->readDataByRoleId($roleIds[0]);
 
-        $showComment = $event->getValue('dat_allow_comments');
-        $showCountGuests = $event->getValue('dat_additional_guests');
+            $showComment = $event->getValue('dat_allow_comments');
+            $showCountGuests = $event->getValue('dat_additional_guests');
 
-        if ($getMode === 'html' && ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleIds[0]))) {
-            $editUserStatus = true;
+            if ($getMode === 'html' && ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleIds[0]))) {
+                $editUserStatus = true;
+            }
         }
     }
+} catch (AdmException $e) {
+    $e->showHtml();
 }
 
 // if user should not view former roles members then disallow it
@@ -160,50 +164,8 @@ if (count($relationTypeIds) > 0) {
     }
 }
 
-// initialize some special mode parameters
-$separator   = '';
-$valueQuotes = '';
-$charset     = '';
-$classTable  = '';
-$orientation = '';
-$showUserUUID = false;
-
-switch ($getMode) {
-    case 'csv-ms':
-        $separator   = ';';  // Microsoft Excel 2007 or new needs a semicolon
-        $valueQuotes = '"';  // all values should be set with quotes
-        //$getMode     = 'csv';
-        $charset     = 'iso-8859-1';
-        break;
-    case 'csv-oo':
-        $separator   = ',';  // a CSV file should have a comma
-        $valueQuotes = '"';  // all values should be set with quotes
-        //$getMode     = 'csv';
-        $charset     = 'utf-8';
-        break;
-    case 'pdf':
-        $classTable  = 'table';
-        $orientation = 'P';
-        $getMode     = 'pdf';
-        break;
-    case 'pdfl':
-        $classTable  = 'table';
-        $orientation = 'L';
-        $getMode     = 'pdf';
-        break;
-    case 'html':
-        $classTable  = 'table table-condensed';
-        $showUserUUID = true;
-        break;
-    case 'print':
-        $classTable  = 'table table-condensed table-striped';
-        $showUserUUID = true;
-        break;
-    default:
-}
-
 // check if user has the right to export lists
-if (in_array($getMode, array('csv', 'pdf'), true)
+if (in_array($getMode, array('csv', 'xlsx', 'ods', 'pdf'), true)
 && ($gSettingsManager->getInt('groups_roles_export') === 0 // no one should export lists
    || ($gSettingsManager->getInt('groups_roles_export') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')))) { // users who don't have the right to edit all profiles
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -211,7 +173,6 @@ if (in_array($getMode, array('csv', 'pdf'), true)
 }
 
 $mainSql = ''; // Main SQL statement for lists
-$csvStr = ''; // CSV file as string
 
 // if no list parameter is set then load role default list configuration or system default list configuration
 if ($numberRoles === 1 && $getListUuid === '') {
@@ -248,7 +209,7 @@ if (!$showCountGuests) {
 $mainSql = $list->getSQL(
     array('showRolesMembers'  => $roleIds,
           'showFormerMembers' => $getShowFormerMembers,
-          'showUserUUID' => $showUserUUID,
+          'showUserUUID' => true,
           'showLeaderFlag' => true,
           'showRelationTypes' => $relationTypeIds,
           'startDate' => $startDateEnglishFormat,
@@ -256,8 +217,7 @@ $mainSql = $list->getSQL(
     )
 );
 
-if($getMode !== 'html') {
-
+if(in_array($getMode, array('xlsx', 'ods', 'csv'))) {
     try {
         $listExport = new ListData();
         $listExport->setDataByConfiguration(
@@ -284,11 +244,6 @@ if($getMode !== 'html') {
             case 'ods':
                 $listExport->export($filename, 'ods');
                 break;
-            case 'pdf':
-                $listExport->export($filename, 'pdf');
-                break;
-            case 'pdfl':
-                break;
             default:
                 // the default will be a csv file
                 $listExport->export($filename);
@@ -301,18 +256,36 @@ if($getMode !== 'html') {
     exit();
 }
 
-// determine the number of users in this list
-$listStatement = $gDb->query($mainSql); // TODO add more params
-$numMembers = $listStatement->rowCount();
+// initialize some special mode parameters
+$classTable  = '';
+$orientation = '';
 
-// get all members and their data of this list in an array
-if($getMode === 'csv') {
-    $membersList = $listStatement->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $membersList = $listStatement->fetchAll(PDO::FETCH_BOTH);
+switch ($getMode) {
+    case 'pdf':
+        $classTable  = 'table';
+        $orientation = 'P';
+        $getMode     = 'pdf';
+        break;
+    case 'pdfl':
+        $classTable  = 'table';
+        $orientation = 'L';
+        $getMode     = 'pdf';
+        break;
+    case 'html':
+        $classTable  = 'table table-condensed';
+        break;
+    case 'print':
+        $classTable  = 'table table-condensed table-striped';
+        break;
+    default:
 }
 
-$userUuidList = array();
+// determine the number of users in this list
+$listStatement = $gDb->query($mainSql); // TODO add more params
+$numMembers    = $listStatement->rowCount();
+$membersList   = $listStatement->fetchAll(PDO::FETCH_BOTH);
+$userUuidList  = array();
+
 foreach ($membersList as $member) {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($member['usr_uuid']);
@@ -342,223 +315,221 @@ if ($getMode === 'html' && !str_contains($gNavigation->getUrl(), 'lists_show.php
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }
 
-if ($getMode !== 'csv') {
-    $datatable = false;
-    $hoverRows = false;
+$datatable = false;
+$hoverRows = false;
 
-    if ($getMode !== 'html') {
-        if ($getShowFormerMembers === 1) {
-            $htmlSubHeadline .= ' - '.$gL10n->get('SYS_FORMER_MEMBERS');
-        } else {
-            if ($getDateFrom === DATE_NOW && $getDateTo === DATE_NOW) {
-                $htmlSubHeadline .= ' - '.$gL10n->get('SYS_ACTIVE_MEMBERS');
-            } else {
-                $htmlSubHeadline .= ' - '.$gL10n->get('SYS_MEMBERS_BETWEEN_PERIOD', array($dateFrom, $dateTo));
-            }
-        }
-    }
-
-    if (count($relationTypeIds) > 1) {
-        $htmlSubHeadline .= ' - '.$relationTypeName;
-    }
-
-    if ($getMode === 'print') {
-        // create html page object without the custom theme files
-        $page = new HtmlPage('admidio-lists-show', $headline);
-        $page->setPrintMode();
-        $page->setTitle($title);
-        $page->addHtml('<h5 class="admidio-content-subheader">'.$htmlSubHeadline.'</h5>');
-        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-    } elseif ($getMode === 'pdf') {
-        $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-        // set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Admidio');
-        $pdf->SetTitle($headline);
-
-        // remove default header/footer
-        $pdf->setPrintHeader();
-        $pdf->setPrintFooter(false);
-        // set header and footer fonts
-        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-        // set auto page breaks
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-        $pdf->SetMargins(10, 20, 10);
-        $pdf->setHeaderMargin();
-        $pdf->setFooterMargin(0);
-
-        // headline for PDF
-        $pdf->setHeaderData('', 0, $headline);
-
-        // set font
-        $pdf->SetFont('times', '', 10);
-
-        // add a page
-        $pdf->AddPage();
-
-        // Create table object for display
-        $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
-        $table->addAttribute('border', '1');
-    } elseif ($getMode === 'html') {
-        $datatable = true;
-        $hoverRows = true;
-
-        // create html page object
-        $page = new HtmlPage('admidio-lists-show', $headline);
-        $page->setTitle($title);
-
-        // create select box with all list configurations
-        $sql = 'SELECT lst_uuid, lst_name, lst_global
-                  FROM '.TBL_LISTS.'
-                 WHERE lst_org_id = ? -- $gCurrentOrgId
-                   AND (  lst_usr_id = ? -- $gCurrentUserId
-                       OR lst_global = true)
-                   AND lst_name IS NOT NULL
-              ORDER BY lst_global ASC, lst_name ASC';
-        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $gCurrentUserId));
-
-        $listConfigurations = array();
-        while ($row = $pdoStatement->fetch()) {
-            $listConfigurations[] = array($row['lst_uuid'], $row['lst_name'], (bool) $row['lst_global']);
-        }
-
-        foreach ($listConfigurations as &$rowConfigurations) {
-            if ($rowConfigurations[2] == 0) {
-                $rowConfigurations[2] = $gL10n->get('SYS_YOUR_LISTS');
-            } else {
-                $rowConfigurations[2] = $gL10n->get('SYS_GENERAL_LISTS');
-            }
-        }
-        unset($rowConfigurations);
-
-        // add list item for own list
-        $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('SYS_CONFIGURATION'));
-
-        // add navbar with filter elements and the select box with all lists configurations
-        $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
-        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
-        $form->addSelectBox(
-            'list_configurations',
-            $gL10n->get('SYS_CONFIGURATION_LIST'),
-            $listConfigurations,
-            array('defaultValue' => $getListUuid)
-        );
-
-
-        // Only for active members of a role and if user has right to view former members
-        if ($hasRightViewFormerMembers) {
-            // create filter menu with elements for start-/end date
-            $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('list_uuid', '', $getListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addInput('urt_ids', '', $getRelationTypeIds, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
-            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-        }
-
-        $filterNavbar->addForm($form->show());
-        $page->addHtml($filterNavbar->show());
-
-        $page->addHtml('<h5 class="admidio-content-subheader">'.$htmlSubHeadline.'</h5>');
-        $page->addJavascript(
-            '
-            $("#list_configurations").change(function() {
-                elementId = $(this).attr("id");
-                roleId    = elementId.substr(elementId.search(/_/) + 1);
-
-                if ($(this).val() === "mylist") {
-                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('rol_ids' => $getRoleIds)) . '";
-                } else {
-                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
-                }
-            });
-
-            $("#menu_item_mail_to_list").click(function() {
-                redirectPost("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {list_uuid: "'.$getListUuid.'", userUuidList: "'.implode(',', $userUuidList).'"});
-                return false;
-            });
-
-            $("#menu_item_lists_print_view").click(function() {
-                window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
-            });',
-            true
-        );
-
-        // link to print overlay and exports
-        $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
-
-        // dropdown menu item with all export possibilities
-        if ($gSettingsManager->getInt('groups_roles_export') === 1 // all users
-        || ($gSettingsManager->getInt('groups_roles_export') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user'))) { // users with the right to edit all profiles
-            $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
-            $page->addPageFunctionsMenuItem(
-                'menu_item_lists_csv_ms',
-                $gL10n->get('SYS_MICROSOFT_EXCEL'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
-                'fa-file-excel',
-                'menu_item_lists_export'
-            );
-            $page->addPageFunctionsMenuItem(
-                'menu_item_lists_csv_ms',
-                $gL10n->get('SYS_ODF_SPREADSHEET'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
-                'fa-file-alt',
-                'menu_item_lists_export'
-            );
-            $page->addPageFunctionsMenuItem(
-                'menu_item_lists_pdf',
-                $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
-                'fa-file-pdf',
-                'menu_item_lists_export'
-            );
-            $page->addPageFunctionsMenuItem(
-                'menu_item_lists_pdfl',
-                $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
-                'fa-file-pdf',
-                'menu_item_lists_export'
-            );
-            $page->addPageFunctionsMenuItem(
-                'menu_item_lists_csv',
-                $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
-                'fa-file-csv',
-                'menu_item_lists_export'
-            );
-        }
-
-        if ($numberRoles === 1) {
-            // link to assign or remove members if you are allowed to do it
-            if ($role->allowedToAssignMembers($gCurrentUser)) {
-                $page->addPageFunctionsMenuItem(
-                    'menu_item_lists_assign_members',
-                    $gL10n->get('SYS_ASSIGN_MEMBERS'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $role->getValue('rol_uuid'))),
-                    'fa-user-plus'
-                );
-            }
-        }
-
-        // link to email-module
-        if ($showLinkMailToList) {
-            $page->addPageFunctionsMenuItem(
-                'menu_item_mail_to_list',
-                $gL10n->get('SYS_EMAIL_TO_LIST'),
-                'javascript:void(0);',
-                'fa-envelope'
-            );
-        }
-
-        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-        $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
+if ($getMode !== 'html') {
+    if ($getShowFormerMembers === 1) {
+        $htmlSubHeadline .= ' - '.$gL10n->get('SYS_FORMER_MEMBERS');
     } else {
-        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+        if ($getDateFrom === DATE_NOW && $getDateTo === DATE_NOW) {
+            $htmlSubHeadline .= ' - '.$gL10n->get('SYS_ACTIVE_MEMBERS');
+        } else {
+            $htmlSubHeadline .= ' - '.$gL10n->get('SYS_MEMBERS_BETWEEN_PERIOD', array($dateFrom, $dateTo));
+        }
     }
+}
+
+if (count($relationTypeIds) > 1) {
+    $htmlSubHeadline .= ' - '.$relationTypeName;
+}
+
+if ($getMode === 'print') {
+    // create html page object without the custom theme files
+    $page = new HtmlPage('admidio-lists-show', $headline);
+    $page->setPrintMode();
+    $page->setTitle($title);
+    $page->addHtml('<h5 class="admidio-content-subheader">'.$htmlSubHeadline.'</h5>');
+    $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+} elseif ($getMode === 'pdf') {
+    $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+    // set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('Admidio');
+    $pdf->SetTitle($headline);
+
+    // remove default header/footer
+    $pdf->setPrintHeader();
+    $pdf->setPrintFooter(false);
+    // set header and footer fonts
+    $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+    $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    // set auto page breaks
+    $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+    $pdf->SetMargins(10, 20, 10);
+    $pdf->setHeaderMargin();
+    $pdf->setFooterMargin(0);
+
+    // headline for PDF
+    $pdf->setHeaderData('', 0, $headline);
+
+    // set font
+    $pdf->SetFont('times', '', 10);
+
+    // add a page
+    $pdf->AddPage();
+
+    // Create table object for display
+    $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
+    $table->addAttribute('border', '1');
+} elseif ($getMode === 'html') {
+    $datatable = true;
+    $hoverRows = true;
+
+    // create html page object
+    $page = new HtmlPage('admidio-lists-show', $headline);
+    $page->setTitle($title);
+
+    // create select box with all list configurations
+    $sql = 'SELECT lst_uuid, lst_name, lst_global
+              FROM '.TBL_LISTS.'
+             WHERE lst_org_id = ? -- $gCurrentOrgId
+               AND (  lst_usr_id = ? -- $gCurrentUserId
+                   OR lst_global = true)
+               AND lst_name IS NOT NULL
+          ORDER BY lst_global ASC, lst_name ASC';
+    $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $gCurrentUserId));
+
+    $listConfigurations = array();
+    while ($row = $pdoStatement->fetch()) {
+        $listConfigurations[] = array($row['lst_uuid'], $row['lst_name'], (bool) $row['lst_global']);
+    }
+
+    foreach ($listConfigurations as &$rowConfigurations) {
+        if ($rowConfigurations[2] == 0) {
+            $rowConfigurations[2] = $gL10n->get('SYS_YOUR_LISTS');
+        } else {
+            $rowConfigurations[2] = $gL10n->get('SYS_GENERAL_LISTS');
+        }
+    }
+    unset($rowConfigurations);
+
+    // add list item for own list
+    $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('SYS_CONFIGURATION'));
+
+    // add navbar with filter elements and the select box with all lists configurations
+    $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
+    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
+    $form->addSelectBox(
+        'list_configurations',
+        $gL10n->get('SYS_CONFIGURATION_LIST'),
+        $listConfigurations,
+        array('defaultValue' => $getListUuid)
+    );
+
+
+    // Only for active members of a role and if user has right to view former members
+    if ($hasRightViewFormerMembers) {
+        // create filter menu with elements for start-/end date
+        $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
+        $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
+        $form->addInput('list_uuid', '', $getListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('urt_ids', '', $getRelationTypeIds, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
+        $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+    }
+
+    $filterNavbar->addForm($form->show());
+    $page->addHtml($filterNavbar->show());
+
+    $page->addHtml('<h5 class="admidio-content-subheader">'.$htmlSubHeadline.'</h5>');
+    $page->addJavascript(
+        '
+        $("#list_configurations").change(function() {
+            elementId = $(this).attr("id");
+            roleId    = elementId.substr(elementId.search(/_/) + 1);
+
+            if ($(this).val() === "mylist") {
+                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('rol_ids' => $getRoleIds)) . '";
+            } else {
+                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
+            }
+        });
+
+        $("#menu_item_mail_to_list").click(function() {
+            redirectPost("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {list_uuid: "'.$getListUuid.'", userUuidList: "'.implode(',', $userUuidList).'"});
+            return false;
+        });
+
+        $("#menu_item_lists_print_view").click(function() {
+            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
+        });',
+        true
+    );
+
+    // link to print overlay and exports
+    $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+
+    // dropdown menu item with all export possibilities
+    if ($gSettingsManager->getInt('groups_roles_export') === 1 // all users
+    || ($gSettingsManager->getInt('groups_roles_export') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user'))) { // users with the right to edit all profiles
+        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
+        $page->addPageFunctionsMenuItem(
+            'menu_item_lists_csv_ms',
+            $gL10n->get('SYS_MICROSOFT_EXCEL'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
+            'fa-file-excel',
+            'menu_item_lists_export'
+        );
+        $page->addPageFunctionsMenuItem(
+            'menu_item_lists_csv_ms',
+            $gL10n->get('SYS_ODF_SPREADSHEET'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
+            'fa-file-alt',
+            'menu_item_lists_export'
+        );
+        $page->addPageFunctionsMenuItem(
+            'menu_item_lists_pdf',
+            $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
+            'fa-file-pdf',
+            'menu_item_lists_export'
+        );
+        $page->addPageFunctionsMenuItem(
+            'menu_item_lists_pdfl',
+            $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
+            'fa-file-pdf',
+            'menu_item_lists_export'
+        );
+        $page->addPageFunctionsMenuItem(
+            'menu_item_lists_csv',
+            $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
+            'fa-file-csv',
+            'menu_item_lists_export'
+        );
+    }
+
+    if ($numberRoles === 1) {
+        // link to assign or remove members if you are allowed to do it
+        if ($role->allowedToAssignMembers($gCurrentUser)) {
+            $page->addPageFunctionsMenuItem(
+                'menu_item_lists_assign_members',
+                $gL10n->get('SYS_ASSIGN_MEMBERS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $role->getValue('rol_uuid'))),
+                'fa-user-plus'
+            );
+        }
+    }
+
+    // link to email-module
+    if ($showLinkMailToList) {
+        $page->addPageFunctionsMenuItem(
+            'menu_item_mail_to_list',
+            $gL10n->get('SYS_EMAIL_TO_LIST'),
+            'javascript:void(0);',
+            'fa-envelope'
+        );
+    }
+
+    $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+    $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
+} else {
+    $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
 }
 
 if ($numMembers === 0) {
@@ -568,9 +539,12 @@ if ($numMembers === 0) {
     // => EXIT
 }
 
-// read column information from the list configuration
-$arrColumnNames = $list->getColumnNames();
-$arrColumnAlign = $list->getColumnAlignments();
+try {// read column information from the list configuration
+    $arrColumnNames = $list->getColumnNames();
+    $arrColumnAlign = $list->getColumnAlignments();
+} catch (AdmException $e) {
+    $e->showHtml();
+}
 
 // set the first column for the counter
 if ($getMode === 'html') {
@@ -588,9 +562,7 @@ if ($getMode === 'html') {
 array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
 array_unshift($arrColumnAlign, 'left');
 
-if ($getMode === 'csv') {
-    $csvStr = $valueQuotes . implode($valueQuotes.$separator.$valueQuotes, $arrColumnNames) . $valueQuotes . "\n";
-} elseif ($getMode === 'html' || $getMode === 'print') {
+if ($getMode === 'html' || $getMode === 'print') {
     $table->setColumnAlignByArray($arrColumnAlign);
     $table->addRowHeadingByArray($arrColumnNames);
 } elseif ($getMode === 'pdf') {
@@ -616,23 +588,21 @@ foreach ($membersList as $member) {
         $memberIsLeader = (bool)$member['mem_leader'];
     }
 
-    if ($getMode !== 'csv') {
-        // in print preview and pdf we group the role leaders and the members and
-        // add a specific header for them
-        if ($memberIsLeader !== $lastGroupHead && ($memberIsLeader || $lastGroupHead !== null)) {
-            if ($memberIsLeader) {
-                $title = $gL10n->get('SYS_LEADERS');
-            } else {
-                // if list has leaders then initialize row number for members
-                $listRowNumber = 1;
-                $title = $gL10n->get('SYS_PARTICIPANTS');
-            }
-
-            if ($getMode === 'print' || $getMode === 'pdf') {
-                $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), $list->countColumns() + 1);
-            }
-            $lastGroupHead = $memberIsLeader;
+    // in print preview and pdf we group the role leaders and the members and
+    // add a specific header for them
+    if ($memberIsLeader !== $lastGroupHead && ($memberIsLeader || $lastGroupHead !== null)) {
+        if ($memberIsLeader) {
+            $title = $gL10n->get('SYS_LEADERS');
+        } else {
+            // if list has leaders then initialize row number for members
+            $listRowNumber = 1;
+            $title = $gL10n->get('SYS_PARTICIPANTS');
         }
+
+        if ($getMode === 'print' || $getMode === 'pdf') {
+            $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), $list->countColumns() + 1);
+        }
+        $lastGroupHead = $memberIsLeader;
     }
 
     // if html mode and the role has leaders then group all data between leaders and members
@@ -670,9 +640,6 @@ foreach ($membersList as $member) {
             if (in_array($getMode, array('print', 'pdf'), true)) {
                 // add serial
                 $columnValues[] = $listRowNumber;
-            } else {
-                // 1st column may show the serial
-                $csvStr .= $valueQuotes.$listRowNumber.$valueQuotes;
             }
 
             // in html mode we add a column with leader/member information to
@@ -687,11 +654,7 @@ foreach ($membersList as $member) {
         }
 
         // fill content with data of database
-        if ($getMode === 'csv') {
-            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, (string) $member[$sqlColumnNumber], $member['usr_uuid']) . $valueQuotes;
-        } else {
-            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, (string) $member[$sqlColumnNumber], $member['usr_uuid']);
-        }
+        $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, (string) $member[$sqlColumnNumber], $member['usr_uuid']);
     }
 
     if ($editUserStatus) {
@@ -707,11 +670,7 @@ foreach ($membersList as $member) {
                                 <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 
-    if ($getMode === 'csv') {
-        $csvStr .= "\n";
-    } else {
-        $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
-    }
+    $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
 
     ++$listRowNumber;
 }  // End-While (end found User)
@@ -719,7 +678,7 @@ foreach ($membersList as $member) {
 $filename = '';
 
 // Settings for export file
-if ($getMode === 'csv' || $getMode === 'pdf') {
+if ($getMode === 'pdf') {
     $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
 
     // file name in the current directory...
@@ -736,18 +695,8 @@ if ($getMode === 'csv' || $getMode === 'pdf') {
     header('Pragma: public');
 }
 
-if ($getMode === 'csv') {
-    // download CSV file
-    header('Content-Type: text/comma-separated-values; charset='.$charset);
-
-    if ($charset === 'iso-8859-1') {
-        echo iconv("UTF-8","ISO-8859-1", $csvStr);
-    } else {
-        echo $csvStr;
-    }
-}
 // send the new PDF to the User
-elseif ($getMode === 'pdf') {
+if ($getMode === 'pdf') {
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true);
 
