@@ -400,7 +400,7 @@
   <string name="SYS_CONFIGURATIONS">Konfigurationen</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Hier können beliebig viele Konfigurationen für den Kategoriereport angelegt werden. In der Bildschirmanzeige wird über \"Konfiguration auswählen\" jeweils eine dieser Konfigurationen als Basis für die Anzeige verwendet.</string>
   <string name="SYS_COMMA">Komma (,)</string>
-  <string name="SYS_COMMA_SEPARATED_FILE">Komma-/Tab-getrennte Datei (*.csv)</string>
+  <string name="SYS_COMMA_SEPARATED_FILE">Kommagetrennte Datei (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_COMPLEMENT">Ergänzen</string>

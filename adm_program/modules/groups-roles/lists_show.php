@@ -472,7 +472,7 @@ if ($getMode === 'print') {
         $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_csv_ms',
-            $gL10n->get('SYS_MICROSOFT_EXCEL'),
+            $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
             'fa-file-excel',
             'menu_item_lists_export'
@@ -482,6 +482,13 @@ if ($getMode === 'print') {
             $gL10n->get('SYS_ODF_SPREADSHEET'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
             'fa-file-alt',
+            'menu_item_lists_export'
+        );
+        $page->addPageFunctionsMenuItem(
+            'menu_item_lists_csv',
+            $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
+            'fa-file-csv',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
@@ -496,13 +503,6 @@ if ($getMode === 'print') {
             $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
             'fa-file-pdf',
-            'menu_item_lists_export'
-        );
-        $page->addPageFunctionsMenuItem(
-            'menu_item_lists_csv',
-            $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
-            'fa-file-csv',
             'menu_item_lists_export'
         );
     }

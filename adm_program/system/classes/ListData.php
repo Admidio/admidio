@@ -10,10 +10,11 @@
  */
 
 /**
- * This class creates a list configuration object. With this object it's possible
- * to manage the configuration in the database. You can easily create new lists,
- * add new columns or remove columns. The object will only list columns of the configuration
- * which the current user is allowed to view.
+ * This class handle the data of a list. Therefore, the data can be added via several methods.
+ * The preferred method is based on the ListConfiguration class and will use their configuration
+ * to handle the data and the output. It's also possible to add data via an individual sql or
+ * just set a custom array. The class delivers several export possibilities such as Excel,
+ * ODF-Spreadsheet or CSV file.
  */
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -96,7 +97,7 @@ class ListData
                             $columnNumber,
                             $outputFormat,
                             (string) $columnValue,
-                            $this->data[$rowNumber]['usr_uuid']
+                            ($this->data[$rowNumber]['usr_uuid'] ?? '')
                         );
                     $columnNumber++;
                 }
