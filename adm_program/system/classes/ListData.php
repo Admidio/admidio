@@ -16,9 +16,6 @@
  * which the current user is allowed to view.
  */
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
-use PhpOffice\PhpSpreadsheet\Writer\Ods;
 
 class ListData
 {
@@ -45,6 +42,15 @@ class ListData
      */
     public function __construct()
     {
+    }
+
+    /**
+     * Return the number of rows of the data in this object.
+     * @return int Return the number of rows of the data in this object.
+     */
+    public function rowCount(): int
+    {
+        return count($this->data);
     }
 
     /**
@@ -81,9 +87,19 @@ class ListData
         for($rowNumber = $startRow; $rowNumber < count($this->data); $rowNumber++) {
             $columnNumber = 1;
 
-            foreach($this->data[$rowNumber] as $columnValue) {
-                $outputData[$rowNumber][$columnNumber] = $this->listConfiguration->convertColumnContentForOutput($columnNumber, $outputFormat, (string) $columnValue, '4711');
-                $columnNumber++;
+            foreach($this->data[$rowNumber] as $columnValueKey => $columnValue) {
+                if (in_array($columnValueKey, array('mem_leader', 'usr_uuid'))) {
+                    $outputData[$rowNumber][$columnValueKey] = $columnValue;
+                } else {
+                    $outputData[$rowNumber][$columnValueKey] =
+                        $this->listConfiguration->convertColumnContentForOutput(
+                            $columnNumber,
+                            $outputFormat,
+                            (string) $columnValue,
+                            $this->data[$rowNumber]['usr_uuid']
+                        );
+                    $columnNumber++;
+                }
             }
         }
 
@@ -217,12 +233,12 @@ class ListData
         switch ($format) {
             case 'xlsx':
                 $this->format();
-                $writer = new Xlsx($this->spreadsheet);
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($this->spreadsheet);
                 $filename .= '.xlsx';
                 break;
             case 'ods':
                 $this->format();
-                $writer = new Ods($this->spreadsheet);
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Ods($this->spreadsheet);
                 $filename .= '.ods';
                 break;
             case 'pdf':
@@ -231,7 +247,7 @@ class ListData
                 $filename .= '.pdf';
                 break;
             default:
-                $writer = new Csv($this->spreadsheet);
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($this->spreadsheet);
                 $filename .= '.csv';
                 break;
         }

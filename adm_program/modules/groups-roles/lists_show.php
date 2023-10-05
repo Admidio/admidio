@@ -172,8 +172,6 @@ if (in_array($getMode, array('csv', 'xlsx', 'ods', 'pdf'), true)
     // => EXIT
 }
 
-$mainSql = ''; // Main SQL statement for lists
-
 // if no list parameter is set then load role default list configuration or system default list configuration
 if ($numberRoles === 1 && $getListUuid === '') {
     // set role default list configuration
@@ -205,32 +203,36 @@ if (!$showCountGuests) {
     $list->removeColumn('mem_count_guests');
 }
 
-// create the main sql
-$mainSql = $list->getSQL(
-    array('showRolesMembers'  => $roleIds,
-          'showFormerMembers' => $getShowFormerMembers,
-          'showUserUUID' => true,
-          'showLeaderFlag' => true,
-          'showRelationTypes' => $relationTypeIds,
-          'startDate' => $startDateEnglishFormat,
-          'endDate'   => $endDateEnglishFormat
-    )
-);
-
-if(in_array($getMode, array('xlsx', 'ods', 'csv'))) {
-    try {
-        $listExport = new ListData();
-        $listExport->setDataByConfiguration(
-            $getListUuid,
-            array(
-                'showRolesMembers' => $roleIds,
-                'showFormerMembers' => $getShowFormerMembers,
-                'showRelationTypes' => $relationTypeIds,
-                'startDate' => $startDateEnglishFormat,
-                'endDate' => $endDateEnglishFormat
-            )
+try {
+    if(in_array($getMode, array('xlsx', 'ods', 'csv'))) {
+        // set SQL options for export
+        $sqlOptions = array(
+            'showRolesMembers' => $roleIds,
+            'showFormerMembers' => $getShowFormerMembers,
+            'showRelationTypes' => $relationTypeIds,
+            'startDate' => $startDateEnglishFormat,
+            'endDate' => $endDateEnglishFormat
         );
-        $listExport->setColumnHeadlines($list->getColumnNames());
+    } else {
+        // set SQL options for displaying
+        $sqlOptions = array(
+            'showRolesMembers'  => $roleIds,
+            'showFormerMembers' => $getShowFormerMembers,
+            'showUserUUID' => true,
+            'showLeaderFlag' => true,
+            'showRelationTypes' => $relationTypeIds,
+            'startDate' => $startDateEnglishFormat,
+            'endDate'   => $endDateEnglishFormat
+        );
+    }
+
+    $listData = new ListData();
+    $listData->setDataByConfiguration($getListUuid, $sqlOptions);
+
+    if(in_array($getMode, array('xlsx', 'ods', 'csv'))) {
+        // generate the export to xlsx, ods or csv file
+
+        $listData->setColumnHeadlines($list->getColumnNames());
         $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
         if ((string)$list->getValue('lst_name') !== '') {
             $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
@@ -239,53 +241,54 @@ if(in_array($getMode, array('xlsx', 'ods', 'csv'))) {
 
         switch ($getMode) {
             case 'xlsx':
-                $listExport->export($filename, 'xlsx');
+                $listData->export($filename, 'xlsx');
                 break;
             case 'ods':
-                $listExport->export($filename, 'ods');
+                $listData->export($filename, 'ods');
                 break;
             default:
                 // the default will be a csv file
-                $listExport->export($filename);
+                $listData->export($filename);
         }
-    } catch (AdmException $e) {
-        $e->showHtml();
-    } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
-        echo $e->getMessage();
+        exit();
     }
+
+    // initialize some special mode parameters
+    $classTable  = '';
+    $orientation = '';
+
+    switch ($getMode) {
+        case 'pdf':
+            $classTable  = 'table';
+            $orientation = 'P';
+            $getMode     = 'pdf';
+            break;
+        case 'pdfl':
+            $classTable  = 'table';
+            $orientation = 'L';
+            $getMode     = 'pdf';
+            break;
+        case 'html':
+            $classTable  = 'table table-condensed';
+            break;
+        case 'print':
+            $classTable  = 'table table-condensed table-striped';
+            break;
+        default:
+    }
+
+    // determine the number of users in this list
+    $numMembers    = $listData->rowCount();
+    $membersList   = $listData->getData($getMode);
+    $userUuidList  = array();
+} catch (AdmException $e) {
+    $e->showHtml();
+} catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
+    echo $e->getMessage();
     exit();
 }
 
-// initialize some special mode parameters
-$classTable  = '';
-$orientation = '';
-
-switch ($getMode) {
-    case 'pdf':
-        $classTable  = 'table';
-        $orientation = 'P';
-        $getMode     = 'pdf';
-        break;
-    case 'pdfl':
-        $classTable  = 'table';
-        $orientation = 'L';
-        $getMode     = 'pdf';
-        break;
-    case 'html':
-        $classTable  = 'table table-condensed';
-        break;
-    case 'print':
-        $classTable  = 'table table-condensed table-striped';
-        break;
-    default:
-}
-
-// determine the number of users in this list
-$listStatement = $gDb->query($mainSql); // TODO add more params
-$numMembers    = $listStatement->rowCount();
-$membersList   = $listStatement->fetchAll(PDO::FETCH_BOTH);
-$userUuidList  = array();
-
+// create an array with all user UUIDs that have a valid email address
 foreach ($membersList as $member) {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($member['usr_uuid']);
@@ -615,46 +618,25 @@ foreach ($membersList as $member) {
         }
     }
 
-    $columnValues = array();
+    $columnValues = $member;
+    unset($columnValues['usr_uuid']);
 
-    // Fields of recordset
-    for ($columnNumber = 1, $max = $list->countColumns(); $columnNumber <= $max; ++$columnNumber) {
-        $column = $list->getColumnObject($columnNumber);
-
-        // in the SQL mem_leader and usr_uuid starts before the column
-        // the Index to the row must be set to 2 directly
-        $sqlColumnNumber = $columnNumber + 1;
-
-        $usfId = 0;
-        if ($column->getValue('lsc_usf_id') > 0) {
-            // check if customs field and remember
-            $usfId = (int) $column->getValue('lsc_usf_id');
+    if ($getMode === 'html') {
+        // in html mode we add a column with leader/member information to
+        // enable the grouping function of jquery datatables
+        if ($memberIsLeader) {
+            $columnValues['mem_leader'] = $gL10n->get('SYS_LEADERS');
+        } else {
+            $columnValues['mem_leader'] = $gL10n->get('SYS_PARTICIPANTS');
         }
 
-        // before adding the first column, add a column with the row number
-        if ($columnNumber === 1) {
-            if ($getMode === 'html') {
-                // add serial
-                $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $member['usr_uuid'])).'">'.$listRowNumber.'</a>';
-            }
-            if (in_array($getMode, array('print', 'pdf'), true)) {
-                // add serial
-                $columnValues[] = $listRowNumber;
-            }
+        // add a column with the row number at the first column
+        array_unshift($columnValues, '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $member['usr_uuid'])).'">'.$listRowNumber.'</a>');
+    } elseif (in_array($getMode, array('print', 'pdf'), true)) {
+        unset($columnValues['mem_leader']);
 
-            // in html mode we add a column with leader/member information to
-            // enable the grouping function of jquery datatables
-            if ($getMode === 'html') {
-                if ($memberIsLeader) {
-                    $columnValues[] = $gL10n->get('SYS_LEADERS');
-                } else {
-                    $columnValues[] = $gL10n->get('SYS_PARTICIPANTS');
-                }
-            }
-        }
-
-        // fill content with data of database
-        $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, (string) $member[$sqlColumnNumber], $member['usr_uuid']);
+        // add a column with the row number at the first column
+        array_unshift($columnValues, $listRowNumber);
     }
 
     if ($editUserStatus) {
@@ -675,10 +657,8 @@ foreach ($membersList as $member) {
     ++$listRowNumber;
 }  // End-While (end found User)
 
-$filename = '';
-
-// Settings for export file
 if ($getMode === 'pdf') {
+    // send the new PDF to the User
     $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
 
     // file name in the current directory...
@@ -687,26 +667,20 @@ if ($getMode === 'pdf') {
     }
 
     $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
+    $file = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
 
+    header('Content-Type: application/pdf');
     header('Content-Disposition: attachment; filename="'.$filename.'"');
 
     // necessary for IE6 to 8, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');
-}
 
-// send the new PDF to the User
-if ($getMode === 'pdf') {
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true);
 
-    $file = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
-
     // Save PDF to file
     $pdf->Output($file, 'F');
-
-    // Redirect
-    header('Content-Type: application/pdf');
 
     readfile($file);
     ignore_user_abort(true);
@@ -717,7 +691,7 @@ if ($getMode === 'pdf') {
         $gLogger->error('Could not delete file!', array('filePath' => $file));
         // TODO
     }
-} elseif ($getMode === 'html' || $getMode === 'print') {
+} else {
     // add table list to the page
     $page->addHtml($table->show());
 
