@@ -160,7 +160,7 @@ class ProfileFields
      *                           * **database** returns database value of **usf_value_list** without any transformations
      *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
-     * @return string Returns for the profile field with the given uuid the value.
+     * @return string|array Returns for the profile field with the given uuid the value.
      */
     public function getPropertyById(int $fieldId, string $column, string $format = '')
     {

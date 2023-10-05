@@ -149,6 +149,7 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
      * @var int $gCurrentOrgId The ID of the current registered user or 0 if its an visitor.
      */
     $gCurrentUserId = $gCurrentUser->getValue('usr_id');
+    $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');
 
     // checks if user in database session is the same as in php session
     if ($gCurrentUserId !== $sesUsrId) {
@@ -160,6 +161,7 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
     $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
     $gCurrentUser   = new User($gDb, $gProfileFields, $sesUsrId);
     $gCurrentUserId = $gCurrentUser->getValue('usr_id');
+    $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');
 
     // if session is created with auto login then update user login data
     // if user object is created and session has usr_id then this is an auto login

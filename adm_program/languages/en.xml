@@ -400,7 +400,7 @@
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
   <string name="SYS_COMMA">Comma (,)</string>
-  <string name="SYS_COMMA_SEPARATED_FILE">Comma-/tab-separated file (*.csv)</string>
+  <string name="SYS_COMMA_SEPARATED_FILE">Comma-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
   <string name="SYS_COMPLEMENT">Complement</string>

@@ -1,0 +1,270 @@
+<?php
+/**
+ ***********************************************************************************************
+ * Class manages a data array
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/**
+ * This class handle the data of a list. Therefore, the data can be added via several methods.
+ * The preferred method is based on the ListConfiguration class and will use their configuration
+ * to handle the data and the output. It's also possible to add data via an individual sql or
+ * just set a custom array. The class delivers several export possibilities such as Excel,
+ * ODF-Spreadsheet or CSV file.
+ */
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
+class ListData
+{
+    /**
+     * @var array<int,array> Array with all data that should be handled in this class
+     */
+    protected $data = array();
+    /**
+     * @var ListConfiguration An object of the ListConfiguration that could be used to read data
+     * and to format data to different output formats.
+     */
+    protected $listConfiguration;
+    /**
+     * @var Spreadsheet An object of the PhpSpreadsheet which will handle the export
+     */
+    protected $spreadsheet;
+    /**
+     * @var boolean Flag if the spreadsheet contains a headline for each column.
+     */
+    protected $containsHeadline = false;
+
+    /**
+     * Constructor that will create an object to handle the configuration of lists.
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Return the number of rows of the data in this object.
+     * @return int Return the number of rows of the data in this object.
+     */
+    public function rowCount(): int
+    {
+        return count($this->data);
+    }
+
+    /**
+     * Returns an array with all the data prepared for the destination output format.
+     * @param string $outputFormat Optional output format. The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
+     * @return array[]
+     * @throws AdmException
+     */
+    public function getData(string $outputFormat = ''): array
+    {
+        if ($outputFormat !== '') {
+            return $this->prepareOutputFormat($outputFormat);
+        } else {
+            return $this->data;
+        }
+    }
+
+    /**
+     * Prepares the internal data array for the submitted output format and returns that formatted array.
+     * @param string $outputFormat The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
+     * @return array Returns copy of the data array with formatted data.
+     * @throws AdmException
+     */
+    protected function prepareOutputFormat(string $outputFormat): array
+    {
+        $outputData = array();
+        $startRow = 0;
+
+        if($this->containsHeadline) {
+            $startRow = 1;
+            $outputData[0] = $this->data[0];
+        }
+
+        for($rowNumber = $startRow; $rowNumber < count($this->data); $rowNumber++) {
+            $columnNumber = 1;
+
+            foreach($this->data[$rowNumber] as $columnValueKey => $columnValue) {
+                if (in_array($columnValueKey, array('mem_leader', 'usr_uuid'))) {
+                    $outputData[$rowNumber][$columnValueKey] = $columnValue;
+                } else {
+                    $outputData[$rowNumber][$columnValueKey] =
+                        $this->listConfiguration->convertColumnContentForOutput(
+                            $columnNumber,
+                            $outputFormat,
+                            (string) $columnValue,
+                            ($this->data[$rowNumber]['usr_uuid'] ?? '')
+                        );
+                    $columnNumber++;
+                }
+            }
+        }
+
+        return $outputData;
+    }
+
+    protected function format()
+    {
+        $alphabet = range('A', 'Z');
+        $column = $alphabet[count($this->data[0])-1];
+
+        if ($this->containsHeadline) {
+            $this->spreadsheet
+                ->getActiveSheet()
+                ->getStyle('A1:'.$column.'1')
+                ->getFill()
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setARGB('ffdddddd');
+            $this->spreadsheet
+                ->getActiveSheet()
+                ->getStyle('A1:'.$column.'1')
+                ->getFont()
+                ->setBold(true);
+        }
+
+        for($number = 0; $number < count($this->data[0]); $number++) {
+            $this->spreadsheet->getActiveSheet()->getColumnDimension($alphabet[$number])->setAutoSize(true);
+        }
+    }
+
+    /**
+     * Set the column headline for each column of the data array.
+     * @param array $headlines Array with the column headline for each column.
+     * @return void
+     */
+    public function setColumnHeadlines(array $headlines)
+    {
+        if (count($this->data) > 0) {
+            array_unshift($this->data, $headlines);
+        } else {
+            $this->data[] = $headlines;
+        }
+        $this->containsHeadline = true;
+    }
+
+    /**
+     * Set an array filled with data that should be exported.
+     * @param array $dataArray The array with the data that should be exported.
+     * @return void
+     */
+    public function setDataByArray(array $dataArray)
+    {
+        $this->data = array_merge($this->data, $dataArray);
+    }
+
+    /**
+     * Read the data by a configuration of the table **adm_lists**. With this method it's possible
+     * to format the output for visual html presentation or for the different export formats.
+     * @param string $listUUID UUID of the list configuration that should be loaded.
+     * @param array $options (optional) An array with the following possible entries:
+     *                                  - **showAllMembersThisOrga** : Set to true all users with an active membership
+     *                                    to at least one role of the current organization will be shown.
+     *                                    This setting could be combined with **showFormerMembers** or **showRelationTypes**.
+     *                                  - **showAllMembersDatabase** : Set to true all users of the database will be shown
+     *                                    independent of the membership to roles or organizations
+     *                                  - **showRolesMembers** : An array with all roles ids could be set and only members
+     *                                    of this roles will be shown.
+     *                                    This setting could be combined with **showFormerMembers** or **showRelationTypes**.
+     *                                  - **showFormerMembers** : Set to true if roles members or members of the organization
+     *                                    should be shown and also former members should be listed
+     *                                  - **showRelationTypes** : An array with relation types. The sql will be expanded with
+     *                                    all users who are in such a relationship to the selected role users.
+     *                                  - **showUserUUID** : If set to true the first column of the SQL will be the usr_uuid.
+     *                                  - **showLeaderFlag** : If set to true the first columns of the SQL will be
+     *                                    the flag if a user is a leader in the role or not.
+     *                                  - **useConditions** : false - Don't add additional conditions to the SQL
+     *                                                        true  - Conditions will be added as stored in the settings
+     *                                  - **useOrderBy** : false - Don't add the sorting to the SQL
+     *                                                  true  - Sorting is added as stored in the settings
+     *                                  - **startDate** : The start date if memberships that should be considered. The time period of
+     *                                    the membership must be at least one day after this date.
+     *                                  - **endDate** : The end date if memberships that should be considered.The time period of
+     *                                    the membership must be at least one day before this date.
+     * @return void
+     * @throws AdmException
+     */
+    public function setDataByConfiguration(string $listUUID, array $options = array())
+    {
+        global $gDb;
+
+        $this->listConfiguration = new ListConfiguration($gDb);
+        $this->listConfiguration->readDataByUuid($listUUID);
+        $this->setDataBySql($this->listConfiguration->getSQL($options));
+    }
+
+    /**
+     * The data array will be filled from the result of a sql statement. Each row of the sql statement will be a
+     * sub array where each column of the sql statement will be an array value.
+     * @param string $sql Sql statement that will return the content for the export.
+     * @param array $parameters Parameters for the sql statement.
+     * @return void
+     */
+    public function setDataBySql(string $sql, array $parameters = array())
+    {
+        global $gDb;
+
+        $listStatement = $gDb->queryPrepared($sql, $parameters);
+        $dataSql = $listStatement->fetchAll(\PDO::FETCH_ASSOC);
+        $this->data = array_merge($this->data, $dataSql);
+    }
+
+    /**
+     * Export the data that was added to this class to different file formats. The following file formats
+     * are supported: xlsx, csv. The default export will be a csv file.
+     * @param string $filename The name of the file without file extension that should be exported.
+     * @param string $format The following values are allows: "xlsx", "csv"
+     * @return void
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws AdmException
+     */
+    public function export(string $filename, string $format = 'csv')
+    {
+        if (count($this->data) === 0) {
+            throw new AdmException('The export file will contain no data.');
+        }
+
+        $this->spreadsheet = new Spreadsheet();
+        $this->spreadsheet->getActiveSheet()->fromArray($this->prepareOutputFormat($format));
+
+        switch ($format) {
+            case 'xlsx':
+                $this->format();
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($this->spreadsheet);
+                $filename .= '.xlsx';
+                break;
+            case 'ods':
+                $this->format();
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Ods($this->spreadsheet);
+                $filename .= '.ods';
+                break;
+            case 'pdf':
+                $this->format();
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf($this->spreadsheet);
+                $filename .= '.pdf';
+                break;
+            default:
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($this->spreadsheet);
+                $filename .= '.csv';
+                break;
+        }
+
+        // save file to server folder because we need the content length otherwise the Excel file is corrupt
+        $tempFileFolderName = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
+        $writer->save($tempFileFolderName);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Content-Length: ' . filesize($tempFileFolderName));
+        ob_clean();
+        flush();
+        $writer->save('php://output');
+        unlink($tempFileFolderName);
+        exit();
+    }
+}
