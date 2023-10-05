@@ -516,7 +516,7 @@ class HtmlForm extends \Smarty
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
             'property'           => self::FIELD_DEFAULT,
-            'maxUploadSize'      => ini_get('upload_max_filesize') * 1024 * 1024, // MiB
+            'maxUploadSize'      => PhpIniUtils::getFileUploadMaxFileSize(),
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
