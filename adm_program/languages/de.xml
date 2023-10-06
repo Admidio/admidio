@@ -418,7 +418,7 @@
   <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
   <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
   <string name="SYS_CONTACT_NO_VALID_LOGIN">Dieser Kontakt besitzt noch keine Anmeldung.\nMöchtest du die Daten dieser Registrierung zuordnen?</string>
-  <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">Gehört die Registrierung nicht zu einem der gefundenen Kontakte oder Mitglieder, dann kannst du einen neuen Kontakt oder Mitglied anlegen und diesem die entsprechenden Rollen zuweisen.</string>
+  <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">Kann der neue Kontakt keinem existierenden Kontakt mit einem ähnlichen Namen zugeordnet werden, so kannst du einen neuen Kontakt anlegen und diesem die entsprechenden Rollen zuweisen.</string>
   <string name="SYS_CONTACT_SIMILAR_NAME">Es wurde ein Kontakt mit einem ähnlichen Namen gefunden.</string>
   <string name="SYS_CONTACTS">Kontakte</string>
   <string name="SYS_CONTENT">Inhalt</string>
