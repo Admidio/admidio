@@ -96,8 +96,10 @@ if ($getMode === '' && $getUserUuid === '') {
 
     try {
         // create html page object
-        $page = new ModuleRegistration('admidio-registration-assign', $headline);
-        $page->createContentAssignUser($getUserUuid);
+        $page = new ModuleContacts('admidio-registration-assign', $headline);
+        $registrationUser = new User($dDb, $gProfileFields);
+        $registrationUser->readDataByUuid($getUserUuid);
+        $page->createContentAssignUser($registrationUser, true);
         $page->show();
     } catch (SmartyException $e) {
         $gMessage->show($e->getMessage());

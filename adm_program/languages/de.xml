@@ -416,8 +416,11 @@
   <string name="SYS_CONFIRM_REGISTRATION">Registrierung bestätigen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
   <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
-  <string name="SYS_CONTACTS">Kontakte</string>
   <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
+  <string name="SYS_CONTACT_NO_VALID_LOGIN">Dieser Kontakt besitzt noch keine Anmeldung.\nMöchtest du die Daten dieser Registrierung zuordnen?</string>
+  <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">Kann der neue Kontakt keinem existierenden Kontakt mit einem ähnlichen Namen zugeordnet werden, so kannst du einen neuen Kontakt anlegen und diesem die entsprechenden Rollen zuweisen.</string>
+  <string name="SYS_CONTACT_SIMILAR_NAME">Es wurde ein Kontakt mit einem ähnlichen Namen gefunden.</string>
+  <string name="SYS_CONTACTS">Kontakte</string>
   <string name="SYS_CONTENT">Inhalt</string>
   <string name="SYS_CONTRIBUTION">Beitrag</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Beitragszeitraum</string>
@@ -448,13 +451,12 @@
   <string name="SYS_CREATE_FOLDER">Ordner anlegen</string>
   <string name="SYS_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
   <string name="SYS_CREATE_HTACCESS">.htaccess erstellen</string>
-  <string name="SYS_CREATE_LINK">Link anlegen</string>
   <string name="SYS_CREATE_MEMBER">Mitglied anlegen</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
-  <string name="SYS_CREATE_NOT_FOUND_USER">Gehört die Registrierung nicht zu einem der gefundenen Mitglieder, dann kannst du ein neues Mitglied anlegen und diesem die entsprechenden Rollen zuweisen.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Beziehung anlegen</string>
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
+  <string name="SYS_CREATE_WEBLINK">Weblink anlegen</string>
   <string name="SYS_CREATED_AT">Angelegt am</string>
   <string name="SYS_CREATED_BY">Angelegt von</string>
   <string name="SYS_CREATED_BY_AND_AT">Angelegt von #VAR1# am #VAR2#</string>
@@ -578,6 +580,7 @@
   <string name="SYS_EDIT_CATEGORY">Kategorie bearbeiten</string>
   <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
   <string name="SYS_EDIT_EVENTS">Veranstaltungen bearbeiten</string>
+  <string name="SYS_EDIT_EVENT">Veranstaltung bearbeiten</string>
   <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
   <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
@@ -594,6 +597,7 @@
   <string name="SYS_EDIT_USER">Benutzer:in bearbeiten</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Profil dieser Beziehung bearbeiten</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
+  <string name="SYS_EDIT_WEBLINK">Weblink bearbeiten</string>
   <string name="SYS_EDIT_WEBLINKS">Weblinks bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
   <string name="SYS_EMAIL">E-Mail</string>
@@ -821,7 +825,7 @@
   <string name="SYS_LINK_TO">Link auf #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
-  <string name="SYS_LOADING_CONTENT">Inhalt wird geladen ...</string>
+  <string name="SYS_LOCATION">Ort</string>
   <string name="SYS_LOCATION_LINK">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort der Veranstaltung eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Speicherort der Profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
@@ -875,9 +879,7 @@
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Mitglied</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
-  <string name="SYS_MEMBER_NO_VALID_LOGIN">Dieses Mitglied besitzt noch keine Anmeldung.\nMöchtest du die Daten dieser Registrierung zuordnen?</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
-  <string name="SYS_MEMBER_SIMILAR_NAME">Es wurde ein Mitglied mit einem ähnlichen Namen gefunden.</string>
   <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
@@ -1295,9 +1297,9 @@
   <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
   <string name="SYS_SHOW_WATERMARK">Zeige Wasserzeichen</string>
   <string name="SYS_SHOW_WATERMARK_DESC">Der eingegebene Text wird in allen angezeigten Fotos angezeigt, ab einer Größe von 200 Pixel der längeren Seite. Wenn der Fotograf im Album hinterlegt wurde, wird anstelle dieses Textes der Name des Fotografen mit Copyright angezeigt. Wenn kein Bildtext angezeigt werden soll, kann dieses Feld leer gelassen werden (Standard: #VAR1#).</string>
-  <string name="SYS_SIMILAR_MEMBERS_FOUND">Ähnliche Mitglieder gefunden</string>
-  <string name="SYS_SIMILAR_MEMBERS_FOUND_ASSIGN">Es wurden Mitglieder mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden.</string>
-  <string name="SYS_SIMILAR_MEMBERS_FOUND_REGISTRATION">Es wurden Mitglieder mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden. Prüfe die Registrierung und ordne diese einem gefunden Mitglied zu oder lege ein neues Mitglied an.</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND">Ähnliche Kontakte gefunden</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Es wurden Kontakte mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden.</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Es wurden Kontakte mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden. Prüfe die Registrierung und ordne diese einem gefunden Kontakt zu oder lege einen neuen Kontakt an.</string>
   <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SIZE">Größe</string>

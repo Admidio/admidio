@@ -80,10 +80,10 @@ class User extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param Database      $database   Object of the class Database. This should be the default global object **$gDb**.
-     * @param ProfileFields $userFields An object of the ProfileFields class with the profile field structure
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param ProfileFields|null $userFields An object of the ProfileFields class with the profile field structure
      *                                  of the current organization. This could be the default object **$gProfileFields**.
-     * @param int           $userId     The id of the user who should be loaded. If id isn't set than an empty
+     * @param int $userId The id of the user who should be loaded. If id isn't set than an empty
      *                                  object with no specific user is created.
      */
     public function __construct(Database $database, ProfileFields $userFields = null, $userId = 0)
@@ -105,7 +105,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedEditProfileField(self $user, $fieldNameIntern): bool
+    public function allowedEditProfileField(self $user, string $fieldNameIntern): bool
     {
         return $this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -160,17 +160,18 @@ class User extends TableAccess
     }
 
     /**
-     * @param string $mode      'set' or 'edit'
-     * @param int $roleId       ID of the role for which the membership should be set,
+     * @param string $mode 'set' or 'edit'
+     * @param int $roleId ID of the role for which the membership should be set,
      *                          or id of the current membership that should be edited.
      * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
-     * @param string $endDate   New end date of the membership. Default will be **31.12.9999**
-     * @param bool   $leader    If set to **1** then the member will be leader of the role and
+     * @param string $endDate New end date of the membership. Default will be **31.12.9999**
+     * @param bool|null $leader If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added/edited.
+     * @throws AdmException
      * @deprecated 4.3.0:4.4.0 "changeRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
-    private function changeRoleMembership($mode, $roleId, $startDate, $endDate, $leader)
+    private function changeRoleMembership(string $mode, int $roleId, string $startDate, string $endDate, bool $leader = null): bool
     {
         if ($startDate === '' || $endDate === '') {
             return false;
@@ -184,12 +185,12 @@ class User extends TableAccess
         if ($mode === 'set') {
             // subtract 1 day from start date so that we find memberships that end yesterday
             // these memberships can be continued with new date
-            $oneDayOffset = new \DateInterval('P1D');
+            $oneDayOffset = new DateInterval('P1D');
 
-            $startDate = \DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayOffset)->format('Y-m-d');
+            $startDate = DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayOffset)->format('Y-m-d');
             // add 1 to max date because we subtract one day if a membership ends
             if ($endDate !== DATE_MAX) {
-                $endDate = \DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayOffset)->format('Y-m-d');
+                $endDate = DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayOffset)->format('Y-m-d');
             }
         }
 
@@ -353,11 +354,11 @@ class User extends TableAccess
      * An array with all roles where the user has the right to write an email will be stored.
      * The method considered the role leader rights of each role if this is set and the current
      * user is a leader in a role.
-     * @param string $right The database column name of the right that should be checked. If this param
+     * @param string|null $right The database column name of the right that should be checked. If this param
      *                      is not set then only the arrays are filled.
      * @return bool Return true if a special right should be checked and the user has this right.
      */
-    public function checkRolesRight($right = null)
+    public function checkRolesRight(string $right = null): bool
     {
         $sqlFetchedRows = array();
 
@@ -405,7 +406,7 @@ class User extends TableAccess
 
                 if ($row['mem_usr_id'] > 0) {
                     // Sql selects all roles. Only consider roles where user is a member.
-                    if ((bool) $row['mem_leader']) {
+                    if ($row['mem_leader']) {
                         $rolLeaderRights = (int)$row['rol_leader_rights'];
 
                         // if user is leader in this role than add role id and leader rights to array
@@ -504,24 +505,24 @@ class User extends TableAccess
      * Check if a valid password is set for the user and return true if the correct password
      * was set. Optional the current session could be updated to a valid login session.
      * @param string $password             The password for the current user. This should not be encoded.
-     * @param bool   $setAutoLogin         If set to true then this login will be stored in AutoLogin table
+     * @param bool $setAutoLogin         If set to true then this login will be stored in AutoLogin table
      *                                     and the user doesn't need login to another time with this browser.
      *                                     To use this functionality **$updateSessionCookies** must be set to true.
-     * @param bool   $updateSessionCookies The current session will be updated to a valid login.
+     * @param bool $updateSessionCookies The current session will be updated to a valid login.
      *                                     If set to false then the login is only valid for the current script.
-     * @param bool   $updateHash           If set to true the code will check if the current password hash uses
+     * @param bool $updateHash           If set to true the code will check if the current password hash uses
      *                                     the best hashing algorithm. If not the password will be rehashed with
      *                                     the new algorithm. If set to false the password will not be rehashed.
-     * @param bool   $isAdministrator      If set to true check if user is admin of organization.
-     * @throws AdmException in case of errors. exception->text contains a string with the reason why the login failed.
+     * @param bool $isAdministrator      If set to true check if user is admin of organization.
+     * @return true Return true if login was successful
+     *@throws AdmException in case of errors. exception->text contains a string with the reason why the login failed.
      *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
      *                                       SYS_LOGIN_NOT_ACTIVATED
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
      *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
-     * @return true Return true if login was successful
      */
-    public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
+    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false): bool
     {
         global $gSettingsManager, $gCurrentSession, $installedDbVersion, $gL10n;
 
@@ -545,7 +546,7 @@ class User extends TableAccess
             throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName)));
         }
 
-        if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization($orgLongName)) {
+        if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization()) {
             throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName)));
         }
 
@@ -582,6 +583,7 @@ class User extends TableAccess
      * Additional to the parent method the user profile fields and all
      * user rights and role memberships will be initialized
      * @return void
+     * @throws AdmException
      */
     public function clear()
     {
@@ -606,7 +608,7 @@ class User extends TableAccess
 
     /**
      * Deletes the selected user of the table and all the many references in other tables.
-     * Also a notification that the user is deleted will be send if notification is enabled.
+     * Also, a notification that the user was deleted will be sent if notification is enabled.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
      */
@@ -820,15 +822,16 @@ class User extends TableAccess
      * Edit an existing role membership of the current user. If the new date range contains
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method is useful to end a membership earlier.
-     * @param int    $memberId  ID of the current membership that should be edited.
+     * @param int $memberId ID of the current membership that should be edited.
      * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
-     * @param string $endDate   New end date of the membership. Default will be **DATE_MAX**
-     * @param bool   $leader    If set to **1** then the member will be leader of the role and
+     * @param string $endDate New end date of the membership. Default will be **DATE_MAX**
+     * @param bool|null $leader If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully edited.
+     * @throws AdmException
      * @deprecated 4.3.0:4.4.0 "editRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
-    public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
+    public function editRoleMembership(int $memberId, $startDate = DATE_NOW, string $endDate = DATE_MAX, bool $leader = null): bool
     {
         return $this->changeRoleMembership('edit', $memberId, $startDate, $endDate, $leader);
     }
@@ -838,7 +841,7 @@ class User extends TableAccess
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to edit them
      */
-    public function getAllEditableCategories($categoryType)
+    public function getAllEditableCategories(string $categoryType): array
     {
         $queryParams = array($categoryType, $this->organizationId);
 
@@ -883,7 +886,7 @@ class User extends TableAccess
      * @return array<int,int> Array with role ids where user has the right to mail them
      * @deprecated 4.2.0:4.3.0 "getAllMailRoles()" is deprecated, use "getRolesWriteMails()" instead.
      */
-    public function getAllMailRoles()
+    public function getAllMailRoles(): array
     {
         return $this->rolesWriteMails;
     }
@@ -893,7 +896,7 @@ class User extends TableAccess
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to view them
      */
-    public function getAllVisibleCategories($categoryType)
+    public function getAllVisibleCategories(string $categoryType): array
     {
         $queryParams = array($categoryType, $this->organizationId);
 
@@ -944,7 +947,7 @@ class User extends TableAccess
      * @return array<int,int> Array with role ids where user has the right to view them
      * @deprecated 4.2.0:4.3.0 "getAllVisibleRoles()" is deprecated, use "getRolesViewMemberships()" instead.
      */
-    public function getAllVisibleRoles()
+    public function getAllVisibleRoles(): array
     {
         return $this->rolesViewMemberships;
     }
@@ -954,7 +957,7 @@ class User extends TableAccess
      * This is in the default case the default organization of the config file.
      * @return int Returns the id of the organization this user object has been assigned
      */
-    public function getOrganization()
+    public function getOrganization(): int
     {
         return $this->organizationId;
     }
@@ -963,7 +966,7 @@ class User extends TableAccess
      * Gets the longname of this organization.
      * @return string Returns the longname of the organization.
      */
-    private function getOrgLongname()
+    private function getOrgLongname(): string
     {
         $sql = 'SELECT org_longname
                   FROM '.TBL_ORGANIZATIONS.'
@@ -995,7 +998,7 @@ class User extends TableAccess
      * Returns an array with all roles where the user has the right to write an email to the role members
      * @return array<int,int> Array with role ids where user has the right to mail them
      */
-    public function getRolesWriteMails()
+    public function getRolesWriteMails(): array
     {
         return $this->rolesWriteMails;
     }
@@ -1004,7 +1007,7 @@ class User extends TableAccess
      * Returns data from the user to improve dictionary attack check
      * @return array<int,string>
      */
-    public function getPasswordUserData()
+    public function getPasswordUserData(): array
     {
         $userData = array(
             // Names
@@ -1029,7 +1032,7 @@ class User extends TableAccess
              * @param string $value
              * @return bool
              */
-            function filterEmptyStrings($value)
+            function filterEmptyStrings(string $value): bool
             {
                 return $value !== '';
             }
@@ -1042,7 +1045,7 @@ class User extends TableAccess
      * Returns an array with all role ids where the user is a member.
      * @return array<int,int> Returns an array with all role ids where the user is a member.
      */
-    public function getRoleMemberships()
+    public function getRoleMemberships(): array
     {
         $this->checkRolesRight();
 
@@ -1053,7 +1056,7 @@ class User extends TableAccess
      * Returns an array with all role ids where the user is a member and not a leader of the role.
      * @return array<int,int> Returns an array with all role ids where the user is a member and not a leader of the role.
      */
-    public function getRoleMembershipsNoLeader()
+    public function getRoleMembershipsNoLeader(): array
     {
         $this->checkRolesRight();
 
@@ -1101,7 +1104,7 @@ class User extends TableAccess
      * (Windows XP address book can't process utf8, so vcard output is iso-8859-1)
      * @return string Returns the vcard as a string
      */
-    public function getVCard()
+    public function getVCard(): string
     {
         global $gSettingsManager, $gCurrentUser;
 
@@ -1164,7 +1167,7 @@ class User extends TableAccess
         if ((int) $gSettingsManager->get('profile_photo_storage') === 0 && $this->getValue('usr_photo') !== '') {
             $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . base64_encode($this->getValue('usr_photo'));
         }
-        // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
+        // Gender is not included in vCard 2.1, is passed here for the Windows address book
         if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && $this->getValue('GENDER') > 0) {
             if ((int) $this->getValue('GENDER') === 1) {
                 $xGender = 'Male';
@@ -1196,11 +1199,11 @@ class User extends TableAccess
     }
 
     /**
-     * Check if the user has deposited an email. Therefore at least one profile field from type EMAIL
+     * Check if the user has deposited an email. Therefore, at least one profile field from type EMAIL
      * must have a value.
      * @return bool Return true if the user has deposited an email.
      */
-    public function hasEmail()
+    public function hasEmail(): bool
     {
         if ($this->getValue('EMAIL') !== '') {
             return true;
@@ -1219,18 +1222,19 @@ class User extends TableAccess
     /**
      * Checks if the maximum of invalid logins is reached.
      * @return bool Returns true if the maximum of invalid logins is reached.
+     * @throws AdmException
      */
-    private function hasMaxInvalidLogins()
+    private function hasMaxInvalidLogins(): bool
     {
         // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
-        $now = new \DateTime();
-        $minutesOffset = new \DateInterval('PT15M');
+        $now = new DateTime();
+        $minutesOffset = new DateInterval('PT15M');
         $minutesBefore = $now->sub($minutesOffset);
 
         if(is_null($this->getValue('usr_date_invalid', 'Y-m-d H:i:s'))) {
             $dateInvalid = $minutesBefore;
         } else {
-            $dateInvalid = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
+            $dateInvalid = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
         }
 
         if ($this->getValue('usr_number_invalid') < self::MAX_INVALID_LOGINS || $minutesBefore->getTimestamp() >= $dateInvalid->getTimestamp()) {
@@ -1244,18 +1248,14 @@ class User extends TableAccess
 
     /**
      * Checks if the current user is allowed to edit the profile of the user of the parameter.
-     * If will check if user can generally edit all users or if he is a group leader and can edit users
-     * of a special role where **$user** is a member or if it's the own profile and he could edit this.
+     * Method will check if user can generally edit all users or if he is a group leader and can edit users
+     * of a special role where **$user** is a member or if it's the own profile, and he could edit this.
      * @param User  $user            User object of the user that should be checked if the current user can edit his profile.
-     * @param bool  $checkOwnProfile If set to **false** than this method don't check the role right to edit the own profile.
+     * @param bool $checkOwnProfile If set to **false** than this method don't check the role right to edit the own profile.
      * @return bool Return **true** if the current user is allowed to edit the profile of the user from **$user**.
      */
-    public function hasRightEditProfile(self $user, $checkOwnProfile = true)
+    public function hasRightEditProfile(self $user, bool $checkOwnProfile = true): bool
     {
-        if (!$user instanceof self) {
-            return false;
-        }
-
         $usrId  = (int) $this->getValue('usr_id');
         $userId = (int) $user->getValue('usr_id');
 
@@ -1328,9 +1328,9 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if the current user has the right to send an email to the role.
-     * @param int $roleId Id of the role that should be checked.
-     * @return bool Return **true** if the user has the right to send an email to the role.
+     * Checks if the current user has the right to send email to the role.
+     * @param int $roleId ID of the role that should be checked.
+     * @return bool Return **true** if the user has the right to send email to the role.
      */
     public function hasRightSendMailToRole(int $roleId): bool
     {
@@ -1338,9 +1338,9 @@ class User extends TableAccess
     }
 
     /**
-     * Checks the necessary rights if this user could view former roles members. Therefore
+     * Checks the necessary rights if this user could view former roles members. Therefore,
      * the user must also have the right to view the role. So you must also check this right.
-     * @param int $roleId Id of the role that should be checked.
+     * @param int $roleId ID of the role that should be checked.
      * @return bool Return **true** if the user has the right to view former roles members
      */
     public function hasRightViewFormerRolesMembers(int $roleId): bool
@@ -1407,7 +1407,7 @@ class User extends TableAccess
                 $rolThisProfileView = (int)$row['rol_view_members_profiles'];
 
                 if ($rolThisProfileView === TableRoles::VIEW_LOGIN_USERS && $gValidLogin) {
-                    // all logged in users can see role lists/profiles
+                    // all logged-in users can see role lists/profiles
                     return true;
                 } elseif ($rolThisProfileView === TableRoles::VIEW_ROLE_MEMBERS && in_array($rolId, $this->rolesViewProfiles)) {
                     // only role members can see role lists/profiles
@@ -1446,8 +1446,9 @@ class User extends TableAccess
     /**
      * Handles the incorrect given login password.
      * @return string Return string with the reason why the login failed.
+     * @throws AdmException
      */
-    private function handleIncorrectPasswordLogin()
+    private function handleIncorrectPasswordLogin(): string
     {
         // log invalid logins
         if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS) {
@@ -1475,9 +1476,9 @@ class User extends TableAccess
      * Deletes all other sessions of the current user except the current session if there is already a current
      * session. All auto logins of the user will be removed. This method is useful if the user changed his
      * password or if unusual activities within the user account are noticed.
-     * @return bool Returns true if all things could be done. Otherwise false is returned.
+     * @return bool Returns true if all things could be done. Otherwise, false is returned.
      */
-    public function invalidateAllOtherLogins()
+    public function invalidateAllOtherLogins(): bool
     {
         global $gCurrentUserId, $gCurrentSession;
 
@@ -1508,7 +1509,7 @@ class User extends TableAccess
      * Checks if the user is assigned to the role **Administrator**
      * @return bool Returns **true** if the user is a member of the role **Administrator**
      */
-    public function isAdministrator()
+    public function isAdministrator(): bool
     {
         $this->checkRolesRight();
 
@@ -1516,11 +1517,10 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if this user is an admin of this organization.
-     * @param string $orgLongName The longname of this organization.
+     * Checks if this user is an admin of the organization that is set in this class.
      * @return bool Return true if user is admin of this organization.
      */
-    private function isAdminOfOrganization($orgLongName)
+    private function isAdminOfOrganization(): bool
     {
         global $installedDbVersion;
 
@@ -1559,7 +1559,7 @@ class User extends TableAccess
      * @param int $roleId
      * @return bool
      */
-    public function isLeaderOfRole($roleId)
+    public function isLeaderOfRole(int $roleId): bool
     {
         return array_key_exists($roleId, $this->rolesMembershipLeader);
     }
@@ -1598,7 +1598,7 @@ class User extends TableAccess
      * @param int $roleId
      * @return bool
      */
-    public function isMemberOfRole($roleId)
+    public function isMemberOfRole(int $roleId): bool
     {
         return in_array($roleId, $this->rolesMembership, true);
     }
@@ -1619,6 +1619,7 @@ class User extends TableAccess
      * found than the default values of all profile fields will be set.
      * @param int $id Unique id of the user that should be read
      * @return bool Returns **true** if one record is found
+     * @throws AdmException
      */
     public function readDataById(int $id): bool
     {
@@ -1641,8 +1642,9 @@ class User extends TableAccess
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readData
+     * @throws AdmException
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readData
      */
     public function readDataByUuid(string $uuid): bool
     {
@@ -1661,8 +1663,9 @@ class User extends TableAccess
      * Rehashes the password of the user if necessary.
      * @param string $password The password for the current user. This should not be encoded.
      * @return bool Returns true if password was rehashed.
+     * @throws AdmException
      */
-    private function rehashIfNecessary($password)
+    private function rehashIfNecessary(string $password): bool
     {
         if (!PasswordUtils::needsRehash($this->getValue('usr_password'))) {
             return false;
@@ -1685,7 +1688,7 @@ class User extends TableAccess
         // initialize rights arrays
         $this->rolesRights = array();
         $this->rolesViewMemberships = array();
-        $this->rolesViewMemberships = array();
+        $this->rolesViewProfiles = array();
         $this->rolesWriteMails = array();
         $this->rolesMembership = array();
         $this->rolesMembershipLeader   = array();
@@ -1694,6 +1697,7 @@ class User extends TableAccess
 
     /**
      * Reset the count of invalid logins. After that it's possible for the user to try another login.
+     * @throws AdmException
      */
     public function resetInvalidLogins()
     {
@@ -1703,10 +1707,10 @@ class User extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's a new
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's a new
      * record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
-     * First save recordset and then save all user fields. After that the session of this got a renew for the user object.
+     * First save recordset and then save all user fields. After that the session of this got a renewal for the user object.
      * If the user doesn't have the right to save data of this user than an exception will be thrown.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
@@ -1747,7 +1751,7 @@ class User extends TableAccess
         $returnValue = parent::save($updateFingerPrint);
         $usrId = (int) $this->getValue('usr_id'); // if a new user was created get the new id
 
-        // if this was an registration then set this user id to create user id
+        // if this was a registration then set this user id to create user id
         if ($updateCreateUserId) {
             $this->setValue('usr_timestamp_create', DATETIME_NOW);
             $this->setValue('usr_usr_id_create', $usrId);
@@ -1777,9 +1781,75 @@ class User extends TableAccess
     }
 
     /**
+     * Method will search for other users in the database with a similar first name and last name. When using MySQL the
+     * SQL function SOUNDEX will be used.
+     * the following combinations within first name and last name will be checked:
+     * 1. first name and last name are equal (under consideration of soundex)
+     * 2. last name is equal and only first part of first name of existing members is equal
+     * 3. last name is equal and only first part of first name of new registration member is equal
+     * 4. last name is equal to first name and first name is equal to last name
+     * @return array<int,int> Returns an array with the user IDs of all found similar users.
+     */
+    public function searchSimilarUsers(): array
+    {
+        global $gSettingsManager;
+
+        $foundUserIds = array();
+        $lastName  = $this->db->escapeString($this->getValue('LAST_NAME', 'database'));
+        $firstName = $this->db->escapeString($this->getValue('FIRST_NAME', 'database'));
+
+        // search for users with similar names (SQL function SOUNDEX only available in MySQL)
+        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar')) {
+            $sqlSimilarName =
+                '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
+                AND SUBSTRING(SOUNDEX(SUBSTRING(first_name.usd_value, 1, LOCATE(\' \', first_name.usd_value))), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(SUBSTRING('. $firstName.', 1, LOCATE(\' \', '.$firstName.'))), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4) ) )';
+        } else {
+            $sqlSimilarName =
+                '(  (   last_name.usd_value  = '. $lastName.'
+                AND first_name.usd_value = '. $firstName.')
+             OR (   last_name.usd_value  = '. $lastName.'
+                AND SUBSTRING(first_name.usd_value, 1, POSITION(\' \' IN first_name.usd_value)) = '. $firstName.')
+             OR (   last_name.usd_value  = '. $lastName.'
+                AND first_name.usd_value = SUBSTRING('. $firstName.', 1, POSITION(\' \' IN '. $firstName.')))
+             OR (   last_name.usd_value  = '. $firstName.'
+                AND first_name.usd_value = '. $lastName.') )';
+        }
+
+        // select all users from the database that have the same first and last name
+        $sql = 'SELECT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name
+                  FROM '.TBL_USERS.'
+            RIGHT JOIN '.TBL_USER_DATA.' AS last_name
+                    ON last_name.usd_usr_id = usr_id
+                   AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+            RIGHT JOIN '.TBL_USER_DATA.' AS first_name
+                    ON first_name.usd_usr_id = usr_id
+                   AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                 WHERE usr_valid = true
+                   AND '.$sqlSimilarName;
+        $queryParams = array(
+            $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),
+            $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id')
+        );
+        $usrStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        while ($row = $usrStatement->fetch()) {
+            $foundUserIds[] = $row['usr_id'];
+        }
+
+        return $foundUserIds;
+    }
+
+    /**
      * Set the default values that are stored in the profile fields configuration to each profile field.
      * A default value will only be set if **usf_default_value** is not NULL.
      * @return void
+     * @throws AdmException
      */
     public function setDefaultValues()
     {
@@ -1795,10 +1865,10 @@ class User extends TableAccess
      * Set the id of the organization which should be used in this user object.
      * The organization is used to read the rights of the user. If **setOrganization** isn't called
      * than the default organization **gCurrentOrganization** is set for the current user object.
-     * @param int $organizationId Id of the organization
+     * @param int $organizationId ID of the organization
      * @return void
      */
-    public function setOrganization($organizationId)
+    public function setOrganization(int $organizationId)
     {
         if($organizationId !== $this->organizationId) {
             $this->organizationId = $organizationId;
@@ -1809,11 +1879,12 @@ class User extends TableAccess
     /**
      * Set a new value for a password column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
-     * @param string $newPassword   The new value that should be stored in the database field
-     * @param bool   $doHashing     Should the password get hashed before inserted. Default is true
+     * @param string $newPassword The new value that should be stored in the database field
+     * @param bool $doHashing Should the password get hashed before inserted. Default is true
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
      */
-    public function setPassword($newPassword, $doHashing = true)
+    public function setPassword(string $newPassword, bool $doHashing = true): bool
     {
         global $gSettingsManager, $gPasswordHashAlgorithm, $gChangeNotification;
 
@@ -1864,13 +1935,13 @@ class User extends TableAccess
      * also against the custom regex if this is set. If an invalid value is set an AdmException will be thrown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
      * @param mixed  $fieldValue      The new value that should be stored in the profile field.
-     * @param bool   $checkValue      The value will be checked if it's valid. If set to **false** than the value will
+     * @param bool $checkValue      The value will be checked if it's valid. If set to **false** than the value will
      *                                not be checked.
-     * @throws AdmException If an invalid value should be set.
-     *                      exception->text contains a string with the reason why the login failed.
      * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
+     *@throws AdmException If an invalid value should be set.
+     *                      exception->text contains a string with the reason why the login failed.
      */
-    public function setProfileFieldsValue($fieldNameIntern, $fieldValue, $checkValue = true)
+    public function setProfileFieldsValue(string $fieldNameIntern, $fieldValue, bool $checkValue = true): bool
     {
         return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue, $checkValue);
     }
@@ -1879,15 +1950,16 @@ class User extends TableAccess
      * Create a new membership to a role for the current user. If the date range contains
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method can't be used to end a membership earlier!
-     * @param int    $roleId    Id of the role for which the membership should be set.
+     * @param int $roleId ID of the role for which the membership should be set.
      * @param string $startDate Start date of the membership. Default will be **DATE_NOW**.
-     * @param string $endDate   End date of the membership. Default will be **31.12.9999**
-     * @param bool   $leader    If set to **1** then the member will be leader of the role and
+     * @param string $endDate End date of the membership. Default will be **31.12.9999**
+     * @param bool|null $leader If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
      * @return bool Return **true** if the membership was successfully added.
+     * @throws AdmException
      * @deprecated 4.3.0:4.4.0 "setRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
      */
-    public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
+    public function setRoleMembership(int $roleId, $startDate = DATE_NOW, string $endDate = DATE_MAX, bool $leader = null): bool
     {
         return $this->changeRoleMembership('set', $roleId, $startDate, $endDate, $leader);
     }
@@ -1899,7 +1971,7 @@ class User extends TableAccess
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value or the
      *                           internal unique profile field name
-     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                           not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
@@ -1911,6 +1983,7 @@ class User extends TableAccess
      * // reads data of adm_user_fields
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
+     * @throws AdmException
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -1982,10 +2055,10 @@ class User extends TableAccess
             $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
         }
 
-        // Nicht alle Aenderungen werden geloggt. Ausnahmen:
-        // Felder, die mit usr_ beginnen (special case above)
-        // Felder, die sich nicht geändert haben (check above)
-        // Wenn usr_id ist 0 (der User neu angelegt wird; Das wird bereits dokumentiert) (check in logProfileChange)
+        // Not all changes are logged. Exceptions:
+        // Fields starting with usr_ (special case above)
+        // Fields that have not changed (check above)
+        // If usr_id is 0 (the user is newly created; this is already documented) (check in logProfileChange)
 
         if ($returnCode && !$this->newRecord && is_object($gChangeNotification)) {
             $gChangeNotification->logProfileChange(
@@ -1995,7 +2068,7 @@ class User extends TableAccess
                 // Old and new values in human-readable version:
                 $oldFieldValue,
                 $this->mProfileFieldsData->getValue($columnName),
-                // Old and new values in raw dtabase:
+                // Old and new values in raw database:
                 $oldFieldValue_db,
                 $newValue,
                 $this
@@ -2009,6 +2082,7 @@ class User extends TableAccess
      * Update login data for this user. These are timestamps of last login and reset count
      * and timestamp of invalid logins.
      * @return void
+     * @throws AdmException
      */
     public function updateLoginData()
     {
@@ -2022,19 +2096,19 @@ class User extends TableAccess
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
+     * Function checks if the logged in user is allowed to create and edit announcements
      * @return bool
      */
-    public function editAnnouncements()
+    public function editAnnouncements(): bool
     {
         return $this->checkRolesRight('rol_announcements');
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User Registrierungen bearbeiten und zuordnen darf
+     * Function checks if the logged in user is allowed to edit and assign registrations
      * @return bool
      */
-    public function approveUsers()
+    public function approveUsers(): bool
     {
         return $this->checkRolesRight('rol_approve_users');
     }
@@ -2044,7 +2118,7 @@ class User extends TableAccess
      * true if the user is a leader of the role and could assign other members to that role.
      * @return bool Return **true** if the user can assign members to at least one role.
      */
-    public function assignRoles()
+    public function assignRoles(): bool
     {
         $this->checkRolesRight();
 
@@ -2056,7 +2130,7 @@ class User extends TableAccess
      * admin access to the groups and roles module.
      * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function manageRoles()
+    public function manageRoles(): bool
     {
         return $this->checkRolesRight('rol_assign_roles');
     }
@@ -2065,7 +2139,7 @@ class User extends TableAccess
      * Method checks if the current user is allowed to administrate the event module.
      * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function editDates()
+    public function editDates(): bool
     {
         return $this->checkRolesRight('rol_dates');
     }
@@ -2074,7 +2148,7 @@ class User extends TableAccess
      * Method checks if the current user is allowed to administrate the documents and files module.
      * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function adminDocumentsFiles()
+    public function adminDocumentsFiles(): bool
     {
         return $this->checkRolesRight('rol_documents_files');
     }
@@ -2084,7 +2158,7 @@ class User extends TableAccess
      * has access to the user management module.
      * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function editUsers()
+    public function editUsers(): bool
     {
         return $this->checkRolesRight('rol_edit_user');
     }
@@ -2093,7 +2167,7 @@ class User extends TableAccess
      * Method checks if the current user is allowed to administrate the guestbook module.
      * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function editGuestbookRight()
+    public function editGuestbookRight(): bool
     {
         return $this->checkRolesRight('rol_guestbook');
     }
@@ -2102,25 +2176,25 @@ class User extends TableAccess
      * Method checks if the current user is allowed to comment guestbook entries.
      * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function commentGuestbookRight()
+    public function commentGuestbookRight(): bool
     {
         return $this->checkRolesRight('rol_guestbook_comments');
     }
 
     /**
-     * Method checks if the current user is allowed to administrate the photos module.
+     * Method checks if the current user is allowed to administrate the photo's module.
      * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function editPhotoRight()
+    public function editPhotoRight(): bool
     {
         return $this->checkRolesRight('rol_photo');
     }
 
     /**
-     * Method checks if the current user is allowed to administrate the weblinks module.
+     * Method checks if the current user is allowed to administrate the web links module.
      * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function editWeblinksRight()
+    public function editWeblinksRight(): bool
     {
         return $this->checkRolesRight('rol_weblinks');
     }

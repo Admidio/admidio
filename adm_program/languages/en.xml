@@ -322,7 +322,6 @@
   <string name="SYS_ASSIGN_ROLE">Assign role</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Please select a role to which all imported contacts will be automatically assigned.\n\nYou can only select roles that you are allowed to see and do not have role assignment permission if you do not have it yourself.</string>
   <string name="SYS_ASSIGN_ROLE_TO_USER">The data cannot be saved.\nAt least one role must be assigned to the contact.</string>
-  <string name="SYS_ASSIGN_ROLES">Assign roles</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrical</string>
   <string name="SYS_ATTACHMENT">Attachment</string>
   <string name="SYS_ATTACHMENT_ONE">1 attachment</string>
@@ -418,7 +417,7 @@
   <string name="SYS_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
   <string name="SYS_CONTACT_NO_VALID_LOGIN">This contact does not have a registration yet.\nDo you want to assign the data of this registration?</string>
-  <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">If the registration does not belong to one of the found contacts or members, then you can create a new contact or member and assign the appropriate roles to it.</string>
+  <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">If the new contact cannot be assigned to an existing contact with a similar name, you can create a new contact and assign the appropriate roles to it.</string>
   <string name="SYS_CONTACT_SIMILAR_NAME">A contact with a similar name was found.</string>
   <string name="SYS_CONTACTS">Contacts</string>
   <string name="SYS_CONTENT">Content</string>

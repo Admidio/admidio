@@ -42,6 +42,7 @@ return array(
     'MenuNode' => $baseDir . '/adm_program/system/classes/MenuNode.php',
     'Message' => $baseDir . '/adm_program/system/classes/Message.php',
     'ModuleAnnouncements' => $baseDir . '/adm_program/system/classes/ModuleAnnouncements.php',
+    'ModuleContacts' => $baseDir . '/adm_program/system/classes/ModuleContacts.php',
     'ModuleEvents' => $baseDir . '/adm_program/system/classes/ModuleEvents.php',
     'ModuleLists' => $baseDir . '/adm_program/system/classes/ModuleLists.php',
     'ModuleMessages' => $baseDir . '/adm_program/system/classes/ModuleMessages.php',
