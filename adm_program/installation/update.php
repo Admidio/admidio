@@ -14,6 +14,29 @@
  *        3 : Show result of update
  ***********************************************************************************************
  */
+
+/**
+ * Shows an error dialog with an error message to the user.
+ * @param string $message Message that should be shown to the user.
+ * @param bool $reloadPage If set to **true** than the user could reload the update page.
+ * @return void
+ */
+function showErrorMessage(string $message, bool $reloadPage = false)
+{
+    global $gL10n;
+
+    $page = new HtmlPageInstallation('admidio-update-message');
+    $page->setUpdateModus();
+    $page->showMessage(
+        'error',
+        $gL10n->get('SYS_NOTE'),
+        $message,
+        ($reloadPage) ? $gL10n->get('SYS_RELOAD') : $gL10n->get('SYS_OVERVIEW'),
+        ($reloadPage) ? 'fa-redo-alt' : 'fa-home',
+        ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . '/adm_program/overview.php'
+    );
+}
+
 $rootPath = dirname(__DIR__, 2);
 
 // embed config file
@@ -31,8 +54,6 @@ if (is_file($configPath)) {
 }
 
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
-require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_functions.php');
-require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/update_functions.php');
 
 // Initialize and check the parameters
 
@@ -140,7 +161,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
 }
 
 // check database version
-$message = checkDatabaseVersion($gDb);
+$message = InstallationUtils::checkDatabaseVersion($gDb);
 
 if ($message !== '') {
     showErrorMessage($message);
@@ -301,7 +322,8 @@ if ($getMode === 1) {
         );
     }
 
-    doAdmidioUpdate($installedDbVersion);
+    $update = new Update();
+    $update->doAdmidioUpdate($installedDbVersion);
 
     // remove session object with all data, so that
     // all data will be read after the update

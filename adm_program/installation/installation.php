@@ -18,8 +18,7 @@
  *        start_installation   : Start installation
  ***********************************************************************************************
  */
-$rootPath = dirname(dirname(__DIR__));
-require_once($rootPath . '/adm_program/installation/install_functions.php');
+$rootPath = dirname(__DIR__, 2);
 
 // if config file already exists then load file with their variables
 $configPath = $rootPath . '/adm_my_files/config.php';
@@ -30,7 +29,7 @@ if (is_file($configPath)) {
 } elseif (is_file($rootPath . '/config.php')) {
     exit('<div style="color: #cc0000;">Old Admidio version 1.x or 2.x config file detected! Please update first to the latest version 3 of Admidio and after that you can perform an update to version 4!<br /><br />Please view <a href="https://www.admidio.org/dokuwiki/doku.php?id=de:2.0:update_von_2.x_auf_3.x">our documentation</a>.</div>');
 } else {
-    $g_root_path = getAdmidioUrl();
+    $g_root_path = InstallationUtils::getAdmidioUrl();
 }
 
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');

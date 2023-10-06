@@ -159,7 +159,7 @@ if (isset($_POST['db_host'])) {
         }
 
         // check database version
-        $message = checkDatabaseVersion($db);
+        $message = InstallationUtils::checkDatabaseVersion($db);
         if ($message !== '') {
             $page = new HtmlPageInstallation('admidio-installation-message');
             $page->showMessage(
