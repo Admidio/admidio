@@ -8,7 +8,7 @@
  */
 
 /**
- * Needful functions for the registration module
+ * Class with methods to display the module pages and helpful functions.
  *
  * This class adds some functions that are used in the registration module to keep the
  * code easy to read and short
@@ -17,7 +17,7 @@
  * ```
  * // generate html output with available registrations
  * $page = new ModuleRegistration('admidio-registration', $headline);
- * $page->createContent();
+ * $page->createContentRegistrationList();
  * $page->show();
  * ```
  */
@@ -51,84 +51,6 @@ class ModuleRegistration extends HtmlPage
               ORDER BY reg_validation_id ASC, reg_timestamp DESC';
         $queryParameters = array($gCurrentOrgId);
         return $gDb->getArrayFromSql($sql, $queryParameters);
-    }
-
-    /**
-     * Search for similar users of the new registration and show all found users with the option to assign
-     * the current registration to the existing user or to create a new member. If the registration is
-     * assigned to an existing user than there will be a different handling if the user is member of the current
-     * organization and if the user has already a login.
-     * @param string $userUuid UUID if the user whose registration should be assigned.
-     * @throws SmartyException|AdmException
-     */
-    public function createContentAssignUser(string $userUuid)
-    {
-        global $gL10n, $gSettingsManager, $gCurrentUser, $gDb, $gProfileFields, $gCurrentOrganization;
-
-        $templateData = array();
-
-        $user = new UserRegistration($gDb, $gProfileFields);
-        $user->readDataByUuid($userUuid);
-        $similarUserIDs = $user->searchSimilarUsers();
-
-        $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
-
-        // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
-        if ($gCurrentUser->editUsers()) {
-            $this->assign('createNewUserUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $userUuid)));
-        } else {
-            $this->assign('createNewUserUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_uuid' => $userUuid)));
-        }
-        foreach ($similarUserIDs as $similarUserID) {
-            $similarUser = new User($gDb, $gProfileFields, $similarUserID);
-
-            $templateRow = array();
-            $templateRow['data'] = $similarUser->getProfileFieldsData();
-            $templateRow['profileUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $similarUser->getValue('usr_uuid')));
-
-            if ($gSettingsManager->getBool('enable_mail_module')) {
-                $templateRow['emailUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $similarUser->getValue('usr_uuid')));
-            } else {
-                $templateRow['emailUrl'] = 'mailto:'.$similarUser->getValue('EMAIL');
-            }
-
-            if ($similarUser->isMemberOfOrganization()) {
-                // found user is member of this organization
-                if ($similarUser->getValue('usr_login_name') !== '') {
-                    // Login data already exists -> Send login data again
-                    $button['description'] = $gL10n->get('SYS_USER_VALID_LOGIN'). '<br />'.$gL10n->get('SYS_REMINDER_SEND_LOGIN');
-                    $button['label'] = $gL10n->get('SYS_SEND_LOGIN_INFORMATION');
-                    $button['icon'] = 'fa-key';
-                    $button['url']  = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => '6'));
-                } else {
-                    // Login data are NOT available -> assign them now
-                    $button['description'] = $gL10n->get('SYS_CONTACT_NO_VALID_LOGIN');
-                    $button['label'] = $gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION');
-                    $button['icon'] = 'fa-user-check';
-                    $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => '1'));
-                }
-            } else {
-                // found user is NOT a member of this organization yet
-                $button['label'] = $gL10n->get('SYS_ASSIGN_MEMBERSHIP');
-                $button['icon'] = 'fa-user-check';
-                $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => '2'));
-
-                if ($similarUser->getValue('usr_login_name') !== '') {
-                    // Login data are already available
-                    $button['description'] = $gL10n->get('SYS_USER_NO_MEMBERSHIP_LOGIN', array($gCurrentOrganization->getValue('org_longname')));
-                } else {
-                    // NO login data available
-                    $button['description'] = $gL10n->get('SYS_USER_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_longname')));
-                }
-            }
-            $templateRow['button'] = $button;
-
-            $templateData[] = $templateRow;
-        }
-
-        $this->assign('similarUsers', $templateData);
-        $this->assign('l10n', $gL10n);
-        $this->pageContent = $this->fetch('modules/registration.assign.tpl');
     }
 
     /**

@@ -322,7 +322,6 @@
   <string name="SYS_ASSIGN_ROLE">Assign role</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Please select a role to which all imported contacts will be automatically assigned.\n\nYou can only select roles that you are allowed to see and do not have role assignment permission if you do not have it yourself.</string>
   <string name="SYS_ASSIGN_ROLE_TO_USER">The data cannot be saved.\nAt least one role must be assigned to the contact.</string>
-  <string name="SYS_ASSIGN_ROLES">Assign roles</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrical</string>
   <string name="SYS_ATTACHMENT">Attachment</string>
   <string name="SYS_ATTACHMENT_ONE">1 attachment</string>

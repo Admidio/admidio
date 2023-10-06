@@ -180,6 +180,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'MenuNode' => __DIR__ . '/../../../..' . '/adm_program/system/classes/MenuNode.php',
         'Message' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Message.php',
         'ModuleAnnouncements' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleAnnouncements.php',
+        'ModuleContacts' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleContacts.php',
         'ModuleEvents' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleEvents.php',
         'ModuleLists' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleLists.php',
         'ModuleMessages' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleMessages.php',

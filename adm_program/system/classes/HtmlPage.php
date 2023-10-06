@@ -15,7 +15,7 @@
  * from the Smarty class. It provides method to add new html data to the page and also set or
  * choose the necessary template files. The generated page will automatically integrate the
  * chosen theme. You can also create a html reduces page without menu header and footer
- * informations.
+ * information.
  *
  * **Code example**
  * ```
@@ -27,7 +27,7 @@
  * $page->show();
  * ```
  */
-class HtmlPage extends \Smarty
+class HtmlPage extends Smarty
 {
     /**
      * @var string The id of the html page that will be set within the <body> tag.
@@ -38,7 +38,7 @@ class HtmlPage extends \Smarty
      */
     protected $title = '';
     /**
-     * @var string Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
+     * @var string Additional header that could not be set with the other methods. This content will be added to head of html page without parsing.
      */
     protected $header = '';
     /**
@@ -74,11 +74,11 @@ class HtmlPage extends \Smarty
      */
     protected $javascriptContent = '';
     /**
-     * @var string Contains the custom javascript of the current page that should be executed after pageload. This will be added to the header part of the page.
+     * @var string Contains the custom javascript of the current page that should be executed after page load. This will be added to the header part of the page.
      */
     protected $javascriptContentExecute = '';
     /**
-     * @var bool If set to true then a page without header menue and sidebar menu will be created. The main template file will be index_inline.tpl
+     * @var bool If set to true then a page without header menu and sidebar menu will be created. The main template file will be index_inline.tpl
      */
     protected $modeInline = false;
     /**
@@ -86,13 +86,13 @@ class HtmlPage extends \Smarty
      */
     protected $templateFile = '';
     /**
-     * @var string Flag that will be responsible of a back button with the url to the previous page will be shown.
+     * @var string Flag that will be responsible for a back button with the url to the previous page will be shown.
      */
     protected $showBackLink = '';
 
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $id       Id of the page. This id will be set in the html <body> tag.
+     * @param string $id       ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
      */
@@ -130,7 +130,7 @@ class HtmlPage extends \Smarty
      * Adds a cascading style sheets file to the html page.
      * @param string $cssFile The url with filename or the relative path starting with **adm_program** of the css file.
      */
-    public function addCssFile($cssFile)
+    public function addCssFile(string $cssFile)
     {
         if (!in_array($cssFile, $this->cssFiles, true)) {
             if (str_starts_with($cssFile, 'http')) {
@@ -142,11 +142,11 @@ class HtmlPage extends \Smarty
     }
 
     /**
-     * Adds a RSS file to the html page.
+     * Adds an RSS file to the html page.
      * @param string $rssFile The url with filename of the rss file.
      * @param string $title   (optional) Set a title. This is the name of the feed and will be shown when adding the rss feed.
      */
-    public function addRssFile($rssFile, $title = '')
+    public function addRssFile(string $rssFile, string $title = '')
     {
         if ($title !== '') {
             $this->rssFiles[$title] = $rssFile;
@@ -159,7 +159,7 @@ class HtmlPage extends \Smarty
      * Adds a javascript file to the html page.
      * @param string $jsFile The url with filename or the relative path starting with **adm_program** of the javascript file.
      */
-    public function addJavascriptFile($jsFile)
+    public function addJavascriptFile(string $jsFile)
     {
         if (!in_array($jsFile, $this->jsFiles, true)) {
             if (str_starts_with($jsFile, 'http')) {
@@ -173,10 +173,10 @@ class HtmlPage extends \Smarty
     /**
      * Adds any javascript content to the page. The javascript will be added in the order you call this method.
      * @param string $javascriptCode       A valid javascript code that will be added to the header of the page.
-     * @param bool   $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
+     * @param bool $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
      *                                     the page is fully loaded.
      */
-    public function addJavascript($javascriptCode, $executeAfterPageLoad = false)
+    public function addJavascript(string $javascriptCode, bool $executeAfterPageLoad = false)
     {
         if ($executeAfterPageLoad) {
             $this->javascriptContentExecute .= $javascriptCode. "\n";
@@ -189,7 +189,7 @@ class HtmlPage extends \Smarty
      * Add content to the header segment of a html page.
      * @param string $header Content for the html header segment.
      */
-    public function addHeader($header)
+    public function addHeader(string $header)
     {
         $this->header .= $header;
     }
@@ -200,7 +200,7 @@ class HtmlPage extends \Smarty
      * the page. The second call below the first etc.
      * @param string $html A valid html code that will be added to the page.
      */
-    public function addHtml($html)
+    public function addHtml(string $html)
     {
         $this->pageContent .= $html;
     }
@@ -210,13 +210,13 @@ class HtmlPage extends \Smarty
      * current page. The menu header will automatically the name of the page. If a dropdown menu item should
      * be created than $parentMenuItemId must be set to each entry of the dropdown. If a badge should
      * be shown at this menu item than set the $badgeCount.
-     * @param string $id.         Id of the menu item that will be the html id of the <a> tag
-     * @param string $name        Name of the menu node that will also shown in the menu
+     * @param string $id.         ID of the menu item that will be the html id of the <a> tag
+     * @param string $name        Name of the menu node that will be shown in the menu
      * @param string $url         The url of this menu item that will be called if someone click the menu item
      * @param string $icon        An icon that will be shown together with the name in the menu
      * @param string $parentMenuItemId The id of the parent item to which this item will be added.
-     * @param int $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
-     * @param string $description A optional description of the menu node that could be shown in some output cases
+     * @param int $badgeCount     If set > 0 than a small badge with the number will be shown after the menu item name
+     * @param string $description An optional description of the menu node that could be shown in some output cases
      */
     public function addPageFunctionsMenuItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = '')
     {
@@ -229,7 +229,7 @@ class HtmlPage extends \Smarty
      * @param string $templateFile The name of the template file in the templates folder of
      *                             the current theme that should be loaded within the current page.
      */
-    public function addTemplateFile($templateFile)
+    public function addTemplateFile(string $templateFile)
     {
         $this->templateFile = $templateFile;
     }
@@ -237,12 +237,12 @@ class HtmlPage extends \Smarty
     /**
      * The method will return the filename. If you are in debug mode than it will return the
      * not minified version of the filename otherwise it will return the minified version.
-     * Therefore you must provide 2 versions of the file. One with a **min** before the file extension
+     * Therefore, you must provide 2 versions of the file. One with a **min** before the file extension
      * and one version without the **min**.
      * @param string $filepath Filename of the NOT minified file.
      * @return string Returns the filename in dependence of the debug mode.
      */
-    private function getDebugOrMinFilepath($filepath)
+    private function getDebugOrMinFilepath(string $filepath): string
     {
         global $gDebug;
 
@@ -260,26 +260,40 @@ class HtmlPage extends \Smarty
     }
 
     /**
+     * Returns the content of the page. Menu, page header and page footer will not be returned.
+     * Just the specific content of the page.
+     * @return string Returns the html of the page content.
+     */
+    public function getPageContent(): string
+    {
+        return $this->pageContent;
+    }
+
+    /**
      * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
      * @return string Returns the headline of the current Admidio page.
      */
-    public function getHeadline()
+    public function getHeadline(): string
     {
         return $this->headline;
     }
 
-    /* Add page specific javascript files, css files or rss files to the header. Also specific header
-     * informations will also be added
-     * @return string Html string with all additional header informations
+    /**
+     * Add page specific javascript files, css files or rss files to the header. Also, specific header
+     * information will also be added
+     * @return string Html string with all additional header information
      */
-    public function getHtmlAdditionalHeader()
+    public function getHtmlAdditionalHeader(): string
     {
         $this->header .= $this->getHtmlCssFiles() . $this->getHtmlJsFiles() . $this->getHtmlRssFiles();
         return $this->header;
     }
 
-    // add css files to page
-    public function getHtmlCssFiles()
+    /**
+     * Get the html code with the script implementation of all assigned CSS files.
+     * @return string Returns the html code with the script implementation of all assigned CSS files.
+     */
+    public function getHtmlCssFiles(): string
     {
         $html = '';
 
@@ -290,8 +304,11 @@ class HtmlPage extends \Smarty
         return $html;
     }
 
-    // add javascript files to page
-    public function getHtmlJsFiles()
+    /**
+     * Get the html code with the script implementation of all assigned javascript files.
+     * @return string Returns the html code with the script implementation of all assigned javascript files.
+     */
+    public function getHtmlJsFiles(): string
     {
         $html = '';
 
@@ -302,8 +319,11 @@ class HtmlPage extends \Smarty
         return $html;
     }
 
-    // add rss feed files to page
-    public function getHtmlRssFiles()
+    /**
+     * Get the html code with the link implementation of all assigned RSS files.
+     * @return string Returns the html code with the link implementation of all assigned RSS files.
+     */
+    public function getHtmlRssFiles(): string
     {
         $html = '';
 
@@ -322,7 +342,7 @@ class HtmlPage extends \Smarty
      * Returns the title of the html page.
      * @return string Returns the title of the html page.
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -341,7 +361,7 @@ class HtmlPage extends \Smarty
      * @param string $headline A string that contains the headline for the page.
      * @return void
      */
-    public function setHeadline($headline)
+    public function setHeadline(string $headline)
     {
         if ($this->title === '') {
             $this->setTitle($headline);
@@ -351,7 +371,7 @@ class HtmlPage extends \Smarty
         $this->headline = $headline;
     }
 
-    /** If set to true then a page without header menue and sidebar menu will be created.
+    /** If set to true then a page without header menu and sidebar menu will be created.
      *  The main template file will be **index_reduced.tpl** instead of index.tpl.
      */
     public function setInlineMode()
@@ -364,7 +384,7 @@ class HtmlPage extends \Smarty
      * @param string $title A string that contains the title for the page.
      * @return void
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         global $gCurrentOrganization;
 
@@ -388,7 +408,7 @@ class HtmlPage extends \Smarty
     }
 
     /**
-     * This method will set all variables for the Smarty engine and than send the whole html
+     * This method will set all variables for the Smarty engine and then send the whole html
      * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
      */
@@ -474,6 +494,8 @@ class HtmlPage extends \Smarty
         } catch (SmartyException $exception) {
             echo $exception->getMessage();
             echo '<br />Please check if the theme folder "<strong>' . $gSettingsManager->getString('theme') . '</strong>" exists within the folder "adm_themes".';
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 }
