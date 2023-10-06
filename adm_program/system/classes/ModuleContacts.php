@@ -54,9 +54,10 @@ class ModuleContacts extends HtmlPage
             throw new AdmException('No similar users found.');
         }
 
-        $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
 
         if($assignRegistration) {
+            $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
+
             // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
             if ($gCurrentUser->editUsers()) {
                 $this->assign('createNewUserUrl',
@@ -80,6 +81,7 @@ class ModuleContacts extends HtmlPage
                 );
             }
         } else {
+            $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_ASSIGN', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
             $this->assign('createNewUserUrl',
                 SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php',
