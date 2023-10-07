@@ -13,14 +13,8 @@
 class Update
 {
     /**
-     * Constructor that initialize the class member parameters
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * checks if login is required and if so, if it is valid
+     * @throws AdmException
      */
     public function checkLogin()
     {
@@ -42,70 +36,17 @@ class Update
 
         if ($userStatement->rowCount() === 0) {
             // show message that username or password is incorrect
-            $page = new HtmlPageInstallation('admidio-update-message');
-            $page->setUpdateModus();
-            $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', 'update.php');
+            throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
             // => EXIT
         } else {
             // create object with current user field structure und user object
             $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
-            try {
-                // check login data. If login failed an exception will be thrown.
-                // Don't update the current session with user id and don't do a rehash of the password
-                // because in former versions the password field was too small for the current hashes
-                // and the update of this field will be done after this check.
-                $gCurrentUser->checkLogin($password, false, false, false, true);
-            } catch (AdmException $e) {
-                // show message with the error of the exception
-                $page = new HtmlPageInstallation('admidio-update-message');
-                $page->setUpdateModus();
-                $page->showMessage('error', $gL10n->get('SYS_NOTE'), $e->getText(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', 'update.php');
-                // => EXIT
-            }
-        }
-    }
-
-    public function updateOrgPreferences()
-    {
-        global $gDb, $gPasswordHashAlgorithm;
-
-        // set execution time to 2 minutes because we have a lot to do
-        PhpIniUtils::startNewExecutionTimeLimit(120);
-
-        // first write the possible new Orga settings in DB
-        require_once(__DIR__ . '/../../installation/db_scripts/preferences.php');
-
-        // calculate the best cost value for your server performance
-        $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
-        $updateOrgPreferences = array();
-
-        if (is_int($benchmarkResults['options']['cost'])) {
-            $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['options']['cost']);
-        }
-
-        $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
-        $organizationStatement = $gDb->queryPrepared($sql);
-
-        while ($orgId = $organizationStatement->fetchColumn()) {
-            $organization = new Organization($gDb, $orgId);
-            $settingsManager =& $organization->getSettingsManager();
-            $settingsManager->setMulti($defaultOrgPreferences, false);
-            $settingsManager->setMulti($updateOrgPreferences);
-        }
-    }
-
-    /**
-     * @param bool $enable
-     */
-    public function toggleForeignKeyChecks(bool $enable)
-    {
-        global $gDb;
-
-        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
-            // disable foreign key checks for mysql, so tables can easily be deleted
-            $sql = 'SET foreign_key_checks = ' . (int) $enable;
-            $gDb->queryPrepared($sql);
+            // check login data. If login failed an exception will be thrown.
+            // Don't update the current session with user id and don't do a rehash of the password
+            // because in former versions the password field was too small for the current hashes
+            // and the update of this field will be done after this check.
+            $gCurrentUser->checkLogin($password, false, false, false, true);
         }
     }
 
@@ -166,5 +107,50 @@ class Update
         // after the update first force the reload of the cache for all active sessions
         $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\'';
         $gDb->queryPrepared($sql);
+    }
+
+    public function updateOrgPreferences()
+    {
+        global $gDb, $gPasswordHashAlgorithm;
+
+        // set execution time to 2 minutes because we have a lot to do
+        PhpIniUtils::startNewExecutionTimeLimit(120);
+
+        // first write the possible new Orga settings in DB
+        require_once(__DIR__ . '/../../installation/db_scripts/preferences.php');
+
+        // calculate the best cost value for your server performance
+        $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
+        $updateOrgPreferences = array();
+
+        if (is_int($benchmarkResults['options']['cost'])) {
+            $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['options']['cost']);
+        }
+
+        $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = $gDb->queryPrepared($sql);
+
+        while ($orgId = $organizationStatement->fetchColumn()) {
+            $organization = new Organization($gDb, $orgId);
+            $settingsManager =& $organization->getSettingsManager();
+            $settingsManager->setMulti($defaultOrgPreferences, false);
+            $settingsManager->setMulti($updateOrgPreferences);
+        }
+    }
+
+    /**
+     * Method will activate / deactivate the foreign key check in the database. This
+     * will only work for a MySQL database.
+     * @param bool $enable If set to **true** the foreign key check will be activated.
+     */
+    public function toggleForeignKeyChecks(bool $enable)
+    {
+        global $gDb;
+
+        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
+            // disable foreign key checks for mysql, so tables can easily be deleted
+            $sql = 'SET foreign_key_checks = ' . (int) $enable;
+            $gDb->queryPrepared($sql);
+        }
     }
 }

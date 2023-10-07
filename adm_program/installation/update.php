@@ -322,8 +322,16 @@ if ($getMode === 1) {
         );
     }
 
-    $update = new Update();
-    $update->doAdmidioUpdate($installedDbVersion);
+    try {
+        $update = new Update();
+        $update->doAdmidioUpdate($installedDbVersion);
+    } catch (AdmException $e) {
+        // show message with the error of the exception
+        $page = new HtmlPageInstallation('admidio-update-message');
+        $page->setUpdateModus();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $e->getText(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', 'update.php');
+        // => EXIT
+    }
 
     // remove session object with all data, so that
     // all data will be read after the update
