@@ -305,32 +305,32 @@ final class FileSystemUtils
     /**
      * Chmod a directory and optional recursive all subdirectories and files
      * @param string $directoryPath   The directory to chmod
-     * @param int    $mode            The mode to set, in octal notation (e.g. 0775)
-     * @param bool   $recursive       If true, subdirectories are chmod too
-     * @param bool   $onlyDirectories If true, only directories gets chmod. If false all content gets chmod
-     * @throws \UnexpectedValueException Throws if process is not directory owner
-     * @throws \RuntimeException         Throws if the chmod or opendir process fails
+     * @param int $mode            The mode to set, in octal notation (e.g. 0775)
+     * @param bool $recursive       If true, subdirectories are chmod too
+     * @param bool $onlyDirectories If true, only directories gets chmod. If false all content gets chmod
+     * @throws UnexpectedValueException Throws if process is not directory owner
+     * @throws RuntimeException         Throws if the chmod or opendir process fails
      * @see https://www.php.net/manual/en/function.chmod.php
      */
-    public static function chmodDirectory($directoryPath, $mode = self::DEFAULT_MODE_DIRECTORY, $recursive = false, $onlyDirectories = true)
+    public static function chmodDirectory(string $directoryPath, int $mode = self::DEFAULT_MODE_DIRECTORY, bool $recursive = false, bool $onlyDirectories = true)
     {
         if (!self::isUnixWithPosix()) {
-            throw new \RuntimeException('"FileSystemUtils::chmodDirectory()" is only available on systems with POSIX support!');
+            throw new RuntimeException('"FileSystemUtils::chmodDirectory()" is only available on systems with POSIX support!');
         }
 
         self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
 
         if (!self::hasPathOwnerRight($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
         }
 
         $chmodResult = chmod($directoryPath, $mode);
         if (!$chmodResult) {
-            throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
+            throw new RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
         }
 
         if ($recursive) {
@@ -479,14 +479,14 @@ final class FileSystemUtils
 
     /**
      * Creates a directory if it already did not exist
-     * @param string              $directoryPath The directory to create
+     * @param string $directoryPath The directory to create
      * @param array<string,mixed> $options       Operation options ([int] mode = 0775, [int] modeParents = 0775, [bool] createDirectoryStructure = true)
-     * @throws \UnexpectedValueException Throws if the parent directory is not writable
-     * @throws \RuntimeException         Throws if the mkdir process fails
      * @return bool Returns true if directory was successfully created or false if directory did already exist
+     * @throws RuntimeException         Throws if the mkdir process fails
+     * @throws UnexpectedValueException Throws if the parent directory is not writable
      * @see https://www.php.net/manual/en/function.mkdir.php
      */
-    public static function createDirectoryIfNotExists($directoryPath, array $options = array())
+    public static function createDirectoryIfNotExists(string $directoryPath, array $options = array()): bool
     {
         self::checkIsInAllowedDirectories($directoryPath);
 
@@ -504,29 +504,29 @@ final class FileSystemUtils
                 $parentOptions['mode'] = $options['modeParents'];
                 self::createDirectoryIfNotExists($parentDirectoryPath, $parentOptions);
             } else {
-                throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" does not exist!');
+                throw new UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" does not exist!');
             }
         }
         if (self::isUnix() && !is_executable($parentDirectoryPath)) {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
+            throw new UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
         if (!is_writable($parentDirectoryPath)) {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
+            throw new UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
         }
 
         $mkdirResult = mkdir($directoryPath, $options['mode']);
         if (!$mkdirResult) {
-            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be created!');
+            throw new RuntimeException('Directory "' . $directoryPath . '" cannot be created!');
         }
 
         if (self::isUnixWithPosix()) {
             if (!self::hasPathOwnerRight($directoryPath)) {
-                throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
+                throw new UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
             }
 
             $chmodResult = chmod($directoryPath, $options['mode']);
             if (!$chmodResult) {
-                throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
+                throw new RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
             }
         }
 
@@ -536,18 +536,18 @@ final class FileSystemUtils
     /**
      * Deletes the content of a directory
      * @param string $directoryPath The directory where to delete the content
-     * @throws \UnexpectedValueException Throws if directory is not writable and readable
-     * @throws \RuntimeException         Throws if the unlink, rmdir or opendir process fails
      * @return bool Returns true if directory content was successfully deleted or false if directory was already empty
+     * @throws RuntimeException         Throws if the unlink, rmdir or opendir process fails
+     * @throws UnexpectedValueException Throws if directory is not writable and readable
      * @see https://www.php.net/manual/en/function.opendir.php
      * @see https://www.php.net/manual/en/function.readdir.php
      */
-    public static function deleteDirectoryContentIfExists($directoryPath)
+    public static function deleteDirectoryContentIfExists(string $directoryPath): bool
     {
         self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
 
         if (self::isDirectoryEmpty($directoryPath)) {
@@ -555,15 +555,15 @@ final class FileSystemUtils
         }
 
         if (!is_writable($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not writable!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" is not writable!');
         }
         if (!is_readable($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
         }
 
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false) {
-            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
+            throw new RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
         }
 
         while (($entry = readdir($dirHandle)) !== false) {

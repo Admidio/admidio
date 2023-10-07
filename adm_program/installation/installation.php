@@ -18,6 +18,26 @@
  *        start_installation   : Start installation
  ***********************************************************************************************
  */
+
+/**
+ * Get the url of the Admidio installation with all subdirectories, a forwarded host
+ * and a port. e.g. https://www.admidio.org/playground
+ * @param bool $checkForwardedHost If set to true the script will check if a forwarded host is set and add him to the url
+ * @return string The url of the Admidio installation
+ */
+function getAdmidioUrl(bool $checkForwardedHost = true): string
+{
+    $ssl      = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+    $sp       = strtolower($_SERVER['SERVER_PROTOCOL']);
+    $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
+    $port     = (int) $_SERVER['SERVER_PORT'];
+    $port     = ((!$ssl && $port === 80) || ($ssl && $port === 443)) ? '' : ':' . $port;
+    $host     = ($checkForwardedHost && isset($_SERVER['HTTP_X_FORWARDED_HOST'])) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : ($_SERVER['HTTP_HOST'] ?? null);
+    $host     = $host ?? $_SERVER['SERVER_NAME'] . $port;
+    $fullUrl  = $protocol . '://' . $host . $_SERVER['REQUEST_URI'];
+    return substr($fullUrl, 0, strpos($fullUrl, 'adm_program') - 1);
+}
+
 $rootPath = dirname(__DIR__, 2);
 
 // if config file already exists then load file with their variables
@@ -29,7 +49,7 @@ if (is_file($configPath)) {
 } elseif (is_file($rootPath . '/config.php')) {
     exit('<div style="color: #cc0000;">Old Admidio version 1.x or 2.x config file detected! Please update first to the latest version 3 of Admidio and after that you can perform an update to version 4!<br /><br />Please view <a href="https://www.admidio.org/dokuwiki/doku.php?id=de:2.0:update_von_2.x_auf_3.x">our documentation</a>.</div>');
 } else {
-    $g_root_path = InstallationUtils::getAdmidioUrl();
+    $g_root_path = getAdmidioUrl();
 }
 
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
@@ -67,10 +87,12 @@ $gL10n = new Language($gLanguageData);
 
 $language = $gL10n->getLanguage();
 
-// check if adm_my_files has write privileges
-if (!is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
-    echo $gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files'));
-    exit();
+try {
+    // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
+    InstallationUtils::checkRequirements();
+} catch (AdmException|UnexpectedValueException|RuntimeException $e) {
+    echo $e->getMessage();
+    // => EXIT
 }
 
 // if config file exists then connect to database

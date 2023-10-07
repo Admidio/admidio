@@ -32,6 +32,36 @@ class InstallationUtils
     }
 
     /**
+     * Method will check if the folder adm_my_files is writable for the PHP user.
+     * @return void
+     * @throws AdmException
+     */
+    public static function checkRequirements()
+    {
+        // check if adm_my_files has write permissions
+        if (!is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
+            // try to set write permissions otherwise throw an exception
+            try {
+                FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA);
+            } catch (RuntimeException | UnexpectedValueException $e) {
+                throw new AdmException('INS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA));
+            }
+        }
+
+        // now check some sub folders and create them if necessary
+        try {
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/logs');
+        } catch (RuntimeException | UnexpectedValueException $e) {
+            throw new AdmException('INS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/logs'));
+        }
+        try {
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/temp');
+        } catch (RuntimeException | UnexpectedValueException $e) {
+            throw new AdmException('INS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/temp'));
+        }
+    }
+
+    /**
      * @param Database $db
      */
     public static function disableSoundexSearchIfPgSql(Database $db)
@@ -43,25 +73,6 @@ class InstallationUtils
                  WHERE prf_name = \'system_search_similar\'';
             $db->queryPrepared($sql);
         }
-    }
-
-    /**
-     * Get the url of the Admidio installation with all subdirectories, a forwarded host
-     * and a port. e.g. https://www.admidio.org/playground
-     * @param bool $checkForwardedHost If set to true the script will check if a forwarded host is set and add him to the url
-     * @return string The url of the Admidio installation
-     */
-    public static function getAdmidioUrl(bool $checkForwardedHost = true): string
-    {
-        $ssl      = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
-        $sp       = strtolower($_SERVER['SERVER_PROTOCOL']);
-        $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
-        $port     = (int) $_SERVER['SERVER_PORT'];
-        $port     = ((!$ssl && $port === 80) || ($ssl && $port === 443)) ? '' : ':' . $port;
-        $host     = ($checkForwardedHost && isset($_SERVER['HTTP_X_FORWARDED_HOST'])) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : ($_SERVER['HTTP_HOST'] ?? null);
-        $host     = $host ?? $_SERVER['SERVER_NAME'] . $port;
-        $fullUrl  = $protocol . '://' . $host . $_SERVER['REQUEST_URI'];
-        return substr($fullUrl, 0, strpos($fullUrl, 'adm_program') - 1);
     }
 
     /**

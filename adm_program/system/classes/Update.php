@@ -18,7 +18,7 @@ class Update
      */
     public function checkLogin()
     {
-        global $gDb, $gL10n, $gLoginForUpdate, $gProfileFields, $gCurrentUser;
+        global $gDb, $gLoginForUpdate, $gProfileFields, $gCurrentUser;
 
         if (isset($gLoginForUpdate) && !$gLoginForUpdate) {
             return;

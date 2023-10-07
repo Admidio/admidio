@@ -13,7 +13,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
 }
 
 // create a page with the notice that the installation must be configured on the next pages
-// create form with selectbox where user can select a language
+// create form with select box where user can select a language
 $page = new HtmlPageInstallation('admidio-installation-welcome');
 $page->addTemplateFile('installation.tpl');
 $page->assign('subHeadline', $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
