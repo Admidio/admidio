@@ -464,7 +464,7 @@ elseif ($getMode === 'pdf') {
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true);
 
-    $file = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
+    $file = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
 
     // Save PDF to file
     $pdf->Output($file, 'F');

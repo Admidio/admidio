@@ -127,7 +127,7 @@ $gChangeNotification = new ChangeNotification();
 
 try {
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
-    InstallationUtils::checkRequirements();
+    InstallationUtils::checkFolderPermissions();
 } catch (AdmException $e) {
     showErrorMessage($e->getText(), true);
     // => EXIT

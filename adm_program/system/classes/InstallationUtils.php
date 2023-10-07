@@ -36,7 +36,7 @@ class InstallationUtils
      * @return void
      * @throws AdmException
      */
-    public static function checkRequirements()
+    public static function checkFolderPermissions()
     {
         // check if adm_my_files has write permissions
         if (!is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
@@ -55,9 +55,9 @@ class InstallationUtils
             throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/logs'));
         }
         try {
-            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/temp');
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_TEMP_DATA);
         } catch (RuntimeException | UnexpectedValueException $e) {
-            throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/temp'));
+            throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_TEMP_DATA));
         }
     }
 

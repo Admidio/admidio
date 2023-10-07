@@ -667,7 +667,7 @@ if ($getMode === 'pdf') {
     }
 
     $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
-    $file = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
+    $file = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
 
     header('Content-Type: application/pdf');
     header('Content-Disposition: attachment; filename="'.$filename.'"');

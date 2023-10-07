@@ -72,6 +72,7 @@ define('CURRENT_URL', (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['REQUEST_
 
 // FOLDERS
 const FOLDER_DATA = '/adm_my_files';
+const FOLDER_TEMP_DATA = '/adm_my_files/temp';
 const FOLDER_SYSTEM = '/adm_program/system';
 const FOLDER_CLASSES = '/adm_program/system/classes';
 const FOLDER_INSTALLATION = '/adm_program/installation';
