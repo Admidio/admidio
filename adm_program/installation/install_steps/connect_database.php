@@ -77,7 +77,7 @@ $form->addInput(
 $form->addInput(
     'db_port',
     $gL10n->get('SYS_PORT'),
-    $dbPort,
+    (string) $dbPort,
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO')
 );
 $form->addInput(

@@ -257,7 +257,7 @@ class TableMembers extends TableAccess
      */
     public function startMembership(int $roleId = 0, int $userId = 0, bool $leader = null, int $approvalState = null): bool
     {
-        global $gCurrentUser;
+        global $gCurrentUser, $gCurrentUserId;
 
         // if role and user is set, then search for this membership and load data into class
         if ($roleId > 0 && $userId > 0) {
@@ -290,7 +290,7 @@ class TableMembers extends TableAccess
                 $this->save();
 
                 // if role membership of current user will be changed then renew his rights arrays
-                if ($GLOBALS['gCurrentUserId'] === $userId) {
+                if ($gCurrentUserId === $userId) {
                     $gCurrentUser->renewRoleData();
                 }
 
