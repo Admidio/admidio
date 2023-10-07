@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Γκρουπ διαχειριστών συστήματος</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Εισάγετε τις πληροφορίες πρόσβασης για τη βάση δεδομένων</string>
   <string name="INS_ERROR_OPEN_FILE">Το αρχείο #VAR1_BOLD# δεν ήταν δυνατό να ανοιχτεί</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Ο φάκελος #VAR1_BOLD# δεν έχει δικαιώματα εγγραφής. Χωρίς δικαιώματα εγγραφής, δεν μπορούν να μεταφορτωθούν αρχεία ή φωτογραφίες από τους χρήστες.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Ο φάκελος #VAR1_BOLD# δεν έχει δικαιώματα εγγραφής. Χωρίς δικαιώματα εγγραφής, δεν μπορούν να μεταφορτωθούν αρχεία ή φωτογραφίες από τους χρήστες.</string>
   <string name="INS_GROUPS">Γκρουπ</string>
   <string name="INS_HOST_INVALID">Το όνομα κεντρικού υπολογιστή δεν είναι έγκυρο. Εισαγάγετε ένα έγκυρο όνομα κεντρικού υπολογιστή ή διεύθυνση IP.</string>
   <string name="INS_INSTALL_ADMIDIO">Εγκατάσταση Admidio</string>

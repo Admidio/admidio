@@ -18,16 +18,6 @@ use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Processor\IntrospectionProcessor;
 
-function createLogDirIfNotExist()
-{
-    // check log folder in "adm_my_files" and create if necessary
-    try {
-        FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/logs');
-    } catch (\RuntimeException $exception) {
-        error_log('Log folder could not be created! ' . $exception->getMessage());
-    }
-}
-
 /**
  * @param string $logDirectory
  * @param int    $logLevel
@@ -35,8 +25,6 @@ function createLogDirIfNotExist()
  */
 function createAdmidioLogger($logDirectory, $logLevel)
 {
-    createLogDirIfNotExist();
-
     $logger = new Logger('Admidio');
 
     // Append line/file/class/function where the log message came from

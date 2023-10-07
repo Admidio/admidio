@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Grupo de administradores do sistema </string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Insira as informações de acesso ao banco de dados</string>
   <string name="INS_ERROR_OPEN_FILE">O arquivo #VAR1_BOLD# não pôde ser aberto.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">A pasta #VAR1_BOLD# não possui permissão de escrita. Conceda permissão de escrita para carregar fotos e arquivos para o módulo de download.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">A pasta #VAR1_BOLD# não possui permissão de escrita. Conceda permissão de escrita para carregar fotos e arquivos para o módulo de download.</string>
   <string name="INS_GROUPS">Grupos</string>
   <string name="INS_HOST_INVALID">O servidor não é válido. Insira um nome ou endereço IP válido.</string>
   <string name="INS_INSTALL_ADMIDIO">Instalar Admidio </string>

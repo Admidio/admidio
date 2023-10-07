@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Süsteemiadministraatorite rühm</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Sisestage andmebaasi juurdepääsuteave</string>
   <string name="INS_ERROR_OPEN_FILE">Faili #VAR1_BOLD# ei saanud avada.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Kaustal #VAR1_BOLD# pole kirjutamisõigusi. Ilma kirjutamisõigusteta ei saa kasutajad faile ega fotosid üles laadida.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Kaustal #VAR1_BOLD# pole kirjutamisõigusi. Ilma kirjutamisõigusteta ei saa kasutajad faile ega fotosid üles laadida.</string>
   <string name="INS_GROUPS">Grupid</string>
   <string name="INS_HOST_INVALID">Hostinimi ei kehti. Sisestage kehtiv hostinimi või IP-aadress.</string>
   <string name="INS_INSTALL_ADMIDIO">Installige Admidio</string>

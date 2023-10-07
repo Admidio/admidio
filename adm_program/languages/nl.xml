@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Groep beheerders</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Geef database toegangsgegevens door</string>
   <string name="INS_ERROR_OPEN_FILE">Bestand #VAR1_BOLD# kan niet geopend worden.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">De map #VAR1_BOLD# heeft geen schrijfrechten. Zonder schrijfrechten kunnen gebruikers geen bestanden of foto\'s uploaden.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">De map #VAR1_BOLD# heeft geen schrijfrechten. Zonder schrijfrechten kunnen gebruikers geen bestanden of foto\'s uploaden.</string>
   <string name="INS_GROUPS">Groepen</string>
   <string name="INS_HOST_INVALID">Hostnaam is niet geldig. Voer een geldige naam of geldig IP-adres in.</string>
   <string name="INS_INSTALL_ADMIDIO">Installeer Admidio</string>

@@ -70,7 +70,7 @@ if ($getPhotoNr == null) {
     $quantity = $photoAlbum->getValue('pho_quantity');
 
     // get tempFolder and unlink zip file otherwise get a PHP deprecated warning from zip open
-    $tempFolder  = sys_get_temp_dir();
+    $tempFolder  = $tempFileFolderName = ADMIDIO_PATH . FOLDER_TEMP_DATA;
     $zipTempName = tempnam($tempFolder, 'zip');
     unlink($zipTempName);
 

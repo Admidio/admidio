@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Група на системните администратори</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Въведете информация за достъп до базата данни</string>
   <string name="INS_ERROR_OPEN_FILE">Файл #VAR1_BOLD# не може да бъде отворен.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Папката #VAR1_BOLD# няма разрешения за запис. Без разрешение за запис, никакви файлове или снимки не могат да бъдат качвани от потребителите.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Папката #VAR1_BOLD# няма разрешения за запис. Без разрешение за запис, никакви файлове или снимки не могат да бъдат качвани от потребителите.</string>
   <string name="INS_GROUPS">Групи</string>
   <string name="INS_HOST_INVALID">Името на хост не е валидно. Въведете валидно име на хост или IP адрес.</string>
   <string name="INS_INSTALL_ADMIDIO">Инсталиране на Admidio</string>

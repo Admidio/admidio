@@ -57,7 +57,6 @@
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurations file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
-  <string name="INS_DATA_DIR_RIGHTS">The necessary folder permissions for \"adm_my_files\" could not be set automatically. To continue, the rights must be manually set to \"777\".</string>
   <string name="INS_DATA_DO_NOT_MATCH">Data from #VAR1_BOLD# does not comply with information provided in installation wizard.\n\nCheck config.php and all other information.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrator\'s details</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Enter the administrator\'s name, e-mail and access information. Log in with the administrator’s credentials after installation.</string>
@@ -68,7 +67,6 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Group of system administrators</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Enter database access information</string>
   <string name="INS_ERROR_OPEN_FILE">File #VAR1_BOLD# could not be opened.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">The folder #VAR1_BOLD# has no write permissions. Without write permissions, no files or photos can be uploaded by users.</string>
   <string name="INS_GROUPS">Groups</string>
   <string name="INS_HOST_INVALID">Hostname is not valid. Enter a valid host name or IP address.</string>
   <string name="INS_INSTALL_ADMIDIO">Install Admidio</string>
@@ -719,6 +717,7 @@
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask an #VAR2#administrator#VAR3# for help to check write permissions of the parent folder.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Folder does not exist anymore on the server. It should be deleted from the database.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Folder (ID #VAR1#) not found.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">The folder #VAR1_BOLD# has no write permissions. The required folder permissions could not be set automatically. Please give the folder #VAR1_BOLD# write permissions (via FTP set the file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>

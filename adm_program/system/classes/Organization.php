@@ -13,7 +13,7 @@
  * This class creates the organization object and manages the access to the
  * organization specific preferences of the table adm_preferences. There
  * are also some method to read the relationship of organizations if the
- * database contains more then one organization.
+ * database contains more as one organization.
  *
  * **Code example**
  * ```
@@ -30,7 +30,7 @@ use Ramsey\Uuid\Uuid;
 class Organization extends TableAccess
 {
     /**
-     * @var bool Flag will be set if the class had already search for child organizations
+     * @var bool Flag will be set if the class had already searched for child organizations
      */
     protected $bCheckChildOrganizations = false;
     /**
@@ -53,6 +53,7 @@ class Organization extends TableAccess
      * @param int|string $organization The recordset of the organization with this id will be loaded.
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
+     * @throws AdmException
      */
     public function __construct(Database $database, $organization = '')
     {
@@ -109,7 +110,7 @@ class Organization extends TableAccess
      */
     public function createBasicData(int $userId)
     {
-        global $gL10n, $gProfileFields, $gSettingsManager;
+        global $gL10n, $gProfileFields;
 
         // read id of system user from database
         $sql = 'SELECT usr_id
@@ -256,8 +257,10 @@ class Organization extends TableAccess
         $roleManagement->save();
 
         // Create membership for user in role 'Administrator' and 'Members'
-        $roleAdministrator->startMembership($userId);
-        $roleMember->startMembership($userId);
+        $membershipAdministrator = new TableMembers($this->db);
+        $membershipAdministrator->startMembership($roleAdministrator->getValue('rol_id'), $userId, false);
+        $membershipMember = new TableMembers($this->db);
+        $membershipMember->startMembership($roleMember->getValue('rol_id'), $userId, false);
 
         // create object with current user field structure
         $gProfileFields = new ProfileFields($this->db, $orgId);
@@ -365,13 +368,14 @@ class Organization extends TableAccess
     }
 
     /**
-     * Create a organization object depending on a optional organization shortname string. If a
+     * Create an organization object depending on an optional organization shortname string. If an
      * organization shortname is set than this organization will be read otherwise the organization
      * with the minimum ID will be read.
      * @param Database $db Object of the class Database. This should be the default global object **$gDb**.
      * @param string $organization The organization shortname. If this is set than this organization
      *                                 will be read otherwise the organization with the minimum ID.
      * @return Organization Returns an organization object.
+     * @throws AdmException
      */
     public static function createDefaultOrganizationObject(Database $db, string $organization = ''): Organization
     {
@@ -390,7 +394,7 @@ class Organization extends TableAccess
     /**
      * @return array<int,string> Returns an array with all child organizations
      */
-    protected function getChildOrganizations()
+    protected function getChildOrganizations(): array
     {
         if (!$this->bCheckChildOrganizations) {
             // Daten erst einmal aus DB einlesen
@@ -408,7 +412,7 @@ class Organization extends TableAccess
      * @return string Returns a string with a comma separated list of all organization
      *                ids that are parents or children and the own id
      */
-    public function getFamilySQL($shortname = false)
+    public function getFamilySQL(bool $shortname = false): string
     {
         $organizations = $this->getOrganizationsInRelationship();
 
@@ -417,7 +421,7 @@ class Organization extends TableAccess
              * @param string $value
              * @return string
              */
-            function addQuotationMarks($value)
+            function addQuotationMarks(string $value): string
             {
                 return '\''.$value.'\'';
             }
@@ -441,7 +445,7 @@ class Organization extends TableAccess
      *                       otherwise it will be **org_shortname**
      * @return array<int,string> Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
-    public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
+    public function getOrganizationsInRelationship(bool $child = true, bool $parent = true, bool $longname = false): array
     {
         $sqlWhere = array();
         $queryParams = array();
@@ -476,7 +480,7 @@ class Organization extends TableAccess
     /**
      * @return SettingsManager
      */
-    public function &getSettingsManager()
+    public function &getSettingsManager(): SettingsManager
     {
         if (!$this->settingsManager instanceof SettingsManager) {
             $this->settingsManager = new SettingsManager($this->db, (int) $this->getValue('org_id'));
@@ -490,16 +494,16 @@ class Organization extends TableAccess
      * Method checks if the organization is configured as a child organization in the recordset.
      * @return bool Return **true** if the organization is a child of another organization
      */
-    public function isChildOrganization()
+    public function isChildOrganization(): bool
     {
         return $this->getValue('org_org_id_parent') > 0;
     }
 
     /**
      * Method checks if the organization is configured as a parent organization in the recordset.
-     * @return bool Return **true** if the organization is the parent of a least one other organization
+     * @return bool Return **true** if the organization is the parent of at least one other organization
      */
-    public function isParentOrganization()
+    public function isParentOrganization(): bool
     {
         return count($this->getChildOrganizations()) > 0;
     }
@@ -508,9 +512,10 @@ class Organization extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -533,7 +538,7 @@ class Organization extends TableAccess
     /**
      * @return array<string,mixed>
      */
-    public function getDbColumns()
+    public function getDbColumns(): array
     {
         return $this->dbColumns;
     }

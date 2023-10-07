@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Група системних адміністраторів</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Ввести інформацію про доступ до бази даних</string>
   <string name="INS_ERROR_OPEN_FILE">Файл #VAR1_BOLD# не вдалося відкрити.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Папка #VAR1_BOLD# не має дозволу на запис. Без дозволу на запис користувачі не можуть завантажувати файли або фотографії.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Папка #VAR1_BOLD# не має дозволу на запис. Без дозволу на запис користувачі не можуть завантажувати файли або фотографії.</string>
   <string name="INS_GROUPS">Групи</string>
   <string name="INS_HOST_INVALID">Ім\'я хоста невірне. Введіть дійсне ім\'я хоста або IP-адресу.</string>
   <string name="INS_INSTALL_ADMIDIO">Встановіть Admidio</string>

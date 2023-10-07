@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Gruppo di amministratori di sistema</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Inserisci le informazioni di accesso al database</string>
   <string name="INS_ERROR_OPEN_FILE">Il file #VAR1_BOLD# non può essere aperto.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">La cartella #VAR1_BOLD# non è abilitata alla scrittura. Per favore definisci i permessi per la scrittura per caricare le foto e i file per il modulo per scaricare.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">La cartella #VAR1_BOLD# non è abilitata alla scrittura. Per favore definisci i permessi per la scrittura per caricare le foto e i file per il modulo per scaricare.</string>
   <string name="INS_GROUPS">Gruppi</string>
   <string name="INS_HOST_INVALID">Il nome dell\'host non è valido. Inserisci un nome host valido o un indirizzo IP.</string>
   <string name="INS_INSTALL_ADMIDIO">Installa Admidio</string>

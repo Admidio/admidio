@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">System administrator gruppe</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Indtast database adgangs information</string>
   <string name="INS_ERROR_OPEN_FILE">Filen #VAR1_BOLD# kunne ikke åbnes.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Folderen #VAR1_BOLD# er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne overføre billeder og filer til fil modulet.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Folderen #VAR1_BOLD# er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne overføre billeder og filer til fil modulet.</string>
   <string name="INS_GROUPS">Grupper</string>
   <string name="INS_HOST_INVALID">Hostnavnet er ikke gyldigt. Indtast et gyldigt hostnavn eller IP adresse.</string>
   <string name="INS_INSTALL_ADMIDIO">Installer Admidio</string>

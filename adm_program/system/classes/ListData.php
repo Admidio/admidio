@@ -17,6 +17,9 @@
  * ODF-Spreadsheet or CSV file.
  */
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use PhpOffice\PhpSpreadsheet\Writer\Ods;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ListData
 {
@@ -234,12 +237,12 @@ class ListData
         switch ($format) {
             case 'xlsx':
                 $this->format();
-                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($this->spreadsheet);
+                $writer = new Xlsx($this->spreadsheet);
                 $filename .= '.xlsx';
                 break;
             case 'ods':
                 $this->format();
-                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Ods($this->spreadsheet);
+                $writer = new Ods($this->spreadsheet);
                 $filename .= '.ods';
                 break;
             case 'pdf':
@@ -248,7 +251,7 @@ class ListData
                 $filename .= '.pdf';
                 break;
             default:
-                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($this->spreadsheet);
+                $writer = new Csv($this->spreadsheet);
                 $filename .= '.csv';
                 break;
         }

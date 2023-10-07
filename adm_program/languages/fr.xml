@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Groupe des administrateurs du système</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Entrer les données d\'accès à la base de données</string>
   <string name="INS_ERROR_OPEN_FILE">Le fichier #VAR1_BOLD# n\'a pas pu être ouvert.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Le dossier #VAR1_BOLD# n\'a pas les droits d\'écriture. Accorde les droits d\'écriture au dossier afin de pouvoir télécharger des photos et fichiers pour le module de téléchargement.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Le dossier #VAR1_BOLD# n\'a pas les droits d\'écriture. Accorde les droits d\'écriture au dossier afin de pouvoir télécharger des photos et fichiers pour le module de téléchargement.</string>
   <string name="INS_GROUPS">Groupes</string>
   <string name="INS_HOST_INVALID">Nom d\'hôte n\'est pas valide. Saisis un nom d\'hôte  ou une adresse IP valide.</string>
   <string name="INS_INSTALL_ADMIDIO">Installer Admidio</string>

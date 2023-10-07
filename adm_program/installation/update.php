@@ -14,6 +14,29 @@
  *        3 : Show result of update
  ***********************************************************************************************
  */
+
+/**
+ * Shows an error dialog with an error message to the user.
+ * @param string $message Message that should be shown to the user.
+ * @param bool $reloadPage If set to **true** than the user could reload the update page.
+ * @return void
+ */
+function showErrorMessage(string $message, bool $reloadPage = false)
+{
+    global $gL10n;
+
+    $page = new HtmlPageInstallation('admidio-update-message');
+    $page->setUpdateModus();
+    $page->showMessage(
+        'error',
+        $gL10n->get('SYS_NOTE'),
+        $message,
+        ($reloadPage) ? $gL10n->get('SYS_RELOAD') : $gL10n->get('SYS_OVERVIEW'),
+        ($reloadPage) ? 'fa-redo-alt' : 'fa-home',
+        ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . '/adm_program/overview.php'
+    );
+}
+
 $rootPath = dirname(__DIR__, 2);
 
 // embed config file
@@ -31,8 +54,6 @@ if (is_file($configPath)) {
 }
 
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
-require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_functions.php');
-require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/update_functions.php');
 
 // Initialize and check the parameters
 
@@ -64,12 +85,6 @@ if (array_key_exists('gCurrentSession', $_SESSION)) {
     // create new session object and store it in PHP session
     $gCurrentSession = new Session($gDb, COOKIE_PREFIX);
     $_SESSION['gCurrentSession'] = $gCurrentSession;
-}
-
-// check if adm_my_files has "write" privileges
-if (!is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
-    echo $gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files'));
-    exit();
 }
 
 // now check if a valid installation exists.
@@ -110,22 +125,12 @@ $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'
 $gL10n = new Language($gLanguageData);
 $gChangeNotification = new ChangeNotification();
 
-if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA))) {
-    try {
-        FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA);
-    } catch (RuntimeException $exception) {
-        try {
-            $pathPermissions = FileSystemUtils::getPathPermissions(ADMIDIO_PATH . FOLDER_DATA);
-        } catch (RuntimeException $exception) {
-            $pathPermissions = array('exception' => $exception->getMessage());
-        }
-        $pathPermissions['path'] = ADMIDIO_PATH . FOLDER_DATA;
-
-        $gLogger->error('FILESYSTEM: Could not set the necessary directory mode!', $pathPermissions);
-
-        showErrorMessage($gL10n->get('INS_DATA_DIR_RIGHTS'), true);
-        // => EXIT
-    }
+try {
+    // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
+    InstallationUtils::checkFolderPermissions();
+} catch (AdmException $e) {
+    showErrorMessage($e->getText(), true);
+    // => EXIT
 }
 
 // config.php exists at wrong place
@@ -140,7 +145,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
 }
 
 // check database version
-$message = checkDatabaseVersion($gDb);
+$message = InstallationUtils::checkDatabaseVersion($gDb);
 
 if ($message !== '') {
     showErrorMessage($message);
@@ -226,7 +231,7 @@ if ($getMode === 1) {
         // create form with login and update button
         $form = new HtmlForm('update_login_form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
 
-        if (!isset($gLoginForUpdate) || $gLoginForUpdate === 1) {
+        if (!isset($gLoginForUpdate) || $gLoginForUpdate) {
             $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
             $form->addInput(
                 'login_name',
@@ -288,20 +293,23 @@ if ($getMode === 1) {
     try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    } catch (AdmException $exception) {
+
+        // start the update
+        $update = new Update();
+        $update->doAdmidioUpdate($installedDbVersion);
+    } catch (AdmException $e) {
+        // show message with the error of the exception
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage(
             'error',
             $gL10n->get('SYS_NOTE'),
-            $exception->getText(),
-            $gL10n->get('SYS_OVERVIEW'),
-            'fa-home',
-            ADMIDIO_URL . '/adm_program/overview.php'
-        );
+            $e->getText(),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            'update.php');
+        // => EXIT
     }
-
-    doAdmidioUpdate($installedDbVersion);
 
     // remove session object with all data, so that
     // all data will be read after the update

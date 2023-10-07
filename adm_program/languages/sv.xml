@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Grupp av systemadministratörer</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Ange databasåtkomstinformation</string>
   <string name="INS_ERROR_OPEN_FILE">Fil #VAR1_BOLD# kunde inte öppnas.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Mapp #VAR1_BOLD# är inte skrivbar. Vänligen ge skrivåtkomst för att ladda upp foton och filer för att ladda ner modulen.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Mapp #VAR1_BOLD# är inte skrivbar. Vänligen ge skrivåtkomst för att ladda upp foton och filer för att ladda ner modulen.</string>
   <string name="INS_GROUPS">Grupper</string>
   <string name="INS_HOST_INVALID">Värdnamnet är inte giltigt. Ange ett giltigt värdnamn eller IP-adress.</string>
   <string name="INS_INSTALL_ADMIDIO">Installera Admidio</string>

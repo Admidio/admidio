@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Grupa administratorów systemu</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Wprowadź informacje o dostępie do bazy danych</string>
   <string name="INS_ERROR_OPEN_FILE">Nie można otworzyć plik #VAR1_BOLD#.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Folder #VAR1_BOLD# nie ma uprawnień do zapisu. Bez uprawnień do zapisu użytkownicy nie mogą przesłać żadnych plików ani zdjęć.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Folder #VAR1_BOLD# nie ma uprawnień do zapisu. Bez uprawnień do zapisu użytkownicy nie mogą przesłać żadnych plików ani zdjęć.</string>
   <string name="INS_GROUPS">Grupy</string>
   <string name="INS_HOST_INVALID">Nazwa serwera jest nieprawidłowa. Wprowadź ważną nazwę serwera lub adres IP.</string>
   <string name="INS_INSTALL_ADMIDIO">Zainstaluj Admidio</string>
