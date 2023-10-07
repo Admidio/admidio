@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Järjestelmänvalvojaryhmä</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Anna tietokannan käyttötiedot</string>
   <string name="INS_ERROR_OPEN_FILE">Tiedostoa #VAR1_BOLD# ei voitu avata.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Kansiolla #VAR1_BOLD# ei ole kirjoitusoikeuksia. Ilman kirjoitusoikeuksia käyttäjät eivät voi ladata tiedostoja tai valokuvia.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Kansiolla #VAR1_BOLD# ei ole kirjoitusoikeuksia. Ilman kirjoitusoikeuksia käyttäjät eivät voi ladata tiedostoja tai valokuvia.</string>
   <string name="INS_GROUPS">Ryhmät</string>
   <string name="INS_HOST_INVALID">Isäntänimi ei kelpaa. Anna kelvollinen isäntänimi tai IP -osoite.</string>
   <string name="INS_INSTALL_ADMIDIO">Asenna Admidio</string>

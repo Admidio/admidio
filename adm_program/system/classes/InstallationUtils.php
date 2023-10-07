@@ -44,7 +44,7 @@ class InstallationUtils
             try {
                 FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA);
             } catch (RuntimeException | UnexpectedValueException $e) {
-                throw new AdmException('INS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA));
+                throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA));
             }
         }
 
@@ -52,12 +52,12 @@ class InstallationUtils
         try {
             FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/logs');
         } catch (RuntimeException | UnexpectedValueException $e) {
-            throw new AdmException('INS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/logs'));
+            throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/logs'));
         }
         try {
             FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/temp');
         } catch (RuntimeException | UnexpectedValueException $e) {
-            throw new AdmException('INS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/temp'));
+            throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/temp'));
         }
     }
 

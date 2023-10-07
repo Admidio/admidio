@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Gruppe aller Administratorinnen und Administratoren des Systems</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt keine Schreibrechte. Ohne Schreibrechte können keine Dateien oder Fotos von den Anwendern hochgeladen werden.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt keine Schreibrechte. Ohne Schreibrechte können keine Dateien oder Fotos von den Anwendern hochgeladen werden.</string>
   <string name="INS_GROUPS">Gruppen</string>
   <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Geben Sie einen gültigen Hostnamen oder IP-Adresse ein.</string>
   <string name="INS_INSTALL_ADMIDIO">Admidio installieren</string>

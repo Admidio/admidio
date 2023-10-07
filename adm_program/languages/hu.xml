@@ -68,7 +68,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">A rendszergazdák csoportja</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Adja meg az adatbázis hozzáférési adatait</string>
   <string name="INS_ERROR_OPEN_FILE">A #VAR1_BOLD# fájlt nem lehet megnyitni.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">A #VAR1_BOLD# mappának nincsenek írási engedélyei. Írásjogok nélkül a felhasználók nem tölthetnek fel fájlokat vagy fényképeket.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">A #VAR1_BOLD# mappának nincsenek írási engedélyei. Írásjogok nélkül a felhasználók nem tölthetnek fel fájlokat vagy fényképeket.</string>
   <string name="INS_GROUPS">Csoportok</string>
   <string name="INS_HOST_INVALID">A hostnév nem érvényes. Adjon meg egy érvényes állomásnevet vagy IP-címet.</string>
   <string name="INS_INSTALL_ADMIDIO">Admidio telepítése</string>
