@@ -226,7 +226,7 @@ if ($getMode === 1) {
         // create form with login and update button
         $form = new HtmlForm('update_login_form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
 
-        if (!isset($gLoginForUpdate) || $gLoginForUpdate === 1) {
+        if (!isset($gLoginForUpdate) || $gLoginForUpdate) {
             $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
             $form->addInput(
                 'login_name',
