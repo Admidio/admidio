@@ -57,7 +57,6 @@
   <string name="INS_DELETE_CONFIG_FILE">Admidio\'s hoved bibliotek #VAR1_BOLD# indeholder en config.php. Den er allerede blevet kopieret til adm_my_files folderen. Venligst slet den fra hoved biblioteket.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Hent konfigurations fil</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Konfigurations filen #VAR1_BOLD# kunne ikke gemmes i folderen #VAR2_BOLD#. Venligst arranger skrive rettigheder til den folder (ret fil rettigheder via ftp program til 0777 eller drwxrwxrwx) eller download konfigurations filen og kopier den ind i Admidio folderen #VAR3_BOLD# ved hjælp af et FTP program.\n\nEfter filen er blevet uploaded til denne folder så kan du fortsætte installationen.</string>
-  <string name="INS_DATA_DIR_RIGHTS">De nødvendige folder rettigheder til \"adm_my_files\" kunne ikke sættes automatisk. For at fortsætte skal rettighederne på folderen sættes til \"777\" manuelt.</string>
   <string name="INS_DATA_DO_NOT_MATCH">Informationen fra #VAR1_BOLD# passer ikke med informationen oplyst under installations guiden.\n\nCheck config.php og al anden information.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrators detaljer</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Oplys administrator\'s navn, e-mail og adgangs information. Log ind med den samme bruger lige efter installationen.</string>
@@ -68,7 +67,6 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">System administrator gruppe</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Indtast database adgangs information</string>
   <string name="INS_ERROR_OPEN_FILE">Filen #VAR1_BOLD# kunne ikke åbnes.</string>
-  <string name="SYS_FOLDER_NOT_WRITABLE">Folderen #VAR1_BOLD# er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne overføre billeder og filer til fil modulet.</string>
   <string name="INS_GROUPS">Grupper</string>
   <string name="INS_HOST_INVALID">Hostnavnet er ikke gyldigt. Indtast et gyldigt hostnavn eller IP adresse.</string>
   <string name="INS_INSTALL_ADMIDIO">Installer Admidio</string>
@@ -291,7 +289,7 @@
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_DAY">Hele dagen</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle organisationer</string>
-  <string name="SYS_ALL_ORGANIZATIONS_DESC">Den valgte kategori deles for alle organisationer.\nDet aktuelle objekt (begivenhed, meddelelse, profilfelt, weblink osv.) vil være synligt ikke kun i denne organisation, men også i alle følgende organisationer: #VAR1#.</string>
+  <string name="SYS_ALL_ORGANIZATIONS_DESC">Den valgte kategori er delt for alle organisationer.\nDet aktuelle objekt (begivenhed, meddelelse, profilfelt, weblink osv.) vil være synlig ikke kun i denne organisation, men også i alle følgende organisationer: #VAR1#.</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle medlemmer af denne organisation</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Deltagere kan registrere anonyme gæster</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Deltagere kan tilføje yderligere sæder til deres registrering. Disse bliver således fratrukket fra det maximale antal deltagere og de tiloversblevne antal sæder reduceres ligeledes. Dette er nyttigt hvis en deltager kan bringe flere deltagere og derfor kræver et antal frie pladser.</string>
@@ -322,7 +320,6 @@
   <string name="SYS_ASSIGN_ROLE">Tildel rolle</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Vælg venligst en rolle, som alle importerede kontakter automatisk vil blive tildelt.\n\nDu kan kun vælge roller, som du har tilladelse til at se, og som ikke har tilladelse til rolletildeling, hvis du ikke selv har det.</string>
   <string name="SYS_ASSIGN_ROLE_TO_USER">Dataene kan ikke gemmes.\nMindst én rolle skal tildeles kontakten.</string>
-  <string name="SYS_ASSIGN_ROLES">Tildel roller</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrisk</string>
   <string name="SYS_ATTACHMENT">Vedhæftet:</string>
   <string name="SYS_ATTACHMENT_ONE">1 Vedhæftet</string>
@@ -400,7 +397,7 @@
   <string name="SYS_CONFIGURATIONS">Konfigurationer</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Et vilkårligt antal konfigurationer kan oprettes her for kategorirapporten. I skærmvisningen bruges en af disse konfigurationer som basis for visningen i hvert enkelt tilfælde via \"Vælg konfiguration\".</string>
   <string name="SYS_COMMA">Komma (,)</string>
-  <string name="SYS_COMMA_SEPARATED_FILE">Komma/TAB separeret fil (*.csv)</string>
+  <string name="SYS_COMMA_SEPARATED_FILE">Kommasepareret fil (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Generel</string>
   <string name="SYS_COMPLEMENT">Supplere</string>
@@ -416,8 +413,11 @@
   <string name="SYS_CONFIRM_REGISTRATION">Bekræft registreringen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bekræft værdi</string>
   <string name="SYS_CONNECTION_ERROR">Forbindelse til Admidio opdaterings side kunne ikke etableres. Check din internetforbindelse og prøv igen senere. Du kan også checke #VAR1# hjemmesiden for manuelle opdateringer.</string>
-  <string name="SYS_CONTACTS">Kontaktpersoner</string>
   <string name="SYS_CONTACT_DETAILS">Kontakt information</string>
+  <string name="SYS_CONTACT_NO_VALID_LOGIN">Denne kontakt har endnu ikke en registrering.\nVil du tildele dataene for denne registrering?</string>
+  <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">Hvis den nye kontakt ikke kan tildeles til en eksisterende kontakt med et lignende navn, kan du oprette en ny kontakt og tildele den de relevante roller.</string>
+  <string name="SYS_CONTACT_SIMILAR_NAME">En kontakt med et lignende navn blev fundet.</string>
+  <string name="SYS_CONTACTS">Kontaktpersoner</string>
   <string name="SYS_CONTENT">Indhold</string>
   <string name="SYS_CONTRIBUTION">Kontingent</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Kontingent periode</string>
@@ -448,13 +448,12 @@
   <string name="SYS_CREATE_FOLDER">Opret folder</string>
   <string name="SYS_CREATE_FOLDER_DESC">En ny folder vil blive oprettet i folderen #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Opret .htaccess</string>
-  <string name="SYS_CREATE_LINK">Opret nyt link</string>
   <string name="SYS_CREATE_MEMBER">Opret medlem</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Opret ny liste</string>
-  <string name="SYS_CREATE_NOT_FOUND_USER">Hvis registreringen ikke tilhører et af de fundne medlemmer, kan du oprette et nyt medlem og tildele det de relevante roller.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Opret relation</string>
   <string name="SYS_CREATE_ROLE">Opret rolle</string>
   <string name="SYS_CREATE_VAR">Opret #VAR1#</string>
+  <string name="SYS_CREATE_WEBLINK">Opret weblink</string>
   <string name="SYS_CREATED_AT">Oprettet den</string>
   <string name="SYS_CREATED_BY">Oprettet af</string>
   <string name="SYS_CREATED_BY_AND_AT">Oprettet af  #VAR1# den #VAR2#</string>
@@ -578,6 +577,7 @@
   <string name="SYS_EDIT_CATEGORY">Rediger kategori</string>
   <string name="SYS_EDIT_ENTRY">Rediger emne</string>
   <string name="SYS_EDIT_EVENTS">Rediger begivenheder</string>
+  <string name="SYS_EDIT_EVENT">Rediger begivenhed</string>
   <string name="SYS_EDIT_FILE">Rediger fil</string>
   <string name="SYS_EDIT_FOLDER">Rediger folder</string>
   <string name="SYS_EDIT_MEMBERS">Rediger medlemmer</string>
@@ -594,6 +594,7 @@
   <string name="SYS_EDIT_USER">Rediger bruger</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Brugerprofil for denne relation kan redigeres</string>
   <string name="SYS_EDIT_VAR">Rediger #VAR1#</string>
+  <string name="SYS_EDIT_WEBLINK">Rediger weblink</string>
   <string name="SYS_EDIT_WEBLINKS">Rediger web links</string>
   <string name="SYS_EDITED_BY">Sidst ændret af</string>
   <string name="SYS_EMAIL">E-mail</string>
@@ -716,6 +717,7 @@
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes.\n\nVenligst snak med en #VAR2#administrator#VAR3# for at få hjælp til at undersøge skrive rettigheder på forældre folderen.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Folderen eksisterer ikke længere på serveren. Den bør slettes i databasen også.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Folder (ID #VAR1#) ikke fundet.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Mappen #VAR1_BOLD# har ingen skrivetilladelser. De nødvendige mappetilladelser kunne ikke indstilles automatisk. Giv venligst mappen #VAR1_BOLD# skrivetilladelser (via FTP indstil filattributterne til 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FOLDER_RENAME_ERROR">En fejl opstod imens folderen #VAR1# blev omdøbt.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes med de krævede skriverettigheder.\n\nVenligst snak med en  #VAR2#administrator#VAR3# om at få hjælp til at undersøge om skriverettighederne er i orden på folderen. (Dette kan gøres med et FTP program, du skal ændre rettigheden til 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
@@ -821,7 +823,7 @@
   <string name="SYS_LINK_TO">Link til #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
-  <string name="SYS_LOADING_CONTENT">Henter indhold...</string>
+  <string name="SYS_LOCATION">Beliggenhed</string>
   <string name="SYS_LOCATION_LINK">Hvis nok information om en lokalitet oplyses såsom (gade, by, land), så kan Google Maps lave en rute til lokationen.</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Placering af profil billeder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Definer hvor profil billeder skal gemmes (i databasen eller i folderen adm_my_files). Hvis du ændrer dette vil de nuværende billeder IKKE blive kopieret til den nye placering. (Standard: database)</string>
@@ -875,9 +877,7 @@
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Medlem</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Medlemskabs tildeling</string>
-  <string name="SYS_MEMBER_NO_VALID_LOGIN">Dette medlem har ikke en registrering endnu.\nVil du tildele dataene for denne registrering?</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Medlem af organisation #VAR1#</string>
-  <string name="SYS_MEMBER_SIMILAR_NAME">Der blev fundet et medlem med et lignende navn.</string>
   <string name="SYS_MEMBERS">Medlemmer</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Medlemmer imellem #VAR1# og #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">En af de her specificerede konfigurationer kan bruges til at vise medlemsadministrationen. Kolonnerne i den valgte listekonfiguration vises derefter i medlemsadministrationen.</string>
@@ -1295,9 +1295,9 @@
   <string name="SYS_SHOW_ROUTE">Vis rute</string>
   <string name="SYS_SHOW_WATERMARK">Vis vandmærke</string>
   <string name="SYS_SHOW_WATERMARK_DESC">Den indtastede tekst vil blive vist i alle viste billeder, startende fra en skala på 200 pixels på den længere side. Hvis fotografen blev deponeret i albummet, vises navnet på fotografen med copyright i stedet for denne tekst. Hvis der ikke skal vises billedtekst, kan dette felt stå tomt. (Standard: #VAR1#)</string>
-  <string name="SYS_SIMILAR_MEMBERS_FOUND">Lignende medlemmer fundet</string>
-  <string name="SYS_SIMILAR_MEMBERS_FOUND_ASSIGN">Medlemmer med et lignende navn som #VAR1_BOLD# blev fundet.</string>
-  <string name="SYS_SIMILAR_MEMBERS_FOUND_REGISTRATION">Medlemmer med et lignende navn som #VAR1_BOLD# blev fundet.</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND">Lignende kontakter fundet</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med et lignende navn som #VAR1_BOLD# blev fundet.</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med et lignende navn som #VAR1_BOLD# blev fundet. Tjek registreringen og tildel den til en fundet kontakt, eller opret en ny kontakt.</string>
   <string name="SYS_SINCE">siden #VAR1#</string>
   <string name="SYS_SINCE_TO">fra #VAR1# til #VAR2#</string>
   <string name="SYS_SIZE">Størrelse</string>
