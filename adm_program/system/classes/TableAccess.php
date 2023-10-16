@@ -519,7 +519,7 @@ class TableAccess
             // fields of other tables must not appear in insert/update
             if (str_starts_with($key, $this->columnPrefix . '_')) {
                 if ($this->columnsInfos[$key]['type'] === 'boolean' && DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-                    if ($value === 1 || $value === '1') {
+                    if ($value || $value === '1') {
                         $value = 'true';
                     } else {
                         $value = 'false';
