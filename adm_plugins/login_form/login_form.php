@@ -12,7 +12,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
@@ -22,7 +22,7 @@ if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
-// set default values if there no value has been stored in the config.php
+// set default values if there has been no value stored in the config.php
 if (!isset($plg_show_register_link) || !is_numeric($plg_show_register_link)) {
     $plg_show_register_link = 1;
 }
@@ -169,7 +169,7 @@ if ($gValidLogin) {
     }
 
     if ($gSettingsManager->getBool('enable_auto_login')) {
-        $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'), false);
+        $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'));
     }
 
     $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key'));
@@ -193,8 +193,12 @@ if ($gValidLogin) {
                        OR cat_org_id IS NULL )';
         $administratorStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
-        // create role object for administrator
-        $roleAdministrator = new TableRoles($gDb, (int) $administratorStatement->fetchColumn());
+        try {
+            // create role object for administrator
+            $roleAdministrator = new TableRoles($gDb, (int)$administratorStatement->fetchColumn());
+        } catch (AdmException $e) {
+            $e->showText();
+        }
 
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
