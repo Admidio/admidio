@@ -3,17 +3,16 @@
  ***********************************************************************************************
  * Login Form
  *
- * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
- * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
- * werden an der Stelle der Felder nun nützliche Informationen des Benutzers
- * angezeigt.
+ * Login Form represents the login form with the appropriate fields for a user to log in.
+ * If the user is logged in, useful information of the user is now displayed in the place
+ * of the fields.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
@@ -23,7 +22,7 @@ if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
-// set default values if there no value has been stored in the config.php
+// set default values if there has been no value stored in the config.php
 if (!isset($plg_show_register_link) || !is_numeric($plg_show_register_link)) {
     $plg_show_register_link = 1;
 }
@@ -130,9 +129,15 @@ if ($gValidLogin) {
 } else {
     // create and show the login form
 
+    // preselected organization should be set by query parameter
+    $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
+    if ($getOrganizationShortName === '') {
+        $getOrganizationShortName = $gCurrentOrganization->getValue('org_shortname');
+    }
+
     $form = new HtmlForm(
         'plugin-login-form',
-        ADMIDIO_URL.'/adm_program/system/login_check.php',
+        ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
         null,
         array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
     );
@@ -151,20 +156,20 @@ if ($gValidLogin) {
 
     // show selectbox with all organizations of database
     if ($gSettingsManager->getBool('system_organization_select')) {
-        $sql = 'SELECT org_id, org_longname
+        $sql = 'SELECT org_shortname, org_longname
                   FROM '.TBL_ORGANIZATIONS.'
               ORDER BY org_longname ASC, org_shortname ASC';
         $form->addSelectBoxFromSql(
-            'plg_org_id',
+            'plg_org_shortname',
             $gL10n->get('SYS_ORGANIZATION'),
             $gDb,
             $sql,
-            array('defaultValue' => $gCurrentOrgId, 'showContextDependentFirstEntry' => false)
+            array('defaultValue' => $getOrganizationShortName, 'showContextDependentFirstEntry' => false)
         );
     }
 
     if ($gSettingsManager->getBool('enable_auto_login')) {
-        $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'), false);
+        $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'));
     }
 
     $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key'));
@@ -188,8 +193,12 @@ if ($gValidLogin) {
                        OR cat_org_id IS NULL )';
         $administratorStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
-        // create role object for administrator
-        $roleAdministrator = new TableRoles($gDb, (int) $administratorStatement->fetchColumn());
+        try {
+            // create role object for administrator
+            $roleAdministrator = new TableRoles($gDb, (int)$administratorStatement->fetchColumn());
+        } catch (AdmException $e) {
+            $e->showText();
+        }
 
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
