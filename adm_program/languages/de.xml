@@ -515,7 +515,7 @@
   <string name="SYS_ANNUALLY">Jährlich</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
   <string name="SYS_ASSIGN_FIELDS">Felder zuordnen</string>
-  <string name="SYS_ASSIGN_FIELDS_DESC">In der linken Spalte der nachfolgenden Tabelle werden alle Profilfelder angezeigt. In der rechten Spalte werden in einer Auswahlliste die Spalten aus der zu importierenden Datei angezeigt. Alle Spalten aus der Datei, die du importieren möchtest, solltest du nun einem Profilfeld zuordnen.\n\nBereits vorhandene Mitglieder werden über Vorname und Nachname identifiziert. Solltest du die eindeutige ID (UUID) des Mitglieds in deiner Datei zur Verfügung haben, so kannst du diese in der Zuordnung auswählen. Die Mitglieder werden dann automatisch über diese ID identifiziert und nicht mehr über Vorname und Nachname.</string>
+  <string name="SYS_ASSIGN_FIELDS_DESC">In der linken Spalte der nachfolgenden Tabelle werden alle Profilfelder angezeigt. In der rechten Spalte werden in einer Auswahlliste die Spalten aus der zu importierenden Datei angezeigt. Alle Spalten aus der Datei, die du importieren möchtest, solltest du nun einem Profilfeld zuordnen.\n\nBereits vorhandene Mitglieder werden über Vorname und Nachname identifiziert. Solltest du die eindeutige Admidio-ID (UUID) des Mitglieds in deiner Datei zur Verfügung haben, so kannst du diese in der Zuordnung auswählen. Die Mitglieder werden dann automatisch über diese Admidio-ID identifiziert und nicht mehr über Vorname und Nachname.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Zugangsdaten zuordnen</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Die Zugangsdaten wurden erfolgreich zugeordnet.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Die Zugangsdaten wurden erfolgreich zugeordnet und die Benutzerin bzw. der Benutzer ist darüber per E-Mail benachrichtigt worden.</string>
@@ -1393,7 +1393,7 @@
   <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
-  <string name="SYS_UNIQUE_ID">Eindeutige ID</string>
+  <string name="SYS_UNIQUE_ID">Eindeutige Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Unbekannt</string>
   <string name="SYS_UNLIMITED">Unbegrenzt</string>
