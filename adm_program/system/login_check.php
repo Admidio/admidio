@@ -10,6 +10,18 @@
  */
 require_once(__DIR__ . '/login_func.php');
 
+$postLoginName = admFuncVariableIsValid($_POST, 'usr_login_name', 'string');
+$postPassword = admFuncVariableIsValid($_POST, 'usr_password', 'string');
+$postOrgShortName = admFuncVariableIsValid($_POST, 'org_shortname', 'string');
+$postAutoLogin = admFuncVariableIsValid($_POST, 'auto_login', 'bool');
+if($getLoginName === '') {
+    // login with plugin
+    $postLoginName = admFuncVariableIsValid($_POST, 'plg_usr_login_name', 'string');
+    $postPassword = admFuncVariableIsValid($_POST, 'plg_usr_password', 'string');
+    $postOrgShortName = admFuncVariableIsValid($_POST, 'plg_org_shortname', 'string');
+    $postAutoLogin = admFuncVariableIsValid($_POST, 'plg_auto_login', 'bool');
+}
+
 try {
     createUserObjectFromPost();
 } catch (AdmException $e) {

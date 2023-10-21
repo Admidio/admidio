@@ -6,91 +6,68 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
+ *
+ * Parameters:
+ *
+ * mode     : dialog - (Default) show the login dialog
+ *            check  - Check the data to the login dialog
+ * organization_short_name : short name of the organization that should be preselected at the select box
+ *
+ * **********************************************************************************************
  */
 require_once(__DIR__ . '/common.php');
 
-$headline = $gL10n->get('SYS_LOGIN');
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'check')));
+$getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
+
+if ($getMode === 'dialog') {
+    $headline = $gL10n->get('SYS_LOGIN');
 
 // remember url (will be removed in login_check)
-$gNavigation->addUrl(CURRENT_URL, $headline);
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// read id of administrator role
-$sql = 'SELECT MIN(rol_id) as rol_id
-          FROM '.TBL_ROLES.'
-    INNER JOIN '.TBL_CATEGORIES.'
-            ON cat_id = rol_cat_id
-         WHERE rol_administrator = true
-           AND (  cat_org_id = ? -- $gCurrentOrgId
-               OR cat_org_id IS NULL )';
-$pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
+    try {
+        // create html page object
+        $page = new HtmlPage('admidio-login', $headline);
+        $loginModule = new ModuleLogin();
+        $loginModule->addHtmlLogin($page, $getOrganizationShortName);
+        $page->show();
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
+} elseif ($getMode === 'check') {
+    // check the data of the login dialog
+    try {
+        $loginModule = new ModuleLogin();
+        $loginModule->checkLogin();
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
 
-// create role object for administrator
-$roleAdministrator = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
+    // check if browser can set cookies and throw error if not
+    if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
+        $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', array(DOMAIN)));
+        // => EXIT
+    }
 
-// create html page object
-$page = new HtmlPage('admidio-login', $headline);
+    // remove login page from navigation stack
+    try {
+        if (str_ends_with($gNavigation->getUrl(), '/login.php')) {
+            $gNavigation->deleteLastUrl();
+        }
+    } catch (AdmException $e) {
+        $gNavigation->clear();
+    }
 
-// show form
-$form = new HtmlForm('login_form', ADMIDIO_URL.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));
+    // If no forward url has been set, then refer to the start page after login
+    if (array_key_exists('login_forward_url', $_SESSION)) {
+        $forwardUrl = $_SESSION['login_forward_url'];
+    } else {
+        $forwardUrl = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_login');
+    }
 
-$form->addInput(
-    'usr_login_name',
-    $gL10n->get('SYS_USERNAME'),
-    '',
-    array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
-);
-$form->addInput(
-    'usr_password',
-    $gL10n->get('SYS_PASSWORD'),
-    '',
-    array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
-);
+    unset($_SESSION['login_forward_url']);
 
-// show selectbox with all organizations of database
-if ($gSettingsManager->getBool('system_organization_select')) {
-    $sql = 'SELECT org_id, org_longname
-              FROM '.TBL_ORGANIZATIONS.'
-          ORDER BY org_longname ASC, org_shortname ASC';
-    $form->addSelectBoxFromSql(
-        'org_id',
-        $gL10n->get('SYS_ORGANIZATION'),
-        $gDb,
-        $sql,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $gCurrentOrgId, 'class' => 'form-control-small')
-    );
+    admRedirect($forwardUrl);
+    // => EXIT
 }
-
-if ($gSettingsManager->getBool('enable_auto_login')) {
-    $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
-}
-$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key', 'class' => ' offset-sm-3'));
-$page->addHtml($form->show());
-
-if ($gSettingsManager->getBool('registration_enable_module')) {
-    $page->addHtml('
-        <div id="login_registration_link">
-            <small>
-                <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a>
-            </small>
-        </div>');
-}
-
-// show link if user has login problems
-if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
-    // request to reset the password
-    $forgotPasswordLink = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
-} elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
-    // show link of message module to send mail to administrator role
-    $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
-} else {
-    // show link to send mail with local mail-client to administrator
-    $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:'.$gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
-}
-
-$page->addHtml('
-    <div id="login_forgot_password_link" class="admidio-margin-bottom">
-        <small><a href="'.$forgotPasswordLink.'">'.$gL10n->get('SYS_FORGOT_MY_PASSWORD').'</a></small>
-    </div>');
-
-$page->show();

@@ -130,9 +130,15 @@ if ($gValidLogin) {
 } else {
     // create and show the login form
 
+    // preselected organization should be set by query parameter
+    $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
+    if ($getOrganizationShortName === '') {
+        $getOrganizationShortName = $gCurrentOrganization->getValue('org_shortname');
+    }
+
     $form = new HtmlForm(
         'plugin-login-form',
-        ADMIDIO_URL.'/adm_program/system/login_check.php',
+        ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
         null,
         array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
     );
@@ -151,15 +157,15 @@ if ($gValidLogin) {
 
     // show selectbox with all organizations of database
     if ($gSettingsManager->getBool('system_organization_select')) {
-        $sql = 'SELECT org_id, org_longname
+        $sql = 'SELECT org_shortname, org_longname
                   FROM '.TBL_ORGANIZATIONS.'
               ORDER BY org_longname ASC, org_shortname ASC';
         $form->addSelectBoxFromSql(
-            'plg_org_id',
+            'plg_org_shortname',
             $gL10n->get('SYS_ORGANIZATION'),
             $gDb,
             $sql,
-            array('defaultValue' => $gCurrentOrgId, 'showContextDependentFirstEntry' => false)
+            array('defaultValue' => $getOrganizationShortName, 'showContextDependentFirstEntry' => false)
         );
     }
 
