@@ -3,10 +3,9 @@
  ***********************************************************************************************
  * Login Form
  *
- * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
- * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
- * werden an der Stelle der Felder nun nützliche Informationen des Benutzers
- * angezeigt.
+ * Login Form represents the login form with the appropriate fields for a user to log in.
+ * If the user is logged in, useful information of the user is now displayed in the place
+ * of the fields.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
