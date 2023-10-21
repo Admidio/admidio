@@ -308,7 +308,7 @@
   <string name="SYS_ASSIGNED_BY_ROLES">Set by the roles</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="SYS_ASSIGN_FIELDS">Assign fields</string>
-  <string name="SYS_ASSIGN_FIELDS_DESC">In the left column of the following table all profile fields are displayed. In the right column, the columns from the file to be imported are displayed in a selection list. All columns from the file you want to import should now be assigned to a profile field.\n\nExisting members are identified by first name and last name. If you have the unique ID (UUID) of the member available in your file, you can select it in the mapping. The members will then be automatically identified by this ID and no longer by first name and last name.</string>
+  <string name="SYS_ASSIGN_FIELDS_DESC">In the left column of the following table all profile fields are displayed. In the right column, the columns from the file to be imported are displayed in a selection list. All columns from the file you want to import should now be assigned to a profile field.\n\nExisting members are identified by first name and last name. If you have the unique Admidio-ID (UUID) of the member available in your file, you can select it in the mapping. The members will then be automatically identified by this Admidio-ID and no longer by first name and last name.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Assign login data</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login data has been successfully assigned.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login data has been successfully assigned and user has been informed via e-mail.</string>
@@ -1373,7 +1373,7 @@
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TWITTER">Twitter</string>
   <string name="SYS_TYPE">Type</string>
-  <string name="SYS_UNIQUE_ID">Unique ID</string>
+  <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNLIMITED">Unlimited</string>
   <string name="SYS_UNKNOWN">Unknown</string>
