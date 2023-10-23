@@ -29,7 +29,7 @@ final class ComponentUpdateSteps
     }
 
     /**
-     * This method will add a new profile field LinkedIn to the database,
+     * This method will add a new profile field LinkedIn and Instagram to the database,
      * but only if the category social networks exists
      */
     public static function updateStep43AddProfileFieldLinkedIn()
@@ -38,16 +38,27 @@ final class ComponentUpdateSteps
         $categoriesStatement = self::$db->queryPrepared($sql);
 
         if ($row = $categoriesStatement->fetch()) {
-            $profileField = new TableUserField(self::$db);
-            $profileField->saveChangesWithoutRights();
-            $profileField->setValue('usf_cat_id', $row['cat_id']);
-            $profileField->setValue('usf_type', 'TEXT');
-            $profileField->setValue('usf_name_intern', 'LINKEDIN');
-            $profileField->setValue('usf_name', 'SYS_LINKEDIN');
-            $profileField->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
-            $profileField->setValue('usf_icon', 'fab fa-linkedin');
-            $profileField->setValue('usf_url', 'https://www.linkedin.com/in/#user_content#');
-            $profileField->save();
+            $profileFieldLinkedIn = new TableUserField(self::$db);
+            $profileFieldLinkedIn->saveChangesWithoutRights();
+            $profileFieldLinkedIn->setValue('usf_cat_id', $row['cat_id']);
+            $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
+            $profileFieldLinkedIn->setValue('usf_name_intern', 'LINKEDIN');
+            $profileFieldLinkedIn->setValue('usf_name', 'SYS_LINKEDIN');
+            $profileFieldLinkedIn->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
+            $profileFieldLinkedIn->setValue('usf_icon', 'fab fa-linkedin');
+            $profileFieldLinkedIn->setValue('usf_url', 'https://www.linkedin.com/in/#user_content#');
+            $profileFieldLinkedIn->save();
+
+            $profileFieldInstagram = new TableUserField(self::$db);
+            $profileFieldInstagram->saveChangesWithoutRights();
+            $profileFieldInstagram->setValue('usf_cat_id', $row['cat_id']);
+            $profileFieldInstagram->setValue('usf_type', 'TEXT');
+            $profileFieldInstagram->setValue('usf_name_intern', 'INSTAGRAM');
+            $profileFieldInstagram->setValue('usf_name', 'SYS_INSTAGRAM');
+            $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
+            $profileFieldInstagram->setValue('usf_icon', 'fab fa-instagram');
+            $profileFieldInstagram->setValue('usf_url', 'https://www.instagram.com/#user_content#');
+            $profileFieldInstagram->save();
         }
     }
 
