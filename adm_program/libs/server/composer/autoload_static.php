@@ -183,6 +183,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'ModuleAnnouncements' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleAnnouncements.php',
         'ModuleContacts' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleContacts.php',
         'ModuleEvents' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleEvents.php',
+        'ModuleGroupsRoles' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleGroupsRoles.php',
         'ModuleLists' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleLists.php',
         'ModuleLogin' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleLogin.php',
         'ModuleMessages' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleMessages.php',
