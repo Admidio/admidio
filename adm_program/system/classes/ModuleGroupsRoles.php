@@ -121,7 +121,7 @@ class ModuleGroupsRoles extends HtmlPage
                 );
             }
 
-            if (strlen($role->getValue('rol_description')) > 0) {
+            if (!empty($role->getValue('rol_description'))) {
                 $roleDescription = strip_tags($role->getValue('rol_description'));
 
                 if (strlen($roleDescription) > 200) {
@@ -144,11 +144,11 @@ class ModuleGroupsRoles extends HtmlPage
                     $html .= '<span class="d-block">'.$gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))).'</span>';
                 }
 
-                if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0) {
+                if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
                     if ($role->getValue('rol_weekday') > 0) {
                         $html .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
                     }
-                    if (strlen($role->getValue('rol_start_time')) > 0) {
+                    if (!empty($role->getValue('rol_start_time'))) {
                         $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
                     }
                     $html .= '<span class="d-block">'.$html.'</span>';
