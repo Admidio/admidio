@@ -374,7 +374,7 @@ class Database
 
     /**
      * Get the name of the database that is running Admidio.
-     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
+     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'Postgres'
      */
     public function getName(): string
     {
@@ -461,7 +461,7 @@ class Database
         $version = $versionStatement->fetchColumn();
 
         if ($this->engine === self::PDO_ENGINE_PGSQL) {
-            // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
+            // the string (Postgres 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
             $versionArray  = explode(',', $version);
             $versionArray2 = explode(' ', $versionArray[0]);
             return $versionArray2[1];
@@ -491,8 +491,8 @@ class Database
      *
      * TODO: Links for improvements
      *       https://www.php.net/manual/en/pdostatement.getcolumnmeta.php
-     *       https://www.postgresql.org/docs/9.5/static/infoschema-columns.html
-     *       https://wiki.postgresql.org/wiki/Retrieve_primary_key_columns
+     *       https://www.Postgres.org/docs/9.5/static/infoschema-columns.html
+     *       https://wiki.Postgres.org/wiki/Retrieve_primary_key_columns
      *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
      */
     private function loadTableColumnsProperties(string $table)
@@ -587,23 +587,48 @@ class Database
     }
 
     /**
-     * @param string $sql
-     * @return string
+     * Prepares the sql parameters for Postgres specifics. The SQL is mainly written for MySQL,
+     * so we need to change some MySQL syntax for Postgres. For example the handling with boolean values
+     * must be changed.
+     * @param array $params Array with the sql parameters that should be prepared for Postgres.
+     * @return array Returns the prepared sql parameters.
+     */
+    private function preparePgParamsQuery(array $params): array
+    {
+        foreach($params as $key => $value) {
+            if (is_bool($value)) {
+                if ($value) {
+                    $params[$key] = 'true';
+                } else {
+                    $params[$key] = 'false';
+                }
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * Prepares the sql statement for Postgres specific syntax. The SQL is mainly written for MySQL,
+     * so we need to change some MySQL syntax for Postgres. For example some datatype like unsigned or
+     * blob must be converted and also the auto increment handling.
+     * @param string $sql The sql statement that should be prepared for Postgres.
+     * @return string Returns a prepared sql statement.
      */
     private function preparePgSqlQuery(string $sql): string
     {
-        // prepare the sql statement to be compatible with PostgreSQL
+        // prepare the sql statement to be compatible with Postgres
         if (StringUtils::strContains($sql, 'CREATE TABLE', false)) {
             // on a create-table-statement if necessary cut existing MySQL table options
             $sql = substr($sql, 0, strrpos($sql, ')') + 1);
         }
         if (StringUtils::strContains($sql, 'CREATE TABLE', false) || StringUtils::strContains($sql, 'ALTER TABLE', false)) {
             $replaces = array(
-                // PostgreSQL doesn't know unsigned
+                // Postgres doesn't know unsigned
                 'unsigned' => '',
                 // since version 4.1 we don't replace boolean with smallint
                 //'boolean'  => 'smallint',
-                // A blob is in PostgreSQL a bytea datatype
+                // A blob is in Postgres a bytea datatype
                 'blob'     => 'bytea'
             );
             $sql = StringUtils::strMultiReplace($sql, $replaces);
@@ -724,6 +749,7 @@ class Database
 
         if ($this->engine === self::PDO_ENGINE_PGSQL) {
             $sql = $this->preparePgSqlQuery($sql);
+            $params = $this->preparePgParamsQuery($params);
         }
 
         // if debug mode then log all sql statements
