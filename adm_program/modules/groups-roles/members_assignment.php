@@ -22,7 +22,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
     // ajax mode then only show text if error occurs
-    $gMessage->showTextOnly(true);
+    $gMessage->showTextOnly();
 }
 
 // Initialize and check the parameters

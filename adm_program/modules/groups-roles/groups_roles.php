@@ -27,10 +27,6 @@ $getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getRoleType = admFuncVariableIsValid($_GET, 'role_type', 'int', array('defaultValue' => 1));
 $getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'card', 'validValues' => array('card', 'permissions')));
 
-define('ROLE_TYPE_INACTIVE', 0);
-define('ROLE_TYPE_ACTIVE', 1);
-define('ROLE_TYPE_EVENT_PARTICIPATION', 2);
-
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -39,15 +35,15 @@ if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
 
 // set headline
 switch ($getRoleType) {
-    case ROLE_TYPE_INACTIVE:
+    case ModuleGroupsRoles::ROLE_TYPE_INACTIVE:
         $headline = $gL10n->get('SYS_INACTIVE_GROUPS_ROLES');
         break;
 
-    case ROLE_TYPE_ACTIVE:
+    case ModuleGroupsRoles::ROLE_TYPE_ACTIVE:
         $headline = $gL10n->get('SYS_GROUPS_ROLES');
         break;
 
-    case ROLE_TYPE_EVENT_PARTICIPATION:
+    case ModuleGroupsRoles::ROLE_TYPE_EVENT_PARTICIPATION:
         $headline = $gL10n->get('SYS_ROLES_CONFIRMATION_OF_PARTICIPATION');
         break;
 }
@@ -63,7 +59,7 @@ if ($getShow === 'permissions') {
 
 // only users with the right to assign roles can view inactive roles
 if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
-    $getRoleType = ROLE_TYPE_ACTIVE;
+    $getRoleType = ModuleGroupsRoles::ROLE_TYPE_ACTIVE;
 }
 
 $category = new TableCategory($gDb);
@@ -79,7 +75,7 @@ $lists->setParameter('cat_id', $category->getValue('cat_id'));
 $lists->setParameter('role_type', (int) $getRoleType);
 
 // create html page object
-$page = new HtmlPage('admidio-groups-roles', $headline);
+$groupsRoles = new ModuleGroupsRoles('admidio-groups-roles', $headline);
 
 if ($getShow === 'card') {
     // Navigation of the module starts here
@@ -92,7 +88,7 @@ if ($getShow === 'card') {
 
 if ($gCurrentUser->manageRoles()) {
     // show link to create new role
-    $page->addPageFunctionsMenuItem(
+    $groupsRoles->addPageFunctionsMenuItem(
         'menu_item_groups_roles_add',
         $gL10n->get('SYS_CREATE_ROLE'),
         ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php',
@@ -101,7 +97,7 @@ if ($gCurrentUser->manageRoles()) {
 
     if ($getShow === 'card') {
         // show permissions of all roles
-        $page->addPageFunctionsMenuItem(
+        $groupsRoles->addPageFunctionsMenuItem(
             'menu_item_groups_roles_show_permissions',
             $gL10n->get('SYS_SHOW_PERMISSIONS'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('show' => 'permissions', 'cat_uuid' => $getCatUuid, 'role_type' => $getRoleType)),
@@ -110,7 +106,7 @@ if ($gCurrentUser->manageRoles()) {
     }
 
     // show link to maintain categories
-    $page->addPageFunctionsMenuItem(
+    $groupsRoles->addPageFunctionsMenuItem(
         'menu_item_groups_roles_maintain_categories',
         $gL10n->get('SYS_EDIT_CATEGORIES'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
@@ -122,7 +118,7 @@ if ($gCurrentUser->manageRoles()) {
 if ($gSettingsManager->getInt('groups_roles_edit_lists') === 1 // everyone
 || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
 || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && $gCurrentUser->isAdministrator())) {
-    $page->addPageFunctionsMenuItem(
+    $groupsRoles->addPageFunctionsMenuItem(
         'menu_item_groups_own_list',
         $gL10n->get('SYS_CONFIGURE_LISTS'),
         ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php',
@@ -131,7 +127,7 @@ if ($gSettingsManager->getInt('groups_roles_edit_lists') === 1 // everyone
 }
 
 // add filter navbar
-$page->addJavascript(
+$groupsRoles->addJavascript(
     '
     $("#cat_uuid").change(function() {
         $("#navbar_filter_form").submit();
@@ -144,7 +140,7 @@ $page->addJavascript(
 
 // create filter menu with elements for category
 $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
-$form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', $page, array('type' => 'navbar', 'setFocus' => false));
+$form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', $groupsRoles, array('type' => 'navbar', 'setFocus' => false));
 $form->addInput('show', '', $getShow, array('property' => HtmlForm::FIELD_HIDDEN));
 $form->addSelectBoxForCategories(
     'cat_uuid',
@@ -163,10 +159,18 @@ if ($gCurrentUser->manageRoles()) {
     );
 }
 $filterNavbar->addForm($form->show());
-$page->addHtml($filterNavbar->show());
+$groupsRoles->addHtml($filterNavbar->show());
 
 $previousCategoryId = 0;
 
+try {
+    $groupsRoles->readData($getRoleType, $getCatUuid);
+    $groupsRoles->createContentCards();
+} catch (AdmException $e) {
+} catch (SmartyException $e) {
+    $gMessage->show($e->getMessage());
+}
+/*
 // Get Lists
 $getStart    = $lists->getStartElement();
 $listsResult = $lists->getDataSet($getStart);
@@ -174,7 +178,7 @@ $listsResult = $lists->getDataSet($getStart);
 if ($listsResult['totalCount'] === 0) {
     if ($gValidLogin) {
         // If login valid, then show message for not available roles
-        if ($getRoleType === ROLE_TYPE_ACTIVE) {
+        if ($getRoleType === ModuleGroupsRoles::ROLE_TYPE_ACTIVE) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
         // => EXIT
         } else {
@@ -531,6 +535,6 @@ if ($getShow === 'card') {
     }
 } else {
     $page->addHtml($table->show());
-}
+}*/
 
-$page->show();
+$groupsRoles->show();
