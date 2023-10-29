@@ -137,8 +137,8 @@ class ModuleGroupsRoles extends HtmlPage
             }
 
             // block with information about events and meeting-point
-            if ($role->getValue('rol_start_date') !== '' || $role->getValue('rol_weekday') > 0
-                || $role->getValue('rol_start_time') !== '' || $role->getValue('rol_location') !== '') {
+            if (!empty($role->getValue('rol_start_date')) || $role->getValue('rol_weekday') > 0
+                || !empty($role->getValue('rol_start_time')) || !empty($role->getValue('rol_location'))) {
                 $html = '<h6>'.$gL10n->get('SYS_APPOINTMENTS').' / '.$gL10n->get('SYS_MEETINGS').'</h6>';
                 if ($role->getValue('rol_start_date') !== '') {
                     $html .= '<span class="d-block">'.$gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))).'</span>';
@@ -151,7 +151,7 @@ class ModuleGroupsRoles extends HtmlPage
                     if (!empty($role->getValue('rol_start_time'))) {
                         $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
                     }
-                    $html .= '<span class="d-block">'.$html.'</span>';
+                    $html = '<span class="d-block">'.$html.'</span>';
                 }
 
                 // Meeting point
