@@ -268,35 +268,7 @@ $page->addHtml('
             // create a static form
             $form = new HtmlForm('profile_basic_data_form');
 
-            // add lastname and firstname
-            if (strlen($user->getValue('GENDER')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'GENDER')) {
-                // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
-                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME').' '.$user->getValue('GENDER', 'html'));
-            } else {
-                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-            }
-
-            // add login name
-            if (strlen($user->getValue('usr_login_name')) > 0) {
-                $userName = '';
-
-                if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
-                    $userName .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)).'" title="' . $gL10n->get('SYS_WRITE_PM') . '">'.
-                            '<i class="fas fa-comment-alt"></i>'.$user->getValue('usr_login_name').'</a>';
-                } else {
-                    $userName .= $user->getValue('usr_login_name');
-                }
-
-                if(!empty($user->getValue('usr_actual_login'))
-                    && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())) {
-                    $userName .= HtmlForm::getHelpTextIcon($gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
-                }
-
-                $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $userName);
-            } else {
-                $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $gL10n->get('SYS_NOT_REGISTERED'));
-            }
-
+            $bNameOutput = false;    // Flag whether the address has already been displayed
             $bAddressOutput = false;    // Flag whether the address has already been displayed
 
             // Loop over all fields of the master data
@@ -308,7 +280,37 @@ $page->addHtml('
                         case 'LAST_NAME': // fallthrough
                         case 'FIRST_NAME': // fallthrough
                         case 'GENDER':
-                            // don't show these fields in default profile list
+                            if (!$bNameOutput) {
+                                $bNameOutput = true;
+                                // add lastname and firstname
+                                if (strlen($user->getValue('GENDER')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'GENDER')) {
+                                    // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
+                                    $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' ' . $user->getValue('GENDER', 'html'));
+                                } else {
+                                    $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+                                }
+
+                                // add login name
+                                if (strlen($user->getValue('usr_login_name')) > 0) {
+                                    $userName = '';
+
+                                    if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
+                                        $userName .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)) . '" title="' . $gL10n->get('SYS_WRITE_PM') . '">' .
+                                            '<i class="fas fa-comment-alt"></i>' . $user->getValue('usr_login_name') . '</a>';
+                                    } else {
+                                        $userName .= $user->getValue('usr_login_name');
+                                    }
+
+                                    if (!empty($user->getValue('usr_actual_login'))
+                                        && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())) {
+                                        $userName .= HtmlForm::getHelpTextIcon($gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
+                                    }
+
+                                    $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $userName);
+                                } else {
+                                    $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $gL10n->get('SYS_NOT_REGISTERED'));
+                                }
+                            }
                             break;
 
                         case 'STREET': // fallthrough
