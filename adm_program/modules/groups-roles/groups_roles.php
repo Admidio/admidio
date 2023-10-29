@@ -326,7 +326,7 @@ foreach ($listsResult['recordset'] as $row) {
             }
 
             // Meeting point
-            if (strlen($role->getValue('rol_location')) > 0) {
+            if (!empty($role->getValue('rol_location'))) {
                 $page->addHtml('<span class="d-block"><i class="fas fa-map-marker-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_LOCATION').'"></i> '. $role->getValue('rol_location').'</span>');
             }
             $page->addHtml('</li>');
