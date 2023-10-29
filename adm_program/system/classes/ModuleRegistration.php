@@ -120,6 +120,7 @@ class ModuleRegistration extends HtmlPage
         }
 
         $this->assign('cards', $templateData);
+        $this->assign('l10n', $gL10n);
         $this->pageContent .= $this->fetch('modules/registration.cards.tpl');
     }
 }

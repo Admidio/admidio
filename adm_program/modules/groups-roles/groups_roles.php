@@ -160,27 +160,14 @@ if ($gCurrentUser->manageRoles()) {
 }
 $filterNavbar->addForm($form->show());
 $groupsRoles->addHtml($filterNavbar->show());
+$groupsRoles->readData($getRoleType, $getCatUuid);
 
-$previousCategoryId = 0;
-
-try {
-    $groupsRoles->readData($getRoleType, $getCatUuid);
-    $groupsRoles->createContentCards();
-} catch (AdmException $e) {
-} catch (SmartyException $e) {
-    $gMessage->show($e->getMessage());
-}
-/*
-// Get Lists
-$getStart    = $lists->getStartElement();
-$listsResult = $lists->getDataSet($getStart);
-
-if ($listsResult['totalCount'] === 0) {
+if ($groupsRoles->countRoles() === 0) {
     if ($gValidLogin) {
         // If login valid, then show message for not available roles
         if ($getRoleType === ModuleGroupsRoles::ROLE_TYPE_ACTIVE) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
-        // => EXIT
+            // => EXIT
         } else {
             $gMessage->show($gL10n->get('SYS_NO_ROLES_VISIBLE'));
             // => EXIT
@@ -190,6 +177,21 @@ if ($listsResult['totalCount'] === 0) {
         require(__DIR__ . '/../../system/login_valid.php');
     }
 }
+
+try {
+    if ($getShow === 'card') {
+        $groupsRoles->createContentCards();
+    } else {
+        $groupsRoles->createContentPermissionsList();
+    }
+} catch (AdmException $e) {
+} catch (SmartyException $e) {
+    $gMessage->show($e->getMessage());
+}
+/*
+// Get Lists
+$getStart    = $lists->getStartElement();
+$listsResult = $lists->getDataSet($getStart);
 
 if ($getShow === 'permissions') {
     // Create table
