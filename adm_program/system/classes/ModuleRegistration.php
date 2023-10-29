@@ -41,8 +41,7 @@ class ModuleRegistration extends HtmlPage
         global $gDb, $gCurrentOrgId;
 
         // Select new Members of the group
-        $sql = 'SELECT usr_id as userID, usr_uuid as userUUID, usr_login_name as loginName,
-                       reg_timestamp as registrationTimestamp, reg_validation_id as validationID
+        $sql = 'SELECT usr_id, usr_uuid, usr_login_name, reg_timestamp, reg_validation_id
                   FROM '.TBL_REGISTRATIONS.'
             INNER JOIN '.TBL_USERS.'
                     ON usr_id = reg_usr_id
@@ -73,19 +72,19 @@ class ModuleRegistration extends HtmlPage
         }
 
         foreach($registrations as $row) {
-            $user = new UserRegistration($gDb, $gProfileFields, $row['userID']);
+            $user = new UserRegistration($gDb, $gProfileFields, $row['usr_id']);
             $similarUserIDs = $user->searchSimilarUsers();
 
             $templateRow = array();
-            $templateRow['id'] = 'row_user_'.$row['userUUID'];
+            $templateRow['id'] = 'user_'.$row['usr_uuid'];
             $templateRow['title'] = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
 
-            $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['registrationTimestamp']);
+            $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
             $templateRow['information'][] = $gL10n->get('SYS_REGISTRATION_AT', array($timestampCreate->format($gSettingsManager->getString('system_date')), $timestampCreate->format($gSettingsManager->getString('system_time'))));
-            $templateRow['information'][] = $gL10n->get('SYS_USERNAME') . ': ' . $row['loginName'];
+            $templateRow['information'][] = $gL10n->get('SYS_USERNAME') . ': ' . $row['usr_login_name'];
             $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': <a href="mailto:'.$user->getValue('EMAIL').'">'.$user->getValue('EMAIL').'</a>';
 
-            if ((string) $row['validationID'] === '') {
+            if ((string) $row['reg_validation_id'] === '') {
                 $templateRow['information'][] = '<div class="alert alert-success"><i class="fas fa-check-circle"></i>' . $gL10n->get('SYS_REGISTRATION_CONFIRMED') . '</div>';
             } else {
                 $templateRow['information'][] = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('SYS_REGISTRATION_NOT_CONFIRMED') . '</div>';
@@ -96,23 +95,23 @@ class ModuleRegistration extends HtmlPage
             }
 
             $templateRow['actions'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['userUUID'])),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])),
                 'icon' => 'fas fa-eye',
                 'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
             );
             $templateRow['actions'][] = array(
-                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['userUUID'], 'name' => $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 'database_id' => $row['userUUID'])),
+                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'user_'.$row['usr_uuid'], 'name' => $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 'database_id' => $row['usr_uuid'])),
                 'icon' => 'fas fa-trash-alt',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
             if (count($similarUserIDs) > 0) {
                 $templateRow['buttons'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('mode' => 'show_similar', 'user_uuid' => $row['userUUID'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('mode' => 'show_similar', 'user_uuid' => $row['usr_uuid'])),
                     'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION')
                 );
             } else {
                 $templateRow['buttons'][] = array(
-                    'url' => ($gCurrentUser->editUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $row['userUUID'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_uuid' => $row['userUUID']))),
+                    'url' => ($gCurrentUser->editUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $row['usr_uuid'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_uuid' => $row['usr_uuid']))),
                     'name' => $gL10n->get('SYS_CONFIRM_REGISTRATION')
                 );
             }
@@ -121,6 +120,6 @@ class ModuleRegistration extends HtmlPage
         }
 
         $this->assign('cards', $templateData);
-        $this->pageContent .= $this->fetch('modules/registration.list.tpl');
+        $this->pageContent .= $this->fetch('modules/registration.cards.tpl');
     }
 }

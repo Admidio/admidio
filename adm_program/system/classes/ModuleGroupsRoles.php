@@ -378,6 +378,6 @@ class ModuleGroupsRoles extends HtmlPage
         }
 
         $this->assign('cards', $templateData);
-        $this->pageContent = $this->fetch('modules/registration.list.tpl');
+        $this->pageContent = $this->fetch('modules/registration.cards.tpl');
     }
 }
