@@ -57,7 +57,7 @@ if (isset($_SESSION['events_request'])) {
     if ((string) $_SESSION['events_request']['event_deadline'] !== '') {
         $_SESSION['events_request']['dat_deadline'] = $_SESSION['events_request']['event_deadline'] . ' ' . $_SESSION['events_request']['event_deadline_time'];
     }
-    $event->setArray($_SESSION['events_request']);
+    $event->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['events_request'])));
 
     // get the selected roles for visibility
     if (isset($_SESSION['events_request']['adm_event_participation_right']) && $_SESSION['events_request']['adm_event_participation_right'] !== '') {
@@ -227,7 +227,7 @@ if ($gSettingsManager->getBool('events_show_map_link')) {
     $form->addInput(
         'dat_location',
         $gL10n->get('SYS_LOCATION'),
-        $event->getValue('dat_location'),
+        (string) $event->getValue('dat_location'),
         array('maxLength' => 100, 'helpTextIdLabel' => 'SYS_LOCATION_LINK')
     );
 
