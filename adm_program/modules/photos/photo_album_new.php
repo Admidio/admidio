@@ -58,7 +58,7 @@ if (!$photoAlbum->isEditable()) {
 if (isset($_SESSION['photo_album_request'])) {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-    $photoAlbum->setArray($_SESSION['photo_album_request']);
+    $photoAlbum->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['photo_album_request'])));
     unset($_SESSION['photo_album_request']);
 }
 

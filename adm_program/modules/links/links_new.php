@@ -50,7 +50,7 @@ if ($getLinkUuid !== '') {
 if (isset($_SESSION['links_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
-    $link->setArray($_SESSION['links_request']);
+    $link->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['links_request'])));
     unset($_SESSION['links_request']);
 }
 

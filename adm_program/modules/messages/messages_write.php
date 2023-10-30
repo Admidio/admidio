@@ -181,7 +181,7 @@ if ($getSubject !== '') {
 if (isset($_SESSION['message_request'])) {
     $message->setArray($_SESSION['message_request']);
     $message->addContent($_SESSION['message_request']['msg_body']);
-    $formValues = $_SESSION['message_request'];
+    $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['message_request']));
     unset($_SESSION['message_request']);
 
     if (!isset($formValues['carbon_copy'])) {

@@ -64,7 +64,7 @@ if ($getRoleUuid !== '') {
 if (isset($_SESSION['roles_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
-    $role->setArray($_SESSION['roles_request']);
+    $role->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['roles_request'])));
     unset($_SESSION['roles_request']);
 }
 

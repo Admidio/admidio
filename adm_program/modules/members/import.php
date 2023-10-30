@@ -31,7 +31,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 if (isset($_SESSION['import_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
-    $formValues = $_SESSION['import_request'];
+    $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['import_request']));
     unset($_SESSION['import_request']);
 }
 

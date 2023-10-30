@@ -70,7 +70,7 @@ if ($getGboUuid === '' && $gValidLogin) {
 
 if (isset($_SESSION['guestbook_entry_request'])) {
     // due to a wrong input the user has returned to this form, now write the previously entered content into the object
-    $guestbook->setArray($_SESSION['guestbook_entry_request']);
+    $guestbook->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['guestbook_entry_request'])));
     unset($_SESSION['guestbook_entry_request']);
 }
 
