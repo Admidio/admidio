@@ -41,7 +41,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 if (isset($_SESSION['rooms_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
-    $room->setArray($_SESSION['rooms_request']);
+    $room->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['rooms_request'])));
     unset($_SESSION['rooms_request']);
 }
 

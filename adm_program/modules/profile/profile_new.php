@@ -117,15 +117,15 @@ if (isset($_SESSION['profile_request'])) {
     foreach ($gProfileFields->getProfileFields() as $field) {
         $fieldName = 'usf-'. (int) $field->getValue('usf_id');
         if (isset($_SESSION['profile_request'][$fieldName])) {
-            $user->setProfileFieldsValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$fieldName]), false);
+            $user->setProfileFieldsValue($field->getValue('usf_name_intern'), SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['profile_request'][$fieldName])), false);
         }
     }
 
     if (isset($_SESSION['profile_request']['usr_login_name'])) {
-        $user->setArray(array('usr_login_name' => $_SESSION['profile_request']['usr_login_name']));
+        $user->setArray(array('usr_login_name' => SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['profile_request']['usr_login_name']))));
     }
     if (isset($_SESSION['profile_request']['reg_org_id'])) {
-        $registrationOrgId = $_SESSION['profile_request']['reg_org_id'];
+        $registrationOrgId = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['profile_request']['reg_org_id']));
     }
 
     unset($_SESSION['profile_request']);

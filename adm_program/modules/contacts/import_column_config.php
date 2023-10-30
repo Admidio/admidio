@@ -30,7 +30,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 if (isset($_SESSION['import_csv_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
-    $formValues = $_SESSION['import_csv_request'];
+    $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['import_csv_request']));
     unset($_SESSION['import_csv_request']);
     if (!isset($form['first_row'])) {
         $formValues['first_row'] = false;

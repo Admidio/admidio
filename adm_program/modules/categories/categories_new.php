@@ -109,7 +109,7 @@ $category = new TableCategory($gDb);
 if (isset($_SESSION['categories_request'])) {
     // By wrong input, the user returned to this form now write the previously entered contents into the object
 
-    $category->setArray($_SESSION['categories_request']);
+    $category->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['categories_request'])));
 
     // get the selected roles for visibility
     if (isset($_SESSION['categories_request']['adm_categories_view_right'])) {

@@ -65,7 +65,7 @@ if (isset($_SESSION['fields_request'])) {
 
     // due to incorrect input, the user has returned to this form
     // Now write the previously entered content into the object
-    $userField->setArray($_SESSION['fields_request']);
+    $userField->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['fields_request'])));
     unset($_SESSION['fields_request']);
 }
 

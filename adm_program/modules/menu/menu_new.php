@@ -86,7 +86,7 @@ if ($getMenuUuid !== '') {
 if (isset($_SESSION['menu_request'])) {
     // due to incorrect input, the user has returned to this form
     // Now write the previously entered content into the object
-    $menu->setArray($_SESSION['menu_request']);
+    $menu->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['menu_request'])));
     unset($_SESSION['menu_request']);
 }
 

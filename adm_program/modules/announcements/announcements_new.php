@@ -68,7 +68,7 @@ if ($getAnnUuid !== '') {
 if (isset($_SESSION['announcements_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
-    $announcement->setArray($_SESSION['announcements_request']);
+    $announcement->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['announcements_request'])));
     unset($_SESSION['announcements_request']);
 }
 

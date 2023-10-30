@@ -11,20 +11,39 @@ final class SecurityUtils
     /**
      * Encodes all HTML special characters
      * If $encodeAll is false, this method is only secure if encoding is not UTF-7
-     * @param string $input     The input string
+     * @param string|array<mixed,string> $input     The input string
      * @param bool   $encodeAll Set true too encode really all HTML special characters
      * @param string $encoding  Define character encoding to use
-     * @return string Encoded string
+     * @return string|array<mixed,string> Encoded string
      */
-    public static function encodeHTML(string $input, bool $encodeAll = false, string $encoding = 'UTF-8')
+    public static function encodeHTML($input, bool $encodeAll = false, string $encoding = 'UTF-8')
     {
-        if ($encodeAll) {
-            // Encodes: all special HTML characters
-            return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
+        if (is_array($input)) {
+            // call function for every array element
+            if ($encodeAll) {
+                // Encodes: all special HTML characters
+                function myHtmlentities($value) {
+                    return htmlentities($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                }
+                $input = array_map('myHtmlentities', $input);
+            } else {
+                // Encodes: &, ", ', <, >
+                function myHtmlspecialchars($value) {
+                    return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                }
+                $input = array_map('myHtmlspecialchars', $input);
+            }
+        } else {
+            if ($encodeAll) {
+                // Encodes: all special HTML characters
+                $input = htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
+            } else {
+                // Encodes: &, ", ', <, >
+                $input = htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, $encoding);
+            }
         }
 
-        // Encodes: &, ", ', <, >
-        return htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, $encoding);
+        return $input;
     }
 
     /**

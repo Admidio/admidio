@@ -36,7 +36,7 @@ if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if (isset($_SESSION['documents_files_request'])) {
-    $formValues = $_SESSION['documents_files_request'];
+    $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['documents_files_request']));
     unset($_SESSION['documents_files_request']);
 } else {
     $formValues['new_name'] = null;

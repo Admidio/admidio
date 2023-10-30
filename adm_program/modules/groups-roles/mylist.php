@@ -56,7 +56,7 @@ $list = new ListConfiguration($gDb);
 $list->readDataByUuid($getListUuid);
 
 if (isset($_SESSION['mylist_request'])) {
-    $formValues = $_SESSION['mylist_request'];
+    $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['mylist_request']));
     unset($_SESSION['mylist_request']);
 
     if (!isset($formValues['cbx_global_configuration'])) {
