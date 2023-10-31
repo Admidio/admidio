@@ -88,4 +88,5 @@ Stay updated with the latest improvements and bug fixes by visiting our [changel
 
 ## Donation
 
-If you appreciate Admidio and our project, consider [making a donation](https://www
+If you appreciate Admidio , consider donating please
+thanks for contributing 🚀
