@@ -289,11 +289,13 @@ if ($getMode === 2) {
     // event roles and administrator cannot be set to inactive
     // all other roles could now set inactive
     try {
+        $gMessage->showTextOnly();
         $role->setInactive();
         echo 'done';
     }
     catch (AdmException $e) {
-        echo $e->showText();
+        $e->showText();
+        // => EXIT
     }
     exit();
 } elseif ($getMode === 4) {
@@ -309,6 +311,7 @@ if ($getMode === 2) {
     exit();
 } elseif ($getMode === 5) {
     // set role active
+    $gMessage->showHtmlTextOnly();
 
     // event roles should not set active
     // all other roles could now set active

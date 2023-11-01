@@ -424,7 +424,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
     if (isset($gMessage) && $gMessage instanceof Message) {
         if ($optionsAll['directOutput']) {
-            $gMessage->showTextOnly(true);
+            $gMessage->showTextOnly();
         }
 
         $gMessage->show($errorMessage);

@@ -18,7 +18,7 @@ require_once(__DIR__ . '/common.php');
 require(__DIR__ . '/login_valid.php');
 
 // Initialize and check the parameters
-$gMessage->showThemeBody(false);
+$gMessage->hideThemeBody();
 $getType        = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true));
 $getElementId   = admFuncVariableIsValid($_GET, 'element_id', 'string', array('requireValue' => true));
 $getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id', 'string', array('requireValue' => true));
@@ -136,7 +136,6 @@ if ($callbackFunction !== '') {
 }
 
 if ($url === '') {
-    $gMessage->showThemeBody(false);
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }

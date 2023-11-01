@@ -25,7 +25,7 @@ if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
-$gMessage->showThemeBody(false);
+$gMessage->hideThemeBody();
 $gMessage->showInModalWindow();
 
 try {

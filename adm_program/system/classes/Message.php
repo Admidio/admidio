@@ -181,30 +181,27 @@ class Message
     /**
      * If this will be set then only the text message will be shown.
      * If this message contains html elements then these will also be shown in the output.
-     * @param bool $showText If set to true than only the message text with their html elements will be shown.
      */
-    public function showHtmlTextOnly($showText)
+    public function showHtmlTextOnly()
     {
-        $this->showHtmlTextOnly = $showText;
+        $this->showHtmlTextOnly = true;
     }
 
     /**
      * If set no theme files will be integrated in the page.
      * This setting is useful if the message should be loaded in a small window.
-     * @param bool $showTheme If set to true than theme body and header will be shown. Otherwise this will be hidden.
      */
-    public function showThemeBody($showTheme)
+    public function hideThemeBody()
     {
-        $this->includeThemeBody = $showTheme;
+        $this->includeThemeBody = false;
     }
 
     /**
      * If this will be set then no html elements will be shown in the output,
      * only pure text. This is useful if you have a script that is used in ajax mode.
-     * @param bool $showText If set to true than only the message text without any html will be shown.
      */
-    public function showTextOnly($showText)
+    public function showTextOnly()
     {
-        $this->showTextOnly = $showText;
+        $this->showTextOnly = true;
     }
 }
