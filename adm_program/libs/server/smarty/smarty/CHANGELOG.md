@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.4] - 2023-09-14
+
+## [4.3.3] - 2023-09-14
+
+### Fixed
+- `|strip_tags` does not work if the input is 0 [#890](https://github.com/smarty-php/smarty/issues/890)
+- Use of negative numbers in {math} equations [#895](https://github.com/smarty-php/smarty/issues/895)
+
+## [4.3.2] - 2023-07-19
+
+### Fixed
+- `$smarty->muteUndefinedOrNullWarnings()` now also mutes PHP8 warnings for undefined properties
+
 ## [4.3.1] - 2023-03-28
 
 ### Security
