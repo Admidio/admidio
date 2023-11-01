@@ -8,32 +8,27 @@
  */
 
 /**
- * Creates an Admidio specific table with special methods
+ * Creates the Javascript output for the jQuery DataTables plugin
  *
- * This class inherits the common HtmlTableBasic class and extends their elements
- * with custom Admidio table methods. The class should be used to create the
- * html part of all Admidio tables. It has simple methods to add complete rows with
- * their column values to the table. It's also possible to add the jQuery plugin Datatables
- * to each table. Therefore you only need to set a flag when creating the object.
+ * There are some methods that will help to create the correct Javascript for DataTables and handles some
+ * table effects that we want to use in Admidio.
  *
  * **Code example**
  * ```
- * // create a simple table with one input field and a button
- * $table = new HtmlTable('simple-table');
- * $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Address', 'Phone', 'E-Mail'));
- * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '+49 342 59433', 'h.mustermann@example.org'));
- * $table->addRowByArray(array('Anne', 'Musterfrau', 'Seestraße 6', '+34 7433 7433', 'a.musterfrau@example.org'));
- * $table->show();
+ * // create a simple DataTables javascript
+ * $dataTables = new HtmlDataTables($htmlPage, 'my-table-id');
+ * $dataTables->createJavascript(145, 7);
  * ```
  *
  * **Code example**
  * ```
- * // create a table with jQuery datatables and align columns to center or right
- * $table = new HtmlTable('simple-table', null, true, true);
- * $table->setColumnAlignByArray(array('left', 'left', 'center', 'right'));
- * $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Birthday', 'Membership fee'));
- * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '14.07.1995', '38,50'));
- * $table->show();
+ * // create a DataTables javascript and set some preferences like a group column or disable sorting for
+ * // some columns or not hide a column in responsive mode.
+ * $dataTables = new HtmlDataTables($htmlPage, 'my-table-id');
+ * $dataTables->setDatatablesGroupColumn(1);
+ * $dataTables->disableDatatablesColumnsSort(array(3, 8));
+ * $dataTables->setDatatablesColumnsNotHideResponsive(array(8));
+ * $dataTables->createJavascript(145, 7);
  * ```
  */
 class HtmlDataTables
@@ -47,14 +42,6 @@ class HtmlDataTables
      */
     protected $rowsPerPage = 25;
     /**
-     * @var int Number of rows that are currently displayed in the table.
-     */
-    protected $rowCount = 0;
-    /**
-     * @var int Number of columns that are currently displayed in the table.
-     */
-    protected $columnCount = 0;
-    /**
      * @var array<int,string> Array with the column number as key and the 'asc' or 'desc' as value.
      */
     protected $columnsOrder = array();
@@ -63,10 +50,6 @@ class HtmlDataTables
      */
     protected $groupedColumn = -1;
     /**
-     * @var bool A flag if the jQuery plugin DataTables should be used to show the table.
-     */
-    protected $datatables;
-    /**
      * @var array<int,string> An array that stores all necessary DataTables parameters that should be set on initialization of this plugin.
      */
     protected $datatablesInitParameters = array();
@@ -74,10 +57,6 @@ class HtmlDataTables
      * @var array<int,string> Array that contains several elements for DataTables columnDefs parameter.
      */
     protected $datatablesColumnDefs = array();
-    /**
-     * @var string The text that should be shown if no row was added to the table
-     */
-    protected $messageNoRowsFound;
     /**
      * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
@@ -93,21 +72,18 @@ class HtmlDataTables
 
     /**
      * Constructor creates the table element
-     * @param HtmlPage $htmlPage
-     * @param string $tableID
-     * @param int $rowCount
+     * @param HtmlPage $htmlPage An object of the current HtmlPage where the HTML table is integrated.
+     * @param string $tableID    The HTML ID of the table which should be converted in a DataTables.
      */
-    public function __construct(HtmlPage $htmlPage, string $tableID, int $rowCount, int $columnCount)
+    public function __construct(HtmlPage $htmlPage, string $tableID)
     {
         $this->htmlPage = $htmlPage;
-        $this->rowCount = $rowCount;
-        $this->columnCount = $columnCount;
         $this->id = $tableID;
     }
 
     /**
      * Disable the sort function for some columns. This is useful if a sorting of the column doesn't make sense
-     * because it only show function icons or something equal.
+     * because it only shows function icons or something equal.
      * @param array<int,int> $columnsSort An array which contain the columns where the sort should be disabled.
      *                                    The columns of the table starts with 1 (not 0).
      */
@@ -120,18 +96,11 @@ class HtmlDataTables
     }
 
     /**
-     * Return the number of the column which should be grouped when using the jQuery plugin DataTables.
-     * @return int Return the number of the column.
-     */
-    public function getDatatablesGroupColumn()
-    {
-        return $this->groupedColumn;
-    }
-
-    /**
      * Adds javascript libs and code and inits the datatables params for a datatables table
+     * @param int $rowCount    Number of rows of the current table.
+     * @param int $columnCount Number of columns of the current table.
      */
-    public function createJavascript()
+    public function createJavascript(int $rowCount = 0, int $columnCount = 0)
     {
         global $gSettingsManager, $gL10n;
 
@@ -142,7 +111,7 @@ class HtmlDataTables
 
         $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json"}';
 
-        if ($this->rowCount > 10 || $this->serverSideProcessing) {
+        if ($rowCount > 10 || $this->serverSideProcessing) {
             // set default page length of the table
             $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
         } else {
@@ -193,7 +162,7 @@ class HtmlDataTables
                     api.column(' . $this->groupedColumn . ', {page: "current"}).data().each(function(group, i) {
                         if (last !== group) {
                             $(rows).eq(i).before(
-                                "<tr class=\"admidio-group-heading\"><td colspan=\"' . $this->columnCount . '\">" + group + "</td></tr>"
+                                "<tr class=\"admidio-group-heading\"><td colspan=\"' . $columnCount . '\">" + group + "</td></tr>"
                             );
 
                             last = group;
@@ -217,7 +186,7 @@ class HtmlDataTables
             $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
         }
 
-        // luxon doesn't work properly if we use server side processing. Than an JS error is thrown.
+        // luxon doesn't work properly if we use server side processing. Then an JS error is thrown.
         if (!$this->serverSideProcessing) {
             $this->htmlPage->addJavascript(
                 '
@@ -254,11 +223,11 @@ class HtmlDataTables
      * This method will set for a selected column other columns that should be used to order the datatables.
      * For example if you will click the name column than you could set the columns lastname and firstname
      * as alternative order columns and the table will be ordered by lastname and firstname.
-     * @param int       $selectedColumn    This is the column the user clicked to be sorted. (started with 1)
-     * @param int|int[] $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
-     *                                     than 1 column this must be an array. The columns of the table starts with 1 (not 0).
+     * @param int $selectedColumn    This is the column the user clicked to be sorted. (started with 1)
+     * @param int|int[] $arrayOrderColumns These are the columns the table will internal be sorted. If you have more
+     *                                     then 1 column this must be an array. The columns of the table starts with 1 (not 0).
      */
-    public function setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns)
+    public function setDatatablesAlternativeOrderColumns(int $selectedColumn, $arrayOrderColumns)
     {
         // internal datatable columns starts with 0
         if (is_array($arrayOrderColumns)) {
@@ -266,7 +235,7 @@ class HtmlDataTables
              * @param int $item
              * @return int decremented item
              */
-            function decrement($item)
+            function decrement(int $item): int
             {
                 return --$item;
             }
@@ -295,14 +264,14 @@ class HtmlDataTables
     /**
      * Datatables will automatically hide columns if the screen will be to small e.g. on smartphones. You must than click
      * on a + button and will view the hidden columns. With this method you can remove specific columns from that feature.
-     * These columns will always be shown. But be careful if you remove to much columns datatables must hide some columns
+     * These columns will always be shown. But be careful if you remove too many columns datatables must hide some columns
      * anyway.
      * @param array<int,int> $columnsNotHideResponsive An array which contain the columns that should not be hidden.
      *                                                 The columns of the table starts with 1 (not 0).
-     * @param int            $priority                 Optional set a priority so datatable will first hide columns with
+     * @param int $priority                            Optional set a priority so datatable will first hide columns with
      *                                                 low priority and after that with higher priority
      */
-    public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, $priority = 1)
+    public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, int $priority = 1)
     {
         // internal datatable columns starts with 0
         foreach ($columnsNotHideResponsive as $columnNotHideResponsive) {
@@ -316,7 +285,7 @@ class HtmlDataTables
      * @param int $columnNumber Number of the column that should be grouped. The first column starts with 1.
      *                          The columns were set with the method **addRowByArray**.
      */
-    public function setDatatablesGroupColumn($columnNumber)
+    public function setDatatablesGroupColumn(int $columnNumber)
     {
         $this->groupedColumn = $columnNumber - 1;
 
@@ -362,7 +331,7 @@ class HtmlDataTables
      * Set the number of rows that should be displayed on one page if the jQuery plugin DataTables is used.
      * @param int $numberRows Number of rows that should be displayed on one page.
      */
-    public function setDatatablesRowsPerPage($numberRows)
+    public function setDatatablesRowsPerPage(int $numberRows)
     {
         $this->rowsPerPage = $numberRows;
     }
@@ -374,7 +343,7 @@ class HtmlDataTables
      * @param string $file The url with the filename that should be called by Datatables to get the data. The
      *                     called script must return a json string.
      */
-    public function setServerSideProcessing($file)
+    public function setServerSideProcessing(string $file)
     {
         $this->serverSideProcessing = true;
         $this->serverSideFile = $file;

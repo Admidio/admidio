@@ -392,11 +392,11 @@ class ModuleGroupsRoles extends HtmlPage
         }
 
         // initialize and set the parameter for DataTables
-        $dataTables = new HtmlDataTables($this, 'role-permissions-table', count($this->data), 7);
+        $dataTables = new HtmlDataTables($this, 'role-permissions-table');
         $dataTables->setDatatablesGroupColumn(1);
         $dataTables->disableDatatablesColumnsSort(array(3, 8));
         $dataTables->setDatatablesColumnsNotHideResponsive(array(8));
-        $dataTables->createJavascript();
+        $dataTables->createJavascript(count($this->data), 7);
 
         $this->assign('list', $templateData);
         $this->assign('l10n', $gL10n);
