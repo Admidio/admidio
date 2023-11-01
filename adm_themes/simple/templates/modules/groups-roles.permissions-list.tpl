@@ -13,12 +13,22 @@
         <tr>
             <td>{$row.category}</td>
             <td><a href="{$row.roleUrl}">{$row.role}</a></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>
+                {foreach $row.roleRights as $roleRight}
+                    <i class="admidio-icon-chain {$roleRight.icon}" data-toggle="tooltip" title="{$roleRight.title}"></i>
+                {/foreach}
+            </td>
+            <td>{$row.emailToThisRole}</td>
+            <td>{$row.viewMembership}</td>
+            <td>{$row.viewMembersProfiles}</td>
+            <td>{$row.roleLeaderRights}</td>
+            <td>
+                {foreach $row.actions as $actionItem}
+                    <a {if isset($actionItem.dataHref)} class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
+                            {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
+                        <i class="{$actionItem.icon}" data-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
+                {/foreach}
+            </td>
         </tr>
     {/foreach}
 </table>
