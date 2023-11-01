@@ -9,7 +9,7 @@
                 <th>{$l10n->get('SYS_VIEW_ROLE_MEMBERSHIPS')}</th>
                 <th>{$l10n->get('SYS_VIEW_PROFILES_OF_ROLE_MEMBERS')}</th>
                 <th>{$l10n->get('SYS_LEADER')}</th>
-                <th>&nbsp;Test</th>
+                <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>

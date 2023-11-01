@@ -394,6 +394,8 @@ class ModuleGroupsRoles extends HtmlPage
         // initialize and set the parameter for DataTables
         $dataTables = new HtmlDataTables($this, 'role-permissions-table', count($this->data), 7);
         $dataTables->setDatatablesGroupColumn(1);
+        $dataTables->disableDatatablesColumnsSort(array(3, 8));
+        $dataTables->setDatatablesColumnsNotHideResponsive(array(8));
         $dataTables->createJavascript();
 
         $this->assign('list', $templateData);
