@@ -67,7 +67,9 @@ if ($getGboUuid === '' && $gValidLogin) {
 
 if (isset($_SESSION['guestbook_entry_request'])) {
     // due to a wrong input the user has returned to this form, now write the previously entered content into the object
+    $guestbookDescription = admFuncVariableIsValid($_SESSION['guestbook_entry_request'], 'gbo_text', 'html');
     $guestbook->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['guestbook_entry_request'])));
+    $guestbook->setValue('gbo_text', $guestbookDescription);
     unset($_SESSION['guestbook_entry_request']);
 }
 

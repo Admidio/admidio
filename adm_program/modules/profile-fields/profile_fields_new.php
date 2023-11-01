@@ -65,7 +65,9 @@ if (isset($_SESSION['fields_request'])) {
 
     // due to incorrect input, the user has returned to this form
     // Now write the previously entered content into the object
+    $userFieldDescription = admFuncVariableIsValid($_SESSION['fields_request'], 'usf_description', 'html');
     $userField->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['fields_request'])));
+    $userField->setValue('usf_description', $userFieldDescription);
     unset($_SESSION['fields_request']);
 }
 

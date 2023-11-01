@@ -68,7 +68,9 @@ if ($getAnnUuid !== '') {
 if (isset($_SESSION['announcements_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
+    $announcementDescription = admFuncVariableIsValid($_SESSION['announcements_request'], 'ann_description', 'html');
     $announcement->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['announcements_request'])));
+    $announcement->setValue('ann_description', $announcementDescription);
     unset($_SESSION['announcements_request']);
 }
 

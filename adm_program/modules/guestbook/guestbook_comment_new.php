@@ -81,7 +81,10 @@ if ($getGbcUuid !== '') {
 if (isset($_SESSION['guestbook_comment_request'])) {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    $gbCommentDescription = admFuncVariableIsValid($_SESSION['guestbook_comment_request'], 'gbc_text', 'html');
     $gbComment->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['guestbook_comment_request'])));
+    $gbComment->setValue('gbc_text', $gbCommentDescription);
+
     unset($_SESSION['guestbook_comment_request']);
 }
 
