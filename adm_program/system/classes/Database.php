@@ -547,6 +547,10 @@ class Database
                     $props['type'] = 'timestamp';
                 } elseif (str_contains($properties['data_type'], 'time')) {
                     $props['type'] = 'time';
+                } elseif (str_contains($properties['data_type'], 'character varying')) {
+                    $props['type'] = 'varchar';
+                } elseif (str_contains($properties['data_type'], 'character')) {
+                    $props['type'] = 'char';
                 } else {
                     $props['type'] = $properties['data_type'];
                 }
