@@ -26,6 +26,7 @@ return array(
     'FileUpload' => $baseDir . '/adm_program/system/classes/FileUpload.php',
     'FormValidation' => $baseDir . '/adm_program/system/classes/FormValidation.php',
     'Htaccess' => $baseDir . '/adm_program/system/classes/Htaccess.php',
+    'HtmlDataTables' => $baseDir . '/adm_program/system/classes/HtmlDataTables.php',
     'HtmlElement' => $baseDir . '/adm_program/system/classes/HtmlElement.php',
     'HtmlForm' => $baseDir . '/adm_program/system/classes/HtmlForm.php',
     'HtmlNavbar' => $baseDir . '/adm_program/system/classes/HtmlNavbar.php',

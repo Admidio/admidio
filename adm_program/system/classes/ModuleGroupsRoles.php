@@ -391,6 +391,11 @@ class ModuleGroupsRoles extends HtmlPage
             $templateData[] = $templateRow;
         }
 
+        // initialize and set the parameter for DataTables
+        $dataTables = new HtmlDataTables($this, 'role-permissions-table', count($this->data), 7);
+        $dataTables->setDatatablesGroupColumn(1);
+        $dataTables->createJavascript();
+
         $this->assign('list', $templateData);
         $this->assign('l10n', $gL10n);
         $this->pageContent .= $this->fetch('modules/groups-roles.permissions-list.tpl');

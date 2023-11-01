@@ -164,6 +164,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'FileUpload' => __DIR__ . '/../../../..' . '/adm_program/system/classes/FileUpload.php',
         'FormValidation' => __DIR__ . '/../../../..' . '/adm_program/system/classes/FormValidation.php',
         'Htaccess' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Htaccess.php',
+        'HtmlDataTables' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlDataTables.php',
         'HtmlElement' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlElement.php',
         'HtmlForm' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlForm.php',
         'HtmlNavbar' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlNavbar.php',
