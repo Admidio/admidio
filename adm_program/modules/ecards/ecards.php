@@ -83,7 +83,7 @@ if (isset($_SESSION['ecard_request'])) {
     // then try to restore all values that he has entered before
     $template   = $_SESSION['ecard_request']['ecard_template'];
     $recipients = $_SESSION['ecard_request']['ecard_recipients'];
-    $message    = $_SESSION['ecard_request']['ecard_message'];
+    $message = admFuncVariableIsValid($_SESSION['ecard_request'], 'ecard_message', 'html');
 } else {
     $template   = $gSettingsManager->getString('ecard_template');
     $recipients = null;

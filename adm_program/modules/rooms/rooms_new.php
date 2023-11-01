@@ -44,7 +44,9 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 if (isset($_SESSION['rooms_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
+    $roomDescription = admFuncVariableIsValid($_SESSION['rooms_request'], 'room_description', 'html');
     $room->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['rooms_request'])));
+    $room->setValue('room_description', $roomDescription);
     unset($_SESSION['rooms_request']);
 }
 

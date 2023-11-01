@@ -23,17 +23,19 @@ final class SecurityUtils
             if ($encodeAll) {
                 // Encodes: all special HTML characters
                 function myHtmlentities($value) {
-                    if (is_string($value)) {
-                        return htmlentities($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    if (is_array($value)) {
+                        return array_map('myHtmlentities', $value);
                     }
+                    return htmlentities($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                 }
                 $input = array_map('myHtmlentities', $input);
             } else {
                 // Encodes: &, ", ', <, >
                 function myHtmlspecialchars($value) {
-                    if (is_string($value)) {
-                        return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    if (is_array($value)) {
+                        return array_map('myHtmlspecialchars', $value);
                     }
+                    return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                 }
                 $input = array_map('myHtmlspecialchars', $input);
             }

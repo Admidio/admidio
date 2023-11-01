@@ -342,7 +342,7 @@ if ($datesResult['totalCount'] === 0) {
             }
         }
 
-        $dateLocation = $date->getValue('dat_location');
+        $dateLocation = (string) $date->getValue('dat_location');
         if ($dateLocation !== '') {
             // Show map link, when at least 2 words available
             // having more than 3 characters each

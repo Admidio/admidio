@@ -50,7 +50,9 @@ if ($getLinkUuid !== '') {
 if (isset($_SESSION['links_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
+    $linkDescription = admFuncVariableIsValid($_SESSION['links_request'], 'lnk_description', 'html');
     $link->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['links_request'])));
+    $link->setValue('lnk_description', $linkDescription);
     unset($_SESSION['links_request']);
 }
 

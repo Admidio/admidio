@@ -60,7 +60,9 @@ if (isset($_SESSION['dates_request'])) {
     if ((string) $_SESSION['dates_request']['date_deadline'] !== '') {
         $_SESSION['dates_request']['dat_deadline'] = $_SESSION['dates_request']['date_deadline'] . ' ' . $_SESSION['dates_request']['date_deadline_time'];
     }
+    $dateDescription = admFuncVariableIsValid($_SESSION['dates_request'], 'dat_description', 'html');
     $date->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['dates_request'])));
+    $date->setValue('dat_description', $dateDescription);
 
     // get the selected roles for visibility
     if (isset($_SESSION['dates_request']['adm_event_participation_right']) && $_SESSION['dates_request']['adm_event_participation_right'] !== '') {
