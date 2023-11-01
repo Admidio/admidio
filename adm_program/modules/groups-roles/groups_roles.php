@@ -461,6 +461,9 @@ foreach ($listsResult['recordset'] as $row) {
             case 2:
                 $viewMemberships = 'ORG_REGISTERED_USERS';
                 break;
+            case 3:
+                $viewMemberships = 'SYS_LEADERS';
+                break;
         }
 
         switch ($role->getValue('rol_view_members_profiles')) {
@@ -472,6 +475,9 @@ foreach ($listsResult['recordset'] as $row) {
                 break;
             case 2:
                 $viewProfiles = 'ORG_REGISTERED_USERS';
+                break;
+            case 3:
+                $viewMemberships = 'SYS_LEADERS';
                 break;
         }
 
