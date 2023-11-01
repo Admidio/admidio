@@ -490,15 +490,8 @@ class TableDate extends TableAccess
                 return parent::setValue($columnName, $newValue, false);
             } elseif ($columnName === 'dat_cat_id') {
                 $category = new TableCategory($this->db);
-                if(is_int($newValue)) {
-                    if(!$category->readDataById($newValue)) {
-                        throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
-                    }
-                } else {
-                    if(!$category->readDataByUuid($newValue)) {
-                        throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
-                    }
-                    $newValue = $category->getValue('cat_id');
+                if(!$category->readDataById($newValue)) {
+                    throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
                 }
             } elseif ($columnName === 'dat_deadline' && (string) $newValue !== '') {
                 if(!DateTime::createFromFormat('Y-m-d H:i', $newValue)) {

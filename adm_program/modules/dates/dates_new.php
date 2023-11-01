@@ -290,7 +290,7 @@ $form->addInput(
     array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(
-    'dat_cat_id',
+    'cat_uuid',
     $gL10n->get('DAT_CALENDAR'),
     $gDb,
     'DAT',

@@ -124,9 +124,13 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'))));
         // => EXIT
     }
-    if (strlen($_POST['dat_cat_id']) === 0) {
+    if (strlen($_POST['cat_uuid']) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_CALENDAR'))));
         // => EXIT
+    } else {
+        $calendar = new TableCategory($gDb);
+        $calendar->readDataByUuid($_POST['cat_uuid']);
+        $_POST['dat_cat_id'] = $calendar->getValue('cat_id');
     }
 
     if (isset($_POST['dat_all_day'])) {
@@ -232,7 +236,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
 
     if (isset($_POST['adm_event_participation_right'])) {
         // save changed roles rights of the category
-        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $date->getValue('dat_cat_id'));
+        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $calendar->getValue('cat_id'));
 
         // if roles for visibility are assigned to the category than check if the assigned roles of event participation
         // are within the visibility roles set otherwise show error
@@ -317,15 +321,6 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     if ($returnCode === true && $gSettingsManager->getBool('system_notifications_new_entries')) {
         // Notification email for new entries
 
-        $sqlCal = 'SELECT cat_name
-                     FROM '.TBL_CATEGORIES.'
-                    WHERE cat_id = ?';
-        $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $date->getValue('dat_cat_id')));
-        $calendar = $pdoStatement->fetchColumn();
-        if (Language::isTranslationStringId($calendar)) {
-            $calendar = $gL10n->get($calendar);
-        }
-
         if (strlen($_POST['dat_location']) > 0) {
             $location = $_POST['dat_location'];
         } else {
@@ -357,7 +352,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
                 . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '<br />'
                 . $gL10n->get('SYS_DATE') . ': ' . $date->getDateTimePeriod() . '<br />'
-                . $gL10n->get('DAT_CALENDAR') . ': ' . $calendar . '<br />'
+                . $gL10n->get('DAT_CALENDAR') . ': ' . $calendar->getValue('cat_name') . '<br />'
                 . $gL10n->get('DAT_LOCATION') . ': ' . $location . '<br />'
                 . $gL10n->get('SYS_ROOM') . ': ' . $room . '<br />'
                 . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '<br />'
