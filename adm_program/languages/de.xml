@@ -707,6 +707,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Du darfst keine Systemkategorien löschen.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">Du kannst die Systemrolle #VAR1_BOLD# nicht löschen.</string>
+  <string name="SYS_DELETED_ENTRY">Gelöschter Eintrag</string>
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
   <string name="SYS_DELIVERY_CONFIRMATION_DESC">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfangenden ab, ob eine Lesebestätigung versendet wird. Der Empfangende kann dies auf seinen Wunsch unterdrücken.</string>
