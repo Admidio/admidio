@@ -205,7 +205,7 @@ class ProfileFields
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gL10n;
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields)) {
             return $value;
@@ -298,7 +298,11 @@ class ProfileFields
                     }
 
                     if(count($arrListValuesWithKeys) > 0) {
-                        $htmlValue = $arrListValuesWithKeys[$value];
+                        if(array_key_exists($value, $arrListValuesWithKeys)) {
+                            $htmlValue = $arrListValuesWithKeys[$value];
+                        } else {
+                            $htmlValue = '<i>'.$gL10n->get('SYS_DELETED_ENTRY').'</i>';
+                        }
                     } else {
                         $htmlValue = '';
                     }
