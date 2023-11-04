@@ -36,5 +36,7 @@
     <step id="310">UPDATE %PREFIX%_preferences SET prf_value = 'en' WHERE prf_name = 'system_language' AND prf_value LIKE 'sw'</step>
     <step id="320">UPDATE %PREFIX%_menu SET men_description = 'SYS_EVENTS_DESC' WHERE men_description = 'DAT_DATES_DESC'</step>
     <step id="330">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'groups_roles_roles_per_page'</step>
+    <step id="340" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_location varchar(100)</step>
+    <step id="350" database="pgsql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_location TYPE varchar(100)</step>
     <step>stop</step>
 </update>

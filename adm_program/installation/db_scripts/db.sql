@@ -611,7 +611,7 @@ CREATE TABLE %PREFIX%_roles
     rol_end_date                date,
     rol_end_time                time,
     rol_weekday                 smallint,
-    rol_location                varchar(30),
+    rol_location                varchar(100),
     rol_max_members             integer,
     rol_cost                    float,
     rol_cost_period             smallint,
