@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Rename a file or a folder of documents & files module
+ * Move a file to another folder of documents & files module
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -64,42 +64,17 @@ $createUserId    = 0;
 $createTimestamp = '';
 
 try {
-    if ($getFileUuid !== '') {
-        // get recordset of current file from database
-        $file = new TableFile($gDb);
-        $file->getFileForDownload($getFileUuid);
+    // read folder data to rename the folder
+    $originalName    = $targetFolder->getValue('fol_name');
+    $createUserId    = (int) $targetFolder->getValue('fol_usr_id');
+    $createTimestamp = $targetFolder->getValue('fol_timestamp');
 
-        $originalName    = pathinfo($file->getValue('fil_name'), PATHINFO_FILENAME);
-        $fileType        = pathinfo($file->getValue('fil_name'), PATHINFO_EXTENSION);
-        $createUserId    = (int) $file->getValue('fil_usr_id');
-        $createTimestamp = $file->getValue('fil_timestamp');
+    if ($formValues['new_name'] == null) {
+        $formValues['new_name'] = $originalName;
+    }
 
-        if ($formValues['new_name'] === null) {
-            $formValues['new_name'] = $originalName;
-        }
-
-        if ($formValues['new_description'] === null) {
-            $formValues['new_description'] = $file->getValue('fil_description');
-        }
-    } else {
-        // main folder should not be renamed
-        if ($targetFolder->getValue('fol_fol_id_parent') === '') {
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-            // => EXIT
-        }
-
-        // read folder data to rename the folder
-        $originalName    = $targetFolder->getValue('fol_name');
-        $createUserId    = (int) $targetFolder->getValue('fol_usr_id');
-        $createTimestamp = $targetFolder->getValue('fol_timestamp');
-
-        if ($formValues['new_name'] == null) {
-            $formValues['new_name'] = $originalName;
-        }
-
-        if ($formValues['new_description'] == null) {
-            $formValues['new_description'] = $targetFolder->getValue('fol_description');
-        }
+    if ($formValues['new_description'] == null) {
+        $formValues['new_description'] = $targetFolder->getValue('fol_description');
     }
 } catch (AdmException $e) {
     $e->showHtml();
