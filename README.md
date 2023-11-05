@@ -1,4 +1,4 @@
-# Admidio: Your Ultimate Open-Source User Management Solution
+# Admidio: Your Open-Source User Management Solution
 
 Admidio empowers organizations and groups by providing a versatile and open-source user management system for their websites. With its flexible role model, Admidio allows you to precisely mirror your organization's structure and permissions. You can easily create and customize individual member profiles by adding or removing profile fields. 
 
