@@ -21,20 +21,46 @@
  * $page->show();
  * ```
  */
-class ModuleDocumentsFiles extends HtmlPage
+class ModuleDocumentsFiles
 {
-    public function getVisibleFolderStructure ()
+    public function getEditableFolderStructure (): array
     {
-        // Get all files of the current folder
-        $sqlFiles = 'SELECT *
-                       FROM '.TBL_FILES.'
-                      INNER JOIN '.TBL_FOLDERS.' ON fol_id = fil_fol_id
-                      WHERE fil_fol_id = ? -- $this->getValue(\'fol_id\')
-                   ORDER BY fil_name';
-        $filesStatement = $this->db->queryPrepared($sqlFiles, array((int) $this->getValue('fol_id')));
+        global $gCurrentOrgId, $gDb, $gL10n;
 
-        // jetzt noch die Dateien ins Array packen:
-        while ($rowFiles = $filesStatement->fetch()) {
+        // read main documents folder
+        $sqlFiles = 'SELECT fol_uuid, fol_id
+                       FROM '.TBL_FOLDERS.'
+                      WHERE fol_fol_id_parent IS NULL
+                        AND fol_org_id = ? -- $gCurrentOrgId
+                        AND fol_type   = \'DOCUMENTS\' ';
+        $filesStatement = $gDb->queryPrepared($sqlFiles, array($gCurrentOrgId));
 
+        $row = $filesStatement->fetch();
+
+        $arrAllUpdatableFolders = array($row['fol_uuid'] => $gL10n->get('SYS_DOCUMENTS_FILES'));
+
+        return $this->readFoldersWithUpdateRights($row['fol_id'], $arrAllUpdatableFolders);
+    }
+
+    private function readFoldersWithUpdateRights(string $folderID, array $arrAllUpdatableFolders, string $indent = ''): array
+    {
+        global $gDb;
+
+        // read all folders
+        $sqlFiles = 'SELECT fol_id
+                       FROM '.TBL_FOLDERS.'
+                      WHERE  fol_fol_id_parent = ? -- $folderID ';
+        $filesStatement = $gDb->queryPrepared($sqlFiles, array($folderID));
+
+        while($row = $filesStatement->fetch()) {
+            $folder = new TableFolder($gDb, $row['fol_id']);
+
+            if ($folder->hasUploadRight()) {
+                $arrAllUpdatableFolders[$folder->getValue('fol_uuid')] = $indent.'- '.$folder->getValue('fol_name');
+
+                $arrAllUpdatableFolders = $this->readFoldersWithUpdateRights($row['fol_id'], $arrAllUpdatableFolders, $indent.'&nbsp;&nbsp;&nbsp;');
+            }
+        }
+        return $arrAllUpdatableFolders;
     }
 }

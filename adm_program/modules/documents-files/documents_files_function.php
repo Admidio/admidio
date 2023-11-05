@@ -15,6 +15,7 @@
  *           5 - Delete folder
  *           6 - Add file/folder to database
  *           7 - Save access to folder
+ *           8 - Move file
  * folder_uuid : UUID of the folder in the database
  * file_uuid   : UUID of the file in the database
  * name        : Name of the file/folder that should be added to the database
@@ -376,4 +377,7 @@ elseif ($getMode === 7) {
         $e->showHtml();
         // => EXIT
     }
+}
+// move file to another folder
+elseif ($getMode === 8) {
 }

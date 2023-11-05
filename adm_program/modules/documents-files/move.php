@@ -58,67 +58,29 @@ if (!$targetFolder->hasUploadRight()) {
     // => EXIT
 }
 
-$originalName    = '';
-$fileType        = '';
-$createUserId    = 0;
-$createTimestamp = '';
-
-try {
-    // read folder data to rename the folder
-    $originalName    = $targetFolder->getValue('fol_name');
-    $createUserId    = (int) $targetFolder->getValue('fol_usr_id');
-    $createTimestamp = $targetFolder->getValue('fol_timestamp');
-
-    if ($formValues['new_name'] == null) {
-        $formValues['new_name'] = $originalName;
-    }
-
-    if ($formValues['new_description'] == null) {
-        $formValues['new_description'] = $targetFolder->getValue('fol_description');
-    }
-} catch (AdmException $e) {
-    $e->showHtml();
-    // => EXIT
-}
+$documentsFiles = new ModuleDocumentsFiles();
+$folders = $documentsFiles->getEditableFolderStructure();
 
 // create html page object
 $page = new HtmlPage('admidio-documents-files-rename', $headline);
 
 // create html form
 $form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);
-if ($getFileUuid !== '') {
-    $form->addInput(
-        'file_type',
-        $gL10n->get('SYS_FILE_TYPE'),
-        $fileType,
-        array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small')
-    );
-}
-$form->addInput(
-    'previous_name',
-    $gL10n->get('SYS_PREVIOUS_NAME'),
-    $originalName,
-    array('property' => HtmlForm::FIELD_DISABLED)
-);
-$form->addInput(
-    'new_name',
-    $gL10n->get('SYS_NEW_NAME'),
-    $formValues['new_name'],
-    array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_FILE_NAME_RULES')
-);
-$form->addMultilineTextInput(
-    'new_description',
-    $gL10n->get('SYS_DESCRIPTION'),
-    $formValues['new_description'],
-    4,
-    array('maxLength' => 255)
+$form->addSelectBox(
+    'dest_folder_uuid',
+    $gL10n->get('SYS_FOLDER'),
+    $folders,
+    array(
+        'property'                       => HtmlForm::FIELD_REQUIRED,
+        'defaultValue'                   => $getFolderUuid,
+        'showContextDependentFirstEntry' => false
+    )
 );
 $form->addSubmitButton(
     'btn_rename',
     $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
-$form->addHtml(admFuncShowCreateChangeInfoById($createUserId, $createTimestamp));
 
 $page->addHtml($form->show());
 $page->show();

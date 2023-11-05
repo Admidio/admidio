@@ -212,7 +212,7 @@ if (isset($folderContent['files'])) {
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
                 $additionalFileFunctions .= '
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/move.php', array('folder_uuid' => $getFolderUuid, 'file_uuid' => $fileUuid)). '">
-                    <i class="fas fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_MOVE_FILE').'"></i></a>';
+                    <i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MOVE_FILE').'"></i></a>';
             } elseif ($gCurrentUser->adminDocumentsFiles()) {
                 $additionalFileFunctions .= '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
