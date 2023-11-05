@@ -7,7 +7,7 @@ In addition to these core features, Admidio boasts a rich array of modules, incl
 ![Admidio Logo](https://www.admidio.org/images/mainpage_flying_icons.png)
 
 [![GitHub issues](https://img.shields.io/github/issues/Admidio/admidio)](https://github.com/Admidio/admidio/issues)
-[![GitHub forks](https://img.shields.io.github/forks/Admidio/admidio)](https://github.com/Admidio/admidio/network)
+[![GitHub forks](https://img.shields.io/github/forks/Admidio/admidio)](https://github.com/Admidio/admidio/network)
 [![GitHub stars](https://img.shields.io/github/stars/Admidio/admidio)](https://github.com/Admidio/admidio/stargazers)
 ![GitHub top language](https://img.shields.io/github/languages/top/admidio/admidio)
 [![GitHub license](https://img.shields.io/github/license/Admidio/admidio)](https://github.com/Admidio/admidio/blob/master/LICENSE.txt)
@@ -88,5 +88,5 @@ Stay updated with the latest improvements and bug fixes by visiting our [changel
 
 ## Donation
 
-If you appreciate Admidio , consider donating please
-thanks for contributing 🚀
+If you appreciate Admidio, consider making a [donation](https://www.admidio.org/donate.php).
+Thanks for contributing!
