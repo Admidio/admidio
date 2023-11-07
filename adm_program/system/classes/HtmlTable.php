@@ -121,16 +121,16 @@ class HtmlTable extends HtmlTableBasic
      *                                              then you could set an array for each value with the following entries:
      *                                              array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
      *                                              With this you can specify special values for sorting and searching.
-     * @param string|null $id              (optional) Set an unique id for the column.
+     * @param string $id           (optional) Set an unique id for the column.
      * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of column where the colspan should start.
      *                                              The first column of a table will be 1.
      */
-    private function addRowTypeByArray(string $type, array $arrColumnValues, string $id = null, array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
+    private function addRowTypeByArray(string $type, array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
         // set an id to the column
-        if ($id !== null) {
+        if ($id !== '') {
             $arrAttributes['id'] = $id;
         }
 
@@ -163,12 +163,12 @@ class HtmlTable extends HtmlTableBasic
      * Adds a complete row with all columns to the table. This will be the column heading row.
      * Each value of the array represents the heading text for each column.
      * @param array<int,string>    $arrColumnValues Array with the values for each column.
-     * @param string|null $id              (optional) Set an unique id for the column.
+     * @param string $id           (optional) Set an unique id for the column.
      * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
      */
-    public function addRowHeadingByArray(array $arrColumnValues, string $id = null, array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
+    public function addRowHeadingByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
         $this->addTableHeader();
         $this->addRowTypeByArray('th', $arrColumnValues, $id, $arrAttributes, $colspan, $colspanOffset);
@@ -180,13 +180,13 @@ class HtmlTable extends HtmlTableBasic
      *                                              then you could set an array for each value with the following entries:
      *                                              array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
      *                                              With this you can specify special values for sorting and searching.
-     * @param string|null $id      (optional) Set an unique id for the column.
+     * @param string $id           (optional) Set an unique id for the column.
      * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start.
      *                                              The first column of a table will be 1.
      */
-    public function addRowByArray(array $arrColumnValues, string $id = null, array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
+    public function addRowByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
         // if body area wasn't defined until now then do it
         if (!$this->tbody) {
@@ -210,13 +210,13 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Adds a column to the table.
      * @param string $type          'th' for header row or 'td' for body row.
-     * @param int $key               Column number (starts with 0).
+     * @param string $key            Column number (starts with 0).
      * @param string|string[] $value Column value or array with column value and attributes.
      * @param int $colspan           (optional) Number of columns that should be joined together.
      * @param int $colspanOffset     (optional) Number of the column where the colspan should start.
      *                               The first column of a table will be 1.
      */
-    private function prepareAndAddColumn(string $type, int $key, $value, int $colspan = 1, int $colspanOffset = 1)
+    private function prepareAndAddColumn(string $type, string $key, $value, int $colspan = 1, int $colspanOffset = 1)
     {
         $columnAttributes = array();
 

@@ -652,7 +652,7 @@ foreach ($membersList as $member) {
                                 <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 
-    $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
+    $table->addRowByArray($columnValues, '', array('nobr' => 'true'));
 
     ++$listRowNumber;
 }  // End-While (end found User)
