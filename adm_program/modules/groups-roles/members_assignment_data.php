@@ -142,7 +142,7 @@ if ($getMembersShowAll) {
 } else {
     // show only members of current organization
     if ($getFilterRoleUuid !== '') {
-        $filterRoleCondition = ' AND rol_uuid = '.$getFilterRoleUuid.' ';
+        $filterRoleCondition = (strlen($getFilterRoleUuid) > 1 ? ' AND rol_uuid = '.$getFilterRoleUuid : '').' ';
     }
 }
 
