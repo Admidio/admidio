@@ -913,6 +913,7 @@
   <string name="SYS_MORE">More</string>
   <string name="SYS_MOVE_FILE">Move file</string>
   <string name="SYS_MOVE_DOWN">Move down #VAR1#</string>
+  <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">Move up #VAR1#</string>
   <string name="SYS_MOVE_VAR">Move #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Multiple recipients</string>

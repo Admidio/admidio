@@ -180,6 +180,29 @@ class TableFile extends TableAccess
     }
 
     /**
+     * Move this file to the folder that is set with the parameter $destFolderUUID. The method
+     * will check if the user has the right to upload files to that folder and then move the file
+     * within the file system and the database structure.
+     * @param string $destFolderUUID UUID of the destination folder to which this file is to be moved.
+     * @return void
+     * @throws AdmException
+     * @throws RuntimeException
+     * @throws UnexpectedValueException
+     */
+    public function moveTo(string $destFolderUUID)
+    {
+        $folder = new TableFolder($this->db);
+        $folder->readDataByUuid($destFolderUUID);
+
+        if ($folder->hasUploadRight()) {
+            FileSystemUtils::moveFile($this->getFullFilePath(), $folder->getFullFolderPath().'/'.$this->getValue('fil_name'));
+
+            $this->setValue('fil_fol_id', $folder->getValue('fol_id'));
+            $this->save();
+        }
+    }
+
+    /**
      * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.

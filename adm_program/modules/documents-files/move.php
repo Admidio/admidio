@@ -22,7 +22,7 @@ $getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'string');
 
 // set headline of the script
 if ($getFileUuid !== '') {
-    $headline = $gL10n->get('SYS_EDIT_FILE');
+    $headline = $gL10n->get('SYS_MOVE_FILE');
 } else {
     $headline = $gL10n->get('SYS_EDIT_FOLDER');
 }
@@ -62,13 +62,13 @@ $documentsFiles = new ModuleDocumentsFiles();
 $folders = $documentsFiles->getEditableFolderStructure();
 
 // create html page object
-$page = new HtmlPage('admidio-documents-files-rename', $headline);
+$page = new HtmlPage('admidio-documents-move-file', $headline);
 
 // create html form
-$form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);
+$form = new HtmlForm('documents_files_move_file', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '8', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);
 $form->addSelectBox(
     'dest_folder_uuid',
-    $gL10n->get('SYS_FOLDER'),
+    $gL10n->get('SYS_MOVE_TO'),
     $folders,
     array(
         'property'                       => HtmlForm::FIELD_REQUIRED,
@@ -77,7 +77,7 @@ $form->addSelectBox(
     )
 );
 $form->addSubmitButton(
-    'btn_rename',
+    'btn_move',
     $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
