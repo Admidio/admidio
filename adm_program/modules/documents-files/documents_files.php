@@ -55,7 +55,7 @@ $getFolderUuid = $currentFolder->getValue('fol_uuid');
 $folderContent = $currentFolder->getFolderContentsForDownload();
 
 // create html page object
-$page = new HtmlPage('admidio-documents-files', $headline);
+$page = new ModuleDocumentsFiles('admidio-documents-files', $headline);
 
 if ($currentFolder->hasUploadRight()) {
     // upload only possible if upload filesize > 0
@@ -98,6 +98,15 @@ if ($currentFolder->hasUploadRight()) {
 if ($gCurrentUser->adminDocumentsFiles()) {
     $page->addHtml('<div class="alert alert-info" role="alert"><i class="fas fa-info-circle"></i>' . $gL10n->get('SYS_DOCUMENTS_FILES_ROLES_VIEW', array(implode(', ', $currentFolder->getViewRolesNames()))) . '</div>');
 }
+
+try {
+    $page->readData($getFolderUuid);
+    $page->createContentList();
+} catch (AdmException $e) {
+} catch (SmartyException $e) {
+    $gMessage->show($e->getMessage());
+}
+
 
 // Create table object
 $documentsFilesOverview = new HtmlTable('tbl_documents_files', $page, true, true);

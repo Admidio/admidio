@@ -23,9 +23,8 @@
  */
 class ModuleGroupsRoles extends HtmlPage
 {
-
     /**
-     * @var array Plain text of email
+     * @var array Array with all read groups and roles
      */
     protected $data = array();
     /**
@@ -35,14 +34,6 @@ class ModuleGroupsRoles extends HtmlPage
     public const ROLE_TYPE_ACTIVE = 1;
     public const ROLE_TYPE_EVENT_PARTICIPATION = 2;
     protected $roleType;
-
-    /**
-     * Constructor that initialize the class member parameters
-     */
-    public function __construct(string $id, string $headline = '')
-    {
-        parent::__construct($id, $headline);
-    }
 
     /**
      * Returns the number of roles that where read in this class.
@@ -373,21 +364,6 @@ class ModuleGroupsRoles extends HtmlPage
                 'icon' => 'fas fa-trash-alt',
                 'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
             );
-            /*
-                        // create array with all column values
-                        $columnValues = array(
-                            array('value' => $role->getValue('cat_name'), 'order' => (int) $role->getValue('cat_sequence')),
-                            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $roleUuid)).'">'.$rolName.'</a>',
-                            $assignRoles,
-                            $gL10n->get($viewEmail),
-                            $gL10n->get($viewMemberships),
-                            $gL10n->get($viewProfiles),
-                            $gL10n->get($leaderRights),
-                            $linkAdministration
-                        );
-
-                        $table->addRowByArray($columnValues, 'row_'. $roleUuid);
-            */
             $templateData[] = $templateRow;
         }
 
@@ -404,10 +380,10 @@ class ModuleGroupsRoles extends HtmlPage
     }
 
     /**
-     * Creates an array with all available groups and roles. The array contains the following entries:
-     * array(userID, userUUID, loginName, registrationTimestamp, lastName, firstName, email, validationID)
-     * @param int $roleType
-     * @param string $categoryUUID
+     * Creates an array with all available groups and roles.
+     * @param int $roleType        The type of groups and roles that should be read. This could be active, inactive
+     *                             or event roles.
+     * @param string $categoryUUID The UUID of the category whose groups and roles should be read.
      */
     public function readData(int $roleType = ModuleGroupsRoles::ROLE_TYPE_ACTIVE, string $categoryUUID = '')
     {
