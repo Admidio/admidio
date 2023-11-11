@@ -147,7 +147,9 @@ if (isset($folderContent['folders'])) {
             if ($nextFolder['fol_exists'] === true) {
                 $additionalFolderFunctions .= '
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $nextFolder['fol_uuid'])) . '">
-                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_FOLDER').'"></i></a>';
+                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_FOLDER').'"></i></a>
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/move.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">
+                    <i class="fas fa-arrow-circle-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MOVE_FOLDER').'"></i></a>';
             } elseif ($gCurrentUser->adminDocumentsFiles()) {
                 $additionalFolderFunctions .= '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
@@ -209,7 +211,9 @@ if (isset($folderContent['files'])) {
             if ($file->getValue('fil_exists') === true) {
                 $additionalFileFunctions .= '
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $getFolderUuid, 'file_uuid' => $fileUuid)). '">
-                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
+                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/move.php', array('folder_uuid' => $getFolderUuid, 'file_uuid' => $fileUuid)). '">
+                    <i class="fas fa-arrow-circle-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MOVE_FILE').'"></i></a>';
             } elseif ($gCurrentUser->adminDocumentsFiles()) {
                 $additionalFileFunctions .= '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"

@@ -911,7 +911,12 @@
   <string name="SYS_MONDAY">Monday</string>
   <string name="SYS_MONTHLY">Monthly</string>
   <string name="SYS_MORE">More</string>
+  <string name="SYS_MOVE_FILE">Move file</string>
+  <string name="SYS_MOVE_FILE_DESC">Select a folder to which you want to move the #VAR1_BOLD# file. The role permissions for displaying the file are taken from the target folder.</string>
+  <string name="SYS_MOVE_FOLDER">Move folder</string>
+  <string name="SYS_MOVE_FOLDER_DESC">Select a folder to which you want to move the #VAR1_BOLD# folder. The role permissions for viewing and uploading files from the target folder are applied to this folder and all subfolders.</string>
   <string name="SYS_MOVE_DOWN">Move down #VAR1#</string>
+  <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">Move up #VAR1#</string>
   <string name="SYS_MOVE_VAR">Move #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Multiple recipients</string>

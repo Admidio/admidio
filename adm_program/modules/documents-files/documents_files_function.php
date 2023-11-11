@@ -15,6 +15,7 @@
  *           5 - Delete folder
  *           6 - Add file/folder to database
  *           7 - Save access to folder
+ *           8 - Move file / folder
  * folder_uuid : UUID of the folder in the database
  * file_uuid   : UUID of the file in the database
  * name        : Name of the file/folder that should be added to the database
@@ -29,7 +30,7 @@ if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
 }
 
 // Initialize and check the parameters
-$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(2, 3, 4, 5, 6, 7)));
+$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(2, 3, 4, 5, 6, 7, 8)));
 $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
 $getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'string');
 $getName       = admFuncVariableIsValid($_GET, 'name', 'file');
@@ -295,7 +296,11 @@ elseif ($getMode === 6) {
     }
 
     // add the file or folder recursively to the database
-    $folder->addFolderOrFileToDatabase($getName);
+    try {
+        $folder->addFolderOrFileToDatabase($getName);
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
 
     // back to previous page
     $gNavigation->addUrl(CURRENT_URL);
@@ -376,4 +381,25 @@ elseif ($getMode === 7) {
         $e->showHtml();
         // => EXIT
     }
+}
+// move file to another folder
+elseif ($getMode === 8) {
+    $destFolderUUID = admFuncVariableIsValid($_POST, 'dest_folder_uuid', 'string', array('requireValue' => true));
+
+    try {
+        if ($getFileUuid !== '') {
+            $file = new TableFile($gDb);
+            $file->readDataByUuid($getFileUuid);
+            $file->moveToFolder($destFolderUUID);
+        } else {
+            $folder = new TableFolder($gDb);
+            $folder->readDataByUuid($getFolderUuid);
+            $folder->moveToFolder($destFolderUUID);
+        }
+    } catch (AdmException | RuntimeException | UnexpectedValueException $e) {
+        $gMessage->show($e->getMessage());
+    }
+
+    $gNavigation->deleteLastUrl();
+    admRedirect($gNavigation->getUrl());
 }

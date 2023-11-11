@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Rename a file or a folder of download module
+ * Rename a file or a folder of documents & files module
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/

@@ -160,8 +160,9 @@ class TableFolder extends TableAccess
      * Add all roles of the array to the current folder and all the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
      * @param string $rolesRightNameIntern Name of the right where the roles should be added
-     * @param array<int,int> $rolesArray
-     * @param bool $recursive            If set to **true** than the rights will be set recursive to all subfolders
+     *                                     e.g. **folder_view** or **folder_upload**
+     * @param array<int,int> $rolesArray   Array with all role IDs that should be added.
+     * @param bool $recursive              If set to **true** than the rights will be set recursive to all subfolders
      */
     public function addRolesOnFolder(string $rolesRightNameIntern, array $rolesArray, bool $recursive = true)
     {
@@ -655,6 +656,42 @@ class TableFolder extends TableAccess
     }
 
     /**
+     * Move this folder to the folder that is set with the parameter $destFolderUUID. The method
+     * will check if the user has the right to upload files to that folder and then move the folder
+     * within the file system and the database structure. The role rights for viewing and uploading will then be
+     * adopted recursively from the destination folder.
+     * @param string $destFolderUUID UUID of the destination folder to which this folder is to be moved.
+     * @return void
+     * @throws AdmException
+     * @throws RuntimeException
+     * @throws UnexpectedValueException
+     */
+    public function moveToFolder(string $destFolderUUID)
+    {
+        $folder = new TableFolder($this->db);
+        $folder->readDataByUuid($destFolderUUID);
+
+        if ($folder->hasUploadRight()) {
+            FileSystemUtils::moveDirectory($this->getFullFolderPath(), $folder->getFullFolderPath().'/'.$this->getValue('fol_name'));
+
+            $this->db->startTransaction();
+            // save new parent folder
+            $this->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
+            $this->setValue('fol_path', $folder->getValue('fol_path').'/'.$folder->getValue('fol_name'));
+            $this->setValue('fol_public', $folder->getValue('fol_public'));
+            $this->setValue('fol_locked', $folder->getValue('fol_locked'));
+            $this->save();
+
+            // adopt the role rights of the new parent folder
+            $this->removeRolesOnFolder('folder_view', $this->getViewRolesIds());
+            $this->removeRolesOnFolder('folder_upload', $this->getUploadRolesIds());
+            $this->addRolesOnFolder('folder_view', $folder->getViewRolesIds());
+            $this->addRolesOnFolder('folder_upload', $folder->getUploadRolesIds());
+            $this->db->endTransaction();
+        }
+    }
+
+    /**
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
      * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
@@ -682,8 +719,9 @@ class TableFolder extends TableAccess
      * Remove all roles of the array from the current folder and all the subfolders. The
      * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
      * @param string $rolesRightNameIntern Name of the right where the roles should be removed
-     * @param array<int,int> $rolesArray
-     * @param bool $recursive            If set to **true** than the rights will be set recursive to all subfolders
+     *                                     e.g. **folder_view** or **folder_upload**
+     * @param array<int,int> $rolesArray   Array with all role IDs that should be removed.
+     * @param bool $recursive              If set to **true** than the rights will be set recursive to all subfolders.
      */
     public function removeRolesOnFolder(string $rolesRightNameIntern, array $rolesArray, bool $recursive = true)
     {

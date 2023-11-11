@@ -45,6 +45,7 @@ return array(
     'Message' => $baseDir . '/adm_program/system/classes/Message.php',
     'ModuleAnnouncements' => $baseDir . '/adm_program/system/classes/ModuleAnnouncements.php',
     'ModuleContacts' => $baseDir . '/adm_program/system/classes/ModuleContacts.php',
+    'ModuleDocumentsFiles' => $baseDir . '/adm_program/system/classes/ModuleDocumentsFiles.php',
     'ModuleEvents' => $baseDir . '/adm_program/system/classes/ModuleEvents.php',
     'ModuleGroupsRoles' => $baseDir . '/adm_program/system/classes/ModuleGroupsRoles.php',
     'ModuleLogin' => $baseDir . '/adm_program/system/classes/ModuleLogin.php',

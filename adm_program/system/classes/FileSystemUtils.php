@@ -205,15 +205,15 @@ final class FileSystemUtils
 
     /**
      * Checks the preconditions for tile copy and move
-     * @param string             $mode        The operation mode (copy or move)
-     * @param string             $oldFilePath The source path
-     * @param string             $newFilePath The destination path
+     * @param string $mode        The operation mode (copy or move)
+     * @param string $oldFilePath The source path
+     * @param string $newFilePath The destination path
      * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure = true, [bool] overwrite = false)
-     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
-     * @throws \RuntimeException         Throws if the destination folder could not be created
      * @return bool Returns true if the destination path will be overwritten
+     * @throws RuntimeException         Throws if the destination folder could not be created
+     * @throws UnexpectedValueException Throws if a precondition is not fulfilled
      */
-    private static function checkFilePreconditions($mode, $oldFilePath, $newFilePath, array $options = array())
+    private static function checkFilePreconditions(string $mode, string $oldFilePath, string $newFilePath, array $options = array()): bool
     {
         $defaultOptions = array('createDirectoryStructure' => true, 'overwrite' => false);
         $options = array_merge($defaultOptions, $options);
@@ -223,17 +223,17 @@ final class FileSystemUtils
 
         $oldParentDirectoryPath = dirname($oldFilePath);
         if (self::isUnix() && !is_executable($oldParentDirectoryPath)) {
-            throw new \UnexpectedValueException('Source parent directory "' . $oldParentDirectoryPath . '" is not executable!');
+            throw new UnexpectedValueException('Source parent directory "' . $oldParentDirectoryPath . '" is not executable!');
         }
         if ($mode === 'move' && !is_writable($oldParentDirectoryPath)) {
-            throw new \UnexpectedValueException('Source parent directory "' . $oldParentDirectoryPath . '" is not writable!');
+            throw new UnexpectedValueException('Source parent directory "' . $oldParentDirectoryPath . '" is not writable!');
         }
 
         if (!is_file($oldFilePath)) {
-            throw new \UnexpectedValueException('Source file "' . $oldFilePath . '" does not exist!');
+            throw new UnexpectedValueException('Source file "' . $oldFilePath . '" does not exist!');
         }
         if ($mode === 'copy' && !is_readable($oldFilePath)) {
-            throw new \UnexpectedValueException('Source file "' . $oldFilePath . '" is not readable!');
+            throw new UnexpectedValueException('Source file "' . $oldFilePath . '" is not readable!');
         }
 
         $newParentDirectoryPath = dirname($newFilePath);
@@ -244,13 +244,13 @@ final class FileSystemUtils
                 return false;
             }
 
-            throw new \UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" does not exist!');
+            throw new UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" does not exist!');
         }
         if (self::isUnix() && !is_executable($newParentDirectoryPath)) {
-            throw new \UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" is not executable!');
+            throw new UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" is not executable!');
         }
         if (!is_writable($newParentDirectoryPath)) {
-            throw new \UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" is not writable!');
+            throw new UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" is not writable!');
         }
 
         if (!is_file($newFilePath)) {
@@ -260,7 +260,7 @@ final class FileSystemUtils
             return true;
         }
 
-        throw new \UnexpectedValueException('Destination file "' . $newFilePath . '" already exist!');
+        throw new UnexpectedValueException('Destination file "' . $newFilePath . '" already exist!');
     }
 
     /**
@@ -665,10 +665,10 @@ final class FileSystemUtils
      * Execute the copy process to copy a directory
      * @param string $oldDirectoryPath The directory to copy
      * @param string $newDirectoryPath The destination directory
-     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
-     * @throws \RuntimeException         Throws if the mkdir, copy or opendir process fails
+     * @throws UnexpectedValueException Throws if a precondition is not fulfilled
+     * @throws RuntimeException         Throws if the mkdir, copy or open dir process fails
      */
-    private static function doCopyDirectory($oldDirectoryPath, $newDirectoryPath)
+    private static function doCopyDirectory(string $oldDirectoryPath, string $newDirectoryPath)
     {
         $oldDirectoryContent = self::getDirectoryContent($oldDirectoryPath, false, false);
 
@@ -1139,14 +1139,14 @@ final class FileSystemUtils
 
     /**
      * Moves a directory
-     * @param string             $oldDirectoryPath The directory to move
-     * @param string             $newDirectoryPath The destination directory
-     * @param array<string,bool> $options          Operation options ([bool] createDirectoryStructure = true, [bool] overwriteContent = false)
-     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
-     * @throws \RuntimeException         Throws if the mkdir, copy, rmdir, unlink or opendir process fails
+     * @param string $oldDirectoryPath The directory to move
+     * @param string $newDirectoryPath The destination directory
+     * @param array<string,bool> $options Operation options ([bool] createDirectoryStructure = true, [bool] overwriteContent = false)
      * @return bool Returns true if content was overwritten
+     * @throws RuntimeException         Throws if the mkdir, copy, rmdir, unlink or open dir process fails
+     * @throws UnexpectedValueException Throws if a precondition is not fulfilled
      */
-    public static function moveDirectory($oldDirectoryPath, $newDirectoryPath, array $options = array())
+    public static function moveDirectory(string $oldDirectoryPath, string $newDirectoryPath, array $options = array()): bool
     {
         $returnValue = self::checkDirectoryPreconditions($oldDirectoryPath, $newDirectoryPath, $options);
 
@@ -1159,21 +1159,21 @@ final class FileSystemUtils
 
     /**
      * Moves a file
-     * @param string             $oldFilePath The file to move
-     * @param string             $newFilePath The path where to move to
-     * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure = true, [bool] overwrite = false)
-     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
-     * @throws \RuntimeException         Throws if the move process fails
+     * @param string $oldFilePath The path and file to move
+     * @param string $newFilePath The path and file where to move to
+     * @param array<string,bool> $options Operation options ([bool] createDirectoryStructure = true, [bool] overwrite = false)
      * @return bool Returns true if the destination path was overwritten
+     * @throws RuntimeException         Throws if the move process fails
+     * @throws UnexpectedValueException Throws if a precondition is not fulfilled
      * @see https://www.php.net/manual/en/function.rename.php
      */
-    public static function moveFile($oldFilePath, $newFilePath, array $options = array())
+    public static function moveFile(string $oldFilePath, string $newFilePath, array $options = array()): bool
     {
         $returnValue = self::checkFilePreconditions('move', $oldFilePath, $newFilePath, $options);
 
         $renameResult = rename($oldFilePath, $newFilePath);
         if (!$renameResult) {
-            throw new \RuntimeException('File "' . $oldFilePath . '" cannot be moved!');
+            throw new RuntimeException('File "' . $oldFilePath . '" cannot be moved!');
         }
 
         return $returnValue;
@@ -1183,25 +1183,25 @@ final class FileSystemUtils
      * Method will read the content of the file that is set through the parameter and return the
      * file content. It will check if the file exists and if it's readable for the PHP user.
      * @param string $filePath The file to read
-     * @throws \UnexpectedValueException Throws if the file does not exist or is not readable
-     * @throws \RuntimeException         Throws if the read process fails
      * @return string Returns the file content
+     * @throws RuntimeException         Throws if the read process fails
+     * @throws UnexpectedValueException Throws if the file does not exist or is not readable
      * @see https://www.php.net/manual/en/function.file-get-contents.php
      */
-    public static function readFile($filePath)
+    public static function readFile(string $filePath): string
     {
         self::checkIsInAllowedDirectories($filePath);
 
         if (!is_file($filePath)) {
-            throw new \UnexpectedValueException('File "' . $filePath . '" does not exist!');
+            throw new UnexpectedValueException('File "' . $filePath . '" does not exist!');
         }
         if (!is_readable($filePath)) {
-            throw new \UnexpectedValueException('File "' . $filePath . '" is not readable!');
+            throw new UnexpectedValueException('File "' . $filePath . '" is not readable!');
         }
 
         $data = file_get_contents($filePath);
         if ($data === false) {
-            throw new \RuntimeException('File "' . $filePath . '" cannot be read!');
+            throw new RuntimeException('File "' . $filePath . '" cannot be read!');
         }
 
         return $data;

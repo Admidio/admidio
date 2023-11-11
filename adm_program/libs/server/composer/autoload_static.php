@@ -96,8 +96,8 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -183,6 +183,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'Message' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Message.php',
         'ModuleAnnouncements' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleAnnouncements.php',
         'ModuleContacts' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleContacts.php',
+        'ModuleDocumentsFiles' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleDocumentsFiles.php',
         'ModuleEvents' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleEvents.php',
         'ModuleGroupsRoles' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleGroupsRoles.php',
         'ModuleLogin' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleLogin.php',
