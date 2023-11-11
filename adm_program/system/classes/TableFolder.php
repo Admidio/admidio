@@ -406,20 +406,6 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Return the contents of the current folder as an array, depending on the user rights.
-     * @return array<string,array<int,array<string,mixed>>> Return the contents of the current folder as an array.
-     */
-    public function getFolderContentsForDownload(): array
-    {
-        $completeFolder = array(
-            'folders' => $this->getSubfoldersWithProperties(),
-            'files'   => $this->getFilesWithProperties()
-        );
-
-        return $this->addAdditionalToFolderContents($completeFolder);
-    }
-
-    /**
      * Reads the folder recordset from database table **adm_folders** and throws an
      * AdmException if the user has no right to see the folder or the folder id doesn't exist.
      * @param string $folderUuid The UUID of the folder. If the UUID is empty then the root folder will be shown.

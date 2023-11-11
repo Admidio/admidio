@@ -27,6 +27,14 @@ class ModuleDocumentsFiles extends HtmlPage
      * @var array Array with all read folders and files
      */
     protected $data = array();
+    /**
+     * @var array Array with all read folders and files
+     */
+    protected $unregisteredFoldersFiles = array();
+    /**
+     * @var TableFolder Object of the current folder
+     */
+    protected $folder;
 
     /**
      * Show all roles of the organization in card view. The roles must be read before with the method readData.
@@ -37,153 +45,120 @@ class ModuleDocumentsFiles extends HtmlPage
      */
     public function createContentList()
     {
-        global $gSettingsManager, $gCurrentUser, $gL10n, $gDb;
+        global $gCurrentUser, $gL10n;
 
         $templateData = array();
+        $infoAlert = '';
+
+        if ($gCurrentUser->adminDocumentsFiles()) {
+            $infoAlert = $gL10n->get('SYS_DOCUMENTS_FILES_ROLES_VIEW', array(implode(', ', $this->folder->getViewRolesNames())));
+        }
 
         foreach($this->data as $row) {
             $templateRow = array();
-            /*
-            $templateRow['category'] = $row['cat_name'];
-            $templateRow['categoryOrder'] = $row['cat_sequence'];
-            $templateRow['role'] = $row['rol_name'];
-            $templateRow['roleUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $row['rol_uuid']));
-            $templateRow['roleRights'] = array();
-            if ($role->getValue('rol_assign_roles') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-user-tie', 'title' => $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'));
-            }
-            if ($role->getValue('rol_all_lists_view') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-list', 'title' => $gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'));
-            }
-            if ($role->getValue('rol_approve_users') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-address-card', 'title' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'));
-            }
-            if ($role->getValue('rol_mail_to_all') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-envelope', 'title' => $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'));
-            }
-            if ($role->getValue('rol_edit_user') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-user-friends', 'title' => $gL10n->get('SYS_RIGHT_EDIT_USER'));
-            }
-            if ($role->getValue('rol_profile') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-user', 'title' => $gL10n->get('SYS_RIGHT_PROFILE'));
-            }
-            if ($role->getValue('rol_announcements') == 1 && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-newspaper', 'title' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'));
-            }
-            if ($role->getValue('rol_dates') == 1 && (int) $gSettingsManager->get('events_module_enabled') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-calendar-alt', 'title' => $gL10n->get('SYS_RIGHT_DATES'));
-            }
-            if ($role->getValue('rol_photo') == 1 && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-image', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
-            }
-            if ($role->getValue('rol_documents_files') == 1 && (int) $gSettingsManager->getBool('documents_files_module_enabled')) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-download', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
-            }
-            if ($role->getValue('rol_guestbook') == 1 && (int) $gSettingsManager->get('enable_guestbook_module') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fas fa-book', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK'));
-            }
-            if ($role->getValue('rol_guestbook_comments') == 1 && (int) $gSettingsManager->get('enable_guestbook_module') > 0 && !$gSettingsManager->getBool('enable_gbook_comments4all')) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-comment', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'));
-            }
-            if ($role->getValue('rol_weblinks') == 1 && (int) $gSettingsManager->get('enable_weblinks_module') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-link', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));
+
+            if ($row['folder']) {
+                $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $row['uuid']));
+                $templateRow['icon'] = 'fas fa-fw fa-folder';
+                $templateRow['title'] = $gL10n->get('SYS_FOLDER');
+
+                if ($this->folder->hasUploadRight()) {
+                    if ($gCurrentUser->adminDocumentsFiles()) {
+                        $templateRow['actions'][] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_config.php', array('folder_uuid' => $row['uuid'])),
+                            'icon' => 'fas fa-lock',
+                            'tooltip' => $gL10n->get('SYS_PERMISSIONS')
+                        );
+                    }
+                    if ($row['existsInFileSystem']) {
+                        $templateRow['actions'][] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/rename.php', array('folder_uuid' => $row['uuid'])),
+                            'icon' => 'fas fa-edit',
+                            'tooltip' => $gL10n->get('SYS_EDIT_FOLDER')
+                        );
+                        $templateRow['actions'][] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/move.php', array('folder_uuid' => $row['uuid'])),
+                            'icon' => 'fas fa-arrow-circle-right',
+                            'tooltip' => $gL10n->get('SYS_MOVE_FOLDER')
+                        );
+                    }
+                    $templateRow['actions'][] = array(
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php',
+                                array('type' => 'fol', 'element_id' => 'row_folder_'.$row['uuid'], 'name' => $row['name'], 'database_id' => $row['uuid'])),
+                        'icon' => 'fas fa-trash-alt',
+                        'tooltip' => $gL10n->get('SYS_DELETE_FOLDER')
+                    );
+                }
+            } else {
+                $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $row['uuid'], 'view' => 1));
+                $templateRow['icon'] = 'fas fa-fw '.FileSystemUtils::getFileFontAwesomeIcon($row['name']);
+                $templateRow['title'] = $gL10n->get('SYS_FILE');
+
+                if ($this->folder->hasUploadRight()) {
+                    if ($row['existsInFileSystem']) {
+                        $templateRow['actions'][] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/rename.php', array('folder_uuid' => $this->folder->getValue('fol_uuid'), 'file_uuid' => $row['uuid'])),
+                            'icon' => 'fas fa-edit',
+                            'tooltip' => $gL10n->get('SYS_EDIT')
+                        );
+                        $templateRow['actions'][] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/move.php', array('folder_uuid' => $this->folder->getValue('fol_uuid'), 'file_uuid' => $row['uuid'])),
+                            'icon' => 'fas fa-arrow-circle-right',
+                            'tooltip' => $gL10n->get('SYS_MOVE_FILE')
+                        );
+                    }
+                    $templateRow['actions'][] = array(
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php',
+                            array('type' => 'fil', 'element_id' => 'row_file_'.$row['uuid'], 'name' => $row['name'], 'database_id' => $row['uuid'], 'database_id_2' => $this->folder->getValue('fol_uuid'))),
+                        'icon' => 'fas fa-trash-alt',
+                        'tooltip' => $gL10n->get('SYS_DELETE_FILE')
+                    );
+                }
+
             }
 
-            switch ($role->getValue('rol_mail_this_role')) {
-                case 0:
-                    $templateRow['emailToThisRole'] = $gL10n->get('SYS_NOBODY');
-                    break;
-                case 1:
-                    $templateRow['emailToThisRole'] = $gL10n->get('SYS_ROLE_MEMBERS');
-                    break;
-                case 2:
-                    $templateRow['emailToThisRole'] = $gL10n->get('ORG_REGISTERED_USERS');
-                    break;
-                case 3:
-                    $templateRow['emailToThisRole'] = $gL10n->get('SYS_ALSO_VISITORS');
-                    break;
-            }
+            $templateRow['folder'] = $row['folder'];
+            $templateRow['name'] = $row['name'];
+            $templateRow['description'] = $row['description'];
+            $templateRow['timestamp'] = $row['timestamp'];
+            $templateRow['size'] = $row['size'];
+            $templateRow['counter'] = $row['counter'];
+            $templateRow['existsInFileSystem'] = $row['existsInFileSystem'];
 
-            switch ($role->getValue('rol_view_memberships')) {
-                case 0:
-                    $templateRow['viewMembership'] = $gL10n->get('SYS_NOBODY');
-                    break;
-                case 1:
-                    $templateRow['viewMembership'] = $gL10n->get('SYS_ROLE_MEMBERS');
-                    break;
-                case 2:
-                    $templateRow['viewMembership'] = $gL10n->get('ORG_REGISTERED_USERS');
-                    break;
-                case 3:
-                    $templateRow['viewMembership'] = $gL10n->get('SYS_LEADERS');
-                    break;
-            }
-
-            switch ($role->getValue('rol_view_members_profiles')) {
-                case 0:
-                    $templateRow['viewMembersProfiles'] = $gL10n->get('SYS_NOBODY');
-                    break;
-                case 1:
-                    $templateRow['viewMembersProfiles'] = $gL10n->get('SYS_ROLE_MEMBERS');
-                    break;
-                case 2:
-                    $templateRow['viewMembersProfiles'] = $gL10n->get('ORG_REGISTERED_USERS');
-                    break;
-                case 3:
-                    $templateRow['viewMembership'] = $gL10n->get('SYS_LEADERS');
-                    break;
-            }
-
-            switch ($role->getValue('rol_leader_rights')) {
-                case 0:
-                    $templateRow['roleLeaderRights'] = $gL10n->get('SYS_NO_ADDITIONAL_RIGHTS');
-                    break;
-                case 1:
-                    $templateRow['roleLeaderRights'] = $gL10n->get('SYS_ASSIGN_MEMBERS');
-                    break;
-                case 2:
-                    $templateRow['roleLeaderRights'] = $gL10n->get('SYS_EDIT_MEMBERS');
-                    break;
-                case 3:
-                    $templateRow['roleLeaderRights'] = $gL10n->get('SYS_ASSIGN_EDIT_MEMBERS');
-                    break;
-            }
-
-            $templateRow['actions'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $row['rol_id'])),
-                'icon' => 'fas fa-list-alt',
-                'tooltip' => $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP')
-            );
-            if ($this->roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
-                $templateRow['actions'][] = array(
-                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
-                    'icon' => 'fas fa-user-check',
-                    'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
-                );
-            } elseif ($this->roleType === $this::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
-                $templateRow['actions'][] = array(
-                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
-                    'icon' => 'fas fa-user-slash',
-                    'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
-                );
-            }
-            $templateRow['actions'][] = array(
-                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
-                'icon' => 'fas fa-trash-alt',
-                'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
-            );
             $templateData[] = $templateRow;
-            */
+        }
+
+        $templateUnregisteredData = array();
+
+        foreach($this->unregisteredFoldersFiles as $row) {
+            $templateRow = array();
+
+            if ($row['folder']) {
+                $templateRow['icon'] = 'fas fa-fw fa-folder';
+                $templateRow['title'] = $gL10n->get('SYS_FOLDER');
+
+            } else {
+                $templateRow['icon'] = 'fas fa-fw '.FileSystemUtils::getFileFontAwesomeIcon($row['name']);
+                $templateRow['title'] = $gL10n->get('SYS_FILE');
+            }
+
+            $templateRow['folder'] = $row['folder'];
+            $templateRow['name'] = $row['name'];
+            $templateRow['size'] = $row['size'];
+            $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '6', 'folder_uuid' => $this->folder->getValue('fol_uuid'), 'name' => $row['name']));
+
+            $templateUnregisteredData[] = $templateRow;
         }
 
         // initialize and set the parameter for DataTables
         $dataTables = new HtmlDataTables($this, 'documents-files-table');
-        $dataTables->setDatatablesGroupColumn(1);
-        $dataTables->disableDatatablesColumnsSort(array(3, 8));
-        $dataTables->setDatatablesColumnsNotHideResponsive(array(8));
-        $dataTables->createJavascript(count($this->data), 7);
+        $dataTables->disableDatatablesColumnsSort(array(1, 6));
+        $dataTables->setDatatablesColumnsNotHideResponsive(array(6));
+        $dataTables->createJavascript(count($this->data), 6);
 
+        $this->assign('infoAlert', $infoAlert);
         $this->assign('list', $templateData);
+        $this->assign('unregisteredList', $templateUnregisteredData);
         $this->assign('l10n', $gL10n);
         $this->pageContent .= $this->fetch('modules/documents-files.list.tpl');
     }
@@ -217,27 +192,31 @@ class ModuleDocumentsFiles extends HtmlPage
      * Creates an array with all available folders and files.
      * @param string $folderUUID The UUID of the folder whose folders and files should be read.
      */
-    public function readData(string $folderUUID = '')
+    public function readData(string $folderUUID)
     {
-        global $gDb;
+        global $gDb, $gSettingsManager;
 
-        $currentFolder = new TableFolder($gDb);
-        $currentFolder->readDataByUuid($folderUUID);
+        $this->folder = new TableFolder($gDb);
+        $this->folder->readDataByUuid($folderUUID);
 
         $this->data = array();
         $completeFolder = array(
-            'folders' => $currentFolder->getSubfoldersWithProperties(),
-            'files'   => $currentFolder->getFilesWithProperties()
+            'folders' => $this->folder->getSubfoldersWithProperties(),
+            'files'   => $this->folder->getFilesWithProperties()
         );
+
+        $completeFolder = $this->folder->addAdditionalToFolderContents($completeFolder);
 
         foreach($completeFolder['folders'] as $folder) {
             $this->data[] = array(
                 'folder' => true,
                 'uuid' => $folder['fol_uuid'],
                 'name' => $folder['fol_name'],
-                'timestamp' => $folder['fol_timestamp'],
-                'size' => 0,
-                'counter' => 0,
+                'description' => (string) $folder['fol_description'],
+                'timestamp' => DateTime::createFromFormat('Y-m-d H:i:s', $folder['fol_timestamp'])
+                    ->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
+                'size' => null,
+                'counter' => null,
                 'existsInFileSystem' => $folder['fol_exists']
             );
         }
@@ -247,11 +226,33 @@ class ModuleDocumentsFiles extends HtmlPage
                 'folder' => false,
                 'uuid' => $file['fil_uuid'],
                 'name' => $file['fil_name'],
-                'timestamp' => $file['fil_timestamp'],
-                'size' => $file['fil_size'],
+                'description' => (string) $file['fil_description'],
+                'timestamp' => DateTime::createFromFormat('Y-m-d H:i:s', $file['fil_timestamp'])
+                    ->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
+                'size' => round($file['fil_size'] / 1024). ' kB&nbsp;',
                 'counter' => $file['fil_counter'],
-                'existsInFileSystem' => $folder['fil_exists']
+                'existsInFileSystem' => $file['fil_exists']
             );
+        }
+
+        if (array_key_exists('additionalFolders', $completeFolder)) {
+            foreach ($completeFolder['additionalFolders'] as $folder) {
+                $this->unregisteredFoldersFiles[] = array(
+                    'folder' => true,
+                    'name' => $folder['fol_name'],
+                    'size' => null
+                );
+            }
+        }
+
+        if (array_key_exists('additionalFiles', $completeFolder)) {
+            foreach ($completeFolder['additionalFiles'] as $file) {
+                $this->unregisteredFoldersFiles[] = array(
+                    'folder' => false,
+                    'name' => $file['fil_name'],
+                    'size' => round($file['fil_size'] / 1024). ' kB&nbsp;'
+                );
+            }
         }
     }
 
