@@ -55,7 +55,7 @@ if ($getFileUuid !== '') {
 }
 
 $documentsFiles = new ModuleDocumentsFiles();
-$folders = $documentsFiles->getEditableFolderStructure();
+$folders = $documentsFiles->getUploadableFolderStructure();
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 

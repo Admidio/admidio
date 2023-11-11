@@ -34,7 +34,7 @@ class TableFolder extends TableAccess
      * @param array<string,array<int,array<string,mixed>>> $completeFolder
      * @return array<string,array<int,array<string,mixed>>>
      */
-    private function addAdditionalToFolderContents(array $completeFolder): array
+    public function addAdditionalToFolderContents(array $completeFolder): array
     {
         global $gCurrentUser;
 
@@ -353,7 +353,7 @@ class TableFolder extends TableAccess
     /**
      * @return array<int,array<string,mixed>> All files with their properties
      */
-    private function getFilesWithProperties(): array
+    public function getFilesWithProperties(): array
     {
         global $gCurrentUser;
 
@@ -403,20 +403,6 @@ class TableFolder extends TableAccess
         }
 
         return $files;
-    }
-
-    /**
-     * Return the contents of the current folder as an array, depending on the user rights.
-     * @return array<string,array<int,array<string,mixed>>> Return the contents of the current folder as an array.
-     */
-    public function getFolderContentsForDownload(): array
-    {
-        $completeFolder = array(
-            'folders' => $this->getSubfoldersWithProperties(),
-            'files'   => $this->getFilesWithProperties()
-        );
-
-        return $this->addAdditionalToFolderContents($completeFolder);
     }
 
     /**
@@ -554,7 +540,7 @@ class TableFolder extends TableAccess
     /**
      * @return array<int,array<string,mixed>> All sub-folders with their properties
      */
-    private function getSubfoldersWithProperties(): array
+    public function getSubfoldersWithProperties(): array
     {
         global $gCurrentUser, $gValidLogin;
 
