@@ -15,7 +15,7 @@
  *           5 - Delete folder
  *           6 - Add file/folder to database
  *           7 - Save access to folder
- *           8 - Move file
+ *           8 - Move file / folder
  * folder_uuid : UUID of the folder in the database
  * file_uuid   : UUID of the file in the database
  * name        : Name of the file/folder that should be added to the database
@@ -387,9 +387,15 @@ elseif ($getMode === 8) {
     $destFolderUUID = admFuncVariableIsValid($_POST, 'dest_folder_uuid', 'string', array('requireValue' => true));
 
     try {
-        $file = new TableFile($gDb);
-        $file->readDataByUuid($getFileUuid);
-        $file->moveTo($destFolderUUID);
+        if ($getFileUuid !== '') {
+            $file = new TableFile($gDb);
+            $file->readDataByUuid($getFileUuid);
+            $file->moveToFolder($destFolderUUID);
+        } else {
+            $folder = new TableFolder($gDb);
+            $folder->readDataByUuid($getFolderUuid);
+            $folder->moveToFolder($destFolderUUID);
+        }
     } catch (AdmException | RuntimeException | UnexpectedValueException $e) {
         $gMessage->show($e->getMessage());
     }

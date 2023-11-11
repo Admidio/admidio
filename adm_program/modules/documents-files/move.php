@@ -20,27 +20,10 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
 $getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'string');
 
-// set headline of the script
-if ($getFileUuid !== '') {
-    $headline = $gL10n->get('SYS_MOVE_FILE');
-} else {
-    $headline = $gL10n->get('SYS_EDIT_FOLDER');
-}
-
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
-}
-
-$gNavigation->addUrl(CURRENT_URL, $headline);
-
-if (isset($_SESSION['documents_files_request'])) {
-    $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['documents_files_request']));
-    unset($_SESSION['documents_files_request']);
-} else {
-    $formValues['new_name'] = null;
-    $formValues['new_description'] = null;
 }
 
 try {
@@ -48,21 +31,36 @@ try {
     // user must be administrator or must have the right to upload files
     $targetFolder = new TableFolder($gDb);
     $targetFolder->getFolderForDownload($getFolderUuid);
+
+    if (!$targetFolder->hasUploadRight()) {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
 } catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
 }
 
-if (!$targetFolder->hasUploadRight()) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
+// set headline and description
+if ($getFileUuid !== '') {
+    $file = new TableFile($gDb);
+    $file->readDataByUuid($getFileUuid);
+    $headline = $gL10n->get('SYS_MOVE_FILE');
+    $description = $gL10n->get('SYS_MOVE_FILE_DESC', array($file->getValue('fil_name')));
+} else {
+    $folder = new TableFolder($gDb);
+    $folder->readDataByUuid($getFolderUuid);
+    $headline = $gL10n->get('SYS_MOVE_FOLDER');
+    $description = $gL10n->get('SYS_MOVE_FOLDER_DESC', array($folder->getValue('fol_name')));
 }
 
 $documentsFiles = new ModuleDocumentsFiles();
 $folders = $documentsFiles->getEditableFolderStructure();
 
-// create html page object
+$gNavigation->addUrl(CURRENT_URL, $headline);
+
 $page = new HtmlPage('admidio-documents-move-file', $headline);
+$page->addHtml('<p class="lead admidio-max-with">'.$description.'</p>');
 
 // create html form
 $form = new HtmlForm('documents_files_move_file', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '8', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);

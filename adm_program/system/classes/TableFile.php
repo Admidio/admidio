@@ -189,7 +189,7 @@ class TableFile extends TableAccess
      * @throws RuntimeException
      * @throws UnexpectedValueException
      */
-    public function moveTo(string $destFolderUUID)
+    public function moveToFolder(string $destFolderUUID)
     {
         $folder = new TableFolder($this->db);
         $folder->readDataByUuid($destFolderUUID);

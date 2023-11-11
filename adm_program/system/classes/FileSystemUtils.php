@@ -665,10 +665,10 @@ final class FileSystemUtils
      * Execute the copy process to copy a directory
      * @param string $oldDirectoryPath The directory to copy
      * @param string $newDirectoryPath The destination directory
-     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
-     * @throws \RuntimeException         Throws if the mkdir, copy or opendir process fails
+     * @throws UnexpectedValueException Throws if a precondition is not fulfilled
+     * @throws RuntimeException         Throws if the mkdir, copy or open dir process fails
      */
-    private static function doCopyDirectory($oldDirectoryPath, $newDirectoryPath)
+    private static function doCopyDirectory(string $oldDirectoryPath, string $newDirectoryPath)
     {
         $oldDirectoryContent = self::getDirectoryContent($oldDirectoryPath, false, false);
 
@@ -1139,14 +1139,14 @@ final class FileSystemUtils
 
     /**
      * Moves a directory
-     * @param string             $oldDirectoryPath The directory to move
-     * @param string             $newDirectoryPath The destination directory
-     * @param array<string,bool> $options          Operation options ([bool] createDirectoryStructure = true, [bool] overwriteContent = false)
-     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
-     * @throws \RuntimeException         Throws if the mkdir, copy, rmdir, unlink or opendir process fails
+     * @param string $oldDirectoryPath The directory to move
+     * @param string $newDirectoryPath The destination directory
+     * @param array<string,bool> $options Operation options ([bool] createDirectoryStructure = true, [bool] overwriteContent = false)
      * @return bool Returns true if content was overwritten
+     * @throws RuntimeException         Throws if the mkdir, copy, rmdir, unlink or open dir process fails
+     * @throws UnexpectedValueException Throws if a precondition is not fulfilled
      */
-    public static function moveDirectory($oldDirectoryPath, $newDirectoryPath, array $options = array())
+    public static function moveDirectory(string $oldDirectoryPath, string $newDirectoryPath, array $options = array()): bool
     {
         $returnValue = self::checkDirectoryPreconditions($oldDirectoryPath, $newDirectoryPath, $options);
 
@@ -1161,7 +1161,7 @@ final class FileSystemUtils
      * Moves a file
      * @param string $oldFilePath The path and file to move
      * @param string $newFilePath The path and file where to move to
-     * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure = true, [bool] overwrite = false)
+     * @param array<string,bool> $options Operation options ([bool] createDirectoryStructure = true, [bool] overwrite = false)
      * @return bool Returns true if the destination path was overwritten
      * @throws RuntimeException         Throws if the move process fails
      * @throws UnexpectedValueException Throws if a precondition is not fulfilled
