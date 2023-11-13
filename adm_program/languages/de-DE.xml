@@ -177,8 +177,8 @@
   <string name="INS_TABLE_PREFIX_INVALID">Das Tabellenpräfix enthält ungültige Zeichen!</string>
   <string name="INS_TEAMS">Mannschaften</string>
   <string name="INS_TRAINING">Training</string>
-  <string name="INS_TWITTER">Twitter</string>
-  <string name="INS_TWITTER_DESC">Wollen Sie Ihr Twitter-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Twitter. Melden Sie sich bei Twitter an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher:innen aus Ihrem Profil direkt Ihr Twitter-Profil aufrufen.</string>
+  <string name="INS_TWITTER">X (Twitter)</string>
+  <string name="INS_TWITTER_DESC">Wollen Sie Ihr X (Twitter)-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei X (Twitter). Melden Sie sich bei X (Twitter) an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher:innen aus Ihrem Profil direkt Ihr X (Twitter)-Profil aufrufen.</string>
   <string name="INS_UPDATE">Update</string>
   <string name="INS_UPDATE_DATABASE">Datenbank aktualisieren</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Eine Aktualisierung der Datenbank ist nicht möglich!</string>
