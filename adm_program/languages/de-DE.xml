@@ -1371,7 +1371,7 @@
   <string name="SYS_TO" description="E-Mail">An</string>
   <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
-  <string name="SYS_TWITTER">Twitter</string>
+  <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Typ</string>
   <string name="SYS_UNIQUE_ID">Eindeutige Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
