@@ -513,7 +513,10 @@ class ListConfiguration extends TableLists
             } else {
                 switch ($listColumn->getValue('lsc_special_field')) {
                     case 'mem_begin': // fallthrough
-                    case 'mem_end':
+                    case 'mem_end': // fallthrough
+                    case 'usr_timestamp_create': // fallthrough
+                    case 'usr_timestamp_change': // fallthrough
+                    case 'mem_timestamp_change':
                         $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\')';
                         break;
 
