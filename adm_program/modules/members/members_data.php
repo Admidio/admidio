@@ -105,8 +105,15 @@ $searchColumns = $membersListConfig->getSearchConditions();
 if ($getSearch !== '' && count($searchColumns) > 0) {
     $searchString = explode(' ', $getSearch);
 
+    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+        $searchValue = ' ?::text ';
+    } else {
+        // mysql
+        $searchValue = ' ? ';
+    }
+
     foreach ($searchString as $searchWord) {
-        $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ') LIKE CONCAT(\'%\', ?, \'%\') ';
+        $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ') LIKE CONCAT(\'%\', '.$searchValue.', \'%\') ';
         $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
     }
 
