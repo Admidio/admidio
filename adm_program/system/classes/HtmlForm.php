@@ -1111,18 +1111,18 @@ class HtmlForm extends \Smarty
             if (is_array($arrayValue)) {
                 if (array_key_exists(2, $arrayValue)) {
                     $valuesArray[] = array(
-                        'id' => $arrayValue[0],
+                        'id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue[1] : $arrayValue[0]),
                         'value' => Language::translateIfTranslationStrId($arrayValue[1]),
                         'group' => Language::translateIfTranslationStrId($arrayValue[2])
                     );
                 } else {
                     $valuesArray[] = array(
-                        'id' => $arrayValue[0],
+                        'id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue[1] : $arrayValue[0]),
                         'value' => Language::translateIfTranslationStrId($arrayValue[1])
                     );
                 }
             } else {
-                $valuesArray[] = array('id' => $arrayKey, 'value' => Language::translateIfTranslationStrId($arrayValue));
+                $valuesArray[] = array('id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue : $arrayKey), 'value' => Language::translateIfTranslationStrId($arrayValue));
             }
         }
 
