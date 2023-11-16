@@ -11,7 +11,7 @@
     <div class="col-sm-9">
         {if $showNoValueButton}
             <label for="{$id}_0" class="radio-inline">
-            <input type="radio" name="{$id}" id="{$id}_0" class="{$data.attributes.class}">---</label>
+            <input type="radio" name="{$id}" id="{$id}_0" class="{$data.attributes.class}" value="0">---</label>
             {/if}
             {foreach $values as $optionvar}
             <label for="{$id}_{$optionvar@key}" class="radio-inline">
