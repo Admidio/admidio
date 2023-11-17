@@ -297,7 +297,7 @@ class ProfileFields
                         $arrListValuesWithKeys[++$index] = $listValue;
                     }
 
-                    if(count($arrListValuesWithKeys) > 0) {
+                    if(count($arrListValuesWithKeys) > 0 && !empty($value)) {
                         if(array_key_exists($value, $arrListValuesWithKeys)) {
                             $htmlValue = $arrListValuesWithKeys[$value];
                         } else {
@@ -654,7 +654,7 @@ class ProfileFields
             throw new AdmException('Profile field ' . $fieldNameIntern . ' doesn\'t exists!');
         }
 
-        if ($fieldValue !== '' && $checkValue) {
+        if (!empty($fieldValue) && $checkValue) {
             switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type')) {
                 case 'CHECKBOX':
                     // Checkbox may only have 0 or 1
@@ -672,6 +672,16 @@ class ProfileFields
                         }
                     } else {
                         $fieldValue = $date->format('Y-m-d');
+                    }
+                    break;
+                case 'DROPDOWN':
+                case 'RADIO_BUTTON':
+                    if ($fieldValue !== 0) { // 0 is the empty value for radio button
+                        if (!$this->noValueCheck && !is_numeric($fieldValue)) {
+                            throw new AdmException($gL10n->get('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
+                        } elseif (!array_key_exists($fieldValue, $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list'))) {
+                            throw new AdmException($gL10n->get('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
+                        }
                     }
                     break;
                 case 'EMAIL':
@@ -741,6 +751,10 @@ class ProfileFields
             && preg_match('/'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_regex').'/', $fieldValue) === 0) {
                 throw new AdmException($gL10n->get('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
             }
+        }
+
+        if ($fieldNameIntern === 'COUNTRY') {
+            $gL10n->getCountryName($fieldValue);
         }
 
         $usfId = (int) $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');

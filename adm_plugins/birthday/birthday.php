@@ -120,7 +120,7 @@ if ($gDbType === 'pgsql') {
     $sql = 'SELECT DISTINCT usr_id, usr_uuid, usr_login_name,
                         last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                         birthday.bday AS birthday, birthday.bdate,
-                        EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - birthday.bdate) AS days_to_bdate, -- DATE_NOW
+                        EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - birthday.bdate) * (-1) AS days_to_bdate, -- DATE_NOW
                         EXTRACT(YEAR FROM bdate) - EXTRACT(YEAR FROM TO_TIMESTAMP(bday, \'YYYY-MM-DD\')) AS age,
                         email.usd_value AS email, gender.usd_value AS gender
           FROM '.TBL_USERS.' AS users

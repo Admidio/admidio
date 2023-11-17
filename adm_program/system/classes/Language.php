@@ -179,8 +179,8 @@ class Language
      * Returns the name of the country in the language of this object. The country will be
      * identified by the ISO code (ISO 3166 ALPHA-3) e.g. 'DEU' or 'GBR' ...
      * @param string $countryIsoCode The three digits ISO code (ISO 3166 ALPHA-3) of the country where the name should be returned.
-     * @throws \UnexpectedValueException
-     * @throws \OutOfBoundsException
+     * @throws AdmException
+     * @throws AdmException
      * @return string Return the name of the country in the language of this object.
      */
     public function getCountryName($countryIsoCode)
@@ -190,13 +190,13 @@ class Language
         }
 
         if (!preg_match('/^[A-Z]{3}$/', $countryIsoCode)) {
-            throw new \UnexpectedValueException('Invalid country-iso-code!');
+            throw new AdmException('SYS_COUNTRY_ISO');
         }
 
         $countries = $this->getCountries();
 
         if (!array_key_exists($countryIsoCode, $countries)) {
-            throw new \OutOfBoundsException('Country-iso-code does not exist!');
+            throw new AdmException('Country-iso-code does not exist!');
         }
 
         return $countries[$countryIsoCode];
@@ -206,21 +206,20 @@ class Language
      * Returns the three digits ISO code (ISO 3166 ALPHA-3) of the country. The country will be identified
      * by the name in the language of this object
      * @param string $countryName The name of the country in the language of this object.
-     * @throws \UnexpectedValueException
-     * @throws \OutOfBoundsException
+     * @throws AdmException
      * @return string Return the three digits ISO code (ISO 3166 ALPHA-3) of the country.
      */
     public function getCountryIsoCode($countryName)
     {
         if ($countryName === '') {
-            throw new \UnexpectedValueException('Invalid country-name!');
+            throw new AdmException('Invalid country name!');
         }
 
         $countries = $this->getCountries();
 
         $result = array_search($countryName, $countries, true);
         if ($result === false) {
-            throw new \OutOfBoundsException('Country-name does not exist!');
+            throw new AdmException('Country name does not exist!');
         }
 
         return $result;
