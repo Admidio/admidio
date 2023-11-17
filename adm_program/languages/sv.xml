@@ -57,7 +57,6 @@
   <string name="INS_DELETE_CONFIG_FILE">Admidios huvudkatalog #VAR1_BOLD# innehåller en config.php. Det har redan flyttats till mappen adm_my_files. Ta bort filen i huvudkatalogen.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Ladda ner konfigurationsfilen</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Konfigurationsfilen #VAR1_BOLD# kunde inte sparas i mappen #VAR2_BOLD#. Vänligen tilldela skrivåtkomst till mappen (ändra filattributet via FTP till 0777 respektive drwxrwxrwx) eller ladda ner konfigurationsfilen och kopiera den till Admidio-katalogen #VAR3_BOLD# med ett FTP-program. \n\n Efter att filen har tappats på den här platsen kan du fortsätta med installationen.</string>
-  <string name="INS_DATA_DIR_RIGHTS">De nödvändiga mappbehörigheterna för \ &amp;quot;adm_my_files \&amp;quot; kunde inte ställas in automatiskt. För att fortsätta måste rättigheterna ställas in manuellt på \ &amp;quot;777 \&amp;quot;.</string>
   <string name="INS_DATA_DO_NOT_MATCH">Data från #VAR1_BOLD# överensstämmer inte med informationen i installationsguiden. \n\nCheck config.php och all annan information.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administratörsuppgifter</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Ange administratörens namn, e-post och åtkomstinformation. Logga in med administratörens referenser efter installationen.</string>
@@ -68,7 +67,6 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Grupp av systemadministratörer</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Ange databasåtkomstinformation</string>
   <string name="INS_ERROR_OPEN_FILE">Fil #VAR1_BOLD# kunde inte öppnas.</string>
-  <string name="SYS_FOLDER_NOT_WRITABLE">Mapp #VAR1_BOLD# är inte skrivbar. Vänligen ge skrivåtkomst för att ladda upp foton och filer för att ladda ner modulen.</string>
   <string name="INS_GROUPS">Grupper</string>
   <string name="INS_HOST_INVALID">Värdnamnet är inte giltigt. Ange ett giltigt värdnamn eller IP-adress.</string>
   <string name="INS_INSTALL_ADMIDIO">Installera Admidio</string>
@@ -180,8 +178,8 @@
   <string name="ORG_ENABLE_RSS_FEEDS">Aktivera webbflöden</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan tillhandahålla webbflöden för flera moduler (tillkännagivanden, möten, gästbok, fotogalleri och webblänkar) på översiktssidan för varje modul. Prenumeration är möjlig av webbläsare eller flödesläsare. (standard: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definiera obegränsade ytterligare fält. Fält visas och kan redigeras i användarens profil. Dessa fält kommer också att finnas i egen lista.</string>
-  <string name="ORG_FIELD_DISABLED">Fält redigerbart endast för användare med tillstånd #VAR1_BOLD#</string>
-  <string name="ORG_FIELD_DISABLED_DESC">Ett låst profilfält kan inte längre redigeras av användaren i sin egen profil. Det kan endast redigeras av användare som har behörighet att redigera alla användare. Ledarna för en roll med tillstånd att redigera profiler för rollmedlemmarna kan också redigera detta profilfält.</string>
+  <string name="ORG_FIELD_DISABLED">Fält redigerbart endast för användare med behörighet #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED_DESC">Ett låst profilfält kan inte längre redigeras av användaren i sin egen profil. Det kan endast redigeras av användare som har behörighet att redigera alla användare. Ledarna för en roll med behörighet att redigera profiler för rollmedlemmarna kan också redigera detta profilfält.</string>
   <string name="ORG_FIELD_EXIST">Fält med samma namn finns redan i denna kategori.</string>
   <string name="ORG_FIELD_HIDDEN">Fält kan endast visas för auktoriserade användare (egen profil och rollrättigheter)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Vanligtvis är ett fält synligt för alla som får se profilen. Om det här alternativet inte är markerat kan endast användare som har rätt att redigera den här profilen se fältet.</string>
@@ -281,12 +279,11 @@
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax begärningsfel. \n Feldetaljer: #VAR1#</string>
   <string name="SYS_ALBUM">Album</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Albumet innehåller inga foton.</string>
-  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Mappen kunde inte hittas. Om mappen raderades med hjälp av FTP eller för att vara otillgänglig, vänligen ta bort mappen i Admidio. \nGäster utan fotohanteringstillstånd kan inte visa valt album.</string>
+  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Mappen kunde inte hittas. Om mappen raderades med hjälp av FTP eller för att vara otillgänglig, vänligen ta bort mappen i Admidio.\nGäster utan behörighet för bildhantering kan inte visa valt album.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">Albumet blockeras och gästerna kan inte visa det. Aktivera det genom att trycka på knappsymbolen i redigeringsfältet.</string>
   <string name="SYS_ALL">Samtliga</string>
   <string name="SYS_ALL_DAY">Heltid</string>
   <string name="SYS_ALL_ORGANIZATIONS">VÄLGÖRENHETSORGANISATIONER</string>
-  <string name="SYS_ALL_ORGANIZATIONS_DESC">Den valda kategorin delas för alla organisationer. \n Det aktuella objektet (händelse, tillkännagivande, profilfält, webblänk, etc.) kommer att synas inte bara i denna organisation utan också i alla följande organisationer: #VAR1#.</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alla medlemmar i denna organisation</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Deltagarna kan registrera anonyma gäster</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Deltagarna kan lägga till ytterligare platser i sin registrering. Dessa subtraheras sedan från det maximuma antalet deltagare och de åtkomliga lediga platserna reduceras därmed. Detta är t.ex. Användbara om en deltagare kan ta med fler besökare och där kräver ett totalt antal gratis platser.</string>
@@ -301,7 +298,6 @@
   <string name="SYS_ASSIGNED_BY_ROLES">Ställ in av rollerna</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tilldela och redigera medlemmar</string>
   <string name="SYS_ASSIGN_FIELDS">Tilldela fält</string>
-  <string name="SYS_ASSIGN_FIELDS_DESC">Om möjligt, tilldela databasfält en kolumn i en fil. \n\n På vänster sida kan du hitta alla typer av databasfält, till höger kan du hitta alla kolumner i den valda filen. Fält kan lämnas tomma när filen inte innehåller alla databasfält.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Tilldela inloggningsinformation</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Inloggningsinformation har tilldelats.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Inloggningsinformation har tilldelats och användaren har informerats via e-post.</string>
@@ -310,8 +306,7 @@
   <string name="SYS_ASSIGN_PARTICIPANTS">Lägg till till deltagare</string>
   <string name="SYS_ASSIGN_REGISTRATION">Tilldelar registrering</string>
   <string name="SYS_ASSIGN_ROLE">Tilldela användarroll</string>
-  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Välj en roll för alla importerade användare. \n\nTillgängliga är bara roller som du har användarrättighet för.</string>
-  <string name="SYS_ASSIGN_ROLES">Tilldela roller</string>
+  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Välj en roll som alla importerade användare automatiskt ska få.\n\nDu kan bara välja bland de roller som du har behörighet att se eller har behörighet att administrera.</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrisk</string>
   <string name="SYS_ATTACHMENT">Bilaga</string>
   <string name="SYS_ATTACHMENT_ONE">1 bilaga</string>
@@ -340,7 +335,7 @@
   <string name="SYS_CANCEL">Avbryt</string>
   <string name="SYS_CANCEL_EVENT">Du avbröt deltagandet för evenemanget #VAR1_BOLD# på #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Uppsägning av Medlemskap</string>
-  <string name="SYS_CANCEL_RELATIONSHIP">Radera förhållandet</string>
+  <string name="SYS_CANCEL_RELATIONSHIP">Ta bort relation</string>
   <string name="SYS_CANT_DELETE_ROLE">Du kan inte radera rollen #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Kapacitet</string>
   <string name="SYS_CAPTCHA">Captcha</string>
@@ -365,7 +360,7 @@
   <string name="SYS_CHANGE_HISTORY">Ändra historia</string>
   <string name="SYS_CHANGE_HISTORY_OF">Ändra historik för #VAR1#</string>
   <string name="SYS_CHANGE_PASSWORD">Ändra lösenord</string>
-  <string name="SYS_CHANGED_AT">Senaste utvecklingssamtal</string>
+  <string name="SYS_CHANGED_AT">Senast ändrad</string>
   <string name="SYS_CHANGED_BY">Ändrad av</string>
   <string name="SYS_CHARACTER_ENCODING">Teckenkodning</string>
   <string name="SYS_CHARACTER_ENCODING_DESC">Teckenkodning som används i e-postmeddelanden skickade av Admidio. Inte alla e-postklienter kan bearbeta UTF-8. Därför kan ISO-8859-1 ställas in alternativt här.</string>
@@ -381,7 +376,6 @@
   <string name="SYS_COLUMN">Kolumn</string>
   <string name="SYS_COMPACT">kompakt</string>
   <string name="SYS_COMMA">Komma (,)</string>
-  <string name="SYS_COMMA_SEPARATED_FILE">Komma-/flikavgränsad fil (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allmänt</string>
   <string name="SYS_COMPLEMENT">Tillägg</string>
@@ -422,10 +416,8 @@
   <string name="SYS_CREATE_FOLDER">Skapa mapp</string>
   <string name="SYS_CREATE_FOLDER_DESC">En ny mapp skapas i mapp #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Skapa .htaccess</string>
-  <string name="SYS_CREATE_LINK">Skapa ny</string>
   <string name="SYS_CREATE_MEMBER">Skapa användare</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Skapa en ny konfiguration</string>
-  <string name="SYS_CREATE_NOT_FOUND_USER">Om den nya användaren inte är listad bland de hittade användare kan du skapa den.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Skapa relation</string>
   <string name="SYS_CREATE_ROLE">Skapa roll</string>
   <string name="SYS_CREATE_VAR">Skapa #VAR1#</string>
@@ -654,11 +646,12 @@
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Mapp #VAR1_BOLD# kan inte skapas. \n\n Fråga en #VAR2# administratör #VAR3# om hjälp för att kontrollera skrivtillstånd för överordnad mapp.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Mappen finns inte längre på servern. Det bör raderas från databasen.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Mapp (ID #VAR1#) hittades inte.</string>
+  <string name="SYS_FOLDER_NOT_WRITABLE">Mappen #VAR1_BOLD# har inte skrivbehörigheter. Nödvändiga rättigheter kunde inte sättas automatiskt. Ge mappen #VAR1_BOLD# skrivbehörigheter (sätt filattributen till 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Ett fel uppstod när mappen #VAR1# bytt namn.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Mapp #VAR1_BOLD# kan inte skapas med nödvändiga skrivbehörigheter. \n\n Fråga en #VAR2# administratör #VAR3# om hjälp för att kontrollera skrivbehörigheter (genom att använda FTP för att ändra filattribut till 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Typsnitt</string>
   <string name="SYS_FONT_AWESOME_DESC">Du kan lagra en ikon på olika sätt: \n1. En ikon för webbsnittet \"Font Awesome\". Gå till #VAR1#http://fontawesome.com#VAR2# och välj en gratis ikon från samlingen \"Solid\" eller \"Brands\". Som ett prefix måste du sätta ett fa- framför det. Så om du väljer ikonen \"user\" måste du ange \"fa-user\" här. \n2. En JPEG- eller PNG -ikon. För att göra detta, ange hela URL:en tillsammans med filnamnet på ikonen. Alternativt kan du placera ikonen i temat i mappen \"images\", då behöver du bara ange filnamnet.</string>
-  <string name="SYS_FORGOT_MY_PASSWORD">Jag har glömt mitt lösenord</string>
+  <string name="SYS_FORGOT_MY_PASSWORD">Jag har glömt mitt lösenord!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Tidigare</string>
   <string name="SYS_FORMER_MEMBERS">Förändringar</string>
@@ -722,6 +715,7 @@
   <string name="SYS_INVALID_FONT_AWESOME">Det angivna ikonnamnet motsvarar inte den förväntade syntaxen. En ikon med typsnittet Awesome måste motsvara schemat fa-iconname. En fil måste lagras i temamappen för bilder och ha ett png- eller jpg -tillägg.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ogiltig sidvy</string>
   <string name="SYS_IO_ERROR">I/ O- fel.</string>
+  <string name="SYS_IS_VAR_FROM">är #VAR1# till</string>
   <string name="SYS_ISO_8859_1">ISO- 8859- 1</string>
   <string name="SYS_ITEMNAME">Objektnamn</string>
   <string name="SYS_KEEP_ORIGINAL">Spara originalfiler dessutom</string>
@@ -747,7 +741,6 @@
   <string name="SYS_LINK_TARGET_DESC">Välj om vald webbplats ska visas i Admidios fönster eller i ett nytt fönster.</string>
   <string name="SYS_LINK_TO">Länk till #VAR1#</string>
   <string name="SYS_LIST">Lista</string>
-  <string name="SYS_LOADING_CONTENT">Laddar innehåll...</string>
   <string name="SYS_LOCATION_LINK">Om tillräckligt med information om plats tillhandahålls (gata, stad, plats) kan Google Maps räkna ut rutt till plats.</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Lagringsplats för profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Ange var du vill lagra profilbilden (i databasen eller i mappen adm_my_files). När en ändring görs kopieras inte de aktuella bilderna till en ny plats. (standard: databas)</string>
@@ -921,9 +914,9 @@
   <string name="SYS_PASSWORD">Lösenord</string>
   <string name="SYS_PASSWORD_CHANGED">Lösenordet har ändrats</string>
   <string name="SYS_PASSWORD_DESCRIPTION">Lösenordet måste ha minst åtta tecken inklusive siffror, bokstäver och specialtecken. \n\n Styrkan för ditt valda lösenord visas i färg med en stapel. Den minsta krävda styrkan anges med pilen i fältet.</string>
-  <string name="SYS_PASSWORD_FORGOTTEN">Lösenord glömt</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Om du har glömt ditt lösenord kan systemet skapa ett nytt lösenord och skicka det till din e-postadress. Vänligen skriv in ditt användarnamn eller din e-postadress som används för registrering i systemet. Det nya lösenordet skickas omedelbart till den registrerade e-postadressen.</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Om användaren har glömt sitt lösenord kan han begära att en länk skickas till honom, genom vilken han kan ställa in ett nytt lösenord för sitt konto på denna webbplats. Om detta alternativ är avaktiverat kan användaren bara skicka en begäran via e-post till administratören om att sätta in ett nytt lösenord. För att lösenordet ska kunna skickas måste inställningen #VAR1_BOLD# också vara inställd. (Standard: ja)</string>
+  <string name="SYS_PASSWORD_FORGOTTEN">Glömt lösenord?</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Ange ditt användarnamn eller e-postadress. Du kommer få ett mejl med en länk där du kan sätta ett nytt lösenord.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Om användaren har glömt sitt lösenord kan hen själv efterfråga ett mejl med en länk för att sätta ett nytt lösenord för sitt konto. Om detta alternativ är avaktiverat kan användaren inte själv hantera glömt lösenord. Då behöver administratören sätta ett nytt lösenord. För att lösenordet ska kunna skickas måste inställningen #VAR1_BOLD# också vara inställd. (Standard: ja)</string>
   <string name="SYS_PASSWORD_LENGTH">lösenordet måste innehålla minst 8 tecken.</string>
   <string name="SYS_PASSWORD_NOT_STRONG_ENOUGH">Lösenordet är inte säkert.</string>
   <string name="SYS_PASSWORD_OLD_WRONG">Gamla lösenordet är felaktigt</string>
@@ -1037,7 +1030,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Hantera dokument och filer</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roller som har denna behörighet kan hantera rättigheterna för dokument- och filmodulen. Detta inkluderar vem som kan se mappar och kan ladda upp filer.</string>
   <string name="SYS_RIGHT_EDIT_USER">Redigera profilen för alla användare</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller som har denna behörighet kan redigera data från andra användare (utom lösenord). \n Dessutom har de tillgång till användaradministrationen och kan lägga till / ta bort användare.</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller som har denna behörighet kan redigera andra användares data (utom lösenord). \nDessutom har de tillgång till användaradministrationen och kan lägga till och ta bort användare.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Redigera och ta bort gästbokposter</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Skapa kommentarer till gästbokposter</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Deltagarna kan skicka e-post till alla deltagare</string>
@@ -1241,7 +1234,6 @@
   <string name="SYS_TO" description="E-Mail">Till</string>
   <string name="SYS_TOTAL">Totalt</string>
   <string name="SYS_TUESDAY">Tisdag</string>
-  <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Typ</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNLIMITED">Obegränsat</string>
