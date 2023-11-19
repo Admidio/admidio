@@ -32,6 +32,8 @@ if (!$gCurrentUser->isAdministrator()) {
  * version of the file names are the values.
  * @param $folder
  * @return false|int[]|string[]
+ * @throws UnexpectedValueException
+ * @throws RuntimeException
  */
 function getArrayFileNames($folder)
 {
@@ -1290,18 +1292,22 @@ $formPhotos->addInput(
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
 );
 
-$formPhotos->addSelectBox(
-    'photo_ecard_template',
-    $gL10n->get('SYS_TEMPLATE'),
-    getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
-    array(
-        'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $formValues['photo_ecard_template']))),
-        'showContextDependentFirstEntry' => false,
-        'arrayKeyIsNotValue' => true,
-        'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
-        'helpTextIdInline' => 'SYS_TEMPLATE_DESC'
-    )
-);
+try {
+    $formPhotos->addSelectBox(
+        'photo_ecard_template',
+        $gL10n->get('SYS_TEMPLATE'),
+        getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
+        array(
+            'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $formValues['photo_ecard_template']))),
+            'showContextDependentFirstEntry' => false,
+            'arrayKeyIsNotValue' => true,
+            'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
+            'helpTextIdInline' => 'SYS_TEMPLATE_DESC'
+        )
+    );
+} catch (Exception $e) {
+    $gMessage->show($e->getMessage());
+}
 
 $formPhotos->addSubmitButton(
     'btn_save_photos',
@@ -1527,17 +1533,21 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'SYS_SHOW_CAPTCHA_DESC')
 );
 
-$formMessages->addSelectBox(
-    'mail_template',
-    $gL10n->get('SYS_EMAIL_TEMPLATE'),
-    getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
-    array(
-        'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.html', '', $formValues['mail_template']))),
-        'showContextDependentFirstEntry' => true,
-        'arrayKeyIsNotValue' => true,
-        'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
-        'helpTextIdInline' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
-);
+try {
+    $formMessages->addSelectBox(
+        'mail_template',
+        $gL10n->get('SYS_EMAIL_TEMPLATE'),
+        getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
+        array(
+            'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.html', '', $formValues['mail_template']))),
+            'showContextDependentFirstEntry' => true,
+            'arrayKeyIsNotValue' => true,
+            'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
+            'helpTextIdInline' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
+    );
+} catch (UnexpectedValueException $e) {
+    $gMessage->show($e->getMessage());
+}
 $formMessages->addInput(
     'mail_max_receiver',
     $gL10n->get('SYS_MAX_RECEIVER'),

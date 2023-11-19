@@ -132,7 +132,7 @@ class Message
             $this->inline = headers_sent();
         }
 
-        if (!isset($page)) {
+        if (!isset($page) || !$this->inline) {
             // create html page object
             $page = new HtmlPage('admidio-message', $headline);
             $page->hideBackLink();
