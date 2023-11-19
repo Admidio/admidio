@@ -32,7 +32,8 @@ class InstallationUtils
     }
 
     /**
-     * Method will check if the folder adm_my_files is writable for the PHP user.
+     * Method will check if the folder adm_my_files is writable for the PHP user. The subfolders **ecard_templates**
+     * **logs**, **mail_templates** and **temp** will be checked if they exist and created if they don't exist.
      * @return void
      * @throws AdmException
      */
