@@ -50,9 +50,19 @@ class InstallationUtils
 
         // now check some sub folders and create them if necessary
         try {
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates');
+        } catch (RuntimeException | UnexpectedValueException $e) {
+            throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/ecard_templates'));
+        }
+        try {
             FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/logs');
         } catch (RuntimeException | UnexpectedValueException $e) {
             throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/logs'));
+        }
+        try {
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates');
+        } catch (RuntimeException | UnexpectedValueException $e) {
+            throw new AdmException('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/mail_templates'));
         }
         try {
             FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_TEMP_DATA);
