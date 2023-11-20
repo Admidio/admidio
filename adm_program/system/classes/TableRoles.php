@@ -219,7 +219,7 @@ class TableRoles extends TableAccess
                       FROM '.TBL_ROLES.'
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
-                     WHERE rol_default_registration = 1
+                     WHERE rol_default_registration = true
                        AND rol_id    <> ? -- $rolId
                        AND cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
             $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, $GLOBALS['gCurrentOrgId']));
@@ -531,7 +531,7 @@ class TableRoles extends TableAccess
                           FROM '.TBL_ROLES.'
                     INNER JOIN '.TBL_CATEGORIES.'
                             ON cat_id = rol_cat_id
-                         WHERE rol_default_registration = 1
+                         WHERE rol_default_registration = true
                            AND rol_id    <> ? -- $this->getValue(\'rol_id\')
                            AND cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
                 $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), $GLOBALS['gCurrentOrgId']));

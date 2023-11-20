@@ -140,7 +140,7 @@ class User extends TableAccess
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_default_registration = 1
+                 WHERE rol_default_registration = true
                    AND cat_org_id = ? -- $this->organizationId';
         $defaultRolesStatement = $this->db->queryPrepared($sql, array($this->organizationId));
 
