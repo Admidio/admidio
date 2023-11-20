@@ -143,7 +143,7 @@ class Organization extends TableAccess
         // create default category for roles, events and weblinks
         $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                        (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                VALUES (?, ?, \'ROL\', \'COMMON\', \'SYS_COMMON\', 1, 1, ?, ?)';
+                VALUES (?, ?, \'ROL\', \'COMMON\', \'SYS_COMMON\', true, true, ?, ?)';
         $queryParams = array($orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
         $categoryCommon = $this->db->lastInsertId();
