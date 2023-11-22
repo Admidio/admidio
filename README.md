@@ -14,18 +14,6 @@ In addition to these core features, Admidio boasts a rich array of modules, incl
 
 **Supported Languages**: :gb: :de: :denmark: :netherlands: :poland: :estonia: :ukraine: :fr: :bulgaria: :finland: :greece: :sweden: :es: :brazil: :portugal: :it: :indonesia: :hungary: :norway: :cn:
 
-## Explore Admidio
-
-- **Features** - Tailor roles and groups to match your organization's structure, customize user profiles, and much more.
-- **Installation** - Get Admidio up and running on your web server with ease. It requires PHP 7.2 or higher and a MySQL or PostgreSQL database.
-- **Update** - Follow the update instructions to keep your Admidio installation current.
-- **Docker** - Experience Admidio in a Docker environment with our Dockerfile and prebuilt images.
-- **Contributing** - Join the Admidio community and contribute through the forum, documentation, translations, or even coding.
-- **Changelog** - Stay informed about the latest bug fixes and enhancements in each version.
-- **Donation** - If you love Admidio, consider supporting the project with a donation.
-- **Copyright and License** - Admidio is released under the GNU General Public License 2.
-- **Credits** - Admidio is built on the shoulders of great projects, and we're grateful to their creators.
-
 ## Features
 
 - **Flexible Roles and Groups**: Craft roles and groups that align seamlessly with your organization's structure.
