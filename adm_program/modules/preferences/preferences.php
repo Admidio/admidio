@@ -1480,7 +1480,7 @@ $formCategoryReport->addCheckbox(
     'category_report_enable_module',
     $gL10n->get('SYS_ENABLE_CATEGORY_REPORT'),
     (bool) $formValues['category_report_enable_module'],
-    array('helpTextIdInline' => 'SYS_ENABLE_CATEGORY_REPORT_DESC')
+    array('helpTextIdInline' => array('SYS_ENABLE_CATEGORY_REPORT_DESC', array($gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'))))
 );
 // read all global lists
 $sqlData = array();
