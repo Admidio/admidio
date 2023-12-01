@@ -531,6 +531,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Wollen Sie die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Sie dürfen keine Systemkategorien löschen.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">Sie können die Systemrolle #VAR1_BOLD# nicht löschen.</string>
+  <string name="SYS_DELETED_ENTRY">Gelöschter Eintrag</string>
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
   <string name="SYS_DELIVERY_CONFIRMATION_DESC">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</string>
@@ -620,7 +621,7 @@
   <string name="SYS_EMPTY">Leer</string>
   <string name="SYS_ENABLED">Aktiviert</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Kategoriereport aktivieren</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Der Kategoriereport erstellt eine Liste aller Rollen und Kategorien, die ein Mitglied hat. Die Berechtigung \"Mitgliederlisten aller Rollen anzeigen\" ist für den Betrieb erforderlich. (Standard: ja)</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Kategoriereport erstellt eine Liste aller Rollen und Kategorien, die ein Mitglied hat. Das Berechtigung #VAR1_BOLD# ist für den Zugriff auf den Kategoriereport erforderlich. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiviere Dokumente &amp; Dateien</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Modul Dokumente &amp; Dateien kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Download aktivieren</string>
@@ -782,6 +783,7 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Geben Sie bitte den Vor- und Nachnamen des neuen Kontakts ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Person mit einem ähnlichen Namen bereits in der Datenbank existiert.</string>
+  <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation erfolgreich</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Sie können jetzt mit Admidio arbeiten und sich mit den Daten eines Administrienden anmelden.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Die Installation und Einrichtung der Datenbank wurde erfolgreich durchgeführt.</string>
@@ -909,7 +911,12 @@
   <string name="SYS_MONDAY">Montag</string>
   <string name="SYS_MONTHLY">Monatlich</string>
   <string name="SYS_MORE">Mehr</string>
+  <string name="SYS_MOVE_FILE">Datei verschieben</string>
+  <string name="SYS_MOVE_FILE_DESC">Wählen Sie einen Ordner, in den Sie die Datei #VAR1_BOLD# verschieben möchten. Die Rollenberechtigungen für die Anzeige der Datei werden aus dem Zielordner übernommen.</string>
+  <string name="SYS_MOVE_FOLDER">Ordner verschieben</string>
+  <string name="SYS_MOVE_FOLDER_DESC">Wählen Sie einen Ordner, in den Sie den Ordner #VAR1_BOLD# verschieben möchten. Die Rollenberechtigungen zum Anzeigen und Hochladen von Dateien aus dem Zielordner werden auf diesen Ordner und alle Unterordner angewendet.</string>
   <string name="SYS_MOVE_DOWN">#VAR1# nach unten verschieben</string>
+  <string name="SYS_MOVE_TO">Verschieben nach</string>
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
   <string name="SYS_MOVE_VAR">#VAR1# verschieben</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger:innen</string>
