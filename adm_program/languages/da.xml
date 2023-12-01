@@ -308,7 +308,7 @@
   <string name="SYS_ASSIGNED_BY_ROLES">Sat af rollerne</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tildel og rediger medlemmer</string>
   <string name="SYS_ASSIGN_FIELDS">Tilføj felter</string>
-  <string name="SYS_ASSIGN_FIELDS_DESC">I venstre kolonne i følgende tabel vises alle profilfelter. I højre kolonne vises kolonnerne fra filen, der skal importeres, i en valgliste. Alle kolonner fra den fil, du vil importere, skal nu tildeles et profilfelt.\n\nEksisterende medlemmer identificeres ved fornavn og efternavn. Hvis du har medlemmets unikke ID (UUID) tilgængeligt i din fil, kan du vælge det i kortlægningen. Medlemmerne vil så automatisk blive identificeret med dette ID og ikke længere med fornavn og efternavn.</string>
+  <string name="SYS_ASSIGN_FIELDS_DESC">I venstre kolonne i følgende tabel vises alle profilfelter. I højre kolonne vises kolonnerne fra filen, der skal importeres, i en valgliste. Alle kolonner fra den fil, du vil importere, skal nu tildeles et profilfelt.\n\nEksisterende medlemmer identificeres ved fornavn og efternavn. Hvis du har medlemmets unikke Admidio-ID (UUID) tilgængeligt i din fil, kan du vælge det i kortlægningen. Medlemmerne vil så automatisk blive identificeret med dette Admidio-ID og ikke længere med fornavn og efternavn.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Tildel login data</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login informationen er tildelt.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login informationen er blevet tildelt og brugeren er blevet informeret via e-mail.</string>
@@ -531,6 +531,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Er du sikker på, at du vil slette rollen #VAR1_BOLD#?\n\nAlle medlemskaber fjernes også permanent.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Du må/kan ikke slette system kategorier.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">Du kan ikke slette system rollen #VAR1_BOLD#.</string>
+  <string name="SYS_DELETED_ENTRY">Slettet opslag</string>
   <string name="SYS_DELETED_USER">Slettet bruger</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Bed om bekræftelse på levering</string>
   <string name="SYS_DELIVERY_CONFIRMATION_DESC">Hvis denne er aktiv, har afsenderen af en e-mail mulighed for at få bekræftet levering af en e-mail. Dog afhænger et eventuelt svar af hvordan modtagerens e-mail program er konfigureret. Modtageren kan vælge at undertrykke afsendelse af en sådan bekræftelse.</string>
@@ -620,7 +621,7 @@
   <string name="SYS_EMPTY">Tom</string>
   <string name="SYS_ENABLED">Aktiveret</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Aktiver kategori rapport</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Kategorirapport opretter en liste over alle roller og kategorier et medlem har. Autorisationen \"Se medlemslister over alle roller\" er påkrævet for drift. (Standard: ja)</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Category rapporten opretter en liste over alle roller og kategorier, som et medlem har. Tilladelsen #VAR1_BOLD# er påkrævet for adgang til kategorirapporten. (Standard: ja)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiver dokumenter &amp; filer</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Dokumenter &amp; filer kan aktiveres eller deaktiveres via denne indstilling. (Standard: ja)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Aktiver download</string>
@@ -782,6 +783,7 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info boks</string>
   <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Indtast venligst for- og efternavnet på den nye kontaktperson. Inden posten oprettes, foretages der et check for at se, om der allerede findes en person med lignende navn i databasen.</string>
+  <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Sucessfuld installation</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Admidio databasen er nu installeret og fuldstændigt konfigureret. Konfigurations filen med adgangsdata til databasen er oprettet og gemt. Du kan nu arbejde med Admidio og logge på med dine administrator oplysninger.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Installationen og opsætningen af databasen blev sucessfuldt afsluttet.</string>
@@ -909,7 +911,12 @@
   <string name="SYS_MONDAY">mandag</string>
   <string name="SYS_MONTHLY">Månedlig</string>
   <string name="SYS_MORE">Mere</string>
+  <string name="SYS_MOVE_FILE">Flyt filen</string>
+  <string name="SYS_MOVE_FILE_DESC">Vælg en mappe, som du vil flytte #VAR1_BOLD# filen til. Rolletilladelserne til at vise filen er taget fra målmappen.</string>
+  <string name="SYS_MOVE_FOLDER">Flyt folder</string>
+  <string name="SYS_MOVE_FOLDER_DESC">Vælg en mappe, som du vil flytte #VAR1_BOLD#-mappen til. Rolletilladelserne til at se og uploade filer fra målmappen anvendes på denne mappe og alle undermapper.</string>
   <string name="SYS_MOVE_DOWN">Flyt ned #VAR1#</string>
+  <string name="SYS_MOVE_TO">Flyt til</string>
   <string name="SYS_MOVE_UP">Flyt op #VAR1#</string>
   <string name="SYS_MOVE_VAR">‎Flytte #VAR1#‎</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Flere modtagere</string>
@@ -1373,7 +1380,7 @@
   <string name="SYS_TUESDAY">tirsdag</string>
   <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Type</string>
-  <string name="SYS_UNIQUE_ID">Unikt ID</string>
+  <string name="SYS_UNIQUE_ID">Unikt Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNLIMITED">Ubegrænset</string>
   <string name="SYS_UNKNOWN">Ukendt</string>
