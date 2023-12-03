@@ -28,7 +28,7 @@
         "phpoffice/phpspreadsheet": "^1.18",
         "ramsey/uuid": "^4.1",
         "smarty/smarty": "^4.0",
-        "tecnickcom/tcpdf": "^6.2",
+        "tecnickcom/tcpdf": "^6.2"
     },
     "require-dev": {},
     "suggest": {
