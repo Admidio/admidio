@@ -93,9 +93,11 @@ switch ($getNewUser) {
             // => EXIT
         }
 
-        // If last name and first name are passed, then these are already preassigned
-        $user->setValue('LAST_NAME', stripslashes($_GET['lastname']));
-        $user->setValue('FIRST_NAME', stripslashes($_GET['firstname']));
+        if (isset($_GET['lastname']) && isset($_GET['firstname'])) {
+            // If last name and first name are passed, then these are already preassigned
+            $user->setValue('LAST_NAME', stripslashes($_GET['lastname']));
+            $user->setValue('FIRST_NAME', stripslashes($_GET['firstname']));
+        }
         break;
 
     case 2: // fallthrough

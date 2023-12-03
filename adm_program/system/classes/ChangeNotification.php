@@ -120,14 +120,14 @@ class ChangeNotification
      * @param string $fieldName The human-readable name of the modified profile field.
      * @param string $old_value The previous value of the field before the change
      * @param string $new_value The new value of the field after the change
-     * @param string|null $old_value_db The previous value of the field before the change as stored in the database
-     * @param string|null $new_value_db The new value of the field after the change as stored in the database
+     * @param string $old_value_db The previous value of the field before the change as stored in the database
+     * @param string $new_value_db The new value of the field after the change as stored in the database
      * @param bool $deleting Whether the profile is changed due to deleting the
      *                       user. In this case, the change will not be logged
      *                       in the history database.
      * @throws AdmException
      */
-    public function logProfileChange(int $userID, int $fieldId, string $fieldName, string $old_value, string $new_value, string $old_value_db = null, string $new_value_db = null, $user = null, bool $deleting = false)
+    public function logProfileChange(int $userID, int $fieldId, string $fieldName, string $old_value, string $new_value, string $old_value_db = '', string $new_value_db = '', $user = null, bool $deleting = false)
     {
         global $gSettingsManager, $gDb;
         // 1. Create a database log entry if so configured
@@ -280,7 +280,7 @@ class ChangeNotification
         foreach (array('usr_login_name', 'usr_password', 'usr_photo', 'usr_text') as $fieldName) {
             $newValue = $user->getValue($fieldName, $this->format);
             if ($newValue) {
-                $this->logUserChange($userID, $fieldName, null, $newValue, $user);
+                $this->logUserChange($userID, $fieldName, '', $newValue, $user);
             }
         }
         // Loop through all profile fields and add all non-empty fields to the notification
@@ -294,7 +294,7 @@ class ChangeNotification
                 if ($newValue) {
                     $fieldLabel = $field->getValue('usf_name', $this->format);
                     $fieldID = $field->getValue('usf_id');
-                    $this->logProfileChange($userID, $fieldID, $fieldLabel, null, $newValue, null, $newValue_db, $user);
+                    $this->logProfileChange($userID, $fieldID, $fieldLabel, '', $newValue, '', $newValue_db, $user);
                 }
             }
         }
@@ -330,7 +330,7 @@ class ChangeNotification
         foreach (array('usr_login_name', 'usr_password', 'usr_photo', 'usr_text') as $fieldName) {
             $oldValue = $oldUser->getValue($fieldName, $this->format);
             if ($oldValue) {
-                $this->logUserChange($userID, $fieldName, $oldValue, null, $user);
+                $this->logUserChange($userID, $fieldName, $oldValue, '', $user);
             }
         }
         // Loop through all profile fields and add all non-empty fields to the notification
@@ -344,7 +344,7 @@ class ChangeNotification
                 if ($oldValue) {
                     $oldFieldId = $oldUser->getProfileFieldsData()->getProfileFields()[$fieldName]->getValue('usf_id');
                     $oldFieldName = $oldUser->getProfileFieldsData()->getProfileFields()[$fieldName]->getValue('usf_name', $this->format);
-                    $this->logProfileChange($userID, $oldFieldId, $oldFieldName, $oldValue, null, $oldValueDB, null, $user, /*deleting=*/true);
+                    $this->logProfileChange($userID, $oldFieldId, $oldFieldName, $oldValue, '', $oldValueDB, '', $user, /*deleting=*/true);
                 }
             }
         }
@@ -364,12 +364,12 @@ class ChangeNotification
         $query = $gDb->queryPrepared($sql, array($userID));
 
         while ($row = $query->fetch()) {
-            $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], null, $user, /*deleting=*/true);
+            $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], '', $user, /*deleting=*/true);
             if ($row['mem_end']) {
-                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], null, $user, /*deleting=*/true);
+                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], '', $user, /*deleting=*/true);
             }
             if ($row['mem_leader']) {
-                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], null, $user, /*deleting=*/true);
+                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], '', $user, /*deleting=*/true);
             }
         }
     }
