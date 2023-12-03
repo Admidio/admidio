@@ -15,9 +15,10 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
 /**
  * get all memberships where the user is assigned
  * @param int $userId
- * @return \PDOStatement
+ * @return PDOStatement
+ * @throws Exception
  */
-function getRolesFromDatabase($userId)
+function getRolesFromDatabase(int $userId): PDOStatement
 {
     global $gDb;
 
@@ -41,9 +42,10 @@ function getRolesFromDatabase($userId)
 /**
  * get all memberships where the user will be assigned
  * @param int $userId
- * @return \PDOStatement
+ * @return PDOStatement
+ * @throws Exception
  */
-function getFutureRolesFromDatabase($userId)
+function getFutureRolesFromDatabase(int $userId): PDOStatement
 {
     global $gDb;
 
@@ -66,9 +68,10 @@ function getFutureRolesFromDatabase($userId)
 /**
  * get all memberships where the user was assigned
  * @param int $userId
- * @return \PDOStatement
+ * @return PDOStatement
+ * @throws Exception
  */
-function getFormerRolesFromDatabase($userId)
+function getFormerRolesFromDatabase(int $userId): PDOStatement
 {
     global $gDb;
 
@@ -89,12 +92,13 @@ function getFormerRolesFromDatabase($userId)
 }
 
 /**
- * @param string        $htmlListId
- * @param User          $user
- * @param \PDOStatement $roleStatement
+ * @param string $htmlListId
+ * @param User $user
+ * @param PDOStatement $roleStatement
  * @return string
+ * @throws AdmException|SmartyException
  */
-function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatement)
+function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleStatement): string
 {
     global $gDb, $gL10n, $gCurrentUser, $gSettingsManager;
 
@@ -104,7 +108,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
     $roleMemHTML = '<ul class="list-group admidio-list-roles-assign" id="'.$htmlListId.'">';
 
     while ($row = $roleStatement->fetch()) {
-        // you must have the right to view memberships of the role or it must be your own profile
+        // you must have the right to view memberships of the role, or it must be your own profile
         if ($gCurrentUser->hasRightViewRole($row['mem_rol_id'])
         || $GLOBALS['gCurrentUserId'] === (int) $user->getValue('usr_id')) {
             $futureMembership = false;

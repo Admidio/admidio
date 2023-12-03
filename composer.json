@@ -19,6 +19,7 @@
         "ext-simplexml": "*",
         "ext-zip": "*",
         "ext-iconv": "*",
+        "ext-posix": "*",
         "bjeavons/zxcvbn-php": "^1.2.0",
         "dapphp/securimage": "^3.6",
         "ezyang/htmlpurifier": "^4.14",
@@ -27,7 +28,7 @@
         "phpoffice/phpspreadsheet": "^1.18",
         "ramsey/uuid": "^4.1",
         "smarty/smarty": "^4.0",
-        "tecnickcom/tcpdf": "^6.2"
+        "tecnickcom/tcpdf": "^6.2",
     },
     "require-dev": {},
     "suggest": {

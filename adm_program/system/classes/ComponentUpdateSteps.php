@@ -1033,7 +1033,7 @@ final class ComponentUpdateSteps
      * @param string $folder
      * @return bool
      */
-    public static function updateStep32RewriteFolderRights($folder = '')
+    public static function updateStep32RewriteFolderRights(string $folder = '')
     {
         if (!FileSystemUtils::isUnixWithPosix()) {
             return false;
