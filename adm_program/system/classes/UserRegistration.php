@@ -58,8 +58,9 @@ class UserRegistration extends User
      * @param int $organizationId The id of the organization for which the user should be registered.
      *                                      If no id is set than the user will be registered for the current organization.
      * @throws AdmException
+     * @throws Exception
      */
-    public function __construct(Database $database, ProfileFields $userFields, $userId = 0, $organizationId = 0)
+    public function __construct(Database $database, ProfileFields $userFields, int $userId = 0, int $organizationId = 0)
     {
         parent::__construct($database, $userFields, $userId);
 
@@ -80,7 +81,8 @@ class UserRegistration extends User
      * that have the flag **rol_default_registration**. After that a notification email is send to the user.
      * If function returns **true** than the user can log in for the organization of this object.
      * @return true Returns **true** if the registration was successful
-     * @throws AdmException
+     * @throws AdmException|SmartyException
+     * @throws Exception
      */
     public function acceptRegistration(): bool
     {
@@ -119,6 +121,8 @@ class UserRegistration extends User
      * be adopted otherwise only username and password will be added to the existing user. The adopted data of the
      * user will not be saved. That must be done in the calling method because of duplicate **usr_login_name**.
      * @param User $user Object of the existing user that should be adopted.
+     * @throws AdmException
+     * @throws Exception
      */
     public function adoptUser(User $user)
     {
@@ -142,6 +146,7 @@ class UserRegistration extends User
      * If the user is valider than only the registration will be deleted!
      * @return bool **true** if no error occurred
      * @throws AdmException
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -181,6 +186,7 @@ class UserRegistration extends User
      * Send a notification email to all role members of roles that can approve registrations
      * therefore the flags system mails and notification mail for roles with approve registration must be activated
      * @throws AdmException
+     * @throws Exception
      */
     public function notifyAuthorizedMembers()
     {
@@ -222,6 +228,7 @@ class UserRegistration extends User
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @throws AdmException
+     * @throws Exception
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
      */
@@ -245,6 +252,7 @@ class UserRegistration extends User
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool
      * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -289,6 +297,7 @@ class UserRegistration extends User
      * @param string $validationId A validation ID of the registration that should be checked.
      * @return bool Return **true** if the given data could be joined to a valid registration
      * @throws AdmException
+     * @throws Exception
      */
     public function validate(string $validationId): bool
     {

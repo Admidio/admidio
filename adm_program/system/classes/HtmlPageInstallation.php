@@ -16,7 +16,7 @@
  * page will automatically integrate the chosen theme. You can optional disable the
  * integration of the theme files. Additional to the basic class HtmlPage this class only assigns
  * variables that are in installation and update mode available. There is also a method that will
- * easily creates a message page.
+ * easily create a message page.
  *
  * **Code example**
  * ```
@@ -37,11 +37,12 @@ class HtmlPageInstallation extends HtmlPage
 {
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $id       Id of the page. This id will be set in the html <body> tag.
+     * @param string $id ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
+     * @throws Exception
      */
-    public function __construct($id, $headline = '')
+    public function __construct(string $id, string $headline = '')
     {
         parent::__construct($id, $headline);
 
@@ -98,8 +99,9 @@ class HtmlPageInstallation extends HtmlPage
     }
 
     /**
-     * Set the form in the installation modus. Therefore headline and title will be changed.
+     * Set the form in the installation modus. Therefore, headline and title will be changed.
      * This is the default modus and will be set automatically if not modus is set in the calling code.
+     * @throws Exception
      */
     public function setInstallationModus()
     {
@@ -110,7 +112,8 @@ class HtmlPageInstallation extends HtmlPage
     }
 
     /**
-     * Set the form in the update modus. Therefore headline and title will be changed.
+     * Set the form in the update modus. Therefore, headline and title will be changed.
+     * @throws Exception
      */
     public function setUpdateModus()
     {
@@ -121,9 +124,10 @@ class HtmlPageInstallation extends HtmlPage
     }
 
     /**
-     * This method will set all variables for the Smarty engine and than send the whole html
+     * This method will set all variables for the Smarty engine and then send the whole html
      * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
+     * @throws SmartyException
      */
     public function show()
     {
@@ -137,16 +141,17 @@ class HtmlPageInstallation extends HtmlPage
     /**
      * This Method creates a message page that will show a simple message text with a button
      * that will navigate to a custom url.
-     * @param string $outputMode     Defines the style of the html message. The values are:
+     * @param string $outputMode Defines the style of the html message. The values are:
      *                               **error** Shows a red box with the message text.
      *                               **success** Shows a green box with the message text.
-     * @param string $headline       The headline of the message page.
-     * @param string $text           The text of the message.
-     * @param string $buttonText     The text of the button which will navigate to the **$destinationUrl**
-     * @param string $buttonIcon     The icon of the button which will navigate to the **$destinationUrl**
-     * @param string $destinationUrl A url to which the user should navigate if he click on the button.
+     * @param string $headline The headline of the message page.
+     * @param string $text The text of the message.
+     * @param string $buttonText The text of the button which will navigate to the **$destinationUrl**
+     * @param string $buttonIcon The icon of the button which will navigate to the **$destinationUrl**
+     * @param string $destinationUrl An url to which the user should navigate if he clicks on the button.
+     * @throws SmartyException
      */
-    public function showMessage($outputMode, $headline, $text, $buttonText, $buttonIcon, $destinationUrl)
+    public function showMessage(string $outputMode, string $headline, string $text, string $buttonText, string $buttonIcon, string $destinationUrl)
     {
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');

@@ -30,7 +30,7 @@
  *
  * // create new category
  * $category = new TableCategory($gDb);
- * $category->setValue('cat_name', 'My new headling');
+ * $category->setValue('cat_name', 'My new headline');
  * $category->setValue('cat_type', 'ROL');
  * $category->save();
  * ```
@@ -53,7 +53,8 @@ class TableCategory extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_category.
      * If the id is set than the specific category will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $catId    The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $catId The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
     public function __construct(Database $database, $catId = 0)
     {
@@ -62,12 +63,13 @@ class TableCategory extends TableAccess
 
     /**
      * Deletes the selected record of the table and all references in other tables.
-     * After that the class will be initialize. The method throws exceptions if
+     * After that the class will be initialized. The method throws exceptions if
      * the category couldn't be deleted.
-     * @throws AdmException SYS_DELETE_SYSTEM_CATEGORY
+     * @return bool **true** if no error occurred
+     * @throws Exception
      *                      SYS_DELETE_LAST_CATEGORY
      *                      SYS_DONT_DELETE_CATEGORY
-     * @return bool **true** if no error occurred
+     * @throws AdmException SYS_DELETE_SYSTEM_CATEGORY
      */
     public function delete(): bool
     {
@@ -109,9 +111,9 @@ class TableCategory extends TableAccess
         $sql = 'SELECT 1
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = ? -- $catId';
-        $recordsetsStatement = $this->db->queryPrepared($sql, array($catId));
+        $recordsetStatement = $this->db->queryPrepared($sql, array($catId));
 
-        if ($recordsetsStatement->rowCount() > 0) {
+        if ($recordsetStatement->rowCount() > 0) {
             throw new AdmException('SYS_DONT_DELETE_CATEGORY', array($this->getValue('cat_name'), $this->getNumberElements()));
         }
 
@@ -128,14 +130,15 @@ class TableCategory extends TableAccess
     }
 
     /**
-     * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
-     * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
-     * Beispiel: 'Gruppen' => 'GRUPPEN_2'
+     * This recursive method determines a unique name for the transferred name.
+     * this is formed from the name in capital letters and the next free number (index)
+     * Beispiel: 'Gruppen' → 'GRUPPEN_2'
      * @param string $name
-     * @param int    $index
+     * @param int $index
      * @return string
+     * @throws Exception
      */
-    private function getNewNameIntern($name, $index)
+    private function getNewNameIntern(string $name, int $index): string
     {
         $newNameIntern = strtoupper(str_replace(' ', '_', $name));
 
@@ -157,10 +160,11 @@ class TableCategory extends TableAccess
     }
 
     /**
-     * Read number of child recordsets of this category.
+     * Read number of child recordset of this category.
      * @return int Returns the number of child elements of this category
+     * @throws Exception
      */
-    public function getNumberElements()
+    public function getNumberElements(): int
     {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.$this->elementTable.'
@@ -174,10 +178,11 @@ class TableCategory extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -199,12 +204,13 @@ class TableCategory extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to edit this category. Therefore
+     * This method checks if the current user is allowed to edit this category. Therefore,
      * the category must be visible to the user and must be of the current organization.
      * If this is a global category than the current organization must be the parent organization.
      * @return bool Return true if the current user is allowed to edit this category
+     * @throws Exception
      */
-    public function isEditable()
+    public function isEditable(): bool
     {
         global $gCurrentOrganization, $gCurrentUser;
 
@@ -242,11 +248,12 @@ class TableCategory extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to view this category. Therefore
+     * This method checks if the current user is allowed to view this category. Therefore,
      * the visibility of the category is checked.
      * @return bool Return true if the current user is allowed to view this category
+     * @throws Exception
      */
-    public function isVisible()
+    public function isVisible(): bool
     {
         global $gCurrentUser;
 
@@ -263,8 +270,9 @@ class TableCategory extends TableAccess
      * Change the internal sequence of this category. It can be moved one place up or down
      * @param string $mode This could be **UP** or **DOWN**.
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
+     * @throws Exception
      */
-    public function moveSequence($mode)
+    public function moveSequence(string $mode): bool
     {
         $catType = $this->getValue('cat_type');
 
@@ -316,6 +324,7 @@ class TableCategory extends TableAccess
      * Per default all columns of adm_categories will be read and stored in the object.
      * @param int $id Unique cat_id
      * @return bool Returns **true** if one record is found
+     * @throws Exception
      */
     public function readDataById(int $id): bool
     {
@@ -330,12 +339,14 @@ class TableCategory extends TableAccess
 
     /**
      * Reads a category out of the table in database selected by different columns in the table.
-     * The columns are commited with an array where every element index is the column name and the value is the column value.
+     * The columns are committed with an array where every element index is the column name and the value is the column value.
      * The columns and values must be selected so that they identify only one record.
      * If the sql will find more than one record the method returns **false**.
      * Per default all columns of adm_categories will be read and stored in the object.
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
+     * @throws AdmException
+     * @throws Exception
      */
     public function readDataByColumns(array $columnArray): bool
     {
@@ -352,11 +363,12 @@ class TableCategory extends TableAccess
      * Reads a record out of the table in database selected by the unique uuid column in the table.
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
      * Per default all columns of the default table will be read and stored in the object.
-     * Not every Admidio table has a uuid. Please check the database structure before you use this method.
+     * Not every Admidio table has a UUID. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readData
+     * @throws Exception
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readData
      */
     public function readDataByUuid(string $uuid): bool
     {
@@ -370,13 +382,15 @@ class TableCategory extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * If a new record is inserted than the next free sequence will be determined.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -396,7 +410,7 @@ class TableCategory extends TableAccess
                 $orgCondition = ' AND cat_org_id IS NULL ';
             }
 
-            // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
+            // Determine the highest sequence number of the category when inserting
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_type = ? -- $this->getValue(\'cat_type\')
@@ -406,7 +420,7 @@ class TableCategory extends TableAccess
             $this->setValue('cat_sequence', (int) $countCategoriesStatement->fetchColumn() + 1);
 
             if ((int) $this->getValue('cat_org_id') === 0) {
-                // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
+                // a cross-organizational category is always at the beginning, so move categories of other organizations to the end
                 $sql = 'UPDATE '.TBL_CATEGORIES.'
                            SET cat_sequence = cat_sequence + 1
                          WHERE cat_type     = ? -- $this->getValue(\'cat_type\')
@@ -434,6 +448,7 @@ class TableCategory extends TableAccess
 
     /**
      * Set table and table-column by cat_type
+     * @throws Exception
      */
     private function setTableAndColumnByCatType()
     {
@@ -469,9 +484,11 @@ class TableCategory extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {

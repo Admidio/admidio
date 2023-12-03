@@ -1,7 +1,8 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS - Klasse
+ * Class creates an RssFeed object according to RSS 2.0.
+ * Specification of RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -9,27 +10,6 @@
  ***********************************************************************************************
  */
 
-/**
- * Diese Klasse erzeugt ein RssFeed-Objekt nach RSS 2.0.
- *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
- * function RssFeed($homepage, $title, $description)
- * Parameters:  $homepage       - Link zur Homepage
- *              $title          - Titel des RSS-Feeds
- *              $description    - Ergaenzende Beschreibung zum Titel
- *
- * Dem RssFeed koennen ueber die Funktion addItem Inhalt zugeordnet werden:
- * function addItem($title, $description, $date, $guid)
- * Parameters:  $title          - Titel des Items
- *              $description    - der Inhalt des Items
- *              $date           - Das Erstellungsdatum des Items
- *              $link           - Ein Link zum Termin/Newsbeitrag etc.
- *
- * Wenn alle benoetigten Items zugeordnet sind, wird der RssFeed generiert mit:
- * function buildFeed()
- *
- * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
- */
 class RssFeed
 {
     /**
@@ -52,7 +32,7 @@ class RssFeed
      * @param string $description Short description of this channel
      * @param string $copyright   Author of the channel; in our case the organization name
      */
-    public function __construct($title, $link, $description, $copyright)
+    public function __construct(string $title, string $link, string $description, string $copyright)
     {
         $this->channel['title'] = $title;
         $this->channel['link']  = $link;
@@ -70,7 +50,7 @@ class RssFeed
      * @param string $pubDate     Optional the publication date of this entry
      * @param string $category    Optional the category of this entry
      */
-    public function addItem($title, $description, $link, $author = '', $pubDate = '', $category = '')
+    public function addItem(string $title, string $description, string $link, string $author = '', string $pubDate = '', string $category = '')
     {
         if (!StringUtils::strValidCharacters(StringUtils::strToLower($author), 'email')) {
             $author = '';
@@ -84,8 +64,7 @@ class RssFeed
      */
     public function getRssFeed()
     {
-        $rssFeed = '';
-        $rssFeed .= $this->getRssHeader();
+        $rssFeed = $this->getRssHeader();
         $rssFeed .= $this->getChannelOpener();
         $rssFeed .= $this->getChannelInfo();
         $rssFeed .= $this->getItems();
@@ -99,7 +78,7 @@ class RssFeed
     /**
      * @return string Returns the RSS header
      */
-    private function getRssHeader()
+    private function getRssHeader(): string
     {
         return '<?xml version="1.0" encoding="utf-8"?>'.chr(10).
         '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">'.chr(10);
@@ -108,7 +87,7 @@ class RssFeed
     /**
      * @return string Returns the open channel
      */
-    private function getChannelOpener()
+    private function getChannelOpener(): string
     {
         return '<channel>'.chr(10).
         '<atom:link href="' . $this->feed . '" rel="self" type="application/rss+xml" />'.chr(10);
@@ -117,7 +96,7 @@ class RssFeed
     /**
      * @return string Returns channel infos
      */
-    private function getChannelInfo()
+    private function getChannelInfo(): string
     {
         global $gL10n;
 
@@ -137,7 +116,7 @@ class RssFeed
     /**
      * @return string Returns the items
      */
-    private function getItems()
+    private function getItems(): string
     {
         $itemString = '';
         foreach ($this->items as $item) {
@@ -159,7 +138,7 @@ class RssFeed
     /**
      * @return string Returns the channel close
      */
-    private function getChannelCloser()
+    private function getChannelCloser(): string
     {
         return '</channel>'.chr(10);
     }
@@ -167,7 +146,7 @@ class RssFeed
     /**
      * @return string Returns the RSS footer
      */
-    private function getRssFooter()
+    private function getRssFooter(): string
     {
         return '</rss>'.chr(10);
     }

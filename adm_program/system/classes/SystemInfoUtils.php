@@ -20,7 +20,7 @@ final class SystemInfoUtils
     /**
      * @return string
      */
-    public static function getOS()
+    public static function getOS(): string
     {
         return PHP_OS;
     }
@@ -29,7 +29,7 @@ final class SystemInfoUtils
      * @param string $mode (a, s, n, r, v, m)
      * @return string
      */
-    public static function getUname($mode = self::UNAME_MODE_A)
+    public static function getUname(string $mode = self::UNAME_MODE_A): string
     {
         return php_uname($mode);
     }
@@ -37,7 +37,7 @@ final class SystemInfoUtils
     /**
      * @return bool
      */
-    public static function is32Bit()
+    public static function is32Bit(): bool
     {
         return PHP_INT_SIZE === 4;
     }
@@ -45,7 +45,7 @@ final class SystemInfoUtils
     /**
      * @return bool
      */
-    public static function is64Bit()
+    public static function is64Bit(): bool
     {
         return PHP_INT_SIZE === 8;
     }
@@ -53,7 +53,7 @@ final class SystemInfoUtils
     /**
      * @return bool
      */
-    public static function isUnixFileSystem()
+    public static function isUnixFileSystem(): bool
     {
         return DIRECTORY_SEPARATOR === '/';
     }
@@ -61,7 +61,7 @@ final class SystemInfoUtils
     /**
      * @return string
      */
-    public static function getDirectorySeparator()
+    public static function getDirectorySeparator(): string
     {
         return DIRECTORY_SEPARATOR;
     }
@@ -69,7 +69,7 @@ final class SystemInfoUtils
     /**
      * @return string
      */
-    public static function getPathSeparator()
+    public static function getPathSeparator(): string
     {
         return PATH_SEPARATOR;
     }
@@ -77,7 +77,7 @@ final class SystemInfoUtils
     /**
      * @return int
      */
-    public static function getMaxPathLength()
+    public static function getMaxPathLength(): int
     {
         return PHP_MAXPATHLEN;
     }

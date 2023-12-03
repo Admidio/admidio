@@ -271,7 +271,7 @@ if ($getMode !== 'csv') {
         }
 
         // create filter menu with elements for role
-        $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+        $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
         $form = new HtmlForm('navbar_filter_form_category_report', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addSelectBox(
             'crt_id',

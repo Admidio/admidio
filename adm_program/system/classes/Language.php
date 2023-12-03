@@ -11,10 +11,10 @@
  * Reads language specific texts that are identified with text ids out of language xml files
  *
  * The class will read a language specific text that is identified with their
- * text id out of an language xml file. The access will be manages with the
+ * text id out of a language xml file. The access will be managed with the
  * \SimpleXMLElement which search through xml files. An object of this class
  * can't be stored in a PHP session because it creates PHP core objects which
- * couldn't be stored in sessions. Therefore an object of **LanguageData**
+ * couldn't be stored in sessions. Therefore, an object of **LanguageData**
  * should be assigned to this class that stored all necessary data and can be
  * stored in a session.
  *
@@ -47,18 +47,17 @@ class Language
      */
     private $languages = array();
     /**
-     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in **$languageData**.
+     * @var array<string,SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in **$languageData**.
      */
     private $xmlLanguageObjects = array();
     /**
-     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in **$languageData**.
+     * @var array<string,SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in **$languageData**.
      */
     private $xmlRefLanguageObjects = array();
 
     /**
      * Language constructor.
-     * @param LanguageData $languageDataObject An object of the class **LanguageData**.
-     * @throws \UnexpectedValueException
+     * @param LanguageData|null $languageDataObject An object of the class **LanguageData**.
      */
     public function __construct(LanguageData $languageDataObject = null)
     {
@@ -74,10 +73,10 @@ class Language
      * Adds a new path of language files to the array with all language paths where Admidio
      * should search for language files.
      * @param string $languageFolderPath Server path where Admidio should search for language files.
-     * @throws \UnexpectedValueException
      * @return bool Returns true if language path is added.
+     *@throws UnexpectedValueException
      */
-    public function addLanguageFolderPath($languageFolderPath)
+    public function addLanguageFolderPath(string $languageFolderPath): bool
     {
         return $this->languageData->addLanguageFolderPath($languageFolderPath);
     }
@@ -86,7 +85,7 @@ class Language
      * Reads a text string out of a language xml file that is identified
      * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
      * than you must set more parameters to replace them.
-     * @param string            $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
      * @param array<int,string> $params Optional parameter to replace placeholders in the text.
      *                                  $params[0] will replace **#VAR1#** or **#VAR1_BOLD#**,
      *                                  $params[1] will replace **#VAR2#** or **#VAR2_BOLD#** etc.
@@ -99,8 +98,9 @@ class Language
      * // display a text with placeholders for individual content
      * echo $gL10n->get('SYS_CREATED_BY_AND_AT', array('John Doe', '2019-04-13'));
      * ```
+     * @throws Exception
      */
-    public function get($textId, array $params = array())
+    public function get(string $textId, array $params = array()): string
     {
         global $gLogger;
 
@@ -110,7 +110,7 @@ class Language
             $text = $this->getTextFromTextId($textId);
 
             //$gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
-        } catch (\RuntimeException $exception) {
+        } catch (RuntimeException $exception) {
             $gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
             $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
 
@@ -129,7 +129,7 @@ class Language
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
      * @return array<string,string> Return an array with all available languages.
      */
-    public function getAvailableLanguages()
+    public function getAvailableLanguages(): array
     {
         if (count($this->languages) === 0) {
             $this->languages = self::loadAvailableLanguages();
@@ -140,10 +140,10 @@ class Language
 
     /**
      * Returns the path of a country file.
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @return string
      */
-    private function getCountryFile()
+    private function getCountryFile(): string
     {
         $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . $this->languageData->getLanguage() . '.xml';
         $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
@@ -155,15 +155,15 @@ class Language
             return $langFileRef;
         }
 
-        throw new \UnexpectedValueException('Country files not found!');
+        throw new UnexpectedValueException('Country files not found!');
     }
 
     /**
      * Returns an array with all countries and their ISO codes (ISO 3166 ALPHA-3)
-     * @throws \UnexpectedValueException
      * @return array<string,string> Array with all countries and their ISO codes (ISO 3166 ALPHA-3) e.g.: array('DEU' => 'Germany' ...)
+     * @throws UnexpectedValueException|Exception
      */
-    public function getCountries()
+    public function getCountries(): array
     {
         $countries = $this->languageData->getCountries();
 
@@ -179,11 +179,11 @@ class Language
      * Returns the name of the country in the language of this object. The country will be
      * identified by the ISO code (ISO 3166 ALPHA-3) e.g. 'DEU' or 'GBR' ...
      * @param string $countryIsoCode The three digits ISO code (ISO 3166 ALPHA-3) of the country where the name should be returned.
-     * @throws AdmException
-     * @throws AdmException
      * @return string Return the name of the country in the language of this object.
+     * @throws AdmException
+     * @throws Exception
      */
-    public function getCountryName($countryIsoCode)
+    public function getCountryName(string $countryIsoCode): string
     {
         if (empty($countryIsoCode)) {
             return '';
@@ -206,10 +206,11 @@ class Language
      * Returns the three digits ISO code (ISO 3166 ALPHA-3) of the country. The country will be identified
      * by the name in the language of this object
      * @param string $countryName The name of the country in the language of this object.
-     * @throws AdmException
      * @return string Return the three digits ISO code (ISO 3166 ALPHA-3) of the country.
+     * @throws AdmException
+     * @throws Exception
      */
-    public function getCountryIsoCode($countryName)
+    public function getCountryIsoCode(string $countryName): string
     {
         if ($countryName === '') {
             throw new AdmException('Invalid country name!');
@@ -230,7 +231,7 @@ class Language
      * codes such as de-CH. If you only want the ISO code then call getLanguageIsoCode().
      * @return string Returns the language code of the language of this object or the reference language.
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->languageData->getLanguage();
     }
@@ -239,7 +240,7 @@ class Language
      * Returns the ISO 639-1 code of the language of this object.
      * @return string Returns the ISO 639-1 code of the language of this object e.g. **de** or **en**.
      */
-    public function getLanguageIsoCode()
+    public function getLanguageIsoCode(): string
     {
         return $this->languageData->getLanguageIsoCode();
     }
@@ -248,7 +249,7 @@ class Language
      * Returns the language code of the language that we need for some libs e.g. datepicker or ckeditor.
      * @return string Returns the language code of the language of this object or the reference language.
      */
-    public function getLanguageLibs()
+    public function getLanguageLibs(): string
     {
         return $this->languageData->getLanguageLibs();
     }
@@ -256,27 +257,27 @@ class Language
     /**
      * Reads a text string out of a language xml file that is identified with a unique text id e.g. SYS_COMMON.
      * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @throws \OutOfBoundsException
-     * @throws \UnexpectedValueException
      * @return string Returns the text string of the text id.
+     * @throws UnexpectedValueException
+     * @throws OutOfBoundsException|Exception
      */
-    private function getTextFromTextId($textId)
+    private function getTextFromTextId(string $textId): string
     {
         // first search text id in text-cache
         try {
             return $this->languageData->getTextCache($textId);
-        } catch (\OutOfBoundsException $exception) {
+        } catch (OutOfBoundsException $exception) {
             // if text id wasn't found than search for it in language
             try {
                 // search for text id in every \SimpleXMLElement (language file) of the object array
                 return $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
-            } catch (\OutOfBoundsException $exception) {
+            } catch (OutOfBoundsException $exception) {
                 // if text id wasn't found than search for it in reference language
                 try {
                     // search for text id in every \SimpleXMLElement (language file) of the object array
                     return $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, LanguageData::REFERENCE_LANGUAGE, $textId);
-                } catch (\OutOfBoundsException $exception) {
-                    throw new \OutOfBoundsException($exception->getMessage());
+                } catch (OutOfBoundsException $exception) {
+                    throw new OutOfBoundsException($exception->getMessage());
                 }
             }
         }
@@ -297,7 +298,7 @@ class Language
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
      * @return array<string,string>
      */
-    private static function loadAvailableLanguages()
+    private static function loadAvailableLanguages(): array
     {
         global $gSupportedLanguages;
 
@@ -308,20 +309,20 @@ class Language
 
     /**
      * Returns an array with all countries and their ISO codes
-     * @throws \UnexpectedValueException
      * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @throws UnexpectedValueException|Exception
      */
-    private function loadCountries()
+    private function loadCountries(): array
     {
         $countryFile = $this->getCountryFile();
 
         // read all countries from xml file
-        $countriesXml = new \SimpleXMLElement($countryFile, 0, true);
+        $countriesXml = new SimpleXMLElement($countryFile, 0, true);
 
         $countries = array();
 
         /**
-         * @var \SimpleXMLElement $xmlNode
+         * @var SimpleXMLElement $xmlNode
          */
         foreach ($countriesXml->children() as $xmlNode) {
             $countries[(string) $xmlNode['name']] = (string) $xmlNode;
@@ -336,11 +337,12 @@ class Language
      * Replaces all placeholders of the translation string with their values that are set through the array **$params**.
      * If the value of the array is a translation id the method will automatically try to replace this id with the
      * translation string.
-     * @param string            $text   The translation string with the static placeholders
+     * @param string $text The translation string with the static placeholders
      * @param array<int,string> $params An array with values for each placeholder of the string.
      * @return string Returns the translation string with the replaced placeholders.
+     * @throws Exception
      */
-    private function prepareTextPlaceholders($text, array $params)
+    private function prepareTextPlaceholders(string $text, array $params): string
     {
         // replace placeholder with value of parameters
         foreach ($params as $index => $param) {
@@ -363,10 +365,10 @@ class Language
      * @param string $text
      * @return string
      */
-    private static function prepareXmlText($text)
+    private static function prepareXmlText(string $text): string
     {
         // set line break with html
-        // Within Android string resource all apostrophe are escaped so we must remove the escape char
+        // Within Android string resource all apostrophe are escaped, so we must remove the escape char
         // replace highly comma, so there are no problems in the code later
         $replaces = array(
             '\\n'  => '<br />',
@@ -379,14 +381,14 @@ class Language
 
     /**
      * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
-     * @param array<string,\SimpleXMLElement> $xmlLanguageObjects The reference to an array where every SimpleXMLElement of each language path is stored
+     * @param array<string,SimpleXMLElement> $xmlLanguageObjects The reference to an array where every SimpleXMLElement of each language path is stored
      * @param string $languageFilePath The path of the language file to search in.
      * @param string $textId The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
      * @throws Exception
      * @throws OutOfBoundsException
      */
-    private function searchLanguageText(array &$xmlLanguageObjects, $languageFilePath, $textId)
+    private function searchLanguageText(array &$xmlLanguageObjects, string $languageFilePath, string $textId): string
     {
         // if not exists create a \SimpleXMLElement of the language file in the language path
         // and add it to the array of language objects
@@ -414,14 +416,14 @@ class Language
     }
 
     /**
-     * @param array<string,\SimpleXMLElement> $xmlLanguageObjects SimpleXMLElement array of each language path is stored
-     * @param string                          $language           Language code
-     * @param string                          $textId             Unique text id of the text that should be read e.g. SYS_COMMON
-     * @throws OutOfBoundsException
-     * @throws UnexpectedValueException
+     * @param array<string,SimpleXMLElement> $xmlLanguageObjects SimpleXMLElement array of each language path is stored
+     * @param string $language           Language code
+     * @param string $textId             Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the text string of the text id.
+     * @throws UnexpectedValueException|Exception
+     * @throws OutOfBoundsException
      */
-    private function searchTextIdInLangObject(array &$xmlLanguageObjects, $language, $textId)
+    private function searchTextIdInLangObject(array &$xmlLanguageObjects, string $language, string $textId): string
     {
         $languageFolderPaths = $this->languageData->getLanguageFolderPaths();
         foreach ($languageFolderPaths as $languageFolderPath) {
@@ -442,7 +444,7 @@ class Language
      * @param string $language ISO code of the language that should be set to this object.
      * @return bool Returns true if language changed.
      */
-    public function setLanguage($language)
+    public function setLanguage(string $language): bool
     {
         if ($language === $this->languageData->getLanguage()) {
             return false;
@@ -461,6 +463,7 @@ class Language
      * Checks if a given string is a translation-string-id and translate it
      * @param string $string The string to check for translation
      * @return string Returns the translated or original string
+     * @throws Exception
      */
     public static function translateIfTranslationStrId(string $string): string
     {

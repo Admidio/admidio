@@ -45,7 +45,7 @@ class RolesRights extends TableAccess
      */
     protected $rolesIds;
     /**
-     * @var int Id of the object for which the roles right should be loaded.
+     * @var int ID of the object for which the roles right should be loaded.
      */
     protected $objectId;
     /**
@@ -56,11 +56,13 @@ class RolesRights extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_roles_rights.
      * If the id is set than the specific category will be loaded.
-     * @param Database $database       Object of the class Database. This should be the default global object **$gDb**.
-     * @param string   $rolesRightName The recordset of the roles right with this name will be loaded.
-     * @param int      $objectId       Id of the object of which the roles should be loaded.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param string $rolesRightName The recordset of the roles right with this name will be loaded.
+     * @param int $objectId ID of the object of which the roles should be loaded.
+     * @throws AdmException
+     * @throws Exception
      */
-    public function __construct(Database $database, $rolesRightName, $objectId)
+    public function __construct(Database $database, string $rolesRightName, int $objectId)
     {
         parent::__construct($database, TBL_ROLES_RIGHTS, 'ror');
 
@@ -72,7 +74,9 @@ class RolesRights extends TableAccess
 
     /**
      * Add all roles of the parameter array to the current roles rights object.
-     * @param array<int,int> $roleIds Array with all role ids that should be add.
+     * @param array<int,int> $roleIds Array with all role ids that should be added.
+     * @throws AdmException
+     * @throws Exception
      */
     public function addRoles(array $roleIds)
     {
@@ -92,6 +96,7 @@ class RolesRights extends TableAccess
 
     /**
      * Initializes all class parameters and deletes all read data.
+     * @throws Exception
      */
     public function clear()
     {
@@ -103,8 +108,9 @@ class RolesRights extends TableAccess
 
     /**
      * Deletes all assigned roles to the current object.
-     * After that the class will be initialize.
+     * After that the class will be initialized.
      * @return bool **true** if no error occurred
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -125,7 +131,7 @@ class RolesRights extends TableAccess
      * Get all roles ids that where assigned to the current roles right and the selected object.
      * @return array<int,int> Returns an array with all role ids
      */
-    public function getRolesIds()
+    public function getRolesIds(): array
     {
         return $this->rolesIds;
     }
@@ -133,8 +139,9 @@ class RolesRights extends TableAccess
     /**
      * Get all names of the roles that where assigned to the current roles right and the selected object.
      * @return array<int,string> Returns an array with all roles names
+     * @throws Exception
      */
-    public function getRolesNames()
+    public function getRolesNames(): array
     {
         $arrRolesNames = array();
 
@@ -158,7 +165,7 @@ class RolesRights extends TableAccess
      * @param array<int,int> $assignedRoles Array with all assigned roles of the user whose rights should be checked
      * @return bool Return **true** if at least one role of the assigned roles exists at the current object.
      */
-    public function hasRight(array $assignedRoles)
+    public function hasRight(array $assignedRoles): bool
     {
         return count($assignedRoles) > 0 && count(array_intersect($this->rolesIds, $assignedRoles)) > 0;
     }
@@ -168,11 +175,12 @@ class RolesRights extends TableAccess
      * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @param array<int,mixed> $queryParams       The query params for the prepared statement
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readDataById
+     * @throws Exception
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readDataById
      */
     protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
@@ -198,6 +206,7 @@ class RolesRights extends TableAccess
     /**
      * Remove all roles of the parameter array from the current roles rights object.
      * @param array<int,int> $roleIds Array with all role ids that should be removed.
+     * @throws Exception
      */
     public function removeRoles(array $roleIds)
     {
@@ -210,11 +219,13 @@ class RolesRights extends TableAccess
 
     /**
      * Save all roles of the array to the current roles rights object.
-     * The method will only save the changes to an existing object. Therefore
+     * The method will only save the changes to an existing object. Therefore,
      * it will check which roles already exists and which roles must be removed.
-     * If the current right has a parent right than all roles will also be added
+     * If the current right has a parent right then all roles will also be added
      * to the parent right and saved.
      * @param array<int,int> $roleIds Array with all role ids that should be saved.
+     * @throws AdmException
+     * @throws Exception
      */
     public function saveRoles(array $roleIds)
     {
@@ -232,7 +243,7 @@ class RolesRights extends TableAccess
             $this->addRoles($addRoles);
             $this->removeRoles($removeRoles);
 
-            // if current right has a parent role right than add the roles also to the parent role right
+            // if current right has a parent role right then add the roles also to the parent role right
             if ((int) $this->getValue('ror_ror_id_parent') > 0) {
                 $parentRight      = new TableAccess($this->db, TBL_ROLES_RIGHTS, 'ror', (int) $this->getValue('ror_ror_id_parent'));
                 $parentRolesRight = new self($this->db, $parentRight->getValue('ror_name_intern'), $this->objectId);
@@ -246,10 +257,11 @@ class RolesRights extends TableAccess
      * This method should only be called from a child role right, which wants to store its roles
      * in the parent role right.
      * @param array<int,int> $roleIds Array with all role ids that should be saved.
+     * @throws AdmException
      */
     public function saveRolesOfChildRight(array $roleIds)
     {
-        // if array is empty of new roles is empty or viewable roles array is empty than add nothing
+        // if array is empty of new roles is empty or viewable roles array is empty then add nothing
         if (count($roleIds) > 0 && count($this->getRolesIds()) > 0) {
             // add new roles and save them to database
             $addRoles = array_diff($roleIds, $this->getRolesIds());

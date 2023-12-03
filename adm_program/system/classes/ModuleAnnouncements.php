@@ -8,10 +8,10 @@
  */
 
 /**
- * This class reads announcement recordsets from database
+ * This class reads announcement recordset from database
  *
- * This class reads all available recordsets from table announcements
- * and returns an Array with results, recordsets and validated parameters from $_GET Array.
+ * This class reads all available recordset from table announcements
+ * and returns an Array with results, recordset and validated parameters from $_GET Array.
  *
  * **Returned array:**
  * ```
@@ -88,9 +88,10 @@ class ModuleAnnouncements extends Modules
      * Get all records and push it to the array
      * @param int $startElement
      * @param int $limit
-     * @return array<string,mixed> Returns the Array with results, recordsets and validated parameters from $_GET Array
+     * @return array<string,mixed> Returns the Array with results, recordset and validated parameters from $_GET Array
+     * @throws Exception
      */
-    public function getDataSet($startElement = 0, $limit = null)
+    public function getDataSet(int $startElement = 0, int $limit = 0): array
     {
         global $gCurrentUser, $gDb;
 
@@ -132,8 +133,9 @@ class ModuleAnnouncements extends Modules
     /**
      * Get number of available announcements
      * @Return int Returns the total count and push it in the array
+     * @throws Exception
      */
-    public function getDataSetCount()
+    public function getDataSetCount(): int
     {
         global $gCurrentUser, $gDb;
 
@@ -155,9 +157,9 @@ class ModuleAnnouncements extends Modules
     /**
      * Add several conditions to an SQL string that could later be used
      * as additional conditions in other SQL queries.
-     * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions and it's query params.
+     * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions, and it's query params.
      */
-    private function getSqlConditions()
+    private function getSqlConditions(): array
     {
         $sqlConditions = '';
         $params = array();
@@ -201,7 +203,7 @@ class ModuleAnnouncements extends Modules
      * Method will set an array with all names of the categories whose announcements should be shown
      * @param array $arrCategoriesNames An array with all names of the categories whose announcements should be shown
      */
-    public function setCategoriesNames($arrCategoriesNames)
+    public function setCategoriesNames(array $arrCategoriesNames)
     {
         $this->categoriesNames = $arrCategoriesNames;
     }
@@ -215,7 +217,7 @@ class ModuleAnnouncements extends Modules
      * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
      * @return bool Returns false if invalid date format is submitted
      */
-    public function setDateRange($dateRangeStart = '1970-01-01', $dateRangeEnd = DATE_NOW)
+    public function setDateRange(string $dateRangeStart = '1970-01-01', string $dateRangeEnd = DATE_NOW): bool
     {
         global $gSettingsManager;
 
@@ -240,11 +242,11 @@ class ModuleAnnouncements extends Modules
      * @param string $dateFormat
      * @return bool
      */
-    private function setDateRangeParams($dateRange, $dateRangePoint, $dateFormat)
+    private function setDateRangeParams(string $dateRange, string $dateRangePoint, string $dateFormat): bool
     {
         global $gSettingsManager;
 
-        $objDate = \DateTime::createFromFormat($dateFormat, $dateRange);
+        $objDate = DateTime::createFromFormat($dateFormat, $dateRange);
 
         if ($objDate === false) {
             return false;
@@ -258,9 +260,9 @@ class ModuleAnnouncements extends Modules
 
     /**
      * Get additional tables for sql statement
-     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins and it's query params.
+     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins, and it's query params.
      */
-    private function sqlGetAdditional()
+    private function sqlGetAdditional(): array
     {
         global $gSettingsManager, $gProfileFields;
 

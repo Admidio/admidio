@@ -49,8 +49,9 @@ class ProfileFields
 
     /**
      * constructor that will initialize variables and read the profile field structure
-     * @param Database $database       Database object (should be **$gDb**)
-     * @param int      $organizationId The id of the organization for which the profile field structure should be read
+     * @param Database $database Database object (should be **$gDb**)
+     * @param int $organizationId The id of the organization for which the profile field structure should be read
+     * @throws Exception
      */
     public function __construct(Database $database, int $organizationId)
     {
@@ -85,6 +86,7 @@ class ProfileFields
     /**
      * Delete all data of the user in table adm_user_data
      * @return void
+     * @throws Exception
      */
     public function deleteUserData()
     {
@@ -106,7 +108,7 @@ class ProfileFields
      * @param bool $allowedToEditProfile Flag if the user is allowed to edit the profile.
      * @return array Returns an array with all usf_id of profile fields that are editable to the current user.
      */
-    public function getEditableArray(bool $allowedToEditProfile = false)
+    public function getEditableArray(bool $allowedToEditProfile = false): array
     {
         $editableFields = array();
 
@@ -122,7 +124,7 @@ class ProfileFields
     /**
      * @return array<string,TableUserField>
      */
-    public function getProfileFields()
+    public function getProfileFields(): array
     {
         return $this->mProfileFields;
     }
@@ -136,7 +138,7 @@ class ProfileFields
      *                           * **database** returns database value of **usf_value_list** without any transformations
      *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
-     * @return string Returns for the profile field with the given uuid the value.
+     * @return mixed Returns for the profile field with the given uuid the value.
      */
     public function getProperty(string $fieldNameIntern, string $column, string $format = '')
     {
@@ -197,13 +199,14 @@ class ProfileFields
 
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
-     * @param string     $fieldNameIntern Internal profile field name of the field that should be html formatted
-     * @param string|int $value           The value that should be formatted must be committed so that layout
+     * @param string $fieldNameIntern Internal profile field name of the field that should be html formatted
+     * @param string|int $value The value that should be formatted must be committed so that layout
      *                                    is also possible for values that aren't stored in database
-     * @param string     $value2          An optional parameter that is necessary for some special fields like email to commit the user uuid
+     * @param string $value2 An optional parameter that is necessary for some special fields like email to commit the user uuid
      * @return string Returns a html formatted string that considered the profile field settings
+     * @throws Exception
      */
-    public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
+    public function getHtmlValue(string $fieldNameIntern, $value, string $value2 = '')
     {
         global $gSettingsManager, $gL10n;
 
@@ -373,12 +376,13 @@ class ProfileFields
      * Returns the user value for this column. Within a dropdown or radio button field the format could be set to **text** so
      * an icon will not be shown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field whose value should be read
-     * @param string $format          Returns the field value in a special format e.g. **html**, **database**
+     * @param string $format Returns the field value in a special format e.g. **html**, **database**
      *                                or datetime (detailed description in method description)
      *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
      *                                * 'database' : returns the value that is stored in database with no format applied
      * @return string|int|bool Returns the value for the column.
+     * @throws Exception
      */
     public function getValue(string $fieldNameIntern, string $format = '')
     {
@@ -542,6 +546,7 @@ class ProfileFields
      * and adds an object for each field structure to the **mProfileFields** array.
      * @param int $organizationId The id of the organization for which the profile fields
      *                            structure should be read.
+     * @throws Exception
      */
     public function readProfileFields(int $organizationId)
     {
@@ -571,9 +576,10 @@ class ProfileFields
      * Reads the user data of all profile fields out of database table **adm_user_data**
      * and adds an object for each field data to the **mUserData** array.
      * If profile fields structure wasn't read, this will be done before.
-     * @param int $userId         The id of the user for which the user data should be read.
+     * @param int $userId The id of the user for which the user data should be read.
      * @param int $organizationId The id of the organization for which the profile fields
      *                            structure should be read if necessary.
+     * @throws Exception
      */
     public function readUserData(int $userId, int $organizationId)
     {
@@ -610,6 +616,8 @@ class ProfileFields
     /**
      * save data of every user field
      * @param int $userId id is necessary if new user, that id was not known before
+     * @throws AdmException
+     * @throws Exception
      */
     public function saveUserData(int $userId)
     {
@@ -639,14 +647,15 @@ class ProfileFields
      * Set a value for a profile field. The value will be checked against typical conditions of the data type and
      * also against the custom regex if this is set. If an invalid value is set an AdmException will be thrown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
-     * @param mixed  $fieldValue      The new value that should be stored in the profile field.
-     * @param bool   $checkValue      The value will be checked if it's valid. If set to **false** than the value will
+     * @param mixed $fieldValue The new value that should be stored in the profile field.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                                not be checked.
-     * @throws AdmException If an invalid value should be set.
-     *                      exception->text contains a string with the reason why the login failed.
      * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
+     * @throws AdmException If an invalid value should be set.
+     * @throws Exception
+     *                      exception->text contains a string with the reason why the login failed.
      */
-    public function setValue(string $fieldNameIntern, $fieldValue, $checkValue = true): bool
+    public function setValue(string $fieldNameIntern, $fieldValue, bool $checkValue = true): bool
     {
         global $gSettingsManager, $gL10n;
 
@@ -724,7 +733,7 @@ class ProfileFields
             }
 
             // if profile field has an url with a placeholder #user_content# and the current value is also an url than
-            // we expect a profile url of a social network an scan for the profile name
+            // we expect a profile url of a social network a scan for the profile name
             if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '#user_content#') !== false) {
                 if (StringUtils::strValidCharacters($fieldValue, 'url') && str_contains($fieldValue, '/')) {
                     if (strrpos($fieldValue, '/profile.php?id=') > 0) {

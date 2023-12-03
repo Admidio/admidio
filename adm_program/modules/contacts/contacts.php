@@ -72,7 +72,7 @@ if ($gCurrentUser->editUsers()) {
     // show checkbox to select all users or only active members
     if ($gSettingsManager->getBool('contacts_show_all')) {
         // create filter menu with elements for category
-        $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+        $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
         $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), $flagShowMembers, array('helpTextIdLabel' => 'SYS_SHOW_ALL_DESC'));
         $filterNavbar->addForm($form->show());

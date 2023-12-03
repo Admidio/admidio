@@ -9,19 +9,16 @@
  ***********************************************************************************************
  */
 
-/**
- * Diese Klasse dient dazu, um ein neues Raumobjekt in der Datenbanktabelle
- * adm_rooms zu erstellen.
- */
 class TableRooms extends TableAccess
 {
     /**
      * Constructor that will create an object of a recordset of the table adm_rooms.
      * If the id is set than the specific room will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $roomId   The recordset of the room with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $roomId The recordset of the room with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
-    public function __construct(Database $database, $roomId = 0)
+    public function __construct(Database $database, int $roomId = 0)
     {
         parent::__construct($database, TBL_ROOMS, 'room', $roomId);
     }
@@ -56,9 +53,10 @@ class TableRooms extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {

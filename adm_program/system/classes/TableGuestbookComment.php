@@ -19,9 +19,10 @@ class TableGuestbookComment extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_guestbook_comments.
      * If the id is set than the specific guestbook comment will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $gbcId    The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $gbcId The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
-    public function __construct(Database $database, $gbcId = 0)
+    public function __construct(Database $database, int $gbcId = 0)
     {
         // read also data of assigned guestbook entry
         $this->connectAdditionalTable(TBL_GUESTBOOK, 'gbo_id', 'gbc_gbo_id');
@@ -57,6 +58,7 @@ class TableGuestbookComment extends TableAccess
 
     /**
      * guestbook entry will be published, if moderate mode is set
+     * @throws AdmException
      */
     public function moderate()
     {
@@ -74,6 +76,7 @@ class TableGuestbookComment extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -99,10 +102,11 @@ class TableGuestbookComment extends TableAccess
      * the timestamp and the url to this guestbook comment.
      * @return bool Returns **true** if the notification was sent
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception
      */
     public function sendNotification(): bool
     {
-        global $gCurrentOrganization, $gCurrentUser, $gSettingsManager, $gL10n;
+        global $gCurrentOrganization, $gSettingsManager, $gL10n;
 
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();

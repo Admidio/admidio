@@ -134,7 +134,7 @@ $groupsRoles->addJavascript(
 );
 
 // create filter menu with elements for category
-$filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+$filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
 $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', $groupsRoles, array('type' => 'navbar', 'setFocus' => false));
 $form->addInput('show', '', $getShow, array('property' => HtmlForm::FIELD_HIDDEN));
 $form->addSelectBoxForCategories(

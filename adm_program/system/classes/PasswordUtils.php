@@ -42,13 +42,14 @@ final class PasswordUtils
 
     /**
      * Run a benchmark to get the best fitting cost value.
-     * @param string            $algorithm The algorithm to test
-     * @param array<string,int> $options   The options to test
-     * @param float             $maxTime   The maximum time the hashing process should take in seconds
-     * @param string            $password  The password to test
+     * @param string $algorithm The algorithm to test
+     * @param array<string,int> $options The options to test
+     * @param float $maxTime The maximum time the hashing process should take in seconds
+     * @param string $password The password to test
      * @return array<string,int|float|array<string,int>> Returns an array with the maximum tested cost with the required time
+     * @throws AdmException
      */
-    public static function costBenchmark($algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array(), $maxTime = 0.2, $password = '123456abcdef_-#:')
+    public static function costBenchmark(string $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array(), float $maxTime = 0.2, string $password = '123456abcdef_-#:'): ?array
     {
         global $gLogger;
 
@@ -90,12 +91,13 @@ final class PasswordUtils
     /**
      * Hash the given password with the given options. The default algorithm uses the password_* methods,
      * otherwise the builtin helper for SHA-512 crypt hashes from the operating system. Minimum cost is 10.
-     * @param string            $password  The password string
-     * @param string            $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
-     * @param array<string,int> $options   The hash-options array
+     * @param string $password The password string
+     * @param string $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
+     * @param array<string,int> $options The hash-options array
      * @return string|false Returns the hashed password or false if an error occurs
+     * @throws AdmException
      */
-    public static function hash($password, $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
+    public static function hash(string $password, string $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
     {
         $options = self::getPreparedOptions($algorithm, $options);
 
@@ -112,9 +114,6 @@ final class PasswordUtils
             case self::HASH_ALGORITHM_BCRYPT:
                 $algorithmPhpConstant = PASSWORD_BCRYPT;
                 break;
-            case self::HASH_ALGORITHM_DEFAULT:
-                $algorithmPhpConstant = PASSWORD_DEFAULT;
-                break;
             case self::HASH_ALGORITHM_SHA512:
                 $salt = SecurityUtils::getRandomString(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./');
                 return crypt($password, self::HASH_INDICATOR_SHA512 . 'rounds=' . $options['cost'] . '$' . $salt . '$');
@@ -127,11 +126,11 @@ final class PasswordUtils
 
     /**
      * Prepares the options values
-     * @param string            $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
+     * @param string $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
      * @param array<string,int> $options   The hash-options array
      * @return array<string,int>
      */
-    private static function getPreparedOptions($algorithm, array $options)
+    private static function getPreparedOptions(string $algorithm, array $options): array
     {
         if ($algorithm === self::HASH_ALGORITHM_SHA512) {
             $defaultCost = self::HASH_COST_SHA512_DEFAULT;
@@ -163,7 +162,7 @@ final class PasswordUtils
      * @param string $hash The hash you want the get infos about
      * @return string|array<string,mixed> Returns an array or string with infos about the given hash
      */
-    public static function hashInfo($hash)
+    public static function hashInfo(string $hash)
     {
         if (str_starts_with($hash, self::HASH_INDICATOR_ARGON2ID) || str_starts_with($hash, self::HASH_INDICATOR_ARGON2I) || str_starts_with($hash, self::HASH_INDICATOR_BCRYPT)) {
             return password_get_info($hash);
@@ -183,12 +182,12 @@ final class PasswordUtils
     /**
      * Checks if the given hash is generated from the given options. The default algorithm uses the
      * password_* methods, otherwise the builtin helper for SHA-512 crypt hashes from the operating system.
-     * @param string            $hash      The hash string that should checked
-     * @param string            $algorithm The hash-algorithm the hash should match to. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
+     * @param string $hash      The hash string that should be checked
+     * @param string $algorithm The hash-algorithm the hash should match to. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
      * @param array<string,int> $options   The hash-options the hash should match to
      * @return bool Returns false if the hash match the given options and false if not
      */
-    public static function needsRehash($hash, $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
+    public static function needsRehash(string $hash, string $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array()): bool
     {
         $options = self::getPreparedOptions($algorithm, $options);
 
@@ -217,17 +216,15 @@ final class PasswordUtils
      * @param string $password The password you want the get infos about
      * @return array<string,int|bool> Returns an array with infos about the given password
      */
-    public static function passwordInfo($password)
+    public static function passwordInfo(string $password): array
     {
         $passwordInfo = array(
-            'length'    => 0,
+            'length'    => strlen($password),
             'number'    => false,
             'lowerCase' => false,
             'upperCase' => false,
             'symbol'    => false
         );
-
-        $passwordInfo['length'] = strlen($password);
 
         if (preg_match('/\d/', $password) === 1) {
             $passwordInfo['number'] = true;
@@ -247,13 +244,13 @@ final class PasswordUtils
 
     /**
      * Calculates the strength of a given password from 0-4.
-     * @param string            $password The password to check
+     * @param string $password The password to check
      * @param array<int,string> $userData An array of strings for dictionary attacks
      * @return int Returns the score of the password
      */
-    public static function passwordStrength($password, array $userData = array())
+    public static function passwordStrength(string $password, array $userData = array()): int
     {
-        $zxcvbn = new \ZxcvbnPhp\Zxcvbn();
+        $zxcvbn = new ZxcvbnPhp\Zxcvbn();
         $strength = $zxcvbn->passwordStrength($password, $userData);
 
         return $strength['score'];
@@ -265,7 +262,7 @@ final class PasswordUtils
      * @param string $hash     The hash string to check
      * @return bool Returns true if the password belongs to the hash and false if not
      */
-    public static function verify($password, $hash)
+    public static function verify(string $password, string $hash): bool
     {
         if (str_starts_with($hash, self::HASH_INDICATOR_ARGON2ID) || str_starts_with($hash, self::HASH_INDICATOR_ARGON2I) || str_starts_with($hash, self::HASH_INDICATOR_BCRYPT)) {
             return password_verify($password, $hash);

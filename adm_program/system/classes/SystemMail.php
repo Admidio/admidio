@@ -54,6 +54,7 @@ class SystemMail extends Email
      * @param User $user User object for which the data is then read and placed in the appropriate placeholders.
      * @return string Returns the text for the email with the replaced placeholders.
      * @throws AdmException
+     * @throws Exception
      */
     public function getMailText(string $systemMailId, User $user): string
     {
@@ -132,9 +133,10 @@ class SystemMail extends Email
      * The system mail will only be sent if the preference for notifications is enabled and a valid
      * system mail text is set within the database.
      * @param string $systemMailId Unique name of the corresponding system mail, corresponds to adm_texts.txt_name
-     * @param User   $user         User object for which the data is then read and placed in the appropriate placeholders.
+     * @param User $user User object for which the data is then read and placed in the appropriate placeholders.
      * @return true Return **true** if the mail was sent and false if it should not be sent because of preferences.
-     *@throws AdmException SYS_EMAIL_NOT_SEND
+     * @throws AdmException SYS_EMAIL_NOT_SEND
+     * @throws Exception
      */
     public function sendSystemMail(string $systemMailId, User $user): bool
     {

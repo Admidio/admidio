@@ -34,9 +34,9 @@ class SettingsManager
     /**
      * SettingsManager constructor.
      * @param Database $database
-     * @param int      $orgId
+     * @param int $orgId
      */
-    public function __construct(Database $database, $orgId)
+    public function __construct(Database $database, int $orgId)
     {
         $this->db = $database;
         $this->orgId = $orgId;
@@ -52,7 +52,7 @@ class SettingsManager
     }
 
     /**
-     * An wakeup add the current database object to this class
+     * A wakeup add the current database object to this class
      */
     public function __wakeup()
     {
@@ -74,8 +74,9 @@ class SettingsManager
     /**
      * Deletes a selected setting out of the database
      * @param string $name The chosen setting name
+     * @throws Exception
      */
-    private function delete($name)
+    private function delete(string $name)
     {
         $sql = 'DELETE FROM '.TBL_PREFERENCES.'
                  WHERE prf_org_id = ? -- $orgId
@@ -86,15 +87,15 @@ class SettingsManager
     /**
      * Deletes a chosen setting out of the database
      * @param string $name The chosen setting name
-     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @throws UnexpectedValueException|Exception Throws if the setting name is invalid or does not exist
      */
-    public function del($name)
+    public function del(string $name)
     {
         if (!self::isValidName($name) && $this->throwExceptions) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
         if (!$this->has($name) && $this->throwExceptions) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
         $this->delete($name);
@@ -114,8 +115,9 @@ class SettingsManager
      * Get all settings from the database
      * @param bool $update Set true to make a force reload of all settings from the database
      * @return array<string,string> Returns all settings
+     * @throws Exception
      */
-    public function getAll($update = false)
+    public function getAll(bool $update = false): array
     {
         if ($update || !$this->initFullLoad) {
             $this->resetAll();
@@ -127,17 +129,17 @@ class SettingsManager
     /**
      * Get a chosen setting from the database
      * @param string $name   The chosen setting name
-     * @param bool   $update Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @param bool $update Set true to make a force reload of this setting from the database
      * @return string Returns the chosen setting value
+     * @throws UnexpectedValueException|Exception Throws if the setting name is invalid or does not exist
      */
-    public function get($name, $update = false)
+    public function get(string $name, bool $update = false): string
     {
         if (!self::isValidName($name) && $this->throwExceptions) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
         if (!$this->has($name, $update) && $this->throwExceptions) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
         return $this->settings[$name];
@@ -146,18 +148,18 @@ class SettingsManager
     /**
      * Get a chosen boolean setting from the database
      * @param string $name   The chosen setting name
-     * @param bool   $update Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
-     * @throws \InvalidArgumentException Throws if the chosen setting value is not of type bool
+     * @param bool $update Set true to make a force reload of this setting from the database
      * @return bool Returns the chosen boolean setting value
+     * @throws InvalidArgumentException Throws if the chosen setting value is not of type bool
+     * @throws UnexpectedValueException|Exception Throws if the setting name is invalid or does not exist
      */
-    public function getBool($name, $update = false)
+    public function getBool(string $name, bool $update = false): bool
     {
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
         if ($value === null && $this->throwExceptions) {
-            throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type bool!');
+            throw new InvalidArgumentException('Settings value of name "' . $name . '" is not of type bool!');
         }
 
         return $value;
@@ -166,18 +168,18 @@ class SettingsManager
     /**
      * Get a chosen integer setting from the database
      * @param string $name   The chosen setting name
-     * @param bool   $update Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
-     * @throws \InvalidArgumentException Throws if the chosen setting value is not of type int
+     * @param bool $update Set true to make a force reload of this setting from the database
      * @return int Returns the chosen integer setting value
+     * @throws InvalidArgumentException Throws if the chosen setting value is not of type int
+     * @throws UnexpectedValueException|Exception Throws if the setting name is invalid or does not exist
      */
-    public function getInt($name, $update = false)
+    public function getInt(string $name, bool $update = false): int
     {
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_INT);
 
         if ($value === false && $this->throwExceptions) {
-            throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type int!');
+            throw new InvalidArgumentException('Settings value of name "' . $name . '" is not of type int!');
         }
 
         return $value;
@@ -186,18 +188,18 @@ class SettingsManager
     /**
      * Get a chosen float setting from the database
      * @param string $name   The chosen setting name
-     * @param bool   $update Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
-     * @throws \InvalidArgumentException Throws if the chosen setting value is not of type float
+     * @param bool $update Set true to make a force reload of this setting from the database
      * @return float Returns the chosen float setting value
+     * @throws InvalidArgumentException Throws if the chosen setting value is not of type float
+     * @throws UnexpectedValueException|Exception Throws if the setting name is invalid or does not exist
      */
-    public function getFloat($name, $update = false)
+    public function getFloat(string $name, bool $update = false): float
     {
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_FLOAT);
 
         if ($value === false && $this->throwExceptions) {
-            throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type float!');
+            throw new InvalidArgumentException('Settings value of name "' . $name . '" is not of type float!');
         }
 
         return $value;
@@ -206,11 +208,11 @@ class SettingsManager
     /**
      * Get a chosen string setting from the database
      * @param string $name   The chosen setting name
-     * @param bool   $update Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @param bool $update Set true to make a force reload of this setting from the database
      * @return string Returns the chosen string setting value
+     * @throws UnexpectedValueException|Exception Throws if the setting name is invalid or does not exist
      */
-    public function getString($name, $update = false)
+    public function getString(string $name, bool $update = false): string
     {
         return $this->get($name, $update);
     }
@@ -218,14 +220,14 @@ class SettingsManager
     /**
      * Checks if a setting exists
      * @param string $name   The chosen setting name
-     * @param bool   $update Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if the settings name is invalid
+     * @param bool $update Set true to make a force reload of this setting from the database
      * @return bool Returns true if the setting exists
+     * @throws UnexpectedValueException|Exception Throws if the settings name is invalid
      */
-    public function has($name, $update = false)
+    public function has(string $name, bool $update = false): bool
     {
         if (!self::isValidName($name) && $this->throwExceptions) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
 
         if ($update || !array_key_exists($name, $this->settings)) {
@@ -233,7 +235,7 @@ class SettingsManager
                 $this->settings[$name] = $this->load($name);
 
                 return true;
-            } catch (\UnexpectedValueException $e) {
+            } catch (UnexpectedValueException $e) {
                 return false;
             }
         }
@@ -246,7 +248,7 @@ class SettingsManager
      * @param string $name The settings name
      * @return bool Returns true if the settings name is valid
      */
-    private static function isValidName($name)
+    private static function isValidName(string $name): bool
     {
         return (bool) preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
     }
@@ -256,7 +258,7 @@ class SettingsManager
      * @param mixed $value The settings value
      * @return bool Returns true if the settings value is true
      */
-    private static function isValidValue($value)
+    private static function isValidValue($value): bool
     {
         return is_scalar($value);
     }
@@ -264,8 +266,9 @@ class SettingsManager
     /**
      * Loads all settings from the database
      * @return array<string,string> An array with all settings from the database
+     * @throws Exception
      */
-    private function loadAll()
+    private function loadAll(): array
     {
         $sql = 'SELECT prf_name, prf_value
                   FROM '.TBL_PREFERENCES.'
@@ -284,10 +287,10 @@ class SettingsManager
     /**
      * Loads a specific setting from the database
      * @param string $name The setting name from the wanted value
-     * @throws \UnexpectedValueException Throws if there is no setting to the given name found
      * @return string Returns the setting value
+     * @throws UnexpectedValueException|Exception Throws if there is no setting to the given name found
      */
-    private function load($name)
+    private function load(string $name): string
     {
         $sql = 'SELECT prf_value
                   FROM '.TBL_PREFERENCES.'
@@ -296,7 +299,7 @@ class SettingsManager
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
 
         if ($pdoStatement->rowCount() === 0 && $this->throwExceptions) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
         return $pdoStatement->fetchColumn();
@@ -304,10 +307,11 @@ class SettingsManager
 
     /**
      * Inserts a new setting into the database
-     * @param string $name  The chosen setting name
+     * @param string $name The chosen setting name
      * @param string $value The chosen setting value
+     * @throws Exception
      */
-    private function insert($name, $value)
+    private function insert(string $name, string $value)
     {
         $sql = 'INSERT INTO '.TBL_PREFERENCES.'
                        (prf_org_id, prf_name, prf_value)
@@ -317,6 +321,7 @@ class SettingsManager
 
     /**
      * Clears and reload all settings
+     * @throws Exception
      */
     public function resetAll()
     {
@@ -328,17 +333,17 @@ class SettingsManager
      * Expects an array with setting name and value and will than add all the settings of the array to
      * the database. Checks the existence of each setting and perform an insert or update.
      * @param array<string,mixed> $settings Array with all setting names and values to set
-     * @param bool                $update   Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if one or more of the setting names are invalid or do not exist
+     * @param bool $update   Set true to make a force reload of this setting from the database
+     * @throws UnexpectedValueException|Exception Throws if one or more of the setting names are invalid or do not exist
      */
-    public function setMulti(array $settings, $update = true)
+    public function setMulti(array $settings, bool $update = true)
     {
         foreach ($settings as $name => $value) {
             if (!self::isValidName($name)) {
-                throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+                throw new UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
             }
             if (!self::isValidValue($value) && $this->throwExceptions) {
-                throw new \UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
+                throw new UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
             }
         }
 
@@ -357,16 +362,16 @@ class SettingsManager
      * Sets a chosen setting in the database
      * @param string $name   The chosen setting name
      * @param mixed  $value  The chosen setting value
-     * @param bool   $update Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @param bool $update Set true to make a force reload of this setting from the database
+     * @throws UnexpectedValueException|Exception Throws if the setting name is invalid or does not exist
      */
-    public function set($name, $value, $update = true)
+    public function set(string $name, $value, bool $update = true)
     {
         if (!self::isValidName($name)) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
         if (!self::isValidValue($value)) {
-            throw new \UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
+            throw new UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
         }
 
         $this->updateOrInsertSetting($name, (string) $value, $update);
@@ -376,10 +381,11 @@ class SettingsManager
 
     /**
      * Updates an already available setting in the database
-     * @param string $name  The chosen setting name
+     * @param string $name The chosen setting name
      * @param string $value The chosen new setting value
+     * @throws Exception
      */
-    private function update($name, $value)
+    private function update(string $name, string $value)
     {
         $sql = 'UPDATE '.TBL_PREFERENCES.'
                    SET prf_value  = ? -- $value
@@ -392,10 +398,10 @@ class SettingsManager
      * Checks if the setting already exists and then inserts or updates this setting
      * @param string $name  The chosen setting name
      * @param string $value The chosen setting value
-     * @param bool   $update Set true to make a force reload of this setting from the database
-     * @throws \UnexpectedValueException Throws if the setting name is invalid
+     * @param bool $update Set true to make a force reload of this setting from the database
+     * @throws UnexpectedValueException|Exception Throws if the setting name is invalid
      */
-    private function updateOrInsertSetting($name, $value, $update = true)
+    private function updateOrInsertSetting(string $name, string $value, bool $update = true)
     {
         if ($this->has($name, true)) {
             if ($update && $this->settings[$name] !== $value) {

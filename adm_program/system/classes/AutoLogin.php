@@ -17,7 +17,7 @@
  *
  * **Code examples**
  * ```
- * // create a valid user login for a Admidio session from auto login
+ * // create a valid user login for an Admidio session from auto login
  * $autoLogin = new AutoLogin($gDb, $sessionId);
  * $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);
  *
@@ -31,15 +31,16 @@ class AutoLogin extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_auto_login.
      * If the id is set than the specific auto login will be loaded.
-     * @param Database   $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string|int $session  The recordset of the auto login with this session will be loaded.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param string|int $session The recordset of the auto login with this session will be loaded.
      *                             If session isn't set than an empty object of the table is created.
+     * @throws AdmException
      */
     public function __construct(Database $database, $session = 0)
     {
         parent::__construct($database, TBL_AUTO_LOGIN, 'atl');
 
-        // if not integer than the auto-login-id is commited
+        // if not integer than the auto-login-id is committed
         if (is_int($session)) {
             $this->readDataById($session);
         } else {
@@ -52,7 +53,7 @@ class AutoLogin extends TableAccess
      * @param int $userId The id of the current user.
      * @return string Returns the auto login id.
      */
-    public function generateAutoLoginId($userId)
+    public function generateAutoLoginId(int $userId): string
     {
         $loginId = '';
 
@@ -67,13 +68,14 @@ class AutoLogin extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * The current organization, last login and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -98,9 +100,9 @@ class AutoLogin extends TableAccess
      */
     public function tableCleanup()
     {
-        // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt
-        $currDateTime = new \DateTime();
-        $oneYearDateInterval = new \DateInterval('P1Y');
+        // Determine the time from which the auto logins are deleted, at least 1 year old
+        $currDateTime = new DateTime();
+        $oneYearDateInterval = new DateInterval('P1Y');
         $oneYearBeforeDateTime = $currDateTime->sub($oneYearDateInterval);
         $dateSessionDelete = $oneYearBeforeDateTime->format('Y-m-d H:i:s');
 
@@ -109,7 +111,7 @@ class AutoLogin extends TableAccess
         $this->db->queryPrepared($sql, array($dateSessionDelete));
 
         // reset all counted wrong auto login ids from this user to prevent
-        // a deadlock if user has auto login an several devices and they were
+        // a deadlock if user has auto login at several devices, and they were
         // set invalid for security reasons
         $sql = 'UPDATE '.TBL_AUTO_LOGIN.'
                    SET atl_number_invalid = 0

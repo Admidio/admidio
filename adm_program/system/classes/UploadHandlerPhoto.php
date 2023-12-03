@@ -12,7 +12,7 @@
  *
  * This class extends the UploadHandler of the jquery-file-upload library. After
  * the upload of a photo we do some checks on the file and if no check fails then
- * the Admidio database will be updated. If you want do upload photos for the photos
+ * the Admidio database will be updated. If you want to upload photos for the photos
  * module just create an instance of this class.
  *
  * **Code example**
@@ -30,22 +30,23 @@ class UploadHandlerPhoto extends UploadHandler
 {
     /**
      * Override the default method to handle the specific things of the photo module and
-     * update the database after file was successful uploaded.
+     * update the database after file was successfully uploaded.
      * This method has the same parameters as the default.
-     * @param string $uploadedFile
+     * @param string $uploaded_file
      * @param string $name
-     * @param int    $size
+     * @param int $size
      * @param        $type
      * @param        $error
      * @param        $index
-     * @param        $contentRange
-     * @return \stdClass
+     * @param        $content_range
+     * @return stdClass
+     * @throws Exception
      */
-    protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $contentRange = null)
+    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null): stdClass
     {
         global $photoAlbum, $gSettingsManager, $gL10n, $gLogger;
 
-        $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
+        $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
 
         if (!isset($file->error)) {
             try {
@@ -108,11 +109,11 @@ class UploadHandlerPhoto extends UploadHandler
 
                         try {
                             FileSystemUtils::moveFile($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
-                        } catch (\RuntimeException $exception) {
+                        } catch (RuntimeException $exception) {
                             $gLogger->error('Could not move file!', array('from' => $fileLocation, 'to' => $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension));
                             // TODO
                         }
-                    } catch (\RuntimeException $exception) {
+                    } catch (RuntimeException $exception) {
                         $gLogger->error('Could not create directory!', array('directoryPath' => $albumFolder . '/originals'));
                         // TODO
                     }
@@ -121,7 +122,7 @@ class UploadHandlerPhoto extends UploadHandler
                 // save thumbnail
                 try {
                     FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/thumbnails');
-                } catch (\RuntimeException $exception) {
+                } catch (RuntimeException $exception) {
                 }
 
                 $image = new Image($fileLocation);
@@ -132,7 +133,7 @@ class UploadHandlerPhoto extends UploadHandler
                 // delete image from upload folder
                 try {
                     FileSystemUtils::deleteFileIfExists($fileLocation);
-                } catch (\RuntimeException $exception) {
+                } catch (RuntimeException $exception) {
                 }
 
                 // if image was successfully saved in filesystem then update image count of album

@@ -25,6 +25,7 @@ class ModuleContacts extends HtmlPage
 {
     /**
      * Constructor that initialize the class member parameters
+     * @throws Exception
      */
     public function __construct(string $id, string $headline = '')
     {
@@ -40,6 +41,7 @@ class ModuleContacts extends HtmlPage
      * @param bool $assignRegistration Flag if the user will be assigned through the registration process.
      * @throws SmartyException
      * @throws AdmException
+     * @throws Exception
      */
     public function createContentAssignUser(User $user, bool $assignRegistration = false)
     {
@@ -97,7 +99,7 @@ class ModuleContacts extends HtmlPage
         foreach ($similarUserIDs as $similarUserID) {
             $similarUser = new User($gDb, $gProfileFields, $similarUserID);
 
-            $button = '';
+            $button = array();
             $templateRow = array();
             $templateRow['data'] = $similarUser->getProfileFieldsData();
             $templateRow['profileUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $similarUser->getValue('usr_uuid')));
@@ -148,7 +150,7 @@ class ModuleContacts extends HtmlPage
                 }
             }
 
-            if ($button !== '') {
+            if (count($button) > 0) {
                 $templateRow['button'] = $button;
             }
 

@@ -413,7 +413,7 @@ if ($getMode === 'print') {
     $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('SYS_CONFIGURATION'));
 
     // add navbar with filter elements and the select box with all lists configurations
-    $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
+    $filterNavbar = new HtmlNavbar('menu_list_filter', '', null, 'filter');
     $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBox(
         'list_configurations',

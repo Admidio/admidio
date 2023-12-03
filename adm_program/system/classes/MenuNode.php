@@ -43,7 +43,8 @@ class MenuNode
     /**
      * constructor
      * @param string $nodeTextId A unique id for this menu node.
-     * @param string $nodeName   The name of this menu node that should be displayed for the user
+     * @param string $nodeName The name of this menu node that should be displayed for the user
+     * @throws Exception
      */
     public function __construct(string $nodeTextId, string $nodeName)
     {
@@ -63,14 +64,15 @@ class MenuNode
     /**
      * Add a new item to this menu node. If a dropdown menu item should be created than $parentMenuItemId must be set
      * to each entry of the dropdown. If a badge should be shown at this menu item than set the $badgeCount.
-     * @param string $id          ID string for the menu item. That will be used as html id tag.
+     * @param string $id ID string for the menu item. That will be used as html id tag.
      *                            It should be unique within this menu node.
-     * @param string $name        Name of the menu node that will also be shown in the menu
-     * @param string $url         The url of this menu item that will be called if someone click the menu item
-     * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $name Name of the menu node that will also be shown in the menu
+     * @param string $url The url of this menu item that will be called if someone click the menu item
+     * @param string $icon An icon that will be shown together with the name in the menu
      * @param string $parentMenuItemId The id of the parent item to which this item will be added.
-     * @param int $badgeCount     If set > 0 than a small badge with the number will be shown after the menu item name
+     * @param int $badgeCount If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description An optional description of the menu node that could be shown in some output cases
+     * @throws Exception
      */
     public function addItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = '')
     {
@@ -118,10 +120,11 @@ class MenuNode
     }
 
     /**
-     * Load all entries of that node from the database table **adm_menu**. Therefore each entry
+     * Load all entries of that node from the database table **adm_menu**. Therefore, each entry
      * must have stored the $nodeId as the mem_mem_id_parent. The entries will be stored within
      * the internal array $nodeEntries.
      * @param int $nodeId The database id of the node menu entry
+     * @throws Exception
      */
     public function loadFromDatabase(int $nodeId)
     {

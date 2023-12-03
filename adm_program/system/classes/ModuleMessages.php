@@ -15,7 +15,7 @@
  *
  * **Code example**
  * ```
- * // check the given Array for charecter and split it.
+ * // check the given Array for character and split it.
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  *
  * // show a message and set a link to a page that should be shown after user click ok
@@ -37,12 +37,13 @@ class ModuleMessages
     }
 
     /**
-     * Check for roles and give back a string with rolename. If former members or activa and former
-     * members were selected than an additional string will be shown after the rolename.
+     * Check for roles and give back a string with role name. If former members or active and former
+     * members were selected than an additional string will be shown after the role name.
      * @param string $roleIdsString A string with several role ids. (e.g: "groupID: 4-2")
-     * @return string Returns the rolename and the status if former members were selected.
+     * @return string Returns the role name and the status if former members were selected.
+     * @throws Exception
      */
-    public function msgGroupNameSplit($roleIdsString)
+    public function msgGroupNameSplit(string $roleIdsString): string
     {
         global $gL10n, $gDb;
 
@@ -71,11 +72,11 @@ class ModuleMessages
     }
 
     /**
-     * check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
+     * check for Group and give back an array with group ID[0] and if it is active, inactive or both [1].
      * @param string $groupString (e.g: "groupID: 93ce816e-7cfd-45e1-b025-a3644828c47c+2")
      * @return array<string,string|int> Returns the groupId and status
      */
-    public static function msgGroupSplit($groupString)
+    public static function msgGroupSplit(string $groupString): array
     {
         $groupSplit = explode(':', $groupString);
         $groupIdAndStatus = explode('+', trim($groupSplit[1]));
@@ -101,9 +102,10 @@ class ModuleMessages
     /**
      * return an array with all Email-Messages of the given user.
      * @param int $userId
-     * @return \PDOStatement
+     * @return PDOStatement
+     * @throws Exception
      */
-    public function msgGetUserEmails($userId)
+    public function msgGetUserEmails(int $userId): PDOStatement
     {
         global $gDb;
 
@@ -119,9 +121,10 @@ class ModuleMessages
     /**
      * return an array with all unread Messages of the given user.
      * @param int $userId
-     * @return \PDOStatement
+     * @return PDOStatement
+     * @throws Exception
      */
-    public function msgGetUserUnread($userId)
+    public function msgGetUserUnread(int $userId): PDOStatement
     {
         global $gDb;
 
@@ -139,9 +142,10 @@ class ModuleMessages
     /**
      * return an array with all unread Messages of the given user.
      * @param int $userId
-     * @return \PDOStatement
+     * @return PDOStatement
+     * @throws Exception
      */
-    public function msgGetUser($userId)
+    public function msgGetUser(int $userId): PDOStatement
     {
         global $gDb;
 
@@ -159,8 +163,9 @@ class ModuleMessages
     /**
      * return the message ID of the admidio chat.
      * @return int
+     * @throws Exception
      */
-    public function msgGetChatId()
+    public function msgGetChatId(): int
     {
         global $gDb;
 

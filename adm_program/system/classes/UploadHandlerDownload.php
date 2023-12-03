@@ -12,7 +12,7 @@
  *
  * This class extends the UploadHandler of the jquery-file-upload library. After
  * the upload of the file we do some checks on the file and if no check fails then
- * the Admidio database will be updated. If you want do upload files for the documents & files
+ * the Admidio database will be updated. If you want to upload files for the documents & files
  * module just create an instance of this class.
  *
  * **Code example**
@@ -28,22 +28,23 @@ class UploadHandlerDownload extends UploadHandler
 {
     /**
      * Override the default method to handle the specific things of the download module and
-     * update the database after file was successful uploaded.
+     * update the database after file was successfully uploaded.
      * This method has the same parameters as the default.
-     * @param string $uploadedFile
+     * @param string $uploaded_file
      * @param string $name
-     * @param int    $size
+     * @param int $size
      * @param        $type
      * @param        $error
      * @param        $index
-     * @param        $contentRange
-     * @return \stdClass
+     * @param        $content_range
+     * @return stdClass
+     * @throws Exception
      */
-    protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $contentRange = null)
+    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null): stdClass
     {
-        global $gSettingsManager, $gL10n, $gDb, $gCurrentOrganization, $gCurrentUser, $gLogger;
+        global $gSettingsManager, $gDb, $gLogger;
 
-        $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
+        $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
 
         if (!isset($file->error)) {
             try {
@@ -74,7 +75,7 @@ class UploadHandlerDownload extends UploadHandler
                 }
 
                 if($newFile->save()) {
-                    // Notification a email for new or changed entries to all members of the notification role
+                    // Notification an email for new or changed entries to all members of the notification role
                     $newFile->sendNotification();
                 }
             } catch (AdmException $e) {

@@ -35,7 +35,8 @@ class ModuleLogin
      * organization select box could be shown and the flag if auto login should be activated.
      * @param HtmlPage $page Html content will be added to this page.
      * @param string $organizationShortName Optional the organization that should be preselected in the dialog.
-     * @throws AdmException
+     * @throws AdmException|SmartyException
+     * @throws Exception
      */
     public function addHtmlLogin(HtmlPage $page, string $organizationShortName = '')
     {
@@ -133,6 +134,7 @@ class ModuleLogin
      * organization than the session data will be updated.
      * @return bool Returns **true** if the login data are valid
      * @throws AdmException
+     * @throws Exception
      */
     public function checkLogin(): bool
     {

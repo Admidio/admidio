@@ -13,8 +13,7 @@
  * This class can be used to log changes to profile fields and role
  * memberships. It stores all changes and at the end of the request,
  * sends one notification mail per modified user to the administrator, if
- * system notifications for profile field changes are enabled in Admidio's
- * configuration.
+ * system notifications for profile field changes are enabled in the configuration of Admidio
  *
  * On startup, a global (singleton) object $gChangeNotifications is created
  * that is automatically used the User and TableMembers classes to log
@@ -23,7 +22,7 @@
  *
  * **Code example**
  * ```
- * // log a change to a profile field (done automatically by the User classe)
+ * // log a change to a profile field (done automatically by the User class)
  * $gChangeNotifications->logProfileChange($usr_id, 123, 'first_name', 'Old Name', 'New Name');
  *
  * // Force sending the change notifications (if configured at all)
@@ -32,7 +31,7 @@
  */
 class ChangeNotification
 {
-    /** @var $changes Queued array of changes (user ID as key) made during this
+    /** @var array $changes Queued array of changes (user ID as key) made during this
      *  php process. This data structure is meant to cache all changes and then
      *  send out only one notification mail per user when PHP is finished.
      *  The structure of each entry of this entry is:
@@ -47,13 +46,13 @@ class ChangeNotification
      *              field_id => array('Field Name', 'old_value', 'new_value'),
      *          ),
      *          'role_changes' => array(
-     *              role_id => array('Role Name', 'fieldname', 'old_value', 'new_value'),
+     *              role_id => array('Role Name', 'fieldName', 'old_value', 'new_value'),
      *          )
      *      )
      */
     protected $changes = array();
 
-    /** @var $format Whether to send mails as 'html' or 'text' (as configured)
+    /** @var string $format Whether to send mails as 'html' or 'text' (as configured)
      */
     protected $format = 'html';
 
@@ -76,12 +75,12 @@ class ChangeNotification
     /**
      * Clear the queue of all recorded changes. No notifications are sent out by
      * this method.
-     * @param int $userId The user for whom all recorded changes should be cleared (null for all users)
+     * @param int $userID The user for whom all recorded changes should be cleared (null for all users)
      */
-    public function clearChanges($userId = null)
+    public function clearChanges(int $userID = 0)
     {
-        if ($userId) {
-            unset($this->changes[$userId]);
+        if ($userID > 0) {
+            unset($this->changes[$userID]);
         } else {
             $this->changes = array();
         }
@@ -89,17 +88,18 @@ class ChangeNotification
 
     /**
      * Initialize the internal data structure to queue changes to a given user ID.
-     * @param int $userId The user for whom to prepare the internal data structure
+     * @param int $userID The user for whom to prepare the internal data structure.
+     * @param User|null $user Optional the user object of the changed user could be set.
      */
-    public function prepareUserChanges($userId, $user = null)
+    public function prepareUserChanges(int $userID, User $user = null)
     {
         global $gDb, $gProfileFields;
-        if (!isset($this->changes[$userId])) {
+        if (!isset($this->changes[$userID])) {
             if (is_null($user)) {
-                $user = new User($gDb, $gProfileFields, $userId);
+                $user = new User($gDb, $gProfileFields, $userID);
             }
-            $this->changes[$userId] = array(
-                'uid' => $userId,
+            $this->changes[$userID] = array(
+                'uid' => $userID,
                 'usr_login_name' => $user->getValue('usr_login_name'),
                 'first_name' => $user->getValue('FIRST_NAME'),
                 'last_name' => $user->getValue('LAST_NAME'),
@@ -115,24 +115,25 @@ class ChangeNotification
      * Records a profile field change for the given user ID and the field ID.
      * Both the old and the new values are stored in an array and sent via
      * a system notification mail to the admin if configured.
-     * @param int $userId The user to whom the change applies
+     * @param int $userID The user to whom the change applies
      * @param int $fieldId The ID of the modified profile field.
-     * @param string $fieldname The human-readable name of the modified profile field.
+     * @param string $fieldName The human-readable name of the modified profile field.
      * @param string $old_value The previous value of the field before the change
      * @param string $new_value The new value of the field after the change
-     * @param string $old_value_db The previous value of the field before the change as stored in the database
-     * @param string $new_value_db The new value of the field after the change as stored in the database
+     * @param string|null $old_value_db The previous value of the field before the change as stored in the database
+     * @param string|null $new_value_db The new value of the field after the change as stored in the database
      * @param bool $deleting Whether the profile is changed due to deleting the
      *                       user. In this case, the change will not be logged
      *                       in the history database.
+     * @throws AdmException
      */
-    public function logProfileChange($userId, $fieldId, $fieldname, $old_value, $new_value, $old_value_db = null, $new_value_db = null, $user = null, $deleting = false)
+    public function logProfileChange(int $userID, int $fieldId, string $fieldName, string $old_value, string $new_value, string $old_value_db = null, string $new_value_db = null, $user = null, bool $deleting = false)
     {
         global $gSettingsManager, $gDb;
         // 1. Create a database log entry if so configured
-        if (!$deleting && $userId > 0 && $gSettingsManager->getBool('profile_log_edit_fields')) {
+        if (!$deleting && $userID > 0 && $gSettingsManager->getBool('profile_log_edit_fields')) {
             $logEntry = new TableAccess($gDb, TBL_USER_LOG, 'usl');
-            $logEntry->setValue('usl_usr_id', $userId);
+            $logEntry->setValue('usl_usr_id', $userID);
             $logEntry->setValue('usl_usf_id', $fieldId);
             $logEntry->setValue('usl_value_old', $old_value_db);
             $logEntry->setValue('usl_value_new', $new_value_db);
@@ -141,8 +142,8 @@ class ChangeNotification
         }
 
         // 2. Store the change to send out one change notification mail (after all modifications are done)
-        $this->prepareUserChanges($userId, $user);
-        $this->changes[$userId]['profile_changes'][] = array($fieldname, $old_value, $new_value);
+        $this->prepareUserChanges($userID, $user);
+        $this->changes[$userID]['profile_changes'][] = array($fieldName, $old_value, $new_value);
     }
 
     /**
@@ -151,16 +152,13 @@ class ChangeNotification
      * a system notification mail to the admin if configured.
      * Some user fields are special cased (password, photo), others are ignored
      * for irrelevance (internal fields).
-     * @param int $userId The user to whom the change applies
-     * @param int $fieldId The ID of the modified profile field.
-     * @param string $fieldname The human-readable name of the modified profile field.
+     * @param int $userID The user to whom the change applies
+     * @param string $fieldName The ID of the modified profile field.
      * @param string $old_value The previous value of the field before the change
      * @param string $new_value The new value of the field after the change
-     * @param bool $deleting Whether the profile is changed due to deleting the
-     *                       user. In this case, the change will not be logged
-     *                       in the history database.
+     * @param User|null $user Optional the object of the changed user.
      */
-    public function logUserChange($userId, $fieldId, $old_value, $new_value, $user = null, $deleting = false)
+    public function logUserChange(int $userID, string $fieldName, string $old_value, string $new_value, User $user = null)
     {
         global $gSettingsManager, $gL10n;
 
@@ -170,24 +168,24 @@ class ChangeNotification
         }
 
         // 2. Store the change to send out one change notification mail (after all modifications are done)
-        $this->prepareUserChanges($userId, $user);
+        $this->prepareUserChanges($userID, $user);
 
-        $fieldtitle = $fieldId;
+        $fieldLabel = $fieldName;
 
         // Ignore all fields (internal logging about who and when a user was
         // last changed) except explicitly handled (login, pwd, photo)
         $ignore = false;
 
-        switch ($fieldId) {
+        switch ($fieldName) {
             case 'usr_login_name':
-                $fieldtitle = $gL10n->get('SYS_USERNAME');
+                $fieldLabel = $gL10n->get('SYS_USERNAME');
                 break;
             case 'usr_password':
-                $fieldtitle = $gL10n->get('SYS_PASSWORD');
+                $fieldLabel = $gL10n->get('SYS_PASSWORD');
                 $old_value = $new_value = '********';
                 break;
             case 'usr_photo':
-                $fieldtitle = $gL10n->get('SYS_PHOTO');
+                $fieldLabel = $gL10n->get('SYS_PHOTO');
                 // Don't show photo data, replace with [...] if set
                 $old_value = $old_value ? '[...]' : $old_value;
                 $new_value = $new_value ? '[...]' : $new_value;
@@ -197,7 +195,7 @@ class ChangeNotification
         }
 
         if (!$ignore) {
-            $this->changes[$userId]['profile_changes'][] = array($fieldtitle, $old_value, $new_value);
+            $this->changes[$userID]['profile_changes'][] = array($fieldLabel, $old_value, $new_value);
         }
     }
 
@@ -205,47 +203,48 @@ class ChangeNotification
      * Records a role membership change for the given user ID and the given role.
      * Both the old and the new values are stored in an array and sent via
      * a system notification mail to the admin if configured.
-     * @param int $userId The user to whom the change applies
-     * @param int $fieldId The ID of the modified profile field.
-     * @param string $fieldname The human-readable name of the modified profile field.
+     * @param int $userID The user to whom the change applies
+     * @param string $roleName The name of the modified role.
+     * @param string $fieldName The human-readable name of the modified profile field.
      * @param string $old_value The previous value of the field before the change
      * @param string $new_value The new value of the field after the change
+     * @param User|null $user Optional the object of the user whose role membership has modified.
      * @param bool $deleting Whether the profile is changed due to deleting the
      *                       user. In this case, the change will not be logged
      *                       in the history database.
      */
-    public function logRoleChange($userId, $roleId, $role, $fieldname, $old_value, $new_value, $user = null, $deleting = false)
+    public function logRoleChange(int $userID, string $roleName, string $fieldName, string $old_value, string $new_value, User $user = null, bool $deleting = false)
     {
         global $gSettingsManager, $gL10n;
         // Don't log anything if no User ID is set yet (e.g. user not yet saved to the database!)
-        if ($userId == 0) {
+        if ($userID == 0) {
             return;
         }
         // 1. Create a database log entry if so configured
-        if (!$deleting && $userId > 0 && $gSettingsManager->getBool('profile_log_edit_fields')) {
+        if (!$deleting && $userID > 0 && $gSettingsManager->getBool('profile_log_edit_fields')) {
             // TODO: Role changes are not yet logged in the database!
         }
 
         // 2. Store the change to send out one change notification mail (after all modifications are done)
-        $this->prepareUserChanges($userId, $user);
-        $fieldtitle = $fieldname;
+        $this->prepareUserChanges($userID, $user);
+        $fieldLabel = $fieldName;
         $ignore = false;
-        switch ($fieldname) {
+        switch ($fieldName) {
             case 'mem_begin':
-                $fieldtitle = $gL10n->get('SYS_MEMBERSHIP_START');
+                $fieldLabel = $gL10n->get('SYS_MEMBERSHIP_START');
                 break;
             case 'mem_end':
-                $fieldtitle = $gL10n->get('SYS_MEMBERSHIP_END');
+                $fieldLabel = $gL10n->get('SYS_MEMBERSHIP_END');
                 break;
             case 'mem_leader':
-                $fieldtitle = $gL10n->get('SYS_LEADER');
+                $fieldLabel = $gL10n->get('SYS_LEADER');
                 break;
             default:
                 $ignore = true;
                 break;
         }
         if (!$ignore) {
-            $this->changes[$userId]['role_changes'][] = array($role, $fieldtitle, $old_value, $new_value);
+            $this->changes[$userID]['role_changes'][] = array($roleName, $fieldLabel, $old_value, $new_value);
         }
     }
 
@@ -254,47 +253,48 @@ class ChangeNotification
      * stored to the database already.
      * All non-empty fields are added to the list of changes and queued for notification.
      *
-     * @param int $userId The user to whom the change applies
-     * @param User $user(optional) The User object of the newly created user
+     * @param int $userID The user to whom the change applies
+     * @param User|null $user (optional) The User object of the newly created user
+     * @throws AdmException
      */
-    public function logUserCreation($userId, $user = null)
+    public function logUserCreation(int $userID, User $user = null)
     {
-        global $gProfileFields, $gL10n;
+        global $gProfileFields, $gDb;
 
         // If user was never created in the DB, no need to log
-        if ($userId == 0) {
+        if ($userID == 0) {
             return;
         }
         if (is_null($user)) {
-            $user = new User($this->db, $gProfileFields, $userId);
+            $user = new User($gDb, $gProfileFields, $userID);
         }
 
         // 1. TODO: Create a history log database entry for the creation
 
 
         // 2. Prepare the admin notifications
-        $this->prepareUserChanges($userId, $user);
-        $this->changes[$userId]['created'] = true;
+        $this->prepareUserChanges($userID, $user);
+        $this->changes[$userID]['created'] = true;
 
         // Username and Passwords
-        foreach (array('usr_login_name', 'usr_password', 'usr_photo', 'usr_text') as $fieldname) {
-            $newval = $user->getValue($fieldname, $this->format);
-            if ($newval) {
-                $this->logUserChange($userId, $fieldname, null, $newval, null, $user);
+        foreach (array('usr_login_name', 'usr_password', 'usr_photo', 'usr_text') as $fieldName) {
+            $newValue = $user->getValue($fieldName, $this->format);
+            if ($newValue) {
+                $this->logUserChange($userID, $fieldName, null, $newValue, $user);
             }
         }
         // Loop through all profile fields and add all non-empty fields to the notification
         if ($user->getProfileFieldsData() instanceof ProfileFields) {
-            foreach ($user->getProfileFieldsData()->getProfileFields() as $fieldname => $field) {
+            foreach ($user->getProfileFieldsData()->getProfileFields() as $fieldName => $field) {
                 // Always use the text representation in the notification mail,
                 // as the HTML-representation might make use of css classes or
                 // image paths that are not available in a mail!
-                $newval = $user->getValue($fieldname, 'text');
-                $newval_db = $user->getValue($fieldname, 'database');
-                if ($newval) {
-                    $fieldtitle = $field->getValue('usf_name', $this->format);
-                    $fieldid = $field->getValue('usf_id');
-                    $this->logProfileChange($userId, $fieldid, $fieldtitle, null, $newval, null, $newval_db, $user, /*deleting=*/false);
+                $newValue = $user->getValue($fieldName, 'text');
+                $newValue_db = $user->getValue($fieldName, 'database');
+                if ($newValue) {
+                    $fieldLabel = $field->getValue('usf_name', $this->format);
+                    $fieldID = $field->getValue('usf_id');
+                    $this->logProfileChange($userID, $fieldID, $fieldLabel, null, $newValue, null, $newValue_db, $user);
                 }
             }
         }
@@ -305,44 +305,46 @@ class ChangeNotification
      * All non-empty fields are added to the list of changes and queued for notification.
      * This function must be called before removing the user from the database.
      *
-     * @param int $userId The user to whom the change applies
-     * @param User $user(optional) The User object of the user to be deleted
+     * @param int $userID The user to whom the change applies
+     * @param User|null $user (optional) The User object of the user to be deleted
+     * @throws AdmException
      */
-    public function logUserDeletion($userId, $user = null)
+    public function logUserDeletion(int $userID, User $user = null)
     {
         global $gProfileFields, $gL10n, $gDb;
 
         // If user wasn't yet created in the DB, no need to log anything
-        if ($userId == 0) {
+        if ($userID == 0) {
             return;
         }
 
         // 1. TODO: Create a history log database entry for the deletion
 
         // 2. Prepare the admin notifications
-        $this->prepareUserChanges($userId, $user);
-        $this->changes[$userId]['deleted'] = true;
+        $this->prepareUserChanges($userID, $user);
+        $this->changes[$userID]['deleted'] = true;
 
-        $olddata = new User($gDb, $gProfileFields, $userId);
+        $oldUser = new User($gDb, $gProfileFields, $userID);
 
         // Username and Passwords
-        foreach (array('usr_login_name', 'usr_password', 'usr_photo', 'usr_text') as $fieldname) {
-            $oldval = $olddata->getValue($fieldname, $this->format);
-            if ($oldval) {
-                $this->logUserChange($userId, $fieldname, $oldval, null, $user);
+        foreach (array('usr_login_name', 'usr_password', 'usr_photo', 'usr_text') as $fieldName) {
+            $oldValue = $oldUser->getValue($fieldName, $this->format);
+            if ($oldValue) {
+                $this->logUserChange($userID, $fieldName, $oldValue, null, $user);
             }
         }
         // Loop through all profile fields and add all non-empty fields to the notification
-        if ($olddata->getProfileFieldsData() instanceof ProfileFields) {
-            foreach (array_keys($olddata->getProfileFieldsData()->getProfileFields()) as $fieldname) {
+        if ($oldUser->getProfileFieldsData() instanceof ProfileFields) {
+            foreach (array_keys($oldUser->getProfileFieldsData()->getProfileFields()) as $fieldName) {
                 // Always use the text representation in the notification mail,
                 // as the HTML-representation might make use of css classes or
                 // image paths that are not available in a mail!
-                $oldval = $olddata->getValue($fieldname, 'text');
-                $oldval_db = $olddata->getValue($fieldname, 'database');
-                if ($oldval) {
-                    $fieldtitle = $olddata->getProfileFieldsData()->getProfileFields()[$fieldname]->getValue('usf_name', $this->format);
-                    $this->logProfileChange($userId, $fieldname, $fieldtitle, $oldval, null, $oldval_db, null, $user, /*deleting=*/true);
+                $oldValue = $oldUser->getValue($fieldName, 'text');
+                $oldValueDB = $oldUser->getValue($fieldName, 'database');
+                if ($oldValue) {
+                    $oldFieldId = $oldUser->getProfileFieldsData()->getProfileFields()[$fieldName]->getValue('usf_id');
+                    $oldFieldName = $oldUser->getProfileFieldsData()->getProfileFields()[$fieldName]->getValue('usf_name', $this->format);
+                    $this->logProfileChange($userID, $oldFieldId, $oldFieldName, $oldValue, null, $oldValueDB, null, $user, /*deleting=*/true);
                 }
             }
         }
@@ -355,19 +357,19 @@ class ChangeNotification
                     ON rol_id = mem_rol_id
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE mem_usr_id  = ? -- $userId
+                 WHERE mem_usr_id  = ? -- $userID
                    AND rol_valid   = true
                    AND cat_name_intern <> \'EVENTS\'
                  ORDER BY cat_org_id, cat_sequence, rol_name';
-        $query = $gDb->queryPrepared($sql, array($userId));
+        $query = $gDb->queryPrepared($sql, array($userID));
 
         while ($row = $query->fetch()) {
-            $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], null, $user, /*deleting=*/true);
+            $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], null, $user, /*deleting=*/true);
             if ($row['mem_end']) {
-                $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], null, $user, /*deleting=*/true);
+                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], null, $user, /*deleting=*/true);
             }
             if ($row['mem_leader']) {
-                $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], null, $user, /*deleting=*/true);
+                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], null, $user, /*deleting=*/true);
             }
         }
     }
@@ -375,9 +377,10 @@ class ChangeNotification
     /**
      * Send out all queued change notifications, if the configuration has system
      * change notifications enabled at all.
-     * @param int $userId The user for whom the notification shall be sent (null for all queued notifications)
+     * @param int $userID The user for whom the notification shall be sent (null for all queued notifications)
+     * @throws AdmException
      */
-    public function sendNotifications($userId = null)
+    public function sendNotifications(int $userID = 0)
     {
         global $gSettingsManager, $gL10n, $gCurrentUser;
 
@@ -390,7 +393,7 @@ class ChangeNotification
                 $format_row = "<tr><th> %s </th><td> %s </td><td> %s </td></tr>\n";
                 $format_rolhdr = "<tr><th> %s </th><th> %s </th><th> %s </th><th> %s </th></tr>\n";
                 $format_rolrow = "<tr><th> %s </th><td> %s </td><td> %s </td><td> %s </td></tr>\n";
-                $table_begin = '<br><br><table border="1">';
+                $table_begin = '<br><br><table style="border-width: 1px;">';
                 $table_end = '</table><br>';
             } else {
                 $format_hdr = "%25s %25s -> %25s\n";
@@ -402,11 +405,11 @@ class ChangeNotification
             }
 
             $changes = $this->changes;
-            if ($userId) {
+            if ($userID > 0) {
                 $changes = array();
-                $changes[$userId] = $this->changes[$userId];
+                $changes[$userID] = $this->changes[$userID];
             }
-            foreach ($changes as $uid => $userdata) {
+            foreach ($changes as $userdata) {
                 $notification = new Email();
                 $hasContent = false;
 
@@ -471,7 +474,7 @@ class ChangeNotification
             }
         }
 
-        $this->clearChanges($userId);
+        $this->clearChanges($userID);
     }
 
 
@@ -480,6 +483,10 @@ class ChangeNotification
      */
     public function shutdown()
     {
-        $this->sendNotifications();
+        try {
+            $this->sendNotifications();
+        } catch (AdmException $e) {
+            $e->showText();
+        }
     }
 }

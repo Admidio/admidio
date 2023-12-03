@@ -10,8 +10,8 @@
 /**
  * Class manages weblinks viewable for user
  *
- * This class reads all available recordsets from table links.
- * and returns an Array with results, recordsets and validated parameters from $_GET Array.
+ * This class reads all available recordset from table links.
+ * and returns an Array with results, recordset and validated parameters from $_GET Array.
  *
  * **Returned Array:**
  * ```
@@ -104,22 +104,23 @@ class ModuleWeblinks extends Modules
     /**
      * Function returns a set of links with corresponding information
      * @param int $startElement Start element of result. First (and default) is 0.
-     * @param int $limit        Number of elements returned max. Default NULL will take number from preferences.
+     * @param int $limit Number of elements returned max. Default NULL will take number from preferences.
      * @return array<string,mixed> with links and corresponding information
+     * @throws Exception
      */
-    public function getDataSet($startElement = 0, $limit = null)
+    public function getDataSet(int $startElement = 0, int $limit = 0): array
     {
         global $gCurrentUser, $gSettingsManager, $gDb;
 
         // Parameter
-        if ($limit === null) {
+        if ($limit === 0) {
             $limit = $gSettingsManager->getInt('weblinks_per_page');
         }
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
         $sqlConditions = $this->getSqlConditions();
 
-        // Weblinks aus der DB fischen...
+        // read weblinks from database
         $sql = 'SELECT *
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
@@ -150,8 +151,9 @@ class ModuleWeblinks extends Modules
     /**
      * Function to get total number of links filtered by current conditions.
      * @return int Number of links.
+     * @throws Exception
      */
-    public function getDataSetCount()
+    public function getDataSetCount(): int
     {
         global $gCurrentUser, $gDb;
 
@@ -171,9 +173,9 @@ class ModuleWeblinks extends Modules
 
     /**
      * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
-     * @return array<string,string|array<int,int>> Returns an array of a SQL string with additional conditions and it's query params.
+     * @return array<string,string|array<int,int>> Returns an array of a SQL string with additional conditions, and it's query params.
      */
-    private function getSqlConditions()
+    private function getSqlConditions(): array
     {
         $sqlConditions = '';
         $params = array();

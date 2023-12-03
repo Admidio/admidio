@@ -10,10 +10,10 @@
 /**
  * Validate various content of form elements
  *
- * This class can be used to validate form input. Therefore the methods can be called and get the
- * form input as parameter. The method will return **true** if validation was succesfull. Otherwise
+ * This class can be used to validate form input. Therefore, the methods can be called and get the
+ * form input as parameter. The method will return **true** if validation was successful. Otherwise,
  * an AdmException will be thrown. To catch this exception all method calls of this class should
- * be within a try and catch structure. Also all method are declared static.
+ * be within a try and catch structure. Also, all method are declared static.
  *
  *
  * **Code example**
@@ -34,17 +34,17 @@ class FormValidation
     /**
      * Checks if the value of the captcha input matches with the captcha image.
      * @param string $value Value of the captcha input field.
-     * @throws AdmException SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
      * @return true Returns **true** if the value matches the captcha image.
-     *              Otherwise throw an exception SYS_CAPTCHA_CODE_INVALID.
+     *              Otherwise, throw an exception SYS_CAPTCHA_CODE_INVALID.
+     *@throws AdmException SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
      */
-    public static function checkCaptcha($value)
+    public static function checkCaptcha(string $value): bool
     {
         global $gSettingsManager;
 
-        $securimage = new Securimage();
+        $secureImage = new Securimage();
 
-        if ($securimage->check($value)) {
+        if ($secureImage->check($value)) {
             return true;
         }
 

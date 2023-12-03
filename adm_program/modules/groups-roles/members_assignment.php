@@ -198,7 +198,7 @@ if ($getMode === 'assign') {
     $sqlData['params'] = array($gCurrentOrgId);
 
     // create filter menu with elements for role
-    $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+    $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
     $form = new HtmlForm('navbar_filter_form_roles', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxFromSql(
         'filter_rol_uuid',

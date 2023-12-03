@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Diese Klasse verwaltet Bilder und bietet Methoden zum Anpassen dieser
+ * Class manages images and provides methods for customizing them.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/

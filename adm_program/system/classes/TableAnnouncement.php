@@ -17,20 +17,20 @@
  *
  * **Code examples**
  * ```
- * // get data from an existing anncouncement
+ * // get data from an existing announcement
  * $announcement = new TableAnnouncement($gDb, $announcementId);
  * $headline = $announcement->getValue('ann_headline');
  * $description = $announcement->getValue('ann_description');
  *
  * // change existing announcement
  * $announcement = new TableAnnouncement($gDb, $announcementId);
- * $announcement->setValue('ann_headline', 'My new headling');
+ * $announcement->setValue('ann_headline', 'My new headline');
  * $announcement->setValue('ann_description', 'This is the new description.');
  * $announcement->save();
  *
- * // create new announement
+ * // create new announcement
  * $announcement = new TableAnnouncement($gDb);
- * $announcement->setValue('ann_headline', 'My new headling');
+ * $announcement->setValue('ann_headline', 'My new headline');
  * $announcement->setValue('ann_description', 'This is the new description.');
  * $announcement->save();
  * ```
@@ -41,7 +41,8 @@ class TableAnnouncement extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_announcements.
      * If the id is set than the specific announcement will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $annId    The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $annId The recordset of the announcement with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
     public function __construct(Database $database, $annId = 0)
     {
@@ -55,10 +56,11 @@ class TableAnnouncement extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -87,13 +89,14 @@ class TableAnnouncement extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to edit this announcement. Therefore
+     * This method checks if the current user is allowed to edit this announcement. Therefore,
      * the announcement must be visible to the user and must be of the current organization.
      * The user must be a member of at least one role that have the right to manage announcements.
      * Global announcements could be only edited by the parent organization.
      * @return bool Return true if the current user is allowed to edit this announcement
+     * @throws Exception
      */
-    public function isEditable()
+    public function isEditable(): bool
     {
         global $gCurrentOrganization, $gCurrentUser;
 
@@ -116,11 +119,12 @@ class TableAnnouncement extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to view this announcement. Therefore
+     * This method checks if the current user is allowed to view this announcement. Therefore,
      * the visibility of the category is checked.
      * @return bool Return true if the current user is allowed to view this announcement
+     * @throws Exception
      */
-    public function isVisible()
+    public function isVisible(): bool
     {
         global $gCurrentUser;
 
@@ -129,13 +133,14 @@ class TableAnnouncement extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -155,6 +160,7 @@ class TableAnnouncement extends TableAccess
      * the timestamp and the url to this announcement.
      * @return bool Returns **true** if the notification was sent
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception
      */
     public function sendNotification(): bool
     {

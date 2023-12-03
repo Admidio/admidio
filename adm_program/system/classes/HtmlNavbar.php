@@ -24,7 +24,7 @@
  *
  * // show link to create new announcement
  * $myNavbar->addItem(
- *     'menu_item_new_entry', ADMIDIO_URL . FOLDER_MODULES . '/mymodule/mymodule_new.php',
+ *     'menu_item_new_entry', ADMIDIO_URL . FOLDER_MODULES . '/my-module/my-module_new.php',
  *     $gL10n->get('SYS_CREATE'), 'fa-plus-circle'
  * );
  * $myNavbar->show();
@@ -53,7 +53,7 @@ class HtmlNavbar
      */
     protected $name;
     /**
-     * @var string Navbar type. There is the  and the **filter** type possible.
+     * @var string Navbar type. There is the **default** and the **filter** type possible.
      */
     protected $type;
     /**
@@ -67,15 +67,16 @@ class HtmlNavbar
 
     /**
      * creates the object of the module menu and initialize all class parameters
-     * @param string   $id       Html id of the navbar
-     * @param string   $name     Name of the navbar that will be shown when navbar changed to vertical mode on small devices
-     * @param HtmlPage $htmlPage Optional a HtmlPage object that will be used to add javascript code
+     * @param string $id Html id of the navbar
+     * @param string $name Name of the navbar that will be shown when navbar changed to vertical mode on small devices
+     * @param HtmlPage|null $htmlPage Optional a HtmlPage object that will be used to add javascript code
      *                           or files to the html output page.
-     * @param string   $type     Different types of the navbar can be defined.
+     * @param string $type Different types of the navbar can be defined.
      *                           default: will be the standard navbar of all modules.
      *                           filter:  should be used if this navbar is used to filter data of within the script.
+     * @throws Exception
      */
-    public function __construct($id, $name = null, HtmlPage $htmlPage = null, $type = 'default')
+    public function __construct(string $id, string $name = '', HtmlPage $htmlPage = null, string $type = 'default')
     {
         global $gL10n;
 
@@ -97,10 +98,10 @@ class HtmlNavbar
     }
 
     /**
-     * This method adds an additional css class to the main nav tag of the menu.
-     * @param string $className The name of a css class that should be add to the main nav tag of the manu
+     * This method adds a css class to the main nav tag of the menu.
+     * @param string $className The name of a css class that should be added to the main nav tag of the manu
      */
-    public function addCssClass($className)
+    public function addCssClass(string $className)
     {
         $this->customCssClass = ' '.$className;
     }
@@ -109,14 +110,14 @@ class HtmlNavbar
      * Add a form to the menu. The form will be added between the left and the right part of the navbar.
      * @param string $htmlForm A html code of a form that will be added to the menu
      */
-    public function addForm($htmlForm)
+    public function addForm(string $htmlForm)
     {
         $this->htmlForm = $htmlForm;
     }
 
     /**
      * Add a new item to the menu. This can be added to the left or right part of the navbar.
-     * You can also add another item to an existing dropdown item. Therefore use the **$parentItem** parameter.
+     * You can also add another item to an existing dropdown item. Therefore, use the **$parentItem** parameter.
      * @param string $id          Html id of the item.
      * @param string $url         The url of the generated link of this item.
      * @param string $text        The text of the item and the generated link.
@@ -127,7 +128,7 @@ class HtmlNavbar
      *                            dropdown. Just commit the id of that item.
      * @param string $class       Optional a css class that will be set for the item.
      */
-    public function addItem($id, $url, $text, $icon = '', $orientation = 'left', $parentItem = 'navbar', $class = '')
+    public function addItem(string $id, string $url, string $text, string $icon = '', string $orientation = 'left', string $parentItem = 'navbar', string $class = '')
     {
         $urlStartRegex = '/^(https?:)?\/\//i';
 
@@ -158,7 +159,7 @@ class HtmlNavbar
      * @param array<string,string> $data An array with all data if the item. This will be **id**, **url**, **text** and **icon**.
      * @return string Returns the html for the menu entry
      */
-    protected function createHtmlLink(array $data)
+    protected function createHtmlLink(array $data): string
     {
         $iconHtml = '';
 
@@ -166,12 +167,10 @@ class HtmlNavbar
             $iconHtml = Image::getIconHtml($data['icon'], $data['text']);
         }
 
-        $html = '
+        return '
             <li class="nav-item ' . $data['class'] . '">
                 <a class="nav-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>
             </li>';
-
-        return $html;
     }
 
     /**
@@ -179,7 +178,7 @@ class HtmlNavbar
      * @param array<string,string> $data An array with all data if the item. This will be **id**, **url**, **text** and **icon**.
      * @return string Returns the html for the menu entry
      */
-    protected function createHtmlDropdownLink(array $data)
+    protected function createHtmlDropdownLink(array $data): string
     {
         $iconHtml = '';
 
@@ -187,17 +186,15 @@ class HtmlNavbar
             $iconHtml = Image::getIconHtml($data['icon'], $data['text']);
         }
 
-        $html = '<a class="dropdown-item" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>';
-
-        return $html;
+        return'<a class="dropdown-item" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>';
     }
 
     /**
      * @param array<string,array<string,string|array<string,array<string,string>>>> $items
-     * @param string                                                                $class
+     * @param string $class
      * @return string
      */
-    private function getNavHtml(array $items, $class = '')
+    private function getNavHtml(array $items, string $class = ''): string
     {
         $html = '<ul class="navbar-nav mr-auto ' . $class . '">';
 
@@ -235,7 +232,7 @@ class HtmlNavbar
      * Set the name of the navbar that will be shown when navbar changed to vertical mode on small devices.
      * @param string $name New name of the navbar.
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
@@ -245,7 +242,7 @@ class HtmlNavbar
      * If one item has several subitems than a dropdown button will be created.
      * @return string Returns the html output for the complete menu
      */
-    public function show()
+    public function show(): string
     {
         $showNavbar = false;
         $navHtml = '';
@@ -269,7 +266,7 @@ class HtmlNavbar
         }
 
         if (!$showNavbar) {
-            // dont show navbar if no menu item or form was added
+            // don't show navbar if no menu item or form was added
             return '';
         }
 

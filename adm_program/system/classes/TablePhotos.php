@@ -24,9 +24,10 @@ class TablePhotos extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_photos.
      * If the id is set than the specific photo album will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $phoId    The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $phoId The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
-    public function __construct(Database $database, $phoId = 0)
+    public function __construct(Database $database, int $phoId = 0)
     {
         parent::__construct($database, TBL_PHOTOS, 'pho', $phoId);
     }
@@ -34,6 +35,7 @@ class TablePhotos extends TableAccess
     /**
      * Initialize all necessary data of this object.
      * @return void
+     * @throws Exception
      */
     public function clear()
     {
@@ -46,6 +48,7 @@ class TablePhotos extends TableAccess
      * Recursive function that returns the number of all images including sub-albums.
      * @param int $phoId
      * @return int
+     * @throws Exception
      */
     public function countImages(int $phoId = 0): int
     {
@@ -94,6 +97,7 @@ class TablePhotos extends TableAccess
      * Deletes the selected photo album and all sub photo albums.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -108,6 +112,7 @@ class TablePhotos extends TableAccess
      * Recursive function that deletes the given photo album and all subordinate photo albums.
      * @param int $photoId
      * @return bool
+     * @throws Exception
      */
     public function deleteInDatabase(int $photoId): bool
     {
@@ -153,6 +158,7 @@ class TablePhotos extends TableAccess
      * Returns the name of the photographers. If there is no photographer(s) saved within this
      * album then the method will return the name "unknown".
      * @return string Name of the photographer(s)
+     * @throws Exception
      */
     public function getPhotographer(): string
     {
@@ -181,8 +187,6 @@ class TablePhotos extends TableAccess
      */
     public function getValue(string $columnName, string $format = '')
     {
-        global $gL10n;
-
         if ($columnName === 'pho_description' && $format === 'html') {
             $value = nl2br(parent::getValue($columnName));
         } else {
@@ -195,6 +199,7 @@ class TablePhotos extends TableAccess
     /**
      * Check if this album has one or more child albums.
      * @return bool Return **true** if child albums exists.
+     * @throws Exception
      */
     public function hasChildAlbums(): ?bool
     {
@@ -269,6 +274,7 @@ class TablePhotos extends TableAccess
      * the timestamp and the url to this photo album.
      * @return bool Returns **true** if the notification was sent
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception
      */
     public function sendNotification(): bool
     {
@@ -307,6 +313,7 @@ class TablePhotos extends TableAccess
      * Return an array with all the necessary info to create the link.
      * @param int $phoId
      * @return array
+     * @throws Exception
      */
     public function shuffleImage(int $phoId = 0): array
     {

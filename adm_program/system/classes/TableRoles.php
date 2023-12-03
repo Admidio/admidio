@@ -44,8 +44,9 @@ class TableRoles extends TableAccess
      * @param int $rolId The recordset of the role with this id will be loaded.
      *                           If id isn't set than an empty object of the table is created.
      * @throws AdmException
+     * @throws Exception
      */
-    public function __construct(Database $database, $rolId = 0)
+    public function __construct(Database $database, int $rolId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
@@ -64,6 +65,7 @@ class TableRoles extends TableAccess
      * checks if user is allowed to assign members to this role
      * @param User $user UserObject of user who should be checked
      * @return bool
+     * @throws Exception
      */
     public function allowedToAssignMembers(User $user): bool
     {
@@ -92,6 +94,7 @@ class TableRoles extends TableAccess
 
     /**
      * Calls clear() Method of parent class and initialize child class specific parameters
+     * @throws Exception
      */
     public function clear()
     {
@@ -105,6 +108,7 @@ class TableRoles extends TableAccess
     /**
      * Method determines the number of active leaders of this role
      * @return int Returns the number of leaders of this role
+     * @throws Exception
      */
     public function countLeaders(): int
     {
@@ -128,6 +132,7 @@ class TableRoles extends TableAccess
      * If it's an event role than the approved state will be considered and also the
      * additional guests.
      * @return int Returns the number of members of this role
+     * @throws Exception
      */
     public function countMembers(): int
     {
@@ -153,6 +158,7 @@ class TableRoles extends TableAccess
      * than the method returns INF.
      * @param bool $countLeaders Flag if the leaders should be count as participants. As per default they will not count.
      * @return int|float
+     * @throws Exception
      */
     public function countVacancies(bool $countLeaders = false)
     {
@@ -179,8 +185,9 @@ class TableRoles extends TableAccess
     /**
      * Deletes the selected role of the table and all references in other tables.
      * After that the class will be initialized.
-     * @throws AdmException
      * @return bool **true** if no error occurred
+     * @throws Exception
+     * @throws AdmException
      */
     public function delete(): bool
     {
@@ -247,11 +254,12 @@ class TableRoles extends TableAccess
 
     /**
      * Returns an array with all cost periods with full name in the specific language.
-     * @param int|null $costPeriod The number of the cost period for which the name should be returned
+     * @param int $costPeriod The number of the cost period for which the name should be returned
      *                        (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
      * @return array<int,string>|string Array with all cost or if param costPeriod is set than the full name of that cost period
+     * @throws Exception
      */
-    public static function getCostPeriods(int $costPeriod = null)
+    public static function getCostPeriods(int $costPeriod = 0)
     {
         global $gL10n;
 
@@ -263,7 +271,7 @@ class TableRoles extends TableAccess
             12 => $gL10n->get('SYS_MONTHLY')
         );
 
-        if ($costPeriod !== null) {
+        if ($costPeriod > 0) {
             return $costPeriods[$costPeriod];
         }
 
@@ -274,6 +282,7 @@ class TableRoles extends TableAccess
      * Read the id of the default list of this role. The list is stored in the column **rol_lst_id**.
      * If there is no list stored then the system default list will be returned
      * @return int Returns the default list id of this role
+     * @throws Exception
      */
     public function getDefaultList(): int
     {
@@ -312,13 +321,14 @@ class TableRoles extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format          Returns the field value in a special format **text**, **html**, **database**
+     * @param string $format Returns the field value in a special format **text**, **html**, **database**
      *                                or datetime (detailed description in method description)
      *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
      *                                * 'database' : returns the value that is stored in database with no format applied
      * @return int|float|string|bool Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -341,6 +351,7 @@ class TableRoles extends TableAccess
     /**
      * Checks if this role has former members
      * @return bool Returns **true** if the role has former memberships
+     * @throws Exception
      */
     public function hasFormerMembers(): bool
     {
@@ -359,6 +370,8 @@ class TableRoles extends TableAccess
      * the view properties of the role will be checked. If it's an event role than
      * we also check if the user is a member of the roles that could participate at the event.
      * @return bool Return true if the current user is allowed to view this role
+     * @throws AdmException
+     * @throws Exception
      */
     public function isVisible(): bool
     {
@@ -394,11 +407,12 @@ class TableRoles extends TableAccess
      * Per default all columns of the default table will be read and stored in the object.
      * If one record is found than the type of the role (ROLE_GROUP or ROLE_EVENT) is set.
      * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @param array<int,mixed> $queryParams       The query params for the prepared statement
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readDataById
+     * @throws Exception
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readDataById
      */
     protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
@@ -422,6 +436,7 @@ class TableRoles extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -451,6 +466,7 @@ class TableRoles extends TableAccess
     /**
      * Set the current role active.
      * @return bool Returns **true** if the role could be set to active.
+     * @throws Exception
      */
     public function setActive(): bool
     {
@@ -462,6 +478,7 @@ class TableRoles extends TableAccess
      * Administrator and event roles could not be set to inactive.
      * @return bool Returns **true** if the role was set to inactive.
      * @throws AdmException
+     * @throws Exception
      */
     public function setInactive(): bool
     {
@@ -486,6 +503,7 @@ class TableRoles extends TableAccess
      * @param bool $leader Flag if the user is assigned as a leader to this role.
      * @return void
      * @throws AdmException
+     * @throws Exception
      */
     public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = false)
     {
@@ -633,10 +651,11 @@ class TableRoles extends TableAccess
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method **save** to store the new value to the database.
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     *@throws AdmException
+     * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -684,6 +703,7 @@ class TableRoles extends TableAccess
      * @param bool $leader Flag if the user is assigned as a leader to this role.
      * @return void
      * @throws AdmException
+     * @throws Exception
      */
     public function startMembership(int $userId, bool $leader = false)
     {
@@ -711,6 +731,7 @@ class TableRoles extends TableAccess
      * @param int $userId ID if the user who should get the membership to this role.
      * @return void
      * @throws AdmException
+     * @throws Exception
      */
     public function stopMembership(int $userId)
     {
@@ -738,6 +759,7 @@ class TableRoles extends TableAccess
     /**
      * @param bool $status
      * @return bool
+     * @throws Exception
      */
     private function toggleValid(bool $status): bool
     {

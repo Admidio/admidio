@@ -498,11 +498,12 @@ class Email extends PHPMailer
 
     /**
      * Add the template text to the email message and replace the placeholders of the template.
-     * @param string $text        Email text that should be sent
-     * @param string $senderName  Firstname and lastname of email sender
+     * @param string $text Email text that should be sent
+     * @param string $senderName Firstname and lastname of email sender
      * @param string $senderEmail The email address of the sender
-     * @param string $senderUuid  The unique ID of the sender.
-     * @param string $recipients  List with firstname and lastname of all recipients of this mail
+     * @param string $senderUuid The unique ID of the sender.
+     * @param string $recipients List with firstname and lastname of all recipients of this mail
+     * @throws Exception|\Exception
      */
     public function setTemplateText(string $text, string $senderName, string $senderEmail, string $senderUuid, string $recipients)
     {
@@ -592,7 +593,7 @@ class Email extends PHPMailer
     /**
      * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
      * recipients will be listed in the mail.
-     * @throws \PHPMailer\PHPMailer\Exception|Exception
+     * @throws Exception
      */
     private function sendCopyMail()
     {

@@ -9,13 +9,6 @@
  ***********************************************************************************************
  */
 
-/**
- * Diese Klasse dient dazu einen Benutzerdefiniertes Feldobjekt zu erstellen.
- * Eine Benutzerdefiniertes Feldobjekt kann ueber diese Klasse in der Datenbank
- * verwaltet werden
- *
- * Es stehen die Methoden der Elternklasse TableAccess zur Verfuegung
- */
 class TableUserField extends TableAccess
 {
     public const MOVE_UP   = 'UP';
@@ -39,9 +32,10 @@ class TableUserField extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_user_fields.
      * If the id is set than the specific user field will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $usfId    The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $usfId The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
-    public function __construct(Database $database, $usfId = 0)
+    public function __construct(Database $database, int $usfId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'usf_cat_id');
@@ -51,6 +45,7 @@ class TableUserField extends TableAccess
 
     /**
      * Additional to the parent method visible roles array and flag will be initialized.
+     * @throws Exception
      */
     public function clear()
     {
@@ -62,8 +57,9 @@ class TableUserField extends TableAccess
 
     /**
      * Deletes the selected field and all references in other tables.
-     * Also the gap in sequence will be closed. After that the class will be initialize.
+     * Also, the gap in sequence will be closed. After that the class will be initialized.
      * @return true true if no error occurred
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -123,11 +119,12 @@ class TableUserField extends TableAccess
      * This recursive method creates from the parameter name a unique name that only have
      * capital letters followed by the next free number (index)
      * Example: 'Membership' => 'MEMBERSHIP_2'
-     * @param string $name  The name from which the unique name should be created
-     * @param int    $index The index of the name. Should be startet with 1
+     * @param string $name The name from which the unique name should be created
+     * @param int $index The index of the name. Should be startet with 1
      * @return string Returns the unique name with capital letters and number
+     * @throws Exception
      */
-    private function getNewNameIntern($name, $index)
+    private function getNewNameIntern(string $name, int $index): string
     {
         $newNameIntern = strtoupper(preg_replace('/[^A-Za-z0-9_]/', '', str_replace(' ', '_', $name)));
 
@@ -152,12 +149,13 @@ class TableUserField extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For column **usf_value_list** the following format is accepted:
+     * @param string $format For column **usf_value_list** the following format is accepted:
      *                           * **database** returns database value of **usf_value_list** without any transformations
      *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -193,8 +191,8 @@ class TableUserField extends TableAccess
                         $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
                         // first replace windows new line with unix new line and then create an array
-                        $valueFormated = str_replace("\r\n", "\n", $value);
-                        $arrListValues = explode("\n", $valueFormated);
+                        $valueFormatted = str_replace("\r\n", "\n", $value);
+                        $arrListValues = explode("\n", $valueFormatted);
 
                         foreach ($arrListValues as $key => &$listValue) {
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
@@ -256,6 +254,7 @@ class TableUserField extends TableAccess
      * @param int $userId Optional the ID of the user for which the required profile field should be checked.
      * @param bool $registration Set to **true** if the check should be done for a registration form. The default is **false**
      * @return bool Returns true if the profile field has a required input.
+     * @throws Exception
      */
     public function hasRequiredInput(int $userId = 0, bool $registration = false): bool
     {
@@ -277,12 +276,13 @@ class TableUserField extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to view this profile field. Therefore
+     * This method checks if the current user is allowed to view this profile field. Therefore,
      * the visibility of the category is checked. This method will not check the context if
      * the user is allowed to view the field because he has the right to edit the profile.
      * @return bool Return true if the current user is allowed to view this profile field
+     * @throws Exception
      */
-    public function isVisible()
+    public function isVisible(): ?bool
     {
         global $gCurrentUserId, $gCurrentUser;
 
@@ -299,10 +299,11 @@ class TableUserField extends TableAccess
     /**
      * Profile field will change the sequence one step up or one step down.
      * @param string $mode mode if the profile field move up or down, values are TableUserField::MOVE_UP, TableUserField::MOVE_DOWN
-     * @throws AdmException
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
+     * @throws AdmException
+     * @throws Exception
      */
-    public function moveSequence($mode)
+    public function moveSequence(string $mode): bool
     {
         $usfSequence = (int) $this->getValue('usf_sequence');
         $usfCatId    = (int) $this->getValue('usf_cat_id');
@@ -330,10 +331,11 @@ class TableUserField extends TableAccess
     /**
      * Profile field will change the complete sequence.
      * @param array $sequence the new sequence of profile fields (field IDs)
-     * @throws AdmException
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
+     * @throws AdmException
+     * @throws Exception
      */
-    public function setSequence($sequence)
+    public function setSequence(array $sequence): bool
     {
         $usfCatId = $this->getValue('usf_cat_id');
         $usfUuid  = $this->getValue('usf_uuid');
@@ -361,14 +363,15 @@ class TableUserField extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     *@throws AdmException
+     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -401,10 +404,11 @@ class TableUserField extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     *@throws AdmException
+     * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {

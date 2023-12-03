@@ -16,6 +16,7 @@ class InstallationUtils
      * Checks whether the minimum requirements for PHP and MySQL have been met.
      * @param Database $database Object of the database that should be checked. A connection should be established.
      * @return string Returns an error text if the database doesn't meet the necessary requirements.
+     * @throws Exception
      */
     public static function checkDatabaseVersion(Database $database): string
     {

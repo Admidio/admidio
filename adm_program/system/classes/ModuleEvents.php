@@ -8,10 +8,10 @@
  */
 
 /**
- * This class reads event recordsets from database
+ * This class reads event recordset from database
  *
- * This class reads all available recordsets from table events.
- * and returns an Array with results, recordsets and validated parameters from $_GET Array.
+ * This class reads all available recordset from table events.
+ * and returns an Array with results, recordset and validated parameters from $_GET Array.
  *
  * **Returned array:**
  * ```
@@ -140,7 +140,7 @@ class ModuleEvents extends Modules
     protected $calendarNames = array();
 
     /**
-     * Constructor that will create an object of a parameter set needed in modules to get the recordsets.
+     * Constructor that will create an object of a parameter set needed in modules to get the recordset.
      * Initialize parameters
      */
     public function __construct()
@@ -156,12 +156,13 @@ class ModuleEvents extends Modules
      * @param int $limit Limit of query rows (default: 0)
      * @return array<string,mixed> Array with all results, events and parameters.
      * @throws AdmException
+     * @throws Exception
      */
-    public function getDataSet($startElement = 0, $limit = null): array
+    public function getDataSet(int $startElement = 0, int $limit = 0): array
     {
         global $gDb, $gSettingsManager, $gCurrentUser;
 
-        if ($limit === null) {
+        if ($limit === 0) {
             $limit = $gSettingsManager->getInt('events_per_page');
         }
 
@@ -220,6 +221,7 @@ class ModuleEvents extends Modules
      * Get number of available events.
      * @return int
      * @throws AdmException
+     * @throws Exception
      */
     public function getDataSetCount(): int
     {
@@ -248,6 +250,7 @@ class ModuleEvents extends Modules
      * Returns a module specific headline
      * @param string $headline The initial headline of the module.
      * @return string Returns the full headline of the module
+     * @throws Exception
      */
     public function getHeadline(string $headline): string
     {
@@ -400,7 +403,7 @@ class ModuleEvents extends Modules
             $this->order = 'DESC';
         }
 
-        // Create date object and format date_from in English format and system format and push to daterange array
+        // Create date object and format date_from in English format and system format and push to date range array
         $objDateFrom = DateTime::createFromFormat('Y-m-d', $dateRangeStart);
 
         if ($objDateFrom === false) {
@@ -415,7 +418,7 @@ class ModuleEvents extends Modules
         $this->setParameter('dateStartFormatEnglish', $objDateFrom->format('Y-m-d'));
         $this->setParameter('dateStartFormatAdmidio', $objDateFrom->format($gSettingsManager->getString('system_date')));
 
-        // Create date object and format date_to in English format and system format and push to daterange array
+        // Create date object and format date_to in English format and system format and push to date range array
         $objDateTo = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
 
         if ($objDateTo === false) {

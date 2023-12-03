@@ -54,6 +54,7 @@ class Organization extends TableAccess
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
      * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, $organization = '')
     {
@@ -74,6 +75,7 @@ class Organization extends TableAccess
     /**
      * Initialize all necessary data of this object.
      * @return void
+     * @throws Exception
      */
     public function clear()
     {
@@ -92,6 +94,7 @@ class Organization extends TableAccess
      * Reads the number of all records of this table. In addition to the parent method
      * this method will cache the value and will return the cached value on multiple calls.
      * @return int Number of all organizations in database.
+     * @throws Exception
      */
     public function countAllRecords(): int
     {
@@ -107,6 +110,7 @@ class Organization extends TableAccess
      * @param int $userId The id of the administrator who creates the new organization.
      *                    This will be the first valid user of the new organization.
      * @throws AdmException
+     * @throws Exception
      */
     public function createBasicData(int $userId)
     {
@@ -376,6 +380,7 @@ class Organization extends TableAccess
      *                                 will be read otherwise the organization with the minimum ID.
      * @return Organization Returns an organization object.
      * @throws AdmException
+     * @throws Exception
      */
     public static function createDefaultOrganizationObject(Database $db, string $organization = ''): Organization
     {
@@ -393,6 +398,7 @@ class Organization extends TableAccess
 
     /**
      * @return array<int,string> Returns an array with all child organizations
+     * @throws Exception
      */
     protected function getChildOrganizations(): array
     {
@@ -411,6 +417,7 @@ class Organization extends TableAccess
      * @param bool $shortname If set to true then a list of all shortnames will be returned
      * @return string Returns a string with a comma separated list of all organization
      *                ids that are parents or children and the own id
+     * @throws Exception
      */
     public function getFamilySQL(bool $shortname = false): string
     {
@@ -439,11 +446,12 @@ class Organization extends TableAccess
 
     /**
      * Read all child and parent organizations of this organization and returns an array with them.
-     * @param bool $child    If set to **true** (default) then all child organizations will be in the array
-     * @param bool $parent   If set to **true** (default) then the parent organization will be in the array
+     * @param bool $child If set to **true** (default) then all child organizations will be in the array
+     * @param bool $parent If set to **true** (default) then the parent organization will be in the array
      * @param bool $longname If set to **true** then the value of the array will be the **org_longname**
      *                       otherwise it will be **org_shortname**
      * @return array<int,string> Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
+     * @throws Exception
      */
     public function getOrganizationsInRelationship(bool $child = true, bool $parent = true, bool $longname = false): array
     {
@@ -502,6 +510,7 @@ class Organization extends TableAccess
     /**
      * Method checks if the organization is configured as a parent organization in the recordset.
      * @return bool Return **true** if the organization is the parent of at least one other organization
+     * @throws Exception
      */
     public function isParentOrganization(): bool
     {

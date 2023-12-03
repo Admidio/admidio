@@ -92,9 +92,10 @@ class HtmlPage extends Smarty
 
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $id       ID of the page. This id will be set in the html <body> tag.
+     * @param string $id ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
+     * @throws Exception
      */
     public function __construct(string $id, string $headline = '')
     {
@@ -210,13 +211,14 @@ class HtmlPage extends Smarty
      * current page. The menu header will automatically the name of the page. If a dropdown menu item should
      * be created than $parentMenuItemId must be set to each entry of the dropdown. If a badge should
      * be shown at this menu item than set the $badgeCount.
-     * @param string $id.         ID of the menu item that will be the html id of the <a> tag
-     * @param string $name        Name of the menu node that will be shown in the menu
-     * @param string $url         The url of this menu item that will be called if someone click the menu item
-     * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $id .         ID of the menu item that will be the html id of the <a> tag
+     * @param string $name Name of the menu node that will be shown in the menu
+     * @param string $url The url of this menu item that will be called if someone click the menu item
+     * @param string $icon An icon that will be shown together with the name in the menu
      * @param string $parentMenuItemId The id of the parent item to which this item will be added.
-     * @param int $badgeCount     If set > 0 than a small badge with the number will be shown after the menu item name
+     * @param int $badgeCount If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description An optional description of the menu node that could be shown in some output cases
+     * @throws Exception
      */
     public function addPageFunctionsMenuItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = '')
     {

@@ -15,6 +15,7 @@ class Update
     /**
      * checks if login is required and if so, if it is valid
      * @throws AdmException
+     * @throws Exception
      */
     public function checkLogin()
     {
@@ -53,6 +54,7 @@ class Update
     /**
      * @param string $installedDbVersion
      * @throws AdmException
+     * @throws Exception
      */
     public function doAdmidioUpdate(string $installedDbVersion)
     {
@@ -109,6 +111,10 @@ class Update
         $gDb->queryPrepared($sql);
     }
 
+    /**
+     * @throws AdmException
+     * @throws Exception
+     */
     public function updateOrgPreferences()
     {
         global $gDb, $gPasswordHashAlgorithm;
@@ -142,6 +148,7 @@ class Update
      * Method will activate / deactivate the foreign key check in the database. This
      * will only work for a MySQL database.
      * @param bool $enable If set to **true** the foreign key check will be activated.
+     * @throws Exception
      */
     public function toggleForeignKeyChecks(bool $enable)
     {

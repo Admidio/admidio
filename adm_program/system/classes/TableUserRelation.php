@@ -9,18 +9,16 @@
  ***********************************************************************************************
  */
 
-/**
- * This class manages the set, update and delete in the table adm_user_relations
- */
 class TableUserRelation extends TableAccess
 {
     /**
      * Constructor that will create an object of a recordset of the table adm_user_relation_types.
      * If the id is set than the specific message will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $ureId    The recordset of the relation with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $ureId The recordset of the relation with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
-    public function __construct(Database $database, $ureId = 0)
+    public function __construct(Database $database, int $ureId = 0)
     {
         parent::__construct($database, TBL_USER_RELATIONS, 'ure', $ureId);
     }
@@ -28,8 +26,10 @@ class TableUserRelation extends TableAccess
     /**
      * Returns the inverse relation.
      * @return null|self Returns the inverse relation
+     * @throws AdmException
+     * @throws Exception
      */
-    public function getInverse()
+    public function getInverse(): ?TableUserRelation
     {
         $relationType = new TableUserRelationType($this->db, (int) $this->getValue('ure_urt_id'));
         if ($relationType->getValue('urt_id_inverse') === null) {
@@ -55,8 +55,10 @@ class TableUserRelation extends TableAccess
      * Deletes the selected record of the table and initializes the class
      * @param bool $deleteInverse
      * @return bool Returns **true** if no error occurred
+     * @throws AdmException
+     * @throws Exception
      */
-    public function delete($deleteInverse = true): bool
+    public function delete(bool $deleteInverse = true): bool
     {
         $this->db->startTransaction();
 

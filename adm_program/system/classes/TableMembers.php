@@ -68,7 +68,6 @@ class TableMembers extends TableAccess
             if ($oldValue != $newValue) {
                 $gChangeNotification->logRoleChange(
                     $this->getValue('mem_usr_id'),
-                    $this->getValue('mem_id'),
                     $this->getValue('rol_name'),
                     $columnName,
                     $oldValue,
@@ -128,33 +127,30 @@ class TableMembers extends TableAccess
             $membership = $this->getValue('rol_name');
             $gChangeNotification->logRoleChange(
                 $usrId,
-                $memId,
                 $membership,
                 'mem_begin',
                 $this->getValue('mem_begin', 'Y-m-d'),
-                null, // user=
-                null, // deleting=
+                '',
+                null,
                 true
             );
             $gChangeNotification->logRoleChange(
                 $usrId,
-                $memId,
                 $membership,
                 'mem_end',
                 $this->getValue('mem_end', 'Y-m-d'),
-                null, // user=
-                null, // deleting=
+                '',
+                null,
                 true
             );
             if ($this->getValue('mem_leader')) {
                 $gChangeNotification->logRoleChange(
                     $usrId,
-                    $memId,
                     $membership,
                     'mem_leader',
                     $this->getValue('mem_leader'),
-                    null, // user=
-                    null, // deleting=
+                    '',
+                    null,
                     true
                 );
             }
@@ -209,33 +205,30 @@ class TableMembers extends TableAccess
             $membership = $obj->getValue('rol_name');
             $gChangeNotification->logRoleChange(
                 $usrId,
-                $memId,
                 $membership,
                 'mem_begin',
-                null,
+                '',
                 $obj->getValue('mem_begin', 'Y-m-d'), // user=
-                null, // deleting=
+                null,
                 true
             );
             $gChangeNotification->logRoleChange(
                 $usrId,
-                $memId,
                 $membership,
                 'mem_end',
-                null,
+                '',
                 $obj->getValue('mem_end', 'Y-m-d'), // user=
-                null, // deleting=
+                null,
                 true
             );
             if ($obj->getValue('mem_leader')) {
                 $gChangeNotification->logRoleChange(
                     $usrId,
-                    $memId,
                     $membership,
                     'mem_leader',
-                    null,
+                    '',
                     $obj->getValue('mem_leader'), // user=
-                    null, // deleting=
+                    null,
                     true
                 );
             }

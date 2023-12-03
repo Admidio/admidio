@@ -40,10 +40,15 @@ class FileUpload
      * Creates the html output for the upload dialog with module specific strings.
      * @param string $destinationName Name of the folder or album where the file should be uploaded
      * @return string Returns the html output for an upload dialog.
+     * @throws Exception
      */
     public function getHtml(string $destinationName): string
     {
         global $gL10n;
+
+        $textUploadDescription = '';
+        $textSelectFiles = '';
+        $textBackButton = '';
 
         if ($this->module === 'photos') {
             $textUploadDescription = $gL10n->get('SYS_PHOTO_UPLOAD_DESC', array($destinationName));

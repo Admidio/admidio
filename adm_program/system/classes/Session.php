@@ -52,10 +52,12 @@ class Session extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
-     * @param Database   $database     Object of the class Database. This should be the default global object **$gDb**.
-     * @param string     $cookiePrefix The prefix that is used for cookies
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param string $cookiePrefix The prefix that is used for cookies
+     * @throws AdmException
+     * @throws Exception
      */
-    public function __construct(Database $database, $cookiePrefix = '')
+    public function __construct(Database $database, string $cookiePrefix = '')
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
@@ -91,9 +93,9 @@ class Session extends TableAccess
      * @param object $object     The object that should be stored in this class.
      * @return bool Return false if object isn't type object or objectName already exists
      */
-    public function addObject(string $objectName, &$object): bool
+    public function addObject(string $objectName, object &$object): bool
     {
-        if (is_object($object) && !array_key_exists($objectName, $this->mObjectArray)) {
+        if (!array_key_exists($objectName, $this->mObjectArray)) {
             $this->mObjectArray[$objectName] = &$object;
             return true;
         }
@@ -102,6 +104,7 @@ class Session extends TableAccess
 
     /**
      * clear user data
+     * @throws AdmException
      */
     protected function clearUserData()
     {
@@ -189,10 +192,11 @@ class Session extends TableAccess
     }
 
     /**
-     * Check if the current session has a valid user login. Therefore the user id must be stored
+     * Check if the current session has a valid user login. Therefore, the user id must be stored
      * within the session and the timestamps must be valid
      * @param int $userId The user id must be stored in this session and will be checked if valid.
      * @return bool Returns **true** if the user has a valid session login otherwise **false**;
+     * @throws AdmException
      */
     public function isValidLogin(int $userId): bool
     {
@@ -220,7 +224,8 @@ class Session extends TableAccess
 
     /**
      * The current user should be removed from the session and auto login.
-     * Also the auto login cookie should be removed.
+     * Also, the auto login cookie should be removed.
+     * @throws Exception
      */
     public function logout()
     {
@@ -250,6 +255,8 @@ class Session extends TableAccess
      * Reload auto login data from database table adm_auto_login. if cookie PREFIX_AUTO_LOGIN_ID
      * is set then there could be an auto login the auto login must be done here because after
      * that the corresponding organization must be set.
+     * @throws AdmException
+     * @throws Exception
      */
     public function refreshAutoLogin()
     {
@@ -274,7 +281,7 @@ class Session extends TableAccess
 
                 self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
             } else {
-                // an invalid AutoLogin should made the current AutoLogin unusable
+                // an invalid AutoLogin should make the current AutoLogin unusable
                 $this->mAutoLogin = null;
                 self::setCookie($this->cookieAutoLoginId, $_COOKIE[$this->cookieAutoLoginId]);
 
@@ -300,6 +307,7 @@ class Session extends TableAccess
     /**
      * Reload session data from database table adm_sessions. If IP address check is activated than check if the IP
      * address has changed. Refresh AutoLogin with new auto_login_id.
+     * @throws Exception
      */
     public function refresh()
     {
@@ -339,6 +347,7 @@ class Session extends TableAccess
     /**
      * This method will replace the current session ID with a new one, and keep the current session information.
      * The new session id will be stored in the database.
+     * @throws AdmException
      */
     public function regenerateId()
     {
@@ -351,6 +360,7 @@ class Session extends TableAccess
     /**
      * This method will reload all stored objects of all active sessions. The session will be
      * reloaded if the user will open a new page.
+     * @throws Exception
      */
     public function reloadAllSessions()
     {
@@ -361,7 +371,8 @@ class Session extends TableAccess
     /**
      * This method will reload the session of a specific user. All stored objects of the session will be initialized
      * and reloaded if the user opens a new page.
-     * @param int $userId Id of the user whose session should be relaoded.
+     * @param int $userId ID of the user whose session should be reloaded.
+     * @throws Exception
      */
     public function reload(int $userId)
     {
@@ -371,13 +382,14 @@ class Session extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the organization, timestamp, begin date and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -399,9 +411,10 @@ class Session extends TableAccess
     }
 
     /**
-     * Save all data that is necessary for an auto login. Therefore an AutoLogin object
+     * Save all data that is necessary for an auto login. Therefore, an AutoLogin object
      * will be created with an auto_login_id and this id will be stored in a cookie
      * in the browser of the current user.
+     * @throws AdmException
      */
     public function setAutoLogin()
     {
@@ -431,7 +444,7 @@ class Session extends TableAccess
      * @param int $expire   The Unix-Timestamp (Seconds) of the Date/Time when the cookie should expire.
      *                         With "0" the cookie will expire if the session ends. (When Browser gets closed)
      * @param string $path     Specify the path where the cookie should be available. (Also in sub-paths)
-     * @param string $domain   Specify the domain where the cookie should be available. (Set ".example.org" to allow sub-domains)
+     * @param string $domain   Specify the domain where the cookie should be available. (Set ".example.org" to allow subdomains)
      * @param bool|null $secure   If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
      * @param bool $httpOnly If "true" cookie is accessible only via HTTP.
      *                         Set to "false" to allow access for JavaScript. (Possible XSS security leak)
@@ -487,7 +500,7 @@ class Session extends TableAccess
      * @param int $limit        The Lifetime (Seconds) of the cookie when it should expire.
      *                             With "0" the cookie will expire if the session ends. (When Browser gets closed)
      * @param string $path         Specify the path where the cookie should be available. (Also in sub-paths)
-     * @param string $domain       Specify the domain where the cookie should be available. (Set ".example.org" to allow sub-domains)
+     * @param string $domain       Specify the domain where the cookie should be available. (Set ".example.org" to allow subdomains)
      * @param bool|null $secure       If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
      * @param bool $httpOnly     If "true" cookie is accessible only via HTTP.
      *                             Set to "false" to allow access for JavaScript. (Possible XSS security leak)
@@ -554,7 +567,7 @@ class Session extends TableAccess
     }
 
     /**
-     * Deletes all sessions in table admSessions that are inactive since **$maxInactiveTime** minutes..
+     * Deletes all sessions in table admSessions that are inactive since **$maxInactiveTime** minutes.
      * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted.
      * @throws Exception
      * @throws Exception

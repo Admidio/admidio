@@ -9,13 +9,13 @@
 final class StringUtils
 {
     /**
-     * In case the multibyte functions are not supported, we fallback to a no-multibyte function
+     * In case the multibyte functions are not supported, we do a fallback to a no-multibyte function
      * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
      * StringUtils::strToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')
      * @param string $string
      * @return string
      */
-    public static function strToLower($string)
+    public static function strToLower(string $string): string
     {
         if (function_exists('mb_strtolower')) {
             return mb_strtolower($string, 'UTF-8');
@@ -25,12 +25,12 @@ final class StringUtils
     }
 
     /**
-     * In case the multibyte functions are not supported, we fallback to a no-multibyte function
+     * In case the multibyte functions are not supported, we de a fallback to a no-multibyte function
      * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
      * @param string $string
      * @return string
      */
-    public static function strToUpper($string)
+    public static function strToUpper(string $string): string
     {
         if (function_exists('mb_strtoupper')) {
             return mb_strtoupper($string, 'UTF-8');
@@ -43,10 +43,10 @@ final class StringUtils
      * Checks if a string contains another given string
      * @param string $string        The string to check
      * @param string $contains      The containing string pattern
-     * @param bool   $caseSensitive Flag to change between case-sensitive and case-insensitive
+     * @param bool $caseSensitive Flag to change between case-sensitive and case-insensitive
      * @return bool Returns true if the string contains the other string
      */
-    public static function strContains($string, $contains, $caseSensitive = true)
+    public static function strContains(string $string, string $contains, bool $caseSensitive = true): bool
     {
         if ($caseSensitive) {
             return str_contains($string, $contains);
@@ -59,10 +59,10 @@ final class StringUtils
      * Checks if a string starts with another given string
      * @param string $string        The string to check
      * @param string $start         The starting string pattern
-     * @param bool   $caseSensitive Flag to change between case-sensitive and case-insensitive
+     * @param bool $caseSensitive Flag to change between case-sensitive and case-insensitive
      * @return bool Returns true if the string starts with the other string
      */
-    public static function strStartsWith($string, $start, $caseSensitive = true)
+    public static function strStartsWith(string $string, string $start, bool $caseSensitive = true): bool
     {
         if ($caseSensitive) {
             return str_starts_with($string, $start);
@@ -75,10 +75,10 @@ final class StringUtils
      * Checks if a string ends with another given string
      * @param string $string        The string to check
      * @param string $end           The ending string pattern
-     * @param bool   $caseSensitive Flag to change between case-sensitive and case-insensitive
+     * @param bool $caseSensitive Flag to change between case-sensitive and case-insensitive
      * @return bool Returns true if the string ends with the other string
      */
-    public static function strEndsWith($string, $end, $caseSensitive = true)
+    public static function strEndsWith(string $string, string $end, bool $caseSensitive = true): bool
     {
         if ($caseSensitive) {
             return str_ends_with($string, $end);
@@ -89,11 +89,11 @@ final class StringUtils
 
     /**
      * Easy way for multiple replacements in a string.
-     * @param string               $string   The string where to replace strings
+     * @param string $string   The string where to replace strings
      * @param array<string,string> $replaces An array with search and replace values
      * @return string The modified string
      */
-    public static function strMultiReplace($string, $replaces)
+    public static function strMultiReplace(string $string, array $replaces): string
     {
         return str_replace(array_keys($replaces), array_values($replaces), $string);
     }
@@ -104,7 +104,7 @@ final class StringUtils
      * @param array<string,string|array<mixed,string>> $srcArray
      * @return array<string,string|array<mixed,string>>
      */
-    public static function strStripSpecialTags(array $srcArray)
+    public static function strStripSpecialTags(array $srcArray): array
     {
         // "ecard_message" => ckeditor-variable
         $specialKeys = array(
@@ -142,14 +142,14 @@ final class StringUtils
     }
 
     /**
-     * Check if a string contains only valid characters. Therefore the string is
+     * Check if a string contains only valid characters. Therefore, the string is
      * compared with a hard coded list of valid characters for each datatype.
      * @param string $string    The string that should be checked.
      * @param string $checkType The type **noSpecialChar**, **email**, **file**, **url** or **phone** that will be checked.
      *                          Each type has a different valid character list.
      * @return bool Returns **true** if all characters of **string** match the internal character list.
      */
-    public static function strValidCharacters($string, $checkType)
+    public static function strValidCharacters(string $string, string $checkType): bool
     {
         if (trim($string) === '') {
             return false;
@@ -203,16 +203,16 @@ final class StringUtils
 
     /**
      * Check if a filename contains invalid characters. The characters will be checked with StringUtils::strValidCharacters.
-     * In addition the function checks if the name contains .. or a . at the beginning.
+     * In addition to the function checks if the name contains .. or a . at the beginning.
      * @param string $filename     Name of the file that should be checked.
      * @param bool $checkExtension If set to **true** then the extension will be checked against a block-list of extensions:
      *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi, phar
+     * @return true Returns @true if filename contains only valid characters. Otherwise, an AdmException is thrown
      * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
      *                      SYS_FILENAME_INVALID : Filename contains invalid characters
      *                      SYS_FILE_EXTENSION_INVALID : Filename contains invalid extension
-     * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
      */
-    public static function strIsValidFileName($filename, $checkExtension = true)
+    public static function strIsValidFileName(string $filename, bool $checkExtension = true): bool
     {
         $filename = urldecode($filename);
 
@@ -221,7 +221,7 @@ final class StringUtils
             throw new AdmException('SYS_FILENAME_EMPTY');
         }
 
-        // filename should only contains valid characters and don't start with a dot
+        // filename should only contain valid characters and don't start with a dot
         if (
             basename($filename) !== $filename ||
             self::strStartsWith($filename, '.') ||
@@ -250,20 +250,20 @@ final class StringUtils
 
     /**
      * Check if a filename contains invalid characters. The characters will be checked with StringUtils::strValidCharacters.
-     * In addition the function checks if the name contains .. or a . at the beginning.
+     * In addition to the function checks if the name contains .. or a . at the beginning.
      * @param string $filename     Name of the file that should be checked.
+     * @return true Returns @true if filename contains only valid characters. Otherwise, an AdmException is thrown
      * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
      *                      SYS_FILENAME_INVALID : Filename contains invalid characters
-     * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
      */
-    public static function strIsValidFolderName($filename)
+    public static function strIsValidFolderName(string $filename): bool
     {
         // If the filename was not empty
         if (trim($filename) === '') {
             throw new AdmException('SYS_FOLDER_NAME_EMPTY');
         }
 
-        // filename should only contains valid characters and don't start with a dot
+        // filename should only contain valid characters and don't start with a dot
         if (basename($filename) !== $filename || self::strStartsWith($filename, '.') || !self::strValidCharacters($filename, 'folder')) {
             throw new AdmException('SYS_FOLDER_NAME_INVALID', array($filename));
         }

@@ -12,8 +12,8 @@
  *
  * This class creates a new html page with a simple headline and a message. It's
  * designed to easily integrate this class into your code. An object **$gMessage**
- * of this class is created in the common.php. You can set a url that should be
- * open after user confirmed the message or you can show a question with two
+ * of this class is created in the common.php. You can set an url that should be
+ * open after user confirmed the message, or you can show a question with two
  * default buttons yes and no. There is also an option to automatically leave the
  * message after some time.
  *
@@ -62,11 +62,6 @@ class Message
      */
     private $showYesNoButtons = false;
     /**
-     * @var bool If this is set to true than the message will be show with html of the bootstrap modal window
-     */
-    private $modalWindowMode = false;
-
-    /**
      * Constructor that initialize the class member parameters
      */
     public function __construct()
@@ -74,11 +69,10 @@ class Message
     }
 
     /**
-     * If this is set to true than the message will be show with html of the bootstrap modal window.
+     * If this is set to true than the message will be shown with html of the bootstrap modal window.
      */
     public function showInModalWindow()
     {
-        $this->modalWindowMode  = true;
         $this->includeThemeBody = false;
         $this->inline = true;
     }
@@ -88,9 +82,9 @@ class Message
      * It's possible to set a timer after that the page of the url will be
      * automatically displayed without user interaction.
      * @param string $url   The full url to which the user should be directed.
-     * @param int    $timer Optional a timer in millisecond after the user will be automatically redirected to the $url.
+     * @param int $timer Optional a timer in millisecond after the user will be automatically redirected to the $url.
      */
-    public function setForwardUrl($url, $timer = 0)
+    public function setForwardUrl(string $url, int $timer = 0)
     {
         $this->forwardUrl = $url;
         $this->timer      = $timer;
@@ -101,7 +95,7 @@ class Message
      * he will be redirected to the $url. If he chooses no he will be directed back to the previous page.
      * @param string $url The full url to which the user should be directed if he chooses **yes**.
      */
-    public function setForwardYesNo($url)
+    public function setForwardYesNo(string $url)
     {
         $this->forwardUrl       = $url;
         $this->showYesNoButtons = true;
@@ -112,10 +106,12 @@ class Message
      * The message is presented depending on the settings. By default, this is an HTML page with
      * title, message and buttons. The message can also be displayed in a modal window.
      * Alternatively there is the possibility to display only the message text.
-     * @param string $content  The message text that should be shown. The content could have html.
+     * @param string $content The message text that should be shown. The content could have html.
      * @param string $headline Optional a headline for the message. Default will be SYS_NOTE.
+     * @throws SmartyException
+     * @throws Exception
      */
-    public function show($content, $headline = '')
+    public function show(string $content, string $headline = '')
     {
         global $gDb, $gL10n, $page;
 
@@ -168,7 +164,7 @@ class Message
             $page->assign('l10n', $gL10n);
             $page->display('message_modal.tpl');
         } else {
-            // show a Admidio html page with complete theme header and body
+            // show an Admidio html page with complete theme header and body
             $page->assign('message', $content);
             $page->assign('forwardUrl', $this->forwardUrl);
             $page->assign('showYesNoButtons', $this->showYesNoButtons);

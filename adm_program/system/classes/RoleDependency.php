@@ -72,7 +72,8 @@ class RoleDependency
     }
 
     /**
-     * aktuelle Rollenabhaengigkeit loeschen
+     * Delete current role dependency
+     * @throws Exception
      */
     public function delete()
     {
@@ -85,12 +86,13 @@ class RoleDependency
     }
 
     /**
-     * Rollenabhaengigkeit aus der Datenbank auslesen
+     * Read role dependency from the database
      * @param int $childRoleId
      * @param int $parentRoleId
      * @return bool
+     * @throws Exception
      */
-    public function get($childRoleId, $parentRoleId)
+    public function get(int $childRoleId, int $parentRoleId): bool
     {
         $this->clear();
 
@@ -122,10 +124,11 @@ class RoleDependency
 
     /**
      * @param Database $database
-     * @param int      $childId
+     * @param int $childId
      * @return array<int,int>
+     * @throws Exception
      */
-    public static function getParentRoles(Database $database, $childId)
+    public static function getParentRoles(Database $database, int $childId): array
     {
         $allParentIds = array();
 
@@ -147,10 +150,11 @@ class RoleDependency
 
     /**
      * @param Database $database
-     * @param int      $parentId
+     * @param int $parentId
      * @return array<int,int>
+     * @throws Exception
      */
-    public static function getChildRoles(Database $database, $parentId)
+    public static function getChildRoles(Database $database, int $parentId): array
     {
         $allChildIds = array();
 
@@ -174,7 +178,7 @@ class RoleDependency
      * Check if roleIdParent and roleIdChild is 0
      * @return bool Returns true if roleIdParent and roleIdChild is 0
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return $this->roleIdParent === 0 && $this->roleIdChild === 0;
     }
@@ -182,8 +186,9 @@ class RoleDependency
     /**
      * @param int $loginUserId
      * @return bool
+     * @throws Exception
      */
-    public function insert($loginUserId)
+    public function insert(int $loginUserId): bool
     {
         if ($loginUserId > 0 && !$this->isEmpty()) {
             $sql = 'INSERT INTO '.TBL_ROLE_DEPENDENCIES.'
@@ -201,10 +206,11 @@ class RoleDependency
 
     /**
      * @param Database $database
-     * @param int      $parentId
+     * @param int $parentId
      * @return bool
+     * @throws Exception
      */
-    public static function removeChildRoles(Database $database, $parentId)
+    public static function removeChildRoles(Database $database, int $parentId): bool
     {
         if ($parentId > 0) {
             $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
@@ -221,7 +227,7 @@ class RoleDependency
      * @param int $parentId
      * @return bool
      */
-    public function setParent($parentId)
+    public function setParent(int $parentId): bool
     {
         if ($parentId > 0) {
             $this->roleIdParent = $parentId;
@@ -237,7 +243,7 @@ class RoleDependency
      * @param int $childId
      * @return bool
      */
-    public function setChild($childId)
+    public function setChild(int $childId): bool
     {
         if ($childId > 0) {
             $this->roleIdChild = $childId;
@@ -250,11 +256,12 @@ class RoleDependency
     }
 
     /**
-     * Es muss die ID des eingeloggten Users uebergeben werden, damit die Aenderung protokolliert werden kann
+     * The ID of the logged-in user must be transferred so that the change can be logged
      * @param int $loginUserId
      * @return bool
+     * @throws Exception
      */
-    public function update($loginUserId)
+    public function update(int $loginUserId): bool
     {
         if ($loginUserId > 0 && !$this->isEmpty()) {
             $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.'
@@ -288,6 +295,8 @@ class RoleDependency
      * If a membership still exists than start date will not be changed. Only
      * the end date will be set to 31.12.9999.
      * @return bool Returns false if no parent or child row exists
+     * @throws AdmException
+     * @throws Exception
      */
     public function updateMembership(): bool
     {

@@ -62,6 +62,7 @@ class Event extends TableAccess
      * the right event_participation. This method will also return **true** if the deadline is exceeded
      * and a further participation isn't possible.
      * @return bool Return true if the current user is allowed to participate in the event.
+     * @throws AdmException
      */
     public function allowedToParticipate(): bool
     {
@@ -96,6 +97,7 @@ class Event extends TableAccess
      * of the event. If the user is already a member of the event, then this method will return true, if the
      * deadline is not reached.
      * @return bool Return true if it's possible for the current user to participate in the event.
+     * @throws AdmException
      */
     public function possibleToParticipate(): bool
     {
@@ -122,6 +124,7 @@ class Event extends TableAccess
      * Check if the deadline is in the future than return false or
      * if the deadline is in the past than return true.
      * @return bool Return true if the deadline is exceeded.
+     * @throws AdmException
      */
     public function deadlineExceeded(): bool
     {
@@ -185,6 +188,7 @@ class Event extends TableAccess
      * If the start and end of the event is at the same day then the date will only include once.
      * Also, the all-day flag will be considered.
      * @return string Returns a formatted date and time string corresponding to the event settings.
+     * @throws AdmException
      */
     public function getDateTimePeriod($showPeriodEnd = true): string
     {
@@ -216,6 +220,7 @@ class Event extends TableAccess
     /**
      * Returns the event in the iCal format.
      * @return string Returns the event in the iCal format.
+     * @throws AdmException
      */
     public function getIcal(): string
     {
@@ -274,6 +279,7 @@ class Event extends TableAccess
     /**
      * Returns a single event in iCal format
      * @return string Returns a single event in iCal format
+     * @throws AdmException
      */
     public function getIcalVEvent(): string
     {
@@ -319,12 +325,14 @@ class Event extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be
+     * @param string $format For date or timestamp columns the format should be
      *                           the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return
      *                           the original database value without any transformations
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws AdmException
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -356,8 +364,9 @@ class Event extends TableAccess
     }
 
     /**
-     * This function reads the deadline for participation. If no deadline is set as default the start date of the event will be set.
-     * return string Returns a string with formatted date and time
+     * This method reads the deadline for participation. If no deadline is set as default the start date of the event will be set.
+     * @return string Returns a string with formatted date and time
+     * @throws AdmException
      */
     public function getValidDeadline(): string
     {
@@ -380,6 +389,7 @@ class Event extends TableAccess
      * The user must be a member of at least one role that have the right to manage events.
      * Global events could be only edited by the parent organization.
      * @return bool Return true if the current user is allowed to edit this event
+     * @throws AdmException
      */
     public function isEditable(): bool
     {
@@ -406,6 +416,7 @@ class Event extends TableAccess
      * This method checks if the current user is allowed to view this event. Therefore,
      * the visibility of the category is checked.
      * @return bool Return true if the current user is allowed to view this event
+     * @throws AdmException
      */
     public function isVisible(): bool
     {
@@ -419,6 +430,7 @@ class Event extends TableAccess
      * Method will return true if the event has a maximum count of participants set and this limit
      * is reached.
      * @return bool Return **true** if the limit of participants is reached.
+     * @throws AdmException
      */
     public function participantLimitReached(): bool
     {
@@ -477,6 +489,7 @@ class Event extends TableAccess
      * the name of the current user, timestamp and the url to this event.
      * @return bool Returns **true** if the notification was sent
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception
      */
     public function sendNotification(): bool
     {
@@ -553,6 +566,7 @@ class Event extends TableAccess
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {

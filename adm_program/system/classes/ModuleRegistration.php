@@ -25,6 +25,7 @@ class ModuleRegistration extends HtmlPage
 {
     /**
      * Constructor that initialize the class member parameters
+     * @throws Exception
      */
     public function __construct(string $id, string $headline = '')
     {
@@ -35,6 +36,7 @@ class ModuleRegistration extends HtmlPage
      * Creates an array with all available registrations. The array contains the following entries:
      * array(userID, userUUID, loginName, registrationTimestamp, lastName, firstName, email, validationID)
      * @return array Returns an array with information about every available registration
+     * @throws Exception
      */
     public function getRegistrationsArray(): array
     {
@@ -57,6 +59,7 @@ class ModuleRegistration extends HtmlPage
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
      * @throws SmartyException|AdmException
+     * @throws Exception
      */
     public function createContentRegistrationList()
     {

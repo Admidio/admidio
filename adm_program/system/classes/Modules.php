@@ -14,9 +14,9 @@
  * The class gets a copy of the $_GET Array and validates the values
  * with Admidio function admFuncVariableIsValid();
  * Values are set to default if no parameters are submitted.
- * The class also defines a daterange and returns the daterange as array with English format and current System format.
- * If no values are available the daterange is set by default: date_from = DATE_NOW; date_to = 9999-12-31
- * The class provides methods to return all single Variables and arrays or returns an Array with all setted parameters
+ * The class also defines a date range and returns the date range as array with English format and current System format.
+ * If no values are available the date range is set by default: date_from = DATE_NOW; date_to = 9999-12-31
+ * The class provides methods to return all single Variables and arrays or returns an Array with all set parameters
  * The returned array contains following settings:
  *
  * **Return parameter array:**
@@ -33,7 +33,7 @@
  *       'view_mode'           => 'string',
  *       'daterange'           =>  array(
  *                                         [english] (date_from => 'string', date_to => 'string'),
- *                                         [sytem] (date_from => 'string', date_to => 'string'))
+ *                                         [system] (date_from => 'string', date_to => 'string'))
  *                                      );
  * ```
  */
@@ -72,10 +72,6 @@ abstract class Modules
      */
     protected $start = 0;
     /**
-     * @var array Array with valid modes ( Default: "Default" )
-     */
-    protected $validModes = array('Default');
-    /**
      * @var array<string,mixed> Array with all parameters of the module that were added to this class.
      */
     protected $parameters = array();
@@ -93,7 +89,7 @@ abstract class Modules
      * @param int $limit
      * @return array
      */
-    abstract public function getDataSet($startElement = 0, $limit = null);
+    abstract public function getDataSet(int $startElement = 0, int $limit = 0): array;
 
     /**
      * @return mixed
@@ -101,7 +97,7 @@ abstract class Modules
     abstract public function getDataSetCount();
 
     /**
-     * Constructor that will create an object of a parameter set needed in modules to get the recordsets.
+     * Constructor that will create an object of a parameter set needed in modules to get the recordset.
      * Initialize parameters
      */
     public function __construct()
@@ -119,43 +115,25 @@ abstract class Modules
      * Return ID
      * @return int Returns the ID of the record
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
-    }
-
-    /**
-     * Return the daterange
-     * @return array[] Returns daterange as array with English format and system format
-     */
-    public function getDaterange()
-    {
-        return $this->daterange;
     }
 
     /**
      * Return mode
      * @return string Returns mode as string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
-    }
-
-    /**
-     * Return mode
-     * @return string Returns order as string
-     */
-    public function getOrder()
-    {
-        return $this->order;
     }
 
     /**
      * Return start element
      * @return int Returns Integer value for the start element
      */
-    public function getStartElement()
+    public function getStartElement(): int
     {
         return $this->start;
     }
@@ -165,7 +143,7 @@ abstract class Modules
      * @param string $parameterName The name of the parameter whose value should be returned.
      * @return mixed|null Returns the parameter value or null if parameter didn't exists
      */
-    public function getParameter($parameterName)
+    public function getParameter(string $parameterName)
     {
         if ($parameterName !== '' && array_key_exists($parameterName, $this->parameters)) {
             return $this->parameters[$parameterName];
@@ -178,7 +156,7 @@ abstract class Modules
      * Return parameter set as Array
      * @return array<string,bool|int|string|array> Returns an Array with all needed parameters as Key/Value pair
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         // Set Array
         $this->arrParameter['role_type']    = $this->roleType;
@@ -198,29 +176,29 @@ abstract class Modules
      */
     protected function setId()
     {
-        // check optional user parameter and make secure. Otherwise set default value
+        // check optional user parameter and make secure. Otherwise, set default value
         $this->id = admFuncVariableIsValid($this->properties, 'id', 'int');
     }
 
     /**
      * Set mode
      * @par If user string is set in $_GET Array the string is validated by Admidio function
-     * and set as mode in the modules. Otherwise mode is set to default
+     * and set as mode in the modules. Otherwise, mode is set to default
      */
     protected function setMode()
     {
-        // check optional user parameter and make secure. Otherwise set default value
+        // check optional user parameter and make secure. Otherwise, set default value
         //$this->mode = admFuncVariableIsValid($this->properties, 'mode', 'string', $this->validModes[0], false, $this->validModes);
     }
 
     /**
      * Set order
      * @par If user string is set in $_GET Array the string is validated by Admidio function
-     * and set as order for the results in the modules. Otherwise mode is set to default "ASC"
+     * and set as order for the results in the modules. Otherwise, mode is set to default "ASC"
      */
     protected function setOrder()
     {
-        // check optional user parameter and make secure. Otherwise set default value
+        // check optional user parameter and make secure. Otherwise, set default value
         $this->order = admFuncVariableIsValid(
             $this->properties,
             'order',
@@ -232,11 +210,11 @@ abstract class Modules
     /**
      * Set startelement
      * @par If user string is set in $_GET Array the string is validated by Admidio function
-     * and set as startelement in the modules. Otherwise startelement is set to 0
+     * and set as startelement in the modules. Otherwise, startelement is set to 0
      */
     protected function setStartElement()
     {
-        // check optional user parameter and make secure. Otherwise set default value
+        // check optional user parameter and make secure. Otherwise, set default value
         $this->start = admFuncVariableIsValid($this->properties, 'start', 'int');
     }
 
@@ -245,7 +223,7 @@ abstract class Modules
      * @param string $parameterName  The name of the parameter that should be added.
      * @param mixed  $parameterValue The value of the parameter that should be added.
      */
-    public function setParameter($parameterName, $parameterValue)
+    public function setParameter(string $parameterName, $parameterValue)
     {
         if ($parameterName !== '') {
             $this->parameters[$parameterName] = $parameterValue;

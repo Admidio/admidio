@@ -129,6 +129,7 @@ class ListConfiguration extends TableLists
      * @param string $userUuid Uuid of the user for which the content should be converted. This is not the login user.
      * @return string Returns the converted content.
      * @throws AdmException
+     * @throws Exception
      */
     public function convertColumnContentForOutput(int $columnNumber, string $format, string $content, string $userUuid)
     {
@@ -374,6 +375,7 @@ class ListConfiguration extends TableLists
      * to the current language.
      * @return array Array with all column names of this list configuration.
      * @throws AdmException
+     * @throws Exception
      */
     public function getColumnNames(): array
     {
@@ -562,6 +564,7 @@ class ListConfiguration extends TableLists
      *                                   the membership must be at least one day before this date.
      * @return string Returns a valid sql that represents all users with the columns of the list configuration.
      * @throws AdmException
+     * @throws Exception
      */
     public function getSQL(array $options = array()): string
     {

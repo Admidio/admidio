@@ -50,6 +50,7 @@ class ModuleGroupsRoles extends HtmlPage
      * role information e.g. description, start and end date, number of active and former members. A button with
      * the link to the default list will be shown.
      * @throws SmartyException|AdmException
+     * @throws Exception
      */
     public function createContentCards()
     {
@@ -224,10 +225,11 @@ class ModuleGroupsRoles extends HtmlPage
      * role information e.g. description, start and end date, number of active and former members. A button with
      * the link to the default list will be shown.
      * @throws SmartyException|AdmException
+     * @throws Exception
      */
     public function createContentPermissionsList()
     {
-        global $gSettingsManager, $gCurrentUser, $gL10n, $gDb;
+        global $gSettingsManager, $gL10n, $gDb;
 
         $templateData = array();
 
@@ -381,9 +383,10 @@ class ModuleGroupsRoles extends HtmlPage
 
     /**
      * Creates an array with all available groups and roles.
-     * @param int $roleType        The type of groups and roles that should be read. This could be active, inactive
+     * @param int $roleType The type of groups and roles that should be read. This could be active, inactive
      *                             or event roles.
      * @param string $categoryUUID The UUID of the category whose groups and roles should be read.
+     * @throws Exception
      */
     public function readData(int $roleType = ModuleGroupsRoles::ROLE_TYPE_ACTIVE, string $categoryUUID = '')
     {

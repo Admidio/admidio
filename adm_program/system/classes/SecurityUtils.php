@@ -12,7 +12,7 @@ final class SecurityUtils
      * Encodes all HTML special characters
      * If $encodeAll is false, this method is only secure if encoding is not UTF-7
      * @param string|array<mixed,string> $input     The input string
-     * @param bool   $encodeAll Set true too encode really all HTML special characters
+     * @param bool   $encodeAll Set true to encode really all HTML special characters
      * @param string $encoding  Define character encoding to use
      * @return string|array<mixed,string> Encoded string
      */
@@ -54,13 +54,13 @@ final class SecurityUtils
 
     /**
      * Build URL with query-string and anker and optional encodes all HTML special characters
-     * @param string              $path   The URL path
+     * @param string $path   The URL path
      * @param array<string,mixed> $params The query-params
-     * @param string              $anchor The Url-anker
-     * @param bool                $encode Set true to also encode all HTML special characters
+     * @param string $anchor The Url-anker
+     * @param bool $encode Set true to also encode all HTML special characters
      * @return string Encoded URL
      */
-    public static function encodeUrl($path, array $params = array(), $anchor = '', $encode = false)
+    public static function encodeUrl(string $path, array $params = array(), string $anchor = '', bool $encode = false)
     {
         $paramsText = '';
         if (count($params) > 0) {
@@ -83,15 +83,15 @@ final class SecurityUtils
 
     /**
      * Generate an insecure pseudo-random integer
-     * @param int               $min                     The min of the range (inclusive)
-     * @param int               $max                     The max of the range (inclusive)
-     * @param bool              $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @param \Error|\Exception $exception               The thrown Error or Exception object.
-     * @param string            $exceptionMessage        The Admidio Exception-Message.
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @param int $min                     The min of the range (inclusive)
+     * @param int $max                     The max of the range (inclusive)
+     * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
+     * @param Error|Exception $exception               The thrown Error or Exception object.
+     * @param string $exceptionMessage        The Admidio Exception-Message.
      * @return int Returns an insecure pseudo-random integer
+     *@throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      */
-    private static function getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $exception, $exceptionMessage)
+    private static function getRandomIntFallback(int $min, int $max, bool $exceptionOnInsecurePRNG, $exception, string $exceptionMessage): int
     {
         global $gLogger;
 
@@ -107,19 +107,19 @@ final class SecurityUtils
 
     /**
      * Generate a cryptographically secure pseudo-random integer
-     * @param int  $min                     The min of the range (inclusive)
-     * @param int  $max                     The max of the range (inclusive)
+     * @param int $min                     The min of the range (inclusive)
+     * @param int $max                     The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      * @return int Returns a cryptographically secure pseudo-random integer
+     *@throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      */
-    public static function getRandomInt($min, $max, $exceptionOnInsecurePRNG = false)
+    public static function getRandomInt(int $min, int $max, bool $exceptionOnInsecurePRNG = false): int
     {
         try {
-            $int = \random_int($min, $max);
-        } catch (\Error $e) {
+            $int = random_int($min, $max);
+        } catch (Error $e) {
             $int = self::getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_ERROR');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $int = self::getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_EXCEPTION');
         }
 
@@ -128,31 +128,31 @@ final class SecurityUtils
 
     /**
      * Generate a cryptographically secure pseudo-random string
-     * @param int    $length  The length of the generated string (default = 16)
+     * @param int $length  The length of the generated string (default = 16)
      * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
-     * @throws \RuntimeException Min-length is 4.
-     * @throws \UnexpectedValueException Charset contains duplicate chars.
-     * @throws \UnexpectedValueException Charset must contain at least 2 unique chars.
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      * @return string Returns a cryptographically secure pseudo-random string
+     * @throws UnexpectedValueException Charset contains duplicate chars.
+     * @throws UnexpectedValueException Charset must contain at least 2 unique chars.
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @throws RuntimeException Min-length is 4.
      * @see https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
-    public static function getRandomString($length = 16, $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    public static function getRandomString(int $length = 16, string $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
     {
         if ($length < 4) {
-            throw new \RuntimeException('Min-length is 4.');
+            throw new RuntimeException('Min-length is 4.');
         }
 
         $charsetLength = strlen($charset);
 
         // Check for duplicate chars in charset
         if ($charsetLength !== strlen(implode('', array_unique(str_split($charset))))) {
-            throw new \UnexpectedValueException('Charset contains duplicate chars.');
+            throw new UnexpectedValueException('Charset contains duplicate chars.');
         }
 
         // Check for a minimum of 2 unique chars
         if ($charsetLength < 2) {
-            throw new \UnexpectedValueException('Charset must contain at least 2 unique chars.');
+            throw new UnexpectedValueException('Charset must contain at least 2 unique chars.');
         }
 
         $randomString = '';
@@ -167,11 +167,11 @@ final class SecurityUtils
 
     /**
      * Method will check the CSRF token from the parameter against the CSRF token of the
-     * current session. If these tokens doesn't match an exception will be thrown.
+     * current session. If these tokens don't match an exception will be thrown.
      * @param string $csrfToken The CSRF token that should be validated.
      * @throws AdmException Tokens doesn't match.
      */
-    public static function validateCsrfToken($csrfToken)
+    public static function validateCsrfToken(string $csrfToken)
     {
         global $gCurrentSession;
 

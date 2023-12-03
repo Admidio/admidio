@@ -97,7 +97,7 @@ if ($getMode === '' && $getUserUuid === '') {
     try {
         // create html page object
         $page = new ModuleContacts('admidio-registration-assign', $headline);
-        $registrationUser = new User($dDb, $gProfileFields);
+        $registrationUser = new User($gDb, $gProfileFields);
         $registrationUser->readDataByUuid($getUserUuid);
         $page->createContentAssignUser($registrationUser, true);
         $page->show();

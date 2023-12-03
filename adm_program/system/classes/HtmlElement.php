@@ -26,15 +26,15 @@
  *
  * **Code example**
  * ```
- * // Example_1: **unorderedlist**
+ * // Example_1: **unordered list**
  *
  * // create as parent instance
  * parent::HtmlElement('ul','class', 'unordered');  // Parameters( element, attribute, value, nesting (true/false ))
  * // we want to have further attributes for the element and set an id, for example
- * HtmlElement::addAttribute('id','mainelement');
+ * HtmlElement::addAttribute('id','main-element');
  * // set a list element with content as string
  * HtmlElement::addElement('li', 'list 1');
- * // if you need attributes for your setted element then first define the element, set the attributes and after that
+ * // if you need attributes for your set element then first define the element, set the attributes and after that
  * // pass the content.
  * // Example: Arrays are also supported for content values.
  * HtmlElement::addElement('li');
@@ -74,12 +74,12 @@
  * // Default false it is not possible to set the main element again
  *
  * parent::HtmlElement ('div', 'class', 'pagewrap', true);
- * // now we can nest a second div element with a paragaph.
+ * // now we can nest a second div element with a paragraph.
  * // Because of div is the parent of the paragraph element, we must tell the class using method addParentElement();
  * HtmlElement::addParentElement('div');
  * // We want to set an Id for the div element, for example
  * HtmlElement::addAttribute('id', 'Paragraphs', 'div');
- * // Define a paragrph
+ * // Define a paragraph
  * HtmlElement::addElement('p', 'Hello World');
  * // Nested div element must be closed !
  * HtmlElement::closeParentElement('div');
@@ -113,7 +113,7 @@
  * HtmlElement::addElement('input');
  * HtmlElement::addAttribute('type', 'text');
  * HtmlElement::addAttribute('name', 'input');
- * HtmlElement::addHtml('Inputfield:');
+ * HtmlElement::addHtml('Input-field:');
  * // pass a whitespace because element has no content
  * HtmlElement::addData(' ', true); // true for self closing element (default: false)
  * // add a checkbox
@@ -133,7 +133,7 @@
  * echo HtmlElement::getHtmlElement();
  * ```
  */
-abstract class HtmlElement extends \Smarty
+abstract class HtmlElement extends Smarty
 {
     /**
      * @var bool Flag enables nesting of main elements, e.g div blocks ( Default : true )
@@ -168,7 +168,7 @@ abstract class HtmlElement extends \Smarty
      */
     protected $htmlString = '';
     /**
-     * @var bool Flag for setted parent Element
+     * @var bool Flag for set parent Element
      */
     protected $parentFlag = false;
     /**
@@ -180,9 +180,9 @@ abstract class HtmlElement extends \Smarty
      * Constructor initializing all class variables
      *
      * @param string $element The html element to be defined
-     * @param bool   $nesting Enables nesting of main elements ( Default: true )
+     * @param bool $nesting Enables nesting of main elements ( Default: true )
      */
-    public function __construct($element, $nesting = true)
+    public function __construct(string $element, bool $nesting = true)
     {
         $this->nesting        = $nesting;
         $this->mainElement    = $element;
@@ -205,12 +205,12 @@ abstract class HtmlElement extends \Smarty
      * than the new value will be attached to the current value.
      * @param string $attrKey   Name of the html attribute
      * @param string $attrValue Value of the attribute
-     * @param string $element   Optional the element for which the attribute should be set,
+     * @param string|null $element   Optional the element for which the attribute should be set,
      *                          if this is not the current element
      */
-    public function addAttribute($attrKey, $attrValue, $element = null)
+    public function addAttribute(string $attrKey, string $attrValue, string $element = '')
     {
-        if ($element === null) {
+        if ($element === '') {
             $element = $this->currentElement;
         }
 
@@ -244,9 +244,9 @@ abstract class HtmlElement extends \Smarty
     /**
      * Add data to current element
      * @param string|string[] $data        Content for the element as string, or array
-     * @param bool            $selfClosing Element has self closing tag ( default: false)
+     * @param bool $selfClosing Element has self closing tag ( default: false)
      */
-    public function addData($data, $selfClosing = false)
+    public function addData($data, bool $selfClosing = false)
     {
         if ($selfClosing) {
             $startTag = '<' . $this->currentElement . $this->getCurrentElementAttributesString();
@@ -274,19 +274,19 @@ abstract class HtmlElement extends \Smarty
     /**
      * @par Add new child element.
      * This method defines the next child element to be written in the output string.
-     * If a parent element was defined before, the syntax with all setted attributes is written first from internal buffer to the string.
+     * If a parent element was defined before, the syntax with all set attributes is written first from internal buffer to the string.
      * After that, the new element is defined.
      * The method determines that the element has **no own child elements** and has a closing tag.
      * If you need a parent element like a \<div\> with some \<p\> elements, use method addParentElement(); instead and then add the paragraph elements.
-     * If nesting mode is active you are allowed to set the main element called with object instance again. Dafault: false
+     * If nesting mode is active you are allowed to set the main element called with object instance again. Default: false
      *
      * @param string $childElement valid child tags for element object
      * @param string $attrKey      Attribute name
      * @param string $attrValue    Value for the attribute
      * @param string $data         content values can be passed as string, array, bidimensional Array and assoc. Array. ( Default: no data )
-     * @param bool   $selfClosing  Element has self closing tag ( default: false)
+     * @param bool $selfClosing  Element has self closing tag ( default: false)
      */
-    public function addElement($childElement, $attrKey = '', $attrValue = '', $data = '', $selfClosing = false)
+    public function addElement(string $childElement, string $attrKey = '', string $attrValue = '', string $data = '', bool $selfClosing = false)
     {
         // if previous current element was not written to html string and the same child element is set
         // than this could be a call of parent class so do not reinitialize the current element
@@ -345,7 +345,7 @@ abstract class HtmlElement extends \Smarty
      * html string than this will be done before your string will be added.
      * @param string $string Text as string in current string position
      */
-    public function addHtml($string = '')
+    public function addHtml(string $string = '')
     {
         // If first child is set start writing the html beginning with main element and attributes
         if ($this->currentElement === $this->mainElement && $this->mainElement !== '' && !$this->mainElementWritten) {
@@ -359,16 +359,16 @@ abstract class HtmlElement extends \Smarty
     /**
      * @par Add a parent element that has own child's.
      * This method is needed if an element can have several child elements and the closing tag must be set after own child elements.
-     * It logs the setted element in an array. Each time you define a new parent element, the function checks the log array, if the element already was set.
+     * It logs the set element in an array. Each time you define a new parent element, the function checks the log array, if the element already was set.
      * If the current element already was defined, then the function determines that the still opened tag must be closed first until it can be set again.
      * The method closeParentElement(); is called automatically to close the previous element.
-     * By default it is not allowed to define several elements from same type. If needed use option **nesting mode true**!
+     * By default, it is not allowed to define several elements from same type. If needed use option **nesting mode true**!
      *
      * @param string $parentElement Parent element to be set
      * @param string $attrKey       Attribute name
      * @param string $attrValue     Value for the attribute
      */
-    public function addParentElement($parentElement, $attrKey = '', $attrValue = '')
+    public function addParentElement(string $parentElement, string $attrKey = '', string $attrValue = '')
     {
         // Only possible for child elements of the main element or nesting mode is active!
         if (!$this->nesting && $this->currentElement === $this->mainElement) {
@@ -416,12 +416,12 @@ abstract class HtmlElement extends \Smarty
      * @par Close parent element.
      * This method sets the endtag of the selected element and removes the entry from log array.
      * If nesting mode is not used, the methods looks for the entry in the array and determines
-     * that all setted elements after the selected element must be closed as well.
-     * All end tags to position are closed automatically starting with last setted element tag.
+     * that all set elements after the selected element must be closed as well.
+     * All end tags to position are closed automatically starting with last set element tag.
      * @param string $parentElement Parent element to be closed
      * @return bool
      */
-    public function closeParentElement($parentElement)
+    public function closeParentElement(string $parentElement): bool
     {
         // count entries in array
         $totalCount = count($this->arrParentElements);
@@ -439,7 +439,7 @@ abstract class HtmlElement extends \Smarty
                 $this->htmlString .= '</' . $this->arrParentElements[$position] . '>';
                 unset($this->arrParentElements[$position]);
             } else {
-                // all elements setted later must also be closed and removed from array
+                // all elements set later must also be closed and removed from array
                 for ($i = $totalCount - 1; $i >= $position; --$i) {
                     $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
                     unset($this->arrParentElements[$i]);
@@ -461,7 +461,7 @@ abstract class HtmlElement extends \Smarty
      * @param array<string,string> $elementAttributes
      * @return string Returns a string with all attributes and values.
      */
-    private function getElementAttributesString(array $elementAttributes)
+    private function getElementAttributesString(array $elementAttributes): string
     {
         if (count($elementAttributes) === 0) {
             return '';
@@ -479,7 +479,7 @@ abstract class HtmlElement extends \Smarty
      * Create a valid html compatible string with all attributes and their values of the last added element.
      * @return string Returns a string with all attributes and values.
      */
-    private function getCurrentElementAttributesString()
+    private function getCurrentElementAttributesString(): string
     {
         return $this->getElementAttributesString($this->currentElementAttributes);
     }
@@ -488,7 +488,7 @@ abstract class HtmlElement extends \Smarty
      * Create a valid html compatible string with all attributes and their values of the main element.
      * @return string Returns a string with all attributes and values.
      */
-    private function getMainElementAttributesString()
+    private function getMainElementAttributesString(): string
     {
         return $this->getElementAttributesString($this->mainElementAttributes);
     }
@@ -497,14 +497,19 @@ abstract class HtmlElement extends \Smarty
      * Return the element as string
      * @return string Returns the parsed html as string
      */
-    public function getHtmlElement()
+    public function getHtmlElement(): string
     {
         $this->htmlString .= '</' . $this->mainElement . '>';
 
         return $this->htmlString;
     }
 
-    public function render($templateName, $assigns) {
+    /**
+     * @param string $templateName Name of the Smarty template that should be rendered.
+     * @param array $assigns An array with all variables that should be rendered within the Smarty template.
+     * @throws SmartyException
+     */
+    public function render(string $templateName, array $assigns) {
         global $gL10n;
         foreach($assigns as $key => $assign) {
             $this->assign($key, $assign);

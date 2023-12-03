@@ -12,7 +12,7 @@
  *
  * This class extends the User class with some special functions for importing new users or modify
  * existing users. If values are set to the object, they will be checked if the values are valid.
- * The class will be more tolerant and transform some values of the import. Also a special mode
+ * The class will be more tolerant and transform some values of the import. Also, a special mode
  * could be set what should be done if a user already exists in the database.
  *
  * **Code example**
@@ -47,13 +47,14 @@ class UserImport extends User
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param Database      $database       Object of the class Database. This should be the default global object **$gDb**.
-     * @param ProfileFields $userFields     An object of the ProfileFields class with the profile field structure
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param ProfileFields $userFields An object of the ProfileFields class with the profile field structure
      *                                      of the current organization. This could be the default object .
-     * @param int           $userId         The id of the user who should be loaded. If id isn't set than an empty object
+     * @param int $userId The id of the user who should be loaded. If id isn't set than an empty object
      *                                      with no specific user is created.
+     * @throws Exception
      */
-    public function __construct(Database $database, ProfileFields $userFields, $userId = 0)
+    public function __construct(Database $database, ProfileFields $userFields, int $userId = 0)
     {
         $this->importMode = self::USER_IMPORT_NOT_EDIT;
 
@@ -63,6 +64,7 @@ class UserImport extends User
     /**
      * Additional to the parent method some import parameters will be initialized
      * @return void
+     * @throws AdmException
      */
     public function clear()
     {
@@ -75,12 +77,14 @@ class UserImport extends User
      * Reads a record out of the table in database selected by the two profile fields FIRST_NAME and LAST_NAME.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string $firstName The first name of the user that should be imported.
-     * @param string $lastName  The last name of the user that should be imported.
+     * @param string $lastName The last name of the user that should be imported.
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readData
+     * @throws AdmException
+     * @throws Exception
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readData
      */
-    public function readDataByFirstnameLastName($firstName, $lastName)
+    public function readDataByFirstnameLastName(string $firstName, string $lastName): bool
     {
         // initialize the object, so that all fields are empty
         $this->clear();
@@ -130,10 +134,12 @@ class UserImport extends User
      *                  USER_IMPORT_DUPLICATE If the user exists a new user will be created.
      *                  USER_IMPORT_DISPLACE  All profile field values of the import file will be added to the user.
      *                  USER_IMPORT_COMPLETE  Only profile fields that don't have a value will be added to the user.
+     * @throws AdmException
+     * @throws Exception
      */
-    public function setImportMode($mode)
+    public function setImportMode(int $mode)
     {
-        if (is_int($mode) && $mode > 0 && $mode < 5) {
+        if ($mode > 0 && $mode < 5) {
             $this->importMode = $mode;
 
             if ($this->userExists) {
@@ -150,15 +156,17 @@ class UserImport extends User
 
     /**
      * Method will set username and password for the import user.
-     * Therefore the current user must be an administrator and if the import user already exists he should
+     * Therefore, the current user must be an administrator and if the import user already exists he should
      * not have username and password. The password must have the min length and should also have the
      * necessary password strength. If the login data meet all these criteria than the login data will
      * be added to the import user.
-     * @param string $loginName The loginname for the import user that should later be used to login to this system.
-     * @param string $password  The password for the import user that should later be used to login to this system.
+     * @param string $loginName The login name for the import user that should later be used to log in to this system.
+     * @param string $password The password for the import user that should later be used to log in to this system.
      * @return bool Return **true** if the login data could be added to the import user otherwise **false**.
+     * @throws AdmException
+     * @throws Exception
      */
-    public function setLoginData($loginName, $password)
+    public function setLoginData(string $loginName, string $password): bool
     {
         global $gCurrentUser, $gSettingsManager;
 
@@ -181,7 +189,7 @@ class UserImport extends User
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value or the
      *                           internal unique profile field name
-     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                           not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
@@ -193,6 +201,8 @@ class UserImport extends User
      * // reads data of adm_user_fields
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
+     * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -207,7 +217,7 @@ class UserImport extends User
         if (str_starts_with($columnName, 'usr_')) {
             return parent::setValue($columnName, $newValue, $checkValue);
         } else {
-            // convert the value of the import file to a Admidio expected value
+            // convert the value of the import file to an Admidio expected value
             $validValue = '';
 
             if ($columnName === 'COUNTRY') {

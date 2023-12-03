@@ -41,7 +41,8 @@ class ModuleDocumentsFiles extends HtmlPage
      * The cards will show various functions like activate, deactivate, vcard export, edit or delete. Also, the
      * role information e.g. description, start and end date, number of active and former members. A button with
      * the link to the default list will be shown.
-     * @throws SmartyException|AdmException
+     * @throws SmartyException
+     * @throws Exception
      */
     public function createContentList()
     {
@@ -168,6 +169,7 @@ class ModuleDocumentsFiles extends HtmlPage
      * top documents and files folder of the current organization. The returned array will represent the
      * nested structure of the folder with an indentation in the folder name.
      * @return array<string,string> Returns an array with the folder UUID as key and the folder name as value.
+     * @throws Exception
      */
     public function getUploadableFolderStructure(): array
     {
@@ -191,6 +193,7 @@ class ModuleDocumentsFiles extends HtmlPage
     /**
      * Creates an array with all available folders and files.
      * @param string $folderUUID The UUID of the folder whose folders and files should be read.
+     * @throws Exception
      */
     public function readData(string $folderUUID)
     {
@@ -262,8 +265,9 @@ class ModuleDocumentsFiles extends HtmlPage
      * @param string $folderID ID if the folder where the upload rights should be checked.
      * @param array<string,string> $arrAllUploadableFolders Array with all currently read uploadable folders. That
      *                         array will be supplemented with new folders of this method and then returned.
-     * @param string $indent   The current indent for the visualisation of the folder structure.
+     * @param string $indent The current indent for the visualisation of the folder structure.
      * @return array<string,string> Returns an array with the folder UUID as key and the folder name as value.
+     * @throws Exception
      */
     private function readFoldersWithUploadRights(string $folderID, array $arrAllUploadableFolders, string $indent = ''): array
     {

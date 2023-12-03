@@ -85,10 +85,11 @@ class TableAccess
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param Database $database   Object of the class Database. This should be the default global object **$gDb**.
-     * @param string $tableName    The name of the database table. Because of specific prefixes this should be the defined value e.g. **TBL_USERS**
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param string $tableName The name of the database table. Because of specific prefixes this should be the defined value e.g. **TBL_USERS**
      * @param string $columnPrefix The prefix of each column of that table. E.g. for table **adm_roles** this is **rol**
-     * @param string|int $id       The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param string|int $id The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
     public function __construct(Database $database, string $tableName, string $columnPrefix, $id = '')
     {
@@ -125,6 +126,7 @@ class TableAccess
      * Initializes all class parameters and deletes all read data.
      * Also, the database structure of the associated table will be
      * read and stored in the arrays **dbColumns** and **columnsInfos**
+     * @throws Exception
      */
     public function clear()
     {
@@ -176,6 +178,7 @@ class TableAccess
     /**
      * Reads the number of all records of this table
      * @return int Number of records of this table
+     * @throws Exception
      */
     public function countAllRecords(): int
     {
@@ -188,6 +191,7 @@ class TableAccess
     /**
      * Deletes the selected record of the table and initializes the class
      * @return true Returns **true** if no error occurred
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -303,11 +307,12 @@ class TableAccess
      * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @param array<int,mixed> $queryParams       The query params for the prepared statement
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readDataById
+     * @throws Exception
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readDataById
      */
     protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
@@ -367,9 +372,10 @@ class TableAccess
      * Per default all columns of the default table will be read and stored in the object.
      * @param int $id Unique id of id column of the table.
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readData
+     * @throws Exception
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readData
      */
     public function readDataById(int $id): bool
     {
@@ -392,9 +398,10 @@ class TableAccess
      * Not every Admidio table has a UUID. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readData
+     * @throws Exception
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readData
      */
     public function readDataByUuid(string $uuid): bool
     {
@@ -427,6 +434,7 @@ class TableAccess
      * $member->readDataByColumn(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
      * ```
      * @throws AdmException
+     * @throws Exception
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readData
@@ -477,6 +485,7 @@ class TableAccess
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -627,6 +636,7 @@ class TableAccess
     /**
      * Read all columns with their information like **type** (integer, varchar, boolean),
      * **null** (or not), **key** and **serial**. Also the changed flag will be set to false.
+     * @throws Exception
      */
     protected function setColumnsInfos()
     {

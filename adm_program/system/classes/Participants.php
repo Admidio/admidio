@@ -83,6 +83,7 @@ class Participants
     /**
      * Count participants of the date. The count will not include the leaders of the role.
      * @return int Returns the result of count participants as numeric value in current object. Leaders are not counted!
+     * @throws Exception
      */
     public function getCount(): int
     {
@@ -130,6 +131,7 @@ class Participants
     /**
      * Get the number of leaders.
      * @return int Returns the number of leaders as numeric value of the current object.
+     * @throws Exception
      */
     public function getNumLeaders(): int
     {
@@ -145,6 +147,7 @@ class Participants
      * Return all participants with surname,firstname, leader and approval status as array
      * @param string $order Values ASC/DESC Default: 'ASC'
      * @return false|array<int,array<string,string|int|bool>> Returns all participants in an array with field names ['usrId'], ['surname'], ['firstname'], ['leader'], ['approved'].
+     * @throws Exception
      */
     public function getParticipantsArray(string $order = 'ASC')
     {
@@ -195,6 +198,7 @@ class Participants
      * Check if the given user is leader of this participation.
      * @param int $userId ID if the user whose participation should be checked.
      * @return bool Returns true if the user is leader of the event participation.
+     * @throws Exception
      */
     public function isLeader(int $userId): bool
     {
@@ -210,6 +214,7 @@ class Participants
      * Look for a user ID exists in the current participants array. If the user ID exists the check the approval state of the user. If not disagreed ( Integer 3 ) User is member of the event role
      * @param int $userId
      * @return bool Returns true if userID is found and approval state is not set to disagreement (value: 3)
+     * @throws Exception
      */
     public function isMemberOfEvent(int $userId): bool
     {

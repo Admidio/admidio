@@ -44,7 +44,7 @@ class LanguageData
      */
     private $languageIsoCode;
     /**
-     * @var array<int,string> Array with all relevant language files
+     * @var string The language code for external libraries.
      */
     private $languageLibs;
     /**
@@ -66,14 +66,12 @@ class LanguageData
 
     /**
      * Creates an object that stores all necessary language data and can be handled in session.
-     * Therefore the language must be set and optional a path where the language files are stored.
+     * Therefore, the language must be set and optional a path where the language files are stored.
      * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
      *                         If no language is set than the browser language will be determined.
-     * @param array $languageInfos An array with additional necessary informations such as iso code, name etc.
-     *                             The array must have the following keys 'isocode' and 'libs'.
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
-    public function __construct($language = '', $languageInfos = array())
+    public function __construct(string $language = '')
     {
         if ($language === '') {
             // get browser language and set this language as default
@@ -100,24 +98,24 @@ class LanguageData
      */
     public function addPluginLanguageFolderPaths()
     {
+        global $gLogger;
+
         if (!$this->pluginLanguageFoldersLoaded) {
             try {
                 $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
-            } catch (\RuntimeException $exception) {
-                $GLOBALS['gLogger']->error('L10N: Plugins folder content could not be loaded!', array('errorMessage' => $exception->getMessage()));
 
-                return array();
-            }
+                foreach ($pluginFolders as $pluginFolder => $type) {
+                    $languageFolder = $pluginFolder . '/languages';
 
-            foreach ($pluginFolders as $pluginFolder => $type) {
-                $languageFolder = $pluginFolder . '/languages';
-
-                if (is_dir($languageFolder)) {
-                    $this->addLanguageFolderPath($languageFolder);
+                    if (is_dir($languageFolder)) {
+                        $this->addLanguageFolderPath($languageFolder);
+                    }
                 }
-            }
 
-            $this->pluginLanguageFoldersLoaded = true;
+                $this->pluginLanguageFoldersLoaded = true;
+            } catch (RuntimeException $exception) {
+                $gLogger->error('L10N: Plugins folder content could not be loaded!', array('errorMessage' => $exception->getMessage()));
+            }
         }
     }
 
@@ -125,13 +123,13 @@ class LanguageData
      * Adds a new path of language files to the array with all language paths
      * where Admidio should search for language files.
      * @param string $languageFolderPath Server path where Admidio should search for language files.
-     * @throws \UnexpectedValueException
      * @return bool Returns true if language path is added.
+     * @throws UnexpectedValueException
      */
-    public function addLanguageFolderPath($languageFolderPath)
+    public function addLanguageFolderPath(string $languageFolderPath): bool
     {
         if ($languageFolderPath === '' || !is_dir($languageFolderPath)) {
-            throw new \UnexpectedValueException('Invalid folder path!');
+            throw new UnexpectedValueException('Invalid folder path!');
         }
 
         if (in_array($languageFolderPath, $this->languageFolderPaths, true)) {
@@ -148,15 +146,15 @@ class LanguageData
      * @param string $defaultLanguage This language will be set if no browser language could be determined
      * @return string Return the preferred language code of the client browser
      */
-    public static function determineBrowserLanguage($defaultLanguage)
+    public static function determineBrowserLanguage(string $defaultLanguage): string
     {
-        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) || empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             return $defaultLanguage;
         }
 
         $languages = preg_split('/\s*,\s*/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        $languageChoosed = $defaultLanguage;
-        $priorityChoosed = 0;
+        $languageSelected = $defaultLanguage;
+        $prioritySelected = 0;
 
         foreach ($languages as $value) {
             if (!preg_match('/^([a-z]{2,3}(?:-[a-zA-Z]{2,3})?|\*)(?:\s*;\s*q=(0(?:\.\d{1,3})?|1(?:\.0{1,3})?))?$/', $value, $matches)) {
@@ -170,20 +168,20 @@ class LanguageData
                 $priority = (float) $matches[2];
             }
 
-            if ($priorityChoosed < $priority && $langCodes[0] !== '*') {
-                $languageChoosed = $langCodes[0];
-                $priorityChoosed = $priority;
+            if ($prioritySelected < $priority && $langCodes[0] !== '*') {
+                $languageSelected = $langCodes[0];
+                $prioritySelected = $priority;
             }
         }
 
-        return $languageChoosed;
+        return $languageSelected;
     }
 
     /**
      * Returns an array with all language paths that were set.
      * @return array<int,string> with all language paths that were set.
      */
-    public function getLanguageFolderPaths()
+    public function getLanguageFolderPaths(): array
     {
         return $this->languageFolderPaths;
     }
@@ -192,7 +190,7 @@ class LanguageData
      * Returns an array with all countries and their ISO codes
      * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
-    public function getCountries()
+    public function getCountries(): array
     {
         return $this->countries;
     }
@@ -202,7 +200,7 @@ class LanguageData
      * codes such as de-CH. If you only want the ISO code then call getLanguageIsoCode().
      * @return string Returns the language code of the language of this object or the reference language.
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }
@@ -211,7 +209,7 @@ class LanguageData
      * Returns the language ISO 639-1 code
      * @return string Returns the language ISO 639-1 code
      */
-    public function getLanguageIsoCode()
+    public function getLanguageIsoCode(): string
     {
         return $this->languageIsoCode;
     }
@@ -220,20 +218,20 @@ class LanguageData
      * Returns the language code of the language that we need for some libs e.g. datepicker or ckeditor.
      * @return string Returns the language code of the language of this object or the reference language.
      */
-    public function getLanguageLibs()
+    public function getLanguageLibs(): string
     {
         return $this->languageLibs;
     }
 
     /**
      * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @throws \OutOfBoundsException
      * @return string Returns the cached text or empty string if text id isn't found
+     *@throws OutOfBoundsException
      */
-    public function getTextCache($textId)
+    public function getTextCache(string $textId): string
     {
         if (!array_key_exists($textId, $this->textCache)) {
-            throw new \OutOfBoundsException('Text-id is not cached!');
+            throw new OutOfBoundsException('Text-id is not cached!');
         }
 
         return $this->textCache[$textId];
@@ -253,7 +251,7 @@ class LanguageData
      * @param string $language ISO code of the language that should be set to this object.
      * @return bool Returns true if language changed.
      */
-    public function setLanguage($language)
+    public function setLanguage(string $language): bool
     {
         global $gSupportedLanguages;
 
@@ -277,7 +275,7 @@ class LanguageData
      * @param string $textId Unique text id where to set the text e.g. SYS_COMMON
      * @param string $text   The text to cache
      */
-    public function setTextCache($textId, $text)
+    public function setTextCache(string $textId, string $text)
     {
         $this->textCache[$textId] = $text;
     }

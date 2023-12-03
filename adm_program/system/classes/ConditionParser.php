@@ -35,15 +35,11 @@ class ConditionParser
      */
     private $destCond = '';
     /**
-     * @var array<int,string> An array from the string **mSrcCond** where every char is one array element
-     */
-    private $srcCondArray = array();
-    /**
-     * @var string Stores the sql statement if a record should not exists when user wants to exclude a column
+     * @var string Stores the sql statement if a record should not exist when user wants to exclude a column
      */
     private $notExistsSql = '';
     /**
-     * @var bool Flag if there is a open quote in this condition that must be closed before the next condition will be parsed
+     * @var bool Flag if there is an open quote in this condition that must be closed before the next condition will be parsed
      */
     private $openQuotes = false;
 
@@ -60,8 +56,8 @@ class ConditionParser
     private function endDestCond()
     {
         if ($this->openQuotes) {
-            // allways set quote marks for a value because some fields are a varchar in db
-            // but should only filled with integer
+            // always set quote marks for a value because some fields are a varchar in db
+            // but should only be filled with integer
             $this->destCond .= '\' ';
         }
 
@@ -70,11 +66,12 @@ class ConditionParser
 
     /**
      * Creates a valid date format **YYYY-MM-DD** for the SQL statement
-     * @param string $date     The unformated date from user input e.g. **12.04.2012**
+     * @param string $date The not formatted date from user input e.g. **12.04.2012**
      * @param string $operator The actual operator for the **date** parameter
      * @return string String with a SQL valid date format **YYYY-MM-DD** or empty string
+     * @throws Exception
      */
-    private function getFormatDate($date, $operator)
+    private function getFormatDate(string $date, string $operator): string
     {
         global $gSettingsManager;
 
@@ -83,10 +80,10 @@ class ConditionParser
 
         if ($lastDateChar === 'J' || $lastDateChar === 'Y') {
             $ageCondition = '';
-            $dateObj = new \DateTime();
-            $years   = new \DateInterval('P' . substr($date, 0, -1) . 'Y');
-            $oneYear = new \DateInterval('P1Y');
-            $oneDay  = new \DateInterval('P1D');
+            $dateObj = new DateTime();
+            $years   = new DateInterval('P' . substr($date, 0, -1) . 'Y');
+            $oneYear = new DateInterval('P1Y');
+            $oneDay  = new DateInterval('P1D');
             $dateObj->sub($years);
 
             switch ($operator) {
@@ -132,7 +129,7 @@ class ConditionParser
 
         // validate date and return it in database format
         if ($date !== '') {
-            $dateObject = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $date);
+            $dateObject = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $date);
             if ($dateObject !== false) {
                 return $dateObject->format('Y-m-d');
             }
@@ -146,13 +143,13 @@ class ConditionParser
      * @param string $sourceCondition
      * @return bool Returns true if date search and false if age search
      */
-    private static function isDateSearch($columnType, $sourceCondition)
+    private static function isDateSearch(string $columnType, string $sourceCondition): bool
     {
         return $columnType === 'date' && (StringUtils::strContains($sourceCondition, 'J', false) || StringUtils::strContains($sourceCondition, 'Y', false));
     }
 
     /**
-     * Stores an sql statement that checks if a record in a table does exists or not exists.
+     * Stores a sql statement that checks if a record in a table does exist or not exist.
      * This must bei a full subselect that starts with SELECT. The statement is used if
      * a condition with EMPTY or NOT EMPTY is used.
      * @param string $sqlStatement String with the full subselect
@@ -161,7 +158,7 @@ class ConditionParser
      * $parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9');
      * ```
      */
-    public function setNotExistsStatement($sqlStatement)
+    public function setNotExistsStatement(string $sqlStatement)
     {
         $this->notExistsSql = $sqlStatement;
     }
@@ -169,14 +166,14 @@ class ConditionParser
     /**
      * Creates from a user defined condition a valid SQL condition
      * @param string $sourceCondition The user condition string
-     * @param string $columnName      The name of the database column for which the condition should be created
-     * @param string $columnType      The type of the column. Valid types are **string**, **int**, **date** and **checkbox**
-     * @param string $fieldName       The name of the profile field. This is used for error output to the end user
-     * @throws AdmException SYS_NOT_VALID_DATE_FORMAT
-     *                      SYS_NOT_NUMERIC
+     * @param string $columnName The name of the database column for which the condition should be created
+     * @param string $columnType The type of the column. Valid types are **string**, **int**, **date** and **checkbox**
+     * @param string $fieldName The name of the profile field. This is used for error output to the end user
      * @return string Returns a valid SQL string with the condition for that column
+     * @throws AdmException
+     * @throws Exception
      */
-    public function makeSqlStatement($sourceCondition, $columnName, $columnType, $fieldName)
+    public function makeSqlStatement(string $sourceCondition, string $columnName, string $columnType, string $fieldName): string
     {
         $conditionComplete = $this->startDestCond($columnType, $columnName, $sourceCondition);
         if ($conditionComplete) {
@@ -184,27 +181,27 @@ class ConditionParser
         }
 
         $this->openQuotes = false;    // set to true if quotes for conditions are open
-        $startCondition   = true;     // gibt an, dass eine neue Bedingung angefangen wurde
-        $newCondition     = true;     // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
-        $startOperand     = false;    // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
-        $date             = '';       // Variable speichert bei Datumsfeldern das gesamte Datum
+        $startCondition   = true;     // Indicates that a new condition has been started
+        $newCondition     = true;     // a new word is searched for in text fields -> new condition
+        $startOperand     = false;    // Indicates whether <>= has already been specified for numeric or date fields
+        $date             = '';       // Variable stores the entire date for date fields
         $operator         = '=';      // saves the actual operator, if no operator is set then = will be default
 
         $this->makeStandardCondition($sourceCondition);
-        $this->srcCondArray = str_split($this->srcCond);
+        $srcCondArray = str_split($this->srcCond);
 
-        // Zeichen fuer Zeichen aus dem Bedingungsstring wird hier verarbeitet
-        foreach ($this->srcCondArray as $character) {
+        // Character for character from the condition string is processed here
+        foreach ($srcCondArray as $character) {
             if ($character === '&' || $character === '|') {
                 if ($newCondition) {
-                    // neue Bedingung, also Verknuepfen
+                    // new condition, i.e. linking
                     if ($character === '&') {
                         $this->destCond .= ' AND ';
-                    } elseif ($character === '|') {
+                    } else {
                         $this->destCond .= ' OR ';
                     }
 
-                    // Feldname noch dahinter
+                    // Field name still behind it
                     if ($columnType === 'string') {
                         $this->destCond .= ' UPPER(' . $columnName . ') ';
                     } else {
@@ -214,7 +211,7 @@ class ConditionParser
                     $startCondition = true;
                 }
             }
-            // Verleich der Werte wird hier verarbeitet
+            // Comparison of the values is processed here
             elseif (in_array($character, array('=', '!', '_', '#', '{', '}', '[', ']'), true)) {
                 // save actual operator for later use
                 $operator = $character;
@@ -252,7 +249,7 @@ class ConditionParser
                         }
                         break;
                     case '{':
-                        // bastwe: invert condition on age search
+                        // invert condition on age search
                         if (self::isDateSearch($columnType, $sourceCondition)) {
                             $this->destCond .= ' > ';
                         } else {
@@ -260,7 +257,7 @@ class ConditionParser
                         }
                         break;
                     case '}':
-                        // bastwe: invert condition on age search
+                        // invert condition on age search
                         if (self::isDateSearch($columnType, $sourceCondition)) {
                             $this->destCond .= ' < ';
                         } else {
@@ -268,7 +265,7 @@ class ConditionParser
                         }
                         break;
                     case '[':
-                        // bastwe: invert condition on age search
+                        // invert condition on age search
                         if (self::isDateSearch($columnType, $sourceCondition)) {
                             $this->destCond .= ' >= ';
                         } else {
@@ -276,7 +273,7 @@ class ConditionParser
                         }
                         break;
                     case ']':
-                        // bastwe: invert condition on age search
+                        // invert condition on age search
                         if (self::isDateSearch($columnType, $sourceCondition)) {
                             $this->destCond .= ' <= ';
                         } else {
@@ -288,14 +285,14 @@ class ConditionParser
                 }
 
                 if ($character !== '_' && $character !== '#') {
-                    // allways set quote marks for a value because some fields are a varchar in db
-                    // but should only filled with integer
+                    // always set quote marks for a value because some fields are a varchar in db
+                    // but should only be filled with integer
                     $this->destCond  .= ' \'';
                     $this->openQuotes = true;
                     $startOperand     = true;
                 }
             } elseif ($character === ' ') {
-                // pruefen, ob ein neues Wort anfaengt
+                // check whether a new word begins
                 if (!$newCondition) {
                     // if date column than the date will be saved in $date.
                     // This variable must then be parsed and changed in a valid database format
@@ -310,8 +307,8 @@ class ConditionParser
                     }
 
                     if ($this->openQuotes) {
-                        // allways set quote marks for a value because some fields are a varchar in db
-                        // but should only filled with integer
+                        // always set quote marks for a value because some fields are a varchar in db
+                        // but should only be filled with integer
                         $this->destCond  .= '\' ';
                         $this->openQuotes = false;
                     }
@@ -329,7 +326,7 @@ class ConditionParser
                     }
                     $this->openQuotes = false;
                 } elseif ($newCondition && !$startOperand) {
-                    // first condition of these column
+                    // first condition of this column
                     if ($columnType === 'string') {
                         $this->destCond .= ' LIKE \'';
                     } else {
@@ -338,7 +335,7 @@ class ConditionParser
                     $this->openQuotes = true;
                 }
 
-                // Zeichen an Zielstring dranhaengen
+                // Append character to target string
                 if ($columnType === 'date') {
                     $date .= $character;
                 } elseif ($columnType === 'int' && !is_numeric($character)) {
@@ -375,7 +372,7 @@ class ConditionParser
      * @param string $sourceCondition The user condition string
      * @return string String with the predefined chars for conditions
      */
-    public function makeStandardCondition($sourceCondition)
+    public function makeStandardCondition(string $sourceCondition): string
     {
         global $gL10n;
 
@@ -425,15 +422,15 @@ class ConditionParser
      * @param string $sourceCondition The user condition string
      * @return bool Returns true if "mDestCondition" is complete
      */
-    private function startDestCond($columnType, $columnName, $sourceCondition)
+    private function startDestCond(string $columnType, string $columnName, string $sourceCondition): bool
     {
-        $this->destCond = ' AND ';  // Bedingungen fuer das Feld immer mit UND starten
+        $this->destCond = ' AND ';  // Conditions for the field always start with AND
 
         if ($columnType === 'string') {
             $this->destCond .= '( UPPER(' . $columnName . ') ';
         } elseif ($columnType === 'checkbox') {
-            // Sonderfall !!!
-            // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
+            // Special case !
+            // a checkbox can only have 1 or 0 and no complicated links
             if ($sourceCondition === '1') {
                 $this->destCond .= $columnName . ' = 1 ';
             } else {

@@ -14,8 +14,8 @@
  * to communicate with the database. There are methods to send sql statements
  * and to handle the response of the database. This class also supports transactions.
  * Just call Database#startTransaction and finish it with Database#endTransaction. If
- * you call this multiple times only 1 transaction will be open and it will be closed
- * after the last endTransaction was send.
+ * you call this multiple times only 1 transaction will be open, and it will be closed
+ * after the last endTransaction was sent.
  *
  * **Code example**
  * ```
@@ -34,10 +34,10 @@
  * **Code example**
  * ```
  * // Now you can use the new object **$gDb** to send a query to the database
- * // send sql to database and assign the returned \PDOStatement
+ * // send sql to database and assign the returned PDOStatement
  * $organizationsStatement = $gDb->queryPrepared('SELECT org_shortname, org_longname FROM ' . TBL_ORGANIZATIONS);
  *
- * // now fetch all rows of the returned \PDOStatement within one array
+ * // now fetch all rows of the returned PDOStatement within one array
  * $organizationsList = $organizationsStatement->fetchAll();
  *
  * // Array with the results:
@@ -51,7 +51,7 @@
  * //             [org_longname]  => 'Test-Organization'
  * //             )
  *
- * // you can also go step by step through the returned \PDOStatement
+ * // you can also go step by step through the returned PDOStatement
  * while ($organizationNames = $organizationsStatement->fetch())
  * {
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
@@ -99,11 +99,11 @@ class Database
      */
     protected $dsn;
     /**
-     * @var \PDO The PDO object that handles the communication with the database.
+     * @var PDO The PDO object that handles the communication with the database.
      */
     protected $pdo;
     /**
-     * @var \PDOStatement The PDOStatement object which is needed to handle the return of a query.
+     * @var PDOStatement The PDOStatement object which is needed to handle the return of a query.
      */
     protected $pdoStatement;
     /**
@@ -125,10 +125,9 @@ class Database
 
     /**
      * Simple way to create a database object with the default Admidio globals
-     * @throws AdmException
      * @return self Returns a Database instance
      */
-    public static function createDatabaseInstance()
+    public static function createDatabaseInstance(): Database
     {
         global $gLogger;
 
@@ -190,14 +189,15 @@ class Database
 
     /**
      * Method will check if the user has the right to create a table. Therefore, the method will try to create a table
-     * in the current database. You should set the $gDebug on true so an exception will be thrown. Otherwise the
+     * in the current database. You should set the $gDebug on true so an exception will be thrown. Otherwise, the
      * function will only return false,
      * @return bool Return true if write access is set for the current database user.
+     * @throws Exception
      */
     public function checkWriteAccess(): bool
     {
         $sql = 'CREATE TABLE adm_sys (sys varchar(10)) ';
-        if ($this->query($sql, true) !== false) {
+        if ($this->query($sql) !== false) {
             $sql = 'DROP TABLE adm_sys ';
             $this->query($sql);
             return true;
@@ -216,10 +216,10 @@ class Database
             $this->setDSNString();
 
             // needed to avoid leaking username, password, ... if a PDOException is thrown
-            $this->pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
+            $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
 
             $this->setConnectionOptions();
-        } catch (\PDOException $exception) {
+        } catch (PDOException $e) {
             $logContext = array(
                 'engine'   => $this->engine,
                 'host'     => $this->host,
@@ -229,9 +229,11 @@ class Database
                 'password' => '******',
                 'options'  => $this->options
             );
-            $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $exception->getMessage(), $logContext);
+            $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
 
-            throw new AdmException($exception->getMessage()); // TODO: change exception class
+            throw new AdmException($e->getMessage()); // TODO: change exception class
+        } catch (Exception $e) {
+            throw new AdmException($e->getMessage()); // TODO: change exception class
         }
     }
 
@@ -240,8 +242,9 @@ class Database
      * transaction counter is greater 1 than only the counter will be
      * decreased and no commit will be performed.
      * @return bool Returns **true** if the commit was successful otherwise **false**
-     * @see Database#startTransaction
+     * @throws Exception
      * @see Database#rollback
+     * @see Database#startTransaction
      */
     public function endTransaction(): bool
     {
@@ -293,6 +296,7 @@ class Database
      * @param string $sql A valid SQL select statement.
      * @param array $queryParameters Optional the parameters for the SQL statement.
      * @return array Returns array with all rows and a sub array with the columns of each row.
+     * @throws Exception
      */
     public function getArrayFromSql(string $sql, array $queryParameters = array()): array
     {
@@ -307,7 +311,7 @@ class Database
     }
 
     /**
-     * This method will create an backtrace of the current position in the script. If several
+     * This method will create a backtrace of the current position in the script. If several
      * scripts were called than each script with their position will be listed in the backtrace.
      * @return string Returns a string with the backtrace of all called scripts.
      */
@@ -362,6 +366,7 @@ class Database
     /**
      * Get the minimum required version of the database that is necessary to run Admidio.
      * @return string Returns a string with the minimum required database version e.g. '5.0.1'
+     * @throws Exception
      */
     public function getMinimumRequiredVersion(): string
     {
@@ -375,6 +380,7 @@ class Database
     /**
      * Get the name of the database that is running Admidio.
      * @return string Returns a string with the name of the database e.g. 'MySQL' or 'Postgres'
+     * @throws Exception
      */
     public function getName(): string
     {
@@ -388,10 +394,11 @@ class Database
     /**
      * @param string $property Property name of the in use database config
      * @return string Returns the value of the chosen property
+     * @throws Exception
      */
     protected function getPropertyFromDatabaseConfig(string $property): string
     {
-        $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
+        $xmlDatabases = new SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
 
         return (string) $node[0];
@@ -427,6 +434,7 @@ class Database
      * Method get all columns and their properties from the database table.
      * @param string $table Name of the database table for which the columns-properties should be shown.
      * @return array<string,array<string,mixed>> Returns an array with column-names.
+     * @throws Exception
      */
     public function getTableColumnsProperties(string $table): array
     {
@@ -441,6 +449,7 @@ class Database
      * Method get all columns-names from the database table.
      * @param string $table Name of the database table for which the columns should be shown.
      * @return array<int,string> Returns an array with each column and their properties.
+     * @throws Exception
      */
     public function getTableColumns(string $table): array
     {
@@ -454,6 +463,7 @@ class Database
     /**
      * Get the version of the connected database.
      * @return string Returns a string with the database version e.g. '5.5.8'
+     * @throws Exception
      */
     public function getVersion(): string
     {
@@ -494,6 +504,7 @@ class Database
      *       https://www.Postgres.org/docs/9.5/static/infoschema-columns.html
      *       https://wiki.Postgres.org/wiki/Retrieve_primary_key_columns
      *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
+     * @throws Exception
      */
     private function loadTableColumnsProperties(string $table)
     {
@@ -577,6 +588,7 @@ class Database
      * Returns the ID of the unique id column of the last INSERT operation.
      * This method replace the old method Database#insert_id.
      * @return int Return ID value of the last INSERT operation.
+     * @throws Exception
      * @see Database#insert_id
      */
     public function lastInsertId(): int
@@ -650,7 +662,7 @@ class Database
 
     /**
      * Replaces Admidio specific parameters within an SQL statement. The **%PREFIX%** parameter will be replaced
-     * with the configured table prefix of this installation. The **%UUID%** parameter will be replaced with an
+     * with the configured table prefix of this installation. The **%UUID%** parameter will be replaced with a
      * unique UUID. Therefor each occurrence of %UUID% will get their own UUID.
      * @param string $sql The SQL statement with the parameters that should be replaced.
      * @return string Returns the SQL statement with the replaced parameters.
@@ -686,13 +698,14 @@ class Database
      * Send a sql statement to the database that will be executed. If debug mode is set
      * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
-     * be terminated and the error with a backtrace will be send to the browser.
-     * @param string $sql      A string with the sql statement that should be executed in database.
-     * @param bool $showError  Default will be **true** and if an error the script will be terminated and
-     *                         occurred the error with a backtrace will be send to the browser. If set to
+     * be terminated and the error with a backtrace will be sent to the browser.
+     * @param string $sql A string with the sql statement that should be executed in database.
+     * @param bool $showError Default will be **true** and if an error the script will be terminated and
+     *                         occurred the error with a backtrace will be sent to the browser. If set to
      *                         **false** no error will be shown and the script will be continued.
-     * @return PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     * @return PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
+     * @throws Exception
      */
     public function query(string $sql, bool $showError = true)
     {
@@ -717,7 +730,7 @@ class Database
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
         }
         // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
-        catch (\PDOException $exception) {
+        catch (PDOException $exception) {
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
 
             if ($showError) {
@@ -738,14 +751,15 @@ class Database
      * Send a sql statement to the database that will be executed. If debug mode is set
      * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
-     * be terminated and the error with a backtrace will be send to the browser.
-     * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param array<int,mixed> $params     An array of parameters to bind to the prepared statement.
-     * @param bool $showError  Default will be **true** and if an error the script will be terminated and
-     *                                     occurred the error with a backtrace will be send to the browser. If set to
+     * be terminated and the error with a backtrace will be sent to the browser.
+     * @param string $sql A string with the sql statement that should be executed in database.
+     * @param array<int,mixed> $params An array of parameters to bind to the prepared statement.
+     * @param bool $showError Default will be **true** and if an error the script will be terminated and
+     *                                     occurred the error with a backtrace will be sent to the browser. If set to
      *                                     **false** no error will be shown and the script will be continued.
-     * @return PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     * @return PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
+     * @throws Exception
      */
     public function queryPrepared(string $sql, array $params = array(), bool $showError = true)
     {
@@ -775,7 +789,7 @@ class Database
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
         }
         // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
-        catch (\PDOException $exception) {
+        catch (PDOException $exception) {
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
 
             if ($showError) {
@@ -793,7 +807,7 @@ class Database
     }
 
     /**
-     * Get an string with question marks that are comma separated.
+     * Get a string with question marks that are comma separated.
      * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
      * @return string Question marks string
      */
@@ -803,11 +817,12 @@ class Database
     }
 
     /**
-     * If there is a open transaction than this method sends a rollback
+     * If there is an open transaction than this method sends a rollback
      * to the database and will set the transaction counter to zero.
      * @return bool
-     * @see Database#startTransaction
+     * @throws Exception
      * @see Database#endTransaction
+     * @see Database#startTransaction
      */
     public function rollback(): bool
     {
@@ -835,19 +850,19 @@ class Database
     /**
      * Create a valid DSN string for the engine that was set through the constructor.
      * If no valid engine is set than an exception is thrown.
-     * @throws \PDOException
+     * @throws PDOException
      */
     private function setDSNString()
     {
         global $gLogger;
 
-        $availableDrivers = \PDO::getAvailableDrivers();
+        $availableDrivers = PDO::getAvailableDrivers();
 
         if (count($availableDrivers) === 0) {
-            throw new \PDOException('PDO does not support any drivers'); // TODO: change exception class
+            throw new PDOException('PDO does not support any drivers'); // TODO: change exception class
         }
         if (!in_array($this->engine, $availableDrivers, true)) {
-            throw new \PDOException('The requested PDO driver ' . $this->engine . ' is not supported'); // TODO: change exception class
+            throw new PDOException('The requested PDO driver ' . $this->engine . ' is not supported'); // TODO: change exception class
         }
 
         switch ($this->engine) {
@@ -869,7 +884,7 @@ class Database
                 break;
 
             default:
-                throw new \PDOException('Engine is not supported by Admidio'); // TODO: change exception class
+                throw new PDOException('Engine is not supported by Admidio'); // TODO: change exception class
         }
 
         $gLogger->debug('DATABASE: DSN-String: "' . $this->dsn . '"!');
@@ -878,21 +893,22 @@ class Database
     /**
      * Set connection specific options like UTF8 connection.
      * These options should always be set if Admidio connect to a database.
+     * @throws Exception
      */
     private function setConnectionOptions()
     {
         global $gDebug;
 
         if ($gDebug) {
-            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } else {
-            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
         }
 
-        $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
-        $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-        $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC); // maybe change in future to \PDO::FETCH_OBJ
-        $this->pdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_NATURAL);
+        $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+        $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); // maybe change in future to PDO::FETCH_OBJ
+        $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
         switch ($this->engine) {
             case self::PDO_ENGINE_MYSQL:
@@ -910,10 +926,11 @@ class Database
 
     /**
      * Display the error code and error message to the user if a database error occurred.
-     * The error must be read by the child method. This method will call a backtrace so
+     * The error must be read by the child method. This method will call a backtrace, so
      * you see the script and specific line in which the error occurred.
      * @param string $errorMessage Optional an error message could be set and integrated in the output of the sql error.
      * @return void Will exit the script and returns a html output with the error information.
+     * @throws Exception
      */
     public function showError(string $errorMessage = '')
     {
@@ -956,17 +973,18 @@ class Database
 
     /**
      * Start a transaction if no open transaction exists. If you call this multiple times
-     * only 1 transaction will be open and it will be closed after the last endTransaction was send.
+     * only 1 transaction will be open, and it will be closed after the last endTransaction was sent.
      * @return bool
-     * @see Database#endTransaction
+     * @throws Exception
      * @see Database#rollback
+     * @see Database#endTransaction
      */
     public function startTransaction(): bool
     {
         global $gLogger;
 
         // If we are within a transaction we will not open another one,
-        // but enclose the current one to not loose data (preventing auto commit)
+        // but enclose the current one to not lose data (preventing auto commit)
         if ($this->transactions > 0) {
             ++$this->transactions;
             return true;

@@ -149,7 +149,7 @@ if ($fieldHistoryStatement->rowCount() === 0) {
 $page = new HtmlPage('admidio-profile-fields-history', $headline);
 
 // create filter menu with input elements for start date and end date
-$filterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');
+$filterNavbar = new HtmlNavbar('menu_profile_field_history_filter', '', null, 'filter');
 $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', $page, array('type' => 'navbar', 'setFocus' => false));
 $form->addInput('user_uuid', '', $getUserUuid, array('property' => HtmlForm::FIELD_HIDDEN));
 $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));

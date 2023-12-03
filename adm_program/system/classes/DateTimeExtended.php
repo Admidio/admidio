@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Klasse erweitert das PHP-DateTime-Objekt um einige nuetzliche Funktionen
+ * Class extends the PHP-DateTime object with some useful functions
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -14,8 +14,9 @@ class DateTimeExtended extends DateTime
      * Returns an array with all 7 weekdays with full name in the specific language.
      * @param int $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
      * @return string|string[] with all 7 weekday or if param weekday is set than the full name of that weekday
+     * @throws Exception
      */
-    public static function getWeekdays($weekday = 0)
+    public static function getWeekdays(int $weekday = 0)
     {
         global $gL10n;
 
@@ -45,7 +46,7 @@ class DateTimeExtended extends DateTime
      *                       If no format is set then the format of the class constructor will be used.
      * @return string Return the transformed format that is valid for the datepicker.
      */
-    public static function getDateFormatForDatepicker($format = 'Y-m-d')
+    public static function getDateFormatForDatepicker(string $format = 'Y-m-d'): string
     {
         $destFormat  = '';
         $formatArray = str_split($format);

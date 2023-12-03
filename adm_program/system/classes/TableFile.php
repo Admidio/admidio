@@ -19,9 +19,10 @@ class TableFile extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_files.
      * If the id is set than the specific files will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $filId    The recordset of the files with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $filId The recordset of the files with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
-    public function __construct(Database $database, $filId = 0)
+    public function __construct(Database $database, int $filId = 0)
     {
         // read also data of assigned folder
         $this->connectAdditionalTable(TBL_FOLDERS, 'fol_id', 'fil_fol_id');
@@ -43,6 +44,7 @@ class TableFile extends TableAccess
      * Deletes the selected record of the table and the associated file in the file system.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -91,7 +93,8 @@ class TableFile extends TableAccess
      * if the user has no right to see the corresponding folder or the file id doesn't exist.
      * @param string $fileUuid The UUID of the file.
      * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
-     *@throws AdmException SYS_FOLDER_NO_RIGHTS
+     * @throws AdmException SYS_FOLDER_NO_RIGHTS
+     * @throws Exception
      *                      SYS_INVALID_PAGE_VIEW
      */
     public function getFileForDownload(string $fileUuid): bool
@@ -188,6 +191,7 @@ class TableFile extends TableAccess
      * @throws AdmException
      * @throws RuntimeException
      * @throws UnexpectedValueException
+     * @throws Exception
      */
     public function moveToFolder(string $destFolderUUID)
     {
@@ -210,6 +214,7 @@ class TableFile extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -236,6 +241,7 @@ class TableFile extends TableAccess
      * the timestamp and the url to the folder of the file.
      * @return bool Returns **true** if the notification was sent
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception
      */
     public function sendNotification(): bool
     {

@@ -12,7 +12,7 @@
  *
  * This class creates html tables.
  * Create a table object, define the elements with optional attributes and pass your content.
- * Several methods allows you to set table rows, columns, header and footer element. Also you can define an array with column widths.
+ * Several methods allow you to set table rows, columns, header and footer element. Also, you can define an array with column widths.
  * The class provides changing class in table rows of body elements using modulo.
  * You can define the class names and the row number for line change.
  * CSS classes are needed using this option for class change !
@@ -28,7 +28,7 @@
  * ```
  * // Example without defining table head and table foot elements.
  * // Starting a row directly, all missing table elements are set automatically for semantic table.
- * // Create an table instance with optional table ID, table class.
+ * // Create a table instance with optional table ID, table class.
  * $table = new HtmlTableBasic('Id_Example_1', 'tableClass');
  * // For each key => value a column is to be defined in a table row.
  * $table->addRow($dataArray);
@@ -38,7 +38,7 @@
  *
  * **Code example**
  * ```
- * // Create an table instance with optional table ID, table class and border
+ * // Create a table instance with optional table ID, table class and border
  * $table = new HtmlTableBasic('Id_Example_2', 'tableClass', 1);
  * // we can also set further attributes for the table
  * $table->addAttribute('style', 'width: 100%;');
@@ -146,21 +146,21 @@ class HtmlTableBasic extends HtmlElement
 
     /**
      * Constructor initializing all class variables
-     * @param string $id     Id of the table
+     * @param string $id     ID of the table
      * @param string $class  Class name of the table
-     * @param int    $border Set the table border width
+     * @param int $border Set the table border width
      */
-    public function __construct($id = null, $class = null, $border = 0)
+    public function __construct(string $id = '', string $class = '', int $border = 0)
     {
         $this->border = $border;
 
         parent::__construct('table');
 
-        if ($id !== null) {
+        if ($id !== '') {
             $this->addAttribute('id', $id);
         }
 
-        if ($class !== null) {
+        if ($class !== '') {
             $this->addAttribute('class', $class);
         }
 
@@ -177,9 +177,9 @@ class HtmlTableBasic extends HtmlElement
      * If all settings are done for the column use the addData(); to define your column content.
      * @param string|array         $data          Content for the column as string, or array
      * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
-     * @param string               $columnType    Column element 'td' or 'th' (Default: 'td')
+     * @param string $columnType    Column element 'td' or 'th' (Default: 'td')
      */
-    public function addColumn($data = '', array $arrAttributes = null, $columnType = 'td')
+    public function addColumn($data = '', array $arrAttributes = null, string $columnType = 'td')
     {
         $this->addElement($columnType);
 
@@ -198,9 +198,9 @@ class HtmlTableBasic extends HtmlElement
 
     /**
      * @param string|array $data Content for the table row as string, or array
-     * @param string       $col  Column element 'td' or 'th' (Default: 'td')
+     * @param string $col  Column element 'td' or 'th' (Default: 'td')
      */
-    private function addColumnsData($data = '', $col = 'td')
+    private function addColumnsData($data = '', string $col = 'td')
     {
         if ($data === '') {
             return;
@@ -224,9 +224,9 @@ class HtmlTableBasic extends HtmlElement
      * After all settings are done use addColumn(); to define your columns with content.
      * @param string|array         $data          Content for the table row as string, or array
      * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
-     * @param string               $columnType    Column element 'td' or 'th' (Default: 'td')
+     * @param string $columnType    Column element 'td' or 'th' (Default: 'td')
      */
-    public function addRow($data = '', array $arrAttributes = null, $columnType = 'td')
+    public function addRow($data = '', array $arrAttributes = null, string $columnType = 'td')
     {
         // Clear column counter
         $this->columnCount = 0;
@@ -269,19 +269,19 @@ class HtmlTableBasic extends HtmlElement
     }
 
     /**
-     * @param string       $element   Element (thead, tbody, tfoot)
-     * @param string       $attribute Attribute
-     * @param string       $value     Value of the attribute
+     * @param string $element   Element (thead, tbody, tfoot)
+     * @param string $attribute Attribute
+     * @param string $value     Value of the attribute
      * @param string|array $data      Content for the element as string, or array
-     * @param string       $col
+     * @param string $col
      */
-    private function addTableSection($element, $attribute = null, $value = null, $data = '', $col = 'td')
+    private function addTableSection(string $element, string $attribute = '', string $value = '', $data = '', string $col = 'td')
     {
         $this->addParentElement($element);
 
         $this->{$element} = true;
 
-        if ($attribute !== null && $value !== null) {
+        if ($attribute !== null && $value !== '') {
             $this->addAttribute($attribute, $value);
         }
 
@@ -293,12 +293,12 @@ class HtmlTableBasic extends HtmlElement
     /**
      * Define table body.
      * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     * @param string       $attribute Attribute
-     * @param string       $value     Value of the attribute
+     * @param string $attribute Attribute
+     * @param string $value     Value of the attribute
      * @param string|array $data      Content for the element as string, or array
-     * @param string       $col
+     * @param string $col
      */
-    public function addTableBody($attribute = null, $value = null, $data = '', $col = 'td')
+    public function addTableBody(string $attribute = '', string $value = '', $data = '', string $col = 'td')
     {
         // always close tr if that was open before
         $this->closeParentElement('tr');
@@ -317,13 +317,13 @@ class HtmlTableBasic extends HtmlElement
     /**
      * @par Define table footer
      * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     * @param string       $attribute Attribute
-     * @param string       $value     Value of the attribute
+     * @param string $attribute Attribute
+     * @param string $value     Value of the attribute
      * @param string|array $data      Content for the element as string, or array
-     * @param string       $col
+     * @param string $col
      * @return bool Returns **false** if tfoot element is already set
      */
-    public function addTableFooter($attribute = null, $value = null, $data = '', $col = 'td')
+    public function addTableFooter(string $attribute = '', string $value = '', $data = '', string $col = 'td'): bool
     {
         if ($this->thead && in_array('thead', $this->arrParentElements, true)) {
             $this->closeParentElement('thead');
@@ -344,13 +344,13 @@ class HtmlTableBasic extends HtmlElement
     /**
      * Define table header
      * Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
-     * @param string       $attribute Attribute
-     * @param string       $value     Value of the attribute
+     * @param string $attribute Attribute
+     * @param string $value     Value of the attribute
      * @param string|array $data      Content for the element as string, or array
-     * @param string       $col
+     * @param string $col
      * @return bool Returns **false** if thead element is already set
      */
-    public function addTableHeader($attribute = null, $value = null, $data = '', $col = 'td')
+    public function addTableHeader(string $attribute = '', string $value = '', $data = '', string $col = 'td'): bool
     {
         // Check if table head already exists
         if ($this->thead) {
@@ -366,7 +366,7 @@ class HtmlTableBasic extends HtmlElement
      * Get the parsed html table
      * @return string Returns the validated html table as string
      */
-    public function getHtmlTable()
+    public function getHtmlTable(): string
     {
         $this->closeParentElement('tr');
         $this->closeParentElement('tbody');
@@ -397,10 +397,10 @@ class HtmlTableBasic extends HtmlElement
     /**
      * Set a specific width for one column of the table. This is useful if you have one column
      * that will not get a useful width automatically by the browser.
-     * @param int    $column The column number where you want to set the width. The columns of the table starts with 1 (not 0).
+     * @param int $column The column number where you want to set the width. The columns of the table starts with 1 (not 0).
      * @param string $width  The new width of the column. Here you can set all valid CSS values e.g. '100%' or '300px'
      */
-    public function setColumnWidth($column, $width)
+    public function setColumnWidth(int $column, string $width)
     {
         // internal datatable columns starts with 0
         $this->columnsWidth[$column - 1] = $width;

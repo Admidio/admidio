@@ -9,19 +9,6 @@
  ***********************************************************************************************
  */
 
-/******************************************************************************
- * Klasse verwaltet die Daten für den Report des Moduls CategoryReport
- *
- * Folgende Methoden stehen zur Verfuegung:
- *
- * generate_listData()					-	erzeugt die Arrays listData und headerData für den Report
- * generate_headerSelection() 			- 	erzeugt die Auswahlliste für die Spaltenauswahl
- * isInheaderSelection($search_value)	-	liest die Konfigurationsdaten aus der Datenbank
- * setConfiguration()                   -   set the internal active configuration to the crtId of the parameter
- * isMemberOfCategorie()                -   prueft, ob ein User Angehoeriger einer bestimmten Kategorie ist
- *
- *****************************************************************************/
-
 class CategoryReport
 {
     public $headerData      = array();          ///< Array mit allen Spaltenueberschriften
@@ -42,6 +29,7 @@ class CategoryReport
     /**
      * Erzeugt die Arrays listData und headerData fuer den Report
      * @return void
+     * @throws AdmException
      */
     public function generate_listData()
     {
@@ -231,7 +219,7 @@ class CategoryReport
 
             if ((string) $this->arrConfiguration[$this->conf]['selection_cat'] !== '') {
                 foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_cat']) as $cat) {
-                    if ($this->isMemberOfCategorie($cat, $member)) {
+                    if ($this->isMemberOfCategory($cat, $member)) {
                         $roleCategoryMarker = true;
                     }
                 }
@@ -331,7 +319,7 @@ class CategoryReport
             while ($row = $statement->fetch()) {
                 $marker = '';
                 if ($row['rol_valid'] == 0) {
-                    $marker = ' (' .  ($row['rol_valid'] == 0 ? '*' : '') . ')';
+                    $marker = ' (*)';
                 }
 
                 $this->headerSelection[$i]['id']   	   = 'r'.$row['rol_id'];       //r wie role
@@ -364,10 +352,9 @@ class CategoryReport
 
     /**
      * Funktion liest das Konfigurationsarray ein
-     * @param   none
      * @return  array $config  das Konfigurationsarray
      */
-    public function getConfigArray()
+    public function getConfigArray(): array
     {
         global  $gDb, $gSettingsManager, $gCurrentOrgId;
 
@@ -399,10 +386,11 @@ class CategoryReport
 
     /**
      * Funktion speichert das Konfigurationsarray
-     * @param   $arrConfiguration
+     * @param  array $arrConfiguration
      * @return  array das Konfigurationsarray
+     * @throws AdmException
      */
-    public function saveConfigArray(array $arrConfiguration)
+    public function saveConfigArray(array $arrConfiguration): array
     {
         global  $gDb, $gCurrentOrgId, $gSettingsManager;
 
@@ -410,7 +398,7 @@ class CategoryReport
 
         $gDb->startTransaction();
 
-        foreach ($arrConfiguration as $key => $values) {
+        foreach ($arrConfiguration as $values) {
             if ($values['id'] === '' || $values['id'] > 0) {                  // id > 0 (=edit a configuration) or '' (=append a configuration)
                 $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
                 $categoryReport->setValue('crt_org_id', $gCurrentOrgId);
@@ -452,10 +440,10 @@ class CategoryReport
      * Prueft, ob es den uebergebenen Wert in der Spaltenauswahlliste gibt
      * Hinweis: die Spaltenauswahlliste ist immer aktuell, da sie neu generiert wird,
      * der zu pruefende Wert koennte jedoch veraltet sein, da er aus der Konfigurationstabelle stammt
-     * @param 	string $search_value
+     * @param string $search_value
      * @return 	int
      */
-    public function isInheaderSelection($search_value)
+    public function isInheaderSelection(string $search_value): int
     {
         $ret = 0;
         foreach ($this->headerSelection as $key => $data) {
@@ -482,18 +470,18 @@ class CategoryReport
     /**
      * Funktion prueft, ob ein User Angehoeriger einer bestimmten Kategorie ist
      *
-     * @param   int  $cat_id    ID der zu pruefenden Kategorie
-     * @param   int  $user_id   ID des Users, fuer den die Mitgliedschaft geprueft werden soll
+     * @param int $cat_id    ID der zu pruefenden Kategorie
+     * @param int $user_id   ID des Users, fuer den die Mitgliedschaft geprueft werden soll
      * @return  bool
      */
-    private function isMemberOfCategorie($cat_id, $user_id = 0)
+    private function isMemberOfCategory(int $cat_id, int $user_id = 0): bool
     {
         global $gCurrentUserId, $gDb, $gCurrentOrgId;
 
         if ($user_id == 0) {
             $user_id = $gCurrentUserId;
-        } elseif (is_numeric($user_id) == false) {
-            return -1;
+        } elseif (is_numeric($user_id) === false) {
+            return false;
         }
 
         $sql = 'SELECT mem_id
@@ -519,9 +507,9 @@ class CategoryReport
         $user_found = $statement->rowCount();
 
         if ($user_found == 1) {
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 }

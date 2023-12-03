@@ -74,20 +74,21 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Constructor creates the table element
-     * @param string $id       ID of the table
+     * @param string $id ID of the table
      * @param HtmlPage|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code
      *                         or files to the html output page.
-     * @param bool $hoverRows  (optional) If set to **true** then the active selected row will be marked with special css code
+     * @param bool $hoverRows (optional) If set to **true** then the active selected row will be marked with special css code
      * @param bool $datatables (optional) If set to **true** then the jQuery plugin Datatables will be used to create the table.
      *                         Then column sort, search within the table and other features are possible.
-     * @param null $class      (optional) An additional css classname. The class **table**
+     * @param string $class (optional) An additional css classname. The class **table**
      *                         is set as default and need not set with this parameter.
+     * @throws Exception
      */
-    public function __construct($id, HtmlPage $htmlPage = null, $hoverRows = true, bool $datatables = false, $class = null)
+    public function __construct(string $id, HtmlPage $htmlPage = null, $hoverRows = true, bool $datatables = false, string $class = '')
     {
         global $gL10n;
 
-        if ($class === null) {
+        if ($class === '') {
             $class = 'table';
         }
 
@@ -140,7 +141,7 @@ class HtmlTable extends HtmlTableBasic
 
         // now add each column to the row
         foreach ($arrColumnValues as $key => $value) {
-            $this->prepareAndAddColumn($type, $key, $value, $colspan, $colspanOffset);
+            $this->prepareAndAddColumn($type, (int) $key, $value, $colspan, $colspanOffset);
         }
     }
 
@@ -148,12 +149,12 @@ class HtmlTable extends HtmlTableBasic
      * Adds a complete row with all columns to the table. This will be the column footer row.
      * Each value of the array represents the heading text for each column.
      * @param array<int,string>    $arrColumnValues Array with the values for each column.
-     * @param string|null $id              (optional) Set an unique id for the column.
+     * @param string $id              (optional) Set an unique id for the column.
      * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
      */
-    public function addRowFooterByArray(array $arrColumnValues, string $id = null, array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
+    public function addRowFooterByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
         $this->addTableFooter();
         $this->addRowTypeByArray('td', $arrColumnValues, $id, $arrAttributes, $colspan, $colspanOffset);
@@ -210,13 +211,13 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Adds a column to the table.
      * @param string $type          'th' for header row or 'td' for body row.
-     * @param string $key            Column number (starts with 0).
+     * @param int $key            Column number (starts with 0).
      * @param string|string[] $value Column value or array with column value and attributes.
      * @param int $colspan           (optional) Number of columns that should be joined together.
      * @param int $colspanOffset     (optional) Number of the column where the colspan should start.
      *                               The first column of a table will be 1.
      */
-    private function prepareAndAddColumn(string $type, string $key, $value, int $colspan = 1, int $colspanOffset = 1)
+    private function prepareAndAddColumn(string $type, int $key, $value, int $colspan = 1, int $colspanOffset = 1)
     {
         $columnAttributes = array();
 
@@ -347,9 +348,10 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Set a text id of the translation files that should be shown if table has no rows.
-     * @param string $messageId   Text id of the translation file.
+     * @param string $messageId Text id of the translation file.
      * @param string $messageType (optional) As **default** the text will be shown. If **warning** or **error**
      *                            is set then a box in yellow or red with the message will be shown.
+     * @throws Exception
      */
     public function setMessageIfNoRowsFound(string $messageId, string $messageType = 'default')
     {

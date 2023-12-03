@@ -30,7 +30,7 @@
  * $form->show();
  * ```
  */
-class HtmlForm extends \Smarty
+class HtmlForm extends Smarty
 {
     public const FIELD_DEFAULT  = 0;
     public const FIELD_REQUIRED = 1;
@@ -84,10 +84,10 @@ class HtmlForm extends \Smarty
 
     /**
      * Constructor creates the form element
-     * @param string $id       ID of the form
-     * @param string|null $action   Action attribute of the form
+     * @param string $id ID of the form
+     * @param string|null $action Action attribute of the form
      * @param HtmlPage|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
-     * @param array    $options  (optional) An array with the following possible entries:
+     * @param array $options (optional) An array with the following possible entries:
      *                           - **type** : Set the form type. Every type has some special features:
      *                             + **default**  : A form that can be used to edit and save data of a database table. The label
      *                               and the element have a horizontal orientation.
@@ -105,6 +105,7 @@ class HtmlForm extends \Smarty
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
+     * @throws SmartyException
      */
     public function __construct(string $id, string $action = null, HtmlPage $htmlPage = null, array $options = array())
     {
@@ -185,9 +186,9 @@ class HtmlForm extends \Smarty
     /**
      * Add a new button with a custom text to the form. This button could have
      * an icon in front of the text.
-     * @param string $id      ID of the button. This will also be the name of the button.
-     * @param string $text    Text of the button
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param string $id ID of the button. This will also be the name of the button.
+     * @param string $text Text of the button
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **icon** : Optional parameter. Path and filename of an icon.
      *                          If set an icon will be shown in front of the text.
      *                        - **link** : If set a javascript click event with a page load to this link
@@ -195,6 +196,7 @@ class HtmlForm extends \Smarty
      *                        - **class** : Optional an additional css classname. The class **admButton**
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
+     * @throws SmartyException
      */
     public function addButton(string $id, string $text, array $options = array())
     {
@@ -230,9 +232,11 @@ class HtmlForm extends \Smarty
     /**
      * Add a captcha with an input field to the form. The captcha could be a picture with a character code
      * or a simple mathematical calculation that must be solved.
-     * @param string $id    ID of the captcha field. This will also be the name of the captcha field.
+     * @param string $id ID of the captcha field. This will also be the name of the captcha field.
      * @param string $class (optional) An additional css classname. The class **admTextInput**
      *                      is set as default and need not set with this parameter.
+     * @throws SmartyException
+     * @throws Exception
      */
     public function addCaptcha(string $id, string $class = '')
     {
@@ -259,11 +263,11 @@ class HtmlForm extends \Smarty
 
     /**
      * Add a new checkbox with a label to the form.
-     * @param string $id      ID of the checkbox. This will also be the name of the checkbox.
-     * @param string $label   The label of the checkbox.
+     * @param string $id ID of the checkbox. This will also be the name of the checkbox.
+     * @param string $label The label of the checkbox.
      * @param bool $checked A value for the checkbox. The value could only be **0** or **1**. If the value is **1** then
      *                        the checkbox will be checked when displayed.
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
@@ -282,6 +286,7 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws SmartyException
      */
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
@@ -351,6 +356,7 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws SmartyException
      */
     public function addCustomContent(string $label, string $content, array $options = array())
     {
@@ -381,10 +387,10 @@ class HtmlForm extends \Smarty
 
     /**
      * Add a new CKEditor element to the form.
-     * @param string $id      ID of the password field. This will also be the name of the password field.
-     * @param string $label   The label of the password field.
-     * @param string $value   A value for the editor field. The editor will contain this value when created.
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param string $id ID of the password field. This will also be the name of the password field.
+     * @param string $label The label of the password field.
+     * @param string $value A value for the editor field. The editor will contain this value when created.
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
@@ -405,6 +411,7 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws SmartyException
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
     {
@@ -476,9 +483,9 @@ class HtmlForm extends \Smarty
     /**
      * Add a field for file upload. If necessary multiple files could be uploaded.
      * The fields for multiple upload could be added dynamically to the form by the user.
-     * @param string $id      ID of the input field. This will also be the name of the input field.
-     * @param string $label   The label of the input field.
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param string $id ID of the input field. This will also be the name of the input field.
+     * @param string $label The label of the input field.
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
@@ -505,11 +512,10 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws SmartyException
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
-        global $gSettingsManager;
-
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
 
@@ -592,10 +598,10 @@ class HtmlForm extends \Smarty
 
     /**
      * Add a new input field with a label to the form.
-     * @param string $id      ID of the input field. This will also be the name of the input field.
-     * @param string $label   The label of the input field.
-     * @param string $value   A value for the text field. The field will be created with this value.
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param string $id ID of the input field. This will also be the name of the input field.
+     * @param string $label The label of the input field.
+     * @param string $value A value for the text field. The field will be created with this value.
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **type** : Set the type if the field. Default will be **text**. Possible values are **text**,
      *                          **number**, **date**, **datetime** or **birthday**. If **date**, **datetime** or **birthday** are set
      *                          than a small calendar will be shown if the date field will be selected.
@@ -608,7 +614,7 @@ class HtmlForm extends \Smarty
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     *                          + **self::FIELD_HIDDEN**   : The field will not be shown. Useful to transport additional informations.
+     *                          + **self::FIELD_HIDDEN**   : The field will not be shown. Useful to transport additional information.
      *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hovers over the icon. If you need an additional parameter
@@ -624,6 +630,8 @@ class HtmlForm extends \Smarty
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      *                        - **htmlAfter** : Add html code after the input field.
+     * @throws SmartyException
+     * @throws Exception
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
     {
@@ -828,11 +836,11 @@ class HtmlForm extends \Smarty
 
     /**
      * Add a new textarea field with a label to the form.
-     * @param string $id      ID of the input field. This will also be the name of the input field.
-     * @param string $label   The label of the input field.
-     * @param string $value   A value for the text field. The field will be created with this value.
-     * @param int $rows    The number of rows that the textarea field should have.
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param string $id ID of the input field. This will also be the name of the input field.
+     * @param string $label The label of the input field.
+     * @param string $value A value for the text field. The field will be created with this value.
+     * @param int $rows The number of rows that the textarea field should have.
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **maxLength** : The maximum number of characters that are allowed in this field. If set
      *                          then show a counter how many characters still available
      *                        - **property** : With this param you can set the following properties:
@@ -851,6 +859,7 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws SmartyException
      */
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
@@ -930,12 +939,12 @@ class HtmlForm extends \Smarty
     /**
      * Add a new radio button with a label to the form. The radio button could have different status
      * which could be defined with an array.
-     * @param string $id      ID of the radio button. This will also be the name of the radio button.
-     * @param string $label   The label of the radio button.
-     * @param array  $values  Array with all entries of the radio button;
+     * @param string $id ID of the radio button. This will also be the name of the radio button.
+     * @param string $label The label of the radio button.
+     * @param array $values Array with all entries of the radio button;
      *                        Array key will be the internal value of the entry
      *                        Array value will be the visual value of the entry
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
@@ -957,6 +966,7 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws SmartyException
      */
     public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
@@ -1004,14 +1014,14 @@ class HtmlForm extends \Smarty
     /**
      * Add a new selectbox with a label to the form. The selectbox
      * could have different values and a default value could be set.
-     * @param string $id      ID of the selectbox. This will also be the name of the selectbox.
-     * @param string $label   The label of the selectbox.
-     * @param array  $values  Array with all entries of the select box;
+     * @param string $id ID of the selectbox. This will also be the name of the selectbox.
+     * @param string $label The label of the selectbox.
+     * @param array $values Array with all entries of the select box;
      *                        Array key will be the internal value of the entry
      *                        Array value will be the visual value of the entry
      *                        If you need an option group within the selectbox than you must add an array as value.
      *                        This array exists of 3 entries: array(0 => id, 1 => value name, 2 => option group name)
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
@@ -1051,6 +1061,8 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws SmartyException
+     * @throws Exception
      */
     public function addSelectBox(string $id, string $label, array $values, array $options = array())
     {
@@ -1221,13 +1233,13 @@ class HtmlForm extends \Smarty
      * column represents the label of each option of the selectbox. Optional you can add a third column
      * to the sql statement. This column will be used as label for an optiongroup. Each time the value
      * of the third column changed a new optiongroup will be created.
-     * @param string $id       ID of the selectbox. This will also be the name of the selectbox.
-     * @param string $label    The label of the selectbox.
-     * @param Database     $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param array|string $sql      Any SQL statement that return 2 columns. The first column will be the internal value of the
+     * @param string $id ID of the selectbox. This will also be the name of the selectbox.
+     * @param string $label The label of the selectbox.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param array|string $sql Any SQL statement that return 2 columns. The first column will be the internal value of the
      *                               selectbox item and will be submitted with the form. The second column represents the
      *                               displayed value of the item. Each row of the result will be a new selectbox entry.
-     * @param array        $options  (optional) An array with the following possible entries:
+     * @param array $options (optional) An array with the following possible entries:
      *                               - **property** : With this param you can set the following properties:
      *                                 + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                                 + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
@@ -1271,6 +1283,8 @@ class HtmlForm extends \Smarty
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show();
      * ```
+     * @throws SmartyException
+     * @throws Exception
      */
     public function addSelectBoxFromSql(string $id, string $label, Database $database, $sql, array $options = array())
     {
@@ -1382,17 +1396,17 @@ class HtmlForm extends \Smarty
     /**
      * Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories.
      * You must define the category type (roles, events, links ...). All categories of this type will be shown.
-     * @param string $id             ID of the selectbox. This will also be the name of the selectbox.
-     * @param string $label          The label of the selectbox.
-     * @param Database $database       A Admidio database object that contains a valid connection to a database
-     * @param string $categoryType   Type of category ('EVT', 'LNK', 'ROL', 'USF') that should be shown.
+     * @param string $id ID of the selectbox. This will also be the name of the selectbox.
+     * @param string $label The label of the selectbox.
+     * @param Database $database A Admidio database object that contains a valid connection to a database
+     * @param string $categoryType Type of category ('EVT', 'LNK', 'ROL', 'USF') that should be shown.
      *                                 The type 'ROL' will ot list event role categories. Therefore, you need to set
      *                                 the type 'ROL_EVENT'. It's not possible to show role categories together with
      *                                 event categories.
      * @param string $selectBoxModus The selectbox could be shown in 2 different modus.
      *                                 - **EDIT_CATEGORIES** : First entry will be "Please choose" and default category will be preselected.
      *                                 - **FILTER_CATEGORIES** : First entry will be "All" and only categories with children will be shown.
-     * @param array    $options        (optional) An array with the following possible entries:
+     * @param array $options (optional) An array with the following possible entries:
      *                                 - **property** : With this param you can set the following properties:
      *                                   + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                                   + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
@@ -1415,6 +1429,8 @@ class HtmlForm extends \Smarty
      *                                 - **icon** : An icon can be set. This will be placed in front of the label.
      *                                 - **class** : An additional css classname. The class **admSelectbox**
      *                                   is set as default and need not set with this parameter.
+     * @throws SmartyException
+     * @throws Exception
      */
     public function addSelectBoxForCategories(string $id, string $label, Database $database, string $categoryType, string $selectBoxModus, array $options = array())
     {
@@ -1559,10 +1575,10 @@ class HtmlForm extends \Smarty
     /**
      * Add a new static control to the form. A static control is only a simple text instead of an input field.
      * This could be used if the value should not be changed by the user.
-     * @param string $id      ID of the static control. This will also be the name of the static control.
-     * @param string $label   The label of the static control.
-     * @param string $value   A value of the static control. The control will be created with this value.
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param string $id ID of the static control. This will also be the name of the static control.
+     * @param string $label The label of the static control.
+     * @param string $value A value of the static control. The control will be created with this value.
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hovers over the icon. If you need an additional parameter
@@ -1577,6 +1593,7 @@ class HtmlForm extends \Smarty
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws SmartyException
      */
     public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
@@ -1609,9 +1626,9 @@ class HtmlForm extends \Smarty
      * Add a new button with a custom text to the form. This button could have
      * an icon in front of the text. Different to addButton this method adds an
      * **div** around the button and the type of the button is **submit**.
-     * @param string $id      ID of the button. This will also be the name of the button.
-     * @param string $text    Text of the button
-     * @param array  $options (optional) An array with the following possible entries:
+     * @param string $id ID of the button. This will also be the name of the button.
+     * @param string $text Text of the button
+     * @param array $options (optional) An array with the following possible entries:
      *                        - **icon** : Optional parameter. Path and filename of an icon.
      *                          If set an icon will be shown in front of the text.
      *                        - **link** : If set a javascript click event with a page load to this link
@@ -1620,6 +1637,7 @@ class HtmlForm extends \Smarty
      *                          is set as default and need not set with this parameter.
      *                        - **type** : If set to true this button get the type **submit**. This will
      *                          be the default.
+     * @throws SmartyException
      */
     public function addSubmitButton(string $id, string $text, array $options = array())
     {
@@ -1663,11 +1681,12 @@ class HtmlForm extends \Smarty
      * Add a small help icon to the form at the current element which shows the translated text of the
      * text-id or an individual text on mouseover. The title will be note if it's a text-id or
      * description if it's an individual text.
-     * @param string $string    A text that should be shown or a unique text id from the translation xml files
+     * @param string $string A text that should be shown or a unique text id from the translation xml files
      *                          that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
-     * @param string $title     A text-id that represents the title of the help text. Default will be SYS_NOTE.
+     * @param string $title A text-id that represents the title of the help text. Default will be SYS_NOTE.
      * @param array $parameter If you need an additional parameters for the text you can set this parameter values within an array.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
+     * @throws Exception
      */
     public static function getHelpTextIcon(string $string, string $title = 'SYS_NOTE', array $parameter = array()): string
     {
@@ -1689,6 +1708,9 @@ class HtmlForm extends \Smarty
         return $html;
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getHelpText($text)
     {
         $parameters = array();
@@ -1750,6 +1772,7 @@ class HtmlForm extends \Smarty
      * @param string $templateName
      * @param array $assigns
      * @return void
+     * @throws SmartyException
      */
     private function render(string $templateName, array $assigns) {
         global $gL10n;
@@ -1770,6 +1793,7 @@ class HtmlForm extends \Smarty
      * if you have finished your form layout. If mandatory fields were set than a notice
      * which marker represents the mandatory will be shown before the form.
      * @return string Return the html code of the form.
+     * @throws Exception
      */
     public function show(): string
     {
