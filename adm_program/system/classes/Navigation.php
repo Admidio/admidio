@@ -105,14 +105,15 @@ class Navigation
     /**
      * Add a new url to the navigation stack. If a html navigation bar should be created later
      * than you should fill the text and maybe the icon. Before the url will be added to the stack
-     * the method checks if the current url was already added to the url.
+     * the method checks if the current url was already added to the url. If the current url is found in
+     * the stack than all further urls of the stack will be removed.
      * @param string $url The url that should be added to the navigation stack.
      * @param string $text A text that should be shown in the html navigation stack and
      *                     would be linked with the $url.
      * @param string $icon The name of a fontawesome icon that should be shown in the html navigation stack
      *                     together with the text and would be linked with the $url.
      * @return bool Returns true if the navigation-stack got changed and false if not.
-     *@throws AdmException Throws an exception if the url has invalid characters.
+     * @throws AdmException Throws an exception if the url has invalid characters.
      */
     public function addUrl(string $url, string $text = '', string $icon = ''): bool
     {
@@ -140,13 +141,16 @@ class Navigation
             }
         }
 
-        // if the second last url is equal to the new url then only remove the last url
-        if ($count > 1 && $url === $this->urlStack[$count - 2]['url']) {
-            array_pop($this->urlStack);
-        } else {
-            $this->urlStack[] = array('url' => $url, 'text' => $text, 'icon' => $icon);
+        // check if the new url is already in the stack. If it's in the stack than remove all further entries
+        foreach($this->urlStack as $key => $entry) {
+            if ($entry['url'] === $url) {
+                while (count($this->urlStack)-1 >= $key) {
+                    array_pop($this->urlStack);
+                }
+            }
         }
 
+        $this->urlStack[] = array('url' => $url, 'text' => $text, 'icon' => $icon);
         return true;
     }
 
@@ -157,6 +161,16 @@ class Navigation
     public function getStack(): array
     {
         return $this->urlStack;
+    }
+
+    /**
+     * Returns the URL of the entry with the given index.
+     * @param int $index Index number of the entry that should be returned.
+     * @return string Returns the URL of the entry with the given index.
+     */
+    public function getStackEntryUrl(int $index): string
+    {
+        return $this->urlStack[$index]['url'];
     }
 
     /**

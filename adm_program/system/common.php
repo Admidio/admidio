@@ -130,7 +130,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)
 
 $gL10n = new Language($gLanguageData);
 
-$sesUsrId      = $gCurrentSession->getValue('ses_usr_id');
+$sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
 
 // Create a notification object to store and send change notifications to profile fields
 $gChangeNotification = new ChangeNotification();

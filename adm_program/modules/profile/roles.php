@@ -129,8 +129,13 @@ if ($getInline) {
 
     if ($getNewUser === 3) {
         $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
+        $nextUrl = $gNavigation->getStackEntryUrl(0);
+    } elseif ($getNewUser === 1) {
+        $messageId = 'SYS_SAVE_DATA';
+        $nextUrl = $gNavigation->getStackEntryUrl($gNavigation->count()-3);
     } else {
         $messageId = 'SYS_SAVE_DATA';
+        $nextUrl = $gNavigation->getPreviousUrl();
     }
     $page->addJavascript('
         $("#btn-next").click(function() {
@@ -147,7 +152,7 @@ if ($getInline) {
                 $("#admidio-profile-roles-alert").fadeIn();
                 $("#admidio-profile-roles-alert").html("<i class=\"fas fa-check\"></i>'.$gL10n->get($messageId).'");
                 setTimeout(function() {
-                    window.location.href = "'.$gNavigation->getPreviousUrl().'";
+                    window.location.href = "'.$nextUrl.'";
                 }, 3000);
             } else {
                 $("#admidio-profile-roles-alert").fadeIn();

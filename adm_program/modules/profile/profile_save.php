@@ -229,7 +229,6 @@ if ((int) $user->getValue('usr_id') === $gCurrentUserId) {
 }
 
 unset($_SESSION['profile_request']);
-$gNavigation->deleteLastUrl();
 
 // ------------------------------------------------------------
 // redirect to the correct page depending on the call mode
@@ -261,22 +260,26 @@ if ($getNewUser === 1 || $getNewUser === 3) {
         admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $user->getValue('usr_uuid'), 'new_user' => $getNewUser)));
     // => EXIT
     } else {
+        $gNavigation->deleteLastUrl();
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
         $gMessage->show($gL10n->get($messageId));
         // => EXIT
     }
 } elseif ($getNewUser === 2) {
     // registration was successful then go to homepage
+    $gNavigation->deleteLastUrl();
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_REGISTRATION_SAVED'));
 // => EXIT
 } elseif ($getNewUser === 0 && !$user->getValue('usr_valid')) {
     // a registration was edited then go back to profile view
+    $gNavigation->deleteLastUrl();
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 // => EXIT
 } else {
     // go back to profile view
+    $gNavigation->deleteLastUrl();
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
     // => EXIT
