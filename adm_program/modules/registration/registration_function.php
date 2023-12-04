@@ -22,6 +22,10 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 try {
+    if ($getMode == 4) {
+        $gMessage->showHtmlTextOnly();
+    }
+
     // Initialize and check the parameters
     $getMode        = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 5, 6)));
     $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
@@ -137,6 +141,6 @@ try {
         admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/contacts/contacts_function.php', array('mode' => '4', 'user_uuid' => $getUserUuid)));
         // => EXIT
     }
-} catch (AdmException|Exception $e) {
+} catch (AdmException | Exception $e) {
     $gMessage->show($e->getMessage());
 }
