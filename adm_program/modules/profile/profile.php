@@ -550,7 +550,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_approve_users'],
                 'right' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'),
-                'icon'  => 'fa-address-card'
+                'icon'  => 'fa-file-signature'
             );
         }
         if ($user->checkRolesRight('rol_edit_user')) {

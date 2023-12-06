@@ -79,7 +79,7 @@ class ModuleDocumentsFiles extends HtmlPage
                         );
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/move.php', array('folder_uuid' => $row['uuid'])),
-                            'icon' => 'fas fa-arrow-circle-right',
+                            'icon' => 'fas fa-folder',
                             'tooltip' => $gL10n->get('SYS_MOVE_FOLDER')
                         );
                     }
@@ -104,7 +104,7 @@ class ModuleDocumentsFiles extends HtmlPage
                         );
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/move.php', array('folder_uuid' => $this->folder->getValue('fol_uuid'), 'file_uuid' => $row['uuid'])),
-                            'icon' => 'fas fa-arrow-circle-right',
+                            'icon' => 'fas fa-folder',
                             'tooltip' => $gL10n->get('SYS_MOVE_FILE')
                         );
                     }

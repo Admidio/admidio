@@ -250,13 +250,13 @@ class ModuleGroupsRoles extends HtmlPage
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-list', 'title' => $gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'));
             }
             if ($role->getValue('rol_approve_users') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-address-card', 'title' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'));
+                $templateRow['roleRights'][] = array('icon' => 'fas fa-file-signature', 'title' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'));
             }
             if ($role->getValue('rol_mail_to_all') == 1) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-envelope', 'title' => $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'));
             }
             if ($role->getValue('rol_edit_user') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-user-friends', 'title' => $gL10n->get('SYS_RIGHT_EDIT_USER'));
+                $templateRow['roleRights'][] = array('icon' => 'fas fa-users-cog', 'title' => $gL10n->get('SYS_RIGHT_EDIT_USER'));
             }
             if ($role->getValue('rol_profile') == 1) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-user', 'title' => $gL10n->get('SYS_RIGHT_PROFILE'));

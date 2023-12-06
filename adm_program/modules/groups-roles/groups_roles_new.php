@@ -270,7 +270,7 @@ if (!$eventRole) {
         'rol_approve_users',
         $gL10n->get('SYS_RIGHT_APPROVE_USERS'),
         (bool) $role->getValue('rol_approve_users'),
-        array('icon' => 'fa-address-card')
+        array('icon' => 'fa-file-signature')
     );
     if ($gSettingsManager->getBool('enable_mail_module')) {
         $form->addCheckbox(

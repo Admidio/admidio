@@ -179,7 +179,7 @@ if ($gValidLogin) {
 
     // show links for registration and help
     if ($plg_show_register_link && $gSettingsManager->getBool('registration_enable_module')) {
-        echo '<a class="btn admidio-icon-link" href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" target="'. $plg_link_target. '"><i class="fas fa-address-card"></i>'.$gL10n->get('SYS_REGISTRATION').'</a>';
+        echo '<a class="btn admidio-icon-link" href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" target="'. $plg_link_target. '"><i class="fas fa-file-signature"></i>'.$gL10n->get('SYS_REGISTRATION').'</a>';
     }
 
     if ($plg_show_email_link) {

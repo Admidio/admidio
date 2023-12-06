@@ -511,7 +511,7 @@ $formRegistration->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'registration', 'accordion_preferences', $gL10n->get('SYS_REGISTRATION'), 'fas fa-address-card', $formRegistration->show()));
+$page->addHtml(getPreferencePanel('common', 'registration', 'accordion_preferences', $gL10n->get('SYS_REGISTRATION'), 'fas fa-file-signature', $formRegistration->show()));
 
 // PANEL: EMAIL DISPATCH
 
