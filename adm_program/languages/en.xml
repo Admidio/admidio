@@ -513,7 +513,7 @@
   <string name="SYS_DEFAULT_VALUE_DESC">You can set a default value for this profile field. This value will be preset directly for a new user in the field. To do this, enter the value in the field that you would also enter in the profile itself.\n\nFor the checkbox data type, you can enter 1 for activated and 0 for deactivated. For the data types dropdown list field and radio button you enter the number of the line from the value list in which the desired value is located.</string>
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Default view</string>
-  <string name="SYS_DEFAULT_VIEW_DESC">Display type for events. With mode #VAR1_BOLD# all event details will be displayed within a box. With mode #VAR2_BOLD# the most important event details will be displayed in a compact list. (Default: Detailed)</string>
+  <string name="SYS_DEFAULT_VIEW_DESC">A display mode of the events can be preselected. In #VAR1_BOLD# mode, all the information about an event is displayed in a box. In the #VAR2_BOLD# display mode, the most important event information is shown in a compact list. (Default setting: #VAR1#)</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
@@ -872,7 +872,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximum file size</string>
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Participate with reservation</string>
-  <string name="SYS_MAYBE_PARTICIPATE_DESC">If this option is activated, there will be a third option #VAR3_BOLD# besides the options #VAR1_BOLD# and #VAR2_BOLD#. (Default: disabled)</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">If this option is activated, a third option #VAR3_BOLD# is available in addition to #VAR1_BOLD# and #VAR2_BOLD# when registering for an event. (Default: disabled)</string>
   <string name="SYS_MEETINGS">Meetings</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Member</string>
@@ -1191,7 +1191,7 @@
   <string name="SYS_ROOM_OVERHANG">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined here.</string>
   <string name="SYS_ROOM_RESERVED">Selected room is already in use at this time.</string>
   <string name="SYS_ROOM_SELECTABLE">Room is available</string>
-  <string name="SYS_ROOM_SELECTABLE_DESC">Selection box for available rooms is available. Select room and create event for selected room. (standard answer: no)</string>
+  <string name="SYS_ROOM_SELECTABLE_DESC">A selection box for the available rooms is displayed to enable the creator of an event to select a room. (standard answer: no)</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotate photo left</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotate photo right</string>
   <string name="SYS_ROW">Row</string>
