@@ -228,8 +228,6 @@
   <string name="ORG_SEND_NEW_PASSWORD">Skicka nytt lösenord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Visa skaparen och tidsstämpeln för skapelsen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Ett fält är normalt synligt för alla användare. Om den här funktionen inte är vald kan informationen bara ses av användare som har rätt att redigera alla användare. I sin egen profil kan användaren se och redigera data.</string>
-  <string name="ORG_SHOW_ALL_USERS">Valfritt visa alla användare</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Om det här alternativet är aktiverat visas tidigare medlemmar och medlemmar i andra organisationer utöver de aktiva medlemmarna i den aktuella organisationen. Annars visas bara medlemmar i den aktuella organisationen. När du skapar nya användare eller tilldelar registreringar kommer alla organisationer fortfarande att kontrolleras för befintliga användare.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Visa organisationsval</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Om flera organisationer lagras i databasen kan inloggningsskärmen visa en markeringsruta med alla tillgängliga organisationer. Användaren kan sedan logga in för att välja en annan organisation (annat än definierat i config.php). Användaren måste dock vara en registrerad medlem i den valda organisationen.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
@@ -254,11 +252,11 @@
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_A_TO_Z">A-Ö</string>
   <string name="SYS_ABORT">Avbryt</string>
-  <string name="SYS_ABR_NO" description="Abbreviation for Number">Nej.</string>
+  <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktiva och tidigare medlemmar</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktiv och tidigare</string>
   <string name="SYS_ACTIVE_MEMBERS">Profilbilder av nyligen aktiva medlemmar</string>
-  <string name="SYS_ACTIVATE_ROLE">&quot;Aktivera roll&quot;</string>
+  <string name="SYS_ACTIVATE_ROLE">Aktivera roll</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Om du aktiverar rollen #VAR1_BOLD# tilldelas rollmedlemmarna igen behörigheter och rollen kan väljas i alla listor. \n\n Vill du aktivera rollerna igen?</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktiva grupper och roller</string>
   <string name="SYS_ADD_ANOTHER_CONFIG">Lägg till ytterligare konfiguration</string>
@@ -640,7 +638,6 @@
   <string name="SYS_ENABLE_PM_MODULE">Aktivera privata meddelanden</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Privata meddelanden kan aktiveras eller avaktiveras med denna inställning. (Standard: aktiverad)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Underhålla och visa relationer</string>
-  <string name="SYS_ENABLE_USER_RELATIONS_DESC">Om den är aktiv kan relationer mellan användare upprätthållas och visas. (Standard: ja)</string>
   <string name="SYS_ENCODING_GUESS">Försök att upptäcka kodningen</string>
   <string name="SYS_END" description="End of a date">Avsluta</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Vill du avsluta medlemskapet till användaren #VAR1# i #VAR2#?</string>
@@ -672,7 +669,7 @@
   <string name="SYS_EXPORT_LISTS">Exportera listor</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listor över grupper och roller kan exporteras av användare, förutsatt att du har rätt att se dessa listor. Denna inställning kan användas för att begränsa exportfunktionen. (Standard: Alla)</string>
   <string name="SYS_EXPORT_TO">Exportera till</string>
-  <string name="SYS_EXPORT_VCARD">&quot;Exportera vCard&quot;</string>
+  <string name="SYS_EXPORT_VCARD">Exportera vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Exportera vCard för #VAR1#</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FADE_IN">Tona in</string>
@@ -703,7 +700,7 @@
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Alla filer överfördes inte.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Välj alla filer som ska överföras till mappen #VAR1_BOLD#</string>
   <string name="SYS_FILENAME_EMPTY">Filnamn saknas!</string>
-  <string name="SYS_FILENAME_INVALID">Det valda filnamnet #VAR1_BOLD# innehåller ogiltiga tecken. Kontrollera filnamnet. \n\nFöljande specialtecken är inte tillåtna:? &quot;&quot; &lt; > |</string>
+  <string name="SYS_FILENAME_INVALID">Det valda filnamnet #VAR1_BOLD# innehåller ogiltiga tecken. Kontrollera filnamnet. \n\nFöljande specialtecken är inte tillåtna: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Databasversionen #VAR1# är högre än versionen av Admidio-skript #VAR2#. \n\n Uppdatera dina Admidio-filer på servern #VAR3# genom att använda en senare version av Admidio #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter för export</string>
@@ -722,7 +719,6 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Ett fel uppstod när mappen #VAR1# bytt namn.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Mapp #VAR1_BOLD# kan inte skapas med nödvändiga skrivbehörigheter. \n\n Fråga en #VAR2# administratör #VAR3# om hjälp för att kontrollera skrivbehörigheter (genom att använda FTP för att ändra filattribut till 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Typsnitt</string>
-  <string name="SYS_FONT_AWESOME_DESC">Du kan lägga till en ikon från webbtypsnitt \"Font Awesome\". Gå till #VAR1#http://fontawesome.com#VAR2# och välj en gratis ikon från samlingen \"Solid\" eller \"Brands\". Som ett prefix måste du använda fa- framför det. Så om du väljer ikonen \"user\" måste du ange \"fa-user\" här.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Jag har glömt mitt lösenord!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Tidigare</string>
@@ -887,9 +883,9 @@
   <string name="SYS_MEMBERS_PER_PAGE">Medlemmar visas per sida</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Antal medlemmar listade i HTML-vyn. Fler medlemmar kan listas med hjälp av pagineringsfunktionen. Detta värde påverkar inte förhandsgranskning och exportfunktioner för utskrifter (standard: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Hittade #VAR1# medlemmar med ett liknande namn.</string>
-  <string name="SYS_MEMBERSHIP_END">&quot;Slut på medlemskap&quot;</string>
+  <string name="SYS_MEMBERSHIP_END">Slut på medlemskap</string>
   <string name="SYS_MEMBERSHIP_DELETE">Vill du avsluta medlemskapet i roll #VAR1_BOLD#?</string>
-  <string name="SYS_MEMBERSHIP_START">&quot;Start av medlemskap&quot;</string>
+  <string name="SYS_MEMBERSHIP_START">Start av medlemskap</string>
   <string name="SYS_MEMORY_LIMIT">Minnes gräns</string>
   <string name="SYS_MENU">Meny</string>
   <string name="SYS_MENU_DESC">Menyn kan konfigureras här. Förutom URL-adressen kan en beskrivning och en ikon deponeras. Dessutom kan det bestämmas vem som får se menyposten.</string>
@@ -1413,7 +1409,6 @@
   <string name="SYS_USERNAME_DESCRIPTION">Du kan logga in med det här användarnamnet. \n\nDetta namn måste vara väl definierat. Om det valda namnet inte är tillgängligt längre, försök att använda kombinationer som Andi78 eller SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">E-postadress</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# vid #VAR3#</string>
-  <string name="SYS_USERS_PER_PAGE">Antal användare per sida</string>
   <string name="SYS_USING_CURRENT_VERSION">Du använder en aktuell version #VAR1# av Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
