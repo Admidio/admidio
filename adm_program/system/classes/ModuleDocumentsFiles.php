@@ -60,7 +60,7 @@ class ModuleDocumentsFiles extends HtmlPage
 
             if ($row['folder']) {
                 $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $row['uuid']));
-                $templateRow['icon'] = 'fas fa-fw fa-folder';
+                $templateRow['icon'] = 'fas fa-fw fa-folder-open';
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
 
                 if ($this->folder->hasUploadRight()) {
