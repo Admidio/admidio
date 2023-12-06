@@ -228,8 +228,6 @@
   <string name="ORG_SEND_NEW_PASSWORD">Neues Passwort zuschicken</string>
   <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">An einigen Stellen wird die Erstellerin bzw. der Ersteller zusammen mit der Benutzerin bzw. der Benutzer mit der letzten Änderung zu einem Datensatz zusammen mit einem Zeitstempel angezeigt. Mit dieser Einstellung kann festgelegt werden, ob diese Informationen überhaupt angezeigt werden und ob die Benutzerin oder der Benutzer mit dem Anmeldenamen oder mit ihrem Vor- und Nachnamen angezeigt werden soll.</string>
-  <string name="ORG_SHOW_ALL_USERS">Optional alle Benutzer:innen anzeigen</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Ist diese Option gesetzt, können neben den aktiven Mitgliedern der aktuellen Organisation optional auch ehemalige Mitglieder und Mitglieder anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive Mitglieder der aktuellen Organisation angezeigt. Beim Anlegen neuer Mitglieder oder beim Zuordnen von Registrierungen wird jedoch weiterhin in der gesamten Datenbank aller Organisationen nach vorhandenen Benutzern gesucht.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
@@ -515,7 +513,7 @@
   <string name="SYS_DEFAULT_VALUE_DESC">Du kannst einen Standardwert für dieses Profilfeld hinterlegen. Dieser Wert wird bei einem neuen Mitglied in dem Profilfeld direkt vorbelegt. Trage dazu den Wert in das Feld ein, den du auch im Profil selber bei dem Feld hinterlegen würdest.\n\nBei dem Datentyp Checkbox kannst du 1 für aktiviert und 0 für deaktiviert hinterlegen. Bei den Datentypen Dropdown-Listenfeld und Optionsfeld hinterlegst du die Nummer der Zeile aus der Werteliste in der der gewünschte Wert steht.</string>
   <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Standard-Darstellung</string>
-  <string name="SYS_DEFAULT_VIEW_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Voreinstellung: Detailliert)</string>
+  <string name="SYS_DEFAULT_VIEW_DESC">Es kann ein Anzeigemodus für die Veranstaltungen vorausgewählt werden. Im Modus #VAR1_BOLD# werden alle Informationen zu einer Veranstaltung in einem Kasten angezeigt. Im Anzeigemodus #VAR2_BOLD# werden die wichtigsten Veranstaltungsinformationen in einer kompakten Liste angezeigt. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_ALBUM">Album löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
@@ -640,7 +638,7 @@
   <string name="SYS_ENABLE_PM_MODULE">Private Nachrichten aktivieren</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
-  <string name="SYS_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen Benutzer:innen gepflegt und angezeigt werden. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_USER_RELATIONS_DESC">Wenn diese Option aktiviert ist, können Beziehungen zwischen Kontakten gepflegt und angezeigt werden. (Voreinstellung: ja)</string>
   <string name="SYS_ENCODING_GUESS">Versuche die Kodierung zu erkennen</string>
   <string name="SYS_END" description="End of a date">Ende</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Willst du die Mitgliedschaft von #VAR1# bei #VAR2# beenden?</string>
@@ -653,7 +651,7 @@
   <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">Du hast bei den Teilnehmenden Rollen zugeordnet, welche bei der gewählten Kategorie nicht das Recht haben die Veranstaltungen zu sehen. Bitte wähle bei den Teilnehmenden eine der folgenden Rollen: #VAR1_BOLD#.</string>
   <string name="SYS_EVENT_CHANGED_TITLE">Ein Termin wurde geändert auf #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">Ein neuer Termin wurde angelegt auf #VAR1#</string>
-  <string name="SYS_EVENT_DEADLINE_DESC">Teilnehmende können sich bis zu diesem Datum am Termin anmelden. Leiter:innen und Mitglieder mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmende zuordnen. Wenn kein Datum angegeben wird, dann wird das Startdatum des Termins als Anmeldeschluss angenommen.</string>
+  <string name="SYS_EVENT_DEADLINE_DESC">Teilnehmende können sich bis zu diesem Datum an der Veranstaltung anmelden. Leiter:innen und Benutzer:innen mit dem Recht Veranstaltungen zu bearbeiten können weiterhin Teilnehmende zuordnen. Wenn kein Datum angegeben wird, dann wird das Startdatum der Veranstaltung als Anmeldeschluss angenommen.</string>
   <string name="SYS_EVENT_MAX_MEMBERS">Hier kann die Anzahl der Teilnehmenden für diese der Veranstaltung beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
   <string name="SYS_EVENT_PARTICIPATION_ATTEND">Ich nehme teil</string>
   <string name="SYS_EVENT_PARTICIPATION_TENTATIVE">Unter Vorbehalt</string>
@@ -722,7 +720,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
   <string name="SYS_FONT">Schriftart</string>
-  <string name="SYS_FONT_AWESOME_DESC">Hier kannst du ein Icon der Webschriftart \"Font Awesome\" hinterlegen. Gehe dazu zu #VAR1#http://fontawesome.com#VAR2# und wähle ein freies Icon aus der Sammlung \"Solid\" oder \"Brands\". Als Präfix muss ein fa- vorangestellt werden. Wenn du also das Icon \"user\" wählst, musst du hier \"fa-user\" eingeben.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Hier kannst du ein Icon der Webschriftart \"Font Awesome\" hinterlegen. Gehe dazu zu #VAR1#https://fontawesome.com#VAR2# und wähle ein freies Icon aus der Sammlung \"Solid\" oder \"Brands\". Als Präfix muss ein fa- vorangestellt werden. Wenn du also das Icon \"user\" wählst, musst du hier \"fa-user\" eingeben.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ehemaliger</string>
@@ -874,7 +872,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Benutzer:innen können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Voreinstellung: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
-  <string name="SYS_MAYBE_PARTICIPATE_DESC">Ist diese Option aktiviert, so steht bei der Terminanmeldung neben den Möglichkeiten #VAR1_BOLD# und #VAR2_BOLD# noch eine dritte Option #VAR3_BOLD# zur Verfügung. (Voreinstellung: nein)</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">Wenn diese Option aktiviert ist, ist bei der Anmeldung zu einer Veranstaltung eine dritte Option #VAR3_BOLD# zusätzlich zu #VAR1_BOLD# und #VAR2_BOLD# verfügbar. (Standard: deaktiviert)</string>
   <string name="SYS_MEETINGS">Treffen</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Mitglied</string>
@@ -1193,7 +1191,7 @@
   <string name="SYS_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
   <string name="SYS_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
   <string name="SYS_ROOM_SELECTABLE">Raum auswählbar</string>
-  <string name="SYS_ROOM_SELECTABLE_DESC">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Voreinstellung: nein)</string>
+  <string name="SYS_ROOM_SELECTABLE_DESC">Es wird eine Auswahlbox für die verfügbaren Räume angezeigt, damit der Ersteller einer Veranstaltung einen Raum auswählen kann (Standardantwort: nein).</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Foto gegen den Uhrzeigersinn drehen</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Foto im Uhrzeigersinn drehen</string>
   <string name="SYS_ROW">Zeile</string>
@@ -1204,8 +1202,8 @@
   <string name="SYS_SAME_WINDOW">Gleiches Fenster</string>
   <string name="SYS_SATURDAY">Samstag</string>
   <string name="SYS_SAVE">Speichern</string>
-  <string name="SYS_SAVE_ALL_CANCELLATIONS">Absagen zu Terminen speichern</string>
-  <string name="SYS_SAVE_ALL_CANCELLATIONS_DESC">Absagen von Teilnehmenden zu Terminen können gespeichert werden. Die Absagen werden dann in der Liste der Teilnehmenden ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Liste der Teilnehmenden auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Voreinstellung : Ja)</string>
+  <string name="SYS_SAVE_ALL_CANCELLATIONS">Absagen zu Veranstaltungen speichern</string>
+  <string name="SYS_SAVE_ALL_CANCELLATIONS_DESC">Absagen von Teilnehmenden zu Veranstaltungen können gespeichert werden. Die Absagen werden dann in der Liste der Teilnehmenden ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Liste der Teilnehmenden auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Voreinstellung : Ja)</string>
   <string name="SYS_SAVE_ATTACHMENTS">Anhänge speichern</string>
   <string name="SYS_SAVE_ATTACHMENTS_DESC">E-Mail-Anhänge werden auf dem Webspace gespeichert und können nach dem Versand weiterhin in der gespeicherten E-Mail aufgerufen werden. (Voreinstellung: ja)</string>
   <string name="SYS_SAVE_CHANGES">Änderungen speichern</string>
@@ -1277,6 +1275,8 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
   <string name="SYS_SHOW_ALL">Alle anzeigen</string>
+  <string name="SYS_SHOW_ALL_CONTACTS">Optional alle Kontakte anzeigen</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den aktiven Kontakten der aktuellen Organisation optional auch ehemalige Kontakte und Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer:innen wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss die Benutzerin oder der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
@@ -1413,7 +1413,7 @@
   <string name="SYS_USERNAME_DESCRIPTION">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
-  <string name="SYS_USERS_PER_PAGE">Anzahl Mitglieder pro Seite</string>
+  <string name="SYS_CONTACTS_PER_PAGE">Anzahl der Kontakte pro Seite</string>
   <string name="SYS_USING_CURRENT_VERSION">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
