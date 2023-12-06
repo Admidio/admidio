@@ -54,16 +54,14 @@ if ($getFileUuid !== '') {
     $description = $gL10n->get('SYS_MOVE_FOLDER_DESC', array($folder->getValue('fol_name')));
 }
 
-$documentsFiles = new ModuleDocumentsFiles();
-$folders = $documentsFiles->getUploadableFolderStructure();
-
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-$page = new HtmlPage('admidio-documents-move-file', $headline);
-$page->addHtml('<p class="lead admidio-max-with">'.$description.'</p>');
+$documentsFiles = new ModuleDocumentsFiles('admidio-documents-move-file', $headline);
+$folders = $documentsFiles->getUploadableFolderStructure();
+$documentsFiles->addHtml('<p class="lead admidio-max-with">'.$description.'</p>');
 
 // create html form
-$form = new HtmlForm('documents_files_move_file', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '8', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);
+$form = new HtmlForm('documents_files_move_file', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '8', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $documentsFiles);
 $form->addSelectBox(
     'dest_folder_uuid',
     $gL10n->get('SYS_MOVE_TO'),
@@ -80,5 +78,5 @@ $form->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml($form->show());
-$page->show();
+$documentsFiles->addHtml($form->show());
+$documentsFiles->show();
