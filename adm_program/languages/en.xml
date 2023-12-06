@@ -228,8 +228,6 @@
   <string name="ORG_SEND_NEW_PASSWORD">Send new password</string>
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">In some places the creator and the user with the last change to a record is displayed together with a timestamp. This setting can be used to determine whether this information is displayed at all and whether the user should be displayed with the user name or with their first and last name.</string>
-  <string name="ORG_SHOW_ALL_USERS">Optional show all users</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">If this option is set, former members and members of other organizations can optionally be displayed in the member administration in addition to the active members of the current organization. Otherwise only active members of the current organization are displayed. When creating new members or assigning registrations, however, the system will continue to look for existing users in the entire database of all organizations.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="ORG_SYSTEM_INFORMATION">System informations</string>
@@ -640,7 +638,7 @@
   <string name="SYS_ENABLE_PM_MODULE">Enable private messages</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Private messages can be enabled or disabled using this setting. (Default: enabled)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Maintain and show relationships</string>
-  <string name="SYS_ENABLE_USER_RELATIONS_DESC">If set active, relationships between users can be maintained and displayed. (Default: yes)</string>
+  <string name="SYS_ENABLE_USER_RELATIONS_DESC">If set active, relationships between contacts can be maintained and displayed. (Default: yes)</string>
   <string name="SYS_ENCODING_GUESS">Try to detect the encoding</string>
   <string name="SYS_END" description="End of a date">End</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Would you like to end membership of user #VAR1# in #VAR2#?</string>
@@ -1277,6 +1275,8 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
   <string name="SYS_SHOW_ALL">Show all</string>
+  <string name="SYS_SHOW_ALL_CONTACTS">Optional show all contacts</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, former contacts and contacts of other organizations can optionally be displayed in the member administration in addition to the active contacts of the current organization. Otherwise, only active contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
@@ -1413,7 +1413,7 @@
   <string name="SYS_USERNAME_DESCRIPTION">You will be able to login with this username.\n\nThis name must be well-defined. If selected name is not available anymore, please try to use combinations like Andi78 or SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
-  <string name="SYS_USERS_PER_PAGE">Number of members per page</string>
+  <string name="SYS_CONTACTS_PER_PAGE">Number of contacts per page</string>
   <string name="SYS_USING_CURRENT_VERSION">You are using a current #VAR1#version of Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

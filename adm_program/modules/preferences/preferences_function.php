@@ -164,7 +164,7 @@ switch ($getMode) {
                 case 'announcements':
                     break;
 
-                case 'user_management':
+                case 'contacts':
                     $checkboxes = array('contacts_show_all', 'contacts_user_relations_enabled');
                     break;
 

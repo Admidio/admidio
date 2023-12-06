@@ -56,7 +56,7 @@ $page = new HtmlPage('admidio-preferences', $headline);
 
 $showOptionValidModules = array(
     'announcements', 'documents-files', 'guestbook', 'groups-roles',
-    'messages', 'photos', 'profile', 'events', 'links', 'user_management', 'category-report'
+    'messages', 'photos', 'profile', 'events', 'links', 'contacts', 'category-report'
 );
 
 // open the modules tab if the options of a module should be shown
@@ -1099,11 +1099,11 @@ $formAnnouncements->addSubmitButton(
 
 $page->addHtml(getPreferencePanel('modules', 'announcements', 'accordion_modules', $gL10n->get('SYS_ANNOUNCEMENTS'), 'fas fa-newspaper', $formAnnouncements->show()));
 
-// PANEL: MEMBERS
+// PANEL: CONTACTS
 
 $formUserManagement = new HtmlForm(
-    'user_management_preferences_form',
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'user_management')),
+    'contacts_preferences_form',
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'contacts')),
     $page,
     array('class' => 'form-preferences')
 );
@@ -1130,7 +1130,7 @@ $formUserManagement->addSelectBoxFromSql(
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formUserManagement->addSelectBox(
     'contacts_per_page',
-    $gL10n->get('SYS_USERS_PER_PAGE'),
+    $gL10n->get('SYS_CONTACTS_PER_PAGE'),
     $selectBoxEntries,
     array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
 );
@@ -1142,9 +1142,9 @@ $formUserManagement->addInput(
 );
 $formUserManagement->addCheckbox(
     'contacts_show_all',
-    $gL10n->get('ORG_SHOW_ALL_USERS'),
+    $gL10n->get('SYS_SHOW_ALL_CONTACTS'),
     (bool) $formValues['contacts_show_all'],
-    array('helpTextIdInline' => 'ORG_SHOW_ALL_USERS_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_ALL_CONTACTS_DESC')
 );
 $formUserManagement->addCheckbox(
     'contacts_user_relations_enabled',
@@ -1158,12 +1158,12 @@ $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/use
 $formUserManagement->addCustomContent($gL10n->get('SYS_USER_RELATIONS'), $html, array('helpTextIdInline' => 'SYS_MAINTAIN_USER_RELATION_TYPES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 
 $formUserManagement->addSubmitButton(
-    'btn_save_user_management',
+    'btn_save_contacts',
     $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'user_administration', 'accordion_modules', $gL10n->get('SYS_MEMBERS'), 'fas fa-users-cog', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'contacts', 'accordion_modules', $gL10n->get('SYS_CONTACTS'), 'fas fa-address-card', $formUserManagement->show()));
 
 // PANEL: DOCUMENTS-FILES
 
