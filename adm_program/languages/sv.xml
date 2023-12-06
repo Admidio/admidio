@@ -444,7 +444,7 @@
   <string name="PRO_EDIT_PROFILE">Redigera profil</string>
   <string name="PRO_EDIT_PROFILE_FIELDS">Redigera profilfält i profilen</string>
   <string name="PRO_EDIT_PROFILE_PIC_FROM">Redigera profilbild av #VAR1# #VAR2#</string>
-  <string name="PRO_EXPORT_VCARD">&quot;Exportera vCard&quot;</string>
+  <string name="PRO_EXPORT_VCARD">Exportera vCard</string>
   <string name="PRO_EXPORT_VCARD_FROM_VAR">Exportera vCard för #VAR1#</string>
   <string name="PRO_FIELD_NUMERIC" description="nur auf Fett gesetzt">I fält #VAR1_BOLD# är endast tillåtna nummer. \n Uppdatera din post.</string>
   <string name="PRO_FORMER_ROLE_MEMBERSHIP">Tidigare rollmedlemskap</string>
@@ -505,7 +505,7 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktiva och tidigare medlemmar</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktiv och tidigare</string>
   <string name="SYS_ACTIVE_MEMBERS">Profilbilder av nyligen aktiva medlemmar</string>
-  <string name="SYS_ACTIVATE_ROLE">&quot;Aktivera roll&quot;</string>
+  <string name="SYS_ACTIVATE_ROLE">Aktivera roll</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Om du aktiverar rollen #VAR1_BOLD# tilldelas rollmedlemmarna igen behörigheter och rollen kan väljas i alla listor. \n\n Vill du aktivera rollerna igen?</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktiva grupper och roller</string>
   <string name="SYS_ADD_ATTACHMENT">Bifoga fil</string>
@@ -830,7 +830,7 @@
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Alla filer överfördes inte.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Välj alla filer som ska överföras till mappen #VAR1_BOLD#</string>
   <string name="SYS_FILENAME_EMPTY">Filnamn saknas!</string>
-  <string name="SYS_FILENAME_INVALID">Det valda filnamnet #VAR1_BOLD# innehåller ogiltiga tecken. Kontrollera filnamnet. \n\nFöljande specialtecken är inte tillåtna:? &quot;&quot; &lt; > |</string>
+  <string name="SYS_FILENAME_INVALID">Det valda filnamnet #VAR1_BOLD# innehåller ogiltiga tecken. Kontrollera filnamnet. \n\nFöljande specialtecken är inte tillåtna: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Databasversionen #VAR1# är högre än versionen av Admidio-skript #VAR2#. \n\n Uppdatera dina Admidio-filer på servern #VAR3# genom att använda en senare version av Admidio #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Den första raden innehåller kolumnnamnet</string>
@@ -981,9 +981,9 @@
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Medlemmar mellan #VAR1# och #VAR2#</string>
   <string name="SYS_MEMBERS_PER_PAGE">Medlemmar visas per sida</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Antal medlemmar listade i HTML-vyn. Fler medlemmar kan listas med hjälp av pagineringsfunktionen. Detta värde påverkar inte förhandsgranskning och exportfunktioner för utskrifter (standard: 25).</string>
-  <string name="SYS_MEMBERSHIP_END">&quot;Slut på medlemskap&quot;</string>
+  <string name="SYS_MEMBERSHIP_END">Slut på medlemskap</string>
   <string name="SYS_MEMBERSHIP_DELETE">Vill du avsluta medlemskapet i roll #VAR1_BOLD#?</string>
-  <string name="SYS_MEMBERSHIP_START">&quot;Start av medlemskap&quot;</string>
+  <string name="SYS_MEMBERSHIP_START">Start av medlemskap</string>
   <string name="SYS_MEMORY_LIMIT">Minnes gräns</string>
   <string name="SYS_MENU">Meny</string>
   <string name="SYS_MENU_DESC">Menyn kan konfigureras här. Förutom URL-adressen kan en beskrivning och en ikon deponeras. Dessutom kan det bestämmas vem som får se menyposten.</string>
