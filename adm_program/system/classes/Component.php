@@ -32,10 +32,11 @@ class Component extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_component.
      * If the id is set than the specific component will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $comId    The recordset of the component with this id will be loaded.
+     * @param int $comId The recordset of the component with this id will be loaded.
      *                           If com_id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
-    public function __construct(Database $database, $comId = 0)
+    public function __construct(Database $database, int $comId = 0)
     {
         parent::__construct($database, TBL_COMPONENTS, 'com', $comId);
     }
@@ -106,8 +107,8 @@ class Component extends TableAccess
      * special checks for each component were done.
      * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. GROUPS-ROLES
      * @return bool Return true if the current user is allowed to view the component
-     *@throws InvalidArgumentException
-     * @throws UnexpectedValueException
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException|Exception
      */
     public static function isAdministrable(string $componentName): bool
     {
@@ -204,14 +205,15 @@ class Component extends TableAccess
      * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. GROUPS-ROLES
      * @return bool Return true if the current user is allowed to view the component
      * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
+     * @throws UnexpectedValueException|Exception
      */
     public static function isVisible(string $componentName): bool
     {
         global $gValidLogin, $gCurrentUser, $gSettingsManager;
 
         switch ($componentName) {
-            case 'CORE':
+            case 'CORE': // fallthrough
+            case 'CONTACTS':
                 if ($gValidLogin) {
                     return true;
                 }
@@ -262,9 +264,6 @@ class Component extends TableAccess
                     return true;
                 }
                 break;
-
-            case 'CONTACTS':
-                return true;
 
             case 'MESSAGES':
                 if ($gSettingsManager->getBool('enable_mail_module')
