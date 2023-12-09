@@ -23,7 +23,7 @@ In addition to these core features, Admidio boasts a rich array of modules, incl
 - **Event Management**: Easily publish events online and allow members to participate.
 - **Media Gallery**: Create and manage photo albums and enable users to send e-cards.
 - **Effective Communication**: Send HTML emails to users, roles, and groups.
-- **Data Export and Import**: Export lists to CSV, Excel, or PDF, and import users from CSV.
+- **Data Export and Import**: Export lists to CSV, Excel, ODF, or PDF, and import users from CSV.
 - **And Much More**: Explore additional features and functionalities.
 
 ## Installation
