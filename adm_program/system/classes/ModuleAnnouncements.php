@@ -189,7 +189,7 @@ class ModuleAnnouncements extends Modules
 
             // add valid calendars
             if (count($this->categoriesNames) > 0) {
-                $sqlConditions .= ' AND cat_name IN (\''. implode('', $this->categoriesNames) . '\')';
+                $sqlConditions .= ' AND cat_name IN (\''. implode('\', \'', $this->categoriesNames) . '\')';
             }
         }
 
