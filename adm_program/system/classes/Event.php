@@ -395,7 +395,7 @@ class Event extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if ($gCurrentUser->editDates()
+        if ($gCurrentUser->editEvents()
         || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)) {
             // if category belongs to current organization than events are editable
             if ($this->getValue('cat_org_id') > 0

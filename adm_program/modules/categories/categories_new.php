@@ -57,7 +57,7 @@ switch ($getType) {
         $component = 'EVENTS';
         $headline = $gL10n->get('SYS_EVENTS') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'SYS_EDIT_EVENTS';
-        $rolesRightsColumn  = 'rol_dates';
+        $rolesRightsColumn  = 'rol_events';
         $rolesRightsName    = 'SYS_RIGHT_DATES';
         $addButtonText      = $gL10n->get('SYS_CALENDAR');
         break;

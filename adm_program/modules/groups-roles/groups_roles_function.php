@@ -42,7 +42,7 @@ try {
 
     if($getMode !== 6) {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token'].'m');
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
 
     $eventRole = false;
@@ -127,7 +127,7 @@ try {
             'rol_assign_roles',
             'rol_approve_users',
             'rol_announcements',
-            'rol_dates',
+            'rol_events',
             'rol_default_registration',
             'rol_photo',
             'rol_documents_files',

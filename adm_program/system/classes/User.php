@@ -380,7 +380,7 @@ class User extends TableAccess
                 'rol_announcements'      => false,
                 'rol_approve_users'      => false,
                 'rol_assign_roles'       => false,
-                'rol_dates'              => false,
+                'rol_events'             => false,
                 'rol_documents_files'    => false,
                 'rol_edit_user'          => false,
                 'rol_guestbook'          => false,
@@ -859,7 +859,7 @@ class User extends TableAccess
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-        || ($categoryType === 'EVT' && $this->editDates())
+        || ($categoryType === 'EVT' && $this->editEvents())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers())
         || ($categoryType === 'ROL' && $this->manageRoles())) {
@@ -915,7 +915,7 @@ class User extends TableAccess
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-        || ($categoryType === 'EVT' && $this->editDates())
+        || ($categoryType === 'EVT' && $this->editEvents())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers())
         || ($categoryType === 'ROL' && $this->assignRoles())) {
@@ -2187,9 +2187,9 @@ class User extends TableAccess
      * @return bool Return true if the user is admin of the module otherwise false
      * @throws Exception
      */
-    public function editDates(): bool
+    public function editEvents(): bool
     {
-        return $this->checkRolesRight('rol_dates');
+        return $this->checkRolesRight('rol_events');
     }
 
     /**

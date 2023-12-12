@@ -302,9 +302,9 @@ if (!$eventRole) {
     }
     if ((int) $gSettingsManager->get('events_module_enabled') > 0) {
         $form->addCheckbox(
-            'rol_dates',
+            'rol_events',
             $gL10n->get('SYS_RIGHT_DATES'),
-            (bool) $role->getValue('rol_dates'),
+            (bool) $role->getValue('rol_events'),
             array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-calendar-alt')
         );
     }

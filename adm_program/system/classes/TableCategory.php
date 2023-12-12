@@ -221,7 +221,7 @@ class TableCategory extends TableAccess
         || ($categoryType === 'LNK' && !$gCurrentUser->editWeblinksRight())
         || ($categoryType === 'ANN' && !$gCurrentUser->editAnnouncements())
         || ($categoryType === 'USF' && !$gCurrentUser->editUsers())
-        || ($categoryType === 'EVT' && !$gCurrentUser->editDates())
+        || ($categoryType === 'EVT' && !$gCurrentUser->editEvents())
         || ($categoryType === 'AWA' && !$gCurrentUser->editUsers())) {
             return false;
         }

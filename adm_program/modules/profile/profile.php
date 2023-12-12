@@ -488,7 +488,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
         'rol_announcements',
         'rol_approve_users',
         'rol_assign_roles',
-        'rol_dates',
+        'rol_events',
         'rol_documents_files',
         'rol_edit_user',
         'rol_guestbook',
@@ -582,9 +582,9 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
                 'icon'  => 'fa-newspaper'
             );
         }
-        if ($user->checkRolesRight('rol_dates') && (int) $gSettingsManager->get('events_module_enabled') > 0) {
+        if ($user->checkRolesRight('rol_events') && (int) $gSettingsManager->get('events_module_enabled') > 0) {
             $profileRightsArray[] = array(
-                'roles' => $rightsOrigin['rol_dates'],
+                'roles' => $rightsOrigin['rol_events'],
                 'right' => $gL10n->get('SYS_RIGHT_DATES'),
                 'icon'  => 'fa-calendar-alt'
             );
