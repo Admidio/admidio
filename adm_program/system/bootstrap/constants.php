@@ -21,8 +21,8 @@ define('SCRIPT_START_TIME', microtime(true));
 // !!! Please do not edit these version numbers !!!
 const MIN_PHP_VERSION = '7.2.0';
 
-const ADMIDIO_VERSION_MAIN = 4;
-const ADMIDIO_VERSION_MINOR = 3;
+const ADMIDIO_VERSION_MAIN = 5;
+const ADMIDIO_VERSION_MINOR = 0;
 const ADMIDIO_VERSION_PATCH = 0;
 const ADMIDIO_VERSION_BETA = 1;
 
