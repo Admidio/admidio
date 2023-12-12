@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS %PREFIX%_announcements        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_auto_login           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_category_report      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_components           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_dates                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_events               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
@@ -155,9 +155,9 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
-/* Table: adm_dates                                             */
+/* Table: adm_events                                            */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_dates
+CREATE TABLE %PREFIX%_events
 (
     dat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     dat_cat_id                  integer unsigned    NOT NULL,
@@ -186,7 +186,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_dat_uuid ON %PREFIX%_dates (dat_uuid);
+CREATE UNIQUE INDEX %PREFIX%_idx_dat_uuid ON %PREFIX%_events (dat_uuid);
 
 /*==============================================================*/
 /* Table: adm_files                                             */
@@ -897,7 +897,7 @@ ALTER TABLE %PREFIX%_categories
 ALTER TABLE %PREFIX%_category_report
     ADD CONSTRAINT %PREFIX%_fk_crt_org         FOREIGN KEY (crt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_dates
+ALTER TABLE %PREFIX%_events
     ADD CONSTRAINT %PREFIX%_fk_dat_cat         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_rol         FOREIGN KEY (dat_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_room        FOREIGN KEY (dat_room_id)        REFERENCES %PREFIX%_rooms (room_id)              ON DELETE SET NULL ON UPDATE RESTRICT,
