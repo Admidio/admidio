@@ -129,7 +129,7 @@ class Component extends TableAccess
                     break;
 
                 case 'EVENTS':
-                    if ($gCurrentUser->editDates()) {
+                    if ($gCurrentUser->editEvents()) {
                         return true;
                     }
                     break;

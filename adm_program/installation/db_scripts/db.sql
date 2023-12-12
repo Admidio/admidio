@@ -592,7 +592,7 @@ CREATE TABLE %PREFIX%_roles
     rol_assign_roles            boolean             NOT NULL    DEFAULT false,
     rol_approve_users           boolean             NOT NULL    DEFAULT false,
     rol_announcements           boolean             NOT NULL    DEFAULT false,
-    rol_dates                   boolean             NOT NULL    DEFAULT false,
+    rol_events                  boolean             NOT NULL    DEFAULT false,
     rol_documents_files         boolean             NOT NULL    DEFAULT false,
     rol_edit_user               boolean             NOT NULL    DEFAULT false,
     rol_guestbook               boolean             NOT NULL    DEFAULT false,

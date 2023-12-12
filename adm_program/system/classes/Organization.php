@@ -219,7 +219,7 @@ class Organization extends TableAccess
         $roleAdministrator->setValue('rol_assign_roles', 1);
         $roleAdministrator->setValue('rol_approve_users', 1);
         $roleAdministrator->setValue('rol_announcements', 1);
-        $roleAdministrator->setValue('rol_dates', 1);
+        $roleAdministrator->setValue('rol_events', 1);
         $roleAdministrator->setValue('rol_documents_files', 1);
         $roleAdministrator->setValue('rol_guestbook', 1);
         $roleAdministrator->setValue('rol_guestbook_comments', 1);
@@ -251,7 +251,7 @@ class Organization extends TableAccess
         $roleManagement->setValue('rol_name', $gL10n->get('INS_BOARD'));
         $roleManagement->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
         $roleManagement->setValue('rol_announcements', 1);
-        $roleManagement->setValue('rol_dates', 1);
+        $roleManagement->setValue('rol_events', 1);
         $roleManagement->setValue('rol_weblinks', 1);
         $roleManagement->setValue('rol_edit_user', 1);
         $roleManagement->setValue('rol_mail_to_all', 1);

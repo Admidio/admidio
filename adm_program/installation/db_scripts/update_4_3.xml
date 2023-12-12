@@ -105,5 +105,8 @@
     <step id="1020">UPDATE %PREFIX%_menu SET men_description = 'SYS_PHOTOS_DESC' WHERE men_name_intern = 'photo'</step>
     <step id="1030" database="mysql">RENAME TABLE %PREFIX%_dates TO %PREFIX%_events</step>
     <step id="1040" database="pgsql">ALTER TABLE %PREFIX%_dates RENAME TO %PREFIX%_events</step>
+    <step id="1050">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_events boolean not null default false</step>
+    <step id="1060">UPDATE %PREFIX%_roles SET rol_events = rol_dates</step>
+    <step id="1070">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_dates</step>
     <step>stop</step>
 </update>

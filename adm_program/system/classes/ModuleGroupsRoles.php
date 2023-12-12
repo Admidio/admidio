@@ -264,7 +264,7 @@ class ModuleGroupsRoles extends HtmlPage
             if ($role->getValue('rol_announcements') == 1 && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-newspaper', 'title' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'));
             }
-            if ($role->getValue('rol_dates') == 1 && (int) $gSettingsManager->get('events_module_enabled') > 0) {
+            if ($role->getValue('rol_events') == 1 && (int) $gSettingsManager->get('events_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-calendar-alt', 'title' => $gL10n->get('SYS_RIGHT_DATES'));
             }
             if ($role->getValue('rol_photo') == 1 && (int) $gSettingsManager->get('photo_module_enabled') > 0) {

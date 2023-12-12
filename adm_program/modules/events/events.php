@@ -145,7 +145,7 @@ if ($getViewMode === 'html') {
             );
         }
 
-        if ($gCurrentUser->editDates()) {
+        if ($gCurrentUser->editEvents()) {
             // if no calendar select box is shown, then show link to edit calendars
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_categories',
@@ -408,7 +408,7 @@ if ($eventsResult['totalCount'] === 0) {
             // check the rights if the user is allowed to view the participants, or he is allowed to participate
             if ($gCurrentUser->hasRightViewRole((int)$event->getValue('dat_rol_id'))
                 || $row['mem_leader'] == 1
-                || $gCurrentUser->editDates()
+                || $gCurrentUser->editEvents()
                 || $event->allowedToParticipate()) {
                 $outputNumberMembers = $participants->getCount();
                 $outputNumberLeaders = $participants->getNumLeaders();
@@ -475,7 +475,7 @@ if ($eventsResult['totalCount'] === 0) {
             }
 
             // if current user is allowed to participate or user could edit this event then show buttons for participation
-            if ($event->possibleToParticipate() || $gCurrentUser->editDates() || $participants->isLeader($gCurrentUserId)) {
+            if ($event->possibleToParticipate() || $gCurrentUser->editEvents() || $participants->isLeader($gCurrentUserId)) {
                 if ($event->getValue('dat_deadline') !== null) {
                     $outputDeadline = $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                 }
@@ -770,7 +770,7 @@ if ($eventsResult['totalCount'] === 0) {
                         // Only show participants if user has right to view the list, is leader or has permission to create/edit events
                         if ($gCurrentUser->hasRightViewRole((int) $event->getValue('dat_rol_id'))
                             || $row['mem_leader'] == 1
-                            || $gCurrentUser->editDates()) {
+                            || $gCurrentUser->editEvents()) {
                             foreach ($participantsArray as $participant) {
                                 if($participant['approved'] === Participants::PARTICIPATION_YES) {
                                     $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'];

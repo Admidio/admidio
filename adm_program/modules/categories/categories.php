@@ -32,7 +32,7 @@ if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
 ||  ($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
 ||  ($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
 ||  ($getType === 'USF' && !$gCurrentUser->editUsers())
-||  ($getType === 'EVT' && !$gCurrentUser->editDates())
+||  ($getType === 'EVT' && !$gCurrentUser->editEvents())
 ||  ($getType === 'AWA' && !$gCurrentUser->editUsers())) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -62,7 +62,7 @@ switch ($getType) {
 
     case 'EVT':
         $component = 'EVENTS';
-        $rolesRightsColumn = 'rol_dates';
+        $rolesRightsColumn = 'rol_events';
         $headline = $gL10n->get('SYS_EVENTS') . ' - ' . $gL10n->get('SYS_CALENDARS');
         $navigationHeadline = $gL10n->get('SYS_CALENDARS');
         $editableHeadline = $gL10n->get('SYS_EDIT_EVENTS');
