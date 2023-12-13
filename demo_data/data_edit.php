@@ -114,77 +114,77 @@ $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.'
                   WHERE ann_id = 3 ';
 
 // set events of events
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(14).' 16:00:00\'
                       , dat_end   = \''.addDaysToDate(14).' 18:00:00\'
                   WHERE dat_id = 3 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(4).' 19:00:00\'
                       , dat_end   = \''.addDaysToDate(4).' 23:30:00\'
                   WHERE dat_id = 4 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(30).' 00:00:00\'
                       , dat_end   = \''.addDaysToDate(35).' 23:59:59\'
                   WHERE dat_id = 5 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(10).' 15:00:00\'
                       , dat_end   = \''.addDaysToDate(10).' 19:00:00\'
                   WHERE dat_id = 6 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(2, true).' 00:00:00\'
                       , dat_end   = \''.addDaysToDate(2, true).' 23:59:59\'
                   WHERE dat_id = 7 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(4, true).' 17:00:00\'
                       , dat_end   = \''.addDaysToDate(4, true).' 18:30:00\'
                   WHERE dat_id = 8 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(3).' 17:00:00\'
                       , dat_end   = \''.addDaysToDate(3).' 18:30:00\'
                   WHERE dat_id = 9 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(10).' 17:00:00\'
                       , dat_end   = \''.addDaysToDate(10).' 18:30:00\'
                   WHERE dat_id = 10 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(17).' 17:00:00\'
                       , dat_end   = \''.addDaysToDate(17).' 18:30:00\'
                   WHERE dat_id = 11 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(24).' 17:00:00\'
                       , dat_end   = \''.addDaysToDate(24).' 18:30:00\'
                   WHERE dat_id = 12 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(31).' 17:00:00\'
                       , dat_end   = \''.addDaysToDate(31).' 18:30:00\'
                   WHERE dat_id = 13 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(20).' 13:00:00\'
                       , dat_end   = \''.addDaysToDate(20).' 14:00:00\'
                   WHERE dat_id = 14 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(3).' 20:00:00\'
                       , dat_end   = \''.addDaysToDate(3).' 22:00:00\'
                   WHERE dat_id = 15 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(32).' 20:00:00\'
                       , dat_end   = \''.addDaysToDate(32).' 22:00:00\'
                   WHERE dat_id = 16 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+$sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
                     SET dat_begin = \''.addDaysToDate(8).' 19:00:00\'
                       , dat_end   = \''.addDaysToDate(8).' 23:30:00\'
                   WHERE dat_id = 17 ';

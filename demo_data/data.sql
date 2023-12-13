@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step, com_update_completed)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.2.11', 0, 310, true)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.2.11', 0, 0, true)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.2.11', 0, 0, true)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.2.11', 0, 0, true)
-                              , (50, 'MODULE', 'SYS_EVENTS', 'DATES', '4.2.11', 0, 0, true)
-                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.2.11', 0, 0, true)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.2.11', 0, 0, true)
-                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.2.11', 0, 0, true)
-                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.2.11', 0, 0, true)
-                              , (100, 'MODULE', 'SYS_MEMBERS', 'MEMBERS', '4.2.11', 0, 0, true)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.2.11', 0, 0, true)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.2.11', 0, 0, true)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.2.11', 0, 0, true)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.2.11', 0, 0, true)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.2.11', 0, 0, true)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.2.11', 0, 0, true)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.2.11', 0, 0, true)
-                              , (190, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.2.11', 0, 0, true);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.3.0', 1, 1070, true)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.3.0', 0, 0, true)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.3.0', 0, 0, true)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.3.0', 0, 0, true)
+                              , (50, 'MODULE', 'SYS_EVENTS', 'EVENTS', '4.3.0', 0, 0, true)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.3.0', 0, 0, true)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.3.0', 0, 0, true)
+                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.3.0', 0, 0, true)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.3.0', 0, 0, true)
+                              , (100, 'MODULE', 'SYS_CONTACTS', 'CONTACTS', '4.3.0', 0, 0, true)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.3.0', 0, 0, true)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.3.0', 0, 0, true)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.3.0', 0, 0, true)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.3.0', 0, 0, true)
+                              , (150, 'MODULE', 'SYS_PROFILE', 'PROFILE', '4.3.0', 0, 0, true)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.3.0', 0, 0, true)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.3.0', 0, 0, true)
+                              , (190, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.3.0', 0, 0, true);
 
 --
 -- Data for table adm_organizations
@@ -43,7 +43,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (60, 1, false, 3, true, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', '187c7c07-4b2a-4f3f-925c-6f40c03e740b'),
 (90, 1, false, 7, true, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 'ebd216b3-26eb-48ec-a082-d1d9645bb051'),
 (20, 1, false, 2, true, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC', 'd96ba837-9b02-4c4e-afa5-c12167cd01db'),
-(130, 1, false, 5, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC', '21db7ac5-7aae-4616-bf88-5b29507d4a02'),
+(130, 1, false, 5, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', '21db7ac5-7aae-4616-bf88-5b29507d4a02'),
 (70, 1, false, 6, true, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC', 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e'),
 (50, 1, false, 8, true, 'events', '/adm_program/modules/events/events.php', 'fa-calendar-alt', 'SYS_EVENTS', 'SYS_EVENTS_DESC', '446a2c54-b269-4b6c-8a1c-869901b35b01'),
 (80, 1, false, 9, true, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', '5b8b3e60-bc71-4375-bfc3-a9783a63bb72'),
@@ -51,8 +51,8 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (30, 2, false, 4, true, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC', '9c6d01e3-b104-4f75-8562-7e7ebe7a929b'),
 (140, 2, false, 6, true, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', '2965d083-8dd3-4a43-9b27-53018e5f22c1'),
 (120, 1, false, 4, true, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC', 'edb6a573-fb66-4dfb-ba90-466317572204'),
-(160, 2, false, 1, true, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-address-card', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', '62330cbc-4c15-4860-b841-10a35d88cd3c'),
-(100, 2, false, 2, true, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'SYS_MEMBERS', 'SYS_MEMBERS_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
+(160, 2, false, 1, true, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-file-signature', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', '62330cbc-4c15-4860-b841-10a35d88cd3c'),
+(100, 1, false, 2, true, 'contacts', '/adm_program/modules/contacts/contacts.php', 'fa-address-card', 'SYS_CONTACTS', 'SYS_CONTACTS_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
 (110, 2, false, 5, true, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC', 'ef4b5380-3500-4ec4-a432-a7f4099a2a92');
 
 
@@ -230,17 +230,15 @@ INSERT INTO %PREFIX%_users (usr_id, usr_uuid, usr_login_name, usr_password, usr_
 
 INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
     (1000, 1, 'announcements_per_page', '10'),
-    (1100, 1, 'ecard_thumbs_scale', '250'),
-    (1300, 1, 'ecard_card_picture_width', '400'),
-    (1400, 1, 'ecard_card_picture_height', '250'),
-    (2000, 1, 'ecard_template', 'postcard.tpl'),
+    (1100, 1, 'photo_ecard_scale', '500'),
+    (2000, 1, 'photo_ecard_template', 'postcard.tpl'),
     (2100, 1, 'email_administrator', 'administrator@admidio.org'),
-    (2200, 1, 'enable_announcements_module', '1'),
+    (2200, 1, 'announcements_module_enabled', '1'),
     (2300, 1, 'enable_auto_login', '1'),
-    (2400, 1, 'enable_dates_ical', '1'),
-    (2500, 1, 'enable_dates_module', '1'),
-    (2600, 1, 'documents_files_enable_module', '1'),
-    (2700, 1, 'enable_ecard_module', '1'),
+    (2400, 1, 'events_ical_export_enabled', '1'),
+    (2500, 1, 'events_module_enabled', '1'),
+    (2600, 1, 'documents_files_module_enabled', '1'),
+    (2700, 1, 'photo_ecard_enabled', '1'),
     (2950, 1, 'system_notifications_new_entries', '0'),
     (2955, 1, 'system_notifications_role', 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16'),
     (2960, 1, 'system_notifications_profile_changes', '0'),
@@ -253,23 +251,23 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (3600, 1, 'enable_mail_module', '1'),
     (3610, 1, 'enable_pm_module', '1'),
     (3700, 1, 'enable_password_recovery', '1'),
-    (3800, 1, 'enable_photo_module', '1'),
-    (3900, 1, 'enable_registration_captcha', '1'),
-    (4000, 1, 'enable_registration_admin_mail', '0'),
+    (3800, 1, 'photo_module_enabled', '1'),
+    (3900, 1, 'registration_enable_captcha', '1'),
+    (4000, 1, 'registration_send_notification_email', '0'),
     (4100, 1, 'enable_rss', '1'),
     (4200, 1, 'system_notifications_enabled', '0'),
     (4300, 1, 'enable_weblinks_module', '1'),
     (4304, 1, 'category_report_enable_module', '1'),
     (4305, 1, 'category_report_default_configuration', '1'),
-    (4310, 1, 'dates_ical_days_past', '60'),
-    (4320, 1, 'dates_ical_days_future', '365'),
-    (4330, 1, 'dates_view', 'detail'),
-    (4400, 1, 'dates_per_page', '10'),
-    (4600, 1, 'dates_show_map_link', '1'),
-    (4700, 1, 'dates_show_rooms', '0'),
-    (4705, 1, 'dates_default_list_configuration', '13'),
-    (4710, 1, 'dates_save_all_confirmations', '1'),
-    (4720, 1, 'dates_may_take_part', '1'),
+    (4310, 1, 'events_ical_days_past', '60'),
+    (4320, 1, 'events_ical_days_future', '365'),
+    (4330, 1, 'events_view', 'detail'),
+    (4400, 1, 'events_per_page', '10'),
+    (4600, 1, 'events_show_map_link', '1'),
+    (4700, 1, 'events_rooms_enabled', '0'),
+    (4705, 1, 'events_list_configuration', '13'),
+    (4710, 1, 'events_save_cancellations', '1'),
+    (4720, 1, 'events_may_take_part', '1'),
     (4900, 1, 'default_country', 'DEU'),
     (5000, 1, 'flooding_protection_time', '60'),
     (6200, 1, 'guestbook_entries_per_page', '10'),
@@ -304,15 +302,14 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (7095, 1, 'mail_send_to_all_addresses', '1'),
     (7098, 1, 'mail_template', 'default.html'),
     (7100, 1, 'max_email_attachment_size', '1'),
-    (7200, 1, 'max_file_upload_size', '3'),
-    (7250, 1, 'members_users_per_page', '25'),
-    (7251, 1, 'members_days_field_history', '365'),
-    (7252, 1, 'members_list_configuration', '15'),
-    (7253, 1, 'members_show_all_users', '1'),
+    (7200, 1, 'documents_files_max_upload_size', '3'),
+    (7250, 1, 'contacts_per_page', '25'),
+    (7251, 1, 'contacts_field_history_days', '365'),
+    (7252, 1, 'contacts_list_configuration', '15'),
+    (7253, 1, 'contacts_show_all', '1'),
     (7300, 1, 'photo_image_text', '© demo.admidio.org'),
     (7305, 1, 'photo_image_text_size', '40'),
     (7350, 1, 'photo_albums_per_page', '24'),
-    (7400, 1, 'photo_save_scale', '1000'),
     (7500, 1, 'photo_show_width', '1000'),
     (7600, 1, 'photo_show_height', '750'),
     (7700, 1, 'photo_show_mode', '1'),
@@ -350,17 +347,15 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (9460, 1, 'captcha_signature', 'Powered by Admidio.org'),
     (9480, 1, 'captcha_type', 'pic'),
     (10001, 2, 'announcements_per_page', '10'),
-    (11001, 2, 'ecard_thumbs_scale', '250'),
-    (13001, 2, 'ecard_card_picture_width', '400'),
-    (14001, 2, 'ecard_card_picture_height', '250'),
-    (20001, 2, 'ecard_template', 'postcard.tpl'),
+    (11001, 2, 'photo_ecard_scale', '500'),
+    (20001, 2, 'photo_ecard_template', 'postcard.tpl'),
     (21001, 2, 'email_administrator', 'administrator@admidio.org'),
-    (22001, 2, 'enable_announcements_module', '1'),
+    (22001, 2, 'announcements_module_enabled', '1'),
     (23001, 2, 'enable_auto_login', '1'),
-    (24001, 2, 'enable_dates_ical', '1'),
-    (25001, 2, 'enable_dates_module', '1'),
-    (26001, 2, 'documents_files_enable_module', '1'),
-    (27001, 2, 'enable_ecard_module', '1'),
+    (24001, 2, 'events_ical_export_enabled', '1'),
+    (25001, 2, 'events_module_enabled', '1'),
+    (26001, 2, 'documents_files_module_enabled', '1'),
+    (27001, 2, 'photo_ecard_enabled', '1'),
     (29501, 2, 'system_notifications_new_entries', '0'),
     (29550, 2, 'system_notifications_role', '7a9e3ff4-197a-48db-9abc-c32c4cc79567'),
     (29510, 2, 'system_notifications_profile_changes', '0'),
@@ -373,23 +368,23 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (36001, 2, 'enable_mail_module', '1'),
     (36010, 2, 'enable_pm_module', '0'),
     (37001, 2, 'enable_password_recovery', '1'),
-    (38001, 2, 'enable_photo_module', '1'),
-    (39001, 2, 'enable_registration_captcha', '1'),
-    (40001, 2, 'enable_registration_admin_mail', '0'),
+    (38001, 2, 'photo_module_enabled', '1'),
+    (39001, 2, 'registration_enable_captcha', '1'),
+    (40001, 2, 'registration_send_notification_email', '0'),
     (41001, 2, 'enable_rss', '1'),
     (42001, 2, 'system_notifications_enabled', '0'),
     (43001, 2, 'enable_weblinks_module', '1'),
     (43050, 2, 'category_report_enable_module', '1'),
     (43055, 2, 'category_report_default_configuration', '2'),
-    (43100, 2, 'dates_ical_days_past', '60'),
-    (43200, 2, 'dates_ical_days_future', '365'),
-    (43300, 2, 'dates_view', 'detail'),
-    (44001, 2, 'dates_per_page', '10'),
-    (46001, 2, 'dates_show_map_link', '1'),
-    (47001, 2, 'dates_show_rooms', '0'),
-    (47005, 2, 'dates_default_list_configuration', '14'),
-    (47010, 2, 'dates_save_all_confirmations', '1'),
-    (47020, 2, 'dates_may_take_part', '1'),
+    (43100, 2, 'events_ical_days_past', '60'),
+    (43200, 2, 'events_ical_days_future', '365'),
+    (43300, 2, 'events_view', 'detail'),
+    (44001, 2, 'events_per_page', '10'),
+    (46001, 2, 'events_show_map_link', '1'),
+    (47001, 2, 'events_rooms_enabled', '0'),
+    (47005, 2, 'events_list_configuration', '14'),
+    (47010, 2, 'events_save_cancellations', '1'),
+    (47020, 2, 'events_may_take_part', '1'),
     (49001, 2, 'default_country', 'DEU'),
     (50001, 2, 'flooding_protection_time', '60'),
     (62001, 2, 'guestbook_entries_per_page', '10'),
@@ -424,15 +419,14 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (70095, 2, 'mail_send_to_all_addresses', '1'),
     (70098, 2, 'mail_template', 'default.html'),
     (71001, 2, 'max_email_attachment_size', '1'),
-    (72001, 2, 'max_file_upload_size', '3'),
-    (72500, 2, 'members_users_per_page', '25'),
-    (72510, 2, 'members_days_field_history', '365'),
-    (72515, 2, 'members_list_configuration', '16'),
-    (72520, 2, 'members_show_all_users', '0'),
+    (72001, 2, 'documents_files_max_upload_size', '3'),
+    (72500, 2, 'contacts_per_page', '25'),
+    (72510, 2, 'contacts_field_history_days', '365'),
+    (72515, 2, 'contacts_list_configuration', '16'),
+    (72520, 2, 'contacts_show_all', '0'),
     (73000, 2, 'photo_albums_per_page', '24'),
     (73025, 2, 'photo_image_text', '© demo.admidio.org'),
     (73050, 2, 'photo_image_text_size', '40'),
-    (74001, 2, 'photo_save_scale', '1000'),
     (75001, 2, 'photo_show_width', '1000'),
     (76001, 2, 'photo_show_height', '750'),
     (77001, 2, 'photo_show_mode', '1'),
@@ -479,7 +473,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (94088, 1, 'captcha_text_color', '#707070'),
     (94089, 1, 'captcha_line_color', '#707070'),
     (94090, 1, 'captcha_charset', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy'),
-    (94091, 1, 'members_enable_user_relations', '1'),
+    (94091, 1, 'contacts_user_relations_enabled', '1'),
     (94181, 2, 'password_min_strength', '1'),
     (94182, 2, 'system_browser_update_check', '0'),
     (94183, 2, 'system_hashing_cost', '10'),
@@ -490,7 +484,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (94188, 2, 'captcha_text_color', '#707070'),
     (94189, 2, 'captcha_line_color', '#707070'),
     (94190, 2, 'captcha_charset', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy'),
-    (94191, 2, 'members_enable_user_relations', '1');
+    (94191, 2, 'contacts_user_relations_enabled', '1');
 
 
 --
@@ -507,9 +501,9 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_uuid, cat_org_id, cat_type, cat_nam
 (7,   'c0778d6e-804b-4d19-b624-802663ebcdca', 1, 'LNK', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (8,   'ad3a3cd8-3108-4df2-b08b-60aa3dad4975', NULL, 'USF', 'ADDIDIONAL_DATA', 'INS_ADDIDIONAL_DATA', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
 (9,   '32edc214-cb7b-42f1-a4af-7336a28ada5e', 1, 'LNK', 'ADMIDIO', 'Admidio', false, true, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
-(10,  '67850ca7-990b-4791-a238-5fd370caa23d', 1, 'DAT', 'COMMON', 'SYS_COMMON', false, true, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(11,  '22c1edc4-4af3-4098-9bb9-375341f1e6c4', 1, 'DAT', 'COURSES', 'INS_COURSES', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(12,  '63573db9-9ad4-47c6-9064-ff77f53d9e6e', 1, 'DAT', 'TRAINING', 'INS_TRAINING', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(10,  '67850ca7-990b-4791-a238-5fd370caa23d', 1, 'EVT', 'COMMON', 'SYS_COMMON', false, true, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(11,  '22c1edc4-4af3-4098-9bb9-375341f1e6c4', 1, 'EVT', 'COURSES', 'INS_COURSES', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(12,  '63573db9-9ad4-47c6-9064-ff77f53d9e6e', 1, 'EVT', 'TRAINING', 'INS_TRAINING', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13,  'ab11ce61-471b-4f49-8735-92134b417d6e', 1, 'ANN', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (14,  '8803b2aa-f36e-4c9b-99ed-52685b5048d7', 1, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
 (100, '6beea24e-58b7-4668-8ac6-6ccc625cc989', 2, 'ROL', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
@@ -518,15 +512,15 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_uuid, cat_org_id, cat_type, cat_nam
 (103, '160819d4-d192-4120-82f7-88e565e2bf18', 2, 'ROL', 'TEAMS', 'INS_TEAMS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
 (104, '9bf1a1ea-69b4-4226-aa55-2517455ed32d', 2, 'LNK', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (105, '9a4b3de1-3cab-40db-97f6-77719c731f01', 2, 'LNK', 'ADMIDIO', 'Admidio', false, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
-(106, '1141cb37-7e15-4107-aa3f-15e1cd740860', 2, 'DAT', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(107, 'b1c33600-6e8a-47db-88a0-0665e7005fec', 2, 'DAT', 'COURSES', 'INS_COURSES', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(108, '0001df5c-1ef1-49da-bed2-c88152cfa792', 2, 'DAT', 'TRAINING', 'INS_TRAINING', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(106, '1141cb37-7e15-4107-aa3f-15e1cd740860', 2, 'EVT', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(107, 'b1c33600-6e8a-47db-88a0-0665e7005fec', 2, 'EVT', 'COURSES', 'INS_COURSES', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(108, '0001df5c-1ef1-49da-bed2-c88152cfa792', 2, 'EVT', 'TRAINING', 'INS_TRAINING', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
 (109, '84205a4e-4fd7-49e4-bed9-63e3280a70d8', 2, 'ANN', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (110, 'c9767836-63fe-470c-abc8-1187d8143d19', 2, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
 (200, 'fff9f4cf-2368-43c4-bb3a-322008830729', 1, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', true, false, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
 (201, '6ee60a30-4721-4427-ac12-dc11f624c5fb', 2, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', true, false, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
 (300, 'a657459f-cef8-4f68-8008-0c5e34f4bfa5', NULL, 'ANN', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(301, 'f4d498ba-87db-4a4e-a894-7b7f42bd4d12', NULL, 'DAT', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
+(301, 'f4d498ba-87db-4a4e-a894-7b7f42bd4d12', NULL, 'EVT', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
 (302, 'a0fa893e-c600-4157-831e-a946cc73fb58', NULL, 'LNK', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL);
 
 
@@ -534,7 +528,7 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_uuid, cat_org_id, cat_type, cat_nam
 -- Data for table adm_roles
 --
 
-INSERT INTO %PREFIX%_roles (rol_id, rol_uuid, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_documents_files, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_view_memberships, rol_view_members_profiles, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
+INSERT INTO %PREFIX%_roles (rol_id, rol_uuid, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_events, rol_documents_files, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_view_memberships, rol_view_members_profiles, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
 (1 , 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',     true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', true, false, true),
 (2 , 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER',                  false, false, false, false, false, false, false, true, false, 2, false, true, false, 2, 2, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', true, false, false),
 (3 , '621fa25f-2fac-4310-af52-af939041cb66', 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD',                     false, false, true, true, true, true, true, true, true, 3, true, true, true, 2, 2, true, 1, false, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', true, false, false),
@@ -613,9 +607,11 @@ fa-mars-stroke-v|SYS_DIVERSE', NULL, NULL, false, false, false, 0, true, 12, 1, 
 (13, '627c57a6-f17b-44df-9d31-3d668634eb97', 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
 (14, 'd1b9314d-953c-4198-8250-d10f4661abe7', 1, 'CHECKBOX', 'DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION_DESC', true, NULL, NULL, NULL, false, false, false, 2, true, 15, 1, '2012-01-08 11:12:05', NULL, NULL),
 (22, '041f1bb5-4305-47d7-8538-c1e7163339a6', 2, 'TEXT', 'FACEBOOK', 'SYS_FACEBOOK', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', false, false, false, 0, false, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
-(18, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 2, 'TEXT', 'SKYPE', 'SYS_SKYPE', 'SYS_SOCIAL_NETWORK_FIELD_DESC', false, NULL, 'fab fa-skype', NULL, false, false, false, 0, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
-(23, '30d0f751-7b38-4704-b042-cf6fbe2f447d', 2, 'TEXT', 'TWITTER', 'SYS_TWITTER', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, 0, false, 3, 1, '2012-01-08 11:11:40', NULL, NULL),
-(24, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 2, 'TEXT', 'XING', 'SYS_XING', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, 0, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
+(27, '1b204526-bae3-4948-91fa-f0e669c48826', 2, 'TEXT', 'INSTAGRAM', 'SYS_INSTAGRAM', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-instagram', 'https://www.instagram.com/#user_content#', false, false, false, 0, false, 2, 1, '2012-01-08 11:11:40', NULL, NULL),
+(26, '1b204525-bae3-4948-91fa-f0e669c48825', 2, 'TEXT', 'LINKEDIN', 'SYS_LINKEDIN', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-linkedin', 'https://www.linkedin.com/in/#user_content#', false, false, false, 0, false, 3, 1, '2012-01-08 11:11:40', NULL, NULL),
+(18, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 2, 'TEXT', 'SKYPE', 'SYS_SKYPE', 'SYS_SOCIAL_NETWORK_FIELD_DESC', false, NULL, 'fab fa-skype', NULL, false, false, false, 0, false, 4, 1, '2012-01-08 11:12:07', NULL, NULL),
+(23, '30d0f751-7b38-4704-b042-cf6fbe2f447d', 2, 'TEXT', 'TWITTER', 'SYS_TWITTER', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, 0, false, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
+(24, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 2, 'TEXT', 'XING', 'SYS_XING', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, 0, false, 6, 1, '2012-01-08 11:11:40', NULL, NULL),
 (20, '89b33bc0-913a-404c-9899-e53ad5080fec', 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DDT_PRO_MEMBERSHIP_NUMBER', NULL, false, NULL, NULL, NULL, false, true, false, 0, false, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
 (21, '15b324bc-29d8-4b79-bee9-10072b8d7489', 8, 'TEXT', 'FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR_CONTENT', false, NULL, NULL, NULL, false, false, false, 0, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 
@@ -677,7 +673,7 @@ INSERT INTO %PREFIX%_category_report (crt_id, crt_org_id, crt_name, crt_col_fiel
 -- Data for table adm_dates
 --
 
-INSERT INTO %PREFIX%_dates (dat_id, dat_uuid, dat_cat_id, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_highlight, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members, dat_allow_comments, dat_additional_guests) VALUES
+INSERT INTO %PREFIX%_events (dat_id, dat_uuid, dat_cat_id, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_highlight, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members, dat_allow_comments, dat_additional_guests) VALUES
 (3 , 'e539f6d4-a5ac-4536-8779-df203a83ef39', 12, '2012-01-22 16:00:00', '2012-01-22 18:00:00', false, 'DDT_DAT_YOUTH_TRAINING_CONTENT', 'DDT_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DDT_DAT_YOUTH_TRAINING', false,  1, '2017-07-06 17:38:26', NULL, NULL, NULL, NULL, 0, false, false),
 (4 , '2bc7d168-7b4e-4ec1-9765-18989e32030c', 10, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DDT_DAT_BARBECUE_CONTENT', NULL, NULL, 'DDT_DAT_BARBECUE', true, 1, '2017-07-06 17:41:18', NULL, NULL, 8, NULL, 0, true, true),
 (5 , '10408fec-1534-4115-a83d-60681c13bcfd', 10, '2012-02-07 00:00:00', '2012-02-12 23:59:59', true, 'DDT_DAT_TRAINER_COURSE_CONTENT', 'DDT_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DDT_DAT_TRAINER_COURSE', true, 1, '2017-07-06 17:49:13', NULL, NULL, NULL, NULL, 0, false, false),
@@ -1151,11 +1147,11 @@ INSERT INTO %PREFIX%_messages_recipients (msr_id, msr_msg_id, msr_rol_id, msr_us
 -- Data for table adm_registrations
 --
 
-INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestamp) VALUES
-(1, 1, 352, '2023-03-28 13:43:02'),
-(2, 1, 353, '2023-03-25 18:05:32'),
-(3, 2, 360, '2023-03-28 13:44:02'),
-(4, 1, 359, '2023-03-27 05:03:34');
+INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestamp, reg_validation_id) VALUES
+(1, 1, 352, '2023-03-28 13:43:02', 'sdovijoi2342lfvsdnmvoi32n5249090fewklfn342klnklf9'),
+(2, 1, 353, '2023-03-25 18:05:32', null),
+(3, 2, 360, '2023-03-28 13:44:02', null),
+(4, 1, 359, '2023-03-27 05:03:34', null);
 
 
 --
@@ -1190,16 +1186,18 @@ INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, s
 --
 
 INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
-(1, 1, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
-(2, 1, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
+(1, 1, 'SYSMAIL_REGISTRATION_APPROVED', 'SYS_SYSMAIL_REGISTRATION_USER'),
+(2, 1, 'SYSMAIL_REGISTRATION_NEW', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
 (3, 1, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
 (4, 1, 'SYSMAIL_PASSWORD_RESET', 'SYS_SYSMAIL_PASSWORD_RESET'),
-(5, 1, 'SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_REFUSE_REGISTRATION'),
-(101, 2, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
-(102, 2, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
+(5, 1, 'SYSMAIL_REGISTRATION_REFUSED', 'SYS_SYSMAIL_REFUSE_REGISTRATION'),
+(6, 1, 'SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_CONFIRMATION'),
+(101, 2, 'SYSMAIL_REGISTRATION_APPROVED', 'SYS_SYSMAIL_REGISTRATION_USER'),
+(102, 2, 'SYSMAIL_REGISTRATION_NEW', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
 (103, 2, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
 (104, 2, 'SYSMAIL_PASSWORD_RESET', 'SYS_SYSMAIL_PASSWORD_RESET'),
-(105, 2, 'SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_REFUSE_REGISTRATION');
+(105, 2, 'SYSMAIL_REGISTRATION_REFUSED', 'SYS_SYSMAIL_REFUSE_REGISTRATION'),
+(106, 2, 'SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_CONFIRMATION');
 
 
 --
