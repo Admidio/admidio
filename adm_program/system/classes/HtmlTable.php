@@ -273,7 +273,9 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setDatatablesAlternativeOrderColumns(int $selectedColumn, $arrayOrderColumns)
     {
-        $this->datatables->setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns);
+        if ($this->useDatatables) {
+            $this->datatables->setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns);
+        }
     }
 
     /**
@@ -284,7 +286,9 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setDatatablesColumnsHide(array $columnsHide)
     {
-        $this->datatables->setDatatablesColumnsHide($columnsHide);
+        if ($this->useDatatables) {
+            $this->datatables->setDatatablesColumnsHide($columnsHide);
+        }
     }
 
     /**
@@ -299,7 +303,9 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, int $priority = 1)
     {
-        $this->datatables->setDatatablesColumnsNotHideResponsive($columnsNotHideResponsive, $priority);
+        if ($this->useDatatables) {
+            $this->datatables->setDatatablesColumnsNotHideResponsive($columnsNotHideResponsive, $priority);
+        }
     }
 
     /**
@@ -310,7 +316,9 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setDatatablesGroupColumn(int $columnNumber)
     {
-        $this->datatables->setDatatablesGroupColumn($columnNumber);
+        if ($this->useDatatables) {
+            $this->datatables->setDatatablesGroupColumn($columnNumber);
+        }
     }
 
     /**
@@ -334,7 +342,9 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setDatatablesOrderColumns(array $arrayOrderColumns)
     {
-        $this->datatables->setDatatablesOrderColumns($arrayOrderColumns);
+        if ($this->useDatatables) {
+            $this->datatables->setDatatablesOrderColumns($arrayOrderColumns);
+        }
     }
 
     /**
@@ -343,7 +353,9 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setDatatablesRowsPerPage(int $numberRows)
     {
-        $this->datatables->setDatatablesRowsPerPage($numberRows);
+        if ($this->useDatatables) {
+            $this->datatables->setDatatablesRowsPerPage($numberRows);
+        }
     }
 
     /**

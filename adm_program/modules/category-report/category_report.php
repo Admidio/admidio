@@ -432,7 +432,7 @@ foreach ($report->listData as $member => $memberdata) {
         if ($getMode == 'csv') {
             $csvStr .= $tmp_csv. "\n";
         } else {
-            $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
+            $table->addRowByArray($columnValues, 'row-'.$listRowNumber, array('nobr' => 'true'));
         }
         $listRowNumber++;
     }
