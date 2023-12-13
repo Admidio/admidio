@@ -513,7 +513,7 @@
   <string name="SYS_DEFAULT_VALUE_DESC">Du kan ange ett standardvärde för detta profilfält. Värde kommer att skrivas i fältet för en ny användare. För att göra detta anger du värdet som profilen ska ha i fältet.\n\nFör datatypen kryssruta kan du ange 1 för aktiverad och 0 för avaktiverad. För datatyperna rullgardinslistfält och radioknapp anger du numret på raden i värdelistan där det önskade värdet finns.</string>
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Standardvy</string>
-  <string name="SYS_DEFAULT_VIEW_DESC">Visa typ av evenemang. Med läge #VAR1_BOLD# visas alla information om evenemanget i en ruta. Med läge #VAR2_BOLD# visas den viktigaste informationen i en kompakt lista. (Standard: Detaljerad)</string>
+  <string name="SYS_DEFAULT_VIEW_DESC">Visningsläge av evenemang. I läge #VAR1_BOLD# visas all information om evenemanget i en ruta. I läge #VAR2_BOLD# visas endast det mest relevanta om evenemanget i en kompakt lista. (Standard: #VAR1#)</string>
   <string name="SYS_DELETE">Radera</string>
   <string name="SYS_DELETE_ALBUM">Radera album</string>
   <string name="SYS_DELETE_CONFIGURATION">Ta bort inställning</string>
@@ -638,6 +638,7 @@
   <string name="SYS_ENABLE_PM_MODULE">Aktivera privata meddelanden</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Privata meddelanden kan aktiveras eller avaktiveras med denna inställning. (Standard: aktiverad)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Underhålla och visa relationer</string>
+  <string name="SYS_ENABLE_USER_RELATIONS_DESC">Om aktiverad så kan relationer mellan kontakter visas och underhållas. (Standard: ja)</string>
   <string name="SYS_ENCODING_GUESS">Försök att upptäcka kodningen</string>
   <string name="SYS_END" description="End of a date">Avsluta</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Vill du avsluta medlemskapet till användaren #VAR1# i #VAR2#?</string>
@@ -719,6 +720,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Ett fel uppstod när mappen #VAR1# bytt namn.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Mapp #VAR1_BOLD# kan inte skapas med nödvändiga skrivbehörigheter. \n\n Fråga en #VAR2# administratör #VAR3# om hjälp för att kontrollera skrivbehörigheter (genom att använda FTP för att ändra filattribut till 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Typsnitt</string>
+  <string name="SYS_FONT_AWESOME_DESC">Här kan en ikon från \"Font Awesome\" placeras. Gå till #VAR1#https://fontawesome.com#VAR2# och välj en gratis ikon från \"Solid\" eller \"Brands\" collection. Som prefix till namnet måste du lägga till fa- framför. Om du väljer ikonen \"user\" så ska du ange \"fa-user\" i fältet.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Jag har glömt mitt lösenord!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Tidigare</string>
@@ -870,7 +872,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximal filstorlek</string>
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Användare får bara ladda upp filer av mindre storlek än vad som visas här. Vid 0 är uppladdning inaktiverad. (standard: 3 MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Jag får delta</string>
-  <string name="SYS_MAYBE_PARTICIPATE_DESC">Om detta alternativ är aktiverat finns det ett tredje alternativ #VAR3_BOLD# förutom alternativen #VAR1_BOLD# och #VAR2_BOLD#. (Standard: inaktiverad)</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">Om aktiverat finns en tredje option, #VAR3_BOLD#, tillgänglig i tillägg till #VAR1_BOLD# och #VAR2_BOLD# vid registrering för ett evenemang. (Standard: avaktiverad)</string>
   <string name="SYS_MEETINGS">Möten</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Medlem</string>
@@ -1189,7 +1191,7 @@
   <string name="SYS_ROOM_OVERHANG">Vid ytterligare tillgängligt utrymme (exempel ytterligare platser, stående rom) kan antalet ytterligare utrymmen definieras här.</string>
   <string name="SYS_ROOM_RESERVED">Valt rum är redan i bruk just nu.</string>
   <string name="SYS_ROOM_SELECTABLE">Rum finns tillgängligt</string>
-  <string name="SYS_ROOM_SELECTABLE_DESC">Fältet för att välja rum är tillgänglig. Välj rum och skapa händelse för valt rum. (standard svar: nej)</string>
+  <string name="SYS_ROOM_SELECTABLE_DESC">Visa en listruta med tillgängliga lokaler för att kunna välja en lokal för evenemanget. (Standard: nej)</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotera foto</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotera fotot åt höger</string>
   <string name="SYS_ROW">Rad</string>
@@ -1273,6 +1275,8 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ange mappbehörigheter</string>
   <string name="SYS_SETTINGS">Inställningar</string>
   <string name="SYS_SHOW_ALL">Visa alla användare</string>
+  <string name="SYS_SHOW_ALL_CONTACTS">Valfritt visa alla kontakter</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Om aktiverat kan tidigare kontakter och kontakter i andra organisationer visas i medlemsadministrationen utöver den aktuella organisationens aktiva kontakter. I annat fall visas endast aktiva kontakter i den aktuella organisationen. Vid skapande av nya kontakter eller tilldelning av registreringar söks dock fortfarande hela databasen för alla organisationer efter befintliga kontakter. (Standard: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Endast aktiva medlemmar i denna organisation kommer att listas om detta alternativ inte är inställt. Annars listas alla användare av databasen.</string>
   <string name="SYS_SHOW_CALENDAR">Visa kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">För utloggade användare kommer en alfanumerisk text att visas när captcha-modulen är aktiverad. Den medföljande texten måste anges i rätt fält. Detta bör förhindra missbruk av formuläret av spammare. (standard: ja)</string>
@@ -1409,6 +1413,7 @@
   <string name="SYS_USERNAME_DESCRIPTION">Du kan logga in med det här användarnamnet. \n\nDetta namn måste vara väl definierat. Om det valda namnet inte är tillgängligt längre, försök att använda kombinationer som Andi78 eller SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">E-postadress</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# vid #VAR3#</string>
+  <string name="SYS_CONTACTS_PER_PAGE">Antal kontakter per sida</string>
   <string name="SYS_USING_CURRENT_VERSION">Du använder en aktuell version #VAR1# av Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
