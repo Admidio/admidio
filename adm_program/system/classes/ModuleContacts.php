@@ -58,7 +58,7 @@ class ModuleContacts extends HtmlPage
 
 
         if($assignRegistration) {
-            $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
+            $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $user->getValue('EMAIL'))));
 
             // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
             if ($gCurrentUser->editUsers()) {
