@@ -2057,7 +2057,7 @@ class User extends TableAccess
                     $this->getValue('usr_id'),
                     $columnName,
                     (string) $this->getValue($columnName),
-                    $newValue,
+                    (string) $newValue,
                     $this
                 );
             }
@@ -2108,11 +2108,11 @@ class User extends TableAccess
                 $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
                 $columnName, // TODO: is $columnName the internal name or the human-readable?
                 // Old and new values in human-readable version:
-                $oldFieldValue,
-                $this->mProfileFieldsData->getValue($columnName),
+                (string) $oldFieldValue,
+                (string) $this->mProfileFieldsData->getValue($columnName),
                 // Old and new values in raw database:
-                $oldFieldValue_db,
-                $newValue,
+                (string) $oldFieldValue_db,
+                (string) $newValue,
                 $this
             );
         }
