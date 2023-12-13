@@ -1304,7 +1304,7 @@
   <string name="SYS_SHOW_WATERMARK_DESC">Der eingegebene Text wird in allen angezeigten Fotos angezeigt, ab einer Größe von 200 Pixel der längeren Seite. Wenn der Fotograf im Album hinterlegt wurde, wird anstelle dieses Textes der Name des Fotografen mit Copyright angezeigt. Wenn kein Bildtext angezeigt werden soll, kann dieses Feld leer gelassen werden (Standard: #VAR1#).</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Ähnliche Kontakte gefunden</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Es wurden Kontakte mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden.</string>
-  <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Es wurden Kontakte mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden. Prüfe die Registrierung und ordne diese einem gefunden Kontakt zu oder lege einen neuen Kontakt an.</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Zu der Registrierung von #VAR1_BOLD# mit der E-Mail-Adresse #VAR2_BOLD# wurden Kontakte mit einem ähnlichen Namen gefunden. Bitte prüfe die Registrierung und ordne diese einem gefundenen Kontakt zu oder lege einen neuen Kontakt an.</string>
   <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SIZE">Größe</string>
