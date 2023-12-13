@@ -50,7 +50,7 @@ $nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient', 'string');
 $emailRecipient   = admFuncVariableIsValid($_POST, 'email_recipient', 'string');
 $ecardMessage     = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
 
-$imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
+$imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => 350, 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
 
 $funcClass = new ECard($gL10n);
 
