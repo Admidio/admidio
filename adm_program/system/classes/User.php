@@ -2056,7 +2056,7 @@ class User extends TableAccess
                 $gChangeNotification->logUserChange(
                     $this->getValue('usr_id'),
                     $columnName,
-                    $this->getValue($columnName),
+                    (string) $this->getValue($columnName),
                     $newValue,
                     $this
                 );
