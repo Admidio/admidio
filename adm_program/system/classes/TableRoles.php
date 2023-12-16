@@ -484,7 +484,7 @@ class TableRoles extends TableAccess
     {
         if ($this->getValue('rol_administrator')) {
             throw new AdmException('Administrator role cannot be set to inactive.');
-        } elseif ($this->getValue('cat_name_intern') === 'EVENTS') {
+        } elseif ($this->type === self::ROLE_EVENT) {
             throw new AdmException('Event role cannot be set to inactive.');
         }
         return $this->toggleValid(false);
@@ -622,7 +622,7 @@ class TableRoles extends TableAccess
             $membership->setValue('mem_begin', $startDate);
             $membership->setValue('mem_end', $endDate);
             $membership->setValue('mem_leader', $leader);
-            if ($this->getValue('cat_name_intern') === 'EVENTS') {
+            if ($this->type === self::ROLE_EVENT) {
                 $membership->setValue('mem_approved', Participants::PARTICIPATION_YES);
             }
             $membership->save();
