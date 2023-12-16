@@ -227,7 +227,7 @@ try {
     }
 
     $listData = new ListData();
-    $listData->setDataByConfiguration($getListUuid, $sqlOptions);
+    $listData->setDataByConfiguration($list, $sqlOptions);
 
     if(in_array($getMode, array('xlsx', 'ods', 'csv'))) {
         // generate the export to xlsx, ods or csv file
