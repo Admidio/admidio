@@ -70,8 +70,8 @@ class TableMembers extends TableAccess
                     $this->getValue('mem_usr_id'),
                     $this->getValue('rol_name'),
                     $columnName,
-                    $oldValue,
-                    $newValue
+                    (string) $oldValue,
+                    (string) $newValue
                 );
             }
         }
