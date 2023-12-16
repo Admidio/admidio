@@ -380,7 +380,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             }
 
             // check if flag is set that current user wants to participate as leader to the event
-            if (isset($_POST['event_right_send_mail']) && $_POST['event_current_user_assigned'] == 1
+            if (isset($_POST['event_current_user_assigned']) && $_POST['event_current_user_assigned'] == 1
                 && !$gCurrentUser->isLeaderOfRole((int)$event->getValue('dat_rol_id'))) {
                 // user wants to participate -> add him to event and set approval state to 2 ( user attend )
                 $role->startMembership($user->getValue('usr_id'), true);
