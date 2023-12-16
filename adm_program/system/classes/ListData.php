@@ -163,7 +163,7 @@ class ListData
     /**
      * Read the data by a configuration of the table **adm_lists**. With this method it's possible
      * to format the output for visual html presentation or for the different export formats.
-     * @param string $listUUID UUID of the list configuration that should be loaded.
+     * @param ListConfiguration $listConfiguration A configuration object with all necessary information.
      * @param array $options (optional) An array with the following possible entries:
      *                                  - **showAllMembersThisOrga** : Set to true all users with an active membership
      *                                    to at least one role of the current organization will be shown.
@@ -190,13 +190,11 @@ class ListData
      *                                    the membership must be at least one day before this date.
      * @return void
      * @throws AdmException
+     * @throws Exception
      */
-    public function setDataByConfiguration(string $listUUID, array $options = array())
+    public function setDataByConfiguration(ListConfiguration $listConfiguration, array $options)
     {
-        global $gDb;
-
-        $this->listConfiguration = new ListConfiguration($gDb);
-        $this->listConfiguration->readDataByUuid($listUUID);
+        $this->listConfiguration = $listConfiguration;
         $this->setDataBySql($this->listConfiguration->getSQL($options));
     }
 
@@ -206,6 +204,7 @@ class ListData
      * @param string $sql Sql statement that will return the content for the export.
      * @param array $parameters Parameters for the sql statement.
      * @return void
+     * @throws Exception
      */
     public function setDataBySql(string $sql, array $parameters = array())
     {

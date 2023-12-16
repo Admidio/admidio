@@ -86,7 +86,7 @@ if (isset($_SESSION['mylist_request'])) {
 
         for ($number = 1, $max = $list->countColumns(); $number <= $max; ++$number) {
             $column = $list->getColumnObject($number);
-            $userField = new TableUserField($gDb, $column->getValue('lsc_usf_id'));
+            $userField = new TableUserField($gDb, (int) $column->getValue('lsc_usf_id'));
 
             if ($column->getValue('lsc_usf_id') > 0) {
                 $formValues['column'. $number] = $userField->getValue('usf_name_intern');
