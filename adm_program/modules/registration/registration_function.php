@@ -63,7 +63,7 @@ try {
             $user->save();
 
             // every new user to the organization will get the default roles for registration
-            if ($getMode === 1) {
+            if ($getMode === 2) {
                 $user->assignDefaultRoles();
             }
             $gDb->endTransaction();
@@ -82,7 +82,7 @@ try {
         // otherwise go to previous url (default roles are assigned automatically)
         if ($gCurrentUser->manageRoles()) {
             // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid)));
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'new_user' => 3)));
         // => EXIT
         } else {
             admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_uuid' => $getUserUuid, 'new_user_uuid' => $getNewUserUuid)));
