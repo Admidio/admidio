@@ -236,7 +236,7 @@ if ($eventsResult['totalCount'] === 0) {
 
         switch ($getView) {
             case 'compact':
-                $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_LOCATION'));
+                $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_VENUE'));
                 $columnAlign   = array('center', 'left', 'left', 'left', 'left');
                 $compactTable->disableDatatablesColumnsSort(array(6));
                 $compactTable->setDatatablesColumnsNotHideResponsive(array(6));
@@ -602,7 +602,7 @@ if ($eventsResult['totalCount'] === 0) {
 
             $eventElements[] = array($gL10n->get('SYS_CALENDAR'), '<strong>' . $event->getValue('cat_name') . '</strong>');
             if ($outputLinkLocation !== '') {
-                $eventElements[] = array($gL10n->get('SYS_LOCATION'), $outputLinkLocation);
+                $eventElements[] = array($gL10n->get('SYS_VENUE'), $outputLinkLocation);
             }
             if ($outputLinkRoom !== '') {
                 $eventElements[] = array($gL10n->get('SYS_ROOM'), $outputLinkRoom);

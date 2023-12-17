@@ -823,8 +823,8 @@
   <string name="SYS_LINK_TO">Link auf #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
-  <string name="SYS_LOCATION">Ort</string>
-  <string name="SYS_LOCATION_LINK">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort der Veranstaltung eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</string>
+  <string name="SYS_MEETING_POINT">Treffpunkt</string>
+  <string name="SYS_MEETING_POINT_LINK">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort der Veranstaltung eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Speicherort der Profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
   <string name="SYS_LOCK">Sperren</string>

@@ -823,8 +823,7 @@
   <string name="SYS_LINK_TO">Link to #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">List</string>
-  <string name="SYS_LOCATION">Location</string>
-  <string name="SYS_LOCATION_LINK">If enough information regarding location is provided (street, city, location), Google Maps is able to calculate route to location.</string>
+  <string name="SYS_MEETING_POINT">Meeting point</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Please define where to store profile picture (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. (default: database)</string>
   <string name="SYS_LOCK">Lock</string>
@@ -1425,6 +1424,8 @@
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
   <string name="SYS_VARIOUS_ROLES">Various roles</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
+  <string name="SYS_VENUE">Venue</string>
+  <string name="SYS_VENUE_LINK">If enough information (city, street, location) about the venue is entered, a link or route can be created via Google Maps.</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Your current database version is #VAR1#. Unfortunately, it is not possible to update to #VAR2# with this version.\n\nPlease install Admidio 4.1 first and then update to Admidio #VAR2#.</string>
   <string name="SYS_VIEW">View</string>
