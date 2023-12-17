@@ -415,15 +415,15 @@ class ModuleGroupsRoles extends HtmlPage
                            AND mem_end < ?  -- DATE_NOW
                            AND NOT EXISTS (
                                SELECT 1
-                                 FROM '.TBL_MEMBERS.' AS act
+                                 FROM ' . TBL_MEMBERS . ' AS act
                                 WHERE act.mem_rol_id = mem.mem_rol_id
                                   AND act.mem_usr_id = mem.mem_usr_id
                                   AND ? BETWEEN act.mem_begin AND act.mem_end -- DATE_NOW
                            )), 0) AS num_former -- DATE_NOW
-                  FROM '.TBL_ROLES.' AS rol
-            INNER JOIN '.TBL_CATEGORIES.' AS cat
+                  FROM ' . TBL_ROLES . ' AS rol
+            INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = rol_cat_id
-                       '.(strlen($categoryUUID) > 1 ? ' AND cat_uuid = '.$categoryUUID : '').'
+                       ' . (strlen($categoryUUID) > 1 ? ' AND cat_uuid = \'' . $categoryUUID . '\'' : '').'
              LEFT JOIN '.TBL_EVENTS.' ON dat_rol_id = rol_id
                  WHERE (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )';
