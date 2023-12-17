@@ -549,7 +549,7 @@ class TableRoles extends TableAccess
                     if ($leader === (bool)$row['mem_leader']) {
                         $newMembershipSaved = true;
 
-                        // save new membership period
+                        // change existing membership period
                         $membership = new TableMembers($this->db);
                         $membership->setArray($row);
                         $membership->setValue('mem_begin', $startDate);
@@ -569,7 +569,7 @@ class TableRoles extends TableAccess
                     if ($leader === (bool) $row['mem_leader']) {
                         $newMembershipSaved = true;
 
-                        // save new membership period
+                        // change existing membership period
                         $membership = new TableMembers($this->db);
                         $membership->setArray($row);
                         $membership->setValue('mem_begin', $startDate);
@@ -752,7 +752,7 @@ class TableRoles extends TableAccess
         if (count($membersList) > 0) {
             $endDate = DateTime::createFromFormat('Y-m-d', DATE_NOW);
             $newEndDate = $endDate->sub(new DateInterval('P1D'))->format('Y-m-d');
-            $this->setMembership($userId, $membersList[0]['mem_begin'], $newEndDate);
+            $this->setMembership($userId, $membersList[0]['mem_begin'], $newEndDate, $membersList[0]['mem_leader']);
         }
     }
 
