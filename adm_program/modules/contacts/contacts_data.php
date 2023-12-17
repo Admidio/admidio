@@ -309,7 +309,7 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
         && $row['usr_uuid'] !== $gCurrentUserUUID) { // no one is allowed to remove their own profile
         $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.
-                '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_USER').'"></i>
+                '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_CONTACT').'"></i>
             </a>';
     }
 

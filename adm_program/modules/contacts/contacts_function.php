@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Various user functions
+ * Various contact functions
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -13,12 +13,12 @@
  * Parameters:
  *
  * mode: 1 - MsgBox explaining what effect the deletion has.
- *       2 - remove user ONLY from the member community
- *       3 - delete user from database
- *       4 - send user e-mail with new access data
+ *       2 - remove contact ONLY from the member community
+ *       3 - delete contact from database
+ *       4 - send contact e-mail with new access data
  *       5 - Ask if access data should be sent
- *       6 - Ask if member should be deleted
- * user_uuid : UUID of the user, who should be edited
+ *       6 - Ask if contact should be deleted
+ * user_uuid : UUID of the contact, who should be edited
  *
  *****************************************************************************/
 
@@ -36,16 +36,15 @@ if (!$gCurrentUser->editUsers()) {
 }
 
 if ($getMode === 1) {
-    // ask if user should only be removed from organization or completely deleted
-
+    // ask if contact should only be removed from organization or completely deleted
     echo '
     <div class="modal-header">
-        <h3 class="modal-title">'.$gL10n->get('SYS_REMOVE_USER').'</h3>
+        <h3 class="modal-title">'.$gL10n->get('SYS_REMOVE_CONTACT').'</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">
         <p><i class="fas fa-user-clock"></i>&nbsp;'.$gL10n->get('SYS_MAKE_FORMER').'</p>
-        <p><i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('SYS_REMOVE_USER_DESC', array($gL10n->get('SYS_DELETE'))).'</p>
+        <p><i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE'))).'</p>
 
         <button id="btnFormer" type="button" class="btn btn-primary"
             onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)).'\'">
