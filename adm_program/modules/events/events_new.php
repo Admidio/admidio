@@ -216,7 +216,7 @@ $page->addJavascript(
 // show form
 $form = new HtmlForm('event_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 1, 'copy' => $getCopy)), $page);
 
-$form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('SYS_LOCATION'));
+$form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('SYS_VENUE'));
 $form->addInput(
     'dat_headline',
     $gL10n->get('SYS_TITLE'),
@@ -228,9 +228,9 @@ $form->addInput(
 if ($gSettingsManager->getBool('events_show_map_link')) {
     $form->addInput(
         'dat_location',
-        $gL10n->get('SYS_LOCATION'),
+        $gL10n->get('SYS_VENUE'),
         (string) $event->getValue('dat_location'),
-        array('maxLength' => 100, 'helpTextIdLabel' => 'SYS_LOCATION_LINK')
+        array('maxLength' => 100, 'helpTextIdLabel' => 'SYS_VENUE_LINK')
     );
 
     if (!$event->getValue('dat_country') && $getEventUuid === '') {
@@ -245,7 +245,7 @@ if ($gSettingsManager->getBool('events_show_map_link')) {
 } else {
     $form->addInput(
         'dat_location',
-        $gL10n->get('SYS_LOCATION'),
+        $gL10n->get('SYS_VENUE'),
         $event->getValue('dat_location'),
         array('maxLength' => 100)
     );

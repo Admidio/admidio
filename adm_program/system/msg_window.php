@@ -98,7 +98,7 @@ switch ($getMessageId) {
                         <td>'.$gL10n->get('SYS_SEARCH_GENDER_DESC').'</td>
                     </tr>
                     <tr>
-                        <td>'.$gL10n->get('SYS_LOCATION').'</td>
+                        <td>'.$gL10n->get('SYS_CITY').'</td>
                         <td><strong>'.$gL10n->get('SYS_SEARCH_LOCATION_EXAMPLE').'</strong></td>
                         <td>'.$gL10n->get('SYS_SEARCH_LOCATION_DESC').'</td>
                     </tr>

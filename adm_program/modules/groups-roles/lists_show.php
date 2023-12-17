@@ -737,7 +737,7 @@ if ($getMode === 'pdf') {
 
             // Meeting Point
             if ((string) $role->getValue('rol_location') !== '') {
-                $form->addStaticControl('infobox_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
+                $form->addStaticControl('infobox_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'));
             }
 
             // Member Fee

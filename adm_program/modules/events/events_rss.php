@@ -84,7 +84,7 @@ if ($eventsResult['numResults'] > 0) {
         }
 
         if ($eventLocation !== '') {
-            $description .= '<br /><br />' . $gL10n->get('SYS_LOCATION') . ': ' . $eventLocation;
+            $description .= '<br /><br />' . $gL10n->get('SYS_VENUE') . ': ' . $eventLocation;
         }
 
         $description .= '<br /><br />' . $event->getValue('dat_description');

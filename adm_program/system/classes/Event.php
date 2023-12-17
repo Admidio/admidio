@@ -544,7 +544,7 @@ class Event extends TableAccess
                 . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '<br />'
                 . $gL10n->get('SYS_DATE') . ': ' . $this->getDateTimePeriod() . '<br />'
                 . $gL10n->get('SYS_CALENDAR') . ': ' . $calendar . '<br />'
-                . $gL10n->get('SYS_LOCATION') . ': ' . $location . '<br />'
+                . $gL10n->get('SYS_VENUE') . ': ' . $location . '<br />'
                 . $gL10n->get('SYS_ROOM') . ': ' . $room . '<br />'
                 . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '<br />'

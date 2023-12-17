@@ -356,7 +356,7 @@ if (!$eventRole) {
     $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));
     $form->addInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), array('type' => 'time'));
     $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), DateTimeExtended::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday')));
-    $form->addInput('rol_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'), array('maxLength' => 100));
+    $form->addInput('rol_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'), array('maxLength' => 100));
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_dependencies', $gL10n->get('SYS_DEPENDENCIES').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');

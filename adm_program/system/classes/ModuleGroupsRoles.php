@@ -158,7 +158,7 @@ class ModuleGroupsRoles extends HtmlPage
 
                 // Meeting point
                 if (!empty($role->getValue('rol_location'))) {
-                    $html .= '<span class="d-block"><i class="fas fa-map-marker-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_LOCATION').'"></i> '. $role->getValue('rol_location').'</span>';
+                    $html .= '<span class="d-block">'.$gL10n->get('SYS_MEETING_POINT').' '. $role->getValue('rol_location').'</span>';
                 }
                 $templateRow['information'][] = $html;
             }
