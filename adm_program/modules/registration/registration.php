@@ -50,7 +50,7 @@ try {
                 // notify all authorized members about the new registration to approve it
                 $userRegistration->notifyAuthorizedMembers();
 
-                $gMessage->setForwardUrl(ADMIDIO_URL . ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
+                $gMessage->setForwardUrl(ADMIDIO_URL . ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout'));
                 $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK', array($gCurrentOrganization->getValue('org_longname'))));
                 // => EXIT
             } else {
