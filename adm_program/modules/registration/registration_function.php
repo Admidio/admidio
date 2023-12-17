@@ -22,14 +22,14 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 try {
-    if ($getMode == 4) {
-        $gMessage->showHtmlTextOnly();
-    }
-
     // Initialize and check the parameters
     $getMode        = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 5, 6)));
     $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
     $getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+
+    if ($getMode == 4) {
+        $gMessage->showHtmlTextOnly();
+    }
 
     // only administrators could approve new users
     if (!$gCurrentUser->approveUsers()) {
