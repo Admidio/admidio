@@ -23,7 +23,13 @@ class ProfileFields
      */
     protected $db;
     /**
-     * @var array<string,TableUserField> Array with all user fields objects
+     * @var array<string,TableUserField> Array with all profile fields represented by a user fields objects.
+     *      The key is the usf_name_intern and the value is an object of class TableUserField
+     *      $mProfileFields = [
+     *          'LAST_NAME' => {TableUserField}
+     *          'FIRST_NAME' => {TableUserField}
+     *          'STREET' => {TableUserField}
+     *      ]
      */
     protected $mProfileFields = array();
     /**
@@ -107,6 +113,7 @@ class ProfileFields
      * if the current user is allowed to edit the profile or not.
      * @param bool $allowedToEditProfile Flag if the user is allowed to edit the profile.
      * @return array Returns an array with all usf_id of profile fields that are editable to the current user.
+     * @throws Exception
      */
     public function getEditableArray(bool $allowedToEditProfile = false): array
     {
@@ -122,7 +129,13 @@ class ProfileFields
     }
 
     /**
-     * @return array<string,TableUserField>
+     * Returns an array with all profile fields represented by a user fields objects.
+     * The key is the usf_name_intern and the value is an object of class TableUserField
+     * @return array<string,TableUserField> $mProfileFields = [
+     *      'LAST_NAME' => {TableUserField}
+     *      'FIRST_NAME' => {TableUserField}
+     *      'STREET' => {TableUserField}
+     *  ]
      */
     public function getProfileFields(): array
     {
@@ -133,12 +146,13 @@ class ProfileFields
      * Returns for a field name intern (usf_name_intern) the value of the column from table adm_user_fields.
      * Optional a format could be set.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of table **adm_user_fields**
-     * @param string $column          The column name of **adm_user_field** for which you want the value
-     * @param string $format    For column **usf_value_list** the following format is accepted:
+     * @param string $column The column name of **adm_user_field** for which you want the value
+     * @param string $format For column **usf_value_list** the following format is accepted:
      *                           * **database** returns database value of **usf_value_list** without any transformations
      *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return mixed Returns for the profile field with the given uuid the value.
+     * @throws Exception
      */
     public function getProperty(string $fieldNameIntern, string $column, string $format = '')
     {
@@ -156,13 +170,14 @@ class ProfileFields
     /**
      * Returns for field id (usf_id) the value of the column from table adm_user_fields.
      * Optional a format could be set.
-     * @param int    $fieldId Expects the **usf_id** of table **adm_user_fields**
-     * @param string $column  The column name of **adm_user_field** for which you want the value
-     * @param string $format    For column **usf_value_list** the following format is accepted:
+     * @param int $fieldId Expects the **usf_id** of table **adm_user_fields**
+     * @param string $column The column name of **adm_user_field** for which you want the value
+     * @param string $format For column **usf_value_list** the following format is accepted:
      *                           * **database** returns database value of **usf_value_list** without any transformations
      *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return string|array Returns for the profile field with the given uuid the value.
+     * @throws Exception
      */
     public function getPropertyById(int $fieldId, string $column, string $format = '')
     {
@@ -179,14 +194,15 @@ class ProfileFields
      * Returns for field uuid (usf_uuid) the value of the column from table adm_user_fields.
      * Optional a format could be set.
      * @param string $fieldUuid Expects the **usf_id** of table **adm_user_fields**
-     * @param string $column    The column name of **adm_user_field** for which you want the value
-     * @param string $format    For column **usf_value_list** the following format is accepted:
+     * @param string $column The column name of **adm_user_field** for which you want the value
+     * @param string $format For column **usf_value_list** the following format is accepted:
      *                           * **database** returns database value of **usf_value_list** without any transformations
      *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return string Returns for the profile field with the given uuid the value.
+     * @throws Exception
      */
-    public function getPropertyByUuid(string $fieldUuid, string $column, string $format = '')
+    public function getPropertyByUuid(string $fieldUuid, string $column, string $format = ''): string
     {
         foreach ($this->mProfileFields as $field) {
             if ($field->getValue('usf_uuid') === $fieldUuid) {
@@ -447,6 +463,7 @@ class ProfileFields
      * if the current user is allowed to edit the profile or not.
      * @param bool $allowedToEditProfile Flag if the user is allowed to edit the profile.
      * @return array Returns an array with all usf_id of profile fields that are visible to the current user.
+     * @throws Exception
      */
     public function getVisibleArray(bool $allowedToEditProfile = false): array
     {
@@ -478,6 +495,7 @@ class ProfileFields
      * @param int $userId Optional the ID of the user for which the required profile field should be checked.
      * @param bool $registration Set to **true** if the check should be done for a registration form. The default is **false**
      * @return bool Returns true if the profile field has a required input.
+     * @throws Exception
      */
     public function hasRequiredInput(string $fieldNameIntern, int $userId = 0, bool $registration = false): bool
     {
@@ -490,10 +508,11 @@ class ProfileFields
      * !!! NOTE that this method ONLY checks if it could be possible to edit this field. There MUST be
      * another check if the current user is allowed to edit the user profile generally.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
-     * @param bool   $allowedToEditProfile Set to **true** if the current user has the right to edit the profile
+     * @param bool $allowedToEditProfile Set to **true** if the current user has the right to edit the profile
      *                                    in which context the right should be checked. This param must not be
      *                                    set if you are not in a user context.
      * @return bool Return true if the current user is allowed to view this profile field
+     * @throws Exception
      */
     public function isEditable(string $fieldNameIntern, bool $allowedToEditProfile): bool
     {
@@ -506,10 +525,11 @@ class ProfileFields
      * within the context of the user in this object. If no context is set than we only check if the
      * current user has the right to view the category of the profile field.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
-     * @param bool   $allowedToEditProfile Set to **true** if the current user has the right to edit the profile
+     * @param bool $allowedToEditProfile Set to **true** if the current user has the right to edit the profile
      *                                    in which context the right should be checked. This param must not be
      *                                    set if you are not in a user context.
      * @return bool Return true if the current user is allowed to view this profile field
+     * @throws Exception
      */
     public function isVisible(string $fieldNameIntern, bool $allowedToEditProfile = false): bool
     {

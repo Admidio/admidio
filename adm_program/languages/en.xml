@@ -859,6 +859,7 @@
   <string name="SYS_MAP">Map</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Displays the location on Google Maps. The street, postal code, city and country are transferred to Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Displays a route from your own place of residence to the location of this user on Google Maps. The street, postal code, city and country are transferred to Google.</string>
+  <string name="SYS_MASTODON">Mastodon</string>
   <string name="SYS_MAX_ATTACHMENT_SIZE">You can add as many attachments as you want. The file size of all attachments together must not exceed #VAR1# MB.</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# of max. #VAR2# participants</string>

@@ -30,7 +30,6 @@
     <step id="280" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_registration_captcha' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_enable_captcha'</step>
     <step id="290" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_registration_captcha' AND pr1.prf_name = 'registration_enable_captcha'</step>
     <step id="300">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_registration_captcha'</step>
-    <step id="310">ComponentUpdateSteps::updateStep43AddProfileFieldLinkedIn</step>
     <step id="320">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC' WHERE usf_description IN ('INS_FACEBOOK_DESC', 'INS_TWITTER_DESC', 'INS_XING_DESC')</step>
     <step id="325">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_DESC' WHERE usf_description IN ('INS_SKYPE_DESC', 'INS_ICQ_DESC')</step>
     <step id="330">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_FACEBOOK' WHERE usf_name LIKE 'INS_FACEBOOK'</step>
@@ -108,5 +107,6 @@
     <step id="1050">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_events boolean not null default false</step>
     <step id="1060">UPDATE %PREFIX%_roles SET rol_events = rol_dates</step>
     <step id="1070">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_dates</step>
+    <step id="1080">ComponentUpdateSteps::updateStep43AddSocialNetworkProfileFields</step>
     <step>stop</step>
 </update>
