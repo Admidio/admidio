@@ -31,6 +31,7 @@ $getNewUser  = admFuncVariableIsValid($_GET, 'new_user', 'int');
 $getInline   = admFuncVariableIsValid($_GET, 'inline', 'bool');
 
 $html = '';
+$setRoleId = 0;
 
 // if user is allowed to assign at least one role then allow access
 if (!$gCurrentUser->assignRoles()) {
@@ -47,12 +48,10 @@ $headline = $gL10n->get('SYS_ROLE_ASSIGNMENT_FOR', array($user->getValue('FIRST_
 if (!$getInline) {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }
-// Testen ob Feste Rolle gesetzt ist
+// check if a special role should be set
 if (isset($_SESSION['set_rol_id'])) {
-    $setRoleId = $_SESSION['set_rol_id'];
+    $setRoleId = (int) $_SESSION['set_rol_id'];
     unset($_SESSION['set_rol_id']);
-} else {
-    $setRoleId = null;
 }
 
 $page = null;
@@ -245,7 +244,7 @@ while ($row = $statement->fetch()) {
 
     // if user is assigned to this role
     // or if user is created in contacts.php of list module
-    if ($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId)) {
+    if ($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') === $setRoleId)) {
         $memberChecked = ' checked="checked" ';
     }
 

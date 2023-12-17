@@ -32,7 +32,7 @@ $getUserUuid       = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array(
 $getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'string');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 
-// create object of the commited role
+// create object of the committed role
 $role = new TableRoles($gDb);
 $role->readDataByUuid($getRoleUuid);
 
