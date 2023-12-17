@@ -26,12 +26,12 @@ try {
     // Initialize and check the parameters
     $getRegistrationId = admFuncVariableIsValid($_GET, 'id', 'string');
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
-    $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('show_similar')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('show_similar')));
 
     if ($getRegistrationId === '') {
         if (!$gValidLogin) {
             // if there is no login then show a profile form where the user can register himself
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '2')));
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('new_user' => '2')));
             // => EXIT
         } elseif (!$gCurrentUser->approveUsers()) {
             // Only Users with the right "approve users" can work with registrations, otherwise exit.
@@ -50,13 +50,14 @@ try {
                 // notify all authorized members about the new registration to approve it
                 $userRegistration->notifyAuthorizedMembers();
 
+                $gMessage->setForwardUrl(ADMIDIO_URL . ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
                 $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK', array($gCurrentOrganization->getValue('org_longname'))));
                 // => EXIT
             } else {
                 // user has done a successful registration, so the account could be activated
                 $userRegistration->acceptRegistration();
 
-                $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/login.php');
+                $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/login.php');
                 $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK_SELF'));
                 // => EXIT
             }
@@ -92,6 +93,6 @@ try {
         $page->createContentAssignUser($registrationUser, true);
         $page->show();
     }
-} catch (AdmException | Exception | SmartyException $e) {
+} catch (AdmException|Exception|SmartyException $e) {
     $gMessage->show($e->getMessage());
 }
