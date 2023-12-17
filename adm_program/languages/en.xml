@@ -1154,7 +1154,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Manage documents and files</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roles having this permission can manage the rights for the documents and files module. This includes who can see folders and can upload files.</string>
   <string name="SYS_RIGHT_EDIT_USER">Edit profile of all contacts</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other contacts (except passwords).\n In addition they can add or delete contacts.</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other contacts (except passwords). In addition they can add or delete contacts.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Participants can send emails to all participants</string>
