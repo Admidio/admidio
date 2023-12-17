@@ -730,7 +730,7 @@
   <string name="SYS_FORWARD">Weiterleiten</string>
   <string name="SYS_FRIDAY">Freitag</string>
   <string name="SYS_FROM">ab #VAR1#</string>
-  <string name="SYS_FROM_TO">vom #VAR1# bis #VAR2#</string>
+  <string name="SYS_FROM_TO">von #VAR1# bis #VAR2#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Weitere Informationen</string>
   <string name="SYS_FUTURE_ROLE_MEMBERSHIP">Zukünftige Rollenmitgliedschaften</string>
   <string name="SYS_GENERAL_LISTS">Allgemeine Listen</string>
@@ -823,8 +823,7 @@
   <string name="SYS_LINK_TO">Link auf #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
-  <string name="SYS_LOCATION">Ort</string>
-  <string name="SYS_LOCATION_LINK">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort der Veranstaltung eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</string>
+  <string name="SYS_MEETING_POINT">Treffpunkt</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Speicherort der Profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
   <string name="SYS_LOCK">Sperren</string>
@@ -859,6 +858,7 @@
   <string name="SYS_MAP">Karte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieser Benutzerin bzw. dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
+  <string name="SYS_MASTODON">Mastodon</string>
   <string name="SYS_MAX_ATTACHMENT_SIZE">Sie können so viele Anhänge hinzufügen, wie Sie möchten. Die Dateigröße aller Anhänge zusammen darf #VAR1# MB nicht überschreiten.</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmende</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmenden</string>
@@ -1153,8 +1153,8 @@
   <string name="SYS_RIGHT_DATES">Veranstaltungen verwalten</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Dokumente und Dateien verwalten</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Rollen mit dieser Berechtigung können im Modul für Dokumente und Dateien die Rechte vergeben, welche Rollen bestimme Ordner sehen oder Dateien hochladen dürfen.</string>
-  <string name="SYS_RIGHT_EDIT_USER">Profildaten aller Mitglieder bearbeiten</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Profildaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Mitgliederverwaltung und können dort Mitglieder anlegen oder löschen.</string>
+  <string name="SYS_RIGHT_EDIT_USER">Profildaten aller Kontakte bearbeiten</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können die Daten anderer Kontakte bearbeiten (mit Ausnahme von Passwörtern). Darüber hinaus können sie Kontakte hinzufügen oder löschen.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Gästebucheinträge bearbeiten und löschen</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Kommentare zu Gästebucheinträgen anlegen</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Teilnehmende können E-Mails an alle Teilnehmende senden </string>
@@ -1424,6 +1424,8 @@
   <string name="SYS_VALID_TO" description="Date valid to">Gültig bis</string>
   <string name="SYS_VARIOUS_ROLES">Verschiedene Rollen</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
+  <string name="SYS_VENUE">Veranstaltungsort</string>
+  <string name="SYS_VENUE_LINK">Wenn genügend Informationen (Stadt, Straße, Treffpunkt) über den Veranstaltungsort eingegeben werden, kann ein Link oder eine Route über Google Maps erstellt werden.</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Ihre aktuelle Datenbankversion ist #VAR1#. Mit dieser Version ist ein Update auf #VAR2# leider nicht möglich.\n\nBitte installieren Sie zuerst Admidio 4.1 und führen Sie anschließend ein Update auf Admidio #VAR2# durch.</string>
   <string name="SYS_VIEW">Ansicht</string>
