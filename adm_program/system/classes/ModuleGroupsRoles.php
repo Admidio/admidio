@@ -63,9 +63,9 @@ class ModuleGroupsRoles extends HtmlPage
             $role->setArray($row);
 
             $templateRow = array();
-            $templateRow['category'] = $row['cat_name'];
-            $templateRow['id'] = 'role_'.$row['rol_uuid'];
-            $templateRow['title'] = $row['rol_name'];
+            $templateRow['category'] = $role->getValue('cat_name');
+            $templateRow['id'] = 'role_'.$role->getValue('rol_uuid');
+            $templateRow['title'] = $role->getValue('rol_name');
 
             // send a mail to all role members
             if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getBool('enable_mail_module')) {
