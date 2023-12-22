@@ -1136,7 +1136,7 @@
   <string name="SYS_REMINDER_SEND_LOGIN">Would you like to send the member their login data with a new password as a reminder?</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_CONTACT">Remove contact</string>
-  <string name="SYS_REMOVE_CONTACT_DESC">By choosing #VAR1_BOLD#, all data will be deleted and this information won't be available anymore.</string>
+  <string name="SYS_REMOVE_CONTACT_DESC">By choosing #VAR1_BOLD#, all data of this contact will be deleted and could not be viewed or restored anymore.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
