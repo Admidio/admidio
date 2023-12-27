@@ -26,12 +26,12 @@
 class MenuNode
 {
     /**
-     * @var array Internal id of the node. Should be the value of mem_name_intern from adm_menu.
+     * @var string Internal id of the node. Should be the value of mem_name_intern from adm_menu.
      */
     protected $textId;
 
     /**
-     * @var array The name of the node that will be shown as the head of the list. Should be the value of mem_name from adm_menu.
+     * @var string The name of the node that will be shown as the head of the list. Should be the value of mem_name from adm_menu.
      */
     protected $name;
 
@@ -114,7 +114,7 @@ class MenuNode
      * Get the translated name of this node.
      * @return string Name of this node.
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -176,6 +176,8 @@ class MenuNode
      * user is a member of at least one of these roles.
      * @param int $menuId The id of the menu item that should be checked if it's visible.
      * @return bool Return true if the menu item is visible to the current user.
+     * @throws AdmException
+     * @throws Exception
      */
     public function menuItemIsVisible(int $menuId): bool
     {
