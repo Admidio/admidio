@@ -31,11 +31,6 @@
 class MainMenu
 {
     /**
-     * @var array Array with the main nodes and their entries
-     */
-    protected $menuNodes;
-
-    /**
      * @var array Multidimensional array with the complete menu structure.
      */
     protected $menuItems;
@@ -56,7 +51,7 @@ class MainMenu
      */
     public function countMainNodes(): int
     {
-        return count($this->menuNodes);
+        return count($this->menuItems);
     }
 
     /**
@@ -80,6 +75,7 @@ class MainMenu
      *    )
      * )
      * @return array Array with all entries of this node
+     * @throws Exception
      */
     public function getAllMenuItems(): array
     {
@@ -96,19 +92,18 @@ class MainMenu
      */
     public function initialize()
     {
-        $this->menuNodes  = array();
         $this->menuItems  = array();
         $this->menuLoaded = false;
     }
 
     /**
      * Load the menu from the database table adm_menu
+     * @throws Exception
      */
     public function loadFromDatabase()
     {
         global $gDb;
 
-        $countMenuNodes = $this->countMainNodes();
         $this->menuLoaded = true;
 
         $sql = 'SELECT men_id, men_name, men_name_intern
@@ -119,14 +114,14 @@ class MainMenu
         $mainNodesStatement = $gDb->queryPrepared($sql);
 
         while ($mainNodes = $mainNodesStatement->fetch()) {
-            $this->menuNodes[$countMenuNodes] = new MenuNode($mainNodes['men_name_intern'], $mainNodes['men_name']);
-            $this->menuNodes[$countMenuNodes]->loadFromDatabase($mainNodes['men_id']);
+            $menuNodes = new MenuNode($mainNodes['men_name_intern'], $mainNodes['men_name']);
+            $menuNodes->loadFromDatabase($mainNodes['men_id']);
 
-            if ($this->menuNodes[$countMenuNodes]->count() > 0) {
+            if ($menuNodes->count() > 0) {
                 $this->menuItems[] = array(
                     'id' => $mainNodes['men_name_intern'],
-                    'name' => $mainNodes['men_name'],
-                    'items' => $this->menuNodes[$countMenuNodes]->getAllItems());
+                    'name' => $menuNodes->getName(),
+                    'items' => $menuNodes->getAllItems());
             }
         }
     }
