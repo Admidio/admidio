@@ -162,11 +162,10 @@ class UserImport extends User
      * be added to the import user.
      * @param string $loginName The login name for the import user that should later be used to log in to this system.
      * @param string $password The password for the import user that should later be used to log in to this system.
-     * @return bool Return **true** if the login data could be added to the import user otherwise **false**.
-     * @throws AdmException
+     * @throws AdmException An exception is thrown if the password doesn't meet the minimum requirements.
      * @throws Exception
      */
-    public function setLoginData(string $loginName, string $password): bool
+    public function setLoginData(string $loginName, string $password)
     {
         global $gCurrentUser, $gSettingsManager;
 
@@ -181,7 +180,6 @@ class UserImport extends User
         } else {
             $this->setValue('usr_login_name', $loginName);
             $this->setPassword($password);
-            return true;
         }
     }
 
