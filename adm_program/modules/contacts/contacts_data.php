@@ -273,7 +273,8 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
     && !empty($row['loginname']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
         if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
             // if email is set and systemmails are activated then administrators can send a new password to user
-            $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
+            $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
                 '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
         } else {
             // if user has no email or send email is disabled then administrators could set a new password
@@ -283,34 +284,36 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
         }
     }
 
-    // add link to send email to user
-    if (!empty($row['member_email'])) {
-        if (!$gSettingsManager->getBool('enable_mail_module')) {
-            $mailLink = 'mailto:'.$row['member_email'];
-        } else {
-            $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));
+    if ($gCurrentUser->editUsers()) {
+        // add link to send email to user
+        if (!empty($row['member_email'])) {
+            if (!$gSettingsManager->getBool('enable_mail_module')) {
+                $mailLink = 'mailto:' . $row['member_email'];
+            } else {
+                $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));
+            }
+            $userAdministration .= '<a class="admidio-icon-link" href="' . $mailLink . '">' .
+                '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email'])) . '"></i></a>';
         }
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'">'.
-            '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email'])) . '"></i></a>';
-    }
 
-    $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)).'">'.
-        '<i class="fas fa-clone" data-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
+        $userAdministration .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)) . '">' .
+            '<i class="fas fa-clone" data-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
 
-    // add link to edit user, but only edit users who are members of the current organization
-    if ($contactsOfThisOrganization || !$contactsOfOtherOrganization) {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])).'">'.
-            '<i class="fas fa-edit" data-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
-    }
+        // add link to edit user, but only edit users who are members of the current organization
+        if ($contactsOfThisOrganization || !$contactsOfOtherOrganization) {
+            $userAdministration .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])) . '">' .
+                '<i class="fas fa-edit" data-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
+        }
 
-    // add link to delete user btw. remove user from the current organization
-    if (((!$contactsOfOtherOrganization && $gCurrentUser->isAdministrator()) // not a member of another organization, then administrators may delete
-        || $contactsOfThisOrganization)                  // active members may be removed by authorized users
-        && $row['usr_uuid'] !== $gCurrentUserUUID) { // no one is allowed to remove their own profile
-        $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.
-                '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_CONTACT').'"></i>
+        // add link to delete user btw. remove user from the current organization
+        if (((!$contactsOfOtherOrganization && $gCurrentUser->isAdministrator()) // not a member of another organization, then administrators may delete
+                || $contactsOfThisOrganization)                  // active members may be removed by authorized users
+            && $row['usr_uuid'] !== $gCurrentUserUUID) { // no one is allowed to remove their own profile
+            $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">' .
+                '<i class="fas fa-trash-alt" data-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
             </a>';
+        }
     }
 
     $columnValues[(string) $columnNumberJson] = $userAdministration;

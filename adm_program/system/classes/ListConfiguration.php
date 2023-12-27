@@ -38,7 +38,8 @@ class ListConfiguration extends TableLists
     /**
      * Constructor that will create an object to handle the configuration of lists.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $lstId    The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $lstId The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
     public function __construct(Database $database, $lstId = 0)
     {
@@ -59,6 +60,7 @@ class ListConfiguration extends TableLists
      * @param string $filter Optional a filter for the values of that column.
      * @return bool Returns true if the field was added to the column list.
      * @throws AdmException
+     * @throws Exception
      */
     public function addColumn($field, int $number = 0, string $sort = '', string $filter = ''): bool
     {
@@ -285,6 +287,7 @@ class ListConfiguration extends TableLists
      * @param bool $all Define all columns to be deleted
      * @return bool
      * @throws AdmException
+     * @throws Exception
      */
     public function deleteColumn(int $number, bool $all = false): bool
     {
@@ -320,6 +323,7 @@ class ListConfiguration extends TableLists
      * Returns an array with all alignments (center, left or right) from all columns of this list.
      * @return array Array with alignments from all columns of this list configuration.
      * @throws AdmException
+     * @throws Exception
      */
     public function getColumnAlignments(): array
     {
@@ -421,6 +425,7 @@ class ListConfiguration extends TableLists
      * This will be the internal profile field name e.g. **LAST_NAME** or the db column name
      * of the special field e.g. **mem_begin**
      * @return array Array with all column names of this sql select clause.
+     * @throws Exception
      */
     public function getColumnNamesSql(): array
     {
@@ -470,6 +475,7 @@ class ListConfiguration extends TableLists
      * Returns an array with all list columns and a search condition for each column. Especially the null value
      * will be replaced with a default value. This array can than be used to add it to the main sql statement.
      * @return array<int,string> Returns an array with all list columns and a search condition for each column.
+     * @throws Exception
      */
     public function getSearchConditions(): array
     {
@@ -833,6 +839,7 @@ class ListConfiguration extends TableLists
      * Read data of responsible columns and store in object. Only columns of profile fields which the current
      * user is allowed to view will be stored in the object. If only the role membership should be shown than
      * remove all columns except first name, last name and assignment timestamps.
+     * @throws Exception
      */
     public function readColumns()
     {
@@ -875,8 +882,9 @@ class ListConfiguration extends TableLists
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readData
+     * @throws Exception
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readData
      */
     public function readDataByUuid(string $uuid): bool
     {
@@ -917,6 +925,7 @@ class ListConfiguration extends TableLists
      * columns from the database. Then the column number will be renewed for all columns.
      * This is in some cases a necessary fix if a column number was lost.
      * @throws AdmException
+     * @throws Exception
      */
     public function repair()
     {
@@ -943,6 +952,7 @@ class ListConfiguration extends TableLists
      * @param bool $updateFingerPrint
      * @return bool
      * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -968,6 +978,7 @@ class ListConfiguration extends TableLists
      * returned. This is useful is a role has the setting that no profile information should be shown, but the
      * membership could be viewed.
      * @return void
+     * @throws Exception
      */
     public function setModeShowOnlyNames()
     {

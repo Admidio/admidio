@@ -2,9 +2,9 @@
 <div class="message admidio-max-with">
     <p class="lead">{$message}</p>
 
-    {if $forwardUrl != ''}
+    {if $url != ''}
         {if $showYesNoButtons}
-            <button id="admButtonYes" class="btn btn-primary" type="button" onclick="self.location.href='{$forwardUrl}'">
+            <button id="admButtonYes" class="btn btn-primary" type="button" onclick="{$url}">
                 <i class="fas fa-check-circle"></i>
                 &nbsp;&nbsp;{$l10n->get("SYS_YES")}&nbsp;&nbsp;&nbsp;
             </button>
@@ -14,7 +14,7 @@
             </button>
         {else}
             {* when forwarding, always display a next button *}
-            <button class="btn btn-primary admidio-margin-bottom" onclick="self.location.href='{$forwardUrl}'">{$l10n->get("SYS_NEXT")}
+            <button class="btn btn-primary admidio-margin-bottom" onclick="{$url}">{$l10n->get("SYS_NEXT")}
                 <i class="fas fa-arrow-circle-right"></i>
             </button>
         {/if}

@@ -86,6 +86,8 @@ if ($gCurrentUser->editUsers()) {
         ADMIDIO_URL.FOLDER_MODULES.'/contacts/import.php',
         'fa-upload'
     );
+} else {
+    $contactsListConfig->setModeShowOnlyNames();
 }
 
 if ($gCurrentUser->isAdministrator()) {
