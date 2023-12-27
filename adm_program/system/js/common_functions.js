@@ -15,7 +15,7 @@
  *                           The elements have the same id but the element to click has a prefix **group_**
  */
 function showHideBlock(elementId) {
-    var showHideElementId = $('#'+elementId).attr("id").substring(6);
+    const showHideElementId = $('#'+elementId).attr("id").substring(6);
 
     if($("#"+showHideElementId).is(":hidden")) {
         $("#"+showHideElementId).show("slow");
@@ -36,33 +36,62 @@ function showHideBlock(elementId) {
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
 function callUrlHideElement(elementId, url, csrfToken, callback) {
-    var entryDeleted = document.getElementById(elementId);
+    const entryDeleted = document.getElementById(elementId);
 
     // send RequestObject and delete entry
     $.post(url, {"admidio-csrf-token": csrfToken}, function(data) {
-        if (data === "done") {
-            $("#admidio-modal").modal("hide");
+        const messageText = $("#status-message");
+        let returnStatus = "error";
+        let returnMessage = "";
 
-            if (callback === 'callbackRoles') {
-                $(entryDeleted).fadeOut("slow", callbackRoles);
-            } else if (callback === 'callbackFormerRoles') {
-                $(entryDeleted).fadeOut("slow", callbackFormerRoles);
-            } else if (callback === 'callbackFutureRoles') {
-                $(entryDeleted).fadeOut("slow", callbackFutureRoles);
-            } else if (callback === 'callbackProfilePhoto') {
-                callbackProfilePhoto();
+        try {
+            const returnData = JSON.parse(data);
+            returnStatus = returnData.status;
+            returnMessage = returnData.message;
+        } catch (e) {
+            // fallback for old implementation without JSON response
+            if (data === "done") {
+                returnStatus = "success";
             } else {
-                $(entryDeleted).fadeOut("slow");
+                returnMessage = data;
+            }
+        }
+
+        if (returnStatus === "success") {
+            if (returnMessage !== "") {
+                messageText.html("<div class=\"alert alert-success\"><i class=\"fas fa-check\"></i>" + returnMessage + "</div>");
+                setTimeout(function(){
+                        $("#admidio-modal").modal("hide");
+                        if (callback === 'callbackRoles') {
+                            $(entryDeleted).fadeOut("slow", callbackRoles);
+                        } else if (callback === 'callbackFormerRoles') {
+                            $(entryDeleted).fadeOut("slow", callbackFormerRoles);
+                        } else if (callback === 'callbackFutureRoles') {
+                            $(entryDeleted).fadeOut("slow", callbackFutureRoles);
+                        } else if (callback === 'callbackProfilePhoto') {
+                            callbackProfilePhoto();
+                        } else {
+                            $(entryDeleted).fadeOut("slow");
+                        }
+                    }, 2000);
+            } else {
+                $("#admidio-modal").modal("hide");
+                if (callback === 'callbackRoles') {
+                    $(entryDeleted).fadeOut("slow", callbackRoles);
+                } else if (callback === 'callbackFormerRoles') {
+                    $(entryDeleted).fadeOut("slow", callbackFormerRoles);
+                } else if (callback === 'callbackFutureRoles') {
+                    $(entryDeleted).fadeOut("slow", callbackFutureRoles);
+                } else if (callback === 'callbackProfilePhoto') {
+                    callbackProfilePhoto();
+                } else {
+                    $(entryDeleted).fadeOut("slow");
+                }
             }
         } else {
-            // entry could not be deleted, than show content of data or an common error message
-            $("#btn_yes").hide();
-            $("#btn_no").hide();
-            $("#btn_close").attr("class", "btn btn-secondary");
-
-            var message = (data.length > 0) ? data : "Error: Entry not deleted";
-            var messageText = $("#message_text");
-            messageText.html(messageText.html() + "<br /><div class=\"alert alert-danger form-alert\"><i class=\"fas fa-exclamation-circle\"></i>" + message + "</div>");
+            // entry could not be deleted, then show content of data or a common error message
+            const message = (data.length > 0) ? data : "Error: Undefined error occurred!";
+            messageText.html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>" + message + "</div>");
         }
     });
 }
@@ -74,7 +103,7 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
  * @return {string} Format of moment.js script
  */
 function formatPhpToLuxon(format) {
-    var formatMap = {
+    const formatMap = {
         d: "dd",
         D: "ccc",
         j: "d",

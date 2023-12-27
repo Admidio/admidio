@@ -40,9 +40,14 @@ class Message
     /**
      * @var string Url auf die durch den Weiter-Button verwiesen wird
      */
-    private $forwardUrl = '';
+    private $url = '';
     /**
-     * @var int Anzahl ms bis automatisch zu forwardUrl weitergeleitet wird
+     * @var bool Set a flag if the given url should be used as a forward url. If set to no than a POST ajax call
+     * will be done.
+     */
+    private $forwardMode = false;
+    /**
+     * @var int Anzahl ms bis automatisch zu url weitergeleitet wird
      */
     private $timer = 0;
     /**
@@ -86,18 +91,33 @@ class Message
      */
     public function setForwardUrl(string $url, int $timer = 0)
     {
-        $this->forwardUrl = $url;
-        $this->timer      = $timer;
+        $this->forwardMode = true;
+        $this->url = $url;
+        $this->timer = $timer;
     }
 
     /**
      * Add two buttons with the labels **yes** and **no** to the message. If the user choose yes
-     * he will be redirected to the $url. If he chooses no he will be directed back to the previous page.
-     * @param string $url The full url to which the user should be directed if he chooses **yes**.
+     * he will be redirected to the $url. If he chooses no he will be directed back to the previous page or
+     * the modal window will be closed.
+     * @param string $urlYesButton The full url to which the user should be directed if he chooses **yes**.
      */
-    public function setForwardYesNo(string $url)
+    public function setForwardYesNo(string $urlYesButton)
     {
-        $this->forwardUrl       = $url;
+        $this->forwardMode = true;
+        $this->url = $urlYesButton;
+        $this->showYesNoButtons = true;
+    }
+
+    /**
+     * Add two buttons with the labels **yes** and **no** to the message. If the user choose yes
+     * a call to the $urlYesButton will be sent. If he chooses no he will be directed back to the previous page
+     * or the modal window will be closed.
+     * @param string $urlYesButton The full url to which the user should be directed if he chooses **yes**.
+     */
+    public function setYesNoButton(string $urlYesButton)
+    {
+        $this->url = $urlYesButton;
         $this->showYesNoButtons = true;
     }
 
@@ -128,6 +148,10 @@ class Message
             $this->inline = headers_sent();
         }
 
+        if ($this->forwardMode && $this->timer === 0) {
+            $this->url = 'self.location.href=\''.$this->url.'\'';
+        }
+
         if (!isset($page) || !$this->inline) {
             // create html page object
             $page = new HtmlPage('admidio-message', $headline);
@@ -143,7 +167,7 @@ class Message
                 $page->addJavascript(
                     '
                     setTimeout(function() {
-                        window.location.href = "'. $this->forwardUrl. '";
+                        window.location.href = "'. $this->url. '";
                     }, '. $this->timer. ');'
                 );
             }
@@ -159,14 +183,14 @@ class Message
             // show the message in html but without the theme specific header and body
             $page->assign('message', $content);
             $page->assign('messageHeadline', $headline);
-            $page->assign('forwardUrl', $this->forwardUrl);
+            $page->assign('url', $this->url);
             $page->assign('showYesNoButtons', $this->showYesNoButtons);
             $page->assign('l10n', $gL10n);
             $page->display('message_modal.tpl');
         } else {
             // show an Admidio html page with complete theme header and body
             $page->assign('message', $content);
-            $page->assign('forwardUrl', $this->forwardUrl);
+            $page->assign('url', $this->url);
             $page->assign('showYesNoButtons', $this->showYesNoButtons);
             $page->addTemplateFile('message.tpl');
             $page->show();

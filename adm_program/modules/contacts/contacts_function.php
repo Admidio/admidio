@@ -12,7 +12,7 @@
 /******************************************************************************
  * Parameters:
  *
- * mode: 1 - MsgBox explaining what effect the deletion has.
+ * mode: 1 - MessageBox that explains the effects of the deletion
  *       2 - remove contact ONLY from the member community
  *       3 - delete contact from database
  *       4 - send contact e-mail with new access data
@@ -24,6 +24,8 @@
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
+
+$gMessage->showInModalWindow();
 
 // Initialize and check the parameters
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 5, 6)));
@@ -45,14 +47,13 @@ if ($getMode === 1) {
     <div class="modal-body">
         <p><i class="fas fa-user-clock"></i>&nbsp;'.$gL10n->get('SYS_MAKE_FORMER').'</p>
         <p><i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE'))).'</p>
-
-        <button id="btnFormer" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)).'\'">
+    </div>
+    <div class="modal-footer">
+        <button id="btnFormer"type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'row_members_'.$getUserUuid.'\', \''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)).'\', \''.$gCurrentSession->getCsrfToken().'\')">
             <i class="fas fa-user-clock"></i>'.$gL10n->get('SYS_FORMER').'</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <button id="btnDelete" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)).'\'">
+        <button id="btnDelete"type="button" class="btn btn-primary" onclick="callUrlHideElement(\'row_members_'.$getUserUuid.'\', \''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)).'\', \''.$gCurrentSession->getCsrfToken().'\')">
             <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_DELETE').'</button>
+        <div id="status-message" class="mt-4 w-100"></div>
     </div>';
 
     exit();
@@ -116,9 +117,8 @@ if ($getMode === 2) {
         // => EXIT
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))));
-    // => EXIT
+    echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')))));
+    exit();
 } elseif ($getMode === 3) {
     // User must not be in any other organization
     // User could not delete himself
@@ -130,10 +130,8 @@ if ($getMode === 2) {
 
     // Delete user from database
     $user->delete();
-
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
-// => EXIT
+    echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_DELETE_DATA')));
+    exit();
 } elseif ($getMode === 4) {
     // User must be member of this organization
     // E-Mail support must be enabled
@@ -161,17 +159,14 @@ if ($getMode === 2) {
         // => EXIT
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
-// => EXIT
+    echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_EMAIL_SEND')));
+    exit();
 } elseif ($getMode === 5) {
     // Ask to send new login-data
-    $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 4)));
+    $gMessage->setYesNoButton('callUrlHideElement(\'row_members\', \''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 4)).'\', \''.$gCurrentSession->getCsrfToken().'\')');
     $gMessage->show($gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
-// => EXIT
+    // => EXIT
 } elseif ($getMode === 6) {
-    $gMessage->showInModalWindow();
-
     if (!$isAlsoInOtherOrgas && $gCurrentUser->isAdministrator()) {
         if (isMember($user->getValue('usr_id'))) {
             // User is ONLY member of this organization -> ask if user should make to former member or delete completely
@@ -179,13 +174,13 @@ if ($getMode === 2) {
         // => EXIT
         } else {
             // User is not member of any organization -> ask if delete completely
-            $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)));
+            $gMessage->setYesNoButton('callUrlHideElement(\'row_members_'.$getUserUuid.'\', \''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)).'\', \''.$gCurrentSession->getCsrfToken().'\')');
             $gMessage->show($gL10n->get('SYS_USER_DELETE_DESC', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))), $gL10n->get('SYS_DELETE'));
             // => EXIT
         }
     } else {
         // User could only be removed from this organization -> ask so
-        $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)));
+        $gMessage->setYesNoButton('callUrlHideElement(\'row_members_'.$getUserUuid.'\', \''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)).'\', \''.$gCurrentSession->getCsrfToken().'\')');
         $gMessage->show($gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))), $gL10n->get('SYS_REMOVE'));
         // => EXIT
     }
