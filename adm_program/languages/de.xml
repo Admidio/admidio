@@ -723,6 +723,7 @@
   <string name="SYS_FONT_AWESOME_DESC">Hier kannst du ein Icon der Webschriftart \"Font Awesome\" hinterlegen. Gehe dazu zu #VAR1#https://fontawesome.com#VAR2# und wähle ein freies Icon aus der Sammlung \"Solid\" oder \"Brands\". Als Präfix muss ein fa- vorangestellt werden. Wenn du also das Icon \"user\" wählst, musst du hier \"fa-user\" eingeben.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
   <string name="SYS_FORMAT">Format</string>
+    <string name="SYS_LOG">Protokoll</string>
   <string name="SYS_FORMER">Ehemaliger</string>
   <string name="SYS_FORMER_MEMBERS">Ehemalige Mitglieder</string>
   <string name="SYS_FORMER_PL">Ehemalige</string>
@@ -773,7 +774,7 @@
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einer Administatorin oder einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer:innen mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
   <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
-  <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer:innen wurden angelegt.\n#VAR2# Benutzer:innen wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
+  <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer:innen wurden angelegt.\n#VAR2# Benutzer:innen wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.\n\n#VAR4#</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Folgende Spalten der Importdatei sind keinen Feldern in Admidio zugeordnet:</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
