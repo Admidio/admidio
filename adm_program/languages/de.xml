@@ -849,7 +849,7 @@
   <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
   <string name="SYS_MAINTAIN_CATEGORIES_DESC">Hier können Kategorien angelegt und bearbeitet werden.</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Es können Beziehungstypen (Elternteil - Kind) definiert werden. Zu jeder definierten Beziehung wird der Typ (asymmetrisch, symmetrisch oder unidirektional) hinterlegt, sowie die Profilbearbeitungsrechte innerhalb der Beziehung festgelegt.</string>
-  <string name="SYS_MAKE_FORMER">Du kannst die Benutzerin bzw. den Benutzer zu einer/einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</string>
+  <string name="SYS_MAKE_FORMER">Du kannst diesen Kontakt zu einer/einem Ehemaligen machen. Dabei werden die Daten nicht gelöscht, sondern nur alle Rollenmitgliedschaften beendet. Das hat den Vorteil, dass du später immer sehen kannst, welche Daten und Rollen du diesem Kontakt zugewiesen hattest.</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher:innen, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert, sowie von vorhandenen Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
@@ -1135,10 +1135,10 @@
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
   <string name="SYS_REMINDER_SEND_LOGIN">Möchtest du dem Mitglied seine Zugangsdaten mit Passwort als Erinnerung zuschicken?</string>
   <string name="SYS_REMOVE">Entfernen</string>
+  <string name="SYS_REMOVE_CONTACT">Kontakt entfernen</string>
+  <string name="SYS_REMOVE_CONTACT_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten dieses Kontakts gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Willst du die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmenden gelöscht.</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
-  <string name="SYS_REMOVE_USER">Benutzer:in entfernen</string>
-  <string name="SYS_REMOVE_USER_DESC">Wenn du #VAR1_BOLD# auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPLACE">Ersetzen</string>
   <string name="SYS_REQUIRED_INPUT">Erforderliche Eingabe</string>

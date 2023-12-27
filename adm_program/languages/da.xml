@@ -228,8 +228,6 @@
   <string name="ORG_SEND_NEW_PASSWORD">Send nyt kodeord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Vis opretter og tidspunktet for oprettelsen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Nogle steder vises skaberen og brugeren med den sidste ændring til en post sammen med et tidsstempel. Denne indstilling kan bruges til at bestemme, om denne information overhovedet vises, og om brugeren skal vises med brugernavnet eller med deres for- og efternavn.</string>
-  <string name="ORG_SHOW_ALL_USERS">Valgfrit: vis alle brugere</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Hvis denne mulighed er indstillet, kan tidligere medlemmer og medlemmer af andre organisationer valgfrit vises i medlemsadministrationen ud over de aktive medlemmer af den nuværende organisation. Ellers vises kun aktive medlemmer af den aktuelle organisation. Ved oprettelse af nye medlemmer eller tildeling af registreringer vil systemet dog fortsat søge efter eksisterende brugere i hele databasen for alle organisationer.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
@@ -515,7 +513,7 @@
   <string name="SYS_DEFAULT_VALUE_DESC">Du kan indstille en standardværdi for dette profilfelt. Denne værdi vil blive forudindstillet direkte for en ny bruger i feltet. For at gøre dette skal du indtaste værdien i feltet, som du også ville indtaste i selve profilen.\n\nFor afkrydsningsfeltets datatype kan du indtaste 1 for aktiveret og 0 for deaktiveret. For datatypers rullelistefelt og alternativknap indtaster du nummeret på linjen fra værdilisten, hvori den ønskede værdi er placeret.</string>
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Standard Visning</string>
-  <string name="SYS_DEFAULT_VIEW_DESC">Displaytype for begivenheder. Med tilstand #VAR1_BOLD# vises alle begivenheds detaljer i en boks. Med tilstand #VAR2_BOLD# vises de vigtigste begivenheds detaljer på en kompakt liste. (Standard: Detaljeret)</string>
+  <string name="SYS_DEFAULT_VIEW_DESC">En visningsfunktion for begivenheder kan forud vælges. I #VAR1_BOLD# tilstand vises alle oplysninger om en begivenhed i en boks. I #VAR2_BOLD# visningsfunktion vises de vigtigste begivenheds oplysninger i en kompakt liste. (Standardindstilling: #VAR1#)</string>
   <string name="SYS_DELETE">Slet</string>
   <string name="SYS_DELETE_ALBUM">Slet album</string>
   <string name="SYS_DELETE_CONFIGURATION">Slet liste indstillingen</string>
@@ -640,7 +638,7 @@
   <string name="SYS_ENABLE_PM_MODULE">Aktiver private beskeder</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Private beskeder kan aktiveres eller deaktiveres ved hjælp af denne indstilling. (Standard: aktiveret)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Vedligehold og vis relationer</string>
-  <string name="SYS_ENABLE_USER_RELATIONS_DESC">Hvis denne er sat til aktiv så kan relationer imellem brugere vedligeholdes og vises. (Standard: Ja) </string>
+  <string name="SYS_ENABLE_USER_RELATIONS_DESC">Hvis indstillet som aktiv, kan relationer mellem kontakter opretholdes og vises. (Standard: ja)</string>
   <string name="SYS_ENCODING_GUESS">‎Prøv at finde kodningen‎</string>
   <string name="SYS_END" description="End of a date">Slut</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Vil du afslutte medlemskab for bruger #VAR1# i #VAR2#?</string>
@@ -722,7 +720,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">En fejl opstod imens folderen #VAR1# blev omdøbt.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes med de krævede skriverettigheder.\n\nVenligst snak med en  #VAR2#administrator#VAR3# om at få hjælp til at undersøge om skriverettighederne er i orden på folderen. (Dette kan gøres med et FTP program, du skal ændre rettigheden til 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_AWESOME_DESC">Her kan du tilføje et ikon af web-fonten \"Font Awesome\". Gå til #VAR1#http://fontawesome.com#VAR2# og vælg et gratis ikon fra samlingen \"Solid\" eller \"Brands\". Som præfiks skal du sætte et fa- foran. Så hvis du vælger ikonet \"bruger\", skal du indtaste \"fa-bruger\" her.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Her kan du tilføje et ikon fra webfonten \"Font Awesome\". Gå til #VAR1#https://fontawesome.com#VAR2# og vælg et gratis ikon fra \"Solid\" eller \"Brands\" samlingen. Som præfiks skal du sætte fa- foran det. Så hvis du vælger ikonet \"user\", skal du indtaste \"fa-user\" her.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Jeg har glemt mit kodeord!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Tidligere medlem</string>
@@ -825,8 +823,7 @@
   <string name="SYS_LINK_TO">Link til #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
-  <string name="SYS_LOCATION">Beliggenhed</string>
-  <string name="SYS_LOCATION_LINK">Hvis nok information om en lokalitet oplyses såsom (gade, by, land), så kan Google Maps lave en rute til lokationen.</string>
+  <string name="SYS_MEETING_POINT">Mødested</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Placering af profil billeder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Definer hvor profil billeder skal gemmes (i databasen eller i folderen adm_my_files). Hvis du ændrer dette vil de nuværende billeder IKKE blive kopieret til den nye placering. (Standard: database)</string>
   <string name="SYS_LOCK">Lås</string>
@@ -852,7 +849,7 @@
   <string name="SYS_MAIL_DISPATCH">E-mail forsendelse</string>
   <string name="SYS_MAINTAIN_CATEGORIES_DESC">Her kan du oprette og redigere ketegorier.</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Du kan definere forholdstyper (forælder - barn). For hvert defineret forhold defineres typen (asymmetrisk, symmetrisk eller ensrettet) og profil redigerings rettighederne defineres i forholdet.</string>
-  <string name="SYS_MAKE_FORMER">En brugers status kan ændres til tidligere medlem. Dette vil bevare al bruger information inklusivt rolle medlemskab til senere brug.</string>
+  <string name="SYS_MAKE_FORMER">Du kan gøre denne kontakt til en tidligere kontakt. Dette sletter ikke dataene, men afslutter kun alle rollemedlemskaber. Dette har den fordel, at du altid senere kan se, hvilke data og roller du havde tildelt denne kontakt.</string>
   <string name="SYS_MALE">Hankøn</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Nye registreringer af brugere kan listes, godkendes eller afvist her.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">Nye profilfelter og deres egenskaber kan defineres såvel som ændringer til eksisterende profilfelter. Felterne kan tildeles kategorier og forsynes med rettigheder som bestemmer hvilke roller kan se eller redigere hvilke profilfelter.</string>
@@ -861,6 +858,7 @@
   <string name="SYS_MAP">Kort</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Viser placeringen på Google Maps. Gaden, postnummer, by og land overføres til Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Viser en rute fra dit eget bopæl til denne brugers placering på Google Maps. Gaden, postnummer, by og land overføres til Google.</string>
+  <string name="SYS_MASTODON">Mastodon</string>
   <string name="SYS_MAX_ATTACHMENT_SIZE">Du kan vedhæfte lige så mange filer du vil. Den samlede filstørelse må ikke overskride #VAR1# MB. </string>
   <string name="SYS_MAX_PARTICIPANTS">Max. antal deltagere</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# af max. #VAR2# deltagere</string>
@@ -874,7 +872,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximum fil størrelse</string>
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Brugere må kun overføre filer mindre end det her viste. Hvis du skriver 0 deaktiveres overførsler. (Standard: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Deltag med forbehold</string>
-  <string name="SYS_MAYBE_PARTICIPATE_DESC">Hvis denne indstilling er aktiveret, vil der være en tredje mulighed #VAR3_BOLD# udover optionerne #VAR1_BOLD# og #VAR2_BOLD#. (Standard: deaktiveret)</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">Hvis denne mulighed er aktiveret, er der ud over #VAR1_BOLD# og #VAR2_BOLD# en tredje mulighed #VAR3_BOLD# tilgængelig ved tilmelding til en begivenhed. (Standard: deaktiveret)</string>
   <string name="SYS_MEETINGS">Møder</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Medlem</string>
@@ -1137,10 +1135,10 @@
   <string name="SYS_REMEMBER_ME">Forbliv logget ind</string>
   <string name="SYS_REMINDER_SEND_LOGIN">Du har bekræftet din registrering. Du kan nu logge ind med dit brugernavn og adgangskode.</string>
   <string name="SYS_REMOVE">Fjern</string>
+  <string name="SYS_REMOVE_CONTACT">Fjern kontakt</string>
+  <string name="SYS_REMOVE_CONTACT_DESC">Ved at vælge #VAR1_BOLD#, vil alle data for denne kontakt blive slettet og kan ikke længere ses eller gendannes.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Vil du fjerne denne event? Alle deltagere vil blive fjernet sammen med eventen.</string>
   <string name="SYS_REMOVE_MESSAGE">Slet besked</string>
-  <string name="SYS_REMOVE_USER">Fjern bruger</string>
-  <string name="SYS_REMOVE_USER_DESC">Ved at vælge #VAR1_BOLD#, vil alle data blive slettet og denne information vil ikke være tilgængelig mere.</string>
   <string name="SYS_REPEAT">Gentag</string>
   <string name="SYS_REPLACE">Udskift</string>
   <string name="SYS_REQUIRED_INPUT">Påkrævet indtastning</string>
@@ -1155,8 +1153,8 @@
   <string name="SYS_RIGHT_DATES">Administrer begivenheder</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Administrer dokumenter og filer</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roller som har denne rettighed kan administrere rettighederne for dokumenter og fil modulet. Dette inkluderer hvem der kan se folderen og uploade filer til den.</string>
-  <string name="SYS_RIGHT_EDIT_USER">Rediger profilen for alle medlemmer</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller med denne tilladelse kan redigere andre medlemmers data (undtagen adgangskoder).\n Derudover har de adgang til medlemsadministrationen og kan tilføje eller slette medlemmer.</string>
+  <string name="SYS_RIGHT_EDIT_USER">Rediger profil for alle kontakter</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen med denne tilladelse kan redigere dataene for andre kontakter (undtagen adgangskoder). Derudover kan de tilføje eller slette kontakter.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Rediger og slet gæstebogs indlæg</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Opret kommentarer til gæstebogs indlæg</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Deltagere kan sende beskeder til alle andre deltagere</string>
@@ -1193,7 +1191,7 @@
   <string name="SYS_ROOM_OVERHANG">I tilfælde af yderligere ledig plads (f.eks. ekstra sæder, stå pladser) kan antallet af ekstra pladser defineres her.</string>
   <string name="SYS_ROOM_RESERVED">Det valgte lokale er allerede i brug i denne periode.</string>
   <string name="SYS_ROOM_SELECTABLE">Lokalet er tilgængeligt</string>
-  <string name="SYS_ROOM_SELECTABLE_DESC">En valg boks for ledige lokaler er tilgængelig. Vælg lokale og opret en event for det valgte lokale. (standard indstilling: no)</string>
+  <string name="SYS_ROOM_SELECTABLE_DESC">En valgboks til de tilgængelige rum vises for at give skaberen af en begivenhed mulighed for at vælge et rum. (standard svar: nej)</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotér billede mod venstre</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotér billede mod højre</string>
   <string name="SYS_ROW">Række</string>
@@ -1277,6 +1275,8 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Sæt folder rettigheder</string>
   <string name="SYS_SETTINGS">Indstillinger</string>
   <string name="SYS_SHOW_ALL">Vis alt</string>
+  <string name="SYS_SHOW_ALL_CONTACTS">Valgfri vis alle kontakter</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Hvis denne indstilling er aktiveret, kan tidligere kontakter og kontakter fra andre organisationer valgfrit vises i medlemsadministrationen ud over de aktive kontakter i den aktuelle organisation. Ellers vises kun aktive kontakter i den aktuelle organisation. Dog søges der stadig i hele databasen for alle organisationer efter eksisterende kontakter, når der oprettes nye kontakter eller tildeler registreringer. (standard: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Hvis denne indstilling er sat, vil tidligere medlemmer såvel som medlemmer af andre organisationer blive vist sammen med de aktive  medlemmer af denne organisation. </string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For udloggede brugere vises en alfanumerisk tekst, når captcha-modulet er aktiveret. Den medfølgende tekst skal indtastes i det rigtige felt. Dette skal forhindre misbrug af formularen fra spammere. (standard: ja)</string>
@@ -1304,7 +1304,7 @@
   <string name="SYS_SHOW_WATERMARK_DESC">Den indtastede tekst vil blive vist i alle viste billeder, startende fra en skala på 200 pixels på den længere side. Hvis fotografen blev deponeret i albummet, vises navnet på fotografen med copyright i stedet for denne tekst. Hvis der ikke skal vises billedtekst, kan dette felt stå tomt. (Standard: #VAR1#)</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Lignende kontakter fundet</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med et lignende navn som #VAR1_BOLD# blev fundet.</string>
-  <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med et lignende navn som #VAR1_BOLD# blev fundet. Tjek registreringen og tildel den til en fundet kontakt, eller opret en ny kontakt.</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med et lignende navn blev fundet til registrering af #VAR1_BOLD# med e-mailadressen #VAR2_BOLD#. Venligst kontroller registreringen og tildel den til en fundet kontakt eller opret en ny kontakt.</string>
   <string name="SYS_SINCE">siden #VAR1#</string>
   <string name="SYS_SINCE_TO">fra #VAR1# til #VAR2#</string>
   <string name="SYS_SIZE">Størrelse</string>
@@ -1413,7 +1413,7 @@
   <string name="SYS_USERNAME_DESCRIPTION">Dette er det brugernavn som du kan logge ind med.\n\nDette skal være vel overvejet. Hvis det valgte navn ikke er til rådighed mere, så prøv med kombinationer såsom Andi78 eller SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# den #VAR3#</string>
-  <string name="SYS_USERS_PER_PAGE">Antal medlemmer pr. side</string>
+  <string name="SYS_CONTACTS_PER_PAGE">Antal kontakter pr. side</string>
   <string name="SYS_USING_CURRENT_VERSION">Du bruger den nyeste version af Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
@@ -1424,6 +1424,8 @@
   <string name="SYS_VALID_TO" description="Date valid to">Gyldig indtil</string>
   <string name="SYS_VARIOUS_ROLES">Diverse roller</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Forskellige bekendtskaber</string>
+  <string name="SYS_VENUE">Sted</string>
+  <string name="SYS_VENUE_LINK">Hvis tilstrækkeligt med information (by, gade, placering) om stedet indtastes, kan der oprettes et link eller en rute via Google Maps.</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Din nuværende databaseversion er #VAR1#. Desværre er det ikke muligt at opdatere til #VAR2# med denne version.\n\nInstaller venligst Admidio 4.1 først og opdater derefter til Admidio #VAR2#.</string>
   <string name="SYS_VIEW">Vis</string>
