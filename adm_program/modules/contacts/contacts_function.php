@@ -37,6 +37,16 @@ if (!$gCurrentUser->editUsers()) {
     // => EXIT
 }
 
+try {
+    if (in_array($getMode, array(2, 3, 4))){
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+} catch (AdmException $e) {
+    echo json_encode(array('status' => 'error', 'message' => $e->getText()));
+    exit();
+}
+
 if ($getMode === 1) {
     // ask if contact should only be removed from organization or completely deleted
     echo '
@@ -81,65 +91,65 @@ if ($getMode === 3 || $getMode === 6) {
 }
 
 if ($getMode === 2) {
-    // User has to be a member of this organization
-    // User could not delete himself
-    // Administrators could not be deleted
-    if (!isMember($user->getValue('usr_id')) || $gCurrentUserId === (int) $user->getValue('usr_id')
-    || (!$gCurrentUser->isAdministrator() && $user->isAdministrator())) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-
-    $member = new TableMembers($gDb);
-
-    $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
-              FROM '.TBL_MEMBERS.'
-        INNER JOIN '.TBL_ROLES.'
-                ON rol_id = mem_rol_id
-        INNER JOIN '.TBL_CATEGORIES.'
-                ON cat_id = rol_cat_id
-             WHERE rol_valid  = true
-               AND (  cat_org_id = ? -- $gCurrentOrgId
-                   OR cat_org_id IS NULL )
-               AND mem_begin <= ? -- DATE_NOW
-               AND mem_end    > ? -- DATE_NOW
-               AND mem_usr_id = ? -- $user->getValue(\'usr_id\')';
-    $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
-
     try {
+        // User has to be a member of this organization
+        // User could not delete himself
+        // Administrators could not be deleted
+        if (!isMember($user->getValue('usr_id')) || $gCurrentUserId === (int) $user->getValue('usr_id')
+        || (!$gCurrentUser->isAdministrator() && $user->isAdministrator())) {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
+
+        $member = new TableMembers($gDb);
+
+        $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE rol_valid  = true
+                   AND (  cat_org_id = ? -- $gCurrentOrgId
+                       OR cat_org_id IS NULL )
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND mem_usr_id = ? -- $user->getValue(\'usr_id\')';
+        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
+
         while ($row = $pdoStatement->fetch()) {
             // stop all role memberships of this organization
             $role = new TableRoles($gDb, $row['mem_rol_id']);
             $role->stopMembership($row['mem_usr_id']);
         }
-    } catch (AdmException $e) {
-        $e->showHtml();
-        // => EXIT
-    }
 
-    echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')))));
+        echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')))));
+    } catch (AdmException|Exception $e) {
+        echo json_encode(array('status' => 'error', 'message' => $e->getText()));
+    }
     exit();
 } elseif ($getMode === 3) {
-    // User must not be in any other organization
-    // User could not delete himself
-    // Only administrators are allowed to do this
-    if ($isAlsoInOtherOrgas || $gCurrentUserId === (int) $user->getValue('usr_id') || !$gCurrentUser->isAdministrator()) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+    try {
+        // User must not be in any other organization
+        // User could not delete himself
+        // Only administrators are allowed to do this
+        if ($isAlsoInOtherOrgas || $gCurrentUserId === (int)$user->getValue('usr_id') || !$gCurrentUser->isAdministrator()) {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
+        // Delete user from database
+        $user->delete();
+        echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_DELETE_DATA')));
+    } catch (AdmException|Exception $e) {
+        echo json_encode(array('status' => 'error', 'message' => $e->getText()));
     }
-
-    // Delete user from database
-    $user->delete();
-    echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_DELETE_DATA')));
     exit();
 } elseif ($getMode === 4) {
-    // User must be member of this organization
-    // E-Mail support must be enabled
-    // Only administrators are allowed to send new login data or users who want to approve login data
-    if (isMember($user->getValue('usr_id'))
-    && $gSettingsManager->getBool('system_notifications_enabled')
-    && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers())) {
-        try {
+    try {
+        // User must be member of this organization
+        // E-Mail support must be enabled
+        // Only administrators are allowed to send new login data or users who want to approve login data
+        if (isMember($user->getValue('usr_id'))
+        && $gSettingsManager->getBool('system_notifications_enabled')
+        && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers())) {
             // Generate new secure-random password and save it
             $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
             $user->setPassword($password);
@@ -150,16 +160,14 @@ if ($getMode === 2) {
             $sysMail->addRecipientsByUser($getUserUuid);
             $sysMail->setVariable(1, $password);
             $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
-        } catch (AdmException $e) {
-            $e->showText();
-            // => EXIT
-        }
-    } else {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
 
-    echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_EMAIL_SEND')));
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_EMAIL_SEND')));
+        } else {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
+    } catch (AdmException|Exception $e) {
+        echo json_encode(array('status' => 'error', 'message' => $e->getText()));
+    }
     exit();
 } elseif ($getMode === 5) {
     // Ask to send new login-data
