@@ -170,16 +170,19 @@ class UserImport extends User
     {
         global $gCurrentUser, $gSettingsManager;
 
-        if ($gCurrentUser->isAdministrator()
-        && strlen($this->getValue('usr_login_name')) === 0
-        && strlen($password) >= PASSWORD_MIN_LENGTH
-        && PasswordUtils::passwordStrength($password, $this->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength')) {
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new AdmException('Current user is not an administrator. Only administrators could import usernames and passwords.');
+        } elseif (strlen($this->getValue('usr_login_name')) > 0) {
+            throw new AdmException('Contact ' . $this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' already has a username and password.');
+        } elseif (strlen($password) < PASSWORD_MIN_LENGTH) {
+            throw new AdmException($this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum length of '.PASSWORD_MIN_LENGTH.' characters.');
+        } elseif (PasswordUtils::passwordStrength($password, $this->getPasswordUserData()) < $gSettingsManager->getInt('password_min_strength')) {
+            throw new AdmException($this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum passwort strength.');
+        } else {
             $this->setValue('usr_login_name', $loginName);
             $this->setPassword($password);
             return true;
         }
-
-        return false;
     }
 
     /**
