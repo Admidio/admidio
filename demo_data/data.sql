@@ -40,20 +40,20 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (NULL, NULL, true, 2, true, 'administration', NULL, '', 'SYS_ADMINISTRATION', '', '9f27b3da-805c-4b1a-adfd-9ac7cc9d4c82'),
 (NULL, NULL, true, 3, true, 'plugins', NULL, '', 'SYS_PLUGINS', '', '4317f28b-ce43-4ac1-a8eb-7e583d16add4'),
 (NULL, 1, false, 1, true, 'overview', '/adm_program/overview.php', 'fa-home', 'SYS_OVERVIEW', '', 'f037c6b0-e71e-4961-80d7-9ea5e42ddb7a'),
-(60, 1, false, 3, true, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', '187c7c07-4b2a-4f3f-925c-6f40c03e740b'),
-(90, 1, false, 7, true, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 'ebd216b3-26eb-48ec-a082-d1d9645bb051'),
 (20, 1, false, 2, true, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC', 'd96ba837-9b02-4c4e-afa5-c12167cd01db'),
-(130, 1, false, 5, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', '21db7ac5-7aae-4616-bf88-5b29507d4a02'),
-(70, 1, false, 6, true, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC', 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e'),
-(50, 1, false, 8, true, 'events', '/adm_program/modules/events/events.php', 'fa-calendar-alt', 'SYS_EVENTS', 'SYS_EVENTS_DESC', '446a2c54-b269-4b6c-8a1c-869901b35b01'),
-(80, 1, false, 9, true, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', '5b8b3e60-bc71-4375-bfc3-a9783a63bb72'),
-(190, 1, false, 10, true, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b'),
-(30, 2, false, 4, true, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC', '9c6d01e3-b104-4f75-8562-7e7ebe7a929b'),
-(140, 2, false, 6, true, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', '2965d083-8dd3-4a43-9b27-53018e5f22c1'),
-(120, 1, false, 4, true, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC', 'edb6a573-fb66-4dfb-ba90-466317572204'),
-(160, 2, false, 1, true, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-file-signature', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', '62330cbc-4c15-4860-b841-10a35d88cd3c'),
-(100, 1, false, 2, true, 'contacts', '/adm_program/modules/contacts/contacts.php', 'fa-address-card', 'SYS_CONTACTS', 'SYS_CONTACTS_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
-(110, 2, false, 5, true, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC', 'ef4b5380-3500-4ec4-a432-a7f4099a2a92');
+(30, 1, false, 3, true, 'events', '/adm_program/modules/events/events.php', 'fa-calendar-alt', 'SYS_EVENTS', 'SYS_EVENTS_DESC', '446a2c54-b269-4b6c-8a1c-869901b35b01'),
+(40, 1, false, 4, true, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC', 'edb6a573-fb66-4dfb-ba90-466317572204'),
+(50, 1, false, 5, true, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 'ebd216b3-26eb-48ec-a082-d1d9645bb051'),
+(60, 1, false, 6, true, 'contacts', '/adm_program/modules/contacts/contacts.php', 'fa-address-card', 'SYS_CONTACTS', 'SYS_CONTACTS_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
+(70, 1, false, 7, true, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', '187c7c07-4b2a-4f3f-925c-6f40c03e740b'),
+(80, 1, false, 8, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', '21db7ac5-7aae-4616-bf88-5b29507d4a02'),
+(90, 1, false, 9, true, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b'),
+(100, 1, false, 10, true, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', '5b8b3e60-bc71-4375-bfc3-a9783a63bb72'),
+(110, 1, false, 11, true, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC', 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e'),
+(120, 2, false, 1, true, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-file-signature', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', '62330cbc-4c15-4860-b841-10a35d88cd3c'),
+(130, 2, false, 2, true, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', '2965d083-8dd3-4a43-9b27-53018e5f22c1'),
+(140, 2, false, 3, true, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC', 'ef4b5380-3500-4ec4-a432-a7f4099a2a92'),
+(150, 2, false, 4, true, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC', '9c6d01e3-b104-4f75-8562-7e7ebe7a929b');
 
 
 --
