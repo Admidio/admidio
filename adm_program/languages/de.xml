@@ -1191,7 +1191,7 @@
   <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
   <string name="SYS_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
   <string name="SYS_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
-  <string name="SYS_ROOM_SELECTABLE">Raum auswählbar</string>
+  <string name="SYS_ROOM_SELECTABLE">Räume zuordnen</string>
   <string name="SYS_ROOM_SELECTABLE_DESC">Es wird eine Auswahlbox für die verfügbaren Räume angezeigt, damit der Ersteller einer Veranstaltung einen Raum auswählen kann (Standardantwort: nein).</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Foto gegen den Uhrzeigersinn drehen</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Foto im Uhrzeigersinn drehen</string>
