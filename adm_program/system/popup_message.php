@@ -18,7 +18,7 @@ require_once(__DIR__ . '/common.php');
 require(__DIR__ . '/login_valid.php');
 
 // Initialize and check the parameters
-$gMessage->hideThemeBody();
+$gMessage->showInModalWindow();
 $getType        = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true));
 $getElementId   = admFuncVariableIsValid($_GET, 'element_id', 'string', array('requireValue' => true));
 $getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id', 'string', array('requireValue' => true));
@@ -140,23 +140,5 @@ if ($url === '') {
     // => EXIT
 }
 
-header('Content-type: text/html; charset=utf-8');
-
-echo '
-<div class="modal-header">
-    <h3 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h3>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-</div>
-<div class="modal-body row">
-    <div class="col-2"><i class="fas fa-times-circle fa-3x" style="color: #f93535;"></i></div>
-    <div id="message_text" class="col-10">'.$gL10n->get($text, array($getName, '')).'</div>
-</div>
-<div class="modal-footer">
-    <button id="btn_yes" class="btn btn-primary mr-4" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\', \''.$gCurrentSession->getCsrfToken().'\''.$callbackFunction.')">
-        <i class="fas fa-check-circle"></i>'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
-    </button>
-    <button id="btn_no" class="btn btn-secondary" type="button" data-dismiss="modal">
-        <i class="fas fa-minus-circle"></i>'.$gL10n->get('SYS_NO').'
-    </button>
-    <div id="status-message" class="mt-4 w-100 text-left"></div>
-</div>';
+$gMessage->setYesNoButton('callUrlHideElement(\''.$getElementId.'\', \''.$url.'\', \''.$gCurrentSession->getCsrfToken().'\''.$callbackFunction.')');
+$gMessage->show($gL10n->get($text, array($getName, '')), $gL10n->get('SYS_NOTE'));
