@@ -1191,7 +1191,7 @@
   <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
   <string name="SYS_ROOM_OVERHANG">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined here.</string>
   <string name="SYS_ROOM_RESERVED">Selected room is already in use at this time.</string>
-  <string name="SYS_ROOM_SELECTABLE">Room is available</string>
+  <string name="SYS_ROOM_SELECTABLE">Assign rooms</string>
   <string name="SYS_ROOM_SELECTABLE_DESC">A selection box for the available rooms is displayed to enable the creator of an event to select a room. (standard answer: no)</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotate photo left</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotate photo right</string>
