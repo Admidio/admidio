@@ -26,7 +26,7 @@ $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
 // in ajax mode only return simple text on error
 if ($getMode === 1) {
-    $gMessage->showHtmlTextOnly(true);
+    $gMessage->showHtmlTextOnly();
 
     try {
         // check the CSRF token of the form against the session token
