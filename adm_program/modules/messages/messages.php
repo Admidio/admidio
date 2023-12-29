@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * PM list page
+ * Show and manage all written emails and private messages
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -11,9 +11,9 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
-// check for valid login
 if (!$gValidLogin) {
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // Visitors could not view messages, they are only able to write messages to specific roles
+    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $getUserUuid, 'mode' => 1)));
     // => EXIT
 }
 
@@ -66,7 +66,7 @@ if ($gSettingsManager->getBool('enable_mail_module')) {
     $page->addPageFunctionsMenuItem(
         'menu_item_messages_new_email',
         $gL10n->get('SYS_WRITE_EMAIL'),
-        ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
+        ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php',
         'fa-envelope-open'
     );
 }
@@ -75,13 +75,13 @@ if ($gSettingsManager->getBool('enable_pm_module')) {
     $page->addPageFunctionsMenuItem(
         'menu_item_messages_new_pm',
         $gL10n->get('SYS_WRITE_PM'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM')),
         'fa-comment-alt'
     );
 }
 
 $table = new HtmlTable('adm_message_table', $page, true, true);
-$table->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_data.php');
+$table->setServerSideProcessing(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_data.php');
 
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
 $table->addRowHeadingByArray(array(
