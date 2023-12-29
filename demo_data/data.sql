@@ -42,7 +42,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (NULL, 1, false, 1, true, 'overview', '/adm_program/overview.php', 'fa-home', 'SYS_OVERVIEW', '', 'f037c6b0-e71e-4961-80d7-9ea5e42ddb7a'),
 (20, 1, false, 2, true, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC', 'd96ba837-9b02-4c4e-afa5-c12167cd01db'),
 (30, 1, false, 3, true, 'events', '/adm_program/modules/events/events.php', 'fa-calendar-alt', 'SYS_EVENTS', 'SYS_EVENTS_DESC', '446a2c54-b269-4b6c-8a1c-869901b35b01'),
-(40, 1, false, 4, true, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC', 'edb6a573-fb66-4dfb-ba90-466317572204'),
+(40, 1, false, 4, true, 'messages', '/adm_program/modules/messages/messages.php', 'fa-comments', 'SYS_MESSAGES', 'SYS_MESSAGES_DESC', 'edb6a573-fb66-4dfb-ba90-466317572204'),
 (50, 1, false, 5, true, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 'ebd216b3-26eb-48ec-a082-d1d9645bb051'),
 (60, 1, false, 6, true, 'contacts', '/adm_program/modules/contacts/contacts.php', 'fa-address-card', 'SYS_CONTACTS', 'SYS_CONTACTS_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
 (70, 1, false, 7, true, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', '187c7c07-4b2a-4f3f-925c-6f40c03e740b'),
