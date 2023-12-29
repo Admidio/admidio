@@ -108,6 +108,6 @@
     <step id="1060">UPDATE %PREFIX%_roles SET rol_events = rol_dates</step>
     <step id="1070">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_dates</step>
     <step id="1080">ComponentUpdateSteps::updateStep43AddSocialNetworkProfileFields</step>
-    <step id="1090">DELETE FROM adm_roles_rights_data WHERE rrd_id IN (SELECT temp.id FROM (SELECT rrd.rrd_id as id FROM adm_roles_rights ror INNER JOIN adm_roles_rights_data rrd ON rrd.rrd_ror_id = ror.ror_id INNER JOIN adm_menu men ON men.men_id = rrd.rrd_object_id AND men.men_standard = true WHERE ror.ror_name_intern = 'menu_view') AS temp)</step>
+    <step id="1090">DELETE FROM %PREFIX%_roles_rights_data WHERE rrd_id IN (SELECT temp.id FROM (SELECT rrd.rrd_id as id FROM %PREFIX%_roles_rights ror INNER JOIN %PREFIX%_roles_rights_data rrd ON rrd.rrd_ror_id = ror.ror_id INNER JOIN %PREFIX%_menu men ON men.men_id = rrd.rrd_object_id AND men.men_standard = true WHERE ror.ror_name_intern = 'menu_view') AS temp)</step>
     <step>stop</step>
 </update>
