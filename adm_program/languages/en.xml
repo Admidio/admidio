@@ -893,10 +893,10 @@
   <string name="SYS_MENU">Menu</string>
   <string name="SYS_MENU_DESC">The menu can be configured here. Beside the URL a description and an icon can be deposited. In addition, it can be determined who is allowed to view the menu entry.</string>
   <string name="SYS_MENU_LEVEL">Menu level</string>
-  <string name="SYS_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible.</string>
   <string name="SYS_MENU_ITEM">Menu item</string>
   <string name="SYS_MENU_MODULE_RIGHTS_DESC">If you specify a module here, the menu item will only be displayed if the user also has the right to see this module.</string>
   <string name="SYS_MENU_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
+  <string name="SYS_MENU_RESTRICT_VISIBILITY">Only the visibility of the menu item is restricted. Access to the underlying page is not affected by this authorization.</string>
   <string name="SYS_MESSAGE">Message</string>
   <string name="SYS_MESSAGE_WENT_TO">Message was sent to</string>
   <string name="SYS_MESSAGES">Messages</string>

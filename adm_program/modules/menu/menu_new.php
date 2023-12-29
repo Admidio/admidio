@@ -162,8 +162,7 @@ $form->addSelectBox(
     $menuList,
     array(
         'property'        => HtmlForm::FIELD_REQUIRED,
-        'defaultValue'    => (int) $menu->getValue('men_men_id_parent'),
-        'helpTextIdLabel' => 'SYS_MENU_LEVEL_DESC'
+        'defaultValue'    => (int) $menu->getValue('men_men_id_parent')
     )
 );
 
@@ -186,7 +185,12 @@ $form->addSelectBox(
     'menu_view',
     $gL10n->get('SYS_VISIBLE_FOR'),
     $parentRoleViewSet,
-    array('defaultValue' => $roleViewSet, 'multiselect' => true)
+    array(
+        'property'     => $fieldDefault,
+        'defaultValue' => $roleViewSet,
+        'multiselect'  => true,
+        'helpTextIdLabel' => 'SYS_MENU_RESTRICT_VISIBILITY'
+    )
 );
 
 if ((bool) $menu->getValue('men_node') === false) {

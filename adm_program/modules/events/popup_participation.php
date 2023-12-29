@@ -21,7 +21,7 @@ $getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defa
 // Initialize local variables
 $disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;
 $disableComments         = HtmlForm::FIELD_HIDDEN;
-$gMessage->hideThemeBody();
+$gMessage->showInModalWindow();
 
 // Get the date object
 $event = new Event($gDb);
