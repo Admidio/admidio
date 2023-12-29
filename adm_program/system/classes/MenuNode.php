@@ -143,23 +143,17 @@ class MenuNode
             if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern'])) {
                 if ($this->menuItemIsVisible($node['men_id'])) {
                     $badgeCount = 0;
+                    $menuUrl  = $node['men_url'];
+                    $menuIcon = (string) $node['men_icon'];
+                    $menuName = $node['men_name'];
 
-                    // special case because there are different links if you are logged in or out for mail
-                    if ($gValidLogin && $node['men_name_intern'] === 'mail') {
+                    if ($node['men_name_intern'] === 'messages' && $gValidLogin) {
                         // get number of unread messages for user
                         $message = new TableMessage($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
-
-                        $menuUrl  = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
-                        $menuIcon = 'fa-comments';
-                        $menuName = $gL10n->get('SYS_MESSAGES');
-                    } else {
-                        $menuUrl  = $node['men_url'];
-                        $menuIcon = $node['men_icon'];
-                        $menuName = $node['men_name'];
                     }
 
-                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, (string) $menuIcon, '', $badgeCount, (string) $node['men_description']);
+                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, $menuIcon, '', $badgeCount, (string) $node['men_description']);
                 }
             }
         }
