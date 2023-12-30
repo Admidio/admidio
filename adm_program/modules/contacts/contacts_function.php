@@ -43,7 +43,7 @@ try {
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
 } catch (AdmException $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getText()));
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     exit();
 }
 
@@ -124,7 +124,7 @@ if ($getMode === 2) {
 
         echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')))));
     } catch (AdmException|Exception $e) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getText()));
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
     exit();
 } elseif ($getMode === 3) {
@@ -139,7 +139,7 @@ if ($getMode === 2) {
         $user->delete();
         echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_DELETE_DATA')));
     } catch (AdmException|Exception $e) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getText()));
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
     exit();
 } elseif ($getMode === 4) {
@@ -166,7 +166,7 @@ if ($getMode === 2) {
             throw new AdmException('SYS_NO_RIGHTS');
         }
     } catch (AdmException|Exception $e) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getText()));
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
     exit();
 } elseif ($getMode === 5) {

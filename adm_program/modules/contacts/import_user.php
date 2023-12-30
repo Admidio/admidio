@@ -123,7 +123,7 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
         try {
             $userImport->setLoginData($userLoginName, $userPassword);
         } catch (AdmException|Exception $e) {
-            $importMessages[] = $e->getText();
+            $importMessages[] = $e->getMessage();
         }
     }
 

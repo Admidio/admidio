@@ -349,7 +349,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
                         StringUtils::strIsValidFileName($value, false);
                     }
                 } catch (AdmException $e) {
-                    $errorMessage = $e->getText();
+                    $errorMessage = $e->getMessage();
                 }
                 break;
 

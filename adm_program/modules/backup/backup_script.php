@@ -429,7 +429,7 @@ if ($fp = open_backup_file($backupabsolutepath.$tempbackupfilename)) {
                         try {
                             $gDb = Database::createDatabaseInstance();
                         } catch (AdmException $e) {
-                            OutputInformation('topprogress', $e->getText());
+                            OutputInformation('topprogress', $e->getMessage());
                             exit();
                         }
                     }

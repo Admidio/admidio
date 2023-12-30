@@ -87,7 +87,7 @@ class UploadHandlerDownload extends UploadHandler
                 }
                 // remove XSS from filename before the name will be shown in the error message
                 $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
-                $file->error = $e->getText();
+                $file->error = $e->getMessage();
 
                 return $file;
             }
@@ -110,7 +110,7 @@ class UploadHandlerDownload extends UploadHandler
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_REQUEST['admidio-csrf-token']);
         } catch (AdmException $exception) {
-            $file->error = $exception->getText();
+            $file->error = $exception->getMessage();
             // => EXIT
         }
         // ADM End

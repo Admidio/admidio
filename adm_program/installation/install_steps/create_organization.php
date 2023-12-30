@@ -150,7 +150,7 @@ if (isset($_POST['db_host'])) {
             $page->showMessage(
                 'error',
                 $gL10n->get('SYS_NOTE'),
-                $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
+                $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getMessage())),
                 $gL10n->get('SYS_BACK'),
                 'fa-arrow-circle-left',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
