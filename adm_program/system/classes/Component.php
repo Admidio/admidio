@@ -209,7 +209,7 @@ class Component extends TableAccess
      */
     public static function isVisible(string $componentName): bool
     {
-        global $gValidLogin, $gCurrentUser, $gSettingsManager;
+        global $gValidLogin, $gCurrentUser, $gSettingsManager, $gDb;
 
         switch ($componentName) {
             case 'CORE': // fallthrough
@@ -241,7 +241,17 @@ class Component extends TableAccess
 
             case 'DOCUMENTS-FILES':
                 if ($gSettingsManager->getBool('documents_files_module_enabled')) {
-                    return true;
+                    if ($gValidLogin) {
+                        return true;
+                    } else {
+                        try {
+                            $documentsRootFolder = new TableFolder($gDb);
+                            $documentsRootFolder->getFolderForDownload('');
+                            return true;
+                        } catch (AdmException $e) {
+                            return false;
+                        }
+                    }
                 }
                 break;
 
