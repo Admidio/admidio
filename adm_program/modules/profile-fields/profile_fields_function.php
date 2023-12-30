@@ -214,7 +214,7 @@ if ($getMode === 1) {
             }
         }
     } catch (AdmException $e) {
-        echo $e->getText();
+        echo $e->getMessage();
     }
     exit();
 }

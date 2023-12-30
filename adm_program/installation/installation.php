@@ -104,7 +104,7 @@ if (is_file($configPath)) {
         $page->showMessage(
             'error',
             $gL10n->get('SYS_NOTE'),
-            $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE', array($e->getText())),
+            $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE', array($e->getMessage())),
             $gL10n->get('INS_CONTINUE_INSTALLATION'),
             'fa-arrow-circle-right',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))

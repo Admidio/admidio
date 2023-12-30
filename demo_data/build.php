@@ -268,7 +268,7 @@ echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 try {
     $gDb = Database::createDatabaseInstance();
 } catch (AdmException $e) {
-    exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())));
+    exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getMessage())));
 }
 
 echo 'Start installing ...<br />';
@@ -281,7 +281,7 @@ echo 'Installation successful!<br />';
 try {
     $databaseVersion = getInstalledDbVersion();
 } catch (AdmException $e) {
-    exit('<br />'.$e->getText());
+    exit('<br />'.$e->getMessage());
 }
 
 echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />

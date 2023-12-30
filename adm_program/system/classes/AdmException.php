@@ -34,11 +34,6 @@
 class AdmException extends Exception
 {
     /**
-     * @var array<int,string>|string
-     */
-    protected $params = array();
-
-    /**
      * Constructor saves the parameters to the class and will call the parent constructor. Also, a **rollback**
      * of open database translation will be done.
      * @param string            $message Translation **id** or simple text that should be shown when exception is caught
@@ -58,9 +53,7 @@ class AdmException extends Exception
             $message = $gL10n->get($message, $params);
         }
 
-        $gLogger->notice('AdmException is thrown!', array('message' => $message, 'params' => $this->params));
-
-        $this->params = $params;
+        $gLogger->notice('AdmException is thrown!', array('message' => $message));
 
         parent::__construct($message);
     }
@@ -68,16 +61,10 @@ class AdmException extends Exception
     /**
      * Simply return the plain translated error text without any markup.
      * @return string Returns only a string with the exception text
+     * @deprecated 4.3.0:4.4.0 "getText()" is deprecated, use "Exception::getMessage()" instead.
      */
     public function getText(): string
     {
-        global $gL10n;
-
-        // if text is a translation-id then translate it
-        if (Language::isTranslationStringId($this->message)) {
-            return $gL10n->get($this->message, $this->params);
-        }
-
         return $this->message;
     }
 
@@ -89,8 +76,14 @@ class AdmException extends Exception
      */
     public function setNewMessage(string $message, array $params = array())
     {
+        global $gL10n;
+
+        // if text is a translation-id then translate it
+        if (Language::isTranslationStringId($message)) {
+            $message = $gL10n->get($message, $params);
+        }
+
         $this->message = $message;
-        $this->params = $params;
     }
 
     /**
@@ -102,7 +95,7 @@ class AdmException extends Exception
 
         // display database error to user
         if ($gMessage instanceof Message) {
-            $gMessage->show($this->getText());
+            $gMessage->show($this->getMessage());
         // => EXIT
         } else {
             $this->showText();
@@ -119,7 +112,7 @@ class AdmException extends Exception
             header('Content-type: text/html; charset=utf-8');
         }
 
-        echo $this->getText();
+        echo $this->getMessage();
         exit();
     }
 }

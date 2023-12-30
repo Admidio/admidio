@@ -232,7 +232,7 @@ try {
     $gSettingsManager->disableExceptions();
     $gMessage->hideThemeBody();
     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php');
-    $gMessage->show($e->getText(), 'Admidio - '.$gL10n->get('INS_UPDATE'));
+    $gMessage->show($e->getMessage(), 'Admidio - '.$gL10n->get('INS_UPDATE'));
 }
 
 // set default homepage

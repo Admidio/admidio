@@ -67,7 +67,7 @@ try {
     $gLanguageData = new LanguageData('en');
     $gL10n = new Language($gLanguageData);
 
-    showErrorMessage($gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())), true);
+    showErrorMessage($gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getMessage())), true);
     // => EXIT
 }
 
@@ -129,7 +129,7 @@ try {
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
     InstallationUtils::checkFolderPermissions();
 } catch (AdmException $e) {
-    showErrorMessage($e->getText(), true);
+    showErrorMessage($e->getMessage(), true);
     // => EXIT
 }
 
@@ -304,7 +304,7 @@ if ($getMode === 1) {
         $page->showMessage(
             'error',
             $gL10n->get('SYS_NOTE'),
-            $e->getText(),
+            $e->getMessage(),
             $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left',
             'update.php');
