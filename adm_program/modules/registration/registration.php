@@ -71,7 +71,7 @@ try {
         // show list with all registrations that should be approved
 
         // set headline of the script
-        $headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
+        $headline = $gL10n->get('SYS_REGISTRATIONS');
 
         // Navigation in module starts here
         $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-file-signature');

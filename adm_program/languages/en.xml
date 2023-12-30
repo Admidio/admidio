@@ -935,7 +935,6 @@
   <string name="SYS_NEW_NAME">New name</string>
   <string name="SYS_NEW_PASSWORD">New password</string>
   <string name="SYS_NEW_PROFILE_PICTURE">New profile picture</string>
-  <string name="SYS_NEW_REGISTRATIONS">New registrations</string>
   <string name="SYS_NEW_ROLE">New role</string>
   <string name="SYS_NEW_VALUE">New value</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">A new stable version is available!</string>
@@ -1125,6 +1124,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_FAILED">The called link is invalid. A registration link is valid only up to 24 hours after registration. Please register again on the site and confirm your registration as soon as you receive the email with the link.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK">You have successfully confirmed your registration. The registration will now be checked by a member of the #VAR1# team. You will then receive an email whether your registration has been accepted or rejected.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">You have successfully confirmed your registration. You can now log in with your username and password.</string>
+  <string name="SYS_REGISTRATIONS">Registrations</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Any regular expression can be stored that will be applied to the user's entered content in this profile field. The content must match the conditions of the regular expression for the entered value to be stored in the field. The regular expression is checked in addition to the general conditions of the data type.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
