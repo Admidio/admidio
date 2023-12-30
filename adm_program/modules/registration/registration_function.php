@@ -11,7 +11,6 @@
  *
  * mode: 1 - Assign registration to a user who is already a member of the organization
  *       2 - Assign registration to a user who is NOT yet a member of the organization
- *       3 - Notification to the user that he/she is now unlocked for the current organization
  *       4 - Delete user account
  *       5 - Create new user and assign roles automatically without dialog
  *       6 - Registration does not need to be assigned, simply send login data
@@ -67,6 +66,28 @@ try {
                 $user->assignDefaultRoles();
             }
             $gDb->endTransaction();
+
+            if ($gSettingsManager->getBool('system_notifications_enabled')) {
+                // Send mail to the user to confirm the registration or the assignment to the new organization
+                $systemMail = new SystemMail($gDb);
+                $systemMail->addRecipientsByUser($getUserUuid);
+                $systemMail->sendSystemMail('SYSMAIL_REGISTRATION_APPROVED', $user);
+                $message = $gL10n->get('SYS_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL')));
+            } else {
+                $message = $gL10n->get('SYS_ASSIGN_LOGIN_SUCCESSFUL');
+            }
+
+            // if current user has the right to assign roles then show roles dialog
+            // otherwise go to previous url (default roles are assigned automatically)
+            if ($gCurrentUser->manageRoles()) {
+                // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
+                admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'new_user' => 3)));
+                // => EXIT
+            } else {
+                $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
+                $gMessage->show($message);
+                // => EXIT
+            }
         } catch (AdmException $e) {
             // exception is thrown when email couldn't be sent
             // so save user data and then show error
@@ -75,36 +96,6 @@ try {
 
             $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
             $e->showHtml();
-            // => EXIT
-        }
-
-        // if current user has the right to assign roles then show roles dialog
-        // otherwise go to previous url (default roles are assigned automatically)
-        if ($gCurrentUser->manageRoles()) {
-            // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'new_user' => 3)));
-        // => EXIT
-        } else {
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_uuid' => $getUserUuid, 'new_user_uuid' => $getNewUserUuid)));
-            // => EXIT
-        }
-    } elseif ($getMode === 3) {
-        $user = new User($gDb, $gProfileFields);
-        $user->readDataByUuid($getUserUuid);
-
-        $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
-
-        // execute only if system mails are supported
-        if ($gSettingsManager->getBool('system_notifications_enabled')) {
-            // Send mail to the user to confirm the registration or the assignment to the new organization
-            $systemMail = new SystemMail($gDb);
-            $systemMail->addRecipientsByUser($getUserUuid);
-            $systemMail->sendSystemMail('SYSMAIL_REGISTRATION_APPROVED', $user);
-
-            $gMessage->show($gL10n->get('SYS_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL'))));
-            // => EXIT
-        } else {
-            $gMessage->show($gL10n->get('SYS_ASSIGN_LOGIN_SUCCESSFUL'));
             // => EXIT
         }
     } elseif ($getMode === 4) {
