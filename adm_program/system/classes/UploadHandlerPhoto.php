@@ -92,7 +92,7 @@ class UploadHandlerPhoto extends UploadHandler
                 $imageDimensions = $imageProperties[0] * $imageProperties[1];
                 $processableImageSize = SystemInfoUtils::getProcessableImageSize();
                 if ($imageDimensions > $processableImageSize) {
-                    throw new AdmException($gL10n->get('SYS_RESOLUTION_TOO_LARGE', array(round($processableImageSize / 1000000, 2))));
+                    throw new AdmException('SYS_RESOLUTION_TOO_LARGE', array(round($processableImageSize / 1000000, 2)));
                 }
 
                 // create image object and scale image to defined size of preferences

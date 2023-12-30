@@ -532,30 +532,30 @@ class User extends TableAccess
      */
     public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false): bool
     {
-        global $gSettingsManager, $gCurrentSession, $installedDbVersion, $gL10n;
+        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($this->hasMaxInvalidLogins()) {
-            throw new AdmException($gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN'));
+            throw new AdmException('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
 
         if (!PasswordUtils::verify($password, $this->getValue('usr_password'))) {
             $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
 
-            throw new AdmException($gL10n->get($incorrectLoginMessage));
+            throw new AdmException($incorrectLoginMessage);
         }
 
         if (!$this->getValue('usr_valid')) {
-            throw new AdmException($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
+            throw new AdmException('SYS_LOGIN_NOT_ACTIVATED');
         }
 
         $orgLongName = $this->getOrgLongname();
 
         if (!$this->isMemberOfOrganization()) {
-            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName)));
+            throw new AdmException('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName));
         }
 
         if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization()) {
-            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName)));
+            throw new AdmException('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName));
         }
 
         if ($updateHash) {
