@@ -424,7 +424,7 @@ class TableFolder extends TableAccess
      */
     public function getFolderForDownload(string $folderUuid): bool
     {
-        global $gCurrentUser, $gValidLogin;
+        global $gCurrentUser, $gCurrentOrgId, $gValidLogin;
 
         if ($folderUuid !== '') {
             // get folder of the parameter
@@ -434,9 +434,9 @@ class TableFolder extends TableAccess
         } else {
             // get first folder of current organization
             $condition = ' fol_fol_id_parent IS NULL
-                       AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
+                       AND fol_org_id = ? -- $gCurrentOrgId
                        AND fol_type   = \'DOCUMENTS\' ';
-            $queryParams = array($GLOBALS['gCurrentOrgId']);
+            $queryParams = array($gCurrentOrgId);
         }
         $this->readData($condition, $queryParams);
 

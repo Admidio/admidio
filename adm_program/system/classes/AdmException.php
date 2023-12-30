@@ -46,11 +46,16 @@ class AdmException extends Exception
      */
     public function __construct($message, $params = array())
     {
-        global $gLogger, $gDb;
+        global $gLogger, $gDb, $gL10n;
 
         if ($gDb instanceof Database) {
             // if there is an open transaction we should perform a rollback
             $gDb->rollback();
+        }
+
+        // if text is a translation-id then translate it
+        if (Language::isTranslationStringId($message)) {
+            $message = $gL10n->get($message, $params);
         }
 
         $gLogger->notice('AdmException is thrown!', array('message' => $message, 'params' => $this->params));
