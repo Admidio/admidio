@@ -153,6 +153,8 @@ class UserRegistration extends User
      */
     public function delete(): bool
     {
+        global $gMenu;
+
         // only send mail if systemmails are enabled and user has email address
         // mail must be sent before user data is removed from this object
         if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail && $this->getValue('EMAIL') !== '') {
@@ -181,6 +183,9 @@ class UserRegistration extends User
         }
 
         $this->db->endTransaction();
+
+        // update registration count in menu
+        $gMenu->initialize();
 
         return $return;
     }

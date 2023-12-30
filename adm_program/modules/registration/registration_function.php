@@ -67,9 +67,6 @@ try {
             }
             $gDb->endTransaction();
 
-            // update registration count in menu
-            $gMenu->initialize();
-
             if ($gSettingsManager->getBool('system_notifications_enabled')) {
                 // Send mail to the user to confirm the registration or the assignment to the new organization
                 $systemMail = new SystemMail($gDb);
