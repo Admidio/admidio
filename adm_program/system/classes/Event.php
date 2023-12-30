@@ -582,7 +582,7 @@ class Event extends TableAccess
                 }
             } elseif ($columnName === 'dat_deadline' && (string) $newValue !== '') {
                 if(!DateTime::createFromFormat('Y-m-d H:i', $newValue)) {
-                    throw new AdmException($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_DEADLINE'), 'YYYY-MM-DD')));
+                    throw new AdmException('SYS_DATE_INVALID', array($gL10n->get('SYS_DEADLINE'), 'YYYY-MM-DD'));
                 } elseif (strtotime($newValue) > strtotime($this->getValue('dat_begin'))) {
                     throw new AdmException('SYS_DEADLINE_AFTER_START');
                 }
