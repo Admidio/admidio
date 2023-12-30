@@ -86,7 +86,7 @@ class UserRegistration extends User
      */
     public function acceptRegistration(): bool
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gMenu;
 
         $this->db->startTransaction();
 
@@ -102,6 +102,9 @@ class UserRegistration extends User
         $this->assignDefaultRoles();
 
         $this->db->endTransaction();
+
+        // update registration count in menu
+        $gMenu->initialize();
 
         // only send mail if systemmails are enabled
         if ($gSettingsManager->getBool('system_notifications_enabled')

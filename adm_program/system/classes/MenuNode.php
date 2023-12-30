@@ -143,17 +143,17 @@ class MenuNode
             if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern'])) {
                 if ($this->menuItemIsVisible($node['men_id'])) {
                     $badgeCount = 0;
-                    $menuUrl  = $node['men_url'];
-                    $menuIcon = (string) $node['men_icon'];
-                    $menuName = $node['men_name'];
 
                     if ($node['men_name_intern'] === 'messages' && $gValidLogin) {
                         // get number of unread messages for user
                         $message = new TableMessage($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
+                    } elseif ($node['men_name_intern'] === 'registration') {
+                        $registration = new ModuleRegistration('registration');
+                        $badgeCount = count($registration->getRegistrationsArray());
                     }
 
-                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, $menuIcon, '', $badgeCount, (string) $node['men_description']);
+                    $this->addItem($node['men_name_intern'], $node['men_name'], $node['men_url'], (string) $node['men_icon'], '', $badgeCount, (string) $node['men_description']);
                 }
             }
         }
