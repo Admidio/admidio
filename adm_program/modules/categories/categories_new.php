@@ -173,9 +173,28 @@ if ($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1) {
 }
 
 // show form
-$form = new HtmlForm('categories_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', array('cat_uuid' => $getCatUuid, 'type' => $getType, 'mode' => '1')), $page);
+$form = new HtmlForm('categories_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', $page);
+// add a hidden field with context information
+$form->addInput(
+    'mode',
+    'mode',
+    'edit',
+    array('property' => HtmlForm::FIELD_HIDDEN)
+);
+$form->addInput(
+    'uuid',
+    'uuid',
+    $getCatUuid,
+    array('property' => HtmlForm::FIELD_HIDDEN)
+);
+$form->addInput(
+    'type',
+    'type',
+    $getType,
+    array('property' => HtmlForm::FIELD_HIDDEN)
+);
 
-// systemcategories should not be renamed
+// system categories should not be renamed
 $fieldPropertyCatName = HtmlForm::FIELD_REQUIRED;
 if ($category->getValue('cat_system') == 1) {
     $fieldPropertyCatName = HtmlForm::FIELD_DISABLED;

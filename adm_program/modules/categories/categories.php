@@ -123,6 +123,18 @@ unset($_SESSION['categories_request']);
 // create html page object
 $page = new HtmlPage('admidio-categories', $headline);
 
+$page->addJavascript('
+    $(".admidio-category-move").click(function() {
+        moveTableRow(
+            $(this).data("direction"),
+            $(this).data("uuid"),
+            "'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php",
+            "' . $gCurrentSession->getCsrfToken() . '"
+        );
+    });
+    ', true
+);
+
 // define link to create new category
 $page->addPageFunctionsMenuItem(
     'menu_item_categories_add',
@@ -185,13 +197,9 @@ while ($catRow = $categoryStatement->fetch()) {
 
     $htmlMoveRow = '&nbsp;';
     if ($category->getValue('cat_system') == 0 || $getType !== 'USF') {
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_UP.'\', \'row_'.$categoryUuid.'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_uuid' => $categoryUuid, 'sequence' => TableCategory::MOVE_UP)) . '\',
-                            \''.$gCurrentSession->getCsrfToken().'\')">'.
+        $htmlMoveRow = '<a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="'.$categoryUuid.'" data-direction="'.TableCategory::MOVE_UP.'">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($addButtonText)) . '"></i></a>
-                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_DOWN.'\', \'row_'.$categoryUuid.'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_uuid' => $categoryUuid, 'sequence' => TableCategory::MOVE_DOWN)) . '\',
-                            \''.$gCurrentSession->getCsrfToken().'\')">'.
+                        <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="'.$categoryUuid.'" data-direction="'.TableCategory::MOVE_DOWN.'">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
     }
 

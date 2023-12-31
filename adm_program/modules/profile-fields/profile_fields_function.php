@@ -12,11 +12,11 @@
 /******************************************************************************
  * Parameters:
  *
- * usf_uuid : UUID of the profile field that should be edited
- * mode     : 1 - create or edit profile field
- *            2 - delete profile field
- *            4 - change sequence of profile field
- * sequence : mode if the profile field move up or down, values are TableUserField::MOVE_UP, TableUserField::MOVE_DOWN
+ * uuid     : UUID of the profile field that should be edited
+ * mode     : edit     - create or edit profile field
+ *            delete   - delete profile field
+ *            sequence - change sequence of profile field
+ * direction : Direction to change the sequence of the category
  *
  *****************************************************************************/
 
@@ -24,17 +24,20 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUsfUuid  = admFuncVariableIsValid($_GET, 'usf_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 4)));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
-$getOrder    = admFuncVariableIsValid($_GET, 'order', 'array');
+$postUsfUUID  = admFuncVariableIsValid($_POST, 'uuid', 'string');
+$postMode     = admFuncVariableIsValid($_POST, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
+$postOrder    = admFuncVariableIsValid($_POST, 'order', 'array');
 
-if ($getMode !== 4 || empty($getOrder)) {
+if (in_array($postMode, array('delete', 'sequence'))) {
+    $gMessage->showHtmlTextOnly();
+}
+
+if ($postMode !== 'sequence' || empty($postOrder)) {
     try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     } catch (AdmException $exception) {
-        if ($getMode === 1) {
+        if ($postMode === 'edit') {
             $exception->showHtml();
         } else {
             $exception->showText();
@@ -52,8 +55,8 @@ if (!$gCurrentUser->isAdministrator()) {
 // create user field object
 $userField = new TableUserField($gDb);
 
-if ($getUsfUuid !== '') {
-    $userField->readDataByUuid($getUsfUuid);
+if ($postUsfUUID !== '') {
+    $userField->readDataByUuid($postUsfUUID);
 
     // check if profile field belongs to actual organization
     if ($userField->getValue('cat_org_id') > 0
@@ -68,7 +71,7 @@ if ($getUsfUuid !== '') {
     }
 }
 
-if ($getMode === 1) {
+if ($postMode === 'edit') {
     // Create or edit profile field
 
     $_SESSION['fields_request'] = $_POST;
@@ -136,8 +139,8 @@ if ($getMode === 1) {
                   FROM '.TBL_USER_FIELDS.'
                  WHERE usf_name   = ? -- $_POST[\'usf_name\']
                    AND usf_cat_id = ? -- $_POST[\'usf_cat_id\']
-                   AND usf_uuid  <> ? -- $getUsfUuid';
-        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int) $_POST['usf_cat_id'], $getUsfUuid));
+                   AND usf_uuid  <> ? -- $postUsfUUID';
+        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int) $_POST['usf_cat_id'], $postUsfUUID));
 
         if ($pdoStatement->fetchColumn() > 0) {
             $gMessage->show($gL10n->get('ORG_FIELD_EXIST'));
@@ -184,7 +187,7 @@ if ($getMode === 1) {
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 // => EXIT
-} elseif ($getMode === 2) {
+} elseif ($postMode === 'delete') {
     // delete profile field
 
     if ($userField->getValue('usf_system') == 1) {
@@ -198,16 +201,17 @@ if ($getMode === 1) {
         echo 'done';
     }
     exit();
-} elseif ($getMode === 4) {
+} elseif ($postMode === 'sequence') {
     // update field order
+    $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
 
     try {
-        if (!empty($getOrder)) {
+        if (!empty($postOrder)) {
             // set new order (drag and drop)
-            $userField->setSequence($getOrder);
+            $userField->setSequence($postOrder);
         } else {
             // move field up/down by one
-            if ($userField->moveSequence($getSequence)) {
+            if ($userField->moveSequence($postSequence)) {
                 echo 'done';
             } else {
                 echo 'Sequence could not be changed.';

@@ -33,13 +33,21 @@ function showHideBlock(elementId) {
  * @param {string}   elementId  This is the id of a html element that should be hidden.
  * @param {string}   url        This is the url that will be called.
  * @param {string}   csrfToken  If this is set than it will be added to the post request.
+ * @param {string}   mode       Mode of the script that is called.
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
-function callUrlHideElement(elementId, url, csrfToken, callback) {
-    const entryDeleted = document.getElementById(elementId);
+function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
+    let entryDeleted = document.getElementById(elementId);
+    if (!entryDeleted) {
+        entryDeleted = document.getElementById("row_" + elementId);
+    }
 
     // send RequestObject and delete entry
-    $.post(url, {"admidio-csrf-token": csrfToken}, function(data) {
+    $.post(url, {
+        "admidio-csrf-token": csrfToken,
+        "uuid": elementId,
+        "mode": mode
+        }, function(data) {
         const messageText = $("#status-message");
         let returnStatus = "error";
         let returnMessage = "";
@@ -193,20 +201,25 @@ function redirectPost(url, data) {
  * @param {string} csrfToken  If this is set than it will be added to the post request.
  */
 function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
-    $.post(updateSequenceUrl, {"admidio-csrf-token": csrfToken}, function(data) {
-        if (data === "done") {
-            var id = "#" + elementId;
-            $(".admidio-icon-link .fas").tooltip("hide");
+    $.post(updateSequenceUrl, {
+            "admidio-csrf-token": csrfToken,
+            "direction": direction,
+            "uuid": elementId,
+            "mode": "sequence"
+        }, function(data) {
+            if (data === "done") {
+                const id = "#row_" + elementId;
+                $(".admidio-icon-link .fas").tooltip("hide");
 
-            if (direction === "UP") {
-                $(id).prev().before($(id));
+                if (direction === "UP") {
+                    $(id).prev().before($(id));
+                } else {
+                    $(id).next().after($(id));
+                }
             } else {
-                $(id).next().after($(id));
+                if(data.length > 0) {
+                    alert(data);
+                }
             }
-        } else {
-            if(data.length > 0) {
-                alert(data);
-            }
-        }
-    });
+        });
 }
