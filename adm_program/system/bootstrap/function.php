@@ -304,6 +304,8 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             $value = (int) $array[$variableName];
         } elseif ($datatype === 'float') {
             $value = (float) $array[$variableName];
+        } elseif ($datatype === 'array') {
+            $value = $array[$variableName];
         } else {
             $value = (string) $array[$variableName];
         }
