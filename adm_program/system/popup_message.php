@@ -19,14 +19,15 @@ require(__DIR__ . '/login_valid.php');
 
 // Initialize and check the parameters
 $gMessage->showInModalWindow();
-$getType        = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true));
-$getElementId   = admFuncVariableIsValid($_GET, 'element_id', 'string', array('requireValue' => true));
-$getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id', 'string', array('requireValue' => true));
+$getType = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true));
+$getElementId = admFuncVariableIsValid($_GET, 'element_id', 'string', array('requireValue' => true));
+$getDatabaseId = admFuncVariableIsValid($_GET, 'database_id', 'string', array('requireValue' => true));
 $getDatabaseId2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
-$getName        = admFuncVariableIsValid($_GET, 'name', 'string');
+$getName = admFuncVariableIsValid($_GET, 'name', 'string');
 
 // initialize local variables
 $text = 'SYS_DELETE_ENTRY';
+$mode = '';
 $callbackFunction = '';
 
 // compose URL
@@ -39,6 +40,8 @@ switch ($getType) {
         break;
     case 'cat':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_uuid' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
+        $mode = 'delete';
+        $getElementId = $getDatabaseId;
 
         // get special message for calendars
         if ($getDatabaseId2 === 'EVT') {
@@ -67,6 +70,8 @@ switch ($getType) {
         break;
     case 'men':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 2, 'menu_uuid' => $getDatabaseId));
+        $mode = 'delete';
+        $getElementId = $getDatabaseId;
         break;
     case 'msg':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_uuid' => $getDatabaseId));
@@ -76,29 +81,29 @@ switch ($getType) {
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('mode' => 4, 'new_user_uuid' => $getDatabaseId));
         break;
     case 'pho':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'photo_uuid' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'photo_uuid' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));
         $text = 'SYS_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'photo_uuid' => $getDatabaseId));
         break;
     case 'pro_pho':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getDatabaseId));
         $text = 'SYS_WANT_DELETE_PHOTO';
         $callbackFunction = 'callbackProfilePhoto';
         break;
     case 'pro_role':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 2, 'member_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 2, 'member_uuid' => $getDatabaseId));
         $text = 'SYS_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackRoles';
         break;
     case 'pro_future':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'member_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'member_uuid' => $getDatabaseId));
         $text = 'SYS_LINK_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackFutureRoles';
         break;
     case 'pro_former':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'member_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'member_uuid' => $getDatabaseId));
         $text = 'SYS_LINK_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackFormerRoles';
         break;
@@ -119,6 +124,8 @@ switch ($getType) {
         break;
     case 'usf':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 2, 'usf_uuid' => $getDatabaseId));
+        $mode = 'delete';
+        $getElementId = $getDatabaseId;
         break;
     case 'urt':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 2, 'urt_uuid' => $getDatabaseId));
@@ -132,7 +139,7 @@ switch ($getType) {
 }
 
 if ($callbackFunction !== '') {
-    $callbackFunction = ', \''.$callbackFunction.'\'';
+    $callbackFunction = ', \'' . $callbackFunction . '\'';
 }
 
 if ($url === '') {
@@ -140,5 +147,5 @@ if ($url === '') {
     // => EXIT
 }
 
-$gMessage->setYesNoButton('callUrlHideElement(\''.$getElementId.'\', \''.$url.'\', \''.$gCurrentSession->getCsrfToken().'\''.$callbackFunction.')');
+$gMessage->setYesNoButton('callUrlHideElement(\'' . $getElementId . '\', \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $mode . '\'' . $callbackFunction . ')');
 $gMessage->show($gL10n->get($text, array($getName, '')), $gL10n->get('SYS_NOTE'));

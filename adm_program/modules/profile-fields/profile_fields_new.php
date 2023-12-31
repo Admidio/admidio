@@ -90,7 +90,21 @@ $page->addJavascript(
 );
 
 // show form
-$form = new HtmlForm('profile_fields_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_function.php', array('usf_uuid' => $getUsfUuid, 'mode' => '1')), $page);
+$form = new HtmlForm('profile_fields_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_function.php', $page);
+// add a hidden field with context information
+$form->addInput(
+    'mode',
+    'mode',
+    'edit',
+    array('property' => HtmlForm::FIELD_HIDDEN)
+);
+$form->addInput(
+    'uuid',
+    'uuid',
+    $getUsfUuid,
+    array('property' => HtmlForm::FIELD_HIDDEN)
+);
+
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
 if ($userField->getValue('usf_system') == 1) {
     $form->addInput(

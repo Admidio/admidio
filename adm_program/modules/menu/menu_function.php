@@ -12,20 +12,23 @@
 /******************************************************************************
  * Parameters:
  *
- * menu_uuid : UUID of the menu that should be edited
- * mode      : 1 - Create or edit menu
- *             2 - Delete menu
- *             3 - Change sequence for parameter men_id
- * sequence  : New sequence for the parameter men_id
+ * uuid : UUID of the menu that should be edited
+ * mode      : edit - Create or edit menu
+ *             delete - Delete menu
+ *             sequence - Change sequence for parameter men_id
+ * direction : Direction to change the sequence of the menu entry
  *
  *****************************************************************************/
 
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3)));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
+$postMenuUUID = admFuncVariableIsValid($_POST, 'uuid', 'string');
+$postMode     = admFuncVariableIsValid($_POST, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
+
+if (in_array($postMode, array('delete', 'sequence'))) {
+    $gMessage->showHtmlTextOnly();
+}
 
 // check rights
 if (!$gCurrentUser->isAdministrator()) {
@@ -35,15 +38,15 @@ if (!$gCurrentUser->isAdministrator()) {
 // create menu object
 $menu = new TableMenu($gDb);
 
-if ($getMenuUuid !== '') {
-    $menu->readDataByUuid($getMenuUuid);
+if ($postMenuUUID !== '') {
+    $menu->readDataByUuid($postMenuUUID);
 }
 
 try {
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 } catch (AdmException $exception) {
-    if ($getMode === 1) {
+    if ($postMode === 'edit') {
         $exception->showHtml();
     } else {
         $exception->showText();
@@ -52,7 +55,7 @@ try {
 }
 
 // create menu or update it
-if ($getMode === 1) {
+if ($postMode === 'edit') {
     $_SESSION['menu_request'] = $_POST;
 
     $postIdParent = admFuncVariableIsValid($_POST, 'men_men_id_parent', 'int');
@@ -118,15 +121,17 @@ if ($getMode === 1) {
 
     header('Location: '. $gNavigation->getUrl());
     exit();
-} elseif ($getMode === 2) {
+} elseif ($postMode === 'delete') {
     // delete menu
     if ($menu->delete()) {
         echo 'done';
     }
     exit();
-} elseif ($getMode === 3) {
+} elseif ($postMode === 'sequence') {
     // Update menu sequence
-    if ($menu->moveSequence($getSequence)) {
+    $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
+
+    if ($menu->moveSequence($postDirection)) {
         echo 'done';
     } else {
         echo 'Sequence could not be changed.';

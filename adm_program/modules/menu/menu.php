@@ -26,6 +26,14 @@ $page->addJavascript(
     '
     $(".admidio-open-close-caret").click(function() {
         showHideBlock($(this).attr("id"));
+    });
+    $(".admidio-menu-move").click(function() {
+        moveTableRow(
+            $(this).data("direction"),
+            $(this).data("uuid"),
+            "'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_function.php",
+            "' . $gCurrentSession->getCsrfToken() . '"
+        );
     });',
     true
 );
@@ -95,13 +103,9 @@ while ($mainMen = $mainMenStatement->fetch()) {
             $menuLink = $menuRow['men_url'];
         }
 
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveTableRow(\'UP\', \'row_men_'.$menuRow['men_uuid'].'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'menu_uuid' => $menuRow['men_uuid'], 'sequence' => 'UP')) . '\',
-                            \''.$gCurrentSession->getCsrfToken().'\')">'.
+        $htmlMoveRow = '<a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_UP.'">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
-                        <a class="admidio-icon-link" href="javascript:moveTableRow(\'DOWN\', \'row_men_'.$menuRow['men_uuid'].'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'menu_uuid' => $menuRow['men_uuid'], 'sequence' => 'DOWN')) . '\',
-                            \''.$gCurrentSession->getCsrfToken().'\')">'.
+                        <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_UP.'">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
@@ -128,7 +132,7 @@ while ($mainMen = $mainMenStatement->fetch()) {
             $htmlStandardMenu,
             $menuAdministration
         );
-        $menuOverview->addRowByArray($columnValues, 'row_men_'. $menuRow['men_uuid']);
+        $menuOverview->addRowByArray($columnValues, 'row_'. $menuRow['men_uuid']);
     }
 }
 

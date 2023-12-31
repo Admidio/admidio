@@ -28,8 +28,7 @@ unset($_SESSION['fields_request']);
 // create html page object
 $page = new HtmlPage('admidio-profile-fields', $headline);
 
-$page->addJavascript(
-    '
+$page->addJavascript('
     $(".admidio-open-close-caret").click(function() {
         showHideBlock($(this).attr("id"));
     });
@@ -39,12 +38,23 @@ $page->addJavascript(
         stop: function(event, ui) {
             var order = $(this).sortable("toArray", {attribute: "data-id"});
             var uid = ui.item.attr("data-id");
-            $.get("'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4)).'",
-            {usf_uuid: uid, order: order});
+            $.post("'.ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php",
+            {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '",
+             "mode": "sequence",
+             "uuid": uid,
+             "order": order
+            });
         }
     });
-    ',
-    true
+    $(".admidio-field-move").click(function() {
+        moveTableRow(
+            $(this).data("direction"),
+            $(this).data("uuid"),
+            "'.ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_function.php",
+            "' . $gCurrentSession->getCsrfToken() . '"
+        );
+    });
+    ', true
 );
 
 // define link to create new profile field
@@ -169,13 +179,9 @@ while ($row = $statement->fetch()) {
     // create array with all column values
     $columnValues = array(
         '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.$userField->getValue('usf_name').'</a>' . HtmlForm::getHelpTextIcon((string) $userField->getValue('usf_description'), 'SYS_NOTE', array($userField->getValue('usf_name')), 'SYS_DESCRIPTION'),
-        '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_UP.'\', \'row_usf_'.$usfUuid.'\',
-            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_uuid' => $usfUuid, 'sequence' => TableUserField::MOVE_UP)) . '\',
-            \''.$gCurrentSession->getCsrfToken().'\')">'.
+        '<a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="'.$usfUuid.'" data-direction="'.TableUserField::MOVE_UP.'">'.
             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD')) . '"></i></a>
-        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_DOWN.'\', \'row_usf_'.$usfUuid.'\',
-            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_uuid' => $usfUuid, 'sequence' => TableUserField::MOVE_DOWN)) . '\',
-            \''.$gCurrentSession->getCsrfToken().'\')">'.
+        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="'.$usfUuid.'" data-direction="'.TableUserField::MOVE_DOWN.'">'.
             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link">'.
             '<i class="fas fa-arrows-alt handle" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD')) . '"></i></a>
@@ -189,7 +195,7 @@ while ($row = $statement->fetch()) {
         $userField->getValue('usf_regex'),
         $usfSystem
     );
-    $table->addRowByArray($columnValues, 'row_usf_'.$usfUuid, array('data-id' => $usfUuid));
+    $table->addRowByArray($columnValues, 'row_'.$usfUuid, array('data-id' => $usfUuid));
 }
 
 $page->addHtml($table->show());

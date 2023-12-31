@@ -45,10 +45,10 @@ function subMenu(array &$menuList, int $level, int $menId, int $parentId = null)
     }
 
     $sql = 'SELECT *
-              FROM '.TBL_MENU.'
+              FROM ' . TBL_MENU . '
              WHERE men_node = true
                AND men_id  <> ? -- $menu->getValue(\'men_id\')
-                   '.$sqlConditionParentId;
+                   ' . $sqlConditionParentId;
     $childStatement = $gDb->queryPrepared($sql, $queryParams);
 
     $parentMenu = new TableMenu($gDb);
@@ -59,9 +59,9 @@ function subMenu(array &$menuList, int $level, int $menId, int $parentId = null)
         $parentMenu->setArray($menuEntry);
 
         // add entry to array of all menus
-        $menuList[(int) $parentMenu->getValue('men_id')] = $einschub . $parentMenu->getValue('men_name');
+        $menuList[(int)$parentMenu->getValue('men_id')] = $einschub . $parentMenu->getValue('men_name');
 
-        subMenu($menuList, ++$level, $menId, (int) $parentMenu->getValue('men_id'));
+        subMenu($menuList, ++$level, $menId, (int)$parentMenu->getValue('men_id'));
     }
 }
 
@@ -97,10 +97,10 @@ $page = new HtmlPage('admidio-menu-edit', $headline);
 
 // alle aus der DB aus lesen
 $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
-               FROM '.TBL_ROLES.'
-         INNER JOIN '.TBL_CATEGORIES.'
+               FROM ' . TBL_ROLES . '
+         INNER JOIN ' . TBL_CATEGORIES . '
                  ON cat_id = rol_cat_id
-         INNER JOIN '.TBL_ORGANIZATIONS.'
+         INNER JOIN ' . TBL_ORGANIZATIONS . '
                  ON org_id = cat_org_id
               WHERE rol_valid  = true
                 AND rol_system = false
@@ -119,24 +119,37 @@ while ($rowViewRoles = $rolesViewStatement->fetch()) {
 }
 
 // show form
-$form = new HtmlForm('menu_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('menu_uuid' => $getMenuUuid, 'mode' => 1)), $page);
+$form = new HtmlForm('menu_edit_form', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', $page);
+// add a hidden field with context information
+$form->addInput(
+    'mode',
+    'mode',
+    'edit',
+    array('property' => HtmlForm::FIELD_HIDDEN)
+);
+$form->addInput(
+    'uuid',
+    'uuid',
+    $getMenuUuid,
+    array('property' => HtmlForm::FIELD_HIDDEN)
+);
 
 $fieldRequired = HtmlForm::FIELD_REQUIRED;
-$fieldDefault  = HtmlForm::FIELD_DEFAULT;
+$fieldDefault = HtmlForm::FIELD_DEFAULT;
 
 if ($menu->getValue('men_standard')) {
     $fieldRequired = HtmlForm::FIELD_DISABLED;
-    $fieldDefault  = HtmlForm::FIELD_DISABLED;
+    $fieldDefault = HtmlForm::FIELD_DISABLED;
 }
 
 $menuList = array();
-subMenu($menuList, 1, (int) $menu->getValue('men_id'));
+subMenu($menuList, 1, (int)$menu->getValue('men_id'));
 
 $form->addInput(
     'men_name',
     $gL10n->get('SYS_NAME'),
     htmlentities($menu->getValue('men_name', 'database'), ENT_QUOTES),
-    array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
+    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
 );
 
 if ($getMenuUuid !== '') {
@@ -161,13 +174,13 @@ $form->addSelectBox(
     $gL10n->get('SYS_MENU_LEVEL'),
     $menuList,
     array(
-        'property'        => HtmlForm::FIELD_REQUIRED,
-        'defaultValue'    => (int) $menu->getValue('men_men_id_parent')
+        'property' => HtmlForm::FIELD_REQUIRED,
+        'defaultValue' => (int)$menu->getValue('men_men_id_parent')
     )
 );
 
 $sql = 'SELECT com_id, com_name
-          FROM '.TBL_COMPONENTS.'
+          FROM ' . TBL_COMPONENTS . '
       ORDER BY com_name';
 $form->addSelectBoxFromSql(
     'men_com_id',
@@ -175,8 +188,8 @@ $form->addSelectBoxFromSql(
     $gDb,
     $sql,
     array(
-        'property'        => $fieldDefault,
-        'defaultValue'    => (int) $menu->getValue('men_com_id'),
+        'property' => $fieldDefault,
+        'defaultValue' => (int)$menu->getValue('men_com_id'),
         'helpTextIdLabel' => 'SYS_MENU_MODULE_RIGHTS_DESC'
     )
 );
@@ -186,14 +199,14 @@ $form->addSelectBox(
     $gL10n->get('SYS_VISIBLE_FOR'),
     $parentRoleViewSet,
     array(
-        'property'     => $fieldDefault,
+        'property' => $fieldDefault,
         'defaultValue' => $roleViewSet,
-        'multiselect'  => true,
+        'multiselect' => true,
         'helpTextIdLabel' => 'SYS_MENU_RESTRICT_VISIBILITY'
     )
 );
 
-if ((bool) $menu->getValue('men_node') === false) {
+if ((bool)$menu->getValue('men_node') === false) {
     $form->addInput(
         'men_url',
         $gL10n->get('SYS_URL'),
