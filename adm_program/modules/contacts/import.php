@@ -80,7 +80,7 @@ $form->addSelectBox(
 $page->addJavascript(
     '
     $("#format").change(function() {
-        var format = $(this).children("option:selected").val();
+        const format = $(this).children("option:selected").val();
          $(".import-setting").prop("disabled", true).parents("div.form-group").hide();
          $(".import-"+format).prop("disabled", false).parents("div.form-group").show("slow");
     });

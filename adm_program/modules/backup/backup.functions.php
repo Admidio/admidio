@@ -201,7 +201,7 @@ function OutputInformation($id, $dhtml, $text = '')
         if (!is_null($dhtml)) {
             if ($id) {
                 echo '<script type="text/javascript">
-                    var element = document.getElementById("'.$id.'");
+                    const element = document.getElementById("'.$id.'");
                     if (element) {
                         element.innerHTML = "' . str_replace('</', '<\\/', $dhtml) . '";
                     }

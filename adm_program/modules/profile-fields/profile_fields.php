@@ -36,8 +36,8 @@ $page->addJavascript('
         axis: "y",
         handle: ".handle",
         stop: function(event, ui) {
-            var order = $(this).sortable("toArray", {attribute: "data-id"});
-            var uid = ui.item.attr("data-id");
+            const order = $(this).sortable("toArray", {attribute: "data-id"});
+            const uid = ui.item.attr("data-id");
             $.post("'.ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php",
             {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '",
              "mode": "sequence",
