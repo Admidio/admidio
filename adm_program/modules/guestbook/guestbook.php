@@ -57,29 +57,20 @@ if ($gSettingsManager->getBool('enable_rss') && (int) $gSettingsManager->get('en
 }
 
 $page->addJavascript('
-    /**
-     * @param {int} guestbookUuid
-     */
-    function getComments(guestbookUuid) {
-        // RequestObjekt abschicken und Kommentar laden
-        $.get("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php', array('moderation' => (int) $getModeration)).'&gbo_uuid=" + guestbookUuid, function(data) {
-            $("#comments_" + guestbookUuid).html(data);
-        });
-    }
+    $(".admidio-toggle-comments").click(function() {
+        const uuid = $(this).data("uuid");
+        toggleDiv("admCommentsInvisible_" + uuid);
+        toggleDiv("admCommentsVisible_" + uuid);
 
-    /**
-     * @param {int} guestbookUuid
-     */
-    function toggleComments(guestbookUuid) {
-        toggleDiv("admCommentsInvisible_" + guestbookUuid);
-        toggleDiv("admCommentsVisible_" + guestbookUuid);
-
-        if (document.getElementById("comments_" + guestbookUuid).innerHTML.length === 0) {
-            getComments(guestbookUuid);
+        if (document.getElementById("comments_" + uuid).innerHTML.length === 0) {
+            // Send request object and load comment
+            $.get("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php', array('moderation' => (int) $getModeration)).'&gbo_uuid=" + uuid, function(data) {
+                $("#comments_" + uuid).html(data);
+            });
         } else {
-            toggleDiv("comments_" + guestbookUuid);
+            toggleDiv("comments_" + uuid);
         }
-    }
+    });
 
     /**
      * @param {string} objectId
@@ -92,7 +83,7 @@ $page->addJavascript('
             divElement.hide();
         }
     }
-');
+', true);
 
 // add headline and title of module
 if ($getModeration) {
@@ -293,12 +284,12 @@ if ($countGuestbookEntries === 0) {
 
             // this link will be shown when comments where loaded
             $page->addHtml('
-                    <a id="admCommentsVisible_'. $gboUuid. '" class="btn" href="javascript:void(0)" onclick="toggleComments(\''. $gboUuid. '\')" style="display: '. $displayOthers. ';">
+                    <a id="admCommentsVisible_'. $gboUuid. '" class="btn admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayOthers. ';">
                         <i class="fas fa-comment-slash"></i>'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
 
             // this link will be invisible when comments where loaded
             $page->addHtml('
-                    <a id="admCommentsInvisible_'. $gboUuid. '" class="btn" href="javascript:void(0)" onclick="toggleComments(\''. $gboUuid. '\')" style="display: '. $displayShowComments. ';">
+                    <a id="admCommentsInvisible_'. $gboUuid. '" class="btn admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayShowComments. ';">
                         <i class="fas fa-comment"></i>'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
 
             // Hier ist das div, in das die Kommentare reingesetzt werden

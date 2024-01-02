@@ -114,6 +114,10 @@ $page->addJavascript(
         });
     });
 
+    $("#captcha-refresh").click(function() {
+        document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php?" + Math.random();
+    });
+
     $("#link_check_for_update").click(function() {
         var admVersionContent = $("#admidio_version_content");
 
@@ -844,7 +848,7 @@ $formCaptcha->addInput(
     array('maxLength' => 60, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
 );
 $html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php" alt="CAPTCHA Image" />
-         <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php?\' + Math.random(); return false">
+         <a id="captcha-refresh" class="admidio-icon-link" href="javascript:void(0)">
             <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>';
 $formCaptcha->addCustomContent(
     $gL10n->get('ORG_CAPTCHA_PREVIEW'),
