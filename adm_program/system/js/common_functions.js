@@ -37,7 +37,7 @@ function showHideBlock(elementId) {
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
 function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
-    let entryDeleted = document.getElementById(elementId);
+    var entryDeleted = document.getElementById(elementId);
     if (!entryDeleted) {
         entryDeleted = document.getElementById("row_" + elementId);
     }
@@ -49,8 +49,8 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
         "mode": mode
         }, function(data) {
         const messageText = $("#status-message");
-        let returnStatus = "error";
-        let returnMessage = "";
+        var returnStatus = "error";
+        var returnMessage = "";
 
         try {
             const returnData = JSON.parse(data);
