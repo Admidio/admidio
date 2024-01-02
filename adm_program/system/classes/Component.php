@@ -241,16 +241,12 @@ class Component extends TableAccess
 
             case 'DOCUMENTS-FILES':
                 if ($gSettingsManager->getBool('documents_files_module_enabled')) {
-                    if ($gValidLogin) {
+                    try {
+                        $documentsRootFolder = new TableFolder($gDb);
+                        $documentsRootFolder->getFolderForDownload('');
                         return true;
-                    } else {
-                        try {
-                            $documentsRootFolder = new TableFolder($gDb);
-                            $documentsRootFolder->getFolderForDownload('');
-                            return true;
-                        } catch (AdmException $e) {
-                            return false;
-                        }
+                    } catch (AdmException $e) {
+                        return false;
                     }
                 }
                 break;
