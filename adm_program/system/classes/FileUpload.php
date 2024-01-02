@@ -125,15 +125,15 @@ class FileUpload
                                 + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                             countErrorFiles++;
                         } else {
-                            var message = "'.$textFileUploaded.'";
-                            var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + file.name + "</strong>");
+                            const message = "'.$textFileUploaded.'";
+                            const newMessage = message.replace("#VAR1_BOLD#", "<strong>" + file.name + "</strong>");
                             $("<p/>").html(newMessage).appendTo("#files");
                             countFiles++
                         }
                     });
                 },
                 progressall: function(e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    const progress = parseInt(data.loaded / data.total * 100, 10);
                     $("#progress .progress-bar").css(
                         "width",
                         progress + "%"

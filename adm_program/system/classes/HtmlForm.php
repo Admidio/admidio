@@ -780,10 +780,10 @@ class HtmlForm extends Smarty
                     $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
 
                     $("#' . $id . '").keyup(function(e) {
-                        var result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
-                        var cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
+                        const result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
+                        const cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
 
-                        var progressBar = $("#admidio-password-strength .progress-bar");
+                        const progressBar = $("#admidio-password-strength .progress-bar");
                         progressBar.attr("aria-valuenow", result.score * 25);
                         progressBar.css("width", result.score * 25 + "%");
                         progressBar.removeClass(cssClasses.join(" "));

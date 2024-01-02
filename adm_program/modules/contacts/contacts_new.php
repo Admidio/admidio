@@ -24,8 +24,8 @@ echo '
     });
 
     $("#form_members_create_user").submit(function(event) {
-        var action = $(this).attr("action");
-        var formMembersAlert = $("#form_members_create_user .form-alert");
+        const action = $(this).attr("action");
+        const formMembersAlert = $("#form_members_create_user .form-alert");
         formMembersAlert.hide();
 
         // disable default form submit

@@ -155,9 +155,9 @@ class HtmlDataTables
         if ($this->groupedColumn >= 0) {
             $javascriptGroup = ',
                 "drawCallback": function(settings) {
-                    var api  = this.api();
-                    var rows = api.rows({page: "current"}).nodes();
-                    var last = null;
+                    const api  = this.api();
+                    const rows = api.rows({page: "current"}).nodes();
+                    const last = null;
 
                     api.column(' . $this->groupedColumn . ', {page: "current"}).data().each(function(group, i) {
                         if (last !== group) {
@@ -172,7 +172,7 @@ class HtmlDataTables
             $javascriptGroupFunction = '
                 // Order by the grouping
                 $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function() {
-                    var currentOrder = admidioTable.order()[0];
+                    const currentOrder = admidioTable.order()[0];
                     if (currentOrder[0] === ' . $this->groupedColumn . ' && currentOrder[1] === "asc") {
                         admidioTable.order([' . $this->groupedColumn . ', "desc"]).draw();
                     } else {
@@ -197,7 +197,7 @@ class HtmlDataTables
         }
         $this->htmlPage->addJavascript(
             '
-            var admidioTable = $("#' . $this->id . '").DataTable({' .
+            const admidioTable = $("#' . $this->id . '").DataTable({' .
             implode(',', $this->datatablesInitParameters) .
             $javascriptGroup . '
             });
