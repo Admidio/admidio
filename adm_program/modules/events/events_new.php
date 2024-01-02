@@ -126,7 +126,6 @@ if (isset($_SESSION['events_request'])) {
 // create html page object
 $page = new HtmlPage('admidio-events-edit', $headline);
 
-$page->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/date-functions.js');
 $page->addJavascript('
     /**
      * Function hides/show date and time fields
