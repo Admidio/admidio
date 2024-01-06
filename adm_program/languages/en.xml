@@ -772,7 +772,7 @@
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Login data can only be imported by an administrator. The rules of the organization must be observed (e.g. password length and password strength). Users with already existing login data keep them. No login data will be overwritten by the import.</string>
   <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
-  <string name="SYS_IMPORT_SUCCESSFUL">Import was successful..\n\n#VAR1# new users have been created.\n#VAR2# users have been edited.\n#VAR3# role memberships have been assigned.\n\n#VAR4#</string>
+  <string name="SYS_IMPORT_SUCCESSFUL">Import was successful.\n\n#VAR1# new contacts have been created.\n#VAR2# contacts have been edited.\n#VAR3# role memberships have been assigned.\n\n#VAR4#</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned any profile fields:</string>
   <string name="SYS_IMPRINT">Imprint</string>
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
