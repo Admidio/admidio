@@ -277,10 +277,9 @@ try {
         $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
     // => EXIT
-    } elseif ($getMode === 3) { // set role inactive
-        // event roles and administrator cannot be set to inactive
-        // all other roles could now set inactive
-        $gMessage->showTextOnly();
+    } elseif ($getMode === 3) {
+        // set role inactive
+        // event roles and administrator cannot be set inactive
         $role->setInactive();
         echo 'done';
         exit();
@@ -292,14 +291,8 @@ try {
         exit();
     } elseif ($getMode === 5) {
         // set role active
-
-        // event roles should not set active
-        // all other roles could now set active
-        if (!$eventRole && $role->setActive()) {
-            echo 'done';
-        } else {
-            $gL10n->get('SYS_NO_RIGHTS');
-        }
+        $role->setActive();
+        echo 'done';
         exit();
     } elseif ($getMode === 6) {
         // Export every member of a role into one vCard file
