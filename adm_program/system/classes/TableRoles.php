@@ -465,29 +465,32 @@ class TableRoles extends TableAccess
 
     /**
      * Set the current role active.
-     * @return bool Returns **true** if the role could be set to active.
+     * Event roles could not be set active.
+     * @throws AdmException
      * @throws Exception
      */
-    public function setActive(): bool
+    public function setActive(): void
     {
-        return $this->toggleValid(true);
+        if ($this->type === self::ROLE_EVENT) {
+            throw new AdmException('Event role cannot be set to inactive.');
+        }
+        $this->toggleValid(true);
     }
 
     /**
      * Set the current role inactive.
-     * Administrator and event roles could not be set to inactive.
-     * @return bool Returns **true** if the role was set to inactive.
+     * Administrator and event roles could not be set inactive.
      * @throws AdmException
      * @throws Exception
      */
-    public function setInactive(): bool
+    public function setInactive(): void
     {
         if ($this->getValue('rol_administrator')) {
             throw new AdmException('Administrator role cannot be set to inactive.');
         } elseif ($this->type === self::ROLE_EVENT) {
             throw new AdmException('Event role cannot be set to inactive.');
         }
-        return $this->toggleValid(false);
+        $this->toggleValid(false);
     }
 
     /**
@@ -757,11 +760,12 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * @param bool $status
-     * @return bool
+     * Toggle the valid status of a role. The role could be set to inactive or active again.
+     * @param bool $status Valid status that should be set.
+     * @throws AdmException
      * @throws Exception
      */
-    private function toggleValid(bool $status): bool
+    private function toggleValid(bool $status): void
     {
         global $gCurrentSession;
 
@@ -775,10 +779,8 @@ class TableRoles extends TableAccess
             // all active users must renew their user data because maybe their
             // rights have been changed if they were members of this role
             $gCurrentSession->reloadAllSessions();
-
-            return true;
+        } else {
+            throw new AdmException('Role ' . $this->getValue('rol_name') . ' is a system role and could not be set inactive!');
         }
-
-        return false;
     }
 }
