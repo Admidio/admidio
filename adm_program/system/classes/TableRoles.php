@@ -557,6 +557,7 @@ class TableRoles extends TableAccess
                         $membership->setArray($row);
                         $membership->setValue('mem_begin', $startDate);
                         $membership->setValue('mem_end', $endDate);
+                        $membership->save();
                     } else {
                         // End existing period and later add new period with changed leader flag
                         $tempEndDate = DateTime::createFromFormat('Y-m-d', $startDate);
@@ -564,9 +565,14 @@ class TableRoles extends TableAccess
 
                         $membership = new TableMembers($this->db);
                         $membership->setArray($row);
-                        $membership->setValue('mem_end', $newEndDate);
+                        if ($newEndDate < $row['mem_begin']) {
+                            // leader flag changed at the day the membership started then delete old membership
+                            $membership->delete();
+                        } else {
+                            $membership->setValue('mem_end', $newEndDate);
+                            $membership->save();
+                        }
                     }
-                    $membership->save();
                 } elseif ($startDate <= $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
                     // new period starts before existing period and ends in existing period
                     if ($leader === (bool) $row['mem_leader']) {
