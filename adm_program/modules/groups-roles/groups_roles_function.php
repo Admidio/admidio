@@ -102,24 +102,6 @@ try {
             }
         }
 
-        // Administrator role need some more flags
-        if ($role->getValue('rol_administrator') == 1) {
-            $_POST['rol_name']           = $role->getValue('rol_name');
-            $_POST['rol_assign_roles']   = 1;
-            $_POST['rol_all_lists_view'] = 1;
-        }
-
-        if ($eventRole) {
-            $_POST['rol_name']        = $role->getValue('rol_name');
-            $_POST['rol_description'] = $role->getValue('rol_description');
-            $_POST['rol_cat_id']      = $role->getValue('rol_cat_id');
-            $_POST['rol_start_date']  = '';
-            $_POST['rol_start_time']  = '';
-            $_POST['rol_end_date']    = '';
-            $_POST['rol_end_time']    = '';
-            $_POST['rol_max_members'] = '';
-        }
-
         // for all checkboxes must be checked if a value was transferred
         // if not, then set the value here to 0, since 0 is not transferred.
 
@@ -154,7 +136,7 @@ try {
         $validFromDate = '';
         $validToDate   = '';
 
-        if (strlen($_POST['rol_start_date']) > 0) {
+        if (isset($_POST['rol_start_date']) && strlen($_POST['rol_start_date']) > 0) {
             $validFromDate = DateTime::createFromFormat('Y-m-d', $_POST['rol_start_date']);
             if (!$validFromDate) {
                 $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_FROM'), 'YYYY-MM-DD')));
@@ -165,7 +147,7 @@ try {
             }
         }
 
-        if (strlen($_POST['rol_end_date']) > 0) {
+        if (isset($_POST['rol_end_date']) && strlen($_POST['rol_end_date']) > 0) {
             $validToDate = DateTime::createFromFormat('Y-m-d', $_POST['rol_end_date']);
             if (!$validToDate) {
                 $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_TO'), 'YYYY-MM-DD')));
@@ -177,7 +159,7 @@ try {
         }
 
         // DateTo should be greater than DateFrom (Timestamp must be less)
-        if (strlen($_POST['rol_start_date']) > 0 && strlen($_POST['rol_end_date']) > 0) {
+        if (isset($_POST['rol_start_date']) && strlen($_POST['rol_start_date']) > 0 && strlen($_POST['rol_end_date']) > 0) {
             if ($validFromDate > $validToDate) {
                 $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
                 // => EXIT
@@ -188,7 +170,7 @@ try {
         // Check valid format of time input
         // ------------------------------------------------
 
-        if (strlen($_POST['rol_start_time']) > 0) {
+        if (isset($_POST['rol_start_time']) && strlen($_POST['rol_start_time']) > 0) {
             $validFromTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW.' '.$_POST['rol_start_time']);
             if (!$validFromTime) {
                 $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME_FROM'), 'HH:ii')));
@@ -199,7 +181,7 @@ try {
             }
         }
 
-        if (strlen($_POST['rol_end_time']) > 0) {
+        if (isset($_POST['rol_end_time']) && strlen($_POST['rol_end_time']) > 0) {
             $validToTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW.' '.$_POST['rol_end_time']);
             if (!$validToTime) {
                 $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME_TO'), 'HH:ii')));
@@ -211,7 +193,7 @@ try {
         }
 
         // Check whether the maximum number of members has already been exceeded in the event , also if the maximum number of members was reduced.
-        if ($getRoleUuid !== '' && (int) $_POST['rol_max_members'] !== (int) $role->getValue('rol_max_members')) {
+        if (isset($_POST['rol_max_members']) && $getRoleUuid !== '' && (int) $_POST['rol_max_members'] !== (int) $role->getValue('rol_max_members')) {
             // Count how many people already have the role, without leaders
             $role->setValue('rol_max_members', (int) $_POST['rol_max_members']);
             $numFreePlaces = $role->countVacancies();

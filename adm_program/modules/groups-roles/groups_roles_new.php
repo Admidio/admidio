@@ -96,15 +96,13 @@ $page->addJavascript('
      * show/hide role dependencies if max count members will be changed
      */
     function checkMaxMemberCount() {
-        // Wenn eine Maximale Mitgliederzahl angeben wurde, duerfen keine Rollenabhaengigkeiten bestehen
+        // If a maximum number of members has been specified, no role dependencies may exist
         if ($("#rol_max_members").val() > 0) {
-            // Die Box zum konfigurieren der Rollenabhängig wird ausgeblendet
             $("#gb_dependencies").hide();
 
-            // Alle Abhängigen Rollen werden markiert und auf unabhängig gesetzt
+            // All dependent roles are marked and set to independent
             $("#dependent_roles").val("");
         } else {
-            // Die Box zum konfigurieren der Rollenabhängigkeit wird wieder eingeblendet
             $("#gb_dependencies").show();
         }
     }
