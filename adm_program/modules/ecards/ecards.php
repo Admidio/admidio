@@ -212,7 +212,7 @@ $queryParams = array(
 $statement = $gDb->queryPrepared($sql, $queryParams);
 
 while ($row = $statement->fetch()) {
-    $list[] = array($row['usr_id'], $row['last_name']. ', '.$row['first_name'], $gL10n->get('SYS_MEMBERS'));
+    $list[] = array($row['usr_id'], $row['last_name']. ', '.$row['first_name'], $gL10n->get('SYS_CONTACTS'));
 }
 
 $form->addSelectBox(

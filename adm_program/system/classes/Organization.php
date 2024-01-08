@@ -293,20 +293,20 @@ class Organization extends TableAccess
         $phoneList->addColumn((int)$gProfileFields->getProperty('EMAIL', 'usf_id'));
         $phoneList->save();
 
-        $contactList = new ListConfiguration($this->db);
-        $contactList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
-        $contactList->setValue('lst_org_id', $orgId);
-        $contactList->setValue('lst_global', 1);
-        $contactList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
-        $contactList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
-        $contactList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $contactList->addColumn((int)$gProfileFields->getProperty('STREET', 'usf_id'));
-        $contactList->addColumn((int)$gProfileFields->getProperty('POSTCODE', 'usf_id'));
-        $contactList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
-        $contactList->addColumn((int)$gProfileFields->getProperty('PHONE', 'usf_id'));
-        $contactList->addColumn((int)$gProfileFields->getProperty('MOBILE', 'usf_id'));
-        $contactList->addColumn((int)$gProfileFields->getProperty('EMAIL', 'usf_id'));
-        $contactList->save();
+        $contactDetailsList = new ListConfiguration($this->db);
+        $contactDetailsList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
+        $contactDetailsList->setValue('lst_org_id', $orgId);
+        $contactDetailsList->setValue('lst_global', 1);
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('STREET', 'usf_id'));
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('POSTCODE', 'usf_id'));
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('PHONE', 'usf_id'));
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('MOBILE', 'usf_id'));
+        $contactDetailsList->addColumn((int)$gProfileFields->getProperty('EMAIL', 'usf_id'));
+        $contactDetailsList->save();
 
         $formerList = new ListConfiguration($this->db);
         $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
@@ -330,18 +330,18 @@ class Organization extends TableAccess
         $participantList->addColumn('mem_count_guests');
         $participantList->save();
 
-        $userManagementList = new ListConfiguration($this->db);
-        $userManagementList->setValue('lst_name', $gL10n->get('SYS_MEMBERS'));
-        $userManagementList->setValue('lst_org_id', $orgId);
-        $userManagementList->setValue('lst_global', 1);
-        $userManagementList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
-        $userManagementList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
-        $userManagementList->addColumn('usr_login_name');
-        $userManagementList->addColumn((int)$gProfileFields->getProperty('GENDER', 'usf_id'));
-        $userManagementList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $userManagementList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
-        $userManagementList->addColumn('usr_timestamp_change');
-        $userManagementList->save();
+        $contactsList = new ListConfiguration($this->db);
+        $contactsList->setValue('lst_name', $gL10n->get('SYS_CONTACTS'));
+        $contactsList->setValue('lst_org_id', $orgId);
+        $contactsList->setValue('lst_global', 1);
+        $contactsList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+        $contactsList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+        $contactsList->addColumn('usr_login_name');
+        $contactsList->addColumn((int)$gProfileFields->getProperty('GENDER', 'usf_id'));
+        $contactsList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $contactsList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
+        $contactsList->addColumn('usr_timestamp_change');
+        $contactsList->save();
 
         // create default category report configuration
         $categoryReportColumns = 'p' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . ',' .
@@ -364,7 +364,7 @@ class Organization extends TableAccess
         $organizationSettings->set('system_notifications_role', $roleAdministrator->getValue('rol_uuid'));
         $organizationSettings->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
         $organizationSettings->set('events_list_configuration', $participantList->getValue('lst_id'));
-        $organizationSettings->set('contacts_list_configuration', $userManagementList->getValue('lst_id'));
+        $organizationSettings->set('contacts_list_configuration', $contactsList->getValue('lst_id'));
         $organizationSettings->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
         if ($this->countAllRecords() > 1) {
             $organizationSettings->set('system_organization_select', true);
