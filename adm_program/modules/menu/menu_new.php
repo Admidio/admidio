@@ -179,32 +179,34 @@ $form->addSelectBox(
     )
 );
 
-$sql = 'SELECT com_id, com_name
+if (!$menu->getValue('men_standard')) {
+    $sql = 'SELECT com_id, com_name
           FROM ' . TBL_COMPONENTS . '
       ORDER BY com_name';
-$form->addSelectBoxFromSql(
-    'men_com_id',
-    $gL10n->get('SYS_MODULE_RIGHTS'),
-    $gDb,
-    $sql,
-    array(
-        'property' => $fieldDefault,
-        'defaultValue' => (int)$menu->getValue('men_com_id'),
-        'helpTextIdLabel' => 'SYS_MENU_MODULE_RIGHTS_DESC'
-    )
-);
+    $form->addSelectBoxFromSql(
+        'men_com_id',
+        $gL10n->get('SYS_MODULE_RIGHTS'),
+        $gDb,
+        $sql,
+        array(
+            'property' => $fieldDefault,
+            'defaultValue' => (int)$menu->getValue('men_com_id'),
+            'helpTextIdLabel' => 'SYS_MENU_MODULE_RIGHTS_DESC'
+        )
+    );
 
-$form->addSelectBox(
-    'menu_view',
-    $gL10n->get('SYS_VISIBLE_FOR'),
-    $parentRoleViewSet,
-    array(
-        'property' => $fieldDefault,
-        'defaultValue' => $roleViewSet,
-        'multiselect' => true,
-        'helpTextIdLabel' => 'SYS_MENU_RESTRICT_VISIBILITY'
-    )
-);
+    $form->addSelectBox(
+        'menu_view',
+        $gL10n->get('SYS_VISIBLE_FOR'),
+        $parentRoleViewSet,
+        array(
+            'property' => $fieldDefault,
+            'defaultValue' => $roleViewSet,
+            'multiselect' => true,
+            'helpTextIdLabel' => 'SYS_MENU_RESTRICT_VISIBILITY'
+        )
+    );
+}
 
 if ((bool)$menu->getValue('men_node') === false) {
     $form->addInput(
