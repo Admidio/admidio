@@ -109,6 +109,11 @@ $gSupportedLanguages = array(
         'isocode' => 'sv',
         'libs'    => 'sv'
     ),
+    'th'    => array(
+        'name'    => 'Thai - แบบไทย',
+        'isocode' => 'th',
+        'libs'    => 'th'
+    ),
     'uk'    => array(
         'name'    => 'Ukrainian - український',
         'isocode' => 'uk',
