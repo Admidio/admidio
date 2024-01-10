@@ -605,7 +605,6 @@
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Brugeren #VAR1# #VAR2# (login: #VAR3#) blev oprettet af #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev slettet</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Brugerens profil #VAR1# #VAR2# (login: #VAR3#) blev slettet af #VAR4#.</string>
-  <string name="SYS_EMAIL_DESC">E-mails kan sendes til forskellige roller såsom grupper, kurser, afdelinger.</string>
   <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# funktion test e-mail</string>
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Denne e-mail blev sendt via #VAR1# webstedet for #VAR2# organisationen med de e-mail indstillinger der er gemt der.</string>
   <string name="SYS_EMAIL_INVALID">E-mail adressen i feltet #VAR1_BOLD# mangler eller indeholder ugyldige karakterer.</string>
@@ -773,7 +772,7 @@
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">‎Logondata kan kun importeres af en administrator. Organisationens regler skal overholdes (f.eks. adgangskodelængde og adgangskodestyrke). Brugere med allerede eksisterende logindata beholder dem. Ingen logindata overskrives af importen.‎</string>
   <string name="SYS_IMPORT_MODE">Import tilstand</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">‎Regnearket #VAR1# findes ikke i den importerede fil!‎</string>
-  <string name="SYS_IMPORT_SUCCESSFUL">Importen forløb succesfuldt..\n\n#VAR1# nye brugere er blevet oprettet.\n#VAR2# Brugere er blevet rettet.\n#VAR3# rolle medlemskaber er blevet tildelt.</string>
+  <string name="SYS_IMPORT_SUCCESSFUL">Importen var vellykket.\n\n#VAR1# nye kontakter er blevet oprettet.\n#VAR2# kontakter er blevet redigeret.\n#VAR3# rollemedlemskaber er blevet tildelt.\n\n#VAR4#</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">‎Følgende kolonner i importfilen er ikke tildelt noget profilfelt:‎</string>
   <string name="SYS_IMPRINT">Aftryk</string>
   <string name="SYS_IMPRINT_DESC">Her kan URL\'en til dit indtryk af din side deponeres. Hvis det valgte tema understøtter dette, vises et link på Admidio-siderne. (Eksempel: https://www.example.com/imprint.html)</string>
@@ -823,6 +822,7 @@
   <string name="SYS_LINK_TO">Link til #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
+  <string name="SYS_LOG">Log</string>
   <string name="SYS_MEETING_POINT">Mødested</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Placering af profil billeder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Definer hvor profil billeder skal gemmes (i databasen eller i folderen adm_my_files). Hvis du ændrer dette vil de nuværende billeder IKKE blive kopieret til den nye placering. (Standard: database)</string>
@@ -878,7 +878,6 @@
   <string name="SYS_MEMBER">Medlem</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Medlemskabs tildeling</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Medlem af organisation #VAR1#</string>
-  <string name="SYS_MEMBERS">Medlemmer</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Medlemmer imellem #VAR1# og #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">En af de her specificerede konfigurationer kan bruges til at vise medlemsadministrationen. Kolonnerne i den valgte listekonfiguration vises derefter i medlemsadministrationen.</string>
   <string name="SYS_CONTACTS_DESC">Vis og organiser alle aktive og tidligere medlemmer her. Nye kontaktpersoner kan importeres eller oprettes.</string>
@@ -892,13 +891,14 @@
   <string name="SYS_MENU">Menu</string>
   <string name="SYS_MENU_DESC">Menuen kan konfigureres her. Ved siden af webadressen kan en beskrivelse og et ikon deponeres. Derudover kan det bestemmes, hvem der har tilladelse til at se menu indgangen.</string>
   <string name="SYS_MENU_LEVEL">Menuniveau</string>
-  <string name="SYS_MENU_LEVEL_DESC">Et menupunkt er altid underordnet et andet menupunkt. I valglisten skal du vælge et menuniveau, hvor det nye menupunkt skal være synligt.</string>
   <string name="SYS_MENU_ITEM">Menupunkt</string>
   <string name="SYS_MENU_MODULE_RIGHTS_DESC">Hvis du specificerer et modul her, vises menupunktet kun, hvis brugeren også har ret til at se dette modul.</string>
   <string name="SYS_MENU_NAME_DESC">Navnet på posten i menuen. Her kan du også indtaste navnet på en oversættelsestreng.</string>
+  <string name="SYS_MENU_RESTRICT_VISIBILITY">Kun synligheden af menu elementet er begrænset. Adgangen til den underliggende side påvirkes ikke af denne autorisation.</string>
   <string name="SYS_MESSAGE">Besked</string>
   <string name="SYS_MESSAGE_WENT_TO">Beskeden blev sendt til</string>
   <string name="SYS_MESSAGES">Beskeder</string>
+  <string name="SYS_MESSAGES_DESC">Oversigt over alle skriftlige e-mails og private beskeder. Nye e-mails og private beskeder kan indtastes og sendes til individuelle kontakter eller roller.</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="SYS_MINUTES_VAR">#VAR1# minutter</string>
   <string name="SYS_MOBILE">Mobil</string>
@@ -934,7 +934,6 @@
   <string name="SYS_NEW_NAME">Nyt navn</string>
   <string name="SYS_NEW_PASSWORD">Nyt kodeord</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Nyt profil billede</string>
-  <string name="SYS_NEW_REGISTRATIONS">Nye registreringer</string>
   <string name="SYS_NEW_ROLE">Ny rolle</string>
   <string name="SYS_NEW_VALUE">Ny værdi</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">En ny stabil version er tilgængelig!</string>
@@ -1119,11 +1118,12 @@
   <string name="SYS_REGISTRATION_NOT_CONFIRMED">Registreringen er endnu ikke blevet bekræftet af brugeren.</string>
   <string name="SYS_REGISTRATION_NOT_POSSIBLE">Registrering er lukket.</string>
   <string name="SYS_REGISTRATION_POSSIBLE_FOR">Registrering mulig i</string>
-  <string name="SYS_REGISTRATION_POSSIBLE">Aktiver registrering til denne aftale.</string>
+  <string name="SYS_REGISTRATION_POSSIBLE">Aktivér registrering til dette arrangement.</string>
   <string name="SYS_REGISTRATION_SAVED">Dine data er blevet gemt.\n\nDu vil nu modtage en e-mail med et bekræftelseslink. Efter du har udført dette link, kan din tilmelding behandles yderligere.</string>
   <string name="SYS_REGISTRATION_VALIDATION_FAILED">Det kaldte link er ugyldigt. Et tilmeldingslink er kun gyldigt op til 24 timer efter tilmelding. Tilmeld dig venligst igen på siden og bekræft din tilmelding, så snart du modtager e-mailen med linket.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK">Du har bekræftet din registrering. Registreringen vil nu blive kontrolleret af et medlem af #VAR1#-holdet. Du vil herefter modtage en e-mail, om din tilmelding er blevet accepteret eller afvist.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Du har bekræftet din registrering. Du kan nu logge ind med dit brugernavn og adgangskode.</string>
+  <string name="SYS_REGISTRATIONS">Registreringer</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulært udtryk</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Ethvert regulært udtryk kan gemmes, som vil blive anvendt på brugerens indtastede indhold i dette profilfelt. Indholdet skal matche betingelserne for det regulære udtryk, for at den indtastede værdi kan gemmes i feltet. Det regulære udtryk kontrolleres ud over de generelle betingelser for datatypen.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relations konfiguration</string>
@@ -1190,7 +1190,7 @@
   <string name="SYS_ROOM_MANAGEMENT">Lokale administration</string>
   <string name="SYS_ROOM_OVERHANG">I tilfælde af yderligere ledig plads (f.eks. ekstra sæder, stå pladser) kan antallet af ekstra pladser defineres her.</string>
   <string name="SYS_ROOM_RESERVED">Det valgte lokale er allerede i brug i denne periode.</string>
-  <string name="SYS_ROOM_SELECTABLE">Lokalet er tilgængeligt</string>
+  <string name="SYS_ROOM_SELECTABLE">Tildel værelser</string>
   <string name="SYS_ROOM_SELECTABLE_DESC">En valgboks til de tilgængelige rum vises for at give skaberen af en begivenhed mulighed for at vælge et rum. (standard svar: nej)</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotér billede mod venstre</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotér billede mod højre</string>
