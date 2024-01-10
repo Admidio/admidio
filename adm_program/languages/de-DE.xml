@@ -605,7 +605,6 @@
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde von #VAR4# erstellt.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde gelöscht</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde gelöscht von #VAR4#.</string>
-  <string name="SYS_EMAIL_DESC">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</string>
   <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# Funktionstest E-Mail</string>
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Diese E-Mail wurde über die Webseite #VAR1# der Organisation #VAR2# mit den dort hinterlegten E-Mail-Einstellungen versendet.</string>
   <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
@@ -773,7 +772,7 @@
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einer Administatorin oder einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer:innen mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
   <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
-  <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer:innen wurden angelegt.\n#VAR2# Benutzer:innen wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
+  <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Kontakte wurden angelegt.\n#VAR2# Kontakte wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.\n\n#VAR4#</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Folgende Spalten der Importdatei sind keinen Feldern in Admidio zugeordnet:</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
@@ -823,6 +822,7 @@
   <string name="SYS_LINK_TO">Link auf #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
+  <string name="SYS_LOG">Protokoll</string>
   <string name="SYS_MEETING_POINT">Treffpunkt</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Speicherort der Profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
@@ -878,7 +878,6 @@
   <string name="SYS_MEMBER">Mitglied</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
-  <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
   <string name="SYS_CONTACTS_DESC">Hier können alle aktiven und ehemaligen Mitglieder angezeigt und organisiert werden. Neue Kontakte können importiert oder erstellt werden.</string>
@@ -892,13 +891,14 @@
   <string name="SYS_MENU">Menü</string>
   <string name="SYS_MENU_DESC">Das Menü kann hier konfiguriert werden. Neben der URL kann eine Beschreibung und ein Icon hinterlegt werden. Zusätzlich kann festgelegt werden, wer den Menüeintrag sehen darf.</string>
   <string name="SYS_MENU_LEVEL">Menüebene</string>
-  <string name="SYS_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wählen Sie dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll.</string>
   <string name="SYS_MENU_ITEM">Menüeintrag</string>
   <string name="SYS_MENU_MODULE_RIGHTS_DESC">Wenn Sie hier ein Modul angeben, dann wird der Menüpunkt nur angezeigt, wenn die Benutzerin oder der Benutzer auch das Recht hat, dieses Modul zu sehen.</string>
   <string name="SYS_MENU_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
+  <string name="SYS_MENU_RESTRICT_VISIBILITY">Lediglich die Sichtbarkeit des Menüpunkts wird eingeschränkt. Der Zugriff auf die darunter liegende Seite ist von dieser Berechtigung nicht betroffen.</string>
   <string name="SYS_MESSAGE">Nachricht</string>
   <string name="SYS_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
   <string name="SYS_MESSAGES">Nachrichten</string>
+  <string name="SYS_MESSAGES_DESC">Übersicht über alle geschriebenen E-Mails und privaten Nachrichten. Neue E-Mails und private Nachrichten können erfasst und an einzelne Kontakte oder Rollen gesendet werden.</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="SYS_MINUTES_VAR">#VAR1# Minuten</string>
   <string name="SYS_MOBILE">Handy</string>
@@ -934,7 +934,6 @@
   <string name="SYS_NEW_NAME">Neuer Name</string>
   <string name="SYS_NEW_PASSWORD">Neues Passwort</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Neues Profilfoto</string>
-  <string name="SYS_NEW_REGISTRATIONS">Neue Registrierungen</string>
   <string name="SYS_NEW_ROLE">Neue Rolle</string>
   <string name="SYS_NEW_VALUE">Neuer Wert</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">Eine neue stabile Version ist verfügbar!</string>
@@ -1124,6 +1123,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_FAILED">Der aufgerufene Link ist ungültig. Ein Registrierungslink ist nur bis zu 24 Stunden nach der Registrierung gültig. Bitte registrieren Sie sich erneut auf der Seite und bestätigen Sie Ihre Registrierung, sobald Sie die E-Mail mit dem Link erhalten.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK">Sie haben Ihre Registrierung erfolgreich bestätigt. Diese wird nun von einem Mitglied aus dem Team von #VAR1# geprüft. Sie erhalten anschließend eine E-Mail, ob Ihre Registrierung angenommen oder abgelehnt wurde.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Sie haben Ihre Registrierung erfolgreich bestätigt. Sie können sich jetzt mit Ihrem Anmeldenamen und Passwort anmelden.</string>
+  <string name="SYS_REGISTRATIONS">Registrierungen</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulärer Ausdruck</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Es kann ein beliebiger regulärer Ausdruck hinterlegt werden, der auf den eingegebenen Inhalt des Benutzers in dieses Profilfeld angewendet wird. Der Inhalt muss den Bedingungen des regulären Ausdrucks entsprechen, damit der eingegebene Wert in dem Feld gespeichert werden kann. Der reguläre Ausdruck wird zusätzlich zu den allgemeinen Bedingungen des Datentyps geprüft.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
@@ -1190,7 +1190,7 @@
   <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
   <string name="SYS_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
   <string name="SYS_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
-  <string name="SYS_ROOM_SELECTABLE">Raum auswählbar</string>
+  <string name="SYS_ROOM_SELECTABLE">Räume zuordnen</string>
   <string name="SYS_ROOM_SELECTABLE_DESC">Es wird eine Auswahlbox für die verfügbaren Räume angezeigt, damit der Ersteller einer Veranstaltung einen Raum auswählen kann (Standardantwort: nein).</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Foto gegen den Uhrzeigersinn drehen</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Foto im Uhrzeigersinn drehen</string>
