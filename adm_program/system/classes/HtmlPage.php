@@ -444,6 +444,7 @@ class HtmlPage extends Smarty
         $this->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
         $this->assign('navigationStack', $gNavigation->getStack());
 
+        $this->assign('currentUser', $gCurrentUser);
         $this->assign('userUuid', $gCurrentUser->getValue('usr_uuid'));
         $this->assign('validLogin', $gValidLogin);
         $this->assign('debug', $gDebug);
