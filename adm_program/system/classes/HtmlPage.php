@@ -445,7 +445,6 @@ class HtmlPage extends Smarty
         $this->assign('navigationStack', $gNavigation->getStack());
 
         $this->assign('currentUser', $gCurrentUser);
-        $this->assign('userUuid', $gCurrentUser->getValue('usr_uuid'));
         $this->assign('validLogin', $gValidLogin);
         $this->assign('debug', $gDebug);
         $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
