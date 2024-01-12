@@ -198,7 +198,7 @@ if ($getMode === 'choose') {
     );
     $form->addSubmitButton(
         'btn_upload',
-        $gL10n->get('PRO_UPLOAD_PHOTO'),
+        $gL10n->get('SYS_UPLOAD_PROFILE_PICTURE'),
         array('icon' => 'fa-upload', 'class' => ' offset-sm-3')
     );
 
