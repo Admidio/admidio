@@ -124,7 +124,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         // => EXIT
     }
     if (strlen($_POST['cat_uuid']) === 0) {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_CALENDAR'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CALENDAR'))));
         // => EXIT
     } else {
         $calendar = new TableCategory($gDb);

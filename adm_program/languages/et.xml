@@ -1026,8 +1026,8 @@
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Kõik fotod laaditi edukalt üles.</string>
   <string name="SYS_PHOTOS">Fotod</string>
   <string name="SYS_PHOTOS_DESC">Sündmuste pilte saab üles laadida ja kuvada. Pilte saab organiseeridada albumitesse, mida saab omavahel siduda.</string>
-  <string name="PHO_PHOTOS_PRESENTATION">Fotode kuvamine</string>
-  <string name="PHO_PHOTOS_PRESENTATION_DESC">Selle valikuga saate määrata, kuidas pilte fotomoodulis kuvatakse. Seda saab teha modaalaknaga, mis avatakse eraldi brauseriaknana. Pildi eelvaade jääb taustal aktiivseks. Kui pilti tuleks kuvada samas aknas, suletakse praeguse pildi eelvaade. Kolmas võimalus võimaldab pilti näidata hüpikaknas, mida saab kasutada lisaks pildi eelvaatele. (Vaikimisi: modaalne aken)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Fotode kuvamine</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Selle valikuga saate määrata, kuidas pilte fotomoodulis kuvatakse. Seda saab teha modaalaknaga, mis avatakse eraldi brauseriaknana. Pildi eelvaade jääb taustal aktiivseks. Kui pilti tuleks kuvada samas aknas, suletakse praeguse pildi eelvaade. Kolmas võimalus võimaldab pilti näidata hüpikaknas, mida saab kasutada lisaks pildi eelvaatele. (Vaikimisi: modaalne aken)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">Kõik PHP seaded</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>

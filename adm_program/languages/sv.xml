@@ -1055,8 +1055,8 @@
   <string name="SYS_PHOTOS_BY">Foton av</string>
   <string name="SYS_PHOTOS_BY_VAR">Foton av #VAR1#</string>
   <string name="SYS_PHOTOS_DESC">Bilder från evenemang kan laddas upp och visas. Bilder kan organiseras i album som kan kopplas samman.</string>
-  <string name="PHO_PHOTOS_PRESENTATION">Fotodisplay</string>
-  <string name="PHO_PHOTOS_PRESENTATION_DESC">Med det här alternativet kan du definiera hur bilderna ska visas i fotomodulen. Detta kan göras med ett modalfönster som öppnas som separat webbläsarfönster. Förhandsgranskningen av bilden förblir aktiv i bakgrunden. Om bilden ska visas i samma fönster stängs den aktuella bildförhandsvisningen. Det tredje alternativet gör det möjligt att visa bilden i ett popup-fönster som kan användas utöver förhandsvisningen av bilden. (Standard: Modal fönster)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Fotodisplay</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Med det här alternativet kan du definiera hur bilderna ska visas i fotomodulen. Detta kan göras med ett modalfönster som öppnas som separat webbläsarfönster. Förhandsgranskningen av bilden förblir aktiv i bakgrunden. Om bilden ska visas i samma fönster stängs den aktuella bildförhandsvisningen. Det tredje alternativet gör det möjligt att visa bilden i ett popup-fönster som kan användas utöver förhandsvisningen av bilden. (Standard: Modal fönster)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">PHP-inställningar</string>
   <string name="SYS_PHP_MAIL">PHP - mail()</string>

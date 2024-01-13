@@ -867,8 +867,8 @@
   <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Nem todas as fotografias foram enviadas com sucesso.</string>
   <string name="SYS_PHOTOS">Fotografias</string>
   <string name="SYS_PHOTOS_DESC">Imagens de eventos podem ser enviadas e exibidas. Também podem ser organizadas em álbuns e serem interligadas.</string>
-  <string name="PHO_PHOTOS_PRESENTATION">Visualização de fotos</string>
-  <string name="PHO_PHOTOS_PRESENTATION_DESC">Defina como as imagens serão exibidas no módulo de fotografias. Isto pode ser feito com uma janela modal que será aberta em uma nova aba do navegador. A pré-visualização de imagem permanecerá ativa no segundo plano. Se a imagem for exibida na mesma aba, a pré-visualização atual será fechada. A terceira opção permite exibir a imagem numa janela pop-up que pode ser usada junto com a pré-visualização. (padrão: Janela modal)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Visualização de fotos</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Defina como as imagens serão exibidas no módulo de fotografias. Isto pode ser feito com uma janela modal que será aberta em uma nova aba do navegador. A pré-visualização de imagem permanecerá ativa no segundo plano. Se a imagem for exibida na mesma aba, a pré-visualização atual será fechada. A terceira opção permite exibir a imagem numa janela pop-up que pode ser usada junto com a pré-visualização. (padrão: Janela modal)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">Todas as configurações do PHP</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>
