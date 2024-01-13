@@ -24,7 +24,7 @@ $disableComments         = HtmlForm::FIELD_HIDDEN;
 $gMessage->showInModalWindow();
 
 // Get the date object
-$event = new Event($gDb);
+$event = new TableEvent($gDb);
 $event->readDataByUuid($getEventUuid);
 
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states

@@ -72,7 +72,7 @@ if ($gSettingsManager->getInt('events_module_enabled') > 0) {
         $e->showHtml();
     }
 
-    $plgEvent = new Event($gDb);
+    $plgEvent = new TableEvent($gDb);
 
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if ($plg_show_headline) {

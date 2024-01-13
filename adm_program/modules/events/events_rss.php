@@ -42,11 +42,11 @@ $rss  = new RssFeed(
     $gL10n->get('SYS_CURRENT_EVENTS_OF_ORGA', array($organizationName)),
     $organizationName
 );
-$event = new Event($gDb);
+$event = new TableEvent($gDb);
 
 // add the RSS items to the RssFeed object
 if ($eventsResult['numResults'] > 0) {
-    $event = new Event($gDb);
+    $event = new TableEvent($gDb);
     foreach ($eventsResult['recordset'] as $row) {
         // move read out event data into event object
         $event->clear();

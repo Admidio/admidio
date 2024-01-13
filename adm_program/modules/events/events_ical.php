@@ -71,7 +71,7 @@ try {
     $datesResult = $events->getDataSet(0, 0);// get parameters fom $_GET Array stored in class
     $parameters = $events->getParameters();
 
-    $event = new Event($gDb);
+    $event = new TableEvent($gDb);
     $iCal = $event->getIcalHeader();
 } catch (AdmException $e) {
     $e->showHtml();
@@ -79,7 +79,7 @@ try {
 }
 
 if ($datesResult['numResults'] > 0) {
-    $event = new Event($gDb);
+    $event = new TableEvent($gDb);
     foreach ($datesResult['recordset'] as $row) {
         $event->clear();
         $event->setArray($row);

@@ -55,7 +55,7 @@ if ($getCopy) {
 }
 
 // create event object
-$event = new Event($gDb);
+$event = new TableEvent($gDb);
 $event->readDataByUuid($getEventUuid);
 
 // read user data

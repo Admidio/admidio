@@ -46,7 +46,7 @@ if ($getCopy) {
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create event object
-$event = new Event($gDb);
+$event = new TableEvent($gDb);
 
 if (isset($_SESSION['events_request'])) {
     // By wrong input, the user returned to this form now write the previously entered contents into the object

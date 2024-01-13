@@ -273,7 +273,7 @@ if ($eventsResult['totalCount'] === 0) {
     }
 
     // create dummy date object
-    $event = new Event($gDb);
+    $event = new TableEvent($gDb);
 
     foreach ($eventsResult['recordset'] as $row) {
         // write of current event data to date object
