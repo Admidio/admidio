@@ -1011,8 +1011,8 @@
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Wszystkie zdjęcia zostały pomyślnie przesłane.</string>
   <string name="SYS_PHOTOS">Zdjęcia</string>
   <string name="SYS_PHOTOS_DESC">Zdjęcia wydarzeń można przesyłać i wyświetlać. Zdjęcia można organizować w albumy, które można ze sobą łączyć.</string>
-  <string name="PHO_PHOTOS_PRESENTATION">Pokaz obrazków</string>
-  <string name="PHO_PHOTOS_PRESENTATION_DESC">Za pomocą tej opcji możesz określić sposób wyświetlania zdjęć w module Zdjęcia. Można to zrobić za pomocą okna modalnego, które zostanie otwarte jako osobne okno przeglądarki. Podgląd obrazu pozostanie aktywny w tle. Jeśli obraz ma być wyświetlany w tym samym oknie, podgląd bieżącego obrazu zostanie zamknięty. Trzecia opcja pozwala na wyświetlenie obrazu w wyskakującym okienku, które może być użyte jako dodatek do podglądu obrazu. (Domyślnie: okno modalne)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Pokaz obrazków</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Za pomocą tej opcji możesz określić sposób wyświetlania zdjęć w module Zdjęcia. Można to zrobić za pomocą okna modalnego, które zostanie otwarte jako osobne okno przeglądarki. Podgląd obrazu pozostanie aktywny w tle. Jeśli obraz ma być wyświetlany w tym samym oknie, podgląd bieżącego obrazu zostanie zamknięty. Trzecia opcja pozwala na wyświetlenie obrazu w wyskakującym okienku, które może być użyte jako dodatek do podglądu obrazu. (Domyślnie: okno modalne)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">Wszystkie ustawienia PHP</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>

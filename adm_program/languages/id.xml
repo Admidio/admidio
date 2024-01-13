@@ -492,8 +492,8 @@
   <string name="SYS_PHOTO_UPLOAD_DESC">Per favore seleziona le immagini che vuoi caricare nell\'album #VAR1_BOLD#.</string>
   <string name="SYS_PHOTOS">Foto</string>
   <string name="SYS_PHOTOS_DESC">Possono essere caricate e visualizzate le immagini di eventi. Le foto possono essere organizzate in album che possono essere interconnessi.</string>
-  <string name="PHO_PHOTOS_PRESENTATION">Come visualizzare le foto</string>
-  <string name="PHO_PHOTOS_PRESENTATION_DESC">Con questa opzione puoi definire come le immagini saranno visualizzate nel modulo foto. Questa può essere impostata come una finestra modale che sarà aperta in una finestra separata del browser. L\'anteprima dell\'immagine sarà attiva in background. Se l\'immagine sarà visualizzata nella stessa finestra l\'anteprima dell\'immagine corrente sarà chiusa. La terza opzione permette di mostrare l\'immagine in una finestra popup che può essere usata in aggiunta all\'anteprima dell\'immagine. (Predefinita: finestra modale)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Come visualizzare le foto</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Con questa opzione puoi definire come le immagini saranno visualizzate nel modulo foto. Questa può essere impostata come una finestra modale che sarà aperta in una finestra separata del browser. L\'anteprima dell\'immagine sarà attiva in background. Se l\'immagine sarà visualizzata nella stessa finestra l\'anteprima dell\'immagine corrente sarà chiusa. La terza opzione permette di mostrare l\'immagine in una finestra popup che può essere usata in aggiunta all\'anteprima dell\'immagine. (Predefinita: finestra modale)</string>
   <string name="SYS_PHP_INFO">Tutte le impostazioni PHP</string>
   <string name="SYS_PHP_VERSION">Versione PHP</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio richiede #VAR1# o più alto</string>

@@ -1225,9 +1225,9 @@ $selectBoxEntries = array(
 );
 $formPhotos->addSelectBox(
     'photo_show_mode',
-    $gL10n->get('PHO_PHOTOS_PRESENTATION'),
+    $gL10n->get('SYS_PHOTOS_PRESENTATION'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PHO_PHOTOS_PRESENTATION_DESC')
+    array('defaultValue' => $formValues['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_PHOTOS_PRESENTATION_DESC')
 );
 $formPhotos->addInput(
     'photo_albums_per_page',

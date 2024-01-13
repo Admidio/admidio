@@ -38,7 +38,7 @@ if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
 // check if download function is enabled
 if (!$gSettingsManager->getBool('photo_download_enabled')) {
     // das Modul ist deaktiviert
-    $gMessage->show($gL10n->get('PHO_DOWNLOAD_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 

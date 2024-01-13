@@ -1009,8 +1009,8 @@
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Alle foto\'s zijn succesvol geüpload.</string>
   <string name="SYS_PHOTOS">Foto\'s</string>
   <string name="SYS_PHOTOS_DESC">Hier kunnen foto\'s geüpload en getoond worden. Deze foto\'s kunnen in mappen verdeeld worden. </string>
-  <string name="PHO_PHOTOS_PRESENTATION">Fotoweergave</string>
-  <string name="PHO_PHOTOS_PRESENTATION_DESC">Hier kunt u instellen hoe de afbeeldingen in de fotomodule moeten worden getoond. Dit kan worden gedaan met een modaal venster die opent als apart browservenster. De preview van de afbeelding blijft op de achtergrond actief. Als de afbeelding in hetzelfde venster moet worden getoond, wordt de preview gesloten. Met de derde optie kan de afbeelding middels een pop-up venster worden getoond, als aanvulling op de preview. (Standaard: modaal venster)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Fotoweergave</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Hier kunt u instellen hoe de afbeeldingen in de fotomodule moeten worden getoond. Dit kan worden gedaan met een modaal venster die opent als apart browservenster. De preview van de afbeelding blijft op de achtergrond actief. Als de afbeelding in hetzelfde venster moet worden getoond, wordt de preview gesloten. Met de derde optie kan de afbeelding middels een pop-up venster worden getoond, als aanvulling op de preview. (Standaard: modaal venster)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">Alle PHP-instellingen</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>

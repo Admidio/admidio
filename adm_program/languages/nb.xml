@@ -241,7 +241,7 @@
   <string name="SYS_PHOTO_FILE_UPLOADED">Bildet #VAR1_BOLD# ble lastet opp.</string>
   <string name="SYS_PHOTO_FORMAT_INVALID">Kun JPG- og PNG-bilder er tillatt</string>
   <string name="SYS_PHOTOS">Bilder</string>
-  <string name="PHO_PHOTOS_PRESENTATION">Bildevisning</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Bildevisning</string>
   <string name="SYS_PHP_INFO">Alle PHP-innstillinger</string>
   <string name="SYS_PHP_VERSION">PHP-versjon</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio krever #VAR1# eller høyere</string>

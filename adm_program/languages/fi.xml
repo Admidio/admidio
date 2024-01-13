@@ -985,8 +985,8 @@
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Kaikkien valokuvien lataaminen onnistui.</string>
   <string name="SYS_PHOTOS">Valokuvat</string>
   <string name="SYS_PHOTOS_DESC">Kuvia tapahtumista voidaan ladata ja näyttää. Kuvat voidaan järjestää albumeihin, jotka voidaan yhdistää toisiinsa.</string>
-  <string name="PHO_PHOTOS_PRESENTATION">Valokuvanäyttö</string>
-  <string name="PHO_PHOTOS_PRESENTATION_DESC">Tällä asetuksella voit määrittää, miten kuvat näytetään foto -moduulissa. Tämä voidaan tehdä modaalisella ikkunalla, joka avataan erillisenä selainikkunana. Kuvan esikatselu pysyy aktiivisena taustalla. Jos kuva näytetään samassa ikkunassa, nykyinen kuvan esikatselu suljetaan. Kolmas vaihtoehto mahdollistaa kuvan näyttämisen ponnahdusikkunassa, jota voidaan käyttää kuvan esikatselun lisäksi. (Oletus: Modaalinen ikkuna)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Valokuvanäyttö</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Tällä asetuksella voit määrittää, miten kuvat näytetään foto -moduulissa. Tämä voidaan tehdä modaalisella ikkunalla, joka avataan erillisenä selainikkunana. Kuvan esikatselu pysyy aktiivisena taustalla. Jos kuva näytetään samassa ikkunassa, nykyinen kuvan esikatselu suljetaan. Kolmas vaihtoehto mahdollistaa kuvan näyttämisen ponnahdusikkunassa, jota voidaan käyttää kuvan esikatselun lisäksi. (Oletus: Modaalinen ikkuna)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">Kaikki PHP -asetukset</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>

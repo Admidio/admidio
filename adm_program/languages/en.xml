@@ -1054,8 +1054,8 @@
   <string name="SYS_PHOTOS_BY">Photos by</string>
   <string name="SYS_PHOTOS_BY_VAR">Photos by #VAR1#</string>
   <string name="SYS_PHOTOS_DESC">Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.</string>
-  <string name="PHO_PHOTOS_PRESENTATION">Photo presentation</string>
-  <string name="PHO_PHOTOS_PRESENTATION_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Photo presentation</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">All PHP settings</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>
