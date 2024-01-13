@@ -190,7 +190,7 @@ class Organization extends TableAccess
 
             $categoryEvents = new TableCategory($this->db);
             $categoryEvents->setValue('cat_type', 'EVT');
-            $categoryEvents->setValue('cat_name_intern', 'DAT_ALL_ORGANIZATIONS');
+            $categoryEvents->setValue('cat_name_intern', 'EVT_ALL_ORGANIZATIONS');
             $categoryEvents->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
             $categoryEvents->save();
 
