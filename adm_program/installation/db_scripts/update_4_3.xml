@@ -111,5 +111,6 @@
     <step id="1090">DELETE FROM %PREFIX%_roles_rights_data WHERE rrd_id IN (SELECT temp.id FROM (SELECT rrd.rrd_id as id FROM %PREFIX%_roles_rights ror INNER JOIN %PREFIX%_roles_rights_data rrd ON rrd.rrd_ror_id = ror.ror_id INNER JOIN %PREFIX%_menu men ON men.men_id = rrd.rrd_object_id AND men.men_standard = true WHERE ror.ror_name_intern = 'menu_view') AS temp)</step>
     <step id="1100">UPDATE %PREFIX%_menu SET men_name = 'SYS_MESSAGES', men_name_intern = 'messages', men_icon='fa-comments', men_url='/adm_program/modules/messages/messages.php', men_description='SYS_MESSAGES_DESC' WHERE men_name_intern = 'mail'</step>
     <step id="1110">UPDATE %PREFIX%_menu SET men_name = 'SYS_REGISTRATIONS', men_name_intern = 'registration' WHERE men_name_intern = 'newreg'</step>
+    <step id="1120">UPDATE %PREFIX%_categories SET cat_name_intern = 'EVT_ALL_ORGANIZATIONS' WHERE cat_name_intern = 'DAT_ALL_ORGANIZATIONS'</step>
     <step>stop</step>
 </update>
