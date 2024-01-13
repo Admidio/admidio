@@ -201,7 +201,6 @@ $javascriptCode .= '
     }
 ';
 $page->addJavascript($javascriptCode);
-$javascriptCode = '$(document).ready(function() { ';
 
 foreach($config as $key => $value)
 {
@@ -211,7 +210,6 @@ foreach($config as $key => $value)
     	}
     	';
 }
-$javascriptCode .= ' }); ';
 $page->addJavascript($javascriptCode, true);
 
 $formConfigurations = new HtmlForm(
