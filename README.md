@@ -1,6 +1,6 @@
 # Admidio: Your Open-Source User Management Solution
 
-Admidio empowers organizations and groups by providing a versatile and open-source user management system for their websites. With its flexible role model, Admidio allows you to precisely mirror your organization's structure and permissions. You can easily create and customize individual member profiles by adding or removing profile fields. 
+Admidio empowers organizations and groups by providing a versatile and open-source user management system for their websites. With its flexible role model, Admidio allows you to precisely mirror your organization's structure and permissions. You can easily create and customize individual member profiles by adding or removing profile fields.
 
 In addition to these core features, Admidio boasts a rich array of modules, including member lists, an event manager, messaging capabilities, photo albums, and a document and file repository.
 
@@ -38,7 +38,7 @@ Keep your Admidio installation up to date by following our [online update instru
 2. Copy the folder "adm_program" and the "index.php" from the new version.
 3. Update the "adm_plugins" folder with the newly delivered plugins.
 4. Access the "index.php" in your Admidio folder to initiate the update.
-5. Adjust the theme in the "adm_theme" folder if necessary.
+5. Update or replace the theme in the "adm_theme" folder.
 
 If you're updating from version 2.x or 3.x to version 4.x, please review our [special update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update_to_version_4).
 
