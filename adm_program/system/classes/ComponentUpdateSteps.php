@@ -543,7 +543,7 @@ final class ComponentUpdateSteps
             $role->setArray($row);
             $role->saveChangesWithoutRights();
 
-            $date = new Event(self::$db);
+            $date = new TableEvent(self::$db);
             $date->readDataByRoleId($role->getValue('rol_id'));
 
             $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));

@@ -8,7 +8,7 @@
  */
 
 /**
- * Creates an event object from the database table adm_dates
+ * Creates an event object from the database table adm_events
  *
  * With the given id an event object is created from the data in the database table **adm_dates**.
  * The class will handle the communication with the database and give easy access to the data. New
@@ -18,7 +18,7 @@
  * **Code examples**
  * ```
  * // get data from an existing event
- * $event       = new Event($gDb, $dateId);
+ * $event       = new TableEvent($gDb, $dateId);
  * $headline    = $event->getValue('dat_headline');
  * $description = $event->getValue('dat_description');
  *
@@ -35,7 +35,7 @@
  * $event->save();
  * ```
  */
-class Event extends TableAccess
+class TableEvent extends TableAccess
 {
     /**
      * @var Participants object to handle all participants of this event
