@@ -135,7 +135,7 @@ class Database
             'DATABASE: Create DB-Instance with default params!',
             array(
                 'engine' => DB_ENGINE, 'host' => DB_HOST, 'port' => DB_PORT,
-                'name' => DB_NAME, 'username' => DB_USERNAME, 'password' => DB_PASSWORD
+                'name' => DB_NAME, 'username' => DB_USERNAME, 'password' => '******'
             )
         );
 
