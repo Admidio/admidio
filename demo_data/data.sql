@@ -766,8 +766,8 @@ INSERT INTO %PREFIX%_lists (lst_id, lst_uuid, lst_org_id, lst_usr_id, lst_name, 
 (12, 'a834cebe-3592-4f05-8c9b-73551615f570', 2, 1, 'INS_MEMBERSHIP', '2012-02-27 21:50:57',  true),
 (13, 'afc87e5f-fffa-46f3-82d1-6e8c65472ae4', 1, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
 (14, 'a94a023b-56fa-4d6e-b05e-267a3d37ba09', 2, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
-(15, 'd39d0642-c367-43ca-bc73-578219febbc6', 1, 1, 'SYS_MEMBERS', '2021-11-13 15:08:45',  true),
-(16, '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 2, 1, 'SYS_MEMBERS', '2021-11-13 15:08:45',  true);
+(15, 'd39d0642-c367-43ca-bc73-578219febbc6', 1, 1, 'SYS_CONTACTS', '2021-11-13 15:08:45',  true),
+(16, '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 2, 1, 'SYS_CONTACTS', '2021-11-13 15:08:45',  true);
 
 --
 -- Data for table adm_list_columns
