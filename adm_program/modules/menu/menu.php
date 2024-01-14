@@ -105,7 +105,7 @@ while ($mainMen = $mainMenStatement->fetch()) {
 
         $htmlMoveRow = '<a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_UP.'">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
-                        <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_UP.'">'.
+                        <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_DOWN.'">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
