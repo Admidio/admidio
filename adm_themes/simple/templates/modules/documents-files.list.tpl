@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             {foreach $list as $row}
-                <tr>
+                <tr id="row_{$row.id}">
                     <td><a class="admidio-icon-link" href="{$row.url}"><i class="{$row.icon}" data-toggle="tooltip" title="{$row.title}"></i></a></td>
                     <td><a href="{$row.url}">{$row.name}</a>
                         {if strlen($row.description) > 0}
