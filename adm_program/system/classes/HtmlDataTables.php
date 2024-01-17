@@ -157,7 +157,7 @@ class HtmlDataTables
                 "drawCallback": function(settings) {
                     const api  = this.api();
                     const rows = api.rows({page: "current"}).nodes();
-                    const last = null;
+                    var last = null;
 
                     api.column(' . $this->groupedColumn . ', {page: "current"}).data().each(function(group, i) {
                         if (last !== group) {
