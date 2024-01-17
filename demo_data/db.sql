@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS %PREFIX%_auto_login           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_category_report      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_components           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_events               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_dates                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
