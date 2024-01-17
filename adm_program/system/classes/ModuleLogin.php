@@ -142,13 +142,13 @@ class ModuleLogin
         global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gL10n;
 
         $postLoginName = admFuncVariableIsValid($_POST, 'usr_login_name', 'string');
-        $postPassword = admFuncVariableIsValid($_POST, 'usr_password', 'string');
+        $postPassword = $_POST['usr_password'];
         $postOrgShortName = admFuncVariableIsValid($_POST, 'org_shortname', 'string');
         $postAutoLogin = admFuncVariableIsValid($_POST, 'auto_login', 'bool');
         if($postLoginName === '') {
             // login with plugin
             $postLoginName = admFuncVariableIsValid($_POST, 'plg_usr_login_name', 'string');
-            $postPassword = admFuncVariableIsValid($_POST, 'plg_usr_password', 'string');
+            $postPassword = $_POST['plg_usr_password'];
             $postOrgShortName = admFuncVariableIsValid($_POST, 'plg_org_shortname', 'string');
             $postAutoLogin = admFuncVariableIsValid($_POST, 'plg_auto_login', 'bool');
         }
