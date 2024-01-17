@@ -52,7 +52,7 @@ final class PhpIniUtils
     private static function getBytesFromSize(string $data, int $multi = self::BYTES_UNIT_FACTOR_1024): int
     {
         if ($data === '' || $data === '-1') {
-            return INF;
+            return (int) INF;
         }
 
         $value = (float) substr($data, 0, -1);
@@ -141,7 +141,7 @@ final class PhpIniUtils
      */
     public static function getUploadMaxSize(): int
     {
-        return min(self::getMemoryLimit(), self::getPostMaxSize(), self::getFileUploadMaxFileSize());
+        return (int) min(self::getMemoryLimit(), self::getPostMaxSize(), self::getFileUploadMaxFileSize());
     }
 
     /**
