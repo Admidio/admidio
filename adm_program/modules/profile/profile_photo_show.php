@@ -38,7 +38,7 @@ if ($gCurrentUser->hasRightViewProfile($user)) {
         // show temporary saved new photo from upload in database
         if ((int) $gSettingsManager->get('profile_photo_storage') === 0) {
             $image = new Image();
-            $image->setImageFromData($gCurrentSession->getValue('ses_binary'));
+            $image->setImageFromData((string) $gCurrentSession->getValue('ses_binary'));
         }
         // show temporary saved new photo from upload in filesystem
         else {
@@ -50,7 +50,7 @@ if ($gCurrentUser->hasRightViewProfile($user)) {
         if ((int) $gSettingsManager->get('profile_photo_storage') === 0) {
             if ((string) $user->getValue('usr_photo') !== '') {
                 $image = new Image();
-                $image->setImageFromData($user->getValue('usr_photo'));
+                $image->setImageFromData((string) $user->getValue('usr_photo'));
             } else {
                 $image = new Image($picPath);
             }
