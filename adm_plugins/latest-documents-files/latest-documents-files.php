@@ -78,17 +78,7 @@ if (Component::isVisible('DOCUMENTS-FILES')) {
                 // get recordset of current file from database
                 $file = new TableFile($gDb);
                 $file->getFileForDownload($rowFile['fil_uuid']);
-            } catch (AdmException $e) {
-                $errorCode = $e->getMessage();
 
-                if ($errorCode !== 'SYS_FOLDER_NO_RIGHTS') {
-                    $e->showText();
-                    // => EXIT
-                }
-            }
-
-            // only show download if user has rights to view folder
-            if ($errorCode !== 'SYS_FOLDER_NO_RIGHTS') {
                 // get filename without extension and extension separatly
                 $fileName = pathinfo($rowFile['fil_name'], PATHINFO_FILENAME);
                 $fullFolderFileName = $rowFile['fol_path'] . '/' . $rowFile['fol_name'] . '/' . $rowFile['fil_name'];
@@ -116,6 +106,8 @@ if (Component::isVisible('DOCUMENTS-FILES')) {
                 if ($countVisibleDownloads === $plgCountFiles) {
                     break;
                 }
+            } catch (AdmException $e) {
+                // do nothing and go to next file
             }
         }
 
