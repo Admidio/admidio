@@ -160,11 +160,7 @@ class ModuleEvents extends Modules
      */
     public function getDataSet(int $startElement = 0, int $limit = 0): array
     {
-        global $gDb, $gSettingsManager, $gCurrentUser;
-
-        if ($limit === 0) {
-            $limit = $gSettingsManager->getInt('events_per_page');
-        }
+        global $gDb, $gCurrentUser;
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('EVT'));
         $additional = $this->sqlGetAdditional();
