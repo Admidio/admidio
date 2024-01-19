@@ -113,11 +113,12 @@ class TableMembers extends TableAccess
     /**
      * Deletes the selected record of the table and optionally sends an admin notification if configured
      * @return true Returns **true** if no error occurred
+     * @throws Exception
      */
     public function delete(): bool
     {
         // Queue admin notification about membership deletion
-        global $gChangeNotification;
+        global $gChangeNotification, $gCurrentSession;
 
         // If this is a new record that hasn't been written to the database, simply ignore it
         if (!$this->newRecord && is_object($gChangeNotification)) {
@@ -157,7 +158,7 @@ class TableMembers extends TableAccess
         }
 
         // renew user object of the affected user because of edited role assignment
-        $GLOBALS['gCurrentSession']->reload($this->getValue('mem_usr_id'));
+        $gCurrentSession->reload((int) $this->getValue('mem_usr_id'));
 
         return parent::delete();
     }
@@ -170,6 +171,7 @@ class TableMembers extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -187,7 +189,7 @@ class TableMembers extends TableAccess
 
         if ($returnStatus && $gCurrentSession instanceof Session) {
             // renew user object of the affected user because of edited role assignment
-            $gCurrentSession->reload($this->getValue('mem_usr_id'));
+            $gCurrentSession->reload((int) $this->getValue('mem_usr_id'));
         }
 
         if ($newRecord && is_object($gChangeNotification)) {
