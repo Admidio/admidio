@@ -78,6 +78,12 @@ class User extends TableAccess
     protected $changeNotificationEnabled;
 
     /**
+     * @var string Binary of the user photo. This is only stored at the first getValue of usr_photo
+     * because the logic for postgres only works once.
+     */
+    protected $userPhoto;
+
+    /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -142,8 +148,8 @@ class User extends TableAccess
         // every user will get the default roles for registration, if the current user has the right to assign roles
         // than the role assignment dialog will be shown
         $sql = 'SELECT rol_id
-                  FROM '.TBL_ROLES.'
-            INNER JOIN '.TBL_CATEGORIES.'
+                  FROM ' . TBL_ROLES . '
+            INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
                  WHERE rol_default_registration = true
                    AND cat_org_id = ? -- $this->organizationId';
@@ -182,10 +188,10 @@ class User extends TableAccess
             return false;
         }
 
-        $usrId = (int) $this->getValue('usr_id');
+        $usrId = (int)$this->getValue('usr_id');
 
         $minStartDate = $startDate;
-        $maxEndDate   = $endDate;
+        $maxEndDate = $endDate;
 
         if ($mode === 'set') {
             // subtract 1 day from start date so that we find memberships that end yesterday
@@ -206,7 +212,7 @@ class User extends TableAccess
             $member = new TableMembers($this->db);
 
             $sql = 'SELECT *
-                      FROM '.TBL_MEMBERS.'
+                      FROM ' . TBL_MEMBERS . '
                      WHERE mem_rol_id = ? -- $roleId
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
@@ -222,7 +228,7 @@ class User extends TableAccess
             $member = new TableMembers($this->db, $roleId);
 
             $sql = 'SELECT *
-                      FROM '.TBL_MEMBERS.'
+                      FROM ' . TBL_MEMBERS . '
                      WHERE mem_id    <> ? -- $roleId
                        AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
                        AND mem_usr_id = ? -- $usrId
@@ -256,7 +262,7 @@ class User extends TableAccess
                 // save new end date if a later date exists
                 // but only if end date is greater than the beginn date otherwise the membership should be deleted
                 if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0
-                &&  strcmp($member->getValue('mem_begin', 'Y-m-d'), $maxEndDate) < 0) {
+                    && strcmp($member->getValue('mem_begin', 'Y-m-d'), $maxEndDate) < 0) {
                     $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
                 }
             } else {
@@ -325,25 +331,25 @@ class User extends TableAccess
     {
         global $gSettingsManager;
 
-        if ((int) $this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('contacts_user_relations_enabled')) {
+        if ((int)$this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('contacts_user_relations_enabled')) {
             return false;
         }
 
         if (!$this->relationshipsChecked && count($this->relationships) === 0) {
             // read all relations of the current user
             $sql = 'SELECT urt_id, urt_edit_user, ure_usr_id2
-                      FROM '.TBL_USER_RELATIONS.'
-                INNER JOIN '.TBL_USER_RELATION_TYPES.'
+                      FROM ' . TBL_USER_RELATIONS . '
+                INNER JOIN ' . TBL_USER_RELATION_TYPES . '
                         ON urt_id = ure_urt_id
                      WHERE ure_usr_id1  = ? -- $this->getValue(\'usr_id\') ';
-            $queryParams = array((int) $this->getValue('usr_id'));
+            $queryParams = array((int)$this->getValue('usr_id'));
             $relationsStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $relationsStatement->fetch()) {
                 $this->relationships[] = array(
-                    'relation_type' => (int) $row['urt_id'],
-                    'user_id'       => (int) $row['ure_usr_id2'],
-                    'edit_user'     => (bool) $row['urt_edit_user']
+                    'relation_type' => (int)$row['urt_id'],
+                    'user_id' => (int)$row['ure_usr_id2'],
+                    'edit_user' => (bool)$row['urt_edit_user']
                 );
             }
 
@@ -369,34 +375,34 @@ class User extends TableAccess
     {
         $sqlFetchedRows = array();
 
-        if ((int) $this->getValue('usr_id') === 0) {
+        if ((int)$this->getValue('usr_id') === 0) {
             return false;
         }
 
         if (count($this->rolesRights) === 0) {
             $this->assignRoles = false;
             $tmpRolesRights = array(
-                'rol_all_lists_view'     => false,
-                'rol_announcements'      => false,
-                'rol_approve_users'      => false,
-                'rol_assign_roles'       => false,
-                'rol_events'             => false,
-                'rol_documents_files'    => false,
-                'rol_edit_user'          => false,
-                'rol_guestbook'          => false,
+                'rol_all_lists_view' => false,
+                'rol_announcements' => false,
+                'rol_approve_users' => false,
+                'rol_assign_roles' => false,
+                'rol_events' => false,
+                'rol_documents_files' => false,
+                'rol_edit_user' => false,
+                'rol_guestbook' => false,
                 'rol_guestbook_comments' => false,
-                'rol_mail_to_all'        => false,
-                'rol_photo'              => false,
-                'rol_profile'            => false,
-                'rol_weblinks'           => false
+                'rol_mail_to_all' => false,
+                'rol_photo' => false,
+                'rol_profile' => false,
+                'rol_weblinks' => false
             );
 
             // read all roles of the organization and join the membership if user is member of that role
             $sql = 'SELECT *
-                      FROM '.TBL_ROLES.'
-                INNER JOIN '.TBL_CATEGORIES.'
+                      FROM ' . TBL_ROLES . '
+                INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = rol_cat_id
-                 LEFT JOIN '.TBL_MEMBERS.'
+                 LEFT JOIN ' . TBL_MEMBERS . '
                         ON mem_rol_id = rol_id
                        AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
                        AND mem_begin <= ? -- DATE_NOW
@@ -404,11 +410,11 @@ class User extends TableAccess
                      WHERE rol_valid  = true
                        AND (  cat_org_id = ? -- $this->organizationId
                            OR cat_org_id IS NULL )';
-            $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+            $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
             $rolesStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $rolesStatement->fetch()) {
-                $roleId = (int) $row['rol_id'];
+                $roleId = (int)$row['rol_id'];
                 $sqlFetchedRows[] = $row;
 
                 if ($row['mem_usr_id'] > 0) {
@@ -455,18 +461,18 @@ class User extends TableAccess
 
             // go again through all roles, but now the rolesRights are set and can be evaluated
             foreach ($sqlFetchedRows as $sqlRow) {
-                $roleId = (int) $sqlRow['rol_id'];
-                $memLeader = (bool) $sqlRow['mem_leader'];
+                $roleId = (int)$sqlRow['rol_id'];
+                $memLeader = (bool)$sqlRow['mem_leader'];
 
                 if (array_key_exists('rol_view_memberships', $sqlRow)) {
                     // Remember roles view setting
-                    if ((int) $sqlRow['rol_view_memberships'] === TableRoles::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
+                    if ((int)$sqlRow['rol_view_memberships'] === TableRoles::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
                         // only role members are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
-                    } elseif ((int) $sqlRow['rol_view_memberships'] === TableRoles::VIEW_LOGIN_USERS) {
+                    } elseif ((int)$sqlRow['rol_view_memberships'] === TableRoles::VIEW_LOGIN_USERS) {
                         // all registered users are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
-                    } elseif ((int) $sqlRow['rol_view_memberships'] === TableRoles::VIEW_LEADERS && $memLeader) {
+                    } elseif ((int)$sqlRow['rol_view_memberships'] === TableRoles::VIEW_LEADERS && $memLeader) {
                         // only leaders are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
                     } elseif ($this->rolesRights['rol_all_lists_view']) {
@@ -475,13 +481,13 @@ class User extends TableAccess
                     }
 
                     // Remember profile view setting
-                    if ((int) $sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
+                    if ((int)$sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
                         // only role members are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
-                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_LOGIN_USERS) {
+                    } elseif ((int)$sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_LOGIN_USERS) {
                         // all registered users are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
-                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_LEADERS && $memLeader) {
+                    } elseif ((int)$sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_LEADERS && $memLeader) {
                         // only leaders are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
                     } elseif ($this->rolesRights['rol_all_lists_view']) {
@@ -563,7 +569,7 @@ class User extends TableAccess
         }
 
         if ($updateSessionCookies) {
-            $gCurrentSession->setValue('ses_usr_id', (int) $this->getValue('usr_id'));
+            $gCurrentSession->setValue('ses_usr_id', (int)$this->getValue('usr_id'));
             $gCurrentSession->save();
         }
 
@@ -609,6 +615,7 @@ class User extends TableAccess
 
         $this->administrator = false;
         $this->relationshipsChecked = false;
+        $this->userPhoto = '';
 
         // initialize rights arrays
         $this->usersEditAllowed = array();
@@ -647,153 +654,153 @@ class User extends TableAccess
         // now delete every database entry where the user id is used
         $sqlQueries = array();
 
-        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_ANNOUNCEMENTS . '
                             SET ann_usr_id_create = NULL
-                          WHERE ann_usr_id_create = '.$usrId;
+                          WHERE ann_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_ANNOUNCEMENTS . '
                             SET ann_usr_id_change = NULL
-                          WHERE ann_usr_id_change = '.$usrId;
+                          WHERE ann_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_EVENTS . '
                             SET dat_usr_id_create = NULL
-                          WHERE dat_usr_id_create = '.$usrId;
+                          WHERE dat_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_EVENTS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_EVENTS . '
                             SET dat_usr_id_change = NULL
-                          WHERE dat_usr_id_change = '.$usrId;
+                          WHERE dat_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_FOLDERS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_FOLDERS . '
                             SET fol_usr_id = NULL
-                          WHERE fol_usr_id = '.$usrId;
+                          WHERE fol_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_FILES.'
+        $sqlQueries[] = 'UPDATE ' . TBL_FILES . '
                             SET fil_usr_id = NULL
-                          WHERE fil_usr_id = '.$usrId;
+                          WHERE fil_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.'
+        $sqlQueries[] = 'UPDATE ' . TBL_GUESTBOOK . '
                             SET gbo_usr_id_create = NULL
-                          WHERE gbo_usr_id_create = '.$usrId;
+                          WHERE gbo_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.'
+        $sqlQueries[] = 'UPDATE ' . TBL_GUESTBOOK . '
                             SET gbo_usr_id_change = NULL
-                          WHERE gbo_usr_id_change = '.$usrId;
+                          WHERE gbo_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_LINKS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_LINKS . '
                             SET lnk_usr_id_create = NULL
-                          WHERE lnk_usr_id_create = '.$usrId;
+                          WHERE lnk_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_LINKS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_LINKS . '
                             SET lnk_usr_id_change = NULL
-                          WHERE lnk_usr_id_change = '.$usrId;
+                          WHERE lnk_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_LISTS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_LISTS . '
                             SET lst_usr_id = NULL
                           WHERE lst_global = true
-                            AND lst_usr_id = '.$usrId;
+                            AND lst_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_PHOTOS . '
                             SET pho_usr_id_create = NULL
-                          WHERE pho_usr_id_create = '.$usrId;
+                          WHERE pho_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_PHOTOS . '
                             SET pho_usr_id_change = NULL
-                          WHERE pho_usr_id_change = '.$usrId;
+                          WHERE pho_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_ROLES.'
+        $sqlQueries[] = 'UPDATE ' . TBL_ROLES . '
                             SET rol_usr_id_create = NULL
-                          WHERE rol_usr_id_create = '.$usrId;
+                          WHERE rol_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_ROLES.'
+        $sqlQueries[] = 'UPDATE ' . TBL_ROLES . '
                             SET rol_usr_id_change = NULL
-                          WHERE rol_usr_id_change = '.$usrId;
+                          WHERE rol_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_ROLE_DEPENDENCIES.'
+        $sqlQueries[] = 'UPDATE ' . TBL_ROLE_DEPENDENCIES . '
                             SET rld_usr_id = NULL
-                          WHERE rld_usr_id = '.$usrId;
+                          WHERE rld_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_USER_LOG.'
+        $sqlQueries[] = 'UPDATE ' . TBL_USER_LOG . '
                             SET usl_usr_id_create = NULL
-                          WHERE usl_usr_id_create = '.$usrId;
+                          WHERE usl_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_USERS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_create = NULL
-                          WHERE usr_usr_id_create = '.$usrId;
+                          WHERE usr_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_USERS.'
+        $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_change = NULL
-                          WHERE usr_usr_id_change = '.$usrId;
+                          WHERE usr_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_LIST_COLUMNS.'
+        $sqlQueries[] = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
                           WHERE lsc_lst_id IN (SELECT lst_id
-                                                 FROM '.TBL_LISTS.'
-                                                WHERE lst_usr_id = '.$usrId.'
+                                                 FROM ' . TBL_LISTS . '
+                                                WHERE lst_usr_id = ' . $usrId . '
                                                   AND lst_global = false)';
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_LISTS.'
+        $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
                           WHERE lst_global = false
-                            AND lst_usr_id = '.$usrId;
+                            AND lst_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
-                          WHERE gbc_usr_id_create = '.$usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_GUESTBOOK_COMMENTS . '
+                          WHERE gbc_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MEMBERS.'
-                          WHERE mem_usr_id = '.$usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MEMBERS . '
+                          WHERE mem_usr_id = ' . $usrId;
 
         // MySQL couldn't create delete statement with same table in a sub query.
         // Therefore, we fill a temporary table with all ids that should be deleted and reference on this table
-        $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
-                          WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'];
+        $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
+                          WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'];
 
-        $sqlQueries[] = 'INSERT INTO '.TBL_IDS.'
+        $sqlQueries[] = 'INSERT INTO ' . TBL_IDS . '
                                 (ids_usr_id, ids_reference_id)
-                         SELECT '.$GLOBALS['gCurrentUserId'].', msc_msg_id
-                           FROM '.TBL_MESSAGES_CONTENT.'
-                          WHERE msc_usr_id = '.$usrId;
+                         SELECT ' . $GLOBALS['gCurrentUserId'] . ', msc_msg_id
+                           FROM ' . TBL_MESSAGES_CONTENT . '
+                          WHERE msc_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
                           WHERE msc_msg_id IN (SELECT ids_reference_id
-                                                 FROM '.TBL_IDS.'
-                                                WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
+                                                 FROM ' . TBL_IDS . '
+                                                WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
                           WHERE msr_msg_id IN (SELECT ids_reference_id
-                                                 FROM '.TBL_IDS.'
-                                                WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
+                                                 FROM ' . TBL_IDS . '
+                                                WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
                           WHERE msg_id IN (SELECT ids_reference_id
-                                             FROM '.TBL_IDS.'
-                                            WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
+                                             FROM ' . TBL_IDS . '
+                                            WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
-                          WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'];
+        $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
+                          WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'];
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
-                          WHERE msr_usr_id = '.$usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                          WHERE msr_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
                                             WHERE msr_msg_id = msc_msg_id)';
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
                                             WHERE msr_msg_id = msg_id)';
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_REGISTRATIONS.'
-                          WHERE reg_usr_id = '.$usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_REGISTRATIONS . '
+                          WHERE reg_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_AUTO_LOGIN.'
-                          WHERE atl_usr_id = '.$usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_AUTO_LOGIN . '
+                          WHERE atl_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_SESSIONS.'
-                          WHERE ses_usr_id = '.$usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
+                          WHERE ses_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_USER_LOG.'
-                          WHERE usl_usr_id = '.$usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_USER_LOG . '
+                          WHERE usl_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_USER_DATA.'
-                          WHERE usd_usr_id = '.$usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
+                          WHERE usd_usr_id = ' . $usrId;
 
         $this->db->startTransaction();
 
@@ -859,10 +866,10 @@ class User extends TableAccess
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-        || ($categoryType === 'EVT' && $this->editEvents())
-        || ($categoryType === 'LNK' && $this->editWeblinksRight())
-        || ($categoryType === 'USF' && $this->editUsers())
-        || ($categoryType === 'ROL' && $this->manageRoles())) {
+            || ($categoryType === 'EVT' && $this->editEvents())
+            || ($categoryType === 'LNK' && $this->editWeblinksRight())
+            || ($categoryType === 'USF' && $this->editUsers())
+            || ($categoryType === 'ROL' && $this->manageRoles())) {
             $condition = '';
         } else {
             $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
@@ -874,7 +881,7 @@ class User extends TableAccess
                                     ON rrd_ror_id = ror_id
                                  WHERE ror_name_intern = \'category_edit\'
                                    AND rrd_object_id   = cat_id
-                                   AND rrd_rol_id IN ('.Database::getQmForValues($rolIdParams).') )
+                                   AND rrd_rol_id IN (' . Database::getQmForValues($rolIdParams) . ') )
                     )';
         }
 
@@ -888,7 +895,7 @@ class User extends TableAccess
 
         $arrEditableCategories = array();
         while ($catId = $pdoStatement->fetchColumn()) {
-            $arrEditableCategories[] = (int) $catId;
+            $arrEditableCategories[] = (int)$catId;
         }
 
         return $arrEditableCategories;
@@ -915,10 +922,10 @@ class User extends TableAccess
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-        || ($categoryType === 'EVT' && $this->editEvents())
-        || ($categoryType === 'LNK' && $this->editWeblinksRight())
-        || ($categoryType === 'USF' && $this->editUsers())
-        || ($categoryType === 'ROL' && $this->assignRoles())) {
+            || ($categoryType === 'EVT' && $this->editEvents())
+            || ($categoryType === 'LNK' && $this->editWeblinksRight())
+            || ($categoryType === 'USF' && $this->editUsers())
+            || ($categoryType === 'ROL' && $this->assignRoles())) {
             $condition = '';
         } else {
             $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
@@ -930,7 +937,7 @@ class User extends TableAccess
                                   ON rrd_ror_id = ror_id
                                WHERE ror_name_intern = \'category_view\'
                                  AND rrd_object_id   = cat_id
-                                 AND rrd_rol_id IN ('.Database::getQmForValues($rolIdParams).') )
+                                 AND rrd_rol_id IN (' . Database::getQmForValues($rolIdParams) . ') )
                       OR NOT EXISTS (SELECT 1
                                        FROM ' . TBL_ROLES_RIGHTS . '
                                  INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
@@ -950,7 +957,7 @@ class User extends TableAccess
 
         $arrVisibleCategories = array();
         while ($catId = $pdoStatement->fetchColumn()) {
-            $arrVisibleCategories[] = (int) $catId;
+            $arrVisibleCategories[] = (int)$catId;
         }
 
         return $arrVisibleCategories;
@@ -984,7 +991,7 @@ class User extends TableAccess
     private function getOrgLongname(): string
     {
         $sql = 'SELECT org_longname
-                  FROM '.TBL_ORGANIZATIONS.'
+                  FROM ' . TBL_ORGANIZATIONS . '
                  WHERE org_id = ?';
         $orgStatement = $this->db->queryPrepared($sql, array($this->organizationId));
 
@@ -1108,14 +1115,29 @@ class User extends TableAccess
             return $this->mProfileFieldsData->getValue($columnName, $format);
         }
 
-        if ($columnName === 'usr_photo' && (int) $gSettingsManager->get('profile_photo_storage') === 0) {
-            $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int) $this->getValue('usr_id') . '.jpg';
+        if ($columnName === 'usr_photo' && (int)$gSettingsManager->get('profile_photo_storage') === 0) {
+            $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int)$this->getValue('usr_id') . '.jpg';
             if (is_file($file)) {
                 return file_get_contents($file);
             }
         }
 
-        return parent::getValue($columnName, $format);
+        $value = parent::getValue($columnName, $format);
+
+        if ($columnName === 'usr_photo'
+            && DB_ENGINE === Database::PDO_ENGINE_PGSQL
+            && is_resource($value)) {
+            if ($this->userPhoto === '') {
+                // Postgres has a special logic to read the content of a bytea column
+                ob_start();
+                fpassthru($value);
+                $this->userPhoto = hex2bin(ob_get_contents());
+                ob_end_clean();
+            }
+            $value = $this->userPhoto;
+        }
+
+        return $value;
     }
 
     /**
@@ -1135,16 +1157,16 @@ class User extends TableAccess
 
         if ($gCurrentUser->allowedViewProfileField($this, 'FIRST_NAME')) {
             $vCard[] = 'N;CHARSET=ISO-8859-1:' .
-                iconv("UTF-8","ISO-8859-1", $this->getValue('LAST_NAME', 'database')) . ';' .
-                iconv("UTF-8","ISO-8859-1", $this->getValue('FIRST_NAME', 'database')) . ';;;';
+                iconv("UTF-8", "ISO-8859-1", $this->getValue('LAST_NAME', 'database')) . ';' .
+                iconv("UTF-8", "ISO-8859-1", $this->getValue('FIRST_NAME', 'database')) . ';;;';
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'LAST_NAME')) {
             $vCard[] = 'FN;CHARSET=ISO-8859-1:' .
-                iconv("UTF-8","ISO-8859-1", $this->getValue('FIRST_NAME')) . ' ' .
-                iconv("UTF-8","ISO-8859-1", $this->getValue('LAST_NAME'));
+                iconv("UTF-8", "ISO-8859-1", $this->getValue('FIRST_NAME')) . ' ' .
+                iconv("UTF-8", "ISO-8859-1", $this->getValue('LAST_NAME'));
         }
         if ($this->getValue('usr_login_name') !== '') {
-            $vCard[] = 'NICKNAME;CHARSET=ISO-8859-1:' . iconv("UTF-8","ISO-8859-1", $this->getValue('usr_login_name'));
+            $vCard[] = 'NICKNAME;CHARSET=ISO-8859-1:' . iconv("UTF-8", "ISO-8859-1", $this->getValue('usr_login_name'));
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'PHONE')) {
             $vCard[] = 'TEL;HOME;VOICE:' . $this->getValue('PHONE');
@@ -1156,14 +1178,14 @@ class User extends TableAccess
             $vCard[] = 'TEL;HOME;FAX:' . $this->getValue('FAX');
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'STREET')
-        &&  $gCurrentUser->allowedViewProfileField($this, 'CITY')
-        &&  $gCurrentUser->allowedViewProfileField($this, 'POSTCODE')
-        &&  $gCurrentUser->allowedViewProfileField($this, 'COUNTRY')) {
+            && $gCurrentUser->allowedViewProfileField($this, 'CITY')
+            && $gCurrentUser->allowedViewProfileField($this, 'POSTCODE')
+            && $gCurrentUser->allowedViewProfileField($this, 'COUNTRY')) {
             $vCard[] = 'ADR;CHARSET=ISO-8859-1;HOME:;;' .
-                iconv("UTF-8","ISO-8859-1", $this->getValue('STREET', 'database')) . ';' .
-                iconv("UTF-8","ISO-8859-1", $this->getValue('CITY', 'database')) . ';;' .
-                iconv("UTF-8","ISO-8859-1", $this->getValue('POSTCODE', 'database')) . ';' .
-                iconv("UTF-8","ISO-8859-1", $this->getValue('COUNTRY', 'database'));
+                iconv("UTF-8", "ISO-8859-1", $this->getValue('STREET', 'database')) . ';' .
+                iconv("UTF-8", "ISO-8859-1", $this->getValue('CITY', 'database')) . ';;' .
+                iconv("UTF-8", "ISO-8859-1", $this->getValue('POSTCODE', 'database')) . ';' .
+                iconv("UTF-8", "ISO-8859-1", $this->getValue('COUNTRY', 'database'));
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'WEBSITE')) {
             $vCard[] = 'URL;HOME:' . $this->getValue('WEBSITE');
@@ -1174,8 +1196,8 @@ class User extends TableAccess
         if ($gCurrentUser->allowedViewProfileField($this, 'EMAIL')) {
             $vCard[] = 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL');
         }
-        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int) $this->getValue('usr_id') . '.jpg';
-        if ((int) $gSettingsManager->get('profile_photo_storage') === 1 && is_file($file)) {
+        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int)$this->getValue('usr_id') . '.jpg';
+        if ((int)$gSettingsManager->get('profile_photo_storage') === 1 && is_file($file)) {
             $imgHandle = fopen($file, 'rb');
             if ($imgHandle !== false) {
                 $base64Image = base64_encode(fread($imgHandle, filesize($file)));
@@ -1184,12 +1206,12 @@ class User extends TableAccess
                 $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . $base64Image;
             }
         }
-        if ((int) $gSettingsManager->get('profile_photo_storage') === 0 && $this->getValue('usr_photo') !== '') {
+        if ((int)$gSettingsManager->get('profile_photo_storage') === 0 && $this->getValue('usr_photo') !== '') {
             $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . base64_encode($this->getValue('usr_photo'));
         }
         // Gender is not included in vCard 2.1, is passed here for the Windows address book
         if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && $this->getValue('GENDER') > 0) {
-            if ((int) $this->getValue('GENDER') === 1) {
+            if ((int)$this->getValue('GENDER') === 1) {
                 $xGender = 'Male';
                 $xWabGender = 2;
             } else {
@@ -1232,7 +1254,7 @@ class User extends TableAccess
 
         foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {// => $profileFieldConfig)
             if ($profileField->getValue('usf_type') === 'EMAIL'
-            && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '') {
+                && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '') {
                 return true;
             }
         }
@@ -1253,7 +1275,7 @@ class User extends TableAccess
         $minutesOffset = new DateInterval('PT15M');
         $minutesBefore = $now->sub($minutesOffset);
 
-        if(is_null($this->getValue('usr_date_invalid', 'Y-m-d H:i:s'))) {
+        if (is_null($this->getValue('usr_date_invalid', 'Y-m-d H:i:s'))) {
             $dateInvalid = $minutesBefore;
         } else {
             $dateInvalid = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
@@ -1279,8 +1301,8 @@ class User extends TableAccess
      */
     public function hasRightEditProfile(self $user, bool $checkOwnProfile = true): bool
     {
-        $usrId  = (int) $this->getValue('usr_id');
-        $userId = (int) $user->getValue('usr_id');
+        $usrId = (int)$this->getValue('usr_id');
+        $userId = (int)$user->getValue('usr_id');
 
         // edit own profile ?
         if ($usrId > 0 && $usrId === $userId && $checkOwnProfile && $this->checkRolesRight('rol_profile')) {
@@ -1373,13 +1395,13 @@ class User extends TableAccess
     {
         global $gSettingsManager;
 
-        if ((int) $gSettingsManager->get('groups_roles_show_former_members') !== 1
-        && ($this->checkRolesRight('rol_assign_roles')
-        || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3), true)))) {
+        if ((int)$gSettingsManager->get('groups_roles_show_former_members') !== 1
+            && ($this->checkRolesRight('rol_assign_roles')
+                || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3), true)))) {
             return true;
-        } elseif ((int) $gSettingsManager->get('groups_roles_show_former_members') !== 2
-        && ($this->checkRolesRight('rol_edit_user')
-        || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3), true)))) {
+        } elseif ((int)$gSettingsManager->get('groups_roles_show_former_members') !== 2
+            && ($this->checkRolesRight('rol_edit_user')
+                || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3), true)))) {
             return true;
         }
 
@@ -1404,7 +1426,7 @@ class User extends TableAccess
         }
 
         // every user is allowed to view his own profile
-        if ((int) $user->getValue('usr_id') === (int) $this->getValue('usr_id') && (int) $this->getValue('usr_id') > 0) {
+        if ((int)$user->getValue('usr_id') === (int)$this->getValue('usr_id') && (int)$this->getValue('usr_id') > 0) {
             return true;
         }
 
@@ -1414,10 +1436,10 @@ class User extends TableAccess
         }
 
         $sql = 'SELECT rol_id, rol_view_members_profiles
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
+                  FROM ' . TBL_MEMBERS . '
+            INNER JOIN ' . TBL_ROLES . '
                     ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
+            INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
                  WHERE rol_valid  = true
                    AND mem_usr_id = ? -- $user->getValue(\'usr_id\')
@@ -1425,7 +1447,7 @@ class User extends TableAccess
                    AND mem_end    > ? -- DATE_NOW
                    AND (  cat_org_id = ? -- $this->organizationId
                        OR cat_org_id IS NULL ) ';
-        $queryParams = array((int) $user->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int)$user->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $listViewStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($listViewStatement->rowCount() > 0) {
@@ -1513,7 +1535,7 @@ class User extends TableAccess
     {
         global $gCurrentUserId, $gCurrentSession;
 
-        if(isset($gCurrentSession)) {
+        if (isset($gCurrentSession)) {
             // remove all sessions of the current user except the current session
             $sql = 'DELETE FROM ' . TBL_SESSIONS . '
                      WHERE ses_usr_id = ? -- $gCurrentUserId
@@ -1566,18 +1588,18 @@ class User extends TableAccess
 
         // Check if user is currently member of a role of an organisation
         $sql = 'SELECT mem_usr_id
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
+                  FROM ' . TBL_MEMBERS . '
+            INNER JOIN ' . TBL_ROLES . '
                     ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
+            INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
                  WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
                    AND rol_valid  = true
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
                    AND cat_org_id = ? -- $this->organizationId
-                   AND '.$administratorColumn.' = true ';
-        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+                   AND ' . $administratorColumn . ' = true ';
+        $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($pdoStatement->rowCount() > 0) {
@@ -1607,17 +1629,17 @@ class User extends TableAccess
     {
         // Check if user is currently member of a role of an organisation
         $sql = 'SELECT mem_usr_id
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
+                  FROM ' . TBL_MEMBERS . '
+            INNER JOIN ' . TBL_ROLES . '
                     ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
+            INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
                  WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
                    AND rol_valid  = true
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
                    AND cat_org_id = ? -- $this->organizationId';
-        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($pdoStatement->rowCount() > 0) {
@@ -1728,7 +1750,7 @@ class User extends TableAccess
         $this->rolesViewProfiles = array();
         $this->rolesWriteMails = array();
         $this->rolesMembership = array();
-        $this->rolesMembershipLeader   = array();
+        $this->rolesMembershipLeader = array();
         $this->rolesMembershipNoLeader = array();
     }
 
@@ -1775,7 +1797,7 @@ class User extends TableAccess
         if ($usrId === 0) {
             if ($GLOBALS['gCurrentUserId'] === 0) {
                 $updateCreateUserId = true;
-                $updateFingerPrint  = false;
+                $updateFingerPrint = false;
             }
         }
 
@@ -1787,7 +1809,7 @@ class User extends TableAccess
         $newRecord = $this->newRecord;
 
         $returnValue = parent::save($updateFingerPrint);
-        $usrId = (int) $this->getValue('usr_id'); // if a new user was created get the new id
+        $usrId = (int)$this->getValue('usr_id'); // if a new user was created get the new id
 
         // if this was a registration then set this user id to create user id
         if ($updateCreateUserId) {
@@ -1834,43 +1856,43 @@ class User extends TableAccess
         global $gSettingsManager;
 
         $foundUserIds = array();
-        $lastName  = $this->db->escapeString($this->getValue('LAST_NAME', 'database'));
+        $lastName = $this->db->escapeString($this->getValue('LAST_NAME', 'database'));
         $firstName = $this->db->escapeString($this->getValue('FIRST_NAME', 'database'));
 
         // search for users with similar names (SQL function SOUNDEX only available in MySQL)
         if (DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar')) {
             $sqlSimilarName =
-                '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
-                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
-             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
-                AND SUBSTRING(SOUNDEX(SUBSTRING(first_name.usd_value, 1, LOCATE(\' \', first_name.usd_value))), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
-             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
-                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(SUBSTRING('. $firstName.', 1, LOCATE(\' \', '.$firstName.'))), 1, 4) )
-             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4)
-                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4) ) )';
+                '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(' . $lastName . '), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(' . $firstName . '), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(' . $lastName . '), 1, 4)
+                AND SUBSTRING(SOUNDEX(SUBSTRING(first_name.usd_value, 1, LOCATE(\' \', first_name.usd_value))), 1, 4) = SUBSTRING(SOUNDEX(' . $firstName . '), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(' . $lastName . '), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(SUBSTRING(' . $firstName . ', 1, LOCATE(\' \', ' . $firstName . '))), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(' . $firstName . '), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(' . $lastName . '), 1, 4) ) )';
         } else {
             $sqlSimilarName =
-                '(  (   last_name.usd_value  = '. $lastName.'
-                AND first_name.usd_value = '. $firstName.')
-             OR (   last_name.usd_value  = '. $lastName.'
-                AND SUBSTRING(first_name.usd_value, 1, POSITION(\' \' IN first_name.usd_value)) = '. $firstName.')
-             OR (   last_name.usd_value  = '. $lastName.'
-                AND first_name.usd_value = SUBSTRING('. $firstName.', 1, POSITION(\' \' IN '. $firstName.')))
-             OR (   last_name.usd_value  = '. $firstName.'
-                AND first_name.usd_value = '. $lastName.') )';
+                '(  (   last_name.usd_value  = ' . $lastName . '
+                AND first_name.usd_value = ' . $firstName . ')
+             OR (   last_name.usd_value  = ' . $lastName . '
+                AND SUBSTRING(first_name.usd_value, 1, POSITION(\' \' IN first_name.usd_value)) = ' . $firstName . ')
+             OR (   last_name.usd_value  = ' . $lastName . '
+                AND first_name.usd_value = SUBSTRING(' . $firstName . ', 1, POSITION(\' \' IN ' . $firstName . ')))
+             OR (   last_name.usd_value  = ' . $firstName . '
+                AND first_name.usd_value = ' . $lastName . ') )';
         }
 
         // select all users from the database that have the same first and last name
         $sql = 'SELECT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name
-                  FROM '.TBL_USERS.'
-            RIGHT JOIN '.TBL_USER_DATA.' AS last_name
+                  FROM ' . TBL_USERS . '
+            RIGHT JOIN ' . TBL_USER_DATA . ' AS last_name
                     ON last_name.usd_usr_id = usr_id
                    AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-            RIGHT JOIN '.TBL_USER_DATA.' AS first_name
+            RIGHT JOIN ' . TBL_USER_DATA . ' AS first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                  WHERE usr_valid = true
-                   AND '.$sqlSimilarName;
+                   AND ' . $sqlSimilarName;
         $queryParams = array(
             $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),
             $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id')
@@ -1895,7 +1917,7 @@ class User extends TableAccess
     {
         foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
             $defaultValue = $profileField->getValue('usf_default_value');
-            if($defaultValue !== '') {
+            if ($defaultValue !== '') {
                 $this->setValue($profileField->getValue('usf_name_intern'), $defaultValue);
             }
         }
@@ -1910,7 +1932,7 @@ class User extends TableAccess
      */
     public function setOrganization(int $organizationId)
     {
-        if($organizationId !== $this->organizationId) {
+        if ($organizationId !== $this->organizationId) {
             $this->organizationId = $organizationId;
             $this->renewRoleData();
         }
@@ -1932,7 +1954,7 @@ class User extends TableAccess
         if (!$doHashing) {
             if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
-                    (int) $this->getValue('usr_id'),
+                    (int)$this->getValue('usr_id'),
                     'usr_password',
                     $this->getValue('usr_password'),
                     $newPassword,
@@ -1956,14 +1978,14 @@ class User extends TableAccess
 
         if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
             $gChangeNotification->logUserChange(
-                (int) $this->getValue('usr_id'),
+                (int)$this->getValue('usr_id'),
                 'usr_password',
                 $this->getValue('usr_password'),
                 $newPasswordHash,
                 $this
             );
         }
-        if(parent::setValue('usr_password', $newPasswordHash, false)) {
+        if (parent::setValue('usr_password', $newPasswordHash, false)) {
             // for security reasons remove all sessions and auto login of the user
             return $this->invalidateAllOtherLogins();
         }
@@ -1975,11 +1997,11 @@ class User extends TableAccess
      * Set a value for a profile field. The value will be checked against typical conditions of the data type and
      * also against the custom regex if this is set. If an invalid value is set an AdmException will be thrown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
-     * @param mixed  $fieldValue      The new value that should be stored in the profile field.
-     * @param bool $checkValue      The value will be checked if it's valid. If set to **false** than the value will
+     * @param mixed $fieldValue The new value that should be stored in the profile field.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                                not be checked.
      * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
-     *@throws AdmException If an invalid value should be set.
+     * @throws AdmException If an invalid value should be set.
      *                      exception->text contains a string with the reason why the login failed.
      */
     public function setProfileFieldsValue(string $fieldNameIntern, $fieldValue, bool $checkValue = true): bool
@@ -2056,8 +2078,8 @@ class User extends TableAccess
                 $gChangeNotification->logUserChange(
                     $this->getValue('usr_id'),
                     $columnName,
-                    (string) $this->getValue($columnName),
-                    (string) $newValue,
+                    (string)$this->getValue($columnName),
+                    (string)$newValue,
                     $this
                 );
             }
@@ -2068,7 +2090,7 @@ class User extends TableAccess
         // user data from adm_user_fields table (human-readable text representation and raw database value)
         $oldFieldValue = $this->mProfileFieldsData->getValue($columnName);
         $oldFieldValue_db = $this->mProfileFieldsData->getValue($columnName, 'database');
-        $newValue = (string) $newValue;
+        $newValue = (string)$newValue;
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE') {
@@ -2090,10 +2112,10 @@ class User extends TableAccess
         // Here is no need to check hidden fields because we check on save() method that only users who
         // can edit the profile are allowed to save and change data.
         if (($this->getValue('usr_id') === 0 && $GLOBALS['gCurrentUserId'] === 0)
-        ||  (int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
-        || ((int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
-            && $GLOBALS['gCurrentUser']->hasRightEditProfile($this, false))
-        || $this->saveChangesWithoutRights === true) {
+            || (int)$this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
+            || ((int)$this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
+                && $GLOBALS['gCurrentUser']->hasRightEditProfile($this, false))
+            || $this->saveChangesWithoutRights === true) {
             $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
         }
 
@@ -2108,11 +2130,11 @@ class User extends TableAccess
                 $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
                 $columnName, // TODO: is $columnName the internal name or the human-readable?
                 // Old and new values in human-readable version:
-                (string) $oldFieldValue,
-                (string) $this->mProfileFieldsData->getValue($columnName),
+                (string)$oldFieldValue,
+                (string)$this->mProfileFieldsData->getValue($columnName),
                 // Old and new values in raw database:
-                (string) $oldFieldValue_db,
-                (string) $newValue,
+                (string)$oldFieldValue_db,
+                (string)$newValue,
                 $this
             );
         }
@@ -2131,7 +2153,7 @@ class User extends TableAccess
     {
         $this->saveChangesWithoutRights();
         $this->setValue('usr_last_login', $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
-        $this->setValue('usr_number_login', (int) $this->getValue('usr_number_login') + 1);
+        $this->setValue('usr_number_login', (int)$this->getValue('usr_number_login') + 1);
         $this->setValue('usr_actual_login', DATETIME_NOW);
         $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling
 
