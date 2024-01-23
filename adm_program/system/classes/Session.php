@@ -50,12 +50,6 @@ class Session extends TableAccess
     protected $csrfToken = '';
 
     /**
-     * @var string Binary of the user photo. This is only stored at the first getValue of usr_photo
-     * because the logic for postgres only works once.
-     */
-    protected $binaryValue;
-
-    /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -75,7 +69,6 @@ class Session extends TableAccess
         }
 
         $this->cookieAutoLoginId = $cookiePrefix . '_AUTO_LOGIN_ID';
-        $this->binaryValue = '';
 
         if (is_int($sessionId)) {
             $this->readDataById($sessionId);
@@ -121,7 +114,6 @@ class Session extends TableAccess
             $gCurrentUser->clear();
         }
         $this->setValue('ses_usr_id', '');
-        $this->binaryValue = '';
     }
 
     /**
@@ -174,39 +166,6 @@ class Session extends TableAccess
         }
 
         return (int)$this->getValue('ses_org_id');
-    }
-
-    /**
-     * Get the value of a column of the database table.
-     * If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be
-     *                           the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return
-     *                           the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
-     *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws AdmException
-     * @throws Exception
-     */
-    public function getValue(string $columnName, string $format = '')
-    {
-        $value = parent::getValue($columnName, $format);
-
-        if ($columnName === 'ses_binary'
-            && DB_ENGINE === Database::PDO_ENGINE_PGSQL
-            && is_resource($value)) {
-            if ($this->binaryValue === '') {
-                // Postgres has a special logic to read the content of a bytea column
-                ob_start();
-                fpassthru($value);
-                $this->binaryValue = hex2bin(ob_get_contents());
-                ob_end_clean();
-            }
-            $value = $this->binaryValue;
-        }
-
-        return $value;
     }
 
     /**

@@ -78,12 +78,6 @@ class User extends TableAccess
     protected $changeNotificationEnabled;
 
     /**
-     * @var string Binary of the user photo. This is only stored at the first getValue of usr_photo
-     * because the logic for postgres only works once.
-     */
-    protected $userPhoto;
-
-    /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -615,7 +609,6 @@ class User extends TableAccess
 
         $this->administrator = false;
         $this->relationshipsChecked = false;
-        $this->userPhoto = '';
 
         // initialize rights arrays
         $this->usersEditAllowed = array();
@@ -1122,22 +1115,7 @@ class User extends TableAccess
             }
         }
 
-        $value = parent::getValue($columnName, $format);
-
-        if ($columnName === 'usr_photo'
-            && DB_ENGINE === Database::PDO_ENGINE_PGSQL
-            && is_resource($value)) {
-            if ($this->userPhoto === '') {
-                // Postgres has a special logic to read the content of a bytea column
-                ob_start();
-                fpassthru($value);
-                $this->userPhoto = hex2bin(ob_get_contents());
-                ob_end_clean();
-            }
-            $value = $this->userPhoto;
-        }
-
-        return $value;
+        return parent::getValue($columnName, $format);
     }
 
     /**

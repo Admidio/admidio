@@ -242,6 +242,17 @@ class TableAccess
                     }
                     break;
 
+                case 'bytea':
+                    // For Postgres, we must encode the stored resource hex value back to binary
+                    if (is_resource($columnValue)) {
+                        ob_start();
+                        fpassthru($columnValue);
+                        $columnValue = hex2bin(ob_get_contents());
+                        ob_end_clean();
+                        $this->dbColumns[$columnName] = $columnValue;
+                    }
+                    break;
+
                 case 'timestamp': // fallthrough
                 case 'date': // fallthrough
                 case 'time':
