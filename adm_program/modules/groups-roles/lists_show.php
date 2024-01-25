@@ -582,7 +582,8 @@ if ($getMode === 'html' || $getMode === 'print') {
     }
 }
 
-$lastGroupHead = null; // Mark for change between leader and member
+$listHasLeaders = false; // Mark for change between leader and member
+$lastMemberIsLeader = false;
 $listRowNumber = 1;
 
 foreach ($membersList as $member) {
@@ -593,8 +594,9 @@ foreach ($membersList as $member) {
 
     // in print preview and pdf we group the role leaders and the members and
     // add a specific header for them
-    if ($memberIsLeader !== $lastGroupHead && ($memberIsLeader || $lastGroupHead !== null)) {
+    if ($memberIsLeader !== $lastMemberIsLeader) {
         if ($memberIsLeader) {
+            $listHasLeaders = true;
             $title = $gL10n->get('SYS_LEADERS');
         } else {
             // if list has leaders then initialize row number for members
@@ -605,17 +607,7 @@ foreach ($membersList as $member) {
         if ($getMode === 'print' || $getMode === 'pdf') {
             $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), $list->countColumns() + 1);
         }
-        $lastGroupHead = $memberIsLeader;
-    }
-
-    // if html mode and the role has leaders then group all data between leaders and members
-    if ($getMode === 'html') {
-        // TODO set only once (yet it is set x times as members gets displayed)
-        if ($memberIsLeader) {
-            $table->setDatatablesGroupColumn(2);
-        } else {
-            $table->setDatatablesColumnsHide(array(2));
-        }
+        $lastMemberIsLeader = $memberIsLeader;
     }
 
     $columnValues = $member;
@@ -656,6 +648,16 @@ foreach ($membersList as $member) {
 
     ++$listRowNumber;
 }  // End-While (end found User)
+
+
+// if html mode and the role has leaders then group all data between leaders and members
+if ($getMode === 'html') {
+    if ($listHasLeaders) {
+        $table->setDatatablesGroupColumn(2);
+    } else {
+        $table->setDatatablesColumnsHide(array(2));
+    }
+}
 
 if ($getMode === 'pdf') {
     // send the new PDF to the User
