@@ -600,9 +600,11 @@ class ListConfiguration extends TableLists
         $sqlOrderBys = '';
         $sqlJoin  = '';
         $sqlWhere = '';
+        $columnNumber = 0;
 
         foreach ($this->columns as $listColumn) {
             $lscUsfId = (int) $listColumn->getValue('lsc_usf_id');
+            $columnNumber++;
 
             $tableAlias = '';
             if ($lscUsfId > 0) {
@@ -615,10 +617,10 @@ class ListConfiguration extends TableLists
                                     AND ' . $tableAlias . '.usd_usf_id = ' . $lscUsfId;
 
                 // usf_id is prefix for the table
-                $dbColumnName = $tableAlias . '.usd_value AS ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
+                $dbColumnName = $tableAlias . '.usd_value AS ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . $columnNumber;
             } else {
                 // Special fields like usr_photo, mem_begin ...
-                $dbColumnName = $listColumn->getValue('lsc_special_field');
+                $dbColumnName = $listColumn->getValue('lsc_special_field') . ' AS ' . $listColumn->getValue('lsc_special_field') . $columnNumber;
             }
 
             if (strlen($dbColumnName) > 0) {
