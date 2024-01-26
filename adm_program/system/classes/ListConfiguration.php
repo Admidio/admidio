@@ -66,7 +66,7 @@ class ListConfiguration extends TableLists
     {
         global $gCurrentUser;
 
-        if($number === 0) {
+        if ($number === 0) {
             // current number of the new column
             $number = count($this->columns) + 1;
         }
@@ -78,14 +78,14 @@ class ListConfiguration extends TableLists
         }
 
         // uuid could only be added by an administrator
-        if($field === 'usr_uuid' && !$gCurrentUser->editUsers()) {
+        if ($field === 'usr_uuid' && !$gCurrentUser->editUsers()) {
             return false;
         }
 
         // If column doesn't exist create object
         if (!array_key_exists($number, $this->columns)) {
             $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-            $this->columns[$number]->setValue('lsc_lst_id', (int) $this->getValue('lst_id'));
+            $this->columns[$number]->setValue('lsc_lst_id', (int)$this->getValue('lst_id'));
         }
 
         // Assign content of column
@@ -138,21 +138,21 @@ class ListConfiguration extends TableLists
         global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
         $column = $this->getColumnObject($columnNumber);
-        $usfId  = 0;
+        $usfId = 0;
 
         if ($column->getValue('lsc_usf_id') > 0) {
             // check if customs field and remember
-            $usfId = (int) $column->getValue('lsc_usf_id');
+            $usfId = (int)$column->getValue('lsc_usf_id');
         }
 
         // in some cases the content must have a special output format
 
-        if ($usfId > 0 && $usfId === (int) $gProfileFields->getProperty('COUNTRY', 'usf_id')) {
+        if ($usfId > 0 && $usfId === (int)$gProfileFields->getProperty('COUNTRY', 'usf_id')) {
             $content = $gL10n->getCountryName($content);
         } elseif ($column->getValue('lsc_special_field') === 'usr_photo') {
             // show user photo
             if (in_array($format, array('html', 'print'), true)) {
-                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $userUuid)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_PROFILE_PHOTO').'" />';
+                $content = '<img src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $userUuid)) . '" style="vertical-align: middle;" alt="' . $gL10n->get('SYS_PROFILE_PHOTO') . '" />';
             }
             if (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true) && $content != null) {
                 $content = $gL10n->get('SYS_PROFILE_PHOTO');
@@ -168,16 +168,16 @@ class ListConfiguration extends TableLists
                 $content = 0;
             }
         } elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DATE'
-        || $column->getValue('lsc_special_field') === 'mem_begin'
-        || $column->getValue('lsc_special_field') === 'mem_end') {
+            || $column->getValue('lsc_special_field') === 'mem_begin'
+            || $column->getValue('lsc_special_field') === 'mem_end') {
             if (strlen($content) > 0) {
                 // date must be formatted
                 $date = DateTime::createFromFormat('Y-m-d', $content);
                 $content = $date->format($gSettingsManager->getString('system_date'));
             }
         } elseif (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true)
-        &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
-            || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON')) {
+            && ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
+                || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON')) {
             if (strlen($content) > 0) {
                 // show selected text of option field or combobox
                 $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
@@ -191,7 +191,7 @@ class ListConfiguration extends TableLists
             }
         } elseif ($column->getValue('lsc_special_field') === 'mem_approved') {
             // Assign Integer to Language strings
-            switch ((int) $content) {
+            switch ((int)$content) {
                 case ModuleEvents::MEMBER_APPROVAL_STATE_INVITED:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_INVITED');
                     $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
@@ -227,11 +227,11 @@ class ListConfiguration extends TableLists
                     $content = $htmlText;
                 }
             }
-        } elseif (in_array($column->getValue('lsc_special_field'), array('usr_usr_id_create', 'usr_usr_id_change', 'mem_usr_id_change')) && (int) $content) {
+        } elseif (in_array($column->getValue('lsc_special_field'), array('usr_usr_id_create', 'usr_usr_id_change', 'mem_usr_id_change')) && (int)$content) {
             // Get User Information and store information in array
-            $userId = (int) $content;
+            $userId = (int)$content;
 
-            if(array_key_exists($userId, $this->arrUserNames)) {
+            if (array_key_exists($userId, $this->arrUserNames)) {
                 $content = $this->arrUserNames[$userId];
             } else {
                 $user = new User($gDb, $gProfileFields, $userId);
@@ -247,25 +247,23 @@ class ListConfiguration extends TableLists
             $content = preg_replace("/\r?\n/", "\\n", $content);
             // replace special chars in Excel so no app or function could be implicit executed
             $outputContent = preg_replace("/^[@=]/", "#", $content);
-        }
-        // pdf should show only text and not much html content
+        } // pdf should show only text and not much html content
         elseif ($format === 'pdf') {
             $outputContent = $content;
-        }
-        // create output in html layout
+        } // create output in html layout
         else {
             // firstname and lastname get a link to the profile
             if ($format === 'html'
-            &&    ($usfId === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
-                || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'))) {
+                && ($usfId === (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                    || $usfId === (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'))) {
                 $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userUuid);
-                $outputContent = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $userUuid)).'">'.$htmlValue.'</a>';
+                $outputContent = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuid)) . '">' . $htmlValue . '</a>';
             } else {
                 // within print mode no links should be set
                 if ($format === 'print'
-                &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'EMAIL'
-                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'PHONE'
-                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'URL')) {
+                    && ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'EMAIL'
+                        || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'PHONE'
+                        || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'URL')) {
                     $outputContent = $content;
                 } else {
                     // checkbox must set a sorting value
@@ -333,21 +331,21 @@ class ListConfiguration extends TableLists
 
         // Array to assign names to tables
         $arrSpecialColumnNames = array(
-            'usr_login_name'       => 'left',
-            'usr_photo'            => 'left',
-            'usr_usr_id_create'    => 'left',
+            'usr_login_name' => 'left',
+            'usr_photo' => 'left',
+            'usr_usr_id_create' => 'left',
             'usr_timestamp_create' => 'left',
-            'usr_usr_id_change'    => 'left',
+            'usr_usr_id_change' => 'left',
             'usr_timestamp_change' => 'left',
-            'usr_uuid'             => 'left',
-            'mem_begin'            => 'left',
-            'mem_end'              => 'left',
-            'mem_leader'           => 'left',
-            'mem_approved'         => 'left',
-            'mem_usr_id_change'    => 'left',
+            'usr_uuid' => 'left',
+            'mem_begin' => 'left',
+            'mem_end' => 'left',
+            'mem_leader' => 'left',
+            'mem_approved' => 'left',
+            'mem_usr_id_change' => 'left',
             'mem_timestamp_change' => 'left',
-            'mem_comment'          => 'left',
-            'mem_count_guests'     => 'right'
+            'mem_comment' => 'left',
+            'mem_count_guests' => 'right'
         );
 
         for ($columnNumber = 1, $iMax = $this->countColumns(); $columnNumber <= $iMax; ++$columnNumber) {
@@ -355,13 +353,13 @@ class ListConfiguration extends TableLists
 
             // Find name of the field
             if ($column->getValue('lsc_usf_id') > 0) {
-                $usfId = (int) $column->getValue('lsc_usf_id');
+                $usfId = (int)$column->getValue('lsc_usf_id');
 
                 if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX'
-                ||  $gProfileFields->getPropertyById($usfId, 'usf_name_intern') === 'GENDER') {
+                    || $gProfileFields->getPropertyById($usfId, 'usf_name_intern') === 'GENDER') {
                     $arrColumnAlignments[] = 'center';
                 } elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'NUMBER'
-                ||      $gProfileFields->getPropertyById($usfId, 'usf_type') === 'DECIMAL') {
+                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'DECIMAL') {
                     $arrColumnAlignments[] = 'right';
                 } else {
                     $arrColumnAlignments[] = 'left';
@@ -389,21 +387,21 @@ class ListConfiguration extends TableLists
 
         // Array to assign names to tables
         $arrSpecialColumnNames = array(
-            'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
-            'usr_photo'            => $gL10n->get('SYS_PHOTO'),
-            'usr_usr_id_create'    => $gL10n->get('SYS_CREATED_BY'),
+            'usr_login_name' => $gL10n->get('SYS_USERNAME'),
+            'usr_photo' => $gL10n->get('SYS_PHOTO'),
+            'usr_usr_id_create' => $gL10n->get('SYS_CREATED_BY'),
             'usr_timestamp_create' => $gL10n->get('SYS_CREATED_AT'),
-            'usr_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
+            'usr_usr_id_change' => $gL10n->get('SYS_CHANGED_BY'),
             'usr_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
-            'usr_uuid'             => $gL10n->get('SYS_UNIQUE_ID'),
-            'mem_begin'            => $gL10n->get('SYS_START'),
-            'mem_end'              => $gL10n->get('SYS_END'),
-            'mem_leader'           => $gL10n->get('SYS_LEADERS'),
-            'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
-            'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
+            'usr_uuid' => $gL10n->get('SYS_UNIQUE_ID'),
+            'mem_begin' => $gL10n->get('SYS_START'),
+            'mem_end' => $gL10n->get('SYS_END'),
+            'mem_leader' => $gL10n->get('SYS_LEADERS'),
+            'mem_approved' => $gL10n->get('SYS_PARTICIPATION_STATUS'),
+            'mem_usr_id_change' => $gL10n->get('SYS_CHANGED_BY'),
             'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
-            'mem_comment'          => $gL10n->get('SYS_COMMENT'),
-            'mem_count_guests'     => $gL10n->get('SYS_SEAT_AMOUNT')
+            'mem_comment' => $gL10n->get('SYS_COMMENT'),
+            'mem_count_guests' => $gL10n->get('SYS_SEAT_AMOUNT')
         );
 
         for ($columnNumber = 1, $iMax = $this->countColumns(); $columnNumber <= $iMax; ++$columnNumber) {
@@ -411,7 +409,7 @@ class ListConfiguration extends TableLists
 
             // Find name of the field
             if ($column->getValue('lsc_usf_id') > 0) {
-                $arrColumnNames[] = $gProfileFields->getPropertyById((int) $column->getValue('lsc_usf_id'), 'usf_name');
+                $arrColumnNames[] = $gProfileFields->getPropertyById((int)$column->getValue('lsc_usf_id'), 'usf_name');
             } else {
                 $arrColumnNames[] = $arrSpecialColumnNames[$column->getValue('lsc_special_field')];
             }
@@ -433,7 +431,7 @@ class ListConfiguration extends TableLists
 
         if (count($this->columnsSqlNames) === 0) {
             foreach ($this->columns as $listColumn) {
-                if ((int) $listColumn->getValue('lsc_usf_id') > 0) {
+                if ((int)$listColumn->getValue('lsc_usf_id') > 0) {
                     // get internal profile field name
                     $this->columnsSqlNames[] = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern');
                 } else {
@@ -484,7 +482,7 @@ class ListConfiguration extends TableLists
         $arrSearchConditions = array();
 
         foreach ($this->columns as $listColumn) {
-            $lscUsfId = (int) $listColumn->getValue('lsc_usf_id');
+            $lscUsfId = (int)$listColumn->getValue('lsc_usf_id');
 
             // custom profile field
             if ($lscUsfId > 0) {
@@ -499,7 +497,7 @@ class ListConfiguration extends TableLists
                         $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
 
                         foreach ($arrListValues as $key => $value) {
-                            $condition .= ' WHEN ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ' = \'' . $key . '\' THEN \''.$value.'\' ';
+                            $condition .= ' WHEN ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ' = \'' . $key . '\' THEN \'' . $value . '\' ';
                         }
 
                         $condition .= ' ELSE \' \' END ';
@@ -580,15 +578,15 @@ class ListConfiguration extends TableLists
         $optionsDefault = array(
             'showAllMembersThisOrga' => false,
             'showAllMembersDatabase' => false,
-            'showRolesMembers'  => array(),
+            'showRolesMembers' => array(),
             'showFormerMembers' => false,
-            'showUserUUID'      => false,
-            'showLeaderFlag'    => false,
+            'showUserUUID' => false,
+            'showLeaderFlag' => false,
             'showRelationTypes' => array(),
-            'useConditions'     => true,
-            'useOrderBy'        => true,
-            'startDate'         => null,
-            'endDate'           => null
+            'useConditions' => true,
+            'useOrderBy' => true,
+            'startDate' => null,
+            'endDate' => null
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
@@ -598,12 +596,12 @@ class ListConfiguration extends TableLists
         $sqlIdColumns = '';
         $sqlMemLeader = '';
         $sqlOrderBys = '';
-        $sqlJoin  = '';
+        $sqlJoin = '';
         $sqlWhere = '';
         $columnNumber = 0;
 
         foreach ($this->columns as $listColumn) {
-            $lscUsfId = (int) $listColumn->getValue('lsc_usf_id');
+            $lscUsfId = (int)$listColumn->getValue('lsc_usf_id');
             $columnNumber++;
 
             $tableAlias = '';
@@ -623,110 +621,108 @@ class ListConfiguration extends TableLists
                 $dbColumnName = $listColumn->getValue('lsc_special_field') . ' AS ' . $listColumn->getValue('lsc_special_field') . $columnNumber;
             }
 
-            if (strlen($dbColumnName) > 0) {
-                $arrSqlColumnNames[] = $dbColumnName;
+            $arrSqlColumnNames[] = $dbColumnName;
 
-                $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
+            $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
 
-                // create a valid sort
-                $lscSort = $listColumn->getValue('lsc_sort');
-                if ($lscSort != '') {
-                    if (strpos($dbColumnName, ' AS') > 0) {
-                        $sortColumnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
+            // create a valid sort
+            $lscSort = $listColumn->getValue('lsc_sort');
+            if ($lscSort != '') {
+                if (strpos($dbColumnName, ' AS') > 0) {
+                    $sortColumnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
+                } else {
+                    $sortColumnName = $dbColumnName;
+                }
+
+                if ($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL') {
+                    // if a field has numeric values then there must be a cast because database
+                    // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
+                    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+                        $columnType = 'numeric';
                     } else {
-                        $sortColumnName = $dbColumnName;
+                        // mysql
+                        $columnType = 'unsigned';
                     }
+                    $arrOrderByColumns[] = ' CAST(' . $sortColumnName . ' AS ' . $columnType . ') ' . $lscSort;
+                } else {
+                    $arrOrderByColumns[] = $sortColumnName . ' ' . $lscSort;
+                }
+            }
 
-                    if ($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL') {
-                        // if a field has numeric values then there must be a cast because database
-                        // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
-                        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-                            $columnType = 'numeric';
-                        } else {
-                            // mysql
-                            $columnType = 'unsigned';
-                        }
-                        $arrOrderByColumns[] = ' CAST(' . $sortColumnName . ' AS ' . $columnType . ') ' . $lscSort;
-                    } else {
-                        $arrOrderByColumns[] = $sortColumnName . ' ' . $lscSort;
+            // Handle the conditions for the columns
+            if ($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '') {
+                $value = $listColumn->getValue('lsc_filter');
+
+                // custom profile field
+                if ($lscUsfId > 0) {
+                    switch ($userFieldType) {
+                        case 'CHECKBOX':
+                            $type = 'checkbox';
+
+                            // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
+                            $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+                            $arrCheckboxKeys = array(1, 0, 1, 0);
+                            $value = str_replace(array_map('StringUtils::strToLower', $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
+                            break;
+
+                        case 'DROPDOWN': // fallthrough
+                        case 'RADIO_BUTTON':
+                            $type = 'int';
+
+                            // replace all field values with their internal numbers
+                            $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
+                            $value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
+                            break;
+
+                        case 'NUMBER': // fallthrough
+                        case 'DECIMAL':
+                            $type = 'int';
+                            break;
+
+                        case 'DATE':
+                            $type = 'date';
+                            break;
+
+                        default:
+                            $type = 'string';
+                    }
+                } else {
+                    switch ($listColumn->getValue('lsc_special_field')) {
+                        case 'mem_begin': // fallthrough
+                        case 'mem_end':
+                            $type = 'date';
+                            break;
+
+                        case 'usr_photo':
+                            $type = '';
+                            break;
+
+                        default:
+                            $type = 'string';
                     }
                 }
 
-                // Handle the conditions for the columns
-                if ($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '') {
-                    $value = $listColumn->getValue('lsc_filter');
+                $parser = new ConditionParser();
 
-                    // custom profile field
-                    if ($lscUsfId > 0) {
-                        switch ($userFieldType) {
-                            case 'CHECKBOX':
-                                $type = 'checkbox';
-
-                                // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
-                                $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
-                                $arrCheckboxKeys = array(1, 0, 1, 0);
-                                $value = str_replace(array_map('StringUtils::strToLower', $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
-                                break;
-
-                            case 'DROPDOWN': // fallthrough
-                            case 'RADIO_BUTTON':
-                                $type = 'int';
-
-                                // replace all field values with their internal numbers
-                                $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
-                                $value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
-                                break;
-
-                            case 'NUMBER': // fallthrough
-                            case 'DECIMAL':
-                                $type = 'int';
-                                break;
-
-                            case 'DATE':
-                                $type = 'date';
-                                break;
-
-                            default:
-                                $type = 'string';
-                        }
-                    } else {
-                        switch ($listColumn->getValue('lsc_special_field')) {
-                            case 'mem_begin': // fallthrough
-                            case 'mem_end':
-                                $type = 'date';
-                                break;
-
-                            case 'usr_photo':
-                                $type = '';
-                                break;
-
-                            default:
-                                $type = 'string';
-                        }
-                    }
-
-                    $parser = new ConditionParser();
-
-                    // if profile field then add not exists condition
-                    if ($lscUsfId > 0) {
-                        $parser->setNotExistsStatement('SELECT 1
+                // if profile field then add not exists condition
+                if ($lscUsfId > 0) {
+                    $parser->setNotExistsStatement('SELECT 1
                                                       FROM ' . TBL_USER_DATA . ' ' . $tableAlias . 's
                                                      WHERE ' . $tableAlias . 's.usd_usr_id = usr_id
                                                        AND ' . $tableAlias . 's.usd_usf_id = ' . $lscUsfId);
-                    }
-
-                    // now transform condition into SQL
-                    if (strpos($dbColumnName, ' AS') > 0) {
-                        $columnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
-                    } else {
-                        $columnName = $dbColumnName;
-                    }
-                    $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name')); // TODO Exception handling
                 }
+
+                // now transform condition into SQL
+                if (strpos($dbColumnName, ' AS') > 0) {
+                    $columnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
+                } else {
+                    $columnName = $dbColumnName;
+                }
+                $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name')); // TODO Exception handling
             }
         }
 
-        if(count($arrSqlColumnNames) > 0) {
+        if (count($arrSqlColumnNames) > 0) {
             $sqlColumnNames = ', ' . implode(', ', $arrSqlColumnNames);
             $sqlColumnNames = substr($sqlColumnNames, 1);
         }
@@ -755,7 +751,7 @@ class ListConfiguration extends TableLists
             $sqlRoleIds = '(SELECT rol_id
                               FROM ' . TBL_CATEGORIES . '
                              INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
-                             WHERE (  cat_org_id = '. $GLOBALS['gCurrentOrgId']. '
+                             WHERE (  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
                                    OR cat_org_id IS NULL )
                                AND cat_name_intern <> \'EVENTS\'
                             )';
@@ -763,25 +759,25 @@ class ListConfiguration extends TableLists
 
         // Set state of membership
         if ($optionsAll['showFormerMembers']) {
-            $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'
+            $sqlMemberStatus = 'AND mem_end < \'' . DATE_NOW . '\'
                 AND NOT EXISTS (
                    SELECT 1
-                     FROM '.TBL_MEMBERS.' AS act
+                     FROM ' . TBL_MEMBERS . ' AS act
                     WHERE act.mem_rol_id = mem.mem_rol_id
                       AND act.mem_usr_id = mem.mem_usr_id
-                      AND \''.DATE_NOW.'\' BETWEEN act.mem_begin AND act.mem_end
+                      AND \'' . DATE_NOW . '\' BETWEEN act.mem_begin AND act.mem_end
                 )';
         } else {
             if ($optionsAll['startDate'] === null) {
-                $sqlMemberStatus = 'AND mem_begin <= \''.DATE_NOW.'\'';
+                $sqlMemberStatus = 'AND mem_begin <= \'' . DATE_NOW . '\'';
             } else {
-                $sqlMemberStatus = 'AND mem_begin <= \''.$optionsAll['endDate'].' 23:59:59\'';
+                $sqlMemberStatus = 'AND mem_begin <= \'' . $optionsAll['endDate'] . ' 23:59:59\'';
             }
 
             if ($optionsAll['endDate'] === null) {
-                $sqlMemberStatus .= ' AND mem_end >= \''.DATE_NOW.'\'';
+                $sqlMemberStatus .= ' AND mem_end >= \'' . DATE_NOW . '\'';
             } else {
-                $sqlMemberStatus .= ' AND mem_end >= \''.$optionsAll['startDate'].' 00:00:00\'';
+                $sqlMemberStatus .= ' AND mem_end >= \'' . $optionsAll['startDate'] . ' 00:00:00\'';
             }
         }
 
@@ -795,43 +791,43 @@ class ListConfiguration extends TableLists
             $sqlIdColumns = ' usr_uuid, ';
         }
 
-        $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
+        $sqlUserJoin = 'INNER JOIN ' . TBL_USERS . '
                                 ON usr_id = mem_usr_id';
         $sqlRelationTypeWhere = '';
         if (count($optionsAll['showRelationTypes']) > 0) {
-            $sqlUserJoin = 'INNER JOIN '.TBL_USER_RELATIONS.'
+            $sqlUserJoin = 'INNER JOIN ' . TBL_USER_RELATIONS . '
                                     ON ure_usr_id1 = mem_usr_id
-                            INNER JOIN '.TBL_USERS.'
+                            INNER JOIN ' . TBL_USERS . '
                                     ON usr_id = ure_usr_id2';
-            $sqlRelationTypeWhere = 'AND ure_urt_id IN ('.implode(', ', $optionsAll['showRelationTypes']).')';
+            $sqlRelationTypeWhere = 'AND ure_urt_id IN (' . implode(', ', $optionsAll['showRelationTypes']) . ')';
         }
 
         // Set SQL-Statement
         if ($optionsAll['showAllMembersDatabase']) {
             $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . '
-                      FROM '.TBL_USERS.'
-                           '.$sqlJoin.'
-                     WHERE usr_valid = true '.
-                           $sqlWhere.
-                           $sqlOrderBys;
+                      FROM ' . TBL_USERS . '
+                           ' . $sqlJoin . '
+                     WHERE usr_valid = true ' .
+                $sqlWhere .
+                $sqlOrderBys;
         } else {
             $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . '
-                      FROM '.TBL_MEMBERS.' mem
-                INNER JOIN '.TBL_ROLES.'
+                      FROM ' . TBL_MEMBERS . ' mem
+                INNER JOIN ' . TBL_ROLES . '
                         ON rol_id = mem_rol_id
-                INNER JOIN '.TBL_CATEGORIES.'
+                INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = rol_cat_id
-                           '.$sqlUserJoin.'
-                           '.$sqlJoin.'
+                           ' . $sqlUserJoin . '
+                           ' . $sqlJoin . '
                      WHERE usr_valid = true
                        AND rol_valid = true
-                       AND rol_id IN ('.$sqlRoleIds.')
-                           '.$sqlRelationTypeWhere.'
-                       AND (  cat_org_id = '. $GLOBALS['gCurrentOrgId']. '
+                       AND rol_id IN (' . $sqlRoleIds . ')
+                           ' . $sqlRelationTypeWhere . '
+                       AND (  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
                            OR cat_org_id IS NULL )
-                           '.$sqlMemberStatus.
-                           $sqlWhere.
-                           $sqlOrderBys;
+                           ' . $sqlMemberStatus .
+                $sqlWhere .
+                $sqlOrderBys;
         }
 
         return $sql;
@@ -850,17 +846,17 @@ class ListConfiguration extends TableLists
         $this->columns = array();
 
         $sql = 'SELECT *
-                  FROM '.TBL_LIST_COLUMNS.'
+                  FROM ' . TBL_LIST_COLUMNS . '
                  WHERE lsc_lst_id = ? -- $this->getValue(\'lst_id\')
               ORDER BY lsc_number ASC';
-        $lscStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('lst_id')));
+        $lscStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('lst_id')));
 
         while ($lscRow = $lscStatement->fetch()) {
-            $usfId = (int) $lscRow['lsc_usf_id'];
+            $usfId = (int)$lscRow['lsc_usf_id'];
 
             // only add columns to the array if the current user is allowed to view them
             if ($usfId === 0
-            || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers())) {
+                || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers())) {
                 // if only names should be shown, then check if it's a name field
                 if (!$this->showOnlyNames
                     || ($usfId > 0 && in_array($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), array('FIRST_NAME', 'LAST_NAME')))
@@ -909,7 +905,7 @@ class ListConfiguration extends TableLists
         // check for every column if the number is expected otherwise set new number
         foreach ($this->columns as $number => $listColumn) {
             if ($listColumn->getValue('lsc_special_field') === $columnNameOrUsfId
-            || $listColumn->getValue('lsc_usf_id') === (int) $columnNameOrUsfId) {
+                || $listColumn->getValue('lsc_usf_id') === (int)$columnNameOrUsfId) {
                 unset($this->columns[$number]);
             } else {
                 // set new number to the columns after the removed column
@@ -964,8 +960,8 @@ class ListConfiguration extends TableLists
 
         // save columns
         foreach ($this->columns as $listColumn) {
-            if ((int) $listColumn->getValue('lsc_lst_id') === 0) {
-                $listColumn->setValue('lsc_lst_id', (int) $this->getValue('lst_id'));
+            if ((int)$listColumn->getValue('lsc_lst_id') === 0) {
+                $listColumn->setValue('lsc_lst_id', (int)$this->getValue('lst_id'));
             }
             $listColumn->save($updateFingerPrint);
         }
@@ -986,7 +982,7 @@ class ListConfiguration extends TableLists
     {
         $this->showOnlyNames = true;
 
-        if(count($this->columns) > 0) {
+        if (count($this->columns) > 0) {
             $this->readColumns();
         }
     }
