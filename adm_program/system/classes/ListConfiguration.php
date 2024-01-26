@@ -602,6 +602,7 @@ class ListConfiguration extends TableLists
 
         foreach ($this->columns as $listColumn) {
             $lscUsfId = (int)$listColumn->getValue('lsc_usf_id');
+            $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
             $columnNumber++;
 
             $tableAlias = '';
@@ -623,11 +624,8 @@ class ListConfiguration extends TableLists
 
             $arrSqlColumnNames[] = $dbColumnName;
 
-            $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
-
             // create a valid sort
-            $lscSort = $listColumn->getValue('lsc_sort');
-            if ($lscSort != '') {
+            if ($listColumn->getValue('lsc_sort') != '') {
                 if (strpos($dbColumnName, ' AS') > 0) {
                     $sortColumnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
                 } else {
@@ -643,14 +641,14 @@ class ListConfiguration extends TableLists
                         // mysql
                         $columnType = 'unsigned';
                     }
-                    $arrOrderByColumns[] = ' CAST(' . $sortColumnName . ' AS ' . $columnType . ') ' . $lscSort;
+                    $arrOrderByColumns[] = ' CAST(' . $sortColumnName . ' AS ' . $columnType . ') ' . $listColumn->getValue('lsc_sort');
                 } else {
-                    $arrOrderByColumns[] = $sortColumnName . ' ' . $lscSort;
+                    $arrOrderByColumns[] = $sortColumnName . ' ' . $listColumn->getValue('lsc_sort');
                 }
             }
 
             // Handle the conditions for the columns
-            if ($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '') {
+            if ($optionsAll['useConditions'] && (string) $listColumn->getValue('lsc_filter') !== '') {
                 $value = $listColumn->getValue('lsc_filter');
 
                 // custom profile field
