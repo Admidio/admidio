@@ -605,7 +605,7 @@ foreach ($membersList as $member) {
         }
 
         if ($getMode === 'print' || $getMode === 'pdf') {
-            $table->addRowByArray(array($title), null, array('class' => 'admidio-group-heading'), $list->countColumns() + 1);
+            $table->addRowByArray(array($title), '', array('class' => 'admidio-group-heading'), $list->countColumns() + 1);
         }
         $lastMemberIsLeader = $memberIsLeader;
     }
