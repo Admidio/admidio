@@ -38,12 +38,6 @@ $role->readDataByUuid($getRoleUuid);
 
 $_SESSION['set_rol_id'] = $role->getValue('rol_id');
 
-// roles of other organizations can't be edited
-if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // check if user is allowed to assign members to this role
 if (!$role->allowedToAssignMembers($gCurrentUser)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

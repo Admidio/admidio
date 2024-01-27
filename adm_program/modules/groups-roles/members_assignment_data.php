@@ -50,7 +50,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
-$getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'int');
+$getFilterRoleUuid = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'string');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 $getDraw   = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
 $getStart  = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
@@ -66,12 +66,6 @@ header('Content-Type: application/json');
 // create object of the commited role
 $role = new TableRoles($gDb);
 $role->readDataByUuid($getRoleUuid);
-
-// roles of other organizations can't be edited
-if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
-    echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
-    exit();
-}
 
 // check if user is allowed to assign members to this role
 if (!$role->allowedToAssignMembers($gCurrentUser)) {
