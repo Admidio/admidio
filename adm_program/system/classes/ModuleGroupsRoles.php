@@ -58,37 +58,38 @@ class ModuleGroupsRoles extends HtmlPage
 
         $templateData = array();
 
-        foreach($this->data as $row) {
+        foreach ($this->data as $row) {
             $role = new TableRoles($gDb);
             $role->setArray($row);
 
             $templateRow = array();
             $templateRow['category'] = $role->getValue('cat_name');
-            $templateRow['id'] = 'role_'.$role->getValue('rol_uuid');
+            $templateRow['id'] = 'role_' . $role->getValue('rol_uuid');
             $templateRow['title'] = $role->getValue('rol_name');
 
             // send a mail to all role members
             if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getBool('enable_mail_module')) {
                 $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $row['rol_uuid'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $row['rol_uuid'])),
                     'icon' => 'fas fa-envelope',
                     'tooltip' => $gL10n->get('SYS_EMAIL_TO_MEMBERS')
                 );
             }
 
-            // show link to export vCard if user is allowed to see members and the role has members
-            if ($row['num_members'] > 0 || $row['num_leader'] > 0) {
+            // show link to export vCard if user is allowed to see the profiles of members and the role has members
+            if ($gCurrentUser->hasRightViewProfiles($row['rol_id'])
+                && ($row['num_members'] > 0 || $row['num_leader'] > 0)) {
                 $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('mode' => '6', 'role_uuid' => $row['rol_uuid'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => '6', 'role_uuid' => $row['rol_uuid'])),
                     'icon' => 'fas fa-download',
                     'tooltip' => $gL10n->get('SYS_EXPORT_VCARD_FROM_VAR', array($row['rol_name']))
-                    );
+                );
             }
 
             // link to assign or remove members if you are allowed to do it
             if ($role->allowedToAssignMembers($gCurrentUser)) {
                 $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $row['rol_uuid'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment.php', array('role_uuid' => $row['rol_uuid'])),
                     'icon' => 'fas fa-user-plus',
                     'tooltip' => $gL10n->get('SYS_ASSIGN_MEMBERS')
                 );
@@ -98,13 +99,13 @@ class ModuleGroupsRoles extends HtmlPage
                 // set role active or inactive
                 if ($this->roleType === ModuleGroupsRoles::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'role_'.$row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'role_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
                         'icon' => 'fas fa-user-check',
                         'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                     );
                 } elseif ($this->roleType === ModuleGroupsRoles::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'role_'.$row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'role_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
                         'icon' => 'fas fa-user-slash',
                         'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
                     );
@@ -112,7 +113,7 @@ class ModuleGroupsRoles extends HtmlPage
 
                 // edit roles of you are allowed to assign roles
                 $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $row['rol_uuid'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_new.php', array('role_uuid' => $row['rol_uuid'])),
                     'icon' => 'fas fa-edit',
                     'tooltip' => $gL10n->get('SYS_EDIT_ROLE')
                 );
@@ -132,9 +133,9 @@ class ModuleGroupsRoles extends HtmlPage
                     // read first 200 chars of text, then search for last space and cut the text there. After that add a "more" link
                     $textPrev = substr($roleDescription, 0, 200);
                     $maxPosPrev = strrpos($textPrev, ' ');
-                    $roleDescription = substr($textPrev, 0, $maxPosPrev).
-                        ' <span class="collapse" id="viewdetails-'.$row['rol_uuid'].'">'.substr($roleDescription, $maxPosPrev).'.
-                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails-'.$row['rol_uuid'].'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                    $roleDescription = substr($textPrev, 0, $maxPosPrev) .
+                        ' <span class="collapse" id="viewdetails-' . $row['rol_uuid'] . '">' . substr($roleDescription, $maxPosPrev) . '.
+                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails-' . $row['rol_uuid'] . '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="' . $gL10n->get('SYS_MORE') . '"></i></a>';
                 }
 
                 $templateRow['information'][] = $roleDescription;
@@ -143,24 +144,24 @@ class ModuleGroupsRoles extends HtmlPage
             // block with information about events and meeting-point
             if (!empty($role->getValue('rol_start_date')) || $role->getValue('rol_weekday') > 0
                 || !empty($role->getValue('rol_start_time')) || !empty($role->getValue('rol_location'))) {
-                $html = '<h6>'.$gL10n->get('SYS_APPOINTMENTS').' / '.$gL10n->get('SYS_MEETINGS').'</h6>';
+                $html = '<h6>' . $gL10n->get('SYS_APPOINTMENTS') . ' / ' . $gL10n->get('SYS_MEETINGS') . '</h6>';
                 if ($role->getValue('rol_start_date') !== '') {
-                    $html .= '<span class="d-block">'.$gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))).'</span>';
+                    $html .= '<span class="d-block">' . $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))) . '</span>';
                 }
 
                 if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
                     if ($role->getValue('rol_weekday') > 0) {
-                        $html .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
+                        $html .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')) . ' ';
                     }
                     if (!empty($role->getValue('rol_start_time'))) {
                         $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
                     }
-                    $html = '<span class="d-block">'.$html.'</span>';
+                    $html = '<span class="d-block">' . $html . '</span>';
                 }
 
                 // Meeting point
                 if (!empty($role->getValue('rol_location'))) {
-                    $html .= '<span class="d-block">'.$gL10n->get('SYS_MEETING_POINT').' '. $role->getValue('rol_location').'</span>';
+                    $html .= '<span class="d-block">' . $gL10n->get('SYS_MEETING_POINT') . ' ' . $role->getValue('rol_location') . '</span>';
                 }
                 $templateRow['information'][] = $html;
             }
@@ -171,7 +172,7 @@ class ModuleGroupsRoles extends HtmlPage
 
                 // Member fee
                 if (!empty($role->getValue('rol_cost'))) {
-                    $html .= (float) $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency');
+                    $html .= (float)$role->getValue('rol_cost') . ' ' . $gSettingsManager->getString('system_currency');
                 }
 
                 // Contributory period
@@ -187,7 +188,7 @@ class ModuleGroupsRoles extends HtmlPage
             $htmlLeader = '';
 
             if ($role->getValue('rol_max_members') > 0) {
-                $html .= $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array((int) $row['num_members'], (int) $role->getValue('rol_max_members')));
+                $html .= $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array((int)$row['num_members'], (int)$role->getValue('rol_max_members')));
             } else {
                 $html .= $row['num_members'] . ' ' . $gL10n->get('SYS_PARTICIPANTS');
             }
@@ -200,7 +201,7 @@ class ModuleGroupsRoles extends HtmlPage
                     $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                 }
 
-                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $row['rol_id'], 'show_former_members' => 1)) . '">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
+                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('rol_ids' => $row['rol_id'], 'show_former_members' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
             }
 
             if ($row['num_leader'] > 0) {
@@ -209,7 +210,7 @@ class ModuleGroupsRoles extends HtmlPage
             $templateRow['information'][] = '<span class="d-block">' . $html . '</span>' . $htmlLeader;
 
             $templateRow['buttons'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $row['rol_id'])),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('rol_ids' => $row['rol_id'])),
                 'name' => $gL10n->get('SYS_SHOW_MEMBER_LIST')
             );
 
@@ -235,7 +236,7 @@ class ModuleGroupsRoles extends HtmlPage
 
         $templateData = array();
 
-        foreach($this->data as $row) {
+        foreach ($this->data as $row) {
             $role = new TableRoles($gDb);
             $role->setArray($row);
 
@@ -243,7 +244,7 @@ class ModuleGroupsRoles extends HtmlPage
             $templateRow['category'] = $role->getValue('cat_name');
             $templateRow['categoryOrder'] = $role->getValue('cat_sequence');
             $templateRow['role'] = $role->getValue('rol_name');
-            $templateRow['roleUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $row['rol_uuid']));
+            $templateRow['roleUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_new.php', array('role_uuid' => $row['rol_uuid']));
             $templateRow['roleRights'] = array();
             if ($role->getValue('rol_assign_roles') == 1) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-user-tie', 'title' => $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'));
@@ -263,25 +264,25 @@ class ModuleGroupsRoles extends HtmlPage
             if ($role->getValue('rol_profile') == 1) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-user', 'title' => $gL10n->get('SYS_RIGHT_PROFILE'));
             }
-            if ($role->getValue('rol_announcements') == 1 && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
+            if ($role->getValue('rol_announcements') == 1 && (int)$gSettingsManager->get('announcements_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-newspaper', 'title' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'));
             }
-            if ($role->getValue('rol_events') == 1 && (int) $gSettingsManager->get('events_module_enabled') > 0) {
+            if ($role->getValue('rol_events') == 1 && (int)$gSettingsManager->get('events_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-calendar-alt', 'title' => $gL10n->get('SYS_RIGHT_DATES'));
             }
-            if ($role->getValue('rol_photo') == 1 && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
+            if ($role->getValue('rol_photo') == 1 && (int)$gSettingsManager->get('photo_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-image', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
             }
-            if ($role->getValue('rol_documents_files') == 1 && (int) $gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($role->getValue('rol_documents_files') == 1 && (int)$gSettingsManager->getBool('documents_files_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-download', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
-            if ($role->getValue('rol_guestbook') == 1 && (int) $gSettingsManager->get('enable_guestbook_module') > 0) {
+            if ($role->getValue('rol_guestbook') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fas fa-book', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK'));
             }
-            if ($role->getValue('rol_guestbook_comments') == 1 && (int) $gSettingsManager->get('enable_guestbook_module') > 0 && !$gSettingsManager->getBool('enable_gbook_comments4all')) {
+            if ($role->getValue('rol_guestbook_comments') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0 && !$gSettingsManager->getBool('enable_gbook_comments4all')) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-comment', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'));
             }
-            if ($role->getValue('rol_weblinks') == 1 && (int) $gSettingsManager->get('enable_weblinks_module') > 0) {
+            if ($role->getValue('rol_weblinks') == 1 && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-link', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));
             }
 
@@ -346,25 +347,25 @@ class ModuleGroupsRoles extends HtmlPage
             }
 
             $templateRow['actions'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $row['rol_id'])),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $row['rol_id'])),
                 'icon' => 'fas fa-list-alt',
                 'tooltip' => $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP')
             );
             if ($this->roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
-                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
                     'icon' => 'fas fa-user-check',
                     'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                 );
             } elseif ($this->roleType === $this::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
-                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
                     'icon' => 'fas fa-user-slash',
                     'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
                 );
             }
             $templateRow['actions'][] = array(
-                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
                 'icon' => 'fas fa-trash-alt',
                 'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
             );
@@ -398,7 +399,7 @@ class ModuleGroupsRoles extends HtmlPage
 
         $sql = 'SELECT rol.*, cat.*,
                        COALESCE((SELECT COUNT(*) + SUM(mem_count_guests) AS count
-                          FROM '.TBL_MEMBERS.' AS mem
+                          FROM ' . TBL_MEMBERS . ' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
                            AND mem.mem_begin  <= ? -- DATE_NOW
                            AND mem.mem_end     > ? -- DATE_NOW
@@ -406,13 +407,13 @@ class ModuleGroupsRoles extends HtmlPage
                             OR mem.mem_approved < 3)
                            AND mem.mem_leader = false), 0) AS num_members,
                        COALESCE((SELECT COUNT(*) AS count
-                          FROM '.TBL_MEMBERS.' AS mem
+                          FROM ' . TBL_MEMBERS . ' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
                            AND mem.mem_begin  <= ? -- DATE_NOW
                            AND mem.mem_end     > ? -- DATE_NOW
                            AND mem.mem_leader = true), 0) AS num_leader,
                        COALESCE((SELECT COUNT(*) AS count
-                          FROM '.TBL_MEMBERS.' AS mem
+                          FROM ' . TBL_MEMBERS . ' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
                            AND mem_end < ?  -- DATE_NOW
                            AND NOT EXISTS (
@@ -425,8 +426,8 @@ class ModuleGroupsRoles extends HtmlPage
                   FROM ' . TBL_ROLES . ' AS rol
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = rol_cat_id
-                       ' . (strlen($categoryUUID) > 1 ? ' AND cat_uuid = \'' . $categoryUUID . '\'' : '').'
-             LEFT JOIN '.TBL_EVENTS.' ON dat_rol_id = rol_id
+                       ' . (strlen($categoryUUID) > 1 ? ' AND cat_uuid = \'' . $categoryUUID . '\'' : '') . '
+             LEFT JOIN ' . TBL_EVENTS . ' ON dat_rol_id = rol_id
                  WHERE (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )';
 
@@ -455,7 +456,7 @@ class ModuleGroupsRoles extends HtmlPage
             if ($visibleRoles !== '') {
                 $sql .= ' AND rol_id IN (' . $visibleRoles . ')';
             } else {
-                $sql .=' AND rol_id = 0 ';
+                $sql .= ' AND rol_id = 0 ';
             }
         }
 
