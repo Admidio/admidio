@@ -49,7 +49,7 @@ class ModuleRegistration extends HtmlPage
                     ON usr_id = reg_usr_id
                  WHERE usr_valid = false
                    AND reg_org_id = ? -- $gCurrentOrgId
-              ORDER BY reg_validation_id ASC, reg_timestamp DESC';
+              ORDER BY reg_validation_id DESC, reg_timestamp DESC';
         $queryParameters = array($gCurrentOrgId);
         return $gDb->getArrayFromSql($sql, $queryParameters);
     }
