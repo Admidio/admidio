@@ -364,11 +364,13 @@ class ModuleGroupsRoles extends HtmlPage
                     'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
                 );
             }
-            $templateRow['actions'][] = array(
-                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
-                'icon' => 'fas fa-trash-alt',
-                'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
-            );
+            if (!$role->getValue('rol_administrator')) {
+                $templateRow['actions'][] = array(
+                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                    'icon' => 'fas fa-trash-alt',
+                    'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
+                );
+            }
             $templateData[] = $templateRow;
         }
 
