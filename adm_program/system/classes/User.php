@@ -1185,7 +1185,7 @@ class User extends TableAccess
             }
         }
         if ((int)$gSettingsManager->get('profile_photo_storage') === 0 && $this->getValue('usr_photo') !== '') {
-            $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . base64_encode($this->getValue('usr_photo'));
+            $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . base64_encode((string) $this->getValue('usr_photo'));
         }
         // Gender is not included in vCard 2.1, is passed here for the Windows address book
         if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && $this->getValue('GENDER') > 0) {
