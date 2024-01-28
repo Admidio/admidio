@@ -27,20 +27,19 @@ require(__DIR__ . '/../../system/login_valid.php');
 try {
     // Initialize and check the parameters
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
-    $getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(2, 3, 4, 5, 6)));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(2, 3, 4, 5, 6)));
 
     if (in_array($getMode, array(3, 4, 5))) {
         $gMessage->showHtmlTextOnly();
     }
 
-    // only members who are allowed to create and edit roles should have access to
-    // most of these functions
-    if (!$gCurrentUser->manageRoles()) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
+    if ($getMode !== 6) {
+        // only members who are allowed to create and edit roles should have access to these functions
+        if (!$gCurrentUser->manageRoles()) {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
 
-    if($getMode !== 6) {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
@@ -53,7 +52,7 @@ try {
         $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
         // Check if the role belongs to the current organization
-        if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
+        if ((int)$role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -80,8 +79,8 @@ try {
         if ($rolName !== $_POST['rol_name']) {
             // check if the role already exists
             $sql = 'SELECT COUNT(*) AS count
-                      FROM '.TBL_ROLES.'
-                INNER JOIN '.TBL_CATEGORIES.'
+                      FROM ' . TBL_ROLES . '
+                INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = rol_cat_id
                      WHERE rol_name   = ? -- $_POST[\'rol_name\']
                        AND rol_cat_id = ? -- $_POST[\'rol_cat_id\']
@@ -90,7 +89,7 @@ try {
                            OR cat_org_id IS NULL )';
             $queryParams = array(
                 $_POST['rol_name'],
-                (int) $_POST['rol_cat_id'],
+                (int)$_POST['rol_cat_id'],
                 $role->getValue('rol_id'),
                 $gCurrentOrgId
             );
@@ -134,13 +133,13 @@ try {
         // ------------------------------------------------
 
         $validFromDate = '';
-        $validToDate   = '';
+        $validToDate = '';
 
         if (isset($_POST['rol_start_date']) && strlen($_POST['rol_start_date']) > 0) {
             $validFromDate = DateTime::createFromFormat('Y-m-d', $_POST['rol_start_date']);
             if (!$validFromDate) {
                 $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_FROM'), 'YYYY-MM-DD')));
-            // => EXIT
+                // => EXIT
             } else {
                 // now write date and time with database format to date object
                 $_POST['rol_start_date'] = $validFromDate->format('Y-m-d');
@@ -151,7 +150,7 @@ try {
             $validToDate = DateTime::createFromFormat('Y-m-d', $_POST['rol_end_date']);
             if (!$validToDate) {
                 $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_TO'), 'YYYY-MM-DD')));
-            // => EXIT
+                // => EXIT
             } else {
                 // now write date and time with database format to date object
                 $_POST['rol_end_date'] = $validToDate->format('Y-m-d');
@@ -171,10 +170,10 @@ try {
         // ------------------------------------------------
 
         if (isset($_POST['rol_start_time']) && strlen($_POST['rol_start_time']) > 0) {
-            $validFromTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW.' '.$_POST['rol_start_time']);
+            $validFromTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW . ' ' . $_POST['rol_start_time']);
             if (!$validFromTime) {
                 $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME_FROM'), 'HH:ii')));
-            // => EXIT
+                // => EXIT
             } else {
                 // now write date and time with database format to date object
                 $_POST['rol_start_time'] = $validFromTime->format('H:i:s');
@@ -182,10 +181,10 @@ try {
         }
 
         if (isset($_POST['rol_end_time']) && strlen($_POST['rol_end_time']) > 0) {
-            $validToTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW.' '.$_POST['rol_end_time']);
+            $validToTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW . ' ' . $_POST['rol_end_time']);
             if (!$validToTime) {
                 $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME_TO'), 'HH:ii')));
-            // => EXIT
+                // => EXIT
             } else {
                 // now write date and time with database format to date object
                 $_POST['rol_end_time'] = $validToTime->format('H:i:s');
@@ -193,9 +192,9 @@ try {
         }
 
         // Check whether the maximum number of members has already been exceeded in the event , also if the maximum number of members was reduced.
-        if (isset($_POST['rol_max_members']) && $getRoleUuid !== '' && (int) $_POST['rol_max_members'] !== (int) $role->getValue('rol_max_members')) {
+        if (isset($_POST['rol_max_members']) && $getRoleUuid !== '' && (int)$_POST['rol_max_members'] !== (int)$role->getValue('rol_max_members')) {
             // Count how many people already have the role, without leaders
-            $role->setValue('rol_max_members', (int) $_POST['rol_max_members']);
+            $role->setValue('rol_max_members', (int)$_POST['rol_max_members']);
             $numFreePlaces = $role->countVacancies();
 
             if ($numFreePlaces < 0) {
@@ -258,7 +257,7 @@ try {
 
         $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
-    // => EXIT
+        // => EXIT
     } elseif ($getMode === 3) {
         // set role inactive
         // event roles and administrator cannot be set inactive
@@ -282,33 +281,35 @@ try {
         $role = new TableRoles($gDb);
         $role->readDataByUuid($getRoleUuid);
 
-        if ($gCurrentUser->hasRightViewRole($role->getValue('rol_id'))) {
-            // create filename of organization name and role name
-            $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
+        if (!$gCurrentUser->hasRightViewProfiles($role->getValue('rol_id'))) {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
 
-            $filename = FileSystemUtils::getSanitizedPathEntry($filename);
+        // create filename of organization name and role name
+        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $role->getValue('rol_name')) . '.vcf';
 
-            header('Content-Type: text/x-vcard; charset=iso-8859-1');
-            header('Content-Disposition: attachment; filename="'.$filename.'"');
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
 
-            // necessary for IE, because without it the download with SSL has problems
-            header('Cache-Control: private');
-            header('Pragma: public');
+        header('Content-Type: text/x-vcard; charset=iso-8859-1');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
 
-            $sql = 'SELECT mem_usr_id
-                      FROM '.TBL_MEMBERS.'
+        // necessary for IE, because without it the download with SSL has problems
+        header('Cache-Control: private');
+        header('Pragma: public');
+
+        $sql = 'SELECT mem_usr_id
+                      FROM ' . TBL_MEMBERS . '
                      WHERE mem_rol_id = ? -- $role->getValue(\'rol_id\')
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW';
-            $pdoStatement = $gDb->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
+        $pdoStatement = $gDb->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
-            while ($memberUserId = $pdoStatement->fetchColumn()) {
-                $user = new User($gDb, $gProfileFields, (int) $memberUserId);
-                // create vcard and check if user is allowed to edit profile, so he can see more data
-                echo $user->getVCard();
-            }
+        while ($memberUserId = $pdoStatement->fetchColumn()) {
+            $user = new User($gDb, $gProfileFields, (int)$memberUserId);
+            // create vcard and check if user is allowed to edit profile, so he can see more data
+            echo $user->getVCard();
         }
     }
-} catch (AdmException | Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }
