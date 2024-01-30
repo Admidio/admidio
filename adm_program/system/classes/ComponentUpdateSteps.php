@@ -206,14 +206,14 @@ final class ComponentUpdateSteps
     {
         global $gLogger;
 
-        $ecardThemeFolder   = ADMIDIO_PATH . FOLDER_THEMES . '/' . $GLOBALS['gSettingsManager']->getString('theme') . '/ecard_templates';
+        $ecardThemeFolder = ADMIDIO_PATH . FOLDER_THEMES . '/' . $GLOBALS['gSettingsManager']->getString('theme') . '/ecard_templates';
         $ecardMyFilesFolder = ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates';
 
         if (is_dir($ecardThemeFolder)) {
             try {
                 FileSystemUtils::copyDirectory($ecardThemeFolder, $ecardMyFilesFolder);
             } catch (\RuntimeException $exception) {
-                $gLogger->error('Could not copy directory from '. $ecardThemeFolder.' to '. $ecardMyFilesFolder.'. Please check if Admidio have write rights within adm_my_files.');
+                $gLogger->error('Could not copy directory from ' . $ecardThemeFolder . ' to ' . $ecardMyFilesFolder . '. Please check if Admidio have write rights within adm_my_files.');
                 return;
                 // => EXIT
             }
@@ -239,10 +239,10 @@ final class ComponentUpdateSteps
 
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
-        $organizationsArray     = $organizationsStatement->fetchAll();
+        $organizationsArray = $organizationsStatement->fetchAll();
 
         foreach ($organizationsArray as $organization) {
-            $orgId = (int) $organization['org_id'];
+            $orgId = (int)$organization['org_id'];
             $config = array();
 
             // prüfen, ob vom Plugin Kategoriereport eine configdata.php existiert
@@ -251,14 +251,14 @@ final class ComponentUpdateSteps
                 include $file;                  // benötigt wird hier der Wert von $dbtoken
 
                 // prüfen, ob die Tabelle 'adm_plugin_preferences' existiert
-                $tableName = TABLE_PREFIX.'_plugin_preferences';
-                $sql = 'SHOW TABLES LIKE \''.$tableName.'\' ';
+                $tableName = TABLE_PREFIX . '_plugin_preferences';
+                $sql = 'SHOW TABLES LIKE \'' . $tableName . '\' ';
                 $tableExistStatement = self::$db->queryPrepared($sql);
 
                 if ($tableExistStatement->rowCount()) {
                     // Konfiguration(en) mit 'PKR_...' einlesen
                     $sql = 'SELECT plp_id, plp_name, plp_value
-                 	          FROM '.$tableName.'
+                 	          FROM ' . $tableName . '
                  	         WHERE plp_name LIKE ?
                  	           AND (plp_org_id = ?
                      	        OR plp_org_id IS NULL ) ';
@@ -280,27 +280,27 @@ final class ComponentUpdateSteps
             // if $config is still empty now, then there was no configuration data of the plugin
             // --> create sample configuration
             if (empty($config)) {
-                $config['col_desc']       = array($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
-                $config['col_fields']     = array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
-                                                  'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
-                                                  'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
-                                                  'p'.$gProfileFields->getProperty('CITY', 'usf_id'));
+                $config['col_desc'] = array($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
+                $config['col_fields'] = array('p' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . ',' .
+                    'p' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . ',' .
+                    'p' . $gProfileFields->getProperty('STREET', 'usf_id') . ',' .
+                    'p' . $gProfileFields->getProperty('CITY', 'usf_id'));
                 $config['selection_role'] = array('');
-                $config['selection_cat']  = array('');
-                $config['number_col']  	  = array(0);
+                $config['selection_cat'] = array('');
+                $config['number_col'] = array(0);
                 $config['config_default'] = 0;
 
                 // Read out the role IDs of the "Administrator", "Board" and "Member" roles
                 $role = new TableAccess(self::$db, TBL_ROLES, 'rol');
                 $role->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
                 if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => $orgId))) {
-                    $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+                    $config['col_fields'][0] .= ',r' . $role->getValue('rol_id');
                 }
                 if ($role->readDataByColumns(array('rol_name' => $gL10n->get('INS_BOARD'), 'cat_org_id' => $orgId))) {
-                    $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+                    $config['col_fields'][0] .= ',r' . $role->getValue('rol_id');
                 }
                 if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_MEMBER'), 'cat_org_id' => $orgId))) {
-                    $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+                    $config['col_fields'][0] .= ',r' . $role->getValue('rol_id');
                 }
             }
 
@@ -317,11 +317,11 @@ final class ComponentUpdateSteps
                 $categoryReport->save();
 
                 if ($config['config_default'] == $i) {
-                    $sql = 'UPDATE '.TBL_PREFERENCES.'
+                    $sql = 'UPDATE ' . TBL_PREFERENCES . '
                                SET prf_value  = ? -- $categoryReport->getValue(\'crt_id\')
                              WHERE prf_org_id = ? -- $orgId
                                AND prf_name   = \'category_report_default_configuration\'';
-                    self::$db->queryPrepared($sql, array((int) $categoryReport->getValue('crt_id'), $orgId));
+                    self::$db->queryPrepared($sql, array((int)$categoryReport->getValue('crt_id'), $orgId));
                 }
             }
         }
@@ -382,20 +382,20 @@ final class ComponentUpdateSteps
 
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
-        $organizationsArray     = $organizationsStatement->fetchAll();
+        $organizationsArray = $organizationsStatement->fetchAll();
 
         foreach ($organizationsArray as $organization) {
             // add default configuration
             $userManagementList = new ListConfiguration(self::$db);
             $userManagementList->setValue('lst_name', $gL10n->get('SYS_CONTACTS'));
-            $userManagementList->setValue('lst_org_id', (int) $organization['org_id']);
+            $userManagementList->setValue('lst_org_id', (int)$organization['org_id']);
             $userManagementList->setValue('lst_global', 1);
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0,'ASC');
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+            $userManagementList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+            $userManagementList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
             $userManagementList->addColumn('usr_login_name');
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('GENDER',  'usf_id'));
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('BIRTHDAY',  'usf_id'));
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('CITY', 'usf_id'));
+            $userManagementList->addColumn((int)$gProfileFields->getProperty('GENDER', 'usf_id'));
+            $userManagementList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+            $userManagementList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
             $userManagementList->addColumn('usr_timestamp_change');
             $userManagementList->save();
 
@@ -403,7 +403,7 @@ final class ComponentUpdateSteps
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ? -- $userManagementList->getValue(\'lst_id\')
                      WHERE prf_org_id = ? -- $organization[\'org_id\']
                        AND prf_name = \'members_list_configuration\' ';
-            self::$db->queryPrepared($sql, array($userManagementList->getValue('lst_id'), (int) $organization['org_id']));
+            self::$db->queryPrepared($sql, array($userManagementList->getValue('lst_id'), (int)$organization['org_id']));
         }
     }
 
@@ -439,7 +439,7 @@ final class ComponentUpdateSteps
 
         while ($row = $messagesStatement->fetch()) {
             $messageRecipient = new TableAccess(self::$db, TBL_MESSAGES_RECIPIENTS, 'msr');
-            $recipientsSplit  = explode('|', $row['msg_usr_id_receiver']);
+            $recipientsSplit = explode('|', $row['msg_usr_id_receiver']);
 
             foreach ($recipientsSplit as $recipients) {
                 $messageRecipient->clear();
@@ -457,7 +457,7 @@ final class ComponentUpdateSteps
                         $messageRecipient->setValue('msr_role_mode', $groupIdAndStatus[1]);
                     }
                 } else {
-                    $messageRecipient->setValue('msr_usr_id', (int) trim($recipients));
+                    $messageRecipient->setValue('msr_usr_id', (int)trim($recipients));
                 }
                 $messageRecipient->save();
             }
@@ -493,12 +493,12 @@ final class ComponentUpdateSteps
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            $rowId = (int) $row['org_id'];
+            $rowId = (int)$row['org_id'];
 
             $organization = new Organization(self::$db, $rowId);
 
             $sql = 'SELECT fol_id, fol_name
-                      FROM '.TBL_FOLDERS.'
+                      FROM ' . TBL_FOLDERS . '
                      WHERE fol_fol_id_parent IS NULL
                        AND fol_org_id = ? -- $rowId';
             $folderStatement = self::$db->queryPrepared($sql, array($rowId));
@@ -509,9 +509,9 @@ final class ComponentUpdateSteps
                 $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
                 $folder->save();
 
-                $sql = 'UPDATE '.TBL_FOLDERS.'
-                           SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')).'\')
-                         WHERE fol_org_id = '.$rowId;
+                $sql = 'UPDATE ' . TBL_FOLDERS . '
+                           SET fol_path = REPLACE(fol_path, \'/' . $rowFolder['fol_name'] . '\', \'/' . TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')) . '\')
+                         WHERE fol_org_id = ' . $rowId;
                 self::$db->query($sql); // TODO add more params
 
                 if (is_dir($folderOldName)) {
@@ -529,6 +529,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method will migrate all names of the event roles from the former technical name to the name of the event
+     * @throws Exception
      */
     public static function updateStep40RenameParticipationRoles()
     {
@@ -543,11 +544,17 @@ final class ComponentUpdateSteps
             $role->setArray($row);
             $role->saveChangesWithoutRights();
 
-            $date = new TableEvent(self::$db);
-            $date->readDataByRoleId($role->getValue('rol_id'));
+            $sql = 'SELECT *
+                      FROM ' . TABLE_PREFIX . '_dates
+                     WHERE dat_rol_id = ? ';
+            $eventStatement = self::$db->queryPrepared($sql, array($role->getValue('rol_id')));
+            $eventRow = $eventStatement->fetch();
 
-            $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
-            $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
+            $event = new TableEvent(self::$db);
+            $event->setArray($eventRow);
+
+            $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
+            $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
             $role->save();
         }
     }
@@ -561,19 +568,19 @@ final class ComponentUpdateSteps
 
         // read id of system user from database
         $sql = 'SELECT usr_id
-                  FROM '.TBL_USERS.'
+                  FROM ' . TBL_USERS . '
                  WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
         $systemUserStatement = self::$db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
-        $systemUserId = (int) $systemUserStatement->fetchColumn();
+        $systemUserId = (int)$systemUserStatement->fetchColumn();
 
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            $rowId = (int) $row['org_id'];
+            $rowId = (int)$row['org_id'];
 
             // Add new list configuration
-            $sql = 'INSERT INTO '.TBL_LISTS.'
+            $sql = 'INSERT INTO ' . TBL_LISTS . '
                            (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global)
                     VALUES (?, ?, ?, ?, 1) -- $rowId, $systemUserId, $gL10n->get(\'SYS_PARTICIPANTS\'), DATETIME_NOW';
             $params = array(
@@ -586,16 +593,16 @@ final class ComponentUpdateSteps
 
             // Add list columns
             $sql = 'SELECT lst_id
-                      FROM '.TBL_LISTS.'
+                      FROM ' . TBL_LISTS . '
                      WHERE lst_name = ? -- $gL10n->get(\'SYS_PARTICIPANTS\')
                        AND lst_org_id = ? -- $rowId';
             $listStatement = self::$db->queryPrepared($sql, array($gL10n->get('SYS_PARTICIPANTS'), $rowId));
-            $listId = (int) $listStatement->fetchColumn();
+            $listId = (int)$listStatement->fetchColumn();
 
-            $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.'
+            $sql = 'INSERT INTO ' . TBL_LIST_COLUMNS . '
                            (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter)
-                    VALUES (?, 1, (SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = \'LAST_NAME\'),  NULL, \'ASC\', NULL) -- $listId
-                         , (?, 2, (SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = \'FIRST_NAME\'), NULL, NULL,    NULL) -- $listId
+                    VALUES (?, 1, (SELECT usf_id FROM ' . TBL_USER_FIELDS . ' WHERE usf_name_intern = \'LAST_NAME\'),  NULL, \'ASC\', NULL) -- $listId
+                         , (?, 2, (SELECT usf_id FROM ' . TBL_USER_FIELDS . ' WHERE usf_name_intern = \'FIRST_NAME\'), NULL, NULL,    NULL) -- $listId
                          , (?, 3, NULL, \'mem_approved\',     NULL,    NULL) -- $listId
                          , (?, 4, NULL, \'mem_comment\',      NULL,    NULL) -- $listId
                          , (?, 5, NULL, \'mem_count_guests\', NULL,    NULL) -- $listId';
@@ -650,10 +657,10 @@ final class ComponentUpdateSteps
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            $rowId = (int) $row['org_id'];
+            $rowId = (int)$row['org_id'];
 
             if ($g_organization === $row['org_shortname']) {
-                $sql = 'UPDATE '.TBL_CATEGORIES.'
+                $sql = 'UPDATE ' . TBL_CATEGORIES . '
                            SET cat_name_intern = \'EVENTS\'
                              , cat_name   = ? -- $gL10n->get(\'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\')
                              , cat_org_id = ? -- $rowId
@@ -676,15 +683,15 @@ final class ComponentUpdateSteps
                 $category->save();
 
                 // all existing events of this organization must get the new category
-                $sql = 'UPDATE '.TBL_ROLES.'
+                $sql = 'UPDATE ' . TBL_ROLES . '
                            SET rol_cat_id = ? -- $category->getValue(\'cat_id\')
                          WHERE rol_id IN (SELECT dat_rol_id
-                                            FROM '.TBL_DATES.'
-                                      INNER JOIN '.TBL_CATEGORIES.'
+                                            FROM ' . TBL_DATES . '
+                                      INNER JOIN ' . TBL_CATEGORIES . '
                                               ON cat_id = dat_cat_id
                                            WHERE dat_rol_id IS NOT NULL
                                              AND cat_org_id = ?) -- $rowId';
-                self::$db->queryPrepared($sql, array((int) $category->getValue('cat_id'), $rowId));
+                self::$db->queryPrepared($sql, array((int)$category->getValue('cat_id'), $rowId));
             }
         }
     }
@@ -696,31 +703,31 @@ final class ComponentUpdateSteps
     {
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
-                  FROM '.TBL_ROLES_RIGHTS.'
+                  FROM ' . TBL_ROLES_RIGHTS . '
                  WHERE ror_name_intern = \'event_participation\'';
         $rolesRightsStatement = self::$db->queryPrepared($sql);
-        $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
+        $rolesRightId = (int)$rolesRightsStatement->fetchColumn();
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
+        $sql = 'INSERT INTO ' . TBL_ROLES_RIGHTS_DATA . '
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $GLOBALS[\'gCurrentUserId\'], DATETIME_NOW
-                  FROM '.TABLE_PREFIX.'_date_role
+                SELECT ' . $rolesRightId . ', dtr_rol_id, dtr_dat_id, ?, ? -- $GLOBALS[\'gCurrentUserId\'], DATETIME_NOW
+                  FROM ' . TABLE_PREFIX . '_date_role
                  WHERE dtr_rol_id IS NOT NULL';
         self::$db->queryPrepared($sql, array($GLOBALS['gCurrentUserId'], DATETIME_NOW));
 
         // if no roles were set than we must assign all default registration roles because now we need at least 1 role
         // so that someone could register to the event
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
+        $sql = 'INSERT INTO ' . TBL_ROLES_RIGHTS_DATA . '
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', rol_id, dat_id, ?, ? -- $GLOBALS[\'gCurrentUserId\'], DATETIME_NOW
-                  FROM '.TABLE_PREFIX.'_dates
-            INNER JOIN '.TABLE_PREFIX.'_categories AS cdat
+                SELECT ' . $rolesRightId . ', rol_id, dat_id, ?, ? -- $GLOBALS[\'gCurrentUserId\'], DATETIME_NOW
+                  FROM ' . TABLE_PREFIX . '_dates
+            INNER JOIN ' . TABLE_PREFIX . '_categories AS cdat
                     ON cdat.cat_id = dat_cat_id
-            INNER JOIN '.TABLE_PREFIX.'_date_role
+            INNER JOIN ' . TABLE_PREFIX . '_date_role
                     ON dtr_dat_id = dat_id
-            INNER JOIN '.TABLE_PREFIX.'_categories AS rdat
+            INNER JOIN ' . TABLE_PREFIX . '_categories AS rdat
                     ON rdat.cat_org_id = cdat.cat_org_id
-            INNER JOIN '.TABLE_PREFIX.'_roles
+            INNER JOIN ' . TABLE_PREFIX . '_roles
                     ON rol_cat_id = rdat.cat_id
                  WHERE dat_rol_id IS NOT NULL
                    AND dtr_rol_id IS NULL
@@ -735,31 +742,31 @@ final class ComponentUpdateSteps
     public static function updateStep33MigrateToStandardMenu()
     {
         // add new module menu to components table
-        $sql = 'INSERT INTO '.TBL_COMPONENTS.'
+        $sql = 'INSERT INTO ' . TBL_COMPONENTS . '
                        (com_type, com_name, com_name_intern, com_version, com_beta)
                 VALUES (\'MODULE\', \'SYS_MENU\', \'MENU\', ?, ?) -- ADMIDIO_VERSION, ADMIDIO_VERSION_BETA';
         self::$db->queryPrepared($sql, array(ADMIDIO_VERSION, ADMIDIO_VERSION_BETA));
 
         // Menu entries for the standard installation
-        $sql = 'INSERT INTO '.TBL_MENU.'
+        $sql = 'INSERT INTO ' . TBL_MENU . '
                        (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
                 VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
                      , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
                      , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'SYS_PLUGINS\', \'\')
                      , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/overview.php\', \'home.png\', \'SYS_OVERVIEW\', \'\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, 0, 3, 1, \'documents-files\', \''.FOLDER_MODULES.'/documents-files/documents_files.php\', \'fa-file-download\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, 0, 7, 1, \'groups-roles\', \''.FOLDER_MODULES.'/groups-roles/groups_roles.php\', \'fa-user-tie\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'announcements.png\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'photo.png\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \''.FOLDER_MODULES.'/events/events.php\', \'dates.png\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'weblinks.png\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'backup.png\', \'SYS_DATABASE_BACKUP\', \'SYS_DATABASE_BACKUP_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'SYS_EMAIL_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'new_registrations.png\', \'SYS_NEW_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'SYS_USER_MANAGEMENT\', \'SYS_MEMBERS_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, 0, 3, 1, \'documents-files\', \'' . FOLDER_MODULES . '/documents-files/documents_files.php\', \'fa-file-download\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, 0, 7, 1, \'groups-roles\', \'' . FOLDER_MODULES . '/groups-roles/groups_roles.php\', \'fa-user-tie\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \'' . FOLDER_MODULES . '/announcements/announcements.php\', \'announcements.png\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \'' . FOLDER_MODULES . '/photos/photos.php\', \'photo.png\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \'' . FOLDER_MODULES . '/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \'' . FOLDER_MODULES . '/events/events.php\', \'dates.png\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \'' . FOLDER_MODULES . '/links/links.php\', \'weblinks.png\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \'' . FOLDER_MODULES . '/backup/backup.php\', \'backup.png\', \'SYS_DATABASE_BACKUP\', \'SYS_DATABASE_BACKUP_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \'' . FOLDER_MODULES . '/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \'' . FOLDER_MODULES . '/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'SYS_EMAIL_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \'' . FOLDER_MODULES . '/registration/registration.php\', \'new_registrations.png\', \'SYS_NEW_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \'' . FOLDER_MODULES . '/members/members.php\', \'user_administration.png\', \'SYS_USER_MANAGEMENT\', \'SYS_MEMBERS_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \'' . FOLDER_MODULES . '/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';
         self::$db->query($sql);
     }
 
@@ -768,17 +775,17 @@ final class ComponentUpdateSteps
      */
     public static function updateStep33SetParticipantsApprovalStates()
     {
-        $sql = 'UPDATE '.TBL_MEMBERS.'
+        $sql = 'UPDATE ' . TBL_MEMBERS . '
                            SET mem_approved = 2
                          WHERE mem_approved IS NULL
                            AND mem_begin < ? -- DATE_NOW
                            AND mem_rol_id IN (SELECT rol_id
-                                                FROM '.TBL_ROLES.'
-                                          INNER JOIN '.TBL_CATEGORIES.'
+                                                FROM ' . TBL_ROLES . '
+                                          INNER JOIN ' . TBL_CATEGORIES . '
                                                   ON cat_id = rol_cat_id
                                                WHERE cat_name_intern = \'EVENTS\'
                                                  AND rol_id IN (SELECT dat_rol_id
-                                                                  FROM '.TBL_DATES.'
+                                                                  FROM ' . TBL_DATES . '
                                                                  WHERE dat_rol_id = rol_id))';
 
         self::$db->queryPrepared($sql, array(DATE_NOW));
@@ -805,14 +812,14 @@ final class ComponentUpdateSteps
                      WHERE rol_valid  = true
                        AND cat_name_intern <> \'EVENTS\'
                        AND cat_org_id = ? -- $row[\'cat_org_id\']';
-            $rolesStatement = self::$db->queryPrepared($sql, array((int) $row['cat_org_id']));
+            $rolesStatement = self::$db->queryPrepared($sql, array((int)$row['cat_org_id']));
 
             while ($rowRole = $rolesStatement->fetch()) {
-                $roles[] = (int) $rowRole['rol_id'];
+                $roles[] = (int)$rowRole['rol_id'];
             }
 
             // save roles to role right
-            $rightCategoryView = new RolesRights(self::$db, 'category_view', (int) $row['cat_id']);
+            $rightCategoryView = new RolesRights(self::$db, 'category_view', (int)$row['cat_id']);
             $rightCategoryView->saveRoles($roles);
         }
     }
@@ -855,7 +862,7 @@ final class ComponentUpdateSteps
 
         while ($row = $messengerStatement->fetch()) {
             // save roles to role right
-            $rightCategoryView = new TableUserField(self::$db, (int) $row['usf_id']);
+            $rightCategoryView = new TableUserField(self::$db, (int)$row['usf_id']);
             $rightCategoryView->delete();
         }
     }
@@ -869,18 +876,18 @@ final class ComponentUpdateSteps
 
         // read id of system user from database
         $sql = 'SELECT usr_id
-                  FROM '.TBL_USERS.'
+                  FROM ' . TBL_USERS . '
                  WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
         $systemUserStatement = self::$db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
-        $systemUserId = (int) $systemUserStatement->fetchColumn();
+        $systemUserId = (int)$systemUserStatement->fetchColumn();
 
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            $rowId = (int) $row['org_id'];
+            $rowId = (int)$row['org_id'];
 
-            $sql = 'INSERT INTO '.TBL_CATEGORIES.'
+            $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                            (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                     VALUES (?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW
                          , (?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', 0, 0, 0, 2, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
@@ -890,9 +897,9 @@ final class ComponentUpdateSteps
             );
             self::$db->queryPrepared($sql, $params);
 
-            $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.'
+            $sql = 'UPDATE ' . TBL_ANNOUNCEMENTS . '
                        SET ann_cat_id = (SELECT cat_id
-                                           FROM '.TBL_CATEGORIES.'
+                                           FROM ' . TBL_CATEGORIES . '
                                           WHERE cat_type = \'ANN\'
                                             AND cat_name_intern = \'COMMON\'
                                             AND cat_org_id = ? ) -- $rowId
@@ -908,16 +915,16 @@ final class ComponentUpdateSteps
     {
         global $gL10n;
 
-        $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.'
+        $sql = 'INSERT INTO ' . TBL_USER_RELATION_TYPES . '
                        (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-                VALUES (1, \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',             2, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
-                     , (2, \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
-                     , (3, \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
-                     , (4, \''.$gL10n->get('INS_SPOUSE').'\',      \''.$gL10n->get('INS_HUSBAND').'\',          \''.$gL10n->get('INS_WIFE').'\',               4, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
-                     , (5, \''.$gL10n->get('INS_COHABITANT').'\',  \''.$gL10n->get('INS_COHABITANT_MALE').'\',  \''.$gL10n->get('INS_COHABITANT_FEMALE').'\',  5, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
-                     , (6, \''.$gL10n->get('INS_COMPANION').'\',   \''.$gL10n->get('INS_BOYFRIEND').'\',        \''.$gL10n->get('INS_GIRLFRIEND').'\',         6, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
-                     , (7, \''.$gL10n->get('INS_SUPERIOR').'\',    \''.$gL10n->get('INS_SUPERIOR_MALE').'\',    \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\',    8, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
-                     , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')';
+                VALUES (1, \'' . $gL10n->get('INS_PARENT') . '\',      \'' . $gL10n->get('INS_FATHER') . '\',           \'' . $gL10n->get('INS_MOTHER') . '\',             2, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (2, \'' . $gL10n->get('INS_CHILD') . '\',       \'' . $gL10n->get('INS_SON') . '\',              \'' . $gL10n->get('INS_DAUGHTER') . '\',           1, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (3, \'' . $gL10n->get('INS_SIBLING') . '\',     \'' . $gL10n->get('INS_BROTHER') . '\',          \'' . $gL10n->get('INS_SISTER') . '\',             3, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (4, \'' . $gL10n->get('INS_SPOUSE') . '\',      \'' . $gL10n->get('INS_HUSBAND') . '\',          \'' . $gL10n->get('INS_WIFE') . '\',               4, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (5, \'' . $gL10n->get('INS_COHABITANT') . '\',  \'' . $gL10n->get('INS_COHABITANT_MALE') . '\',  \'' . $gL10n->get('INS_COHABITANT_FEMALE') . '\',  5, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (6, \'' . $gL10n->get('INS_COMPANION') . '\',   \'' . $gL10n->get('INS_BOYFRIEND') . '\',        \'' . $gL10n->get('INS_GIRLFRIEND') . '\',         6, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (7, \'' . $gL10n->get('INS_SUPERIOR') . '\',    \'' . $gL10n->get('INS_SUPERIOR_MALE') . '\',    \'' . $gL10n->get('INS_SUPERIOR_FEMALE') . '\',    8, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (8, \'' . $gL10n->get('INS_SUBORDINATE') . '\', \'' . $gL10n->get('INS_SUBORDINATE_MALE') . '\', \'' . $gL10n->get('INS_SUBORDINATE_FEMALE') . '\', 7, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')';
         self::$db->query($sql); // TODO add more params
     }
 
@@ -931,30 +938,30 @@ final class ComponentUpdateSteps
 
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
-                  FROM '.TBL_ROLES_RIGHTS.'
+                  FROM ' . TBL_ROLES_RIGHTS . '
                  WHERE ror_name_intern = \'folder_view\'';
         $rolesRightsStatement = self::$db->queryPrepared($sql);
-        $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
+        $rolesRightId = (int)$rolesRightsStatement->fetchColumn();
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
+        $sql = 'INSERT INTO ' . TBL_ROLES_RIGHTS_DATA . '
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, ?, ? -- $gCurrentUserId, DATETIME_NOW
-                  FROM '.TABLE_PREFIX.'_folder_roles ';
+                SELECT ' . $rolesRightId . ', flr_rol_id, flr_fol_id, ?, ? -- $gCurrentUserId, DATETIME_NOW
+                  FROM ' . TABLE_PREFIX . '_folder_roles ';
         self::$db->queryPrepared($sql, array($GLOBALS['gCurrentUserId'], DATETIME_NOW));
 
         // add new right folder_update to adm_roles_rights
         $sql = 'SELECT fol_id
-                  FROM '.TBL_FOLDERS.'
+                  FROM ' . TBL_FOLDERS . '
                  WHERE fol_type = \'DOWNLOAD\'
                    AND fol_name = \'download\' ';
         $rolesRightsStatement = self::$db->queryPrepared($sql);
-        $folderId = (int) $rolesRightsStatement->fetchColumn();
+        $folderId = (int)$rolesRightsStatement->fetchColumn();
 
         $sql = 'SELECT rol_id
-                  FROM '.TBL_ROLES.'
-             LEFT JOIN '.TBL_CATEGORIES.'
+                  FROM ' . TBL_ROLES . '
+             LEFT JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
-             LEFT JOIN '.TBL_ORGANIZATIONS.'
+             LEFT JOIN ' . TBL_ORGANIZATIONS . '
                     ON org_id = cat_org_id
                  WHERE rol_download  = 1
                    AND org_shortname = ? -- $g_organization';
@@ -962,7 +969,7 @@ final class ComponentUpdateSteps
 
         $rolesArray = array();
         while ($roleId = $rolesDownloadStatement->fetchColumn()) {
-            $rolesArray[] = (int) $roleId;
+            $rolesArray[] = (int)$roleId;
         }
 
         try {
@@ -987,12 +994,12 @@ final class ComponentUpdateSteps
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            $rowId = (int) $row['org_id'];
+            $rowId = (int)$row['org_id'];
 
             $organization = new Organization(self::$db, $rowId);
 
             $sql = 'SELECT fol_id, fol_name
-                      FROM '.TBL_FOLDERS.'
+                      FROM ' . TBL_FOLDERS . '
                      WHERE fol_fol_id_parent IS NULL
                        AND fol_org_id = ? -- $rowId';
             $folderStatement = self::$db->queryPrepared($sql, array($rowId));
@@ -1003,9 +1010,9 @@ final class ComponentUpdateSteps
                 $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
                 $folder->save();
 
-                $sql = 'UPDATE '.TBL_FOLDERS.'
-                           SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')).'\')
-                         WHERE fol_org_id = '.$rowId;
+                $sql = 'UPDATE ' . TBL_FOLDERS . '
+                           SET fol_path = REPLACE(fol_path, \'/' . $rowFolder['fol_name'] . '\', \'/' . TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')) . '\')
+                         WHERE fol_org_id = ' . $rowId;
                 self::$db->query($sql); // TODO add more params
 
                 if ($row['org_shortname'] === $g_organization && is_dir($folderOldName)) {
@@ -1017,7 +1024,7 @@ final class ComponentUpdateSteps
                     }
                 }
             } else {
-                $sql = 'INSERT INTO '.TBL_FOLDERS.'
+                $sql = 'INSERT INTO ' . TBL_FOLDERS . '
                                (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_timestamp)
                         VALUES (?, \'DOWNLOAD\', ?, ?, 0, 1, ?) -- $rowId, TableFolder::getRootFolderName(), FOLDER_DATA, DATETIME_NOW';
                 $params = array(
@@ -1038,12 +1045,12 @@ final class ComponentUpdateSteps
     {
         global $gL10n;
 
-        $sql = 'UPDATE '.TBL_ROLES.'
+        $sql = 'UPDATE ' . TBL_ROLES . '
                    SET rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')_1
                  WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')';
         self::$db->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR') . '_1', $gL10n->get('SYS_ADMINISTRATOR')));
 
-        $sql = 'UPDATE '.TBL_ROLES.'
+        $sql = 'UPDATE ' . TBL_ROLES . '
                    SET rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
                  WHERE rol_name = ? -- $gL10n->get(\'SYS_WEBMASTER\')';
         self::$db->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gL10n->get('SYS_WEBMASTER')));
@@ -1080,20 +1087,20 @@ final class ComponentUpdateSteps
     {
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
-        $organizationsArray     = $organizationsStatement->fetchAll();
+        $organizationsArray = $organizationsStatement->fetchAll();
 
         foreach ($organizationsArray as $organization) {
-            $orgId = (int) $organization['org_id'];
+            $orgId = (int)$organization['org_id'];
 
             $sql = 'SELECT lst_id
-                      FROM '.TBL_LISTS.'
+                      FROM ' . TBL_LISTS . '
                      WHERE lst_default = 1
                        AND lst_org_id  = ? -- $orgId';
             $defaultListStatement = self::$db->queryPrepared($sql, array($orgId));
-            $listId = (int) $defaultListStatement->fetchColumn();
+            $listId = (int)$defaultListStatement->fetchColumn();
 
             // save default list to preferences
-            $sql = 'UPDATE '.TBL_PREFERENCES.'
+            $sql = 'UPDATE ' . TBL_PREFERENCES . '
                        SET prf_value  = ? -- $listId
                      WHERE prf_name   = \'lists_default_configuation\'
                        AND prf_org_id = ? -- $orgId';
@@ -1107,17 +1114,17 @@ final class ComponentUpdateSteps
     public static function updateStep30DeleteDateRoles()
     {
         $sql = 'SELECT rol_id
-                  FROM '.TBL_ROLES.'
-            INNER JOIN '.TBL_CATEGORIES.'
+                  FROM ' . TBL_ROLES . '
+            INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
                  WHERE cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\'
                    AND NOT exists (SELECT 1
-                                     FROM '.TBL_DATES.'
+                                     FROM ' . TBL_DATES . '
                                     WHERE dat_rol_id = rol_id)';
         $rolesStatement = self::$db->queryPrepared($sql);
 
         while ($roleId = $rolesStatement->fetchColumn()) {
-            $role = new TableAccess(self::$db, TBL_ROLES, 'rol', (int) $roleId);
+            $role = new TableAccess(self::$db, TBL_ROLES, 'rol', (int)$roleId);
             $role->delete(); // TODO Exception handling
         }
     }
