@@ -533,6 +533,8 @@ final class ComponentUpdateSteps
      */
     public static function updateStep40RenameParticipationRoles()
     {
+        global $gSettingsManager;
+
         $sql = 'SELECT *
                   FROM ' . TBL_ROLES . '
             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
@@ -550,11 +552,16 @@ final class ComponentUpdateSteps
             $eventStatement = self::$db->queryPrepared($sql, array($role->getValue('rol_id')));
             $eventRow = $eventStatement->fetch();
 
-            $event = new TableEvent(self::$db);
-            $event->setArray($eventRow);
+            $datetime = new DateTime($eventRow['dat_begin']);
+            $beginDate = $datetime->format($gSettingsManager->getString('system_date')) . ' ';
 
-            $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
-            $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
+            if ($eventRow['dat_all_day'] != 1) {
+                $datetime = new DateTime($eventRow['dat_begin']);
+                $beginDate .= $datetime->format($gSettingsManager->getString('system_time'));
+            }
+
+            $role->setValue('rol_name', $beginDate . ' ' . $eventRow['dat_headline']);
+            $role->setValue('rol_description', substr($eventRow['dat_description'], 0, 3999));
             $role->save();
         }
     }
