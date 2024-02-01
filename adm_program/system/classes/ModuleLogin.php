@@ -140,18 +140,11 @@ class ModuleLogin
     {
         global $gDb, $gCurrentOrganization, $gCurrentOrgId, $gProfileFields, $gCurrentSession, $gSettingsManager;
         global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gL10n;
-
-        $postLoginName = admFuncVariableIsValid($_POST, 'usr_login_name', 'string');
-        $postPassword = $_POST['usr_password'];
-        $postOrgShortName = admFuncVariableIsValid($_POST, 'org_shortname', 'string');
-        $postAutoLogin = admFuncVariableIsValid($_POST, 'auto_login', 'bool');
-        if($postLoginName === '') {
-            // login with plugin
-            $postLoginName = admFuncVariableIsValid($_POST, 'plg_usr_login_name', 'string');
-            $postPassword = $_POST['plg_usr_password'];
-            $postOrgShortName = admFuncVariableIsValid($_POST, 'plg_org_shortname', 'string');
-            $postAutoLogin = admFuncVariableIsValid($_POST, 'plg_auto_login', 'bool');
-        }
+        
+        $postLoginName = admFuncVariableIsValid($_POST, (isset($_POST['usr_login_name']) ? 'usr_login_name' : 'plg_usr_login_name'), 'string');
+        $postPassword = (isset($_POST['usr_password']) ? $_POST['usr_password'] : $_POST['plg_usr_password']);
+        $postOrgShortName = admFuncVariableIsValid($_POST, (isset($_POST['org_shortname']) ? 'org_shortname' : 'plg_org_shortname'), 'string');
+        $postAutoLogin = admFuncVariableIsValid($_POST, (isset($_POST['auto_login']) ? 'auto_login' : 'plg_auto_login'), 'bool');
 
         if ($postLoginName === '') {
             throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_USERNAME')));
