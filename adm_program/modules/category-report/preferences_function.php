@@ -36,21 +36,21 @@ try {
                 // => EXIT
             }
 
-            for ($conf = 0; isset($_POST['name'. $conf]); $conf++) {
-                $values['id']             = $_POST['id'. $conf];
-                $values['name']           = $_POST['name'. $conf];
-                $values['selection_role'] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]), ',') : '';
-                $values['selection_cat']  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]), ',') : '';
-                $values['number_col']     = isset($_POST['number_col'. $conf]) ? 1 : 0;
-                $values['default_conf']   = (bool) $_POST['default_conf'. $conf];
+            for ($conf = 0; isset($_POST['name' . $conf]); $conf++) {
+                $values['id'] = $_POST['id' . $conf];
+                $values['name'] = $_POST['name' . $conf];
+                $values['selection_role'] = isset($_POST['selection_role' . $conf]) ? trim(implode(',', $_POST['selection_role' . $conf]), ',') : '';
+                $values['selection_cat'] = isset($_POST['selection_cat' . $conf]) ? trim(implode(',', $_POST['selection_cat' . $conf]), ',') : '';
+                $values['number_col'] = isset($_POST['number_col' . $conf]) ? 1 : 0;
+                $values['default_conf'] = (bool)$_POST['default_conf' . $conf];
 
                 $allColumnsEmpty = true;
 
                 $fields = '';
-                for ($number = 1; isset($_POST['column'.$conf.'_'.$number]); $number++) {
-                    if (strlen($_POST['column'.$conf.'_'.$number]) > 0) {
+                for ($number = 1; isset($_POST['column' . $conf . '_' . $number]); $number++) {
+                    if (strlen($_POST['column' . $conf . '_' . $number]) > 0) {
                         $allColumnsEmpty = false;
-                        $fields .= $_POST['column'.$conf.'_'.$number].',';
+                        $fields .= $_POST['column' . $conf . '_' . $number] . ',';
                     }
                 }
 
@@ -64,10 +64,10 @@ try {
 
             $report = new CategoryReport();
             $config = $report->saveConfigArray($config);
-               break;
+            break;
 
-           default:
-                  $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        default:
+            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 } catch (AdmException $e) {
     $e->showText();
