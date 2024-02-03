@@ -205,7 +205,9 @@ class HtmlTable extends HtmlTableBasic
      */
     public function disableDatatablesColumnsSort(array $columnsSort)
     {
-        $this->datatables->disableDatatablesColumnsSort($columnsSort);
+        if ($this->useDatatables) {
+            $this->datatables->disableDatatablesColumnsSort($columnsSort);
+        }
     }
 
     /**
