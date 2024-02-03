@@ -590,6 +590,7 @@ class ListConfiguration extends TableLists
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
+        $arrSqlColumns = array();
         $arrSqlColumnNames = array();
         $arrOrderByColumns = array();
         $sqlColumnNames = '';
@@ -616,13 +617,19 @@ class ListConfiguration extends TableLists
                                     AND ' . $tableAlias . '.usd_usf_id = ' . $lscUsfId;
 
                 // usf_id is prefix for the table
-                $dbColumnName = $tableAlias . '.usd_value AS ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . $columnNumber;
+                $dbColumnName = $tableAlias . '.usd_value';
+                $sqlColumnName = $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
             } else {
                 // Special fields like usr_photo, mem_begin ...
-                $dbColumnName = $listColumn->getValue('lsc_special_field') . ' AS ' . $listColumn->getValue('lsc_special_field') . $columnNumber;
+                $dbColumnName = $listColumn->getValue('lsc_special_field');
+                $sqlColumnName = $listColumn->getValue('lsc_special_field');
             }
 
-            $arrSqlColumnNames[] = $dbColumnName;
+            if (in_array($sqlColumnName,  $arrSqlColumnNames)) {
+                $arrSqlColumns[] = $dbColumnName.' AS '.$sqlColumnName.$columnNumber;
+            } else {
+                $arrSqlColumns[] = $dbColumnName.' AS '.$sqlColumnName;
+            }
 
             // create a valid sort
             if ($listColumn->getValue('lsc_sort') != '') {
@@ -720,8 +727,8 @@ class ListConfiguration extends TableLists
             }
         }
 
-        if (count($arrSqlColumnNames) > 0) {
-            $sqlColumnNames = ', ' . implode(', ', $arrSqlColumnNames);
+        if (count($arrSqlColumns) > 0) {
+            $sqlColumnNames = ', ' . implode(', ', $arrSqlColumns);
             $sqlColumnNames = substr($sqlColumnNames, 1);
         }
 
