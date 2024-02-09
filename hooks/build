@@ -39,7 +39,6 @@ echo "Build hook running"
 echo "docker build --build-arg ADMIDIO_BUILD_DATE=\"${ADMIDIO_BUILD_DATE}\" \
 --build-arg ADMIDIO_VCS_REF=\"${ADMIDIO_VCS_REF}\" \
 --build-arg ADMIDIO_VERSION=\"${ADMIDIO_VERSION}\" \
---build-arg ADMIDIO_TRIVY_ENABLED=\"${ADMIDIO_TRIVY_ENABLED:-false}\" \
 --rm --force-rm \
 -f \"Dockerfile\" \
 ${IMAGE_NAMES} \
@@ -50,7 +49,6 @@ docker build \
   --build-arg ADMIDIO_BUILD_DATE="${ADMIDIO_BUILD_DATE}" \
   --build-arg ADMIDIO_VCS_REF="${ADMIDIO_VCS_REF}" \
   --build-arg ADMIDIO_VERSION="${ADMIDIO_VERSION}" \
-  --build-arg ADMIDIO_TRIVY_ENABLED="${ADMIDIO_TRIVY_ENABLED:-false}" \
   --rm --force-rm \
   -f "Dockerfile" \
   ${IMAGE_NAMES} \

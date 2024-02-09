@@ -62,6 +62,8 @@ mailq
 ADMIDIO_CONFIG_TEMPLATE="/opt/app-root/src/provisioning/adm_my_files/config_example.php"
 ADMIDIO_CONFIG="/opt/app-root/src/adm_my_files/config.php"
 ADMIDIO_FIRSTRUN="/opt/app-root/src/adm_my_files/.admidio_installed"
+ADMIDIO_IMAGE_VERSION="/opt/app-root/src/.admidio_image_version"
+ADMIDIO_INSTALLED_VERSION="/opt/app-root/src/adm_my_files/.admidio_installed_version"
 
 
 if [ -f "${ADMIDIO_FIRSTRUN}" ]; then
@@ -150,11 +152,28 @@ if [ -f "${ADMIDIO_FIRSTRUN}" ]; then
     else
         echo "[WARNING] admidio config.php file does not exist."
     fi
+
+    if [ "$(cat ${ADMIDIO_INSTALLED_VERSION} 2>/dev/null)" != "$(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null)" ]; then
+        echo "[INFO ] update admidio installation to image version ($(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null)) ..."
+        # echo "[DEBUG] rsync -a --delete provisioning/adm_program/ adm_program/"
+        # rsync -a --delete provisioning/adm_program/ adm_program/
+        # echo "[DEBUG] rsync -a --delete provisioning/adm_plugins/ adm_plugins/"
+        # rsync -a --delete provisioning/adm_plugins/ adm_plugins/
+        # echo "[DEBUG] rsync -a --delete provisioning/adm_themes/ adm_themes/"
+        # rsync -a --delete provisioning/adm_themes/ adm_themes/
+        # echo "[DEBUG] rsync -a --delete --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/"
+        # rsync -a --delete --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/
+    fi
 fi
 
 if [ ! -f "${ADMIDIO_FIRSTRUN}" ]; then
     echo "[INFO ] create .admidio_installed file (${ADMIDIO_FIRSTRUN})"
     touch "${ADMIDIO_FIRSTRUN}"
+fi
+
+if [ ! -f "${ADMIDIO_INSTALLED_VERSION}" ]; then
+    echo "[INFO ] create ADMIDIO_INSTALLED_VERSION file (${ADMIDIO_INSTALLED_VERSION}) with admidio version ($(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null))"
+    echo -n "$(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null)" > "${ADMIDIO_INSTALLED_VERSION}"
 fi
 
 # run apache with php enabled as user default
