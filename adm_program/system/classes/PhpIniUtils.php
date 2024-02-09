@@ -47,12 +47,12 @@ final class PhpIniUtils
      * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit.
      *                      Units could be K for Kilobyte, M for Megabyte, G for Gigabyte or T for Terabyte.
      * @param int $multi Factor to multiply. Default: 1024
-     * @return int Returns the bytes of the data string.
+     * @return float Returns the bytes of the data string.
      */
-    private static function getBytesFromSize(string $data, int $multi = self::BYTES_UNIT_FACTOR_1024): int
+    private static function getBytesFromSize(string $data, int $multi = self::BYTES_UNIT_FACTOR_1024): float
     {
         if ($data === '' || $data === '-1') {
-            return (int) INF;
+            return INF;
         }
 
         $value = (float) substr($data, 0, -1);
@@ -72,7 +72,7 @@ final class PhpIniUtils
                 $value *= $multi;
         }
 
-        return (int) $value;
+        return $value;
     }
 
     /**
@@ -87,10 +87,10 @@ final class PhpIniUtils
 
     /**
      * Returns the memory limit
-     * @return int
+     * @return float
      * @see https://www.php.net/manual/en/ini.core.php#ini.memory-limit
      */
-    public static function getMemoryLimit(): int
+    public static function getMemoryLimit(): float
     {
         return self::getBytesFromSize(ini_get('memory_limit'));
     }
