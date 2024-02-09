@@ -1,9 +1,9 @@
 # local image build command:
-#   IMAGE_NAME="yourUsername/admidio:v4.2.0" ./hooks/build
+#   IMAGE_NAME="yourUsername/admidio:v4.3.0" ./hooks/build
 
 
 # https://hub.docker.com/_/php/tags?page=1&name=-apache-bullseye
-FROM php:8.2.3-apache-bullseye
+FROM php:8.3-apache-bullseye
 
 # Build-time metadata as defined at http://label-schema.org
 ARG ADMIDIO_BUILD_DATE
@@ -23,7 +23,6 @@ LABEL org.label-schema.build-date="${ADMIDIO_BUILD_DATE}" \
 # set arguments and enviroments
 ARG TZ
 ENV TZ="${TZ}"
-ARG ADMIDIO_TRIVY_ENABLED="false"
 ENV APACHE_DOCUMENT_ROOT="/opt/app-root/src"
 
 
@@ -57,21 +56,8 @@ WORKDIR ${APACHE_DOCUMENT_ROOT}
 
 RUN mkdir ${APACHE_DOCUMENT_ROOT}/provisioning && \
     cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/adm_program ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
-    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files
-
-
-# check for vulnerabilities in image with trivy (https://github.com/aquasecurity/trivy)
-# search for vulnerability details: https://nvd.nist.gov/vuln/search
-# --serverity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
-RUN if [ "${ADMIDIO_TRIVY_ENABLED}" != "false" ] ; then \
-      echo "scan image with trivy (trivy filesystem --exit-code 1 --severity CRITICAL --no-progress /)" && \
-      curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin && \
-      trivy filesystem --exit-code 1 --severity CRITICAL --no-progress / && \
-      echo "scan image with trivy (trivy filesystem --exit-code 1 --severity MEDIUM,HIGH --no-progress /)" && \
-      trivy filesystem --exit-code 0 --severity MEDIUM,HIGH --no-progress / && \
-      rm -rf /opt/app-root/src/.cache/trivy ; \
-    fi
-
+    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files && \
+    echo -n ${ADMIDIO_VERSION} > /opt/app-root/src/.admidio_image_version
 
 VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/adm_themes", "/opt/app-root/src/adm_plugins"]
 
