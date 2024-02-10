@@ -157,6 +157,7 @@ $installedDbVersion     = '';
 $installedDbBetaVersion = '';
 $maxUpdateStep          = 0;
 $currentUpdateStep      = 0;
+$updateMessage          = '';
 
 $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
 if (!$gDb->queryPrepared($sql, array(), false)) {
@@ -309,12 +310,9 @@ if ($getMode === 1) {
             'fa-arrow-circle-left',
             'update.php');
         // => EXIT
+    } catch (RuntimeException $e) {
+        $updateMessage = $e->getMessage();
     }
-
-    // remove session object with all data, so that
-    // all data will be read after the update
-    session_unset();
-    session_destroy();
 
     // show notice that update was successful
     $page = new HtmlPageInstallation('admidio-update-successful');
@@ -330,6 +328,7 @@ if ($getMode === 1) {
     );
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-heart'));
 
+    $page->addHtml($updateMessage);
     $page->addHtml($form->show());
     $page->show();
 }
