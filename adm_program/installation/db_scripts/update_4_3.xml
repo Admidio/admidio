@@ -113,5 +113,6 @@
     <step id="1110">UPDATE %PREFIX%_menu SET men_name = 'SYS_REGISTRATIONS', men_name_intern = 'registration' WHERE men_name_intern = 'newreg'</step>
     <step id="1120">UPDATE %PREFIX%_categories SET cat_name_intern = 'EVT_ALL_ORGANIZATIONS' WHERE cat_name_intern = 'DAT_ALL_ORGANIZATIONS'</step>
     <step id="1130">UPDATE %PREFIX%_menu SET men_description = 'SYS_EVENTS_DESC' WHERE men_name_intern = 'events'</step>
+    <step id="1140">ComponentUpdateSteps::updateStep43RemoveInvalidVisibleRoleRights</step>
     <step>stop</step>
 </update>
