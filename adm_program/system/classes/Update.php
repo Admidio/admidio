@@ -109,6 +109,11 @@ class Update
         // after the update first force the reload of the cache for all active sessions
         $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\'';
         $gDb->queryPrepared($sql);
+
+        // remove session object with all data, so that
+        // all data will be read after the update
+        session_unset();
+        session_destroy();
     }
 
     /**
