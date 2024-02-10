@@ -78,7 +78,7 @@ switch ($getType) {
         $text = 'SYS_DELETE_MESSAGE';
         break;
     case 'nwu':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('mode' => 4, 'new_user_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('mode' => 'delete_user', 'new_user_uuid' => $getDatabaseId));
         break;
     case 'pho':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'photo_uuid' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));

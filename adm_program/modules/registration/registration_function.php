@@ -9,11 +9,11 @@
  *
  * Parameters:
  *
- * mode: 1 - Assign registration to a user who is already a member of the organization
- *       2 - Assign registration to a user who is NOT yet a member of the organization
- *       4 - Delete user account
- *       5 - Create new user and assign roles automatically without dialog
- *       6 - Registration does not need to be assigned, simply send login data
+ * mode: assign_member - Assign registration to a user who is already a member of the organization
+ *       assign_user   - Assign registration to a user who is NOT yet a member of the organization
+ *       delete_user   - Delete user account
+ *       create_user   - Create new user and assign roles automatically without dialog
+ *       send_login    - Registration does not need to be assigned, simply send login data
  * new_user_uuid: UUID of the new registered user to be processed
  * user_uuid:     UUID of the user to whom the new login should be assigned
  *****************************************************************************/
@@ -22,11 +22,11 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 try {
     // Initialize and check the parameters
-    $getMode        = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 5, 6)));
+    $getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('assign_member', 'assign_user', 'delete_user', 'create_user', 'send_login')));
     $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
     $getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 
-    if ($getMode == 4) {
+    if ($getMode !== 'delete_user') {
         $gMessage->showHtmlTextOnly();
     }
 
@@ -46,7 +46,7 @@ try {
     $registrationUser = new UserRegistration($gDb, $gProfileFields);
     $registrationUser->readDataByUuid($getNewUserUuid);
 
-    if ($getMode === 1 || $getMode === 2) {
+    if (in_array($getMode, array('assign_member', 'assign_user'))) {
         try {
             $user = new User($gDb, $gProfileFields);
             $user->readDataByUuid($getUserUuid);
@@ -62,7 +62,7 @@ try {
             $user->save();
 
             // every new user to the organization will get the default roles for registration
-            if ($getMode === 2) {
+            if ($getMode === 'assign_user') {
                 $user->assignDefaultRoles();
             }
             $gDb->endTransaction();
@@ -98,7 +98,7 @@ try {
             $e->showHtml();
             // => EXIT
         }
-    } elseif ($getMode === 4) {
+    } elseif ($getMode === 'delete_user') {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
@@ -107,7 +107,7 @@ try {
 
         // return successful delete for XMLHttpRequest
         echo 'done';
-    } elseif ($getMode === 5) {
+    } elseif ($getMode === 'create_user') {
         // accept a registration, assign necessary roles and send a notification email
         $registrationUser->acceptRegistration();
 
@@ -121,7 +121,7 @@ try {
             $gMessage->show($gL10n->get('SYS_ASSIGN_REGISTRATION_SUCCESSFUL'));
             // => EXIT
         }
-    } elseif ($getMode === 6) {
+    } elseif ($getMode === 'send_login') {
         // User already exists and has a login
 
         // delete registration
