@@ -114,7 +114,7 @@ class ModuleRegistration extends HtmlPage
                 );
             } else {
                 $templateRow['buttons'][] = array(
-                    'url' => ($gCurrentUser->editUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $row['usr_uuid'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_uuid' => $row['usr_uuid']))),
+                    'url' => ($gCurrentUser->editUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $row['usr_uuid'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => 'create_user', 'new_user_uuid' => $row['usr_uuid']))),
                     'name' => $gL10n->get('SYS_CONFIRM_REGISTRATION')
                 );
             }
