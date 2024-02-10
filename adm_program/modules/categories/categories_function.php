@@ -178,7 +178,7 @@ if ($postMode === 'edit') {
     // write category into database
     $category->save();
 
-    if ($postType !== 'ROL') {
+    if ($postType !== 'ROL' && $category->getValue('cat_name_intern') !== 'BASIC_DATA') {
         $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
 
         // roles have their own preferences for visibility, so only allow this for other types

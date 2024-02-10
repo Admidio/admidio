@@ -29,6 +29,26 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method removes wrong configured visible roles of category Basic_Data
+     */
+    public static function updateStep43RemoveInvalidVisibleRoleRights()
+    {
+        $sql = 'SELECT rrd_id
+                  FROM adm_categories
+                 INNER JOIN adm_roles_rights ON ror_name_intern = \'category_view\'
+                 INNER JOIN adm_roles_rights_data rr ON rr.rrd_ror_id = ror_id
+                   AND rr.rrd_object_id = cat_id
+                 WHERE cat_name_intern = \'BASIC_DATA\' ';
+        $rolesRightsStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $rolesRightsStatement->fetch()) {
+            // save roles to role right
+            $rolesRights = new TableAccess(self::$db, TBL_ROLES_RIGHTS_DATA, 'rrd', (int)$row['rrd_id']);
+            $rolesRights->delete();
+        }
+    }
+
+    /**
      * This method will add a new profile field LinkedIn and Instagram to the database,
      * but only if the category social networks exists
      */
