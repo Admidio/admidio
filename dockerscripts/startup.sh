@@ -163,6 +163,7 @@ if [ -f "${ADMIDIO_FIRSTRUN}" ]; then
         # rsync -a --delete provisioning/adm_themes/ adm_themes/
         # echo "[DEBUG] rsync -a --delete --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/"
         # rsync -a --delete --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/
+        rm -f "${ADMIDIO_INSTALLED_VERSION}"
     fi
 fi
 
@@ -177,5 +178,8 @@ if [ ! -f "${ADMIDIO_INSTALLED_VERSION}" ]; then
 fi
 
 # run apache with php enabled as user default
-echo "[INFO ] run apache with php enabled (apache2-foreground)"
-apache2-foreground
+echo "[INFO ] run apache config test (apachectl configtest)"
+apachectl configtest
+
+echo "[INFO ] run apache with php enabled (apachectl -D FOREGROUND)"
+apachectl -D FOREGROUND
