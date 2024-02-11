@@ -311,10 +311,12 @@ class Session extends TableAccess
      */
     public function refresh()
     {
+        global $gCurrentSession, $gCheckIpAddress;
+
         // read session data from database to update the reload flag
         if (!$this->readDataById((int)$this->getValue('ses_id'))) {
             // if session was not found than destroy session object
-            unset($_SESSION['gCurrentSession']);
+            unset($gCurrentSession);
             $this->initializeObjects();
             $this->clear();
         }
@@ -322,11 +324,11 @@ class Session extends TableAccess
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
         $sesIpAddress = $this->getValue('ses_ip_address');
-        if (isset($GLOBALS['gCheckIpAddress']) && $GLOBALS['gCheckIpAddress'] && $sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR']) {
+        if (isset($gCheckIpAddress) && $gCheckIpAddress && $sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR']) {
             $GLOBALS['gLogger']->warning('Admidio stored session ip address: ' . $sesIpAddress . ' :: Remote ip address: ' . $_SERVER['REMOTE_ADDR']);
             $GLOBALS['gLogger']->warning('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
 
-            unset($_SESSION['gCurrentSession']);
+            unset($gCurrentSession);
             $this->initializeObjects();
             $this->clear();
 
