@@ -155,14 +155,16 @@ if [ -f "${ADMIDIO_FIRSTRUN}" ]; then
 
     if [ "$(cat ${ADMIDIO_INSTALLED_VERSION} 2>/dev/null)" != "$(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null)" ]; then
         echo "[INFO ] update admidio installation to image version ($(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null)) ..."
-        # echo "[DEBUG] rsync -a --delete provisioning/adm_program/ adm_program/"
-        # rsync -a --delete provisioning/adm_program/ adm_program/
-        # echo "[DEBUG] rsync -a --delete provisioning/adm_plugins/ adm_plugins/"
-        # rsync -a --delete provisioning/adm_plugins/ adm_plugins/
-        # echo "[DEBUG] rsync -a --delete provisioning/adm_themes/ adm_themes/"
-        # rsync -a --delete provisioning/adm_themes/ adm_themes/
-        # echo "[DEBUG] rsync -a --delete --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/"
-        # rsync -a --delete --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/
+        echo "[DEBUG] rsync -a --delete provisioning/adm_program/ adm_program/"
+        rsync -a --delete provisioning/adm_program/ adm_program/
+        echo "[DEBUG] rsync -a provisioning/adm_plugins/ adm_plugins/"
+        rsync -a provisioning/adm_plugins/ adm_plugins/
+        echo "[DEBUG] rsync -a provisioning/adm_themes/ adm_themes/"
+        rsync -a provisioning/adm_themes/ adm_themes/
+        echo "[DEBUG] rsync -a --delete provisioning/adm_themes/simple/ adm_themes/simple/"
+        rsync -a --delete provisioning/adm_themes/simple/ adm_themes/simple/
+        echo "[DEBUG] rsync -a --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/"
+        rsync -a --exclude="/config.php" --exclude="/.admidio_installed" --exclude="/.admidio_installed_version" provisioning/adm_my_files/ adm_my_files/
         rm -f "${ADMIDIO_INSTALLED_VERSION}"
     fi
 fi
