@@ -271,7 +271,7 @@ class TableRoles extends TableAccess
             12 => $gL10n->get('SYS_MONTHLY')
         );
 
-        if ($costPeriod > 0) {
+        if ($costPeriod !== 0) {
             return $costPeriods[$costPeriod];
         }
 
