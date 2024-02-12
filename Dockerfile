@@ -1,9 +1,9 @@
 # local image build command:
-#   IMAGE_NAME="yourUsername/admidio:v4.2.0" ./hooks/build
+#   IMAGE_NAME="yourUsername/admidio:v4.3.0" ./hooks/build
 
 
-# https://hub.docker.com/_/php/tags?page=1&name=-apache-bullseye
-FROM php:8.2.3-apache-bullseye
+# https://hub.docker.com/_/ubuntu/tags?page=1&name=jammy
+FROM ubuntu:22.04
 
 # Build-time metadata as defined at http://label-schema.org
 ARG ADMIDIO_BUILD_DATE
@@ -23,55 +23,63 @@ LABEL org.label-schema.build-date="${ADMIDIO_BUILD_DATE}" \
 # set arguments and enviroments
 ARG TZ
 ENV TZ="${TZ}"
-ARG ADMIDIO_TRIVY_ENABLED="false"
 ENV APACHE_DOCUMENT_ROOT="/opt/app-root/src"
 
+# Stop dpkg-reconfigure tzdata from prompting for input
+ENV DEBIAN_FRONTEND=noninteractive
 
 # install package updates and required dependencies
 RUN apt-get update \
-    && apt-get dist-upgrade -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    && apt-get full-upgrade -y \
+    && apt-get install -y --no-install-recommends \
+        apache2 \
+        imagemagick \
+        libapache2-mod-php8.1 \
+        php-bcmath \
+        php-bz2 \
+        php-cli \
+        php-common \
+        php-curl \
+        php-db \
+        php-gd \
+        php-gmp \
+        php-igbinary \
+        php-imagick \
+        php-intl \
+        php-json \
+        php-ldap \
+        php-mbstring \
+        php-mime-type \
+        php-mysql \
+        php-pear \
+        php-pgsql \
+        php-readline \
+        php-soap \
+        php-tidy \
+        php-uploadprogress \
+        php-xml \
+        php-xmlrpc \
+        php-zip \
         postfix \
-        libpq-dev \
-        zlib1g-dev \
-        libfreetype6-dev \
-        libjpeg-dev \
-        libpng-dev \
-        libzip-dev \
+        rsync \
+        tzdata \
+    && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     \
     && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
-    \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql iconv zip \
-    && docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
-    && docker-php-ext-install gd \
-    && docker-php-ext-enable gd
-
+    && sed -ri -e 's|^ErrorLog .*$|ErrorLog /dev/stderr|' /etc/apache2/apache2.conf \
+    && sed -ri -e '/^ErrorLog /a TransferLog /dev/stdout' /etc/apache2/apache2.conf \
+    && sed -ri -e '/ErrorLog /d' -e '/CustomLog /d' /etc/apache2/sites-available/*.conf
 
 COPY . ${APACHE_DOCUMENT_ROOT}/
 WORKDIR ${APACHE_DOCUMENT_ROOT}
 
 RUN mkdir ${APACHE_DOCUMENT_ROOT}/provisioning && \
     cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/adm_program ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
-    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files
-
-
-# check for vulnerabilities in image with trivy (https://github.com/aquasecurity/trivy)
-# search for vulnerability details: https://nvd.nist.gov/vuln/search
-# --serverity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
-RUN if [ "${ADMIDIO_TRIVY_ENABLED}" != "false" ] ; then \
-      echo "scan image with trivy (trivy filesystem --exit-code 1 --severity CRITICAL --no-progress /)" && \
-      curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin && \
-      trivy filesystem --exit-code 1 --severity CRITICAL --no-progress / && \
-      echo "scan image with trivy (trivy filesystem --exit-code 1 --severity MEDIUM,HIGH --no-progress /)" && \
-      trivy filesystem --exit-code 0 --severity MEDIUM,HIGH --no-progress / && \
-      rm -rf /opt/app-root/src/.cache/trivy ; \
-    fi
-
+    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files && \
+    echo -n ${ADMIDIO_VERSION} > /opt/app-root/src/.admidio_image_version
 
 VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/adm_themes", "/opt/app-root/src/adm_plugins"]
 
