@@ -27,7 +27,7 @@
  */
 function getAdmidioUrl(bool $checkForwardedHost = true): string
 {
-    $ssl      = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+    $ssl      = !empty($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0;
     $sp       = strtolower($_SERVER['SERVER_PROTOCOL']);
     $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
     $port     = (int) $_SERVER['SERVER_PORT'];
