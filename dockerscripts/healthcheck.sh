@@ -10,7 +10,7 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 _init () {
     scheme="http://"
     address="localhost:8080"
-    resource="/adm_program/overview.php"
+    resource="/index.php"
     start=$(stat -c "%Y" /proc/1)
 }
 
@@ -24,18 +24,7 @@ healthcheck_main () {
         exit 0
     else
         # Get the http response code
-        http_response=$(curl --noproxy "*" -s -k -o /dev/null -w "%{http_code}" -X GET ${scheme}${address}${resource})
-
-        # Get the http response body
-        # http_response_body=$(curl --noproxy "*" -s -k -X GET ${scheme}${address}${resource})
-
-        # server returns response 403 and body "SSL required" if non-TLS
-        # connection is attempted on a TLS-configured server. Change
-        # the scheme and try again
-        # if [ "${http_response}" = "403" ] && [ "${http_response_body}" = "SSL required" ]; then
-        #     scheme="https://"
-        #     http_response=$(curl -s -k -o /dev/null -w "%{http_code}" -X GET ${scheme}${address}${resource})
-        # fi
+        http_response=$(curl --noproxy "*" -s -k --location -o /dev/null -w "%{http_code}" -X GET ${scheme}${address}${resource})
 
         # If http_response is 200 - server is up.
         if [ "${http_response}" != "200" ]; then
