@@ -9,8 +9,24 @@
  ***********************************************************************************************
  */
 
+
+$rootPath = dirname(__DIR__, 2);
+
 // check if installation is necessary
-if (is_file('../../adm_my_files/config.php')) {
+if (is_file($rootPath . '/adm_my_files/config.php')) {
+    // load config and init bootstrapping
+    require_once($rootPath . '/adm_my_files/config.php');
+
+    // check for empty db and redirect to installation wizard
+    try {
+        $gDb = Database::createDatabaseInstance();
+        $gDb->getTableColumns($g_adm_db . '.' . $g_tbl_praefix . '_sessions');
+    } catch (\Throwable $t) {
+        $page = 'installation.php';
+        header('Location: ' . $page);
+        exit();
+    }
+
     $page = 'update.php';
 } else {
     $page = 'installation.php';
