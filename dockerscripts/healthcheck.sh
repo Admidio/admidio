@@ -10,7 +10,7 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 _init () {
     scheme="http://"
     address="localhost:8080"
-    resource="/index.php"
+    resource="/dockerscripts/healthcheck.sh"
     start=$(stat -c "%Y" /proc/1)
 }
 
