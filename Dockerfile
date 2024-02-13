@@ -33,6 +33,7 @@ RUN apt-get update \
     && apt-get full-upgrade -y \
     && apt-get install -y --no-install-recommends \
         apache2 \
+        curl \
         imagemagick \
         libapache2-mod-php8.1 \
         php-bcmath \
