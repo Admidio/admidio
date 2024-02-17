@@ -47,7 +47,7 @@ try {
                 $allColumnsEmpty = true;
 
                 $fields = '';
-                for ($number = 1; isset($_POST['column' . $conf . '_' . $number]); $number++) {
+                for ($number = 0; isset($_POST['column' . $conf . '_' . $number]); $number++) {
                     if (strlen($_POST['column' . $conf . '_' . $number]) > 0) {
                         $allColumnsEmpty = false;
                         $fields .= $_POST['column' . $conf . '_' . $number] . ',';
