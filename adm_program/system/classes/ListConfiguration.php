@@ -34,6 +34,12 @@ class ListConfiguration extends TableLists
      * should be removed.
      */
     protected $showOnlyNames = false;
+    /**
+     * @var boolean Flag if leaders should be shown. If there is more than one role this flag is set to **false**.
+     * should be removed.
+     */
+    protected $showLeaders = false;
+
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -600,10 +606,11 @@ class ListConfiguration extends TableLists
         $sqlJoin = '';
         $sqlWhere = '';
         $columnNumber = 0;
+        $this->showLeaders = $optionsAll['showLeaderFlag'];
 
         // if there is more than 1 role, don't show the leaders
         if (count($optionsAll['showRolesMembers']) > 1) {
-            $optionsAll['showLeaderFlag'] = false;
+            $this->showLeaders = false;
         }
 
         foreach ($this->columns as $listColumn) {
@@ -742,7 +749,7 @@ class ListConfiguration extends TableLists
             $sqlOrderBys = implode(', ', $arrOrderByColumns);
 
             // if roles should be shown than sort by leaders
-            if ($optionsAll['showLeaderFlag']) {
+            if ($this->showLeaders) {
                 if (strlen($sqlOrderBys) > 0) {
                     $sqlOrderBys = 'mem_leader DESC, ' . $sqlOrderBys;
                 } else {
@@ -792,7 +799,7 @@ class ListConfiguration extends TableLists
         }
 
         // check if mem_leaders should be shown
-        if ($optionsAll['showLeaderFlag']) {
+        if ($this->showLeaders) {
             $sqlMemLeader = ' mem_leader, ';
         }
 
@@ -841,6 +848,16 @@ class ListConfiguration extends TableLists
         }
 
         return $sql;
+    }
+
+    /**
+     * Return **true** if it's only one role and this role has leaders. The SQL if this list then has an
+     * additional column with the leader state of each role member.
+     * @return bool Return **true** if it's only one role and this role has leaders.
+     */
+    public function isShowingLeaders(): bool
+    {
+        return $this->showLeaders;
     }
 
     /**
