@@ -17,12 +17,11 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 ![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/admidio/admidio?style=plastic)
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/admidio/admidio?style=plastic)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/admidio/admidio/latest?style=plastic)
-![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/admidio/admidio/latest?style=plastic)
 ![Docker Pulls](https://img.shields.io/docker/pulls/admidio/admidio?style=plastic)
 
 -	[`latest`](https://github.com/Admidio/admidio/blob/master/Dockerfile)
--	[`branch-v4.2`](https://github.com/Admidio/admidio/blob/v4.2/Dockerfile)
-- `vN.N.N` (e.g.: `v4.2.0`)
+-	[`branch-v4.3`](https://github.com/Admidio/admidio/blob/v4.3/Dockerfile)
+- `vN.N.N` (e.g.: `v4.3.0`)
 - see https://hub.docker.com/r/admidio/admidio/tags for all available tags
 
 You can find the releasenotes on Github [admidio/releases](https://github.com/Admidio/admidio/releases) and the Docker images on Dockerhub [admidio/admidio](https://hub.docker.com/r/admidio/admidio/).
@@ -34,6 +33,7 @@ Starting a mariadb instance. The admidio database and admidio user will be creat
 
 ```bash
 docker run --detach -it --name "Admidio-MariaDB" \
+  --hostname "admidio-mariadb" \
   -p 3306:3306 \
   --restart="unless-stopped" \
   -v "Admidio-MariaDB-confd:/etc/mysql/conf.d" \
@@ -55,8 +55,7 @@ docker run --detach -it --name "Admidio" \
   -v "Admidio-files:/opt/app-root/src/adm_my_files" \
   -v "Admidio-themes:/opt/app-root/src/adm_themes" \
   -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
-  --link "Admidio-MariaDB:db" \
-  -e ADMIDIO_DB_HOST="db:3306" \
+  -e ADMIDIO_DB_HOST="admidio-mariadb:3306" \
   -e ADMIDIO_DB_NAME="admidio" \
   -e ADMIDIO_DB_USER="admidio" \
   -e ADMIDIO_DB_PASSWORD="my_VerySecureAdmidioUserPassword.01" \
@@ -75,9 +74,8 @@ docker run --detach -it --name "Admidio" \
   -v "Admidio-files:/opt/app-root/src/adm_my_files" \
   -v "Admidio-themes:/opt/app-root/src/adm_themes" \
   -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
-  --link "Admidio-MariaDB:db" \
   -e ADMIDIO_DB_TYPE="mysql" \
-  -e ADMIDIO_DB_HOST="db:3306" \
+  -e ADMIDIO_DB_HOST="admidio-mariadb:3306" \
   -e ADMIDIO_DB_NAME="admidio" \
   -e ADMIDIO_DB_TABLE_PRAEFIX="adm" \
   -e ADMIDIO_DB_USER="admidio" \
@@ -97,15 +95,6 @@ docker run --detach -it --name "Admidio" \
 * **`--memory="1024m"`:** limit ram usage of docker container to 1GB
 * **`-p 8080:8080`:** published port (see https://docs.docker.com/config/containers/container-networking/#published-ports)
 * **admidio/admidio:latest:** Image name with version tag. We recommend a special version tag to be used instead of latest (e.g.: `admidio/admidio:v4.2.0`)
-
-## Database container link
-* **`--link "Admidio-MariaDB:db"`:** connect to docker database server instance.  
-`Admidio-MariaDB` = name of the mariadb docker container \
-`db` = internal hostname of the database server
-
-See https://docs.docker.com/network/links/. \
-Use [MariaDB](https://hub.docker.com/_/mariadb/) or [PostgreSQL](https://hub.docker.com/_/postgres/) images to start database container.
-
 
 ## Volumes
 * **`-v "Admidio-files:/opt/app-root/src/adm_my_files"`:** admidio config files and data uploads
@@ -242,111 +231,59 @@ docker run --detach -it --name "Admidio" \
 
 ## Docker Compose Example (docker-compose.yaml)
 ```yaml
-version: '3.9'
+version: "3.9"
+
+# https://github.com/Admidio/admidio/blob/master/README-Docker.md
 
 services:
-  db:
+  admidio-test-db:
     restart: unless-stopped
-    image: mariadb:latest
-    container_name: Admidio-MariaDB
+    image: mariadb:11.1.2-jammy
+    container_name: admidio-test-mariaDB
     volumes:
-      - "Admidio_MariaDB_config:/etc/mysql/conf.d"
-      - "Admidio_MariaDB_data:/var/lib/mysql"
-    # ports:
-    #   - 3306:3306
+      - "./admidio-test/mariadb/config:/etc/mysql/conf.d"
+      - "./admidio-test/mariadb/data:/var/lib/mysql"
+    ports:
+      - 3308:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=rootpasswd
       - MYSQL_DATABASE=admidio
       - MYSQL_USER=admidio
       - MYSQL_PASSWORD=password
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=rootpasswd"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
+    security_opt:
+      - "seccomp:unconfined"
 
   admidio:
     restart: unless-stopped
-    image: admidio/admidio:latest
-    container_name: Admidio
+    image: admidio/admidio:branch_v4.3
+    # image: schast/admidio:branch_v4.3
+    container_name: admidio-test-app
     depends_on:
-      - db
+      - admidio-test-db
     volumes:
-      - Admidio_files:/opt/app-root/src/adm_my_files
-      - Admidio_themes:/opt/app-root/src/adm_themes
-      - Admidio_plugins:/opt/app-root/src/adm_plugins
+      - ./admidio-test/files:/opt/app-root/src/adm_my_files
+      - ./admidio-test/themes:/opt/app-root/src/adm_themes
+      - ./admidio-test/plugins:/opt/app-root/src/adm_plugins
     ports:
-      - 8084:8080
+      - 3100:8080
     environment:
       - ADMIDIO_DB_TYPE=mysql
-      - ADMIDIO_DB_HOST=db:3306
+      - ADMIDIO_DB_HOST=admidio-test-db:3306
       - ADMIDIO_DB_NAME=admidio
       - ADMIDIO_DB_USER=admidio
       - ADMIDIO_DB_PASSWORD=password
-      #- ADMIDIO_DB_TABLE_PRAEFIX=adm
-      #- ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
-      #- ADMIDIO_LOGIN_FOR_UPDATE=1
-      #- ADMIDIO_ORGANISATION=TEST02
-      #- ADMIDIO_PASSWORD_HASH_ALGORITHM=DEFAULT
-      - ADMIDIO_ROOT_PATH=http://localhost:8084
+      - ADMIDIO_DB_TABLE_PRAEFIX=adm
+      - ADMIDIO_MAIL_RELAYHOST=192.168.10.10:25
+      - ADMIDIO_LOGIN_FOR_UPDATE=1
+      - ADMIDIO_ORGANISATION=GBV
+      - ADMIDIO_PASSWORD_HASH_ALGORITHM=DEFAULT
       - TZ=Europe/Vienna
-
-volumes:
-  Admidio_MariaDB_config:
-  Admidio_MariaDB_data:
-  Admidio_files:
-  Admidio_themes:
-  Admidio_plugins:
-```
-
-## Docker Compose Example with local build (docker-compose.yaml)
-We also deliver a Dockerfile and you can easily build and use your own docker image.
-
-```yaml
-version: '3.9'
-
-services:
-  db:
-    restart: unless-stopped
-    image: mariadb:latest
-    container_name: Admidio-MariaDB
-    volumes:
-      - "Admidio_MariaDB_config:/etc/mysql/conf.d"
-      - "Admidio_MariaDB_data:/var/lib/mysql"
-    # ports:
-    #   - 3306:3306
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=admidio
-      - MYSQL_USER=admidio
-      - MYSQL_PASSWORD=password
-
-  admidio:
-    build: .
-    image: yourUsername/admidio:latest
-    container_name: Admidio
-    restart: unless-stopped
-    depends_on:
-      - db
-    volumes:
-      - Admidio_files:/opt/app-root/src/adm_my_files
-      - Admidio_themes:/opt/app-root/src/adm_themes
-      - Admidio_plugins:/opt/app-root/src/adm_plugins
-    ports:
-      - 8084:8080
-    environment:
-      - ADMIDIO_DB_TYPE=mysql
-      - ADMIDIO_DB_HOST=db:3306
-      - ADMIDIO_DB_NAME=admidio
-      - ADMIDIO_DB_USER=admidio
-      - ADMIDIO_DB_PASSWORD=password
-      #- ADMIDIO_DB_TABLE_PRAEFIX=adm
-      #- ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
-      #- ADMIDIO_LOGIN_FOR_UPDATE=1
-      #- ADMIDIO_ORGANISATION=TEST02
-      #- ADMIDIO_PASSWORD_HASH_ALGORITHM=DEFAULT
-      - ADMIDIO_ROOT_PATH=http://localhost:8084
-      - TZ=Europe/Vienna
-
-volumes:
-  Admidio_MariaDB_config:
-  Admidio_MariaDB_data:
-  Admidio_files:
-  Admidio_themes:
-  Admidio_plugins:
+      - ADMIDIO_ROOT_PATH=http://localhost:3100
+    security_opt:
+      - "seccomp:unconfined"
 ```
