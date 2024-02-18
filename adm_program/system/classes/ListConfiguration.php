@@ -601,6 +601,11 @@ class ListConfiguration extends TableLists
         $sqlWhere = '';
         $columnNumber = 0;
 
+        // if there is more than 1 role, don't show the leaders
+        if (count($optionsAll['showRolesMembers']) > 1) {
+            $optionsAll['showLeaderFlag'] = false;
+        }
+
         foreach ($this->columns as $listColumn) {
             $lscUsfId = (int)$listColumn->getValue('lsc_usf_id');
             $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
@@ -737,7 +742,7 @@ class ListConfiguration extends TableLists
             $sqlOrderBys = implode(', ', $arrOrderByColumns);
 
             // if roles should be shown than sort by leaders
-            if (count($optionsAll['showRolesMembers']) > 0 && $optionsAll['showLeaderFlag']) {
+            if ($optionsAll['showLeaderFlag']) {
                 if (strlen($sqlOrderBys) > 0) {
                     $sqlOrderBys = 'mem_leader DESC, ' . $sqlOrderBys;
                 } else {
@@ -787,7 +792,7 @@ class ListConfiguration extends TableLists
         }
 
         // check if mem_leaders should be shown
-        if (count($optionsAll['showRolesMembers']) === 1 && $optionsAll['showLeaderFlag']) {
+        if ($optionsAll['showLeaderFlag']) {
             $sqlMemLeader = ' mem_leader, ';
         }
 
