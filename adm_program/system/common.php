@@ -38,6 +38,15 @@ try {
     // => EXIT
 }
 
+// check for empty db and redirect to installation wizard
+try {
+    $gDb->getTableColumns($g_adm_db . '.' . $g_tbl_praefix . '_sessions');
+} catch (\Throwable $t) {
+    header('Location: adm_program/installation/index.php');
+    exit();
+}
+
+
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables
 /********************************************************************************/
