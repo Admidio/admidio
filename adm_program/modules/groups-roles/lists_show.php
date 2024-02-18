@@ -617,9 +617,9 @@ foreach ($membersList as $member) {
         // in html mode we add a column with leader/member information to
         // enable the grouping function of jquery datatables
         if ($memberIsLeader) {
-            $columnValues['mem_leader'] = $gL10n->get('SYS_LEADERS');
+            $columnValues = array('mem_leader' => $gL10n->get('SYS_LEADERS')) + $columnValues;
         } else {
-            $columnValues['mem_leader'] = $gL10n->get('SYS_PARTICIPANTS');
+            $columnValues = array('mem_leader' => $gL10n->get('SYS_PARTICIPANTS')) + $columnValues;
         }
 
         // add a column with the row number at the first column
@@ -652,7 +652,7 @@ foreach ($membersList as $member) {
 
 // if html mode and the role has leaders then group all data between leaders and members
 if ($getMode === 'html') {
-    if ($listHasLeaders) {
+    if ($list->isShowingLeaders() && $listHasLeaders) {
         $table->setDatatablesGroupColumn(2);
     } else {
         $table->setDatatablesColumnsHide(array(2));
