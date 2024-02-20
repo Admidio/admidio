@@ -676,6 +676,23 @@ class TableAccess
     }
 
     /**
+     * Set the flag that it's a new record. Initialize the ID and set a new UUID if that column exists.
+     * @return void
+     * @throws AdmException
+     */
+    public function setNewRecord()
+    {
+        $this->newRecord = true;
+
+        if (array_key_exists($this->columnPrefix . '_id', $this->dbColumns)) {
+            $this->setValue($this->columnPrefix . '_id', 0);
+        }
+        if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
+            $this->setValue($this->columnPrefix . '_uuid', (string) Uuid::uuid4());
+        }
+    }
+
+    /**
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method **save** to store the new value to the database. If the unique key
      * column is set to 0 than this record will be a new record and all other columns are marked as changed.

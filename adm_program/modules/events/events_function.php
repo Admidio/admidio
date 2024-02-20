@@ -348,7 +348,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                     $pdoStatement = $gDb->queryPrepared($sql, array($originalEventUuid));
 
                     $role = new TableRoles($gDb, (int)$pdoStatement->fetchColumn());
-                    $role->setValue('rol_id', '0');
+                    $role->setNewRecord();
                 } else {
                     // Read category for event participation
                     $sql = 'SELECT cat_id
