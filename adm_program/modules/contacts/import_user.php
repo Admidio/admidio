@@ -95,6 +95,10 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
     }
 
     foreach ($line as $columnKey => $columnValue) {
+        if (empty($columnValue)) {
+            $columnValue = '';
+        }
+
         // get usf id or database column name
         $assignedFieldColumnId = array_search($columnKey, $importProfileFields);
         // remove spaces and html tags
