@@ -540,7 +540,7 @@ class TableRoles extends TableAccess
         $this->db->startTransaction();
 
         foreach ($membersList as $row) {
-            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin'] && $leader === $row['mem_leader']) {
+            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin'] && $leader === (bool) $row['mem_leader']) {
                 // assignment already exists and must not be updated
                 $updateNecessary = false;
             } else {
@@ -602,7 +602,7 @@ class TableRoles extends TableAccess
                     $membership->setArray($row);
                     $membership->setValue('mem_end', $endDate);
                     $membership->save();
-                } elseif ($endDate === $row['mem_end'] && $startDate === $row['mem_begin'] && $leader !== $row['mem_leader']) {
+                } elseif ($endDate === $row['mem_end'] && $startDate === $row['mem_begin'] && $leader !== (bool)$row['mem_leader']) {
                     // exact same time period but the leader flag has changed than delete current period
                     // and updated period later
                     $membership = new TableMembers($this->db);
@@ -778,7 +778,7 @@ class TableRoles extends TableAccess
         if (count($membersList) > 0) {
             $endDate = DateTime::createFromFormat('Y-m-d', DATE_NOW);
             $newEndDate = $endDate->sub(new DateInterval('P1D'))->format('Y-m-d');
-            $this->setMembership($userId, $membersList[0]['mem_begin'], $newEndDate, $membersList[0]['mem_leader']);
+            $this->setMembership($userId, $membersList[0]['mem_begin'], $newEndDate, (bool)$membersList[0]['mem_leader']);
         }
     }
 
