@@ -632,8 +632,12 @@ class TableAccess
             $this->columnsInfos[$field]['changed'] = false;
         }
 
-        $this->newRecord = empty($this->dbColumns[$this->keyColumnName]);
-        $this->insertRecord = $this->newRecord;
+        if (empty($this->dbColumns[$this->keyColumnName])) {
+            $this->setNewRecord();
+        } else {
+            $this->newRecord = false;
+            $this->insertRecord = false;
+        }
     }
 
     /**
@@ -676,13 +680,15 @@ class TableAccess
     }
 
     /**
-     * Set the flag that it's a new record. Initialize the ID and set a new UUID if that column exists.
+     * Use this method if you have read a record from the database and want to use this data to create a new record.
+     * Method set the flag that it's a new record and initialize the ID and set a new UUID if that column exists.
      * @return void
      * @throws AdmException
      */
     public function setNewRecord()
     {
         $this->newRecord = true;
+        $this->insertRecord = true;
 
         if (array_key_exists($this->columnPrefix . '_id', $this->dbColumns)) {
             $this->setValue($this->columnPrefix . '_id', 0);
