@@ -47,13 +47,17 @@ If you're updating from version 2.x or 3.x to version 4.x, please review our [sp
 Admidio is also available for Docker environments. You can create and use your own Docker image using our Dockerfile. Alternatively, you can use our prebuilt images from Dockerhub. Start an Admidio Docker container with the following command:
 
 ```bash
-docker run --detach -it --name Admidio \
-  --memory="1024m" --cpu-quota="80000" --cpuset-cpus="0-1" \
+docker run --detach -it --name "Admidio" \
   -p 8080:8080 \
   --restart="unless-stopped" \
-  -v Admidio-files:/var/www/admidio/adm_my_files \
-  -v Admidio-themes:/var/www/admidio/adm_themes \
-  -v Admidio-plugins:/var/www/admidio/adm_plugins \
+  -v "Admidio-files:/opt/app-root/src/adm_my_files" \
+  -v "Admidio-themes:/opt/app-root/src/adm_themes" \
+  -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
+  -e ADMIDIO_DB_HOST="admidio-mariadb:3306" \
+  -e ADMIDIO_DB_NAME="admidio" \
+  -e ADMIDIO_DB_USER="admidio" \
+  -e ADMIDIO_DB_PASSWORD="my_VerySecureAdmidioUserPassword.01" \
+  -e ADMIDIO_ROOT_PATH="https://www.mydomain.at/admidio" \
   admidio/admidio:latest
 ```
 
