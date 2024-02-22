@@ -290,7 +290,7 @@ try {
 
         $filename = FileSystemUtils::getSanitizedPathEntry($filename);
 
-        header('Content-Type: text/x-vcard; charset=iso-8859-1');
+        header('Content-Type: text/vcard; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
 
         // necessary for IE, because without it the download with SSL has problems
