@@ -1119,60 +1119,79 @@ class User extends TableAccess
     }
 
     /**
-     * Creates a vcard with all data of this user object
-     * (Windows XP address book can't process utf8, so vcard output is iso-8859-1)
+     * Creates a vcard with all data of this user object (vCard 3.0, utf-8)
      * @return string Returns the vcard as a string
      * @throws Exception
      */
     public function getVCard(): string
     {
-        global $gSettingsManager, $gCurrentUser;
+        global $gSettingsManager, $gCurrentUser, $gL10n;
 
         $vCard = array(
             'BEGIN:VCARD',
-            'VERSION:2.1'
+            'VERSION:3.0'
         );
 
         if ($gCurrentUser->allowedViewProfileField($this, 'FIRST_NAME')) {
-            $vCard[] = 'N;CHARSET=ISO-8859-1:' .
-                iconv("UTF-8", "ISO-8859-1", $this->getValue('LAST_NAME', 'database')) . ';' .
-                iconv("UTF-8", "ISO-8859-1", $this->getValue('FIRST_NAME', 'database')) . ';;;';
+            $vCard[] = 'N:' .
+                $this->getValue('LAST_NAME', 'database') . ';' .
+                $this->getValue('FIRST_NAME', 'database') . ';;;';
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'LAST_NAME')) {
-            $vCard[] = 'FN;CHARSET=ISO-8859-1:' .
-                iconv("UTF-8", "ISO-8859-1", $this->getValue('FIRST_NAME')) . ' ' .
-                iconv("UTF-8", "ISO-8859-1", $this->getValue('LAST_NAME'));
+            $vCard[] = 'FN:' .
+                $this->getValue('FIRST_NAME') . ' ' .
+                $this->getValue('LAST_NAME');
         }
         if ($this->getValue('usr_login_name') !== '') {
-            $vCard[] = 'NICKNAME;CHARSET=ISO-8859-1:' . iconv("UTF-8", "ISO-8859-1", $this->getValue('usr_login_name'));
+            $vCard[] = 'NICKNAME:' . $this->getValue('usr_login_name');
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'PHONE')) {
-            $vCard[] = 'TEL;HOME;VOICE:' . $this->getValue('PHONE');
+        if ($gCurrentUser->allowedViewProfileField($this, 'PHONE') && $this->getValue('PHONE') !== '') {
+            $vCard[] = 'TEL;TYPE=home,voice:' . $this->getValue('PHONE');
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'MOBILE')) {
-            $vCard[] = 'TEL;CELL;VOICE:' . $this->getValue('MOBILE');
+        if ($gCurrentUser->allowedViewProfileField($this, 'MOBILE') && $this->getValue('MOBILE') !== '') {
+            $vCard[] = 'TEL;TYPE=cell,voice:' . $this->getValue('MOBILE');
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'FAX')) {
-            $vCard[] = 'TEL;HOME;FAX:' . $this->getValue('FAX');
+        if ($gCurrentUser->allowedViewProfileField($this, 'FAX') && $this->getValue('FAX') !== '') {
+            $vCard[] = 'TEL;TYPE=home,fax:' . $this->getValue('FAX');
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'STREET')
             && $gCurrentUser->allowedViewProfileField($this, 'CITY')
             && $gCurrentUser->allowedViewProfileField($this, 'POSTCODE')
             && $gCurrentUser->allowedViewProfileField($this, 'COUNTRY')) {
-            $vCard[] = 'ADR;CHARSET=ISO-8859-1;HOME:;;' .
-                iconv("UTF-8", "ISO-8859-1", $this->getValue('STREET', 'database')) . ';' .
-                iconv("UTF-8", "ISO-8859-1", $this->getValue('CITY', 'database')) . ';;' .
-                iconv("UTF-8", "ISO-8859-1", $this->getValue('POSTCODE', 'database')) . ';' .
-                iconv("UTF-8", "ISO-8859-1", $this->getValue('COUNTRY', 'database'));
+            $vCard[] = 'ADR;TYPE=home:;;' .
+                $this->getValue('STREET', 'database') . ';' .
+                $this->getValue('CITY', 'database') . ';;' .
+                $this->getValue('POSTCODE', 'database') . ';' .
+                $gL10n->getCountryName($this->getValue('COUNTRY', 'database'));
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'WEBSITE')) {
-            $vCard[] = 'URL;HOME:' . $this->getValue('WEBSITE');
+        if ($gCurrentUser->allowedViewProfileField($this, 'WEBSITE') && $this->getValue('WEBSITE') !== '') {
+            $vCard[] = 'URL;TYPE=home:' . $this->getValue('WEBSITE');
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'BIRTHDAY')) {
-            $vCard[] = 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd');
+
+        if ($gCurrentUser->allowedViewProfileField($this, 'FACEBOOK') && $this->getValue('FACEBOOK') !== '') {
+            $vCard[] = 'X-SOCIALPROFILE;TYPE=FACEBOOK:' . $this->getValue('FACEBOOK');
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'EMAIL')) {
-            $vCard[] = 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL');
+        if ($gCurrentUser->allowedViewProfileField($this, 'YOUTUBE') && $this->getValue('YOUTUBE') !== '') {
+            $vCard[] = 'X-SOCIALPROFILE;TYPE=YOUTUBE:' . $this->getValue('YOUTUBE');
+        }
+        if ($gCurrentUser->allowedViewProfileField($this, 'SKYPE') && $this->getValue('SKYPE') !== '') {
+            $vCard[] = 'X-SOCIALPROFILE;TYPE=SKYPE:' . $this->getValue('SKYPE');
+        }
+        if ($gCurrentUser->allowedViewProfileField($this, 'LINKEDIN') && $this->getValue('LINKEDIN') !== '') {
+            $vCard[] = 'X-SOCIALPROFILE;TYPE=LINKEDIN:' . $this->getValue('LINKEDIN');
+        }
+        if ($gCurrentUser->allowedViewProfileField($this, 'INSTAGRAM') && $this->getValue('INSTAGRAM') !== '') {
+            $vCard[] = 'X-SOCIALPROFILE;TYPE=INSTAGRAM:' . $this->getValue('INSTAGRAM');
+        }
+        if ($gCurrentUser->allowedViewProfileField($this, 'MASTODON') && $this->getValue('MASTODON') !== '') {
+            $vCard[] = 'X-SOCIALPROFILE;TYPE=MASTODON:' . $this->getValue('MASTODON');
+        }
+
+        if ($gCurrentUser->allowedViewProfileField($this, 'BIRTHDAY') && $this->getValue('BIRTHDAY') !== '') {
+            $vCard[] = 'BDAY:' . $this->getValue('BIRTHDAY', 'Y-m-d');
+        }
+        if ($gCurrentUser->allowedViewProfileField($this, 'EMAIL') && $this->getValue('EMAIL') !== '') {
+            $vCard[] = 'EMAIL;TYPE=home:' . $this->getValue('EMAIL');
         }
         $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int)$this->getValue('usr_id') . '.jpg';
         if ((int)$gSettingsManager->get('profile_photo_storage') === 1 && is_file($file)) {
@@ -1180,32 +1199,29 @@ class User extends TableAccess
             if ($imgHandle !== false) {
                 $base64Image = base64_encode(fread($imgHandle, filesize($file)));
                 fclose($imgHandle);
-
-                $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . $base64Image;
+                $vCard[] = 'PHOTO;TYPE=JPEG;ENCODING=b:' . $base64Image;
             }
         }
-        if ((int)$gSettingsManager->get('profile_photo_storage') === 0 && $this->getValue('usr_photo') !== '') {
-            $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . base64_encode((string) $this->getValue('usr_photo'));
+        if ((int)$gSettingsManager->get('profile_photo_storage') === 0 && !is_null($this->getValue('usr_photo'))) {
+            $vCard[] = 'PHOTO;TYPE=JPEG;ENCODING=b:' . base64_encode((string) $this->getValue('usr_photo'));
         }
-        // Gender is not included in vCard 2.1, is passed here for the Windows address book
-        if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && $this->getValue('GENDER') > 0) {
+        if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && (int)$this->getValue('GENDER') > 0) {
+            // https://datatracker.ietf.org/doc/html/rfc6350#section-6.2.7
             if ((int)$this->getValue('GENDER') === 1) {
-                $xGender = 'Male';
-                $xWabGender = 2;
-            } else {
-                $xGender = 'Female';
-                $xWabGender = 1;
+                $vCard[] = 'GENDER:M';
+            } elseif ((int)$this->getValue('GENDER') === 2) {
+                $vCard[] = 'GENDER:F';
+            } elseif ((int)$this->getValue('GENDER') === 3) {
+                $vCard[] = 'GENDER:O';
             }
-
-            $vCard[] = 'X-GENDER:' . $xGender;
-            $vCard[] = 'X-WAB-GENDER:' . $xWabGender;
         }
         if ($this->getValue('usr_timestamp_change') !== '') {
-            $vCard[] = 'REV:' . $this->getValue('usr_timestamp_change', 'Ymd\This');
+            $vCard[] = 'REV:' . $this->getValue('usr_timestamp_change', 'Ymd\THis\Z');
+        } else {
+            $vCard[] = 'REV:' . $this->getValue('usr_timestamp_create', 'Ymd\THis\Z');
         }
-
+        $vCard[] = 'UID:urn:uuid:' . $this->getValue('usr_uuid');
         $vCard[] = 'END:VCARD';
-
         return implode("\r\n", $vCard) . "\r\n";
     }
 
