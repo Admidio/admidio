@@ -1205,13 +1205,13 @@ class User extends TableAccess
         if ((int)$gSettingsManager->get('profile_photo_storage') === 0 && !is_null($this->getValue('usr_photo'))) {
             $vCard[] = 'PHOTO;TYPE=JPEG;ENCODING=b:' . base64_encode((string) $this->getValue('usr_photo'));
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && (int)$this->getValue('GENDER') > 0) {
+        if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && (int)$this->getValue('GENDER', 'database') > 0) {
             // https://datatracker.ietf.org/doc/html/rfc6350#section-6.2.7
-            if ((int)$this->getValue('GENDER') === 1) {
+            if ((int)$this->getValue('GENDER', 'database') === 1) {
                 $vCard[] = 'GENDER:M';
-            } elseif ((int)$this->getValue('GENDER') === 2) {
+            } elseif ((int)$this->getValue('GENDER', 'database') === 2) {
                 $vCard[] = 'GENDER:F';
-            } elseif ((int)$this->getValue('GENDER') === 3) {
+            } elseif ((int)$this->getValue('GENDER', 'database') === 3) {
                 $vCard[] = 'GENDER:O';
             }
         }
