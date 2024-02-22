@@ -1218,9 +1218,7 @@ class User extends TableAccess
         if ($this->getValue('usr_timestamp_change') !== '') {
             $vCard[] = 'REV:' . $this->getValue('usr_timestamp_change', 'c');
         }
-        if ($this->getValue('usr_uuid') !== '') {
-            $vCard[] = 'UID:urn:uuid:' . $this->getValue('usr_uuid');
-        }
+        $vCard[] = 'UID:urn:uuid:' . $this->getValue('usr_uuid');
         $vCard[] = 'END:VCARD';
         return implode("\r\n", $vCard) . "\r\n";
     }
