@@ -210,15 +210,15 @@ class TableUserField extends TableAccess
                                     // if text is a translation-id then translate it
                                     $listValueText = Language::translateIfTranslationStrId($listValueText);
 
-                                    if ($format === 'text') {
+                                    if ($format === 'html') {
+                                        $listValue = Image::getIconHtml($listValueImage, $listValueText);
+                                    } else {
                                         // if no image is wanted then return the text part or only the position of the entry
                                         if (str_contains($listValue, '|')) {
                                             $listValue = $listValueText;
                                         } else {
                                             $listValue = $key + 1;
                                         }
-                                    } else {
-                                        $listValue = Image::getIconHtml($listValueImage, $listValueText);
                                     }
                                 }
                             }
