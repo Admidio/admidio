@@ -2326,11 +2326,11 @@ class Securimage
         for ($line = 0; $line < $this->num_lines; ++ $line) {
             $x = $this->image_width * (1 + $line) / ($this->num_lines + 1);
             $x += (0.5 - $this->frand()) * $this->image_width / $this->num_lines;
-            $y = mt_rand((int) ($this->image_height * 0.1), (int) ($this->image_height * 0.9));
+            $y = mt_rand(round($this->image_height * 0.1, 0), round($this->image_height * 0.9, 0));
 
             $theta = ($this->frand() - 0.5) * M_PI * 0.33;
             $w = $this->image_width;
-            $len = mt_rand($w * 0.4, $w * 0.7);
+            $len = mt_rand(round($w * 0.4, 0), round($w * 0.7, 0));
             $lwid = mt_rand(0, 2);
 
             $k = $this->frand() * 0.6 + 0.2;
