@@ -45,7 +45,7 @@ if ($getMode === 'new') {
     $getPhotoUuid = null;
 } elseif ($getMode === 'change') {
     $photoAlbum->readDataByUuid($getPhotoUuid);
-    $parentAlbum = new TablePhotos($gDb, $photoAlbum->getValue('pho_pho_id_parent'));
+    $parentAlbum = new TablePhotos($gDb, (int) $photoAlbum->getValue('pho_pho_id_parent'));
     $parentAlbumUuid = $parentAlbum->getValue('pho_uuid');
 }
 
