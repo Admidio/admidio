@@ -34,10 +34,10 @@ final class ComponentUpdateSteps
     public static function updateStep43RemoveInvalidVisibleRoleRights()
     {
         $sql = 'SELECT rrd_id
-                  FROM adm_categories
-                 INNER JOIN adm_roles_rights ON ror_name_intern = \'category_view\'
-                 INNER JOIN adm_roles_rights_data rr ON rr.rrd_ror_id = ror_id
-                   AND rr.rrd_object_id = cat_id
+                  FROM '.TBL_CATEGORIES.'
+                 INNER JOIN '.TBL_ROLES_RIGHTS.' ON ror_name_intern = \'category_view\'
+                 INNER JOIN '.TBL_ROLES_RIGHTS_DATA.' ON rrd_ror_id = ror_id
+                   AND rrd_object_id = cat_id
                  WHERE cat_name_intern = \'BASIC_DATA\' ';
         $rolesRightsStatement = self::$db->queryPrepared($sql);
 
