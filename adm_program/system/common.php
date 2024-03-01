@@ -40,7 +40,7 @@ try {
 
 // check for empty db and redirect to installation wizard
 try {
-    $gDb->getTableColumns($g_adm_db . '.' . $g_tbl_praefix . '_sessions');
+    $gDb->getTableColumns(TBL_SESSIONS);
 } catch (\Throwable $t) {
     header('Location: adm_program/installation/index.php');
     exit();
