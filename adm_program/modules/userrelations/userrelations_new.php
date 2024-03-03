@@ -138,8 +138,8 @@ if ($gCurrentUser->editUsers()) {
         $gCurrentUserId,
         DATE_NOW,
         DATE_NOW,
-        ROLE_LEADER_MEMBERS_EDIT,
-        ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
+        TableRoles::ROLE_LEADER_MEMBERS_EDIT,
+        TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
         $gCurrentOrgId,
         DATE_NOW,
         DATE_NOW

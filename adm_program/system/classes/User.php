@@ -422,7 +422,7 @@ class User extends TableAccess
                         // if role leader could assign new members then remember this setting
                         // roles for confirmation of events should be ignored
                         if ($row['cat_name_intern'] !== 'EVENTS'
-                            && ($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)) {
+                            && ($rolLeaderRights === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT)) {
                             $this->assignRoles = true;
                         }
                     } else {

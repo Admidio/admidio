@@ -365,7 +365,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                     $role->setValue('rol_view_memberships', isset($_POST['event_right_list_view']) ? 1 : 3);
                     // role members are allowed to send mail to this role
                     $role->setValue('rol_mail_this_role', isset($_POST['event_right_send_mail']) ? 1 : 0);
-                    $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
+                    $role->setValue('rol_leader_rights', TableRoles::ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
                     $role->setValue('rol_max_members', (int)$_POST['dat_max_members']);
                 }
 

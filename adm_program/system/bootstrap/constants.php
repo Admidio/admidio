@@ -166,12 +166,6 @@ if (isset($g_adm_db)) {
 }
 define('COOKIE_PREFIX', preg_replace('/\W/', '_', $cookiePrefix));
 
-// constants for column rol_leader_rights
-const ROLE_LEADER_NO_RIGHTS = 0;
-const ROLE_LEADER_MEMBERS_ASSIGN = 1;
-const ROLE_LEADER_MEMBERS_EDIT = 2;
-const ROLE_LEADER_MEMBERS_ASSIGN_EDIT = 3;
-
 // Password settings
 const PASSWORD_MIN_LENGTH = 8;
 const PASSWORD_GEN_LENGTH = 16;

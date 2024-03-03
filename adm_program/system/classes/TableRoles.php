@@ -24,6 +24,13 @@ class TableRoles extends TableAccess
     public const VIEW_LEADERS = 3;
     public const VIEW_ROLE_MEMBERS = 1;
     public const VIEW_LOGIN_USERS = 2;
+
+    // constants for column rol_leader_rights
+    const ROLE_LEADER_NO_RIGHTS = 0;
+    const ROLE_LEADER_MEMBERS_ASSIGN = 1;
+    const ROLE_LEADER_MEMBERS_EDIT = 2;
+    const ROLE_LEADER_MEMBERS_ASSIGN_EDIT = 3;
+
     /**
      * @var int number of leaders of this role
      */
@@ -83,7 +90,7 @@ class TableRoles extends TableAccess
             $rolLeaderRights = (int)$this->getValue('rol_leader_rights');
 
             // leader are allowed to assign members if it's configured in the role
-            if (($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+            if (($rolLeaderRights === $this::ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === $this::ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
                 && $user->isLeaderOfRole((int)$this->getValue('rol_id'))) {
                 return true;
             }
