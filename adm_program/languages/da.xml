@@ -1054,8 +1054,8 @@
   <string name="SYS_PHOTOS_BY">Fotos af</string>
   <string name="SYS_PHOTOS_BY_VAR">Billeder af #VAR1#</string>
   <string name="SYS_PHOTOS_DESC">Billeder fra events kan overføres og vises. Billederne kan organiseres i albums som kan være internt forbundet.</string>
-  <string name="SYS_PHOTOS_PRESENTATION">Hvordan skal billederne vises</string>
-  <string name="SYS_PHOTOS_PRESENTATION_DESC">Med denne indstilling kan du definere hvordan billeder vil blive vist inde i fotomodulet. Dette kan gøres med et ekstra vindue der lukkes op i et separat browser vindue. Billed oversigten vil være aktiv i baggrunden. Hvis billedet skal vises i det samme vindue som billed oversigten vil oversigten blive lukket. Den tredie mulighed er at tillade et popup billede som bliver vist samtidigt med billede oversigten. (Standard: Nyt vindue)</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Foto præsentation</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Med denne mulighed kan du definere, hvordan billederne vil blive vist inden i foto-modulet. Dette kan gøres med et modalt vindue, der åbnes som et separat browser-vindue. Billedvisningen forbliver aktiv i baggrunden. Hvis billedet skal vises i det samme vindue, lukkes den aktuelle billedvisning. Den tredje mulighed tillader at vise billedet i et popup-vindue, som kan bruges i tillæg til billedvisningen. (Standard: Modalt vindue)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">alle PHP indstillinger</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>
