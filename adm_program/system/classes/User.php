@@ -164,157 +164,6 @@ class User extends TableAccess
     }
 
     /**
-     * @param string $mode 'set' or 'edit'
-     * @param int $roleId ID of the role for which the membership should be set,
-     *                          or id of the current membership that should be edited.
-     * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
-     * @param string $endDate New end date of the membership. Default will be **31.12.9999**
-     * @param bool|null $leader If set to **1** then the member will be leader of the role and
-     *                          might get more rights for this role.
-     * @return bool Return **true** if the membership was successfully added/edited.
-     * @throws AdmException
-     * @throws Exception
-     * @deprecated 4.3.0:4.4.0 "changeRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
-     */
-    private function changeRoleMembership(string $mode, int $roleId, string $startDate, string $endDate, bool $leader = null): bool
-    {
-        if ($startDate === '' || $endDate === '') {
-            return false;
-        }
-
-        $usrId = (int)$this->getValue('usr_id');
-
-        $minStartDate = $startDate;
-        $maxEndDate = $endDate;
-
-        if ($mode === 'set') {
-            // subtract 1 day from start date so that we find memberships that end yesterday
-            // these memberships can be continued with new date
-            $oneDayOffset = new DateInterval('P1D');
-
-            $startDate = DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayOffset)->format('Y-m-d');
-            // add 1 to max date because we subtract one day if a membership ends
-            if ($endDate !== DATE_MAX) {
-                $endDate = DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayOffset)->format('Y-m-d');
-            }
-        }
-
-        $this->db->startTransaction();
-
-        // search for membership with same role and user and overlapping events
-        if ($mode === 'set') {
-            $member = new TableMembers($this->db);
-
-            $sql = 'SELECT *
-                      FROM ' . TBL_MEMBERS . '
-                     WHERE mem_rol_id = ? -- $roleId
-                       AND mem_usr_id = ? -- $usrId
-                       AND mem_begin <= ? -- $endDate
-                       AND mem_end   >= ? -- $startDate
-                  ORDER BY mem_begin';
-            $queryParams = array(
-                $roleId,
-                $usrId,
-                $endDate,
-                $startDate
-            );
-        } else {
-            $member = new TableMembers($this->db, $roleId);
-
-            $sql = 'SELECT *
-                      FROM ' . TBL_MEMBERS . '
-                     WHERE mem_id    <> ? -- $roleId
-                       AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
-                       AND mem_usr_id = ? -- $usrId
-                       AND mem_begin <= ? -- $endDate
-                       AND mem_end   >= ? -- $startDate
-                  ORDER BY mem_begin';
-            $queryParams = array(
-                $roleId,
-                $member->getValue('mem_rol_id'),
-                $usrId,
-                $endDate,
-                $startDate
-            );
-        }
-        $membershipStatement = $this->db->queryPrepared($sql, $queryParams);
-
-        if ($membershipStatement->rowCount() === 1) {
-            // one record found than update this record
-            $row = $membershipStatement->fetch();
-            if (($mode === 'set') && ($row['mem_id'] > 0)) {
-                $member = new TableMembers($this->db, $row['mem_id']);
-            }
-            $member->setArray($row);
-
-            // save new start date if an earlier date exists
-            if (strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0) {
-                $minStartDate = $member->getValue('mem_begin', 'Y-m-d');
-            }
-
-            if ($mode === 'set') {
-                // save new end date if a later date exists
-                // but only if end date is greater than the beginn date otherwise the membership should be deleted
-                if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0
-                    && strcmp($member->getValue('mem_begin', 'Y-m-d'), $maxEndDate) < 0) {
-                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
-                }
-            } else {
-                // save new end date if a later date exists
-                if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0) {
-                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
-                }
-            }
-        } elseif ($membershipStatement->rowCount() > 1) {
-            // several records found then read min and max date and delete all records
-            while ($row = $membershipStatement->fetch()) {
-                $member->clear();
-                $member->setArray($row);
-
-                // save new start date if an earlier date exists
-                if (strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0) {
-                    $minStartDate = $member->getValue('mem_begin', 'Y-m-d');
-                }
-
-                // save new end date if a later date exists
-                if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0) {
-                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
-                }
-
-                // delete existing entry because a new overlapping entry will be created
-                $member->delete();
-            }
-            $member->clear();
-        }
-
-        if (strcmp($minStartDate, $maxEndDate) > 0) {
-            // if start date is greater than end date than delete membership
-            if ($member->getValue('mem_id') > 0) {
-                $member->delete();
-            }
-            $returnStatus = true;
-        } else {
-            // save membership to database
-            if ($mode === 'set') {
-                $member->setValue('mem_rol_id', $roleId);
-                $member->setValue('mem_usr_id', $usrId);
-            }
-            $member->setValue('mem_begin', $minStartDate);
-            $member->setValue('mem_end', $maxEndDate);
-
-            if ($leader !== null) {
-                $member->setValue('mem_leader', $leader);
-            }
-            $returnStatus = $member->save();
-        }
-
-        $this->db->endTransaction();
-        $this->renewRoleData();
-
-        return $returnStatus;
-    }
-
-    /**
      * Method reads all relationships of the user and will store them in an array. The
      * relationship property if the user can edit the profile of the other user will be stored
      * for later checks within this class.
@@ -831,24 +680,6 @@ class User extends TableAccess
     }
 
     /**
-     * Edit an existing role membership of the current user. If the new date range contains
-     * a future or past membership of the same role then the two memberships will be merged.
-     * In opposite to setRoleMembership this method is useful to end a membership earlier.
-     * @param int $memberId ID of the current membership that should be edited.
-     * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
-     * @param string $endDate New end date of the membership. Default will be **DATE_MAX**
-     * @param bool|null $leader If set to **1** then the member will be leader of the role and
-     *                          might get more rights for this role.
-     * @return bool Return **true** if the membership was successfully edited.
-     * @throws AdmException
-     * @deprecated 4.3.0:4.4.0 "editRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
-     */
-    public function editRoleMembership(int $memberId, $startDate = DATE_NOW, string $endDate = DATE_MAX, bool $leader = null): bool
-    {
-        return $this->changeRoleMembership('edit', $memberId, $startDate, $endDate, $leader);
-    }
-
-    /**
      * Creates an array with all categories of one type where the user has the right to edit them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to edit them
@@ -892,16 +723,6 @@ class User extends TableAccess
         }
 
         return $arrEditableCategories;
-    }
-
-    /**
-     * Creates an array with all roles where the user has the right to mail them
-     * @return array<int,int> Array with role ids where user has the right to mail them
-     * @deprecated 4.2.0:4.3.0 "getAllMailRoles()" is deprecated, use "getRolesWriteMails()" instead.
-     */
-    public function getAllMailRoles(): array
-    {
-        return $this->rolesWriteMails;
     }
 
     /**
@@ -954,16 +775,6 @@ class User extends TableAccess
         }
 
         return $arrVisibleCategories;
-    }
-
-    /**
-     * Creates an array with all roles where the user has the right to view them
-     * @return array<int,int> Array with role ids where user has the right to view them
-     * @deprecated 4.2.0:4.3.0 "getAllVisibleRoles()" is deprecated, use "getRolesViewMemberships()" instead.
-     */
-    public function getAllVisibleRoles(): array
-    {
-        return $this->rolesViewMemberships;
     }
 
     /**
@@ -2001,24 +1812,6 @@ class User extends TableAccess
     public function setProfileFieldsValue(string $fieldNameIntern, $fieldValue, bool $checkValue = true): bool
     {
         return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue, $checkValue);
-    }
-
-    /**
-     * Create a new membership to a role for the current user. If the date range contains
-     * a future or past membership of the same role then the two memberships will be merged.
-     * In opposite to setRoleMembership this method can't be used to end a membership earlier!
-     * @param int $roleId ID of the role for which the membership should be set.
-     * @param string $startDate Start date of the membership. Default will be **DATE_NOW**.
-     * @param string $endDate End date of the membership. Default will be **31.12.9999**
-     * @param bool|null $leader If set to **1** then the member will be leader of the role and
-     *                          might get more rights for this role.
-     * @return bool Return **true** if the membership was successfully added.
-     * @throws AdmException
-     * @deprecated 4.3.0:4.4.0 "setRoleMembership()" is deprecated, use "TableRoles::setMembership()" instead.
-     */
-    public function setRoleMembership(int $roleId, $startDate = DATE_NOW, string $endDate = DATE_MAX, bool $leader = null): bool
-    {
-        return $this->changeRoleMembership('set', $roleId, $startDate, $endDate, $leader);
     }
 
     /**

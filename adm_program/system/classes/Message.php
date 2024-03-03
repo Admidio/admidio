@@ -98,20 +98,6 @@ class Message
 
     /**
      * Add two buttons with the labels **yes** and **no** to the message. If the user choose yes
-     * he will be redirected to the $url. If he chooses no he will be directed back to the previous page or
-     * the modal window will be closed.
-     * @param string $urlYesButton The full url to which the user should be directed if he chooses **yes**.
-     * @deprecated 4.3.0:4.4.0 "setForwardYesNo()" is deprecated, use "Message::setYesNoButton()" instead.
-     */
-    public function setForwardYesNo(string $urlYesButton)
-    {
-        $this->forwardMode = true;
-        $this->url = $urlYesButton;
-        $this->showYesNoButtons = true;
-    }
-
-    /**
-     * Add two buttons with the labels **yes** and **no** to the message. If the user choose yes
      * a call to the $urlYesButton will be sent. If he chooses no he will be directed back to the previous page
      * or the modal window will be closed.
      * @param string $urlYesButton The full url to which the user should be directed if he chooses **yes**.

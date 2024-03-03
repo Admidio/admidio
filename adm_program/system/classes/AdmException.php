@@ -59,16 +59,6 @@ class AdmException extends Exception
     }
 
     /**
-     * Simply return the plain translated error text without any markup.
-     * @return string Returns only a string with the exception text
-     * @deprecated 4.3.0:4.4.0 "getText()" is deprecated, use "Exception::getMessage()" instead.
-     */
-    public function getText(): string
-    {
-        return $this->message;
-    }
-
-    /**
      * Set a new Admidio message id with their parameters. This method should be used
      * if during the exception processing a new better message should be set.
      * @param string $message Translation **id** that should be shown when exception is caught

@@ -240,16 +240,6 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 }
 
 /**
- * Funktion gibt die maximale Pixelzahl zurück die der Speicher verarbeiten kann
- * @return int
- * @deprecated 4.3.0 "admFuncProcessableImageSize()" is deprecated, use "SystemInfoUtils::getProcessableImageSize()" instead.
- */
-function admFuncProcessableImageSize()
-{
-    return SystemInfoUtils::getProcessableImageSize();
-}
-
-/**
  * Verify the content of an array element if it's the expected datatype
  *
  * The function is designed to check the content of **$_GET** and **$_POST** elements and should be used at the
