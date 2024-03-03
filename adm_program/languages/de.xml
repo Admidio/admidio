@@ -664,7 +664,7 @@
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXECUTE_BACKUP">Backup durchführen</string>
-  <string name="SYS_EXISTING_CONTACTS">Existierende Konakte</string>
+  <string name="SYS_EXISTING_CONTACTS">Existierende Kontakte</string>
   <string name="SYS_EXPORT_ICAL">Exportieren (iCal)</string>
   <string name="SYS_EXPORT_LISTS">Listen exportieren</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listen von Gruppen und Rollen können von Benutzerinnen und Benutzern exportiert werden, sofern sie das Recht haben diese Listen zu sehen. Mit dieser Einstellung kann die Exportfunktion eingeschränkt werden. (Voreinstellung: Alle)</string>
