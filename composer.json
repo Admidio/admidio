@@ -6,7 +6,6 @@
     "license": "GPL-2.0",
     "homepage": "https://www.admidio.org/",
     "config": {
-        "vendor-dir": "adm_program/libs/server",
         "platform": {
             "php": "7.2.0"
         }
@@ -14,21 +13,19 @@
     "require": {
         "php": "^7.2 || ^8.0",
         "ext-gd": "*",
-        "ext-json": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
         "ext-zip": "*",
-        "ext-iconv": "*",
-        "ext-posix": "*",
         "bjeavons/zxcvbn-php": "^1.2.0",
-        "dapphp/securimage": "^3.6",
         "ezyang/htmlpurifier": "^4.14",
         "monolog/monolog": "^2.0",
         "phpmailer/phpmailer": "^6.4",
         "phpoffice/phpspreadsheet": "^1.18",
         "ramsey/uuid": "^4.1",
         "smarty/smarty": "^4.0",
-        "tecnickcom/tcpdf": "^6.2"
+        "tecnickcom/tcpdf": "^6.2",
+        "twbs/bootstrap": "^4.6",
+        "fortawesome/font-awesome": "^5.15"
     },
     "require-dev": {},
     "suggest": {
@@ -39,6 +36,20 @@
     },
     "autoload": {
         "classmap": ["adm_program/system/classes/"],
-        "files": ["adm_program/libs/client/jquery-file-upload/server/php/UploadHandler.php"]
+        "files": ["adm_program/libs/jquery-file-upload/server/php/UploadHandler.php"]
+    },
+    "archive": {
+        "exclude": [ "!vendor/*",
+            "vendor/tecnickcom/tcpdf/examples",
+            "vendor/tecnickcom/tcpdf/fonts",
+            "!vendor/tecnickcom/tcpdf/fonts/courier*.*",
+            "!vendor/tecnickcom/tcpdf/fonts/helvetica*.*",
+            "!vendor/tecnickcom/tcpdf/fonts/pdfa*.*",
+            "!vendor/tecnickcom/tcpdf/fonts/times*.*",
+            "vendor/twbs/bootstrap",
+            "!vendor/twbs/bootstrap/dist",
+            "vendor/fortawesome/font-awesome",
+            "!vendor/fortawesome/font-awesome/css",
+            "!vendor/fortawesome/font-awesome/webfonts"]
     }
 }

@@ -104,12 +104,12 @@ class HtmlDataTables
     {
         global $gSettingsManager, $gL10n;
 
-        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.js');
-        $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.css');
-        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/luxon/luxon.js');
-        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datetime-luxon.js');
+        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.js');
+        $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.css');
+        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/luxon/luxon.js');
+        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datetime-luxon.js');
 
-        $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json"}';
+        $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json"}';
 
         if ($rowCount > 10 || $this->serverSideProcessing) {
             // set default page length of the table

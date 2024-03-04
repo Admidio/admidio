@@ -46,7 +46,7 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
 // Add polyfills for backwards compatibility with older PHP versions
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/polyfill.php');
 // Add Class autoloader
-require_once(ADMIDIO_PATH . '/adm_program/libs/server/autoload.php');
+require_once(ADMIDIO_PATH . '/vendor/autoload.php');
 // Enable Logging
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/logging.php');
 // Add shutdown function

@@ -98,7 +98,7 @@ $page->addJavascript(
                 if (data === "success") {
                     if (id === "captcha_preferences_form") {
                         // reload captcha if form is saved
-                        $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/dapphp/securimage/securimage_show.php?" + Math.random());
+                        $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random());
                     }
                     formAlert.attr("class", "alert alert-success form-alert");
                     formAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
@@ -115,7 +115,7 @@ $page->addJavascript(
     });
 
     $("#captcha-refresh").click(function() {
-        document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php?" + Math.random();
+        document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
     });
 
     $("#link_check_for_update").click(function() {
@@ -809,7 +809,7 @@ $formCaptcha->addInput(
     $formValues['captcha_perturbation'],
     array('type' => 'string', 'helpTextIdInline' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small')
 );
-$backgrounds = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/dapphp/securimage/backgrounds/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+$backgrounds = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_LIBS . '/securimage/backgrounds/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 asort($backgrounds);
 $formCaptcha->addSelectBox(
     'captcha_background_image',
@@ -847,7 +847,7 @@ $formCaptcha->addInput(
     $formValues['captcha_signature'],
     array('maxLength' => 60, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
 );
-$html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php" alt="CAPTCHA Image" />
+$html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
          <a id="captcha-refresh" class="admidio-icon-link" href="javascript:void(0)">
             <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>';
 $formCaptcha->addCustomContent(
