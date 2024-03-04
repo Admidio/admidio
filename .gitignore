@@ -21,6 +21,9 @@
 !/adm_plugins/who-is-online/
 !/adm_plugins/category_report/
 
+# Don't commit the external libs from vendor folder
+/vendor
+
 # Some special OS files that should not commited
 /*.phar
 .DS_Store
