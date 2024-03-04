@@ -1781,7 +1781,7 @@ class HtmlForm extends Smarty
             $this->assign($key, $assign);
         }
         $this->assign("ADMIDIO_URL", ADMIDIO_URL);
-        $this->assign("FOLDER_LIBS_SERVER", FOLDER_LIBS_SERVER);
+        $this->assign("FOLDER_LIBS", FOLDER_LIBS);
         $this->assign("data", $assigns);
 
         $this->assign('l10n', $gL10n);
