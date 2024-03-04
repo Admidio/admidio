@@ -1,4 +1,4 @@
-var $buoop = {notify:{i:10,f:-2,o:-2,s:-2,c:-2},insecure:true,unsupported:true,api:5};
+var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,api:2024.03 };
 function $buo_f(){
     var e = document.createElement("script");
     e.src = "//browser-update.org/update.min.js";

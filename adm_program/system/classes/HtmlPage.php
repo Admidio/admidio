@@ -123,7 +123,7 @@ class HtmlPage extends Smarty
 
         if (is_object($gSettingsManager) && $gSettingsManager->has('system_browser_update_check')
         && $gSettingsManager->getBool('system_browser_update_check')) {
-            $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
+            $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/browser-update/browser-update.js');
         }
     }
 
