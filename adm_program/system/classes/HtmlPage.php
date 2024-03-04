@@ -21,7 +21,7 @@
  * ```
  * // create a simple html page with some text
  * $page = new HtmlPage('admidio-example');
- * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/jquery.min.js');
+ * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
  * $page->show();
