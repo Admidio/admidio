@@ -7,11 +7,11 @@
     "homepage": "https://www.admidio.org/",
     "config": {
         "platform": {
-            "php": "7.2.0"
+            "php": "7.4.0"
         }
     },
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^7.4 || ^8.0",
         "ext-gd": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
