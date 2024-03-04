@@ -36,7 +36,7 @@
     },
     "autoload": {
         "classmap": ["adm_program/system/classes/"],
-        "files": ["adm_program/libs/client/jquery-file-upload/server/php/UploadHandler.php"]
+        "files": ["adm_program/libs/jquery-file-upload/server/php/UploadHandler.php"]
     },
     "archive": {
         "exclude": [ "!vendor/*",
