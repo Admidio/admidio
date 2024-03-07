@@ -514,9 +514,8 @@ abstract class HtmlElement extends Smarty
         foreach($assigns as $key => $assign) {
             $this->assign($key, $assign);
         }
-        $this->assign("ADMIDIO_URL", ADMIDIO_URL);
-        $this->assign("FOLDER_LIBS", FOLDER_LIBS);
-        $this->assign("data", $assigns);
+        $this->assign('ADMIDIO_URL', ADMIDIO_URL);
+        $this->assign('data', $assigns);
 
         $this->assign('l10n', $gL10n);
         return $this->fetch("sys-template-parts/".$templateName.'.tpl');
