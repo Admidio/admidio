@@ -85,6 +85,11 @@ RUN mkdir ${APACHE_DOCUMENT_ROOT}/provisioning && \
 
 VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/adm_themes", "/opt/app-root/src/adm_plugins"]
 
+# Latest release
+COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
+# RUN composer update
+RUN composer install
+
 HEALTHCHECK --interval=30s --timeout=5s CMD "/opt/app-root/src/dockerscripts/healthcheck.sh"
 
 EXPOSE 8080
