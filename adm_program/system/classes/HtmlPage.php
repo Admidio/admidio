@@ -417,7 +417,7 @@ class HtmlPage extends Smarty
     public function show()
     {
         global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager,
-               $gSetCookieForDomain, $gNavigation;
+               $gSetCookieForDomain, $gNavigation, $gLayoutReduced;
 
         $urlImprint = '';
         $urlDataProtection = '';
@@ -489,7 +489,7 @@ class HtmlPage extends Smarty
         $this->assign('l10n', $gL10n);
 
         try {
-            if ($this->modeInline) {
+            if ($this->modeInline || $gLayoutReduced) {
                 $this->display('index_reduced.tpl');
             } else {
                 $this->display('index.tpl');

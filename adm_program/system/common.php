@@ -137,6 +137,16 @@ if (array_key_exists('gCurrentSession', $_SESSION)
     $gCurrentSession->tableCleanup($gSettingsManager->getInt('logout_minutes'));
 }
 
+// Check if reduced layout should be shown
+if (array_key_exists('iframe', $_GET)) {
+    $gLayoutReduced = (bool) $_GET['iframe'];
+    $_SESSION['gLayoutReduced'] = $_GET['iframe'];
+} elseif (array_key_exists('gLayoutReduced', $_SESSION)) {
+    $gLayoutReduced = $_SESSION['gLayoutReduced'];
+} else {
+    $gLayoutReduced = false;
+}
+
 $gL10n = new Language($gLanguageData);
 
 $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
