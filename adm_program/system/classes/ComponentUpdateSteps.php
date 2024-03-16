@@ -65,7 +65,7 @@ final class ComponentUpdateSteps
             if (!array_key_exists('LINKEDIN', $profileFields)) {
                 $profileFieldLinkedIn = new TableUserField(self::$db);
                 $profileFieldLinkedIn->saveChangesWithoutRights();
-                $profileFieldLinkedIn->setValue('usf_cat_id', $row['cat_id']);
+                $profileFieldLinkedIn->setValue('usf_cat_id',(int) $row['cat_id']);
                 $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
                 $profileFieldLinkedIn->setValue('usf_name_intern', 'LINKEDIN');
                 $profileFieldLinkedIn->setValue('usf_name', 'SYS_LINKEDIN');
@@ -78,7 +78,7 @@ final class ComponentUpdateSteps
             if (!array_key_exists('INSTAGRAM', $profileFields)) {
                 $profileFieldInstagram = new TableUserField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
-                $profileFieldInstagram->setValue('usf_cat_id', $row['cat_id']);
+                $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'INSTAGRAM');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_INSTAGRAM');
@@ -91,7 +91,7 @@ final class ComponentUpdateSteps
             if (!array_key_exists('MASTODON', $profileFields)) {
                 $profileFieldInstagram = new TableUserField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
-                $profileFieldInstagram->setValue('usf_cat_id', $row['cat_id']);
+                $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'MASTODON');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_MASTODON');
