@@ -605,7 +605,6 @@
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Användaren #VAR1# #VAR2# (användarnamn: #VAR3#) skapades av #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Användare #VAR1# #VAR2# (inloggning: #VAR3#) har tagits bort</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Användarens profil #VAR1# #VAR2# (inloggning: #VAR3#) raderades av #VAR4#.</string>
-  <string name="SYS_EMAIL_DESC">E-postmeddelanden kan skickas till olika roller som grupper, kurser eller avdelningar.</string>
   <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# e-post för funktionstest</string>
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Det här e-postmeddelandet skickades via #VAR1# webbplats för organisationen #VAR2# med e -postinställningarna lagrade där.</string>
   <string name="SYS_EMAIL_INVALID">E-postadress i fält #VAR1_BOLD# innehåller ogiltiga tecken eller är ofullständig.</string>
@@ -773,7 +772,7 @@
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Inloggningsdata kan endast importeras av en administratör. Organisationens regler måste följas (t.ex. lösenordslängd och lösenordsstyrka). Användare med redan befintliga inloggningsdata behåller dem. Inga inloggningsdata kommer att skrivas över av importen.</string>
   <string name="SYS_IMPORT_MODE">Importläge</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Arbetsbladet #VAR1# finns inte i den importerade filen!</string>
-  <string name="SYS_IMPORT_SUCCESSFUL">Importen lyckades .. \n\n #VAR1# nya användare har skapats. \n #VAR2# användare har redigerats. \n #VAR3# rollmedlemskap har tilldelats.</string>
+  <string name="SYS_IMPORT_SUCCESSFUL">Importen lyckades..\n\n#VAR1# nya användare har skapats.\n#VAR2# användare har redigerats.\n#VAR3# rollmedlemskap har tilldelats.\n\n#VAR4#</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Följande kolumner i importfilen tilldelas inga profilfält:</string>
   <string name="SYS_IMPRINT">Information</string>
   <string name="SYS_IMPRINT_DESC">Här kan URL: en för avtrycket på din sida deponeras. Om det valda temat stöder detta kommer en länk att visas på Admidio-sidorna. (Exempel: https://www.example.com/imprint.html)</string>
@@ -823,8 +822,8 @@
   <string name="SYS_LINK_TO">Länk till #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Lista</string>
-  <string name="SYS_LOCATION">Plats</string>
-  <string name="SYS_LOCATION_LINK">Om tillräckligt med information om plats tillhandahålls (gata, stad, plats) kan Google Maps räkna ut rutt till plats.</string>
+  <string name="SYS_LOG">Logg</string>
+  <string name="SYS_MEETING_POINT">Träffpunkt</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Lagringsplats för profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Ange var du vill lagra profilbilden (i databasen eller i mappen adm_my_files). När en ändring görs kopieras inte de aktuella bilderna till en ny plats. (standard: databas)</string>
   <string name="SYS_LOCK">Lås</string>
@@ -850,7 +849,7 @@
   <string name="SYS_MAIL_DISPATCH">E-postleverans</string>
   <string name="SYS_MAINTAIN_CATEGORIES_DESC">Här kan du skapa och redigera kategorier.</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Du kan definiera relationstyper (förälder - barn). För varje definierat förhållande definieras typen (asymmetrisk, symmetrisk eller enkelriktad) och profilredigeringsrättigheterna definieras i relationen.</string>
-  <string name="SYS_MAKE_FORMER">En användare kan ändras till status som tidigare medlem. Detta kommer att bevara all användarinformation inklusive rollmedlemskap för senare användning.</string>
+  <string name="SYS_MAKE_FORMER">Du kan omvandla kontakten till en före detta kontakt. Detta avslutar alla gruppmedlemsskap men raderar inte informationen om kontakten. Det ger möjligheten att senare kunna se roller och information om kontakten.</string>
   <string name="SYS_MALE">Man</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Nya registreringar av besökare kan listas, godkännas eller vägras här.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">Nya profilfält och deras egenskaper kan definieras såväl som ändringar i befintliga profilfält. Fälten kan tilldelas kategorier och förses med rättigheter, vilka roller kan se eller redigera vilka profilfält.</string>
@@ -859,6 +858,7 @@
   <string name="SYS_MAP">Karta</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Visar platsen på Google Maps. Gata, postnummer, stad och land överförs till Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Visar en rutt från din egen bostad till den här användarens plats på Google Maps. Gatan, postnumret, staden och landet överförs till Google.</string>
+  <string name="SYS_MASTODON">Mastodon</string>
   <string name="SYS_MAX_ATTACHMENT_SIZE">Obegränsat antal mottagare kan läggas till. Den totala storleken på alla bilagor tillsammans får inte överstiga #VAR1# MB.</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. deltagarna</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# av max. #VAR2# deltagare</string>
@@ -878,7 +878,6 @@
   <string name="SYS_MEMBER">Medlem</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Medlemuppdrag</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Medlem av organisationen #VAR1#</string>
-  <string name="SYS_MEMBERS">Medlemmar</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Medlemmar mellan #VAR1# och #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">En av de konfigurationer som anges här kan användas för att visa användaradministrationen. Kolumnerna i den valda listkonfigurationen visas sedan i användaradministrationen.</string>
   <string name="SYS_CONTACTS_DESC">Visa och organisera alla aktiva och före detta medlemmar här. Nya kontakter kan importeras eller skapas.</string>
@@ -892,13 +891,14 @@
   <string name="SYS_MENU">Meny</string>
   <string name="SYS_MENU_DESC">Menyn kan konfigureras här. Förutom URL-adressen kan en beskrivning och en ikon deponeras. Dessutom kan det bestämmas vem som får se menyposten.</string>
   <string name="SYS_MENU_LEVEL">menynivå</string>
-  <string name="SYS_MENU_LEVEL_DESC">Ett menyalternativ är alltid underordnat ett annat menyalternativ. I vallistan väljer du en menynivå där det nya menyalternativet ska vara synligt. </string>
   <string name="SYS_MENU_ITEM">Menyval</string>
   <string name="SYS_MENU_MODULE_RIGHTS_DESC">Om du anger en modul här, kommer menyalternativet endast att visas om användaren också har rätt att se den här modulen.</string>
   <string name="SYS_MENU_NAME_DESC">Namnet på posten i menyn. Här kan du också ange namnet på en översättningssträng.</string>
+  <string name="SYS_MENU_RESTRICT_VISIBILITY">Endast visandet av menyn begränsas. Åtkomst till underliggande sidor påverkas inte av auktorisationen.</string>
   <string name="SYS_MESSAGE">Meddelande</string>
   <string name="SYS_MESSAGE_WENT_TO">Meddelandet skickades till</string>
   <string name="SYS_MESSAGES">Meddelanden</string>
+  <string name="SYS_MESSAGES_DESC">En översikt av alla skickade mejl och privata meddelanden. Nya mejl och privata meddelanden kan skrivas och skickas till individuella kontakter eller roller. </string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="SYS_MINUTES_VAR">#VAR1# minuter</string>
   <string name="SYS_MOBILE">Mobil</string>
@@ -934,7 +934,6 @@
   <string name="SYS_NEW_NAME">Nytt namn</string>
   <string name="SYS_NEW_PASSWORD">Nytt lösenord</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Profilbild</string>
-  <string name="SYS_NEW_REGISTRATIONS">Nyregistreringar</string>
   <string name="SYS_NEW_ROLE">Ny roll</string>
   <string name="SYS_NEW_VALUE">Nytt värde</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">En ny version tillgänglig</string>
@@ -1055,7 +1054,7 @@
   <string name="SYS_PHOTOS_BY">Foton av</string>
   <string name="SYS_PHOTOS_BY_VAR">Foton av #VAR1#</string>
   <string name="SYS_PHOTOS_DESC">Bilder från evenemang kan laddas upp och visas. Bilder kan organiseras i album som kan kopplas samman.</string>
-  <string name="SYS_PHOTOS_PRESENTATION">Fotodisplay</string>
+  <string name="SYS_PHOTOS_PRESENTATION">Bildpresentation</string>
   <string name="SYS_PHOTOS_PRESENTATION_DESC">Med det här alternativet kan du definiera hur bilderna ska visas i fotomodulen. Detta kan göras med ett modalfönster som öppnas som separat webbläsarfönster. Förhandsgranskningen av bilden förblir aktiv i bakgrunden. Om bilden ska visas i samma fönster stängs den aktuella bildförhandsvisningen. Det tredje alternativet gör det möjligt att visa bilden i ett popup-fönster som kan användas utöver förhandsvisningen av bilden. (Standard: Modal fönster)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">PHP-inställningar</string>
@@ -1124,6 +1123,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_FAILED">Den angivna länken är ogiltig. En registreringslänk är endast giltig upp till 24 timmar efter registreringen. Registrera dig igen på webbplatsen och bekräfta din registrering så snart du får e-postmeddelandet med länken.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK">Du har bekräftat din registrering. Den kommer nu att kontrolleras av en medlem av #VAR1#-teamet. Du får sedan ett e-postmeddelande om din registrering har godkänts eller avvisats.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Du har verifierat din registrering. Nu kan du logga in med ditt användarnamn och lösenord.</string>
+  <string name="SYS_REGISTRATIONS">Registreringar</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Alla reguljära uttryck som lagras kommer tillämpas på värdet som användaren matar in i profilfält. Innehållet måste matcha villkoren i det reguljära uttrycket för att det angivna värdet ska lagras i fältet. Det reguljära uttrycket kontrolleras utöver de allmänna villkoren för datatypen.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationskonfiguration</string>
@@ -1135,10 +1135,10 @@
   <string name="SYS_REMEMBER_ME">Fortsätt vara inloggad</string>
   <string name="SYS_REMINDER_SEND_LOGIN">Vill du skicka användaruppgifterna och nytt lösenord som en påminnelse?</string>
   <string name="SYS_REMOVE">Ta bort</string>
+  <string name="SYS_REMOVE_CONTACT">Ta bort kontakt</string>
+  <string name="SYS_REMOVE_CONTACT_DESC">När du väljer #VAR1_BOLD# raderas all data om kontakten och kan inte visas eller återskapas.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Vill du ta bort anmälan till detta evenemang? Alla deltagare kommer att tas bort.</string>
   <string name="SYS_REMOVE_MESSAGE">Ta bort meddelandet</string>
-  <string name="SYS_REMOVE_USER">Ta bort användare</string>
-  <string name="SYS_REMOVE_USER_DESC">Genom att välja #VAR1_BOLD# kommer alla data att raderas och denna information kommer inte att finnas tillgänglig längre.</string>
   <string name="SYS_REPEAT">Upprepa</string>
   <string name="SYS_REPLACE">Byt ut</string>
   <string name="SYS_REQUIRED_INPUT">Inmatning krävs</string>
@@ -1153,8 +1153,8 @@
   <string name="SYS_RIGHT_DATES">Hantera evenemang</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Hantera dokument och filer</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roller som har denna behörighet kan hantera rättigheterna för dokument- och filmodulen. Detta inkluderar vem som kan se mappar och kan ladda upp filer.</string>
-  <string name="SYS_RIGHT_EDIT_USER">Redigera profilen för alla användare</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller som har denna behörighet kan redigera andra användares data (utom lösenord). \nDessutom har de tillgång till användaradministrationen och kan lägga till och ta bort användare.</string>
+  <string name="SYS_RIGHT_EDIT_USER">Redigera profilen på alla kontakter</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller med denna behörighet kan redigera information på andra kontakter (utom lösenord). de kan även skapa och ta bort kontakter.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Redigera och ta bort gästbokposter</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Skapa kommentarer till gästbokposter</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Deltagarna kan skicka e-post till alla deltagare</string>
@@ -1190,7 +1190,7 @@
   <string name="SYS_ROOM_MANAGEMENT">Rumsadministration</string>
   <string name="SYS_ROOM_OVERHANG">Vid ytterligare tillgängligt utrymme (exempel ytterligare platser, stående rom) kan antalet ytterligare utrymmen definieras här.</string>
   <string name="SYS_ROOM_RESERVED">Valt rum är redan i bruk just nu.</string>
-  <string name="SYS_ROOM_SELECTABLE">Rum finns tillgängligt</string>
+  <string name="SYS_ROOM_SELECTABLE">Tilldela rum</string>
   <string name="SYS_ROOM_SELECTABLE_DESC">Visa en listruta med tillgängliga lokaler för att kunna välja en lokal för evenemanget. (Standard: nej)</string>
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotera foto</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotera fotot åt höger</string>
@@ -1304,7 +1304,7 @@
   <string name="SYS_SHOW_WATERMARK_DESC">Den angivna texten kommer visas i alla bilder, med början i en skala på 200 pixels längs långsidan. Om en fotograf är angiven i albumet kommer fotografens namn med copyright visas istället för texten. Om fältet lämnas tomt kommer ingen text visas. (Standard: #VAR1#)</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Liknande kontakt funnen</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med liknande namn som #VAR1_BOLD# hittades.</string>
-  <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med liknande namn som #VAR1_BOLD# hittades. Kontrollera registreringen och välj en av de hittade kontakterna eller skapa en ny kontakt.</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med liknande namn hittades vid registrering av #VAR1_BOLD# med e-postadressen #VAR2_BOLD#. Kontrollera informationen och koppla till en befintlig kontakt eller skapa en ny kontakt.</string>
   <string name="SYS_SINCE">sedan #VAR1#</string>
   <string name="SYS_SINCE_TO">från #VAR1# till #VAR2#</string>
   <string name="SYS_SIZE">Storlek</string>
@@ -1348,7 +1348,7 @@
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Växla till relationskonfiguration</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Öppet rumadministration</string>
   <string name="SYS_SYMMETRICAL">Symmetri</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#ämne# Intyg för #organization_long_name# \n #content# Hej #user_first_name#, \n\nDu får dina referenser för webbplatsen #organization_homepage#. \n Användarnamn: #användare_loginnamn# \n Lösenord: #variabel1# \n\n Lösenordet var genereras automatiskt, \nDu bör ändra det efter att du har loggat in på #organization_homepage# i din profil. \n\nCheers, \nAdministratörerna</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Inloggningsuppgifter för #organization_long_name# \n#content# Hej #user_first_name#,\n\nHär kommer inloggningsuppgifter för webbplatsen #organization_homepage#.\nAnvändarnamn: #user_login_name# \nLösenord: #variable1# \n\nLösenordet har genereras automatiskt,\nDu bör ändra det efter att du har loggat in på #organization_homepage#.\n\nLycka till, \nAdministratören</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Återställ lösenord för #organization_long_name#\n#content# Hej #user_first_name#, \n \nVi har fått en begäran om att återställa ditt lösenord på #organization_homepage#. \n\nOm begäran kom från dig kan du använda följande länk för att återställa ditt lösenord och ställa in ett nytt: \n#variable1#\n\nHälsningar \nAdministratörerna</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# vid registrering på #organization_long_name# avvisad.\n#content#Hej #user_first_name#,\n\ndin registrering på #organization_homepage# avvisades.\n\nRegistreringar accepteras i allmänhet av våra användare. Om du är medlem och din registrering fortfarande avvisades kan det bero på att du inte identifierades som medlem. \nFör att klargöra orsakerna till avslaget vänligen kontakta administratören #administrator_email# från #organization_homepage#.\n\nHälsningar,\n Teamet hos #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#ämne# Registrering på #organization_long_name# bekräftad \n #content# Hej #user_first_name#, \n\ny registrering på #organization_homepage# har bekräftats. \n\nDu kan nu logga in på hemsidan med ditt användarnamn # användare_login_namn # och ditt lösenord. \n\nOm du har några frågor, skriv ett e-postmeddelande till #administrator_email #. \n\nCheers, \n Administratörerna</string>
@@ -1380,7 +1380,7 @@
   <string name="SYS_TUESDAY">Tisdag</string>
   <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Typ</string>
-  <string name="SYS_UNIQUE_ID">Unikt Admidio-ID</string>
+  <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNLIMITED">Obegränsat</string>
   <string name="SYS_UNKNOWN">Oidentifierad data</string>
@@ -1424,6 +1424,8 @@
   <string name="SYS_VALID_TO" description="Date valid to">Gäller t.o.m.</string>
   <string name="SYS_VARIOUS_ROLES">Olika roller</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Olika relationer</string>
+  <string name="SYS_VENUE">Plats</string>
+  <string name="SYS_VENUE_LINK">Med tillräcklig information (stad, gata, koordinater) om platsen anges kan en länk eller vägbeskrivning skapas via Google Maps. </string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Din nuvarande databasversion är #VAR1#. Tyvärr är det inte möjligt att uppdatera till #VAR2# med denna version.\n\nInstallera först Admidio 4.1 och sedan kan du uppdatera till Admidio #VAR2#.</string>
   <string name="SYS_VIEW">Visa</string>
