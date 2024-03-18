@@ -263,7 +263,9 @@ class ListData
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         header('Cache-Control: max-age=0');
         header('Content-Length: ' . filesize($tempFileFolderName));
-        ob_clean();
+        if(ob_get_length() > 0) { // Issue 1607 Fix
+            ob_clean();
+        }
         flush();
         $writer->save('php://output');
         unlink($tempFileFolderName);
