@@ -298,6 +298,23 @@ class UserRegistration extends User
     }
 
     /**
+     * If email support is enabled and the current user is administrator or has the right to approve new
+     * registrations than this method will create a new password and send this to the user. Also the current
+     * registration record will be deleted because it has no use anymore.
+     * @return void
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function sendNewPassword()
+    {
+        // Resend access data
+        parent::sendNewPassword();
+
+        // delete registration record in registration table
+        $this->tableRegistration->delete();
+    }
+
+    /**
      * Method will search in the registration table for a valid registration for this user in combination with the
      * validation ID. If a valid registration was found than reg_validation_id will be cleared and so the
      * registration is validated through the user. After that the registration must be manually approved by a member
