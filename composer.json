@@ -41,10 +41,8 @@
     "autoload": {
         "classmap": [
             "adm_program/system/classes/",
+            "adm_program/libs/jquery-file-upload/server/php/",
             "adm_program/libs/securimage/"
-        ],
-        "files": [
-            "adm_program/libs/jquery-file-upload/server/php/UploadHandler.php"
         ]
     },
     "archive": {
