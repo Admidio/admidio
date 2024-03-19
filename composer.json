@@ -2,7 +2,11 @@
     "name": "admidio/admidio",
     "description": "Admidio is a free open source user management system for websites of organizations and groups.",
     "type": "project",
-    "keywords": ["admidio", "management", "organizations"],
+    "keywords": [
+        "admidio",
+        "management",
+        "organizations"
+    ],
     "license": "GPL-2.0",
     "homepage": "https://www.admidio.org/",
     "config": {
@@ -35,11 +39,17 @@
         "ext-pdo_pgsql": "For PostgreSQL database support"
     },
     "autoload": {
-        "classmap": ["adm_program/system/classes/"],
-        "files": ["adm_program/libs/jquery-file-upload/server/php/UploadHandler.php"]
+        "classmap": [
+            "adm_program/system/classes/",
+            "adm_program/libs/securimage/"
+        ],
+        "files": [
+            "adm_program/libs/jquery-file-upload/server/php/UploadHandler.php"
+        ]
     },
     "archive": {
-        "exclude": [ "!vendor/*",
+        "exclude": [
+            "!vendor/*",
             "vendor/tecnickcom/tcpdf/examples",
             "vendor/tecnickcom/tcpdf/fonts",
             "!vendor/tecnickcom/tcpdf/fonts/courier*.*",
@@ -50,6 +60,7 @@
             "!vendor/twbs/bootstrap/dist",
             "vendor/fortawesome/font-awesome",
             "!vendor/fortawesome/font-awesome/css",
-            "!vendor/fortawesome/font-awesome/webfonts"]
+            "!vendor/fortawesome/font-awesome/webfonts"
+        ]
     }
 }

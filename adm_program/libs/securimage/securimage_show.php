@@ -47,8 +47,6 @@
 // Remove the "//" from the following line for debugging problems
 // error_reporting(E_ALL); ini_set('display_errors', 1);
 
-require_once dirname(__FILE__) . '/securimage.php';
-
 // ***** START ADMIDIO CODE *****
 require_once(__DIR__ . '/../../system/common.php');
 // ***** END ADMIDIO CODE *****
