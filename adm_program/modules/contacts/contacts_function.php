@@ -144,22 +144,9 @@ if ($getMode === 2) {
     exit();
 } elseif ($getMode === 4) {
     try {
-        // User must be member of this organization
-        // E-Mail support must be enabled
-        // Only administrators are allowed to send new login data or users who want to approve login data
-        if (isMember($user->getValue('usr_id'))
-        && $gSettingsManager->getBool('system_notifications_enabled')
-        && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers())) {
-            // Generate new secure-random password and save it
-            $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
-            $user->setPassword($password);
-            $user->save();
-
-            // Send mail with login data to user
-            $sysMail = new SystemMail($gDb);
-            $sysMail->addRecipientsByUser($getUserUuid);
-            $sysMail->setVariable(1, $password);
-            $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
+        // If User must be member of this organization than send a new password
+        if (isMember($user->getValue('usr_id'))) {
+            $user->sendNewPassword();
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_EMAIL_SEND')));
         } else {

@@ -122,14 +122,10 @@ try {
             // => EXIT
         }
     } elseif ($getMode === 'send_login') {
-        // User already exists and has a login
+        // User already exists and has a login than sent access data with a new password
 
-        // delete registration
-        $registrationUser->delete();
-
-        // Resend access data
-        $gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/contacts/contacts_function.php', array('mode' => '4', 'user_uuid' => $getUserUuid)));
+        $registrationUser->sendNewPassword();
+        admRedirect(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
         // => EXIT
     }
 } catch (AdmException | Exception $e) {

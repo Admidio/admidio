@@ -1901,6 +1901,36 @@ class User extends TableAccess
     }
 
     /**
+     * If email support is enabled and the current user is administrator or has the right to approve new
+     * registrations than this method will create a new password and send this to the user.
+     * @return void
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function sendNewPassword()
+    {
+        global $gSettingsManager, $gCurrentUser;
+
+        // E-Mail support must be enabled
+        // Only administrators are allowed to send new login data or users who want to approve login data
+        if ($gSettingsManager->getBool('system_notifications_enabled')
+            && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers())) {
+            // Generate new secure-random password and save it
+            $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
+            $this->setPassword($password);
+            $this->save();
+
+            // Send mail with login data to user
+            $sysMail = new SystemMail($this->db);
+            $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
+            $sysMail->setVariable(1, $password);
+            $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $this);
+        } else {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
+    }
+
+    /**
      * Set the default values that are stored in the profile fields configuration to each profile field.
      * A default value will only be set if **usf_default_value** is not NULL.
      * @return void
