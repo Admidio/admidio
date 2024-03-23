@@ -170,8 +170,8 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         $form->openGroupBox('gb_category_'.$field->getValue('cat_name_intern'), $field->getValue('cat_name'));
 
         if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
-            if (($userId > 0 && $gCurrentUser->isAdministrator()) || $getNewUser === 2 || $getNewUser === 1) {
-                // add username to form
+            // edit login name if it's a new record or administrator or approval of new registration
+            if (($userId > 0 && $gCurrentUser->isAdministrator()) || $getNewUser !== 0) {
                 $fieldProperty = HtmlForm::FIELD_DEFAULT;
 
                 if ($getNewUser >= 2) {
