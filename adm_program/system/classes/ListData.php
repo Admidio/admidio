@@ -133,8 +133,8 @@ class ListData
         for($number = 0; $number < count($this->data[0]); $number++) {
             $this->spreadsheet->getActiveSheet()->getColumnDimension($alphabet[$number])->setAutoSize(true);
         }
+        $this->spreadsheet->getDefaultStyle()->getAlignment()->setWrapText(true);
     }
-
     /**
      * Set the column headline for each column of the data array.
      * @param array $headlines Array with the column headline for each column.

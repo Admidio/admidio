@@ -250,7 +250,6 @@ class ListConfiguration extends TableLists
         if (in_array($format, array('csv', 'xlsx', 'ods'))) {
             // replace tab and line feed
             $content = preg_replace("/\t/", "\\t", $content);
-            $content = preg_replace("/\r?\n/", "\\n", $content);
             // replace special chars in Excel so no app or function could be implicit executed
             $outputContent = preg_replace("/^[@=]/", "#", $content);
         } // pdf should show only text and not much html content
