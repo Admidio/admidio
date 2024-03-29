@@ -29,7 +29,7 @@
                     <td class="text-right">{$row.size}</td>
                     <td class="text-right">{$row.counter}</td>
                     <td class="text-right">
-                        {if array_key_exists('actions', $row)}
+                        {if {array_key_exists array=$row key='actions'}}
                             {foreach $row.actions as $actionItem}
                                 <a {if isset($actionItem.dataHref)} class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
                                         {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>

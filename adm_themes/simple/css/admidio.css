@@ -182,7 +182,7 @@ a.btn-primary:hover, .btn-secondary:hover {
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
-.navbar-filter, .table-responsive, .admidio-content-header,
+.navbar-filter, .table-responsive, .admidio-menu-function-node,
 .dataTables_wrapper, .admidio-margin-bottom, .admidio-content-subheader,
 .tab-content {
     margin-bottom: 40px;

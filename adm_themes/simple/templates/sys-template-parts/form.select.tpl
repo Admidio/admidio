@@ -10,7 +10,7 @@
             {$itemvar@key}="{$itemvar}" {/foreach}>
             {assign "group" ""}
             {foreach $values as $optionvar}
-                {if array_key_exists("group", $optionvar) && $optionvar["group"] neq $group}
+                {if {array_key_exists key="group" array=$optionvar} && $optionvar["group"] neq $group}
                     {if $group neq ""}</optgroup>{/if}
                     <optgroup label="{$optionvar["group"]}">
                     {assign "group" "{$optionvar["group"]}"}

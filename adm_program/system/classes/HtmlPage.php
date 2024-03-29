@@ -120,6 +120,9 @@ class HtmlPage extends Smarty
         $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
         $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
+        $this->registerPlugin('function', 'isTranslationStringId', array('Language', 'isTranslationStringId'));
+        $this->registerPlugin('function', 'isFontAwesomeIcon', array('Image', 'isFontAwesomeIcon'));
+        $this->registerPlugin('function', 'encodeHTML', array('SecurityUtils', 'encodeHTML'));
 
         if (is_object($gSettingsManager) && $gSettingsManager->has('system_browser_update_check')
         && $gSettingsManager->getBool('system_browser_update_check')) {
