@@ -227,7 +227,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
                 'property'               => HtmlForm::FIELD_REQUIRED,
                 'multiselect'            => true,
                 'maximumSelectionNumber' => $maxNumberRecipients,
-                'helpTextIdLabel'        => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
+                'helpTextId'        => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
             )
         );
         $form->closeGroupBox();
@@ -457,7 +457,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             'property'               => HtmlForm::FIELD_REQUIRED,
             'multiselect'            => true,
             'maximumSelectionNumber' => $maxNumberRecipients,
-            'helpTextIdLabel'        => 'SYS_SEND_MAIL_TO_ROLE',
+            'helpTextId'        => 'SYS_SEND_MAIL_TO_ROLE',
             'defaultValue'           => $preloadData
         )
     );
@@ -558,7 +558,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
                 'maxUploadSize'      => Email::getMaxAttachmentSize(),
                 'multiUploadLabel'   => $gL10n->get('SYS_ADD_ATTACHMENT'),
                 'hideUploadField'    => true,
-                'helpTextIdLabel'    => $gL10n->get('SYS_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
+                'helpTextId'    => $gL10n->get('SYS_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
                 'icon'               => 'fa-paperclip'
             )
         );
@@ -566,7 +566,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
     // add multiline text element or ckeditor to form
     if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
-        $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => ($gValidLogin && $gSettingsManager->getInt('mail_sending_mode') === Email::SENDINGMODE_SINGLE) ? array('SYS_EMAIL_PARAMETERS_DESC', array('#recipient_firstname#', '#recipient_lastname#', '#recipient_name#', '#recipient_email#')) : null));
+        $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => ($gValidLogin && $gSettingsManager->getInt('mail_sending_mode') === Email::SENDINGMODE_SINGLE) ? array('SYS_EMAIL_PARAMETERS_DESC', array('#recipient_firstname#', '#recipient_lastname#', '#recipient_name#', '#recipient_email#')) : null));
     } else {
         $form->addMultilineTextInput(
             'msg_body',

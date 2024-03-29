@@ -72,13 +72,13 @@ $form->addInput(
     'db_host',
     $gL10n->get('SYS_HOST'),
     $dbHost,
-    array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'INS_DATABASE_HOST_INFO')
+    array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'INS_DATABASE_HOST_INFO')
 );
 $form->addInput(
     'db_port',
     $gL10n->get('SYS_PORT'),
     (string) $dbPort,
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextId' => 'INS_DATABASE_PORT_INFO')
 );
 $form->addInput(
     'db_name',

@@ -164,7 +164,7 @@ if ($gSettingsManager->getBool('enable_mail_module')) {
         array(
             'defaultValue'                   => $role->getValue('rol_mail_this_role'),
             'showContextDependentFirstEntry' => false,
-            'helpTextIdLabel'                => $gL10n->get('SYS_RIGHT_MAIL_THIS_ROLE_DESC', array('SYS_RIGHT_MAIL_TO_ALL'))
+            'helpTextId'                => $gL10n->get('SYS_RIGHT_MAIL_THIS_ROLE_DESC', array('SYS_RIGHT_MAIL_TO_ALL'))
         )
     );
 }
@@ -176,7 +176,7 @@ $form->addSelectBox(
     array(
         'defaultValue'                   => $role->getValue('rol_view_memberships'),
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => $gL10n->get('SYS_VIEW_ROLE_MEMBERSHIPS_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW'))
+        'helpTextId'                => $gL10n->get('SYS_VIEW_ROLE_MEMBERSHIPS_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW'))
     )
 );
 $form->addSelectBox(
@@ -186,7 +186,7 @@ $form->addSelectBox(
     array(
         'defaultValue'                   => $role->getValue('rol_view_members_profiles'),
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => $gL10n->get('SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW'))
+        'helpTextId'                => $gL10n->get('SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW'))
     )
 );
 $selectBoxEntries = array(0 => $gL10n->get('SYS_NO_ADDITIONAL_RIGHTS'), 1 => $gL10n->get('SYS_ASSIGN_MEMBERS'), 2 => $gL10n->get('SYS_EDIT_MEMBERS'), 3 => $gL10n->get('SYS_ASSIGN_EDIT_MEMBERS'));
@@ -197,7 +197,7 @@ $form->addSelectBox(
     array(
         'defaultValue'                   => $role->getValue('rol_leader_rights'),
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => 'SYS_LEADER_RIGHTS_DESC'
+        'helpTextId'                => 'SYS_LEADER_RIGHTS_DESC'
     )
 );
 
@@ -218,7 +218,7 @@ $form->addSelectBox(
     'rol_lst_id',
     $gL10n->get('SYS_DEFAULT_LIST'),
     $selectBoxEntries,
-    array('defaultValue' => (int) $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'SYS_DEFAULT_LIST_DESC')
+    array('defaultValue' => (int) $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_LIST_DESC')
 );
 
 if (!$eventRole) {
@@ -226,7 +226,7 @@ if (!$eventRole) {
         'rol_default_registration',
         $gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION'),
         (bool) $role->getValue('rol_default_registration'),
-        array('helpTextIdLabel' => 'SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC')
+        array('helpTextId' => 'SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC')
     );
     $form->addInput(
         'rol_max_members',
@@ -256,7 +256,7 @@ if (!$eventRole) {
         'rol_assign_roles',
         $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'),
         (bool) $role->getValue('rol_assign_roles'),
-        array('helpTextIdLabel' => 'SYS_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'fa-users')
+        array('helpTextId' => 'SYS_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'fa-users')
     );
     $form->addCheckbox(
         'rol_all_lists_view',
@@ -282,7 +282,7 @@ if (!$eventRole) {
         'rol_edit_user',
         $gL10n->get('SYS_RIGHT_EDIT_USER'),
         (bool) $role->getValue('rol_edit_user'),
-        array('helpTextIdLabel' => 'SYS_RIGHT_EDIT_USER_DESC', 'icon' => 'fa-users-cog')
+        array('helpTextId' => 'SYS_RIGHT_EDIT_USER_DESC', 'icon' => 'fa-users-cog')
     );
     $form->addCheckbox(
         'rol_profile',
@@ -295,7 +295,7 @@ if (!$eventRole) {
             'rol_announcements',
             $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
             (bool) $role->getValue('rol_announcements'),
-            array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-newspaper')
+            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-newspaper')
         );
     }
     if ((int) $gSettingsManager->get('events_module_enabled') > 0) {
@@ -303,7 +303,7 @@ if (!$eventRole) {
             'rol_events',
             $gL10n->get('SYS_RIGHT_DATES'),
             (bool) $role->getValue('rol_events'),
-            array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-calendar-alt')
+            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-calendar-alt')
         );
     }
     if ((int) $gSettingsManager->get('photo_module_enabled') > 0) {
@@ -319,7 +319,7 @@ if (!$eventRole) {
             'rol_documents_files',
             $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
             (bool) $role->getValue('rol_documents_files'),
-            array('helpTextIdLabel' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'fa-download')
+            array('helpTextId' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'fa-download')
         );
     }
     if ((int) $gSettingsManager->get('enable_guestbook_module') > 0) {
@@ -344,7 +344,7 @@ if (!$eventRole) {
             'rol_weblinks',
             $gL10n->get('SYS_RIGHT_WEBLINKS'),
             (bool) $role->getValue('rol_weblinks'),
-            array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-link')
+            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-link')
         );
     }
     $form->closeGroupBox();

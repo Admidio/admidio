@@ -1410,7 +1410,7 @@
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
   <string name="SYS_USER_VALID_LOGIN">Diese Benutzerin bzw. dieser Benutzer besitzt schon ein gültiges Login.</string>
   <string name="SYS_USERNAME">Anmeldename</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Anzahl der Kontakte pro Seite</string>

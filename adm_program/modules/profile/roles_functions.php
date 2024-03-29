@@ -157,7 +157,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
 
             $roleMemHTML .= '&nbsp;
                         </span>
-                        <span class="float-right text-right">
+                        <span class="float-end text-right">
                             <span class="mr-2">';
             if ($showRoleEndDate) {
                 $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));

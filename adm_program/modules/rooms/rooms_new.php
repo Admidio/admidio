@@ -69,7 +69,7 @@ $form->addInput(
     'room_overhang',
     $gL10n->get('SYS_OVERHANG'),
     (int) $room->getValue('room_overhang'),
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'SYS_ROOM_OVERHANG')
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextId' => 'SYS_ROOM_OVERHANG')
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');

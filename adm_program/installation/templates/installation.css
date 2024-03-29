@@ -180,10 +180,6 @@ label {
 }
 
 @media (min-width: 768px) {
-    .offset-sm-3.btn {
-        margin-left: 25.5%;
-    }
-
     .form-control-small {
         width: 50%;
     }
@@ -242,7 +238,7 @@ input[type=date] {
     margin-right: 10px;
 }
 
-.card-header .float-right .fas {
+.card-header .float-end .fas {
     margin-right: 0;
 }
 

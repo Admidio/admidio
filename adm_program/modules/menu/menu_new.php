@@ -149,7 +149,7 @@ $form->addInput(
     'men_name',
     $gL10n->get('SYS_NAME'),
     htmlentities($menu->getValue('men_name', 'database'), ENT_QUOTES),
-    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
+    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'SYS_MENU_NAME_DESC')
 );
 
 if ($getMenuUuid !== '') {
@@ -157,7 +157,7 @@ if ($getMenuUuid !== '') {
         'men_name_intern',
         $gL10n->get('SYS_INTERNAL_NAME'),
         $menu->getValue('men_name_intern'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC')
+        array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
     );
 }
 
@@ -191,7 +191,7 @@ if (!$menu->getValue('men_standard')) {
         array(
             'property' => $fieldDefault,
             'defaultValue' => (int)$menu->getValue('men_com_id'),
-            'helpTextIdLabel' => 'SYS_MENU_MODULE_RIGHTS_DESC'
+            'helpTextId' => 'SYS_MENU_MODULE_RIGHTS_DESC'
         )
     );
 
@@ -203,7 +203,7 @@ if (!$menu->getValue('men_standard')) {
             'property' => $fieldDefault,
             'defaultValue' => $roleViewSet,
             'multiselect' => true,
-            'helpTextIdLabel' => 'SYS_MENU_RESTRICT_VISIBILITY'
+            'helpTextId' => 'SYS_MENU_RESTRICT_VISIBILITY'
         )
     );
 }
@@ -223,7 +223,7 @@ $form->addInput(
     $menu->getValue('men_icon'),
     array(
         'maxLength' => 100,
-        'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),
+        'helpTextId' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),
         'class' => 'form-control-small'
     )
 );
@@ -231,7 +231,7 @@ $form->addInput(
 $form->addSubmitButton(
     'btn_save',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+    array('icon' => 'fa-check')
 );
 
 // add form to html page and show page

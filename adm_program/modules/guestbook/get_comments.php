@@ -68,7 +68,7 @@ if ($getCommentGboUuid !== '') {
             // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
             if ($gCurrentUser->editGuestbookRight()) {
                 echo '
-                        <div class="dropdown float-right">
+                        <div class="dropdown float-end">
                             <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">

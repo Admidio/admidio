@@ -247,7 +247,7 @@ if ($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false ||
             'defaultValue' => $roleViewSet,
             'multiselect'  => true,
             'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null),
-            'helpTextIdInline' => $roleViewDescription
+            'helpTextId' => $roleViewDescription
         )
     );
 
@@ -271,16 +271,16 @@ if ($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false ||
 if ($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrganization->countAllRecords() > 1) {
     if ($gCurrentOrganization->isChildOrganization()) {
         $fieldProperty   = HtmlForm::FIELD_DISABLED;
-        $helpTextIdLabel = 'SYS_ONLY_SET_BY_MOTHER_ORGANIZATION';
+        $helpTextId = 'SYS_ONLY_SET_BY_MOTHER_ORGANIZATION';
     } else {
         // show all organizations where this organization is mother or child organization
         $organizations = implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
         if ($getType === 'USF') {
-            $helpTextIdLabel = $gL10n->get('SYS_CATEGORY_VISIBLE_ALL_ORGA', array($organizations));
+            $helpTextId = $gL10n->get('SYS_CATEGORY_VISIBLE_ALL_ORGA', array($organizations));
         } else {
-            $helpTextIdLabel = $gL10n->get('SYS_DATA_CATEGORY_GLOBAL', array($organizations));
+            $helpTextId = $gL10n->get('SYS_DATA_CATEGORY_GLOBAL', array($organizations));
         }
     }
 
@@ -301,11 +301,11 @@ if ($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrg
         $adminRoles[] = $roleName;
     }
 
-    $form->addStaticControl(
+    $form->addInput(
         'adm_administrators',
         $gL10n->get('SYS_ADMINISTRATORS'),
         implode(', ', $adminRoles),
-        array('helpTextIdLabel' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
+        array('property' => HtmlForm::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
     );
 
     $checked = false;
@@ -317,7 +317,7 @@ if ($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrg
         'show_in_several_organizations',
         $gL10n->get('SYS_DATA_MULTI_ORGA'),
         $checked,
-        array('property' => $fieldProperty, 'helpTextIdLabel' => $helpTextIdLabel)
+        array('property' => $fieldProperty, 'helpTextId' => $helpTextId)
     );
 }
 
@@ -327,7 +327,7 @@ $form->addCheckbox(
     (bool) $category->getValue('cat_default'),
     array('icon' => 'fa-star')
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $category->getValue('cat_usr_id_create'),
     $category->getValue('cat_timestamp_create'),

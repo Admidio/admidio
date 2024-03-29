@@ -4742,8 +4742,8 @@ textarea.form-control-lg {
 }
 
 .badge {
-  --bs-badge-padding-x: 0.65em;
-  --bs-badge-padding-y: 0.35em;
+  --bs-badge-padding-x: 0.5em;
+  --bs-badge-padding-y: 0.25em;
   --bs-badge-font-size: 0.75em;
   --bs-badge-font-weight: 700;
   --bs-badge-color: #fff;
@@ -11846,6 +11846,10 @@ textarea.form-control-lg {
 }
 a {
   text-decoration: none;
+}
+
+.badge {
+  margin-left: 5px;
 }
 
 /*# sourceMappingURL=bootstrap.css.map */

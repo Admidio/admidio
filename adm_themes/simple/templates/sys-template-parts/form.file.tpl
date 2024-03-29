@@ -4,7 +4,6 @@
     <label for="{$id}" class="col-sm-3 control-label">
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
-        {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
     </label>
   <div class="col-sm-9">
     {if $maxUploadSize}

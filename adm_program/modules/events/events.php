@@ -655,7 +655,7 @@ if ($eventsResult['totalCount'] === 0) {
 
             if ($event->isEditable() || $gSettingsManager->getBool('events_ical_export_enabled')) {
                 $page->addHtml('
-                            <div class="dropdown float-right">
+                            <div class="dropdown float-end">
                                 <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">');

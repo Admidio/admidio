@@ -561,7 +561,7 @@ if ($gCurrentUser->isAdministrator()) {
         'cbx_global_configuration',
         $gL10n->get('SYS_CONFIGURATION_ALL_USERS'),
         (bool) $list->getValue('lst_global'),
-        array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'SYS_PRESET_CONFIGURATION_DESC')
+        array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextId' => 'SYS_PRESET_CONFIGURATION_DESC')
     );
 }
 

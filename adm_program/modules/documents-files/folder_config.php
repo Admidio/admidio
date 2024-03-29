@@ -149,12 +149,12 @@ $form->addStaticControl(
     'adm_administrators',
     $gL10n->get('SYS_ADMINISTRATORS'),
     implode(', ', $adminRoles),
-    array('helpTextIdLabel' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
+    array('helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
 );
 $form->addSubmitButton(
     'btn_save',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+    array('icon' => 'fa-check')
 );
 
 // add form to html page and show page

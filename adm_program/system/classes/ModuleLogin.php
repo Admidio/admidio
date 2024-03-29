@@ -99,7 +99,7 @@ class ModuleLogin
         if ($gSettingsManager->getBool('enable_auto_login')) {
             $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
         }
-        $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key', 'class' => ' offset-sm-3'));
+        $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key'));
         $page->addHtml($form->show());
 
         if ($gSettingsManager->getBool('registration_enable_module')) {
@@ -140,7 +140,7 @@ class ModuleLogin
     {
         global $gDb, $gCurrentOrganization, $gCurrentOrgId, $gProfileFields, $gCurrentSession, $gSettingsManager;
         global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gL10n;
-        
+
         $postLoginName = admFuncVariableIsValid($_POST, (isset($_POST['usr_login_name']) ? 'usr_login_name' : 'plg_usr_login_name'), 'string');
         $postPassword = (isset($_POST['usr_password']) ? $_POST['usr_password'] : $_POST['plg_usr_password']);
         $postOrgShortName = admFuncVariableIsValid($_POST, (isset($_POST['org_shortname']) ? 'org_shortname' : 'plg_org_shortname'), 'string');

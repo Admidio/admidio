@@ -1,7 +1,7 @@
 {* Create the sidebar menu out of the navigation menu array *}
 <div class="admidio-headline-mobile-menu d-md-none p-2">
     <span class="text-uppercase">{$l10n->get('SYS_MENU')}</span>
-    <button class="btn btn-link d-md-none collapsed float-right" type="button" data-toggle="collapse"
+    <button class="btn btn-link d-md-none collapsed float-end" type="button" data-toggle="collapse"
             data-target="#admidio-main-menu" aria-controls="admidio-main-menu" aria-expanded="false">
         <i class="fas fa-bars fa-fw"></i>
     </button>
@@ -15,7 +15,7 @@
                     <a id="{$menuItem.id}" class="nav-link" href="{$menuItem.url}">
                         <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
                         {if $menuItem.badgeCount > 0}
-                            <span class="badge badge-light">{$menuItem.badgeCount}</span>
+                            <span class="badge bg-light text-dark">{$menuItem.badgeCount}</span>
                         {/if}
                     </a>
                 </li>

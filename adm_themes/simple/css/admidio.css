@@ -240,8 +240,8 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 /***********************************/
 /* Mark mandatory fields */
 /***********************************/
-.admidio-form-group-required .control-label:after,
-.admidio-form-group-required .checkbox label:after,
+.admidio-form-group-required .form-label:after,
+.admidio-form-group-required .form-check-label:after,
 .admidio-form-required-notice span:after {
     font-family: "Font Awesome 5 Free", serif;
     font-size: 6pt;
@@ -290,10 +290,6 @@ label {
 }
 
 @media (min-width: 768px) {
-    .offset-sm-3.btn {
-        margin-left: 25.5%;
-    }
-
     .form-control-small {
         width: 50%;
     }
@@ -361,7 +357,7 @@ input[type=time] {
     margin-right: 10px;
 }
 
-.card-header .float-right .fas {
+.card-header .float-end .fas {
     margin-right: 0;
 }
 
@@ -471,10 +467,6 @@ input[type=time] {
 
 .admidio-opacity-reduced {
     opacity: 0.4;
-}
-
-.badge {
-    margin-left: 5px;
 }
 
 .list-unstyled li {

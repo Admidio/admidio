@@ -188,7 +188,7 @@ $form->addSelectBox(
     array(
         'property'        => HtmlForm::FIELD_REQUIRED,
         'defaultValue'    => $formValues['import_role_id'],
-        'helpTextIdLabel' => 'SYS_ASSIGN_ROLE_FOR_IMPORT'
+        'helpTextId' => 'SYS_ASSIGN_ROLE_FOR_IMPORT'
     )
 );
 
@@ -206,13 +206,13 @@ $form->addSelectBox(
         'property'                       => HtmlForm::FIELD_REQUIRED,
         'defaultValue'                   => $formValues['user_import_mode'],
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => 'SYS_IDENTIFY_USERS'
+        'helpTextId'                => 'SYS_IDENTIFY_USERS'
     )
 );
 $form->addSubmitButton(
     'btn_forward',
     $gL10n->get('SYS_ASSIGN_FIELDS'),
-    array('icon' => 'fa-arrow-circle-right', 'class' => ' offset-sm-3')
+    array('icon' => 'fa-arrow-circle-right')
 );
 
 // add form to html page and show page

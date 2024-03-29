@@ -129,7 +129,7 @@ $form->addInput(
     'new_name',
     $gL10n->get('SYS_NEW_NAME'),
     $formValues['new_name'],
-    array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_FILE_NAME_RULES')
+    array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'SYS_FILE_NAME_RULES')
 );
 $form->addMultilineTextInput(
     'new_description',
@@ -141,7 +141,7 @@ $form->addMultilineTextInput(
 $form->addSubmitButton(
     'btn_rename',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+    array('icon' => 'fa-check')
 );
 $form->addHtml(admFuncShowCreateChangeInfoById($createUserId, $createTimestamp));
 

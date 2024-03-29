@@ -1,5 +1,5 @@
 <div id="captcha_puzzle_group" class="form-group captcha row">
-    <div class="offset-sm-3 col-sm-9">
+    <div class="col-sm-9">
         <img id="captcha"
             src="{$ADMIDIO_URL}/adm_program/libs/securimage/securimage_show.php"
             alt="CAPTCHA Image" />

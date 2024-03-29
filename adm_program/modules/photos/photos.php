@@ -397,7 +397,7 @@ if ($albumsCount > 0) {
                 }
 
                 $page->addHtml('
-                                    <div class="dropdown float-right">
+                                    <div class="dropdown float-end">
                                         <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">

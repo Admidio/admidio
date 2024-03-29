@@ -2,13 +2,19 @@
 // Option A: Include all of Bootstrap
 
 // Include any default variable overrides here (though functions won't be available)
-$breadcrumb-padding-y:              0.75rem;
-$breadcrumb-padding-x:              1rem;
-$breadcrumb-bg:                     #e9ecef;
+$breadcrumb-padding-y:    0.75rem;
+$breadcrumb-padding-x:    1rem;
+$breadcrumb-bg:           #e9ecef;
+$badge-padding-y:         .25em;
+$badge-padding-x:         .5em;
 
 @import "./vendor/twbs/bootstrap/scss/bootstrap";
 
 // Then add additional custom code here
 a {
   text-decoration: none;
+}
+
+.badge {
+  margin-left: 5px;
 }

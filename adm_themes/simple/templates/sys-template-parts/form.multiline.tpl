@@ -5,13 +5,12 @@
         {/foreach}
     >{$value}</textarea>
 {else}
-    <div id="{$id}_group" class="form-group row {if $property eq 1}admidio-form-group-required{/if}">
-        <label for="{$id}" class="col-sm-3 control-label">
+    <div id="{$id}_group" class="mb-4 {if $property eq 1}admidio-form-group-required{/if}">
+        <label for="{$id}" class="form-label">
             {include file='sys-template-parts/parts/form.part.icon.tpl'}
             {$label}
-            {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
         </label>
-        <div class="col-sm-9">
+        <div>
             <textarea name="{$id}" id="{$id}"
                 {foreach $data.attributes as $itemvar}
                     {$itemvar@key}="{$itemvar}"
