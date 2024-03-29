@@ -13,13 +13,13 @@
                     </li>
                 {/if}
 
-                {if array_key_exists('information', $card) && count($card.information) > 0}
+                {if {array_key_exists array=$card key='information'} && count($card.information) > 0}
                     {foreach $card.information as $informationItem}
                         <li class="list-group-item">{$informationItem}</li>
                     {/foreach}
                 {/if}
             </ul>
-            {if array_key_exists('buttons', $card) && count($card.buttons) > 0}
+            {if {array_key_exists array=$card key='buttons'} && count($card.buttons) > 0}
                 {foreach $card.buttons as $buttonItem}
                     <a class="btn btn-primary mt-auto" href="{$buttonItem.url}">{$buttonItem.name}</a>
                 {/foreach}

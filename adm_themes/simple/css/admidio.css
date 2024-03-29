@@ -9,8 +9,14 @@
  *
  *****************************************************************************/
 
+:root {
+    /* background color for the main headline of Admidio and color of all links and primary buttons */
+    --main-link-color: #349aaa;
+    --main-link-color-hover: #25717d;
+}
+
 #admidio-main-navbar {
-    background-color: #349aaa;
+    background-color: var(--main-link-color);
     min-height: 4rem;
     position: sticky;
     padding-bottom: 0;
@@ -131,6 +137,7 @@
 .admidio-menu-function-node .nav-link {
     margin-right: 25px;
     margin-top: 15px;
+    background-color: var(--main-link-color);
 }
 
 @media (max-width: 767px) {
@@ -149,11 +156,11 @@ body {
 }
 
 a, .btn-link, .page-link, a.btn {
-    color: #349aaa;
+    color: var(--main-link-color);
 }
 
 a:hover, .page-link:hover, a.btn:hover {
-    color: #25717d;
+    color: var(--main-link-color-hover);
 }
 
 a.btn-primary, .btn-secondary {
@@ -161,17 +168,18 @@ a.btn-primary, .btn-secondary {
 }
 
 a.btn-primary:hover, .btn-secondary:hover {
+    background-color: var(--main-link-color-hover);
     color: #ffffff !important;
 }
 
 .btn-primary {
-    background-color: #349aaa;
-    border-color: #349aaa;
+    background-color: var(--main-link-color);
+    border-color: var(--main-link-color);
 }
 
 .btn-primary:hover {
-    background-color: #25717d;
-    border-color: #25717d;
+    background-color: var(--main-link-color-hover);
+    border-color: var(--main-link-color-hover);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -270,7 +278,7 @@ input[type=checkbox]:focus, button:focus {
 }
 
 .btn-primary:focus {
-    background-color: #25717d !important;
+    background-color: var(--main-link-color-hover) !important;
 }
 
 input[type=checkbox] {

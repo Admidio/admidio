@@ -71,13 +71,13 @@
                 alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
         </a>
         <span id="headline-organization" class="d-block d-lg-none">{$organizationName}</span>
-        <span id="headline-membership" class="d-none d-lg-block">{$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')} - {$organizationName}</span>
+        <span id="headline-membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div id="navbarNav" class="collapse navbar-collapse">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ms-auto">
             {if $validLogin}
                 <li class="nav-item">
                     <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/profile/profile.php">{$l10n->get('SYS_MY_PROFILE')}</a>

@@ -2,7 +2,7 @@
     {if is_array($helpTextIdInline)}
         {$helpTextIdInline = $l10n->get($helpTextIdInline[0],$helpTextIdInline[1])}
     {else}
-        {if {isTranslationStringId string=$helpTextIdInline}}
+        {if {is_translation_string_id string=$helpTextIdInline}}
             {$helpTextIdInline = $l10n->get($helpTextIdInline)}
         {/if}
     {/if}
