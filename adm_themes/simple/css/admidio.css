@@ -12,10 +12,17 @@
 :root {
     /* background color for the main headline of Admidio and color of all links and primary buttons */
     --admidio-link-color: #349aaa;
-    --admidio-link-color-hover: #25717d;
+    --admidio-link-color-hover: #4fb8c9;
     --admidio-font-color: #263340;
     --admidio-bg-color: #ffffff;
-    --admidio-card-color: #e9ecef;
+    --admidio-header-bg-color: #349aaa;
+    --admidio-header-font-color: #ffffff;
+    --admidio-header-link-color: #263340;
+    --admidio-header-link-color-hover: #000000;
+    --admidio-menu-color: #263340;
+    --admidio-menu-color-hover: #3d5266;
+    --admidio-menu-font-color: #dddddd;
+    --admidio-menu-font-color-hover: #ffffff;
 }
 
 .card {
@@ -30,14 +37,14 @@
 }
 
 #admidio-main-navbar {
-    background-color: var(--admidio-link-color);
+    background-color: var(--admidio-header-bg-color);
     min-height: 4rem;
     position: sticky;
     padding-bottom: 0;
 }
 
 #admidio-main-navbar {
-    color: #ffffff;
+    color: var(--admidio-header-font-color);
     font-weight: bold;
     font-size: 1.7rem;
     padding-top: 0;
@@ -48,12 +55,12 @@
 }
 
 #admidio-main-navbar a {
-    color: var(--admidio-font-color);
+    color: var(--admidio-header-link-color);
     font-size: 1rem
 }
 
 #admidio-main-navbar a:hover {
-    color: #000000;
+    color: var(--admidio-header-link-color-hover);
 }
 
 @media (max-width: 767px)
@@ -81,7 +88,7 @@
 /***********************************/
 .admidio-sidebar {
     padding: 0;
-    background-color: #263340;
+    background-color: var(--admidio-menu-color);
     overflow-y: auto;
 }
 
@@ -92,7 +99,7 @@
 .admidio-headline-mobile-menu {
     width: 100%;
     font-size: 1.1rem;
-    color: #eeeeee;
+    color: var(--admidio-menu-font-color);
     letter-spacing: 2px;
 }
 
@@ -105,7 +112,7 @@
 }
 
 .admidio-menu-list a {
-    color: #dddddd;
+    color: var(--admidio-menu-font-color);
 }
 
 .admidio-menu-list .dropdown-item {
@@ -113,8 +120,8 @@
 }
 
 .admidio-menu-list a:hover {
-    color: #ffffff;
-    background-color: #324b64;
+    color: var(--admidio-menu-font-color-hover);
+    background-color: var(--admidio-menu-color-hover);
 }
 
 @media (min-width: 768px)
