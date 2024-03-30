@@ -7,6 +7,6 @@
         {/if}
     {/if}
     <i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
-    data-html="true" data-trigger="hover click" data-placement="auto"
-    title="{$l10n->get('SYS_NOTE')}" data-content="{$helpTextId|escape:'html'}"></i>
+    data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+    title="{$l10n->get('SYS_NOTE')}" data-bs-content="{$helpTextId|escape:'html'}"></i>
 {/if}

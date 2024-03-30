@@ -465,8 +465,8 @@ if ($eventsResult['totalCount'] === 0) {
                             <div class="alert alert-info" role="alert">
                                 <span class="' . $buttonClass . '">' . $iconParticipationStatus . ' ' . $buttonText . '</span>
                                 <i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
-                                    data-html="true" data-trigger="hover click" data-placement="auto"
-                                    title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($gL10n->get('SYS_DEADLINE_ATTENTION')) . '"></i>
+                                    data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+                                    title="' . $gL10n->get('SYS_NOTE') . '" data-bs-content="' . SecurityUtils::encodeHTML($gL10n->get('SYS_DEADLINE_ATTENTION')) . '"></i>
                             </div>';
                 } elseif ($event->allowedToParticipate()) {
                     $attentionDeadline = '<div class="alert alert-info" role="alert">' . $gL10n->get('SYS_REGISTRATION_NOT_POSSIBLE') . '</div>';

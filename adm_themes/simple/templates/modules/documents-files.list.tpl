@@ -21,8 +21,8 @@
                     <td><a href="{$row.url}">{$row.name}</a>
                         {if strlen($row.description) > 0}
                             <i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
-                                data-html="true" data-trigger="hover click" data-placement="auto"
-                                title="{$l10n->get('SYS_DESCRIPTION')}" data-content="{$row.description}"></i>
+                                data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+                                title="{$l10n->get('SYS_DESCRIPTION')}" data-bs-content="{$row.description}"></i>
                         {/if}
                     </td>
                     <td>{$row.timestamp}</td>
@@ -37,8 +37,8 @@
                             {/foreach}
                         {/if}
                         {if $row.existsInFileSystem == false}
-                            <i class="fas fa-exclamation-triangle" style="color:red;" data-bs-toggle="popover" data-trigger="hover click" data-placement="left"
-                               title="{$l10n->get('SYS_WARNING')}" data-content="{if $row.folder}{$l10n->get('SYS_FOLDER_NOT_EXISTS')}{else}{$l10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB')}{/if}"></i>
+                            <i class="fas fa-exclamation-triangle" style="color:red;" data-bs-toggle="popover" data-bs-trigger="hover click" data-bs-placement="left"
+                               title="{$l10n->get('SYS_WARNING')}" data-bs-content="{if $row.folder}{$l10n->get('SYS_FOLDER_NOT_EXISTS')}{else}{$l10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB')}{/if}"></i>
                         {/if}
                     </td>
                 </tr>

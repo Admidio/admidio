@@ -493,8 +493,8 @@ while ($currentDay <= $lastDayCurrentMonth) {
                 }
 
                 // plg_link_class bestimmt das Erscheinungsbild des jeweiligen Links
-                echo '<a class="admidio-calendar-link '.$plgLinkClass.'" href="'.$plgLink.'" data-bs-toggle="popover" data-html="true" data-trigger="hover click" data-placement="auto"
-                    title="'.$dateObj->format($gSettingsManager->getString('system_date')).'" data-content="'.SecurityUtils::encodeHTML($htmlContent).'" target="'.$plgLinkTarget.'">'.$currentDay.'</a>';
+                echo '<a class="admidio-calendar-link '.$plgLinkClass.'" href="'.$plgLink.'" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+                    title="'.$dateObj->format($gSettingsManager->getString('system_date')).'" data-bs-content="'.SecurityUtils::encodeHTML($htmlContent).'" target="'.$plgLinkTarget.'">'.$currentDay.'</a>';
             } else {
                 echo '<a class="'.$plgLinkClass.'" href="'.$plgLink.'" title="'.str_replace('"', '', $textContent).'"
                     href="'.$plgLink.'" target="'.$plgLinkTarget.'">'.$currentDay.'</a>';

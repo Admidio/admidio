@@ -637,8 +637,8 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
         }
 
         foreach ($profileRightsArray as $profileRight) {
-            $page->addHtml('<div class="col-sm-6 col-md-4 admidio-profile-user-right" data-bs-toggle="popover" data-html="true"
-                data-trigger="hover click" data-placement="auto" data-content="'.$gL10n->get('SYS_ASSIGNED_BY_ROLES'). ':
+            $page->addHtml('<div class="col-sm-6 col-md-4 admidio-profile-user-right" data-bs-toggle="popover" data-bs-html="true"
+                data-bs-trigger="hover click" data-bs-placement="auto" data-bs-content="'.$gL10n->get('SYS_ASSIGNED_BY_ROLES'). ':
                 <strong>'. $profileRight['roles'].'</strong>"><i class="fas ' . $profileRight['icon'] . '"></i>'. $profileRight['right']. '</div>');
         }
     } else {
