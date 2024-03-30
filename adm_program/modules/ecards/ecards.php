@@ -98,15 +98,11 @@ if (isset($_SESSION['ecard_request'])) {
 // create html page object
 $page = new HtmlPage('admidio-ecards', $headline);
 
-$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox/ekko-lightbox.min.js');
+$page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/css/lightbox.css');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');
 
 $page->addJavascript(
     '
-    $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
-    });
-
     $("#btn_ecard_preview").click(function(event) {
         event.preventDefault();
         $("#ecard_form input[id=\'submit_action\']").val("preview");
@@ -136,7 +132,7 @@ $form->addInput('photo_nr', '', $getPhotoNr, array('property' => HtmlForm::FIELD
 
 $form->openGroupBox('gb_layout', $gL10n->get('SYS_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
-    <a data-toggle="lightbox" data-type="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
+    <a data-lightbox="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
         href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
         src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale'))).'"
         class="imageFrame" alt="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'" />

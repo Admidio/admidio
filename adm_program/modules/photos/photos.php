@@ -109,18 +109,10 @@ if ($photoAlbum->isEditable()) {
     );
 }
 
-// integrate bootstrap ekko lightbox addon
+// integrate lightbox 2 addon
 if ((int) $gSettingsManager->get('photo_show_mode') === 1) {
-    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox/ekko-lightbox.css');
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox/ekko-lightbox.js');
-
-    $page->addJavascript('
-        $("*[data-toggle=\"lightbox\"]").click(function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        });',
-        true
-    );
+    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/css/lightbox.css');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');
 }
 
 // if a photo number was committed then simulate a left mouse click
@@ -220,10 +212,10 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
                             src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" />';
             }
 
-            // Bootstrap modal with lightbox
+            // Modal with lightbox 2
             elseif ((int) $gSettingsManager->get('photo_show_mode') === 1) {
                 $photoThumbnailTable .= '
-                        <a data-gallery="admidio-gallery" data-type="image" data-parent=".admidio-album-thumbnail" data-toggle="lightbox" data-title="'.$headline.'"
+                        <a data-lightbox="admidio-gallery" data-title="'.$headline.'"
                             href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
                             class="rounded" id="img_'.$actThumbnail.'" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" /></a>';
             }
