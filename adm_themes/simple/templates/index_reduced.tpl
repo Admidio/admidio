@@ -27,8 +27,8 @@
 
         // add javascript code to page that will be executed after page is fully loaded
         $(function() {
-            $("[data-toggle=popover]").popover();
-            $("[data-toggle=tooltip]").tooltip();
+            $("[data-bs-toggle=popover]").popover();
+            $("[data-bs-toggle=tooltip]").tooltip();
 
             {$javascriptContentExecuteAtPageLoad}
         });

@@ -126,7 +126,7 @@ if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
                             href="'. SecurityUtils::encodeUrl(
                         ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
                         array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)
-                    ). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                    ). '"><i class="fas fa-angle-double-right" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
 
                     echo '<div>'.$textPrev.'</div>';
                 }

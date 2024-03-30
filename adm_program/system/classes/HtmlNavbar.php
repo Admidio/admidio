@@ -207,7 +207,7 @@ class HtmlNavbar
                     // add a dropdown to the navbar
                     $html .= '
                         <li class="nav-item dropdown ' . $menuEntry['class'] . '">
-                            <a id="' . $menuEntry['id'] . '" href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a id="' . $menuEntry['id'] . '" href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bars"></i>' . $menuEntry['text'] . '
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">';
@@ -285,7 +285,7 @@ class HtmlNavbar
         $html = '
             <nav class="navbar navbar-expand-md ' . $cssClassNavbar . $this->customCssClass . '">
                 <a class="navbar-brand ' . $cssClassBrand . '" href="#">' . $this->name . '</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#' . $this->id . '" aria-controls="' . $this->id . '" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#' . $this->id . '" aria-controls="' . $this->id . '" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon fas fa-bars"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="' . $this->id . '">';

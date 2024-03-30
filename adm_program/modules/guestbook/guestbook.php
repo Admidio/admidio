@@ -214,22 +214,22 @@ if ($countGuestbookEntries === 0) {
         if (strlen($gboHomepage) > 0) {
             $page->addHtml('
                     <a class="admidio-icon-link" href="'.$gboHomepage.'" target="_blank">
-                        <i class="fas fa-link" data-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
+                        <i class="fas fa-link" data-bs-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
         }
 
         // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
         if (strlen($gboEmail) > 0) {
             $page->addHtml('
                     <a class="admidio-icon-link" href="mailto:'.$gboEmail.'">
-                        <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
+                        <i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
         }
 
         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
         if ($gCurrentUser->editGuestbookRight()) {
             $page->addHtml('
                     <div class="dropdown float-end">
-                        <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
+                        <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
                                 <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>

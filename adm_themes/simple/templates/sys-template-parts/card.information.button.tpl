@@ -8,7 +8,7 @@
                         {foreach $card.actions as $actionItem}
                             <a {if isset($actionItem.dataHref)} class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
                                     {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
-                                <i class="{$actionItem.icon}" data-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
+                                <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
                         {/foreach}
                     </li>
                 {/if}

@@ -1631,7 +1631,7 @@ class HtmlForm extends Smarty
                 $text  = $string;
             }
 
-            $html = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
+            $html = '<i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
             data-html="true" data-trigger="hover click" data-placement="auto"
             title="' . $gL10n->get($title) . '" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
         }

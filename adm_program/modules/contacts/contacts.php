@@ -110,7 +110,7 @@ $columnHeading = $contactsListConfig->getColumnNames();
 array_unshift(
     $columnHeading,
     $gL10n->get('SYS_ABR_NO'),
-    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>'
+    '<i class="fas fa-user" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>'
 );
 $columnHeading[] = '&nbsp;';
 

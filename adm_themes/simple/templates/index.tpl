@@ -26,8 +26,8 @@
 
         // add javascript code to page that will be executed after page is fully loaded
         $(function() {
-            $("[data-toggle=popover]").popover();
-            $("[data-toggle=tooltip]").tooltip();
+            $("[data-bs-toggle=popover]").popover();
+            $("[data-bs-toggle=tooltip]").tooltip();
 
             // Sidebar toggle behavior
             $('#sidebarCollapse').on('click', function() {
@@ -72,11 +72,11 @@
         <span id="headline-organization" class="d-block d-lg-none">{$organizationName}</span>
         <span id="headline-membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div id="navbarNav" class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav me-auto">
             {if $validLogin}
                 <li class="nav-item">
                     <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/profile/profile.php">{$l10n->get('SYS_MY_PROFILE')}</a>

@@ -4,16 +4,18 @@
         {foreach $menuFunctions as $menuItem}
             {if {array_key_exists array=$menuItem key='items'}}
                 <li class="nav-item dropdown">
-                    <a id="{$menuItem.id}" class="nav-link btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <a id="{$menuItem.id}" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                         <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
                     </a>
-                    <div class="dropdown-menu dropdown-menu-left">
+                    <ul class="dropdown-menu">
                         {foreach $menuItem.items as $subItem}
-                            <a id="{$subItem.id}" class="dropdown-item" href="{$subItem.url}">
-                                <i class="{$subItem.icon} fa-fw"></i>{$subItem.name}
-                            </a>
+                            <li>
+                                <a id="{$subItem.id}" class="dropdown-item" href="{$subItem.url}">
+                                    <i class="{$subItem.icon} fa-fw"></i>{$subItem.name}
+                                </a>
+                            </li>
                         {/foreach}
-                    </div>
+                    </ul>
                 </li>
             {else}
                 <li class="nav-item">

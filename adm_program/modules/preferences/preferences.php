@@ -172,7 +172,7 @@ function getPreferencePanel($group, $id, $parentId, $title, $icon, $body)
 {
     $html = '
         <div id="admidio-panel-' . $id . '" class="card">
-            <div class="card-header" data-toggle="collapse" data-target="#collapse_' . $id . '">
+            <div class="card-header" data-bs-toggle="collapse" data-target="#collapse_' . $id . '">
                 <i class="' . $icon . ' fa-fw"></i>' . $title . '
             </div>
             <div id="collapse_' . $id . '" class="collapse" aria-labelledby="headingOne" data-parent="#' . $parentId . '">
@@ -188,10 +188,10 @@ function getPreferencePanel($group, $id, $parentId, $title, $icon, $body)
 $page->addHtml('
 <ul id="admidio-preferences-tabs" class="nav nav-tabs" role="tablist">
     <li class="nav-item">
-        <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-toggle="tab" role="tab">'.$gL10n->get('SYS_COMMON').'</a>
+        <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-bs-toggle="tab" role="tab">'.$gL10n->get('SYS_COMMON').'</a>
     </li>
     <li class="nav-item">
-        <a id="tabs_nav_modules" class="nav-link" href="#tabs-modules" data-toggle="tab" role="tab">'.$gL10n->get('SYS_MODULES').'</a>
+        <a id="tabs_nav_modules" class="nav-link" href="#tabs-modules" data-bs-toggle="tab" role="tab">'.$gL10n->get('SYS_MODULES').'</a>
     </li>
 </ul>
 
@@ -849,7 +849,7 @@ $formCaptcha->addInput(
 );
 $html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
          <a id="captcha-refresh" class="admidio-icon-link" href="javascript:void(0)">
-            <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>';
+            <i class="fas fa-sync-alt fa-lg" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>';
 $formCaptcha->addCustomContent(
     $gL10n->get('ORG_CAPTCHA_PREVIEW'),
     $html,
