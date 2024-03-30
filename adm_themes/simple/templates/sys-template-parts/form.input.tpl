@@ -5,22 +5,26 @@
         {/foreach}
     >
 {else}
-    <div id="{$id}_group" class="mb-4 {if $property eq 1}admidio-form-group-required{/if}">
+    <div id="{$id}_group" class="mb-4{if $property eq 1} admidio-form-group-required{/if}{if $type == 'datetime'} row{/if}">
         <label for="{$id}" class="form-label">
             {include file='sys-template-parts/parts/form.part.icon.tpl'}
             {$label}
         </label>
         {if $type == 'datetime'}
-            <input class="form-control" type="date" name="{$id}" id="{$id}" value="{$data.attributes.dateValue}"
-                {foreach $data.attributes.dateValueAttributes as $itemvar}
-                    {$itemvar@key}="{$itemvar}"
-                {/foreach}
-            >
-            <input class="form-control" type="time" name="{$id}_time" id="{$id}_time" value="{$data.attributes.timeValue}"
-                {foreach $data.attributes.timeValueAttributes as $itemvar}
-                    {$itemvar@key}="{$itemvar}"
-                {/foreach}
-            >
+            <div class="col-auto">
+                <input class="form-control" type="date" name="{$id}" id="{$id}" value="{$data.attributes.dateValue}"
+                    {foreach $data.attributes.dateValueAttributes as $itemvar}
+                        {$itemvar@key}="{$itemvar}"
+                    {/foreach}
+                >
+            </div>
+            <div class="col-auto">
+                <input class="form-control" type="time" name="{$id}_time" id="{$id}_time" value="{$data.attributes.timeValue}"
+                    {foreach $data.attributes.timeValueAttributes as $itemvar}
+                        {$itemvar@key}="{$itemvar}"
+                    {/foreach}
+                >
+            </div>
             {$htmlAfter}
         {elseif $type == 'date'}
             <input class="form-control" type="date" name="{$id}" id="{$id}" value="{$value}"

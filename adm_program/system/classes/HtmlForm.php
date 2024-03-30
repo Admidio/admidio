@@ -218,7 +218,7 @@ class HtmlForm extends Smarty
         ++$this->countElements;
 
         if(strstr($attributes['class'], ' btn ') === false) {
-            $attributes['class'] = "btn btn-secondary " . $optionsAll['class'];
+            $attributes['class'] = "btn btn-primary " . $optionsAll['class'];
 
             if ($this->type !== 'navbar') {
                 $attributes['class'] .= '  admidio-margin-bottom';

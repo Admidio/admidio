@@ -1,18 +1,11 @@
-<div
-    id="{$id}_group"
-    class="form-group form-upload row {if $property eq 1}admidio-form-group-required{/if}">
+<div id="{$id}_group" class="form-group form-upload row {if $property eq 1}admidio-form-group-required{/if}">
     <label for="{$id}" class="col-sm-3 control-label">
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
     </label>
   <div class="col-sm-9">
     {if $maxUploadSize}
-    <input
-      type="hidden"
-      name="MAX_FILE_SIZE"
-      id="MAX_FILE_SIZE"
-      value="{$maxUploadSize}"
-    />
+        <input type="hidden" name="MAX_FILE_SIZE" id="MAX_FILE_SIZE" value="{$maxUploadSize}" />
     {/if}
     {if $hideUploadField != true OR !$enableMultiUploads}
         <input type="file" name="userfile[]"
@@ -23,13 +16,9 @@
     {/if}
 
     {if $enableMultiUploads}
-    <button
-      type="button"
-      id="btn_add_attachment_{$id}"
-      class="btn btn-secondary"
-    >
-        {include file='sys-template-parts/parts/form.part.icon.tpl'} {$multiUploadLabel}
-    </button>
+        <button type="button" id="btn_add_attachment_{$id}" class="btn btn-primary">
+            {include file='sys-template-parts/parts/form.part.icon.tpl'} {$multiUploadLabel}
+        </button>
     {/if}
     {include file='sys-template-parts/parts/form.part.helptext.tpl'}
     {include file='sys-template-parts/parts/form.part.warning.tpl'}

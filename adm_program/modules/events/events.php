@@ -510,7 +510,7 @@ if ($eventsResult['totalCount'] === 0) {
                         if ($participateModalForm === false) {
                             $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-secondary dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $iconParticipationStatus . $buttonText . '</button>
+                                <button class="btn btn-primary dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $iconParticipationStatus . $buttonText . '</button>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="btn admidio-event-approval-state-attend ' . $disableStatusAttend . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
@@ -534,7 +534,7 @@ if ($eventsResult['totalCount'] === 0) {
                         } else {
                             $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-secondary openPopup ' . $buttonClass . '" href="javascript:void(0);"
+                                <button class="btn btn-primary openPopup ' . $buttonClass . '" href="javascript:void(0);"
                                     data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/popup_participation.php', array('dat_uuid' => $dateUuid)) . '">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                         }
@@ -547,7 +547,7 @@ if ($eventsResult['totalCount'] === 0) {
 
                             if ($getView === 'detail') {
                                 $outputButtonParticipants = '
-                                    <button class="btn btn-secondary" onclick="window.location.href=\'' . $buttonURL . '\'">
+                                    <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
                                         <i class="fas fa-list"></i>' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '</button>';
                             } else {
                                 $outputButtonParticipants = '
@@ -564,7 +564,7 @@ if ($eventsResult['totalCount'] === 0) {
 
                             if ($getView === 'detail') {
                                 $outputButtonParticipantsEmail = '
-                                    <button class="btn btn-secondary" onclick="window.location.href=\'' . $buttonURL . '\'">
+                                    <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
                                         <i class="fas fa-envelope"></i>' . $gL10n->get('SYS_WRITE_EMAIL') . '</button>';
                             } else {
                                 $outputButtonParticipantsEmail = '
@@ -580,7 +580,7 @@ if ($eventsResult['totalCount'] === 0) {
 
                         if ($getView === 'detail') {
                             $outputButtonParticipantsAssign = '
-                                <button class="btn btn-secondary" onclick="window.location.href=\'' . $buttonURL . '\'">
+                                <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
                                     <i class="fas fa-user-plus"></i>' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '</button>';
                         } else {
                             $outputButtonParticipantsAssign = '
