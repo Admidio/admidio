@@ -11,12 +11,26 @@
 
 :root {
     /* background color for the main headline of Admidio and color of all links and primary buttons */
-    --main-link-color: #349aaa;
-    --main-link-color-hover: #25717d;
+    --admidio-link-color: #349aaa;
+    --admidio-link-color-hover: #25717d;
+    --admidio-font-color: #263340;
+    --admidio-bg-color: #ffffff;
+    --admidio-card-color: #e9ecef;
+}
+
+.card {
+    --bs-card-color: var(--admidio-font-color);
+}
+
+.popover {
+    --bs-popover-bg: var(--admidio-bg-color);
+    --bs-popover-body-color: var(--admidio-font-color);
+    --bs-popover-header-bg: var(--admidio-card-color);
+    --bs-popover-header-color: var(--admidio-font-color);
 }
 
 #admidio-main-navbar {
-    background-color: var(--main-link-color);
+    background-color: var(--admidio-link-color);
     min-height: 4rem;
     position: sticky;
     padding-bottom: 0;
@@ -34,7 +48,7 @@
 }
 
 #admidio-main-navbar a {
-    color: #263340;
+    color: var(--admidio-font-color);
     font-size: 1rem
 }
 
@@ -95,7 +109,7 @@
 }
 
 .admidio-menu-list .dropdown-item {
-    color: #263340;
+    color: var(--admidio-font-color);
 }
 
 .admidio-menu-list a:hover {
@@ -137,7 +151,7 @@
 .admidio-menu-function-node .nav-link {
     margin-right: 25px;
     margin-top: 15px;
-    background-color: var(--main-link-color);
+    background-color: var(--admidio-link-color);
 }
 
 @media (max-width: 767px) {
@@ -152,15 +166,16 @@
 /***********************************/
 
 body {
-    color: #263340;
+    color: var(--admidio-font-color);
+    background-color: var(--admidio-bg-color);
 }
 
 a, .btn-link, .page-link, a.btn {
-    color: var(--main-link-color);
+    color: var(--admidio-link-color);
 }
 
 a:hover, .page-link:hover, a.btn:hover {
-    color: var(--main-link-color-hover);
+    color: var(--admidio-link-color-hover);
 }
 
 a.btn-primary, .btn-secondary {
@@ -168,18 +183,18 @@ a.btn-primary, .btn-secondary {
 }
 
 a.btn-primary:hover, .btn-secondary:hover {
-    background-color: var(--main-link-color-hover);
+    background-color: var(--admidio-link-color-hover);
     color: #ffffff !important;
 }
 
 .btn-primary {
-    background-color: var(--main-link-color);
-    border-color: var(--main-link-color);
+    background-color: var(--admidio-link-color);
+    border-color: var(--admidio-link-color);
 }
 
 .btn-primary:hover {
-    background-color: var(--main-link-color-hover);
-    border-color: var(--main-link-color-hover);
+    background-color: var(--admidio-link-color-hover);
+    border-color: var(--admidio-link-color-hover);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -278,7 +293,7 @@ input[type=checkbox]:focus, button:focus {
 }
 
 .btn-primary:focus {
-    background-color: var(--main-link-color-hover) !important;
+    background-color: var(--admidio-link-color-hover) !important;
 }
 
 input[type=checkbox] {
@@ -485,16 +500,6 @@ input[type=time] {
     display: block;
 }
 
-/* Style for popover */
-.popover-header {
-    color: white;
-    background-color: #263340;
-}
-
-.popover-body {
-    background-color: #eeeeee;
-}
-
 .page-item.active .page-link {
     background-color: #263340;
     border-color: #263340;
@@ -547,7 +552,7 @@ input[type=time] {
 #admidio-password-strength-minimum {
     position: absolute;
     border: 9px solid transparent;
-    border-left-color: #263340;
+    border-left-color: var(--admidio-font-color);
     border-right-width: 0;
     margin-top: -5px;
 }
@@ -566,9 +571,9 @@ input[type=time] {
 }
 
 #plgCalendarTable td.plgCalendarToday {
-    background-color: #324b64;
+    background-color: var(--admidio-font-color);
     border-radius: 5px;
-    color: white;
+    color: var(--admidio-bg-color);
 }
 
 #plgCalendarTable td {
