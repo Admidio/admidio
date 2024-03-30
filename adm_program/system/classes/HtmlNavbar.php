@@ -80,7 +80,7 @@ class HtmlNavbar
     {
         global $gL10n;
 
-        if ($name === null) {
+        if ($name === '') {
             if ($type === 'default') {
                 $name = $gL10n->get('SYS_MENU');
             } elseif ($type === 'filter') {
