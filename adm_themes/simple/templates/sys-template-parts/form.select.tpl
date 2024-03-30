@@ -1,9 +1,11 @@
 
-<div id="{$id}_group" class="mb-4 {if $property eq 1}admidio-form-group-required{/if}">
-    <label for="{$id}" class="form-label">
-        {include file='sys-template-parts/parts/form.part.icon.tpl'}
-        {$label}
-    </label>
+<div id="{$id}_group" class="form-control-group{if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}{if $property eq 1} admidio-form-group-required{/if}">
+    {if $data.formtype neq "navbar"}
+        <label for="{$id}" class="form-label">
+            {include file='sys-template-parts/parts/form.part.icon.tpl'}
+            {$label}
+        </label>
+    {/if}
     <select class="form-select" {foreach $data.attributes as $itemvar}
         {$itemvar@key}="{$itemvar}" {/foreach}>
         {assign "group" ""}
@@ -17,7 +19,16 @@
         {/foreach}
         {if $group neq ""}</optgroup>{/if}
     </select>
-
-    {include file='sys-template-parts/parts/form.part.helptext.tpl'}
+    {if $data.formtype eq "navbar"}
+        <label for="{$id}" class="form-label">
+            {include file='sys-template-parts/parts/form.part.icon.tpl'}
+            {$label}
+        </label>
+    {/if}
+    {if $data.formtype eq "navbar"}
+        {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
+    {else}
+        {include file='sys-template-parts/parts/form.part.helptext.tpl'}
+    {/if}
     {include file='sys-template-parts/parts/form.part.warning.tpl'}
 </div>

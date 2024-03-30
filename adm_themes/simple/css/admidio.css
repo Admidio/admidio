@@ -15,6 +15,7 @@
     --admidio-link-color-hover: #4fb8c9;
     --admidio-font-color: #263340;
     --admidio-bg-color: #ffffff;
+    --admidio-light-color: #e9ecef;
     --admidio-header-bg-color: #349aaa;
     --admidio-header-font-color: #ffffff;
     --admidio-header-link-color: #263340;
@@ -32,8 +33,12 @@
 .popover {
     --bs-popover-bg: var(--admidio-bg-color);
     --bs-popover-body-color: var(--admidio-font-color);
-    --bs-popover-header-bg: var(--admidio-card-color);
+    --bs-popover-header-bg: var(--admidio-light-color);
     --bs-popover-header-color: var(--admidio-font-color);
+}
+
+.navbar .form-floating.form-control-group {
+    margin-right: 10px;
 }
 
 #admidio-main-navbar {

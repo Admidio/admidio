@@ -80,7 +80,7 @@ class HtmlNavbar
     {
         global $gL10n;
 
-        if ($name === null) {
+        if ($name === '') {
             if ($type === 'default') {
                 $name = $gL10n->get('SYS_MENU');
             } elseif ($type === 'filter') {
@@ -283,15 +283,16 @@ class HtmlNavbar
 
         // add html for navbar
         $html = '
-            <nav class="navbar navbar-expand-md ' . $cssClassNavbar . $this->customCssClass . '">
+            <nav class="navbar navbar-expand-lg ' . $cssClassNavbar . $this->customCssClass . '">
+            <div class="container-fluid">
                 <a class="navbar-brand ' . $cssClassBrand . '" href="#">' . $this->name . '</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#' . $this->id . '" aria-controls="' . $this->id . '" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon fas fa-bars"></span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#' . $this->id . '" aria-controls="' . $this->id . '" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="' . $this->id . '">';
 
         $html .= $navHtml;
-        $html .= '</div></nav>';
+        $html .= '</div></div></nav>';
 
         // now show the complete html of the menu
         return $html;

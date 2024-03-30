@@ -5,7 +5,7 @@
         {/foreach}
     >{$value}</textarea>
 {else}
-    <div id="{$id}_group" class="mb-4 {if $property eq 1}admidio-form-group-required{/if}">
+    <div id="{$id}_group" class="form-control-group{if $data.formtype neq "navbar"} mb-4{/if}{if $property eq 1} admidio-form-group-required{/if}">
         <label for="{$id}" class="form-label">
             {include file='sys-template-parts/parts/form.part.icon.tpl'}
             {$label}

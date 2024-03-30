@@ -151,7 +151,7 @@ class HtmlForm extends Smarty
         } elseif ($this->type === 'vertical') {
             $optionsAll['class'] .= ' admidio-form-vertical form-dialog';
         } elseif ($this->type === 'navbar') {
-            $optionsAll['class'] .= ' form-inline ';
+            $optionsAll['class'] .= ' d-lg-flex ';
         }
 
         if ($optionsAll['class'] !== '') {
@@ -1711,6 +1711,7 @@ class HtmlForm extends Smarty
             $this->assign($key, $assign);
         }
         $this->assign('ADMIDIO_URL', ADMIDIO_URL);
+        $this->assign('formtype', $this->type);
         $this->assign('data', $assigns);
 
         $this->assign('l10n', $gL10n);

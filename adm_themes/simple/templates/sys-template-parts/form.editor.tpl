@@ -1,4 +1,4 @@
-<div id="{$id}_group" class="mb-4 form-group-editor">
+<div id="{$id}_group" class="form-group-editor form-control-group mb-4">
     <label for="{$id}" class="form-label">
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}

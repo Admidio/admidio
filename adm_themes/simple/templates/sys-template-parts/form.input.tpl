@@ -5,11 +5,13 @@
         {/foreach}
     >
 {else}
-    <div id="{$id}_group" class="mb-4{if $property eq 1} admidio-form-group-required{/if}{if $type == 'datetime'} row{/if}">
-        <label for="{$id}" class="form-label">
-            {include file='sys-template-parts/parts/form.part.icon.tpl'}
-            {$label}
-        </label>
+    <div id="{$id}_group" class="form-control-group{if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}{if $property eq 1} admidio-form-group-required{/if}{if $type == 'datetime'} row{/if}">
+        {if $data.formtype neq "navbar"}
+            <label for="{$id}" class="form-label">
+                {include file='sys-template-parts/parts/form.part.icon.tpl'}
+                {$label}
+            </label>
+        {/if}
         {if $type == 'datetime'}
             <div class="col-auto">
                 <input class="form-control" type="date" name="{$id}" id="{$id}" value="{$data.attributes.dateValue}"
@@ -54,7 +56,17 @@
             >
             {$htmlAfter}
         {/if}
-        {include file='sys-template-parts/parts/form.part.helptext.tpl'}
+        {if $data.formtype eq "navbar"}
+            <label for="{$id}" class="form-label">
+                {include file='sys-template-parts/parts/form.part.icon.tpl'}
+                {$label}
+            </label>
+        {/if}
+        {if $data.formtype eq "navbar"}
+            {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
+        {else}
+            {include file='sys-template-parts/parts/form.part.helptext.tpl'}
+        {/if}
         {include file='sys-template-parts/parts/form.part.warning.tpl'}
     </div>
 {/if}
