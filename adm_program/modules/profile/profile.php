@@ -181,11 +181,11 @@ $page->addJavascript(
 
     $("#menu_item_profile_password").attr("href", "javascript:void(0);");
     $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)).'");
-    $("#menu_item_profile_password").attr("class", "nav-link btn btn-secondary openPopup");
+    $("#menu_item_profile_password").attr("class", "nav-link btn btn-primary openPopup");
 
     $("#menu_item_profile_send_password").attr("href", "javascript:void(0);");
     $("#menu_item_profile_send_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'send_login_msg')).'");
-    $("#menu_item_profile_send_password").attr("class", "nav-link btn btn-secondary openPopup");
+    $("#menu_item_profile_send_password").attr("class", "nav-link btn btn-primary openPopup");
 
     $("body").on("hidden.bs.modal", ".modal", function() {
         $(this).removeData("bs.modal");

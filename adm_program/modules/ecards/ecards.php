@@ -118,7 +118,8 @@ $page->addJavascript(
             success: function(response) { // on success..
                 $(".modal-dialog").attr("class", "modal-dialog modal-lg");
                 $(".modal-content").html(response);
-                $("#admidio-modal").modal();
+                var myModal = new bootstrap.Modal($("#admidio-modal"), {});
+                myModal.show();
             }
         });
 

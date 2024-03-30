@@ -40,9 +40,8 @@
             $(document).on('click', '.openPopup', function (){
                 $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
                 $('.modal-content').load($(this).attr('data-href'),function(){
-                    $('#admidio-modal').modal({
-                        show:true
-                    });
+                    var myModal = new bootstrap.Modal($('#admidio-modal'), {});
+                    myModal.show();
                 });
             });
 

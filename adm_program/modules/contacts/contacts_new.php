@@ -58,7 +58,7 @@ echo '
 
 <div class="modal-header">
     <h3 class="modal-title">'.$gL10n->get('SYS_CREATE_CONTACT').'</h3>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
     <p class="lead">'.$gL10n->get('SYS_INPUT_FIRSTNAME_LASTNAME').'</p>';

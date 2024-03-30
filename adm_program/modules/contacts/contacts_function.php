@@ -52,7 +52,7 @@ if ($getMode === 'delete_explain_msg') {
     echo '
     <div class="modal-header">
         <h3 class="modal-title">'.$gL10n->get('SYS_REMOVE_CONTACT').'</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
         <p><i class="fas fa-user-clock"></i>&nbsp;'.$gL10n->get('SYS_MAKE_FORMER').'</p>

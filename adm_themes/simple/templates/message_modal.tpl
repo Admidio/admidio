@@ -1,9 +1,7 @@
 
 <div class="modal-header">
     <h3 class="modal-title">{$messageHeadline}</h3>
-    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
 <div class="modal-body">{$message}</div>
@@ -15,7 +13,7 @@
                 <i class="fas fa-check-circle"></i>
                 &nbsp;&nbsp;{$l10n->get("SYS_YES")}&nbsp;&nbsp;&nbsp;
             </button>
-            <button id="admButtonNo" class="btn btn-secondary" type="button" data-dismiss="modal">
+            <button id="admButtonNo" class="btn btn-secondary" type="button" data-bs-dismiss="modal">
                 <i class="fas fa-minus-circle"></i>
                 &nbsp;{$l10n->get("SYS_NO")}
             </button>
