@@ -171,12 +171,14 @@ function getStaticText($type, $text, $info = '')
 function getPreferencePanel($group, $id, $parentId, $title, $icon, $body)
 {
     $html = '
-        <div id="admidio-panel-' . $id . '" class="card">
-            <div class="card-header" data-bs-toggle="collapse" data-target="#collapse_' . $id . '">
-                <i class="' . $icon . ' fa-fw"></i>' . $title . '
-            </div>
-            <div id="collapse_' . $id . '" class="collapse" aria-labelledby="headingOne" data-parent="#' . $parentId . '">
-                <div class="card-body">
+        <div id="admidio-panel-' . $id . '" class="accordion-item">
+            <h2 class="accordion-header" data-bs-toggle="collapse" data-target="#collapse_' . $id . '">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_' . $id . '" aria-expanded="true" aria-controls="collapseOne">
+                    <i class="' . $icon . ' fa-fw"></i>' . $title . '
+                </button>
+            </h2>
+            <div id="collapse_' . $id . '" class="accordion-collapse collapse" data-bs-parent="#' . $parentId . '">
+                <div class="accordion-body">
                     ' . $body . '
                 </div>
             </div>
@@ -222,13 +224,13 @@ $formCommon->addSelectBox(
 );
 $formCommon->addInput(
     'homepage_logout',
-    $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')',
+    $gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('SYS_VISITORS').')',
     $formValues['homepage_logout'],
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_VISITORS')
 );
 $formCommon->addInput(
     'homepage_login',
-    $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')',
+    $gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('ORG_REGISTERED_USERS').')',
     $formValues['homepage_login'],
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS')
 );
