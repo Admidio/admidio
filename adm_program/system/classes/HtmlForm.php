@@ -493,7 +493,7 @@ class HtmlForm extends Smarty
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
-        $attributes = array('class' => 'form-control');
+        $attributes = array('class' => 'form-control mb-2');
         ++$this->countElements;
 
         // create array with all options
