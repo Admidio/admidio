@@ -62,27 +62,31 @@ if (!isset($formValues['import_role_id'])) {
 $page = new HtmlPage('admidio-members-import', $headline);
 
 // show form
-$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/contacts/import_read_file.php', $page, array('enableFileUpload' => true));
+$form = new HtmlForm('import_users_form', ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_read_file.php', $page, array('enableFileUpload' => true));
 $formats = array(
     'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
     'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),
-    'XLS'  => $gL10n->get('SYS_EXCEL_97_2003'),
-    'ODS'  => $gL10n->get('SYS_ODF_SPREADSHEET'),
-    'CSV'  => $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
+    'XLS' => $gL10n->get('SYS_EXCEL_97_2003'),
+    'ODS' => $gL10n->get('SYS_ODF_SPREADSHEET'),
+    'CSV' => $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
     'HTML' => $gL10n->get('SYS_HTML_TABLE')
 );
 $form->addSelectBox(
     'format',
     $gL10n->get('SYS_FORMAT'),
     $formats,
-    array('showContextDependentFirstEntry' => false, 'property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['format'])
+    array(
+        'showContextDependentFirstEntry' => false,
+        'property' => HtmlForm::FIELD_REQUIRED,
+        'defaultValue' => $formValues['format']
+    )
 );
 $page->addJavascript(
     '
     $("#format").change(function() {
         const format = $(this).children("option:selected").val();
-         $(".import-setting").prop("disabled", true).parents("div.form-group").hide();
-         $(".import-"+format).prop("disabled", false).parents("div.form-group").show("slow");
+         $(".import-setting").prop("disabled", true).parents("div.form-control-group").hide();
+         $(".import-"+format).prop("disabled", false).parents("div.form-control-group").show("slow");
     });
     $("#format").trigger("change");',
     true
@@ -92,11 +96,11 @@ $form->addFileUpload(
     'userfile',
     $gL10n->get('SYS_CHOOSE_FILE'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
-              'text/html',
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-              'application/vnd.ms-excel',
-              'application/vnd.oasis.opendocument.spreadsheet'
-        )
+        'text/html',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-excel',
+        'application/vnd.oasis.opendocument.spreadsheet'
+    )
     )
 );
 
@@ -104,7 +108,11 @@ $form->addFileUpload(
 // o) Worksheet: AUTO, XLSX, XLS, ODS, HTML (not CSV)
 // o) Encoding (Default/Detect/UTF-8/ISO-8859-1/CP1252): CSV, HTML
 // o) Delimiter (Detect/Comma/Tab/Semicolon): CSV
-$form->addInput('import_sheet', $gL10n->get('SYS_WORKSHEET_NAMEINDEX'), '', array('class' => 'import-setting import-XLSX import-XLS import-ODS import-HTML import-AUTO'));
+$form->addInput(
+    'import_sheet',
+    $gL10n->get('SYS_WORKSHEET_NAMEINDEX'),
+    '',
+    array('class' => 'import-setting import-XLSX import-XLS import-ODS import-HTML import-AUTO'));
 
 $selectBoxEntries = array(
     '' => $gL10n->get('SYS_DEFAULT_ENCODING_UTF8'),
@@ -121,7 +129,11 @@ $form->addSelectBox(
     'import_coding',
     $gL10n->get('SYS_CODING'),
     $selectBoxEntries,
-    array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_coding'], 'class' => 'import-setting import-CSV import-HTML')
+    array(
+        'showContextDependentFirstEntry' => false,
+        'defaultValue' => $formValues['import_coding'],
+        'class' => 'import-setting import-CSV import-HTML'
+    )
 );
 
 $selectBoxEntries = array(
@@ -135,7 +147,11 @@ $form->addSelectBox(
     'import_separator',
     $gL10n->get('SYS_SEPARATOR_FOR_CSV_FILE'),
     $selectBoxEntries,
-    array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_separator'], 'class' => 'import-setting import-CSV')
+    array(
+        'showContextDependentFirstEntry' => false,
+        'defaultValue' => $formValues['import_separator'],
+        'class' => 'import-setting import-CSV'
+    )
 );
 
 $selectBoxEntries = array(
@@ -148,7 +164,11 @@ $form->addSelectBox(
     'import_enclosure',
     $gL10n->get('SYS_FIELD_ENCLOSURE'),
     $selectBoxEntries,
-    array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_enclosure'], 'class' => 'import-setting import-CSV')
+    array(
+        'showContextDependentFirstEntry' => false,
+        'defaultValue' => $formValues['import_enclosure'],
+        'class' => 'import-setting import-CSV'
+    )
 );
 
 
@@ -166,14 +186,14 @@ if (!$gCurrentUser->isAdministrator()) {
 }
 
 $sql = 'SELECT rol_id, rol_name, cat_name
-          FROM '.TBL_ROLES.'
-    INNER JOIN '.TBL_CATEGORIES.'
+          FROM ' . TBL_ROLES . '
+    INNER JOIN ' . TBL_CATEGORIES . '
             ON cat_id = rol_cat_id
          WHERE rol_valid   = true
            AND cat_name_intern <> \'EVENTS\'
            AND (  cat_org_id  = ? -- $gCurrentOrgId
                OR cat_org_id IS NULL )
-               '.$condition.'
+               ' . $condition . '
       ORDER BY cat_sequence, rol_name';
 $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 $roles = array();
@@ -186,8 +206,8 @@ $form->addSelectBox(
     $gL10n->get('SYS_ASSIGN_ROLE'),
     $roles,
     array(
-        'property'        => HtmlForm::FIELD_REQUIRED,
-        'defaultValue'    => $formValues['import_role_id'],
+        'property' => HtmlForm::FIELD_REQUIRED,
+        'defaultValue' => $formValues['import_role_id'],
         'helpTextId' => 'SYS_ASSIGN_ROLE_FOR_IMPORT'
     )
 );
@@ -203,10 +223,10 @@ $form->addSelectBox(
     $gL10n->get('SYS_EXISTING_CONTACTS'),
     $selectBoxEntries,
     array(
-        'property'                       => HtmlForm::FIELD_REQUIRED,
-        'defaultValue'                   => $formValues['user_import_mode'],
+        'property' => HtmlForm::FIELD_REQUIRED,
+        'defaultValue' => $formValues['user_import_mode'],
         'showContextDependentFirstEntry' => false,
-        'helpTextId'                => 'SYS_IDENTIFY_USERS'
+        'helpTextId' => 'SYS_IDENTIFY_USERS'
     )
 );
 $form->addSubmitButton(

@@ -6,5 +6,5 @@
             {$helpTextId = $l10n->get($helpTextId)}
         {/if}
     {/if}
-    <div class="help-block">{$helpTextId}</div>
+    <div class="form-text">{$helpTextId}</div>
 {/if}

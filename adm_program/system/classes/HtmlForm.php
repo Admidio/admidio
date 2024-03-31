@@ -1022,7 +1022,7 @@ class HtmlForm extends Smarty
         global $gL10n;
 
         ++$this->countElements;
-        $attributes = array('class' => 'form-control');
+        $attributes = array('class' => 'form-select');
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,

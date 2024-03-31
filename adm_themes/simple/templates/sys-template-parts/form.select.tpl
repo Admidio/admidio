@@ -6,8 +6,10 @@
             {$label}
         </label>
     {/if}
-    <select class="form-select" {foreach $data.attributes as $itemvar}
-        {$itemvar@key}="{$itemvar}" {/foreach}>
+    <select
+        {foreach $data.attributes as $itemvar}
+            {$itemvar@key}="{$itemvar}"
+        {/foreach}>
         {assign "group" ""}
         {foreach $values as $optionvar}
             {if {array_key_exists key="group" array=$optionvar} && $optionvar["group"] neq $group}

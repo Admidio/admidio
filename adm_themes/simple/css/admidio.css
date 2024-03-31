@@ -10,18 +10,14 @@
  *****************************************************************************/
 
 :root {
-    /* background color for the main headline of Admidio and color of all links and primary buttons */
-    --admidio-link-color: #349aaa;
-    --admidio-link-color-hover: #4fb8c9;
-    --admidio-font-color: #263340;
     --admidio-bg-color: #ffffff;
     --admidio-light-color: #e9ecef;
     --admidio-header-bg-color: #349aaa;
     --admidio-header-font-color: #ffffff;
     --admidio-header-link-color: #263340;
     --admidio-header-link-color-hover: #000000;
-    --admidio-menu-color: #263340;
-    --admidio-menu-color-hover: #3d5266;
+    --admidio-menu-bg-color: #263340;
+    --admidio-menu-bg-color-hover: #3d5266;
     --admidio-menu-font-color: #dddddd;
     --admidio-menu-font-color-hover: #ffffff;
     --bs-body-color: #263340;
@@ -29,35 +25,6 @@
     --bs-link-color-rgb: 52, 154, 170;
     --bs-link-hover-color: #4fb8c9;
     --bs-link-hover-color-rgb: 79, 184, 201;
-}
-
-.nav-tabs .nav-link {
-    background-color: var(--admidio-light-color);
-    font-weight: bold;
-}
-
-.accordion {
-    --bs-accordion-bg: var(--admidio-bg-color);
-    --bs-accordion-btn-color: var(--bs-link-color);
-    --bs-accordion-active-color: var(--admidio-menu-font-color);
-    --bs-accordion-active-bg: var(--admidio-menu-color);
-}
-
-.accordion-button {
-    font-size: 1.3rem;
-}
-
-.accordion .fas, .accordion .fab {
-    margin-right: 5px;
-}
-
-.popover {
-    --bs-popover-bg: var(--admidio-bg-color);
-    --bs-popover-header-bg: var(--admidio-light-color);
-}
-
-.navbar .form-floating.form-control-group {
-    margin-right: 10px;
 }
 
 #admidio-main-navbar {
@@ -112,7 +79,7 @@
 /***********************************/
 .admidio-sidebar {
     padding: 0;
-    background-color: var(--admidio-menu-color);
+    background-color: var(--admidio-menu-bg-color);
     overflow-y: auto;
 }
 
@@ -145,7 +112,7 @@
 
 .admidio-menu-list a:hover {
     color: var(--admidio-menu-font-color-hover);
-    background-color: var(--admidio-menu-color-hover);
+    background-color: var(--admidio-menu-bg-color-hover);
 }
 
 @media (min-width: 768px)
@@ -196,12 +163,8 @@
 /* Default tags */
 /***********************************/
 
-a.btn-primary, .btn-secondary {
-    color: #f7f7f7 !important;
-}
-
-a.btn-primary:hover, .btn-secondary:hover {
-    color: #ffffff !important;
+.btn, .btn:hover {
+    color: var(--admidio-bg-color);
 }
 
 .btn-primary {
@@ -306,11 +269,7 @@ input[type=checkbox]:focus, button:focus {
 }
 
 .btn-primary:focus {
-    background-color: var(--admidio-link-color-hover) !important;
-}
-
-input[type=checkbox] {
-    margin-right: 10px;
+    background-color: var(--bs-link-hover-color) !important;
 }
 
 label {
@@ -323,42 +282,8 @@ label {
     }
 }
 
-.form-inline div {
-    padding-right: 15px;
-}
-
-.form-inline label {
-    padding-right: 5px;
-}
-
 .form-control-static {
     margin-bottom: 0;
-}
-
-.radio-inline {
-    margin-right: 15px;
-}
-
-input[type=date] {
-    width: 200px;
-}
-
-input[type=time] {
-    width: 100px;
-}
-
-.datetime-date-control {
-    display: inline-block;
-}
-
-.datetime-time-control {
-    display: inline-block;
-    width: 110px !important;
-    margin-left: 20px;
-}
-
-.dropdown-menu .btn {
-    text-align: left;
 }
 
 /***********************************/
@@ -373,7 +298,7 @@ input[type=time] {
 .admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
 .admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
     border: none;
-    background-color: #eeeeee;
+    background-color: var(--admidio-light-color);
 }
 
 .card-header {
@@ -399,7 +324,7 @@ input[type=time] {
 
 .admidio-field-group .list-group-item {
     border: none;
-    background-color: #eeeeee;
+    background-color: var(--admidio-light-color);
     padding: 0 0 1rem 0;
 }
 
@@ -414,7 +339,7 @@ input[type=time] {
 
 .card-body .list-group-item {
     padding-left: 0;
-    background-color: #eeeeee;
+    background-color: var(--admidio-light-color);
 }
 
 .card-footer .admidio-info-created-edited {
@@ -442,7 +367,7 @@ input[type=time] {
 
 .admidio-card {
     border: none;
-    background-color: #eeeeee;
+    background-color: var(--admidio-light-color);
     margin-top: 15px;
     margin-bottom: 15px;
     height: 95%;
@@ -451,42 +376,43 @@ input[type=time] {
 .admidio-card li {
     padding-left: 0;
     padding-right: 0;
-    background-color: #eeeeee;
-}
-
-/***********************************/
-/* Nav-Bars */
-/***********************************/
-
-.navbar button {
-    margin-bottom: 0;
-}
-
-.navbar label {
-    margin-right: 10px;
-}
-
-.navbar-filter {
-    background-color: #eeeeee;
-}
-
-.navbar-filter .form-group {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    background-color: var(--admidio-light-color);
 }
 
 /***********************************/
 /* Accordion */
 /***********************************/
 
-.accordion .card-header:hover {
-    color: #eeeeee;
-    background-color: #263340;
-    cursor: pointer;
+.accordion {
+    --bs-accordion-bg: var(--admidio-bg-color);
+    --bs-accordion-btn-color: var(--bs-link-color);
+    --bs-accordion-active-color: var(--admidio-menu-font-color);
+    --bs-accordion-active-bg: var(--admidio-menu-bg-color);
 }
 
-.accordion .card-header {
-    color: #349aaa;
+.accordion-button {
+    font-size: 1.3rem;
+}
+
+.accordion .fas, .accordion .fab {
+    margin-right: 5px;
+}
+
+/***********************************/
+/* Navbar */
+/***********************************/
+
+.navbar-filter {
+    background-color: var(--admidio-light-color);
+}
+
+.nav-tabs .nav-link {
+    background-color: var(--admidio-light-color);
+    font-weight: bold;
+}
+
+.navbar .form-floating.form-control-group {
+    margin-right: 10px;
 }
 
 /***********************************/
@@ -509,13 +435,18 @@ input[type=time] {
     font-size: 80%;
 }
 
+.popover {
+    --bs-popover-bg: var(--admidio-bg-color);
+    --bs-popover-header-bg: var(--admidio-light-color);
+}
+
 .breadcrumb-item {
     display: block;
 }
 
 .page-item.active .page-link {
-    background-color: #263340;
-    border-color: #263340;
+    background-color: var(--admidio-menu-bg-color);
+    border-color: var(--admidio-menu-bg-color);
 }
 
 #imprint {
@@ -534,7 +465,8 @@ input[type=time] {
 }
 
 .admidio-event-highlight .card-header, tr.admidio-event-highlight {
-    background-color: #cccccc;
+    background-color: var(--admidio-menu-bg-color);
+    color: var(--admidio-menu-font-color);
 }
 
 .admidio-event-approval-state-attend .fas {

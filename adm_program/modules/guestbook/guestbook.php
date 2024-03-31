@@ -316,7 +316,7 @@ if ($countGuestbookEntries === 0) {
             // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
             $loadUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $gboUuid));
             $page->addHtml('
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href=\''.$loadUrl.'\'">
+                    <button type="button" class="btn btn-primary" onclick="window.location.href=\''.$loadUrl.'\'">
                         <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>');
         }
 
