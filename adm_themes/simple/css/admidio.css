@@ -516,7 +516,7 @@ input[type=time] {
 }
 
 .admidio-event-highlight .card-header, tr.admidio-event-highlight {
-    background-color: #cccccc;
+    background-color: #cccccc !important;
 }
 
 .admidio-event-approval-state-attend .fas {
