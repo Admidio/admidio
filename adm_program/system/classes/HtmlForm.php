@@ -242,7 +242,7 @@ class HtmlForm extends Smarty
     {
         global $gL10n;
 
-        $attributes = array('class' => 'captcha');
+        $attributes = array();
         ++$this->countElements;
 
         // set specific css class for this field

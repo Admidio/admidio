@@ -1022,7 +1022,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Participant Status</string>
   <string name="SYS_PASSWORD">Password</string>
   <string name="SYS_PASSWORD_CHANGED">Password has been successfully changed.</string>
-  <string name="SYS_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nThe strength of your selected password will be displayed in color using a bar. The minimum required strength is indicated by the arrow in the bar.</string>
+  <string name="SYS_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\nThe strength of your selected password will be displayed in color using a bar. The minimum required strength is indicated by the arrow in the bar.</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten?</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter your login name or email address. We will then send you a link where you can reset your password and after that set a new password.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">If the user has forgotten his password, he can request a link to be sent to him, through which he can set a new password for his account on this website. If this option is deactivated, the user can only send a request by e-mail to the administrator to deposit a new password. In order for the password to be sent, the #VAR1_BOLD# setting must also be set. (Default: yes)</string>
