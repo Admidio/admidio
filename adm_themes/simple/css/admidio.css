@@ -247,10 +247,6 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     padding-right: 15px;
 }
 
-.btn-group-vertical {
-    display: block;
-}
-
 .alert-info {
     background-color: #abd7e0;
 }
