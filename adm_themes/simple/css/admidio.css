@@ -417,6 +417,10 @@ label {
 /* Various settings */
 /***********************************/
 
+.table td, .table th {
+    color: var(--bs-secondary);
+}
+
 .admidio-opacity-reduced {
     opacity: 0.4;
 }
@@ -435,12 +439,16 @@ label {
 
 .dropdown-item {
     color: var(--bs-secondary);
-    background: white;
+    background: var(--bs-body-bg);
 }
 
 .popover {
     --bs-popover-bg: var(--bs-body-bg);
     --bs-popover-header-bg: var(--bs-tertiary);
+}
+
+.tooltip {
+    --bs-tooltip-bg: var(--bs-secondary);
 }
 
 .breadcrumb {
