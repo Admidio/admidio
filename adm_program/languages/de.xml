@@ -1093,10 +1093,7 @@
   <string name="SYS_PROFILE_FROM">Profil von #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformationen</string>
   <string name="SYS_PROFILE_PHOTO">Profilfoto</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1">Du solltest selbst auf dem Foto zu sehen sein.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2">Das Foto muss im Format JPG oder PNG gespeichert sein.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3">Der Server kann Fotos mit einer maximalen Auflösung von #VAR1# MegaPixeln verarbeiten.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4">Die hochgeladene Datei darf nicht größer als #VAR1# MB sein.</string>
+  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du solltest selbst auf dem Foto zu sehen sein. Das Foto darf eine maximale Auflösung von #VAR1# MegaPixeln haben. Die Fotodatei darf nicht größer als #VAR1# MB sein und muss im Format JPG oder PNG vorliegen.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
   <string name="SYS_QUANTITY">Anzahl</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>

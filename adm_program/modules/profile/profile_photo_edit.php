@@ -194,7 +194,10 @@ if ($getMode === 'choose') {
     $form->addFileUpload(
         'foto_upload_file',
         $gL10n->get('SYS_SELECT_PHOTO'),
-        array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help')
+        array(
+            'allowedMimeTypes' => array('image/jpeg', 'image/png'),
+            'helpTextIdLabel' => array('SYS_PROFILE_PICTURE_RESTRICTIONS', array(round(SystemInfoUtils::getProcessableImageSize()/1000000, 2), round(PhpIniUtils::getUploadMaxSize()/1024** 2, 2)))
+        )
     );
     $form->addSubmitButton(
         'btn_upload',

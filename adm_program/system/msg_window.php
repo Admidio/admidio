@@ -136,18 +136,6 @@ switch ($getMessageId) {
             </table>';
         break;
 
-    // Profile photo help text
-    case 'profile_photo_up_help':
-        echo '
-            <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
-            <ul>
-                <li>'.$gL10n->get('SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1').'</li>
-                <li>'.$gL10n->get('SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2').'</li>
-                <li>'.$gL10n->get('SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3', array(round(SystemInfoUtils::getProcessableImageSize()/1000000, 2))).'</li>
-                <li>'.$gL10n->get('SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4', array(round(PhpIniUtils::getUploadMaxSize()/1024** 2, 2))).'</li>
-            </ul>';
-        break;
-
     default:
         // In the standard case, the ID is used to read the text from the language file.
         // If the text variable is filled, check whether this is an ID from the language file.
