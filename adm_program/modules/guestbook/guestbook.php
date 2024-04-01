@@ -230,14 +230,16 @@ if ($countGuestbookEntries === 0) {
                     <div class="dropdown float-end">
                         <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
                                 <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
+                            </li>
+                            <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
                                 'element_id' => 'gbo_'.$gboUuid, 'database_id' => $gboUuid, 'name' => $gboName)).'">
                                 <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
-                        </div>
+                            </li>
+                        </ul>
                     </div>');
         }
         $page->addHtml('

@@ -105,13 +105,15 @@ if ($roomsStatement->rowCount() === 0) {
                 <div class="dropdown float-end">
                     <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)).'">
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)).'">
                             <i class="fas fa-edit" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                        <a class="dropdown-item btn openPopup" href="javascript:void(0);"
+                        </li>
+                        <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.$room->getValue('room_uuid'), 'name' => $room->getValue('room_name'), 'database_id' => $room->getValue('room_uuid'))).'">
                             <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="card-body">

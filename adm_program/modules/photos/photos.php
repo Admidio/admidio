@@ -384,23 +384,26 @@ if ($albumsCount > 0) {
             // if user has admin rights for photo module then show some functions
             if ($gCurrentUser->editPhotoRight()) {
                 if ((bool) $childPhotoAlbum->getValue('pho_locked') === false) {
-                    $htmlLock = '<a class="dropdown-item btn admidio-album-lock" href="javascript:void(0)" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="lock">
-                                            <i class="fas fa-lock" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_LOCK_ALBUM').'</a>';
+                    $htmlLock = '<li><a class="dropdown-item admidio-album-lock" href="javascript:void(0)" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="lock">
+                                            <i class="fas fa-lock" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_LOCK_ALBUM').'</a>
+                                 </li>';
                 }
 
                 $page->addHtml('
                                     <div class="dropdown float-end">
                                         <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'change')).'">
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'change')).'">
                                                 <i class="fas fa-edit" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT_ALBUM').'</a>
+                                            </li>
                                             ' .$htmlLock . '
-                                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
+                                            <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid'),
                                             'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_uuid'))).'">
                                                 <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE_ALBUM').'</a>
-                                        </div>
+                                            </li>
+                                        </ul>
                                     </div>');
             }
             $page->addHtml('</h5>

@@ -108,10 +108,6 @@
     color: var(--bs-tertiary);
 }
 
-.admidio-menu-list .dropdown-item {
-    color: var(--bs-body-color);
-}
-
 .admidio-menu-list a:hover {
     color: var(--admidio-menu-font-color-hover);
     background-color: var(--admidio-menu-bg-color-hover);
@@ -320,10 +316,6 @@ label {
     margin-right: 0;
 }
 
-.card-header .dropdown .fas, .card-header .dropdown .fab {
-    margin-right: 0;
-}
-
 .admidio-blog .card-footer {
     font-size: 80%;
 }
@@ -439,6 +431,11 @@ label {
 
 .admidio-info-created-edited {
     font-size: 80%;
+}
+
+.dropdown-item {
+    color: var(--bs-secondary);
+    background: white;
 }
 
 .popover {

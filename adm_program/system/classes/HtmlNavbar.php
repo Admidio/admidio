@@ -186,7 +186,7 @@ class HtmlNavbar
             $iconHtml = Image::getIconHtml($data['icon'], $data['text']);
         }
 
-        return'<a class="dropdown-item" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>';
+        return'<li><a class="dropdown-item" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a></li>';
     }
 
     /**
@@ -210,12 +210,12 @@ class HtmlNavbar
                             <a id="' . $menuEntry['id'] . '" href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bars"></i>' . $menuEntry['text'] . '
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">';
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">';
 
                     foreach ($menuEntry['items'] as $menuEntryDropDown) {
                         $html .= $this->createHtmlDropdownLink($menuEntryDropDown);
                     }
-                    $html .= '</div></li>';
+                    $html .= '</ul></li>';
                 }
             } else {
                 // add a simple link to the navbar

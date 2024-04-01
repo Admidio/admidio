@@ -513,19 +513,19 @@ if ($eventsResult['totalCount'] === 0) {
                                 <button class="btn btn-primary dropdown-toggle ' . $buttonClass . '" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $iconParticipationStatus . $buttonText . '</button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="btn admidio-event-approval-state-attend ' . $disableStatusAttend . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
+                                        <a class="dropdown-item admidio-event-approval-state-attend ' . $disableStatusAttend . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
                                             <i class="fas fa-check-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
                                         </a>
                                     </li>';
                             if ($gSettingsManager->getBool('events_may_take_part')) {
                                 $outputButtonParticipation .= '<li>
-                                            <a class="btn admidio-event-approval-state-tentative ' . $disableStatusTentative . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
+                                            <a class="dropdown-item admidio-event-approval-state-tentative ' . $disableStatusTentative . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
                                                 <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '"></i>' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '
                                             </a>
                                         </li>';
                             }
                             $outputButtonParticipation .= '<li>
-                                        <a class="btn admidio-event-approval-state-cancel" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '4', 'dat_uuid' => $dateUuid)) . '">
+                                        <a class="dropdown-item admidio-event-approval-state-cancel" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '4', 'dat_uuid' => $dateUuid)) . '">
                                             <i class="fas fa-times-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CANCEL') . '"></i>' . $gL10n->get('SYS_CANCEL') . '
                                         </a>
                                     </li>
@@ -658,27 +658,31 @@ if ($eventsResult['totalCount'] === 0) {
                             <div class="dropdown float-end">
                                 <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">');
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">');
                 // iCal Download
                 if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                     $page->addHtml('
-                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
-                                                <i class="fas fa-file-export" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EXPORT_ICAL').'</a>');
+                                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
+                                                    <i class="fas fa-file-export" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EXPORT_ICAL').'</a>
+                                            </li>');
                 }
 
                 // change and delete is only for users with additional rights
                 if ($event->isEditable()) {
                     $page->addHtml('
-                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1)) . '">
+                                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1)) . '">
                                                 <i class="fas fa-clone" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
-                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid)) . '">
+                                            </li>
+                                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid)) . '">
                                                 <i class="fas fa-edit" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
+                                            </li>
+                                            <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
                                                 'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
-                                                <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>');
+                                                <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                            </li>');
                 }
-                $page->addHtml('</div>
+                $page->addHtml('</ul>
                             </div>');
             }
             $page->addHtml('</div>
