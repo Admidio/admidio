@@ -10,17 +10,19 @@
  *****************************************************************************/
 
 :root {
-    --admidio-bg-color: #ffffff;
-    --admidio-light-color: #e9ecef;
-    --admidio-header-bg-color: #349aaa;
     --admidio-header-font-color: #ffffff;
     --admidio-header-link-color: #263340;
     --admidio-header-link-color-hover: #000000;
-    --admidio-menu-bg-color: #263340;
     --admidio-menu-bg-color-hover: #3d5266;
-    --admidio-menu-font-color: #dddddd;
     --admidio-menu-font-color-hover: #ffffff;
+    --bs-primary: #349aaa;
+    --bs-primary-rgb: 52, 154, 170;
+    --bs-secondary: #263340;
+    --bs-secondary-rgb: 38, 51, 64;
+    --bs-tertiary: #e9ecef;
+    --bs-tertiary-rgb: 233, 236, 269;
     --bs-body-color: #263340;
+    --bs-body-bg: #ffffff;
     --bs-link-color: #349aaa;
     --bs-link-color-rgb: 52, 154, 170;
     --bs-link-hover-color: #4fb8c9;
@@ -28,7 +30,7 @@
 }
 
 #admidio-main-navbar {
-    background-color: var(--admidio-header-bg-color);
+    background-color: var(--bs-primary);
     min-height: 4rem;
     position: sticky;
     padding-bottom: 0;
@@ -79,7 +81,7 @@
 /***********************************/
 .admidio-sidebar {
     padding: 0;
-    background-color: var(--admidio-menu-bg-color);
+    background-color: var(--bs-secondary);
     overflow-y: auto;
 }
 
@@ -90,7 +92,7 @@
 .admidio-headline-mobile-menu {
     width: 100%;
     font-size: 1.1rem;
-    color: var(--admidio-menu-font-color);
+    color: var(--bs-secondary);
     letter-spacing: 2px;
 }
 
@@ -103,7 +105,7 @@
 }
 
 .admidio-menu-list a {
-    color: var(--admidio-menu-font-color);
+    color: var(--bs-tertiary);
 }
 
 .admidio-menu-list .dropdown-item {
@@ -168,7 +170,7 @@ a {
 }
 
 .btn, .btn:hover {
-    color: var(--admidio-bg-color);
+    color: var(--bs-body-bg);
 }
 
 .btn-primary {
@@ -302,7 +304,7 @@ label {
 .admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
 .admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
     border: none;
-    background-color: var(--admidio-light-color);
+    background-color: var(--bs-tertiary);
 }
 
 .card-header {
@@ -328,7 +330,7 @@ label {
 
 .admidio-field-group .list-group-item {
     border: none;
-    background-color: var(--admidio-light-color);
+    background-color: var(--bs-tertiary);
     padding: 0 0 1rem 0;
 }
 
@@ -343,7 +345,7 @@ label {
 
 .card-body .list-group-item {
     padding-left: 0;
-    background-color: var(--admidio-light-color);
+    background-color: var(--bs-tertiary);
 }
 
 .card-footer .admidio-info-created-edited {
@@ -371,7 +373,7 @@ label {
 
 .admidio-card {
     border: none;
-    background-color: var(--admidio-light-color);
+    background-color: var(--bs-tertiary);
     margin-top: 15px;
     margin-bottom: 15px;
     height: 95%;
@@ -380,7 +382,7 @@ label {
 .admidio-card li {
     padding-left: 0;
     padding-right: 0;
-    background-color: var(--admidio-light-color);
+    background-color: var(--bs-tertiary);
 }
 
 /***********************************/
@@ -388,10 +390,10 @@ label {
 /***********************************/
 
 .accordion {
-    --bs-accordion-bg: var(--admidio-bg-color);
+    --bs-accordion-bg: var(--bs-body-bg);
     --bs-accordion-btn-color: var(--bs-link-color);
-    --bs-accordion-active-color: var(--admidio-menu-font-color);
-    --bs-accordion-active-bg: var(--admidio-menu-bg-color);
+    --bs-accordion-active-color: var(--bs-tertiary);
+    --bs-accordion-active-bg: var(--bs-secondary);
 }
 
 .accordion-button {
@@ -407,11 +409,11 @@ label {
 /***********************************/
 
 .navbar-filter {
-    background-color: var(--admidio-light-color);
+    background-color: var(--bs-tertiary);
 }
 
 .nav-tabs .nav-link {
-    background-color: var(--admidio-light-color);
+    background-color: var(--bs-tertiary);
     font-weight: bold;
 }
 
@@ -440,12 +442,12 @@ label {
 }
 
 .popover {
-    --bs-popover-bg: var(--admidio-bg-color);
-    --bs-popover-header-bg: var(--admidio-light-color);
+    --bs-popover-bg: var(--bs-body-bg);
+    --bs-popover-header-bg: var(--bs-tertiary);
 }
 
 .breadcrumb {
-    --bs-breadcrumb-bg: var(--admidio-light-color);
+    --bs-breadcrumb-bg: var(--bs-tertiary);
     --bs-breadcrumb-padding-y: 0.75rem;
     --bs-breadcrumb-padding-x: 1rem;
 }
@@ -461,8 +463,8 @@ label {
 }
 
 .page-item.active .page-link {
-    background-color: var(--admidio-menu-bg-color);
-    border-color: var(--admidio-menu-bg-color);
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
 }
 
 #imprint {
@@ -481,8 +483,8 @@ label {
 }
 
 .admidio-event-highlight .card-header {
-    background-color: var(--admidio-menu-bg-color);
-    color: var(--admidio-menu-font-color);
+    background-color: var(--bs-secondary);
+    color: var(--bs-tertiary);
 }
 
 tr.admidio-event-highlight {
@@ -538,7 +540,7 @@ tr.admidio-event-highlight {
 #plgCalendarTable td.plgCalendarToday {
     background-color: var(--bs-body-color);
     border-radius: 5px;
-    color: var(--admidio-bg-color);
+    color: var(--bs-body-bg);
 }
 
 #plgCalendarTable td {
