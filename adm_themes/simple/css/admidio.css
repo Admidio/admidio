@@ -163,6 +163,10 @@
 /* Default tags */
 /***********************************/
 
+a {
+    text-decoration: none;
+}
+
 .btn, .btn:hover {
     color: var(--admidio-bg-color);
 }
@@ -440,8 +444,20 @@ label {
     --bs-popover-header-bg: var(--admidio-light-color);
 }
 
+.breadcrumb {
+    --bs-breadcrumb-bg: var(--admidio-light-color);
+    --bs-breadcrumb-padding-y: 0.75rem;
+    --bs-breadcrumb-padding-x: 1rem;
+}
+
 .breadcrumb-item {
     display: block;
+}
+
+.badge {
+    --bs-badge-padding-y: .25em;
+    --bs-badge-padding-x: .5em;
+    margin-left: 5px;
 }
 
 .page-item.active .page-link {
@@ -464,9 +480,13 @@ label {
     cursor: help;
 }
 
-.admidio-event-highlight .card-header, tr.admidio-event-highlight {
+.admidio-event-highlight .card-header {
     background-color: var(--admidio-menu-bg-color);
     color: var(--admidio-menu-font-color);
+}
+
+tr.admidio-event-highlight {
+    font-weight: bold;
 }
 
 .admidio-event-approval-state-attend .fas {
