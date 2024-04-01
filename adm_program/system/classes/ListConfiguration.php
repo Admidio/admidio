@@ -519,7 +519,7 @@ class ListConfiguration extends TableLists
                         break;
 
                     default:
-                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', \'\')';
+                        $arrSearchConditions[] = 'LOWER(COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', \'\'))';
                 }
             } else {
                 switch ($listColumn->getValue('lsc_special_field')) {
