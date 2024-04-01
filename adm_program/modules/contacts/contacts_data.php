@@ -108,7 +108,7 @@ if ($getSearch !== '' && count($searchColumns) > 0) {
     }
 
     foreach ($searchString as $searchWord) {
-        $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ') LIKE CONCAT(\'%\', '.$searchValue.', \'%\') ';
+        $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ') LIKE LOWER(CONCAT(\'%\', '.$searchValue.', \'%\')) ';
         $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
     }
 
