@@ -272,14 +272,14 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
         $photoThumbnailTableShown = false;
 
         for ($hiddenPhotoNr = 1; $hiddenPhotoNr <= $photoAlbum->getValue('pho_quantity'); ++$hiddenPhotoNr) {
-            if ($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr <= $actThumbnail) {
+            if ($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr < $actThumbnail) {
                 if (!$photoThumbnailTableShown) {
                     $page->addHtml($photoThumbnailTable);
                     $photoThumbnailTableShown = true;
                 }
             } else {
                 $page->addHtml('
-                    <a class="d-none" data-gallery="admidio-gallery" data-type="image" data-bs-toggle="lightbox" data-title="'.$headline.'"
+                    <a class="d-none" data-lightbox="admidio-gallery" data-title="'.$headline.'"
                         href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $hiddenPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'">&nbsp;</a>
                 ');
             }
