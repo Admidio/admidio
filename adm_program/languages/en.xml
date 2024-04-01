@@ -1093,10 +1093,7 @@
   <string name="SYS_PROFILE_FROM">Profile of #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profile information</string>
   <string name="SYS_PROFILE_PHOTO">Profile photo</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1">You should even be seen in the photo.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2">Photo has to be saved as JPG or PNG.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3">Server is able to handle photos with a maximum size of #VAR1# megapixels.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4">Uploaded files must not be greater than #VAR1# MB.</string>
+  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">You should be in the photo yourself. The photo may have a maximum resolution of #VAR1# MegaPixels. The photo file must not be larger than #VAR1# MB and must be in JPG or PNG format.</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_QUANTITY">Quantity</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
@@ -1144,7 +1141,6 @@
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>
-  <string name="SYS_RESTRICTIONS">Restrictions</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organize and assign registrations</string>
