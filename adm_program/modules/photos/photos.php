@@ -280,7 +280,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
         $photoThumbnailTableShown = false;
 
         for ($hiddenPhotoNr = 1; $hiddenPhotoNr <= $photoAlbum->getValue('pho_quantity'); ++$hiddenPhotoNr) {
-            if ($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr <= $actThumbnail) {
+            if ($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr < $actThumbnail) {
                 if (!$photoThumbnailTableShown) {
                     $page->addHtml($photoThumbnailTable);
                     $photoThumbnailTableShown = true;
