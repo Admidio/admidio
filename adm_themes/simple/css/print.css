@@ -97,7 +97,7 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     margin-right: 10px;
 }
 
-.card-header .float-right .fas {
+.card-header .float-end .fas {
     margin-right: 0px;
 }
 

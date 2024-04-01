@@ -109,18 +109,10 @@ if ($photoAlbum->isEditable()) {
     );
 }
 
-// integrate bootstrap ekko lightbox addon
+// integrate lightbox 2 addon
 if ((int) $gSettingsManager->get('photo_show_mode') === 1) {
-    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox/ekko-lightbox.css');
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox/ekko-lightbox.js');
-
-    $page->addJavascript('
-        $("*[data-toggle=\"lightbox\"]").click(function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        });',
-        true
-    );
+    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/css/lightbox.css');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');
 }
 
 // if a photo number was committed then simulate a left mouse click
@@ -220,10 +212,10 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
                             src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" />';
             }
 
-            // Bootstrap modal with lightbox
+            // Modal with lightbox 2
             elseif ((int) $gSettingsManager->get('photo_show_mode') === 1) {
                 $photoThumbnailTable .= '
-                        <a data-gallery="admidio-gallery" data-type="image" data-parent=".admidio-album-thumbnail" data-toggle="lightbox" data-title="'.$headline.'"
+                        <a data-lightbox="admidio-gallery" data-title="'.$headline.'"
                             href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
                             class="rounded" id="img_'.$actThumbnail.'" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" /></a>';
             }
@@ -244,27 +236,27 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
             if ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) {
                 $photoThumbnailTable .= '
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/ecards/ecards.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid, 'show_page' => $getPhotoNr)).'">
-                            <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_PHOTO_AS_ECARD').'"></i></a>';
+                            <i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_PHOTO_AS_ECARD').'"></i></a>';
             }
 
             if ($gSettingsManager->getBool('photo_download_enabled')) {
                 // show link to download photo
                 $photoThumbnailTable .= '
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)).'">
-                            <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_PHOTO').'"></i></a>';
+                            <i class="fas fa-download" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_PHOTO').'"></i></a>';
             }
 
             // buttons for moderation
             if ($gCurrentUser->editPhotoRight()) {
                 $photoThumbnailTable .= '
                         <a class="admidio-icon-link admidio-image-rotate" href="javascript:void(0)" data-image="'.$actThumbnail.'" data-direction="right">
-                            <i class="fas fa-redo-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_ROTATE_PHOTO_RIGHT').'"></i></a>
+                            <i class="fas fa-redo-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ROTATE_PHOTO_RIGHT').'"></i></a>
                         <a class="admidio-icon-link admidio-image-rotate"  href="javascript:void(0)"  data-image="'.$actThumbnail.'" data-direction="left"">
-                            <i class="fas fa-undo-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_ROTATE_PHOTO_LEFT').'"></i></a>
+                            <i class="fas fa-undo-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ROTATE_PHOTO_LEFT').'"></i></a>
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
                             'database_id' => $actThumbnail, 'database_id_2' => $getPhotoUuid)).'">
-                            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                            <i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
 
             if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
@@ -287,7 +279,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
                 }
             } else {
                 $page->addHtml('
-                    <a class="d-none" data-gallery="admidio-gallery" data-type="image" data-toggle="lightbox" data-title="'.$headline.'"
+                    <a class="d-none" data-gallery="admidio-gallery" data-type="image" data-bs-toggle="lightbox" data-title="'.$headline.'"
                         href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $hiddenPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'">&nbsp;</a>
                 ');
             }
@@ -392,23 +384,26 @@ if ($albumsCount > 0) {
             // if user has admin rights for photo module then show some functions
             if ($gCurrentUser->editPhotoRight()) {
                 if ((bool) $childPhotoAlbum->getValue('pho_locked') === false) {
-                    $htmlLock = '<a class="dropdown-item btn admidio-album-lock" href="javascript:void(0)" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="lock">
-                                            <i class="fas fa-lock" data-toggle="tooltip"></i> '.$gL10n->get('SYS_LOCK_ALBUM').'</a>';
+                    $htmlLock = '<li><a class="dropdown-item admidio-album-lock" href="javascript:void(0)" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="lock">
+                                            <i class="fas fa-lock" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_LOCK_ALBUM').'</a>
+                                 </li>';
                 }
 
                 $page->addHtml('
-                                    <div class="dropdown float-right">
-                                        <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'change')).'">
-                                                <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT_ALBUM').'</a>
+                                    <div class="dropdown float-end">
+                                        <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'change')).'">
+                                                <i class="fas fa-edit" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT_ALBUM').'</a>
+                                            </li>
                                             ' .$htmlLock . '
-                                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
+                                            <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid'),
                                             'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_uuid'))).'">
-                                                <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE_ALBUM').'</a>
-                                        </div>
+                                                <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE_ALBUM').'</a>
+                                            </li>
+                                        </ul>
                                     </div>');
             }
             $page->addHtml('</h5>
@@ -424,7 +419,7 @@ if ($albumsCount > 0) {
                     $maxPosPrev = strrpos($textPrev, ' ');
                     $albumDescription = substr($textPrev, 0, $maxPosPrev).
                                         ' <span class="collapse" id="viewdetails'.$childPhotoAlbum->getValue('pho_uuid').'">'.substr($albumDescription, $maxPosPrev).'.
-                                        </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$childPhotoAlbum->getValue('uuid').'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                                        </span> <a class="admidio-icon-link" data-bs-toggle="collapse" data-target="#viewdetails'.$childPhotoAlbum->getValue('uuid').'"><i class="fas fa-angle-double-right" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
                 }
 
                 $page->addHtml('<p class="card-text">' . $albumDescription . '</p>');

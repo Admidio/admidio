@@ -995,7 +995,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">On</string>
   <string name="SYS_ONE_TIME">One time</string>
-  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online membership management</string>
+  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Membership management</string>
   <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Only at registration and own profile</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">This preference can only be set by the parent organization.</string>
   <string name="SYS_OPERATING_SYSTEM">Operating system</string>
@@ -1022,7 +1022,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Participant Status</string>
   <string name="SYS_PASSWORD">Password</string>
   <string name="SYS_PASSWORD_CHANGED">Password has been successfully changed.</string>
-  <string name="SYS_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nThe strength of your selected password will be displayed in color using a bar. The minimum required strength is indicated by the arrow in the bar.</string>
+  <string name="SYS_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\nThe strength of your selected password will be displayed in color using a bar. The minimum required strength is indicated by the arrow in the bar.</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten?</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter your login name or email address. We will then send you a link where you can reset your password and after that set a new password.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">If the user has forgotten his password, he can request a link to be sent to him, through which he can set a new password for his account on this website. If this option is deactivated, the user can only send a request by e-mail to the administrator to deposit a new password. In order for the password to be sent, the #VAR1_BOLD# setting must also be set. (Default: yes)</string>
@@ -1252,7 +1252,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Send greeting card</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Send login information</string>
-  <string name="SYS_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</string>
+  <string name="SYS_SEND_MAIL_TO_ROLE">Your e-mail will be sent to the individual selected recipients and to all members of the selected roles, provided they have entered an e-mail address.</string>
   <string name="SYS_SEND_MAILS">Send e-mails</string>
   <string name="SYS_SEND_METHOD">Send via</string>
   <string name="SYS_SEND_METHOD_DESC">PHP\'s mail() method might be restricted by some providers and can be a reason for spam suspicion. Hence it is recommended to send mails by using an existing mail address and SMTP server. You can configure the SMTP settings below (default: PHP mail()).</string>
@@ -1410,7 +1410,7 @@
   <string name="SYS_USER_RELATION_TYPE">Relationship type</string>
   <string name="SYS_USER_VALID_LOGIN">User already has valid login information.</string>
   <string name="SYS_USERNAME">Username</string>
-  <string name="SYS_USERNAME_DESCRIPTION">You will be able to login with this username.\n\nThis name must be well-defined. If selected name is not available anymore, please try to use combinations like Andi78 or SteveT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">You will be able to login with this username.\nThis name must be well-defined. If selected name is not available anymore, please try to use combinations like Andi78 or SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Number of contacts per page</string>

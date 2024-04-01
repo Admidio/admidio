@@ -229,7 +229,7 @@ if ($gSettingsManager->getBool('events_show_map_link')) {
         'dat_location',
         $gL10n->get('SYS_VENUE'),
         (string) $event->getValue('dat_location'),
-        array('maxLength' => 100, 'helpTextIdLabel' => 'SYS_VENUE_LINK')
+        array('maxLength' => 100, 'helpTextId' => 'SYS_VENUE_LINK')
     );
 
     if (!$event->getValue('dat_country') && $getEventUuid === '') {
@@ -301,7 +301,7 @@ $form->addCheckbox(
     'event_participation_possible',
     $gL10n->get('SYS_REGISTRATION_POSSIBLE'),
     $eventParticipationPossible,
-    array('helpTextIdLabel' => 'SYS_ENABLE_EVENT_REGISTRATION')
+    array('helpTextId' => 'SYS_ENABLE_EVENT_REGISTRATION')
 );
 
 // add a multi select box to the form where the user can choose all roles whose members could participate in this event
@@ -335,31 +335,31 @@ $form->addCheckbox(
     'event_current_user_assigned',
     $gL10n->get('SYS_PARTICIPATE_AT_EVENT'),
     $eventCurrentUserAssigned,
-    array('helpTextIdLabel' => 'SYS_PARTICIPATE_AT_EVENT_DESC')
+    array('helpTextId' => 'SYS_PARTICIPATE_AT_EVENT_DESC')
 );
 $form->addCheckbox(
     'dat_allow_comments',
     $gL10n->get('SYS_ALLOW_USER_COMMENTS'),
     (bool) $event->getValue('dat_allow_comments'),
-    array('helpTextIdLabel' => 'SYS_ALLOW_USER_COMMENTS_DESC')
+    array('helpTextId' => 'SYS_ALLOW_USER_COMMENTS_DESC')
 );
 $form->addCheckbox(
     'dat_additional_guests',
     $gL10n->get('SYS_ALLOW_ADDITIONAL_GUESTS'),
     (bool) $event->getValue('dat_additional_guests'),
-    array('helpTextIdLabel' => 'SYS_ALLOW_ADDITIONAL_GUESTS_DESC')
+    array('helpTextId' => 'SYS_ALLOW_ADDITIONAL_GUESTS_DESC')
 );
 $form->addInput(
     'dat_max_members',
     $gL10n->get('SYS_PARTICIPANTS_LIMIT'),
     (int) $event->getValue('dat_max_members'),
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'SYS_EVENT_MAX_MEMBERS')
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextId' => 'SYS_EVENT_MAX_MEMBERS')
 );
 $form->addInput(
     'event_deadline',
     $gL10n->get('SYS_DEADLINE'),
     $event->getValue('dat_deadline', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
-    array('type' => 'datetime', 'helpTextIdLabel' => 'SYS_EVENT_DEADLINE_DESC')
+    array('type' => 'datetime', 'helpTextId' => 'SYS_EVENT_DEADLINE_DESC')
 );
 $form->addCheckbox('event_right_list_view', $gL10n->get('SYS_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
 $form->addCheckbox('event_right_send_mail', $gL10n->get('SYS_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);

@@ -273,7 +273,7 @@ while ($user = $userStatement->fetch()) {
         $icon = 'fa-user-times';
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
     }
-    $arrContent[] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
+    $arrContent[] = '<i class="fas ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // set flag if user is member of the current organization or not
     if ($user['member_this_role']) {
@@ -312,7 +312,7 @@ while ($user = $userStatement->fetch()) {
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
         if ($addressText !== '') {
-            $arrContent[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
+            $arrContent[] = '<i class="fas fa-map-marker-alt" data-bs-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
         } else {
             $arrContent[] = '&nbsp;';
         }

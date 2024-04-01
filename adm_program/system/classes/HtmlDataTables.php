@@ -132,21 +132,6 @@ class HtmlDataTables
             $this->datatablesInitParameters[] = '"processing": true';
             $this->datatablesInitParameters[] = '"serverSide": true';
             $this->datatablesInitParameters[] = '"ajax": "'.$this->serverSideFile.'"';
-
-            // add a callback function to link openPopup to the modal window. This will be used
-            // e.g. for the delete button or other things that need a modal window.
-            $this->datatablesInitParameters[] = '
-                "fnDrawCallback": function( oSettings ) {
-                    $(".openPopup").on("click",function(){
-                        $(".modal-dialog").attr("class", "modal-dialog " + $(this).attr("data-class"));
-                        $(".modal-content").load($(this).attr("data-href"),function(){
-                            $("#admidio-modal").modal({
-                                show:true
-                            });
-                        });
-                    });
-                }
-            ';
         }
 
         $javascriptGroup = '';

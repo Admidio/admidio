@@ -27,11 +27,11 @@ function smarty_function_load_admidio_plugin(array $params, Smarty_Internal_Temp
     global $g_root_path, $gPreferences, $gCurrentOrgId, $gCurrentUserId;
 
     if (empty($params['plugin'])) {
-        throw new \UnexpectedValueException('Smarty funxtion load_admidio_plugin: missing "plugin" parameter');
+        throw new \UnexpectedValueException('Smarty function load_admidio_plugin: missing "plugin" parameter');
     }
 
     if (empty($params['file'])) {
-        throw new \UnexpectedValueException('Smarty funxtion load_admidio_plugin: missing "file" parameter');
+        throw new \UnexpectedValueException('Smarty function load_admidio_plugin: missing "file" parameter');
     }
 
     $filename = ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $params['plugin'] . '/' . $params['file'];

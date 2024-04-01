@@ -104,7 +104,7 @@ $participationForm = new HtmlForm(
 $participationForm->addHtml('
     <div class="modal-header">
         <h3 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h3>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
         <h5>' .$event->getValue('dat_headline'). ': ' .$event->getDateTimePeriod(). '</h5>

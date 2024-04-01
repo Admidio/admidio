@@ -194,12 +194,12 @@ if ($getMode === 'choose') {
     $form->addFileUpload(
         'foto_upload_file',
         $gL10n->get('SYS_SELECT_PHOTO'),
-        array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help')
+        array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextId' => 'profile_photo_up_help')
     );
     $form->addSubmitButton(
         'btn_upload',
         $gL10n->get('SYS_UPLOAD_PROFILE_PICTURE'),
-        array('icon' => 'fa-upload', 'class' => ' offset-sm-3')
+        array('icon' => 'fa-upload')
     );
 
     // add form to html page and show page
@@ -283,7 +283,7 @@ if ($getMode === 'choose') {
     $form->addCustomContent($gL10n->get('SYS_CURRENT_PROFILE_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('SYS_CURRENT_PROFILE_PICTURE').'" />');
     $form->addCustomContent($gL10n->get('SYS_NEW_PROFILE_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)).'" alt="'.$gL10n->get('SYS_NEW_PROFILE_PICTURE').'" />');
     $form->addLine();
-    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'fa-upload', 'class' => ' offset-sm-3'));
+    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'fa-upload'));
 
     // add form to html page and show page
     $page->addHtml($form->show());

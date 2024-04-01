@@ -197,7 +197,6 @@ abstract class HtmlElement extends Smarty
         $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
         $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
-
     }
 
     /**

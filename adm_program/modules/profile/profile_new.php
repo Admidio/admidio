@@ -182,7 +182,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'usr_login_name',
                     $gL10n->get('SYS_USERNAME'),
                     $user->getValue('usr_login_name'),
-                    array('maxLength' => 254, 'property' => $fieldProperty, 'helpTextIdLabel' => 'SYS_USERNAME_DESCRIPTION', 'class' => 'form-control-small')
+                    array('maxLength' => 254, 'property' => $fieldProperty, 'helpTextId' => 'SYS_USERNAME_DESCRIPTION', 'class' => 'form-control-small')
                 );
 
                 if ($getNewUser === 2) {
@@ -196,7 +196,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                             'property'         => HtmlForm::FIELD_REQUIRED,
                             'minLength'        => PASSWORD_MIN_LENGTH,
                             'passwordStrength' => true,
-                            'helpTextIdLabel'  => 'SYS_PASSWORD_DESCRIPTION',
+                            'helpTextId'  => 'SYS_PASSWORD_DESCRIPTION',
                             'class'            => 'form-control-small'
                         )
                     );
@@ -232,7 +232,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
         $helpId        = '';
         $usfNameIntern = $field->getValue('usf_name_intern');
-        $helpTextMode  = 'helpTextIdLabel';
+        $helpTextMode  = 'helpTextId';
 
         if ($gProfileFields->getProperty($usfNameIntern, 'usf_disabled') == 1
         && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 0) {
@@ -250,7 +250,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         }
 
         if ($gProfileFields->getProperty($usfNameIntern, 'usf_description_inline')) {
-            $helpTextMode  = 'helpTextIdInline';
+            $helpTextMode  = 'helpTextId';
         }
 
         // code for different field types

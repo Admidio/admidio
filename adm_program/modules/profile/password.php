@@ -161,7 +161,7 @@ if ($getMode === 'change') {
 
     <div class="modal-header">
         <h3 class="modal-title">'.$gL10n->get('SYS_EDIT_PASSWORD').'</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">';
     // show form
@@ -186,7 +186,7 @@ if ($getMode === 'change') {
                 'minLength'        => PASSWORD_MIN_LENGTH,
                 'passwordStrength' => true,
                 'passwordUserData' => $user->getPasswordUserData(),
-                'helpTextIdInline' => 'SYS_PASSWORD_DESCRIPTION'
+                'helpTextId' => 'SYS_PASSWORD_DESCRIPTION'
             )
     );
     $form->addInput(
@@ -198,7 +198,7 @@ if ($getMode === 'change') {
     $form->addSubmitButton(
         'btn_save',
         $gL10n->get('SYS_SAVE'),
-        array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+        array('icon' => 'fa-check')
     );
     echo $form->show();
     echo '</div>';

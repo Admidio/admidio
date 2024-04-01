@@ -151,7 +151,7 @@ class HtmlForm extends Smarty
         } elseif ($this->type === 'vertical') {
             $optionsAll['class'] .= ' admidio-form-vertical form-dialog';
         } elseif ($this->type === 'navbar') {
-            $optionsAll['class'] .= ' form-inline ';
+            $optionsAll['class'] .= ' d-lg-flex ';
         }
 
         if ($optionsAll['class'] !== '') {
@@ -218,7 +218,7 @@ class HtmlForm extends Smarty
         ++$this->countElements;
 
         if(strstr($attributes['class'], ' btn ') === false) {
-            $attributes['class'] = "btn btn-secondary " . $optionsAll['class'];
+            $attributes['class'] = "btn btn-primary " . $optionsAll['class'];
 
             if ($this->type !== 'navbar') {
                 $attributes['class'] .= '  admidio-margin-bottom';
@@ -242,7 +242,7 @@ class HtmlForm extends Smarty
     {
         global $gL10n;
 
-        $attributes = array('class' => 'captcha');
+        $attributes = array();
         ++$this->countElements;
 
         // set specific css class for this field
@@ -256,7 +256,7 @@ class HtmlForm extends Smarty
             $id,
             $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'),
             '',
-            array('property' => self::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_CAPTCHA_DESCRIPTION', 'class' => 'form-control-small')
+            array('property' => self::FIELD_REQUIRED, 'helpTextId' => 'SYS_CAPTCHA_DESCRIPTION', 'class' => 'form-control-small')
         );
 
     }
@@ -272,15 +272,10 @@ class HtmlForm extends Smarty
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
@@ -296,8 +291,7 @@ class HtmlForm extends Smarty
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
             'property'         => self::FIELD_DEFAULT,
-            'helpTextIdLabel'  => '',
-            'helpTextIdInline' => '',
+            'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
             'alertWarning'     => '',
@@ -342,15 +336,10 @@ class HtmlForm extends Smarty
      * @param string $content A simple Text or html that would be placed instead of a form element.
      * @param array $options (optional) An array with the following possible entries:
      *                        - **referenceId** : Optional the id of a form control if this is defined within the custom content
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
@@ -364,8 +353,7 @@ class HtmlForm extends Smarty
         $optionsDefault = array('formtype' => $this->type,
             'property'         => '',
             'referenceId'      => '',
-            'helpTextIdLabel'  => '',
-            'helpTextIdInline' => '',
+            'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
             'label'            => $label,
@@ -399,15 +387,10 @@ class HtmlForm extends Smarty
      *                        - **height** : Optional set the height in pixel of the editor. The default will be 300.
      *                        - **labelVertical** : If set to **true** (default) then the label will be display above the control and the control get a width of 100%.
      *                          Otherwise, the label will be displayed in front of the control.
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -427,8 +410,7 @@ class HtmlForm extends Smarty
             'toolbar'          => 'AdmidioDefault',
             'height'           => '300',
             'alertWarning'     => '',
-            'helpTextIdLabel'  => '',
-            'helpTextIdInline' => '',
+            'helpTextId'       => '',
             'labelVertical'    => true,
             'icon'             => '',
             'class'            => '',
@@ -500,15 +482,10 @@ class HtmlForm extends Smarty
      *                        - **multiUploadLabel** : The label for the button who will add new upload fields to the form.
      *                        - **hideUploadField** : Hide the upload field if multi uploads are enabled. Then the first
      *                          upload field will be shown if the user will click the multi upload button.
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -516,7 +493,7 @@ class HtmlForm extends Smarty
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
-        $attributes = array('class' => 'form-control');
+        $attributes = array('class' => 'form-control mb-2');
         ++$this->countElements;
 
         // create array with all options
@@ -527,8 +504,7 @@ class HtmlForm extends Smarty
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
             'multiUploadLabel'   => '',
-            'helpTextIdLabel'    => '',
-            'helpTextIdInline'   => '',
+            'helpTextId'         => '',
             'icon'               => '',
             'class'              => '',
             'id'                 => $id,
@@ -615,15 +591,10 @@ class HtmlForm extends Smarty
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
      *                          + **self::FIELD_HIDDEN**   : The field will not be shown. Useful to transport additional information.
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
@@ -656,8 +627,7 @@ class HtmlForm extends Smarty
             'property'         => self::FIELD_DEFAULT,
             'passwordStrength' => false,
             'passwordUserData' => array(),
-            'helpTextIdLabel'  => '',
-            'helpTextIdInline' => '',
+            'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
             'htmlAfter'        => '',
@@ -665,7 +635,7 @@ class HtmlForm extends Smarty
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $optionsAll['helpTextIdInline'] = self::getHelpText($optionsAll['helpTextIdInline']);
+        $optionsAll['helpTextId'] = self::getHelpText($optionsAll['helpTextId']);
 
         $attributes['placeholder'] = $optionsAll['placeholder'];
 
@@ -847,15 +817,10 @@ class HtmlForm extends Smarty
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -870,8 +835,7 @@ class HtmlForm extends Smarty
         $optionsDefault = array('formtype' => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'maxLength'        => 0,
-            'helpTextIdLabel'  => '',
-            'helpTextIdInline' => '',
+            'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
             'id'               => $id,
@@ -952,15 +916,10 @@ class HtmlForm extends Smarty
      *                        - **defaultValue** : This is the value of that radio button that is preselected.
      *                        - **showNoValueButton** : If set to true than one radio with no value will be set in front of the other array.
      *                          This could be used if the user should also be able to set no radio to value.
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
@@ -978,8 +937,7 @@ class HtmlForm extends Smarty
             'property'          => self::FIELD_DEFAULT,
             'defaultValue'      => '',
             'showNoValueButton' => false,
-            'helpTextIdLabel'   => '',
-            'helpTextIdInline'  => '',
+            'helpTextId'        => '',
             'icon'              => '',
             'class'             => '',
             'id'                => $id,
@@ -1047,15 +1005,10 @@ class HtmlForm extends Smarty
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                          onother array with the combination of attributes name and attributes value.
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
@@ -1069,7 +1022,7 @@ class HtmlForm extends Smarty
         global $gL10n;
 
         ++$this->countElements;
-        $attributes = array('class' => 'form-control');
+        $attributes = array('class' => 'form-select');
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -1084,8 +1037,7 @@ class HtmlForm extends Smarty
             'maximumSelectionNumber'         => 0,
             'valueAttributes'                => '',
             'alertWarning'                   => '',
-            'helpTextIdLabel'                => '',
-            'helpTextIdInline'               => '',
+            'helpTextId'                     => '',
             'icon'                           => '',
             'class'                          => '',
             'id'                             => $id,
@@ -1261,15 +1213,10 @@ class HtmlForm extends Smarty
      *                                 of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                               - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                                 another array with the combination of attributes name and attributes value.
-     *                               - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                                 e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                                 the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                                 for the text you can add an array. The first entry must be the unique text id and the second
-     *                                 entry will be a parameter of the text id.
-     *                               - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                                 e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                                 If you need an additional parameter for the text you can add an array. The first entry must
-     *                                 be the unique text id and the second entry will be a parameter of the text id.
+     *                               - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                                 e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                                 If you need an additional parameter for the text you can add an array. The first entry
+     *                                 must be the unique text id and the second entry will be a parameter of the text id.
      *                               - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                                 will be the text of the alertbox
      *                               - **icon** : An icon can be set. This will be placed in front of the label.
@@ -1345,15 +1292,10 @@ class HtmlForm extends Smarty
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                          another array with the combination of attributes name and attributes value.
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
@@ -1415,15 +1357,10 @@ class HtmlForm extends Smarty
      *.                                - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as
      *                                   option value and not the key of the array
      *                                 - **showSystemCategory** : Show user defined and system categories
-     *                                 - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                                   e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                                   the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                                   for the text you can add an array. The first entry must be the unique text id and the second
-     *                                   entry will be a parameter of the text id.
-     *                                 - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                                   e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                                   If you need an additional parameter for the text you can add an array. The first entry must
-     *                                   be the unique text id and the second entry will be a parameter of the text id.
+     *                                 - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                                   e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                                   If you need an additional parameter for the text you can add an array. The first entry
+     *                                   must be the unique text id and the second entry will be a parameter of the text id.
      *                                 - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                                   will be the text of the alertbox
      *                                 - **icon** : An icon can be set. This will be placed in front of the label.
@@ -1445,8 +1382,7 @@ class HtmlForm extends Smarty
             'multiselect'                    => false,
             'showSystemCategory'             => true,
             'alertWarning'                   => '',
-            'helpTextIdLabel'                => '',
-            'helpTextIdInline'               => '',
+            'helpTextId'                     => '',
             'icon'                           => '',
             'class'                          => ''
         );
@@ -1579,15 +1515,10 @@ class HtmlForm extends Smarty
      * @param string $label The label of the static control.
      * @param string $value A value of the static control. The control will be created with this value.
      * @param array $options (optional) An array with the following possible entries:
-     *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
-     *                          the user can see the text if he hovers over the icon. If you need an additional parameter
-     *                          for the text you can add an array. The first entry must be the unique text id and the second
-     *                          entry will be a parameter of the text id.
-     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
      *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
@@ -1604,8 +1535,7 @@ class HtmlForm extends Smarty
         $optionsDefault = array(
             'formtype'         => $this->type,
             'property'         => '',
-            'helpTextIdLabel'  => '',
-            'helpTextIdInline' => '',
+            'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
             'id'               => $id,
@@ -1701,9 +1631,9 @@ class HtmlForm extends Smarty
                 $text  = $string;
             }
 
-            $html = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
-            data-html="true" data-trigger="hover click" data-placement="auto"
-            title="' . $gL10n->get($title) . '" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
+            $html = '<i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
+            data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+            title="' . $gL10n->get($title) . '" data-bs-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
         }
         return $html;
     }
@@ -1781,6 +1711,7 @@ class HtmlForm extends Smarty
             $this->assign($key, $assign);
         }
         $this->assign('ADMIDIO_URL', ADMIDIO_URL);
+        $this->assign('formtype', $this->type);
         $this->assign('data', $assigns);
 
         $this->assign('l10n', $gL10n);

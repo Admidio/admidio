@@ -125,7 +125,7 @@ $form->addSelectBox(
         'property'                       => HtmlForm::FIELD_REQUIRED,
         'defaultValue'                   => $parentAlbumUuid,
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => $gL10n->get('SYS_PARENT_ALBUM_DESC', array('SYS_PHOTO_ALBUMS'))
+        'helpTextId'                => $gL10n->get('SYS_PARENT_ALBUM_DESC', array('SYS_PHOTO_ALBUMS'))
     )
 );
 $form->addInput(
@@ -157,10 +157,10 @@ $form->addCheckbox(
     'pho_locked',
     $gL10n->get('SYS_LOCK_ALBUM'),
     (bool) $photoAlbum->getValue('pho_locked'),
-    array('helpTextIdLabel' => 'SYS_LOCK_ALBUM_DESC')
+    array('helpTextId' => 'SYS_LOCK_ALBUM_DESC')
 );
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $photoAlbum->getValue('pho_usr_id_create'),
     $photoAlbum->getValue('pho_timestamp_create'),

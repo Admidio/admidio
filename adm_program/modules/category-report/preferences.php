@@ -232,7 +232,7 @@ foreach ($config as $key => $value) {
         		</tbody>
     		</table>
     	</div>';
-    $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html, array('helpTextIdLabel' => 'SYS_COLUMN_SELECTION_DESC'));
+    $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html, array('helpTextId' => 'SYS_COLUMN_SELECTION_DESC'));
 
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM ' . TBL_CATEGORIES . ' , ' . TBL_ROLES . '
@@ -240,7 +240,7 @@ foreach ($config as $key => $value) {
                AND ( cat_org_id = ' . $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
     $formConfigurations->addSelectBoxFromSql('selection_role' . $key, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,
-        array('defaultValue' => explode(',', (string)$value['selection_role']), 'multiselect' => true, 'helpTextIdLabel' => 'SYS_ROLE_SELECTION_CONF_DESC'));
+        array('defaultValue' => explode(',', (string)$value['selection_role']), 'multiselect' => true, 'helpTextId' => 'SYS_ROLE_SELECTION_CONF_DESC'));
 
     $sql = 'SELECT cat_id, cat_name
               FROM ' . TBL_CATEGORIES . ' , ' . TBL_ROLES . '
@@ -248,8 +248,8 @@ foreach ($config as $key => $value) {
                AND ( cat_org_id = ' . $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
     $formConfigurations->addSelectBoxFromSql('selection_cat' . $key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
-        array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
-    $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
+        array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextId' => 'SYS_CAT_SELECTION_CONF_DESC'));
+    $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
     $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => HtmlForm::FIELD_HIDDEN));
     $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => HtmlForm::FIELD_HIDDEN));
     $html = '<a id="copy_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('copy' => $key + 1)) . '">
@@ -271,8 +271,8 @@ $html = '<a id="add_config" class="icon-text-link" href="' . SecurityUtils::enco
 $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
                 <i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '
             </div>';
-$formConfigurations->addCustomContent('', $html, array('helpTextIdInline' => $htmlDesc));
-$formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
+$formConfigurations->addCustomContent('', $html, array('helpTextId' => $htmlDesc));
+$formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 
 $page->addHtml($formConfigurations->show());
 

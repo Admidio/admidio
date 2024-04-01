@@ -16,7 +16,7 @@
                     {if $similarUser.data->getValue('EMAIL') ne ''}
                         <a href="{$similarUser.emailUrl}">{$similarUser.data->getValue('EMAIL')}</a><br />
                     {/if}
-                    {if array_key_exists('button', $similarUser)}
+                    {if {array_key_exists array=$similarUser key='button'}}
                         <br />
                         <p>{$similarUser.button.description}</p>
                         <button class="btn btn-primary" onclick="window.location.href='{$similarUser.button.url}'">

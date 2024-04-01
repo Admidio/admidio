@@ -68,10 +68,10 @@ $form->addCheckbox(
     'urt_edit_user',
     $gL10n->get('SYS_EDIT_USER_IN_RELATION'),
     (bool) $relationType1->getValue('urt_edit_user'),
-    array('helpTextIdLabel' => 'SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC')
+    array('helpTextId' => 'SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC')
 );
 
-$options = array('defaultValue' => $relationType1->getRelationTypeString(), 'helpTextIdLabel' => 'SYS_RELATIONSHIP_TYPE_DESC');
+$options = array('defaultValue' => $relationType1->getRelationTypeString(), 'helpTextId' => 'SYS_RELATIONSHIP_TYPE_DESC');
 if (!$relationType1->isNewRecord()) {
     $options['property'] = HtmlForm::FIELD_DISABLED;
 }
@@ -149,7 +149,7 @@ $form->addCheckbox(
     'urt_edit_user_inverse',
     $gL10n->get('SYS_EDIT_USER_IN_RELATION'),
     (bool) $relationType2->getValue('urt_edit_user'),
-    array('helpTextIdLabel' => 'SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC')
+    array('helpTextId' => 'SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC')
 );
 $form->closeGroupBox();
 

@@ -75,7 +75,7 @@ $form->addSelectBox(
 $form->addSubmitButton(
     'btn_move',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+    array('icon' => 'fa-check')
 );
 
 $documentsFiles->addHtml($form->show());

@@ -201,7 +201,7 @@ if ($getMode === 'assign') {
         $sqlData,
         array('defaultValue' => $getFilterRoleUuid, 'firstEntry' => $gL10n->get('SYS_ALL'))
     );
-    $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), false, array('helpTextIdLabel' => 'SYS_SHOW_ALL_DESC'));
+    $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), false, array('helpTextId' => 'SYS_SHOW_ALL_DESC'));
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
 
@@ -231,7 +231,7 @@ if ($getMode === 'assign') {
 
     // create array with all column heading values
     $columnHeading = array(
-        '<i class="fas fa-user" data-toggle="tooltip" title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"></i>',
+        '<i class="fas fa-user" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"></i>',
         $gL10n->get('SYS_MEMBER'));
     $columnAlignment = array('left', 'left');
 
@@ -247,7 +247,7 @@ if ($getMode === 'assign') {
     || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
-        $columnHeading[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_ADDRESS').'"></i>';
+        $columnHeading[] = '<i class="fas fa-map-marker-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ADDRESS').'"></i>';
         $columnAlignment[] = 'left';
     }
     if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers())) {

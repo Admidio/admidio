@@ -162,7 +162,7 @@ class Image
                 }
 
                 if ($text !== '') {
-                    return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
+                    return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-bs-toggle="tooltip" title="' . $text . '"></i>';
                 } else {
                     return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw"></i>';
                 }
@@ -171,7 +171,7 @@ class Image
             if (self::isImageFilename($icon)) {
                 // A full URL of an icon
                 if (StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false) {
-                    return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+                    return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-bs-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
                 }
 
                 try {
@@ -179,7 +179,7 @@ class Image
                     if (StringUtils::strIsValidFileName($icon)) {
                         $iconPath = THEME_URL . '/images/' . $icon;
 
-                        return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+                        return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-bs-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
                     }
                 } catch (AdmException $e) {
                     // Do nothing here

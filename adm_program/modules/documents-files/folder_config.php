@@ -35,8 +35,8 @@ if (!$gCurrentUser->adminDocumentsFiles()) {
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 $rolesViewRightParentFolder = array();
-$sqlRolesViewRight          = '';
-$sqlRolesUploadRight        = '';
+$sqlRolesViewRight = '';
+$sqlRolesUploadRight = '';
 
 try {
     // get recordset of current folder from database
@@ -46,7 +46,7 @@ try {
     // read parent folder
     if ($folder->getValue('fol_fol_id_parent')) {
         // get recordset of parent folder from database
-        $parentFolder = new TableFolder($gDb, (int) $folder->getValue('fol_fol_id_parent'));
+        $parentFolder = new TableFolder($gDb, (int)$folder->getValue('fol_fol_id_parent'));
         $parentFolder->getFolderForDownload($parentFolder->getValue('fol_uuid'));
 
         // get assigned roles of the parent folder
@@ -62,24 +62,24 @@ try {
 
 // if parent folder has access for all roles then read all roles from database
 $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
-                   FROM '.TBL_ROLES.'
-             INNER JOIN '.TBL_CATEGORIES.'
+                   FROM ' . TBL_ROLES . '
+             INNER JOIN ' . TBL_CATEGORIES . '
                      ON cat_id = rol_cat_id
                   WHERE rol_valid  = true
                     AND rol_system = false
-                        '.$sqlRolesViewRight.'
+                        ' . $sqlRolesViewRight . '
                     AND cat_org_id = ? -- $gCurrentOrgId
                     AND cat_name_intern <> \'EVENTS\'
                ORDER BY cat_sequence, rol_name';
 $sqlDataView = array(
-    'query'  => $sqlViewRoles,
+    'query' => $sqlViewRoles,
     'params' => array_merge($rolesViewRightParentFolder, array($gCurrentOrgId))
 );
 
 $firstEntryViewRoles = '';
 
 if (count($rolesViewRightParentFolder) === 0) {
-    $firstEntryViewRoles = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
+    $firstEntryViewRoles = array('0', $gL10n->get('SYS_ALL') . ' (' . $gL10n->get('SYS_ALSO_VISITORS') . ')', null);
 }
 
 // get assigned roles of this folder
@@ -100,8 +100,8 @@ if (count($roleUploadSet) === 0) {
 
 // read all download module administrator roles
 $sqlAdminRoles = 'SELECT rol_name
-                    FROM '.TBL_ROLES.'
-              INNER JOIN '.TBL_CATEGORIES.'
+                    FROM ' . TBL_ROLES . '
+              INNER JOIN ' . TBL_CATEGORIES . '
                       ON cat_id = rol_cat_id
                    WHERE rol_valid    = true
                      AND rol_documents_files = true
@@ -117,20 +117,20 @@ while ($row = $statementAdminRoles->fetch()) {
 // create html page object
 $page = new HtmlPage('admidio-documents-files-config-folder', $headline);
 
-$page->addHtml('<p class="lead admidio-max-with">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
+$page->addHtml('<p class="lead admidio-max-with">' . $gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))) . '</p>');
 
 // show form
-$form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '7', 'folder_uuid' => $getFolderUuid)), $page);
+$form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => '7', 'folder_uuid' => $getFolderUuid)), $page);
 $form->addSelectBoxFromSql(
     'adm_roles_view_right',
     $gL10n->get('SYS_VISIBLE_FOR'),
     $gDb,
     $sqlDataView,
     array(
-        'property'     => HtmlForm::FIELD_REQUIRED,
+        'property' => HtmlForm::FIELD_REQUIRED,
         'defaultValue' => $roleViewSet,
-        'multiselect'  => true,
-        'firstEntry'   => $firstEntryViewRoles
+        'multiselect' => true,
+        'firstEntry' => $firstEntryViewRoles
     )
 );
 $form->addSelectBoxFromSql(
@@ -139,22 +139,22 @@ $form->addSelectBoxFromSql(
     $gDb,
     $sqlDataView,
     array(
-        'property'     => HtmlForm::FIELD_REQUIRED,
+        'property' => HtmlForm::FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,
-        'multiselect'  => true,
-        'placeholder'  => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
+        'multiselect' => true,
+        'placeholder' => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
     )
 );
-$form->addStaticControl(
+$form->addInput(
     'adm_administrators',
     $gL10n->get('SYS_ADMINISTRATORS'),
     implode(', ', $adminRoles),
-    array('helpTextIdLabel' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
+    array('property' => HtmlForm::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
 );
 $form->addSubmitButton(
     'btn_save',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+    array('icon' => 'fa-check')
 );
 
 // add form to html page and show page

@@ -9,15 +9,35 @@
  *
  *****************************************************************************/
 
+:root {
+    --admidio-header-font-color: #ffffff;
+    --admidio-header-link-color: #263340;
+    --admidio-header-link-color-hover: #000000;
+    --admidio-menu-bg-color-hover: #3d5266;
+    --admidio-menu-font-color-hover: #ffffff;
+    --bs-primary: #349aaa;
+    --bs-primary-rgb: 52, 154, 170;
+    --bs-secondary: #263340;
+    --bs-secondary-rgb: 38, 51, 64;
+    --bs-tertiary: #e9ecef;
+    --bs-tertiary-rgb: 233, 236, 269;
+    --bs-body-color: #263340;
+    --bs-body-bg: #ffffff;
+    --bs-link-color: #349aaa;
+    --bs-link-color-rgb: 52, 154, 170;
+    --bs-link-hover-color: #4fb8c9;
+    --bs-link-hover-color-rgb: 79, 184, 201;
+}
+
 #admidio-main-navbar {
-    background-color: #349aaa;
+    background-color: var(--bs-primary);
     min-height: 4rem;
     position: sticky;
     padding-bottom: 0;
 }
 
 #admidio-main-navbar {
-    color: #ffffff;
+    color: var(--admidio-header-font-color);
     font-weight: bold;
     font-size: 1.7rem;
     padding-top: 0;
@@ -28,12 +48,12 @@
 }
 
 #admidio-main-navbar a {
-    color: #263340;
+    color: var(--admidio-header-link-color);
     font-size: 1rem
 }
 
 #admidio-main-navbar a:hover {
-    color: #000000;
+    color: var(--admidio-header-link-color-hover);
 }
 
 @media (max-width: 767px)
@@ -61,7 +81,7 @@
 /***********************************/
 .admidio-sidebar {
     padding: 0;
-    background-color: #263340;
+    background-color: var(--bs-secondary);
     overflow-y: auto;
 }
 
@@ -72,7 +92,7 @@
 .admidio-headline-mobile-menu {
     width: 100%;
     font-size: 1.1rem;
-    color: #eeeeee;
+    color: var(--bs-secondary);
     letter-spacing: 2px;
 }
 
@@ -85,16 +105,12 @@
 }
 
 .admidio-menu-list a {
-    color: #dddddd;
-}
-
-.admidio-menu-list .dropdown-item {
-    color: #263340;
+    color: var(--bs-tertiary);
 }
 
 .admidio-menu-list a:hover {
-    color: #ffffff;
-    background-color: #324b64;
+    color: var(--admidio-menu-font-color-hover);
+    background-color: var(--admidio-menu-bg-color-hover);
 }
 
 @media (min-width: 768px)
@@ -131,6 +147,7 @@
 .admidio-menu-function-node .nav-link {
     margin-right: 25px;
     margin-top: 15px;
+    background-color: var(--bs-link-color);
 }
 
 @media (max-width: 767px) {
@@ -144,34 +161,22 @@
 /* Default tags */
 /***********************************/
 
-body {
-    color: #263340;
+a {
+    text-decoration: none;
 }
 
-a, .btn-link, .page-link, a.btn {
-    color: #349aaa;
-}
-
-a:hover, .page-link:hover, a.btn:hover {
-    color: #25717d;
-}
-
-a.btn-primary, .btn-secondary {
-    color: #f7f7f7 !important;
-}
-
-a.btn-primary:hover, .btn-secondary:hover {
-    color: #ffffff !important;
+.btn, .btn:hover {
+    color: var(--bs-body-bg);
 }
 
 .btn-primary {
-    background-color: #349aaa;
-    border-color: #349aaa;
+    background-color: var(--bs-link-color);
+    border-color: var(--bs-link-color);
 }
 
 .btn-primary:hover {
-    background-color: #25717d;
-    border-color: #25717d;
+    background-color: var(--bs-link-hover-color);
+    border-color: var(--bs-link-hover-color);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -182,7 +187,7 @@ a.btn-primary:hover, .btn-secondary:hover {
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
-.navbar-filter, .table-responsive, .admidio-content-header,
+.navbar-filter, .table-responsive, .admidio-menu-function-node,
 .dataTables_wrapper, .admidio-margin-bottom, .admidio-content-subheader,
 .tab-content {
     margin-bottom: 40px;
@@ -207,10 +212,6 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     padding-right: 15px;
 }
 
-.btn-group-vertical {
-    display: block;
-}
-
 .alert-info {
     background-color: #abd7e0;
 }
@@ -232,8 +233,8 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 /***********************************/
 /* Mark mandatory fields */
 /***********************************/
-.admidio-form-group-required .control-label:after,
-.admidio-form-group-required .checkbox label:after,
+.admidio-form-group-required .form-label:after,
+.admidio-form-group-required .form-check-label:after,
 .admidio-form-required-notice span:after {
     font-family: "Font Awesome 5 Free", serif;
     font-size: 6pt;
@@ -270,11 +271,7 @@ input[type=checkbox]:focus, button:focus {
 }
 
 .btn-primary:focus {
-    background-color: #25717d !important;
-}
-
-input[type=checkbox] {
-    margin-right: 10px;
+    background-color: var(--bs-link-hover-color) !important;
 }
 
 label {
@@ -282,51 +279,13 @@ label {
 }
 
 @media (min-width: 768px) {
-    .offset-sm-3.btn {
-        margin-left: 25.5%;
-    }
-
     .form-control-small {
         width: 50%;
     }
 }
 
-.form-inline div {
-    padding-right: 15px;
-}
-
-.form-inline label {
-    padding-right: 5px;
-}
-
 .form-control-static {
     margin-bottom: 0;
-}
-
-.radio-inline {
-    margin-right: 15px;
-}
-
-input[type=date] {
-    width: 200px;
-}
-
-input[type=time] {
-    width: 100px;
-}
-
-.datetime-date-control {
-    display: inline-block;
-}
-
-.datetime-time-control {
-    display: inline-block;
-    width: 110px !important;
-    margin-left: 20px;
-}
-
-.dropdown-menu .btn {
-    text-align: left;
 }
 
 /***********************************/
@@ -341,7 +300,7 @@ input[type=time] {
 .admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
 .admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
     border: none;
-    background-color: #eeeeee;
+    background-color: var(--bs-tertiary);
 }
 
 .card-header {
@@ -353,11 +312,7 @@ input[type=time] {
     margin-right: 10px;
 }
 
-.card-header .float-right .fas {
-    margin-right: 0;
-}
-
-.card-header .dropdown .fas, .card-header .dropdown .fab {
+.card-header .float-end .fas {
     margin-right: 0;
 }
 
@@ -367,7 +322,7 @@ input[type=time] {
 
 .admidio-field-group .list-group-item {
     border: none;
-    background-color: #eeeeee;
+    background-color: var(--bs-tertiary);
     padding: 0 0 1rem 0;
 }
 
@@ -382,7 +337,7 @@ input[type=time] {
 
 .card-body .list-group-item {
     padding-left: 0;
-    background-color: #eeeeee;
+    background-color: var(--bs-tertiary);
 }
 
 .card-footer .admidio-info-created-edited {
@@ -410,7 +365,7 @@ input[type=time] {
 
 .admidio-card {
     border: none;
-    background-color: #eeeeee;
+    background-color: var(--bs-tertiary);
     margin-top: 15px;
     margin-bottom: 15px;
     height: 95%;
@@ -419,54 +374,55 @@ input[type=time] {
 .admidio-card li {
     padding-left: 0;
     padding-right: 0;
-    background-color: #eeeeee;
-}
-
-/***********************************/
-/* Nav-Bars */
-/***********************************/
-
-.navbar button {
-    margin-bottom: 0;
-}
-
-.navbar label {
-    margin-right: 10px;
-}
-
-.navbar-filter {
-    background-color: #eeeeee;
-}
-
-.navbar-filter .form-group {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    background-color: var(--bs-tertiary);
 }
 
 /***********************************/
 /* Accordion */
 /***********************************/
 
-.accordion .card-header:hover {
-    color: #eeeeee;
-    background-color: #263340;
-    cursor: pointer;
+.accordion {
+    --bs-accordion-bg: var(--bs-body-bg);
+    --bs-accordion-btn-color: var(--bs-link-color);
+    --bs-accordion-active-color: var(--bs-tertiary);
+    --bs-accordion-active-bg: var(--bs-secondary);
 }
 
-.accordion .card-header {
-    color: #349aaa;
+.accordion-button {
+    font-size: 1.3rem;
+}
+
+.accordion .fas, .accordion .fab {
+    margin-right: 5px;
+}
+
+/***********************************/
+/* Navbar */
+/***********************************/
+
+.navbar-filter {
+    background-color: var(--bs-tertiary);
+}
+
+.nav-tabs .nav-link {
+    background-color: var(--bs-tertiary);
+    font-weight: bold;
+}
+
+.navbar .form-floating.form-control-group {
+    margin-right: 10px;
 }
 
 /***********************************/
 /* Various settings */
 /***********************************/
 
-.admidio-opacity-reduced {
-    opacity: 0.4;
+.table td, .table th {
+    color: var(--bs-secondary);
 }
 
-.badge {
-    margin-left: 5px;
+.admidio-opacity-reduced {
+    opacity: 0.4;
 }
 
 .list-unstyled li {
@@ -481,23 +437,39 @@ input[type=time] {
     font-size: 80%;
 }
 
+.dropdown-item {
+    color: var(--bs-secondary);
+    background: var(--bs-body-bg);
+}
+
+.popover {
+    --bs-popover-bg: var(--bs-body-bg);
+    --bs-popover-header-bg: var(--bs-tertiary);
+}
+
+.tooltip {
+    --bs-tooltip-bg: var(--bs-secondary);
+}
+
+.breadcrumb {
+    --bs-breadcrumb-bg: var(--bs-tertiary);
+    --bs-breadcrumb-padding-y: 0.75rem;
+    --bs-breadcrumb-padding-x: 1rem;
+}
+
 .breadcrumb-item {
     display: block;
 }
 
-/* Style for popover */
-.popover-header {
-    color: white;
-    background-color: #263340;
-}
-
-.popover-body {
-    background-color: #eeeeee;
+.badge {
+    --bs-badge-padding-y: .25em;
+    --bs-badge-padding-x: .5em;
+    margin-left: 5px;
 }
 
 .page-item.active .page-link {
-    background-color: #263340;
-    border-color: #263340;
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
 }
 
 #imprint {
@@ -515,8 +487,13 @@ input[type=time] {
     cursor: help;
 }
 
-.admidio-event-highlight .card-header, tr.admidio-event-highlight {
-    background-color: #cccccc;
+.admidio-event-highlight .card-header {
+    background-color: var(--bs-secondary);
+    color: var(--bs-tertiary);
+}
+
+tr.admidio-event-highlight {
+    font-weight: bold;
 }
 
 .admidio-event-approval-state-attend .fas {
@@ -547,7 +524,7 @@ input[type=time] {
 #admidio-password-strength-minimum {
     position: absolute;
     border: 9px solid transparent;
-    border-left-color: #263340;
+    border-left-color: var(--bs-body-color);
     border-right-width: 0;
     margin-top: -5px;
 }
@@ -566,9 +543,9 @@ input[type=time] {
 }
 
 #plgCalendarTable td.plgCalendarToday {
-    background-color: #324b64;
+    background-color: var(--bs-body-color);
     border-radius: 5px;
-    color: white;
+    color: var(--bs-body-bg);
 }
 
 #plgCalendarTable td {

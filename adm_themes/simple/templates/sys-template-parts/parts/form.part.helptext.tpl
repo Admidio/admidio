@@ -1,10 +1,10 @@
-{if $helpTextIdInline}
-    {if is_array($helpTextIdInline)}
-        {$helpTextIdInline = $l10n->get($helpTextIdInline[0],$helpTextIdInline[1])}
+{if $helpTextId}
+    {if is_array($helpTextId)}
+        {$helpTextId = $l10n->get($helpTextId[0],$helpTextId[1])}
     {else}
-        {if Language::isTranslationStringId($helpTextIdInline)}
-            {$helpTextIdInline = $l10n->get($helpTextIdInline)}
+        {if {is_translation_string_id string=$helpTextId}}
+            {$helpTextId = $l10n->get($helpTextId)}
         {/if}
     {/if}
-    <div class="help-block">{$helpTextIdInline}</div>
+    <div class="form-text">{$helpTextId}</div>
 {/if}

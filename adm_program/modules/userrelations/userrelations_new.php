@@ -172,7 +172,7 @@ $form->addInput(
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
 );
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 
 // add form to html page and show page
 $page->addHtml($form->show());

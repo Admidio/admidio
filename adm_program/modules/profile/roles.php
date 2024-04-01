@@ -118,7 +118,7 @@ if ($getInline) {
 
     <div class="modal-header">
         <h3 class="modal-title">'.$headline.'</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">';
 } else {
@@ -294,20 +294,20 @@ while ($row = $statement->fetch()) {
 
     // show icon that leaders have no additional rights
     if ((int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_NO_RIGHTS) {
-        $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
+        $leaderRights .= '<i class="fas fa-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
                           <i class="fas fa-trash invisible"></i>';
     }
 
     // show icon with edit user right if leader has this right
     if ((int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_EDIT
     || (int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
-        $leaderRights .= '<i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_EDIT_MEMBERS').'"></i>';
+        $leaderRights .= '<i class="fas fa-user-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_EDIT_MEMBERS').'"></i>';
     }
 
     // show icon with assign role right if leader has this right
     if ((int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN
     || (int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
-        $leaderRights .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_ASSIGN_MEMBERS').'"></i>';
+        $leaderRights .= '<i class="fas fa-user-tie" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_ASSIGN_MEMBERS').'"></i>';
     }
 
     // show dummy icon if leader has not all rights

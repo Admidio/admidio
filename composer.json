@@ -28,7 +28,7 @@
         "ramsey/uuid": "^4.1",
         "smarty/smarty": "^4.0",
         "tecnickcom/tcpdf": "^6.2",
-        "twbs/bootstrap": "^4.6",
+        "twbs/bootstrap": "^5.3",
         "fortawesome/font-awesome": "^5.15"
     },
     "require-dev": {},

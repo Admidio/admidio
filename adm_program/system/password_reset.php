@@ -129,7 +129,7 @@ if ($getUserUuid !== '') {
                 'minLength'        => PASSWORD_MIN_LENGTH,
                 'passwordStrength' => true,
                 'passwordUserData' => $user->getPasswordUserData(),
-                'helpTextIdInline' => 'SYS_PASSWORD_DESCRIPTION'
+                'helpTextId' => 'SYS_PASSWORD_DESCRIPTION'
             )
         );
         $form->addInput(
@@ -141,7 +141,7 @@ if ($getUserUuid !== '') {
         $form->addSubmitButton(
             'btn_save',
             $gL10n->get('SYS_SAVE'),
-            array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+            array('icon' => 'fa-check')
         );
 
         $page->addHtml($form->show());

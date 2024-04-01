@@ -9,9 +9,27 @@
  *
  *****************************************************************************/
 
+:root {
+    --admidio-bg-color: #ffffff;
+    --admidio-light-color: #e9ecef;
+    --admidio-header-bg-color: #349aaa;
+    --admidio-header-font-color: #ffffff;
+    --admidio-header-link-color: #263340;
+    --admidio-header-link-color-hover: #000000;
+    --admidio-menu-bg-color: #263340;
+    --admidio-menu-bg-color-hover: #3d5266;
+    --admidio-menu-font-color: #dddddd;
+    --admidio-menu-font-color-hover: #ffffff;
+    --bs-body-color: #263340;
+    --bs-link-color: #349aaa;
+    --bs-link-color-rgb: 52, 154, 170;
+    --bs-link-hover-color: #4fb8c9;
+    --bs-link-hover-color-rgb: 79, 184, 201;
+}
+
 #installation-header {
-    background-color: #349aaa;
-    color: #ffffff;
+    background-color: var(--admidio-header-bg-color);
+    color: var(--admidio-header-font-color);
 }
 
 .admidio-area {
@@ -19,7 +37,7 @@
 }
 
 #installation-body .admidio-container {
-    background-color: #ffffff;
+    background-color: var(--admidio-header-font-color);
 }
 
 .admidio-container {
@@ -52,31 +70,18 @@
 /* Default tags */
 /***********************************/
 
-body {
-    color: #263340;
-    background-color: #eeeeee;
-}
-
-a, .btn-link, .page-link, a.btn {
-    color: #349aaa;
-}
-
-a:hover, .page-link:hover, a.btn:hover {
-    color: #25717d;
-}
-
-a.btn-primary {
-    color: #ffffff !important;
+.btn, .btn:hover {
+    color: var(--admidio-bg-color);
 }
 
 .btn-primary {
-    background-color: #349aaa;
-    border-color: #349aaa;
+    background-color: var(--bs-link-color);
+    border-color: var(--bs-link-color);
 }
 
 .btn-primary:hover {
-    background-color: #25717d;
-    border-color: #25717d;
+    background-color: var(--bs-link-hover-color);
+    border-color: var(--bs-link-hover-color);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -87,15 +92,16 @@ a.btn-primary {
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
-.navbar-filter, .table-responsive, .admidio-content-header,
-.dataTables_wrapper, .admidio-margin-bottom {
+.navbar-filter, .table-responsive, .admidio-menu-function-node,
+.dataTables_wrapper, .admidio-margin-bottom, .admidio-content-subheader,
+.tab-content {
     margin-bottom: 40px;
 }
 
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .fas, .btn .fas, .alert .fas,
 .admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"],
-label img, .form-control-static img {
+label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     margin-right: 5px;
 }
 
@@ -103,6 +109,7 @@ label img, .form-control-static img {
     margin-left: 0;
     padding-left: 0;
     text-align: left;
+    cursor: pointer;
 }
 
 .admidio-reduced {
@@ -110,12 +117,12 @@ label img, .form-control-static img {
     padding-right: 15px;
 }
 
-.btn-group-vertical {
-    display: block;
+.alert-info {
+    background-color: #abd7e0;
 }
 
 /* show vertical btn group in mobile view */
-@media (max-width: 767px)
+@media (max-width: 500px)
 {
     .btn-group {
         display: block;
@@ -131,7 +138,8 @@ label img, .form-control-static img {
 /***********************************/
 /* Mark mandatory fields */
 /***********************************/
-.admidio-form-group-required label:after,
+.admidio-form-group-required .form-label:after,
+.admidio-form-group-required .form-check-label:after,
 .admidio-form-required-notice span:after {
     font-family: "Font Awesome 5 Free", serif;
     font-size: 6pt;
@@ -149,74 +157,40 @@ label img, .form-control-static img {
     text-align: right;
     width: 100%;
     display: inline-block;
+    max-width: 1000px;
 }
 
 /***********************************/
 /* Forms */
 /***********************************/
 
-.form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection,
+form, .admidio-max-with {
+    max-width: 1000px;
+}
+
+.form-control:focus, .select2-container--bootstrap4.select2-container--focus .select2-selection,
 input[type=checkbox]:focus, button:focus {
-    border-color: #349aaa !important;
-    background-color: #d6ebee !important;
+    border-color: #349aaa;
+    background-color: #d6ebee;
     box-shadow: none !important;
 }
 
 .btn-primary:focus {
-    background-color: #25717d !important;
-}
-
-.btn-secondary {
-    margin-right: 25px;
-}
-
-input[type=checkbox] {
-    margin-right: 10px;
+    background-color: var(--bs-link-hover-color) !important;
 }
 
 label {
     font-weight: bold;
-    padding-right: 0 !important;
 }
 
 @media (min-width: 768px) {
-    .offset-sm-3.btn {
-        margin-left: 25.5%;
-    }
-
     .form-control-small {
         width: 50%;
     }
 }
 
-.form-inline div {
-    padding-right: 15px;
-}
-
-.form-inline label {
-    padding-right: 5px;
-}
-
-.radio-inline {
-    margin-right: 15px;
-}
-
-input[type=date] {
-    width: 200px;
-}
-
-.datetime-date-control {
-    display: inline-block;
-}
-
-.datetime-time-control {
-    display: inline-block;
-    width: 110px !important;
-    margin-left: 20px;
-}
-
-.dropdown-menu .btn {
-    text-align: left;
+.form-control-static {
+    margin-bottom: 0;
 }
 
 /***********************************/
@@ -225,12 +199,13 @@ input[type=date] {
 
 .admidio-blog, .admidio-field-group {
     border: none;
+    max-width: 1000px;
 }
 
 .admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
 .admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
     border: none;
-    background-color: #eeeeee;
+    background-color: var(--admidio-light-color);
 }
 
 .card-header {
@@ -242,7 +217,7 @@ input[type=date] {
     margin-right: 10px;
 }
 
-.card-header .float-right .fas {
+.card-header .float-end .fas {
     margin-right: 0;
 }
 
@@ -256,7 +231,7 @@ input[type=date] {
 
 .admidio-field-group .list-group-item {
     border: none;
-    background-color: #eeeeee;
+    background-color: var(--admidio-light-color);
     padding: 0 0 1rem 0;
 }
 
@@ -269,33 +244,82 @@ input[type=date] {
     margin-top: 0;
 }
 
+.card-body .list-group-item {
+    padding-left: 0;
+    background-color: var(--admidio-light-color);
+}
+
 .card-footer .admidio-info-created-edited {
     font-size: 100% !important;
 }
 
-/***********************************/
-/* Nav-Bars */
-/***********************************/
-
-.navbar button {
-    margin-bottom: 0;
+.admidio-blog-comment .card-header, .admidio-blog-comment .card-body, .admidio-blog-comment .card-footer {
+    background-color: #dddddd;
 }
 
-.navbar label {
-    margin-right: 10px;
+.admidio-blog-comment .card-header {
+    font-size: 120%;
+    padding-bottom: 0;
+}
+
+.admidio-blog-comment {
+    margin-bottom: 20px;
+}
+
+.admidio-blog .card-body > .btn {
+    margin-top: 20px;
+    display: block;
+    text-align: left;
+}
+
+.admidio-card {
+    border: none;
+    background-color: var(--admidio-light-color);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 95%;
+}
+
+.admidio-card li {
+    padding-left: 0;
+    padding-right: 0;
+    background-color: var(--admidio-light-color);
 }
 
 /***********************************/
 /* Accordion */
 /***********************************/
 
-.accordion .card-header:hover {
-    color: #eeeeee;
-    background-color: #263340;
+.accordion {
+    --bs-accordion-bg: var(--admidio-bg-color);
+    --bs-accordion-btn-color: var(--bs-link-color);
+    --bs-accordion-active-color: var(--admidio-menu-font-color);
+    --bs-accordion-active-bg: var(--admidio-menu-bg-color);
 }
 
-.accordion .card-header {
-    color: #349aaa;
+.accordion-button {
+    font-size: 1.3rem;
+}
+
+.accordion .fas, .accordion .fab {
+    margin-right: 5px;
+}
+
+/***********************************/
+/* Navbar */
+/***********************************/
+
+.navbar-filter {
+    background-color: var(--admidio-light-color);
+}
+
+.nav-tabs .nav-link {
+    background-color: var(--admidio-light-color);
+    font-weight: bold;
+}
+
+.navbar .form-floating.form-control-group {
+    margin-right: 10px;
 }
 
 /***********************************/
@@ -306,8 +330,8 @@ input[type=date] {
     opacity: 0.4;
 }
 
-.badge {
-    margin-left: 5px;
+.list-unstyled li {
+    padding-top: 7px;
 }
 
 .admidio-info-created {
@@ -318,19 +342,18 @@ input[type=date] {
     font-size: 80%;
 }
 
-/* Style for popover */
-.popover-header {
-    color: white;
-    background-color: #263340;
+.popover {
+    --bs-popover-bg: var(--admidio-bg-color);
+    --bs-popover-header-bg: var(--admidio-light-color);
 }
 
-.popover-body {
-    background-color: #eeeeee;
+.breadcrumb-item {
+    display: block;
 }
 
 .page-item.active .page-link {
-    background-color: #263340;
-    border-color: #263340;
+    background-color: var(--admidio-menu-bg-color);
+    border-color: var(--admidio-menu-bg-color);
 }
 
 #imprint {
@@ -344,6 +367,36 @@ input[type=date] {
     margin-left: 6px;
 }
 
+.admidio-profile-user-right {
+    cursor: help;
+}
+
+.admidio-event-highlight .card-header, tr.admidio-event-highlight {
+    background-color: var(--admidio-menu-bg-color);
+    color: var(--admidio-menu-font-color);
+}
+
+.admidio-event-approval-state-attend .fas {
+    color: #00b100 !important;
+}
+
+.admidio-event-approval-state-tentative .fas {
+    color: #9b009b !important;
+}
+
+.admidio-event-approval-state-cancel .fas {
+    color: #df2424 !important;
+}
+
+.admidio-album-thumbnail {
+    margin-bottom: 25px;
+}
+
+.admidio-img-presenter img {
+    max-width: 100%;
+    height: auto;
+}
+
 #admidio-password-strength {
     margin-top: 10px;
 }
@@ -351,11 +404,12 @@ input[type=date] {
 #admidio-password-strength-minimum {
     position: absolute;
     border: 9px solid transparent;
-    border-left-color: #263340;
+    border-left-color: var(--bs-body-color);
     border-right-width: 0;
-    margin-top: -7px;
+    margin-top: -5px;
 }
 
 .progress {
     background-color: #dddddd;
+    height: 20px !important;
 }

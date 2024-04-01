@@ -214,30 +214,32 @@ if ($countGuestbookEntries === 0) {
         if (strlen($gboHomepage) > 0) {
             $page->addHtml('
                     <a class="admidio-icon-link" href="'.$gboHomepage.'" target="_blank">
-                        <i class="fas fa-link" data-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
+                        <i class="fas fa-link" data-bs-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
         }
 
         // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
         if (strlen($gboEmail) > 0) {
             $page->addHtml('
                     <a class="admidio-icon-link" href="mailto:'.$gboEmail.'">
-                        <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
+                        <i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
         }
 
         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
         if ($gCurrentUser->editGuestbookRight()) {
             $page->addHtml('
-                    <div class="dropdown float-right">
-                        <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
+                    <div class="dropdown float-end">
+                        <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
                                 <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
+                            </li>
+                            <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
                                 'element_id' => 'gbo_'.$gboUuid, 'database_id' => $gboUuid, 'name' => $gboName)).'">
                                 <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
-                        </div>
+                            </li>
+                        </ul>
                     </div>');
         }
         $page->addHtml('
@@ -316,7 +318,7 @@ if ($countGuestbookEntries === 0) {
             // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
             $loadUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $gboUuid));
             $page->addHtml('
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href=\''.$loadUrl.'\'">
+                    <button type="button" class="btn btn-primary" onclick="window.location.href=\''.$loadUrl.'\'">
                         <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>');
         }
 
