@@ -134,13 +134,7 @@
  * ```
  */
 
-include_once(__DIR__.'/../smarty-plugins/function.array_key_exists.php');
-include_once(__DIR__.'/../smarty-plugins/function.is_font_awesome_icon.php');
-include_once(__DIR__.'/../smarty-plugins/function.is_translation_string_id.php');
-include_once(__DIR__.'/../smarty-plugins/function.load_admidio_plugin.php');
-use Smarty\Smarty;
-
-abstract class HtmlElement extends Smarty
+abstract class HtmlElement
 {
     /**
      * @var bool Flag enables nesting of main elements, e.g div blocks ( Default : true )
@@ -194,20 +188,6 @@ abstract class HtmlElement extends Smarty
         $this->nesting        = $nesting;
         $this->mainElement    = $element;
         $this->currentElement = $element;
-
-        parent::__construct();
-        // initialize php template engine smarty
-        if (defined('THEME_PATH')) {
-            $this->setTemplateDir(THEME_PATH . '/templates/');
-        }
-
-        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
-        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        //$this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
-        $this->registerPlugin('function', 'array_key_exists', 'smarty_function_array_key_exists');
-        $this->registerPlugin('function', 'is_font_awesome_icon', 'smarty_function_is_font_awesome_icon');
-        $this->registerPlugin('function', 'is_translation_string_id', 'smarty_function_is_translation_string_id');
-        $this->registerPlugin('function', 'load_admidio_plugin', 'smarty_function_load_admidio_plugin');
     }
 
     /**
@@ -517,17 +497,20 @@ abstract class HtmlElement extends Smarty
     /**
      * @param string $templateName Name of the Smarty template that should be rendered.
      * @param array $assigns An array with all variables that should be rendered within the Smarty template.
-     * @throws SmartyException
+     * @throws Smarty\Exception
      */
-    public function render(string $templateName, array $assigns) {
-        global $gL10n;
-        foreach($assigns as $key => $assign) {
-            $this->assign($key, $assign);
-        }
-        $this->assign('ADMIDIO_URL', ADMIDIO_URL);
-        $this->assign('data', $assigns);
+    public function render(string $templateName, array $assigns): string
+    {
+        global $gL10n, $page;
+        $smarty = $page->getSmartyTemplate();
 
-        $this->assign('l10n', $gL10n);
-        return $this->fetch("sys-template-parts/".$templateName.'.tpl');
+        foreach($assigns as $key => $assign) {
+            $smarty->assign($key, $assign);
+        }
+        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
+        $smarty->assign('data', $assigns);
+
+        $smarty->assign('l10n', $gL10n);
+        return $smarty->fetch("sys-template-parts/".$templateName.'.tpl');
     }
 }

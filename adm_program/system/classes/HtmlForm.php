@@ -31,13 +31,7 @@
  * ```
  */
 
-include_once(__DIR__.'/../smarty-plugins/function.array_key_exists.php');
-include_once(__DIR__.'/../smarty-plugins/function.is_font_awesome_icon.php');
-include_once(__DIR__.'/../smarty-plugins/function.is_translation_string_id.php');
-include_once(__DIR__.'/../smarty-plugins/function.load_admidio_plugin.php');
-use Smarty\Smarty;
-
-class HtmlForm extends Smarty
+class HtmlForm
 {
     public const FIELD_DEFAULT  = 0;
     public const FIELD_REQUIRED = 1;
@@ -112,7 +106,6 @@ class HtmlForm extends Smarty
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
      */
     public function __construct(string $id, string $action = null, HtmlPage $htmlPage = null, array $options = array())
     {
@@ -132,22 +125,6 @@ class HtmlForm extends Smarty
         }
 
         $optionsAll = array_replace($optionsDefault, $options);
-
-        //parent::__construct($action, $id, $optionsAll['method']);
-        parent::__construct();
-        // initialize php template engine smarty
-        if (defined('THEME_PATH')) {
-            $this->setTemplateDir(THEME_PATH . '/templates/');
-        }
-
-        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
-        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        //$this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
-        $this->registerPlugin('function', 'array_key_exists', 'smarty_function_array_key_exists');
-        $this->registerPlugin('function', 'is_font_awesome_icon', 'smarty_function_is_font_awesome_icon');
-        $this->registerPlugin('function', 'is_translation_string_id', 'smarty_function_is_translation_string_id');
-        $this->registerPlugin('function', 'load_admidio_plugin', 'smarty_function_load_admidio_plugin');
-
         $this->showRequiredFields = $optionsAll['showRequiredFields'];
         $this->type   = $optionsAll['type'];
         $this->id     = $id;
@@ -1717,16 +1694,17 @@ class HtmlForm extends Smarty
      */
     private function render(string $templateName, array $assigns) {
         global $gL10n;
+        $smarty = $this->htmlPage->getSmartyTemplate();
 
         foreach($assigns as $key => $assign) {
-            $this->assign($key, $assign);
+            $smarty->assign($key, $assign);
         }
-        $this->assign('ADMIDIO_URL', ADMIDIO_URL);
-        $this->assign('formtype', $this->type);
-        $this->assign('data', $assigns);
+        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
+        $smarty->assign('formtype', $this->type);
+        $smarty->assign('data', $assigns);
 
-        $this->assign('l10n', $gL10n);
-        $this->htmlString .= $this->fetch("sys-template-parts/".$templateName.'.tpl');
+        $smarty->assign('l10n', $gL10n);
+        $this->htmlString .= $smarty->fetch("sys-template-parts/".$templateName.'.tpl');
     }
 
     /**
