@@ -133,6 +133,13 @@
  * echo HtmlElement::getHtmlElement();
  * ```
  */
+
+include_once(__DIR__.'/../smarty-plugins/function.array_key_exists.php');
+include_once(__DIR__.'/../smarty-plugins/function.is_font_awesome_icon.php');
+include_once(__DIR__.'/../smarty-plugins/function.is_translation_string_id.php');
+include_once(__DIR__.'/../smarty-plugins/function.load_admidio_plugin.php');
+use Smarty\Smarty;
+
 abstract class HtmlElement extends Smarty
 {
     /**
@@ -196,7 +203,11 @@ abstract class HtmlElement extends Smarty
 
         $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
+        //$this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
+        $this->registerPlugin('function', 'array_key_exists', 'smarty_function_array_key_exists');
+        $this->registerPlugin('function', 'is_font_awesome_icon', 'smarty_function_is_font_awesome_icon');
+        $this->registerPlugin('function', 'is_translation_string_id', 'smarty_function_is_translation_string_id');
+        $this->registerPlugin('function', 'load_admidio_plugin', 'smarty_function_load_admidio_plugin');
     }
 
     /**

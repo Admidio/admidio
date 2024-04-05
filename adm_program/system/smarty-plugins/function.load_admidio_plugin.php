@@ -4,7 +4,7 @@
  * the html of Admidio plugins. The Admidio plugins must generate the output directly in the php
  * code with the function **echo**.
  * @param array                    $params   Array with all the variables that are set within the template file.
- * @param Smarty_Internal_Template $template The Smarty template object that could be used within the function.
+ * @param Smarty\Template $template The Smarty template object that could be used within the function.
  * @return string Returns the html code of the called Admidio plugin.
  *
  * **Code example**
@@ -20,7 +20,7 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-function smarty_function_load_admidio_plugin(array $params, Smarty_Internal_Template $template)
+function smarty_function_load_admidio_plugin(array $params, Smarty\Template $template)
 {
     global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
     global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
