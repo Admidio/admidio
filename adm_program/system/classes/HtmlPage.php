@@ -28,10 +28,6 @@
  * ```
  */
 
-include_once(__DIR__.'/../smarty-plugins/function.array_key_exists.php');
-include_once(__DIR__.'/../smarty-plugins/function.is_font_awesome_icon.php');
-include_once(__DIR__.'/../smarty-plugins/function.is_translation_string_id.php');
-include_once(__DIR__.'/../smarty-plugins/function.load_admidio_plugin.php');
 use Smarty\Smarty;
 
 class HtmlPage
@@ -121,24 +117,37 @@ class HtmlPage
             $this->setHeadline($headline);
         }
 
-        $this->smarty = new Smarty();
-
-        // initialize php template engine smarty
-        if (defined('THEME_PATH')) {
-            $this->smarty->setTemplateDir(THEME_PATH . '/templates/');
-        }
-
-        $this->smarty->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
-        $this->smarty->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        $this->smarty->registerPlugin('function', 'array_key_exists', 'smarty_function_array_key_exists');
-        $this->smarty->registerPlugin('function', 'is_font_awesome_icon', 'smarty_function_is_font_awesome_icon');
-        $this->smarty->registerPlugin('function', 'is_translation_string_id', 'smarty_function_is_translation_string_id');
-        $this->smarty->registerPlugin('function', 'load_admidio_plugin', 'smarty_function_load_admidio_plugin');
+        $this->smarty = $this->createSmartyObject();
 
         if (is_object($gSettingsManager) && $gSettingsManager->has('system_browser_update_check')
         && $gSettingsManager->getBool('system_browser_update_check')) {
             $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/browser-update/browser-update.js');
         }
+    }
+
+    /**
+     * Create an object of the template engine Smarty. This object uses the template folder of the
+     * current theme. The all cacheable and compilable files will be stored in the templates folder
+     * of **adm_my_files**.
+     * @return Smarty Returns the initialized Smarty object.
+     * @throws \Smarty\Exception
+     */
+    public static function createSmartyObject(): Smarty
+    {
+        $smartyObject = new Smarty();
+
+        // initialize php template engine smarty
+        if (defined('THEME_PATH')) {
+            $smartyObject->setTemplateDir(THEME_PATH . '/templates/');
+        }
+
+        $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
+        $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
+        $smartyObject->registerPlugin('function', 'array_key_exists', 'SmartyPlugins::arrayKeyExists');
+        $smartyObject->registerPlugin('function', 'is_font_awesome_icon', 'SmartyPlugins::isFontAwesomeIcon');
+        $smartyObject->registerPlugin('function', 'is_translation_string_id', 'SmartyPlugins::isTranslationStringID');
+        $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'SmartyPlugins::loadAdmidioPlugin');
+        return $smartyObject;
     }
 
     /**

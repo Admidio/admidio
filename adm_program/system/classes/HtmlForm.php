@@ -1687,14 +1687,21 @@ class HtmlForm
     }
 
     /**
-     * @param string $templateName
-     * @param array $assigns
+     * Create the html code from the template and add this to the internal $htmlString variable.
+     * @param string $templateName Name of the template file that should be used.
+     * @param array $assigns Array with variables that should be assigned to the template.
      * @return void
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
-    private function render(string $templateName, array $assigns) {
+    private function render(string $templateName, array $assigns)
+    {
         global $gL10n;
-        $smarty = $this->htmlPage->getSmartyTemplate();
+
+        if (is_object($this->htmlPage)) {
+            $smarty = $this->htmlPage->getSmartyTemplate();
+        } else {
+            $smarty = HtmlPage::createSmartyObject();
+        }
 
         foreach($assigns as $key => $assign) {
             $smarty->assign($key, $assign);

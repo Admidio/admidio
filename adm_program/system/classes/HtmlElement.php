@@ -495,6 +495,7 @@ abstract class HtmlElement
     }
 
     /**
+     * Create the html code from the template and add this to the internal $htmlString variable.
      * @param string $templateName Name of the Smarty template that should be rendered.
      * @param array $assigns An array with all variables that should be rendered within the Smarty template.
      * @throws Smarty\Exception
@@ -502,7 +503,12 @@ abstract class HtmlElement
     public function render(string $templateName, array $assigns): string
     {
         global $gL10n, $page;
-        $smarty = $page->getSmartyTemplate();
+
+        if (is_object($page)) {
+            $smarty = $page->getSmartyTemplate();
+        } else {
+            $smarty = HtmlPage::createSmartyObject();
+        }
 
         foreach($assigns as $key => $assign) {
             $smarty->assign($key, $assign);
