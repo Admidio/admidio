@@ -596,7 +596,7 @@ class ListConfiguration extends TableLists
         $optionsAll = array_replace($optionsDefault, $options);
 
         $arrSqlColumns = array();
-        $arrSqlColumnNames = array();
+        $arrSqlColumnNames = array('usr_uuid');
         $arrOrderByColumns = array();
         $sqlColumnNames = '';
         $sqlIdColumns = '';
