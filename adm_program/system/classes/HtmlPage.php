@@ -27,8 +27,15 @@
  * $page->show();
  * ```
  */
-class HtmlPage extends Smarty
+
+use Smarty\Smarty;
+
+class HtmlPage
 {
+    /**
+     * @var Smarty An object ot the Smarty template engine.
+     */
+    protected $smarty;
     /**
      * @var string The id of the html page that will be set within the <body> tag.
      */
@@ -110,21 +117,37 @@ class HtmlPage extends Smarty
             $this->setHeadline($headline);
         }
 
-        parent::__construct();
-
-        // initialize php template engine smarty
-        if (defined('THEME_PATH')) {
-            $this->setTemplateDir(THEME_PATH . '/templates/');
-        }
-
-        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
-        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
+        $this->smarty = $this->createSmartyObject();
 
         if (is_object($gSettingsManager) && $gSettingsManager->has('system_browser_update_check')
         && $gSettingsManager->getBool('system_browser_update_check')) {
             $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/browser-update/browser-update.js');
         }
+    }
+
+    /**
+     * Create an object of the template engine Smarty. This object uses the template folder of the
+     * current theme. The all cacheable and compilable files will be stored in the templates folder
+     * of **adm_my_files**.
+     * @return Smarty Returns the initialized Smarty object.
+     * @throws \Smarty\Exception
+     */
+    public static function createSmartyObject(): Smarty
+    {
+        $smartyObject = new Smarty();
+
+        // initialize php template engine smarty
+        if (defined('THEME_PATH')) {
+            $smartyObject->setTemplateDir(THEME_PATH . '/templates/');
+        }
+
+        $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
+        $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
+        $smartyObject->registerPlugin('function', 'array_key_exists', 'SmartyPlugins::arrayKeyExists');
+        $smartyObject->registerPlugin('function', 'is_font_awesome_icon', 'SmartyPlugins::isFontAwesomeIcon');
+        $smartyObject->registerPlugin('function', 'is_translation_string_id', 'SmartyPlugins::isTranslationStringID');
+        $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'SmartyPlugins::loadAdmidioPlugin');
+        return $smartyObject;
     }
 
     /**
@@ -341,6 +364,15 @@ class HtmlPage extends Smarty
     }
 
     /**
+     * Returns the Smarty template object.
+     * @return Smarty Returns the Smarty template object.
+     */
+    public function getSmartyTemplate(): Smarty
+    {
+        return $this->smarty;
+    }
+
+    /**
      * Returns the title of the html page.
      * @return string Returns the title of the html page.
      */
@@ -431,29 +463,29 @@ class HtmlPage extends Smarty
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
 
-        $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
-        $this->assign('languageIsoCode', $gL10n->getLanguageIsoCode());
-        $this->assign('id', $this->id);
-        $this->assign('title', $this->title);
-        $this->assign('headline', $this->headline);
-        $this->assign('hasPreviousUrl', $hasPreviousUrl);
-        $this->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
-        $this->assign('urlAdmidio', ADMIDIO_URL);
-        $this->assign('urlTheme', THEME_URL);
-        $this->assign('javascriptContent', $this->javascriptContent);
-        $this->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
-        $this->assign('navigationStack', $gNavigation->getStack());
+        $this->smarty->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
+        $this->smarty->assign('languageIsoCode', $gL10n->getLanguageIsoCode());
+        $this->smarty->assign('id', $this->id);
+        $this->smarty->assign('title', $this->title);
+        $this->smarty->assign('headline', $this->headline);
+        $this->smarty->assign('hasPreviousUrl', $hasPreviousUrl);
+        $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
+        $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
+        $this->smarty->assign('urlTheme', THEME_URL);
+        $this->smarty->assign('javascriptContent', $this->javascriptContent);
+        $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
+        $this->smarty->assign('navigationStack', $gNavigation->getStack());
 
-        $this->assign('currentUser', $gCurrentUser);
-        $this->assign('validLogin', $gValidLogin);
-        $this->assign('debug', $gDebug);
-        $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
+        $this->smarty->assign('currentUser', $gCurrentUser);
+        $this->smarty->assign('validLogin', $gValidLogin);
+        $this->smarty->assign('debug', $gDebug);
+        $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
 
-        $this->assign('printView', $this->printView);
-        $this->assign('menuNavigation', $gMenu->getAllMenuItems());
-        $this->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
-        $this->assign('templateFile', $this->templateFile);
-        $this->assign('content', $this->pageContent);
+        $this->smarty->assign('printView', $this->printView);
+        $this->smarty->assign('menuNavigation', $gMenu->getAllMenuItems());
+        $this->smarty->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
+        $this->smarty->assign('templateFile', $this->templateFile);
+        $this->smarty->assign('content', $this->pageContent);
 
         // add imprint and data protection
         if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {
@@ -462,38 +494,38 @@ class HtmlPage extends Smarty
         if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0) {
             $urlDataProtection = $gSettingsManager->getString('system_url_data_protection');
         }
-        $this->assign('urlImprint', $urlImprint);
-        $this->assign('urlDataProtection', $urlDataProtection);
-        $this->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
+        $this->smarty->assign('urlImprint', $urlImprint);
+        $this->smarty->assign('urlDataProtection', $urlDataProtection);
+        $this->smarty->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
 
         // show cookie note
         if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note')) {
-            $this->assign('cookieDomain', DOMAIN);
-            $this->assign('cookiePrefix', COOKIE_PREFIX);
+            $this->smarty->assign('cookieDomain', DOMAIN);
+            $this->smarty->assign('cookiePrefix', COOKIE_PREFIX);
 
             if ($gSetCookieForDomain) {
-                $this->assign('cookiePath', '/');
+                $this->smarty->assign('cookiePath', '/');
             } else {
-                $this->assign('cookiePath', ADMIDIO_URL_PATH . '/');
+                $this->smarty->assign('cookiePath', ADMIDIO_URL_PATH . '/');
             }
 
             if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0) {
-                $this->assign('cookieDataProtectionUrl', '"href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ');
+                $this->smarty->assign('cookieDataProtectionUrl', '"href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ');
             } else {
-                $this->assign('cookieDataProtectionUrl', '');
+                $this->smarty->assign('cookieDataProtectionUrl', '');
             }
         }
 
         // add translation object
-        $this->assign('l10n', $gL10n);
+        $this->smarty->assign('l10n', $gL10n);
 
         try {
             if ($this->modeInline || $gLayoutReduced) {
-                $this->display('index_reduced.tpl');
+                $this->smarty->display('index_reduced.tpl');
             } else {
-                $this->display('index.tpl');
+                $this->smarty->display('index.tpl');
             }
-        } catch (SmartyException $exception) {
+        } catch (\Smarty\Exception $exception) {
             echo $exception->getMessage();
             echo '<br />Please check if the theme folder "<strong>' . $gSettingsManager->getString('theme') . '</strong>" exists within the folder "adm_themes".';
         } catch (Exception $e) {
