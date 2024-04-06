@@ -995,7 +995,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">Tændt</string>
   <string name="SYS_ONE_TIME">Engangs</string>
-  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online medlemsskabs administration</string>
+  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Medlemsskabs administration</string>
   <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Kun ved registrering og egen profil</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Denne præference kan kun indstilles af moderorganisationen.</string>
   <string name="SYS_OPERATING_SYSTEM">Operativ system</string>
@@ -1022,7 +1022,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Deltager status</string>
   <string name="SYS_PASSWORD">Kodeord</string>
   <string name="SYS_PASSWORD_CHANGED">Kodeordet er blevet ændret.</string>
-  <string name="SYS_PASSWORD_DESCRIPTION">Kodeord skal have mindst 8 karakterer som inkluderer numre, bogstaver og specielle karakterer.\n\nStyrken af dit valgte kodeord vil blive vist i farver med en bar. Minimum styrken er indikeret via pilen i baren.</string>
+  <string name="SYS_PASSWORD_DESCRIPTION">Adgangskoden skal have mindst 8 tegn inklusive tal, bogstaver og specialtegn.\nStyrken af din valgte adgangskode vil blive vist i farver ved hjælp af en bjælke. Den mindst nødvendige styrke er angivet med pilen i bjælken.</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Glemt kodeord</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Indtast venligst dit login navn eller e-mailadresse. Vi sender dig derefter et link, hvor du kan nulstille din adgangskode og derefter lave en ny adgangskode.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">‎Hvis brugeren har glemt sin adgangskode, kan brugeren anmode om et link, der skal sendes til brugeren, hvorigennem brugeren kan indstille en ny adgangskode til sin konto på denne hjemmeside. Hvis denne indstilling er deaktiveret, kan brugeren kun sende en anmodning via e-mail til administratoren om at indsætte en ny adgangskode. Hvis adgangskoden skal sendes, skal indstillingen #VAR1_BOLD# også angives. (Standard: ja)‎</string>
@@ -1093,10 +1093,7 @@
   <string name="SYS_PROFILE_FROM">Profil for #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profil information</string>
   <string name="SYS_PROFILE_PHOTO">Profilbillede</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1">Du skulle være her i billedet.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2">Billede skal gemmes som JPG eller PNG.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3">Serveren kan kun håndtere billeder med en max. opløsning på #VAR1# megapixels.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4">De overførte filer må ikke overskride størrelsen på #VAR1# MB.</string>
+  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du skal selv være med på billedet. Billedet kan have en maksimal opløsning på #VAR1# MegaPixels. Billedfilen må ikke være større end #VAR1# MB og skal være i JPG- eller PNG-format.</string>
   <string name="SYS_PROPERTIES">Indstillinger</string>
   <string name="SYS_QUANTITY">Antal</string>
   <string name="SYS_QUARTERLY">Kvartalsvis</string>
@@ -1144,7 +1141,6 @@
   <string name="SYS_REQUIRED_INPUT">Påkrævet indtastning</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">‎Du er allerede logget på systemet. Det er ikke nødvendigt at anmode om en ny adgangskode.‎</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Billedet kunne ikke behandles, fordi opløsningen er større end #VAR1# Megapixel.</string>
-  <string name="SYS_RESTRICTIONS">Begrænsninger</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Se medlemslister over alle roller og alle medlemsprofiler</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Administrer meddelelser</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organiser og tildel registreringer</string>
@@ -1252,7 +1248,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Hvis denne indstilling er aktiveret, sendes e-mails til alle brugerens e-mail-adresser, der er gemt i profilen. Hvis indstillingen er deaktiveret, sendes e-mails kun til e-mail-adressen fra profilfeltet med det interne navn EMAIL. (Standard: aktiveret)</string>
   <string name="SYS_SEND_GREETING_CARD">Send lykønskningskort</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Send login information</string>
-  <string name="SYS_SEND_MAIL_TO_ROLE">Din email vil blive sendt til alle medlemmer der har en email adresse og som tilhører den valgte rolle eller de valgte modtagere.\n\nFlere roller og modtagere er tilgængelige kun for brugere der er logget ind.</string>
+  <string name="SYS_SEND_MAIL_TO_ROLE">Din e-mail vil blive sendt til de enkelte udvalgte modtagere og til alle medlemmer af de valgte roller, forudsat at de har indtastet en e-mailadresse.</string>
   <string name="SYS_SEND_MAILS">Send e-mails</string>
   <string name="SYS_SEND_METHOD">Send via</string>
   <string name="SYS_SEND_METHOD_DESC">PHPs mail() -metode kan være begrænset af nogle internet udbydere og kan være en grund til mistanke om spam. Derfor anbefales det at sende mails ved hjælp af en eksisterende mail-adresse og SMTP-server. Du kan konfigurere SMTP-indstillingerne nedenfor (standard: PHP-mail()).</string>
@@ -1410,7 +1406,7 @@
   <string name="SYS_USER_RELATION_TYPE">Relations typer</string>
   <string name="SYS_USER_VALID_LOGIN">Brugeren har allerede gyldig login information.</string>
   <string name="SYS_USERNAME">Bruger navn</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Dette er det brugernavn som du kan logge ind med.\n\nDette skal være vel overvejet. Hvis det valgte navn ikke er til rådighed mere, så prøv med kombinationer såsom Andi78 eller SteveT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Du vil være i stand til at logge ind med dette brugernavn.\nDette navn skal være veldefineret. Hvis det valgte navn ikke længere er tilgængeligt, så prøv at bruge kombinationer som Andi78 eller SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# den #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Antal kontakter pr. side</string>

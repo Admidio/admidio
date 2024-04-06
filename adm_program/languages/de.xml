@@ -1141,7 +1141,6 @@
   <string name="SYS_REQUIRED_INPUT">Erforderliche Eingabe</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du bist bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Das Bild konnte nicht verarbeitet werden, weil die Auflösung größer als #VAR1# Megapixel ist.</string>
-  <string name="SYS_RESTRICTIONS">Einschränkungen</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen und alle Mitgliederprofile einsehen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Ankündigungen verwalten</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registrierungen verwalten und zuordnen</string>

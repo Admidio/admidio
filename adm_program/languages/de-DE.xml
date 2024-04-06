@@ -995,7 +995,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">an</string>
   <string name="SYS_ONE_TIME">Einmalig</string>
-  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Die Online-Mitgliederverwaltung</string>
+  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Mitgliederverwaltung</string>
   <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Nur bei Registrierung und im eigenen Profil</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Diese Einstellung kann nur von der Mutterorganisation gesetzt werden.</string>
   <string name="SYS_OPERATING_SYSTEM">Betriebssystem</string>
@@ -1022,7 +1022,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Status der teilnehmenden Person</string>
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
-  <string name="SYS_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nDie Stärke Ihres gewählten Passworts wird Ihnen farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt Ihnen der Pfeil im Balken an.</string>
+  <string name="SYS_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\nDie Stärke Ihres gewählten Passworts wird Ihnen farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt Ihnen der Pfeil im Balken an.</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte geben Sie Ihren Anmeldenamen oder Ihre E-Mail-Adresse ein. Wir werden Ihnen dann einen Link schicken, mit dem Sie Ihr Passwort zurücksetzen und anschließend ein neues Passwort vergeben können.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Hat die Benutzerin oder der Benutzer sein Passwort vergessen, kann er sich einen Link zuschicken lassen, über den er auf dieser Webseite ein neues Passwort für seinen Account vergeben kann. Ist diese Option deaktiviert, kann die Benutzerin oder der Benutzer nur eine Anfrage per E-Mail an die Administratorinnen und Administratoren stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
@@ -1093,10 +1093,7 @@
   <string name="SYS_PROFILE_FROM">Profil von #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformationen</string>
   <string name="SYS_PROFILE_PHOTO">Profilfoto</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1">Sie sollten selbst auf dem Foto zu sehen sein.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2">Das Foto muss im Format JPG oder PNG gespeichert sein.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3">Der Server kann Fotos mit einer maximalen Auflösung von #VAR1# Megapixeln verarbeiten.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4">Die hochgeladene Datei darf nicht größer als #VAR1# MB sein.</string>
+  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Sie sollten selbst auf dem Foto zu sehen sein. Das Foto darf eine maximale Auflösung von #VAR1# MegaPixeln haben. Die Fotodatei darf nicht größer als #VAR1# MB sein und muss im Format JPG oder PNG vorliegen.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
   <string name="SYS_QUANTITY">Anzahl</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
@@ -1144,7 +1141,6 @@
   <string name="SYS_REQUIRED_INPUT">Erforderliche Eingabe</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Sie sind bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Das Bild konnte nicht verarbeitet werden, weil die Auflösung größer als #VAR1# Megapixel ist.</string>
-  <string name="SYS_RESTRICTIONS">Einschränkungen</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen und alle Mitgliederprofile einsehen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Ankündigungen verwalten</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registrierungen verwalten und zuordnen</string>
@@ -1252,7 +1248,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin oder des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: ja)</string>
   <string name="SYS_SEND_GREETING_CARD">Grußkarte versenden</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten versenden</string>
-  <string name="SYS_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</string>
+  <string name="SYS_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an die einzelnen ausgewählten Empfänger:innen und an alle Mitglieder der ausgewählten Rollen geschickt, sofern diese eine E-Mail-Adresse hinterlegt haben.</string>
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
   <string name="SYS_SEND_METHOD">Versandmethode</string>
   <string name="SYS_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mail-Adresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Voreinstellung: PHP mail())</string>
@@ -1410,7 +1406,7 @@
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
   <string name="SYS_USER_VALID_LOGIN">Diese:r Benutzer:in besitzt schon ein gültiges Login.</string>
   <string name="SYS_USERNAME">Anmeldename</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Mit diesem Namen können Sie sich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist Ihr Wunschname bereits vergeben, dann versuchen Sie es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Mit diesem Namen können Sie sich später auf der Homepage anmelden.\nDer Name muss im System eindeutig sein. Ist Ihr Wunschname bereits vergeben, dann versuchen Sie es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Anzahl der Kontakte pro Seite</string>
