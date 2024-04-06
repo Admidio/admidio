@@ -133,7 +133,8 @@
  * echo HtmlElement::getHtmlElement();
  * ```
  */
-abstract class HtmlElement extends Smarty
+
+abstract class HtmlElement
 {
     /**
      * @var bool Flag enables nesting of main elements, e.g div blocks ( Default : true )
@@ -187,16 +188,6 @@ abstract class HtmlElement extends Smarty
         $this->nesting        = $nesting;
         $this->mainElement    = $element;
         $this->currentElement = $element;
-
-        parent::__construct();
-        // initialize php template engine smarty
-        if (defined('THEME_PATH')) {
-            $this->setTemplateDir(THEME_PATH . '/templates/');
-        }
-
-        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
-        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
     }
 
     /**
@@ -504,19 +495,28 @@ abstract class HtmlElement extends Smarty
     }
 
     /**
+     * Create the html code from the template and add this to the internal $htmlString variable.
      * @param string $templateName Name of the Smarty template that should be rendered.
      * @param array $assigns An array with all variables that should be rendered within the Smarty template.
-     * @throws SmartyException
+     * @throws Smarty\Exception
      */
-    public function render(string $templateName, array $assigns) {
-        global $gL10n;
-        foreach($assigns as $key => $assign) {
-            $this->assign($key, $assign);
-        }
-        $this->assign('ADMIDIO_URL', ADMIDIO_URL);
-        $this->assign('data', $assigns);
+    public function render(string $templateName, array $assigns): string
+    {
+        global $gL10n, $page;
 
-        $this->assign('l10n', $gL10n);
-        return $this->fetch("sys-template-parts/".$templateName.'.tpl');
+        if (is_object($page)) {
+            $smarty = $page->getSmartyTemplate();
+        } else {
+            $smarty = HtmlPage::createSmartyObject();
+        }
+
+        foreach($assigns as $key => $assign) {
+            $smarty->assign($key, $assign);
+        }
+        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
+        $smarty->assign('data', $assigns);
+
+        $smarty->assign('l10n', $gL10n);
+        return $smarty->fetch("sys-template-parts/".$templateName.'.tpl');
     }
 }

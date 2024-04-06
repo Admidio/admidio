@@ -30,7 +30,8 @@
  * $form->show();
  * ```
  */
-class HtmlForm extends Smarty
+
+class HtmlForm
 {
     public const FIELD_DEFAULT  = 0;
     public const FIELD_REQUIRED = 1;
@@ -105,7 +106,6 @@ class HtmlForm extends Smarty
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
-     * @throws SmartyException
      */
     public function __construct(string $id, string $action = null, HtmlPage $htmlPage = null, array $options = array())
     {
@@ -125,18 +125,6 @@ class HtmlForm extends Smarty
         }
 
         $optionsAll = array_replace($optionsDefault, $options);
-
-        //parent::__construct($action, $id, $optionsAll['method']);
-        parent::__construct();
-        // initialize php template engine smarty
-        if (defined('THEME_PATH')) {
-            $this->setTemplateDir(THEME_PATH . '/templates/');
-        }
-
-        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
-        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
-
         $this->showRequiredFields = $optionsAll['showRequiredFields'];
         $this->type   = $optionsAll['type'];
         $this->id     = $id;
@@ -1699,23 +1687,31 @@ class HtmlForm extends Smarty
     }
 
     /**
-     * @param string $templateName
-     * @param array $assigns
+     * Create the html code from the template and add this to the internal $htmlString variable.
+     * @param string $templateName Name of the template file that should be used.
+     * @param array $assigns Array with variables that should be assigned to the template.
      * @return void
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
-    private function render(string $templateName, array $assigns) {
+    private function render(string $templateName, array $assigns)
+    {
         global $gL10n;
 
-        foreach($assigns as $key => $assign) {
-            $this->assign($key, $assign);
+        if (is_object($this->htmlPage)) {
+            $smarty = $this->htmlPage->getSmartyTemplate();
+        } else {
+            $smarty = HtmlPage::createSmartyObject();
         }
-        $this->assign('ADMIDIO_URL', ADMIDIO_URL);
-        $this->assign('formtype', $this->type);
-        $this->assign('data', $assigns);
 
-        $this->assign('l10n', $gL10n);
-        $this->htmlString .= $this->fetch("sys-template-parts/".$templateName.'.tpl');
+        foreach($assigns as $key => $assign) {
+            $smarty->assign($key, $assign);
+        }
+        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
+        $smarty->assign('formtype', $this->type);
+        $smarty->assign('data', $assigns);
+
+        $smarty->assign('l10n', $gL10n);
+        $this->htmlString .= $smarty->fetch("sys-template-parts/".$templateName.'.tpl');
     }
 
     /**
