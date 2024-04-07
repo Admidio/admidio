@@ -7,8 +7,15 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************/
+ *
+ * Parameters:
+ *
+ * org_uuid  - Show only announcements of this organization
+ * *********************************************************************************************
+ */
 require_once(__DIR__ . '/../../system/common.php');
+
+$getOrgUuid  = admFuncVariableIsValid($_GET, 'org_uuid', 'string');
 
 // Check if RSS is active...
 if (!$gSettingsManager->getBool('enable_rss')) {
@@ -22,6 +29,16 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') !== 1) {
     // disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
+}
+
+if ($getOrgUuid !== '') {
+    $organization = new Organization($gDb);
+    $organization->readDataByUuid($getOrgUuid);
+    $organizationName = $organization->getValue('org_long_name');
+    $organizationID = $organization->getValue('org_id');
+} else {
+    $organizationName = $gCurrentOrganization->getValue('org_longname');
+    $organizationID = $gCurrentOrgId;
 }
 
 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
@@ -54,14 +71,10 @@ $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
             ON cat_id = lnk_cat_id
                '.$additionalTables.'
          WHERE cat_type = \'LNK\'
-           AND cat_org_id = ? -- $gCurrentOrgId
+           AND cat_org_id = ? -- $organizationID
       ORDER BY lnk_timestamp_create DESC';
-$queryParams[] = $gCurrentOrgId;
+$queryParams[] = $organizationID;
 $statement = $gDb->queryPrepared($sql, $queryParams);
-
-// start defining the RSS Feed
-
-$organizationName = $gCurrentOrganization->getValue('org_longname');
 
 // create RSS feed object with channel information
 $rss = new RssFeed(
