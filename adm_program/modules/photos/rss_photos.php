@@ -7,9 +7,15 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
+ *
+ * Parameters:
+ *
+ * org_uuid  - Show only announcements of this organization
+ * *********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
+
+$getOrgUuid  = admFuncVariableIsValid($_GET, 'org_uuid', 'string');
 
 // check if module is active
 if (!$gSettingsManager->getBool('enable_rss')) {
@@ -25,6 +31,16 @@ if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
 } elseif ((int) $gSettingsManager->get('photo_module_enabled') === 2) {
     // only logged in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
+}
+
+if ($getOrgUuid !== '') {
+    $organization = new Organization($gDb);
+    $organization->readDataByUuid($getOrgUuid);
+    $organizationName = $organization->getValue('org_long_name');
+    $organizationID = $organization->getValue('org_id');
+} else {
+    $organizationName = $gCurrentOrganization->getValue('org_longname');
+    $organizationID = $gCurrentOrgId;
 }
 
 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
@@ -54,17 +70,16 @@ if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
 $sql = 'SELECT pho.*, '.$additionalFields.'
           FROM '.TBL_PHOTOS.' AS pho
                '.$additionalTables.'
-         WHERE pho_org_id = ? -- $gCurrentOrgId
+         WHERE pho_org_id = ? -- $organizationID
            AND pho_locked = false
       ORDER BY pho_timestamp_create DESC
          LIMIT 10';
-$queryParams[] = $gCurrentOrgId;
+$queryParams[] = $organizationID;
 $statement = $gDb->queryPrepared($sql, $queryParams);
 
 $photoAlbum = new TablePhotos($gDb);
 
 // add the RSS items to the RssFeed object
-$organizationName = $gCurrentOrganization->getValue('org_longname');
 $rss = new RssFeed(
     $organizationName . ' - ' . $gL10n->get('SYS_PHOTO_ALBUMS'),
     $gCurrentOrganization->getValue('org_homepage'),
