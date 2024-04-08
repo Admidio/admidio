@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed of events. Lists the newest 10 events.
+ * RSS feed of events. Lists the newest 50 events.
  * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
@@ -42,7 +42,7 @@ if ($getOrgUuid !== '') {
 try {
     $events = new ModuleEvents();
     $events->setDateRange();
-    $eventsResult = $events->getDataSet(0, 10);
+    $eventsResult = $events->getDataSet(0, 50);
 } catch (AdmException $e) {
     $e->showText();
 }
@@ -110,7 +110,8 @@ if ($eventsResult['numResults'] > 0) {
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('dat_uuid' => $eventUuid, 'view' => 'detail')),
             $row['create_name'],
             DateTime::createFromFormat('Y-m-d H:i:s', $event->getValue('dat_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
-            $event->getValue('cat_name')
+            $event->getValue('cat_name'),
+            $event->getValue('dat_uuid')
         );
     }
 }

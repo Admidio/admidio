@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed of announcements. Lists the newest 10 announcements.
+ * RSS feed of announcements. Lists the newest 50 announcements.
  * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
@@ -52,7 +52,7 @@ $rss = new RssFeed(
 
 if ($announcements->getDataSetCount() > 0) {
     $announcement = new TableAnnouncement($gDb);
-    $rows = $announcements->getDataSet(0, 10);
+    $rows = $announcements->getDataSet(0, 50);
 
     // add the RSS items to the RssFeed object
     foreach ($rows['recordset'] as $row) {
@@ -66,7 +66,8 @@ if ($announcements->getDataSetCount() > 0) {
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('ann_uuid' => $announcement->getValue('ann_uuid'))),
             $row['create_name'],
             DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
-            $announcement->getValue('cat_name')
+            $announcement->getValue('cat_name'),
+            $announcement->getValue('ann_uuid')
         );
     }
 }
