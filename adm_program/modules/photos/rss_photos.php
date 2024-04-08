@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed of albums. List the newest 10 albums
+ * RSS feed of albums. List the newest 50 albums
  * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
@@ -73,7 +73,7 @@ $sql = 'SELECT pho.*, '.$additionalFields.'
          WHERE pho_org_id = ? -- $organizationID
            AND pho_locked = false
       ORDER BY pho_timestamp_create DESC
-         LIMIT 10';
+         LIMIT 50';
 $queryParams[] = $organizationID;
 $statement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -144,7 +144,9 @@ while ($row = $statement->fetch()) {
         $description,
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('photo_uuid' => $phoUuid)),
         $row['create_name'],
-        DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create', 'Y-m-d H:i:s'))->format('r')
+        DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
+        '',
+        $row['pho_uuid']
     );
 }
 

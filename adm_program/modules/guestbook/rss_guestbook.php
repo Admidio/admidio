@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed of guestbook. Lists the newest 10 guestbook entries.
+ * RSS feed of guestbook. Lists the newest 50 guestbook entries.
  * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
@@ -46,7 +46,7 @@ $sql = 'SELECT *
          WHERE gbo_org_id = ? -- $organizationID
            AND gbo_locked = false
       ORDER BY gbo_timestamp_create DESC
-         LIMIT 10';
+         LIMIT 50';
 $statement = $gDb->queryPrepared($sql, array($organizationID));
 
 // create RSS feed object with channel information
@@ -69,7 +69,9 @@ while ($row = $statement->fetch()) {
         $guestbook->getValue('gbo_text'),
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => (int) $guestbook->getValue('gbo_id'))),
         $guestbook->getValue('gbo_name'),
-        \DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create', 'Y-m-d H:i:s'))->format('r')
+        \DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
+        '',
+        $guestbook->getValue('gbo_uuid')
     );
 }
 

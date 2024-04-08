@@ -27,36 +27,45 @@ class RssFeed
 
     /**
      * Constructor of the RSS class which needs all the information of the channel
-     * @param string $title       Headline of this channel
-     * @param string $link        Link to the website of this RSS feed
+     * @param string $title Headline of this channel
+     * @param string $link Link to the website of this RSS feed
      * @param string $description Short description of this channel
-     * @param string $copyright   Author of the channel; in our case the organization name
+     * @param string $copyright Author of the channel; in our case the organization name
      */
     public function __construct(string $title, string $link, string $description, string $copyright)
     {
         $this->channel['title'] = $title;
-        $this->channel['link']  = $link;
+        $this->channel['link'] = $link;
         $this->channel['description'] = $description;
-        $this->channel['copyright']   = $copyright;
+        $this->channel['copyright'] = $copyright;
         $this->feed = CURRENT_URL;
     }
 
     /**
      * Add rss item to the current feed with all necessary information about the item
-     * @param string $title       Headline of this item
+     * @param string $title Headline of this item
      * @param string $description The main content of the item which can contain html
-     * @param string $link        Link to this entry on the homepage
-     * @param string $author      Optional the email address of the member who creates this entry
-     * @param string $pubDate     Optional the publication date of this entry
-     * @param string $category    Optional the category of this entry
+     * @param string $link Link to this entry on the homepage
+     * @param string $author Optional the email address of the member who creates this entry
+     * @param string $pubDate Optional the publication date of this entry
+     * @param string $category Optional the category of this entry
      */
-    public function addItem(string $title, string $description, string $link, string $author = '', string $pubDate = '', string $category = '')
+    public function addItem(string $title, string $description, string $link, string $author = '', string $pubDate = '', string $category = '', string $guid = '')
     {
         if (!StringUtils::strValidCharacters(StringUtils::strToLower($author), 'email')) {
             $author = '';
         }
 
-        $this->items[] = array('title' => $title, 'description' => $description, 'link' => $link, 'author' => $author, 'pubDate' => $pubDate, 'category' => $category);
+        $this->items[] =
+            array(
+                'title' => $title,
+                'description' => $description,
+                'link' => $link,
+                'author' => $author,
+                'pubDate' => $pubDate,
+                'category' => $category,
+                'guid' => $guid
+            );
     }
 
     /**
@@ -80,8 +89,8 @@ class RssFeed
      */
     private function getRssHeader(): string
     {
-        return '<?xml version="1.0" encoding="utf-8"?>'.chr(10).
-        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">'.chr(10);
+        return '<?xml version="1.0" encoding="utf-8"?>' . chr(10) .
+            '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">' . chr(10);
     }
 
     /**
@@ -89,8 +98,8 @@ class RssFeed
      */
     private function getChannelOpener(): string
     {
-        return '<channel>'.chr(10).
-        '<atom:link href="' . $this->feed . '" rel="self" type="application/rss+xml" />'.chr(10);
+        return '<channel>' . chr(10) .
+            '<atom:link href="' . $this->feed . '" rel="self" type="application/rss+xml" />' . chr(10);
     }
 
     /**
@@ -103,12 +112,12 @@ class RssFeed
         $channelInfo = '';
         foreach (array('title', 'link', 'description', 'copyright') as $field) {
             if (isset($this->channel[$field])) {
-                $channelInfo .= '<'.$field.'>'.SecurityUtils::encodeHTML($this->channel[$field]).'</'.$field.'>'.chr(10);
+                $channelInfo .= '<' . $field . '>' . SecurityUtils::encodeHTML($this->channel[$field]) . '</' . $field . '>' . chr(10);
             }
         }
-        $channelInfo .= '<language>'.$gL10n->getLanguageIsoCode().'</language>'.chr(10);
-        $channelInfo .= '<generator>Admidio RSS-Class</generator>'.chr(10).chr(10);
-        $channelInfo .= '<pubDate>'.date('r').'</pubDate>'.chr(10).chr(10);
+        $channelInfo .= '<language>' . $gL10n->getLanguageIsoCode() . '</language>' . chr(10);
+        $channelInfo .= '<generator>Admidio RSS-Class</generator>' . chr(10) . chr(10);
+        $channelInfo .= '<pubDate>' . date('r') . '</pubDate>' . chr(10) . chr(10);
 
         return $channelInfo;
     }
@@ -120,16 +129,18 @@ class RssFeed
     {
         $itemString = '';
         foreach ($this->items as $item) {
-            $itemString .= '<item>'.chr(10);
-            foreach (array('title', 'description', 'link', 'author', 'pubDate', 'category') as $field) {
+            $itemString .= '<item>' . chr(10);
+            foreach (array('title', 'description', 'link', 'author', 'pubDate', 'category', 'guid') as $field) {
                 if (isset($item[$field]) && $item[$field] !== '') {
                     // fields should only be set if they have a value
-                    $itemString .= '<'.$field.'>'.SecurityUtils::encodeHTML($item[$field]).'</'.$field.'>'.chr(10);
+                    $itemString .= '<' . $field . '>' . SecurityUtils::encodeHTML($item[$field]) . '</' . $field . '>' . chr(10);
                 }
             }
-            $itemString .= '<guid>'.str_replace('&', '&amp;', $item['link']).'</guid>'.chr(10);
-            $itemString .= '<source url="'.$this->feed.'">'.SecurityUtils::encodeHTML($this->channel['title']).'</source>'.chr(10);
-            $itemString .= '</item>'.chr(10).chr(10);
+            if ($item['guid'] === '') {
+                $itemString .= '<guid>' . str_replace('&', '&amp;', $item['link']) . '</guid>' . chr(10);
+            }
+            $itemString .= '<source url="' . $this->feed . '">' . SecurityUtils::encodeHTML($this->channel['title']) . '</source>' . chr(10);
+            $itemString .= '</item>' . chr(10) . chr(10);
         }
 
         return $itemString;
@@ -140,7 +151,7 @@ class RssFeed
      */
     private function getChannelCloser(): string
     {
-        return '</channel>'.chr(10);
+        return '</channel>' . chr(10);
     }
 
     /**
@@ -148,6 +159,6 @@ class RssFeed
      */
     private function getRssFooter(): string
     {
-        return '</rss>'.chr(10);
+        return '</rss>' . chr(10);
     }
 }

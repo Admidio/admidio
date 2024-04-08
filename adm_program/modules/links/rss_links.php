@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed of weblinks. Lists the newest 10 weblinks.
+ * RSS feed of all weblinks.
  * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
@@ -101,7 +101,8 @@ while ($row = $statement->fetch()) {
         SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/links.php', array('id' => (int) $weblink->getValue('lnk_id'))),
         $row['create_name'],
         DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
-        $weblink->getValue('cat_name')
+        $weblink->getValue('cat_name'),
+        $weblink->getValue('lnk_uuid')
     );
 }
 
