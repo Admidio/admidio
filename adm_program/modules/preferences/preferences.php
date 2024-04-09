@@ -1222,8 +1222,7 @@ $formPhotos->addSelectBox(
 );
 $selectBoxEntries = array(
     '1' => $gL10n->get('SYS_MODAL_WINDOW'),
-    '2' => $gL10n->get('SYS_SAME_WINDOW'),
-    '0' => $gL10n->get('SYS_POPUP_WINDOW')
+    '2' => $gL10n->get('SYS_SAME_WINDOW')
 );
 $formPhotos->addSelectBox(
     'photo_show_mode',

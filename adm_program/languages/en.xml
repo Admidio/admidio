@@ -1050,12 +1050,13 @@
   <string name="SYS_PHOTO_UPLOAD_DESC">Please select the images which you want to upload to album #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Not all photos were successfully uploaded.</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">All photos were successfully uploaded.</string>
+  <string name="SYS_PHOTO_X_OF_Y">Photo #VAR1# of #VAR2#</string>
   <string name="SYS_PHOTOS">Photos</string>
   <string name="SYS_PHOTOS_BY">Photos by</string>
   <string name="SYS_PHOTOS_BY_VAR">Photos by #VAR1#</string>
   <string name="SYS_PHOTOS_DESC">Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.</string>
   <string name="SYS_PHOTOS_PRESENTATION">Photo presentation</string>
-  <string name="SYS_PHOTOS_PRESENTATION_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">This option allows you to specify how the images are to be displayed within the photo module. This can be done with a modal window that is opened as a separate window within the active browser window. The image preview remains active in the background. If the image is to be displayed in the same window, the current album with the preview images is replaced by the selected image with navigation elements. (Default: Modal window)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">All PHP settings</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>
@@ -1066,7 +1067,6 @@
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLEASE_WAIT">Please wait</string>
   <string name="SYS_PLUGINS">Plugins</string>
-  <string name="SYS_POPUP_WINDOW">Popup window</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>

@@ -78,6 +78,10 @@ if ($gSettingsManager->getBool('enable_rss')) {
 
 if ($photoAlbum->isEditable()) {
     $page->addJavascript('
+        lightbox.option({
+            "albumLabel": "'.strtr($gL10n->get('SYS_PHOTO_X_OF_Y'), array('#VAR1#' => '%1', '#VAR2#' => '%2')).'"
+        });
+
         $(".admidio-image-rotate").click(function() {
             imageNr = $(this).data("image");
             $.post("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php?photo_uuid='.$getPhotoUuid.'&photo_nr=" + $(this).data("image") + "&job=rotate&direction=" + $(this).data("direction"),
@@ -204,16 +208,8 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
         if ($actThumbnail <= $photoAlbum->getValue('pho_quantity')) {
             $photoThumbnailTable .= '<div class="col-sm-6 col-lg-4 col-xl-3 admidio-album-thumbnail" id="div_image_'.$actThumbnail.'">';
 
-            // Popup window
-            if ((int) $gSettingsManager->get('photo_show_mode') === 0) {
-                $photoThumbnailTable .= '
-                        <img class="rounded" id="img_'.$actThumbnail.'" style="cursor: pointer"
-                            onclick="window.open(\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid)).'\',\'msg\', \'height='.($gSettingsManager->getInt('photo_show_height') + 300).', width='.($gSettingsManager->getInt('photo_show_width')+70).',left=162,top=5\')"
-                            src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" />';
-            }
-
             // Modal with lightbox 2
-            elseif ((int) $gSettingsManager->get('photo_show_mode') === 1) {
+            if ((int) $gSettingsManager->get('photo_show_mode') === 1) {
                 $photoThumbnailTable .= '
                         <a data-lightbox="admidio-gallery" data-title="'.$headline.'"
                             href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update>
+    <step id="10">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'photo_show_mode' AND prf_value = '0'</step>
+    <step>stop</step>
+</update>

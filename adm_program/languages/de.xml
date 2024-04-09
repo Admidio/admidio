@@ -1050,12 +1050,13 @@
   <string name="SYS_PHOTO_UPLOAD_DESC">Wähle bitte alle Fotos aus, die du in das Album #VAR1_BOLD# hochladen möchtest.</string>
   <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Fotos erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.</string>
+  <string name="SYS_PHOTO_X_OF_Y">Foto #VAR1# von #VAR2#</string>
   <string name="SYS_PHOTOS">Fotos</string>
   <string name="SYS_PHOTOS_BY">Fotos von</string>
   <string name="SYS_PHOTOS_BY_VAR">Fotos von #VAR1#</string>
   <string name="SYS_PHOTOS_DESC">Fotos zu Veranstaltungen können hochgeladen und betrachtet werden. Die Fotos werden in Alben zusammengefasst, welche wiederum beliebig verschachtelt werden können.</string>
   <string name="SYS_PHOTOS_PRESENTATION">Fotodarstellung</string>
-  <string name="SYS_PHOTOS_PRESENTATION_DESC">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann als modales Fenster geschehen, dann wird im vorhandenen Browserfenster ein neues Fenster geöffnet. Im Hintergrund bleibt die ausgewählte Fotovorschau weiterhin aktiv. Sollen die Bilder im gleichen Fenster dargestellt werden, dann wird die aktuelle Fotovorschau verlassen und eine neue Seite mit dem ausgewählten Foto angezeigt. Soll ein Popup-Fenster erzeugt werden, dann wird ein neues Browserfenster geöffnet in dem das ausgewählte Foto angezeigt wird. Dieses kann dann unabhängig vom Browserfenster mit der Fotovorschau bedient werden. (Voreinstellung: Modales Fenster)</string>
+  <string name="SYS_PHOTOS_PRESENTATION_DESC">Mit dieser Option können Sie festlegen, wie die Bilder innerhalb des Fotomoduls angezeigt werden sollen. Dies kann mit einem modalen Fenster geschehen, das als separates Fenster innerhalb des aktiven Browserfensters geöffnet wird. Die Bildvorschau bleibt dabei im Hintergrund aktiv. Wenn das Bild im gleichen Fenster angezeigt werden soll, wird das aktuelle Album mit den Vorschaubildern ersetzt durch das ausgewählte Bild mit Navigationselementen. (Standard: Modales Fenster)</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">alle PHP-Einstellungen</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>
