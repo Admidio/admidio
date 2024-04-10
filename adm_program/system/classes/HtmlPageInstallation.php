@@ -47,7 +47,7 @@ class HtmlPageInstallation extends HtmlPage
         parent::__construct($id, $headline);
 
         // initialize php template engine smarty
-        $this->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');
+        $this->smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');
 
         // if no modus set then set installation modus
         if ($headline === '') {
@@ -66,24 +66,24 @@ class HtmlPageInstallation extends HtmlPage
         $urlImprint = '';
         $urlDataProtection = '';
 
-        $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
-        $this->assign('id', $this->id);
-        $this->assign('title', $this->title);
-        $this->assign('headline', $this->headline);
-        $this->assign('urlAdmidio', ADMIDIO_URL);
-        $this->assign('urlTheme', THEME_URL);
-        $this->assign('javascriptContent', $this->javascriptContent);
-        $this->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
+        $this->smarty->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
+        $this->smarty->assign('id', $this->id);
+        $this->smarty->assign('title', $this->title);
+        $this->smarty->assign('headline', $this->headline);
+        $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
+        $this->smarty->assign('urlTheme', THEME_URL);
+        $this->smarty->assign('javascriptContent', $this->javascriptContent);
+        $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
 
-        $this->assign('validLogin', $gValidLogin);
-        $this->assign('debug', $gDebug);
+        $this->smarty->assign('validLogin', $gValidLogin);
+        $this->smarty->assign('debug', $gDebug);
 
-        $this->assign('printView', $this->printView);
-        $this->assign('templateFile', $this->templateFile);
-        $this->assign('content', $this->pageContent);
+        $this->smarty->assign('printView', $this->printView);
+        $this->smarty->assign('templateFile', $this->templateFile);
+        $this->smarty->assign('content', $this->pageContent);
 
         // add translation object
-        $this->assign('l10n', $gL10n);
+        $this->smarty->assign('l10n', $gL10n);
 
         // add imprint and data protection
         if(is_object($gSettingsManager)) {
@@ -94,8 +94,8 @@ class HtmlPageInstallation extends HtmlPage
                 $urlDataProtection = $gSettingsManager->getString('system_url_data_protection');
             }
         }
-        $this->assign('urlImprint', $urlImprint);
-        $this->assign('urlDataProtection', $urlDataProtection);
+        $this->smarty->assign('urlImprint', $urlImprint);
+        $this->smarty->assign('urlDataProtection', $urlDataProtection);
     }
 
     /**
@@ -127,7 +127,7 @@ class HtmlPageInstallation extends HtmlPage
      * This method will set all variables for the Smarty engine and then send the whole html
      * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function show()
     {
@@ -135,7 +135,7 @@ class HtmlPageInstallation extends HtmlPage
         header('X-Frame-Options: SAMEORIGIN');
 
         $this->assignDefaultVariables();
-        $this->display('index.tpl');
+        $this->smarty->display('index.tpl');
     }
 
     /**
@@ -149,16 +149,16 @@ class HtmlPageInstallation extends HtmlPage
      * @param string $buttonText The text of the button which will navigate to the **$destinationUrl**
      * @param string $buttonIcon The icon of the button which will navigate to the **$destinationUrl**
      * @param string $destinationUrl An url to which the user should navigate if he clicks on the button.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function showMessage(string $outputMode, string $headline, string $text, string $buttonText, string $buttonIcon, string $destinationUrl)
     {
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
 
-        $this->assign('outputMode', $outputMode);
-        $this->assign('messageHeadline', $headline);
-        $this->assign('messageText', $text);
+        $this->smarty->assign('outputMode', $outputMode);
+        $this->smarty->assign('messageHeadline', $headline);
+        $this->smarty->assign('messageText', $text);
         $this->addTemplateFile('message.tpl');
 
         // add form with submit button
@@ -167,7 +167,7 @@ class HtmlPageInstallation extends HtmlPage
         $this->addHtml($form->show());
 
         $this->assignDefaultVariables();
-        $this->display('index.tpl');
+        $this->smarty->display('index.tpl');
         exit();
     }
 }

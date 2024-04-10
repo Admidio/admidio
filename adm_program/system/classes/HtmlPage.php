@@ -126,31 +126,6 @@ class HtmlPage
     }
 
     /**
-     * Create an object of the template engine Smarty. This object uses the template folder of the
-     * current theme. The all cacheable and compilable files will be stored in the templates folder
-     * of **adm_my_files**.
-     * @return Smarty Returns the initialized Smarty object.
-     * @throws \Smarty\Exception
-     */
-    public static function createSmartyObject(): Smarty
-    {
-        $smartyObject = new Smarty();
-
-        // initialize php template engine smarty
-        if (defined('THEME_PATH')) {
-            $smartyObject->setTemplateDir(THEME_PATH . '/templates/');
-        }
-
-        $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
-        $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        $smartyObject->registerPlugin('function', 'array_key_exists', 'SmartyPlugins::arrayKeyExists');
-        $smartyObject->registerPlugin('function', 'is_font_awesome_icon', 'SmartyPlugins::isFontAwesomeIcon');
-        $smartyObject->registerPlugin('function', 'is_translation_string_id', 'SmartyPlugins::isTranslationStringID');
-        $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'SmartyPlugins::loadAdmidioPlugin');
-        return $smartyObject;
-    }
-
-    /**
      * Adds a cascading style sheets file to the html page.
      * @param string $cssFile The url with filename or the relative path starting with **adm_program** of the css file.
      */
@@ -257,6 +232,42 @@ class HtmlPage
     public function addTemplateFile(string $templateFile)
     {
         $this->templateFile = $templateFile;
+    }
+
+    /**
+     * Public method to assign new variables to the Smarty template of the HtmlPage.
+     * @param string $variable Name of the variable within the Smarty template.
+     * @param string $value Value of the variable.
+     * @return void
+     */
+    public function assignSmartyVariable(string $variable, string $value)
+    {
+        $this->smarty->assign($variable, $value);
+    }
+
+    /**
+     * Create an object of the template engine Smarty. This object uses the template folder of the
+     * current theme. The all cacheable and compilable files will be stored in the templates folder
+     * of **adm_my_files**.
+     * @return Smarty Returns the initialized Smarty object.
+     * @throws \Smarty\Exception
+     */
+    public static function createSmartyObject(): Smarty
+    {
+        $smartyObject = new Smarty();
+
+        // initialize php template engine smarty
+        if (defined('THEME_PATH')) {
+            $smartyObject->setTemplateDir(THEME_PATH . '/templates/');
+        }
+
+        $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
+        $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
+        $smartyObject->registerPlugin('function', 'array_key_exists', 'SmartyPlugins::arrayKeyExists');
+        $smartyObject->registerPlugin('function', 'is_font_awesome_icon', 'SmartyPlugins::isFontAwesomeIcon');
+        $smartyObject->registerPlugin('function', 'is_translation_string_id', 'SmartyPlugins::isTranslationStringID');
+        $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'SmartyPlugins::loadAdmidioPlugin');
+        return $smartyObject;
     }
 
     /**

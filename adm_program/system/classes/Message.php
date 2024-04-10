@@ -168,17 +168,18 @@ class Message
             echo $content;
         } elseif ($this->inline) {
             // show the message in html but without the theme specific header and body
-            $page->assign('message', $content);
-            $page->assign('messageHeadline', $headline);
-            $page->assign('url', $this->url);
-            $page->assign('showYesNoButtons', $this->showYesNoButtons);
-            $page->assign('l10n', $gL10n);
-            $page->display('message_modal.tpl');
+            $smarty = $page->getSmartyTemplate();
+            $smarty->assign('message', $content);
+            $smarty->assign('messageHeadline', $headline);
+            $smarty->assign('url', $this->url);
+            $smarty->assign('showYesNoButtons', $this->showYesNoButtons);
+            $smarty->assign('l10n', $gL10n);
+            $smarty->display('message_modal.tpl');
         } else {
             // show an Admidio html page with complete theme header and body
-            $page->assign('message', $content);
-            $page->assign('url', $this->url);
-            $page->assign('showYesNoButtons', $this->showYesNoButtons);
+            $page->assignSmartyVariable('message', $content);
+            $page->assignSmartyVariable('url', $this->url);
+            $page->assignSmartyVariable('showYesNoButtons', $this->showYesNoButtons);
             $page->addTemplateFile('message.tpl');
             $page->show();
         }

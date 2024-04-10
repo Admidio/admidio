@@ -99,7 +99,7 @@ if (!$pdoStatement || $pdoStatement->rowCount() === 0) {
 
 // create an organization object of the current organization
 $gCurrentOrganization = Organization::createDefaultOrganizationObject($gDb, $g_organization);
-$gCurrentOrgId  = $gCurrentOrganization->getValue('org_id');
+$gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 
 // get system user id
 $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'System\' ';
@@ -153,17 +153,17 @@ if ($message !== '') {
 }
 
 // read current version of Admidio database
-$installedDbVersion     = '';
+$installedDbVersion = '';
 $installedDbBetaVersion = '';
-$maxUpdateStep          = 0;
-$currentUpdateStep      = 0;
-$updateMessage          = '';
+$maxUpdateStep = 0;
+$currentUpdateStep = 0;
+$updateMessage = '';
 
 $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
 if (!$gDb->queryPrepared($sql, array(), false)) {
     // in Admidio version 2 the database version was stored in preferences table
     if ($gSettingsManager->has('db_version')) {
-        $installedDbVersion     = $gSettingsManager->getString('db_version');
+        $installedDbVersion = $gSettingsManager->getString('db_version');
         $installedDbBetaVersion = $gSettingsManager->getInt('db_version_beta');
     }
 } else {
@@ -172,10 +172,10 @@ if (!$gDb->queryPrepared($sql, array(), false)) {
     $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
 
     if ($componentUpdateHandle->getValue('com_id') > 0) {
-        $installedDbVersion     = $componentUpdateHandle->getValue('com_version');
-        $installedDbBetaVersion = (int) $componentUpdateHandle->getValue('com_beta');
-        $currentUpdateStep      = (int) $componentUpdateHandle->getValue('com_update_step');
-        $maxUpdateStep          = $componentUpdateHandle->getMaxUpdateStep();
+        $installedDbVersion = $componentUpdateHandle->getValue('com_version');
+        $installedDbBetaVersion = (int)$componentUpdateHandle->getValue('com_beta');
+        $currentUpdateStep = (int)$componentUpdateHandle->getValue('com_update_step');
+        $maxUpdateStep = $componentUpdateHandle->getMaxUpdateStep();
     }
 }
 
@@ -201,7 +201,7 @@ if ($getMode === 1) {
     // if database version is smaller than source version -> update
     // if database version is equal to source but beta has a difference -> update
     if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
-    || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
+        || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
         // create a page with the notice that the installation must be configured on the next pages
         $page = new HtmlPageInstallation('admidio-update');
         $page->addTemplateFile('update.tpl');
@@ -227,7 +227,7 @@ if ($getMode === 1) {
                     $("#update_login_form").submit();
                 }
             });', true);
-        $page->assign('installedDbVersion', $installedDbVersion);
+        $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
 
         // create form with login and update button
         $form = new HtmlForm('update_login_form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
@@ -257,8 +257,7 @@ if ($getMode === 1) {
 
         $page->addHtml($form->show());
         $page->show();
-    }
-    // if versions are equal > no update
+    } // if versions are equal > no update
     elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
@@ -270,9 +269,8 @@ if ($getMode === 1) {
             'fa-home',
             ADMIDIO_URL . '/adm_program/overview.php'
         );
-    // => EXIT
-    }
-    // if source version smaller than database -> show error
+        // => EXIT
+    } // if source version smaller than database -> show error
     else {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
@@ -282,7 +280,7 @@ if ($getMode === 1) {
             $gL10n->get(
                 'SYS_FILESYSTEM_VERSION_INVALID',
                 array($installedDbVersion,
-                ADMIDIO_VERSION_TEXT, '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>')
+                    ADMIDIO_VERSION_TEXT, '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>')
             ),
             $gL10n->get('SYS_OVERVIEW'),
             'fa-home',
@@ -324,9 +322,17 @@ if ($getMode === 1) {
     $form->addButton(
         'main_page',
         $gL10n->get('SYS_LATER'),
-        array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php')
+        array(
+            'icon' => 'fa-home',
+            'link' => ADMIDIO_URL . '/adm_program/overview.php',
+            'class' => ' btn btn-secondary admidio-margin-bottom '
+        )
     );
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-heart'));
+    $form->addSubmitButton(
+        'next_page',
+        $gL10n->get('SYS_DONATE'),
+        array('icon' => 'fa-heart')
+    );
 
     $page->addHtml($updateMessage);
     $page->addHtml($form->show());
