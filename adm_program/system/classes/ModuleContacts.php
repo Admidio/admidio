@@ -39,7 +39,7 @@ class ModuleContacts extends HtmlPage
      * of the current organization and if the user has already a login.
      * @param User $user User object of the user who should be assigned.
      * @param bool $assignRegistration Flag if the user will be assigned through the registration process.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      * @throws AdmException
      * @throws Exception
      */

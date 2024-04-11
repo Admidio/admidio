@@ -115,7 +115,7 @@ class Message
      * Alternatively there is the possibility to display only the message text.
      * @param string $content The message text that should be shown. The content could have html.
      * @param string $headline Optional a headline for the message. Default will be SYS_NOTE.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      * @throws Exception
      */
     public function show(string $content, string $headline = '')

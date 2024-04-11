@@ -93,6 +93,6 @@ try {
         $page->createContentAssignUser($registrationUser, true);
         $page->show();
     }
-} catch (AdmException|Exception|SmartyException $e) {
+} catch (AdmException|Exception|\Smarty\Exception $e) {
     $gMessage->show($e->getMessage());
 }

@@ -130,7 +130,7 @@ class User extends TableAccess
     /**
      * Assign the user to all roles that have set the flag **rol_default_registration**.
      * These flag should be set if you want that every new user should get this role.
-     * @throws AdmException|SmartyException
+     * @throws AdmException|\Smarty\Exception
      * @throws Exception
      */
     public function assignDefaultRoles()

@@ -48,7 +48,7 @@ try {
     $newUser->setValue('FIRST_NAME', $postFirstname);
     $page->createContentAssignUser($newUser);
     echo $page->getPageContent();
-} catch (SmartyException $e) {
+} catch (\Smarty\Exception $e) {
     $gMessage->show($e->getMessage());
 } catch (AdmException $e) {
     if ($e->getMessage() === 'No similar users found.') {

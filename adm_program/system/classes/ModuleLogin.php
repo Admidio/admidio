@@ -35,7 +35,7 @@ class ModuleLogin
      * organization select box could be shown and the flag if auto login should be activated.
      * @param HtmlPage $page Html content will be added to this page.
      * @param string $organizationShortName Optional the organization that should be preselected in the dialog.
-     * @throws AdmException|SmartyException
+     * @throws AdmException|\Smarty\Exception
      * @throws Exception
      */
     public function addHtmlLogin(HtmlPage $page, string $organizationShortName = '')

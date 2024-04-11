@@ -96,7 +96,7 @@ function getFormerRolesFromDatabase(int $userId): PDOStatement
  * @param User $user
  * @param PDOStatement $roleStatement
  * @return string
- * @throws AdmException|SmartyException
+ * @throws AdmException|\Smarty\Exception
  */
 function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleStatement): string
 {

@@ -184,7 +184,7 @@ class HtmlForm
      *                        - **class** : Optional an additional css classname. The class **admButton**
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addButton(string $id, string $text, array $options = array())
     {
@@ -223,7 +223,7 @@ class HtmlForm
      * @param string $id ID of the captcha field. This will also be the name of the captcha field.
      * @param string $class (optional) An additional css classname. The class **admTextInput**
      *                      is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      * @throws Exception
      */
     public function addCaptcha(string $id, string $class = '')
@@ -269,7 +269,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
@@ -333,7 +333,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addCustomContent(string $label, string $content, array $options = array())
     {
@@ -382,7 +382,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
     {
@@ -477,7 +477,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
@@ -589,7 +589,7 @@ class HtmlForm
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      *                        - **htmlAfter** : Add html code after the input field.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      * @throws Exception
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
@@ -812,7 +812,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
@@ -913,7 +913,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
@@ -1002,7 +1002,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      * @throws Exception
      */
     public function addSelectBox(string $id, string $label, array $values, array $options = array())
@@ -1218,7 +1218,7 @@ class HtmlForm
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show();
      * ```
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      * @throws Exception
      */
     public function addSelectBoxFromSql(string $id, string $label, Database $database, $sql, array $options = array())
@@ -1354,7 +1354,7 @@ class HtmlForm
      *                                 - **icon** : An icon can be set. This will be placed in front of the label.
      *                                 - **class** : An additional css classname. The class **admSelectbox**
      *                                   is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      * @throws Exception
      */
     public function addSelectBoxForCategories(string $id, string $label, Database $database, string $categoryType, string $selectBoxModus, array $options = array())
@@ -1512,7 +1512,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
@@ -1555,7 +1555,7 @@ class HtmlForm
      *                          is set as default and need not set with this parameter.
      *                        - **type** : If set to true this button get the type **submit**. This will
      *                          be the default.
-     * @throws SmartyException
+     * @throws \Smarty\Exception
      */
     public function addSubmitButton(string $id, string $text, array $options = array())
     {

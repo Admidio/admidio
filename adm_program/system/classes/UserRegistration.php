@@ -81,7 +81,7 @@ class UserRegistration extends User
      * that have the flag **rol_default_registration**. After that a notification email is send to the user.
      * If function returns **true** than the user can log in for the organization of this object.
      * @return true Returns **true** if the registration was successful
-     * @throws AdmException|SmartyException
+     * @throws AdmException|\Smarty\Exception
      * @throws Exception
      */
     public function acceptRegistration(): bool
