@@ -22,9 +22,11 @@
         </label>
     {/if}
     {if $enableMultiUploads}
-        <button type="button" id="btn_add_attachment_{$id}" class="btn btn-primary">
-            {include file='sys-template-parts/parts/form.part.icon.tpl'} {$multiUploadLabel}
-        </button>
+        <div>
+            <button type="button" id="btn_add_attachment_{$id}" class="btn btn-primary">
+                {include file='sys-template-parts/parts/form.part.icon.tpl'} {$multiUploadLabel}
+            </button>
+        </div>
     {/if}
     {if $data.formtype eq "navbar"}
         {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}

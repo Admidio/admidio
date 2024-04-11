@@ -513,7 +513,7 @@ class HtmlForm
                     newAttachment = document.createElement("input");
                     $(newAttachment).attr("type", "file");
                     $(newAttachment).attr("name", "userfile[]");
-                    $(newAttachment).attr("class", "' . $optionsAll['class'] . '");
+                    $(newAttachment).attr("class", "form-control mb-2 ' . $optionsAll['class'] . '");
                     $(newAttachment).hide();
                     $("#btn_add_attachment_' . $id . '").before(newAttachment);
                     $(newAttachment).show("slow");
