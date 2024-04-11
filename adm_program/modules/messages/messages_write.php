@@ -548,6 +548,27 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
+    // add multiline text element or ckeditor to form
+    if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
+        $form->addEditor(
+            'msg_body',
+            $gL10n->get('SYS_TEXT'),
+            $message->getContent(),
+            array(
+                'property' => HtmlForm::FIELD_REQUIRED,
+                'helpTextId' => ($gValidLogin && $gSettingsManager->getInt('mail_sending_mode') === Email::SENDINGMODE_SINGLE) ? array('SYS_EMAIL_PARAMETERS_DESC', array('#recipient_firstname#', '#recipient_lastname#', '#recipient_name#', '#recipient_email#')) : null
+            )
+        );
+    } else {
+        $form->addMultilineTextInput(
+            'msg_body',
+            $gL10n->get('SYS_TEXT'),
+            $message->getContent('database'),
+            10,
+            array('property' => HtmlForm::FIELD_REQUIRED)
+        );
+    }
+
     // Only logged in users are allowed to attach files
     if ($gValidLogin && ($gSettingsManager->getInt('max_email_attachment_size') > 0) && PhpIniUtils::isFileUploadEnabled()) {
         $form->addFileUpload(
@@ -561,19 +582,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
                 'helpTextId'    => $gL10n->get('SYS_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
                 'icon'               => 'fa-paperclip'
             )
-        );
-    }
-
-    // add multiline text element or ckeditor to form
-    if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
-        $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => ($gValidLogin && $gSettingsManager->getInt('mail_sending_mode') === Email::SENDINGMODE_SINGLE) ? array('SYS_EMAIL_PARAMETERS_DESC', array('#recipient_firstname#', '#recipient_lastname#', '#recipient_name#', '#recipient_email#')) : null));
-    } else {
-        $form->addMultilineTextInput(
-            'msg_body',
-            $gL10n->get('SYS_TEXT'),
-            $message->getContent('database'),
-            10,
-            array('property' => HtmlForm::FIELD_REQUIRED)
         );
     }
 
