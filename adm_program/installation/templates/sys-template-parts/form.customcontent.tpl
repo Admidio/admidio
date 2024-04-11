@@ -3,7 +3,7 @@
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
     </label>
-    <div id="{$id}">{$content}</div>
+    <div id="{$id}"{if $data.class neq ""} class="{$class}"{/if}>{$content}</div>
     {if $data.formtype eq "navbar"}
         {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
     {else}

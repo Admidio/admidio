@@ -5,8 +5,7 @@
         {$label}
     </label>
     <div>
-        <p {foreach $data.attributes as $itemvar}
-        {$itemvar@key}="{$itemvar}" {/foreach}>{$value}</p>
+        <p id="{$id}" class="form-control-static {$class}">{$value}</p>
 
         {if $data.formtype eq "navbar"}
             {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}

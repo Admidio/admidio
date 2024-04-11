@@ -270,6 +270,14 @@ input[type=checkbox]:focus, button:focus {
     box-shadow: none !important;
 }
 
+input[type=date], input[type=number] {
+    max-width: 180px;
+}
+
+input[type=time] {
+    max-width: 100px;
+}
+
 .btn-primary:focus {
     background-color: var(--bs-link-hover-color) !important;
 }

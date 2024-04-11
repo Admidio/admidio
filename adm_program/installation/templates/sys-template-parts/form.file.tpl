@@ -6,10 +6,10 @@
         </label>
     {/if}
     {if $maxUploadSize}
-        <input type="hidden" name="MAX_FILE_SIZE" id="MAX_FILE_SIZE" value="{$maxUploadSize}" />
+        <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="{$maxUploadSize}" />
     {/if}
     {if $hideUploadField != true OR !$enableMultiUploads}
-        <input class="form-control mb-2" type="file" name="userfile[]"
+        <input type="file" name="userfile[]" class="form-control mb-2 {$class}"
             {foreach $data.attributes as $itemvar}
                 {$itemvar@key}="{$itemvar}"
             {/foreach}
@@ -22,9 +22,11 @@
         </label>
     {/if}
     {if $enableMultiUploads}
-        <button type="button" id="btn_add_attachment_{$id}" class="btn btn-primary">
-            {include file='sys-template-parts/parts/form.part.icon.tpl'} {$multiUploadLabel}
-        </button>
+        <div>
+            <button type="button" id="btn_add_attachment_{$id}" class="btn btn-primary">
+                {include file='sys-template-parts/parts/form.part.icon.tpl'} {$multiUploadLabel}
+            </button>
+        </div>
     {/if}
     {if $data.formtype eq "navbar"}
         {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}

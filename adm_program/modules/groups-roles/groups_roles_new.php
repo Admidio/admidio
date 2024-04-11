@@ -244,7 +244,7 @@ if (!$eventRole) {
         'rol_cost_period',
         $gL10n->get('SYS_CONTRIBUTION_PERIOD'),
         TableRoles::getCostPeriods(),
-        array('defaultValue' => $role->getValue('rol_cost_period'))
+        array('defaultValue' => $role->getValue('rol_cost_period'), 'class' => 'form-control-small')
     );
 }
 $form->closeGroupBox();
@@ -353,7 +353,7 @@ if (!$eventRole) {
     $form->addInput('rol_end_date', $gL10n->get('SYS_VALID_TO'), $role->getValue('rol_end_date'), array('type' => 'date'));
     $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));
     $form->addInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), array('type' => 'time'));
-    $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), DateTimeExtended::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday')));
+    $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), DateTimeExtended::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
     $form->addInput('rol_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'), array('maxLength' => 100));
     $form->closeGroupBox();
 
