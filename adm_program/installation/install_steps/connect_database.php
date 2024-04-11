@@ -55,8 +55,8 @@ if (isset($_SESSION['db_host'])) {
 // create a page to enter all necessary database connection information
 $page = new HtmlPageInstallation('admidio-installation-connect-database');
 $page->addTemplateFile('installation.tpl');
-$page->assign('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
-$page->assign('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
+$page->assignSmartyVariable('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
+$page->assignSmartyVariable('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
 
 $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
 $form->openGroupBox('gbConnectDatabase', $gL10n->get('INS_DATABASE_LOGIN'));

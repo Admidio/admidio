@@ -68,8 +68,8 @@ $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 // create a page to enter all necessary data to create a administrator user
 $page = new HtmlPageInstallation('admidio-installation-create-administrator');
 $page->addTemplateFile('installation.tpl');
-$page->assign('subHeadline', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
-$page->assign('text', $gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'));
+$page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
+$page->assignSmartyVariable('text', $gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'));
 $page->addJavascriptFile(FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
 $page->addJavascript('
     $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4)");

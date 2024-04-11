@@ -217,9 +217,9 @@ class ModuleGroupsRoles extends HtmlPage
             $templateData[] = $templateRow;
         }
 
-        $this->assign('cards', $templateData);
-        $this->assign('l10n', $gL10n);
-        $this->pageContent .= $this->fetch('modules/groups-roles.cards.tpl');
+        $this->smarty->assign('cards', $templateData);
+        $this->smarty->assign('l10n', $gL10n);
+        $this->pageContent .= $this->smarty->fetch('modules/groups-roles.cards.tpl');
     }
 
     /**
@@ -381,9 +381,9 @@ class ModuleGroupsRoles extends HtmlPage
         $dataTables->setDatatablesColumnsNotHideResponsive(array(8));
         $dataTables->createJavascript(count($this->data), 7);
 
-        $this->assign('list', $templateData);
-        $this->assign('l10n', $gL10n);
-        $this->pageContent .= $this->fetch('modules/groups-roles.permissions-list.tpl');
+        $this->smarty->assign('list', $templateData);
+        $this->smarty->assign('l10n', $gL10n);
+        $this->pageContent .= $this->smarty->fetch('modules/groups-roles.permissions-list.tpl');
     }
 
     /**

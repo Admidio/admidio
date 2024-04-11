@@ -122,8 +122,8 @@ class ModuleRegistration extends HtmlPage
             $templateData[] = $templateRow;
         }
 
-        $this->assign('cards', $templateData);
-        $this->assign('l10n', $gL10n);
-        $this->pageContent .= $this->fetch('modules/registration.cards.tpl');
+        $this->smarty->assign('cards', $templateData);
+        $this->smarty->assign('l10n', $gL10n);
+        $this->pageContent .= $this->smarty->fetch('modules/registration.cards.tpl');
     }
 }

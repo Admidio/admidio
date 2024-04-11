@@ -166,8 +166,8 @@ if ($configFileHandle) {
     fclose($configFileHandle);
 
     // start installation
-    $page->assign('subHeadline', $gL10n->get('INS_INSTALL_ADMIDIO'));
-    $page->assign('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));
+    $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_INSTALL_ADMIDIO'));
+    $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));
 
     $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
     $form->addButton(
@@ -177,8 +177,8 @@ if ($configFileHandle) {
     );
 } else {
     // if user doesn't has write access then create a page with a download link for the config file
-    $page->assign('subHeadline', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
-    $page->assign('text', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files')));
+    $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
+    $page->assignSmartyVariable('text', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files')));
 
     $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
     $form->addButton(

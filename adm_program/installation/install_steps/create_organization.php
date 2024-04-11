@@ -216,8 +216,8 @@ foreach ($allTimezones as $timezone) {
 // create a page to enter the organization names
 $page = new HtmlPageInstallation('admidio-installation-create-organization');
 $page->addTemplateFile('installation.tpl');
-$page->assign('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
-$page->assign('text', $gL10n->get('ORG_NEW_ORGANIZATION_DESC'));
+$page->assignSmartyVariable('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
+$page->assignSmartyVariable('text', $gL10n->get('ORG_NEW_ORGANIZATION_DESC'));
 
 $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')));
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ORGANIZATION'));

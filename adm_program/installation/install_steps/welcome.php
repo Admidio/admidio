@@ -16,8 +16,8 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
 // create form with select box where user can select a language
 $page = new HtmlPageInstallation('admidio-installation-welcome');
 $page->addTemplateFile('installation.tpl');
-$page->assign('subHeadline', $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
-$page->assign('text', $gL10n->get(
+$page->assignSmartyVariable('subHeadline', $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
+$page->assignSmartyVariable('text', $gL10n->get(
     'INS_WELCOME_TEXT',
     array(
             '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation" target="_blank">', '</a>',

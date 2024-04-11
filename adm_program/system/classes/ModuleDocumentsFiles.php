@@ -158,11 +158,11 @@ class ModuleDocumentsFiles extends HtmlPage
         $dataTables->setDatatablesColumnsNotHideResponsive(array(6));
         $dataTables->createJavascript(count($this->data), 6);
 
-        $this->assign('infoAlert', $infoAlert);
-        $this->assign('list', $templateData);
-        $this->assign('unregisteredList', $templateUnregisteredData);
-        $this->assign('l10n', $gL10n);
-        $this->pageContent .= $this->fetch('modules/documents-files.list.tpl');
+        $this->smarty->assign('infoAlert', $infoAlert);
+        $this->smarty->assign('list', $templateData);
+        $this->smarty->assign('unregisteredList', $templateUnregisteredData);
+        $this->smarty->assign('l10n', $gL10n);
+        $this->pageContent .= $this->smarty->fetch('modules/documents-files.list.tpl');
     }
 
     /**

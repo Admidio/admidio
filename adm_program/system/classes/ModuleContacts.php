@@ -58,11 +58,11 @@ class ModuleContacts extends HtmlPage
 
 
         if($assignRegistration) {
-            $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $user->getValue('EMAIL'))));
+            $this->smarty->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $user->getValue('EMAIL'))));
 
             // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
             if ($gCurrentUser->editUsers()) {
-                $this->assign('createNewUserUrl',
+                $this->smarty->assign('createNewUserUrl',
                     SecurityUtils::encodeUrl(
                         ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php',
                         array(
@@ -72,7 +72,7 @@ class ModuleContacts extends HtmlPage
                     )
                 );
             } else {
-                $this->assign('createNewUserUrl',
+                $this->smarty->assign('createNewUserUrl',
                     SecurityUtils::encodeUrl(
                         ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php',
                         array(
@@ -83,8 +83,8 @@ class ModuleContacts extends HtmlPage
                 );
             }
         } else {
-            $this->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_ASSIGN', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
-            $this->assign('createNewUserUrl',
+            $this->smarty->assign('description', $gL10n->get('SYS_SIMILAR_CONTACTS_FOUND_ASSIGN', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
+            $this->smarty->assign('createNewUserUrl',
                 SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php',
                     array(
@@ -157,8 +157,8 @@ class ModuleContacts extends HtmlPage
             $templateData[] = $templateRow;
         }
 
-        $this->assign('similarUsers', $templateData);
-        $this->assign('l10n', $gL10n);
-        $this->pageContent .= $this->fetch('modules/contacts.assign.tpl');
+        $this->smarty->assign('similarUsers', $templateData);
+        $this->smarty->assign('l10n', $gL10n);
+        $this->pageContent .= $this->smarty->fetch('modules/contacts.assign.tpl');
     }
 }
