@@ -263,7 +263,7 @@ form, .admidio-max-with {
     max-width: 1000px;
 }
 
-.form-control:focus, .select2-container--bootstrap4.select2-container--focus .select2-selection,
+.form-control:focus, .form-select:focus, .select2-container--bootstrap4.select2-container--focus .select2-selection,
 input[type=checkbox]:focus, button:focus {
     border-color: #349aaa;
     background-color: #d6ebee;
