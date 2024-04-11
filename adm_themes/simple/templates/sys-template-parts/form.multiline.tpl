@@ -11,7 +11,7 @@
             {$label}
         </label>
         <div>
-            <textarea name="{$id}" id="{$id}"
+            <textarea id="{$id}" name="{$id}" class="form-control {$class}"
                 {foreach $data.attributes as $itemvar}
                     {$itemvar@key}="{$itemvar}"
                 {/foreach}

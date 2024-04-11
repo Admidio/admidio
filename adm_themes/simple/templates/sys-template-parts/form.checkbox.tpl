@@ -1,6 +1,6 @@
 
 <div id="{$id}_group" class="form-control-group form-check{if $data.formtype neq "navbar"} mb-4{/if}{if $property eq 1} admidio-form-group-required{/if}">
-    <input class="form-check-input" type="checkbox" name="{$id}" id="{$id}" value="1"
+    <input id="{$id}" name="{$id}" class="form-check-input {$class}" type="checkbox" value="1"
         {foreach $data.attributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
         {/foreach}

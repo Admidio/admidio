@@ -200,16 +200,15 @@ class HtmlForm
         );
         $optionsAll = array_replace($optionsDefault, $options);
         $attributes = array();
-        $attributes['class'] = $optionsAll['class'];
         $attributes['type'] = $optionsAll['type'];
         $attributes['data-admidio'] = $optionsAll['data-admidio'];
         ++$this->countElements;
 
-        if(strstr($attributes['class'], ' btn ') === false) {
-            $attributes['class'] = "btn btn-primary " . $optionsAll['class'];
+        if(strstr($optionsAll['class'], 'btn-') === false) {
+            $optionsAll['class'] .= " btn-primary";
 
             if ($this->type !== 'navbar') {
-                $attributes['class'] .= '  admidio-margin-bottom';
+                $optionsAll['class'] .= '  admidio-margin-bottom';
             }
         }
 
@@ -230,21 +229,19 @@ class HtmlForm
     {
         global $gL10n;
 
-        $attributes = array();
         ++$this->countElements;
 
-        // set specific css class for this field
-        if ($class !== '') {
-            $attributes['class'] .= ' ' . $class;
-        }
-
-        $this->render('form.captcha', ['attributes' => $attributes]);
+        $this->render('form.captcha', ['class' => $class]);
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,
             $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'),
             '',
-            array('property' => self::FIELD_REQUIRED, 'helpTextId' => 'SYS_CAPTCHA_DESCRIPTION', 'class' => 'form-control-small')
+            array(
+                'property' => self::FIELD_REQUIRED,
+                'helpTextId' => 'SYS_CAPTCHA_DESCRIPTION',
+                'class' => 'form-control-small'
+            )
         );
 
     }
@@ -273,7 +270,6 @@ class HtmlForm
      */
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
-        $attributes   = array('class' => '');
         ++$this->countElements;
 
         // create array with all options
@@ -287,6 +283,7 @@ class HtmlForm
             'label'            => $label
         );
         $optionsAll = array_replace($optionsDefault, $options);
+        $attributes = array();
 
         // disable field
         if ($optionsAll['property'] === self::FIELD_DISABLED) {
@@ -299,11 +296,6 @@ class HtmlForm
         // if checked = true then set checkbox checked
         if ($checked) {
             $attributes['checked'] = 'checked';
-        }
-
-        // set specific css class for this field
-        if ($optionsAll['class'] !== '') {
-            $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
         $optionsAll["attributes"] = $attributes;
@@ -388,7 +380,6 @@ class HtmlForm
     {
         global $gSettingsManager, $gL10n;
 
-        $attributes = array('class' => 'editor');
         $flagLabelVertical = $this->type;
         ++$this->countElements;
 
@@ -407,6 +398,7 @@ class HtmlForm
             'value'            => $value,
         );
         $optionsAll = array_replace($optionsDefault, $options);
+        $attributes = array();
 
         if ($optionsAll['labelVertical']) {
             $this->type = 'vertical';
@@ -417,10 +409,6 @@ class HtmlForm
             $this->flagRequiredFields = true;
         }
 
-        // set specific css class for this field
-        if ($optionsAll['class'] !== '') {
-            $attributes['class'] .= ' ' . $optionsAll['class'];
-        }
         $javascriptCode = '
             CKEDITOR.replace("' . $id . '", {
                 toolbar: "' . $optionsAll['toolbar'] . '",
@@ -481,7 +469,6 @@ class HtmlForm
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
-        $attributes = array('class' => 'form-control mb-2');
         ++$this->countElements;
 
         // create array with all options
@@ -499,6 +486,7 @@ class HtmlForm
             'label'              => $label,
         );
         $optionsAll = array_replace($optionsDefault, $options);
+        $attributes = array();
 
         // disable field
         if ($optionsAll['property'] === self::FIELD_DISABLED) {
@@ -514,11 +502,6 @@ class HtmlForm
 
         if ($optionsAll['icon'] === '') {
             $optionsAll['icon'] = 'fa-upload';
-        }
-
-        // set specific css class for this field
-        if ($optionsAll['class'] !== '') {
-            $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
         // if multiple uploads are enabled then add javascript that will
@@ -596,7 +579,6 @@ class HtmlForm
     {
         global $gSettingsManager, $gLogger;
 
-        $attributes = array('class' => 'form-control');
         ++$this->countElements;
 
         // create array with all options
@@ -681,13 +663,8 @@ class HtmlForm
 
             case self::FIELD_HIDDEN:
                 $attributes['hidden'] = 'hidden';
-                $attributes['class'] .= ' invisible';
+                $optionsAll['class'] .= ' invisible';
                 break;
-        }
-
-        // set specific css class for this field
-        if ($optionsAll['class'] !== '') {
-            $attributes['class'] .= ' '.$optionsAll['class'];
         }
 
         // Remove attributes that are not set
@@ -817,7 +794,6 @@ class HtmlForm
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
         ++$this->countElements;
-        $attributes = array('class' => 'form-control');
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -831,6 +807,7 @@ class HtmlForm
             'value'            => $value
         );
         $optionsAll = array_replace($optionsDefault, $options);
+        $attributes = array();
 
         // set field properties
         switch ($optionsAll['property']) {
@@ -851,11 +828,6 @@ class HtmlForm
                 $attributes['hidden'] = 'hidden';
                 $attributes['class'] .= ' invisible';
                 break;
-        }
-
-        // set specific css class for this field
-        if ($optionsAll['class'] !== '') {
-            $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
         if ($optionsAll['maxLength'] > 0) {
@@ -918,7 +890,6 @@ class HtmlForm
     public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
         ++$this->countElements;
-        $attributes = array('class' => '');
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -933,6 +904,7 @@ class HtmlForm
             'values'            => $values
         );
         $optionsAll = array_replace($optionsDefault, $options);
+        $attributes = array();
 
         // disable field
         if ($optionsAll['property'] === self::FIELD_DISABLED) {
@@ -940,11 +912,6 @@ class HtmlForm
         } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
             $this->flagRequiredFields = true;
-        }
-
-        // set specific css class for this field
-        if ($optionsAll['class'] !== '') {
-            $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
         $optionsAll["attributes"] = $attributes;
@@ -1010,7 +977,6 @@ class HtmlForm
         global $gL10n;
 
         ++$this->countElements;
-        $attributes = array('class' => 'form-select');
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -1032,8 +998,7 @@ class HtmlForm
             'label'                          => $label
         );
         $optionsAll = array_replace($optionsDefault, $options);
-        $attributes['id'] = $id;
-        $attributes['name'] = $id;
+        $attributes = array();
 
         // set field properties
         switch ($optionsAll['property']) {
@@ -1094,11 +1059,6 @@ class HtmlForm
                 // reset the preferences so the logic for not multiselect will not be performed
                 $optionsAll['showContextDependentFirstEntry'] = false;
             }
-        }
-
-        // set specific css class for this field
-        if ($optionsAll['class'] !== '') {
-            $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
         if ($optionsAll['firstEntry'] !== '') {
@@ -1516,7 +1476,6 @@ class HtmlForm
      */
     public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
-        $attributes = array('class' => 'form-control-static');
         ++$this->countElements;
 
         // create array with all options
@@ -1531,12 +1490,6 @@ class HtmlForm
             'value'            => $value);
         $optionsAll     = array_replace($optionsDefault, $options);
 
-        // set specific css class for this field
-        if ($optionsAll['class'] !== '') {
-            $attributes['class'] .= ' ' . $optionsAll['class'];
-        }
-
-        $optionsAll["attributes"] = $attributes;
         $this->render('form.static', $optionsAll);
     }
 
@@ -1564,7 +1517,7 @@ class HtmlForm
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css classes
-        $optionsAll['class'] .= ' btn btn-primary';
+        $optionsAll['class'] .= ' btn-primary';
         if ($this->type !== 'navbar') {
             $optionsAll['class'] .= '  admidio-margin-bottom';
         }

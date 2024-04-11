@@ -6,7 +6,7 @@
             {$label}
         </label>
     {/if}
-    <select
+    <select id="{$id}" name="{$id}" class="form-select {$class}"
         {foreach $data.attributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
         {/foreach}>

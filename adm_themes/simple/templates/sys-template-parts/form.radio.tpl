@@ -13,13 +13,13 @@
         <div>
             {if $showNoValueButton}
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="{$id}" id="{$id}_0" class="{$data.attributes.class}" value="0">
+                    <input id="{$id}_0" name="{$id}" class="form-check-input {$class}" type="radio" class="{$data.attributes.class}" value="0">
                     <label for="{$id}_0" class="form-check-label">---</label>
                 </div>
             {/if}
             {foreach $values as $optionvar}
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="{$id}" id="{$id}_{$optionvar@key}" value="{$optionvar@key}"
+                    <input id="{$id}_{$optionvar@key}" name="{$id}" class="form-check-input {$class}" type="radio" value="{$optionvar@key}"
                         {foreach $data.attributes as $itemvar}
                             {$itemvar@key}="{$itemvar}"
                         {/foreach}

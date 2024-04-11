@@ -3,7 +3,7 @@
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
     </label>
-    <div
+    <div class="editor {$class}"
         {foreach $data.attributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
         {/foreach}

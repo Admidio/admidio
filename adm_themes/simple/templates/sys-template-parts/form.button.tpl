@@ -1,4 +1,4 @@
-<button id="{$id}" name="{$id}"
+<button id="{$id}" name="{$id}" class="btn  {$class}"
     {if $link}onclick="self.location.href='{$link}'" {/if}
     {foreach $data.attributes as $itemvar}
         {$itemvar@key}="{$itemvar}"
