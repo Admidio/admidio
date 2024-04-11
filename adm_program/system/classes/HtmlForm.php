@@ -513,7 +513,7 @@ class HtmlForm
                     newAttachment = document.createElement("input");
                     $(newAttachment).attr("type", "file");
                     $(newAttachment).attr("name", "userfile[]");
-                    $(newAttachment).attr("class", "' . $attributes['class'] . '");
+                    $(newAttachment).attr("class", "' . $optionsAll['class'] . '");
                     $(newAttachment).hide();
                     $("#btn_add_attachment_' . $id . '").before(newAttachment);
                     $(newAttachment).show("slow");
@@ -1088,7 +1088,7 @@ class HtmlForm
 
             $javascriptCode = '
                 $("#' . $id . '").select2({
-                    theme: "bootstrap4",
+                    theme: "bootstrap-5",
                     allowClear: ' . $allowClear . ',
                     ' . $maximumSelectionNumber . '
                     placeholder: "' . $optionsAll['placeholder'] . '",
@@ -1108,7 +1108,7 @@ class HtmlForm
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
-                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap4.css');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
             }
