@@ -160,9 +160,6 @@ if ($postMode === 'edit') {
     if (!isset($_POST['usf_registration'])) {
         $_POST['usf_registration'] = 0;
     }
-    if (!isset($_POST['usf_description_inline'])) {
-        $_POST['usf_description_inline'] = 0;
-    }
 
     // make html in description secure
     $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');

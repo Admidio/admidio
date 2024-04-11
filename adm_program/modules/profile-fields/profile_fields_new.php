@@ -265,12 +265,6 @@ $form->addInput(
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
 $form->addEditor('usf_description', '', $userField->getValue('usf_description'), array('height' => '200px'));
-$form->addDescription($gL10n->get('SYS_DESCRIPTION_POPOVER_DESC'));
-$form->addCheckbox(
-    'usf_description_inline',
-    $gL10n->get('SYS_DESCRIPTION_INLINE_DESC'),
-    (bool) $userField->getValue('usf_description_inline')
-);
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));

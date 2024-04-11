@@ -232,7 +232,6 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
         $helpId        = '';
         $usfNameIntern = $field->getValue('usf_name_intern');
-        $helpTextMode  = 'helpTextId';
 
         if ($gProfileFields->getProperty($usfNameIntern, 'usf_disabled') == 1
         && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 0) {
@@ -249,10 +248,6 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             }
         }
 
-        if ($gProfileFields->getProperty($usfNameIntern, 'usf_description_inline')) {
-            $helpTextMode  = 'helpTextId';
-        }
-
         // code for different field types
         if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'CHECKBOX') {
             $form->addCheckbox(
@@ -260,9 +255,9 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
                 (bool) $user->getValue($usfNameIntern),
                 array(
-                    'property'    => $fieldProperty,
-                    $helpTextMode => $helpId,
-                    'icon'        => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'property'   => $fieldProperty,
+                    'helpTextId' => $helpId,
+                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $usfNameIntern === 'COUNTRY') {
@@ -288,7 +283,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 array(
                     'property'     => $fieldProperty,
                     'defaultValue' => $defaultValue,
-                    $helpTextMode  => $helpId,
+                    'helpTextId'   => $helpId,
                     'icon'         => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
@@ -307,7 +302,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'property'          => $fieldProperty,
                     'defaultValue'      => (int) $user->getValue($usfNameIntern, 'database'),
                     'showNoValueButton' => $showDummyRadioButton,
-                    $helpTextMode       => $helpId,
+                    'helpTextId'        => $helpId,
                     'icon'              => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
@@ -318,10 +313,10 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 $user->getValue($usfNameIntern),
                 3,
                 array(
-                    'maxLength'       => 4000,
-                    'property'        => $fieldProperty,
-                    $helpTextMode     => $helpId,
-                    'icon'            => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'maxLength'  => 4000,
+                    'property'   => $fieldProperty,
+                    'helpTextId' => $helpId,
+                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } else {
@@ -351,11 +346,11 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
                 $user->getValue($usfNameIntern),
                 array(
-                    'type'            => $fieldType,
-                    'maxLength'       => $maxlength,
-                    'property'        => $fieldProperty,
-                    $helpTextMode     => $helpId,
-                    'icon'            => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'type'       => $fieldType,
+                    'maxLength'  => $maxlength,
+                    'property'   => $fieldProperty,
+                    'helpTextId' => $helpId,
+                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         }

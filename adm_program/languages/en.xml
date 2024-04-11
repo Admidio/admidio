@@ -536,8 +536,6 @@
   <string name="SYS_DEPENDENCIES">Dependencies</string>
   <string name="SYS_DEPENDENT">Dependent</string>
   <string name="SYS_DESCRIPTION">Description</string>
-  <string name="SYS_DESCRIPTION_POPOVER_DESC">The description is displayed in a small window, which can be accessed via a question mark icon next to the field label.</string>
-  <string name="SYS_DESCRIPTION_INLINE_DESC">Display the description below the field directly in the form.</string>
   <string name="SYS_DESIGNATION">Name</string>
   <string name="SYS_DETAILED">Detailed</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>

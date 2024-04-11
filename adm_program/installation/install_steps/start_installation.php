@@ -149,22 +149,22 @@ $db->queryPrepared($sql);
 
 // create profile fields of category basic data
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
-               (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_description_inline, usf_value_list, usf_system, usf_disabled, usf_required_input, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-        VALUES ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, false, NULL, true, true, 1, true, 1,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, false, NULL, true, true, 1, true, 2,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, false, NULL, false, false, 0, false, 3,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'POSTCODE\',   \'SYS_POSTCODE\',  NULL, false, NULL, false, false, 0, false, 4,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'CITY\',       \'SYS_CITY\',      NULL, false, NULL, false, false, 0, false, 5,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, false, NULL, false, false, 0, false, 6,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, false, NULL, false, false, 0, false, 7,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, false, NULL, false, false, 0, false, 8,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, false, NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, false, \'fa-mars|SYS_MALE
+               (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_required_input, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+        VALUES ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, NULL, true, true, 1, true, 1,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, NULL, true, true, 1, true, 2,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, NULL, false, false, 0, false, 3,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'POSTCODE\',   \'SYS_POSTCODE\',  NULL, NULL, false, false, 0, false, 4,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'CITY\',       \'SYS_CITY\',      NULL, NULL, false, false, 0, false, 5,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, NULL, false, false, 0, false, 6,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, NULL, false, false, 0, false, 7,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, NULL, false, false, 0, false, 8,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'fa-mars|SYS_MALE
 fa-venus|SYS_FEMALE
 fa-mars-stroke-v|SYS_DIVERSE\', false, false, 0, false, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, false, NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, false, NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', true, NULL, false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', NULL, false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
 
 // create profile fields of category social networks
