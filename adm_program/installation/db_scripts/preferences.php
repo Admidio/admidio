@@ -28,7 +28,6 @@ $defaultOrgPreferences = array(
     'system_date'                    => 'd.m.Y',
     'system_hashing_cost'            => '10',
     'system_js_editor_enabled'       => '1',
-    'system_js_editor_color'         => '#96c4cb',
     'system_language'                => 'de',
     'system_search_similar'          => '1',
     'system_show_create_edit'        => '1',
