@@ -411,7 +411,9 @@ class HtmlForm
 
         $javascriptCode = '
         ClassicEditor
-        .create( document.querySelector( "#' . $id . '" ) )
+        .create( document.querySelector( "#' . $id . '" ), {
+            language: "' . $gL10n->getLanguageLibs() . '"
+        } )
             .catch( error => {
         console.error( error );
     } );
@@ -431,8 +433,7 @@ class HtmlForm
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/ckeditor.js');
-                //$this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/script.js');
-                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/styles.css');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/translations/' . $gL10n->getLanguageLibs() . '.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
