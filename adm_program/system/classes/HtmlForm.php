@@ -410,6 +410,14 @@ class HtmlForm
         }
 
         $javascriptCode = '
+        ClassicEditor
+        .create( document.querySelector( "#' . $id . '" ) )
+            .catch( error => {
+        console.error( error );
+    } );
+        ';
+        /*
+        $javascriptCode = '
             CKEDITOR.replace("' . $id . '", {
                 toolbar: "' . $optionsAll['toolbar'] . '",
                 language: "' . $gL10n->getLanguageLibs() . '",
@@ -418,11 +426,13 @@ class HtmlForm
                 filebrowserImageUploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php"
             });
             CKEDITOR.config.height = "' . $optionsAll['height'] . '";';
-
+*/
         if ($gSettingsManager->getBool('system_js_editor_enabled')) {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof HtmlPage) {
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/ckeditor.js');
+                //$this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/script.js');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/styles.css');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
