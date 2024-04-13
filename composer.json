@@ -59,7 +59,12 @@
             "!vendor/twbs/bootstrap/dist",
             "vendor/fortawesome/font-awesome",
             "!vendor/fortawesome/font-awesome/css",
-            "!vendor/fortawesome/font-awesome/webfonts"
+            "!vendor/fortawesome/font-awesome/webfonts",
+            "adm_my_files/*",
+            "!adm_my_files/config_example.php",
+            "!adm_my_files/ecard_templates",
+            "!adm_my_files/mail_templates",
+            "demo_data"
         ]
     }
 }
