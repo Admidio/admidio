@@ -19,7 +19,6 @@ $getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireVal
 
 try {
     $htmlUrl = '';
-    $message = '';
     $response = array();
 
     // check if a file was really uploaded
@@ -76,8 +75,8 @@ try {
 
     // check if the file contains a valid image
     if (!getimagesize($fileNamePath)) {
-        $message = $gL10n->get('SYS_PHOTO_FORMAT_INVALID');
         FileSystemUtils::deleteFileIfExists($fileNamePath);
+        throw new AdmException('SYS_PHOTO_FORMAT_INVALID');
     }
 
     echo json_encode(array('url' => $htmlUrl));
