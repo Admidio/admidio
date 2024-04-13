@@ -90,8 +90,7 @@ $form->addSelectBoxForCategories(
 $form->addEditor(
     'lnk_description',
     $gL10n->get('SYS_DESCRIPTION'),
-    $link->getValue('lnk_description'),
-    array('height' => '150px')
+    $link->getValue('lnk_description')
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 

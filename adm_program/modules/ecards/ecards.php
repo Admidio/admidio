@@ -237,7 +237,7 @@ $form->addEditor(
     'ecard_message',
     '',
     $message,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook')
+    array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
 );
 $form->closeGroupBox();
 $form->openButtonGroup();

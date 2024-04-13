@@ -145,7 +145,7 @@ $form->addEditor(
     'gbc_text',
     $gL10n->get('SYS_COMMENT'),
     $gbComment->getValue('gbc_text'),
-    array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook')
+    array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
 );
 
 // if captchas are enabled then visitors of the website must resolve this

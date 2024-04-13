@@ -271,12 +271,6 @@ $formCommon->addInput(
     $formValues['system_url_imprint'],
     array('maxLength' => 250, 'helpTextId' => 'SYS_IMPRINT_DESC')
 );
-$formCommon->addInput(
-    'system_js_editor_color',
-    $gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR'),
-    $formValues['system_js_editor_color'],
-    array('maxLength' => 10, 'helpTextId' => array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', array('SYS_REMEMBER_ME')), 'class' => 'form-control-small')
-);
 $formCommon->addCheckbox(
     'system_js_editor_enabled',
     $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'),

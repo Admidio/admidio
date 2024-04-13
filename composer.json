@@ -17,6 +17,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-gd": "*",
+        "ext-json": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
         "ext-zip": "*",
