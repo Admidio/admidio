@@ -264,7 +264,7 @@ $form->addInput(
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
-$form->addEditor('usf_description', '', $userField->getValue('usf_description'), array('height' => '200px'));
+$form->addEditor('usf_description', '', $userField->getValue('usf_description'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));

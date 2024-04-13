@@ -97,7 +97,7 @@ $form->addEditor(
     'ann_description',
     $gL10n->get('SYS_TEXT'),
     $announcement->getValue('ann_description'),
-    array('property' => HtmlForm::FIELD_REQUIRED, 'height' => '400')
+    array('property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(

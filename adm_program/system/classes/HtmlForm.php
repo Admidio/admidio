@@ -364,7 +364,6 @@ class HtmlForm
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                        - **toolbar** : Optional set a predefined toolbar for the editor. Possible values are
      *                          **AdmidioDefault**, **AdmidioGuestbook** and **AdmidioPlugin_WC**
-     *                        - **height** : Optional set the height in pixel of the editor. The default will be 300.
      *                        - **labelVertical** : If set to **true** (default) then the label will be display above the control and the control get a width of 100%.
      *                          Otherwise, the label will be displayed in front of the control.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
@@ -387,7 +386,6 @@ class HtmlForm
         $optionsDefault = array('formtype' => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
-            'height'           => '300',
             'alertWarning'     => '',
             'helpTextId'       => '',
             'labelVertical'    => true,
@@ -412,23 +410,15 @@ class HtmlForm
         $javascriptCode = '
         ClassicEditor
         .create( document.querySelector( "#' . $id . '" ), {
-            language: "' . $gL10n->getLanguageLibs() . '"
+            language: "' . $gL10n->getLanguageLibs() . '",
+            simpleUpload: {
+                uploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php?id=' . $id . '"
+            }
         } )
-            .catch( error => {
-        console.error( error );
-    } );
-        ';
-        /*
-        $javascriptCode = '
-            CKEDITOR.replace("' . $id . '", {
-                toolbar: "' . $optionsAll['toolbar'] . '",
-                language: "' . $gL10n->getLanguageLibs() . '",
-                uiColor: "' . $gSettingsManager->getString('system_js_editor_color') . '",
-                filebrowserUploadMethod: "form",
-                filebrowserImageUploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php"
-            });
-            CKEDITOR.config.height = "' . $optionsAll['height'] . '";';
-*/
+        .catch( error => {
+            console.error( error );
+        } );';
+
         if ($gSettingsManager->getBool('system_js_editor_enabled')) {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof HtmlPage) {

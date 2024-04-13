@@ -73,7 +73,7 @@ $form->addInput(
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
-$form->addEditor('room_description', '', $room->getValue('room_description'), array('height' => '150px'));
+$form->addEditor('room_description', '', $room->getValue('room_description'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
