@@ -363,7 +363,7 @@ class HtmlForm
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                        - **toolbar** : Optional set a predefined toolbar for the editor. Possible values are
-     *                          **AdmidioDefault**, **AdmidioGuestbook** and **AdmidioPlugin_WC**
+     *                          **AdmidioDefault**, **AdmidioComments** and **AdmidioNoMedia**
      *                        - **labelVertical** : If set to **true** (default) then the label will be display above the control and the control get a width of 100%.
      *                          Otherwise, the label will be displayed in front of the control.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
@@ -407,9 +407,18 @@ class HtmlForm
             $this->flagRequiredFields = true;
         }
 
+        if ($optionsAll['toolbar'] === 'AdmidioComments') {
+            $toolbarJS = 'toolbar: ["bold", "italic", "link", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "undo", "redo"],';
+        } elseif ($optionsAll['toolbar'] === 'AdmidioNoMedia') {
+            $toolbarJS = 'toolbar: ["bold", "italic", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "link", "blockQuote", "insertTable", "|", "undo", "redo"],';
+        } else {
+            $toolbarJS = '';
+        }
+
         $javascriptCode = '
         ClassicEditor
         .create( document.querySelector( "#' . $id . '" ), {
+            ' . $toolbarJS . '
             language: "' . $gL10n->getLanguageLibs() . '",
             simpleUpload: {
                 uploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php?id=' . $id . '"
