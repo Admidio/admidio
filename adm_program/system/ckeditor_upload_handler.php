@@ -76,7 +76,8 @@ try {
 
     echo json_encode(
         array(
-            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/show_image.php',
+            'url' => SecurityUtils::encodeUrl(
+                ADMIDIO_URL . '/adm_program/system/show_image.php',
                 array(
                     'module' => $folderName,
                     'file' => $fileName
