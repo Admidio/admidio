@@ -18,9 +18,6 @@ require(__DIR__ . '/login_valid.php');
 $getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
 
 try {
-    $htmlUrl = '';
-    $response = array();
-
     // check if a file was really uploaded
     if (!file_exists($_FILES['upload']['tmp_name']) || !is_uploaded_file($_FILES['upload']['tmp_name'])) {
         throw new AdmException('SYS_FILE_NOT_EXIST');
@@ -69,8 +66,6 @@ try {
     $fileName = FileSystemUtils::getGeneratedFilename($_FILES['upload']['name']);
     $fileNamePath = $imagesPath . '/' . $fileName;
 
-    $htmlUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $fileName));
-
     move_uploaded_file($_FILES['upload']['tmp_name'], $fileNamePath);
 
     // check if the file contains a valid image
@@ -79,7 +74,16 @@ try {
         throw new AdmException('SYS_PHOTO_FORMAT_INVALID');
     }
 
-    echo json_encode(array('url' => $htmlUrl));
+    echo json_encode(
+        array(
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/show_image.php',
+                array(
+                    'module' => $folderName,
+                    'file' => $fileName
+                )
+            )
+        )
+    );
 } catch (RuntimeException|AdmException $exception) {
     echo json_encode(array('error' => array('message' => $exception->getMessage())));
 }
