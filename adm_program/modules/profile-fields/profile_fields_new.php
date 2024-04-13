@@ -263,8 +263,12 @@ $form->addInput(
     array('maxLength' => 2000, 'helpTextId' => 'ORG_FIELD_URL_DESC')
 );
 $form->closeGroupBox();
-$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
-$form->addEditor('usf_description', '', $userField->getValue('usf_description'));
+$form->openGroupBox('gb_description', '', 'admidio-panel-editor');
+$form->addEditor(
+    'usf_description',
+    $gL10n->get('SYS_DESCRIPTION'),
+    $userField->getValue('usf_description'),
+    array('toolbar' => 'AdmidioComments'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
