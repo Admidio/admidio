@@ -431,8 +431,8 @@ class HtmlForm
         if ($gSettingsManager->getBool('system_js_editor_enabled')) {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof HtmlPage) {
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/ckeditor.js');
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor5/translations/' . $gL10n->getLanguageLibs() . '.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/translations/' . $gL10n->getLanguageLibs() . '.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
