@@ -48,6 +48,13 @@
     },
     "archive": {
         "exclude": [
+            "adm_my_files/*",
+            "!adm_my_files/.htaccess",
+            "!adm_my_files/index.html",
+            "!adm_my_files/config_example.php",
+            "!adm_my_files/ecard_templates",
+            "!adm_my_files/mail_templates",
+            "demo_data",
             "!vendor/*",
             "vendor/tecnickcom/tcpdf/examples",
             "vendor/tecnickcom/tcpdf/fonts",
@@ -59,12 +66,7 @@
             "!vendor/twbs/bootstrap/dist",
             "vendor/fortawesome/font-awesome",
             "!vendor/fortawesome/font-awesome/css",
-            "!vendor/fortawesome/font-awesome/webfonts",
-            "adm_my_files/*",
-            "!adm_my_files/config_example.php",
-            "!adm_my_files/ecard_templates",
-            "!adm_my_files/mail_templates",
-            "demo_data"
+            "!vendor/fortawesome/font-awesome/webfonts"
         ]
     }
 }
