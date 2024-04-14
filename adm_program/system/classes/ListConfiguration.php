@@ -762,9 +762,9 @@ class ListConfiguration extends TableLists
         }
 
         if (count($optionsAll['showRolesMembers']) > 0) {
-            $sqlRoleIds = implode(', ', $optionsAll['showRolesMembers']);
+            $sqlRoleIds = '(\'' . implode('\', \'', $optionsAll['showRolesMembers']) . '\')';
         } else {
-            $sqlRoleIds = '(SELECT rol_id
+            $sqlRoleIds = '(SELECT rol_uuid
                               FROM ' . TBL_CATEGORIES . '
                              INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
                              WHERE (  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
@@ -837,7 +837,7 @@ class ListConfiguration extends TableLists
                            ' . $sqlJoin . '
                      WHERE usr_valid = true
                        AND rol_valid = true
-                       AND rol_id IN (' . $sqlRoleIds . ')
+                       AND rol_uuid IN ' . $sqlRoleIds . '
                            ' . $sqlRelationTypeWhere . '
                        AND (  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
                            OR cat_org_id IS NULL )

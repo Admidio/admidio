@@ -42,7 +42,7 @@ if (!isset($_POST['column1']) || strlen($_POST['column1']) === 0) {
 
 // role must be filled when displaying
 if ($getMode === 2
-&& (!isset($_POST['sel_roles_ids']) || (int) $_POST['sel_roles_ids'] === 0 || !is_array($_POST['sel_roles_ids']))) {
+&& (!isset($_POST['sel_roles']) || $_POST['sel_roles'] === '' || !is_array($_POST['sel_roles']))) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROLE'))));
     // => EXIT
 }
@@ -125,7 +125,7 @@ if (in_array($getMode, array(1, 2), true)) {
         array(
             'list_uuid' => $listUuid,
             'mode'      => 'html',
-            'rol_ids'   => implode(',', array_map('intval', $_POST['sel_roles_ids'])),
+            'role_list'   => implode(',', $_POST['sel_roles']),
             'urt_ids'   => implode(',', $_POST['sel_relationtype_ids'])
         )
     ));

@@ -140,14 +140,14 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
 
             // create list entry for one role
             $roleMemHTML .= '
-            <li class="list-group-item" id="role_'. $row['mem_rol_id']. '">
+            <li class="list-group-item" id="role_'. $row['rol_uuid']. '">
                 <ul class="list-group admidio-list-roles-assign-pos">
                     <li class="list-group-item">
                         <span>'.
                             $role->getValue('cat_name'). ' - ';
 
             if ($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id'))) {
-                $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+                $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'])). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
             } else {
                 $roleMemHTML .= $role->getValue('rol_name');
             }

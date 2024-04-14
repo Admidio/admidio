@@ -14,7 +14,7 @@
  * date_to:         Value for the end date of the date range filter (default: current date)
  * list_uuid:       UUID of the list configuration that should be shown.
  *                  If id is null then the default list of the role will be shown.
- * rol_ids:         ID of the role or an integer array of all role ids whose members should be shown
+ * role_list:       UUID list of all roles whose members should be shown
  * urt_ids:         ID of the relation type or an integer array of all relation types ids whose members should be shown
  * show_former_members: 0 - (Default) show members of role that are active within the selected date range
  *                      1 - show only former members of the role
@@ -30,7 +30,7 @@ $getDateFrom          = admFuncVariableIsValid($_GET, 'date_from', 'date', array
 $getDateTo            = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_NOW));
 $getMode              = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'ods', 'csv', 'html', 'print', 'pdf', 'pdfl')));
 $getListUuid          = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
-$getRoleIds           = admFuncVariableIsValid($_GET, 'rol_ids', 'string'); // could be int or int[], so string is necessary
+$getRoleList          = admFuncVariableIsValid($_GET, 'role_list', 'string');
 $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
 $getRelationTypeIds   = admFuncVariableIsValid($_GET, 'urt_ids', 'string'); // could be int or int[], so string is necessary
 
@@ -40,8 +40,8 @@ if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
     // => EXIT
 }
 
-$roleIds = array_map('intval', array_filter(explode(',', $getRoleIds), 'is_numeric'));
-$numberRoles = count($roleIds);
+$roleUuidList = explode(',', $getRoleList);
+$numberRoles = count($roleUuidList);
 
 if ($numberRoles === 0) {
     $gMessage->show($gL10n->get('SYS_NO_ROLE_GIVEN'));
@@ -60,8 +60,8 @@ $showCountGuests = true;
 // read information about the roles
 $sql = 'SELECT rol_id, rol_name, rol_valid
           FROM '.TBL_ROLES.'
-         WHERE rol_id IN ('.Database::getQmForValues($roleIds).')';
-$rolesStatement = $gDb->queryPrepared($sql, $roleIds);
+         WHERE rol_uuid IN ('.Database::getQmForValues($roleUuidList).')';
+$rolesStatement = $gDb->queryPrepared($sql, $roleUuidList);
 $rolesData      = $rolesStatement->fetchAll();
 
 foreach ($rolesData as $role) {
@@ -98,20 +98,22 @@ $htmlSubHeadline = substr($htmlSubHeadline, 2);
 
 try {
     if ($numberRoles === 1) {
-        $role = new TableRoles($gDb, $roleIds[0]);
+        $role = new TableRoles($gDb);
+        $role->readDataByUuid($roleUuidList[0]);
+        $roleID = $role->getValue('rol_id');
         $roleName = $role->getValue('rol_name');
         $htmlSubHeadline = $role->getValue('cat_name');
-        $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
+        $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleID);
 
         // If it's an event list and user has right to edit user states then an additional column with edit link is shown
         if ($role->getValue('cat_name_intern') === 'EVENTS') {
             $event = new TableEvent($gDb);
-            $event->readDataByRoleId($roleIds[0]);
+            $event->readDataByRoleId($roleID);
 
             $showComment = $event->getValue('dat_allow_comments');
             $showCountGuests = $event->getValue('dat_additional_guests');
 
-            if ($getMode === 'html' && ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleIds[0]))) {
+            if ($getMode === 'html' && ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleID))) {
                 $editUserStatus = true;
             }
         }
@@ -207,7 +209,7 @@ try {
     if(in_array($getMode, array('xlsx', 'ods', 'csv'))) {
         // set SQL options for export
         $sqlOptions = array(
-            'showRolesMembers' => $roleIds,
+            'showRolesMembers' => $roleUuidList,
             'showFormerMembers' => $getShowFormerMembers,
             'showRelationTypes' => $relationTypeIds,
             'startDate' => $startDateEnglishFormat,
@@ -216,7 +218,7 @@ try {
     } else {
         // set SQL options for displaying
         $sqlOptions = array(
-            'showRolesMembers'  => $roleIds,
+            'showRolesMembers'  => $roleUuidList,
             'showFormerMembers' => $getShowFormerMembers,
             'showUserUUID' => true,
             'showLeaderFlag' => true,
@@ -429,7 +431,7 @@ if ($getMode === 'print') {
         $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
         $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
         $form->addInput('list_uuid', '', $getListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
-        $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('role_list', '', $getRoleList, array('property' => HtmlForm::FIELD_HIDDEN));
         $form->addInput('urt_ids', '', $getRelationTypeIds, array('property' => HtmlForm::FIELD_HIDDEN));
         $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
         $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
@@ -446,9 +448,9 @@ if ($getMode === 'print') {
             roleId    = elementId.substr(elementId.search(/_/) + 1);
 
             if ($(this).val() === "mylist") {
-                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('rol_ids' => $getRoleIds)) . '";
+                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('role_list' => $getRoleList)) . '";
             } else {
-                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
+                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
             }
         });
 
@@ -458,7 +460,7 @@ if ($getMode === 'print') {
         });
 
         $("#menu_item_lists_print_view").click(function() {
-            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
+            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'roel_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
         });',
         true
     );
@@ -473,35 +475,35 @@ if ($getMode === 'print') {
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_csv_ms',
             $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
             'fa-file-excel',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_csv_ms',
             $gL10n->get('SYS_ODF_SPREADSHEET'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
             'fa-file-alt',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_csv',
             $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
             'fa-file-csv',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_pdf',
             $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
             'fa-file-pdf',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_pdfl',
             $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
             'fa-file-pdf',
             'menu_item_lists_export'
         );
@@ -635,8 +637,8 @@ foreach ($membersList as $member) {
         // Get the matching event
         $sql = 'SELECT dat_uuid
                   FROM '.TBL_EVENTS.'
-                 WHERE dat_rol_id = ? -- $roleIds[0]';
-        $datesStatement = $gDb->queryPrepared($sql, $roleIds);
+                 WHERE dat_rol_id = ? -- $roleID';
+        $datesStatement = $gDb->queryPrepared($sql, array($roleID));
         $dateUuid       = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"

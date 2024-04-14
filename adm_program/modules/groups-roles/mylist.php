@@ -10,7 +10,7 @@
  * Parameters:
  *
  * list_uuid    : UUID of the list configuration that should be shown
- * rol_ids      : (Optional) ID of the role or an integer array of all role ids whose members should be shown
+ * role_list    : (Optional) UUID list of all roles whose members should be shown
  * active_role  : true  - (Default) List only active roles
  *                false - List only deactivated roles
  * show_members : 0 - (Default) show active members of role
@@ -23,7 +23,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getListUuid    = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
-$getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids', 'string'); // could be int or int[], so string is necessary
+$getRoleList    = admFuncVariableIsValid($_GET, 'role_list', 'string');
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
@@ -63,8 +63,8 @@ if (isset($_SESSION['mylist_request'])) {
         $formValues['cbx_global_configuration'] = 0;
     }
 
-    if (!isset($formValues['sel_roles_ids'])) {
-        $formValues['sel_roles_ids'] = 0;
+    if (!isset($formValues['sel_roles'])) {
+        $formValues['sel_roles'] = '';
     }
 
     // if rows for columns have been added manually before, they must now be created directly
@@ -78,7 +78,7 @@ if (isset($_SESSION['mylist_request'])) {
 } else {
     $formValues['sel_select_configuration'] = $getListUuid;
     $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
-    $formValues['sel_roles_ids']            = $getRoleIds;
+    $formValues['sel_roles']                = $getRoleList;
 
     // if a saved configuration was loaded then add columns to formValues array
     if ($getListUuid !== '') {
@@ -624,7 +624,7 @@ if ($getActiveRole) {
         // => EXIT
     }
 
-    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+    $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
@@ -632,7 +632,7 @@ if ($getActiveRole) {
                        ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = $allVisibleRoles;
 } else {
-    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+    $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
@@ -651,16 +651,16 @@ if ($getActiveRole) {
     }
 }
 $form->addSelectBoxFromSql(
-    'sel_roles_ids',
+    'sel_roles',
     $gL10n->get('SYS_ROLE'),
     $gDb,
     $sqlData,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true)
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles'], 'multiselect' => true)
 );
 
 if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
     // select box showing all relation types
-    $sql = 'SELECT urt_id, urt_name, urt_name
+    $sql = 'SELECT urt_uuid, urt_name, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
           ORDER BY urt_name';
     $form->addSelectBoxFromSql(

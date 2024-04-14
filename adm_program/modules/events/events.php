@@ -280,9 +280,10 @@ if ($eventsResult['totalCount'] === 0) {
         $event->clear();
         $event->setArray($row);
 
-        $dateUuid     = $event->getValue('dat_uuid');
+        $dateUuid      = $event->getValue('dat_uuid');
         $eventRolId    = $event->getValue('dat_rol_id');
-        $dateHeadline = $event->getValue('dat_headline');
+        $eventRoleUUID = $row['rol_uuid'];
+        $dateHeadline  = $event->getValue('dat_headline');
 
         // initialize all output elements
         $attentionDeadline  = '';
@@ -543,7 +544,7 @@ if ($eventsResult['totalCount'] === 0) {
                     // Link to participants list
                     if ($gCurrentUser->hasRightViewRole($eventRolId)) {
                         if ($outputNumberMembers > 0 || $outputNumberLeaders > 0) {
-                            $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $eventRolId));
+                            $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $eventRoleUUID));
 
                             if ($getView === 'detail') {
                                 $outputButtonParticipants = '

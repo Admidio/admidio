@@ -201,7 +201,7 @@ class ModuleGroupsRoles extends HtmlPage
                     $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                 }
 
-                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('rol_ids' => $row['rol_id'], 'show_former_members' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
+                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'], 'show_former_members' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
             }
 
             if ($row['num_leader'] > 0) {
@@ -210,7 +210,7 @@ class ModuleGroupsRoles extends HtmlPage
             $templateRow['information'][] = '<span class="d-block">' . $html . '</span>' . $htmlLeader;
 
             $templateRow['buttons'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('rol_ids' => $row['rol_id'])),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'])),
                 'name' => $gL10n->get('SYS_SHOW_MEMBER_LIST')
             );
 
@@ -347,7 +347,7 @@ class ModuleGroupsRoles extends HtmlPage
             }
 
             $templateRow['actions'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $row['rol_id'])),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $row['rol_uuid'])),
                 'icon' => 'fas fa-list-alt',
                 'tooltip' => $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP')
             );
@@ -453,7 +453,7 @@ class ModuleGroupsRoles extends HtmlPage
             // if inactive roles should be shown, then show all of them to administrator
             $sql .= '';
         } else {
-            // create a list with all rol_ids that the user is allowed to view
+            // create a list with all role IDs that the user is allowed to view
             $visibleRoles = implode(',', $gCurrentUser->getRolesViewMemberships());
             if ($visibleRoles !== '') {
                 $sql .= ' AND rol_id IN (' . $visibleRoles . ')';
