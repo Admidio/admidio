@@ -1008,7 +1008,7 @@ class HtmlForm
             'label'                          => $label
         );
         $optionsAll = array_replace($optionsDefault, $options);
-        $attributes = array();
+        $attributes = array('name' => $id);
 
         // set field properties
         switch ($optionsAll['property']) {
