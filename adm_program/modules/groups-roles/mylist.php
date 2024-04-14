@@ -660,7 +660,7 @@ $form->addSelectBoxFromSql(
 
 if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
     // select box showing all relation types
-    $sql = 'SELECT urt_uuid, urt_name, urt_name
+    $sql = 'SELECT urt_uuid, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
           ORDER BY urt_name';
     $form->addSelectBoxFromSql(
