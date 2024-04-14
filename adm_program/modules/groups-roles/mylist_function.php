@@ -21,38 +21,38 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
-$getName     = admFuncVariableIsValid($_GET, 'name', 'string');
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getName = admFuncVariableIsValid($_GET, 'name', 'string');
 
 $_SESSION['mylist_request'] = $_POST;
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('groups_roles_enable_module')
-|| ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
-|| ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator())) {
+    || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
+    || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator())) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // At least one field should be assigned
 if (!isset($_POST['column1']) || strlen($_POST['column1']) === 0) {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array('1. '.$gL10n->get('SYS_COLUMN'))));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array('1. ' . $gL10n->get('SYS_COLUMN'))));
     // => EXIT
 }
 
 // role must be filled when displaying
 if ($getMode === 2
-&& (!isset($_POST['sel_roles']) || $_POST['sel_roles'] === '' || !is_array($_POST['sel_roles']))) {
+    && (!isset($_POST['sel_roles']) || $_POST['sel_roles'] === '' || !is_array($_POST['sel_roles']))) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROLE'))));
     // => EXIT
 }
 
-if (!isset($_POST['sel_relationtype_ids'])) {
-    $_POST['sel_relationtype_ids'] = array();
+if (!isset($_POST['sel_relation_types'])) {
+    $_POST['sel_relation_types'] = array();
 }
 
 $list = new ListConfiguration($gDb);
-if($getListUuid !== '') {
+if ($getListUuid !== '') {
     $list->readDataByUuid($getListUuid);
 }
 
@@ -61,9 +61,9 @@ if ($getMode !== 2) {
     // global lists can only be edited by administrator
     if ($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-    } elseif ((int) $list->getValue('lst_usr_id') !== $gCurrentUserId
-    && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0) {
+        // => EXIT
+    } elseif ((int)$list->getValue('lst_usr_id') !== $gCurrentUserId
+        && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
@@ -82,13 +82,13 @@ if (in_array($getMode, array(1, 2), true)) {
     $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
 
     // go through all existing columns
-    for ($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber) {
-        if (strlen($_POST['column'. $columnNumber]) > 0) {
+    for ($columnNumber = 1; isset($_POST['column' . $columnNumber]); ++$columnNumber) {
+        if (strlen($_POST['column' . $columnNumber]) > 0) {
             // add column to list and check if its a profile field or another column
-            if(StringUtils::strStartsWith($_POST['column'. $columnNumber], 'usr_') || StringUtils::strStartsWith($_POST['column'. $columnNumber], 'mem_')) {
+            if (StringUtils::strStartsWith($_POST['column' . $columnNumber], 'usr_') || StringUtils::strStartsWith($_POST['column' . $columnNumber], 'mem_')) {
                 $list->addColumn($_POST['column' . $columnNumber], $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
             } else {
-                $list->addColumn($gProfileFields->getProperty($_POST['column' . $columnNumber], 'usf_id') , $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
+                $list->addColumn($gProfileFields->getProperty($_POST['column' . $columnNumber], 'usf_id'), $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
             }
         } else {
             $list->deleteColumn($columnNumber, true);
@@ -115,18 +115,18 @@ if (in_array($getMode, array(1, 2), true)) {
         $_SESSION['mylist_request']['sel_select_configuration'] = $listUuid;
 
         // go back to mylist configuration
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/mylist.php', array('list_uuid' => $listUuid)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('list_uuid' => $listUuid)));
         // => EXIT
     }
 
     // redirect to general list page
     admRedirect(SecurityUtils::encodeUrl(
-        ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/lists_show.php',
+        ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php',
         array(
             'list_uuid' => $listUuid,
-            'mode'      => 'html',
-            'role_list'   => implode(',', $_POST['sel_roles']),
-            'urt_ids'   => implode(',', $_POST['sel_relationtype_ids'])
+            'mode' => 'html',
+            'role_list' => implode(',', $_POST['sel_roles']),
+            'relation_type_list' => implode(',', $_POST['sel_relation_types'])
         )
     ));
 // => EXIT
@@ -141,6 +141,6 @@ if (in_array($getMode, array(1, 2), true)) {
     }
 
     // go back to list configuration
-    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/mylist.php');
+    admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php');
     // => EXIT
 }

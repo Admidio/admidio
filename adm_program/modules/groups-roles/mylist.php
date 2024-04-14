@@ -10,7 +10,7 @@
  * Parameters:
  *
  * list_uuid    : UUID of the list configuration that should be shown
- * role_list    : (Optional) UUID list of all roles whose members should be shown
+ * role_list    : (Optional) Comma separated UUID list of all roles whose members should be shown
  * active_role  : true  - (Default) List only active roles
  *                false - List only deactivated roles
  * show_members : 0 - (Default) show active members of role
@@ -664,11 +664,11 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
               FROM '.TBL_USER_RELATION_TYPES.'
           ORDER BY urt_name';
     $form->addSelectBoxFromSql(
-        'sel_relationtype_ids',
+        'sel_relation_types',
         $gL10n->get('SYS_USER_RELATION'),
         $gDb,
         $sql,
-        array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : '')
+        array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relation_types']) ? $formValues['sel_relation_types'] : '')
     );
 }
 

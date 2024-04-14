@@ -636,10 +636,10 @@ class ListConfiguration extends TableLists
                 $sqlColumnName = $listColumn->getValue('lsc_special_field');
             }
 
-            if (in_array($sqlColumnName,  $arrSqlColumnNames)) {
-                $arrSqlColumns[] = $dbColumnName.' AS '.$sqlColumnName.$columnNumber;
+            if (in_array($sqlColumnName, $arrSqlColumnNames)) {
+                $arrSqlColumns[] = $dbColumnName . ' AS ' . $sqlColumnName . $columnNumber;
             } else {
-                $arrSqlColumns[] = $dbColumnName.' AS '.$sqlColumnName;
+                $arrSqlColumns[] = $dbColumnName . ' AS ' . $sqlColumnName;
             }
 
             // create a valid sort
@@ -666,7 +666,7 @@ class ListConfiguration extends TableLists
             }
 
             // Handle the conditions for the columns
-            if ($optionsAll['useConditions'] && (string) $listColumn->getValue('lsc_filter') !== '') {
+            if ($optionsAll['useConditions'] && (string)$listColumn->getValue('lsc_filter') !== '') {
                 $value = $listColumn->getValue('lsc_filter');
 
                 // custom profile field
@@ -811,11 +811,13 @@ class ListConfiguration extends TableLists
                                 ON usr_id = mem_usr_id';
         $sqlRelationTypeWhere = '';
         if (count($optionsAll['showRelationTypes']) > 0) {
-            $sqlUserJoin = 'INNER JOIN ' . TBL_USER_RELATIONS . '
+            $sqlUserJoin = 'INNER JOIN ' . TBL_USER_RELATION_TYPES . '
+                                    ON urt_uuid IN (\'' . implode('\', \'', $optionsAll['showRelationTypes']) . '\')
+                            INNER JOIN ' . TBL_USER_RELATIONS . '
                                     ON ure_usr_id1 = mem_usr_id
+                                   AND ure_urt_id = urt_id
                             INNER JOIN ' . TBL_USERS . '
                                     ON usr_id = ure_usr_id2';
-            $sqlRelationTypeWhere = 'AND ure_urt_id IN (' . implode(', ', $optionsAll['showRelationTypes']) . ')';
         }
 
         // Set SQL-Statement

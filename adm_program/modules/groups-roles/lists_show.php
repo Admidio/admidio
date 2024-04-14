@@ -9,13 +9,13 @@
  *
  * Parameters:
  *
- * mode:            Output(html, print, csv, xlsx, ods, pdf, pdfl)
- * date_from:       Value for the start date of the date range filter (default: current date)
- * date_to:         Value for the end date of the date range filter (default: current date)
- * list_uuid:       UUID of the list configuration that should be shown.
- *                  If id is null then the default list of the role will be shown.
- * role_list:       UUID list of all roles whose members should be shown
- * urt_ids:         ID of the relation type or an integer array of all relation types ids whose members should be shown
+ * mode:      Output(html, print, csv, xlsx, ods, pdf, pdfl)
+ * date_from: Value for the start date of the date range filter (default: current date)
+ * date_to:   Value for the end date of the date range filter (default: current date)
+ * list_uuid: UUID of the list configuration that should be shown.
+ *            If id is null then the default list of the role will be shown.
+ * role_list: Comma separated UUID list of all roles whose members should be shown
+ * relation_type_list:  Comma separated UUID list of the relation type whose members should be shown
  * show_former_members: 0 - (Default) show members of role that are active within the selected date range
  *                      1 - show only former members of the role
  ***********************************************************************************************
@@ -32,7 +32,7 @@ $getMode              = admFuncVariableIsValid($_GET, 'mode', 'string', array('d
 $getListUuid          = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
 $getRoleList          = admFuncVariableIsValid($_GET, 'role_list', 'string');
 $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
-$getRelationTypeIds   = admFuncVariableIsValid($_GET, 'urt_ids', 'string'); // could be int or int[], so string is necessary
+$getRelationTypeList   = admFuncVariableIsValid($_GET, 'relation_type_list', 'string'); // could be int or int[], so string is necessary
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
@@ -153,13 +153,18 @@ if ($objDateFrom > $objDateTo) {
 
 // read names of all used relationships for later output
 $relationTypeName = '';
-$relationTypeIds = array_map('intval', array_filter(explode(',', $getRelationTypeIds), 'is_numeric'));
-if (count($relationTypeIds) > 0) {
-    $sql = 'SELECT urt_id, urt_name
+$relationTypeUuidList = array();
+
+if ($getRelationTypeList !== '') {
+    $relationTypeUuidList = explode(',', $getRelationTypeList);
+}
+
+if (count($relationTypeUuidList) > 0) {
+    $sql = 'SELECT urt_uuid, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
-             WHERE urt_id IN ('.Database::getQmForValues($relationTypeIds).')
+             WHERE urt_uuid IN ('.Database::getQmForValues($relationTypeUuidList).')
           ORDER BY urt_name';
-    $relationTypesStatement = $gDb->queryPrepared($sql, $relationTypeIds);
+    $relationTypesStatement = $gDb->queryPrepared($sql, $relationTypeUuidList);
 
     while ($relationType = $relationTypesStatement->fetch()) {
         $relationTypeName .= (empty($relationTypeName) ? '' : ', ').$relationType['urt_name'];
@@ -211,7 +216,7 @@ try {
         $sqlOptions = array(
             'showRolesMembers' => $roleUuidList,
             'showFormerMembers' => $getShowFormerMembers,
-            'showRelationTypes' => $relationTypeIds,
+            'showRelationTypes' => $relationTypeUuidList,
             'startDate' => $startDateEnglishFormat,
             'endDate' => $endDateEnglishFormat
         );
@@ -222,7 +227,7 @@ try {
             'showFormerMembers' => $getShowFormerMembers,
             'showUserUUID' => true,
             'showLeaderFlag' => true,
-            'showRelationTypes' => $relationTypeIds,
+            'showRelationTypes' => $relationTypeUuidList,
             'startDate' => $startDateEnglishFormat,
             'endDate'   => $endDateEnglishFormat
         );
@@ -309,9 +314,9 @@ if ((string) $list->getValue('lst_name') !== '') {
     $headline = $roleName;
 }
 
-if (count($relationTypeIds) === 1) {
+if (count($relationTypeUuidList) === 1) {
     $headline .= ' - '.$relationTypeName;
-} elseif (count($relationTypeIds) > 1) {
+} elseif (count($relationTypeUuidList) > 1) {
     $headline .= ' - '.$gL10n->get('SYS_VARIOUS_USER_RELATION_TYPES');
 }
 
@@ -335,7 +340,7 @@ if ($getMode !== 'html') {
     }
 }
 
-if (count($relationTypeIds) > 1) {
+if (count($relationTypeUuidList) > 1) {
     $htmlSubHeadline .= ' - '.$relationTypeName;
 }
 
@@ -432,7 +437,7 @@ if ($getMode === 'print') {
         $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
         $form->addInput('list_uuid', '', $getListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
         $form->addInput('role_list', '', $getRoleList, array('property' => HtmlForm::FIELD_HIDDEN));
-        $form->addInput('urt_ids', '', $getRelationTypeIds, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => HtmlForm::FIELD_HIDDEN));
         $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
         $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
     }
@@ -450,7 +455,7 @@ if ($getMode === 'print') {
             if ($(this).val() === "mylist") {
                 self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('role_list' => $getRoleList)) . '";
             } else {
-                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
+                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
             }
         });
 
@@ -460,7 +465,7 @@ if ($getMode === 'print') {
         });
 
         $("#menu_item_lists_print_view").click(function() {
-            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'roel_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
+            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
         });',
         true
     );
@@ -475,35 +480,35 @@ if ($getMode === 'print') {
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_csv_ms',
             $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
             'fa-file-excel',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_csv_ms',
             $gL10n->get('SYS_ODF_SPREADSHEET'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
             'fa-file-alt',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_csv',
             $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
             'fa-file-csv',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_pdf',
             $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
             'fa-file-pdf',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_pdfl',
             $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
             'fa-file-pdf',
             'menu_item_lists_export'
         );
