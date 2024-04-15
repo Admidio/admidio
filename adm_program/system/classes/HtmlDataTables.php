@@ -103,7 +103,7 @@ class HtmlDataTables
      */
     public function createJavascript(int $rowCount = 0, int $columnCount = 0)
     {
-        global $gL10n;
+        global $gSettingsManager, $gL10n;
 
         $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.js');
         $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.css');
