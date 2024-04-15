@@ -135,11 +135,11 @@ class ListConfiguration extends TableLists
      * @param string $format The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
      * @param string $content The content that should be converted.
      * @param string $userUuid Uuid of the user for which the content should be converted. This is not the login user.
+     * @param bool $setSortValue If set to **true** a special sort value for checkboxes will be set, when using server side processing set to **false**.
      * @return string Returns the converted content.
      * @throws AdmException
-     * @throws Exception
      */
-    public function convertColumnContentForOutput(int $columnNumber, string $format, string $content, string $userUuid)
+    public function convertColumnContentForOutput(int $columnNumber, string $format, string $content, string $userUuid, bool $setSortValue = true)
     {
         global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
@@ -272,7 +272,7 @@ class ListConfiguration extends TableLists
                     $outputContent = $content;
                 } else {
                     // checkbox must set a sorting value
-                    if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX') {
+                    if ($setSortValue && $gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX') {
                         $outputContent = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userUuid), 'order' => $content);
                     } else {
                         $outputContent = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userUuid);

@@ -256,7 +256,7 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
     // start columnNumber with 4 because the first 2 columns are not of the list configuration
     for ($columnNumber = 1; $columnNumber <= $contactsListConfig->countColumns(); $columnNumber++) {
         if (!empty($row[$ColumnNumberSql])) {
-            $columnValues[(string) $columnNumberJson] = $contactsListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_uuid']);
+            $columnValues[(string) $columnNumberJson] = $contactsListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_uuid'], false);
         } else {
             $columnValues[(string) $columnNumberJson] = '';
         }
