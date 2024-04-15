@@ -56,6 +56,15 @@
             "!adm_my_files/mail_templates",
             "demo_data",
             "!vendor/*",
+            "vendor/fortawesome/font-awesome",
+            "!vendor/fortawesome/font-awesome/css",
+            "!vendor/fortawesome/font-awesome/webfonts",
+            "vendor/maennchen/zipstream-php/test",
+            "vendor/markbaker/complex/examples",
+            "vendor/markbaker/matrix/examples",
+            "vendor/smarty/smarty/changelog",
+            "vendor/smarty/smarty/demo",
+            "vendor/smarty/smarty/docs",
             "vendor/tecnickcom/tcpdf/examples",
             "vendor/tecnickcom/tcpdf/fonts",
             "!vendor/tecnickcom/tcpdf/fonts/courier*.*",
@@ -63,10 +72,7 @@
             "!vendor/tecnickcom/tcpdf/fonts/pdfa*.*",
             "!vendor/tecnickcom/tcpdf/fonts/times*.*",
             "vendor/twbs/bootstrap",
-            "!vendor/twbs/bootstrap/dist",
-            "vendor/fortawesome/font-awesome",
-            "!vendor/fortawesome/font-awesome/css",
-            "!vendor/fortawesome/font-awesome/webfonts"
+            "!vendor/twbs/bootstrap/dist"
         ]
     }
 }
