@@ -276,7 +276,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesAlternativeOrderColumns(int $selectedColumn, $arrayOrderColumns)
     {
         if ($this->useDatatables) {
-            $this->datatables->setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns);
+            $this->datatables->setAlternativeOrderColumns($selectedColumn, $arrayOrderColumns);
         }
     }
 
@@ -289,7 +289,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesColumnsHide(array $columnsHide)
     {
         if ($this->useDatatables) {
-            $this->datatables->setDatatablesColumnsHide($columnsHide);
+            $this->datatables->setColumnsHide($columnsHide);
         }
     }
 
@@ -306,7 +306,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, int $priority = 1)
     {
         if ($this->useDatatables) {
-            $this->datatables->setDatatablesColumnsNotHideResponsive($columnsNotHideResponsive, $priority);
+            $this->datatables->setColumnsNotHideResponsive($columnsNotHideResponsive, $priority);
         }
     }
 
@@ -319,7 +319,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesGroupColumn(int $columnNumber)
     {
         if ($this->useDatatables) {
-            $this->datatables->setDatatablesGroupColumn($columnNumber);
+            $this->datatables->setGroupColumn($columnNumber);
         }
     }
 
@@ -345,7 +345,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesOrderColumns(array $arrayOrderColumns)
     {
         if ($this->useDatatables) {
-            $this->datatables->setDatatablesOrderColumns($arrayOrderColumns);
+            $this->datatables->setOrderColumns($arrayOrderColumns);
         }
     }
 
@@ -356,7 +356,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesRowsPerPage(int $numberRows)
     {
         if ($this->useDatatables) {
-            $this->datatables->setDatatablesRowsPerPage($numberRows);
+            $this->datatables->setRowsPerPage($numberRows);
         }
     }
 

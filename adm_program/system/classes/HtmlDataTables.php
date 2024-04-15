@@ -87,7 +87,7 @@ class HtmlDataTables
      * @param array<int,int> $columnsSort An array which contain the columns where the sort should be disabled.
      *                                    The columns of the table starts with 1 (not 0).
      */
-    public function disableDatatablesColumnsSort(array $columnsSort)
+    public function disableColumnsSort(array $columnsSort)
     {
         // internal datatable columns starts with 0
         foreach ($columnsSort as $columnSort) {
@@ -103,7 +103,7 @@ class HtmlDataTables
      */
     public function createJavascript(int $rowCount = 0, int $columnCount = 0)
     {
-        global $gSettingsManager, $gL10n;
+        global $gL10n;
 
         $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.js');
         $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.css');
@@ -215,7 +215,7 @@ class HtmlDataTables
      * @param int|int[] $arrayOrderColumns These are the columns the table will internal be sorted. If you have more
      *                                     then 1 column this must be an array. The columns of the table starts with 1 (not 0).
      */
-    public function setDatatablesAlternativeOrderColumns(int $selectedColumn, $arrayOrderColumns)
+    public function setAlternativeOrderColumns(int $selectedColumn, $arrayOrderColumns)
     {
         // internal datatable columns starts with 0
         if (is_array($arrayOrderColumns)) {
@@ -242,7 +242,7 @@ class HtmlDataTables
      * @param array<int,int> $columnsHide An array which contain the columns that should be hidden.
      *                                    The columns of the table starts with 1 (not 0).
      */
-    public function setDatatablesColumnsHide(array $columnsHide)
+    public function setColumnsHide(array $columnsHide)
     {
         // internal datatable columns starts with 0
         foreach ($columnsHide as $columnHide) {
@@ -260,7 +260,7 @@ class HtmlDataTables
      * @param int $priority Optional set a priority so datatable will first hide columns with
      *                                                 low priority and after that with higher priority
      */
-    public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, int $priority = 1)
+    public function setColumnsNotHideResponsive(array $columnsNotHideResponsive, int $priority = 1)
     {
         // internal datatable columns starts with 0
         foreach ($columnsNotHideResponsive as $columnNotHideResponsive) {
@@ -274,7 +274,7 @@ class HtmlDataTables
      * @param int $columnNumber Number of the column that should be grouped. The first column starts with 1.
      *                          The columns were set with the method **addRowByArray**.
      */
-    public function setDatatablesGroupColumn(int $columnNumber)
+    public function setGroupColumn(int $columnNumber)
     {
         $this->groupedColumn = $columnNumber - 1;
 
@@ -304,7 +304,7 @@ class HtmlDataTables
      * $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc')));
      * ```
      */
-    public function setDatatablesOrderColumns(array $arrayOrderColumns)
+    public function setOrderColumns(array $arrayOrderColumns)
     {
         // internal datatable columns starts with 0
         foreach ($arrayOrderColumns as $column) {
@@ -320,7 +320,7 @@ class HtmlDataTables
      * Set the number of rows that should be displayed on one page if the jQuery plugin DataTables is used.
      * @param int $numberRows Number of rows that should be displayed on one page.
      */
-    public function setDatatablesRowsPerPage(int $numberRows)
+    public function setRowsPerPage(int $numberRows)
     {
         $this->rowsPerPage = $numberRows;
     }

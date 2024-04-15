@@ -32,7 +32,7 @@ $getMode              = admFuncVariableIsValid($_GET, 'mode', 'string', array('d
 $getListUuid          = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
 $getRoleList          = admFuncVariableIsValid($_GET, 'role_list', 'string');
 $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
-$getRelationTypeList   = admFuncVariableIsValid($_GET, 'relation_type_list', 'string'); // could be int or int[], so string is necessary
+$getRelationTypeList  = admFuncVariableIsValid($_GET, 'relation_type_list', 'string'); // could be int or int[], so string is necessary
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
