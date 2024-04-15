@@ -80,7 +80,7 @@ if (strlen($importfile) === 0) {
 $role = new TableRoles($gDb, $postRoleId);
 
 if (!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
-|| (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false)) {
+|| (!$gCurrentUser->manageRoles() && !$role->getValue('rol_default_registration'))) {
     $gMessage->show($gL10n->get('SYS_ROLE_SELECT_RIGHT', array($role->getValue('rol_name'))));
     // => EXIT
 }
@@ -150,11 +150,8 @@ if (isset($reader) and !is_null($reader)) {
             // read data to array without any format
             $_SESSION['import_data'] = $sheet->toArray(null, true, false);
         }
-    } catch (\PhpOffice\PhpSpreadsheet\Exception | \Exception $e) {
+    } catch (\PhpOffice\PhpSpreadsheet\Exception |Exception $e) {
         $gMessage->show($e->getMessage());
-        // => EXIT
-    } catch (AdmException $e) {
-        $e->showText();
         // => EXIT
     }
 }
