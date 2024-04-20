@@ -188,7 +188,7 @@ a {
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-menu-function-node,
-.dataTables_wrapper, .admidio-margin-bottom, .admidio-content-subheader,
+.dt-container, .admidio-margin-bottom, .admidio-content-subheader,
 .tab-content {
     margin-bottom: 40px;
 }
