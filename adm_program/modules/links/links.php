@@ -65,7 +65,7 @@ $page = new HtmlPage('admidio-weblinks', $headline);
 
 if ($gSettingsManager->getBool('enable_rss')) {
     $page->addRssFile(
-        ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php',
+        ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
         $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $headline))
     );
 }

@@ -38,11 +38,13 @@ if (isset($_SESSION['import_csv_request'])) {
 } else {
     $formValues['first_row'] = true;
 }
+
 /**
  * Function creates the html for each assignment of a profile field to a column of the import file.
  * @param array $arrayColumnList The array contains the following elements cat_name, cat_tooltip, id, name, name_intern, tooltip
  * @param array $arrayCsvColumns An array with the names of the columns from the import file.
  * @return string Returns the HTML of a table with all profile fields and possible assigned columns of the import file.
+ * @throws Exception
  */
 function getColumnAssignmentHtml(array $arrayColumnList, array $arrayCsvColumns): string
 {

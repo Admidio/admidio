@@ -10,12 +10,12 @@
  *
  * Parameters:
  *
- * org_uuid  - Show only announcements of this organization
+ * organization_short_name : short name of the organization whose weblinks should be shown
  * *********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 
-$getOrgUuid  = admFuncVariableIsValid($_GET, 'org_uuid', 'string');
+$getOrganizationShortName  = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
 
 // Check if RSS is active...
 if (!$gSettingsManager->getBool('enable_rss')) {
@@ -31,9 +31,8 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') !== 1) {
     // => EXIT
 }
 
-if ($getOrgUuid !== '') {
-    $organization = new Organization($gDb);
-    $organization->readDataByUuid($getOrgUuid);
+if ($getOrganizationShortName !== '') {
+    $organization = new Organization($gDb, $getOrganizationShortName);
     $organizationName = $organization->getValue('org_long_name');
     $organizationID = $organization->getValue('org_id');
 } else {

@@ -13,7 +13,7 @@
         <div>
             {if $showNoValueButton}
                 <div class="form-check form-check-inline">
-                    <input id="{$id}_0" name="{$id}" class="form-check-input {$class}" type="radio" class="{$data.attributes.class}" value="0">
+                    <input id="{$id}_0" name="{$id}" class="form-check-input {$class}" type="radio" value="0">
                     <label for="{$id}_0" class="form-check-label">---</label>
                 </div>
             {/if}

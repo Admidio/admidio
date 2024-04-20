@@ -51,7 +51,7 @@ $page = new HtmlPage('admidio-guestbook');
 // add rss feed to guestbook
 if ($gSettingsManager->getBool('enable_rss') && (int) $gSettingsManager->get('enable_guestbook_module') === 1) {
     $page->addRssFile(
-        ADMIDIO_URL.FOLDER_MODULES.'/guestbook/rss_guestbook.php',
+        ADMIDIO_URL.FOLDER_MODULES.'/guestbook/rss_guestbook.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
         $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('GBO_GUESTBOOK')))
     );
 }
