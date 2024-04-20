@@ -73,7 +73,7 @@ $page = new HtmlPage('admidio-announcements', $headline);
 // add rss feed to announcements
 if ($gSettingsManager->getBool('enable_rss')) {
     $page->addRssFile(
-        ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php',
+        ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
         $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $headline))
     );
 }
