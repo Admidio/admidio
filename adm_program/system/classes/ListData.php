@@ -238,28 +238,32 @@ class ListData
                 $this->format();
                 $writer = new Xlsx($this->spreadsheet);
                 $filename .= '.xlsx';
+                $contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                 break;
             case 'ods':
                 $this->format();
                 $writer = new Ods($this->spreadsheet);
                 $filename .= '.ods';
+                $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
                 break;
             case 'pdf':
                 $this->format();
                 $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf($this->spreadsheet);
                 $filename .= '.pdf';
+                $contentType = 'application/pdf';
                 break;
             default:
                 $writer = new Csv($this->spreadsheet);
                 $filename .= '.csv';
+                $contentType = 'text/csv';
                 break;
         }
 
         // save file to server folder because we need the content length otherwise the Excel file is corrupt
-        $tempFileFolderName = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
+        $tempFileFolderName = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
         $writer->save($tempFileFolderName);
 
-        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Type: ' . $contentType);
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         header('Cache-Control: max-age=0');
         header('Content-Length: ' . filesize($tempFileFolderName));
