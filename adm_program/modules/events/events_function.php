@@ -428,7 +428,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // Delete successful -> Return for XMLHttpRequest
     echo 'done';
 } elseif ($getMode === 6) {  // export event in ical format
-    $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline')) . '.ics';
+    $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database')) . '.ics';
 
     header('Content-Type: text/calendar; charset=utf-8');
     header('Content-Disposition: attachment; filename="'. $filename. '"');
