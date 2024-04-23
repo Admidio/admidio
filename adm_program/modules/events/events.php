@@ -339,7 +339,7 @@ if ($eventsResult['totalCount'] === 0) {
             }
         }
 
-        $eventLocation = (string) $event->getValue('dat_location');
+        $eventLocation = (string) $event->getValue('dat_location', 'database');
         if ($eventLocation !== '') {
             // Show map link, when at least 2 words available
             // having more than 3 characters each
