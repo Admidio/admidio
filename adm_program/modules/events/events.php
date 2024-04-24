@@ -703,10 +703,10 @@ if ($eventsResult['totalCount'] === 0) {
                     admFuncShowCreateChangeInfoByName(
                         $row['create_name'],
                         $event->getValue('dat_timestamp_create'),
-                        $row['change_name'],
+                        (string) $row['change_name'],
                         $event->getValue('dat_timestamp_change'),
                         $row['create_uuid'],
-                        $row['change_uuid']
+                        (string) $row['change_uuid']
                     ).'
                     </div>
                 </div>');

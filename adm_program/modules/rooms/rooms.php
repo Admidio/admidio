@@ -141,10 +141,10 @@ if ($roomsStatement->rowCount() === 0) {
                 admFuncShowCreateChangeInfoByName(
                     $row['create_name'],
                     $room->getValue('room_timestamp_create'),
-                    $row['change_name'],
+                    (string) $row['change_name'],
                     $room->getValue('room_timestamp_change'),
                     $room->getValue('create_uuid'),
-                    $room->getValue('change_uuid')
+                    (string) $room->getValue('change_uuid')
                 ).'
             </div>
         </div>');
