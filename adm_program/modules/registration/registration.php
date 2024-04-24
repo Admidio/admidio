@@ -19,8 +19,7 @@ require_once(__DIR__ . '/../../system/common.php');
 try {
     // check if module is active
     if (!$gSettingsManager->getBool('registration_enable_module')) {
-        $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-        // => EXIT
+        throw new AdmException('SYS_MODULE_DISABLED');
     }
 
     // Initialize and check the parameters
@@ -35,8 +34,7 @@ try {
             // => EXIT
         } elseif (!$gCurrentUser->approveUsers()) {
             // Only Users with the right "approve users" can work with registrations, otherwise exit.
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
+            throw new AdmException('SYS_NO_RIGHTS');
         }
     } else {
         // user has clicked the link in his registration email, and now we must check if it's a valid request
@@ -62,8 +60,7 @@ try {
                 // => EXIT
             }
         } else {
-            $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_FAILED'));
-            // => EXIT
+            throw new AdmException('SYS_REGISTRATION_VALIDATION_FAILED');
         }
     }
 

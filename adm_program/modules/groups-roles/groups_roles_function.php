@@ -36,8 +36,7 @@ try {
     if ($getMode !== 6) {
         // only members who are allowed to create and edit roles should have access to these functions
         if (!$gCurrentUser->manageRoles()) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
+            throw new AdmException('SYS_NO_RIGHTS');
         }
 
         // check the CSRF token of the form against the session token
@@ -53,8 +52,7 @@ try {
 
         // Check if the role belongs to the current organization
         if ((int)$role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
+            throw new AdmException('SYS_NO_RIGHTS');
         }
     }
 
@@ -66,14 +64,12 @@ try {
 
         if (!array_key_exists('rol_name', $_POST) || $_POST['rol_name'] === '') {
             // not all fields are filled
-            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
-            // => EXIT
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
         }
 
         if (strlen($_POST['rol_cat_id']) === 0) {
             // not all fields are filled
-            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
-            // => EXIT
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CATEGORY'));
         }
 
         if ($rolName !== $_POST['rol_name']) {
@@ -96,8 +92,7 @@ try {
             $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
             if ($pdoStatement->fetchColumn() > 0) {
-                $gMessage->show($gL10n->get('SYS_ROLE_NAME_EXISTS'));
-                // => EXIT
+                throw new AdmException('SYS_ROLE_NAME_EXISTS');
             }
         }
 
@@ -138,8 +133,7 @@ try {
         if (isset($_POST['rol_start_date']) && strlen($_POST['rol_start_date']) > 0) {
             $validFromDate = DateTime::createFromFormat('Y-m-d', $_POST['rol_start_date']);
             if (!$validFromDate) {
-                $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_FROM'), 'YYYY-MM-DD')));
-                // => EXIT
+                throw new AdmException('SYS_DATE_INVALID', array('SYS_VALID_FROM', 'YYYY-MM-DD'));
             } else {
                 // now write date and time with database format to date object
                 $_POST['rol_start_date'] = $validFromDate->format('Y-m-d');
@@ -149,8 +143,7 @@ try {
         if (isset($_POST['rol_end_date']) && strlen($_POST['rol_end_date']) > 0) {
             $validToDate = DateTime::createFromFormat('Y-m-d', $_POST['rol_end_date']);
             if (!$validToDate) {
-                $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_TO'), 'YYYY-MM-DD')));
-                // => EXIT
+                throw new AdmException('SYS_DATE_INVALID', array('SYS_VALID_TO', 'YYYY-MM-DD'));
             } else {
                 // now write date and time with database format to date object
                 $_POST['rol_end_date'] = $validToDate->format('Y-m-d');
@@ -160,8 +153,7 @@ try {
         // DateTo should be greater than DateFrom (Timestamp must be less)
         if (isset($_POST['rol_start_date']) && strlen($_POST['rol_start_date']) > 0 && strlen($_POST['rol_end_date']) > 0) {
             if ($validFromDate > $validToDate) {
-                $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
-                // => EXIT
+                throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
             }
         }
 
@@ -172,8 +164,7 @@ try {
         if (isset($_POST['rol_start_time']) && strlen($_POST['rol_start_time']) > 0) {
             $validFromTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW . ' ' . $_POST['rol_start_time']);
             if (!$validFromTime) {
-                $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME_FROM'), 'HH:ii')));
-                // => EXIT
+                throw new AdmException('SYS_TIME_INVALID', array('SYS_TIME_FROM', 'HH:ii'));
             } else {
                 // now write date and time with database format to date object
                 $_POST['rol_start_time'] = $validFromTime->format('H:i:s');
@@ -183,8 +174,7 @@ try {
         if (isset($_POST['rol_end_time']) && strlen($_POST['rol_end_time']) > 0) {
             $validToTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW . ' ' . $_POST['rol_end_time']);
             if (!$validToTime) {
-                $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME_TO'), 'HH:ii')));
-                // => EXIT
+                throw new AdmException('SYS_TIME_INVALID', array('SYS_TIME_TO', 'HH:ii'));
             } else {
                 // now write date and time with database format to date object
                 $_POST['rol_end_time'] = $validToTime->format('H:i:s');
@@ -198,8 +188,7 @@ try {
             $numFreePlaces = $role->countVacancies();
 
             if ($numFreePlaces < 0) {
-                $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($rolName)));
-                // => EXIT
+                throw new AdmException('SYS_ROLE_MAX_MEMBERS', array($rolName));
             }
         }
 

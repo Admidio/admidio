@@ -36,8 +36,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
-        $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-        // => EXIT
+        throw new AdmException('SYS_MODULE_DISABLED');
     }
 
     $_SESSION['documents_files_request'] = $_POST;
@@ -51,8 +50,7 @@ try {
     $folder->getFolderForDownload($getFolderUuid);
 
     if (!$folder->hasUploadRight()) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+        throw new AdmException('SYS_NO_RIGHTS');
     }
 
     // check the CSRF token of the form against the session token
@@ -73,8 +71,7 @@ try {
             }
         } else {
             // if no file id was set then show error
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-            // => EXIT
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         unset($_SESSION['documents_files_request']);
@@ -84,8 +81,7 @@ try {
     elseif ($getMode === 3) {
         if ($getFolderUuid === '') {
             // Folder UUID is required to create a sub-folder
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-            // => EXIT
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         try {
@@ -94,8 +90,7 @@ try {
 
             // Test if the folder already exists in the file system
             if (is_dir($folder->getFullFolderPath() . '/' . $newFolderName)) {
-                $gMessage->show($gL10n->get('SYS_FOLDER_EXISTS', array($newFolderName)));
-            // => EXIT
+                throw new AdmException('SYS_FOLDER_EXISTS', array($newFolderName));
             } else {
                 // create folder
                 $error = $folder->createFolder($newFolderName);
@@ -148,8 +143,7 @@ try {
     elseif ($getMode === 4) {
         if (!$getFileUuid && !$getFolderUuid) {
             // file UUID and/or folder UUID must be set
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-            // => EXIT
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         try {
@@ -167,8 +161,7 @@ try {
 
                 // check if file already exists in filesystem
                 if ($newFile !== $file->getValue('fil_name') && is_file($newPath . $newFile)) {
-                    $gMessage->show($gL10n->get('SYS_FILE_EXIST', array($newFile)));
-                // => EXIT
+                    throw new AdmException('SYS_FILE_EXIST', array($newFile));
                 } else {
                     $oldName = $file->getValue('fil_name');
 
@@ -195,8 +188,7 @@ try {
             } elseif ($getFolderUuid !== '') {
                 // main folder could not be renamed
                 if ($folder->getValue('fol_fol_id_parent') === '') {
-                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-                    // => EXIT
+                    throw new AdmException('SYS_INVALID_PAGE_VIEW');
                 }
 
                 $oldFolder = $folder->getFullFolderPath();
@@ -205,8 +197,7 @@ try {
                 // check if folder already exists in filesystem
                 if ($newFolder !== $folder->getValue('fol_name')
                 && is_dir(ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder)) {
-                    $gMessage->show($gL10n->get('SYS_FOLDER_EXISTS', array($newFolder)));
-                // => EXIT
+                    throw new AdmException('SYS_FOLDER_EXISTS', array($newFolder));
                 } else {
                     $oldName = $folder->getValue('fol_name');
 
@@ -250,8 +241,7 @@ try {
     elseif ($getMode === 5) {
         if ($getFolderUuid === '') {
             // the uuid of the current folder must be set
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-        // => EXIT
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         } else {
             if ($folder->delete()) {
                 // Delete successful -> return for XMLHttpRequest
@@ -266,14 +256,12 @@ try {
     elseif ($getMode === 6) {
         if ($getFolderUuid === '') {
             // the uuid of the current folder must be set
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-            // => EXIT
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         // only users with download administration rights should set new roles rights
         if (!$gCurrentUser->adminDocumentsFiles()) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
+            throw new AdmException('SYS_NO_RIGHTS');
         }
 
         // add the file or folder recursively to the database
@@ -288,8 +276,7 @@ try {
     // save view or upload rights for a folder
     elseif ($getMode === 7) {
         if (!isset($_POST['adm_roles_view_right'])) {
-            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_VISIBLE_FOR'))));
-            // => EXIT
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_VISIBLE_FOR'));
         }
         if (!isset($_POST['adm_roles_upload_right'])) {
             // upload right does not need to be set because documents & files module administrators still
@@ -299,14 +286,12 @@ try {
 
         if ($getFolderUuid === '' || !is_array($_POST['adm_roles_view_right']) || !is_array($_POST['adm_roles_upload_right'])) {
             // the uuid of the current folder must be set
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-            // => EXIT
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         // only users with documents & files administration rights should set new roles rights
         if (!$gCurrentUser->adminDocumentsFiles()) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
+            throw new AdmException('SYS_NO_RIGHTS');
         }
 
         $postIntRolesViewRight   = array_map('intval', $_POST['adm_roles_view_right']);

@@ -11,36 +11,25 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-$postLastname = admFuncVariableIsValid($_POST, 'lastname', 'string');
-$postFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string');
-
-// this script should return errors in ajax mode
-$gMessage->showHtmlTextOnly(true);
-
 try {
+    $postLastname = admFuncVariableIsValid($_POST, 'lastname', 'string');
+    $postFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string');
+
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-} catch (AdmException $exception) {
-    $exception->showText();
-    // => EXIT
-}
 
-// only legitimate users are allowed to call the user management
-if (!$gCurrentUser->editUsers()) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
+    // only legitimate users are allowed to call the user management
+    if (!$gCurrentUser->editUsers()) {
+        throw new AdmException('SYS_NO_RIGHTS');
+    }
 
-if (strlen($_POST['lastname']) === 0) {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LASTNAME'))));
-    // => EXIT
-}
-if (strlen($_POST['firstname']) === 0) {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_FIRSTNAME'))));
-    // => EXIT
-}
+    if (strlen($_POST['lastname']) === 0) {
+        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LASTNAME'));
+    }
+    if (strlen($_POST['firstname']) === 0) {
+        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_FIRSTNAME'));
+    }
 
-try {
     // create html page object
     $page = new ModuleContacts('admidio-registration-assign', $gL10n->get('SYS_ASSIGN_REGISTRATION'));
     $newUser = new User($gDb, $gProfileFields);
@@ -49,7 +38,7 @@ try {
     $page->createContentAssignUser($newUser);
     echo $page->getPageContent();
 } catch (\Smarty\Exception $e) {
-    $gMessage->show($e->getMessage());
+    echo $e->getMessage();
 } catch (AdmException $e) {
     if ($e->getMessage() === 'No similar users found.') {
         echo 'success';

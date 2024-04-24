@@ -30,8 +30,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
-        $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-        // => EXIT
+        throw new AdmException('SYS_MODULE_DISABLED');
     }
 
     // set headline
@@ -51,8 +50,7 @@ try {
 
     if ($getShow === 'permissions') {
         if (!$gCurrentUser->manageRoles()) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
+            throw new AdmException('SYS_NO_RIGHTS');
         }
 
         $headline .= ' - ' . $gL10n->get('SYS_PERMISSIONS');

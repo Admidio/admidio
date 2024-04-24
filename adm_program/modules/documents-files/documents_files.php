@@ -22,8 +22,7 @@ try {
 
     // Check if module is activated
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
-        $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-        // => EXIT
+        throw new AdmException('SYS_MODULE_DISABLED');
     }
 
     // get recordset of current folder from database

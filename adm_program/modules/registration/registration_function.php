@@ -26,20 +26,18 @@ try {
     $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
     $getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 
-    if ($getMode !== 'delete_user') {
+    if ($getMode === 'delete_user') {
         $gMessage->showHtmlTextOnly();
     }
 
     // only administrators could approve new users
     if (!$gCurrentUser->approveUsers()) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+        throw new AdmException('SYS_NO_RIGHTS');
     }
 
     // module must be enabled in the settings
     if (!$gSettingsManager->getBool('registration_enable_module')) {
-        $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-        // => EXIT
+        throw new AdmException('SYS_MODULE_DISABLED');
     }
 
     // create user objects
