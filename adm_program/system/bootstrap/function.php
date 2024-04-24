@@ -174,17 +174,12 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
      */
     function getListElementString(string $linkText, string $className = '', string $url = '', string $paramName = '', int $paramValue = 0): string
     {
-        $classString = '';
-        if ($className !== '') {
-            $classString = ' class="' . $className . '"';
-        }
-
         $urlString = '#';
         if ($url !== '') {
             $urlString = $url . '&' . $paramName . '=' . $paramValue;
         }
 
-        return '<li' . $classString . '><a class="page-link" href="' . $urlString . '">' . $linkText . '</a></li>';
+        return '<li class="page-item ' . $className . '"><a class="page-link" href="' . $urlString . '">' . $linkText . '</a></li>';
     }
 
     $onPage = (int)floor($pageStartItem / $itemsPerPage) + 1;
@@ -219,12 +214,12 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
     if ($addPrevNextText) {
         $pageNavClassPrev = '';
         if ($onPage === 1) {
-            $pageNavClassPrev = 'page-item disabled';
+            $pageNavClassPrev = 'disabled';
         }
 
         $pageNavClassNext = '';
         if ($onPage === $totalPagesCount) {
-            $pageNavClassNext = 'page-item disabled';
+            $pageNavClassNext = 'disabled';
         }
 
         $pageNavigationPrevText = getListElementString($gL10n->get('SYS_BACK'), $pageNavClassPrev, $baseUrl, $queryParamName, ($onPage - 2) * $itemsPerPage);
