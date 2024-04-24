@@ -85,6 +85,6 @@ try {
             )
         )
     );
-} catch (RuntimeException|AdmException $exception) {
+} catch (RuntimeException|AdmException|Exception $exception) {
     echo json_encode(array('error' => array('message' => $exception->getMessage())));
 }

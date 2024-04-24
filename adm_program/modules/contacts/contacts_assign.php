@@ -37,12 +37,10 @@ try {
     $newUser->setValue('FIRST_NAME', $postFirstname);
     $page->createContentAssignUser($newUser);
     echo $page->getPageContent();
-} catch (\Smarty\Exception $e) {
-    echo $e->getMessage();
-} catch (AdmException $e) {
+} catch (AdmException|Exception|\Smarty\Exception $e) {
     if ($e->getMessage() === 'No similar users found.') {
         echo 'success';
     } else {
-        $e->showText();
+        echo $e->getMessage();
     }
 }
