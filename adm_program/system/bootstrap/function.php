@@ -16,7 +16,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
  * Function checks if the user is a member of the role.
  * If **userId** is not set than this will be checked for the current user
  * @param string $roleName The name of the role where the membership of the user should be checked
- * @param int    $userId   The id of the user who should be checked if he is a member of the role.
+ * @param int $userId The id of the user who should be checked if he is a member of the role.
  *                         If @userId is not set than this will be checked for the current user
  * @return bool Returns **true** if the user is a member of the role
  */
@@ -27,10 +27,10 @@ function hasRole($roleName, $userId = 0)
     }
 
     $sql = 'SELECT mem_id
-              FROM '.TBL_MEMBERS.'
-        INNER JOIN '.TBL_ROLES.'
+              FROM ' . TBL_MEMBERS . '
+        INNER JOIN ' . TBL_ROLES . '
                 ON rol_id = mem_rol_id
-        INNER JOIN '.TBL_CATEGORIES.'
+        INNER JOIN ' . TBL_CATEGORIES . '
                 ON cat_id = rol_cat_id
              WHERE mem_usr_id = ? -- $userId
                AND mem_begin <= ? -- DATE_NOW
@@ -56,10 +56,10 @@ function isMember($userId)
     }
 
     $sql = 'SELECT COUNT(*) AS count
-              FROM '.TBL_MEMBERS.'
-        INNER JOIN '.TBL_ROLES.'
+              FROM ' . TBL_MEMBERS . '
+        INNER JOIN ' . TBL_ROLES . '
                 ON rol_id = mem_rol_id
-        INNER JOIN '.TBL_CATEGORIES.'
+        INNER JOIN ' . TBL_CATEGORIES . '
                 ON cat_id = rol_cat_id
              WHERE mem_usr_id = ? -- $userId
                AND mem_begin <= ? -- DATE_NOW
@@ -87,10 +87,10 @@ function isGroupLeader($userId, $roleId = 0)
     }
 
     $sql = 'SELECT mem_id
-              FROM '.TBL_MEMBERS.'
-        INNER JOIN '.TBL_ROLES.'
+              FROM ' . TBL_MEMBERS . '
+        INNER JOIN ' . TBL_ROLES . '
                 ON rol_id = mem_rol_id
-        INNER JOIN '.TBL_CATEGORIES.'
+        INNER JOIN ' . TBL_CATEGORIES . '
                 ON cat_id = rol_cat_id
              WHERE mem_usr_id = ? -- $userId
                AND mem_begin <= ? -- DATE_NOW
@@ -117,11 +117,11 @@ function isGroupLeader($userId, $roleId = 0)
  * Beispiel:
  *     Seite: < Vorherige 1  2  3 ... 9  10  11 Naechste >
  *
- * @param string $baseUrl                  Basislink zum Modul (auch schon mit notwendigen Uebergabevariablen)
- * @param int    $itemsCount               Gesamtanzahl an Elementen
- * @param int    $itemsPerPage             Anzahl Elemente pro Seite
- * @param int    $pageStartItem            Mit dieser Elementnummer beginnt die aktuelle Seite
- * @param bool   $addPrevNextText          Links mit "Vorherige" "Naechste" anzeigen
+ * @param string $baseUrl Basislink zum Modul (auch schon mit notwendigen Uebergabevariablen)
+ * @param int $itemsCount Gesamtanzahl an Elementen
+ * @param int $itemsPerPage Anzahl Elemente pro Seite
+ * @param int $pageStartItem Mit dieser Elementnummer beginnt die aktuelle Seite
+ * @param bool $addPrevNextText Links mit "Vorherige" "Naechste" anzeigen
  * @param string $queryParamName (optional) You can set a new name for the parameter that should be used as start parameter.
  * @return string
  */
@@ -133,19 +133,19 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         return '';
     }
 
-    $totalPagesCount = (int) ceil($itemsCount / $itemsPerPage);
+    $totalPagesCount = (int)ceil($itemsCount / $itemsPerPage);
 
     if ($totalPagesCount <= 1) {
         return '';
     }
 
     /**
-     * @param int    $start
-     * @param int    $end
-     * @param int    $page
+     * @param int $start
+     * @param int $end
+     * @param int $page
      * @param string $url
      * @param string $paramName
-     * @param int    $itemsPerPage
+     * @param int $itemsPerPage
      * @return string
      */
     function getListElementsFromTo($start, $end, $page, $url, $paramName, $itemsPerPage)
@@ -154,9 +154,9 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 
         for ($i = $start; $i < $end; ++$i) {
             if ($i === $page) {
-                $pageNavString .= getListElementString((string) $i, 'page-item active');
+                $pageNavString .= getListElementString((string)$i, 'page-item active');
             } else {
-                $pageNavString .= getListElementString((string) $i, 'page-item', $url, $paramName, ($i - 1) * $itemsPerPage);
+                $pageNavString .= getListElementString((string)$i, 'page-item', $url, $paramName, ($i - 1) * $itemsPerPage);
             }
         }
 
@@ -168,25 +168,25 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
      * @param string $className
      * @param string $url
      * @param string $paramName
-     * @param int    $paramValue
+     * @param int $paramValue
      * @return string
      */
     function getListElementString($linkText, $className = '', $url = '', $paramName = '', $paramValue = null)
     {
         $classString = '';
         if ($className !== '') {
-            $classString = ' class="'.$className.'"';
+            $classString = ' class="' . $className . '"';
         }
 
         $urlString = '#';
         if ($url !== '') {
-            $urlString = $url.'&'.$paramName.'='.$paramValue;
+            $urlString = $url . '&' . $paramName . '=' . $paramValue;
         }
 
-        return '<li'.$classString.'><a class="page-link" href="'.$urlString.'">'.$linkText.'</a></li>';
+        return '<li' . $classString . '><a class="page-link" href="' . $urlString . '">' . $linkText . '</a></li>';
     }
 
-    $onPage = (int) floor($pageStartItem / $itemsPerPage) + 1;
+    $onPage = (int)floor($pageStartItem / $itemsPerPage) + 1;
 
     $pageNavigationString = '';
 
@@ -231,10 +231,10 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         $pageNavigationPrevText = getListElementString($gL10n->get('SYS_BACK'), $pageNavClassPrev, $baseUrl, $queryParamName, ($onPage - 2) * $itemsPerPage);
         $pageNavigationNextText = getListElementString($gL10n->get('SYS_PAGE_NEXT'), $pageNavClassNext, $baseUrl, $queryParamName, $onPage * $itemsPerPage);
 
-        $pageNavigationString = $pageNavigationPrevText.$pageNavigationString.$pageNavigationNextText;
+        $pageNavigationString = $pageNavigationPrevText . $pageNavigationString . $pageNavigationNextText;
     }
 
-    $pageNavigationString = '<nav><ul class="pagination">'.$pageNavigationString.'</ul></nav>';
+    $pageNavigationString = '<nav><ul class="pagination">' . $pageNavigationString . '</ul></nav>';
 
     return $pageNavigationString;
 }
@@ -247,13 +247,13 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
  * value was set then the parameter will be initialized. The function can be used with every array and their elements.
  * You can set several flags (like required value, datatype …) that should be checked.
  *
- * @param array<string,mixed> $array        The array with the element that should be checked
- * @param string              $variableName Name of the array element that should be checked
- * @param string              $datatype     The datatype like **string**, **numeric**, **int**, **float**, **bool**, **boolean**, **html**,
+ * @param array<string,mixed> $array The array with the element that should be checked
+ * @param string $variableName Name of the array element that should be checked
+ * @param string $datatype The datatype like **string**, **numeric**, **int**, **float**, **bool**, **boolean**, **html**,
  *                                          **url**, **date**, **file** or **folder** that is expected and which will be checked.
  *                                          Datatype **date** expects a date that has the Admidio default format from the
  *                                          preferences or the english date format **Y-m-d**
- * @param array<string,mixed> $options      (optional) An array with the following possible entries:
+ * @param array<string,mixed> $options (optional) An array with the following possible entries:
  *                                          - defaultValue : A value that will be set if the variable has no value
  *                                          - **requireValue** : If set to **true** than a value is required otherwise the function
  *                                                              returns an error
@@ -274,6 +274,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
  * // string initialized with actual and the only allowed values are actual and old
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
  * ```
+ * @throws AdmException|\Smarty\Exception
  */
 function admFuncVariableIsValid(array $array, $variableName, $datatype, array $options = array())
 {
@@ -281,7 +282,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
     // create array with all options
     $optionsDefault = array('defaultValue' => null, 'requireValue' => false, 'validValues' => null, 'directOutput' => null);
-    $optionsAll     = array_replace($optionsDefault, $options);
+    $optionsAll = array_replace($optionsDefault, $options);
 
     $errorMessage = '';
     $value = null;
@@ -289,15 +290,15 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     // set default value for each datatype if no value is given and no value was required
     if (array_key_exists($variableName, $array) && $array[$variableName] !== '') {
         if ($datatype === 'bool' || $datatype === 'boolean') {
-            $value = (bool) $array[$variableName];
+            $value = (bool)$array[$variableName];
         } elseif ($datatype === 'numeric' || $datatype === 'int') {
-            $value = (int) $array[$variableName];
+            $value = (int)$array[$variableName];
         } elseif ($datatype === 'float') {
-            $value = (float) $array[$variableName];
+            $value = (float)$array[$variableName];
         } elseif ($datatype === 'array') {
             $value = $array[$variableName];
         } else {
-            $value = (string) $array[$variableName];
+            $value = (string)$array[$variableName];
         }
     } else {
         if ($optionsAll['requireValue']) {
@@ -420,10 +421,9 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         }
 
         $gMessage->show($errorMessage);
-    // => EXIT
+        // => EXIT
     } else {
-        echo $errorMessage;
-        exit();
+        throw new AdmException($errorMessage);
     }
 
     return null;
@@ -433,9 +433,9 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
  * parameters. If userId is not set then the function will show **deleted user**.
- * @param int         $userIdCreated   Id of the user who create the recordset.
- * @param string      $timestampCreate Date and time of the moment when the user create the recordset.
- * @param int         $userIdEdited    Id of the user last changed the recordset.
+ * @param int $userIdCreated Id of the user who create the recordset.
+ * @param string $timestampCreate Date and time of the moment when the user create the recordset.
+ * @param int $userIdEdited Id of the user last changed the recordset.
  * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
@@ -444,7 +444,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
     global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
     // only show info if system setting is activated
-    if ((int) $gSettingsManager->get('system_show_create_edit') === 0) {
+    if ((int)$gSettingsManager->get('system_show_create_edit') === 0) {
         return '';
     }
 
@@ -456,7 +456,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
             $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
             $userUuidCreated = $userCreate->getValue('usr_uuid');
 
-            if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
+            if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
                 $htmlCreateName = $userCreate->getValue('FIRST_NAME') . ' ' . $userCreate->getValue('LAST_NAME');
             } else {
                 $htmlCreateName = $userCreate->getValue('usr_login_name');
@@ -474,7 +474,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
             $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
             $userUuidEdited = $userEdit->getValue('usr_uuid');
 
-            if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
+            if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
                 $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' ' . $userEdit->getValue('LAST_NAME');
             } else {
                 $htmlEditName = $userEdit->getValue('usr_login_name');
@@ -503,13 +503,13 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
  * parameters. If user name is not set then the function will show **deleted user**.
- * @param string      $userNameCreated Id of the user who create the recordset.
- * @param string      $timestampCreate Date and time of the moment when the user create the recordset.
- * @param string|null $userNameEdited  Id of the user last changed the recordset.
+ * @param string $userNameCreated Id of the user who create the recordset.
+ * @param string $timestampCreate Date and time of the moment when the user create the recordset.
+ * @param string|null $userNameEdited Id of the user last changed the recordset.
  * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
- * @param string      $userUuidCreated  (optional) The uuid of the user who create the recordset.
+ * @param string $userUuidCreated (optional) The uuid of the user who create the recordset.
  *                                      If uuid is set than a link to the user profile will be created
- * @param string      $userUuidEdited   (optional) The uuid of the user last changed the recordset.
+ * @param string $userUuidEdited (optional) The uuid of the user last changed the recordset.
  *                                      If uuid is set than a link to the user profile will be created
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
@@ -518,7 +518,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     global $gL10n, $gValidLogin, $gSettingsManager;
 
     // only show info if system setting is activated
-    if ((int) $gSettingsManager->get('system_show_create_edit') === 0) {
+    if ((int)$gSettingsManager->get('system_show_create_edit') === 0) {
         return '';
     }
 
@@ -535,7 +535,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         // if valid login and a user id is given than create a link to the profile of this user
         if ($gValidLogin && $userUuidCreated !== '' && $userNameCreated !== $gL10n->get('SYS_SYSTEM')) {
             $userNameCreated = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuidCreated)) .
-                               '">' . $userNameCreated . '</a>';
+                '">' . $userNameCreated . '</a>';
         }
 
         $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY_AND_AT', array($userNameCreated, $timestampCreate)) . '</span>';
@@ -552,7 +552,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         // if valid login and a user id is given than create a link to the profile of this user
         if ($gValidLogin && $userUuidEdited !== '' && $userNameEdited !== $gL10n->get('SYS_SYSTEM')) {
             $userNameEdited = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuidEdited)) .
-                              '">' . $userNameEdited . '</a>';
+                '">' . $userNameEdited . '</a>';
         }
 
         $html .= '<span class="info-edited">' . $gL10n->get('SYS_LAST_EDITED_BY', array($userNameEdited, $timestampEdited)) . '</span>';
@@ -587,8 +587,8 @@ function admFuncCheckUrl($url)
 
 /**
  * This is a safe method for redirecting.
- * @param string $url        The URL where redirecting to. Must be a absolute URL. (www.example.org)
- * @param int    $statusCode The status-code which should be send. (301, 302, 303 (default), 307)
+ * @param string $url The URL where redirecting to. Must be a absolute URL. (www.example.org)
+ * @param int $statusCode The status-code which should be send. (301, 302, 303 (default), 307)
  * @see https://www.owasp.org/index.php/Open_redirect
  */
 function admRedirect($url, $statusCode = 303)

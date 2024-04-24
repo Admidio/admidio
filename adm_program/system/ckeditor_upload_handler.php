@@ -15,9 +15,9 @@
 require_once(__DIR__ . '/common.php');
 require(__DIR__ . '/login_valid.php');
 
-$getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
-
 try {
+    $getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
+
     // check if a file was really uploaded
     if (!file_exists($_FILES['upload']['tmp_name']) || !is_uploaded_file($_FILES['upload']['tmp_name'])) {
         throw new AdmException('SYS_FILE_NOT_EXIST');
