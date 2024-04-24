@@ -20,7 +20,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
  *                         If @userId is not set than this will be checked for the current user
  * @return bool Returns **true** if the user is a member of the role
  */
-function hasRole($roleName, $userId = 0)
+function hasRole(string $roleName, int $userId = 0): bool
 {
     if ($userId === 0) {
         $userId = $GLOBALS['gCurrentUserId'];
@@ -49,7 +49,7 @@ function hasRole($roleName, $userId = 0)
  * @param int $userId The id of the user who should be checked if he is a member of the current organization
  * @return bool Returns **true** if the user is a member
  */
-function isMember($userId)
+function isMember(int $userId): bool
 {
     if ($userId === 0) {
         return false;
@@ -80,7 +80,7 @@ function isMember($userId)
  *                    otherwise it checks if the user is group leader in one role of the current organization
  * @return bool Returns **true** if the user is a group leader
  */
-function isGroupLeader($userId, $roleId = 0)
+function isGroupLeader(int $userId, int $roleId = 0): bool
 {
     if ($userId === 0) {
         return false;
@@ -112,20 +112,21 @@ function isGroupLeader($userId, $roleId = 0)
 }
 
 /**
- * diese Funktion gibt eine Seitennavigation in Anhaengigkeit der Anzahl Seiten zurueck
- * Teile dieser Funktion sind von generatePagination aus phpBB2
- * Beispiel:
- *     Seite: < Vorherige 1  2  3 ... 9  10  11 Naechste >
+ * This function returns a page navigation depending on the number of pages.
+ * Parts of this function are from generatePagination from phpBB2.
+ * Example:
+ *     Page: < Previous 1  2  3 ... 9  10  11 Next >
  *
- * @param string $baseUrl Basislink zum Modul (auch schon mit notwendigen Uebergabevariablen)
+ * @param string $baseUrl Basislink zum Modul
  * @param int $itemsCount Gesamtanzahl an Elementen
  * @param int $itemsPerPage Anzahl Elemente pro Seite
  * @param int $pageStartItem Mit dieser Elementnummer beginnt die aktuelle Seite
- * @param bool $addPrevNextText Links mit "Vorherige" "Naechste" anzeigen
+ * @param bool $addPrevNextText Show link with "Previous" and "Next"
  * @param string $queryParamName (optional) You can set a new name for the parameter that should be used as start parameter.
  * @return string
+ * @throws Exception
  */
-function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageStartItem, $addPrevNextText = true, $queryParamName = 'start')
+function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsPerPage, int $pageStartItem, bool $addPrevNextText = true, string $queryParamName = 'start'): string
 {
     global $gL10n;
 
@@ -148,7 +149,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
      * @param int $itemsPerPage
      * @return string
      */
-    function getListElementsFromTo($start, $end, $page, $url, $paramName, $itemsPerPage)
+    function getListElementsFromTo(int $start, int $end, int $page, string $url, string $paramName, int $itemsPerPage): string
     {
         $pageNavString = '';
 
@@ -168,10 +169,10 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
      * @param string $className
      * @param string $url
      * @param string $paramName
-     * @param int $paramValue
+     * @param int|null $paramValue
      * @return string
      */
-    function getListElementString($linkText, $className = '', $url = '', $paramName = '', $paramValue = null)
+    function getListElementString(string $linkText, string $className = '', string $url = '', string $paramName = '', int $paramValue = 0): string
     {
         $classString = '';
         if ($className !== '') {
@@ -191,11 +192,10 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
     $pageNavigationString = '';
 
     if ($totalPagesCount > 7) {
-        $initPageMax = ($totalPagesCount > 3) ? 3 : $totalPagesCount;
+        $initPageMax = 3;
 
         $pageNavigationString .= getListElementsFromTo(1, $initPageMax + 1, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
 
-        if ($totalPagesCount > 3) {
             $disabledLink = '<li class="page-item disabled"><a>...</a></li>';
 
             if ($onPage > 1 && $onPage < $totalPagesCount) {
@@ -212,7 +212,6 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
             }
 
             $pageNavigationString .= getListElementsFromTo($totalPagesCount - 2, $totalPagesCount + 1, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
-        }
     } else {
         $pageNavigationString .= getListElementsFromTo(1, $totalPagesCount + 1, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
     }
@@ -234,9 +233,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         $pageNavigationString = $pageNavigationPrevText . $pageNavigationString . $pageNavigationNextText;
     }
 
-    $pageNavigationString = '<nav><ul class="pagination">' . $pageNavigationString . '</ul></nav>';
-
-    return $pageNavigationString;
+    return '<nav><ul class="pagination">' . $pageNavigationString . '</ul></nav>';
 }
 
 /**
@@ -274,18 +271,16 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
  * // string initialized with actual and the only allowed values are actual and old
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
  * ```
- * @throws AdmException|\Smarty\Exception
+ * @throws AdmException
+ * @throws Exception
  */
-function admFuncVariableIsValid(array $array, $variableName, $datatype, array $options = array())
+function admFuncVariableIsValid(array $array, string $variableName, string $datatype, array $options = array())
 {
-    global $gL10n, $gMessage, $gSettingsManager;
+    global $gSettingsManager;
 
     // create array with all options
     $optionsDefault = array('defaultValue' => null, 'requireValue' => false, 'validValues' => null, 'directOutput' => null);
     $optionsAll = array_replace($optionsDefault, $options);
-
-    $errorMessage = '';
-    $value = null;
 
     // set default value for each datatype if no value is given and no value was required
     if (array_key_exists($variableName, $array) && $array[$variableName] !== '') {
@@ -302,8 +297,8 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         }
     } else {
         if ($optionsAll['requireValue']) {
-            // if value is required an no value is given then show error
-            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+            // if value is required and no value is given then show error
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         } elseif ($optionsAll['defaultValue'] !== null) {
             // if a default value was set then take this value
             if (is_string($optionsAll['defaultValue'])) {
@@ -330,116 +325,95 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     // check if parameter has a valid value
     // do a strict check with in_array because the function don't work properly
     if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true)) {
-        $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+        throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
 
-    if ($errorMessage === '') {
-        switch ($datatype) {
-            case 'file': // fallthrough
-            case 'folder':
-                try {
-                    if ($value !== '') {
-                        StringUtils::strIsValidFileName($value, false);
-                    }
-                } catch (AdmException $e) {
-                    $errorMessage = $e->getMessage();
+    switch ($datatype) {
+        case 'file': // fallthrough
+        case 'folder':
+            if ($value !== '') {
+                StringUtils::strIsValidFileName($value, false);
+            }
+            break;
+
+        case 'date':
+            // check if date is a valid Admidio date format
+            $objAdmidioDate = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
+
+            if (!$objAdmidioDate) {
+                // check if date has english format
+                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $value);
+
+                if (!$objEnglishDate) {
+                    throw new AdmException('SYS_NOT_VALID_DATE_FORMAT', array($variableName));
                 }
-                break;
+            }
+            break;
 
-            case 'date':
-                // check if date is a valid Admidio date format
-                $objAdmidioDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
+        case 'bool': // fallthrough
+        case 'boolean':
+            $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if ($valid === null) {
+                throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            }
+            $value = $valid;
+            break;
 
-                if (!$objAdmidioDate) {
-                    // check if date has english format
-                    $objEnglishDate = \DateTime::createFromFormat('Y-m-d', $value);
-
-                    if (!$objEnglishDate) {
-                        $errorMessage = $gL10n->get('SYS_NOT_VALID_DATE_FORMAT', array($variableName));
-                    }
-                }
-                break;
-
-            case 'bool': // fallthrough
-            case 'boolean':
-                $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-                if ($valid === null) {
-                    $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-                }
-                $value = $valid;
-                break;
-
-            case 'int': // fallthrough
-            case 'float': // fallthrough
-            case 'numeric':
-                // numeric datatype should only contain numbers
-                if (!is_numeric($value)) {
-                    $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+        case 'int': // fallthrough
+        case 'float': // fallthrough
+        case 'numeric':
+            // numeric datatype should only contain numbers
+            if (!is_numeric($value)) {
+                throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            } else {
+                if ($datatype === 'int') {
+                    $value = filter_var($value, FILTER_VALIDATE_INT);
+                } elseif ($datatype === 'float') {
+                    $value = filter_var($value, FILTER_VALIDATE_FLOAT);
                 } else {
-                    if ($datatype === 'int') {
-                        $value = filter_var($value, FILTER_VALIDATE_INT);
-                    } elseif ($datatype === 'float') {
-                        $value = filter_var($value, FILTER_VALIDATE_FLOAT);
-                    } else {
-                        // https://www.php.net/manual/en/function.is-numeric.php#107326
-                        $value += 0;
-                    }
+                    // https://www.php.net/manual/en/function.is-numeric.php#107326
+                    $value += 0;
                 }
-                break;
+            }
+            break;
 
-            case 'string':
-                $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
-                break;
+        case 'string':
+            $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
+            break;
 
-            case 'html':
-                // check html string vor invalid tags and scripts
-                $config = HTMLPurifier_Config::createDefault();
-                $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-                $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
-                $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+        case 'html':
+            // check html string vor invalid tags and scripts
+            $config = HTMLPurifier_Config::createDefault();
+            $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+            $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
 
-                $filter = new HTMLPurifier($config);
-                $value = $filter->purify($value);
-                break;
+            $filter = new HTMLPurifier($config);
+            $value = $filter->purify($value);
+            break;
 
-            case 'url':
-                if (!StringUtils::strValidCharacters($value, 'url')) {
-                    $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+        case 'url':
+            if (!StringUtils::strValidCharacters($value, 'url')) {
+                throw new AdmException('SYS_INVALID_PAGE_VIEW');
                 }
-                break;
-        }
+            break;
     }
 
-    // if no error was detected, then return the contents of the variable
-    if ($errorMessage === '') {
-        return $value;
-    }
-
-    if (isset($gMessage) && $gMessage instanceof Message) {
-        if ($optionsAll['directOutput']) {
-            $gMessage->showTextOnly();
-        }
-
-        $gMessage->show($errorMessage);
-        // => EXIT
-    } else {
-        throw new AdmException($errorMessage);
-    }
-
-    return null;
+    return $value;
 }
 
 /**
  * Creates a html fragment with information about user and time when the recordset was created
- * and when it was at last edited. Therefore all necessary data must be set in the function
+ * and when it was at last edited. Therefore, all necessary data must be set in the function
  * parameters. If userId is not set then the function will show **deleted user**.
- * @param int $userIdCreated Id of the user who create the recordset.
+ * @param int $userIdCreated ID of the user who create the recordset.
  * @param string $timestampCreate Date and time of the moment when the user create the recordset.
- * @param int $userIdEdited Id of the user last changed the recordset.
- * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
+ * @param int $userIdEdited ID of the user last changed the recordset.
+ * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
+ * @throws Exception
  */
-function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited = 0, $timestampEdited = null)
+function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCreate, int $userIdEdited = 0, string $timestampEdited = ''): string
 {
     global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
@@ -451,7 +425,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
     // compose name of user who create the recordset
     $htmlCreateName = '';
     $userUuidCreated = '';
-    if ($timestampCreate) {
+    if ($timestampCreate !== '') {
         if ($userIdCreated > 0) {
             $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
             $userUuidCreated = $userCreate->getValue('usr_uuid');
@@ -469,7 +443,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
     // compose name of user who edit the recordset
     $htmlEditName = '';
     $userUuidEdited = '';
-    if ($timestampEdited) {
+    if ($timestampEdited !== '') {
         if ($userIdEdited > 0) {
             $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
             $userUuidEdited = $userEdit->getValue('usr_uuid');
@@ -501,19 +475,20 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
 /**
  * Creates a html fragment with information about user and time when the recordset was created
- * and when it was at last edited. Therefore all necessary data must be set in the function
- * parameters. If user name is not set then the function will show **deleted user**.
- * @param string $userNameCreated Id of the user who create the recordset.
+ * and when it was at last edited. Therefore, all necessary data must be set in the function
+ * parameters. If username is not set then the function will show **deleted user**.
+ * @param string $userNameCreated ID of the user who create the recordset.
  * @param string $timestampCreate Date and time of the moment when the user create the recordset.
- * @param string|null $userNameEdited Id of the user last changed the recordset.
+ * @param string|null $userNameEdited ID of the user last changed the recordset.
  * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
  * @param string $userUuidCreated (optional) The uuid of the user who create the recordset.
  *                                      If uuid is set than a link to the user profile will be created
  * @param string $userUuidEdited (optional) The uuid of the user last changed the recordset.
  *                                      If uuid is set than a link to the user profile will be created
  * @return string Returns a html string with usernames who creates item and edit item the last time
+ * @throws Exception
  */
-function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited = null, $timestampEdited = null, $userUuidCreated = '', $userUuidEdited = '')
+function admFuncShowCreateChangeInfoByName(string $userNameCreated, string $timestampCreate, string $userNameEdited = '', string $timestampEdited = '', string $userUuidCreated = '', string $userUuidEdited = ''): string
 {
     global $gL10n, $gValidLogin, $gSettingsManager;
 
@@ -525,7 +500,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     $html = '';
 
     // compose name of user who create the recordset
-    if ($timestampCreate) {
+    if ($timestampCreate !== '') {
         $userNameCreated = trim($userNameCreated);
 
         if ($userNameCreated === '') {
@@ -542,7 +517,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     }
 
     // compose name of user who edit the recordset
-    if ($timestampEdited) {
+    if ($timestampEdited !== '') {
         $userNameEdited = trim($userNameEdited);
 
         if ($userNameEdited === '') {
@@ -570,7 +545,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
  * @param $url string
  * @return false|string
  */
-function admFuncCheckUrl($url)
+function admFuncCheckUrl(string $url)
 {
     // Homepage url have to start with "http://"
     if (!StringUtils::strStartsWith($url, 'http://', false) && !StringUtils::strStartsWith($url, 'https://', false)) {
@@ -587,11 +562,13 @@ function admFuncCheckUrl($url)
 
 /**
  * This is a safe method for redirecting.
- * @param string $url The URL where redirecting to. Must be a absolute URL. (www.example.org)
- * @param int $statusCode The status-code which should be send. (301, 302, 303 (default), 307)
+ * @param string $url The URL where redirecting to. Must be an absolute URL. (www.example.org)
+ * @param int $statusCode The status-code which should be sent. (301, 302, 303 (default), 307)
+ * @throws \Smarty\Exception
+ * @throws Exception
  * @see https://www.owasp.org/index.php/Open_redirect
  */
-function admRedirect($url, $statusCode = 303)
+function admRedirect(string $url, int $statusCode = 303)
 {
     global $gLogger, $gMessage, $gL10n;
 
@@ -637,7 +614,7 @@ function admRedirect($url, $statusCode = 303)
  * @param float $startTime The start time
  * @return string Returns the formated execution time
  */
-function getExecutionTime($startTime)
+function getExecutionTime(float $startTime): string
 {
     $stopTime = microtime(true);
 
