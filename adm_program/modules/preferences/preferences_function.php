@@ -9,11 +9,12 @@
  *
  * Parameters:
  *
- * mode     : 1 - Save organization preferences
- *            2 - show welcome dialog for new organization
- *            3 - Create basic data for new organization in database
- *            4 - set directory protection, write htaccess
- *            5 - send test email
+ * mode     : save           - Save organization preferences
+ *            new_org_dialog - show welcome dialog for new organization
+ *            new_org_create - Create basic data for new organization in database
+ *            htaccess       - set directory protection, write htaccess
+ *            test_email     - send test email
+ *            backup         - create backup of Admidio database
  * form     : The name of the form preferences that were submitted.
  ***********************************************************************************************
  */
@@ -21,11 +22,11 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1, 'validValues' => array(1, 2, 3, 4, 5)));
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'save', 'validValues' => array('save', 'new_org_dialog', 'new_org_create', 'htaccess', 'test_email', 'backup')));
 $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
 // in ajax mode only return simple text on error
-if ($getMode === 1) {
+if ($getMode === 'save') {
     $gMessage->showHtmlTextOnly();
 
     try {
@@ -58,7 +59,7 @@ function getTemplateFileName($folder, $templateName)
 }
 
 switch ($getMode) {
-    case 1:
+    case 'save':
         $checkboxes = array();
 
         try {
@@ -274,7 +275,7 @@ switch ($getMode) {
         break;
 
     // show welcome dialog for new organization
-    case 2:
+    case 'new_org_dialog':
         if (isset($_SESSION['add_organization_request'])) {
             $formValues = $_SESSION['add_organization_request'];
             unset($_SESSION['add_organization_request']);
@@ -295,7 +296,7 @@ switch ($getMode) {
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
         // show form
-        $form = new HtmlForm('add_new_organization_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '3')), $page);
+        $form = new HtmlForm('add_new_organization_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => 'new_org_create')), $page);
         $form->addInput(
             'orgaShortName',
             $gL10n->get('SYS_NAME_ABBREVIATION'),
@@ -326,7 +327,7 @@ switch ($getMode) {
         break;
 
     // Create basic data for new organization in database
-    case 3:
+    case 'new_org_create':
         $_SESSION['add_organization_request'] = $_POST;
 
         try {
@@ -412,7 +413,7 @@ switch ($getMode) {
         break;
 
     // set directory protection, write htaccess
-    case 4:
+    case 'htaccess':
         if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess')) {
             echo $gL10n->get('SYS_ON');
             return;
@@ -431,7 +432,7 @@ switch ($getMode) {
         break;
 
     // send test email
-    case 5:
+    case 'test_email':
         $debugOutput = '';
 
         $email = new Email();

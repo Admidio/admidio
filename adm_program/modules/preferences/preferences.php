@@ -132,7 +132,7 @@ $page->addJavascript(
         var dirProtectionStatus = $("#directory_protection_status");
 
         dirProtectionStatus.html("<i class=\"fas fa-spinner fa-spin\"></i>").show();
-        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php", {mode: "4"}, function(statusText) {
+        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php", {mode: "htaccess"}, function(statusText) {
             var directoryProtection = dirProtectionStatus.parent().parent().parent();
             directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
         });
@@ -402,7 +402,7 @@ if ($gCurrentOrganization->countAllRecords() > 1) {
     );
 }
 
-$html = '<a class="btn btn-secondary" id="add_another_organization" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '2')).'">
+$html = '<a class="btn btn-secondary" id="add_another_organization" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => 'new_org_dialog')).'">
             <i class="fas fa-plus-circle"></i>'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
 $formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextId' => 'ORG_ADD_ORGANIZATION_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formOrganization->addSubmitButton(
@@ -646,7 +646,7 @@ $formEmailDispatch->addInput(
     $formValues['mail_smtp_password'],
     array('type' => 'password', 'maxLength' => 50, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
 );
-$html = '<a class="btn btn-secondary" id="send_test_mail" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '5')).'">
+$html = '<a class="btn btn-secondary" id="send_test_mail" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => 'test_email')).'">
             <i class="fas fa-envelope"></i>'.$gL10n->get('SYS_SEND_TEST_MAIL').'</a>';
 $formEmailDispatch->addCustomContent($gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
 $formEmailDispatch->addSubmitButton(
