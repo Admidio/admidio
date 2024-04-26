@@ -862,7 +862,7 @@ $page->addHtml(getPreferencePanel('common', 'captcha', 'accordion_preferences', 
 
 // PANEL: ADMIDIO UPDATE
 
-$formAdmidioUpdate = new HtmlForm('admidio_update_preferences_form', null, $page);
+$formAdmidioUpdate = new HtmlForm('admidio_update_preferences_form', '', $page);
 
 $html = '<span id="admidio_version_content">'.ADMIDIO_VERSION_TEXT.'
             <a id="link_check_for_update" href="#link_check_for_update" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
@@ -888,6 +888,11 @@ if ($updateStep === $maxStep) {
 }
 $formAdmidioUpdate->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $html);
 
+if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
+    $html = '<a class="btn btn-secondary" id="add_another_organization" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'backup')) . '">
+            <i class="fas fa-download"></i>' . $gL10n->get('SYS_DOWNLOAD_DATABASE_BACKUP') . '</a>';
+    $formAdmidioUpdate->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextId' => 'ORG_ADD_ORGANIZATION_DESC'));
+}
 $html = '<a id="donate" href="'. ADMIDIO_HOMEPAGE . 'donate.php" target="_blank">
             <i class="fas fa-heart"></i>'.$gL10n->get('SYS_DONATE').'</a>';
 $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_SUPPORT_ADMIDIO'), $html, array('helpTextId' => 'INS_SUPPORT_FURTHER_DEVELOPMENT'));
@@ -896,7 +901,7 @@ $page->addHtml(getPreferencePanel('common', 'admidio_update', 'accordion_prefere
 
 // PANEL: PHP
 
-$formPhp = new HtmlForm('php_preferences_form', null, $page);
+$formPhp = new HtmlForm('php_preferences_form', '', $page);
 
 if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
     $html = getStaticText('danger', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION)));
@@ -953,7 +958,7 @@ $page->addHtml(getPreferencePanel('common', 'php', 'accordion_preferences', $gL1
 
 // PANEL: SYSTEM INFORMATION
 
-$formSystemInformation = new HtmlForm('system_information_preferences_form', null, $page);
+$formSystemInformation = new HtmlForm('system_information_preferences_form', '', $page);
 
 $formSystemInformation->addStaticControl(
     'operating_system',

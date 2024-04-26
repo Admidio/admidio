@@ -45,11 +45,11 @@ class HtmlForm
     /**
      * @var bool Flag if this form has required fields. Then a notice must be written at the end of the form
      */
-    protected $flagRequiredFields = false;
+    protected bool $flagRequiredFields = false;
     /**
      * @var bool Flag if required fields should get a special css class to make them more visible to the user.
      */
-    protected $showRequiredFields;
+    protected bool $showRequiredFields;
     /**
      * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
@@ -57,11 +57,11 @@ class HtmlForm
     /**
      * @var string String with prepared html
      */
-    protected $htmlString = '';
+    protected string $htmlString = '';
     /**
      * @var int Number of visible elements in this form. Hidden elements are not count because no interaction is possible.
      */
-    protected $countElements = 0;
+    protected int $countElements = 0;
     /**
      * @var string Form type. Possible values are **default**, **vertical** or **navbar**.
      */
@@ -69,19 +69,19 @@ class HtmlForm
     /**
      * @var string ID of the form
      */
-    protected $id;
+    protected string $id;
     /**
      * @var string Content of the action attribute ot the form
      */
-    protected $action;
+    protected string $action;
     /**
      * @var string CSS classes of the form
      */
-    protected $attributes = array();
+    protected array $attributes = array();
     /**
      * @var bool Flag that indicates if a bootstrap button-group is open and should be closed later
      */
-    protected $buttonGroupOpen = false;
+    protected bool $buttonGroupOpen = false;
 
     /**
      * Constructor creates the form element
@@ -107,7 +107,7 @@ class HtmlForm
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
      */
-    public function __construct(string $id, string $action = null, HtmlPage $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $action = '', HtmlPage $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -334,6 +334,7 @@ class HtmlForm
             'property'         => '',
             'referenceId'      => '',
             'helpTextId'       => '',
+            'alertWarning'     => '',
             'icon'             => '',
             'class'            => '',
             'label'            => $label,

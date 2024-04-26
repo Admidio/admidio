@@ -18,6 +18,7 @@
  * form     : The name of the form preferences that were submitted.
  ***********************************************************************************************
  */
+
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
@@ -443,6 +444,19 @@ try {
                 $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', array($gL10n->get('SYS_RECIPIENT'), $sendResult)) . $debugOutput);
                 // => EXIT
             }
+            break;
+
+        // create backup of Admidio database
+        case 'backup':
+            // function not available for other databases except MySQL
+            if (DB_ENGINE !== Database::PDO_ENGINE_MYSQL) {
+                throw new AdmException('SYS_MODULE_DISABLED');
+            }
+
+            $dump = new DatabaseDump($gDb);
+            $dump->create('admidio_dump_' . $g_adm_db . '.sql.gzip');
+            $dump->export();
+            $dump->deleteDumpFile();
             break;
     }
 } catch (AdmException|Exception $exception) {

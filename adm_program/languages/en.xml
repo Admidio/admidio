@@ -554,6 +554,7 @@
   <string name="SYS_DQUOTE">Double quote (")</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
+  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_DOWNLOAD_ZIP_ERROR">An error occurred when creating the zip file.</string>
