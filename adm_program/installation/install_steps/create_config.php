@@ -153,7 +153,7 @@ $page->addTemplateFile('installation.tpl');
 $page->addJavascript('
     $("#next_page").on("click", function() {
         $(this).prop("disabled", true);
-        $(this).html("<i class=\"fas fa-sync fa-spin\"></i> ' . $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED') . '");
+        $(this).html("<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> ' . $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED') . '");
         $("#installation-form").submit();
     });', true);
 

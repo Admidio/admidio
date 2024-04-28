@@ -223,7 +223,7 @@ if ($getMode === 1) {
                 if(showProgress == true)
                 {
                     $(this).prop("disabled", true);
-                    $(this).html("<i class=\"fas fa-sync fa-spin\"></i> ' . $gL10n->get('INS_DATABASE_IS_UPDATED') . '");
+                    $(this).html("<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> ' . $gL10n->get('INS_DATABASE_IS_UPDATED') . '");
                     $("#update_login_form").submit();
                 }
             });', true);
