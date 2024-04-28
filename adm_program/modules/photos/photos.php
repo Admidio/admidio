@@ -289,9 +289,9 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
 
     // show information about user who creates the recordset and changed it
     $page->addHtml(admFuncShowCreateChangeInfoById(
-        $photoAlbum->getValue('pho_usr_id_create'),
+        (int) $photoAlbum->getValue('pho_usr_id_create'),
         $photoAlbum->getValue('pho_timestamp_create'),
-        $photoAlbum->getValue('pho_usr_id_change'),
+        (int) $photoAlbum->getValue('pho_usr_id_change'),
         $photoAlbum->getValue('pho_timestamp_change')
     ));
 
