@@ -14,14 +14,14 @@
         {/if}
         {if $type == 'datetime'}
             <div class="col-auto">
-                <input id="{$id}" name="{$id}" class="form-control {$class}" type="date" value="{$data.attributes.dateValue}"
+                <input id="{$id}" name="{$id}" class="form-control focus-ring {$class}" type="date" value="{$data.attributes.dateValue}"
                     {foreach $data.attributes.dateValueAttributes as $itemvar}
                         {$itemvar@key}="{$itemvar}"
                     {/foreach}
                 >
             </div>
             <div class="col-auto">
-                <input id="{$id}_time" name="{$id}_time" class="form-control {$class}" type="time" value="{$data.attributes.timeValue}"
+                <input id="{$id}_time" name="{$id}_time" class="form-control focus-ring {$class}" type="time" value="{$data.attributes.timeValue}"
                     {foreach $data.attributes.timeValueAttributes as $itemvar}
                         {$itemvar@key}="{$itemvar}"
                     {/foreach}
@@ -29,14 +29,14 @@
             </div>
             {$htmlAfter}
         {elseif $type == 'date'}
-            <input id="{$id}" name="{$id}" class="form-control {$class}" type="date" value="{$value}"
+            <input id="{$id}" name="{$id}" class="form-control focus-ring {$class}" type="date" value="{$value}"
                 {foreach $data.attributes as $itemvar}
                     {$itemvar@key}="{$itemvar}"
                 {/foreach}
             >
             {$htmlAfter}
         {elseif $type == 'password'}
-            <input id="{$id}" name="{$id}" class="form-control {$class}" type="{$type}" value="{$value}"
+            <input id="{$id}" name="{$id}" class="form-control focus-ring {$class}" type="{$type}" value="{$value}"
                 {foreach $data.attributes as $itemvar}
                     {$itemvar@key}="{$itemvar}"
                 {/foreach}
@@ -49,7 +49,7 @@
             {/if}
             {$htmlAfter}
         {else}
-            <input id="{$id}" name="{$id}" class="form-control {$class}" type="{$type}" value="{$value}"
+            <input id="{$id}" name="{$id}" class="form-control focus-ring {$class}" type="{$type}" value="{$value}"
                 {foreach $data.attributes as $itemvar}
                     {$itemvar@key}="{$itemvar}"
                 {/foreach}

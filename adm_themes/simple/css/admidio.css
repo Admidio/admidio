@@ -27,6 +27,7 @@
     --bs-link-color-rgb: 52, 154, 170;
     --bs-link-hover-color: #4fb8c9;
     --bs-link-hover-color-rgb: 79, 184, 201;
+    --bs-focus-ring-color: #c4e9ef;
 }
 
 #admidio-main-navbar {
@@ -263,11 +264,14 @@ form, .admidio-max-with {
     max-width: 1000px;
 }
 
-.form-control:focus, .form-select:focus, .select2-container--bootstrap-5.select2-container--focus .select2-selection,
-input[type=checkbox]:focus, button:focus {
-    border-color: #349aaa;
-    background-color: #d6ebee;
-    box-shadow: none !important;
+.form-control:focus, .form-select:focus, button:focus,
+.select2-container--bootstrap-5.select2-container--focus .select2-selection {
+    border-color: var(--bs-link-hover-color);
+}
+
+.form-switch .form-check-input, .form-check-inline input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
 }
 
 input[type=date], input[type=number] {
@@ -279,7 +283,8 @@ input[type=time] {
 }
 
 .btn-primary:focus {
-    background-color: var(--bs-link-hover-color) !important;
+    background-color: var(--bs-link-color) !important;
+    border-color: var(--bs-link-color) !important;;
 }
 
 label {

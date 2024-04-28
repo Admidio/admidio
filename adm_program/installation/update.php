@@ -325,7 +325,7 @@ if ($getMode === 1) {
         array(
             'icon' => 'fa-home',
             'link' => ADMIDIO_URL . '/adm_program/overview.php',
-            'class' => ' btn btn-secondary admidio-margin-bottom '
+            'class' => ' btn-secondary admidio-margin-bottom '
         )
     );
     $form->addSubmitButton(

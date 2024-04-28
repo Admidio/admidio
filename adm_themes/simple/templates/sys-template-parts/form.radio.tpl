@@ -19,7 +19,7 @@
             {/if}
             {foreach $values as $optionvar}
                 <div class="form-check form-check-inline">
-                    <input id="{$id}_{$optionvar@key}" name="{$id}" class="form-check-input {$class}" type="radio" value="{$optionvar@key}"
+                    <input id="{$id}_{$optionvar@key}" name="{$id}" class="form-check-input focus-ring {$class}" type="radio" value="{$optionvar@key}"
                         {foreach $data.attributes as $itemvar}
                             {$itemvar@key}="{$itemvar}"
                         {/foreach}
