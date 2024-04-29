@@ -119,7 +119,7 @@ class ModuleContacts extends HtmlPage
                         // Login data already exists -> Send login data again
                         $button['description'] = $gL10n->get('SYS_USER_VALID_LOGIN') . '<br />' . $gL10n->get('SYS_REMINDER_SEND_LOGIN');
                         $button['label'] = $gL10n->get('SYS_SEND_LOGIN_INFORMATION');
-                        $button['icon'] = 'fa-key';
+                        $button['icon'] = 'bi-key-fill';
                         $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => 'send_login'));
                     } else {
                         // Login data are NOT available -> assign them now

@@ -182,9 +182,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                                 || ($role->getValue('rol_administrator') == 0)) {
                     $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberUuid, 'name' => $role->getValue('rol_name'))).'"><i
-                                        class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
+                                        class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
                 } else {
-                    $roleMemHTML .= '<a><i class="fas fa-trash-alt invisible"></i></a>';
+                    $roleMemHTML .= '<a><i class="bi bi-trash-fill invisible"></i></a>';
                 }
             }
 

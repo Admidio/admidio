@@ -172,12 +172,12 @@ while ($message = $messageStatement->fetch()) {
 
     // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
     if ($message['msg_type'] === TableMessage::MESSAGE_TYPE_EMAIL) {
-        $icon = 'fa-envelope';
+        $icon = 'bi-envelope-fill';
         $iconText = $gL10n->get('SYS_EMAIL');
         $links = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'], 'forward' => '1')) . '">
                     <i class="fas fa-share" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_FORWARD').'"></i></a>';
     } else {
-        $icon = 'fa-comment-alt';
+        $icon = 'bi-chat-left-fill';
         $iconText = $gL10n->get('SYS_PRIVATE_MESSAGES');
         $links = '';
     }
@@ -202,7 +202,7 @@ while ($message = $messageStatement->fetch()) {
     $arrContent['5'] = $links . '
         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
             data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $message['msg_uuid'], 'name' => $messageObject->getValue('msg_subject'), 'database_id' => $message['msg_uuid'])) . '">
-            <i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_MESSAGE').'"></i>
+            <i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_MESSAGE').'"></i>
         </a>';
 
     // create array with all column values and add it to the json array

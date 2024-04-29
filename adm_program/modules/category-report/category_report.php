@@ -381,7 +381,7 @@ foreach ($report->listData as $member => $memberdata) {
             if (in_array($getMode, array('csv', 'pdf'), true)) {
                 $content = 'X';
             } else {
-                $content = '<i class="fas fa-check"</i>';
+                $content = '<i class="bi bi-check-lg"</i>';
             }
         }
 

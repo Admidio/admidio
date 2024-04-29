@@ -221,7 +221,7 @@ if ($countGuestbookEntries === 0) {
         if (strlen($gboEmail) > 0) {
             $page->addHtml('
                     <a class="admidio-icon-link" href="mailto:'.$gboEmail.'">
-                        <i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
+                        <i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
         }
 
         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
@@ -237,7 +237,7 @@ if ($countGuestbookEntries === 0) {
                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
                                 'element_id' => 'gbo_'.$gboUuid, 'database_id' => $gboUuid, 'name' => $gboName)).'">
-                                <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                <i class="bi bi-trash-fill"></i> '.$gL10n->get('SYS_DELETE').'</a>
                             </li>
                         </ul>
                     </div>');
@@ -253,9 +253,9 @@ if ($countGuestbookEntries === 0) {
             $page->addHtml('
                     <div class="btn-group" role="group">
                         <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbo_'.$gboUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 9, 'gbo_uuid' => $gboUuid)).'\')">
-                            <i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                            <i class=\"bi bi-check-lg\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
                         <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbo_'.$gboUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 2, 'gbo_uuid' => $gboUuid)).'\')">
-                            <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
+                            <i class="bi bi-trash-fill"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>');
         }
 

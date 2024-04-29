@@ -20,7 +20,7 @@ $headline = $gL10n->get('SYS_MENU');
 // create html page object
 $page = new HtmlPage('admidio-menu', $headline);
 
-$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-stream');
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-menu-button-wide-fill');
 
 $page->addJavascript(
     '
@@ -121,7 +121,7 @@ while ($mainMen = $mainMenStatement->fetch()) {
             $menuAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
                                         $menuRow['men_uuid'], 'name' => $menuName, 'database_id' => $menuRow['men_uuid'])).'">'.
-                                        '<i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                                        '<i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
 
         // create array with all column values

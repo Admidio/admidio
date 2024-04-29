@@ -73,7 +73,7 @@ try {
 
     if ($getShow === 'card') {
         // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-users');
+        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-people-fill');
     } else {
         // In permission mode the navigation should continue
         $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_PERMISSIONS'));

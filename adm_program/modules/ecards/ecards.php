@@ -241,8 +241,8 @@ $form->addEditor(
 );
 $form->closeGroupBox();
 $form->openButtonGroup();
-$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'fa-eye', 'class' => 'admidio-margin-bottom'));
-$form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
+$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'bi-eye-fill', 'class' => 'admidio-margin-bottom'));
+$form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 $form->closeButtonGroup();
 
 // add form to html page and show page

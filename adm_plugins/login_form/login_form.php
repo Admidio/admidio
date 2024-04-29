@@ -170,7 +170,7 @@ if ($gValidLogin) {
         $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'));
     }
 
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key'));
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-key-fill'));
     echo $form->show();
 
     echo '<div class="container">';
@@ -213,7 +213,7 @@ if ($gValidLogin) {
             $linkUrl = SecurityUtils::encodeUrl('mailto:'. $gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
 
-        echo '<div class="row"><a class="admidio-icon-link" href="'. $linkUrl. '" target="'.$plg_link_target.'"><i class="fas fa-envelope"></i>'.$linkText.'</a></div>';
+        echo '<div class="row"><a class="admidio-icon-link" href="'. $linkUrl. '" target="'.$plg_link_target.'"><i class="bi bi-envelope-fill"></i>'.$linkText.'</a></div>';
     }
     echo '</div>';
 }

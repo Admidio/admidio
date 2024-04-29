@@ -67,7 +67,7 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
 
         if (returnStatus === "success") {
             if (returnMessage !== "") {
-                messageText.html("<div class=\"alert alert-success\"><i class=\"fas fa-check\"></i>" + returnMessage + "</div>");
+                messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>" + returnMessage + "</div>");
                 setTimeout(function(){
                         $("#admidio-modal").modal("hide");
                         if (callback === 'callbackRoles') {

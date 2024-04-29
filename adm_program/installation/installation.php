@@ -125,7 +125,7 @@ if (is_file($configPath)) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_INSTALLATION_EXISTS'),
             $gL10n->get('SYS_OVERVIEW'),
-            'fa-home',
+            'bi-house-door-fill',
             '../index.php'
         );
         // => EXIT

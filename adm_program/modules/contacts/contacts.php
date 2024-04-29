@@ -30,7 +30,7 @@ if (!$gSettingsManager->getBool('contacts_show_all')) {
 $headline = $gL10n->get('SYS_CONTACTS');
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-person-vcard-fill');
 
 $contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('contacts_list_configuration'));
 $_SESSION['contacts_list_configuration'] = $contactsListConfig;
@@ -96,7 +96,7 @@ if ($gCurrentUser->isAdministrator()) {
         'menu_item_contacts_profile_fields',
         $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
         ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
-        'fa-th-list'
+        'bi-ui-radios'
     );
 }
 
@@ -110,7 +110,7 @@ $columnHeading = $contactsListConfig->getColumnNames();
 array_unshift(
     $columnHeading,
     $gL10n->get('SYS_ABR_NO'),
-    '<i class="fas fa-user" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>'
+    '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>'
 );
 $columnHeading[] = '&nbsp;';
 

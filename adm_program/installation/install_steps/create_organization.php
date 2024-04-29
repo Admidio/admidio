@@ -185,7 +185,7 @@ if (isset($_POST['db_host'])) {
                 $gL10n->get('SYS_NOTE'),
                 $gL10n->get('INS_INSTALLATION_EXISTS'),
                 $gL10n->get('SYS_OVERVIEW'),
-                'fa-home',
+                'bi-house-door-fill',
                 ADMIDIO_URL . '/adm_program/overview.php'
             );
             // => EXIT

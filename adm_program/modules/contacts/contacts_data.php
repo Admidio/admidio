@@ -242,15 +242,17 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
 
     // Add icon for member or no member of the organization
     if ($contactsOfThisOrganization) {
-        $icon = 'fa-user';
+        $icon = 'bi-person-fill';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName));
+        $class = '';
     } else {
-        $icon = 'fa-user-alt-slash';
+        $icon = 'bi-person-fill-dash';
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
+        $class = 'text-danger';
     }
 
-    $columnValues['1'] = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'">
-        <i class="fas ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
+    $columnValues['1'] = '<a class="' . $class . '" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'">
+        <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // add all columns of the list configuration to the json array
     // start columnNumber with 4 because the first 2 columns are not of the list configuration
@@ -275,12 +277,12 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'send_login_msg')).'">'.
-                '<i class="fas fa-key" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
+                '<i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
         } else {
             // if user has no email or send email is disabled then administrators could set a new password
             $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $row['usr_uuid'])).'">'.
-                '<i class="fas fa-key" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CHANGE_PASSWORD') . '"></i></a>';
+                '<i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CHANGE_PASSWORD') . '"></i></a>';
         }
     }
 
@@ -293,7 +295,7 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
                 $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));
             }
             $userAdministration .= '<a class="admidio-icon-link" href="' . $mailLink . '">' .
-                '<i class="fas fa-envelope" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email'])) . '"></i></a>';
+                '<i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email'])) . '"></i></a>';
         }
 
         $userAdministration .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)) . '">' .
@@ -311,7 +313,7 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
             && $row['usr_uuid'] !== $gCurrentUserUUID) { // no one is allowed to remove their own profile
             $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_msg')) . '">' .
-                '<i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
+                '<i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
             </a>';
         }
     }

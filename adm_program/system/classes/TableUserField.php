@@ -197,7 +197,7 @@ class TableUserField extends TableAccess
                         foreach ($arrListValues as $key => &$listValue) {
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
                                 // if value is imagefile or imageurl then show image
-                                if (Image::isFontAwesomeIcon($listValue)
+                                if (Image::isBootstrapIcon($listValue)
                                 || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)) { // TODO: simplify check for images
                                     // if there is imagefile and text separated by | then explode them
                                     if (str_contains($listValue, '|')) {

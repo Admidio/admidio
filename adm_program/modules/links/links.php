@@ -173,7 +173,7 @@ if ($weblinksCount === 0) {
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'lnk',
                         'element_id' => 'lnk_'.$lnkUuid, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkUuid)).'">
-                        <i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
+                        <i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
             }
 
             // get available description

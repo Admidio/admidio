@@ -86,7 +86,7 @@ class ModuleDocumentsFiles extends HtmlPage
                     $templateRow['actions'][] = array(
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php',
                                 array('type' => 'fol', 'element_id' => 'row_'.$row['uuid'], 'name' => $row['name'], 'database_id' => $row['uuid'])),
-                        'icon' => 'fas fa-trash-alt',
+                        'icon' => 'bi bi-trash-fill',
                         'tooltip' => $gL10n->get('SYS_DELETE_FOLDER')
                     );
                 }
@@ -111,7 +111,7 @@ class ModuleDocumentsFiles extends HtmlPage
                     $templateRow['actions'][] = array(
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php',
                             array('type' => 'fil', 'element_id' => 'row_'.$row['uuid'], 'name' => $row['name'], 'database_id' => $row['uuid'], 'database_id_2' => $this->folder->getValue('fol_uuid'))),
-                        'icon' => 'fas fa-trash-alt',
+                        'icon' => 'bi bi-trash-fill',
                         'tooltip' => $gL10n->get('SYS_DELETE_FILE')
                     );
                 }

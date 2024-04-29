@@ -370,9 +370,9 @@ if ($getNewUser === 2 && $gSettingsManager->getBool('registration_enable_captcha
 // Bild und Text fuer den Speichern-Button
 if ($getNewUser === 2) {
     // Registrierung
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 } else {
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 }
 
 if ($getNewUser === 0) {

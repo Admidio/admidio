@@ -101,7 +101,7 @@ if ($roomsStatement->rowCount() === 0) {
         $page->addHtml('
         <div class="card admidio-blog" id="room_'.$room->getValue('room_uuid').'">
             <div class="card-header">
-                <i class="fas fa-home"></i>' . $room->getValue('room_name') . '
+                <i class="bi bi-house-door-fill"></i>' . $room->getValue('room_name') . '
                 <div class="dropdown float-end">
                     <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
@@ -111,7 +111,7 @@ if ($roomsStatement->rowCount() === 0) {
                         </li>
                         <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.$room->getValue('room_uuid'), 'name' => $room->getValue('room_name'), 'database_id' => $room->getValue('room_uuid'))).'">
-                            <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                            <i class="bi bi-trash-fill" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                         </li>
                     </ul>
                 </div>

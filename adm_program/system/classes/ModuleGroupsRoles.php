@@ -71,7 +71,7 @@ class ModuleGroupsRoles extends HtmlPage
             if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getBool('enable_mail_module')) {
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $row['rol_uuid'])),
-                    'icon' => 'fas fa-envelope',
+                    'icon' => 'bi bi-envelope-fill',
                     'tooltip' => $gL10n->get('SYS_EMAIL_TO_MEMBERS')
                 );
             }
@@ -90,7 +90,7 @@ class ModuleGroupsRoles extends HtmlPage
             if ($role->allowedToAssignMembers($gCurrentUser)) {
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment.php', array('role_uuid' => $row['rol_uuid'])),
-                    'icon' => 'fas fa-user-plus',
+                    'icon' => 'bi bi-person-plus-fill',
                     'tooltip' => $gL10n->get('SYS_ASSIGN_MEMBERS')
                 );
             }
@@ -120,7 +120,7 @@ class ModuleGroupsRoles extends HtmlPage
                 if (!$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'role_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
-                        'icon' => 'fas fa-trash-alt',
+                        'icon' => 'bi bi-trash-fill',
                         'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                     );
                 }
@@ -256,7 +256,7 @@ class ModuleGroupsRoles extends HtmlPage
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-file-signature', 'title' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'));
             }
             if ($role->getValue('rol_mail_to_all') == 1) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-envelope', 'title' => $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'));
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-envelope-fill', 'title' => $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'));
             }
             if ($role->getValue('rol_edit_user') == 1) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-users-cog', 'title' => $gL10n->get('SYS_RIGHT_EDIT_USER'));
@@ -265,13 +265,13 @@ class ModuleGroupsRoles extends HtmlPage
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-user', 'title' => $gL10n->get('SYS_RIGHT_PROFILE'));
             }
             if ($role->getValue('rol_announcements') == 1 && (int)$gSettingsManager->get('announcements_module_enabled') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-newspaper', 'title' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'));
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-newspaper', 'title' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'));
             }
             if ($role->getValue('rol_events') == 1 && (int)$gSettingsManager->get('events_module_enabled') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-calendar-alt', 'title' => $gL10n->get('SYS_RIGHT_DATES'));
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-calendar-week-fill', 'title' => $gL10n->get('SYS_RIGHT_DATES'));
             }
             if ($role->getValue('rol_photo') == 1 && (int)$gSettingsManager->get('photo_module_enabled') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-image', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-image-fill', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
             }
             if ($role->getValue('rol_documents_files') == 1 && (int)$gSettingsManager->getBool('documents_files_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-download', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
@@ -367,7 +367,7 @@ class ModuleGroupsRoles extends HtmlPage
             if (!$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
-                    'icon' => 'fas fa-trash-alt',
+                    'icon' => 'bi bi-trash-fill',
                     'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                 );
             }

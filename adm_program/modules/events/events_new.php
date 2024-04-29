@@ -369,7 +369,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
 $form->addEditor('dat_description', '', $event->getValue('dat_description'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $event->getValue('dat_usr_id_create'),
     $event->getValue('dat_timestamp_create'),

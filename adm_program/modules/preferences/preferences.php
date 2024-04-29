@@ -101,7 +101,7 @@ $page->addJavascript(
                         $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random());
                     }
                     formAlert.attr("class", "alert alert-success form-alert");
-                    formAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                    formAlert.html("<i class=\"fas bi-check-lg\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                     formAlert.fadeIn("slow");
                     formAlert.animate({opacity: 1.0}, 2500);
                     formAlert.fadeOut("slow");
@@ -286,7 +286,7 @@ $formCommon->addCheckbox(
 $formCommon->addSubmitButton(
     'btn_save_common',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('common', 'common', 'accordion_preferences', $gL10n->get('SYS_COMMON'), 'fas fa-cog', $formCommon->show()));
@@ -336,7 +336,7 @@ $formSecurity->addCheckbox(
 $formSecurity->addSubmitButton(
     'btn_save_security',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('common', 'security', 'accordion_preferences', $gL10n->get('SYS_SECURITY'), 'fas fa-shield-alt', $formSecurity->show()));
@@ -408,7 +408,7 @@ $formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, 
 $formOrganization->addSubmitButton(
     'btn_save_organization',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('common', 'organization', 'accordion_preferences', $gL10n->get('SYS_ORGANIZATION'), 'fas fa-sitemap', $formOrganization->show()));
@@ -461,7 +461,7 @@ $formRegionalSettings->addInput(
 $formRegionalSettings->addSubmitButton(
     'btn_save_regional_settings',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('common', 'regional_settings', 'accordion_preferences', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'fas fa-globe', $formRegionalSettings->show()));
@@ -508,7 +508,7 @@ $formRegistration->addCheckbox(
 $formRegistration->addSubmitButton(
     'btn_save_registration',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('common', 'registration', 'accordion_preferences', $gL10n->get('SYS_REGISTRATION'), 'fas fa-file-signature', $formRegistration->show()));
@@ -647,15 +647,15 @@ $formEmailDispatch->addInput(
     array('type' => 'password', 'maxLength' => 50, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
 );
 $html = '<a class="btn btn-secondary" id="send_test_mail" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => 'test_email')).'">
-            <i class="fas fa-envelope"></i>'.$gL10n->get('SYS_SEND_TEST_MAIL').'</a>';
+            <i class="bi bi-envelope-fill"></i>'.$gL10n->get('SYS_SEND_TEST_MAIL').'</a>';
 $formEmailDispatch->addCustomContent($gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
 $formEmailDispatch->addSubmitButton(
     'btn_save_email_dispatch',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('common', 'email_dispatch', 'accordion_preferences', $gL10n->get('SYS_MAIL_DISPATCH'), 'fas fa-envelope', $formEmailDispatch->show()));
+$page->addHtml(getPreferencePanel('common', 'email_dispatch', 'accordion_preferences', $gL10n->get('SYS_MAIL_DISPATCH'), 'bi bi-envelope-open-fill', $formEmailDispatch->show()));
 
 // PANEL: SYSTEM NOTIFICATION
 
@@ -753,7 +753,7 @@ $formSystemNotification->addMultilineTextInput(
 $formSystemNotification->addSubmitButton(
     'btn_save_system_notification',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('common', 'system_notification', 'accordion_preferences', $gL10n->get('SYS_SYSTEM_MAILS'), 'fas fa-broadcast-tower', $formSystemNotification->show()));
@@ -855,7 +855,7 @@ $formCaptcha->addCustomContent(
 $formCaptcha->addSubmitButton(
     'btn_save_captcha',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('common', 'captcha', 'accordion_preferences', $gL10n->get('SYS_CAPTCHA'), 'fas fa-font', $formCaptcha->show()));
@@ -894,7 +894,7 @@ if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
     $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_DATABASE_BACKUP'), $html, array('helpTextId' => 'SYS_DATABASE_BACKUP_DESC'));
 }
 $html = '<a id="donate" href="'. ADMIDIO_HOMEPAGE . 'donate.php" target="_blank">
-            <i class="fas fa-heart"></i>'.$gL10n->get('SYS_DONATE').'</a>';
+            <i class="bi bi-heart-fill"></i>'.$gL10n->get('SYS_DONATE').'</a>';
 $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_SUPPORT_ADMIDIO'), $html, array('helpTextId' => 'INS_SUPPORT_FURTHER_DEVELOPMENT'));
 
 $page->addHtml(getPreferencePanel('common', 'admidio_version_backup', 'accordion_preferences', $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'fas fa-cloud-download-alt', $formAdmidioUpdate->show()));
@@ -1099,10 +1099,10 @@ $formAnnouncements->addCustomContent(
 $formAnnouncements->addSubmitButton(
     'btn_save_announcements',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'announcements', 'accordion_modules', $gL10n->get('SYS_ANNOUNCEMENTS'), 'fas fa-newspaper', $formAnnouncements->show()));
+$page->addHtml(getPreferencePanel('modules', 'announcements', 'accordion_modules', $gL10n->get('SYS_ANNOUNCEMENTS'), 'bi bi-newspaper', $formAnnouncements->show()));
 
 // PANEL: CONTACTS
 
@@ -1165,10 +1165,10 @@ $formUserManagement->addCustomContent($gL10n->get('SYS_USER_RELATIONS'), $html, 
 $formUserManagement->addSubmitButton(
     'btn_save_contacts',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'contacts', 'accordion_modules', $gL10n->get('SYS_CONTACTS'), 'fas fa-address-card', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'contacts', 'accordion_modules', $gL10n->get('SYS_CONTACTS'), 'bi bi-person-vcard-fill', $formUserManagement->show()));
 
 // PANEL: DOCUMENTS-FILES
 
@@ -1194,7 +1194,7 @@ $formDownloads->addInput(
 $formDownloads->addSubmitButton(
     'btn_save_documents_files',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'documents-files', 'accordion_modules', $gL10n->get('SYS_DOCUMENTS_FILES'), 'fas fa-file-download', $formDownloads->show()));
@@ -1316,10 +1316,10 @@ try {
 $formPhotos->addSubmitButton(
     'btn_save_photos',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'photos', 'accordion_modules', $gL10n->get('SYS_PHOTOS'), 'fas fa-image', $formPhotos->show()));
+$page->addHtml(getPreferencePanel('modules', 'photos', 'accordion_modules', $gL10n->get('SYS_PHOTOS'), 'bi bi-image-fill', $formPhotos->show()));
 
 // PANEL: GUESTBOOK
 
@@ -1385,7 +1385,7 @@ $formGuestbook->addInput(
 $formGuestbook->addSubmitButton(
     'btn_save_guestbook',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'guestbook', 'accordion_modules', $gL10n->get('GBO_GUESTBOOK'), 'fas fa-book', $formGuestbook->show()));
@@ -1466,10 +1466,10 @@ $formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, ar
 $formGroupsRoles->addSubmitButton(
     'btn_save_lists',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'groups-roles', 'accordion_modules', $gL10n->get('SYS_GROUPS_ROLES'), 'fas fa-users', $formGroupsRoles->show()));
+$page->addHtml(getPreferencePanel('modules', 'groups-roles', 'accordion_modules', $gL10n->get('SYS_GROUPS_ROLES'), 'bi bi-people-fill', $formGroupsRoles->show()));
 
 // PANEL: CATEGORY-REPORT
 
@@ -1504,7 +1504,7 @@ $formCategoryReport->addSelectBoxFromSql(
 $formCategoryReport->addSubmitButton(
     'btn_save_documents_files',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'category-report', 'accordion_modules', $gL10n->get('SYS_CATEGORY_REPORT'), 'fas fa-list', $formCategoryReport->show()));
@@ -1602,10 +1602,10 @@ $formMessages->addSelectBox(
 $formMessages->addSubmitButton(
     'btn_save_messages',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'messages', 'accordion_modules', $gL10n->get('SYS_MESSAGES'), 'fas fa-comments', $formMessages->show()));
+$page->addHtml(getPreferencePanel('modules', 'messages', 'accordion_modules', $gL10n->get('SYS_MESSAGES'), 'bi bi-envelope-fill', $formMessages->show()));
 
 // PANEL: PROFILE
 
@@ -1617,7 +1617,7 @@ $formProfile = new HtmlForm(
 );
 
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile-fields/profile_fields.php">
-            <i class="fas fa-th-list"></i>'.$gL10n->get('SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION').'</a>';
+            <i class="bi bi-ui-radios"></i>'.$gL10n->get('SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION').'</a>';
 $formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextId' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formProfile->addCheckbox(
     'profile_log_edit_fields',
@@ -1663,7 +1663,7 @@ $formProfile->addSelectBox(
 $formProfile->addSubmitButton(
     'btn_save_profile',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'profile', 'accordion_modules', $gL10n->get('SYS_PROFILE'), 'fas fa-user', $formProfile->show()));
@@ -1777,15 +1777,15 @@ $formEvents->addCheckbox(
     array('helpTextId' => 'SYS_ROOM_SELECTABLE_DESC')
 );
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php">
-            <i class="fas fa-home"></i>'.$gL10n->get('SYS_SWITCH_TO_ROOM_MANAGEMENT').'</a>';
+            <i class="bi bi-house-door-fill"></i>'.$gL10n->get('SYS_SWITCH_TO_ROOM_MANAGEMENT').'</a>';
 $formEvents->addCustomContent($gL10n->get('SYS_EDIT_ROOMS'), $html, array('helpTextId' => 'SYS_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addSubmitButton(
     'btn_save_events',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'events', 'accordion_modules', $gL10n->get('SYS_EVENTS'), 'fas fa-calendar-alt', $formEvents->show()));
+$page->addHtml(getPreferencePanel('modules', 'events', 'accordion_modules', $gL10n->get('SYS_EVENTS'), 'bi bi-calendar-week-fill', $formEvents->show()));
 
 // PANEL: WEBLINKS
 
@@ -1836,7 +1836,7 @@ $formWeblinks->addCustomContent(
 $formWeblinks->addSubmitButton(
     'btn_save_links',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'links', 'accordion_modules', $gL10n->get('SYS_WEBLINKS'), 'fas fa-link', $formWeblinks->show()));

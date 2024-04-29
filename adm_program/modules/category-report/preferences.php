@@ -78,7 +78,7 @@ $page->addJavascript('
                 if (data === "success") {
 
                     formAlert.attr("class", "alert alert-success form-alert");
-                    formAlert.html("<i class=\"fas fa-check\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
+                    formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
                     formAlert.fadeIn("slow");
                     formAlert.animate({opacity: 1.0}, 2500);
                     formAlert.fadeOut("slow");
@@ -256,7 +256,7 @@ foreach ($config as $key => $value) {
             <i class="fas fa-clone"></i> ' . $gL10n->get('SYS_COPY_CONFIGURATION') . '</a>';
     if (count($config) > 1 && $value['default_conf'] == false) {
         $html .= '&nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('delete' => $key + 1)) . '">
-            <i class="fas fa-trash-alt"></i> ' . $gL10n->get('SYS_DELETE_CONFIGURATION') . '</a>';
+            <i class="bi bi-trash-fill"></i> ' . $gL10n->get('SYS_DELETE_CONFIGURATION') . '</a>';
     }
     if (!empty($value['name'])) {
         $formConfigurations->addCustomContent('', $html);
@@ -272,7 +272,7 @@ $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
                 <i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '
             </div>';
 $formConfigurations->addCustomContent('', $html, array('helpTextId' => $htmlDesc));
-$formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
 $page->addHtml($formConfigurations->show());
 

@@ -3,7 +3,7 @@
     <h3>{$l10n->get("SYS_INSTALLATION_SUCCESSFUL")}</h3>
 
     <div class="alert alert-success form-alert">
-        <i class="fas fa-check"></i>
+        <i class="bi bi-check-lg"></i>
         <strong>{$l10n->get('SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC')}</strong>
     </div>
 

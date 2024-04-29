@@ -256,7 +256,7 @@ if (!$eventRole) {
         'rol_assign_roles',
         $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'),
         (bool) $role->getValue('rol_assign_roles'),
-        array('helpTextId' => 'SYS_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'fa-users')
+        array('helpTextId' => 'SYS_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'bi-people-fill')
     );
     $form->addCheckbox(
         'rol_all_lists_view',
@@ -275,7 +275,7 @@ if (!$eventRole) {
             'rol_mail_to_all',
             $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'),
             (bool) $role->getValue('rol_mail_to_all'),
-            array('icon' => 'fa-envelope')
+            array('icon' => 'bi-envelope-fill')
         );
     }
     $form->addCheckbox(
@@ -295,7 +295,7 @@ if (!$eventRole) {
             'rol_announcements',
             $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
             (bool) $role->getValue('rol_announcements'),
-            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-newspaper')
+            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'bi-newspaper')
         );
     }
     if ((int) $gSettingsManager->get('events_module_enabled') > 0) {
@@ -303,7 +303,7 @@ if (!$eventRole) {
             'rol_events',
             $gL10n->get('SYS_RIGHT_DATES'),
             (bool) $role->getValue('rol_events'),
-            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-calendar-alt')
+            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'bi-calendar-week-fill')
         );
     }
     if ((int) $gSettingsManager->get('photo_module_enabled') > 0) {
@@ -311,7 +311,7 @@ if (!$eventRole) {
             'rol_photo',
             $gL10n->get('SYS_RIGHT_PHOTOS'),
             (bool) $role->getValue('rol_photo'),
-            array('icon' => 'fa-image')
+            array('icon' => 'bi-image-fill')
         );
     }
     if ($gSettingsManager->getBool('documents_files_module_enabled')) {
@@ -386,7 +386,7 @@ if (!$eventRole) {
     $form->closeGroupBox();
 }
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $role->getValue('rol_usr_id_create'),
     $role->getValue('rol_timestamp_create'),

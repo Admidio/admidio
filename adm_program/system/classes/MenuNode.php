@@ -89,7 +89,7 @@ class MenuNode
         $node['url'] = $url;
 
         if ($icon === '') {
-            $icon = 'fa-trash-alt invisible';
+            $icon = 'bi bi-trash-fill invisible';
         }
         if (strpos($icon, 'bi-') !== false) {
             $node['icon'] = 'bi ' . $icon;

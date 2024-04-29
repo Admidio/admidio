@@ -149,7 +149,7 @@ if ($getInline) {
                 $("#btn-next").prop("disabled", true) ;
                 $("#admidio-profile-roles-alert").attr("class", "alert alert-success form-alert");
                 $("#admidio-profile-roles-alert").fadeIn();
-                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-check\"></i>'.$gL10n->get($messageId).'");
+                $("#admidio-profile-roles-alert").html("<i class=\"bi bi-check-lg\"></i>'.$gL10n->get($messageId).'");
                 setTimeout(function() {
                     window.location.href = "'.$nextUrl.'";
                 }, 3000);
@@ -323,7 +323,7 @@ $html .= $table->show() . '<div id="admidio-profile-roles-alert" class="alert al
 if ($getInline) {
     echo $html.'</div>';
 } else {
-    $html .= '<button class="btn-primary btn admidio-margin-bottom" id="btn-next" type="submit"><i class="fas fa-check"></i>'.$gL10n->get('SYS_NEXT').'</button>';
+    $html .= '<button class="btn-primary btn admidio-margin-bottom" id="btn-next" type="submit"><i class="bi bi-check-lg"></i>'.$gL10n->get('SYS_NEXT').'</button>';
     $page->addHtml($html);
     $page->show();
 }

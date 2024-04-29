@@ -62,7 +62,7 @@ if ($getPhotoUuid !== '') {
     $headline = $gL10n->get('SYS_PHOTO_ALBUMS');
 
     // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-image');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-image-fill');
 }
 
 // create html page object
@@ -232,7 +232,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
             if ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) {
                 $photoThumbnailTable .= '
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/ecards/ecards.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid, 'show_page' => $getPhotoNr)).'">
-                            <i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_PHOTO_AS_ECARD').'"></i></a>';
+                            <i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_PHOTO_AS_ECARD').'"></i></a>';
             }
 
             if ($gSettingsManager->getBool('photo_download_enabled')) {
@@ -252,7 +252,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
                             'database_id' => $actThumbnail, 'database_id_2' => $getPhotoUuid)).'">
-                            <i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                            <i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
 
             if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
@@ -397,7 +397,7 @@ if ($albumsCount > 0) {
                                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid'),
                                             'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_uuid'))).'">
-                                                <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE_ALBUM').'</a>
+                                                <i class="bi bi-trash-fill" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE_ALBUM').'</a>
                                             </li>
                                         </ul>
                                     </div>');

@@ -13,7 +13,7 @@
     {elseif $outputMode == "success"}
         <p>
             <div class="alert alert-success alert-small" role="alert">
-                <i class="fas fa-check"></i>
+                <i class="bi bi-check-lg"></i>
                 <strong>{$messageText}</strong>
             </div>
         </p>

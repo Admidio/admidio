@@ -158,9 +158,9 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, NULL, false, false, 0, false, 7,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, NULL, false, false, 0, false, 8,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'fa-mars|SYS_MALE
-fa-venus|SYS_FEMALE
-fa-mars-stroke-v|SYS_DIVERSE\', false, false, 0, false, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'bi-gender-male|SYS_MALE
+bi-gender-female|SYS_FEMALE
+bi-gender-trans|SYS_DIVERSE\', false, false, 0, false, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', NULL, false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
@@ -277,20 +277,20 @@ $sql = 'INSERT INTO '.TBL_MENU.'
         VALUES (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 1, true, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
              , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 2, true, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
              , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 3, true, \'plugins\', NULL, \'\', \'SYS_PLUGINS\', \'\')
-             , (NULL, 1, \'' . Uuid::uuid4() . '\', false, 1, true, \'overview\', \'/adm_program/overview.php\', \'fa-home\', \'SYS_OVERVIEW\', \'\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 2, true, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'fa-newspaper\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'EVENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 3, true, \'events\', \''.FOLDER_MODULES.'/events/events.php\', \'fa-calendar-alt\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, \'' . Uuid::uuid4() . '\', false, 4, true, \'messages\', \''.FOLDER_MODULES.'/messages/messages.php\', \'fa-comments\', \'SYS_MESSAGES\', \'SYS_MESSAGES_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, \'' . Uuid::uuid4() . '\', false, 5, true, \'groups-roles\', \''.FOLDER_MODULES.'/groups-roles/groups_roles.php\', \'fa-users\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CONTACTS\'), 1, \'' . Uuid::uuid4() . '\', false, 6, true, \'contacts\', \''.FOLDER_MODULES.'/contacts/contacts.php\', \'fa-address-card\', \'SYS_CONTACTS\', \'SYS_CONTACTS_DESC\')
+             , (NULL, 1, \'' . Uuid::uuid4() . '\', false, 1, true, \'overview\', \'/adm_program/overview.php\', \'bi-house-door-fill\', \'SYS_OVERVIEW\', \'\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 2, true, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'bi-newspaper\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'EVENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 3, true, \'events\', \''.FOLDER_MODULES.'/events/events.php\', \'bi-calendar-week-fill\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, \'' . Uuid::uuid4() . '\', false, 4, true, \'messages\', \''.FOLDER_MODULES.'/messages/messages.php\', \'bi-envelope-fill\', \'SYS_MESSAGES\', \'SYS_MESSAGES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, \'' . Uuid::uuid4() . '\', false, 5, true, \'groups-roles\', \''.FOLDER_MODULES.'/groups-roles/groups_roles.php\', \'bi-people-fill\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CONTACTS\'), 1, \'' . Uuid::uuid4() . '\', false, 6, true, \'contacts\', \''.FOLDER_MODULES.'/contacts/contacts.php\', \'bi-person-vcard-fill\', \'SYS_CONTACTS\', \'SYS_CONTACTS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, \'' . Uuid::uuid4() . '\', false, 7, true, \'documents-files\', \''.FOLDER_MODULES.'/documents-files/documents_files.php\', \'fa-file-download\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, \'' . Uuid::uuid4() . '\', false, 8, true, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'fa-image\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, \'' . Uuid::uuid4() . '\', false, 8, true, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'bi-image-fill\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CATEGORY-REPORT\'), 1, \'' . Uuid::uuid4() . '\', false, 9, true, \'category-report\', \''.FOLDER_MODULES.'/category-report/category_report.php\', \'fa-list-ul\', \'SYS_CATEGORY_REPORT\', \'SYS_CATEGORY_REPORT_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, \'' . Uuid::uuid4() . '\', false, 10, true, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'fa-link\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'fa-book\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'fa-cog\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration/registration.php\', \'fa-file-signature\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'fa-stream\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'bi-menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
 $db->query($sql);
 
 // delete session data
@@ -308,10 +308,10 @@ $form = new HtmlForm('installation-form', ADMIDIO_HOMEPAGE.'donate.php', null, a
 $form->addButton(
     'main_page',
     $gL10n->get('SYS_LATER'),
-    array('icon' => 'fa-home', 'class' => 'admidio-margin-bottom',
+    array('icon' => 'bi-house-door-fill', 'class' => 'admidio-margin-bottom',
         'link' => ADMIDIO_URL . '/adm_program/overview.php')
 );
-$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-heart'));
+$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'bi-heart-fill'));
 
 $page->addHtml($form->show());
 $page->show();

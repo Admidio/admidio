@@ -160,7 +160,7 @@ $form->addCheckbox(
     array('helpTextId' => 'SYS_LOCK_ALBUM_DESC')
 );
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $photoAlbum->getValue('pho_usr_id_create'),
     $photoAlbum->getValue('pho_timestamp_create'),

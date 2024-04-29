@@ -260,7 +260,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
     $form->closeGroupBox();
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 
     // add form to html page
     $page->addHtml($form->show());
@@ -594,7 +594,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $form->closeGroupBox();
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 
     // add form to html page and show page
     $page->addHtml($form->show());
@@ -618,10 +618,10 @@ if (isset($messageStatement)) {
                 $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date')),
                 $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_time'))
             ));
-            $messageIcon   = 'fa-comment-alt';
+            $messageIcon   = 'bi-chat-left-fill';
         } else {
             $messageHeader = $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) .'<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
-            $messageIcon   = 'fa-envelope';
+            $messageIcon   = 'bi-envelope-fill';
             $attachments   = $message->getAttachmentsInformations();
 
             if (count($attachments) > 0) {

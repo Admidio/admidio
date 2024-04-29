@@ -56,13 +56,13 @@ if ($getMode === 'delete_explain_msg') {
     </div>
     <div class="modal-body">
         <p><i class="fas fa-user-clock"></i>&nbsp;'.$gL10n->get('SYS_MAKE_FORMER').'</p>
-        <p><i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE'))).'</p>
+        <p><i class="bi bi-trash-fill"></i>&nbsp;'.$gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE'))).'</p>
     </div>
     <div class="modal-footer">
         <button id="btnFormer"type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'row_members_'.$getUserUuid.'\', \''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'remove')).'\', \''.$gCurrentSession->getCsrfToken().'\')">
             <i class="fas fa-user-clock"></i>'.$gL10n->get('SYS_FORMER').'</button>
         <button id="btnDelete"type="button" class="btn btn-primary" onclick="callUrlHideElement(\'row_members_'.$getUserUuid.'\', \''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'delete')).'\', \''.$gCurrentSession->getCsrfToken().'\')">
-            <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_DELETE').'</button>
+            <i class="bi bi-trash-fill"></i>'.$gL10n->get('SYS_DELETE').'</button>
         <div id="status-message" class="mt-4 w-100"></div>
     </div>';
 

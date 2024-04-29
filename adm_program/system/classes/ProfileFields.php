@@ -242,7 +242,7 @@ class ProfileFields
                     if ($value == 1) {
                         $htmlValue = '<span class="fa-stack">
                             <i class="fas fa-square-full fa-stack-1x"></i>
-                            <i class="fas fa-check-square fa-stack-1x fa-inverse"></i>
+                            <i class="bi bi-check-lg-square fa-stack-1x fa-inverse"></i>
                         </span>';
                     } else {
                         $htmlValue = '<span class="fa-stack">
@@ -291,7 +291,7 @@ class ProfileFields
                     foreach ($arrListValues as $index => $listValue) {
                         // if value is imagefile or imageurl then show image
                         if ($usfType === 'RADIO_BUTTON'
-                            && (Image::isFontAwesomeIcon($listValue)
+                            && (Image::isBootstrapIcon($listValue)
                                 || StringUtils::strContains($listValue, '.png', false)
                                 || StringUtils::strContains($listValue, '.jpg', false))) { // TODO: simplify check for images
                             // if there is imagefile and text separated by | then explode them

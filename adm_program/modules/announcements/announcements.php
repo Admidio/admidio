@@ -61,7 +61,7 @@ try {
     if ($getAnnUuid !== '') {
         $gNavigation->addUrl(CURRENT_URL, $headline);
     } else {
-        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-newspaper');
+        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-newspaper');
     }
 } catch (AdmException $e) {
     $e->showHtml();
@@ -152,7 +152,7 @@ if ($announcementsCount === 0) {
         $page->addHtml('
         <div class="card admidio-blog" id="ann_'.$annUuid.'">
             <div class="card-header">
-                <i class="fas fa-newspaper"></i>' . $announcement->getValue('ann_headline'));
+                <i class="bi bi-newspaper"></i>' . $announcement->getValue('ann_headline'));
 
         // check if the user could edit this announcement
         if ($announcement->isEditable()) {
@@ -169,7 +169,7 @@ if ($announcementsCount === 0) {
                             </li>
                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annUuid, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annUuid)).'">
-                                <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                <i class="bi bi-trash-fill" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                             </li>
                         </ul>
                     </div>');

@@ -142,7 +142,7 @@ class FileUpload
                 stop: function(e, data) {
                     $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
                     if (countErrorFiles === 0 && countFiles > 0) {
-                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"fas fa-check\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
+                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
                     } else {
                         $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
                     }

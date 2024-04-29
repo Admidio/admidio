@@ -88,7 +88,7 @@ class ModuleRegistration extends HtmlPage
             $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': <a href="mailto:'.$user->getValue('EMAIL').'">'.$user->getValue('EMAIL').'</a>';
 
             if ((string) $row['reg_validation_id'] === '') {
-                $templateRow['information'][] = '<div class="alert alert-success"><i class="fas fa-check-circle"></i>' . $gL10n->get('SYS_REGISTRATION_CONFIRMED') . '</div>';
+                $templateRow['information'][] = '<div class="alert alert-success"><i class="bi bi-check-lg-circle"></i>' . $gL10n->get('SYS_REGISTRATION_CONFIRMED') . '</div>';
             } else {
                 $templateRow['information'][] = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('SYS_REGISTRATION_NOT_CONFIRMED') . '</div>';
             }
@@ -104,7 +104,7 @@ class ModuleRegistration extends HtmlPage
             );
             $templateRow['actions'][] = array(
                 'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'user_'.$row['usr_uuid'], 'name' => $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 'database_id' => $row['usr_uuid'])),
-                'icon' => 'fas fa-trash-alt',
+                'icon' => 'bi bi-trash-fill',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
             if (count($similarUserIDs) > 0) {

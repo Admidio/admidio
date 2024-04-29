@@ -87,7 +87,7 @@ if ($getViewMode === 'html') {
         $gNavigation->addUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')));
     } else {
         // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')), 'fa-calendar-alt');
+        $gNavigation->addStartUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')), 'bi-calendar-week-fill');
     }
 }
 
@@ -335,7 +335,7 @@ if ($eventsResult['totalCount'] === 0) {
                     <a class="openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
                         'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
-                        <i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                        <i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
         }
 
@@ -426,12 +426,12 @@ if ($eventsResult['totalCount'] === 0) {
                 case ModuleEvents::MEMBER_APPROVAL_STATE_INVITED:
                     $buttonText = $gL10n->get('SYS_PARTICIPATE_QUESTION');
                     $buttonClass = '';
-                    $iconParticipationStatus = '<i class="fas fa-user-plus"></i>';
+                    $iconParticipationStatus = '<i class="bi bi-person-plus-fill"></i>';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
                     $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
                     $buttonClass = 'admidio-event-approval-state-attend';
-                    $iconParticipationStatus = '<i class="fas fa-check-circle"></i>';
+                    $iconParticipationStatus = '<i class="bi bi-check-lg-circle"></i>';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
                     $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE');
@@ -515,7 +515,7 @@ if ($eventsResult['totalCount'] === 0) {
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item admidio-event-approval-state-attend ' . $disableStatusAttend . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
-                                            <i class="fas fa-check-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
+                                            <i class="bi bi-check-lg-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
                                         </a>
                                     </li>';
                             if ($gSettingsManager->getBool('events_may_take_part')) {
@@ -566,11 +566,11 @@ if ($eventsResult['totalCount'] === 0) {
                             if ($getView === 'detail') {
                                 $outputButtonParticipantsEmail = '
                                     <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                        <i class="fas fa-envelope"></i>' . $gL10n->get('SYS_WRITE_EMAIL') . '</button>';
+                                        <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_WRITE_EMAIL') . '</button>';
                             } else {
                                 $outputButtonParticipantsEmail = '
                                     <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                        <i class="fas fa-envelope" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_WRITE_EMAIL') . '"></i></a>';
+                                        <i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_WRITE_EMAIL') . '"></i></a>';
                             }
                         }
                     }
@@ -582,11 +582,11 @@ if ($eventsResult['totalCount'] === 0) {
                         if ($getView === 'detail') {
                             $outputButtonParticipantsAssign = '
                                 <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                    <i class="fas fa-user-plus"></i>' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '</button>';
+                                    <i class="bi bi-person-plus-fill"></i>' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '</button>';
                         } else {
                             $outputButtonParticipantsAssign = '
                                 <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                    <i class="fas fa-user-plus" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '"></i></a>';
+                                    <i class="bi bi-person-plus-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '"></i></a>';
                         }
                     }
                 }
@@ -651,7 +651,7 @@ if ($eventsResult['totalCount'] === 0) {
             $page->addHtml('
                 <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="dat_' . $dateUuid . '">
                     <div class="card-header">
-                        <i class="fas fa-calendar-alt"></i>' .
+                        <i class="bi bi-calendar-week-fill"></i>' .
                         $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
 
             if ($event->isEditable() || $gSettingsManager->getBool('events_ical_export_enabled')) {
@@ -680,7 +680,7 @@ if ($eventsResult['totalCount'] === 0) {
                                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
                                                 'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
-                                                <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                                <i class="bi bi-trash-fill" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                                             </li>');
                 }
                 $page->addHtml('</ul>

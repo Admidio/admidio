@@ -154,7 +154,7 @@ $form->addInput(
 $form->addSubmitButton(
     'btn_save',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 // add form to html page and show page

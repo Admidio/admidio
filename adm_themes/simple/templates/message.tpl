@@ -5,7 +5,7 @@
     {if $url != ''}
         {if $showYesNoButtons}
             <button id="admButtonYes" class="btn btn-primary" type="button" onclick="{$url}">
-                <i class="fas fa-check-circle"></i>
+                <i class="bi bi-check-lg-circle"></i>
                 &nbsp;&nbsp;{$l10n->get("SYS_YES")}&nbsp;&nbsp;&nbsp;
             </button>
             <button id="admButtonNo" class="btn btn-secondary" type="button" onclick="history.back()">

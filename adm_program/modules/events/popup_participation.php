@@ -127,7 +127,7 @@ $participationForm->openButtonGroup();
 $participationForm->addButton(
     'btn_attend_' . $getEventUuid,
     $gL10n->get('SYS_PARTICIPATE'),
-    array('icon' => 'fa-check-circle', 'class' => 'admidio-event-approval-state-attend')
+    array('icon' => 'bi-check-lg-circle', 'class' => 'admidio-event-approval-state-attend')
 );
 
 if ($gSettingsManager->getBool('events_may_take_part')) {

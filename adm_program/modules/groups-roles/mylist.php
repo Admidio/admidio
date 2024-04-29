@@ -590,14 +590,14 @@ if ($gCurrentUser->isAdministrator()) {
 $form->openButtonGroup();
 $form->addButton('btn_add_column', $gL10n->get('SYS_ADD_COLUMN'), array('icon' => 'bi-plus-circle-fill'));
 if ($getListUuid !== '' && $list->getValue('lst_name') !== '') {
-    $form->addButton('btn_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'fa-check'));
+    $form->addButton('btn_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'bi-check-lg'));
 } else {
-    $form->addButton('btn_save', $gL10n->get('SYS_SAVE_CONFIGURATION'), array('icon' => 'fa-check'));
+    $form->addButton('btn_save', $gL10n->get('SYS_SAVE_CONFIGURATION'), array('icon' => 'bi-check-lg'));
 }
 // your lists could be deleted, administrators are allowed to delete system configurations
 if (($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 || ($gCurrentUserId === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0)) {
-    $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'fa-trash-alt'));
+    $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'bi bi-trash-fill'));
 }
 // current configuration can be duplicated and saved with another name
 if (strlen($list->getValue('lst_name')) > 0) {

@@ -156,7 +156,7 @@ class Image
         global $gLogger;
 
         if($icon !== '') {
-            if (self::isFontAwesomeIcon($icon)) {
+            if (self::isBootstrapIcon($icon)) {
                 if (str_starts_with($icon, 'fa-')) {
                     $icon = 'fas ' . $icon;
                 }
@@ -217,13 +217,13 @@ class Image
     }
 
     /**
-     * Checks if the given icon is a font-awesome icon
-     * @param string $icon Font-Awesome icon name
-     * @return bool Returns true if icon is a font-awesome icon
+     * Checks if the given icon is a bootstrap icon
+     * @param string $icon Bootstrap icon name
+     * @return bool Returns true if icon is a bootstrap icon
      */
-    public static function isFontAwesomeIcon(string $icon): bool
+    public static function isBootstrapIcon(string $icon): bool
     {
-        return str_starts_with($icon, 'fa-') || str_starts_with($icon, 'fas fa-') || str_starts_with($icon, 'fab fa-');
+        return str_starts_with($icon, 'bi-') || str_starts_with($icon, 'bi bi-');
     }
 
     /**

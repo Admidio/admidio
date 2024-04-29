@@ -141,7 +141,7 @@ $form->addMultilineTextInput(
 $form->addSubmitButton(
     'btn_rename',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 $form->addHtml(admFuncShowCreateChangeInfoById($createUserId, $createTimestamp));
 

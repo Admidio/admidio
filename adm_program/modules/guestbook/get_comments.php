@@ -62,7 +62,7 @@ if ($getCommentGboUuid !== '') {
             // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
             if (strlen($gbcEmail) > 0) {
                 echo '<a class="admidio-icon-link" href="mailto:'.$gbcEmail.'">
-                            <i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'"></i></a>';
+                            <i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'"></i></a>';
             }
 
             // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
@@ -77,7 +77,7 @@ if ($getCommentGboUuid !== '') {
                                 </li>
                                 <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcUuid, 'database_id' => $gbcUuid, 'database_id_2' => (int) $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'">
-                                    <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                    <i class="bi bi-trash-fill"></i> '.$gL10n->get('SYS_DELETE').'</a>
                                 </li>
                             </ul>
                         </div>';
@@ -92,9 +92,9 @@ if ($getCommentGboUuid !== '') {
                 echo '
                         <div class="btn-group" role="group">
                             <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 10, 'gbc_uuid' => $gbcUuid)).'\')">
-                                <i class="fas fa-check"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                                <i class="bi bi-check-lg"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
                             <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 5, 'gbc_uuid' => $gbcUuid)).'\')">
-                                <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
+                                <i class="bi bi-trash-fill"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                         </div>';
             }
             echo '</div>';

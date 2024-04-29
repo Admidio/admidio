@@ -521,7 +521,7 @@ if ($getMode === 'print') {
                 'menu_item_lists_assign_members',
                 $gL10n->get('SYS_ASSIGN_MEMBERS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $role->getValue('rol_uuid'))),
-                'fa-user-plus'
+                'bi bi-person-plus-fill'
             );
         }
     }
@@ -532,7 +532,7 @@ if ($getMode === 'print') {
             'menu_item_mail_to_list',
             $gL10n->get('SYS_EMAIL_TO_LIST'),
             'javascript:void(0);',
-            'fa-envelope'
+            'bi-envelope-fill'
         );
     }
 

@@ -92,8 +92,8 @@ $columnHeading = array(
     $gL10n->get('SYS_FIELD').HtmlForm::getHelpTextIcon('ORG_FIELD_DESCRIPTION'),
     '&nbsp;',
     $gL10n->get('ORG_DATATYPE'),
-    '<i class="fas fa-eye" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>',
-    '<i class="fas fa-key" data-bs-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>',
+    '<i class="bi bi-eye-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>',
+    '<i class="bi bi-key-fill" data-bs-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>',
     '<i class="fas fa-address-card" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>',
     $gL10n->get('SYS_REQUIRED_INPUT'),
     $gL10n->get('SYS_DEFAULT_VALUE'),
@@ -131,15 +131,15 @@ while ($row = $statement->fetch()) {
     }
 
     if ($userField->getValue('usf_hidden') == 1) {
-        $hidden = '<i class="fas fa-eye admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'"></i>';
+        $hidden = '<i class="bi bi-eye-fill admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'"></i>';
     } else {
-        $hidden = '<i class="fas fa-eye" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>';
+        $hidden = '<i class="bi bi-eye-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>';
     }
 
     if ($userField->getValue('usf_disabled') == 1) {
-        $disable = '<i class="fas fa-key" data-bs-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>';
+        $disable = '<i class="bi bi-key-fill" data-bs-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>';
     } else {
-        $disable = '<i class="fas fa-key admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'"></i>';
+        $disable = '<i class="bi bi-key-fill admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'"></i>';
     }
 
     if ($userField->getValue('usf_registration') == 1) {
@@ -173,7 +173,7 @@ while ($row = $statement->fetch()) {
         $usfSystem .='<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfUuid,
                         'name' => $userField->getValue('usf_name'), 'database_id' => $usfUuid)).'">'.
-                        '<i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                        '<i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
     }
 
     // create array with all column values

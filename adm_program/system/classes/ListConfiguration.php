@@ -205,7 +205,7 @@ class ListConfiguration extends TableLists
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
-                    $htmlText = '<i class="fas fa-check-circle admidio-icon-chain"></i>' . $text;
+                    $htmlText = '<i class="bi bi-check-lg-circle admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-attend';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
