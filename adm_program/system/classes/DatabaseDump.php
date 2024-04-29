@@ -1,6 +1,8 @@
 <?php
 /**
  ***********************************************************************************************
+ * Class will create and export a dump file of the database.
+ *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
@@ -33,7 +35,9 @@ class DatabaseDump
     }
 
     /**
-     * @param string $filename
+     * Create a dump file with the backup of the structure and data of all Admidio tables. The tables are identified by
+     * the prefix. The dump file will be stored in the temp folder of adm_my_files
+     * @param string $filename Filename of the dump file.
      * @throws Exception
      */
     public function create(string $filename)
@@ -52,6 +56,10 @@ class DatabaseDump
 
     }
 
+    /**
+     * Export the created dump file as octet-stream to the browser.
+     * @return void
+     */
     public function export()
     {
         header('Content-Type: application/octet-stream');
@@ -62,11 +70,22 @@ class DatabaseDump
         exit();
     }
 
+    /**
+     * Deletes the dump file in the temp folder of adm_my_files.
+     * @return void
+     */
     public function deleteDumpFile()
     {
         unlink(ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $this->dumpFilename);
     }
 
+    /**
+     * Returns an array with all database tables of Admidio. The tables will be identified by the constant
+     * **TABLE_PREFIX**. The default value of this constant is **adm** but can be overwritten in the config.php with
+     * the parameter **$g_tbl_praefix**.
+     * @return array Returns an array with all database tables of Admidio.
+     * @throws Exception
+     */
     protected function getAdmidioTables(): array
     {
         // create a list with all tables with configured table prefix
