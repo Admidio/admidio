@@ -9,7 +9,7 @@
         <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="{$maxUploadSize}" />
     {/if}
     {if $hideUploadField != true OR !$enableMultiUploads}
-        <input type="file" name="userfile[]" class="form-control mb-2 {$class}"
+        <input type="file" name="userfile[]" class="form-control mb-2 focus-ring {$class}"
             {foreach $data.attributes as $itemvar}
                 {$itemvar@key}="{$itemvar}"
             {/foreach}
@@ -23,7 +23,7 @@
     {/if}
     {if $enableMultiUploads}
         <div>
-            <button type="button" id="btn_add_attachment_{$id}" class="btn btn-primary">
+            <button type="button" id="btn_add_attachment_{$id}" class="btn btn-primary focus-ring">
                 {include file='sys-template-parts/parts/form.part.icon.tpl'} {$multiUploadLabel}
             </button>
         </div>
