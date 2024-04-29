@@ -64,7 +64,7 @@ try {
                 'menu_item_documents_create_folder',
                 $gL10n->get('SYS_CREATE_FOLDER'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_uuid' => $getFolderUUID)),
-                'fa-plus-circle'
+                'bi-plus-circle-fill'
             );
 
             if ($currentFolder->getValue('fol_fol_id_parent') > 0) {

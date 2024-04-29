@@ -226,7 +226,7 @@ foreach ($config as $key => $value) {
         		<tbody id="mylist_fields_tbody' . $key . '">
             		<tr id="table_row_button">
                 		<td colspan="2">
-                    		<a class="icon-text-link" href="javascript:addColumn' . $key . '()"><i class="fas fa-plus-circle"></i> ' . $gL10n->get('SYS_ADD_COLUMN') . '</a>
+                    		<a class="icon-text-link" href="javascript:addColumn' . $key . '()"><i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_COLUMN') . '</a>
                 		</td>
             		</tr>
         		</tbody>
@@ -266,7 +266,7 @@ foreach ($config as $key => $value) {
 
 $formConfigurations->addLine();
 $html = '<a id="add_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)) . '">
-            <i class="fas fa-plus-circle"></i> ' . $gL10n->get('SYS_ADD_ANOTHER_CONFIG') . '
+            <i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_ANOTHER_CONFIG') . '
         </a>';
 $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
                 <i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '

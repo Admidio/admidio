@@ -34,7 +34,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_new_room',
     $gL10n->get('SYS_CREATE_VAR', array($textRoom)),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)),
-    'fa-plus-circle'
+    'bi-plus-circle-fill'
 );
 
 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {

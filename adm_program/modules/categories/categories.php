@@ -140,7 +140,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_categories_add',
     $addButtonText,
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType)),
-    'fa-plus-circle'
+    'bi-plus-circle-fill'
 );
 
 // Create table object

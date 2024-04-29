@@ -91,7 +91,11 @@ class MenuNode
         if ($icon === '') {
             $icon = 'fa-trash-alt invisible';
         }
-        $node['icon'] = 'fas ' . $icon;
+        if (strpos($icon, 'bi-') !== false) {
+            $node['icon'] = 'bi ' . $icon;
+        } else {
+            $node['icon'] = 'fas ' . $icon;
+        }
         $node['badgeCount'] = $badgeCount;
 
         if ($parentMenuItemId === '') {

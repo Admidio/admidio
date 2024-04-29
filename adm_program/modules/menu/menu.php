@@ -43,7 +43,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_menu_new',
     $gL10n->get('SYS_CREATE_ENTRY'),
     ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
-    'fa-plus-circle'
+    'bi-plus-circle-fill'
 );
 
 // Create table object

@@ -81,7 +81,7 @@ if ($weblinks->getId() === 0) {
             'menu_item_links_add',
             $gL10n->get('SYS_CREATE_WEBLINK'),
             ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php',
-            'fa-plus-circle'
+            'bi-plus-circle-fill'
         );
     }
 
@@ -91,7 +91,7 @@ if ($weblinks->getId() === 0) {
             'menu_item_links_maintain_categories',
             $gL10n->get('SYS_EDIT_CATEGORIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')),
-            'fa-th-large'
+            'bi-hdd-stack-fill'
         );
     }
 

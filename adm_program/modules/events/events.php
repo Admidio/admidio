@@ -127,7 +127,7 @@ if ($getViewMode === 'html') {
             'menu_item_event_add',
             $gL10n->get('SYS_CREATE_EVENT'),
             ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php',
-            'fa-plus-circle'
+            'bi-plus-circle-fill'
         );
     }
 
@@ -151,7 +151,7 @@ if ($getViewMode === 'html') {
                 'menu_item_event_categories',
                 $gL10n->get('SYS_EDIT_CALENDARS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'EVT')),
-                'fa-th-large'
+                'bi-hdd-stack-fill'
             );
         }
 

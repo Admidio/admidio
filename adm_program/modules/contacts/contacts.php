@@ -56,7 +56,7 @@ if ($gCurrentUser->editUsers()) {
         'menu_item_contacts_create_contact',
         $gL10n->get('SYS_CREATE_CONTACT'),
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_new.php',
-        'fa-plus-circle'
+        'bi-plus-circle-fill'
     );
 
     if ($gSettingsManager->getBool('profile_log_edit_fields')) {

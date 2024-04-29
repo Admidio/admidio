@@ -33,6 +33,6 @@
         <p>{$l10n->get('SYS_CONTACT_NOT_FOUND_CREATE_NEW')}</p>
 
         <button class="btn btn-primary" onclick="window.location.href='{$createNewUserUrl}'">
-            <i class="fas fa-plus-circle"></i>{$l10n->get('SYS_CREATE_CONTACT')}</button>
+            <i class="bi bi-plus-circle-fill"></i>{$l10n->get('SYS_CREATE_CONTACT')}</button>
     </div>
 </div>

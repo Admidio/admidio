@@ -92,7 +92,7 @@ if (count($gCurrentUser->getAllEditableCategories('ANN')) > 0) {
         'menu_item_announcement_add',
         $gL10n->get('SYS_CREATE_ENTRY'),
         ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php',
-        'fa-plus-circle'
+        'bi-plus-circle-fill'
     );
 }
 
@@ -101,7 +101,7 @@ if ($gCurrentUser->editAnnouncements()) {
         'menu_item_announcement_categories',
         $gL10n->get('SYS_EDIT_CATEGORIES'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
-        'fa-th-large'
+        'bi-hdd-stack-fill'
     );
 }
 

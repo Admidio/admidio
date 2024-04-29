@@ -825,7 +825,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
         if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->editUsers()) {
             $page->addHtml('
                         <a class="admidio-icon-link float-end" id="profile_relations_new_entry" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)).'">
-                            <i class="fas fa-plus-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CREATE_RELATIONSHIP').'"></i></a>');
+                            <i class="bi bi-plus-circle-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CREATE_RELATIONSHIP').'"></i></a>');
         }
         $page->addHtml('</div>
             <div class="card-body" id="profile_user_relations_box_body">');

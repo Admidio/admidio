@@ -79,7 +79,7 @@ echo '
     $form->addSubmitButton(
         'btn_add',
         $gL10n->get('SYS_CREATE_CONTACT'),
-        array('icon' => 'fa-plus-circle')
+        array('icon' => 'bi-plus-circle-fill')
     );
     echo $form->show();
 echo '</div>';

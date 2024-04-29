@@ -130,7 +130,7 @@ if ($gCurrentUser->editPhotoRight()) {
         'menu_item_photos_new_album',
         $gL10n->get('SYS_CREATE_ALBUM'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'new', 'photo_uuid' => $getPhotoUuid)),
-        'fa-plus-circle'
+        'bi-plus-circle-fill'
     );
 
     if ($getPhotoUuid !== '') {

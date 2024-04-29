@@ -78,7 +78,7 @@ $form->addMultilineTextInput(
 $form->addSubmitButton(
     'btn_create',
     $gL10n->get('SYS_CREATE_FOLDER'),
-    array('icon' => 'fa-plus-circle')
+    array('icon' => 'bi-plus-circle-fill')
 );
 
 // add form to html page and show page

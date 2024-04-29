@@ -588,7 +588,7 @@ if ($gCurrentUser->isAdministrator()) {
     </div>');
 
 $form->openButtonGroup();
-$form->addButton('btn_add_column', $gL10n->get('SYS_ADD_COLUMN'), array('icon' => 'fa-plus-circle'));
+$form->addButton('btn_add_column', $gL10n->get('SYS_ADD_COLUMN'), array('icon' => 'bi-plus-circle-fill'));
 if ($getListUuid !== '' && $list->getValue('lst_name') !== '') {
     $form->addButton('btn_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'fa-check'));
 } else {

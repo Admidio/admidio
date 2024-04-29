@@ -86,7 +86,7 @@ try {
             'menu_item_groups_roles_add',
             $gL10n->get('SYS_CREATE_ROLE'),
             ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php',
-            'fa-plus-circle'
+            'bi-plus-circle-fill'
         );
 
         if ($getShow === 'card') {
@@ -104,7 +104,7 @@ try {
             'menu_item_groups_roles_maintain_categories',
             $gL10n->get('SYS_EDIT_CATEGORIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
-            'fa-th-large'
+            'bi-hdd-stack-fill'
         );
     }
 

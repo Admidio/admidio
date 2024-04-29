@@ -196,8 +196,13 @@ a {
 
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .fas, .btn .fas, .alert .fas,
-.admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"],
-label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
+.admidio-profile-user-right .fas, .checkbox .fas,
+.admidio-icon-link .fas, a .fas,
+.accordion .fas, .accordion .fab,
+.admidio-icon-chain, .nav-link .bi, .btn .bi, .alert .bi,
+.admidio-profile-user-right .bi, .checkbox .bi, input[type="radio"],
+label img, .form-control-static img, .admidio-icon-link .bi, a .bi,
+.accordion .bi {
     margin-right: 5px;
 }
 
@@ -411,10 +416,6 @@ label {
 
 .accordion-button:focus {
     box-shadow: none;
-}
-
-.accordion .fas, .accordion .fab {
-    margin-right: 5px;
 }
 
 /***********************************/
