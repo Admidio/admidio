@@ -94,7 +94,6 @@ $gCurrentUserId = $gCurrentUser->getValue('usr_id');
 $sql = 'INSERT INTO '.TBL_COMPONENTS.'
                (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES (\'MODULE\', \'SYS_ANNOUNCEMENTS\',   \'ANNOUNCEMENTS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'SYS_DATABASE_BACKUP\', \'BACKUP\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_CATEGORIES\',      \'CATEGORIES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_CATEGORY_REPORT\', \'CATEGORY-REPORT\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_EVENTS\',          \'EVENTS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -291,8 +290,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'fa-book\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'fa-cog\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration/registration.php\', \'fa-file-signature\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'fa-stream\', \'SYS_MENU\', \'SYS_MENU_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'fa-database\', \'SYS_DATABASE_BACKUP\', \'SYS_DATABASE_BACKUP_DESC\')';
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'fa-stream\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
 $db->query($sql);
 
 // delete session data
