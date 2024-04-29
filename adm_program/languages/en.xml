@@ -269,8 +269,8 @@
   <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Go to the Admidio download page</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
-  <string name="SYS_ADMIDIO_UPDATE">Admidio update</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
+  <string name="SYS_ADMIDIO_VERSION_BACKUP">Admidio version and backup</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administrators</string>
@@ -468,7 +468,7 @@
   <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">I have read the information provided by the organization. As far as the personal data provided by me are not necessary data for the fulfillment of the contract, I declare my consent to the processing of these data. My data will be stored exclusively for the purposes of the organization and treated confidentially.</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Database backup</string>
-  <string name="SYS_DATABASE_BACKUP_DESC">Create and download database backups of Admidio tables.</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">Creates a backup of all Admidio data in a gzip file. In addition to the data, the file also contains the structure of the tables, the indices and the links between the tables. The backup contains sensitive member data and should therefore be stored securely. It should not be possible for third parties to access the file.</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">It is not necessary to update the database.</string>
   <string name="SYS_DATABASE_ERROR">Database error</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date.</string>

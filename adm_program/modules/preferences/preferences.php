@@ -891,13 +891,13 @@ $formAdmidioUpdate->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_U
 if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
     $html = '<a class="btn btn-secondary" id="add_another_organization" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'backup')) . '">
             <i class="fas fa-download"></i>' . $gL10n->get('SYS_DOWNLOAD_DATABASE_BACKUP') . '</a>';
-    $formAdmidioUpdate->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextId' => 'ORG_ADD_ORGANIZATION_DESC'));
+    $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_DATABASE_BACKUP'), $html, array('helpTextId' => 'SYS_DATABASE_BACKUP_DESC'));
 }
 $html = '<a id="donate" href="'. ADMIDIO_HOMEPAGE . 'donate.php" target="_blank">
             <i class="fas fa-heart"></i>'.$gL10n->get('SYS_DONATE').'</a>';
 $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_SUPPORT_ADMIDIO'), $html, array('helpTextId' => 'INS_SUPPORT_FURTHER_DEVELOPMENT'));
 
-$page->addHtml(getPreferencePanel('common', 'admidio_update', 'accordion_preferences', $gL10n->get('SYS_ADMIDIO_UPDATE'), 'fas fa-cloud-download-alt', $formAdmidioUpdate->show()));
+$page->addHtml(getPreferencePanel('common', 'admidio_version_backup', 'accordion_preferences', $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'fas fa-cloud-download-alt', $formAdmidioUpdate->show()));
 
 // PANEL: PHP
 

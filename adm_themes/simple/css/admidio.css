@@ -409,6 +409,10 @@ label {
     font-size: 1.3rem;
 }
 
+.accordion-button:focus {
+    box-shadow: none;
+}
+
 .accordion .fas, .accordion .fab {
     margin-right: 5px;
 }
