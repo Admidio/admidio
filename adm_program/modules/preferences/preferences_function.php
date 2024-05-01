@@ -376,7 +376,7 @@ try {
 
             // show form
             $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', $page);
-            $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => 'fa-arrow-circle-right'));
+            $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => 'bi-arrow-circle-right-fill'));
 
             // add form to html page and show page
             $page->addHtml($form->show());

@@ -205,17 +205,17 @@ class ListConfiguration extends TableLists
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
-                    $htmlText = '<i class="bi bi-check-lg-circle admidio-icon-chain"></i>' . $text;
+                    $htmlText = '<i class="bi bi-check-circle-fill admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-attend';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE');
-                    $htmlText = '<i class="fas fa-question-circle admidio-icon-chain"></i>' . $text;
+                    $htmlText = '<i class="bi bi-question-circle-fill admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-tentative';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_CANCELED');
-                    $htmlText = '<i class="fas fa-times-circle admidio-icon-chain"></i>' . $text;
+                    $htmlText = '<i class="bi bi-x-circle-fill admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-cancel';
                     break;
                 default:

@@ -41,7 +41,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $currentFolder->getValue('fol_name'));
     } else {
         // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('SYS_DOCUMENTS_FILES'), 'fa-file-download');
+        $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('SYS_DOCUMENTS_FILES'), 'bi-file-earmark-arrow-down-fill');
     }
 
     $getFolderUUID = $currentFolder->getValue('fol_uuid');
@@ -57,7 +57,7 @@ try {
                 'menu_item_documents_upload_files',
                 $gL10n->get('SYS_UPLOAD_FILES'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'uuid' => $getFolderUUID)),
-                'fa-upload'
+                'bi-upload'
             );
 
             $page->addPageFunctionsMenuItem(

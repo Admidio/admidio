@@ -116,7 +116,7 @@ try {
             'menu_item_groups_own_list',
             $gL10n->get('SYS_CONFIGURE_LISTS'),
             ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php',
-            'fa-list-alt'
+            'bi-card-list'
         );
     }
 

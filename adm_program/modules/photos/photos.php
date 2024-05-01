@@ -147,7 +147,7 @@ if ($gCurrentUser->editPhotoRight()) {
             'menu_item_photos_upload_photo',
             $gL10n->get('SYS_UPLOAD_PHOTOS'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'uuid' => $getPhotoUuid)),
-            'fa-upload'
+            'bi-upload'
         );
     }
 }
@@ -246,9 +246,9 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
             if ($gCurrentUser->editPhotoRight()) {
                 $photoThumbnailTable .= '
                         <a class="admidio-icon-link admidio-image-rotate" href="javascript:void(0)" data-image="'.$actThumbnail.'" data-direction="right">
-                            <i class="fas fa-redo-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ROTATE_PHOTO_RIGHT').'"></i></a>
+                            <i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ROTATE_PHOTO_RIGHT').'"></i></a>
                         <a class="admidio-icon-link admidio-image-rotate"  href="javascript:void(0)"  data-image="'.$actThumbnail.'" data-direction="left"">
-                            <i class="fas fa-undo-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ROTATE_PHOTO_LEFT').'"></i></a>
+                            <i class="bi bi-arrow-counterclockwise" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ROTATE_PHOTO_LEFT').'"></i></a>
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
                             'database_id' => $actThumbnail, 'database_id_2' => $getPhotoUuid)).'">
@@ -381,7 +381,7 @@ if ($albumsCount > 0) {
             if ($gCurrentUser->editPhotoRight()) {
                 if ((bool) $childPhotoAlbum->getValue('pho_locked') === false) {
                     $htmlLock = '<li><a class="dropdown-item admidio-album-lock" href="javascript:void(0)" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="lock">
-                                            <i class="fas fa-lock" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_LOCK_ALBUM').'</a>
+                                            <i class="bi bi-lock" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_LOCK_ALBUM').'</a>
                                  </li>';
                 }
 

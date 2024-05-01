@@ -344,7 +344,7 @@ if (!$eventRole) {
             'rol_weblinks',
             $gL10n->get('SYS_RIGHT_WEBLINKS'),
             (bool) $role->getValue('rol_weblinks'),
-            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-link')
+            array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'bi-link-45deg')
         );
     }
     $form->closeGroupBox();

@@ -84,7 +84,7 @@ if ($gCurrentUser->editUsers()) {
         'menu_item_contacts_import_users',
         $gL10n->get('SYS_IMPORT_CONTACTS'),
         ADMIDIO_URL.FOLDER_MODULES.'/contacts/import.php',
-        'fa-upload'
+        'bi-upload'
     );
 } else {
     $contactsListConfig->setModeShowOnlyNames();

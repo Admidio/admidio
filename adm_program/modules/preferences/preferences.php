@@ -146,7 +146,7 @@ if ($showOption !== '') {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 } else {
     // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-cog');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
 }
 
 /**
@@ -289,7 +289,7 @@ $formCommon->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('common', 'common', 'accordion_preferences', $gL10n->get('SYS_COMMON'), 'fas fa-cog', $formCommon->show()));
+$page->addHtml(getPreferencePanel('common', 'common', 'accordion_preferences', $gL10n->get('SYS_COMMON'), 'bi bi-gear-fill', $formCommon->show()));
 
 // PANEL: SECURITY
 
@@ -339,7 +339,7 @@ $formSecurity->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('common', 'security', 'accordion_preferences', $gL10n->get('SYS_SECURITY'), 'fas fa-shield-alt', $formSecurity->show()));
+$page->addHtml(getPreferencePanel('common', 'security', 'accordion_preferences', $gL10n->get('SYS_SECURITY'), 'bi bi-shield-fill', $formSecurity->show()));
 
 // PANEL: ORGANIZATION
 
@@ -411,7 +411,7 @@ $formOrganization->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('common', 'organization', 'accordion_preferences', $gL10n->get('SYS_ORGANIZATION'), 'fas fa-sitemap', $formOrganization->show()));
+$page->addHtml(getPreferencePanel('common', 'organization', 'accordion_preferences', $gL10n->get('SYS_ORGANIZATION'), 'bi bi-diagram-3-fill', $formOrganization->show()));
 
 // PANEL: REGIONAL SETTINGS
 
@@ -464,7 +464,7 @@ $formRegionalSettings->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('common', 'regional_settings', 'accordion_preferences', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'fas fa-globe', $formRegionalSettings->show()));
+$page->addHtml(getPreferencePanel('common', 'regional_settings', 'accordion_preferences', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'bi bi-globe2', $formRegionalSettings->show()));
 
 // PANEL: REGISTRATION
 
@@ -756,7 +756,7 @@ $formSystemNotification->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('common', 'system_notification', 'accordion_preferences', $gL10n->get('SYS_SYSTEM_MAILS'), 'fas fa-broadcast-tower', $formSystemNotification->show()));
+$page->addHtml(getPreferencePanel('common', 'system_notification', 'accordion_preferences', $gL10n->get('SYS_SYSTEM_MAILS'), 'bi bi-broadcast-pin', $formSystemNotification->show()));
 
 // PANEL: CAPTCHA
 
@@ -845,7 +845,7 @@ $formCaptcha->addInput(
 );
 $html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
          <a id="captcha-refresh" class="admidio-icon-link" href="javascript:void(0)">
-            <i class="fas fa-sync-alt fa-lg" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>';
+            <i class="bi bi-arrow-repeat" style="font-size: 22pt;" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>';
 $formCaptcha->addCustomContent(
     $gL10n->get('ORG_CAPTCHA_PREVIEW'),
     $html,
@@ -858,7 +858,7 @@ $formCaptcha->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('common', 'captcha', 'accordion_preferences', $gL10n->get('SYS_CAPTCHA'), 'fas fa-font', $formCaptcha->show()));
+$page->addHtml(getPreferencePanel('common', 'captcha', 'accordion_preferences', $gL10n->get('SYS_CAPTCHA'), 'bi bi-fonts', $formCaptcha->show()));
 
 // PANEL: ADMIDIO UPDATE
 
@@ -897,7 +897,7 @@ $html = '<a id="donate" href="'. ADMIDIO_HOMEPAGE . 'donate.php" target="_blank"
             <i class="bi bi-heart-fill"></i>'.$gL10n->get('SYS_DONATE').'</a>';
 $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_SUPPORT_ADMIDIO'), $html, array('helpTextId' => 'INS_SUPPORT_FURTHER_DEVELOPMENT'));
 
-$page->addHtml(getPreferencePanel('common', 'admidio_version_backup', 'accordion_preferences', $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'fas fa-cloud-download-alt', $formAdmidioUpdate->show()));
+$page->addHtml(getPreferencePanel('common', 'admidio_version_backup', 'accordion_preferences', $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'bi bi-cloud-arrow-down-fill', $formAdmidioUpdate->show()));
 
 // PANEL: PHP
 
@@ -954,7 +954,7 @@ $formPhp->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PR
 $html = '<a href="' . ADMIDIO_URL . '/adm_program/system/phpinfo.php' . '" target="_blank">phpinfo()</a> <i class="fas fa-external-link-alt"></i>';
 $formPhp->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
 
-$page->addHtml(getPreferencePanel('common', 'php', 'accordion_preferences', $gL10n->get('SYS_PHP'), 'fab fa-php', $formPhp->show()));
+$page->addHtml(getPreferencePanel('common', 'php', 'accordion_preferences', $gL10n->get('SYS_PHP'), 'bi bi-filetype-php', $formPhp->show()));
 
 // PANEL: SYSTEM INFORMATION
 
@@ -1055,7 +1055,7 @@ try {
 }
 $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 
-$page->addHtml(getPreferencePanel('common', 'system_information', 'accordion_preferences', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'fas fa-info-circle', $formSystemInformation->show()));
+$page->addHtml(getPreferencePanel('common', 'system_information', 'accordion_preferences', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'bi bi-info-circle-fill', $formSystemInformation->show()));
 
 $page->addHtml('
         </div>
@@ -1197,7 +1197,7 @@ $formDownloads->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'documents-files', 'accordion_modules', $gL10n->get('SYS_DOCUMENTS_FILES'), 'fas fa-file-download', $formDownloads->show()));
+$page->addHtml(getPreferencePanel('modules', 'documents-files', 'accordion_modules', $gL10n->get('SYS_DOCUMENTS_FILES'), 'bi bi-file-earmark-arrow-down-fill', $formDownloads->show()));
 
 // PANEL: PHOTOS
 
@@ -1839,7 +1839,7 @@ $formWeblinks->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'links', 'accordion_modules', $gL10n->get('SYS_WEBLINKS'), 'fas fa-link', $formWeblinks->show()));
+$page->addHtml(getPreferencePanel('modules', 'links', 'accordion_modules', $gL10n->get('SYS_WEBLINKS'), 'bi bi-link-45deg', $formWeblinks->show()));
 
 $page->addHtml('
         </div>

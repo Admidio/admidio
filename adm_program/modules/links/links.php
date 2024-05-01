@@ -57,7 +57,7 @@ if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
 if ($getLinkUuid  !== '') {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-link');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-link-45deg');
 }
 
 // create html page object
@@ -163,7 +163,7 @@ if ($weblinksCount === 0) {
             // show weblink
             $page->addHtml('
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('link_uuid' => $lnkUuid)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
-                    <i class="fas fa-link"></i>'.$lnkName.'</a>');
+                    <i class="bi bi-link"></i>'.$lnkName.'</a>');
 
             // change and delete only users with rights
             if ($weblink->isEditable()) {

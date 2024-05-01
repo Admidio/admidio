@@ -216,7 +216,7 @@ $htmlFieldTable = '
         </tbody>
     </table>';
 $form->addHtml($htmlFieldTable);
-$form->addSubmitButton('btn_forward', $gL10n->get('SYS_IMPORT'), array('icon' => 'fa-upload'));
+$form->addSubmitButton('btn_forward', $gL10n->get('SYS_IMPORT'), array('icon' => 'bi-upload'));
 
 // add form to html page and show page
 $page->addHtml($form->show());

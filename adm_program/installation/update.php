@@ -32,7 +32,7 @@ function showErrorMessage(string $message, bool $reloadPage = false)
         $gL10n->get('SYS_NOTE'),
         $message,
         ($reloadPage) ? $gL10n->get('SYS_RELOAD') : $gL10n->get('SYS_OVERVIEW'),
-        ($reloadPage) ? 'fa-redo-alt' : 'bi-house-door-fill',
+        ($reloadPage) ? 'bi-arrow-clockwise' : 'bi-house-door-fill',
         ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . '/adm_program/overview.php'
     );
 }
@@ -252,7 +252,7 @@ if ($getMode === 1) {
         $form->addButton(
             'next_page',
             $gL10n->get('INS_UPDATE_DATABASE'),
-            array('icon' => 'fa-sync', 'class' => 'btn-primary')
+            array('icon' => 'bi-arrow-repeat', 'class' => 'btn-primary')
         );
 
         $page->addHtml($form->show());
@@ -305,7 +305,7 @@ if ($getMode === 1) {
             $gL10n->get('SYS_NOTE'),
             $e->getMessage(),
             $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left',
+            'bi-arrow-circle-left-fill',
             'update.php');
         // => EXIT
     } catch (RuntimeException $e) {

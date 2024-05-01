@@ -64,7 +64,7 @@ class FileUpload
         <p class="lead">'.$textUploadDescription.'</p>
 
         <span class="btn btn-primary fileinput-button mb-4">
-            <i class="fas fa-upload"></i>'.$textSelectFiles.'
+            <i class="bi bi-upload"></i>'.$textSelectFiles.'
             <input id="fileupload" type="file" name="files[]" multiple>
         </span>
         <div id="progress" class="progress mb-5" style="max-width: 600px;">

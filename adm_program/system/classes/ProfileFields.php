@@ -240,15 +240,9 @@ class ProfileFields
             switch ($usfType) {
                 case 'CHECKBOX':
                     if ($value == 1) {
-                        $htmlValue = '<span class="fa-stack">
-                            <i class="fas fa-square-full fa-stack-1x"></i>
-                            <i class="bi bi-check-lg-square fa-stack-1x fa-inverse"></i>
-                        </span>';
+                        $htmlValue = '<i class="bi bi-check-square"></i>';
                     } else {
-                        $htmlValue = '<span class="fa-stack">
-                            <i class="fas fa-square-full fa-stack-1x"></i>
-                            <i class="fas fa-square fa-stack-1x fa-inverse"></i>
-                        </span>';
+                        $htmlValue = '<i class="bi bi-square"></i>';
                     }
                     break;
                 case 'DATE':

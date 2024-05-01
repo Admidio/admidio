@@ -127,21 +127,21 @@ $participationForm->openButtonGroup();
 $participationForm->addButton(
     'btn_attend_' . $getEventUuid,
     $gL10n->get('SYS_PARTICIPATE'),
-    array('icon' => 'bi-check-lg-circle', 'class' => 'admidio-event-approval-state-attend')
+    array('icon' => 'bi-check-circle-fill', 'class' => 'admidio-event-approval-state-attend')
 );
 
 if ($gSettingsManager->getBool('events_may_take_part')) {
     $participationForm->addButton(
         'btn_tentative_' . $getEventUuid,
         $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE'),
-        array('icon' => 'fa-question-circle', 'class' => 'admidio-event-approval-state-tentative')
+        array('icon' => 'bi-question-circle-fill', 'class' => 'admidio-event-approval-state-tentative')
     );
 }
 
 $participationForm->addButton(
     'btn_refuse_' . $getEventUuid,
     $gL10n->get('SYS_CANCEL'),
-    array('icon' => 'fa-times-circle', 'class' => 'admidio-event-approval-state-cancel')
+    array('icon' => 'bi-x-circle-fill', 'class' => 'admidio-event-approval-state-cancel')
 );
 $participationForm->closeButtonGroup();
 $participationForm->addHtml('</div></div>');

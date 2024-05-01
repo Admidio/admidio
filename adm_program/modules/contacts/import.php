@@ -232,7 +232,7 @@ $form->addSelectBox(
 $form->addSubmitButton(
     'btn_forward',
     $gL10n->get('SYS_ASSIGN_FIELDS'),
-    array('icon' => 'fa-arrow-circle-right')
+    array('icon' => 'bi-arrow-circle-right-fill')
 );
 
 // add form to html page and show page

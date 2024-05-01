@@ -283,7 +283,7 @@ class ModuleGroupsRoles extends HtmlPage
                 $templateRow['roleRights'][] = array('icon' => 'fas fa-comment', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'));
             }
             if ($role->getValue('rol_weblinks') == 1 && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas fa-link', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-link-45deg', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));
             }
 
             switch ($role->getValue('rol_mail_this_role')) {
@@ -348,7 +348,7 @@ class ModuleGroupsRoles extends HtmlPage
 
             $templateRow['actions'][] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $row['rol_uuid'])),
-                'icon' => 'fas fa-list-alt',
+                'icon' => 'bi bi-card-list',
                 'tooltip' => $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP')
             );
             if ($this->roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {

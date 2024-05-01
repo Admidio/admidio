@@ -577,7 +577,7 @@ if ($gCurrentUser->isAdministrator()) {
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => 'mylist_condition', 'inline' => 'true')).'">
-                        <i class="fas fa-info-circle admidio-info-icon"></i>
+                        <i class="bi bi-info-circle-fill admidio-info-icon"></i>
                     </a>
                 </th>
             </tr>
@@ -677,7 +677,7 @@ $form->closeGroupBox();
 $form->addButton(
     'btn_show_list',
     $gL10n->get('SYS_SHOW_LIST'),
-    array('icon' => 'fa-list-alt', 'class' => 'btn-primary admidio-margin-bottom')
+    array('icon' => 'bi-card-list', 'class' => 'btn-primary admidio-margin-bottom')
 );
 
 // add form to html page and show page

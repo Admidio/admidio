@@ -214,7 +214,7 @@ if ($countGuestbookEntries === 0) {
         if (strlen($gboHomepage) > 0) {
             $page->addHtml('
                     <a class="admidio-icon-link" href="'.$gboHomepage.'" target="_blank">
-                        <i class="fas fa-link" data-bs-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
+                        <i class="bi bi-link" data-bs-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
         }
 
         // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...

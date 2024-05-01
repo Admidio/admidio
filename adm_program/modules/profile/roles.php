@@ -294,7 +294,7 @@ while ($row = $statement->fetch()) {
 
     // show icon that leaders have no additional rights
     if ((int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_NO_RIGHTS) {
-        $leaderRights .= '<i class="fas fa-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
+        $leaderRights .= '<i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
                           <i class="fas fa-trash invisible"></i>';
     }
 

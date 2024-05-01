@@ -8,17 +8,16 @@
     <step id="60">UPDATE %PREFIX%_menu SET men_icon = 'bi-house-door-fill' WHERE men_icon = 'fa-home'</step>
     <step id="70">UPDATE %PREFIX%_menu SET men_icon = 'bi-newspaper' WHERE men_icon = 'fa-newspaper'</step>
     <step id="80">UPDATE %PREFIX%_menu SET men_icon = 'bi-calendar-week-fill' WHERE men_icon = 'fa-calendar-alt'</step>
-    <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'fa-download' WHERE men_icon = 'download.png'</step>
+    <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'bi-file-earmark-arrow-down-fill' WHERE men_icon = 'fa-file-download'</step>
     <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'bi-envelope-fill' WHERE men_icon = 'fa-comments'</step>
     <step id="110">UPDATE %PREFIX%_menu SET men_icon = 'bi-image-fill' WHERE men_icon = 'fa-image'</step>
     <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'fa-book' WHERE men_icon = 'guestbook.png'</step>
     <step id="130">UPDATE %PREFIX%_menu SET men_icon = 'fa-list' WHERE men_icon = 'lists.png'</step>
-    <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'fa-link' WHERE men_icon = 'weblinks.png'</step>
-    <step id="150">UPDATE %PREFIX%_menu SET men_icon = 'fa-list-alt' WHERE men_icon = 'mylist.png'</step>
+    <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'bi-link-45deg' WHERE men_icon = 'fa-link'</step>
     <step id="160">UPDATE %PREFIX%_menu SET men_icon = 'bi-person-vcard-fill' WHERE men_icon = 'fa-address-card'</step>
     <step id="170">UPDATE %PREFIX%_menu SET men_icon = 'bi-people-fill' WHERE men_icon = 'fa-users'</step>
     <step id="180">UPDATE %PREFIX%_menu SET men_icon = 'fa-database' WHERE men_icon = 'backup.png'</step>
-    <step id="190">UPDATE %PREFIX%_menu SET men_icon = 'fa-cog' WHERE men_icon = 'options.png'</step>
+    <step id="190">UPDATE %PREFIX%_menu SET men_icon = 'bi-gear-fill' WHERE men_icon = 'fa-cog'</step>
     <step id="200">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-tie' WHERE men_icon = 'roles.png'</step>
     <step id="210">UPDATE %PREFIX%_menu SET men_icon = 'bi-menu-button-wide-fill' WHERE men_icon = 'fa-stream'</step>
     <step id="220">UPDATE %PREFIX%_user_fields SET usf_value_list = 'bi-gender-male|SYS_MALE

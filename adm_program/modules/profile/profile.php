@@ -419,7 +419,7 @@ $page->addHtml('
                 $page->addHtml('
                 <ul id="profile_picture_links" class="list-unstyled">
                     <li><a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)).'">
-                        <i class="fas fa-upload"></i>'.$gL10n->get('SYS_UPLOAD_PROFILE_PICTURE').'</a></li>');
+                        <i class="bi bi-upload"></i>'.$gL10n->get('SYS_UPLOAD_PROFILE_PICTURE').'</a></li>');
 
                 // the image can only be deleted if corresponding rights exist
                 if (((string) $user->getValue('usr_photo') !== '' && (int) $gSettingsManager->get('profile_photo_storage') === 0)
@@ -625,7 +625,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_weblinks'],
                 'right' => $gL10n->get('SYS_RIGHT_WEBLINKS'),
-                'icon'  => 'fa-link'
+                'icon'  => 'bi-link-45deg'
             );
         }
         if ($user->checkRolesRight('rol_all_lists_view')) {
@@ -884,7 +884,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
             // only show info if system setting is activated
             if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
                 $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.(int) $relation->getValue('ure_id').'" href="javascript:void(0)"><i
-                    class="fas fa-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>');
+                    class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>');
             }
 
             $page->addHtml('</span></div>');

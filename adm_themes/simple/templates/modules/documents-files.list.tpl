@@ -1,5 +1,5 @@
 {if strlen($infoAlert) > 0}
-    <div class="alert alert-info" role="alert"><i class="fas fa-info-circle"></i>{$infoAlert}</div>
+    <div class="alert alert-info" role="alert"><i class="bi bi-info-circle-fill"></i>{$infoAlert}</div>
 {/if}
 
 <div class="table-responsive">
@@ -20,7 +20,7 @@
                     <td><a class="admidio-icon-link" href="{$row.url}"><i class="{$row.icon}" data-bs-toggle="tooltip" title="{$row.title}"></i></a></td>
                     <td><a href="{$row.url}">{$row.name}</a>
                         {if strlen($row.description) > 0}
-                            <i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
+                            <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
                                 data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
                                 title="{$l10n->get('SYS_DESCRIPTION')}" data-bs-content="{$row.description}"></i>
                         {/if}

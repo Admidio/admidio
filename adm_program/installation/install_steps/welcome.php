@@ -47,7 +47,7 @@ if (ADMIDIO_VERSION_BETA > 0) {
     );
 }
 
-$form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'fa-arrow-circle-right', 'class' => 'float-right'));
+$form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'bi-arrow-circle-right-fill', 'class' => 'float-right'));
 
 $page->addHtml($form->show());
 $page->addHtml('<br /><br />');

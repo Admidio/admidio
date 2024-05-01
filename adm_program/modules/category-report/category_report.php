@@ -191,7 +191,7 @@ if ($getMode !== 'csv') {
 
         if ($getExportAndFilter) {
             // link to print overlay and exports
-            $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+            $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
 
             // dropdown menu item with all export possibilities
             $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
@@ -250,7 +250,7 @@ if ($getMode !== 'csv') {
                 'admMenuItemPreferencesLists',
                 $gL10n->get('SYS_CONFIGURATIONS'),
                 ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',
-                'fa-cog'
+                'bi-gear-fill'
             );
         }
 

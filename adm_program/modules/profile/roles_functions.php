@@ -191,7 +191,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             // only show info if system setting is activated
             if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
                 $roleMemHTML .= '<a class="admidio-icon-link admMemberInfo" id="member_info_'.$memberUuid.'" href="javascript:void(0)"><i
-                                    class="fas fa-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>';
+                                    class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>';
             }
             $roleMemHTML .= '</span>
                     </li>
