@@ -162,14 +162,14 @@ if ($announcementsCount === 0) {
                             <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid, 'copy' => '1')).'">
-                                <i class="fas fa-clone" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
+                                <i class="bi bi-copy" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
                             </li>
                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid)).'">
-                                <i class="fas fa-edit" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                             </li>
                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annUuid, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annUuid)).'">
-                                <i class="bi bi-trash-fill" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                <i class="bi bi-trash" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                             </li>
                         </ul>
                     </div>');

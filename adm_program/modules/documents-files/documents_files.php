@@ -72,7 +72,7 @@ try {
                     'menu_item_documents_edit_folder',
                     $gL10n->get('SYS_EDIT_FOLDER'),
                     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $getFolderUUID)),
-                    'fa-edit'
+                    'bi-pencil-square'
                 );
             }
         }
@@ -82,7 +82,7 @@ try {
                 'menu_item_documents_permissions',
                 $gL10n->get('SYS_PERMISSIONS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_uuid' => $getFolderUUID)),
-                'fa-lock'
+                'bi-shield-lock-fill'
             );
         }
     }

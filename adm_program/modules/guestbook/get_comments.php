@@ -73,11 +73,11 @@ if ($getCommentGboUuid !== '') {
                                 <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbc_uuid' => $gbcUuid)).'">
-                                    <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                    <i class="bi bi-pencil-square"></i> '.$gL10n->get('SYS_EDIT').'</a>
                                 </li>
                                 <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcUuid, 'database_id' => $gbcUuid, 'database_id_2' => (int) $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'">
-                                    <i class="bi bi-trash-fill"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                    <i class="bi bi-trash"></i> '.$gL10n->get('SYS_DELETE').'</a>
                                 </li>
                             </ul>
                         </div>';
@@ -94,7 +94,7 @@ if ($getCommentGboUuid !== '') {
                             <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 10, 'gbc_uuid' => $gbcUuid)).'\')">
                                 <i class="bi bi-check-lg"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
                             <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 5, 'gbc_uuid' => $gbcUuid)).'\')">
-                                <i class="bi bi-trash-fill"></i>'.$gL10n->get('SYS_REMOVE').'</button>
+                                <i class="bi bi-trash"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                         </div>';
             }
             echo '</div>';

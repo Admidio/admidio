@@ -597,14 +597,14 @@ if ($getListUuid !== '' && $list->getValue('lst_name') !== '') {
 // your lists could be deleted, administrators are allowed to delete system configurations
 if (($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 || ($gCurrentUserId === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0)) {
-    $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'bi bi-trash-fill'));
+    $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'bi bi-trash'));
 }
 // current configuration can be duplicated and saved with another name
 if (strlen($list->getValue('lst_name')) > 0) {
     $form->addButton(
         'btn_copy',
         $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
-        array('icon' => 'fa-clone')
+        array('icon' => 'bi-copy')
     );
 }
 $form->closeButtonGroup();

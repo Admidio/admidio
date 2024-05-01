@@ -172,9 +172,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 // do not edit administrator role
                 if ($row['rol_administrator'] == 0) {
                     $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" href="javascript:profileJS.toggleDetailsOn(\''.$memberUuid.'\')"><i
-                                        class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CHANGE_DATE').'"></i></a>';
+                                        class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CHANGE_DATE').'"></i></a>';
                 } else {
-                    $roleMemHTML .= '<a><i class="fas fa-edit invisible"></i></a>';
+                    $roleMemHTML .= '<a><i class="bi bi-pencil-square invisible"></i></a>';
                 }
 
                 // You are not allowed to delete your own administrator membership, other roles could be deleted
@@ -182,9 +182,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                                 || ($role->getValue('rol_administrator') == 0)) {
                     $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberUuid, 'name' => $role->getValue('rol_name'))).'"><i
-                                        class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
+                                        class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
                 } else {
-                    $roleMemHTML .= '<a><i class="bi bi-trash-fill invisible"></i></a>';
+                    $roleMemHTML .= '<a><i class="bi bi-trash invisible"></i></a>';
                 }
             }
 

@@ -327,15 +327,15 @@ if ($eventsResult['totalCount'] === 0) {
             if ($event->isEditable()) {
                 $outputButtonCopy = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1)) . '">
-                        <i class="fas fa-clone" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>';
+                        <i class="bi bi-copy" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>';
                 $outputButtonEdit = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid)) . '">
-                        <i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
+                        <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
                 $outputButtonDelete = '
                     <a class="openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
                         'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
-                        <i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
         }
 
@@ -446,7 +446,7 @@ if ($eventsResult['totalCount'] === 0) {
                 default:
                     $buttonText = $gL10n->get('SYS_PARTICIPATE');
                     $buttonClass = '';
-                    $iconParticipationStatus = '<i class="fas fa-edit"></i>';
+                    $iconParticipationStatus = '<i class="bi bi-pencil-square"></i>';
             }
 
             if ($getView !== 'detail') {
@@ -672,15 +672,15 @@ if ($eventsResult['totalCount'] === 0) {
                 if ($event->isEditable()) {
                     $page->addHtml('
                                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1)) . '">
-                                                <i class="fas fa-clone" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
+                                                <i class="bi bi-copy" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
                                             </li>
                                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid)) . '">
-                                                <i class="fas fa-edit" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                                <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                                             </li>
                                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
                                                 'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
-                                                <i class="bi bi-trash-fill" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                                <i class="bi bi-trash" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                                             </li>');
                 }
                 $page->addHtml('</ul>

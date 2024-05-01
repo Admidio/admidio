@@ -6,7 +6,7 @@
     <table id="documents-files-table" class="table table-hover" width="100%" style="width: 100%;">
         <thead>
             <tr>
-                <th><i class="fas fa-fw fa-folder-open" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
+                <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
                 <th>{$l10n->get('SYS_NAME')}</th>
                 <th>{$l10n->get('SYS_DATE_MODIFIED')}</th>
                 <th class="text-right">{$l10n->get('SYS_SIZE')}</th>
@@ -54,7 +54,7 @@
         <table id="documents-files-unregistered-table" class="table table-hover" width="100%" style="width: 100%;">
             <thead>
             <tr>
-                <th><i class="fas fa-fw fa-folder-open" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
+                <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
                 <th>{$l10n->get('SYS_NAME')}</th>
                 <th class="text-right">{$l10n->get('SYS_SIZE')}</th>
                 <th>&nbsp;</th>

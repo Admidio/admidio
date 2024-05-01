@@ -165,7 +165,7 @@ while ($row = $statement->fetch()) {
                                   3 => 'SYS_NOT_AT_REGISTRATION');
 
     $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.
-                    '<i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
+                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
     if ($userField->getValue('usf_system') == 1) {
         $usfSystem .= '<i class="fas fa-trash invisible"></i>';
@@ -173,7 +173,7 @@ while ($row = $statement->fetch()) {
         $usfSystem .='<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfUuid,
                         'name' => $userField->getValue('usf_name'), 'database_id' => $usfUuid)).'">'.
-                        '<i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                        '<i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
     }
 
     // create array with all column values

@@ -330,11 +330,11 @@ label {
     font-size: 150%;
 }
 
-.card-header .fas, .card-header .fab {
+.card-header .bi {
     margin-right: 10px;
 }
 
-.card-header .float-end .fas {
+.card-header .float-end .bi {
     margin-right: 0;
 }
 

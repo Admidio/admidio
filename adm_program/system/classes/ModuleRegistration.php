@@ -104,7 +104,7 @@ class ModuleRegistration extends HtmlPage
             );
             $templateRow['actions'][] = array(
                 'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'user_'.$row['usr_uuid'], 'name' => $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 'database_id' => $row['usr_uuid'])),
-                'icon' => 'bi bi-trash-fill',
+                'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
             if (count($similarUserIDs) > 0) {

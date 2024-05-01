@@ -204,7 +204,7 @@ if ($gCurrentUser->hasRightEditProfile($user)) {
         'menu_item_profile_edit',
         $gL10n->get('SYS_EDIT_PROFILE'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $user->getValue('usr_uuid'))),
-        'fa-edit'
+        'bi-pencil-square'
     );
 }
 
@@ -426,7 +426,7 @@ $page->addHtml('
                         || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1) {
                     $page->addHtml('<li><a id="btn_delete_photo" class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $getUserUuid)).
-                                        '"><i class="bi bi-trash-fill"></i>'.$gL10n->get('SYS_DELETE_PROFILE_PICTURE').'</a></li>');
+                                        '"><i class="bi bi-trash"></i>'.$gL10n->get('SYS_DELETE_PROFILE_PICTURE').'</a></li>');
                 }
                 $page->addHtml('</ul>');
             }
@@ -665,7 +665,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
     if ($gCurrentUser->assignRoles()) {
         $page->addHtml('<a class="btn btn-secondary float-end openPopup" id="profile_role_memberships_change" data-class="modal-lg"
                     href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => '1')).'">
-                    <i class="fas fa-edit"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
+                    <i class="bi bi-pencil-square"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
     }
     $page->addHtml('</div>
         <div class="card-body" id="profile_roles_box_body">
@@ -865,7 +865,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
 
             if ($gCurrentUser->hasRightEditProfile($otherUser)) {
                 $editUserIcon = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid'))) . '"><i
-                    class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i></a>';
+                    class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i></a>';
             }
 
             $page->addHtml('<li id="row_ure_'.(int) $relation->getValue('ure_id').'" class="list-group-item">');
@@ -878,7 +878,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
                 $page->addHtml('<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_'.(int) $relation->getValue('ure_id'), 'database_id' => (int) $relation->getValue('ure_id'),
                                 'name' => $relationType->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))).'"><i
-                                class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_RELATIONSHIP').'"></i></a>');
+                                class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_RELATIONSHIP').'"></i></a>');
             }
 
             // only show info if system setting is activated

@@ -232,12 +232,12 @@ if ($countGuestbookEntries === 0) {
                             <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
-                                <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                <i class="bi bi-pencil-square"></i> '.$gL10n->get('SYS_EDIT').'</a>
                             </li>
                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
                                 'element_id' => 'gbo_'.$gboUuid, 'database_id' => $gboUuid, 'name' => $gboName)).'">
-                                <i class="bi bi-trash-fill"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                <i class="bi bi-trash"></i> '.$gL10n->get('SYS_DELETE').'</a>
                             </li>
                         </ul>
                     </div>');
@@ -255,7 +255,7 @@ if ($countGuestbookEntries === 0) {
                         <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbo_'.$gboUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 9, 'gbo_uuid' => $gboUuid)).'\')">
                             <i class=\"bi bi-check-lg\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
                         <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbo_'.$gboUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 2, 'gbo_uuid' => $gboUuid)).'\')">
-                            <i class="bi bi-trash-fill"></i>'.$gL10n->get('SYS_REMOVE').'</button>
+                            <i class="bi bi-trash"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>');
         }
 

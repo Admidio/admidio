@@ -103,11 +103,11 @@ while ($relRow = $relationTypesStatement->fetch()) {
     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(
         ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
         array('urt_uuid' => $relationType1->getValue('urt_uuid'))
-    ). '"><i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+    ). '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_uuid'),
         'name' => $relationType1->getValue('urt_name').($relationType1->isUnidirectional() ? '' : ('/'.$relationType2->getValue('urt_name'))),
-        'database_id' => $relationType1->getValue('urt_uuid'))).'"><i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+        'database_id' => $relationType1->getValue('urt_uuid'))).'"><i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
 
     // create array with all column values
     $columnValues = array(

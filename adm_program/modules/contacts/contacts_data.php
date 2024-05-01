@@ -295,16 +295,16 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
                 $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));
             }
             $userAdministration .= '<a class="admidio-icon-link" href="' . $mailLink . '">' .
-                '<i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email'])) . '"></i></a>';
+                '<i class="bi bi-envelope" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email'])) . '"></i></a>';
         }
 
         $userAdministration .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)) . '">' .
-            '<i class="fas fa-clone" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
+            '<i class="bi bi-copy" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
 
         // add link to edit user, but only edit users who are members of the current organization
         if ($contactsOfThisOrganization || !$contactsOfOtherOrganization) {
             $userAdministration .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])) . '">' .
-                '<i class="fas fa-edit" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
+                '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
         }
 
         // add link to delete user btw. remove user from the current organization
@@ -313,7 +313,7 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
             && $row['usr_uuid'] !== $gCurrentUserUUID) { // no one is allowed to remove their own profile
             $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_msg')) . '">' .
-                '<i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
+                '<i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
             </a>';
         }
     }

@@ -114,13 +114,13 @@ class ModuleGroupsRoles extends HtmlPage
                 // edit roles of you are allowed to assign roles
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_new.php', array('role_uuid' => $row['rol_uuid'])),
-                    'icon' => 'fas fa-edit',
+                    'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT_ROLE')
                 );
                 if (!$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'role_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
-                        'icon' => 'bi bi-trash-fill',
+                        'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                     );
                 }
@@ -367,7 +367,7 @@ class ModuleGroupsRoles extends HtmlPage
             if (!$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
-                    'icon' => 'bi bi-trash-fill',
+                    'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                 );
             }
