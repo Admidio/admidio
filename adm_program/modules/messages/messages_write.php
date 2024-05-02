@@ -580,7 +580,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
                 'multiUploadLabel'   => $gL10n->get('SYS_ADD_ATTACHMENT'),
                 'hideUploadField'    => true,
                 'helpTextId'    => $gL10n->get('SYS_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
-                'icon'               => 'fa-paperclip'
+                'icon'               => 'bi-paperclip'
             )
         );
     }
@@ -625,7 +625,7 @@ if (isset($messageStatement)) {
             $attachments   = $message->getAttachmentsInformations();
 
             if (count($attachments) > 0) {
-                $messageFooter .= '<div class="card-footer"><span class="mr-3"><i class="fas fa-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT') . '</span>';
+                $messageFooter .= '<div class="card-footer"><span class="mr-3"><i class="bi bi-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT') . '</span>';
             }
 
             foreach ($attachments as $attachment) {
@@ -647,7 +647,7 @@ if (isset($messageStatement)) {
         $page->addHtml('
         <div class="card admidio-blog">
             <div class="card-header">
-                <i class="fas ' . $messageIcon . '"></i>' . $messageHeader . '
+                <i class="bi ' . $messageIcon . '"></i>' . $messageHeader . '
             </div>
             <div class="card-body">' . $messageContent->getValue('msc_message') . '</div>
             ' . $messageFooter . '

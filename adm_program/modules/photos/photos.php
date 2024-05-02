@@ -178,7 +178,7 @@ if ($getPhotoUuid !== '') {
 
     $page->addHtml('
     <p class="lead">
-        <p class="font-weight-bold">' . $datePeriod . '</p>
+        <p class="fw-bold">' . $datePeriod . '</p class="fw-bold">
         <p>' . $photoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($photoAlbum->getPhotographer())) . '</p>');
 
     if (strlen($photoAlbum->getValue('pho_description')) > 0) {
@@ -415,7 +415,7 @@ if ($albumsCount > 0) {
                     $maxPosPrev = strrpos($textPrev, ' ');
                     $albumDescription = substr($textPrev, 0, $maxPosPrev).
                                         ' <span class="collapse" id="viewdetails'.$childPhotoAlbum->getValue('pho_uuid').'">'.substr($albumDescription, $maxPosPrev).'.
-                                        </span> <a class="admidio-icon-link" data-bs-toggle="collapse" data-target="#viewdetails'.$childPhotoAlbum->getValue('uuid').'"><i class="fas fa-angle-double-right" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                                        </span> <a class="admidio-icon-link"  data-bs-toggle="collapse" data-target="#viewdetails'.$childPhotoAlbum->getValue('uuid').'">»</a>';
                 }
 
                 $page->addHtml('<p class="card-text">' . $albumDescription . '</p>');

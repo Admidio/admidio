@@ -164,7 +164,7 @@ $rowNumber = $getStart; // count for every row
 while ($message = $messageStatement->fetch()) {
     ++$rowNumber;
     $arrContent = array();
-    $cssClass   = 'font-weight-normal';
+    $cssClass   = 'fw-normal';
     $iconAttachments = '';
 
     $messageObject = new TableMessage($gDb);
@@ -175,7 +175,7 @@ while ($message = $messageStatement->fetch()) {
         $icon = 'bi-envelope-fill';
         $iconText = $gL10n->get('SYS_EMAIL');
         $links = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'], 'forward' => '1')) . '">
-                    <i class="fas fa-share" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_FORWARD').'"></i></a>';
+                    <i class="bi bi-forward" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_FORWARD').'"></i></a>';
     } else {
         $icon = 'bi-chat-left-fill';
         $iconText = $gL10n->get('SYS_PRIVATE_MESSAGES');
@@ -183,18 +183,18 @@ while ($message = $messageStatement->fetch()) {
     }
 
     if ($messageObject->isUnread()) {
-        $cssClass = 'font-weight-bold';
+        $cssClass = 'fw-bold';
     }
 
     if ((int) $message['attachments'] === 1) {
-        $iconAttachments = '<i class="fas fa-paperclip" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT_ONE') . '"></i>';
+        $iconAttachments = '<i class="bi bi-paperclip" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT_ONE') . '"></i>';
     } elseif ($message['attachments'] > 1) {
-        $iconAttachments = '<i class="fas fa-paperclip" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENTS_VAR', array($message['attachments'])) . '"></i>';
+        $iconAttachments = '<i class="bi bi-paperclip" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENTS_VAR', array($message['attachments'])) . '"></i>';
     }
 
     $arrContent['DT_RowId'] = 'row_message_' . $message['msg_uuid'];
     $arrContent['DT_RowClass'] = $cssClass;
-    $arrContent['0'] = '<i class="fas ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
+    $arrContent['0'] = '<i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
     $arrContent['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'])) . '">' . $messageObject->getValue('msg_subject') . '</a>';
     $arrContent['2'] = $messageObject->getRecipientsNamesString();
     $arrContent['3'] = $iconAttachments;

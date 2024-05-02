@@ -126,11 +126,11 @@ if ($gSettingsManager->getInt('events_module_enabled') > 0) {
                     // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                     $textPrev = substr($textPrev, 0, $plg_events_show_preview + 15);
                     $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).'
-                        <a class="admidio-icon-link" target="'. $plg_link_target. '"
+                        <a class="admidio-icon-link" target="'. $plg_link_target. '" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"
                             href="'.SecurityUtils::encodeUrl(
                         $plg_link_url,
                         array('view' => 'detail', 'dat_uuid' => $plgEvent->getValue('dat_uuid'))
-                    ). '"><i class="bi bi-three-dots" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                    ). '">»</a>';
 
                     echo '<div>'.$textPrev.'</div>';
                 }
