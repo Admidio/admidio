@@ -125,14 +125,14 @@ class ModuleContacts extends HtmlPage
                         // Login data are NOT available -> assign them now
                         $button['description'] = $gL10n->get('SYS_CONTACT_NO_VALID_LOGIN');
                         $button['label'] = $gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION');
-                        $button['icon'] = 'fa-user-check';
+                        $button['icon'] = 'bi-person-check-fill';
                         $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => 'assign_member'));
                     }
                 }
             } else {
                 // found user is NOT a member of this organization yet
                 $button['label'] = $gL10n->get('SYS_ASSIGN_MEMBERSHIP');
-                $button['icon'] = 'fa-user-check';
+                $button['icon'] = 'bi-person-check-fill';
 
                 if($assignRegistration) {
                     $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => 'assign_user'));

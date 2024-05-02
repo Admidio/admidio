@@ -325,7 +325,7 @@ $form->addCheckbox(
     'cat_default',
     $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)),
     (bool) $category->getValue('cat_default'),
-    array('icon' => 'fa-star')
+    array('icon' => 'bi-star-fill')
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 $form->addHtml(admFuncShowCreateChangeInfoById(

@@ -267,7 +267,7 @@ while ($user = $userStatement->fetch()) {
 
     // Select icon for member and non-member of the organisation
     if ($user['member_this_orga'] > 0) {
-        $icon = 'fa-user';
+        $icon = 'bi-person-fill';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
     } else {
         $icon = 'fa-user-times';

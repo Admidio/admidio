@@ -6,7 +6,7 @@
             {foreach $similarUsers as $similarUser}
                 <li class="list-group-item">
                     <a href="{$similarUser.profileUrl}" title="{$l10n->get('SYS_SHOW_PROFILE')}">
-                        <i class="fas fa-user"></i>{$similarUser.data->getValue('FIRST_NAME')} {$similarUser.data->getValue('LAST_NAME')}</a><br />
+                        <i class="bi bi-person-fill"></i>{$similarUser.data->getValue('FIRST_NAME')} {$similarUser.data->getValue('LAST_NAME')}</a><br />
                     {if $similarUser.data->getValue('STREET') ne ''}
                         {$similarUser.data->getValue('STREET')}<br />
                     {/if}
@@ -20,7 +20,7 @@
                         <br />
                         <p>{$similarUser.button.description}</p>
                         <button class="btn btn-primary" onclick="window.location.href='{$similarUser.button.url}'">
-                            <i class="fas {$similarUser.button.icon}"></i>{$similarUser.button.label}</button>
+                            <i class="bi {$similarUser.button.icon}"></i>{$similarUser.button.label}</button>
                     {/if}
                 </li>
             {/foreach}

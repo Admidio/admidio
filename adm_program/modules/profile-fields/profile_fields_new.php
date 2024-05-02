@@ -225,14 +225,14 @@ if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNam
         'usf_registration',
         $gL10n->get('ORG_FIELD_REGISTRATION'),
         (bool) $userField->getValue('usf_registration'),
-        array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'fa-address-card')
+        array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'bi-card-checklist')
     );
 } else {
     $form->addCheckbox(
         'usf_registration',
         $gL10n->get('ORG_FIELD_REGISTRATION'),
         (bool) $userField->getValue('usf_registration'),
-        array('icon' => 'fa-address-card')
+        array('icon' => 'bi-card-checklist')
     );
 }
 $form->addInput(

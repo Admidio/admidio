@@ -25,7 +25,7 @@
  * // show link to create new announcement
  * $myNavbar->addItem(
  *     'menu_item_new_entry', ADMIDIO_URL . FOLDER_MODULES . '/my-module/my-module_new.php',
- *     $gL10n->get('SYS_CREATE'), 'fa-plus-circle'
+ *     $gL10n->get('SYS_CREATE'), 'bi-plus-circle'
  * );
  * $myNavbar->show();
  * ```

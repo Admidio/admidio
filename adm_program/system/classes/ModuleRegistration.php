@@ -90,7 +90,7 @@ class ModuleRegistration extends HtmlPage
             if ((string) $row['reg_validation_id'] === '') {
                 $templateRow['information'][] = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i>' . $gL10n->get('SYS_REGISTRATION_CONFIRMED') . '</div>';
             } else {
-                $templateRow['information'][] = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('SYS_REGISTRATION_NOT_CONFIRMED') . '</div>';
+                $templateRow['information'][] = '<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('SYS_REGISTRATION_NOT_CONFIRMED') . '</div>';
             }
 
             if (count($similarUserIDs) > 0) {
@@ -99,7 +99,7 @@ class ModuleRegistration extends HtmlPage
 
             $templateRow['actions'][] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])),
-                'icon' => 'fas fa-eye',
+                'icon' => 'bi bi-eye',
                 'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
             );
             $templateRow['actions'][] = array(

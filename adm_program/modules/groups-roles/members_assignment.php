@@ -231,7 +231,7 @@ if ($getMode === 'assign') {
 
     // create array with all column heading values
     $columnHeading = array(
-        '<i class="fas fa-user" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"></i>',
+        '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"></i>',
         $gL10n->get('SYS_MEMBER'));
     $columnAlignment = array('left', 'left');
 

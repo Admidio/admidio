@@ -42,7 +42,7 @@ if (ADMIDIO_VERSION_BETA > 0) {
 
     $form->addDescription(
         '<div class="alert alert-warning alert-small" role="alert">
-            <i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
+            <i class="bi bi-exclamation-triangle-fill"></i>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
         </div>'
     );
 }

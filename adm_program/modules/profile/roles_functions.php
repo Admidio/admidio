@@ -158,7 +158,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             $roleMemHTML .= '&nbsp;
                         </span>
                         <span class="float-end text-right">
-                            <span class="mr-2">';
+                            <span class="me-2">';
             if ($showRoleEndDate) {
                 $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));
             } elseif ($futureMembership) {
@@ -191,7 +191,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             // only show info if system setting is activated
             if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
                 $roleMemHTML .= '<a class="admidio-icon-link admMemberInfo" id="member_info_'.$memberUuid.'" href="javascript:void(0)"><i
-                                    class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>';
+                                    class="bi bi-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>';
             }
             $roleMemHTML .= '</span>
                     </li>

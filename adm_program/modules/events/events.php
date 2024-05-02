@@ -382,7 +382,7 @@ if ($eventsResult['totalCount'] === 0) {
 
                     $outputLinkLocation .= '
                         <a class="admidio-icon-link" href="' . $routeUrl . '" target="_blank">
-                            <i class="fas fa-map" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"></i>
+                            <i class="bi bi-map-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"></i>
                         </a>';
                 }
             } else {
@@ -549,11 +549,11 @@ if ($eventsResult['totalCount'] === 0) {
                             if ($getView === 'detail') {
                                 $outputButtonParticipants = '
                                     <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                        <i class="fas fa-list"></i>' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '</button>';
+                                        <i class="bi bi-list-task"></i>' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '</button>';
                             } else {
                                 $outputButtonParticipants = '
                                     <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                        <i class="fas fa-list" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '"></i></a>';
+                                        <i class="bi bi-list-task" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '"></i></a>';
                             }
                         }
                     }
@@ -657,8 +657,8 @@ if ($eventsResult['totalCount'] === 0) {
             if ($event->isEditable() || $gSettingsManager->getBool('events_ical_export_enabled')) {
                 $page->addHtml('
                             <div class="dropdown float-end">
-                                <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                                <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">');
                 // iCal Download
                 if ($gSettingsManager->getBool('events_ical_export_enabled')) {

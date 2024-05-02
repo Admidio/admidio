@@ -106,7 +106,7 @@ $page->addJavascript(
     $("#btn_ecard_preview").click(function(event) {
         event.preventDefault();
         $("#ecard_form input[id=\'submit_action\']").val("preview");
-        $("#ecard_form textarea[name=\'ecard_message\']").text(CKEDITOR.instances.ecard_message.getData());
+        $("#ecard_form textarea[name=\'ecard_message\']").text(editor.getData());
 
         $.post({ // create an AJAX call...
             data: $("#ecard_form").serialize(), // get the form data

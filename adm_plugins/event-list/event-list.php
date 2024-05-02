@@ -130,7 +130,7 @@ if ($gSettingsManager->getInt('events_module_enabled') > 0) {
                             href="'.SecurityUtils::encodeUrl(
                         $plg_link_url,
                         array('view' => 'detail', 'dat_uuid' => $plgEvent->getValue('dat_uuid'))
-                    ). '"><i class="fas fa-angle-double-right" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                    ). '"><i class="bi bi-three-dots" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
 
                     echo '<div>'.$textPrev.'</div>';
                 }

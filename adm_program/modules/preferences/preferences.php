@@ -511,7 +511,7 @@ $formRegistration->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('common', 'registration', 'accordion_preferences', $gL10n->get('SYS_REGISTRATION'), 'fas fa-file-signature', $formRegistration->show()));
+$page->addHtml(getPreferencePanel('common', 'registration', 'accordion_preferences', $gL10n->get('SYS_REGISTRATION'), 'bi bi-card-checklist', $formRegistration->show()));
 
 // PANEL: EMAIL DISPATCH
 
@@ -890,7 +890,7 @@ $formAdmidioUpdate->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_U
 
 if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
     $html = '<a class="btn btn-secondary" id="add_another_organization" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'backup')) . '">
-            <i class="fas fa-download"></i>' . $gL10n->get('SYS_DOWNLOAD_DATABASE_BACKUP') . '</a>';
+            <i class="bi bi-download"></i>' . $gL10n->get('SYS_DOWNLOAD_DATABASE_BACKUP') . '</a>';
     $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_DATABASE_BACKUP'), $html, array('helpTextId' => 'SYS_DATABASE_BACKUP_DESC'));
 }
 $html = '<a id="donate" href="'. ADMIDIO_HOMEPAGE . 'donate.php" target="_blank">
@@ -1388,7 +1388,7 @@ $formGuestbook->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'guestbook', 'accordion_modules', $gL10n->get('GBO_GUESTBOOK'), 'fas fa-book', $formGuestbook->show()));
+$page->addHtml(getPreferencePanel('modules', 'guestbook', 'accordion_modules', $gL10n->get('GBO_GUESTBOOK'), 'bi bi-book-half', $formGuestbook->show()));
 
 // PANEL: GROUPS AND ROLES
 
@@ -1507,7 +1507,7 @@ $formCategoryReport->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'category-report', 'accordion_modules', $gL10n->get('SYS_CATEGORY_REPORT'), 'fas fa-list', $formCategoryReport->show()));
+$page->addHtml(getPreferencePanel('modules', 'category-report', 'accordion_modules', $gL10n->get('SYS_CATEGORY_REPORT'), 'bi bi-list-stars', $formCategoryReport->show()));
 
 // PANEL: MESSAGES
 
@@ -1666,7 +1666,7 @@ $formProfile->addSubmitButton(
     array('icon' => 'bi-check-lg')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'profile', 'accordion_modules', $gL10n->get('SYS_PROFILE'), 'fas fa-user', $formProfile->show()));
+$page->addHtml(getPreferencePanel('modules', 'profile', 'accordion_modules', $gL10n->get('SYS_PROFILE'), 'bi bi-person-fill', $formProfile->show()));
 
 // PANEL: EVENTS
 

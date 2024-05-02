@@ -150,7 +150,7 @@ $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
-    '<i class="fas fa-star" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>',
+    '<i class="bi bi-star-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>',
     $visibleHeadline,
     $editableHeadline,
     '&nbsp;'
@@ -198,14 +198,14 @@ while ($catRow = $categoryStatement->fetch()) {
     $htmlMoveRow = '&nbsp;';
     if ($category->getValue('cat_system') == 0 || $getType !== 'USF') {
         $htmlMoveRow = '<a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="'.$categoryUuid.'" data-direction="'.TableCategory::MOVE_UP.'">'.
-                            '<i class="fas fa-chevron-circle-up" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($addButtonText)) . '"></i></a>
+                            '<i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($addButtonText)) . '"></i></a>
                         <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="'.$categoryUuid.'" data-direction="'.TableCategory::MOVE_DOWN.'">'.
-                            '<i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
+                            '<i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
     }
 
     $htmlDefaultCategory = '&nbsp;';
     if ($category->getValue('cat_default') == 1) {
-        $htmlDefaultCategory = '<i class="fas fa-star" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>';
+        $htmlDefaultCategory = '<i class="bi bi-star-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>';
     }
 
     // create list with all roles that could view the category

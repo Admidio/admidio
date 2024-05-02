@@ -37,7 +37,7 @@
                             {/foreach}
                         {/if}
                         {if $row.existsInFileSystem == false}
-                            <i class="fas fa-exclamation-triangle" style="color:red;" data-bs-toggle="popover" data-bs-trigger="hover click" data-bs-placement="left"
+                            <i class="bi bi-exclamation-triangle-fill" style="color:red;" data-bs-toggle="popover" data-bs-trigger="hover click" data-bs-placement="left"
                                title="{$l10n->get('SYS_WARNING')}" data-bs-content="{if $row.folder}{$l10n->get('SYS_FOLDER_NOT_EXISTS')}{else}{$l10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB')}{/if}"></i>
                         {/if}
                     </td>

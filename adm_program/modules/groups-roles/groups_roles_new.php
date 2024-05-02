@@ -262,13 +262,13 @@ if (!$eventRole) {
         'rol_all_lists_view',
         $gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'),
         (bool) $role->getValue('rol_all_lists_view'),
-        array('icon' => 'fa-list')
+        array('icon' => 'bi-list-task')
     );
     $form->addCheckbox(
         'rol_approve_users',
         $gL10n->get('SYS_RIGHT_APPROVE_USERS'),
         (bool) $role->getValue('rol_approve_users'),
-        array('icon' => 'fa-file-signature')
+        array('icon' => 'bi-card-checklist')
     );
     if ($gSettingsManager->getBool('enable_mail_module')) {
         $form->addCheckbox(
@@ -282,13 +282,13 @@ if (!$eventRole) {
         'rol_edit_user',
         $gL10n->get('SYS_RIGHT_EDIT_USER'),
         (bool) $role->getValue('rol_edit_user'),
-        array('helpTextId' => 'SYS_RIGHT_EDIT_USER_DESC', 'icon' => 'fa-users-cog')
+        array('helpTextId' => 'SYS_RIGHT_EDIT_USER_DESC', 'icon' => 'bi-person-fill-gear')
     );
     $form->addCheckbox(
         'rol_profile',
         $gL10n->get('SYS_RIGHT_PROFILE'),
         (bool) $role->getValue('rol_profile'),
-        array('icon' => 'fa-user')
+        array('icon' => 'bi-person-fill')
     );
     if ((int) $gSettingsManager->get('announcements_module_enabled') > 0) {
         $form->addCheckbox(
@@ -319,7 +319,7 @@ if (!$eventRole) {
             'rol_documents_files',
             $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
             (bool) $role->getValue('rol_documents_files'),
-            array('helpTextId' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'fa-download')
+            array('helpTextId' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'bi-file-earmark-arrow-down-fill')
         );
     }
     if ((int) $gSettingsManager->get('enable_guestbook_module') > 0) {
@@ -327,7 +327,7 @@ if (!$eventRole) {
             'rol_guestbook',
             $gL10n->get('SYS_RIGHT_GUESTBOOK'),
             (bool) $role->getValue('rol_guestbook'),
-            array('icon' => 'fa-book')
+            array('icon' => 'bi-book-half')
         );
         // if not registered users can set comments than there is no need to set a role dependent right
         if (!$gSettingsManager->getBool('enable_gbook_comments4all')) {
@@ -335,7 +335,7 @@ if (!$eventRole) {
                 'rol_guestbook_comments',
                 $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),
                 (bool) $role->getValue('rol_guestbook_comments'),
-                array('icon' => 'fa-comment')
+                array('icon' => 'bi-chat-fill')
             );
         }
     }

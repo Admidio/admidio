@@ -122,7 +122,7 @@ if ($gValidLogin) {
 
     if ($plg_show_logout_link) {
         // show link for logout
-        echo '<a id="adm_logout_link" class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_SYSTEM.'/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>';
+        echo '<a id="adm_logout_link" class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_SYSTEM.'/logout.php"><i class="bi bi-box-arrow-right"></i>'.$gL10n->get('SYS_LOGOUT').'</a>';
     }
 } else {
     // create and show the login form
@@ -177,7 +177,7 @@ if ($gValidLogin) {
 
     // show links for registration and help
     if ($plg_show_register_link && $gSettingsManager->getBool('registration_enable_module')) {
-        echo '<div class="row"><a class="admidio-icon-link" href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" target="'. $plg_link_target. '"><i class="fas fa-file-signature"></i>'.$gL10n->get('SYS_REGISTRATION').'</a></div>';
+        echo '<div class="row"><a class="admidio-icon-link" href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" target="'. $plg_link_target. '"><i class="bi bi-card-checklist"></i>'.$gL10n->get('SYS_REGISTRATION').'</a></div>';
     }
 
     if ($plg_show_email_link) {

@@ -11,17 +11,23 @@
     <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'bi-file-earmark-arrow-down-fill' WHERE men_icon = 'fa-file-download'</step>
     <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'bi-envelope-fill' WHERE men_icon = 'fa-comments'</step>
     <step id="110">UPDATE %PREFIX%_menu SET men_icon = 'bi-image-fill' WHERE men_icon = 'fa-image'</step>
-    <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'fa-book' WHERE men_icon = 'guestbook.png'</step>
-    <step id="130">UPDATE %PREFIX%_menu SET men_icon = 'fa-list' WHERE men_icon = 'lists.png'</step>
-    <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'bi-link-45deg' WHERE men_icon = 'fa-link'</step>
-    <step id="160">UPDATE %PREFIX%_menu SET men_icon = 'bi-person-vcard-fill' WHERE men_icon = 'fa-address-card'</step>
-    <step id="170">UPDATE %PREFIX%_menu SET men_icon = 'bi-people-fill' WHERE men_icon = 'fa-users'</step>
-    <step id="180">UPDATE %PREFIX%_menu SET men_icon = 'fa-database' WHERE men_icon = 'backup.png'</step>
-    <step id="190">UPDATE %PREFIX%_menu SET men_icon = 'bi-gear-fill' WHERE men_icon = 'fa-cog'</step>
-    <step id="200">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-tie' WHERE men_icon = 'roles.png'</step>
-    <step id="210">UPDATE %PREFIX%_menu SET men_icon = 'bi-menu-button-wide-fill' WHERE men_icon = 'fa-stream'</step>
-    <step id="220">UPDATE %PREFIX%_user_fields SET usf_value_list = 'bi-gender-male|SYS_MALE
+    <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'bi-link-45deg' WHERE men_icon = 'fa-link'</step>
+    <step id="130">UPDATE %PREFIX%_menu SET men_icon = 'bi-person-vcard-fill' WHERE men_icon = 'fa-address-card'</step>
+    <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'bi-people-fill' WHERE men_icon = 'fa-users'</step>
+    <step id="145">UPDATE %PREFIX%_menu SET men_icon = 'bi-list-stars' WHERE men_icon = 'fa-list-ul'</step>
+    <step id="150">UPDATE %PREFIX%_menu SET men_icon = 'bi-gear-fill' WHERE men_icon = 'fa-cog'</step>
+    <step id="155">UPDATE %PREFIX%_menu SET men_icon = 'bi-card-checklist' WHERE men_icon = 'fa-file-signature'</step>
+    <step id="160">UPDATE %PREFIX%_menu SET men_icon = 'bi-menu-button-wide-fill' WHERE men_icon = 'fa-stream'</step>
+    <step id="165">UPDATE %PREFIX%_menu SET men_icon = 'bi-book-half' WHERE men_icon = 'fa-book'</step>
+    <step id="170">UPDATE %PREFIX%_user_fields SET usf_value_list = 'bi-gender-male|SYS_MALE
 bi-gender-female|SYS_FEMALE
 bi-gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'fa-mars|%'</step>
+    <step id="180">UPDATE %PREFIX%_user_fields SET usf_icon = 'facebook' WHERE usf_name_intern = 'FACEBOOK'</step>
+    <step id="190">UPDATE %PREFIX%_user_fields SET usf_icon = 'instagram' WHERE usf_name_intern = 'INSTAGRAM'</step>
+    <step id="200">UPDATE %PREFIX%_user_fields SET usf_icon = 'linkedin' WHERE usf_name_intern = 'LINKEDIN'</step>
+    <step id="210">UPDATE %PREFIX%_user_fields SET usf_icon = 'mastodon' WHERE usf_name_intern = 'MASTODON'</step>
+    <step id="220">UPDATE %PREFIX%_user_fields SET usf_icon = 'skype' WHERE usf_name_intern = 'SKYPE'</step>
+    <step id="230">UPDATE %PREFIX%_user_fields SET usf_icon = 'twitter-x' WHERE usf_name_intern = 'TWITTER'</step>
+    <step id="230">UPDATE %PREFIX%_user_fields SET usf_icon = null WHERE usf_name_intern = 'XING'</step>
     <step>stop</step>
 </update>

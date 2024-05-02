@@ -103,8 +103,8 @@ if ($roomsStatement->rowCount() === 0) {
             <div class="card-header">
                 <i class="bi bi-house-door-fill"></i>' . $room->getValue('room_name') . '
                 <div class="dropdown float-end">
-                    <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                    <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)).'">
                             <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>

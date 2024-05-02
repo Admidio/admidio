@@ -42,7 +42,7 @@ if ($getModeration && !$gCurrentUser->editGuestbookRight()) {
 if ($getGboUuid !== '') {
     $gNavigation->addUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'));
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'), 'fa-book');
+    $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'), 'bi-book-half');
 }
 
 // create html page object
@@ -204,7 +204,7 @@ if ($countGuestbookEntries === 0) {
         $page->addHtml('
         <div class="card admidio-blog" id="gbo_'.$gboUuid.'">
             <div class="card-header">
-                <i class="fas fa-book"></i>'.
+                <i class="bi bi-book-half"></i>'.
                 $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gboName, $guestbook->getValue(
                     'gbo_timestamp_create',
                     $gSettingsManager->getString('system_date')
@@ -228,8 +228,8 @@ if ($countGuestbookEntries === 0) {
         if ($gCurrentUser->editGuestbookRight()) {
             $page->addHtml('
                     <div class="dropdown float-end">
-                        <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                        <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
                                 <i class="bi bi-pencil-square"></i> '.$gL10n->get('SYS_EDIT').'</a>
@@ -287,12 +287,12 @@ if ($countGuestbookEntries === 0) {
             // this link will be shown when comments where loaded
             $page->addHtml('
                     <a id="admCommentsVisible_'. $gboUuid. '" class="btn admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayOthers. ';">
-                        <i class="fas fa-comment-slash"></i>'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
+                        <i class="bi bi-chat-fill-slash"></i>'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
 
             // this link will be invisible when comments where loaded
             $page->addHtml('
                     <a id="admCommentsInvisible_'. $gboUuid. '" class="btn admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayShowComments. ';">
-                        <i class="fas fa-comment"></i>'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
+                        <i class="bi bi-chat-fill"></i>'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
 
             // Hier ist das div, in das die Kommentare reingesetzt werden
             $page->addHtml('<div id="comments_'. $gboUuid. '" class="admidio-guestbook-comments">');

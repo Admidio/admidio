@@ -366,10 +366,7 @@ class ProfileFields
         // special case for type CHECKBOX and no value is there, then show unchecked checkbox
         else {
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX') {
-                $value = '<span class="fa-stack">
-                    <i class="fas fa-square-full fa-stack-1x"></i>
-                    <i class="fas fa-square fa-stack-1x fa-inverse"></i>
-                </span>';
+                $value = '<i class="bi bi-square"></i>';
 
                 // if field has url then create a link
                 $usfUrl = $this->mProfileFields[$fieldNameIntern]->getValue('usf_url');

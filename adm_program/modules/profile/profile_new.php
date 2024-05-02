@@ -257,7 +257,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 array(
                     'property'   => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $usfNameIntern === 'COUNTRY') {
@@ -284,7 +284,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'property'     => $fieldProperty,
                     'defaultValue' => $defaultValue,
                     'helpTextId'   => $helpId,
-                    'icon'         => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'         => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {
@@ -303,7 +303,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'defaultValue'      => (int) $user->getValue($usfNameIntern, 'database'),
                     'showNoValueButton' => $showDummyRadioButton,
                     'helpTextId'        => $helpId,
-                    'icon'              => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'              => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'TEXT_BIG') {
@@ -316,7 +316,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'maxLength'  => 4000,
                     'property'   => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } else {
@@ -350,7 +350,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'maxLength'  => $maxlength,
                     'property'   => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         }

@@ -235,8 +235,8 @@ class TableUserField extends TableAccess
 
                     break;
                 case 'usf_icon':
-                    // if value is font awesome icon or imagefile or imageurl then show image
-                    $value = Image::getIconHtml($value, $this->getValue('usf_name'));
+                    // if value is bootstrap icon then show image
+                    $value = '<i class="bi bi-' . $value . '"></i>';
 
                     break;
                 default:
@@ -432,8 +432,8 @@ class TableUserField extends TableAccess
                         $newValue = $category->getValue('cat_id');
                     }
                 } elseif ($columnName === 'usf_icon' && $newValue !== '') {
-                    // check if font awesome syntax is used
-                    if (!preg_match('/fa-[a-zA-z0-9]/', $newValue)) {
+                    // check if bootstrap icon syntax is used
+                    if (!preg_match('/[a-zA-z0-9]/', $newValue)) {
                         throw new AdmException('SYS_INVALID_FONT_AWESOME');
                     }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {

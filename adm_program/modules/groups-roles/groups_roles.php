@@ -95,7 +95,7 @@ try {
                 'menu_item_groups_roles_show_permissions',
                 $gL10n->get('SYS_SHOW_PERMISSIONS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('show' => 'permissions', 'cat_uuid' => $getCatUuid, 'role_type' => $getRoleType)),
-                'fa-user-shield'
+                'bi-shield-lock-fill'
             );
         }
 

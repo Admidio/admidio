@@ -158,8 +158,8 @@ if ($announcementsCount === 0) {
         if ($announcement->isEditable()) {
             $page->addHtml('
                     <div class="dropdown float-end">
-                        <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                        <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid, 'copy' => '1')).'">
                                 <i class="bi bi-copy" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>

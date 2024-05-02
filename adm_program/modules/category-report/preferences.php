@@ -269,7 +269,7 @@ $html = '<a id="add_config" class="icon-text-link" href="' . SecurityUtils::enco
             <i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_ANOTHER_CONFIG') . '
         </a>';
 $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
-                <i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '
+                <i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '
             </div>';
 $formConfigurations->addCustomContent('', $html, array('helpTextId' => $htmlDesc));
 $formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));

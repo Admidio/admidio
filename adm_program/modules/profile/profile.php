@@ -80,7 +80,7 @@ if ($userId === $gCurrentUserId) {
 
 // if user UUID was not set and own profile should be shown then initialize navigation
 if (!isset($_GET['user_uuid'])) {
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-user');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-person-fill');
 } else {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }
@@ -307,7 +307,7 @@ $page->addHtml('
 
                                     if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
                                         $userName .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)) . '" title="' . $gL10n->get('SYS_WRITE_PM') . '">' .
-                                            '<i class="fas bi-chat-left-fill"></i>' . $user->getValue('usr_login_name') . '</a>';
+                                            '<i class="bi bi-chat-left-fill"></i>' . $user->getValue('usr_login_name') . '</a>';
                                     } else {
                                         $userName .= $user->getValue('usr_login_name');
                                     }
@@ -554,14 +554,14 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_approve_users'],
                 'right' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'),
-                'icon'  => 'fa-file-signature'
+                'icon'  => 'bi-card-checklist'
             );
         }
         if ($user->checkRolesRight('rol_edit_user')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_edit_user'],
                 'right' => $gL10n->get('SYS_RIGHT_EDIT_USER'),
-                'icon'  => 'fa-users-cog'
+                'icon'  => 'bi-person-fill-gear'
             );
         }
 
@@ -576,7 +576,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_profile'],
                 'right' => $gL10n->get('SYS_RIGHT_PROFILE'),
-                'icon'  => 'fa-user'
+                'icon'  => 'bi-person-fill'
             );
         }
         if ($user->checkRolesRight('rol_announcements') && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
@@ -604,21 +604,21 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_documents_files'],
                 'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
-                'icon'  => 'fa-download'
+                'icon'  => 'bi-file-earmark-arrow-down-fill'
             );
         }
         if ($user->checkRolesRight('rol_guestbook') && (int) $gSettingsManager->get('enable_guestbook_module') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_guestbook'],
                 'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK'),
-                'icon'  => 'fa-book'
+                'icon'  => 'bi-book-half'
             );
         }
         if ($user->checkRolesRight('rol_guestbook_comments') && (int) $gSettingsManager->get('enable_guestbook_module') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_guestbook_comments'],
                 'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),
-                'icon'  => 'fa-comment'
+                'icon'  => 'bi-chat-fill'
             );
         }
         if ($user->checkRolesRight('rol_weblinks') && (int) $gSettingsManager->get('enable_weblinks_module') > 0) {
@@ -632,14 +632,14 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_all_lists_view'],
                 'right' => $gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'),
-                'icon'  => 'fa-list'
+                'icon'  => 'bi-list-task'
             );
         }
 
         foreach ($profileRightsArray as $profileRight) {
             $page->addHtml('<div class="col-sm-6 col-md-4 admidio-profile-user-right" data-bs-toggle="popover" data-bs-html="true"
                 data-bs-trigger="hover click" data-bs-placement="auto" data-bs-content="'.$gL10n->get('SYS_ASSIGNED_BY_ROLES'). ':
-                <strong>'. $profileRight['roles'].'</strong>"><i class="fas ' . $profileRight['icon'] . '"></i>'. $profileRight['right']. '</div>');
+                <strong>'. $profileRight['roles'].'</strong>"><i class="bi ' . $profileRight['icon'] . '"></i>'. $profileRight['right']. '</div>');
         }
     } else {
         $page->addHtml('<div class="col-sm-12">'.$gL10n->get('SYS_NO_PERMISSIONS_ASSIGNED').'</div>');
@@ -665,7 +665,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
     if ($gCurrentUser->assignRoles()) {
         $page->addHtml('<a class="btn btn-secondary float-end openPopup" id="profile_role_memberships_change" data-class="modal-lg"
                     href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => '1')).'">
-                    <i class="bi bi-pencil-square"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
+                    <i class="bi bi-pencil-square me-1"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
     }
     $page->addHtml('</div>
         <div class="card-body" id="profile_roles_box_body">
@@ -884,7 +884,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
             // only show info if system setting is activated
             if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
                 $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.(int) $relation->getValue('ure_id').'" href="javascript:void(0)"><i
-                    class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>');
+                    class="bi bi-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>');
             }
 
             $page->addHtml('</span></div>');

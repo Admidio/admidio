@@ -6,7 +6,7 @@
         <p>{$l10n->get("SYS_PROCESSING_ERROR_DESC")}</p>
         <p>
             <div class="alert alert-danger alert-small" role="alert">
-                <i class="fas fa-exclamation-circle"></i>
+                <i class="bi bi-exclamation-triangle-fill"></i>
                 <strong>{$messageText}</strong>
             </div>
         </p>

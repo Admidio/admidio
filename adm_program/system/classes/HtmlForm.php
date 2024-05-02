@@ -417,6 +417,7 @@ class HtmlForm
         }
 
         $javascriptCode = '
+        let editor;
         ClassicEditor
         .create( document.querySelector( "#' . $id . '" ), {
             ' . $toolbarJS . '
@@ -425,6 +426,9 @@ class HtmlForm
                 uploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php?id=' . $id . '"
             }
         } )
+        .then( newEditor => {
+            editor = newEditor;
+        })
         .catch( error => {
             console.error( error );
         } );';

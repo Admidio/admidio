@@ -113,7 +113,7 @@ if (Component::isVisible('DOCUMENTS-FILES')) {
 
         if ($countVisibleDownloads > 0) {
             echo '<li class="list-group-item">
-                <a class="admidio-icon-link" href="' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php"><i class="fas fa-list"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS') . '</a>
+                <a class="admidio-icon-link" href="' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php"><i class="bi bi-list-task"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS') . '</a>
             </li>';
         }
         echo '</ul>';

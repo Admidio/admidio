@@ -53,7 +53,7 @@ if ($getCommentGboUuid !== '') {
             echo '
             <div class="card admidio-blog-comment" id="gbc_'.$gbcUuid.'">
                 <div class="card-header">
-                    <i class="fas fa-comment"></i>' .
+                    <i class="bi bi-chat-fill"></i>' .
                         $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gbComment->getValue('gbc_name'), $gbComment->getValue(
                             'gbc_timestamp_create',
                             $gSettingsManager->getString('system_date')
@@ -69,8 +69,8 @@ if ($getCommentGboUuid !== '') {
             if ($gCurrentUser->editGuestbookRight()) {
                 echo '
                         <div class="dropdown float-end">
-                            <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                            <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbc_uuid' => $gbcUuid)).'">
                                     <i class="bi bi-pencil-square"></i> '.$gL10n->get('SYS_EDIT').'</a>

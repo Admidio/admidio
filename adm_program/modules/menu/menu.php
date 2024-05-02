@@ -54,7 +54,7 @@ $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
     $gL10n->get('SYS_URL'),
-    '<i class="fas fa-star" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>',
+    '<i class="bi bi-star-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>',
     '&nbsp;'
 );
 $menuOverview->setColumnAlignByArray(array('left', 'left', 'left', 'center', 'right'));
@@ -104,13 +104,13 @@ while ($mainMen = $mainMenStatement->fetch()) {
         }
 
         $htmlMoveRow = '<a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_UP.'">'.
-                            '<i class="fas fa-chevron-circle-up" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
+                            '<i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
                         <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_DOWN.'">'.
-                            '<i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
+                            '<i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
         if ($menuRow['men_standard']) {
-            $htmlStandardMenu = '<i class="fas fa-star" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>';
+            $htmlStandardMenu = '<i class="bi bi-star-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>';
         }
 
         $menuAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('menu_uuid' => $menuRow['men_uuid'])). '">'.

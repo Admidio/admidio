@@ -105,7 +105,7 @@ $subHeadline = $config[$report->getConfiguration()]['name'];
 $filename    = $gCurrentOrganization->getValue('org_shortname').'-'.$headline.'-'.$subHeadline;
 
 if ($getMode === 'html') {
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-list-ul');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-list-stars');
 }
 
 if ($getMode !== 'csv') {
