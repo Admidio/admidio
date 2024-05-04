@@ -1,4 +1,5 @@
 <?php
+
 /**
  ***********************************************************************************************
  * Class manages access to database table adm_folders
@@ -113,7 +114,7 @@ class TableFolder extends TableAccess
     {
         $newFolderFileName = urldecode($newFolderFileName);
         $newObjectPath = $this->getFullFolderPath() . '/' . $newFolderFileName;
-        $folderId = (int) $this->getValue('fol_id');
+        $folderId = (int)$this->getValue('fol_id');
 
         // check if a file or folder should be created
         if (is_file($newObjectPath)) {
@@ -206,7 +207,7 @@ class TableFolder extends TableAccess
     {
         global $gLogger;
 
-        $folId = (int) $this->getValue('fol_id');
+        $folId = (int)$this->getValue('fol_id');
         $folderPath = '';
 
         if ($folderId === 0) {
@@ -214,7 +215,7 @@ class TableFolder extends TableAccess
                 return false;
             }
 
-            $folderId = (int) $this->getValue('fol_id');
+            $folderId = (int)$this->getValue('fol_id');
             $folderPath = $this->getFullFolderPath();
         }
 
@@ -222,13 +223,13 @@ class TableFolder extends TableAccess
 
         $subfoldersStatement = $this->getSubfolderStatement($folderId);
 
-        while ($rowFolId = (int) $subfoldersStatement->fetchColumn()) {
+        while ($rowFolId = (int)$subfoldersStatement->fetchColumn()) {
             // rekursiver Aufruf mit jedem einzelnen Unterordner
             $this->delete($rowFolId);
         }
 
         // In the database delete the files of the current folder_id
-        $sqlDeleteFiles = 'DELETE FROM '.TBL_FILES.'
+        $sqlDeleteFiles = 'DELETE FROM ' . TBL_FILES . '
                             WHERE fil_fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlDeleteFiles, array($folderId));
 
@@ -244,7 +245,7 @@ class TableFolder extends TableAccess
         }
 
         // Delete the entry of the folder itself in the database
-        $sqlDeleteFolder = 'DELETE FROM '.TBL_FOLDERS.'
+        $sqlDeleteFolder = 'DELETE FROM ' . TBL_FOLDERS . '
                              WHERE fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlDeleteFolder, array($folderId));
 
@@ -288,7 +289,7 @@ class TableFolder extends TableAccess
         }
 
         if ($folderId === 0) {
-            $folderId = (int) $this->getValue('fol_id');
+            $folderId = (int)$this->getValue('fol_id');
         }
 
         $this->db->startTransaction();
@@ -296,7 +297,7 @@ class TableFolder extends TableAccess
         if ($recursive) {
             $subfoldersStatement = $this->getSubfolderStatement($folderId);
 
-            while ($folId = (int) $subfoldersStatement->fetchColumn()) {
+            while ($folId = (int)$subfoldersStatement->fetchColumn()) {
                 // recursive call for every sub-folder
                 $this->editRolesOnFolder($mode, $rolesRightNameIntern, $rolesArray, true, $folId);
             }
@@ -323,21 +324,21 @@ class TableFolder extends TableAccess
     public function editPublicFlagOnFolder(bool $publicFlag, int $folderId = 0)
     {
         if ($folderId === 0) {
-            $folderId = (int) $this->getValue('fol_id');
-            $this->setValue('fol_public', (int) $publicFlag);
+            $folderId = (int)$this->getValue('fol_id');
+            $this->setValue('fol_public', (int)$publicFlag);
         }
 
         $subfoldersStatement = $this->getSubfolderStatement($folderId);
 
-        while ($folId = (int) $subfoldersStatement->fetchColumn()) {
+        while ($folId = (int)$subfoldersStatement->fetchColumn()) {
             // recursive call with every single subfolder
             $this->editPublicFlagOnFolder($publicFlag, $folId);
         }
 
-        $sqlUpdate = 'UPDATE '.TBL_FOLDERS.'
+        $sqlUpdate = 'UPDATE ' . TBL_FOLDERS . '
                          SET fol_public = ? -- $publicFlag
                        WHERE fol_id = ? -- $folderId';
-        $this->db->queryPrepared($sqlUpdate, array((int) $publicFlag, $folderId));
+        $this->db->queryPrepared($sqlUpdate, array((int)$publicFlag, $folderId));
     }
 
     /**
@@ -370,11 +371,11 @@ class TableFolder extends TableAccess
 
         // Get all files of the current folder
         $sqlFiles = 'SELECT *
-                       FROM '.TBL_FILES.'
-                      INNER JOIN '.TBL_FOLDERS.' ON fol_id = fil_fol_id
+                       FROM ' . TBL_FILES . '
+                      INNER JOIN ' . TBL_FOLDERS . ' ON fol_id = fil_fol_id
                       WHERE fil_fol_id = ? -- $this->getValue(\'fol_id\')
                    ORDER BY fil_name';
-        $filesStatement = $this->db->queryPrepared($sqlFiles, array((int) $this->getValue('fol_id')));
+        $filesStatement = $this->db->queryPrepared($sqlFiles, array((int)$this->getValue('fol_id')));
 
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetch()) {
@@ -395,18 +396,18 @@ class TableFolder extends TableAccess
 
             if ($addToArray) {
                 $files[] = array(
-                    'fil_id'          => $rowFiles['fil_id'],
-                    'fil_uuid'        => $rowFiles['fil_uuid'],
-                    'fil_name'        => $rowFiles['fil_name'],
+                    'fil_id' => $rowFiles['fil_id'],
+                    'fil_uuid' => $rowFiles['fil_uuid'],
+                    'fil_name' => $rowFiles['fil_name'],
                     'fil_description' => $rowFiles['fil_description'],
-                    'fil_timestamp'   => $rowFiles['fil_timestamp'],
-                    'fil_locked'      => $rowFiles['fil_locked'],
-                    'fil_exists'      => $fileExists,
-                    'fil_size'        => $fileSize,
-                    'fil_counter'     => $rowFiles['fil_counter'],
-                    'fol_id'          => $rowFiles['fol_id'],
-                    'fol_name'        => $rowFiles['fol_name'],
-                    'fol_path'        => $rowFiles['fol_path']
+                    'fil_timestamp' => $rowFiles['fil_timestamp'],
+                    'fil_locked' => $rowFiles['fil_locked'],
+                    'fil_exists' => $fileExists,
+                    'fil_size' => $fileSize,
+                    'fil_counter' => $rowFiles['fil_counter'],
+                    'fol_id' => $rowFiles['fol_id'],
+                    'fol_name' => $rowFiles['fol_name'],
+                    'fol_path' => $rowFiles['fol_path']
                 );
             }
         }
@@ -419,7 +420,8 @@ class TableFolder extends TableAccess
      * AdmException if the user has no right to see the folder or the folder id doesn't exist.
      * @param string $folderUuid The UUID of the folder. If the UUID is empty then the root folder will be shown.
      * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
-     * @throws AdmException
+     * @throws AdmException Exception with the relevant message text. If message text = 'LOGIN' than
+     *                      login page should be shown.
      * @throws Exception
      */
     public function getFolderForDownload(string $folderUuid): bool
@@ -441,7 +443,7 @@ class TableFolder extends TableAccess
         $this->readData($condition, $queryParams);
 
         // Check if a dataset is found
-        if ((int) $this->getValue('fol_id') === 0) {
+        if ((int)$this->getValue('fol_id') === 0) {
             throw new AdmException('SYS_FOLDER_NOT_FOUND', array($folderUuid));
         }
 
@@ -450,19 +452,14 @@ class TableFolder extends TableAccess
             return true;
         }
 
-        // If folder is locked (and no download-admin-rights) => throw exception
-        if ($this->getValue('fol_locked')) {
-            $this->clear();
-            throw new AdmException('SYS_FOLDER_NO_RIGHTS');
-        }
-
         // If folder is public (and file is not locked) => allow
-        if ($this->getValue('fol_public')) {
+        if ($this->getValue('fol_public') && !$this->getValue('fol_locked')) {
             return true;
         }
 
         // check if user has a membership in a role that is assigned to the current folder
-        if ($this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships())) {
+        if ($this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships())
+            && !$this->getValue('fol_locked')) {
             return true;
         }
 
@@ -470,14 +467,18 @@ class TableFolder extends TableAccess
         if ($gValidLogin) {
             throw new AdmException('SYS_FOLDER_NO_RIGHTS');
         } else {
-            throw new AdmException('SYS_FOLDER_NO_FILES_VISITOR');
+            if ($folderUuid !== '') {
+                throw new AdmException('LOGIN');
+            } else {
+                throw new AdmException('SYS_FOLDER_NO_FILES_VISITOR');
+            }
         }
     }
 
     /**
      * Create a unique folder name for the root folder of the download module that contains
      * the shortname of the current organization.
-     * @param string $type                  The folder type of which the root should be determined.
+     * @param string $type The folder type of which the root should be determined.
      *                                      If no type is set than **documents** will be set.
      * @param string $organizationShortname The shortname of the organization for which the folder name should be returned
      *                                      If no shortname is set than shortname of the current organization will be set.
@@ -517,8 +518,8 @@ class TableFolder extends TableAccess
         global $gL10n;
 
         $roleNames = $this->folderViewRolesObject->getRolesNames();
-        if(count($roleNames) === 0) {
-            $roleNames[] = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+        if (count($roleNames) === 0) {
+            $roleNames[] = $gL10n->get('SYS_ALL') . ' (' . $gL10n->get('SYS_ALSO_VISITORS') . ')';
         }
         return $roleNames;
     }
@@ -543,7 +544,7 @@ class TableFolder extends TableAccess
     {
         // select all sub-folders of the current folder
         $sql = 'SELECT ' . implode(',', $columns) . '
-                  FROM '.TBL_FOLDERS.'
+                  FROM ' . TBL_FOLDERS . '
                  WHERE fol_fol_id_parent = ? -- $folderId';
 
         return $this->db->queryPrepared($sql, array($folderId));
@@ -560,12 +561,12 @@ class TableFolder extends TableAccess
 
         // Get all subfolder of the current folder
         $sqlFolders = 'SELECT *
-                         FROM '.TBL_FOLDERS.'
+                         FROM ' . TBL_FOLDERS . '
                         WHERE fol_type          = \'DOCUMENTS\'
                           AND fol_fol_id_parent = ? -- $this->getValue(\'fol_id\')
                           AND fol_org_id        = ? -- $GLOBALS[\'gCurrentOrgId\']
                      ORDER BY fol_name';
-        $foldersStatement = $this->db->queryPrepared($sqlFolders, array((int) $this->getValue('fol_id'), $GLOBALS['gCurrentOrgId']));
+        $foldersStatement = $this->db->queryPrepared($sqlFolders, array((int)$this->getValue('fol_id'), $GLOBALS['gCurrentOrgId']));
 
         $folders = array();
 
@@ -577,14 +578,12 @@ class TableFolder extends TableAccess
             // If user has adminDocumentsFiles, show it
             if ($gCurrentUser->adminDocumentsFiles()) {
                 $addToArray = true;
-            }
-            // If user hasn't adminDocumentsFiles, only show if folder exists
+            } // If user hasn't adminDocumentsFiles, only show if folder exists
             elseif ($folderExists) {
                 // If folder is public and not locked, show it
                 if ($rowFolders['fol_public'] && !$rowFolders['fol_locked']) {
                     $addToArray = true;
-                }
-                // If user has a membership in a role that is assigned to the current subfolder, show it
+                } // If user has a membership in a role that is assigned to the current subfolder, show it
                 elseif ($gValidLogin) {
                     $subfolderViewRolesObject = new RolesRights($this->db, 'folder_view', $rowFolders['fol_id']);
 
@@ -596,15 +595,15 @@ class TableFolder extends TableAccess
 
             if ($addToArray) {
                 $folders[] = array(
-                    'fol_id'          => $rowFolders['fol_id'],
-                    'fol_uuid'        => $rowFolders['fol_uuid'],
-                    'fol_name'        => $rowFolders['fol_name'],
+                    'fol_id' => $rowFolders['fol_id'],
+                    'fol_uuid' => $rowFolders['fol_uuid'],
+                    'fol_name' => $rowFolders['fol_name'],
                     'fol_description' => $rowFolders['fol_description'],
-                    'fol_path'        => $rowFolders['fol_path'],
-                    'fol_timestamp'   => $rowFolders['fol_timestamp'],
-                    'fol_public'      => $rowFolders['fol_public'],
-                    'fol_exists'      => $folderExists,
-                    'fol_locked'      => $rowFolders['fol_locked']
+                    'fol_path' => $rowFolders['fol_path'],
+                    'fol_timestamp' => $rowFolders['fol_timestamp'],
+                    'fol_public' => $rowFolders['fol_public'],
+                    'fol_exists' => $folderExists,
+                    'fol_locked' => $rowFolders['fol_locked']
                 );
             }
         }
@@ -616,7 +615,7 @@ class TableFolder extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with **setValue** than the manipulated value is returned.
@@ -673,12 +672,12 @@ class TableFolder extends TableAccess
         $folder->readDataByUuid($destFolderUUID);
 
         if ($folder->hasUploadRight()) {
-            FileSystemUtils::moveDirectory($this->getFullFolderPath(), $folder->getFullFolderPath().'/'.$this->getValue('fol_name'));
+            FileSystemUtils::moveDirectory($this->getFullFolderPath(), $folder->getFullFolderPath() . '/' . $this->getValue('fol_name'));
 
             $this->db->startTransaction();
             // save new parent folder
             $this->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
-            $this->setValue('fol_path', $folder->getValue('fol_path').'/'.$folder->getValue('fol_name'));
+            $this->setValue('fol_path', $folder->getValue('fol_path') . '/' . $folder->getValue('fol_name'));
             $this->setValue('fol_public', $folder->getValue('fol_public'));
             $this->setValue('fol_locked', $folder->getValue('fol_locked'));
             $this->save();
@@ -708,8 +707,8 @@ class TableFolder extends TableAccess
     protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
-            $folId = (int) $this->getValue('fol_id');
-            $this->folderViewRolesObject   = new RolesRights($this->db, 'folder_view', $folId);
+            $folId = (int)$this->getValue('fol_id');
+            $this->folderViewRolesObject = new RolesRights($this->db, 'folder_view', $folId);
             $this->folderUploadRolesObject = new RolesRights($this->db, 'folder_upload', $folId);
 
             return true;
@@ -743,7 +742,7 @@ class TableFolder extends TableAccess
     public function rename(string $newName, string $newPath, int $folderId = 0)
     {
         if ($folderId === 0) {
-            $folderId = (int) $this->getValue('fol_id');
+            $folderId = (int)$this->getValue('fol_id');
             $this->setValue('fol_name', $newName);
             $this->save();
         }
@@ -751,7 +750,7 @@ class TableFolder extends TableAccess
         $this->db->startTransaction();
 
         // Set new path in database for folderId
-        $sqlUpdate = 'UPDATE '.TBL_FOLDERS.'
+        $sqlUpdate = 'UPDATE ' . TBL_FOLDERS . '
                          SET fol_path = ? -- $newPath
                        WHERE fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlUpdate, array($newPath, $folderId));
