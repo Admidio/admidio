@@ -1,4 +1,5 @@
 <?php
+
 /**
  ***********************************************************************************************
  * Class manages access to database table adm_files
@@ -104,7 +105,7 @@ class TableFile extends TableAccess
         $this->readDataByUuid($fileUuid);
 
         // Check if a dataset is found
-        if ((int) $this->getValue('fil_id') === 0) {
+        if ((int)$this->getValue('fil_id') === 0) {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
@@ -125,7 +126,7 @@ class TableFile extends TableAccess
         }
 
         // check if user has a membership in a role that is assigned to the current folder
-        $folderViewRolesObject = new RolesRights($this->db, 'folder_view', (int) $this->getValue('fol_id'));
+        $folderViewRolesObject = new RolesRights($this->db, 'folder_view', (int)$this->getValue('fol_id'));
 
         if ($folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships())) {
             return true;
@@ -156,7 +157,7 @@ class TableFile extends TableAccess
     /**
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
@@ -199,7 +200,7 @@ class TableFile extends TableAccess
         $folder->readDataByUuid($destFolderUUID);
 
         if ($folder->hasUploadRight()) {
-            FileSystemUtils::moveFile($this->getFullFilePath(), $folder->getFullFolderPath().'/'.$this->getValue('fil_name'));
+            FileSystemUtils::moveFile($this->getFullFilePath(), $folder->getFullFolderPath() . '/' . $this->getValue('fil_name'));
 
             $this->setValue('fil_fol_id', $folder->getValue('fol_id'));
             $this->save();
@@ -252,6 +253,7 @@ class TableFile extends TableAccess
 
             $message = $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
                 . $gL10n->get('SYS_FILE') . ': ' . $this->getValue('fil_name') . '<br />'
+                . $gL10n->get('SYS_FOLDER') . ': ' . $this->getValue('fol_name') . '<br />'
                 . $gL10n->get('SYS_CREATED_BY') . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get('SYS_CREATED_AT') . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
                 . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php?folder_uuid=' . $this->getValue('fol_uuid') . '<br />';

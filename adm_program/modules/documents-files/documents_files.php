@@ -33,7 +33,7 @@ try {
     if ($currentFolder->getValue('fol_fol_id_parent') == null) {
         $headline = $gL10n->get('SYS_DOCUMENTS_FILES');
     } else {
-        $headline = $gL10n->get('SYS_DOCUMENTS_FILES').' - '.$currentFolder->getValue('fol_name');
+        $headline = $gL10n->get('SYS_DOCUMENTS_FILES') . ' - ' . $currentFolder->getValue('fol_name');
     }
 
     if ($getFolderUUID !== '') {
@@ -56,14 +56,14 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_documents_upload_files',
                 $gL10n->get('SYS_UPLOAD_FILES'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'uuid' => $getFolderUUID)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/file_upload.php', array('module' => 'documents_files', 'uuid' => $getFolderUUID)),
                 'fa-upload'
             );
 
             $page->addPageFunctionsMenuItem(
                 'menu_item_documents_create_folder',
                 $gL10n->get('SYS_CREATE_FOLDER'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_uuid' => $getFolderUUID)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_new.php', array('folder_uuid' => $getFolderUUID)),
                 'fa-plus-circle'
             );
 
@@ -71,7 +71,7 @@ try {
                 $page->addPageFunctionsMenuItem(
                     'menu_item_documents_edit_folder',
                     $gL10n->get('SYS_EDIT_FOLDER'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $getFolderUUID)),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/rename.php', array('folder_uuid' => $getFolderUUID)),
                     'fa-edit'
                 );
             }
@@ -81,7 +81,7 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_documents_permissions',
                 $gL10n->get('SYS_PERMISSIONS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_uuid' => $getFolderUUID)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_config.php', array('folder_uuid' => $getFolderUUID)),
                 'fa-lock'
             );
         }
@@ -90,6 +90,10 @@ try {
     $page->readData($getFolderUUID);
     $page->createContentList();
     $page->show();
-} catch (AdmException | Exception | \Smarty\Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    if ($e->getMessage() === 'LOGIN') {
+        require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
+    } else {
+        $gMessage->show($e->getMessage());
+    }
 }
