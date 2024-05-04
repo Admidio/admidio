@@ -123,8 +123,13 @@ try {
         }
     } elseif ($getMode === 'send_login') {
         // User already exists and has a login than sent access data with a new password
+        $user = new User($gDb, $gProfileFields);
+        $user->readDataByUuid($getUserUuid);
+        $user->sendNewPassword();
 
-        $registrationUser->sendNewPassword();
+        // delete the registration because it isn't needed anymore
+        $registrationUser->notSendEmail();
+        $registrationUser->delete();
         admRedirect(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
         // => EXIT
     }
