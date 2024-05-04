@@ -200,7 +200,7 @@ class ListConfiguration extends TableLists
             switch ((int)$content) {
                 case ModuleEvents::MEMBER_APPROVAL_STATE_INVITED:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_INVITED');
-                    $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
+                    $htmlText = '<i class="bi bi-calendar2-check-fill admidio-icon-chain"></i>' . $text;
                     $buttonClass = '';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:

@@ -378,7 +378,7 @@ class HtmlTable extends HtmlTableBasic
                 $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><i class="bi bi-exclamation-triangle-fill"></i>' . $message . '</div>';
                 break;
             case 'error':
-                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><i class="fas fa-exclamation-circle"></i>' . $message . '</div>';
+                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><i class="bi bi-exclamation-circle-fill"></i>' . $message . '</div>';
                 break;
             default:
                 $this->messageNoRowsFound = $message;

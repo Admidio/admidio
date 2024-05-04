@@ -144,9 +144,9 @@ class Image
 
     /**
      * Method creates a short html snippet that contains an image tag with an icon.
-     * The icon itself could be a font awesome icon name or a full url to an icon
+     * The icon itself could be a bootstrap icon name or a full url to an icon
      * or only a filename than the icon must be in the theme folder **images**.
-     * @param string $icon     The font-awesome icon-name or url or filename
+     * @param string $icon     The bootstrap icon-name or url or filename
      * @param string $text     A text that should be shown on mouseover
      * @param string $cssClass Optional an additional css class for the icon can be set
      * @return string Html snippet that contains an image tag
@@ -157,14 +157,14 @@ class Image
 
         if($icon !== '') {
             if (self::isBootstrapIcon($icon)) {
-                if (str_starts_with($icon, 'fa-')) {
-                    $icon = 'fas ' . $icon;
+                if (str_starts_with($icon, 'bi-')) {
+                    $icon = 'bi ' . $icon;
                 }
 
                 if ($text !== '') {
-                    return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-bs-toggle="tooltip" title="' . $text . '"></i>';
+                    return '<i class="' . $icon . ' ' . $cssClass . '" data-bs-toggle="tooltip" title="' . $text . '"></i>';
                 } else {
-                    return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw"></i>';
+                    return '<i class="' . $icon . ' ' . $cssClass . '></i>';
                 }
             }
 

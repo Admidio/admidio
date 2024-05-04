@@ -723,7 +723,7 @@ final class FileSystemUtils
      */
     public static function getFileFontAwesomeIcon(string $filename): string
     {
-        $iconFile = 'fa-file';
+        $iconFile = 'bi-file-earmark-fill';
         $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
 

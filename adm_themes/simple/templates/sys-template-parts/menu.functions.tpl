@@ -5,13 +5,13 @@
             {if {array_key_exists array=$menuItem key='items'}}
                 <li class="nav-item dropdown">
                     <a id="{$menuItem.id}" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                        <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
+                        <i class="{$menuItem.icon}"></i>{$menuItem.name}
                     </a>
                     <ul class="dropdown-menu">
                         {foreach $menuItem.items as $subItem}
                             <li>
                                 <a id="{$subItem.id}" class="dropdown-item" href="{$subItem.url}">
-                                    <i class="{$subItem.icon} fa-fw"></i>{$subItem.name}
+                                    <i class="{$subItem.icon}"></i>{$subItem.name}
                                 </a>
                             </li>
                         {/foreach}
@@ -20,7 +20,7 @@
             {else}
                 <li class="nav-item">
                     <a id="{$menuItem.id}" class="nav-link btn btn-primary" href="{$menuItem.url}">
-                        <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
+                        <i class="{$menuItem.icon}"></i>{$menuItem.name}
                     </a>
                 </li>
             {/if}

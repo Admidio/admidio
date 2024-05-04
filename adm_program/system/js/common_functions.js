@@ -9,24 +9,6 @@
  */
 
 /**
- * The function can be used to show or hide a element. Therefore a small
- * caret is used that will change his orientation if the element is hidden.
- * @param {string} elementId This is the id of the element you must click to show or hide another element.
- *                           The elements have the same id but the element to click has a prefix **group_**
- */
-function showHideBlock(elementId) {
-    const showHideElementId = $('#'+elementId).attr("id").substring(6);
-
-    if($("#"+showHideElementId).is(":hidden")) {
-        $("#"+showHideElementId).show("slow");
-        $('#'+elementId+" .fas").attr("class", "fas fa-caret-down")
-    } else {
-        $("#"+showHideElementId).hide("slow");
-        $('#'+elementId+" .fas").attr("class", "fas fa-caret-right")
-    }
-}
-
-/**
  * This function can be used to call a specific url and hide an html element
  * in dependence from the returned data. If the data received is "done" then
  * the element will be hidden otherwise the data will be shown in an error block.
@@ -99,7 +81,7 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
         } else {
             // entry could not be deleted, then show content of data or a common error message
             const message = (data.length > 0) ? data : "Error: Undefined error occurred!";
-            messageText.html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>" + message + "</div>");
+            messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>" + message + "</div>");
         }
     });
 }

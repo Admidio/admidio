@@ -121,7 +121,7 @@ class FileUpload
                     $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
                     $.each(data.result.files, function(index, file) {
                         if (typeof file.error !== "undefined") {
-                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>"
+                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>"
                                 + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                             countErrorFiles++;
                         } else {
@@ -144,7 +144,7 @@ class FileUpload
                     if (countErrorFiles === 0 && countFiles > 0) {
                         $("<p/>").html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
                     } else {
-                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
+                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
                     }
                 }
             }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");',

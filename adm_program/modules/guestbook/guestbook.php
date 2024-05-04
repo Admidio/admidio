@@ -136,7 +136,7 @@ if ($getGboUuid === '' && !$getModeration) {
         'menu_item_guestbook_new_entry',
         $gL10n->get('SYS_WRITE_ENTRY'),
         ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php',
-        'fa-pencil-alt'
+        'bi bi-pencil-fill'
     );
 }
 
@@ -319,7 +319,7 @@ if ($countGuestbookEntries === 0) {
             $loadUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $gboUuid));
             $page->addHtml('
                     <button type="button" class="btn btn-primary" onclick="window.location.href=\''.$loadUrl.'\'">
-                        <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>');
+                        <i class="bi bi-pencil-fill"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>');
         }
 
         // Falls eine ID uebergeben wurde und der dazugehoerige Eintrag existiert,

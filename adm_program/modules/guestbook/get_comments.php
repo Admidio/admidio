@@ -115,7 +115,7 @@ if ($getCommentGboUuid !== '') {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '
             <button type="button" class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $getCommentGboUuid)).'\'">
-                <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
+                <i class="bi bi-pencil-fill"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
         }
     }
 }

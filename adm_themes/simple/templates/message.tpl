@@ -9,7 +9,7 @@
                 &nbsp;&nbsp;{$l10n->get("SYS_YES")}&nbsp;&nbsp;&nbsp;
             </button>
             <button id="admButtonNo" class="btn btn-secondary" type="button" onclick="history.back()">
-                <i class="fas fa-minus-circle"></i>
+                <i class="bi bi-dash-circle-fill"></i>
                 &nbsp;{$l10n->get("SYS_NO")}
             </button>
         {else}
