@@ -247,7 +247,7 @@ if ($getMode === 'assign') {
     || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
-        $columnHeading[] = '<i class="fas fa-map-marker-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ADDRESS').'"></i>';
+        $columnHeading[] = $gL10n->get('SYS_ADDRESS');
         $columnAlignment[] = 'left';
     }
     if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers())) {

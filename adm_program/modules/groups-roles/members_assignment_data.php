@@ -270,10 +270,10 @@ while ($user = $userStatement->fetch()) {
         $icon = 'bi-person-fill';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
     } else {
-        $icon = 'fa-user-times';
+        $icon = 'bi-person-fill-dash text-danger';
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
     }
-    $arrContent[] = '<i class="fas ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
+    $arrContent[] = '<i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // set flag if user is member of the current organization or not
     if ($user['member_this_role']) {
@@ -312,7 +312,7 @@ while ($user = $userStatement->fetch()) {
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
         if ($addressText !== '') {
-            $arrContent[] = '<i class="fas fa-map-marker-alt" data-bs-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
+            $arrContent[] = '<i class="bi bi-geo-fill" data-bs-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
         } else {
             $arrContent[] = '&nbsp;';
         }

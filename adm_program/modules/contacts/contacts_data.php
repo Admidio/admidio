@@ -244,14 +244,12 @@ while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
     if ($contactsOfThisOrganization) {
         $icon = 'bi-person-fill';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName));
-        $class = '';
     } else {
-        $icon = 'bi-person-fill-dash';
+        $icon = 'bi-person-fill-dash text-danger';
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
-        $class = 'text-danger';
     }
 
-    $columnValues['1'] = '<a class="' . $class . '" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'">
+    $columnValues['1'] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'">
         <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // add all columns of the list configuration to the json array
