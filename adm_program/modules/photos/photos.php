@@ -423,8 +423,8 @@ if ($albumsCount > 0) {
                     $textPrev = substr($albumDescription, 0, 200);
                     $maxPosPrev = strrpos($textPrev, ' ');
                     $albumDescription = substr($textPrev, 0, $maxPosPrev).
-                                        ' <span class="collapse" id="viewdetails'.$childPhotoAlbum->getValue('pho_uuid').'">'.substr($albumDescription, $maxPosPrev).'.
-                                        </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$childPhotoAlbum->getValue('uuid').'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                                        ' <span class="collapse" id="viewdetails-'.$childPhotoAlbum->getValue('pho_uuid').'">'.substr($albumDescription, $maxPosPrev).'.
+                                        </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails-'.$childPhotoAlbum->getValue('pho_uuid').'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
                 }
 
                 $page->addHtml('<p class="card-text">' . $albumDescription . '</p>');
