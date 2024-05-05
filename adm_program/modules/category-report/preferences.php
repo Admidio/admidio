@@ -85,7 +85,7 @@ $page->addJavascript('
                 } else {
                     formAlert.attr("class", "alert alert-danger form-alert");
                     formAlert.fadeIn();
-                    formAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                    formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                 }
             }
         });

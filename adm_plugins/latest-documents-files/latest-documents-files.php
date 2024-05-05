@@ -100,7 +100,7 @@ if (Component::isVisible('DOCUMENTS-FILES')) {
 
                 echo '<li class="list-group-item">
                     <a class="admidio-icon-link" data-bs-toggle="tooltip" data-html="true" title="' . $tooltip . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/get_file.php', array('file_uuid' => $rowFile['fil_uuid'])) . '">' .
-                    '<i class="fas ' . $file->getFontAwesomeIcon() . '"></i>' . $fileName . '.' . $file->getFileExtension() . '</a>
+                    '<i class="fas ' . $file->getIcon() . '"></i>' . $fileName . '.' . $file->getFileExtension() . '</a>
                 </li>';
 
                 if ($countVisibleDownloads === $plgCountFiles) {

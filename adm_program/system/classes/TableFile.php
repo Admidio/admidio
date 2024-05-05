@@ -136,12 +136,12 @@ class TableFile extends TableAccess
     }
 
     /**
-     * Get the relevant Font Awesome icon for the current file
-     * @return string Returns the name of the Font Awesome icon
+     * Get the relevant icon for the current file
+     * @return string Returns the name of the icon
      */
-    public function getFontAwesomeIcon(): string
+    public function getIcon(): string
     {
-        return FileSystemUtils::getFileFontAwesomeIcon($this->getValue('fil_name'));
+        return FileSystemUtils::getFileIcon($this->getValue('fil_name'));
     }
 
     /**

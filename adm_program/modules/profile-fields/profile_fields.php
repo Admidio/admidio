@@ -123,7 +123,7 @@ while ($row = $statement->fetch()) {
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'admidio-group-row-'.$categoryId));
         $table->addColumn(
-            '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$userField->getValue('cat_name'),
+            '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="bi bi-caret-down-fill"></i></a>'.$userField->getValue('cat_name'),
             array('id' => 'group_'.$blockId, 'colspan' => '10')
         );
         $table->addTableBody('id', $blockId);
@@ -168,7 +168,7 @@ while ($row = $statement->fetch()) {
                     '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
     if ($userField->getValue('usf_system') == 1) {
-        $usfSystem .= '<i class="fas fa-trash invisible"></i>';
+        $usfSystem .= '<i class="bi bi-trash invisible"></i>';
     } else {
         $usfSystem .='<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfUuid,

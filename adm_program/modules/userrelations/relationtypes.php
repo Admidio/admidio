@@ -77,7 +77,7 @@ while ($relRow = $relationTypesStatement->fetch()) {
     $relationType1->setArray($relRow);
 
     if ((bool) $relRow['urt_edit_user']) {
-        $editUserIcon = ' <i class="fas fa-user-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
+        $editUserIcon = ' <i class="bi bi-pencil-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
     }
 
     $nameRelationshiptype = $relationType1->getValue('urt_name') . $editUserIcon;
@@ -93,7 +93,7 @@ while ($relRow = $relationTypesStatement->fetch()) {
         $relationType2->setArray($relRow2);
 
         if ((bool) $relRow['urt_edit_user_inverse']) {
-            $editUserInverseIcon = ' <i class="fas fa-user-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
+            $editUserInverseIcon = ' <i class="bi bi-pencil-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
         }
 
         $nameRelationshiptype .= '&nbsp;&nbsp;-&nbsp;&nbsp;'. $relationType2->getValue('urt_name') . $editUserInverseIcon;

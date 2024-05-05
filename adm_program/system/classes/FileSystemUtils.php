@@ -718,10 +718,10 @@ final class FileSystemUtils
     }
 
     /**
-     * Get the relevant Font Awesome icon for the current file
-     * @return string Returns the name of the Font Awesome icon
+     * Get the relevant icon for the current file
+     * @return string Returns the name of the icon
      */
-    public static function getFileFontAwesomeIcon(string $filename): string
+    public static function getFileIcon(string $filename): string
     {
         $iconFile = 'bi-file-earmark-fill';
         $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));

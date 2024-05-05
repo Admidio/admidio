@@ -152,7 +152,7 @@ if ($getMode === 'change') {
                     } else {
                         passwordFormAlert.attr("class", "alert alert-danger form-alert");
                         passwordFormAlert.fadeIn();
-                        passwordFormAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                        passwordFormAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                     }
                 });
             });

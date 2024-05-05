@@ -165,7 +165,7 @@ $page->addJavascript('
                     } else {
                         formAlert.attr("class", "alert alert-danger form-alert");
                         formAlert.fadeIn();
-                        formAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                        formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                     }
                 }
              });
@@ -253,7 +253,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_profile_vcard',
     $gL10n->get('SYS_EXPORT_VCARD'),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '1', 'user_uuid' => $getUserUuid)),
-    'fa-file-export'
+    'bi-download'
 );
 
 // show link to create relations

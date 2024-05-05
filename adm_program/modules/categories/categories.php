@@ -255,14 +255,14 @@ while ($catRow = $categoryStatement->fetch()) {
                                     '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
         if ($category->getValue('cat_system') == 1) {
-            $categoryAdministration .= '<i class="fas fa-trash invisible"></i>';
+            $categoryAdministration .= '<i class="bi bi-trash invisible"></i>';
         } else {
             $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. $categoryUuid, 'name' => $category->getValue('cat_name'), 'database_id' => $categoryUuid, 'database_id_2' => $getType)).'">'.
                                             '<i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
     } else {
-        $categoryAdministration = '<i class="fas fa-trash invisible"></i><i class="fas fa-trash invisible"></i>';
+        $categoryAdministration = '<i class="bi bi-trash invisible"></i><i class="bi bi-trash invisible"></i>';
     }
 
     // create array with all column values

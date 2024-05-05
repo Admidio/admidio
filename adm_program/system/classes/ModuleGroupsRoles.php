@@ -135,7 +135,7 @@ class ModuleGroupsRoles extends HtmlPage
                     $maxPosPrev = strrpos($textPrev, ' ');
                     $roleDescription = substr($textPrev, 0, $maxPosPrev) .
                         ' <span class="collapse" id="viewdetails-' . $row['rol_uuid'] . '">' . substr($roleDescription, $maxPosPrev) . '.
-                                </span> <a class="admidio-icon-link" data-bs-toggle="collapse" data-target="#viewdetails-' . $row['rol_uuid'] . '"><i class="fas fa-angle-double-right" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MORE') . '"></i></a>';
+                                </span> <a class="admidio-icon-link" data-bs-toggle="collapse" data-bs-target="#viewdetails-' . $row['rol_uuid'] . '">»</a>';
                 }
 
                 $templateRow['information'][] = $roleDescription;

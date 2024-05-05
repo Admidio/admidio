@@ -108,7 +108,7 @@ $page->addJavascript(
                 } else {
                     formAlert.attr("class", "alert alert-danger form-alert");
                     formAlert.fadeIn();
-                    formAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                    formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                 }
             }
         });
@@ -172,7 +172,7 @@ function getPreferencePanel($group, $id, $parentId, $title, $icon, $body)
 {
     $html = '
         <div id="admidio-panel-' . $id . '" class="accordion-item">
-            <h2 class="accordion-header" data-bs-toggle="collapse" data-target="#collapse_' . $id . '">
+            <h2 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#collapse_' . $id . '">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_' . $id . '" aria-expanded="true" aria-controls="collapseOne">
                     <i class="' . $icon . ' fa-fw"></i>' . $title . '
                 </button>

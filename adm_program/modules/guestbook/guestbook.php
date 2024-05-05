@@ -163,7 +163,7 @@ if (!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMa
             'menu_item_guestbook_moderate',
             $gL10n->get('GBO_MODERATE_ENTRIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1')),
-            'fa-tasks',
+            'bi-list-check',
             $countLockedEntries
         );
     }

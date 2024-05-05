@@ -85,7 +85,7 @@ while ($mainMen = $mainMenStatement->fetch()) {
             $menuOverview->addTableBody();
             $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
             $menuOverview->addColumn(
-                '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.Language::translateIfTranslationStrId((string) $mainMen['men_name']),
+                '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="bi bi-caret-down-fill"></i></a>'.Language::translateIfTranslationStrId((string) $mainMen['men_name']),
                 array('id' => 'group_'.$blockId, 'colspan' => '8')
             );
             $menuOverview->addTableBody('id', $blockId);

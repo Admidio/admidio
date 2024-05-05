@@ -300,7 +300,7 @@ try {
             $form->addSubmitButton(
                 'btn_forward',
                 $gL10n->get('INS_SET_UP_ORGANIZATION'),
-                array('icon' => 'fa-wrench')
+                array('icon' => 'bi-wrench')
             );
 
             // add form to html page and show page

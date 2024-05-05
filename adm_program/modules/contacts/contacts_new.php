@@ -48,7 +48,7 @@ echo '
                     } else {
                         formMembersAlert.attr("class", "alert alert-danger form-alert");
                         formMembersAlert.fadeIn();
-                        formMembersAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                        formMembersAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                     }
                 }
             }
