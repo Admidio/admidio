@@ -1339,8 +1339,8 @@
   <string name="SYS_SUNDAY">Sonntag</string>
   <string name="SYS_SUPPORT_ADMIDIO">Admidio unterstützen</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Wechsel zur Kalenderverwaltung</string>
-  <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
-  <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Wechsel zur Beziehungskonfiguration</string>
+  <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorie Verwaltung</string>
+  <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Wechsel zur Profilfeld-Konfiguration</string>
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Wechsel zur Beziehungskonfiguration</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Zur Raumadministration wechseln</string>
   <string name="SYS_SYMMETRICAL">symmetrisch</string>

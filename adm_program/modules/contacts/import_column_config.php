@@ -32,7 +32,7 @@ if (isset($_SESSION['import_csv_request'])) {
     // now write the previously entered contents into the object
     $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['import_csv_request']));
     unset($_SESSION['import_csv_request']);
-    if (!isset($form['first_row'])) {
+    if (!isset($formValues['first_row'])) {
         $formValues['first_row'] = false;
     }
 } else {
