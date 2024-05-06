@@ -433,8 +433,8 @@ class TableUserField extends TableAccess
                     }
                 } elseif ($columnName === 'usf_icon' && $newValue !== '') {
                     // check if bootstrap icon syntax is used
-                    if (!preg_match('/[a-zA-z0-9]/', $newValue)) {
-                        throw new AdmException('SYS_INVALID_FONT_AWESOME');
+                    if (preg_match('/[^a-z0-9-]/', $newValue)) {
+                        throw new AdmException('SYS_INVALID_ICON_NAME');
                     }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);

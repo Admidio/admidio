@@ -101,7 +101,7 @@ $page->addJavascript(
                         $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random());
                     }
                     formAlert.attr("class", "alert alert-success form-alert");
-                    formAlert.html("<i class=\"fas bi-check-lg\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                    formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                     formAlert.fadeIn("slow");
                     formAlert.animate({opacity: 1.0}, 2500);
                     formAlert.fadeOut("slow");
@@ -1159,7 +1159,7 @@ $formUserManagement->addCheckbox(
 );
 
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
-            <i class="fas fa-people-arrows"></i>'.$gL10n->get('SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION').'</a>';
+            <i class="bi bi-person-heart"></i>'.$gL10n->get('SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION').'</a>';
 $formUserManagement->addCustomContent($gL10n->get('SYS_USER_RELATIONS'), $html, array('helpTextId' => 'SYS_MAINTAIN_USER_RELATION_TYPES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 
 $formUserManagement->addSubmitButton(

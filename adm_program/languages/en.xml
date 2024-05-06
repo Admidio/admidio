@@ -709,7 +709,6 @@
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_AWESOME_DESC">Here you can add an icon of the web font \"Font Awesome\". Go to #VAR1#https://fontawesome.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. As a prefix you have to put a fa- in front of it. So if you choose the icon \"user\", you have to enter \"fa-user\" here.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
@@ -753,6 +752,7 @@
   <string name="SYS_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or subscription. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
+  <string name="SYS_ICON_FONT_DESC">Here you can add an icon of the web font \"Bootstrap Icons\". Go to #VAR1#https://icons.getbootstrap.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. Just insert the name of the icon in this text box.</string>
   <string name="SYS_ICQ">ICQ</string>
   <string name="SYS_IDENTIFY_USERS">Existing contacts are recognized by first name and last name.</string>
   <string name="SYS_IMPORTANT">Important</string>
@@ -778,7 +778,7 @@
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
   <string name="SYS_INTO_TO">Recipients need to be listed in the TO field instead of the BCC field</string>
   <string name="SYS_INTO_TO_DESC">All recipients will be listed in the TO field if set accordingly and an email will be received by multiple person. Thus each recipient will see the name and email address of the other recipients. In addition each recipient can reply to all. (Default: deactivated)</string>
-  <string name="SYS_INVALID_FONT_AWESOME">The entered icon name does not correspond to the expected syntax. An icon of font Awesome must correspond to the schema fa-iconName.</string>
+  <string name="SYS_INVALID_ICON_NAME">The entered icon name does not correspond to the expected syntax. An icon name of Bootstrap Icons should only contain characters a-z, numbers and a hyphen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Invalid page view</string>
   <string name="SYS_IO_ERROR">I/O error</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>

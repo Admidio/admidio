@@ -223,7 +223,7 @@ $form->addInput(
     $menu->getValue('men_icon'),
     array(
         'maxLength' => 100,
-        'helpTextId' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),
+        'helpTextId' => $gL10n->get('SYS_ICON_FONT_DESC', array('<a href="https://icons.getbootstrap.com/" target="_blank">', '</a>')),
         'class' => 'form-control-small'
     )
 );

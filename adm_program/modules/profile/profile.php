@@ -244,7 +244,7 @@ if ($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasR
         'menu_item_profile_change_history',
         $gL10n->get('SYS_CHANGE_HISTORY'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('user_uuid' => $getUserUuid)),
-        'fa-history'
+        'bi-clock-history'
     );
 }
 
@@ -262,7 +262,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUs
         'menu_item_profile_user_relation_types',
         $gL10n->get('SYS_CREATE_RELATIONSHIP'),
         SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)),
-        'fa-people-arrows'
+        'bi-person-heart'
     );
 }
 

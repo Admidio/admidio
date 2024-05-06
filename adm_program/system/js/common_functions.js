@@ -209,7 +209,7 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
         }, function(data) {
             if (data === "done") {
                 const id = "#row_" + elementId;
-                $(".admidio-icon-link .fas").tooltip("hide");
+                $(".admidio-icon-link .bi").tooltip("hide");
 
                 if (direction === "UP") {
                     $(id).prev().before($(id));

@@ -277,7 +277,7 @@ class ModuleGroupsRoles extends HtmlPage
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
             if ($role->getValue('rol_guestbook') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'fas bi bi-book-half', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK'));
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-book-half', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK'));
             }
             if ($role->getValue('rol_guestbook_comments') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0 && !$gSettingsManager->getBool('enable_gbook_comments4all')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-chat-fill', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'));

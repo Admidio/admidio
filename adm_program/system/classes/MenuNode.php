@@ -93,8 +93,10 @@ class MenuNode
         }
         if (strpos($icon, 'bi-') !== false) {
             $node['icon'] = 'bi ' . $icon;
+        } elseif (strpos($icon, 'bi') !== false) {
+            $node['icon'] = $icon;
         } else {
-            $node['icon'] = 'fas ' . $icon;
+            $node['icon'] = 'bi bi-' . $icon;
         }
         $node['badgeCount'] = $badgeCount;
 

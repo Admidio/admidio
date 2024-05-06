@@ -65,7 +65,7 @@ if ($gCurrentUser->editUsers()) {
             'menu_item_contacts_change_history',
             $gL10n->get('SYS_CHANGE_HISTORY'),
             ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php',
-            'fa-history'
+            'bi-clock-history'
         );
     }
 
