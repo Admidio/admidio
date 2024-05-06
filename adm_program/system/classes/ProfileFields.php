@@ -240,15 +240,9 @@ class ProfileFields
             switch ($usfType) {
                 case 'CHECKBOX':
                     if ($value == 1) {
-                        $htmlValue = '<span class="fa-stack">
-                            <i class="fas fa-square-full fa-stack-1x"></i>
-                            <i class="fas fa-check-square fa-stack-1x fa-inverse"></i>
-                        </span>';
+                        $htmlValue = '<i class="bi bi-check-square"></i>';
                     } else {
-                        $htmlValue = '<span class="fa-stack">
-                            <i class="fas fa-square-full fa-stack-1x"></i>
-                            <i class="fas fa-square fa-stack-1x fa-inverse"></i>
-                        </span>';
+                        $htmlValue = '<i class="bi bi-square"></i>';
                     }
                     break;
                 case 'DATE':
@@ -291,7 +285,7 @@ class ProfileFields
                     foreach ($arrListValues as $index => $listValue) {
                         // if value is imagefile or imageurl then show image
                         if ($usfType === 'RADIO_BUTTON'
-                            && (Image::isFontAwesomeIcon($listValue)
+                            && (Image::isBootstrapIcon($listValue)
                                 || StringUtils::strContains($listValue, '.png', false)
                                 || StringUtils::strContains($listValue, '.jpg', false))) { // TODO: simplify check for images
                             // if there is imagefile and text separated by | then explode them
@@ -372,10 +366,7 @@ class ProfileFields
         // special case for type CHECKBOX and no value is there, then show unchecked checkbox
         else {
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX') {
-                $value = '<span class="fa-stack">
-                    <i class="fas fa-square-full fa-stack-1x"></i>
-                    <i class="fas fa-square fa-stack-1x fa-inverse"></i>
-                </span>';
+                $value = '<i class="bi bi-square"></i>';
 
                 // if field has url then create a link
                 $usfUrl = $this->mProfileFields[$fieldNameIntern]->getValue('usf_url');

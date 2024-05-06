@@ -62,7 +62,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_new_field',
     $gL10n->get('ORG_CREATE_PROFILE_FIELD'),
     ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php',
-    'fa-plus-circle'
+    'bi-plus-circle-fill'
 );
 
 // define link to maintain categories
@@ -70,7 +70,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_maintain_category',
     $gL10n->get('SYS_EDIT_CATEGORIES'),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'USF')),
-    'fa-th-large'
+    'bi-hdd-stack-fill'
 );
 
 $sql = 'SELECT *
@@ -92,9 +92,9 @@ $columnHeading = array(
     $gL10n->get('SYS_FIELD').HtmlForm::getHelpTextIcon('ORG_FIELD_DESCRIPTION'),
     '&nbsp;',
     $gL10n->get('ORG_DATATYPE'),
-    '<i class="fas fa-eye" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>',
-    '<i class="fas fa-key" data-bs-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>',
-    '<i class="fas fa-address-card" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>',
+    '<i class="bi bi-eye-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>',
+    '<i class="bi bi-key-fill" data-bs-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>',
+    '<i class="bi bi-card-checklist" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>',
     $gL10n->get('SYS_REQUIRED_INPUT'),
     $gL10n->get('SYS_DEFAULT_VALUE'),
     $gL10n->get('SYS_REGULAR_EXPRESSION'),
@@ -123,7 +123,7 @@ while ($row = $statement->fetch()) {
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'admidio-group-row-'.$categoryId));
         $table->addColumn(
-            '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$userField->getValue('cat_name'),
+            '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="bi bi-caret-down-fill"></i></a>'.$userField->getValue('cat_name'),
             array('id' => 'group_'.$blockId, 'colspan' => '10')
         );
         $table->addTableBody('id', $blockId);
@@ -131,21 +131,21 @@ while ($row = $statement->fetch()) {
     }
 
     if ($userField->getValue('usf_hidden') == 1) {
-        $hidden = '<i class="fas fa-eye admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'"></i>';
+        $hidden = '<i class="bi bi-eye-fill admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'"></i>';
     } else {
-        $hidden = '<i class="fas fa-eye" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>';
+        $hidden = '<i class="bi bi-eye-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>';
     }
 
     if ($userField->getValue('usf_disabled') == 1) {
-        $disable = '<i class="fas fa-key" data-bs-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>';
+        $disable = '<i class="bi bi-key-fill" data-bs-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>';
     } else {
-        $disable = '<i class="fas fa-key admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'"></i>';
+        $disable = '<i class="bi bi-key-fill admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'"></i>';
     }
 
     if ($userField->getValue('usf_registration') == 1) {
-        $registration = '<i class="fas fa-address-card" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>';
+        $registration = '<i class="bi bi-card-checklist" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>';
     } else {
-        $registration = '<i class="fas fa-address-card admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_REGISTRATION').'"></i>';
+        $registration = '<i class="bi bi-card-checklist admidio-opacity-reduced" data-bs-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_REGISTRATION').'"></i>';
     }
 
     $userFieldText = array('CHECKBOX'     => $gL10n->get('SYS_CHECKBOX'),
@@ -165,26 +165,26 @@ while ($row = $statement->fetch()) {
                                   3 => 'SYS_NOT_AT_REGISTRATION');
 
     $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.
-                    '<i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
+                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
     if ($userField->getValue('usf_system') == 1) {
-        $usfSystem .= '<i class="fas fa-trash invisible"></i>';
+        $usfSystem .= '<i class="bi bi-trash invisible"></i>';
     } else {
         $usfSystem .='<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfUuid,
                         'name' => $userField->getValue('usf_name'), 'database_id' => $usfUuid)).'">'.
-                        '<i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                        '<i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
     }
 
     // create array with all column values
     $columnValues = array(
         '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.$userField->getValue('usf_name').'</a>' . HtmlForm::getHelpTextIcon((string) $userField->getValue('usf_description'), 'SYS_NOTE', array($userField->getValue('usf_name')), 'SYS_DESCRIPTION'),
         '<a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="'.$usfUuid.'" data-direction="'.TableUserField::MOVE_UP.'">'.
-            '<i class="fas fa-chevron-circle-up" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD')) . '"></i></a>
+            '<i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="'.$usfUuid.'" data-direction="'.TableUserField::MOVE_DOWN.'">'.
-            '<i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD')) . '"></i></a>
+            '<i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link">'.
-            '<i class="fas fa-arrows-alt handle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD')) . '"></i></a>
+            '<i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD')) . '"></i></a>
             ',
         $userFieldText[$userField->getValue('usf_type')],
         $hidden,

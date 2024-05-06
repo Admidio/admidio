@@ -105,7 +105,7 @@ $subHeadline = $config[$report->getConfiguration()]['name'];
 $filename    = $gCurrentOrganization->getValue('org_shortname').'-'.$headline.'-'.$subHeadline;
 
 if ($getMode === 'html') {
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-list-ul');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-list-stars');
 }
 
 if ($getMode !== 'csv') {
@@ -191,10 +191,10 @@ if ($getMode !== 'csv') {
 
         if ($getExportAndFilter) {
             // link to print overlay and exports
-            $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+            $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
 
             // dropdown menu item with all export possibilities
-            $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
+            $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'bi-download');
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_csv_ms',
                 $gL10n->get('SYS_MICROSOFT_EXCEL'),
@@ -203,7 +203,7 @@ if ($getMode !== 'csv') {
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-ms')),
-                'fa-file-excel',
+                'bi-file-earmark-excel',
                 'menu_item_lists_export'
             );
             $page->addPageFunctionsMenuItem(
@@ -214,7 +214,7 @@ if ($getMode !== 'csv') {
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdf')),
-                'fa-file-pdf',
+                'bi-file-earmark-pdf',
                 'menu_item_lists_export'
             );
             $page->addPageFunctionsMenuItem(
@@ -225,7 +225,7 @@ if ($getMode !== 'csv') {
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdfl')),
-                'fa-file-pdf',
+                'bi-file-earmark-pdf',
                 'menu_item_lists_export'
             );
             $page->addPageFunctionsMenuItem(
@@ -236,7 +236,7 @@ if ($getMode !== 'csv') {
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-oo')),
-                'fa-file-csv',
+                'bi-filetype-csv',
                 'menu_item_lists_export'
             );
         } else {
@@ -250,7 +250,7 @@ if ($getMode !== 'csv') {
                 'admMenuItemPreferencesLists',
                 $gL10n->get('SYS_CONFIGURATIONS'),
                 ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',
-                'fa-cog'
+                'bi-gear-fill'
             );
         }
 
@@ -381,7 +381,7 @@ foreach ($report->listData as $member => $memberdata) {
             if (in_array($getMode, array('csv', 'pdf'), true)) {
                 $content = 'X';
             } else {
-                $content = '<i class="fas fa-check"</i>';
+                $content = '<i class="bi bi-check-lg"</i>';
             }
         }
 

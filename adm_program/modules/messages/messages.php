@@ -56,7 +56,7 @@ $headline = $gL10n->get('SYS_MESSAGES');
 
 // add current url to navigation stack
 $gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL, $headline, 'fa-envelope');
+$gNavigation->addUrl(CURRENT_URL, $headline, 'bi-envelope-fill');
 
 // create html page object
 $page = new HtmlPage('admidio-messages', $headline);
@@ -67,7 +67,7 @@ if ($gSettingsManager->getBool('enable_mail_module')) {
         'menu_item_messages_new_email',
         $gL10n->get('SYS_WRITE_EMAIL'),
         ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php',
-        'fa-envelope-open'
+        'bi-envelope-open-fill'
     );
 }
 // link to write new PM
@@ -76,7 +76,7 @@ if ($gSettingsManager->getBool('enable_pm_module')) {
         'menu_item_messages_new_pm',
         $gL10n->get('SYS_WRITE_PM'),
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM')),
-        'fa-comment-alt'
+        'bi-chat-left-fill'
     );
 }
 
@@ -85,10 +85,10 @@ $table->setServerSideProcessing(ADMIDIO_URL . FOLDER_MODULES . '/messages/messag
 
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
 $table->addRowHeadingByArray(array(
-    '<i class="fas fa-envelope" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CATEGORY') . '"></i>',
+    '<i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CATEGORY') . '"></i>',
     $gL10n->get('SYS_SUBJECT'),
     $gL10n->get('SYS_CONVERSATION_PARTNER'),
-    '<i class="fas fa-paperclip" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT') . '"></i>',
+    '<i class="bi bi-paperclip" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT') . '"></i>',
     $gL10n->get('SYS_DATE'),
     ''
 ));

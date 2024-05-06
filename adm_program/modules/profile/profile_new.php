@@ -257,7 +257,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 array(
                     'property'   => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $usfNameIntern === 'COUNTRY') {
@@ -284,7 +284,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'property'     => $fieldProperty,
                     'defaultValue' => $defaultValue,
                     'helpTextId'   => $helpId,
-                    'icon'         => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'         => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {
@@ -303,7 +303,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'defaultValue'      => (int) $user->getValue($usfNameIntern, 'database'),
                     'showNoValueButton' => $showDummyRadioButton,
                     'helpTextId'        => $helpId,
-                    'icon'              => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'              => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'TEXT_BIG') {
@@ -316,7 +316,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'maxLength'  => 4000,
                     'property'   => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } else {
@@ -350,7 +350,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     'maxLength'  => $maxlength,
                     'property'   => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         }
@@ -370,9 +370,9 @@ if ($getNewUser === 2 && $gSettingsManager->getBool('registration_enable_captcha
 // Bild und Text fuer den Speichern-Button
 if ($getNewUser === 2) {
     // Registrierung
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 } else {
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 }
 
 if ($getNewUser === 0) {

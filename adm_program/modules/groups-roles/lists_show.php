@@ -471,45 +471,45 @@ if ($getMode === 'print') {
     );
 
     // link to print overlay and exports
-    $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+    $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
 
     // dropdown menu item with all export possibilities
     if ($gSettingsManager->getInt('groups_roles_export') === 1 // all users
     || ($gSettingsManager->getInt('groups_roles_export') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user'))) { // users with the right to edit all profiles
-        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
+        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_DOWNLOAD_FILE'), '#', 'bi-download');
         $page->addPageFunctionsMenuItem(
-            'menu_item_lists_csv_ms',
+            'menu_item_lists_excel',
             $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
-            'fa-file-excel',
+            'bi-file-earmark-excel',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
-            'menu_item_lists_csv_ms',
+            'menu_item_lists_odf',
             $gL10n->get('SYS_ODF_SPREADSHEET'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
-            'fa-file-alt',
+            'bi-file-earmark-spreadsheet',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_csv',
             $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
-            'fa-file-csv',
+            'bi-filetype-csv',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_pdf',
             $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
-            'fa-file-pdf',
+            'bi-file-earmark-pdf',
             'menu_item_lists_export'
         );
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_pdfl',
             $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
-            'fa-file-pdf',
+            'bi-file-earmark-pdf',
             'menu_item_lists_export'
         );
     }
@@ -521,7 +521,7 @@ if ($getMode === 'print') {
                 'menu_item_lists_assign_members',
                 $gL10n->get('SYS_ASSIGN_MEMBERS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $role->getValue('rol_uuid'))),
-                'fa-user-plus'
+                'bi bi-person-plus-fill'
             );
         }
     }
@@ -532,7 +532,7 @@ if ($getMode === 'print') {
             'menu_item_mail_to_list',
             $gL10n->get('SYS_EMAIL_TO_LIST'),
             'javascript:void(0);',
-            'fa-envelope'
+            'bi-envelope-fill'
         );
     }
 
@@ -648,7 +648,7 @@ foreach ($membersList as $member) {
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/popup_participation.php', array('dat_uuid' => $dateUuid, 'user_uuid' => $member['usr_uuid'])) . '">
-                                <i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
+                                <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 
     $table->addRowByArray($columnValues, '', array('nobr' => 'true'));

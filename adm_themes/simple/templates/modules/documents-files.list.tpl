@@ -1,12 +1,12 @@
 {if strlen($infoAlert) > 0}
-    <div class="alert alert-info" role="alert"><i class="fas fa-info-circle"></i>{$infoAlert}</div>
+    <div class="alert alert-info" role="alert"><i class="bi bi-info-circle-fill"></i>{$infoAlert}</div>
 {/if}
 
 <div class="table-responsive">
     <table id="documents-files-table" class="table table-hover" width="100%" style="width: 100%;">
         <thead>
             <tr>
-                <th><i class="fas fa-fw fa-folder-open" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
+                <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
                 <th>{$l10n->get('SYS_NAME')}</th>
                 <th>{$l10n->get('SYS_DATE_MODIFIED')}</th>
                 <th class="text-right">{$l10n->get('SYS_SIZE')}</th>
@@ -20,7 +20,7 @@
                     <td><a class="admidio-icon-link" href="{$row.url}"><i class="{$row.icon}" data-bs-toggle="tooltip" title="{$row.title}"></i></a></td>
                     <td><a href="{$row.url}">{$row.name}</a>
                         {if strlen($row.description) > 0}
-                            <i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
+                            <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
                                 data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
                                 title="{$l10n->get('SYS_DESCRIPTION')}" data-bs-content="{$row.description}"></i>
                         {/if}
@@ -37,7 +37,7 @@
                             {/foreach}
                         {/if}
                         {if $row.existsInFileSystem == false}
-                            <i class="fas fa-exclamation-triangle" style="color:red;" data-bs-toggle="popover" data-bs-trigger="hover click" data-bs-placement="left"
+                            <i class="bi bi-exclamation-triangle-fill" style="color:red;" data-bs-toggle="popover" data-bs-trigger="hover click" data-bs-placement="left"
                                title="{$l10n->get('SYS_WARNING')}" data-bs-content="{if $row.folder}{$l10n->get('SYS_FOLDER_NOT_EXISTS')}{else}{$l10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB')}{/if}"></i>
                         {/if}
                     </td>
@@ -54,7 +54,7 @@
         <table id="documents-files-unregistered-table" class="table table-hover" width="100%" style="width: 100%;">
             <thead>
             <tr>
-                <th><i class="fas fa-fw fa-folder-open" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
+                <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
                 <th>{$l10n->get('SYS_NAME')}</th>
                 <th class="text-right">{$l10n->get('SYS_SIZE')}</th>
                 <th>&nbsp;</th>
@@ -68,7 +68,7 @@
                     <td class="text-right">{$row.size}</td>
                     <td class="text-right">
                         <a class="admidio-icon-link" href="{$row.url}">
-                            <i class="fas fa-plus-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ADD_TO_DATABASE')}"></i>
+                            <i class="bi bi-plus-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ADD_TO_DATABASE')}"></i>
                         </a>
                     </td>
                 </tr>

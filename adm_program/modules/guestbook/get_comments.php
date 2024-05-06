@@ -53,7 +53,7 @@ if ($getCommentGboUuid !== '') {
             echo '
             <div class="card admidio-blog-comment" id="gbc_'.$gbcUuid.'">
                 <div class="card-header">
-                    <i class="fas fa-comment"></i>' .
+                    <i class="bi bi-chat-fill"></i>' .
                         $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gbComment->getValue('gbc_name'), $gbComment->getValue(
                             'gbc_timestamp_create',
                             $gSettingsManager->getString('system_date')
@@ -62,22 +62,22 @@ if ($getCommentGboUuid !== '') {
             // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
             if (strlen($gbcEmail) > 0) {
                 echo '<a class="admidio-icon-link" href="mailto:'.$gbcEmail.'">
-                            <i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'"></i></a>';
+                            <i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'"></i></a>';
             }
 
             // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
             if ($gCurrentUser->editGuestbookRight()) {
                 echo '
                         <div class="dropdown float-end">
-                            <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                            <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbc_uuid' => $gbcUuid)).'">
-                                    <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                    <i class="bi bi-pencil-square"></i> '.$gL10n->get('SYS_EDIT').'</a>
                                 </li>
                                 <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcUuid, 'database_id' => $gbcUuid, 'database_id_2' => (int) $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'">
-                                    <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                    <i class="bi bi-trash"></i> '.$gL10n->get('SYS_DELETE').'</a>
                                 </li>
                             </ul>
                         </div>';
@@ -92,9 +92,9 @@ if ($getCommentGboUuid !== '') {
                 echo '
                         <div class="btn-group" role="group">
                             <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 10, 'gbc_uuid' => $gbcUuid)).'\')">
-                                <i class="fas fa-check"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                                <i class="bi bi-check-lg"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
                             <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 5, 'gbc_uuid' => $gbcUuid)).'\')">
-                                <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
+                                <i class="bi bi-trash"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                         </div>';
             }
             echo '</div>';
@@ -115,7 +115,7 @@ if ($getCommentGboUuid !== '') {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '
             <button type="button" class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $getCommentGboUuid)).'\'">
-                <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
+                <i class="bi bi-pencil-fill"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
         }
     }
 }

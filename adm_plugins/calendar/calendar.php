@@ -426,7 +426,7 @@ while ($currentDay <= $lastDayCurrentMonth) {
                 }
 
                 if ($plg_geb_icon) {
-                    $icon = '<i class="admidio-icon-chain fas fa-birthday-cake"></i>';
+                    $icon = '<i class="admidio-icon-chain bi bi-cake2-fill"></i>';
                 } else {
                     $icon = '';
                 }

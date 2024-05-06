@@ -71,7 +71,7 @@ try {
         $headline = $gL10n->get('SYS_REGISTRATIONS');
 
         // Navigation in module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-file-signature');
+        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-card-checklist');
 
         // create html page object
         $page = new ModuleRegistration('admidio-registration', $headline);

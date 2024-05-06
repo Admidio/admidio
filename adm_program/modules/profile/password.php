@@ -144,7 +144,7 @@ if ($getMode === 'change') {
                 $.post(action, $(this).serialize(), function(data) {
                     if (data === "success") {
                         passwordFormAlert.attr("class", "alert alert-success form-alert");
-                        passwordFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_PASSWORD_CHANGED').'</strong>");
+                        passwordFormAlert.html("<i class=\"bi bi-check-lg\"></i><strong>'.$gL10n->get('SYS_PASSWORD_CHANGED').'</strong>");
                         passwordFormAlert.fadeIn("slow");
                         setTimeout(function() {
                             $("#admidio-modal").modal("hide");
@@ -152,7 +152,7 @@ if ($getMode === 'change') {
                     } else {
                         passwordFormAlert.attr("class", "alert alert-danger form-alert");
                         passwordFormAlert.fadeIn();
-                        passwordFormAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                        passwordFormAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                     }
                 });
             });
@@ -198,7 +198,7 @@ if ($getMode === 'change') {
     $form->addSubmitButton(
         'btn_save',
         $gL10n->get('SYS_SAVE'),
-        array('icon' => 'fa-check')
+        array('icon' => 'bi-check-lg')
     );
     echo $form->show();
     echo '</div>';

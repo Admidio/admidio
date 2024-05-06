@@ -3,7 +3,7 @@
     <span class="text-uppercase">{$l10n->get('SYS_MENU')}</span>
     <button class="btn btn-link d-md-none collapsed float-end" type="button" data-bs-toggle="collapse"
             data-bs-target="#admidio-main-menu" aria-controls="admidio-main-menu" aria-expanded="false">
-        <i class="fas fa-bars fa-fw"></i>
+        <i class="bi bi-list"></i>
     </button>
 </div>
 <nav class="admidio-menu-list collapse" id="admidio-main-menu">
@@ -13,7 +13,7 @@
             {foreach $menuGroup.items as $menuItem}
                 <li class="nav-item">
                     <a id="{$menuItem.id}" class="nav-link" href="{$menuItem.url}">
-                        <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
+                        <i class="{$menuItem.icon}"></i>{$menuItem.name}
                         {if $menuItem.badgeCount > 0}
                             <span class="badge bg-light text-dark">{$menuItem.badgeCount}</span>
                         {/if}

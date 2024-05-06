@@ -80,7 +80,7 @@ if ($userId === $gCurrentUserId) {
 
 // if user UUID was not set and own profile should be shown then initialize navigation
 if (!isset($_GET['user_uuid'])) {
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-user');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-person-fill');
 } else {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }
@@ -149,7 +149,7 @@ $page->addJavascript('
                 {
                     if (data === "success") {
                         formAlert.attr("class", "alert alert-success form-alert");
-                        formAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                        formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         formAlert.fadeIn("slow");
                         formAlert.animate({opacity: 1.0}, 5000);
                         formAlert.fadeOut("slow");
@@ -165,7 +165,7 @@ $page->addJavascript('
                     } else {
                         formAlert.attr("class", "alert alert-danger form-alert");
                         formAlert.fadeIn();
-                        formAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                        formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                     }
                 }
              });
@@ -204,7 +204,7 @@ if ($gCurrentUser->hasRightEditProfile($user)) {
         'menu_item_profile_edit',
         $gL10n->get('SYS_EDIT_PROFILE'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $user->getValue('usr_uuid'))),
-        'fa-edit'
+        'bi-pencil-square'
     );
 }
 
@@ -214,7 +214,7 @@ if ($userId === $gCurrentUserId) {
         'menu_item_profile_password',
         $gL10n->get('SYS_CHANGE_PASSWORD'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)),
-        'fa-key'
+        'bi-key-fill'
     );
 } elseif ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0) {
     // Administrators can change or send password if login is configured and user is member of current organization
@@ -225,7 +225,7 @@ if ($userId === $gCurrentUserId) {
             'menu_item_profile_send_password',
             $gL10n->get('ORG_SEND_NEW_PASSWORD'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'send_login_msg')),
-            'fa-key'
+            'bi-key-fill'
         );
     } else {
         // if user has no email or send email is disabled then administrator could set a new password
@@ -233,7 +233,7 @@ if ($userId === $gCurrentUserId) {
             'menu_item_profile_password',
             $gL10n->get('SYS_CHANGE_PASSWORD'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)),
-            'fa-key'
+            'bi-key-fill'
         );
     }
 }
@@ -244,7 +244,7 @@ if ($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasR
         'menu_item_profile_change_history',
         $gL10n->get('SYS_CHANGE_HISTORY'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('user_uuid' => $getUserUuid)),
-        'fa-history'
+        'bi-clock-history'
     );
 }
 
@@ -253,7 +253,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_profile_vcard',
     $gL10n->get('SYS_EXPORT_VCARD'),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '1', 'user_uuid' => $getUserUuid)),
-    'fa-file-export'
+    'bi-download'
 );
 
 // show link to create relations
@@ -262,7 +262,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUs
         'menu_item_profile_user_relation_types',
         $gL10n->get('SYS_CREATE_RELATIONSHIP'),
         SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)),
-        'fa-people-arrows'
+        'bi-person-heart'
     );
 }
 
@@ -307,7 +307,7 @@ $page->addHtml('
 
                                     if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
                                         $userName .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)) . '" title="' . $gL10n->get('SYS_WRITE_PM') . '">' .
-                                            '<i class="fas fa-comment-alt"></i>' . $user->getValue('usr_login_name') . '</a>';
+                                            '<i class="bi bi-chat-left-fill"></i>' . $user->getValue('usr_login_name') . '</a>';
                                     } else {
                                         $userName .= $user->getValue('usr_login_name');
                                     }
@@ -383,7 +383,7 @@ $page->addHtml('
                                 && (strlen($postcode) > 0 || strlen($city) > 0)) {
                                     $address .= '
                                         <a class="admidio-icon-link" href="'. $mapUrl. '" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_HOME_DESC').'">
-                                            <i class="fas fa-map-marker-alt"></i>'.$gL10n->get('SYS_MAP').'</a>';
+                                            <i class="bi bi-map-fill"></i>'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if it's not the profile of CurrentUser
                                     if ($userId !== $gCurrentUserId) {
@@ -419,14 +419,14 @@ $page->addHtml('
                 $page->addHtml('
                 <ul id="profile_picture_links" class="list-unstyled">
                     <li><a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)).'">
-                        <i class="fas fa-upload"></i>'.$gL10n->get('SYS_UPLOAD_PROFILE_PICTURE').'</a></li>');
+                        <i class="bi bi-upload"></i>'.$gL10n->get('SYS_UPLOAD_PROFILE_PICTURE').'</a></li>');
 
                 // the image can only be deleted if corresponding rights exist
                 if (((string) $user->getValue('usr_photo') !== '' && (int) $gSettingsManager->get('profile_photo_storage') === 0)
                         || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1) {
                     $page->addHtml('<li><a id="btn_delete_photo" class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $getUserUuid)).
-                                        '"><i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_DELETE_PROFILE_PICTURE').'</a></li>');
+                                        '"><i class="bi bi-trash"></i>'.$gL10n->get('SYS_DELETE_PROFILE_PICTURE').'</a></li>');
                 }
                 $page->addHtml('</ul>');
             }
@@ -547,21 +547,21 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_assign_roles'],
                 'right' => $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'),
-                'icon'  => 'fa-users'
+                'icon'  => 'bi-people-fill'
             );
         }
         if ($user->checkRolesRight('rol_approve_users')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_approve_users'],
                 'right' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'),
-                'icon'  => 'fa-file-signature'
+                'icon'  => 'bi-card-checklist'
             );
         }
         if ($user->checkRolesRight('rol_edit_user')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_edit_user'],
                 'right' => $gL10n->get('SYS_RIGHT_EDIT_USER'),
-                'icon'  => 'fa-users-cog'
+                'icon'  => 'bi-person-fill-gear'
             );
         }
 
@@ -569,77 +569,77 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_mail_to_all'],
                 'right' => $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'),
-                'icon'  => 'fa-envelope'
+                'icon'  => 'bi-envelope-fill'
             );
         }
         if ($user->checkRolesRight('rol_profile')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_profile'],
                 'right' => $gL10n->get('SYS_RIGHT_PROFILE'),
-                'icon'  => 'fa-user'
+                'icon'  => 'bi-person-fill'
             );
         }
         if ($user->checkRolesRight('rol_announcements') && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_announcements'],
                 'right' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
-                'icon'  => 'fa-newspaper'
+                'icon'  => 'bi-newspaper'
             );
         }
         if ($user->checkRolesRight('rol_events') && (int) $gSettingsManager->get('events_module_enabled') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_events'],
                 'right' => $gL10n->get('SYS_RIGHT_DATES'),
-                'icon'  => 'fa-calendar-alt'
+                'icon'  => 'bi-calendar-week-fill'
             );
         }
         if ($user->checkRolesRight('rol_photo') && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_photo'],
                 'right' => $gL10n->get('SYS_RIGHT_PHOTOS'),
-                'icon'  => 'fa-image'
+                'icon'  => 'bi-image-fill'
             );
         }
         if ($user->checkRolesRight('rol_documents_files') && (int) $gSettingsManager->getBool('documents_files_module_enabled')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_documents_files'],
                 'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
-                'icon'  => 'fa-download'
+                'icon'  => 'bi-file-earmark-arrow-down-fill'
             );
         }
         if ($user->checkRolesRight('rol_guestbook') && (int) $gSettingsManager->get('enable_guestbook_module') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_guestbook'],
                 'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK'),
-                'icon'  => 'fa-book'
+                'icon'  => 'bi-book-half'
             );
         }
         if ($user->checkRolesRight('rol_guestbook_comments') && (int) $gSettingsManager->get('enable_guestbook_module') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_guestbook_comments'],
                 'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),
-                'icon'  => 'fa-comment'
+                'icon'  => 'bi-chat-fill'
             );
         }
         if ($user->checkRolesRight('rol_weblinks') && (int) $gSettingsManager->get('enable_weblinks_module') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_weblinks'],
                 'right' => $gL10n->get('SYS_RIGHT_WEBLINKS'),
-                'icon'  => 'fa-link'
+                'icon'  => 'bi-link-45deg'
             );
         }
         if ($user->checkRolesRight('rol_all_lists_view')) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_all_lists_view'],
                 'right' => $gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'),
-                'icon'  => 'fa-list'
+                'icon'  => 'bi-list-task'
             );
         }
 
         foreach ($profileRightsArray as $profileRight) {
             $page->addHtml('<div class="col-sm-6 col-md-4 admidio-profile-user-right" data-bs-toggle="popover" data-bs-html="true"
                 data-bs-trigger="hover click" data-bs-placement="auto" data-bs-content="'.$gL10n->get('SYS_ASSIGNED_BY_ROLES'). ':
-                <strong>'. $profileRight['roles'].'</strong>"><i class="fas ' . $profileRight['icon'] . '"></i>'. $profileRight['right']. '</div>');
+                <strong>'. $profileRight['roles'].'</strong>"><i class="bi ' . $profileRight['icon'] . '"></i>'. $profileRight['right']. '</div>');
         }
     } else {
         $page->addHtml('<div class="col-sm-12">'.$gL10n->get('SYS_NO_PERMISSIONS_ASSIGNED').'</div>');
@@ -665,7 +665,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
     if ($gCurrentUser->assignRoles()) {
         $page->addHtml('<a class="btn btn-secondary float-end openPopup" id="profile_role_memberships_change" data-class="modal-lg"
                     href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => '1')).'">
-                    <i class="fas fa-edit"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
+                    <i class="bi bi-pencil-square me-1"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
     }
     $page->addHtml('</div>
         <div class="card-body" id="profile_roles_box_body">
@@ -825,7 +825,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
         if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->editUsers()) {
             $page->addHtml('
                         <a class="admidio-icon-link float-end" id="profile_relations_new_entry" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)).'">
-                            <i class="fas fa-plus-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CREATE_RELATIONSHIP').'"></i></a>');
+                            <i class="bi bi-plus-circle-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CREATE_RELATIONSHIP').'"></i></a>');
         }
         $page->addHtml('</div>
             <div class="card-body" id="profile_user_relations_box_body">');
@@ -865,7 +865,7 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
 
             if ($gCurrentUser->hasRightEditProfile($otherUser)) {
                 $editUserIcon = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid'))) . '"><i
-                    class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i></a>';
+                    class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i></a>';
             }
 
             $page->addHtml('<li id="row_ure_'.(int) $relation->getValue('ure_id').'" class="list-group-item">');
@@ -878,13 +878,13 @@ if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
                 $page->addHtml('<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_'.(int) $relation->getValue('ure_id'), 'database_id' => (int) $relation->getValue('ure_id'),
                                 'name' => $relationType->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))).'"><i
-                                class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_RELATIONSHIP').'"></i></a>');
+                                class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_RELATIONSHIP').'"></i></a>');
             }
 
             // only show info if system setting is activated
             if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
                 $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.(int) $relation->getValue('ure_id').'" href="javascript:void(0)"><i
-                    class="fas fa-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>');
+                    class="bi bi-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>');
             }
 
             $page->addHtml('</span></div>');

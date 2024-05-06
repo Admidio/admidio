@@ -42,7 +42,7 @@ if ($getModeration && !$gCurrentUser->editGuestbookRight()) {
 if ($getGboUuid !== '') {
     $gNavigation->addUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'));
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'), 'fa-book');
+    $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'), 'bi-book-half');
 }
 
 // create html page object
@@ -136,7 +136,7 @@ if ($getGboUuid === '' && !$getModeration) {
         'menu_item_guestbook_new_entry',
         $gL10n->get('SYS_WRITE_ENTRY'),
         ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php',
-        'fa-pencil-alt'
+        'bi bi-pencil-fill'
     );
 }
 
@@ -163,7 +163,7 @@ if (!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMa
             'menu_item_guestbook_moderate',
             $gL10n->get('GBO_MODERATE_ENTRIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1')),
-            'fa-tasks',
+            'bi-list-check',
             $countLockedEntries
         );
     }
@@ -204,7 +204,7 @@ if ($countGuestbookEntries === 0) {
         $page->addHtml('
         <div class="card admidio-blog" id="gbo_'.$gboUuid.'">
             <div class="card-header">
-                <i class="fas fa-book"></i>'.
+                <i class="bi bi-book-half"></i>'.
                 $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gboName, $guestbook->getValue(
                     'gbo_timestamp_create',
                     $gSettingsManager->getString('system_date')
@@ -214,30 +214,30 @@ if ($countGuestbookEntries === 0) {
         if (strlen($gboHomepage) > 0) {
             $page->addHtml('
                     <a class="admidio-icon-link" href="'.$gboHomepage.'" target="_blank">
-                        <i class="fas fa-link" data-bs-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
+                        <i class="bi bi-link" data-bs-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
         }
 
         // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
         if (strlen($gboEmail) > 0) {
             $page->addHtml('
                     <a class="admidio-icon-link" href="mailto:'.$gboEmail.'">
-                        <i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
+                        <i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
         }
 
         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
         if ($gCurrentUser->editGuestbookRight()) {
             $page->addHtml('
                     <div class="dropdown float-end">
-                        <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                        <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)). '">
-                                <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                <i class="bi bi-pencil-square"></i> '.$gL10n->get('SYS_EDIT').'</a>
                             </li>
                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
                                 'element_id' => 'gbo_'.$gboUuid, 'database_id' => $gboUuid, 'name' => $gboName)).'">
-                                <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                <i class="bi bi-trash"></i> '.$gL10n->get('SYS_DELETE').'</a>
                             </li>
                         </ul>
                     </div>');
@@ -253,9 +253,9 @@ if ($countGuestbookEntries === 0) {
             $page->addHtml('
                     <div class="btn-group" role="group">
                         <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbo_'.$gboUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 9, 'gbo_uuid' => $gboUuid)).'\')">
-                            <i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                            <i class=\"bi bi-check-lg\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
                         <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbo_'.$gboUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 2, 'gbo_uuid' => $gboUuid)).'\')">
-                            <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
+                            <i class="bi bi-trash"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>');
         }
 
@@ -287,12 +287,12 @@ if ($countGuestbookEntries === 0) {
             // this link will be shown when comments where loaded
             $page->addHtml('
                     <a id="admCommentsVisible_'. $gboUuid. '" class="btn admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayOthers. ';">
-                        <i class="fas fa-comment-slash"></i>'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
+                        <i class="bi bi-chat-fill-slash"></i>'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
 
             // this link will be invisible when comments where loaded
             $page->addHtml('
                     <a id="admCommentsInvisible_'. $gboUuid. '" class="btn admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayShowComments. ';">
-                        <i class="fas fa-comment"></i>'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
+                        <i class="bi bi-chat-fill"></i>'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
 
             // Hier ist das div, in das die Kommentare reingesetzt werden
             $page->addHtml('<div id="comments_'. $gboUuid. '" class="admidio-guestbook-comments">');
@@ -319,7 +319,7 @@ if ($countGuestbookEntries === 0) {
             $loadUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $gboUuid));
             $page->addHtml('
                     <button type="button" class="btn btn-primary" onclick="window.location.href=\''.$loadUrl.'\'">
-                        <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>');
+                        <i class="bi bi-pencil-fill"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>');
         }
 
         // Falls eine ID uebergeben wurde und der dazugehoerige Eintrag existiert,

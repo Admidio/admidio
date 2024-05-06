@@ -60,58 +60,58 @@ class ModuleDocumentsFiles extends HtmlPage
 
             if ($row['folder']) {
                 $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $row['uuid']));
-                $templateRow['icon'] = 'fas fa-fw fa-folder-open';
+                $templateRow['icon'] = 'bi bi-folder-fill';
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
 
                 if ($this->folder->hasUploadRight()) {
                     if ($gCurrentUser->adminDocumentsFiles()) {
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_config.php', array('folder_uuid' => $row['uuid'])),
-                            'icon' => 'fas fa-lock',
+                            'icon' => 'bi bi-shield-lock',
                             'tooltip' => $gL10n->get('SYS_PERMISSIONS')
                         );
                     }
                     if ($row['existsInFileSystem']) {
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/rename.php', array('folder_uuid' => $row['uuid'])),
-                            'icon' => 'fas fa-edit',
+                            'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_EDIT_FOLDER')
                         );
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/move.php', array('folder_uuid' => $row['uuid'])),
-                            'icon' => 'fas fa-folder',
+                            'icon' => 'bi bi-folder-symlink',
                             'tooltip' => $gL10n->get('SYS_MOVE_FOLDER')
                         );
                     }
                     $templateRow['actions'][] = array(
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php',
                                 array('type' => 'fol', 'element_id' => 'row_'.$row['uuid'], 'name' => $row['name'], 'database_id' => $row['uuid'])),
-                        'icon' => 'fas fa-trash-alt',
+                        'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_FOLDER')
                     );
                 }
             } else {
                 $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $row['uuid'], 'view' => 1));
-                $templateRow['icon'] = 'fas fa-fw '.FileSystemUtils::getFileFontAwesomeIcon($row['name']);
+                $templateRow['icon'] = 'bi '.FileSystemUtils::getFileIcon($row['name']);
                 $templateRow['title'] = $gL10n->get('SYS_FILE');
 
                 if ($this->folder->hasUploadRight()) {
                     if ($row['existsInFileSystem']) {
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/rename.php', array('folder_uuid' => $this->folder->getValue('fol_uuid'), 'file_uuid' => $row['uuid'])),
-                            'icon' => 'fas fa-edit',
+                            'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_EDIT')
                         );
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/move.php', array('folder_uuid' => $this->folder->getValue('fol_uuid'), 'file_uuid' => $row['uuid'])),
-                            'icon' => 'fas fa-folder',
+                            'icon' => 'bi bi-folder-symlink',
                             'tooltip' => $gL10n->get('SYS_MOVE_FILE')
                         );
                     }
                     $templateRow['actions'][] = array(
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php',
                             array('type' => 'fil', 'element_id' => 'row_'.$row['uuid'], 'name' => $row['name'], 'database_id' => $row['uuid'], 'database_id_2' => $this->folder->getValue('fol_uuid'))),
-                        'icon' => 'fas fa-trash-alt',
+                        'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_FILE')
                     );
                 }
@@ -136,11 +136,11 @@ class ModuleDocumentsFiles extends HtmlPage
             $templateRow = array();
 
             if ($row['folder']) {
-                $templateRow['icon'] = 'fas fa-fw fa-folder';
+                $templateRow['icon'] = 'bi bi-folder-fill';
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
 
             } else {
-                $templateRow['icon'] = 'fas fa-fw '.FileSystemUtils::getFileFontAwesomeIcon($row['name']);
+                $templateRow['icon'] = 'bi '.FileSystemUtils::getFileIcon($row['name']);
                 $templateRow['title'] = $gL10n->get('SYS_FILE');
             }
 

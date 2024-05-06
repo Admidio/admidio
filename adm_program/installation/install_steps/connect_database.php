@@ -22,7 +22,7 @@ if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '') 
         $gL10n->get('SYS_NOTE'),
         $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
         $gL10n->get('SYS_BACK'),
-        'fa-arrow-circle-left',
+        'bi-arrow-circle-left-fill',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome'))
     );
     // => EXIT
@@ -108,10 +108,10 @@ $form->closeGroupBox();
 $form->addButton(
     'previous_page',
     $gL10n->get('SYS_BACK'),
-    array('icon' => 'fa-arrow-circle-left', 'class' => 'admidio-margin-bottom',
+    array('icon' => 'bi-arrow-circle-left-fill', 'class' => 'admidio-margin-bottom',
         'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')))
 );
-$form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'fa-arrow-circle-right', 'class' => 'float-right'));
+$form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'bi-arrow-circle-right-fill', 'class' => 'float-right'));
 
 $page->addHtml($form->show());
 $page->show();

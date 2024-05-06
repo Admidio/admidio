@@ -78,14 +78,14 @@ $page->addJavascript('
                 if (data === "success") {
 
                     formAlert.attr("class", "alert alert-success form-alert");
-                    formAlert.html("<i class=\"fas fa-check\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
+                    formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
                     formAlert.fadeIn("slow");
                     formAlert.animate({opacity: 1.0}, 2500);
                     formAlert.fadeOut("slow");
                 } else {
                     formAlert.attr("class", "alert alert-danger form-alert");
                     formAlert.fadeIn();
-                    formAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                    formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                 }
             }
         });
@@ -226,7 +226,7 @@ foreach ($config as $key => $value) {
         		<tbody id="mylist_fields_tbody' . $key . '">
             		<tr id="table_row_button">
                 		<td colspan="2">
-                    		<a class="icon-text-link" href="javascript:addColumn' . $key . '()"><i class="fas fa-plus-circle"></i> ' . $gL10n->get('SYS_ADD_COLUMN') . '</a>
+                    		<a class="icon-text-link" href="javascript:addColumn' . $key . '()"><i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_COLUMN') . '</a>
                 		</td>
             		</tr>
         		</tbody>
@@ -253,10 +253,10 @@ foreach ($config as $key => $value) {
     $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => HtmlForm::FIELD_HIDDEN));
     $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => HtmlForm::FIELD_HIDDEN));
     $html = '<a id="copy_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('copy' => $key + 1)) . '">
-            <i class="fas fa-clone"></i> ' . $gL10n->get('SYS_COPY_CONFIGURATION') . '</a>';
+            <i class="bi bi-copy"></i> ' . $gL10n->get('SYS_COPY_CONFIGURATION') . '</a>';
     if (count($config) > 1 && $value['default_conf'] == false) {
         $html .= '&nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('delete' => $key + 1)) . '">
-            <i class="fas fa-trash-alt"></i> ' . $gL10n->get('SYS_DELETE_CONFIGURATION') . '</a>';
+            <i class="bi bi-trash"></i> ' . $gL10n->get('SYS_DELETE_CONFIGURATION') . '</a>';
     }
     if (!empty($value['name'])) {
         $formConfigurations->addCustomContent('', $html);
@@ -266,13 +266,13 @@ foreach ($config as $key => $value) {
 
 $formConfigurations->addLine();
 $html = '<a id="add_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)) . '">
-            <i class="fas fa-plus-circle"></i> ' . $gL10n->get('SYS_ADD_ANOTHER_CONFIG') . '
+            <i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_ANOTHER_CONFIG') . '
         </a>';
 $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
-                <i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '
+                <i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '
             </div>';
 $formConfigurations->addCustomContent('', $html, array('helpTextId' => $htmlDesc));
-$formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
 $page->addHtml($formConfigurations->show());
 

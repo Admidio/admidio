@@ -42,12 +42,12 @@ if (ADMIDIO_VERSION_BETA > 0) {
 
     $form->addDescription(
         '<div class="alert alert-warning alert-small" role="alert">
-            <i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
+            <i class="bi bi-exclamation-triangle-fill"></i>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
         </div>'
     );
 }
 
-$form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'fa-arrow-circle-right', 'class' => 'float-right'));
+$form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'bi-arrow-circle-right-fill', 'class' => 'float-right'));
 
 $page->addHtml($form->show());
 $page->addHtml('<br /><br />');

@@ -57,7 +57,7 @@ if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
 if ($getLinkUuid  !== '') {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-link');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-link-45deg');
 }
 
 // create html page object
@@ -81,7 +81,7 @@ if ($weblinks->getId() === 0) {
             'menu_item_links_add',
             $gL10n->get('SYS_CREATE_WEBLINK'),
             ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php',
-            'fa-plus-circle'
+            'bi-plus-circle-fill'
         );
     }
 
@@ -91,7 +91,7 @@ if ($weblinks->getId() === 0) {
             'menu_item_links_maintain_categories',
             $gL10n->get('SYS_EDIT_CATEGORIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')),
-            'fa-th-large'
+            'bi-hdd-stack-fill'
         );
     }
 
@@ -163,17 +163,17 @@ if ($weblinksCount === 0) {
             // show weblink
             $page->addHtml('
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('link_uuid' => $lnkUuid)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
-                    <i class="fas fa-link"></i>'.$lnkName.'</a>');
+                    <i class="bi bi-link"></i>'.$lnkName.'</a>');
 
             // change and delete only users with rights
             if ($weblink->isEditable()) {
                 $page->addHtml('
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $lnkUuid)). '">
-                        <i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+                        <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'lnk',
                         'element_id' => 'lnk_'.$lnkUuid, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkUuid)).'">
-                        <i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
             }
 
             // get available description

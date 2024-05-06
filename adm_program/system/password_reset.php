@@ -141,7 +141,7 @@ if ($getUserUuid !== '') {
         $form->addSubmitButton(
             'btn_save',
             $gL10n->get('SYS_SAVE'),
-            array('icon' => 'fa-check')
+            array('icon' => 'bi-check-lg')
         );
 
         $page->addHtml($form->show());
@@ -283,7 +283,7 @@ if ($getUserUuid !== '') {
         $form->addCaptcha('captcha_code');
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 
     // add form to html page and show page
     $page->addHtml($form->show());

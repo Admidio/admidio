@@ -197,7 +197,7 @@ class TableUserField extends TableAccess
                         foreach ($arrListValues as $key => &$listValue) {
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
                                 // if value is imagefile or imageurl then show image
-                                if (Image::isFontAwesomeIcon($listValue)
+                                if (Image::isBootstrapIcon($listValue)
                                 || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)) { // TODO: simplify check for images
                                     // if there is imagefile and text separated by | then explode them
                                     if (str_contains($listValue, '|')) {
@@ -235,8 +235,8 @@ class TableUserField extends TableAccess
 
                     break;
                 case 'usf_icon':
-                    // if value is font awesome icon or imagefile or imageurl then show image
-                    $value = Image::getIconHtml($value, $this->getValue('usf_name'));
+                    // if value is bootstrap icon then show image
+                    $value = '<i class="bi bi-' . $value . '"></i>';
 
                     break;
                 default:
@@ -432,9 +432,9 @@ class TableUserField extends TableAccess
                         $newValue = $category->getValue('cat_id');
                     }
                 } elseif ($columnName === 'usf_icon' && $newValue !== '') {
-                    // check if font awesome syntax is used
-                    if (!preg_match('/fa-[a-zA-z0-9]/', $newValue)) {
-                        throw new AdmException('SYS_INVALID_FONT_AWESOME');
+                    // check if bootstrap icon syntax is used
+                    if (preg_match('/[^a-z0-9-]/', $newValue)) {
+                        throw new AdmException('SYS_INVALID_ICON_NAME');
                     }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);

@@ -247,8 +247,8 @@ class TableMenu extends TableAccess
         if ($newValue !== parent::getValue($columnName) && $checkValue) {
             if ($columnName === 'men_icon' && $newValue !== '') {
                 // check if font awesome syntax is used
-                if (!preg_match('/fa-[a-zA-z0-9]/', $newValue)) {
-                    throw new AdmException('SYS_INVALID_FONT_AWESOME');
+                if (preg_match('/[^a-z0-9-]/', $newValue)) {
+                    throw new AdmException('SYS_INVALID_ICON_NAME');
                 }
             }
 

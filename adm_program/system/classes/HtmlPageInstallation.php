@@ -30,7 +30,7 @@
  * // create a message
  * $page = new HtmlPageInstallation();
  * $page->setUpdateModus();
- * $page->showMessage('error', 'Message', 'Some error message.', $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
+ * $page->showMessage('error', 'Message', 'Some error message.', $gL10n->get('SYS_OVERVIEW'), 'bi-house-door-fill', ADMIDIO_URL . '/adm_program/overview.php');
  * ```
  */
 class HtmlPageInstallation extends HtmlPage

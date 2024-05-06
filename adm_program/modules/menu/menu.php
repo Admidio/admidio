@@ -20,7 +20,7 @@ $headline = $gL10n->get('SYS_MENU');
 // create html page object
 $page = new HtmlPage('admidio-menu', $headline);
 
-$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-stream');
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-menu-button-wide-fill');
 
 $page->addJavascript(
     '
@@ -43,7 +43,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_menu_new',
     $gL10n->get('SYS_CREATE_ENTRY'),
     ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
-    'fa-plus-circle'
+    'bi-plus-circle-fill'
 );
 
 // Create table object
@@ -54,7 +54,7 @@ $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
     $gL10n->get('SYS_URL'),
-    '<i class="fas fa-star" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>',
+    '<i class="bi bi-star-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>',
     '&nbsp;'
 );
 $menuOverview->setColumnAlignByArray(array('left', 'left', 'left', 'center', 'right'));
@@ -85,7 +85,7 @@ while ($mainMen = $mainMenStatement->fetch()) {
             $menuOverview->addTableBody();
             $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
             $menuOverview->addColumn(
-                '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.Language::translateIfTranslationStrId((string) $mainMen['men_name']),
+                '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="bi bi-caret-down-fill"></i></a>'.Language::translateIfTranslationStrId((string) $mainMen['men_name']),
                 array('id' => 'group_'.$blockId, 'colspan' => '8')
             );
             $menuOverview->addTableBody('id', $blockId);
@@ -104,24 +104,24 @@ while ($mainMen = $mainMenStatement->fetch()) {
         }
 
         $htmlMoveRow = '<a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_UP.'">'.
-                            '<i class="fas fa-chevron-circle-up" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
+                            '<i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
                         <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="'.$menuRow['men_uuid'].'" data-direction="'.TableMenu::MOVE_DOWN.'">'.
-                            '<i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
+                            '<i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
         if ($menuRow['men_standard']) {
-            $htmlStandardMenu = '<i class="fas fa-star" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>';
+            $htmlStandardMenu = '<i class="bi bi-star-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>';
         }
 
         $menuAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('menu_uuid' => $menuRow['men_uuid'])). '">'.
-                                '<i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>';
+                                '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>';
 
         // don't allow delete for standard menus
         if (!$menuRow['men_standard']) {
             $menuAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
                                         $menuRow['men_uuid'], 'name' => $menuName, 'database_id' => $menuRow['men_uuid'])).'">'.
-                                        '<i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                                        '<i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
 
         // create array with all column values

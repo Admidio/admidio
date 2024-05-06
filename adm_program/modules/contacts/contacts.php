@@ -30,7 +30,7 @@ if (!$gSettingsManager->getBool('contacts_show_all')) {
 $headline = $gL10n->get('SYS_CONTACTS');
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-person-vcard-fill');
 
 $contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('contacts_list_configuration'));
 $_SESSION['contacts_list_configuration'] = $contactsListConfig;
@@ -56,7 +56,7 @@ if ($gCurrentUser->editUsers()) {
         'menu_item_contacts_create_contact',
         $gL10n->get('SYS_CREATE_CONTACT'),
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_new.php',
-        'fa-plus-circle'
+        'bi-plus-circle-fill'
     );
 
     if ($gSettingsManager->getBool('profile_log_edit_fields')) {
@@ -65,7 +65,7 @@ if ($gCurrentUser->editUsers()) {
             'menu_item_contacts_change_history',
             $gL10n->get('SYS_CHANGE_HISTORY'),
             ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php',
-            'fa-history'
+            'bi-clock-history'
         );
     }
 
@@ -84,7 +84,7 @@ if ($gCurrentUser->editUsers()) {
         'menu_item_contacts_import_users',
         $gL10n->get('SYS_IMPORT_CONTACTS'),
         ADMIDIO_URL.FOLDER_MODULES.'/contacts/import.php',
-        'fa-upload'
+        'bi-upload'
     );
 } else {
     $contactsListConfig->setModeShowOnlyNames();
@@ -96,7 +96,7 @@ if ($gCurrentUser->isAdministrator()) {
         'menu_item_contacts_profile_fields',
         $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
         ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
-        'fa-th-list'
+        'bi-ui-radios'
     );
 }
 
@@ -110,7 +110,7 @@ $columnHeading = $contactsListConfig->getColumnNames();
 array_unshift(
     $columnHeading,
     $gL10n->get('SYS_ABR_NO'),
-    '<i class="fas fa-user" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>'
+    '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>'
 );
 $columnHeading[] = '&nbsp;';
 

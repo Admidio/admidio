@@ -89,9 +89,15 @@ class MenuNode
         $node['url'] = $url;
 
         if ($icon === '') {
-            $icon = 'fa-trash-alt invisible';
+            $icon = 'bi bi-trash invisible';
         }
-        $node['icon'] = 'fas ' . $icon;
+        if (strpos($icon, 'bi-') !== false) {
+            $node['icon'] = 'bi ' . $icon;
+        } elseif (strpos($icon, 'bi') !== false) {
+            $node['icon'] = $icon;
+        } else {
+            $node['icon'] = 'bi bi-' . $icon;
+        }
         $node['badgeCount'] = $badgeCount;
 
         if ($parentMenuItemId === '') {

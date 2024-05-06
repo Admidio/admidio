@@ -82,12 +82,12 @@ $page->addHtml('<div class="btn-group admidio-margin-bottom">');
 if ($previousImage > 0) {
     $page->addHtml('
     <button class="btn btn-secondary" onclick="window.location.href=\''.$urlPreviousImage.'\'">
-        <i class="fas fa-arrow-alt-circle-left"></i>'.$gL10n->get('SYS_PREVIOUS_PHOTO').'</button>');
+        <i class="bi bi-arrow-left-circle-fill"></i>'.$gL10n->get('SYS_PREVIOUS_PHOTO').'</button>');
 }
 if ($nextImage <= $photoAlbum->getValue('pho_quantity')) {
     $page->addHtml('
     <button class="btn btn-primary" onclick="window.location.href=\''.$urlNextImage.'\'">
-        <i class="fas fa-arrow-alt-circle-right"></i>'.$gL10n->get('SYS_NEXT_PHOTO').'</button>');
+        <i class="bi bi-arrow-right-circle-fill"></i>'.$gL10n->get('SYS_NEXT_PHOTO').'</button>');
 }
 $page->addHtml('</div>');
 

@@ -176,7 +176,7 @@ if ($getMode === 'assign') {
             'menu_item_members_assign_create_user',
             $gL10n->get('SYS_CREATE_MEMBER'),
             ADMIDIO_URL.FOLDER_MODULES.'/contacts/contacts_new.php',
-            'fa-plus-circle'
+            'bi-plus-circle-fill'
         );
     }
 
@@ -231,7 +231,7 @@ if ($getMode === 'assign') {
 
     // create array with all column heading values
     $columnHeading = array(
-        '<i class="fas fa-user" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"></i>',
+        '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"></i>',
         $gL10n->get('SYS_MEMBER'));
     $columnAlignment = array('left', 'left');
 
@@ -247,7 +247,7 @@ if ($getMode === 'assign') {
     || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
-        $columnHeading[] = '<i class="fas fa-map-marker-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_ADDRESS').'"></i>';
+        $columnHeading[] = $gL10n->get('SYS_ADDRESS');
         $columnAlignment[] = 'left';
     }
     if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers())) {

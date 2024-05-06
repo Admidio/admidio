@@ -25,7 +25,7 @@
  * // show link to create new announcement
  * $myNavbar->addItem(
  *     'menu_item_new_entry', ADMIDIO_URL . FOLDER_MODULES . '/my-module/my-module_new.php',
- *     $gL10n->get('SYS_CREATE'), 'fa-plus-circle'
+ *     $gL10n->get('SYS_CREATE'), 'bi-plus-circle'
  * );
  * $myNavbar->show();
  * ```
@@ -208,7 +208,7 @@ class HtmlNavbar
                     $html .= '
                         <li class="nav-item dropdown ' . $menuEntry['class'] . '">
                             <a id="' . $menuEntry['id'] . '" href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bars"></i>' . $menuEntry['text'] . '
+                                <i class="bi bi-list"></i>' . $menuEntry['text'] . '
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">';
 

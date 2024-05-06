@@ -65,7 +65,7 @@ class MainMenu
      *              [name] => Übersicht
      *              [description] =>
      *              [url] => http://localhost/GitHub/admidio/adm_program/overview.php
-     *              [icon] => fa-home
+     *              [icon] => bi-house-door-fill
      *              [badgeCount] => 0 )
      *          [announcements] => Array (
      *              [id] => announcements

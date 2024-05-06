@@ -92,7 +92,7 @@ $form->addEditor(
     $gL10n->get('SYS_DESCRIPTION'),
     $link->getValue('lnk_description')
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $link->getValue('lnk_usr_id_create'),

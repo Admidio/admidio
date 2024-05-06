@@ -211,13 +211,13 @@ $form->addCheckbox(
     'usf_hidden',
     $gL10n->get('ORG_FIELD_NOT_HIDDEN'),
     (bool) $userField->getValue('usf_hidden'),
-    array('helpTextId' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'fa-eye')
+    array('helpTextId' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'bi-eye-fill')
 );
 $form->addCheckbox(
     'usf_disabled',
     $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))),
     (bool) $userField->getValue('usf_disabled'),
-    array('helpTextId' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'fa-key')
+    array('helpTextId' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'bi-key-fill')
 );
 
 if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL') {
@@ -225,14 +225,14 @@ if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNam
         'usf_registration',
         $gL10n->get('ORG_FIELD_REGISTRATION'),
         (bool) $userField->getValue('usf_registration'),
-        array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'fa-address-card')
+        array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'bi-card-checklist')
     );
 } else {
     $form->addCheckbox(
         'usf_registration',
         $gL10n->get('ORG_FIELD_REGISTRATION'),
         (bool) $userField->getValue('usf_registration'),
-        array('icon' => 'fa-address-card')
+        array('icon' => 'bi-card-checklist')
     );
 }
 $form->addInput(
@@ -253,7 +253,7 @@ $form->addInput(
     $userField->getValue('usf_icon', 'database'),
     array(
         'maxLength' => 100,
-        'helpTextId' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>'))
+        'helpTextId' => $gL10n->get('SYS_ICON_FONT_DESC', array('<a href="https://icons.getbootstrap.com/" target="_blank">', '</a>'))
     )
 );
 $form->addInput(
@@ -271,7 +271,7 @@ $form->addEditor(
     array('toolbar' => 'AdmidioComments'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $userField->getValue('usf_usr_id_create'),
     $userField->getValue('usf_timestamp_create'),

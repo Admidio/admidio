@@ -195,17 +195,26 @@ a {
 }
 
 /* add 5px distance to all icons within a icon text combination */
-.admidio-icon-chain, .nav-link .fas, .btn .fas, .alert .fas,
-.admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"],
-label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
+.admidio-icon-chain, .nav-link .bi, .btn .bi, .alert .bi,
+.admidio-profile-user-right .bi, .checkbox .bi, input[type="radio"],
+label img, .form-control-static img, .accordion .bi, .form-control-static .bi  {
     margin-right: 5px;
 }
 
+.admidio-icon {
+    padding: 3px;
+}
+
 .admidio-icon-link {
-    margin-left: 0;
-    padding-left: 0;
-    text-align: left;
+    padding: 3px;
     cursor: pointer;
+}
+
+.admidio-icon-link:hover {
+    padding: 3px;
+    border-radius: 50%;
+    background-color: var(--bs-tertiary);
+    filter: brightness(92%);
 }
 
 .admidio-reduced {
@@ -215,6 +224,7 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 
 .alert-info {
     background-color: #abd7e0;
+    border-color: #87a9b1;
 }
 
 /* show vertical btn group in mobile view */
@@ -237,9 +247,9 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 .admidio-form-group-required .form-label:after,
 .admidio-form-group-required .form-check-label:after,
 .admidio-form-required-notice span:after {
-    font-family: "Font Awesome 5 Free", serif;
+    font-family: "bootstrap-icons", serif;
     font-size: 6pt;
-    content: "\f111";
+    content: "\F287";
     color: #d91515;
     white-space: nowrap;
     vertical-align: super;
@@ -325,11 +335,11 @@ label {
     font-size: 150%;
 }
 
-.card-header .fas, .card-header .fab {
+.card-header .bi {
     margin-right: 10px;
 }
 
-.card-header .float-end .fas {
+.card-header .float-end .bi {
     margin-right: 0;
 }
 
@@ -362,7 +372,7 @@ label {
 }
 
 .admidio-blog-comment .card-header, .admidio-blog-comment .card-body, .admidio-blog-comment .card-footer {
-    background-color: #dddddd;
+    background-color: var(--bs-tertiary);
 }
 
 .admidio-blog-comment .card-header {
@@ -411,10 +421,6 @@ label {
 
 .accordion-button:focus {
     box-shadow: none;
-}
-
-.accordion .fas, .accordion .fab {
-    margin-right: 5px;
 }
 
 /***********************************/
@@ -517,15 +523,15 @@ tr.admidio-event-highlight {
     font-weight: bold;
 }
 
-.admidio-event-approval-state-attend .fas {
+.admidio-event-approval-state-attend .bi {
     color: #00b100 !important;
 }
 
-.admidio-event-approval-state-tentative .fas {
+.admidio-event-approval-state-tentative .bi {
     color: #9b009b !important;
 }
 
-.admidio-event-approval-state-cancel .fas {
+.admidio-event-approval-state-cancel .bi {
     color: #df2424 !important;
 }
 

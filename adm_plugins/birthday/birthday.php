@@ -295,12 +295,12 @@ if ($numberBirthdays > 0) {
                 if ((string) $row['email'] !== '' && $plg_show_email_extern < 2) {
                     $plgShowName .= '
                             <a class="admidio-icon-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])) . '">'.
-                                '<i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
+                                '<i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
                 }
             } elseif ($plg_show_email_extern === 1 && strlen($row['email']) > 0) {
                 $plgShowName .= '
                         <a class="admidio-icon-link" href="mailto:'. $row['email']. '">'.
-                            '<i class="fas fa-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
+                            '<i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
             }
 
             // set css class and string for birthday today, in the future or in the past

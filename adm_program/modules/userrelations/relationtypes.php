@@ -33,7 +33,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_relation_type_add',
     $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
     ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
-    'fa-plus-circle'
+    'bi-plus-circle-fill'
 );
 
 
@@ -77,7 +77,7 @@ while ($relRow = $relationTypesStatement->fetch()) {
     $relationType1->setArray($relRow);
 
     if ((bool) $relRow['urt_edit_user']) {
-        $editUserIcon = ' <i class="fas fa-user-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
+        $editUserIcon = ' <i class="bi bi-pencil-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
     }
 
     $nameRelationshiptype = $relationType1->getValue('urt_name') . $editUserIcon;
@@ -93,7 +93,7 @@ while ($relRow = $relationTypesStatement->fetch()) {
         $relationType2->setArray($relRow2);
 
         if ((bool) $relRow['urt_edit_user_inverse']) {
-            $editUserInverseIcon = ' <i class="fas fa-user-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
+            $editUserInverseIcon = ' <i class="bi bi-pencil-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
         }
 
         $nameRelationshiptype .= '&nbsp;&nbsp;-&nbsp;&nbsp;'. $relationType2->getValue('urt_name') . $editUserInverseIcon;
@@ -103,11 +103,11 @@ while ($relRow = $relationTypesStatement->fetch()) {
     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(
         ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
         array('urt_uuid' => $relationType1->getValue('urt_uuid'))
-    ). '"><i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+    ). '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_uuid'),
         'name' => $relationType1->getValue('urt_name').($relationType1->isUnidirectional() ? '' : ('/'.$relationType2->getValue('urt_name'))),
-        'database_id' => $relationType1->getValue('urt_uuid'))).'"><i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+        'database_id' => $relationType1->getValue('urt_uuid'))).'"><i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
 
     // create array with all column values
     $columnValues = array(

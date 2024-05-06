@@ -32,7 +32,7 @@ function showErrorMessage(string $message, bool $reloadPage = false)
         $gL10n->get('SYS_NOTE'),
         $message,
         ($reloadPage) ? $gL10n->get('SYS_RELOAD') : $gL10n->get('SYS_OVERVIEW'),
-        ($reloadPage) ? 'fa-redo-alt' : 'fa-home',
+        ($reloadPage) ? 'bi-arrow-clockwise' : 'bi-house-door-fill',
         ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . '/adm_program/overview.php'
     );
 }
@@ -252,7 +252,7 @@ if ($getMode === 1) {
         $form->addButton(
             'next_page',
             $gL10n->get('INS_UPDATE_DATABASE'),
-            array('icon' => 'fa-sync', 'class' => 'btn-primary')
+            array('icon' => 'bi-arrow-repeat', 'class' => 'btn-primary')
         );
 
         $page->addHtml($form->show());
@@ -266,7 +266,7 @@ if ($getMode === 1) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('SYS_DATABASE_IS_UP_TO_DATE') . '<br />' . $gL10n->get('SYS_DATABASE_DOESNOT_NEED_UPDATED'),
             $gL10n->get('SYS_OVERVIEW'),
-            'fa-home',
+            'bi-house-door-fill',
             ADMIDIO_URL . '/adm_program/overview.php'
         );
         // => EXIT
@@ -283,7 +283,7 @@ if ($getMode === 1) {
                     ADMIDIO_VERSION_TEXT, '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>')
             ),
             $gL10n->get('SYS_OVERVIEW'),
-            'fa-home',
+            'bi-house-door-fill',
             ADMIDIO_URL . '/adm_program/overview.php'
         );
         // => EXIT
@@ -305,7 +305,7 @@ if ($getMode === 1) {
             $gL10n->get('SYS_NOTE'),
             $e->getMessage(),
             $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left',
+            'bi-arrow-circle-left-fill',
             'update.php');
         // => EXIT
     } catch (RuntimeException $e) {
@@ -323,7 +323,7 @@ if ($getMode === 1) {
         'main_page',
         $gL10n->get('SYS_LATER'),
         array(
-            'icon' => 'fa-home',
+            'icon' => 'bi-house-door-fill',
             'link' => ADMIDIO_URL . '/adm_program/overview.php',
             'class' => ' btn-secondary admidio-margin-bottom '
         )
@@ -331,7 +331,7 @@ if ($getMode === 1) {
     $form->addSubmitButton(
         'next_page',
         $gL10n->get('SYS_DONATE'),
-        array('icon' => 'fa-heart')
+        array('icon' => 'bi-heart-fill')
     );
 
     $page->addHtml($updateMessage);

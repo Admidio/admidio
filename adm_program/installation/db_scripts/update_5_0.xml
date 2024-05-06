@@ -5,5 +5,29 @@
     <step id="30">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'system_js_editor_color'</step>
     <step id="40">DELETE FROM %PREFIX%_menu WHERE men_name_intern = 'dbback'</step>
     <step id="50">DELETE FROM %PREFIX%_components WHERE com_name_intern = 'BACKUP'</step>
+    <step id="60">UPDATE %PREFIX%_menu SET men_icon = 'house-door-fill' WHERE men_icon = 'fa-home'</step>
+    <step id="70">UPDATE %PREFIX%_menu SET men_icon = 'newspaper' WHERE men_icon = 'fa-newspaper'</step>
+    <step id="80">UPDATE %PREFIX%_menu SET men_icon = 'calendar-week-fill' WHERE men_icon = 'fa-calendar-alt'</step>
+    <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'file-earmark-arrow-down-fill' WHERE men_icon = 'fa-file-download'</step>
+    <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'envelope-fill' WHERE men_icon = 'fa-comments'</step>
+    <step id="110">UPDATE %PREFIX%_menu SET men_icon = 'image-fill' WHERE men_icon = 'fa-image'</step>
+    <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'link-45deg' WHERE men_icon = 'fa-link'</step>
+    <step id="130">UPDATE %PREFIX%_menu SET men_icon = 'person-vcard-fill' WHERE men_icon = 'fa-address-card'</step>
+    <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'people-fill' WHERE men_icon = 'fa-users'</step>
+    <step id="145">UPDATE %PREFIX%_menu SET men_icon = 'list-stars' WHERE men_icon = 'fa-list-ul'</step>
+    <step id="150">UPDATE %PREFIX%_menu SET men_icon = 'gear-fill' WHERE men_icon = 'fa-cog'</step>
+    <step id="155">UPDATE %PREFIX%_menu SET men_icon = 'card-checklist' WHERE men_icon = 'fa-file-signature'</step>
+    <step id="160">UPDATE %PREFIX%_menu SET men_icon = 'menu-button-wide-fill' WHERE men_icon = 'fa-stream'</step>
+    <step id="165">UPDATE %PREFIX%_menu SET men_icon = 'book-half' WHERE men_icon = 'fa-book'</step>
+    <step id="170">UPDATE %PREFIX%_user_fields SET usf_value_list = 'bi-gender-male|SYS_MALE
+bi-gender-female|SYS_FEMALE
+bi-gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'fa-mars|%'</step>
+    <step id="180">UPDATE %PREFIX%_user_fields SET usf_icon = 'facebook' WHERE usf_name_intern = 'FACEBOOK'</step>
+    <step id="190">UPDATE %PREFIX%_user_fields SET usf_icon = 'instagram' WHERE usf_name_intern = 'INSTAGRAM'</step>
+    <step id="200">UPDATE %PREFIX%_user_fields SET usf_icon = 'linkedin' WHERE usf_name_intern = 'LINKEDIN'</step>
+    <step id="210">UPDATE %PREFIX%_user_fields SET usf_icon = 'mastodon' WHERE usf_name_intern = 'MASTODON'</step>
+    <step id="220">UPDATE %PREFIX%_user_fields SET usf_icon = 'skype' WHERE usf_name_intern = 'SKYPE'</step>
+    <step id="230">UPDATE %PREFIX%_user_fields SET usf_icon = 'twitter-x' WHERE usf_name_intern = 'TWITTER'</step>
+    <step id="230">UPDATE %PREFIX%_user_fields SET usf_icon = null WHERE usf_name_intern = 'XING'</step>
     <step>stop</step>
 </update>

@@ -19,10 +19,10 @@ function showHideBlock(elementId) {
 
     if($("#"+showHideElementId).is(":hidden")) {
         $("#"+showHideElementId).show("slow");
-        $('#'+elementId+" .fas").attr("class", "fas fa-caret-down")
+        $('#'+elementId+" .bi").attr("class", "bi bi-caret-down-fill")
     } else {
         $("#"+showHideElementId).hide("slow");
-        $('#'+elementId+" .fas").attr("class", "fas fa-caret-right")
+        $('#'+elementId+" .bi").attr("class", "bi bi-caret-right-fill")
     }
 }
 
@@ -67,7 +67,7 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
 
         if (returnStatus === "success") {
             if (returnMessage !== "") {
-                messageText.html("<div class=\"alert alert-success\"><i class=\"fas fa-check\"></i>" + returnMessage + "</div>");
+                messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>" + returnMessage + "</div>");
                 setTimeout(function(){
                         $("#admidio-modal").modal("hide");
                         if (callback === 'callbackRoles') {
@@ -99,7 +99,7 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
         } else {
             // entry could not be deleted, then show content of data or a common error message
             const message = (data.length > 0) ? data : "Error: Undefined error occurred!";
-            messageText.html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>" + message + "</div>");
+            messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>" + message + "</div>");
         }
     });
 }
@@ -209,7 +209,7 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
         }, function(data) {
             if (data === "done") {
                 const id = "#row_" + elementId;
-                $(".admidio-icon-link .fas").tooltip("hide");
+                $(".admidio-icon-link .bi").tooltip("hide");
 
                 if (direction === "UP") {
                     $(id).prev().before($(id));

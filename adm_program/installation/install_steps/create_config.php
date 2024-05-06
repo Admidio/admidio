@@ -32,7 +32,7 @@ if (isset($_POST['user_last_name'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'),
             $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left',
+            'bi-arrow-circle-left-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
         );
         // => EXIT
@@ -46,7 +46,7 @@ if (isset($_POST['user_last_name'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))),
             $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left',
+            'bi-arrow-circle-left-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
         );
         // => EXIT
@@ -59,7 +59,7 @@ if (isset($_POST['user_last_name'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))),
             $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left',
+            'bi-arrow-circle-left-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
         );
         // => EXIT
@@ -73,7 +73,7 @@ if (isset($_POST['user_last_name'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('SYS_PASSWORD_LENGTH'),
             $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left',
+            'bi-arrow-circle-left-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
         );
         // => EXIT
@@ -94,7 +94,7 @@ if (isset($_POST['user_last_name'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('SYS_PASSWORD_NOT_STRONG_ENOUGH'),
             $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left',
+            'bi-arrow-circle-left-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
         );
         // => EXIT
@@ -108,7 +108,7 @@ if (isset($_POST['user_last_name'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('SYS_PASSWORDS_NOT_EQUAL'),
             $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left',
+            'bi-arrow-circle-left-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
         );
         // => EXIT
@@ -173,7 +173,7 @@ if ($configFileHandle) {
     $form->addButton(
         'next_page',
         $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'fa-sync', 'class' => ' btn-primary admidio-margin-bottom')
+        array('icon' => 'bi-arrow-repeat', 'class' => ' btn-primary admidio-margin-bottom')
     );
 } else {
     // if user doesn't has write access then create a page with a download link for the config file
@@ -184,17 +184,17 @@ if ($configFileHandle) {
     $form->addButton(
         'previous_page',
         $gL10n->get('SYS_BACK'),
-        array('icon' => 'fa-arrow-circle-left', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')))
+        array('icon' => 'bi-arrow-circle-left-fill', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')))
     );
     $form->addButton(
         'download_config',
         $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'),
-        array('icon' => 'fa-download', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'download_config')))
+        array('icon' => 'bi-download', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'download_config')))
     );
     $form->addButton(
         'next_page',
         $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'fa-sync', 'class' => ' btn-primary admidio-margin-bottom')
+        array('icon' => 'bi-arrow-repeat', 'class' => ' btn-primary admidio-margin-bottom')
     );
 }
 

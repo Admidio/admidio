@@ -96,7 +96,7 @@ $javascript = '
                     }
 
                     $("#admidio-profile-roles-alert").fadeIn();
-                    $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                    $("#admidio-profile-roles-alert").html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                     return false;
                 }
                 return true;
@@ -149,13 +149,13 @@ if ($getInline) {
                 $("#btn-next").prop("disabled", true) ;
                 $("#admidio-profile-roles-alert").attr("class", "alert alert-success form-alert");
                 $("#admidio-profile-roles-alert").fadeIn();
-                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-check\"></i>'.$gL10n->get($messageId).'");
+                $("#admidio-profile-roles-alert").html("<i class=\"bi bi-check-lg\"></i>'.$gL10n->get($messageId).'");
                 setTimeout(function() {
                     window.location.href = "'.$nextUrl.'";
                 }, 3000);
             } else {
                 $("#admidio-profile-roles-alert").fadeIn();
-                $("#admidio-profile-roles-alert").html("<i class=\"fas fa-exclamation-circle\"></i>'.$gL10n->get('SYS_ASSIGN_ROLE_TO_USER').'");
+                $("#admidio-profile-roles-alert").html("<i class=\"bi bi-exclamation-circle-fill\"></i>'.$gL10n->get('SYS_ASSIGN_ROLE_TO_USER').'");
             }
         });', true);
 }
@@ -282,7 +282,7 @@ while ($row = $statement->fetch()) {
         $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$blockId));
         $table->addColumn();
         $table->addAttribute('colspan', '4', 'td');
-        $table->addData('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$role->getValue('cat_name'));
+        $table->addData('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="bi bi-caret-down-fill"></i></a>'.$role->getValue('cat_name'));
         $table->addTableBody('id', $blockId);
 
         $category = (int) $role->getValue('cat_id');
@@ -294,25 +294,25 @@ while ($row = $statement->fetch()) {
 
     // show icon that leaders have no additional rights
     if ((int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_NO_RIGHTS) {
-        $leaderRights .= '<i class="fas fa-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
-                          <i class="fas fa-trash invisible"></i>';
+        $leaderRights .= '<i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
+                          <i class="bi bi-trash invisible admidio-icon"></i>';
     }
 
     // show icon with edit user right if leader has this right
     if ((int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_EDIT
     || (int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
-        $leaderRights .= '<i class="fas fa-user-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_EDIT_MEMBERS').'"></i>';
+        $leaderRights .= '<i class="bi bi-pencil-fill admidio-icon" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_EDIT_MEMBERS').'"></i>';
     }
 
     // show icon with assign role right if leader has this right
     if ((int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN
     || (int) $role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
-        $leaderRights .= '<i class="fas fa-user-tie" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_ASSIGN_MEMBERS').'"></i>';
+        $leaderRights .= '<i class="bi bi-people-fill admidio-icon" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_ASSIGN_MEMBERS').'"></i>';
     }
 
     // show dummy icon if leader has not all rights
     if ((int) $role->getValue('rol_leader_rights') !== TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
-        $leaderRights .= '<i class="fas fa-trash invisible"></i>';
+        $leaderRights .= '<i class="bi bi-trash invisible admidio-icon"></i>';
     }
     $columnValues[] = $leaderRights;
 
@@ -323,7 +323,7 @@ $html .= $table->show() . '<div id="admidio-profile-roles-alert" class="alert al
 if ($getInline) {
     echo $html.'</div>';
 } else {
-    $html .= '<button class="btn-primary btn admidio-margin-bottom" id="btn-next" type="submit"><i class="fas fa-check"></i>'.$gL10n->get('SYS_NEXT').'</button>';
+    $html .= '<button class="btn-primary btn admidio-margin-bottom" id="btn-next" type="submit"><i class="bi bi-check-lg"></i>'.$gL10n->get('SYS_NEXT').'</button>';
     $page->addHtml($html);
     $page->show();
 }

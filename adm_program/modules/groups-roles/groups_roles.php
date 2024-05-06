@@ -73,7 +73,7 @@ try {
 
     if ($getShow === 'card') {
         // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-users');
+        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-people-fill');
     } else {
         // In permission mode the navigation should continue
         $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_PERMISSIONS'));
@@ -86,7 +86,7 @@ try {
             'menu_item_groups_roles_add',
             $gL10n->get('SYS_CREATE_ROLE'),
             ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php',
-            'fa-plus-circle'
+            'bi-plus-circle-fill'
         );
 
         if ($getShow === 'card') {
@@ -95,7 +95,7 @@ try {
                 'menu_item_groups_roles_show_permissions',
                 $gL10n->get('SYS_SHOW_PERMISSIONS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('show' => 'permissions', 'cat_uuid' => $getCatUuid, 'role_type' => $getRoleType)),
-                'fa-user-shield'
+                'bi-shield-lock-fill'
             );
         }
 
@@ -104,7 +104,7 @@ try {
             'menu_item_groups_roles_maintain_categories',
             $gL10n->get('SYS_EDIT_CATEGORIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
-            'fa-th-large'
+            'bi-hdd-stack-fill'
         );
     }
 
@@ -116,7 +116,7 @@ try {
             'menu_item_groups_own_list',
             $gL10n->get('SYS_CONFIGURE_LISTS'),
             ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php',
-            'fa-list-alt'
+            'bi-card-list'
         );
     }
 

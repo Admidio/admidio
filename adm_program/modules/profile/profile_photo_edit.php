@@ -202,7 +202,7 @@ if ($getMode === 'choose') {
     $form->addSubmitButton(
         'btn_upload',
         $gL10n->get('SYS_UPLOAD_PROFILE_PICTURE'),
-        array('icon' => 'fa-upload')
+        array('icon' => 'bi-upload')
     );
 
     // add form to html page and show page
@@ -286,7 +286,7 @@ if ($getMode === 'choose') {
     $form->addCustomContent($gL10n->get('SYS_CURRENT_PROFILE_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('SYS_CURRENT_PROFILE_PICTURE').'" />');
     $form->addCustomContent($gL10n->get('SYS_NEW_PROFILE_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)).'" alt="'.$gL10n->get('SYS_NEW_PROFILE_PICTURE').'" />');
     $form->addLine();
-    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'fa-upload'));
+    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'bi-upload'));
 
     // add form to html page and show page
     $page->addHtml($form->show());

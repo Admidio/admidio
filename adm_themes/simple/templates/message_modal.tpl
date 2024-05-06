@@ -10,17 +10,17 @@
     {if $url != ''}
         {if $showYesNoButtons}
             <button id="admButtonYes" class="btn btn-primary" type="button" onclick="{$url}">
-                <i class="fas fa-check-circle"></i>
+                <i class="bi bi-check-circle-fill"></i>
                 &nbsp;&nbsp;{$l10n->get("SYS_YES")}&nbsp;&nbsp;&nbsp;
             </button>
             <button id="admButtonNo" class="btn btn-secondary" type="button" data-bs-dismiss="modal">
-                <i class="fas fa-minus-circle"></i>
+                <i class="bi bi-dash-circle-fill"></i>
                 &nbsp;{$l10n->get("SYS_NO")}
             </button>
         {else}
             {* when forwarding, always display a next button *}
             <button class="btn btn-primary admidio-margin-bottom" onclick="{$url}">{$l10n->get("SYS_NEXT")}
-                <i class="fas fa-arrow-circle-right"></i>
+                <i class="bi bi-arrow-circle-right-fill"></i>
             </button>
         {/if}
         <div id="status-message" class="mt-4 w-100"></div>

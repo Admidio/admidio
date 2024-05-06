@@ -37,7 +37,7 @@ echo '
             success: function(data) {
                 if (data === "success") {
                     formMembersAlert.attr("class", "alert alert-success form-alert");
-                    formMembersAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_USER_COULD_BE_CREATED').'</strong>");
+                    formMembersAlert.html("<i class=\"bi bi-check-lg\"></i><strong>'.$gL10n->get('SYS_USER_COULD_BE_CREATED').'</strong>");
                     formMembersAlert.fadeIn("slow");
                     setTimeout(function() {
                         self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1)).'&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
@@ -48,7 +48,7 @@ echo '
                     } else {
                         formMembersAlert.attr("class", "alert alert-danger form-alert");
                         formMembersAlert.fadeIn();
-                        formMembersAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
+                        formMembersAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
                     }
                 }
             }
@@ -79,7 +79,7 @@ echo '
     $form->addSubmitButton(
         'btn_add',
         $gL10n->get('SYS_CREATE_CONTACT'),
-        array('icon' => 'fa-plus-circle')
+        array('icon' => 'bi-plus-circle-fill')
     );
     echo $form->show();
 echo '</div>';

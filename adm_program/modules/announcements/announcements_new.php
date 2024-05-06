@@ -99,7 +99,7 @@ $form->addEditor(
     $announcement->getValue('ann_description'),
     array('property' => HtmlForm::FIELD_REQUIRED)
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $announcement->getValue('ann_usr_id_create'),
     $announcement->getValue('ann_timestamp_create'),

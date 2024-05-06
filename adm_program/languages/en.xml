@@ -550,6 +550,7 @@
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
+  <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_DOWNLOAD_ZIP_ERROR">An error occurred when creating the zip file.</string>
   <string name="SYS_DUPLICATE">Duplicate</string>
@@ -655,7 +656,6 @@
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXISTING_CONTACTS">Existing contacts</string>
-  <string name="SYS_EXPORT_ICAL">Export (iCal)</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Export to</string>
@@ -709,7 +709,6 @@
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_AWESOME_DESC">Here you can add an icon of the web font \"Font Awesome\". Go to #VAR1#https://fontawesome.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. As a prefix you have to put a fa- in front of it. So if you choose the icon \"user\", you have to enter \"fa-user\" here.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
@@ -753,6 +752,7 @@
   <string name="SYS_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or subscription. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
+  <string name="SYS_ICON_FONT_DESC">Here you can add an icon of the web font \"Bootstrap Icons\". Go to #VAR1#https://icons.getbootstrap.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. Just insert the name of the icon in this text box.</string>
   <string name="SYS_ICQ">ICQ</string>
   <string name="SYS_IDENTIFY_USERS">Existing contacts are recognized by first name and last name.</string>
   <string name="SYS_IMPORTANT">Important</string>
@@ -778,7 +778,7 @@
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
   <string name="SYS_INTO_TO">Recipients need to be listed in the TO field instead of the BCC field</string>
   <string name="SYS_INTO_TO_DESC">All recipients will be listed in the TO field if set accordingly and an email will be received by multiple person. Thus each recipient will see the name and email address of the other recipients. In addition each recipient can reply to all. (Default: deactivated)</string>
-  <string name="SYS_INVALID_FONT_AWESOME">The entered icon name does not correspond to the expected syntax. An icon of font Awesome must correspond to the schema fa-iconName.</string>
+  <string name="SYS_INVALID_ICON_NAME">The entered icon name does not correspond to the expected syntax. An icon name of Bootstrap Icons should only contain characters a-z, numbers and a hyphen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Invalid page view</string>
   <string name="SYS_IO_ERROR">I/O error</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
@@ -956,7 +956,7 @@
   <string name="SYS_NONE">None</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
-  <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">You are not a member of organization #VAR1#</string>
+  <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Not member of organization #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Please use a valid number as condition for field #VAR1_BOLD#.</string>
   <string name="SYS_NOT_REGISTERED">Not registered</string>
   <string name="SYS_NOT_SET">Not set</string>

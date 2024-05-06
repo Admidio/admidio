@@ -64,7 +64,7 @@ class FileUpload
         <p class="lead">'.$textUploadDescription.'</p>
 
         <span class="btn btn-primary fileinput-button mb-4">
-            <i class="fas fa-upload"></i>'.$textSelectFiles.'
+            <i class="bi bi-upload"></i>'.$textSelectFiles.'
             <input id="fileupload" type="file" name="files[]" multiple>
         </span>
         <div id="progress" class="progress mb-5" style="max-width: 600px;">
@@ -121,7 +121,7 @@ class FileUpload
                     $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
                     $.each(data.result.files, function(index, file) {
                         if (typeof file.error !== "undefined") {
-                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>"
+                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>"
                                 + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                             countErrorFiles++;
                         } else {
@@ -142,9 +142,9 @@ class FileUpload
                 stop: function(e, data) {
                     $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
                     if (countErrorFiles === 0 && countFiles > 0) {
-                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"fas fa-check\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
+                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
                     } else {
-                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
+                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
                     }
                 }
             }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");',

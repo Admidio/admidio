@@ -87,7 +87,7 @@ if ($getViewMode === 'html') {
         $gNavigation->addUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')));
     } else {
         // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')), 'fa-calendar-alt');
+        $gNavigation->addStartUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')), 'bi-calendar-week-fill');
     }
 }
 
@@ -118,7 +118,7 @@ if ($getViewMode === 'html') {
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
     if ($getEventUuid !== '') {
         // add back link to module menu
-        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
     }
 
     // Add new event
@@ -127,21 +127,21 @@ if ($getViewMode === 'html') {
             'menu_item_event_add',
             $gL10n->get('SYS_CREATE_EVENT'),
             ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php',
-            'fa-plus-circle'
+            'bi-plus-circle-fill'
         );
     }
 
     if ($getEventUuid === '') {
         // show print button
-        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
 
         // iCal Download
         if ($gSettingsManager->getBool('events_ical_export_enabled')) {
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_ical',
-                $gL10n->get('SYS_EXPORT_ICAL'),
+                $gL10n->get('SYS_DOWNLOAD_ICAL'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_ical.php', array('cat_uuid' => $getCatUuid, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                'fa-file-export'
+                'bi-cloud-arrow-down-fill'
             );
         }
 
@@ -151,7 +151,7 @@ if ($getViewMode === 'html') {
                 'menu_item_event_categories',
                 $gL10n->get('SYS_EDIT_CALENDARS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'EVT')),
-                'fa-th-large'
+                'bi-hdd-stack-fill'
             );
         }
 
@@ -320,22 +320,22 @@ if ($eventsResult['totalCount'] === 0) {
             if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                 $outputButtonICal = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
-                        <i class="fas fa-download" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EXPORT_ICAL').'"></i></a>';
+                        <i class="bi bi-download" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_ICAL').'"></i></a>';
             }
 
             // change and delete is only for users with additional rights
             if ($event->isEditable()) {
                 $outputButtonCopy = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1)) . '">
-                        <i class="fas fa-clone" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>';
+                        <i class="bi bi-copy" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>';
                 $outputButtonEdit = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid)) . '">
-                        <i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
+                        <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
                 $outputButtonDelete = '
                     <a class="openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
                         'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
-                        <i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
         }
 
@@ -382,7 +382,7 @@ if ($eventsResult['totalCount'] === 0) {
 
                     $outputLinkLocation .= '
                         <a class="admidio-icon-link" href="' . $routeUrl . '" target="_blank">
-                            <i class="fas fa-map" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"></i>
+                            <i class="bi bi-map-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"></i>
                         </a>';
                 }
             } else {
@@ -426,27 +426,27 @@ if ($eventsResult['totalCount'] === 0) {
                 case ModuleEvents::MEMBER_APPROVAL_STATE_INVITED:
                     $buttonText = $gL10n->get('SYS_PARTICIPATE_QUESTION');
                     $buttonClass = '';
-                    $iconParticipationStatus = '<i class="fas fa-user-plus"></i>';
+                    $iconParticipationStatus = '<i class="bi bi-person-plus-fill"></i>';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
                     $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
                     $buttonClass = 'admidio-event-approval-state-attend';
-                    $iconParticipationStatus = '<i class="fas fa-check-circle"></i>';
+                    $iconParticipationStatus = '<i class="bi bi-check-circle-fill"></i>';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
                     $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE');
                     $buttonClass = 'admidio-event-approval-state-tentative';
-                    $iconParticipationStatus = '<i class="fas fa-question-circle"></i>';
+                    $iconParticipationStatus = '<i class="bi bi-question-circle-fill"></i>';
                     break;
                 case ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED:
                     $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_CANCELED');
                     $buttonClass = 'admidio-event-approval-state-cancel';
-                    $iconParticipationStatus = '<i class="fas fa-times-circle"></i>';
+                    $iconParticipationStatus = '<i class="bi bi-x-circle-fill"></i>';
                     break;
                 default:
                     $buttonText = $gL10n->get('SYS_PARTICIPATE');
                     $buttonClass = '';
-                    $iconParticipationStatus = '<i class="fas fa-edit"></i>';
+                    $iconParticipationStatus = '<i class="bi bi-pencil-square"></i>';
             }
 
             if ($getView !== 'detail') {
@@ -465,7 +465,7 @@ if ($eventsResult['totalCount'] === 0) {
                     $attentionDeadline = '
                             <div class="alert alert-info" role="alert">
                                 <span class="' . $buttonClass . '">' . $iconParticipationStatus . ' ' . $buttonText . '</span>
-                                <i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
+                                <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
                                     data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
                                     title="' . $gL10n->get('SYS_NOTE') . '" data-bs-content="' . SecurityUtils::encodeHTML($gL10n->get('SYS_DEADLINE_ATTENTION')) . '"></i>
                             </div>';
@@ -515,19 +515,19 @@ if ($eventsResult['totalCount'] === 0) {
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item admidio-event-approval-state-attend ' . $disableStatusAttend . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
-                                            <i class="fas fa-check-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
+                                            <i class="bi bi-check-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
                                         </a>
                                     </li>';
                             if ($gSettingsManager->getBool('events_may_take_part')) {
                                 $outputButtonParticipation .= '<li>
                                             <a class="dropdown-item admidio-event-approval-state-tentative ' . $disableStatusTentative . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
-                                                <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '"></i>' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '
+                                                <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '"></i>' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '
                                             </a>
                                         </li>';
                             }
                             $outputButtonParticipation .= '<li>
                                         <a class="dropdown-item admidio-event-approval-state-cancel" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '4', 'dat_uuid' => $dateUuid)) . '">
-                                            <i class="fas fa-times-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CANCEL') . '"></i>' . $gL10n->get('SYS_CANCEL') . '
+                                            <i class="bi bi-x-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CANCEL') . '"></i>' . $gL10n->get('SYS_CANCEL') . '
                                         </a>
                                     </li>
                                 </ul>
@@ -549,11 +549,11 @@ if ($eventsResult['totalCount'] === 0) {
                             if ($getView === 'detail') {
                                 $outputButtonParticipants = '
                                     <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                        <i class="fas fa-list"></i>' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '</button>';
+                                        <i class="bi bi-list-task"></i>' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '</button>';
                             } else {
                                 $outputButtonParticipants = '
                                     <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                        <i class="fas fa-list" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '"></i></a>';
+                                        <i class="bi bi-list-task" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SHOW_PARTICIPANTS') . '"></i></a>';
                             }
                         }
                     }
@@ -566,11 +566,11 @@ if ($eventsResult['totalCount'] === 0) {
                             if ($getView === 'detail') {
                                 $outputButtonParticipantsEmail = '
                                     <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                        <i class="fas fa-envelope"></i>' . $gL10n->get('SYS_WRITE_EMAIL') . '</button>';
+                                        <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_WRITE_EMAIL') . '</button>';
                             } else {
                                 $outputButtonParticipantsEmail = '
                                     <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                        <i class="fas fa-envelope" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_WRITE_EMAIL') . '"></i></a>';
+                                        <i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_WRITE_EMAIL') . '"></i></a>';
                             }
                         }
                     }
@@ -582,11 +582,11 @@ if ($eventsResult['totalCount'] === 0) {
                         if ($getView === 'detail') {
                             $outputButtonParticipantsAssign = '
                                 <button class="btn btn-primary" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                    <i class="fas fa-user-plus"></i>' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '</button>';
+                                    <i class="bi bi-person-plus-fill"></i>' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '</button>';
                         } else {
                             $outputButtonParticipantsAssign = '
                                 <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                    <i class="fas fa-user-plus" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '"></i></a>';
+                                    <i class="bi bi-person-plus-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ASSIGN_PARTICIPANTS') . '"></i></a>';
                         }
                     }
                 }
@@ -651,20 +651,20 @@ if ($eventsResult['totalCount'] === 0) {
             $page->addHtml('
                 <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="dat_' . $dateUuid . '">
                     <div class="card-header">
-                        <i class="fas fa-calendar-alt"></i>' .
+                        <i class="bi bi-calendar-week-fill"></i>' .
                         $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
 
             if ($event->isEditable() || $gSettingsManager->getBool('events_ical_export_enabled')) {
                 $page->addHtml('
                             <div class="dropdown float-end">
-                                <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                                <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">');
                 // iCal Download
                 if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                     $page->addHtml('
                                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
-                                                    <i class="fas fa-file-export" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EXPORT_ICAL').'</a>
+                                                    <i class="bi bi-download" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DOWNLOAD_ICAL').'</a>
                                             </li>');
                 }
 
@@ -672,15 +672,15 @@ if ($eventsResult['totalCount'] === 0) {
                 if ($event->isEditable()) {
                     $page->addHtml('
                                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid, 'copy' => 1)) . '">
-                                                <i class="fas fa-clone" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
+                                                <i class="bi bi-copy" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
                                             </li>
                                             <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $dateUuid)) . '">
-                                                <i class="fas fa-edit" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                                <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                                             </li>
                                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateUuid,
                                                 'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateUuid)) . '">
-                                                <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                                                <i class="bi bi-trash" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                                             </li>');
                 }
                 $page->addHtml('</ul>

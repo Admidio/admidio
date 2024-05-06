@@ -75,7 +75,7 @@ $form->addSelectBox(
 $form->addSubmitButton(
     'btn_move',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'bi-check-lg')
 );
 
 $documentsFiles->addHtml($form->show());

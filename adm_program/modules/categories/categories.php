@@ -140,7 +140,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_categories_add',
     $addButtonText,
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType)),
-    'fa-plus-circle'
+    'bi-plus-circle-fill'
 );
 
 // Create table object
@@ -150,7 +150,7 @@ $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
-    '<i class="fas fa-star" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>',
+    '<i class="bi bi-star-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>',
     $visibleHeadline,
     $editableHeadline,
     '&nbsp;'
@@ -198,14 +198,14 @@ while ($catRow = $categoryStatement->fetch()) {
     $htmlMoveRow = '&nbsp;';
     if ($category->getValue('cat_system') == 0 || $getType !== 'USF') {
         $htmlMoveRow = '<a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="'.$categoryUuid.'" data-direction="'.TableCategory::MOVE_UP.'">'.
-                            '<i class="fas fa-chevron-circle-up" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($addButtonText)) . '"></i></a>
+                            '<i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($addButtonText)) . '"></i></a>
                         <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="'.$categoryUuid.'" data-direction="'.TableCategory::MOVE_DOWN.'">'.
-                            '<i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
+                            '<i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
     }
 
     $htmlDefaultCategory = '&nbsp;';
     if ($category->getValue('cat_default') == 1) {
-        $htmlDefaultCategory = '<i class="fas fa-star" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>';
+        $htmlDefaultCategory = '<i class="bi bi-star-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>';
     }
 
     // create list with all roles that could view the category
@@ -252,17 +252,17 @@ while ($catRow = $categoryStatement->fetch()) {
 
     if ($category->isEditable()) {
         $categoryAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_uuid' => $categoryUuid, 'type' => $getType)).'">'.
-                                    '<i class="fas fa-edit" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
+                                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
         if ($category->getValue('cat_system') == 1) {
-            $categoryAdministration .= '<i class="fas fa-trash invisible"></i>';
+            $categoryAdministration .= '<i class="bi bi-trash invisible"></i>';
         } else {
             $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. $categoryUuid, 'name' => $category->getValue('cat_name'), 'database_id' => $categoryUuid, 'database_id_2' => $getType)).'">'.
-                                            '<i class="fas fa-trash-alt" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                                            '<i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
     } else {
-        $categoryAdministration = '<i class="fas fa-trash invisible"></i><i class="fas fa-trash invisible"></i>';
+        $categoryAdministration = '<i class="bi bi-trash invisible"></i><i class="bi bi-trash invisible"></i>';
     }
 
     // create array with all column values

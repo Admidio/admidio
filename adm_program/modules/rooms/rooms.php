@@ -34,7 +34,7 @@ $page->addPageFunctionsMenuItem(
     'menu_item_new_room',
     $gL10n->get('SYS_CREATE_VAR', array($textRoom)),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)),
-    'fa-plus-circle'
+    'bi-plus-circle-fill'
 );
 
 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
@@ -101,17 +101,17 @@ if ($roomsStatement->rowCount() === 0) {
         $page->addHtml('
         <div class="card admidio-blog" id="room_'.$room->getValue('room_uuid').'">
             <div class="card-header">
-                <i class="fas fa-home"></i>' . $room->getValue('room_name') . '
+                <i class="bi bi-house-door-fill"></i>' . $room->getValue('room_name') . '
                 <div class="dropdown float-end">
-                    <a class="" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-chevron-circle-down" data-bs-toggle="tooltip"></i></a>
+                    <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)).'">
-                            <i class="fas fa-edit" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                            <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                         </li>
                         <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.$room->getValue('room_uuid'), 'name' => $room->getValue('room_name'), 'database_id' => $room->getValue('room_uuid'))).'">
-                            <i class="fas fa-trash-alt" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                            <i class="bi bi-trash" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                         </li>
                     </ul>
                 </div>

@@ -88,23 +88,23 @@ class ModuleRegistration extends HtmlPage
             $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': <a href="mailto:'.$user->getValue('EMAIL').'">'.$user->getValue('EMAIL').'</a>';
 
             if ((string) $row['reg_validation_id'] === '') {
-                $templateRow['information'][] = '<div class="alert alert-success"><i class="fas fa-check-circle"></i>' . $gL10n->get('SYS_REGISTRATION_CONFIRMED') . '</div>';
+                $templateRow['information'][] = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i>' . $gL10n->get('SYS_REGISTRATION_CONFIRMED') . '</div>';
             } else {
-                $templateRow['information'][] = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('SYS_REGISTRATION_NOT_CONFIRMED') . '</div>';
+                $templateRow['information'][] = '<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('SYS_REGISTRATION_NOT_CONFIRMED') . '</div>';
             }
 
             if (count($similarUserIDs) > 0) {
-                $templateRow['information'][] = '<div class="alert alert-info"><i class="fas fa-info-circle"></i>' . (count($similarUserIDs) === 1 ? $gL10n->get('SYS_CONTACT_SIMILAR_NAME') : $gL10n->get('SYS_MEMBERS_SIMILAR_NAME') ) . '</div>';
+                $templateRow['information'][] = '<div class="alert alert-info"><i class="bi bi-info-circle-fill"></i>' . (count($similarUserIDs) === 1 ? $gL10n->get('SYS_CONTACT_SIMILAR_NAME') : $gL10n->get('SYS_MEMBERS_SIMILAR_NAME') ) . '</div>';
             }
 
             $templateRow['actions'][] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])),
-                'icon' => 'fas fa-eye',
+                'icon' => 'bi bi-eye',
                 'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
             );
             $templateRow['actions'][] = array(
                 'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'user_'.$row['usr_uuid'], 'name' => $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 'database_id' => $row['usr_uuid'])),
-                'icon' => 'fas fa-trash-alt',
+                'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
             if (count($similarUserIDs) > 0) {

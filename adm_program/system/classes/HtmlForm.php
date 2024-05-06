@@ -26,7 +26,7 @@
  * $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'),
  *                     array('defaultValue' => 'simple', 'showContextDependentFirstEntry' => true));
  * $form->closeGroupBox();
- * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'fa-arrow-circle-right'));
+ * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'bi-arrow-circle-right-fill'));
  * $form->show();
  * ```
  */
@@ -417,6 +417,7 @@ class HtmlForm
         }
 
         $javascriptCode = '
+        let editor;
         ClassicEditor
         .create( document.querySelector( "#' . $id . '" ), {
             ' . $toolbarJS . '
@@ -425,6 +426,9 @@ class HtmlForm
                 uploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php?id=' . $id . '"
             }
         } )
+        .then( newEditor => {
+            editor = newEditor;
+        })
         .catch( error => {
             console.error( error );
         } );';
@@ -512,7 +516,7 @@ class HtmlForm
         }
 
         if ($optionsAll['icon'] === '') {
-            $optionsAll['icon'] = 'fa-upload';
+            $optionsAll['icon'] = 'bi-upload';
         }
 
         // if multiple uploads are enabled then add javascript that will
@@ -1583,7 +1587,7 @@ class HtmlForm
                 $text  = $string;
             }
 
-            $html = '<i class="fas fa-info-circle admidio-info-icon" data-bs-toggle="popover"
+            $html = '<i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
             data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
             title="' . $gL10n->get($title) . '" data-bs-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
         }
