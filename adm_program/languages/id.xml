@@ -140,7 +140,7 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Dovrebbero esserci diverse organizzazioni presenti nel database, la schermata di accesso può visualizzare un box di selezione con tutte le organizzazioni disponibili. L\'utente può in seguito in fase di accesso selezionare un\'altra organizzazione (un\'altra di quelle definite nel file config.php). Comunque l\'utente deve essere un membro registrato dell\'organizzazione selezionata.</string>
   <string name="ORG_TIME_FORMAT">Formato ora</string>
   <string name="ORG_TIME_FORMAT_DESC">Il ormato rispetta la funzione PHP #VAR1#. (predefinito: H:i)</string>
-  <string name="ORG_VALUE_LIST">Elenco dei valori</string>
+  <string name="SYS_VALUE_LIST">Elenco dei valori</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Collegamento per l\'attivazione  della nuova password</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Indirizzo email di sistema dell\'organizzazione</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Nome dell\'organizzazione</string>

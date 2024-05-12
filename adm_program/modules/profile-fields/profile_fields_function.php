@@ -103,7 +103,7 @@ if ($postMode === 'edit') {
 
     if (($_POST['usf_type'] === 'DROPDOWN' || $_POST['usf_type'] === 'RADIO_BUTTON')
     && $_POST['usf_value_list'] === '') {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_VALUE_LIST'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_VALUE_LIST'))));
         // => EXIT
     }
 

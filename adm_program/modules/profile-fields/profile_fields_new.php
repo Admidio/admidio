@@ -186,10 +186,10 @@ if ($userField->getValue('usf_system') == 1) {
 }
 $form->addMultilineTextInput(
     'usf_value_list',
-    $gL10n->get('ORG_VALUE_LIST'),
+    $gL10n->get('SYS_VALUE_LIST'),
     htmlentities($userField->getValue('usf_value_list', 'database'), ENT_QUOTES),
     6,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'ORG_VALUE_LIST_DESC')
+    array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com">', '</a>')))
 );
 $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
 if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
