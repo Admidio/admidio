@@ -628,7 +628,7 @@ if ($getActiveRole) {
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
-                          WHERE rol_id IN (' . Database::getQmForValues($allVisibleRoles) . ')
+                          WHERE rol_uuid IN (' . Database::getQmForValues($allVisibleRoles) . ')
                        ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = $allVisibleRoles;
 } else {

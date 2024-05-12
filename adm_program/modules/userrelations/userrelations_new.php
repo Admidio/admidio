@@ -77,7 +77,7 @@ if ($gCurrentUser->editUsers()) {
                              ON first_name.usd_usr_id = usr_id
                             AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                           WHERE usr_id <> ? -- $user->getValue(\'usr_id\')
-                            AND rol_id IN ('.Database::getQmForValues($gCurrentUser->getRolesViewMemberships()).')
+                            AND rol_uuid IN ('.Database::getQmForValues($gCurrentUser->getRolesViewMemberships()).')
                             AND rol_valid   = true
                             AND cat_name_intern <> \'EVENTS\'
                             AND ( cat_org_id = ? -- $gCurrentOrgId

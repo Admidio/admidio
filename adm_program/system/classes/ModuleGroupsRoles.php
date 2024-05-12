@@ -454,11 +454,11 @@ class ModuleGroupsRoles extends HtmlPage
             $sql .= '';
         } else {
             // create a list with all role IDs that the user is allowed to view
-            $visibleRoles = implode(',', $gCurrentUser->getRolesViewMemberships());
+            $visibleRoles = '\'' . implode('\', \'', $gCurrentUser->getRolesViewMemberships()) . '\'';
             if ($visibleRoles !== '') {
-                $sql .= ' AND rol_id IN (' . $visibleRoles . ')';
+                $sql .= ' AND rol_uuid IN (' . $visibleRoles . ')';
             } else {
-                $sql .= ' AND rol_id = 0 ';
+                $sql .= ' AND rol_uuid IS NULL ';
             }
         }
 

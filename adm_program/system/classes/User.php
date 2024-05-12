@@ -29,17 +29,29 @@ class User extends TableAccess
      */
     protected $rolesRights = array();
     /**
-     * @var array<int,bool> Array with all roles and a flag if the user could view this role e.g. array(0 => role_id_1, 1 => role_id_2, ...)
+     * @var array<int,int> Array with all roles e.g. array(0 => role_id_1, 1 => role_id_2, ...)
      */
     protected $rolesViewMemberships = array();
     /**
-     * @var array<int,bool> Array with all roles and a flag if the user could view profiles of the roles members e.g. array(0 => role_id_1, 1 => role_id_2, ...)
+     * @var array<int,int> Array with all roles e.g. array(0 => role_id_1, 1 => role_id_2, ...)
      */
     protected $rolesViewProfiles = array();
     /**
-     * @var array<int,bool> Array with all roles and a flag if the user could write a mail to this role e.g. array(0 => role_id_1, 1 => role_id_2, ...)
+     * @var array<int,string> Array with all UUIDs of roles e.g. array(0 => role_uuid_1, 1 => role_uuid_2, ...)
+     */
+    protected $rolesViewMembershipsUUID = array();
+    /**
+     * @var array<int,string> Array with all UUIDs of roles e.g. array(0 => role_uuid_1, 1 => role_uuid_2, ...)
+     */
+    protected $rolesViewProfilesUUID = array();
+    /**
+     * @var array<int,int> Array with all roles e.g. array(0 => role_id_1, 1 => role_id_2, ...)
      */
     protected $rolesWriteMails = array();
+    /**
+     * @var array<int,string> Array with all UUIDs of roles e.g. array(0 => role_uuid_1, 1 => role_uuid_2, ...)
+     */
+    protected $rolesWriteMailsUUID = array();
     /**
      * @var array<int,int> Array with all roles who the user is assigned
      */
@@ -305,6 +317,7 @@ class User extends TableAccess
             // go again through all roles, but now the rolesRights are set and can be evaluated
             foreach ($sqlFetchedRows as $sqlRow) {
                 $roleId = (int)$sqlRow['rol_id'];
+                $roleUUID = $sqlRow['rol_uuid'];
                 $memLeader = (bool)$sqlRow['mem_leader'];
 
                 if (array_key_exists('rol_view_memberships', $sqlRow)) {
@@ -312,30 +325,38 @@ class User extends TableAccess
                     if ((int)$sqlRow['rol_view_memberships'] === TableRoles::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
                         // only role members are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
+                        $this->rolesViewMembershipsUUID[] = $roleUUID;
                     } elseif ((int)$sqlRow['rol_view_memberships'] === TableRoles::VIEW_LOGIN_USERS) {
                         // all registered users are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
+                        $this->rolesViewMembershipsUUID[] = $roleUUID;
                     } elseif ((int)$sqlRow['rol_view_memberships'] === TableRoles::VIEW_LEADERS && $memLeader) {
                         // only leaders are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
+                        $this->rolesViewMembershipsUUID[] = $roleUUID;
                     } elseif ($this->rolesRights['rol_all_lists_view']) {
                         // user is allowed to view all roles than also view this membership
                         $this->rolesViewMemberships[] = $roleId;
+                        $this->rolesViewMembershipsUUID[] = $roleUUID;
                     }
 
                     // Remember profile view setting
                     if ((int)$sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
                         // only role members are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
+                        $this->rolesViewProfilesUUID[] = $roleUUID;
                     } elseif ((int)$sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_LOGIN_USERS) {
                         // all registered users are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
+                        $this->rolesViewProfilesUUID[] = $roleUUID;
                     } elseif ((int)$sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_LEADERS && $memLeader) {
                         // only leaders are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
+                        $this->rolesViewProfilesUUID[] = $roleUUID;
                     } elseif ($this->rolesRights['rol_all_lists_view']) {
                         // user is allowed to view all roles than also view this membership
                         $this->rolesViewProfiles[] = $roleId;
+                        $this->rolesViewProfilesUUID[] = $roleUUID;
                     }
                 }
 
@@ -344,12 +365,15 @@ class User extends TableAccess
                     // Leaders are allowed to write mails to the role
                     // Membership to the role and this is not locked, then look at it
                     $this->rolesWriteMails[] = $roleId;
+                    $this->rolesWriteMailsUUID[] = $roleUUID;
                 } elseif ($sqlRow['rol_mail_this_role'] >= 2) {
                     // look at other roles when everyone is allowed to see them
                     $this->rolesWriteMails[] = $roleId;
+                    $this->rolesWriteMailsUUID[] = $roleUUID;
                 } elseif ($this->rolesRights['rol_mail_to_all']) {
                     // user is allowed to write emails to all roles than also write to this role
                     $this->rolesWriteMails[] = $roleId;
+                    $this->rolesWriteMailsUUID[] = $roleUUID;
                 }
             }
         }
@@ -803,30 +827,30 @@ class User extends TableAccess
     }
 
     /**
-     * Returns an array with all roles where the user has the right to view the profiles of the role members
-     * @return array<int,int> Array with role ids where user has the right to view the profiles of the role members
+     * Returns an array with all UUIDs of roles where the user has the right to view the profiles of the role members
+     * @return array<int,string> Array with role UUIDs where user has the right to view the profiles of the role members
      */
     public function getRolesViewProfiles(): array
     {
-        return $this->rolesViewProfiles;
+        return $this->rolesViewProfilesUUID;
     }
 
     /**
      * Returns an array with all roles where the user has the right to view the memberships
-     * @return array<int,int> Array with role ids where user has the right to view the memberships
+     * @return array<int,string> Array with role ids where user has the right to view the memberships
      */
     public function getRolesViewMemberships(): array
     {
-        return $this->rolesViewMemberships;
+        return $this->rolesViewMembershipsUUID;
     }
 
     /**
-     * Returns an array with all roles where the user has the right to write an email to the role members
-     * @return array<int,int> Array with role ids where user has the right to mail them
+     * Returns an array with all UUIDs of roles where the user has the right to write an email to the role members
+     * @return array<int,string> Array with role UUIDs where user has the right to mail them
      */
     public function getRolesWriteMails(): array
     {
-        return $this->rolesWriteMails;
+        return $this->rolesWriteMailsUUID;
     }
 
     /**
@@ -1014,7 +1038,7 @@ class User extends TableAccess
             }
         }
         if ((int)$gSettingsManager->get('profile_photo_storage') === 0 && !is_null($this->getValue('usr_photo'))) {
-            $vCard[] = 'PHOTO;TYPE=JPEG;ENCODING=b:' . base64_encode((string) $this->getValue('usr_photo'));
+            $vCard[] = 'PHOTO;TYPE=JPEG;ENCODING=b:' . base64_encode((string)$this->getValue('usr_photo'));
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && (int)$this->getValue('GENDER', 'database') > 0) {
             // https://datatracker.ietf.org/doc/html/rfc6350#section-6.2.7
@@ -1553,7 +1577,10 @@ class User extends TableAccess
         $this->rolesRights = array();
         $this->rolesViewMemberships = array();
         $this->rolesViewProfiles = array();
+        $this->rolesViewMembershipsUUID = array();
+        $this->rolesViewProfilesUUID = array();
         $this->rolesWriteMails = array();
+        $this->rolesWriteMailsUUID = array();
         $this->rolesMembership = array();
         $this->rolesMembershipLeader = array();
         $this->rolesMembershipNoLeader = array();

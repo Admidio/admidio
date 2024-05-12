@@ -186,7 +186,7 @@ if ($getMode === 'assign') {
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
                           WHERE rol_valid   = true
-                            AND rol_id IN (' . Database::getQmForValues($allVisibleRoles) . ')
+                            AND rol_uuid IN (' . Database::getQmForValues($allVisibleRoles) . ')
                             AND cat_name_intern <> \'EVENTS\'
                        ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = $allVisibleRoles;

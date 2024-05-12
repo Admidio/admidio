@@ -105,9 +105,8 @@ if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gSettingsManager->getInt('
 }
 
 $list = array();
-$arrAllMailRoles = $gCurrentUser->getRolesWriteMails();
 
-if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrAllMailRoles) > 0) {
+if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($gCurrentUser->getRolesWriteMails()) > 0) {
     $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
@@ -122,7 +121,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
          LEFT JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-             WHERE rol_id IN ('.Database::getQmForValues($arrAllMailRoles).')
+             WHERE rol_uuid IN ('.Database::getQmForValues($gCurrentUser->getRolesWriteMails()).')
                AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
@@ -138,7 +137,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
             $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
             $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
         ),
-        $arrAllMailRoles,
+        $gCurrentUser->getRolesWriteMails(),
         array(
             $gCurrentOrgId,
             DATE_NOW,
@@ -293,7 +292,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     $form = new HtmlForm('mail_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
-    $sqlRoleIds = array();
+    $sqlRoleUUIDs = array();
     $sqlUserIds = '';
     $sqlParticipationRoles = '';
 
@@ -304,12 +303,12 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     } elseif ($getRoleUuid !== '') {
         // role id was committed then write email to this role
         $preloadData = 'groupID: '.$getRoleUuid;
-        $sqlRoleIds  = array($role->getValue('rol_id'));
+        $sqlRoleUUIDs  = array($role->getValue('rol_uuid'));
     } else {
         // no user or role was committed then show list with all roles and users
         // where the current user has the right to send email
         $preloadData = isset($formValues['msg_to']) ? $formValues['msg_to'] : '';
-        $sqlRoleIds = $gCurrentUser->getRolesWriteMails();
+        $sqlRoleUUIDs = $gCurrentUser->getRolesWriteMails();
         $sqlParticipationRoles = ' AND cat_name_intern <> \'EVENTS\' ';
     }
 
@@ -320,7 +319,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $listActiveAndFormer = array();
         $listRoleIdsArray = array();
 
-        if (count($sqlRoleIds) === 0) {
+        if (count($sqlRoleUUIDs) === 0) {
             // if only send mail to one user than this user must be in a role the current user is allowed to see
             $listVisibleRoleArray = $gCurrentUser->getRolesViewMemberships();
         } else {
@@ -331,18 +330,18 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
                         ON cat_id = rol_cat_id
                        AND (  cat_org_id = ? -- $gCurrentOrgId
                            OR cat_org_id IS NULL)
-                     WHERE rol_id IN ('.Database::getQmForValues($sqlRoleIds).')
+                     WHERE rol_uuid IN ('.Database::getQmForValues($sqlRoleUUIDs).')
                        AND rol_valid = true
                            '.$sqlParticipationRoles.'
                   ORDER BY rol_name ASC';
-            $rolesStatement = $gDb->queryPrepared($sql, array_merge(array($gCurrentOrgId), $sqlRoleIds));
+            $rolesStatement = $gDb->queryPrepared($sql, array_merge(array($gCurrentOrgId), $sqlRoleUUIDs));
             $rolesArray = $rolesStatement->fetchAll();
 
             foreach ($rolesArray as $roleArray) {
                 $role = new TableRoles($gDb);
                 $role->setArray($roleArray);
                 $list[] = array('groupID: '.$roleArray['rol_uuid'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
-                $listRoleIdsArray[] = $roleArray['rol_id'];
+                $listRoleIdsArray[] = $roleArray['rol_uuid'];
                 if ($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former')) {
                     // list role with former members
                     $listFormer[] = array('groupID: '.$roleArray['rol_uuid'].'+1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
@@ -377,7 +376,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
                        AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                      WHERE usr_id    <> ? -- $gCurrentUserId
                        AND mem_begin <= ? -- DATE_NOW
-                       AND rol_id IN ('.Database::getQmForValues($listVisibleRoleArray).')
+                       AND rol_uuid IN ('.Database::getQmForValues($listVisibleRoleArray).')
                            '.$sqlUserIds.'
                        AND usr_valid = true
                   ORDER BY last_name, first_name, mem_end DESC';
