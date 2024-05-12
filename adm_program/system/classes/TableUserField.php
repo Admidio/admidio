@@ -11,7 +11,7 @@
 
 class TableUserField extends TableAccess
 {
-    public const MOVE_UP   = 'UP';
+    public const MOVE_UP = 'UP';
     public const MOVE_DOWN = 'DOWN';
 
     const USER_FIELD_REQUIRED_INPUT_NO = 0;
@@ -68,22 +68,22 @@ class TableUserField extends TableAccess
         $this->db->startTransaction();
 
         // close gap in sequence
-        $sql = 'UPDATE '.TBL_USER_FIELDS.'
+        $sql = 'UPDATE ' . TBL_USER_FIELDS . '
                    SET usf_sequence = usf_sequence - 1
                  WHERE usf_cat_id   = ? -- $this->getValue(\'usf_cat_id\')
                    AND usf_sequence > ? -- $this->getValue(\'usf_sequence\')';
-        $this->db->queryPrepared($sql, array((int) $this->getValue('usf_cat_id'), (int) $this->getValue('usf_sequence')));
+        $this->db->queryPrepared($sql, array((int)$this->getValue('usf_cat_id'), (int)$this->getValue('usf_sequence')));
 
-        $usfId = (int) $this->getValue('usf_id');
+        $usfId = (int)$this->getValue('usf_id');
 
         // close gap in sequence of saved lists
         $sql = 'SELECT lsc_lst_id, lsc_number
-                  FROM '.TBL_LIST_COLUMNS.'
+                  FROM ' . TBL_LIST_COLUMNS . '
                  WHERE lsc_usf_id = ? -- $usfId';
         $listsStatement = $this->db->queryPrepared($sql, array($usfId));
 
         while ($rowLst = $listsStatement->fetch()) {
-            $sql = 'UPDATE '.TBL_LIST_COLUMNS.'
+            $sql = 'UPDATE ' . TBL_LIST_COLUMNS . '
                        SET lsc_number = lsc_number - 1
                      WHERE lsc_lst_id = ? -- $rowLst[\'lsc_lst_id\']
                        AND lsc_number > ? -- $rowLst[\'lsc_number\']';
@@ -91,15 +91,15 @@ class TableUserField extends TableAccess
         }
 
         // delete all dependencies in other tables
-        $sql = 'DELETE FROM '.TBL_USER_LOG.'
+        $sql = 'DELETE FROM ' . TBL_USER_LOG . '
                  WHERE usl_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
 
-        $sql = 'DELETE FROM '.TBL_USER_DATA.'
+        $sql = 'DELETE FROM ' . TBL_USER_DATA . '
                  WHERE usd_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
 
-        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
+        $sql = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
                  WHERE lsc_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
 
@@ -133,7 +133,7 @@ class TableUserField extends TableAccess
         }
 
         $sql = 'SELECT usf_id
-                  FROM '.TBL_USER_FIELDS.'
+                  FROM ' . TBL_USER_FIELDS . '
                  WHERE usf_name_intern = ? -- $newNameIntern';
         $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
@@ -196,22 +196,21 @@ class TableUserField extends TableAccess
 
                         foreach ($arrListValues as $key => &$listValue) {
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
-                                // if value is imagefile or imageurl then show image
-                                if (Image::isBootstrapIcon($listValue)
-                                || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)) { // TODO: simplify check for images
-                                    // if there is imagefile and text separated by | then explode them
+                                // if value is bootstrap icon or icon separated from text
+                                if (Image::isBootstrapIcon($listValue) || str_contains($listValue, '|')) {
+                                    // if there is bootstrap icon and text separated by | then explode them
                                     if (str_contains($listValue, '|')) {
                                         list($listValueImage, $listValueText) = explode('|', $listValue);
                                     } else {
                                         $listValueImage = $listValue;
-                                        $listValueText  = $this->getValue('usf_name');
+                                        $listValueText = $this->getValue('usf_name');
                                     }
 
                                     // if text is a translation-id then translate it
                                     $listValueText = Language::translateIfTranslationStrId($listValueText);
 
                                     if ($format === 'html') {
-                                        $listValue = Image::getIconHtml($listValueImage, $listValueText);
+                                        $listValue = Image::getIconHtml($listValueImage, $listValueText) . ' ' . $listValueText;
                                     } else {
                                         // if no image is wanted then return the text part or only the position of the entry
                                         if (str_contains($listValue, '|')) {
@@ -262,10 +261,10 @@ class TableUserField extends TableAccess
 
         $requiredInput = $this->getValue('usf_required_input');
 
-        if($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_YES) {
+        if ($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_YES) {
             return true;
         } elseif ($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_ONLY_REGISTRATION) {
-            if($userId === $gCurrentUserId || $registration) {
+            if ($userId === $gCurrentUserId || $registration) {
                 return true;
             }
         } elseif ($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_NOT_REGISTRATION && !$registration) {
@@ -290,7 +289,7 @@ class TableUserField extends TableAccess
             $this->mViewUserFieldUserId = $gCurrentUserId;
 
             // check if the current user could view the category of the profile field
-            $this->mViewUserField = in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true);
+            $this->mViewUserField = in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true);
         }
 
         return $this->mViewUserField;
@@ -305,9 +304,9 @@ class TableUserField extends TableAccess
      */
     public function moveSequence(string $mode): bool
     {
-        $usfSequence = (int) $this->getValue('usf_sequence');
-        $usfCatId    = (int) $this->getValue('usf_cat_id');
-        $sql = 'UPDATE '.TBL_USER_FIELDS.'
+        $usfSequence = (int)$this->getValue('usf_sequence');
+        $usfCatId = (int)$this->getValue('usf_cat_id');
+        $sql = 'UPDATE ' . TBL_USER_FIELDS . '
                    SET usf_sequence = ? -- $usfSequence
                  WHERE usf_cat_id   = ? -- $usfCatId
                    AND usf_sequence = ? -- $usfSequence -/+ 1';
@@ -315,8 +314,7 @@ class TableUserField extends TableAccess
         // profile field will get one number lower and therefore move a position up in the list
         if ($mode === self::MOVE_UP) {
             $newSequence = $usfSequence - 1;
-        }
-        // profile field will get one number higher and therefore move a position down in the list
+        } // profile field will get one number higher and therefore move a position down in the list
         elseif ($mode === self::MOVE_DOWN) {
             $newSequence = $usfSequence + 1;
         }
@@ -338,9 +336,9 @@ class TableUserField extends TableAccess
     public function setSequence(array $sequence): bool
     {
         $usfCatId = $this->getValue('usf_cat_id');
-        $usfUuid  = $this->getValue('usf_uuid');
+        $usfUuid = $this->getValue('usf_uuid');
 
-        $sql = 'UPDATE '.TBL_USER_FIELDS.'
+        $sql = 'UPDATE ' . TBL_USER_FIELDS . '
                    SET usf_sequence = ? -- new order sequence
                  WHERE usf_uuid     = ? -- field ID;
                    AND usf_cat_id   = ? -- $usfCatId;
@@ -421,13 +419,13 @@ class TableUserField extends TableAccess
                     $checkValue = false;
                 } elseif ($columnName === 'usf_cat_id') {
                     $category = new TableCategory($this->db);
-                    if(is_int($newValue)) {
-                        if(!$category->readDataById($newValue)) {
-                            throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
+                    if (is_int($newValue)) {
+                        if (!$category->readDataById($newValue)) {
+                            throw new AdmException('No Category with the given id ' . $newValue . ' was found in the database.');
                         }
                     } else {
-                        if(!$category->readDataByUuid($newValue)) {
-                            throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
+                        if (!$category->readDataByUuid($newValue)) {
+                            throw new AdmException('No Category with the given uuid ' . $newValue . ' was found in the database.');
                         }
                         $newValue = $category->getValue('cat_id');
                     }
@@ -445,16 +443,16 @@ class TableUserField extends TableAccess
                 }
 
                 // name, category and type couldn't be edited if it's a system field
-                if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int) $this->getValue('usf_system') === 1) {
+                if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int)$this->getValue('usf_system') === 1) {
                     throw new AdmException('The user field ' . $this->getValue('usf_name_intern') . ' as a system field. You could
                         not change the category, type or name.');
                 }
             }
 
-            if ($columnName === 'usf_cat_id' && (int) $this->getValue($columnName) !== (int) $newValue) {
+            if ($columnName === 'usf_cat_id' && (int)$this->getValue($columnName) !== (int)$newValue) {
                 // first determine the highest sequence number of the category
                 $sql = 'SELECT COUNT(*) AS count
-                          FROM '.TBL_USER_FIELDS.'
+                          FROM ' . TBL_USER_FIELDS . '
                          WHERE usf_cat_id = ? -- $newValue';
                 $pdoStatement = $this->db->queryPrepared($sql, array($newValue));
 

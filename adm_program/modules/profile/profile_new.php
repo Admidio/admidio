@@ -26,9 +26,9 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
-$getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
-$getCopy      = admFuncVariableIsValid($_GET, 'copy', 'bool');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'int');
+$getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 $registrationOrgId = $gCurrentOrgId;
 
@@ -117,7 +117,7 @@ if (isset($_SESSION['profile_request'])) {
     $user->noValueCheck();
 
     foreach ($gProfileFields->getProfileFields() as $field) {
-        $fieldName = 'usf-'. (int) $field->getValue('usf_id');
+        $fieldName = 'usf-' . (int)$field->getValue('usf_id');
         if (isset($_SESSION['profile_request'][$fieldName])) {
             $user->setProfileFieldsValue($field->getValue('usf_name_intern'), SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['profile_request'][$fieldName])), false);
         }
@@ -138,7 +138,7 @@ $page = new HtmlPage('admidio-profile-edit', $headline);
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
 
 // create html form
-$form = new HtmlForm('edit_profile_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php', array('user_uuid' => $getUserUuid, 'new_user' => $getNewUser)), $page);
+$form = new HtmlForm('edit_profile_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_save.php', array('user_uuid' => $getUserUuid, 'new_user' => $getNewUser)), $page);
 
 // *******************************************************************************
 // Loop over all categories and profile fields
@@ -152,8 +152,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
     // at registration check if the field is enabled for registration
     if ($getNewUser === 2 && $field->getValue('usf_registration') == 1) {
         $showField = true;
-    }
-    // check if the current user has the right to edit this profile field of the selected user
+    } // check if the current user has the right to edit this profile field of the selected user
     elseif ($getNewUser !== 2 && $gCurrentUser->allowedEditProfileField($user, $field->getValue('usf_name_intern'))) {
         $showField = true;
     }
@@ -166,8 +165,8 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         }
         $category = $field->getValue('cat_name');
 
-        $form->addHtml('<a id="cat-'. (int) $field->getValue('cat_id'). '"></a>');
-        $form->openGroupBox('gb_category_'.$field->getValue('cat_name_intern'), $field->getValue('cat_name'));
+        $form->addHtml('<a id="cat-' . (int)$field->getValue('cat_id') . '"></a>');
+        $form->openGroupBox('gb_category_' . $field->getValue('cat_name_intern'), $field->getValue('cat_name'));
 
         if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
             // edit login name if it's a new record or administrator or approval of new registration
@@ -192,12 +191,12 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                         $gL10n->get('SYS_PASSWORD'),
                         '',
                         array(
-                            'type'             => 'password',
-                            'property'         => HtmlForm::FIELD_REQUIRED,
-                            'minLength'        => PASSWORD_MIN_LENGTH,
+                            'type' => 'password',
+                            'property' => HtmlForm::FIELD_REQUIRED,
+                            'minLength' => PASSWORD_MIN_LENGTH,
                             'passwordStrength' => true,
-                            'helpTextId'  => 'SYS_PASSWORD_DESCRIPTION',
-                            'class'            => 'form-control-small'
+                            'helpTextId' => 'SYS_PASSWORD_DESCRIPTION',
+                            'class' => 'form-control-small'
                         )
                     );
                     $form->addInput(
@@ -210,7 +209,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                     // show selectbox with all organizations of database
                     if ($gSettingsManager->getBool('system_organization_select')) {
                         $sql = 'SELECT org_id, org_longname
-                                  FROM '.TBL_ORGANIZATIONS.'
+                                  FROM ' . TBL_ORGANIZATIONS . '
                               ORDER BY org_longname ASC, org_shortname ASC';
                         $form->addSelectBoxFromSql(
                             'reg_org_id',
@@ -230,11 +229,11 @@ foreach ($gProfileFields->getProfileFields() as $field) {
     if ($showField) {
         // add profile fields to form
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
-        $helpId        = '';
+        $helpId = '';
         $usfNameIntern = $field->getValue('usf_name_intern');
 
         if ($gProfileFields->getProperty($usfNameIntern, 'usf_disabled') == 1
-        && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 0) {
+            && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 0) {
             // disable field if this is configured in profile field configuration
             $fieldProperty = HtmlForm::FIELD_DISABLED;
         } elseif ($gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 2 || $getNewUser === 3) ? true : false))) {
@@ -251,72 +250,72 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         // code for different field types
         if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'CHECKBOX') {
             $form->addCheckbox(
-                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
+                'usf-' . $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                (bool) $user->getValue($usfNameIntern),
+                (bool)$user->getValue($usfNameIntern),
                 array(
-                    'property'   => $fieldProperty,
+                    'property' => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $usfNameIntern === 'COUNTRY') {
             // set array with values and set default value
             if ($usfNameIntern === 'COUNTRY') {
                 $arrListValues = $gL10n->getCountries();
-                $defaultValue  = null;
+                $defaultValue = null;
 
-                if ((int) $user->getValue('usr_id') === 0 && strlen($gSettingsManager->getString('default_country')) > 0) {
+                if ((int)$user->getValue('usr_id') === 0 && strlen($gSettingsManager->getString('default_country')) > 0) {
                     $defaultValue = $gSettingsManager->getString('default_country');
                 } elseif ($user->getValue('usr_id') > 0 && strlen($user->getValue($usfNameIntern)) > 0) {
                     $defaultValue = $user->getValue($usfNameIntern, 'database');
                 }
             } else {
                 $arrListValues = $gProfileFields->getProperty($usfNameIntern, 'usf_value_list');
-                $defaultValue  = $user->getValue($usfNameIntern, 'database');
+                $defaultValue = $user->getValue($usfNameIntern, 'database');
             }
 
             $form->addSelectBox(
-                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
+                'usf-' . $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
                 $arrListValues,
                 array(
-                    'property'     => $fieldProperty,
+                    'property' => $fieldProperty,
                     'defaultValue' => $defaultValue,
-                    'helpTextId'   => $helpId,
-                    'icon'         => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'helpTextId' => $helpId,
+                    'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {
             $showDummyRadioButton = false;
 
-            if(!$gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 2 || $getNewUser === 3) ? true : false))) {
+            if (!$gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 2 || $getNewUser === 3) ? true : false))) {
                 $showDummyRadioButton = true;
             }
 
             $form->addRadioButton(
-                'usf-'.$gProfileFields->getProperty($usfNameIntern, 'usf_id'),
+                'usf-' . $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $gProfileFields->getProperty($usfNameIntern, 'usf_value_list'),
+                $gProfileFields->getProperty($usfNameIntern, 'usf_value_list', 'html'),
                 array(
-                    'property'          => $fieldProperty,
-                    'defaultValue'      => (int) $user->getValue($usfNameIntern, 'database'),
+                    'property' => $fieldProperty,
+                    'defaultValue' => (int)$user->getValue($usfNameIntern, 'database'),
                     'showNoValueButton' => $showDummyRadioButton,
-                    'helpTextId'        => $helpId,
-                    'icon'              => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'helpTextId' => $helpId,
+                    'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'TEXT_BIG') {
             $form->addMultilineTextInput(
-                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
+                'usf-' . $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
                 $user->getValue($usfNameIntern),
                 3,
                 array(
-                    'maxLength'  => 4000,
-                    'property'   => $fieldProperty,
+                    'maxLength' => 4000,
+                    'property' => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         } else {
@@ -342,15 +341,15 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             }
 
             $form->addInput(
-                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
+                'usf-' . $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
                 $user->getValue($usfNameIntern),
                 array(
-                    'type'       => $fieldType,
-                    'maxLength'  => $maxlength,
-                    'property'   => $fieldProperty,
+                    'type' => $fieldType,
+                    'maxLength' => $maxlength,
+                    'property' => $fieldProperty,
                     'helpTextId' => $helpId,
-                    'icon'       => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                    'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
         }
@@ -378,9 +377,9 @@ if ($getNewUser === 2) {
 if ($getNewUser === 0) {
     // show information about user who creates the recordset and changed it
     $form->addHtml(admFuncShowCreateChangeInfoById(
-        (int) $user->getValue('usr_usr_id_create'),
+        (int)$user->getValue('usr_usr_id_create'),
         $user->getValue('usr_timestamp_create'),
-        (int) $user->getValue('usr_usr_id_change'),
+        (int)$user->getValue('usr_usr_id_change'),
         $user->getValue('usr_timestamp_change')
     ));
 }

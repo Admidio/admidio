@@ -19,9 +19,9 @@
     <step id="155">UPDATE %PREFIX%_menu SET men_icon = 'card-checklist' WHERE men_icon = 'fa-file-signature'</step>
     <step id="160">UPDATE %PREFIX%_menu SET men_icon = 'menu-button-wide-fill' WHERE men_icon = 'fa-stream'</step>
     <step id="165">UPDATE %PREFIX%_menu SET men_icon = 'book-half' WHERE men_icon = 'fa-book'</step>
-    <step id="170">UPDATE %PREFIX%_user_fields SET usf_value_list = 'bi-gender-male|SYS_MALE
-bi-gender-female|SYS_FEMALE
-bi-gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'fa-mars|%'</step>
+    <step id="170">UPDATE %PREFIX%_user_fields SET usf_value_list = 'gender-male|SYS_MALE
+gender-female|SYS_FEMALE
+gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'fa-mars|%'</step>
     <step id="180">UPDATE %PREFIX%_user_fields SET usf_icon = 'facebook' WHERE usf_name_intern = 'FACEBOOK'</step>
     <step id="190">UPDATE %PREFIX%_user_fields SET usf_icon = 'instagram' WHERE usf_name_intern = 'INSTAGRAM'</step>
     <step id="200">UPDATE %PREFIX%_user_fields SET usf_icon = 'linkedin' WHERE usf_name_intern = 'LINKEDIN'</step>

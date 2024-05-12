@@ -156,9 +156,11 @@ class Image
         global $gLogger;
 
         if($icon !== '') {
-            if (self::isBootstrapIcon($icon)) {
+            if (preg_match('/[^a-z0-9-]/', $icon) === 0) {
                 if (str_starts_with($icon, 'bi-')) {
                     $icon = 'bi ' . $icon;
+                } else {
+                    $icon = 'bi bi-' . $icon;
                 }
 
                 if ($text !== '') {

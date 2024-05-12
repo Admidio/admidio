@@ -120,7 +120,7 @@ class ProfileFields
         $editableFields = array();
 
         foreach ($this->mProfileFields as $field) {
-            if($this->isEditable($field->getValue('usf_name_intern'), $allowedToEditProfile)) {
+            if ($this->isEditable($field->getValue('usf_name_intern'), $allowedToEditProfile)) {
                 $editableFields[] = $field->getValue('usf_id');
             }
         }
@@ -182,7 +182,7 @@ class ProfileFields
     public function getPropertyById(int $fieldId, string $column, string $format = '')
     {
         foreach ($this->mProfileFields as $field) {
-            if ((int) $field->getValue('usf_id') === $fieldId) {
+            if ((int)$field->getValue('usf_id') === $fieldId) {
                 return $field->getValue($column, $format);
             }
         }
@@ -283,17 +283,15 @@ class ProfileFields
                     $arrListValues = explode("\n", $valueFormatted);
 
                     foreach ($arrListValues as $index => $listValue) {
-                        // if value is imagefile or imageurl then show image
+                        // if value is bootstrap icon or icon separated from text
                         if ($usfType === 'RADIO_BUTTON'
-                            && (Image::isBootstrapIcon($listValue)
-                                || StringUtils::strContains($listValue, '.png', false)
-                                || StringUtils::strContains($listValue, '.jpg', false))) { // TODO: simplify check for images
+                            && (Image::isBootstrapIcon($listValue) || str_contains($listValue, '|'))) {
                             // if there is imagefile and text separated by | then explode them
                             if (str_contains($listValue, '|')) {
                                 list($listValueImage, $listValueText) = explode('|', $listValue);
                             } else {
                                 $listValueImage = $listValue;
-                                $listValueText  = $this->getValue('usf_name');
+                                $listValueText = $this->getValue('usf_name');
                             }
 
                             // if text is a translation-id then translate it
@@ -310,11 +308,11 @@ class ProfileFields
                         $arrListValuesWithKeys[++$index] = $listValue;
                     }
 
-                    if(count($arrListValuesWithKeys) > 0 && !empty($value)) {
-                        if(array_key_exists($value, $arrListValuesWithKeys)) {
+                    if (count($arrListValuesWithKeys) > 0 && !empty($value)) {
+                        if (array_key_exists($value, $arrListValuesWithKeys)) {
                             $htmlValue = $arrListValuesWithKeys[$value];
                         } else {
-                            $htmlValue = '<i>'.$gL10n->get('SYS_DELETED_ENTRY').'</i>';
+                            $htmlValue = '<i>' . $gL10n->get('SYS_DELETED_ENTRY') . '</i>';
                         }
                     } else {
                         $htmlValue = '';
@@ -362,8 +360,7 @@ class ProfileFields
                 }
             }
             $value = $htmlValue;
-        }
-        // special case for type CHECKBOX and no value is there, then show unchecked checkbox
+        } // special case for type CHECKBOX and no value is there, then show unchecked checkbox
         else {
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX') {
                 $value = '<i class="bi bi-square"></i>';
@@ -398,7 +395,7 @@ class ProfileFields
         // exists a profile field with that name ?
         // then check if user has a data object for this field and then read value of this object
         if (array_key_exists($fieldNameIntern, $this->mProfileFields)
-        &&  array_key_exists($this->mProfileFields[$fieldNameIntern]->getValue('usf_id'), $this->mUserData)) {
+            && array_key_exists($this->mProfileFields[$fieldNameIntern]->getValue('usf_id'), $this->mUserData)) {
             $value = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->getValue('usd_value', $format);
 
             if ($format === 'database') {
@@ -461,7 +458,7 @@ class ProfileFields
         $visibleFields = array();
 
         foreach ($this->mProfileFields as $field) {
-            if($this->isVisible($field->getValue('usf_name_intern'), $allowedToEditProfile)) {
+            if ($this->isVisible($field->getValue('usf_name_intern'), $allowedToEditProfile)) {
                 $visibleFields[] = $field->getValue('usf_id');
             }
         }
@@ -508,7 +505,7 @@ class ProfileFields
     public function isEditable(string $fieldNameIntern, bool $allowedToEditProfile): bool
     {
         return $this->isVisible($fieldNameIntern, $allowedToEditProfile)
-        && ($GLOBALS['gCurrentUser']->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
+            && ($GLOBALS['gCurrentUser']->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
     }
 
     /**
@@ -524,15 +521,15 @@ class ProfileFields
      */
     public function isVisible(string $fieldNameIntern, bool $allowedToEditProfile = false): bool
     {
-        if(!array_key_exists($fieldNameIntern, $this->mProfileFields)) {
+        if (!array_key_exists($fieldNameIntern, $this->mProfileFields)) {
             return false;
         }
 
         // check a special case where the field is only visible for users who can edit the profile but must therefore
         // have the right to edit all users
         if (!$GLOBALS['gCurrentUser']->editUsers()
-        && $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 1
-        && $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 1) {
+            && $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 1
+            && $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 1) {
             return false;
         }
 
@@ -540,7 +537,7 @@ class ProfileFields
         // if it's the own profile than we check if user could edit his profile and if so he could view all fields
         // check if the profile field is only visible for users that could edit this
         return ($this->mProfileFields[$fieldNameIntern]->isVisible() || $GLOBALS['gCurrentUserId'] === $this->mUserId)
-        && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
+            && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
     }
 
     /**
@@ -567,8 +564,8 @@ class ProfileFields
 
         // read all user fields and belonging category data of organization
         $sql = 'SELECT *
-                  FROM '.TBL_USER_FIELDS.'
-            INNER JOIN '.TBL_CATEGORIES.'
+                  FROM ' . TBL_USER_FIELDS . '
+            INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = usf_cat_id
                  WHERE cat_org_id IS NULL
                     OR cat_org_id = ? -- $organizationId
@@ -604,10 +601,10 @@ class ProfileFields
 
             // read all user data of user
             $sql = 'SELECT *
-                      FROM '.TBL_USERS.'
-                INNER JOIN '.TBL_USER_DATA.'
+                      FROM ' . TBL_USERS . '
+                INNER JOIN ' . TBL_USER_DATA . '
                         ON usd_usr_id = usr_id
-                INNER JOIN '.TBL_USER_FIELDS.'
+                INNER JOIN ' . TBL_USER_FIELDS . '
                         ON usf_id = usd_usf_id
                      WHERE usr_id = ? -- $userId';
             $userDataStatement = $this->db->queryPrepared($sql, array($userId));
@@ -745,7 +742,7 @@ class ProfileFields
 
             // if profile field has an url with a placeholder #user_content# and the current value is also an url than
             // we expect a profile url of a social network a scan for the profile name
-            if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '#user_content#') !== false) {
+            if (strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '#user_content#') !== false) {
                 if (StringUtils::strValidCharacters($fieldValue, 'url') && str_contains($fieldValue, '/')) {
                     if (strrpos($fieldValue, '/profile.php?id=') > 0) {
                         // extract facebook id (not facebook unique name) from url
@@ -767,8 +764,8 @@ class ProfileFields
                 }
             }
 
-            if($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') !== ''
-            && preg_match('/'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_regex').'/', $fieldValue) === 0) {
+            if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') !== ''
+                && preg_match('/' . $this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') . '/', $fieldValue) === 0) {
                 throw new AdmException('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
             }
         }
@@ -777,7 +774,7 @@ class ProfileFields
             $gL10n->getCountryName($fieldValue);
         }
 
-        $usfId = (int) $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
+        $usfId = (int)$this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
 
         if (!array_key_exists($usfId, $this->mUserData) && $fieldValue !== '') {
             $this->mUserData[$usfId] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
