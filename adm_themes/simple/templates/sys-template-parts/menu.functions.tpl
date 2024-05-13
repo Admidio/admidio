@@ -2,7 +2,7 @@
 {if count($menuFunctions) > 0}
     <ul class="nav admidio-menu-function-node">
         {foreach $menuFunctions as $menuItem}
-            {if {array_key_exists array=$menuItem key='items'}}
+            {if {array_key_exists array=$menuItem key="items"}}
                 <li class="nav-item dropdown">
                     <a id="{$menuItem.id}" class="nav-link btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                         <i class="{$menuItem.icon}"></i>{$menuItem.name}

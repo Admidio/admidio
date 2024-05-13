@@ -22,7 +22,7 @@ if (!is_file($configPath)) {
         $gL10n->get('SYS_NOTE'),
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
         $gL10n->get('SYS_BACK'),
-        'bi-arrow-circle-left-fill',
+        'bi-arrow-left-circle-fill',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config'))
     );
     // => EXIT
@@ -44,7 +44,7 @@ if (isset($_SESSION['table_prefix'])
         $gL10n->get('SYS_NOTE'),
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
         $gL10n->get('SYS_BACK'),
-        'bi-arrow-circle-left-fill',
+        'bi-arrow-left-circle-fill',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
     );
     // => EXIT
@@ -63,7 +63,7 @@ if (is_string($sqlQueryResult)) {
         $gL10n->get('SYS_NOTE'),
         $sqlQueryResult,
         $gL10n->get('SYS_BACK'),
-        'bi-arrow-circle-left-fill',
+        'bi-arrow-left-circle-fill',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config'))
     );
     // => EXIT
@@ -308,8 +308,11 @@ $form = new HtmlForm('installation-form', ADMIDIO_HOMEPAGE.'donate.php', null, a
 $form->addButton(
     'main_page',
     $gL10n->get('SYS_LATER'),
-    array('icon' => 'bi-house-door-fill', 'class' => 'admidio-margin-bottom',
-        'link' => ADMIDIO_URL . '/adm_program/overview.php')
+    array(
+        'icon' => 'bi-house-door-fill',
+        'link' => ADMIDIO_URL . '/adm_program/overview.php',
+        'class' => ' btn-secondary admidio-margin-bottom '
+    )
 );
 $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'bi-heart-fill'));
 

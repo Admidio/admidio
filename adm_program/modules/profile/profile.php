@@ -306,7 +306,7 @@ $page->addHtml('
                                     $userName = '';
 
                                     if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
-                                        $userName .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)) . '" title="' . $gL10n->get('SYS_WRITE_PM') . '">' .
+                                        $userName .= '<a class="icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)) . '" title="' . $gL10n->get('SYS_WRITE_PM') . '">' .
                                             '<i class="bi bi-chat-left-fill"></i>' . $user->getValue('usr_login_name') . '</a>';
                                     } else {
                                         $userName .= $user->getValue('usr_login_name');
@@ -382,12 +382,13 @@ $page->addHtml('
                                 if ($gSettingsManager->getBool('profile_show_map_link') && strlen($street) > 0
                                 && (strlen($postcode) > 0 || strlen($city) > 0)) {
                                     $address .= '
-                                        <a class="admidio-icon-link" href="'. $mapUrl. '" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_HOME_DESC').'">
-                                            <i class="bi bi-map-fill"></i>'.$gL10n->get('SYS_MAP').'</a>';
+                                        <a class="icon-link" href="'. $mapUrl. '" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_HOME_DESC').'">
+                                            <i class="bi bi-pin-map-fill"></i>'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if it's not the profile of CurrentUser
                                     if ($userId !== $gCurrentUserId) {
-                                        $address .= ' - <a href="'.$routeUrl.'" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_ROUTE_DESC').'">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
+                                        $address .= ' - <a class="icon-link" href="'.$routeUrl.'" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_ROUTE_DESC').'">
+                                            <i class="bi bi-sign-turn-right-fill"></i>'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
                                 }
 
@@ -418,13 +419,13 @@ $page->addHtml('
             if ($gCurrentUser->hasRightEditProfile($user)) {
                 $page->addHtml('
                 <ul id="profile_picture_links" class="list-unstyled">
-                    <li><a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)).'">
+                    <li><a class="icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)).'">
                         <i class="bi bi-upload"></i>'.$gL10n->get('SYS_UPLOAD_PROFILE_PICTURE').'</a></li>');
 
                 // the image can only be deleted if corresponding rights exist
                 if (((string) $user->getValue('usr_photo') !== '' && (int) $gSettingsManager->get('profile_photo_storage') === 0)
                         || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1) {
-                    $page->addHtml('<li><a id="btn_delete_photo" class="admidio-icon-link openPopup" href="javascript:void(0);"
+                    $page->addHtml('<li><a id="btn_delete_photo" class="icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $getUserUuid)).
                                         '"><i class="bi bi-trash"></i>'.$gL10n->get('SYS_DELETE_PROFILE_PICTURE').'</a></li>');
                 }

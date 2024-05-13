@@ -26,7 +26,7 @@
  * $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'),
  *                     array('defaultValue' => 'simple', 'showContextDependentFirstEntry' => true));
  * $form->closeGroupBox();
- * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'bi-arrow-circle-right-fill'));
+ * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'bi-arrow-right-circle-fill'));
  * $form->show();
  * ```
  */
@@ -231,7 +231,7 @@ class HtmlForm
 
         ++$this->countElements;
 
-        $this->render('form.captcha', ['class' => $class]);
+        $this->render('form.captcha', ['formtype' => $this->type, 'class' => $class]);
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,
@@ -273,7 +273,8 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'helpTextId'       => '',
             'icon'             => '',

@@ -8,5 +8,5 @@
     {/if}
     <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
     data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
-    title="{$l10n->get('SYS_NOTE')}" data-bs-content="{$helpTextId|escape:'html'}"></i>
+    title="{$l10n->get("SYS_NOTE")}" data-bs-content="{$helpTextId|escape:"html"}"></i>
 {/if}

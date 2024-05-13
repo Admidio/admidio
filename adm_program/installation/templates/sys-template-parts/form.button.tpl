@@ -4,7 +4,7 @@
         {$itemvar@key}="{$itemvar}"
     {/foreach}
 >
-    {include file='sys-template-parts/parts/form.part.icon.tpl'}{$value}
+    {include file="sys-template-parts/parts/form.part.icon.tpl"}{$value}
 </button>
 
 

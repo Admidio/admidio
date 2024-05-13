@@ -305,7 +305,7 @@ if ($getMode === 1) {
             $gL10n->get('SYS_NOTE'),
             $e->getMessage(),
             $gL10n->get('SYS_BACK'),
-            'bi-arrow-circle-left-fill',
+            'bi-arrow-left-circle-fill',
             'update.php');
         // => EXIT
     } catch (RuntimeException $e) {

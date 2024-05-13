@@ -1,7 +1,7 @@
-<div id="{$id}_group" class="form-control-group{if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}{if $property eq 1} admidio-form-group-required{/if}">
+<div id="{$id}_group" class="admidio-form-group{if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}{if $property eq 1} admidio-form-group-required{/if}">
     {if $data.formtype neq "navbar"}
         <label for="{$id}" class="form-label">
-            {include file='sys-template-parts/parts/form.part.icon.tpl'}
+            {include file="sys-template-parts/parts/form.part.icon.tpl"}
             {$label}
         </label>
     {/if}
@@ -17,21 +17,21 @@
     {/if}
     {if $data.formtype eq "navbar"}
         <label for="{$id}" class="form-label">
-            {include file='sys-template-parts/parts/form.part.icon.tpl'}
+            {include file="sys-template-parts/parts/form.part.icon.tpl"}
             {$label}
         </label>
     {/if}
     {if $enableMultiUploads}
         <div>
             <button type="button" id="btn_add_attachment_{$id}" class="btn btn-primary focus-ring">
-                {include file='sys-template-parts/parts/form.part.icon.tpl'} {$multiUploadLabel}
+                {include file="sys-template-parts/parts/form.part.icon.tpl"} {$multiUploadLabel}
             </button>
         </div>
     {/if}
     {if $data.formtype eq "navbar"}
-        {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
+        {include file="sys-template-parts/parts/form.part.iconhelp.tpl"}
     {else}
-        {include file='sys-template-parts/parts/form.part.helptext.tpl'}
+        {include file="sys-template-parts/parts/form.part.helptext.tpl"}
     {/if}
-    {include file='sys-template-parts/parts/form.part.warning.tpl'}
+    {include file="sys-template-parts/parts/form.part.warning.tpl"}
 </div>

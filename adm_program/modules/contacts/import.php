@@ -85,8 +85,8 @@ $page->addJavascript(
     '
     $("#format").change(function() {
         const format = $(this).children("option:selected").val();
-         $(".import-setting").prop("disabled", true).parents("div.form-control-group").hide();
-         $(".import-"+format).prop("disabled", false).parents("div.form-control-group").show("slow");
+         $(".import-setting").prop("disabled", true).parents("div.admidio-form-group").hide();
+         $(".import-"+format).prop("disabled", false).parents("div.admidio-form-group").show("slow");
     });
     $("#format").trigger("change");',
     true
@@ -232,7 +232,7 @@ $form->addSelectBox(
 $form->addSubmitButton(
     'btn_forward',
     $gL10n->get('SYS_ASSIGN_FIELDS'),
-    array('icon' => 'bi-arrow-circle-right-fill')
+    array('icon' => 'bi-arrow-right-circle-fill')
 );
 
 // add form to html page and show page

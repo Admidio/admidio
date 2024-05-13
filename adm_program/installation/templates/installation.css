@@ -104,7 +104,7 @@
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .bi, .btn .bi, .alert .bi,
 .admidio-profile-user-right .bi, .checkbox .bi, input[type="radio"],
-label img, .form-control-static img, .accordion .bi, .form-control-static .bi  {
+.accordion .bi, .form-control-static > .bi  {
     margin-right: 5px;
 }
 
@@ -342,7 +342,7 @@ label {
     font-weight: bold;
 }
 
-.navbar .form-floating.form-control-group {
+.navbar .form-floating.admidio-form-group {
     margin-right: 10px;
 }
 

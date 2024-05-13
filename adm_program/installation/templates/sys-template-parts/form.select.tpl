@@ -1,11 +1,14 @@
-
-<div id="{$id}_group" class="form-control-group{if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}{if $property eq 1} admidio-form-group-required{/if}">
+<div id="{$id}_group" class="admidio-form-group
+    {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}row{/if}
+    {if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}
+    {if $property eq 1} admidio-form-group-required{/if}">
     {if $data.formtype neq "navbar"}
-        <label for="{$id}" class="form-label">
-            {include file='sys-template-parts/parts/form.part.icon.tpl'}
+        <label for="{$id}" class="{if $data.formtype neq "vertical" and $data.formtype neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
+            {include file="sys-template-parts/parts/form.part.icon.tpl"}
             {$label}
         </label>
     {/if}
+    {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}<div class="col-sm-9">{/if}
     <select id="{$id}" class="form-select focus-ring {$class}"
         {foreach $data.attributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
@@ -23,14 +26,15 @@
     </select>
     {if $data.formtype eq "navbar"}
         <label for="{$id}" class="form-label">
-            {include file='sys-template-parts/parts/form.part.icon.tpl'}
+            {include file="sys-template-parts/parts/form.part.icon.tpl"}
             {$label}
         </label>
     {/if}
     {if $data.formtype eq "navbar"}
-        {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
+        {include file="sys-template-parts/parts/form.part.iconhelp.tpl"}
     {else}
-        {include file='sys-template-parts/parts/form.part.helptext.tpl'}
+        {include file="sys-template-parts/parts/form.part.helptext.tpl"}
     {/if}
-    {include file='sys-template-parts/parts/form.part.warning.tpl'}
+    {include file="sys-template-parts/parts/form.part.warning.tpl"}
+    {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}</div>{/if}
 </div>

@@ -382,7 +382,7 @@ if ($eventsResult['totalCount'] === 0) {
 
                     $outputLinkLocation .= '
                         <a class="admidio-icon-link" href="' . $routeUrl . '" target="_blank">
-                            <i class="bi bi-map-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"></i>
+                            <i class="bi bi-sign-turn-right-fill" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"></i>
                         </a>';
                 }
             } else {

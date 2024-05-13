@@ -20,7 +20,7 @@
         {else}
             {* when forwarding, always display a next button *}
             <button class="btn btn-primary admidio-margin-bottom" onclick="{$url}">{$l10n->get("SYS_NEXT")}
-                <i class="bi bi-arrow-circle-right-fill"></i>
+                <i class="bi bi-arrow-right-circle-fill"></i>
             </button>
         {/if}
         <div id="status-message" class="mt-4 w-100"></div>

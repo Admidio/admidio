@@ -15,13 +15,13 @@
         {else}
             {* when forwarding, always display a next button *}
             <button class="btn btn-primary admidio-margin-bottom" onclick="{$url}">{$l10n->get("SYS_NEXT")}
-                <i class="bi bi-arrow-circle-right-fill"></i>
+                <i class="bi bi-arrow-right-circle-fill"></i>
             </button>
         {/if}
     {else}
         {* If not forwarded, then always display a back button *}
         <button class="btn btn-primary admidio-margin-bottom" onclick="history.back()">
-            <i class="bi bi-arrow-circle-left-fill"></i>
+            <i class="bi bi-arrow-left-circle-fill"></i>
             {$l10n->get("SYS_BACK")}
         </button>
     {/if}

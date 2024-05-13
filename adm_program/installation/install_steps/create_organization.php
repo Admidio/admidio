@@ -36,7 +36,7 @@ if (isset($_POST['db_host'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_DATABASE_CONNECTION_NOT_COMPLETELY'),
             $gL10n->get('SYS_BACK'),
-            'bi-arrow-circle-left-fill',
+            'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
         );
         // => EXIT
@@ -50,7 +50,7 @@ if (isset($_POST['db_host'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_DATABASE_TYPE_INVALID'),
             $gL10n->get('SYS_BACK'),
-            'bi-arrow-circle-left-fill',
+            'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
         );
         // => EXIT
@@ -65,7 +65,7 @@ if (isset($_POST['db_host'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_HOST_INVALID'),
             $gL10n->get('SYS_BACK'),
-            'bi-arrow-circle-left-fill',
+            'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
         );
         // => EXIT
@@ -83,7 +83,7 @@ if (isset($_POST['db_host'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_DATABASE_PORT_INVALID'),
             $gL10n->get('SYS_BACK'),
-            'bi-arrow-circle-left-fill',
+            'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
         );
         // => EXIT
@@ -97,7 +97,7 @@ if (isset($_POST['db_host'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_DATABASE_NAME_INVALID'),
             $gL10n->get('SYS_BACK'),
-            'bi-arrow-circle-left-fill',
+            'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
         );
         // => EXIT
@@ -111,7 +111,7 @@ if (isset($_POST['db_host'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_DATABASE_USER_INVALID'),
             $gL10n->get('SYS_BACK'),
-            'bi-arrow-circle-left-fill',
+            'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
         );
         // => EXIT
@@ -131,7 +131,7 @@ if (isset($_POST['db_host'])) {
             $gL10n->get('SYS_NOTE'),
             $gL10n->get('INS_TABLE_PREFIX_INVALID'),
             $gL10n->get('SYS_BACK'),
-            'bi-arrow-circle-left-fill',
+            'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
         );
         // => EXIT
@@ -152,7 +152,7 @@ if (isset($_POST['db_host'])) {
                 $gL10n->get('SYS_NOTE'),
                 $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getMessage())),
                 $gL10n->get('SYS_BACK'),
-                'bi-arrow-circle-left-fill',
+                'bi-arrow-left-circle-fill',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
             );
             // => EXIT
@@ -167,7 +167,7 @@ if (isset($_POST['db_host'])) {
                 $gL10n->get('SYS_NOTE'),
                 $message,
                 $gL10n->get('SYS_BACK'),
-                'bi-arrow-circle-left-fill',
+                'bi-arrow-left-circle-fill',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
             );
             // => EXIT
@@ -249,10 +249,10 @@ $form->closeGroupBox();
 $form->addButton(
     'previous_page',
     $gL10n->get('SYS_BACK'),
-    array('icon' => 'bi-arrow-circle-left-fill', 'class' => 'admidio-margin-bottom',
+    array('icon' => 'bi-arrow-left-circle-fill', 'class' => 'admidio-margin-bottom',
         'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')))
 );
-$form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'bi-arrow-circle-right-fill', 'class' => 'float-right'));
+$form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end'));
 
 $page->addHtml($form->show());
 $page->show();
