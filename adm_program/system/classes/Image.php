@@ -144,9 +144,8 @@ class Image
 
     /**
      * Method creates a short html snippet that contains an image tag with an icon.
-     * The icon itself could be a bootstrap icon name or a full url to an icon
-     * or only a filename than the icon must be in the theme folder **images**.
-     * @param string $icon     The bootstrap icon-name or url or filename
+     * The icon itself could be a bootstrap icon name.
+     * @param string $icon     The bootstrap icon-name
      * @param string $text     A text that should be shown on mouseover
      * @param string $cssClass Optional an additional css class for the icon can be set
      * @return string Html snippet that contains an image tag
@@ -167,24 +166,6 @@ class Image
                     return '<i class="' . $icon . ' ' . $cssClass . '" data-bs-toggle="tooltip" title="' . $text . '"></i>';
                 } else {
                     return '<i class="' . $icon . ' ' . $cssClass . '></i>';
-                }
-            }
-
-            if (self::isImageFilename($icon)) {
-                // A full URL of an icon
-                if (StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false) {
-                    return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-bs-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
-                }
-
-                try {
-                    // Only a filename -> look into theme icon folder
-                    if (StringUtils::strIsValidFileName($icon)) {
-                        $iconPath = THEME_URL . '/images/' . $icon;
-
-                        return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-bs-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
-                    }
-                } catch (AdmException $e) {
-                    // Do nothing here
                 }
             }
 
