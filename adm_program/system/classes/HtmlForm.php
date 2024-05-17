@@ -188,8 +188,11 @@ class HtmlForm
      */
     public function addButton(string $id, string $text, array $options = array())
     {
+        ++$this->countElements;
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'formtype'     => $this->type,
+            'property'     => self::FIELD_DEFAULT,
             'icon'         => '',
             'link'         => '',
             'class'        => '',
@@ -202,7 +205,11 @@ class HtmlForm
         $attributes = array();
         $attributes['type'] = $optionsAll['type'];
         $attributes['data-admidio'] = $optionsAll['data-admidio'];
-        ++$this->countElements;
+
+        // disable field
+        if ($optionsAll['property'] === self::FIELD_DISABLED) {
+            $attributes['disabled'] = 'disabled';
+        }
 
         if(strstr($optionsAll['class'], 'btn-') === false) {
             $optionsAll['class'] .= " btn-primary";

@@ -286,13 +286,13 @@ if ($countGuestbookEntries === 0) {
 
             // this link will be shown when comments where loaded
             $page->addHtml('
-                    <a id="admCommentsVisible_'. $gboUuid. '" class="btn admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayOthers. ';">
-                        <i class="bi bi-chat-fill-slash"></i>'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
+                    <a id="admCommentsVisible_'. $gboUuid. '" class="admidio-icon-text admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayOthers. ';">
+                        <i class="bi bi-eye-slash-fill"></i>'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
 
             // this link will be invisible when comments where loaded
             $page->addHtml('
-                    <a id="admCommentsInvisible_'. $gboUuid. '" class="btn admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayShowComments. ';">
-                        <i class="bi bi-chat-fill"></i>'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
+                    <a id="admCommentsInvisible_'. $gboUuid. '" class="admidio-icon-text admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayShowComments. ';">
+                        <i class="bi bi-eye-fill"></i>'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
 
             // Hier ist das div, in das die Kommentare reingesetzt werden
             $page->addHtml('<div id="comments_'. $gboUuid. '" class="admidio-guestbook-comments">');

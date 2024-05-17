@@ -34,7 +34,7 @@
     <div id="installation-header" class="admidio-area">
         <div class="admidio-container container">
             <img id="admidio-logo" src="{$urlAdmidio}/adm_program/system/logo/admidio_writing_white_150.png" alt="Logo" />
-            <span id="installation-headline">{$headline}</span>
+            <span id="installation-headline" class="align-middle">{$headline}</span>
         </div>
     </div>
     <div id="installation-body" class="admidio-area">

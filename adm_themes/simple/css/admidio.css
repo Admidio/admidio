@@ -45,7 +45,7 @@
 }
 
 #admidio-main-navbar .navbar-brand img {
-    margin-right: 10px;
+    margin-right: 1rem;
 }
 
 #admidio-main-navbar a {
@@ -71,10 +71,10 @@
     padding: 0;
 }
 
-.admidio-content {
+.admidio-content, .admidio-reduced {
     order: 1;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 /***********************************/
@@ -87,7 +87,7 @@
 }
 
 .admidio-module-headline {
-    margin-top: 20px;
+    margin-top: 1rem;
 }
 
 .admidio-headline-mobile-menu {
@@ -132,7 +132,7 @@
 .admidio-menu-header {
     font-weight: bold;
     text-transform: uppercase;
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     margin: 0;
     color: rgba(222, 222, 222, 0.65);
 }
@@ -141,20 +141,16 @@
 /* page function menu */
 /***********************************/
 
-.admidio-menu-function-node {
-    margin-top: 25px;
-}
-
 .admidio-menu-function-node .nav-link {
-    margin-right: 25px;
-    margin-top: 15px;
+    margin-right: 1.5rem;
+    margin-top: 1rem;
     background-color: var(--bs-link-color);
 }
 
 @media (max-width: 767px) {
     .admidio-menu-function-node .nav-link {
         width: 150px;
-        margin-right: 15px;
+        margin-right: 1rem;
     }
 }
 
@@ -181,8 +177,8 @@ a {
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
-    background-color: #6b979f;
-    border-color: #6b979f;
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
 }
 
 /* default distance between elements */
@@ -191,18 +187,23 @@ a {
 .navbar-filter, .table-responsive, .admidio-menu-function-node,
 .dt-container, .admidio-margin-bottom, .admidio-content-subheader,
 .tab-content {
-    margin-bottom: 40px;
+    margin-bottom: 2.5rem;
 }
 
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .bi, .btn .bi, .alert .bi,
 .admidio-profile-user-right .bi, .checkbox .bi, input[type="radio"],
-.accordion .bi, .form-control-static > .bi  {
-    margin-right: 5px;
+.accordion .bi, .form-control-static > .bi, .admidio-icon-text .bi  {
+    margin-right: 0.5rem;
 }
 
 .admidio-icon {
     padding: 3px;
+}
+
+.admidio-icon-text {
+    display: block;
+    margin: 0.5rem 0;
 }
 
 .icon-link .bi {
@@ -221,14 +222,9 @@ a {
     filter: brightness(92%);
 }
 
-.admidio-reduced {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
 .alert-info {
-    background-color: #abd7e0;
-    border-color: #87a9b1;
+    background-color: color-mix(in srgb, var(--bs-primary) 40%, white);
+    border-color: color-mix(in srgb, var(--bs-primary) 70%, white);
 }
 
 /* show vertical btn group in mobile view */
@@ -274,7 +270,7 @@ a {
 /* Forms */
 /***********************************/
 
-form, .admidio-max-with {
+form, .admidio-blog, .admidio-max-with {
     max-width: 1000px;
 }
 
@@ -323,13 +319,9 @@ label {
 /* Cards */
 /***********************************/
 
-.admidio-blog, .admidio-field-group {
-    border: none;
-    max-width: 1000px;
-}
-
-.admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
-.admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
+.admidio-blog, .admidio-field-group, .admidio-blog .card-header, .admidio-blog .card-body,
+.admidio-blog .card-footer, .admidio-field-group .card-header, .admidio-field-group .card-body,
+.admidio-field-group .card-footer {
     border: none;
     background-color: var(--bs-tertiary);
 }
@@ -340,7 +332,7 @@ label {
 }
 
 .card-header .bi {
-    margin-right: 10px;
+    margin-right: 0.5rem;
 }
 
 .card-header .float-end .bi {
@@ -385,11 +377,11 @@ label {
 }
 
 .admidio-blog-comment {
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .admidio-blog .card-body > .btn {
-    margin-top: 20px;
+    margin-top: 1rem;
     display: block;
     text-align: left;
 }
@@ -397,8 +389,7 @@ label {
 .admidio-card {
     border: none;
     background-color: var(--bs-tertiary);
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin: 1rem 0;
     height: 95%;
 }
 
@@ -441,7 +432,7 @@ label {
 }
 
 .navbar .form-floating.admidio-form-group {
-    margin-right: 10px;
+    margin-right: 0.5rem;
 }
 
 /***********************************/
@@ -457,7 +448,7 @@ label {
 }
 
 .list-unstyled li {
-    padding-top: 7px;
+    padding-top: 0.5rem;
 }
 
 .admidio-info-created {
@@ -495,7 +486,7 @@ label {
 .badge {
     --bs-badge-padding-y: .25em;
     --bs-badge-padding-x: .5em;
-    margin-left: 5px;
+    margin-left: 0.5rem;
 }
 
 .page-item.active .page-link {
@@ -504,14 +495,14 @@ label {
 }
 
 #imprint {
-    margin-bottom: 30px;
+    margin-bottom: 2rem;
     font-size: 80%;
 }
 
 .admidio-info-icon {
     color: #4496dd;
     cursor: pointer;
-    margin-left: 6px;
+    margin-left: 0.5rem;
 }
 
 .admidio-profile-user-right {
@@ -540,7 +531,7 @@ tr.admidio-event-highlight {
 }
 
 .admidio-album-thumbnail {
-    margin-bottom: 25px;
+    margin-bottom: 2rem;
 }
 
 .admidio-img-presenter img {
@@ -549,7 +540,7 @@ tr.admidio-event-highlight {
 }
 
 #admidio-password-strength {
-    margin-top: 10px;
+    margin-top: 0.5rem;
 }
 
 #admidio-password-strength-minimum {
@@ -557,12 +548,13 @@ tr.admidio-event-highlight {
     border: 9px solid transparent;
     border-left-color: var(--bs-body-color);
     border-right-width: 0;
-    margin-top: -5px;
+    margin-top: 3px;
 }
 
 .progress {
-    background-color: #dddddd;
-    height: 20px !important;
+    height: 1.5rem !important;
+    background-color: var(--bs-tertiary);
+    filter: brightness(92%);
 }
 
 /***********************************/
@@ -584,5 +576,5 @@ tr.admidio-event-highlight {
 }
 
 #plugin-login-form .btn {
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
