@@ -162,7 +162,7 @@ if ($weblinksCount === 0) {
 
             // show weblink
             $page->addHtml('
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('link_uuid' => $lnkUuid)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
+                <a class="icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('link_uuid' => $lnkUuid)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
                     <i class="bi bi-link"></i>'.$lnkName.'</a>');
 
             // change and delete only users with rights

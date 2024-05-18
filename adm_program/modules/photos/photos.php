@@ -231,7 +231,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
 
             if ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) {
                 $photoThumbnailTable .= '
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/ecards/ecards.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid, 'show_page' => $getPhotoNr)).'">
+                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/ecards.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid, 'show_page' => $getPhotoNr)).'">
                             <i class="bi bi-envelope" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_PHOTO_AS_ECARD').'"></i></a>';
             }
 
