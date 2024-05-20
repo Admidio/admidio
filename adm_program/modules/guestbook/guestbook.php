@@ -78,9 +78,9 @@ $page->addJavascript('
     function toggleDiv(objectId) {
         var divElement = $("#" + objectId);
         if (divElement.is(":hidden")) {
-            divElement.show();
+            divElement.attr("class", "d-block mt-2 icon-link admidio-toggle-comments");
         } else {
-            divElement.hide();
+            divElement.attr("class", "d-none mt-2 icon-link admidio-toggle-comments");
         }
     }
 ', true);
@@ -277,21 +277,21 @@ if ($countGuestbookEntries === 0) {
         // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
         if ($getGboUuid === '' && $commentStatement->rowCount() > 0) {
             if ($gSettingsManager->getBool('enable_intial_comments_loading') || $getModeration) {
-                $displayShowComments = 'none';
-                $displayOthers       = 'block';
+                $displayShowComments = 'd-none';
+                $displayOthers       = 'd-block';
             } else {
-                $displayShowComments = 'block';
-                $displayOthers       = 'none';
+                $displayShowComments = 'd-block';
+                $displayOthers       = 'd-none';
             }
 
             // this link will be shown when comments where loaded
             $page->addHtml('
-                    <a id="admCommentsVisible_'. $gboUuid. '" class="admidio-icon-text admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayOthers. ';">
+                    <a id="admCommentsVisible_'. $gboUuid. '" class="' . $displayOthers . ' mt-2 icon-link admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'">
                         <i class="bi bi-eye-slash-fill"></i>'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
 
             // this link will be invisible when comments where loaded
             $page->addHtml('
-                    <a id="admCommentsInvisible_'. $gboUuid. '" class="admidio-icon-text admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'" style="display: '. $displayShowComments. ';">
+                    <a id="admCommentsInvisible_'. $gboUuid. '" class="' . $displayShowComments . ' mt-2 icon-link admidio-toggle-comments" href="javascript:void(0)" data-uuid="'.$gboUuid.'">
                         <i class="bi bi-eye-fill"></i>'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
 
             // Hier ist das div, in das die Kommentare reingesetzt werden

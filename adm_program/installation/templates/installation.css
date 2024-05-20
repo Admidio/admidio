@@ -106,17 +106,12 @@ a {
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .bi, .btn .bi, .alert .bi,
 .admidio-profile-user-right .bi, .checkbox .bi, input[type="radio"],
-.accordion .bi, .form-control-static > .bi, .admidio-icon-text .bi  {
+.accordion .bi, .form-control-static > .bi, .icon-link .bi  {
     margin-right: 0.5rem;
 }
 
 .admidio-icon {
     padding: 3px;
-}
-
-.admidio-icon-text {
-    display: block;
-    margin: 0.5rem 0;
 }
 
 .icon-link .bi {
