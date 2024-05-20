@@ -10,7 +10,7 @@
  * Parameters:
  *
  * start      : Position of query recordset where the visual output should start
- * moderation : false (Default) - Guestbookviww
+ * moderation : false (Default) - Guestbook view
  *              true - Moderation mode, every entry could be released
  * gbo_uuid   : UUID of one guestbook entry that should be shown
  ***********************************************************************************************
@@ -24,7 +24,7 @@ if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 // => EXIT
 } elseif ((int) $gSettingsManager->get('enable_guestbook_module') === 2) {
-    // only logged in users can access the module
+    // only logged-in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
@@ -41,6 +41,8 @@ if ($getModeration && !$gCurrentUser->editGuestbookRight()) {
 // add url to navigation stack
 if ($getGboUuid !== '') {
     $gNavigation->addUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'));
+} elseif ($getModeration) {
+    $gNavigation->addUrl(CURRENT_URL, $gL10n->get('GBO_MODERATE_VAR', array($gL10n->get('GBO_GUESTBOOK'))));
 } else {
     $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'), 'fa-book');
 }
@@ -164,6 +166,7 @@ if (!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMa
             $gL10n->get('GBO_MODERATE_ENTRIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1')),
             'fa-tasks',
+            '',
             $countLockedEntries
         );
     }
@@ -251,7 +254,7 @@ if ($countGuestbookEntries === 0) {
             $page->addHtml('
                     <div class="btn-group" role="group">
                         <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbo_'.$gboUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 9, 'gbo_uuid' => $gboUuid)).'\')">
-                            <i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                            <i class="fas fa-check"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
                         <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbo_'.$gboUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 2, 'gbo_uuid' => $gboUuid)).'\')">
                             <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>');

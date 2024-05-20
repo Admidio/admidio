@@ -18,6 +18,9 @@
             <li class="nav-item">
                 <a id="{$menuItem.id}" class="nav-link btn btn-secondary" href="{$menuItem.url}">
                     <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
+                    {if $menuItem.badgeCount > 0}
+                        <span class="badge bg-light text-dark">{$menuItem.badgeCount}</span>
+                    {/if}
                 </a>
             </li>
         {/if}
