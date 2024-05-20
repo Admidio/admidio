@@ -238,7 +238,11 @@ class HtmlForm
 
         ++$this->countElements;
 
-        $this->render('form.captcha', ['formtype' => $this->type, 'class' => $class]);
+        $this->addJavascriptCode('
+            $("#' . $id . '_refresh").click(function() {
+                document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
+            });', true);
+        $this->render('form.captcha', ['formtype' => $this->type, 'class' => $class, 'id' => $id]);
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,

@@ -4,9 +4,7 @@
 {/if}
 <div id="captcha_puzzle_group" class="admidio-form-group mb-2 {$class}">
     <img id="captcha" src="{$ADMIDIO_URL}/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />
-    <a class="admidio-icon-link" href="javascript:void(0)"
-        onclick="document.getElementById("captcha").src="{$ADMIDIO_URL}/adm_program/libs/securimage/securimage_show.php?"
-        + Math.random(); return false;">
+    <a id="{$id}_refresh" class="admidio-icon-link" href="javascript:void(0)">
         <i class="bi bi-arrow-repeat" style="font-size: 22pt;" data-bs-toggle="tooltip" title="{$l10n->get("SYS_RELOAD")}"></i>
     </a>
 </div>
