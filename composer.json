@@ -70,8 +70,10 @@
             "!vendor/tecnickcom/tcpdf/fonts/pdfa*.*",
             "!vendor/tecnickcom/tcpdf/fonts/times*.*",
             "vendor/twbs/bootstrap",
+            "!vendor/twbs/bootstrap/license",
             "!vendor/twbs/bootstrap/dist",
             "vendor/twbs/bootstrap-icons",
+            "!vendor/twbs/bootstrap-icons/license",
             "!vendor/twbs/bootstrap-icons/font"
         ]
     }
