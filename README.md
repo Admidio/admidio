@@ -12,7 +12,7 @@ In addition to these core features, Admidio boasts a rich array of modules, incl
 ![GitHub top language](https://img.shields.io/github/languages/top/admidio/admidio)
 [![GitHub license](https://img.shields.io/github/license/Admidio/admidio)](https://github.com/Admidio/admidio/blob/master/LICENSE.txt)
 
-**Supported Languages**: :gb: :de: :denmark: :netherlands: :poland: :estonia: :ukraine: :fr: :bulgaria: :finland: :greece: :sweden: :es: :brazil: :portugal: :it: :indonesia: :hungary: :norway: :cn:
+**Supported Languages**: :gb: :de: :denmark: :netherlands: :poland: :estonia: :ukraine: :fr: :bulgaria: :finland: :greece: :sweden: :ru: :es: :brazil: :portugal: :it: :indonesia: :hungary: :norway: :cn:
 
 ## Features
 
