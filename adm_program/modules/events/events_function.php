@@ -10,12 +10,12 @@
  * Parameters:
  *
  * dat_uuid  : UUID of the event that should be edited
- * mode      : 1 edit - Create or edit an event
- *             2 delete - Delete the event
- *             6 export - Export event in iCal format
- *             3 participate - User attends to the event
- *             4 participate_cancel - User cancel participation of the event
- *             7 participate_maybe - User may participate in the event
+ * mode      : edit - Create or edit an event
+ *             delete - Delete the event
+ *             export - Export event in iCal format
+ *             participate - User attends to the event
+ *             participate_cancel - User cancel participation of the event
+ *             participate_maybe - User may participate in the event
  * user_uuid : UUID of the user membership to an event should be edited
  * copy      : true - The event of the dat_id will be copied and the base for this new event
  * cat_uuid  : show all events of calendar with this UUID
