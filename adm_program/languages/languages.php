@@ -99,6 +99,11 @@ $gSupportedLanguages = array(
         'isocode' => 'pt',
         'libs'    => 'pt-BR'
     ),
+    'ru'    => array(
+        'name'    => 'Russian - Русский',
+        'isocode' => 'ru',
+        'libs'    => 'ru'
+    ),
     'es'    => array(
         'name'    => 'Spanish - Español',
         'isocode' => 'es',
