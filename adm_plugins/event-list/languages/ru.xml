@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Все события</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">События</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Для посетителей нет доступных событий. Войдите в систему, чтобы увидеть события.</string>
+</resources>
