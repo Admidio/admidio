@@ -492,7 +492,7 @@
   <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">One of the configurations given here can be made the default configuration for the category report of this organization. The selected configuration will be displayed directly when the report is called.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">One of the configurations specified here can be made the default configuration for lists of this organization. Member lists of roles that do not have a list configuration stored will be displayed with this configuration.</string>
   <string name="SYS_DEFAULT_COUNTRY">Default country</string>
-  <string name="SYS_DEFAULT_COUNTRY_DESC">Define a country for which this organization mainly operates. It will be preselected when new users are created or registered. It eases the data input and can be changed by the user. (Default: Germany)</string>
+  <string name="SYS_DEFAULT_COUNTRY_DESC">Define a country for which this organization mainly operates. It will be preselected when new users are created or registered. It eases the data input and can be changed by the user.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Default encoding (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Default list</string>
   <string name="SYS_DEFAULT_LIST_DESC">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</string>
