@@ -274,6 +274,76 @@ class ModuleEvents extends Modules
     }
 
     /**
+     * Create the content of an iCal file in vCalendar version 2. Therefore, all events that are selected
+     * in this class with the help of parameters will be included.
+     * @return \Eluceo\iCal\Presentation\Component Object with the structure of the vCalendar.
+     *          This could directly put into the output.
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function getICalContent(): \Eluceo\iCal\Presentation\Component
+    {
+        global $gTimezone, $gDb;
+
+        $iCalEvents = array();
+        $iCalMinDateTime = '';
+        $iCalMaxDateTime = '';
+        $timeZone = new DateTimeZone($gTimezone);
+        $events = $this->getDataSet();
+
+        foreach ($events['recordset'] as $eventRecord) {
+            $event = new TableEvent($gDb);
+            $event->setArray($eventRecord);
+
+            if ($iCalMinDateTime === '') {
+                $iCalMinDateTime = $event->getValue('dat_begin', 'Y-m-d H:i:s');
+            }
+            $iCalMaxDateTime = $event->getValue('dat_end', 'Y-m-d H:i:s');
+
+            $iCalEvent = new Eluceo\iCal\Domain\Entity\Event(new Eluceo\iCal\Domain\ValueObject\UniqueIdentifier($eventRecord['dat_uuid']));
+            $iCalEvent->setSummary($eventRecord['dat_headline']);
+            $iCalEvent->setDescription((string) $eventRecord['dat_description']);
+            $iCalEvent->setLocation(new \Eluceo\iCal\Domain\ValueObject\Location((string) $eventRecord['dat_location']));
+
+            if ((string) $eventRecord['dat_timestamp_change'] === '') {
+                $iCalEvent->touch(new Eluceo\iCal\Domain\ValueObject\Timestamp(new DateTimeImmutable($event->getValue('dat_timestamp_create', 'Y-m-d H:i:s'))));
+            }  else {
+                $iCalEvent->touch(new Eluceo\iCal\Domain\ValueObject\Timestamp(new DateTimeImmutable($event->getValue('dat_timestamp_change', 'Y-m-d H:i:s'))));
+            }
+
+            if ($eventRecord['dat_all_day'] === true) {
+                if ($event->getValue('dat_begin', 'Y-m-d') === $event->getValue('dat_end', 'Y-m-d')) {
+                    $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\SingleDay(
+                        new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d')))
+                    ));
+                } else {
+                    $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\MultiDay(
+                        new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d'))),
+                        new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_end', 'Y-m-d')))
+                    ));
+                }
+            } else {
+                $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\TimeSpan(
+                    new \Eluceo\iCal\Domain\ValueObject\DateTime(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d H:i:s')), false),
+                    new \Eluceo\iCal\Domain\ValueObject\DateTime(new DateTimeImmutable($event->getValue('dat_end', 'Y-m-d H:i:s')), false)
+                ));
+            }
+
+            $iCalEvents[] = $iCalEvent;
+        }
+
+        $calendar = new Eluceo\iCal\Domain\Entity\Calendar($iCalEvents);
+        $calendar->addTimeZone(Eluceo\iCal\Domain\Entity\TimeZone::createFromPhpDateTimeZone(
+            $timeZone,
+            new DateTimeImmutable($iCalMinDateTime, $timeZone),
+            new DateTimeImmutable($iCalMaxDateTime, $timeZone))
+        );
+
+        $componentFactory = new Eluceo\iCal\Presentation\Factory\CalendarFactory();
+        return $componentFactory->createCalendar($calendar);
+    }
+
+    /**
      * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
      * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions, and it's query params.
      * @throws AdmException
@@ -285,11 +355,16 @@ class ModuleEvents extends Modules
         $sqlConditions = '';
         $params = array();
 
-        $uuid = $this->getParameter('dat_uuid');
-        // In case ID was permitted and user has rights
-        if (!empty($uuid)) {
+        // In case calendar UUID was permitted and user has rights
+        if (!empty($this->getParameter('cat_uuid'))) {
+            $sqlConditions .= ' AND cat_uuid = ? '; // $id
+            $params[] = $this->getParameter('cat_uuid');
+        }
+
+        // In case event UUID was permitted and user has rights
+        if (!empty($this->getParameter('dat_uuid'))) {
             $sqlConditions .= ' AND dat_uuid = ? '; // $id
-            $params[] = $uuid;
+            $params[] = $this->getParameter('dat_uuid');
         }
         // ...otherwise get all additional events for a group
         else {

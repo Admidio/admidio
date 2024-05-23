@@ -140,8 +140,8 @@ if ($getViewMode === 'html') {
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_ical',
                 $gL10n->get('SYS_DOWNLOAD_ICAL'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_ical.php', array('cat_uuid' => $getCatUuid, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                'bi-cloud-arrow-down-fill'
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('mode' => 6, 'cat_uuid' => $getCatUuid, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
+                'bi-download'
             );
         }
 

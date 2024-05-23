@@ -38,8 +38,8 @@ try {
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
-    $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date');
+    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
+    $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_MAX));
     $postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
     $postUserComment = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
@@ -402,6 +402,15 @@ try {
         // Delete successful -> Return for XMLHttpRequest
         echo 'done';
     } elseif ($getMode === 6) {  // export event in iCal format
+        $events = new ModuleEvents();
+        if ($getEventUuid !== '') {
+            $events->setParameter('dat_uuid', $getEventUuid);
+        } else {
+            $events->setParameter('cat_uuid', $getCatUuid);
+            $events->setDateRange($getDateFrom, $getDateTo);
+        }
+
+        $text = $events->getICalContent();
         $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database')) . '.ics';
 
         header('Content-Type: text/calendar; charset=utf-8');
@@ -411,7 +420,7 @@ try {
         header('Cache-Control: private');
         header('Pragma: public');
 
-        echo $event->getIcal();
+        echo $text;
         exit();
     }
     // If participation mode: Set status and write optional parameter from user and show current status message
