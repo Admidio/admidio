@@ -100,7 +100,7 @@ if ($eventsResult['numResults'] > 0) {
         $description .= '<br /><br />' . $event->getValue('dat_description');
 
         // i-cal download link
-        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $eventUuid, 'mode' => '6')).'">' . $gL10n->get('SYS_ADD_EVENT_TO_CALENDAR') . '</a>';
+        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $eventUuid, 'mode' => 'export')).'">' . $gL10n->get('SYS_ADD_EVENT_TO_CALENDAR') . '</a>';
 
         // add entry to RSS feed
         $rss->addItem(

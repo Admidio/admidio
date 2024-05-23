@@ -73,7 +73,7 @@ echo '<script>
         var formAction = $(submitParticipationForm).attr("action");
 
         // add value 3 to mode attribute in link for participation
-        $(submitParticipationForm).attr("action", formAction + 3);
+        $(submitParticipationForm).attr("action", formAction + "participate");
         submitParticipationForm.submit();
     });
 
@@ -81,7 +81,7 @@ echo '<script>
         var submitParticipationForm = $(this).get(0).form;
         var formAction = $(submitParticipationForm).attr("action");
 
-        $(submitParticipationForm).attr("action", formAction + 7);
+        $(submitParticipationForm).attr("action", formAction + "participate_maybe");
         submitParticipationForm.submit();
     });
 
@@ -89,7 +89,7 @@ echo '<script>
         var submitParticipationForm = $(this).get(0).form;
         var formAction = $(submitParticipationForm).attr("action");
 
-        $(submitParticipationForm).attr("action", formAction + 4);
+        $(submitParticipationForm).attr("action", formAction + "participate_cancel");
         submitParticipationForm.submit();
     });
 </script>';

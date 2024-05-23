@@ -744,10 +744,6 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</string>
   <string name="SYS_HTML_TABLE">HTML table</string>
-  <string name="SYS_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
-  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Number of days in the future, to be included in an iCal download or abo. If the iCal download is started within the event module, then this setting is ignored and the filtered appointments are exported. (Default: 365)</string>
-  <string name="SYS_ICAL_DAYS_PAST">Number of iCal days in the past</string>
-  <string name="SYS_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or subscription. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_ICON_FONT_DESC">Here you can add an icon of the web font \"Bootstrap Icons\". Go to #VAR1#https://icons.getbootstrap.com#VAR2# and select an icon from the collection. Just insert the name of the icon in this text box.</string>

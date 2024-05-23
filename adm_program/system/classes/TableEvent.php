@@ -166,24 +166,6 @@ class TableEvent extends TableAccess
     }
 
     /**
-     * @param string $text
-     * @return string
-     */
-    private function escapeIcalText(string $text): string
-    {
-        $replaces = array(
-            '\\' => '\\\\',
-            ';'  => '\;',
-            ','  => '\,',
-            "\n" => '\n',
-            "\r" => '',
-            '<br />' => '\n' // workaround
-        );
-
-        return trim(StringUtils::strMultiReplace($text, $replaces));
-    }
-
-    /**
      * This Method will return a string with the date and time period of the current event.
      * If the start and end of the event is at the same day then the date will only include once.
      * Also, the all-day flag will be considered.
@@ -215,110 +197,6 @@ class TableEvent extends TableAccess
         }
 
         return $beginDate . $endDate;
-    }
-
-    /**
-     * Returns the event in the iCal format.
-     * @return string Returns the event in the iCal format.
-     * @throws AdmException
-     */
-    public function getIcal(): string
-    {
-        return $this->getIcalHeader().
-                $this->getIcalVEvent().
-                $this->getIcalFooter();
-    }
-
-    /**
-     * gibt den Kopf eines iCalCalenders aus
-     * @return string
-     */
-    public function getIcalHeader(): string
-    {
-        $defaultTimezone = date_default_timezone_get();
-
-        $iCalHeader = array(
-            'BEGIN:VCALENDAR',
-            'VERSION:2.0',
-            'PRODID:-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE',
-            'CALSCALE:GREGORIAN',
-            'METHOD:PUBLISH',
-            'X-WR-TIMEZONE:' . $defaultTimezone,
-            'BEGIN:VTIMEZONE',
-            'TZID:' . $defaultTimezone,
-            'X-LIC-LOCATION:' . $defaultTimezone,
-            'BEGIN:STANDARD',
-            'DTSTART:19701025T030000',
-            'TZOFFSETFROM:+0200',
-            'TZOFFSETTO:+0100',
-            'TZNAME:CET',
-            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10',
-            'END:STANDARD',
-            'BEGIN:DAYLIGHT',
-            'DTSTART:19700329T020000',
-            'TZOFFSETFROM:+0100',
-            'TZOFFSETTO:+0200',
-            'TZNAME:CEST',
-            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3',
-            'END:DAYLIGHT',
-            'END:VTIMEZONE'
-        );
-
-        return implode("\r\n", $iCalHeader) . "\r\n";
-    }
-
-    /**
-     * Outputs the footer of an iCalCalendar
-     * @return string Returns the footer of an iCalCalendar
-     */
-    public function getIcalFooter(): string
-    {
-        return 'END:VCALENDAR';
-    }
-
-    /**
-     * Returns a single event in iCal format
-     * @return string Returns a single event in iCal format
-     * @throws AdmException
-     */
-    public function getIcalVEvent(): string
-    {
-        $dateTimeFormat = 'Ymd\THis';
-
-        $iCalVEvent = array(
-            'BEGIN:VEVENT',
-            'CREATED:' . $this->getValue('dat_timestamp_create', $dateTimeFormat)
-        );
-
-        if ((string) $this->getValue('dat_timestamp_change') === '') {
-            $iCalVEvent[] = 'LAST-MODIFIED:' . $this->getValue('dat_timestamp_create', $dateTimeFormat);
-        }  else {
-            $iCalVEvent[] = 'LAST-MODIFIED:' . $this->getValue('dat_timestamp_change', $dateTimeFormat);
-        }
-
-        // Filter out semicolons
-        $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . (int) $this->getValue('dat_usr_id_create') . '@' . DOMAIN;
-        $iCalVEvent[] = 'SUMMARY:' . $this->escapeIcalText($this->getValue('dat_headline', 'database'));
-        $iCalVEvent[] = 'DESCRIPTION:' . StringUtils::strStripTags($this->escapeIcalText(html_entity_decode($this->getValue('dat_description'), ENT_QUOTES, 'UTF-8')));
-        $iCalVEvent[] = 'DTSTAMP:' . date($dateTimeFormat);
-        $iCalVEvent[] = 'LOCATION:' . $this->escapeIcalText((string) $this->getValue('dat_location', 'database'));
-
-        if ((int) $this->getValue('dat_all_day') === 1) {
-            // The end date for multi-day appointments must also be + 1 day in iCal.
-            // Outlook and Co. show it correctly only then.
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
-            $oneDayOffset = new DateInterval('P1D');
-
-            $iCalVEvent[] = 'DTSTART;VALUE=DATE:' . $this->getValue('dat_begin', 'Ymd');
-            $iCalVEvent[] = 'DTEND;VALUE=DATE:' . $dateTime->add($oneDayOffset)->format('Ymd');
-        } else {
-            $iCalVEvent[] = 'DTSTART;TZID=' . date_default_timezone_get() . ':' . $this->getValue('dat_begin', $dateTimeFormat);
-            $iCalVEvent[] = 'DTEND;TZID='   . date_default_timezone_get() . ':' . $this->getValue('dat_end', $dateTimeFormat);
-        }
-
-        $iCalVEvent[] = 'END:VEVENT';
-
-        return implode("\r\n", $iCalVEvent) . "\r\n";
     }
 
     /**
