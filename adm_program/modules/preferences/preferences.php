@@ -1723,18 +1723,6 @@ $formEvents->addCheckbox(
     (bool) $formValues['events_ical_export_enabled'],
     array('helpTextId' => 'SYS_ENABLE_ICAL_EXPORT_DESC')
 );
-$formEvents->addInput(
-    'events_ical_days_past',
-    $gL10n->get('SYS_ICAL_DAYS_PAST'),
-    $formValues['events_ical_days_past'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_ICAL_DAYS_PAST_DESC')
-);
-$formEvents->addInput(
-    'events_ical_days_future',
-    $gL10n->get('SYS_ICAL_DAYS_FUTURE'),
-    $formValues['events_ical_days_future'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_ICAL_DAYS_FUTURE_DESC')
-);
 $formEvents->addCheckbox(
     'events_show_map_link',
     $gL10n->get('SYS_SHOW_MAP_LINK'),

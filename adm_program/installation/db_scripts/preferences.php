@@ -103,8 +103,6 @@ $defaultOrgPreferences = array(
     // Events
     'events_list_configuration'   => '',
     'events_ical_export_enabled'  => '1',
-    'events_ical_days_past'       => '30',
-    'events_ical_days_future'     => '365',
     'events_may_take_part'        => '0',
     'events_module_enabled'       => '1',
     'events_per_page'             => '10',

@@ -137,10 +137,15 @@ if ($getViewMode === 'html') {
 
         // iCal Download
         if ($gSettingsManager->getBool('events_ical_export_enabled')) {
+            $param = array('mode' => 'export');
+            ($getCatUuid !== '' ? $param['cat_uuid'] = $getCatUuid : '');
+            ($getDateFrom !== '' ? $param['date_from'] = $getDateFrom : '');
+            ($getDateTo !== '' ? $param['date_to'] = $getDateTo : '');
+
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_ical',
                 $gL10n->get('SYS_DOWNLOAD_ICAL'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('mode' => 6, 'cat_uuid' => $getCatUuid, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', $param),
                 'bi-download'
             );
         }
@@ -191,13 +196,13 @@ if ($getViewMode === 'html') {
         $form->addInput(
             'date_from',
             $gL10n->get('SYS_START'),
-            $events->getParameter('dateStartFormatAdmidio'),
+            $events->getParameter('dateStartFormatEnglish'),
             array('type' => 'date', 'maxLength' => 10)
         );
         $form->addInput(
             'date_to',
             $gL10n->get('SYS_END'),
-            $events->getParameter('dateEndFormatAdmidio'),
+            $events->getParameter('dateEndFormatEnglish'),
             array('type' => 'date', 'maxLength' => 10)
         );
         $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
@@ -319,7 +324,7 @@ if ($eventsResult['totalCount'] === 0) {
             // iCal Download
             if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                 $outputButtonICal = '
-                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
+                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 'export')).'">
                         <i class="bi bi-download" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_ICAL').'"></i></a>';
             }
 
@@ -514,19 +519,19 @@ if ($eventsResult['totalCount'] === 0) {
                                 <button class="btn btn-primary dropdown-toggle ' . $buttonClass . '" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $iconParticipationStatus . $buttonText . '</button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="icon-link dropdown-item admidio-event-approval-state-attend ' . $disableStatusAttend . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
+                                        <a class="icon-link dropdown-item admidio-event-approval-state-attend ' . $disableStatusAttend . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'participate', 'dat_uuid' => $dateUuid)) . '">
                                             <i class="bi bi-check-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
                                         </a>
                                     </li>';
                             if ($gSettingsManager->getBool('events_may_take_part')) {
                                 $outputButtonParticipation .= '<li>
-                                            <a class="icon-link dropdown-item admidio-event-approval-state-tentative ' . $disableStatusTentative . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
+                                            <a class="icon-link dropdown-item admidio-event-approval-state-tentative ' . $disableStatusTentative . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'participate_maybe', 'dat_uuid' => $dateUuid)) . '">
                                                 <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '"></i>' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . '
                                             </a>
                                         </li>';
                             }
                             $outputButtonParticipation .= '<li>
-                                        <a class="icon-link dropdown-item admidio-event-approval-state-cancel" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => '4', 'dat_uuid' => $dateUuid)) . '">
+                                        <a class="icon-link dropdown-item admidio-event-approval-state-cancel" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'participate_cancel', 'dat_uuid' => $dateUuid)) . '">
                                             <i class="bi bi-x-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CANCEL') . '"></i>' . $gL10n->get('SYS_CANCEL') . '
                                         </a>
                                     </li>
@@ -663,7 +668,7 @@ if ($eventsResult['totalCount'] === 0) {
                 // iCal Download
                 if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                     $page->addHtml('
-                                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
+                                            <li><a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $dateUuid, 'mode' => 'export')).'">
                                                     <i class="bi bi-download" data-bs-toggle="tooltip"></i> '.$gL10n->get('SYS_DOWNLOAD_ICAL').'</a>
                                             </li>');
                 }

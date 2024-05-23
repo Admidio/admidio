@@ -213,7 +213,7 @@ $page->addJavascript(
 );
 
 // show form
-$form = new HtmlForm('event_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 1, 'copy' => $getCopy)), $page);
+$form = new HtmlForm('event_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 'edit', 'copy' => $getCopy)), $page);
 
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('SYS_VENUE'));
 $form->addInput(

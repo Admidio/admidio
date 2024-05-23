@@ -10,12 +10,12 @@
  * Parameters:
  *
  * dat_uuid  : UUID of the event that should be edited
- * mode      : 1 - Create or edit an event
- *             2 - Delete the event
- *             3 - User attends to the event
- *             4 - User cancel the event
- *             6 - Export event in iCal format
- *             7 - User may participate in the event
+ * mode      : 1 edit - Create or edit an event
+ *             2 delete - Delete the event
+ *             6 export - Export event in iCal format
+ *             3 participate - User attends to the event
+ *             4 participate_cancel - User cancel participation of the event
+ *             7 participate_maybe - User may participate in the event
  * user_uuid : UUID of the user membership to an event should be edited
  * copy      : true - The event of the dat_id will be copied and the base for this new event
  * cat_uuid  : show all events of calendar with this UUID
@@ -28,18 +28,18 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
-    if ($_GET['mode'] == 2) {
+    if ($_GET['mode'] == 'delete') {
         $gMessage->showHtmlTextOnly();
     }
 
     // Initialize and check the parameters
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 6, 7)));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'participate', 'participate_cancel', 'participate_maybe', 'export')));
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
-    $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_MAX));
+    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
+    $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date');
     $postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
     $postUserComment = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
@@ -52,8 +52,8 @@ try {
         throw new AdmException('SYS_MODULE_DISABLED');
     }
 
-    if ($getMode !== 6 || (int)$gSettingsManager->get('events_module_enabled') === 2) {
-        // All functions, except export and login, are only available for logged-in users.
+    if ($getMode !== 'export' || (int)$gSettingsManager->get('events_module_enabled') === 2) {
+        // All functions, except export, are only available for logged-in users.
         require(__DIR__ . '/../../system/login_valid.php');
     }
 
@@ -70,7 +70,7 @@ try {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
-    if (in_array($getMode, array(1, 2), true)) {
+    if (in_array($getMode, array('edit', 'delete'), true)) {
         if ($getEventUuid !== '') {
             // check if the current user has the right to edit this event
             if (!$event->isEditable()) {
@@ -84,7 +84,7 @@ try {
         }
     }
 
-    if ($getMode === 1) {  // Create a new event or edit an existing event
+    if ($getMode === 'edit') {  // Create a new event or edit an existing event
         $_SESSION['events_request'] = $_POST;
 
         // check the CSRF token of the form against the session token
@@ -392,7 +392,7 @@ try {
 
         admRedirect($gNavigation->getUrl());
     // => EXIT
-    } elseif ($getMode === 2) {
+    } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
@@ -401,17 +401,32 @@ try {
 
         // Delete successful -> Return for XMLHttpRequest
         echo 'done';
-    } elseif ($getMode === 6) {  // export event in iCal format
-        $events = new ModuleEvents();
-        if ($getEventUuid !== '') {
-            $events->setParameter('dat_uuid', $getEventUuid);
-        } else {
-            $events->setParameter('cat_uuid', $getCatUuid);
-            $events->setDateRange($getDateFrom, $getDateTo);
+    } elseif ($getMode === 'export') {  // export event in iCal format
+        // If iCal enabled and module is public
+        if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
+            throw new AdmException('SYS_ICAL_DISABLED');
         }
 
-        $text = $events->getICalContent();
-        $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database')) . '.ics';
+        if ($getDateFrom === '') {
+            $getDateFrom = (new DateTime)->sub(new DateInterval('P6M'))->format('Y-m-d');
+            $getDateTo = DATE_MAX;
+        }
+
+        $events = new ModuleEvents();
+        if ($getEventUuid !== '') {
+            $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database')) . '.ics';
+            $events->setParameter('dat_uuid', $getEventUuid);
+        } else {
+            $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname'));
+            $events->setDateRange($getDateFrom, $getDateTo);
+
+            if ($getCatUuid !== '') {
+                $calendar = new TableCategory($gDb);
+                $events->setParameter('cat_uuid', $getCatUuid);
+                $calendar->readDataByUuid($getCatUuid);
+                $filename .= '-'.$calendar->getValue('cat_name');
+            }
+        }
 
         header('Content-Type: text/calendar; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -420,11 +435,11 @@ try {
         header('Cache-Control: private');
         header('Pragma: public');
 
-        echo $text;
+        echo $events->getICalContent();
         exit();
     }
     // If participation mode: Set status and write optional parameter from user and show current status message
-    if (in_array($getMode, array(3, 4, 7), true)) {
+    if (in_array($getMode, array('participate', 'participate_cancel', 'participate_maybe'), true)) {
         if ($postAdditionalGuests > 0 || $postUserComment !== '') {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
@@ -468,15 +483,15 @@ try {
             $member->save();
 
             // change the participation status, it's always possible to cancel the participation
-            if ($participationPossible || $getMode === 4) {
+            if ($participationPossible || $getMode === 'participate_cancel') {
                 switch ($getMode) {
-                    case 3:  // User attends to the event
+                    case 'participate':  // User attends to the event
                         $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);
                         $outputMessage = $gL10n->get('SYS_ATTEND_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                         // => EXIT
                         break;
 
-                    case 4:  // User cancel the event
+                    case 'participate_cancel':  // User cancel the event
                         if ($gSettingsManager->getBool('events_save_cancellations')) {
                             // Set user status to refused
                             $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_NO);
@@ -489,7 +504,7 @@ try {
                         // => EXIT
                         break;
 
-                    case 7:  // User may participate in the event
+                    case 'participate_maybe':  // User may participate in the event
                         $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_MAYBE);
                         $outputMessage = $gL10n->get('SYS_ATTEND_POSSIBLY', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                         // => EXIT
