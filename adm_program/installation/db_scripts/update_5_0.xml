@@ -28,6 +28,8 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="210">UPDATE %PREFIX%_user_fields SET usf_icon = 'mastodon' WHERE usf_name_intern = 'MASTODON'</step>
     <step id="220">UPDATE %PREFIX%_user_fields SET usf_icon = 'skype' WHERE usf_name_intern = 'SKYPE'</step>
     <step id="230">UPDATE %PREFIX%_user_fields SET usf_icon = 'twitter-x' WHERE usf_name_intern = 'TWITTER'</step>
-    <step id="230">UPDATE %PREFIX%_user_fields SET usf_icon = null WHERE usf_name_intern = 'XING'</step>
+    <step id="240">UPDATE %PREFIX%_user_fields SET usf_icon = null WHERE usf_name_intern = 'XING'</step>
+    <step id="250">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'events_ical_days_past'</step>
+    <step id="260">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'events_ical_days_future'</step>
     <step>stop</step>
 </update>
