@@ -44,7 +44,7 @@ switch ($getCKEditor) {
         $folderName = 'announcements';
         break;
     case 'dat_description':
-        $folderName = 'dates';
+        $folderName = 'events';
         break;
     case 'lnk_description':
         $folderName = 'weblinks';
