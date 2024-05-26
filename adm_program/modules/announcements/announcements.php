@@ -53,7 +53,7 @@ try {
     $announcements->setParameter('cat_id', $category->getValue('cat_id'));
     $announcements->setDateRange($getDateFrom, $getDateTo);
 
-    // get parameters and number of recordsets
+    // get parameters and number of data records
     $announcementsCount = $announcements->getDataSetCount();
 
     // add url to navigation stack
@@ -134,7 +134,7 @@ try {
             $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
         }
     } else {
-        // get all recordsets
+        // get all data records
         $announcementsArray = $announcements->getDataSet($getStart, $announcementsPerPage);
         $announcement = new TableAnnouncement($gDb);
 
@@ -193,7 +193,7 @@ try {
         </div>');
         }  // Ende foreach
 
-        // If necessary show links to navigate to next and previous recordsets of the query
+        // If necessary show links to navigate to next and previous data records of the query
         $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php', array('cat_uuid' => $getCatUuid));
         $page->addHtml(admFuncGeneratePagination($baseUrl, $announcementsCount, $announcementsPerPage, $getStart));
     }

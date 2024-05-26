@@ -70,6 +70,6 @@ try {
 
     $gCurrentUser->setOrganization($gCurrentOrgId);
     $rss->getRssFeed();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

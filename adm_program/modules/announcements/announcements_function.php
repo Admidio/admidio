@@ -10,8 +10,8 @@
  * Parameters:
  *
  * ann_uuid - UUID of the announcement that should be edited
- * mode     - edit 1 : Create or edit announcement
- *            delete 2 : Delete announcement
+ * mode     - edit : Create or edit announcement
+ *            delete : Delete announcement
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
