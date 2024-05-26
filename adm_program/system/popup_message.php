@@ -33,7 +33,7 @@ $callbackFunction = '';
 // compose URL
 switch ($getType) {
     case 'ann':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 2, 'ann_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 'delete', 'ann_uuid' => $getDatabaseId));
         break;
     case 'bac':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/backup/backup_file_function.php', array('job' => 'delete', 'filename' => $getDatabaseId));

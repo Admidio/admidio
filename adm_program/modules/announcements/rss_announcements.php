@@ -15,61 +15,61 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
-$getOrganizationShortName  = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
+try {
+    $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
 
-// Check if RSS is active...
-if (!$gSettingsManager->getBool('enable_rss')) {
-    $gMessage->setForwardUrl($gHomepage);
-    $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
-    // => EXIT
-}
-
-// check if module is active or is public
-if ((int) $gSettingsManager->get('announcements_module_enabled') !== 1) {
-    // das Modul ist deaktiviert
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-
-$announcements = new ModuleAnnouncements();
-
-if ($getOrganizationShortName !== '') {
-    $organization = new Organization($gDb, $getOrganizationShortName);
-    $organizationName = $organization->getValue('org_long_name');
-    $gCurrentUser->setOrganization($organization->getValue('org_id'));
-} else {
-    $organizationName = $gCurrentOrganization->getValue('org_longname');
-}
-
-// create RSS feed object with channel information
-$rss = new RssFeed(
-    $organizationName . ' - ' . $gL10n->get('SYS_ANNOUNCEMENTS'),
-    $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('SYS_RECENT_ANNOUNCEMENTS_OF_ORGA', array($organizationName)),
-    $organizationName
-);
-
-if ($announcements->getDataSetCount() > 0) {
-    $announcement = new TableAnnouncement($gDb);
-    $rows = $announcements->getDataSet(0, 50);
-
-    // add the RSS items to the RssFeed object
-    foreach ($rows['recordset'] as $row) {
-        $announcement->clear();
-        $announcement->setArray($row);
-
-        // add entry to RSS feed
-        $rss->addItem(
-            $announcement->getValue('ann_headline'),
-            $announcement->getValue('ann_description'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('ann_uuid' => $announcement->getValue('ann_uuid'))),
-            $row['create_name'],
-            DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
-            $announcement->getValue('cat_name'),
-            $announcement->getValue('ann_uuid')
-        );
+    // Check if RSS is active...
+    if (!$gSettingsManager->getBool('enable_rss')) {
+        throw new AdmException('SYS_RSS_DISABLED');
     }
-}
 
-$gCurrentUser->setOrganization($gCurrentOrgId);
-$rss->getRssFeed();
+    // check if module is active or is public
+    if ((int)$gSettingsManager->get('announcements_module_enabled') !== 1) {
+        throw new AdmException('SYS_MODULE_DISABLED');
+    }
+
+    $announcements = new ModuleAnnouncements();
+
+    if ($getOrganizationShortName !== '') {
+        $organization = new Organization($gDb, $getOrganizationShortName);
+        $organizationName = $organization->getValue('org_long_name');
+        $gCurrentUser->setOrganization($organization->getValue('org_id'));
+    } else {
+        $organizationName = $gCurrentOrganization->getValue('org_longname');
+    }
+
+    // create RSS feed object with channel information
+    $rss = new RssFeed(
+        $organizationName . ' - ' . $gL10n->get('SYS_ANNOUNCEMENTS'),
+        $gCurrentOrganization->getValue('org_homepage'),
+        $gL10n->get('SYS_RECENT_ANNOUNCEMENTS_OF_ORGA', array($organizationName)),
+        $organizationName
+    );
+
+    if ($announcements->getDataSetCount() > 0) {
+        $announcement = new TableAnnouncement($gDb);
+        $rows = $announcements->getDataSet(0, 50);
+
+        // add the RSS items to the RssFeed object
+        foreach ($rows['recordset'] as $row) {
+            $announcement->clear();
+            $announcement->setArray($row);
+
+            // add entry to RSS feed
+            $rss->addItem(
+                $announcement->getValue('ann_headline'),
+                $announcement->getValue('ann_description'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php', array('ann_uuid' => $announcement->getValue('ann_uuid'))),
+                $row['create_name'],
+                DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
+                $announcement->getValue('cat_name'),
+                $announcement->getValue('ann_uuid')
+            );
+        }
+    }
+
+    $gCurrentUser->setOrganization($gCurrentOrgId);
+    $rss->getRssFeed();
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
+}

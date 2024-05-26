@@ -10,75 +10,59 @@
  * Parameters:
  *
  * ann_uuid - UUID of the announcement that should be edited
- * mode     - 1 : Create or edit announcement
- *            2 : Delete announcement
+ * mode     - edit 1 : Create or edit announcement
+ *            delete 2 : Delete announcement
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-// check if the module is enabled for use
-if ((int) $gSettingsManager->get('announcements_module_enabled') === 0) {
-    // module is disabled
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-
-// Initialize and check the parameters
-$getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
-$getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2)));
-
-// create announcement object
-$announcement = new TableAnnouncement($gDb);
-
-if ($getAnnUuid !== '') {
-    $announcement->readDataByUuid($getAnnUuid);
-
-    // check if the user has the right to edit this announcement
-    if (!$announcement->isEditable()) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-} else {
-    // check if the user has the right to edit at least one category
-    if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-}
-
-$_SESSION['announcements_request'] = $_POST;
-
 try {
+    // check if the module is enabled and disallow access if it's disabled
+    if ((int)$gSettingsManager->get('announcements_module_enabled') === 0) {
+        throw new AdmException('SYS_MODULE_DISABLED');
+    }
+
+    // Initialize and check the parameters
+    $getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete')));
+
+    // create announcement object
+    $announcement = new TableAnnouncement($gDb);
+
+    if ($getAnnUuid !== '') {
+        $announcement->readDataByUuid($getAnnUuid);
+
+        // check if the user has the right to edit this announcement
+        if (!$announcement->isEditable()) {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
+    } else {
+        // check if the user has the right to edit at least one category
+        if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
+    }
+
+    $_SESSION['announcements_request'] = $_POST;
+
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-} catch (AdmException $e) {
-    if ($getMode === 1) {
-        $e->showHtml();
-    } else {
-        $e->showText();
-    }
-    // => EXIT
-}
 
-if ($getMode === 1) {
-    if (strlen($_POST['ann_headline']) === 0) {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_HEADLINE'))));
-        // => EXIT
-    }
-    if (strlen($_POST['ann_description']) === 0) {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEXT'))));
-        // => EXIT
-    }
-    if (strlen($_POST['ann_cat_id']) === 0) {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
-        // => EXIT
-    }
+    if ($getMode === 'edit') {
+        if (strlen($_POST['ann_headline']) === 0) {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_HEADLINE'));
+        }
+        if (strlen($_POST['ann_description']) === 0) {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TEXT'));
+        }
+        if (strlen($_POST['ann_cat_id']) === 0) {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CATEGORY'));
+        }
 
-    // make html in description secure
-    $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
+        // make html in description secure
+        $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
 
-    try {
         // write POST parameters in announcement object
         foreach ($_POST as $key => $value) { // TODO possible security issue
             if (str_starts_with($key, 'ann_')) {
@@ -90,20 +74,23 @@ if ($getMode === 1) {
             // Notification email for new or changed entries to all members of the notification role
             $announcement->sendNotification();
         }
-    } catch (AdmException $e) {
-        $e->showHtml();
+
+        unset($_SESSION['announcements_request']);
+        $gNavigation->deleteLastUrl();
+
+        admRedirect($gNavigation->getUrl());
         // => EXIT
+    } elseif ($getMode === 'delete') {
+        // delete current announcements, right checks were done before
+        $announcement->delete();
+
+        // Delete successful -> Return for XMLHttpRequest
+        echo 'done';
     }
-
-    unset($_SESSION['announcements_request']);
-    $gNavigation->deleteLastUrl();
-
-    admRedirect($gNavigation->getUrl());
-// => EXIT
-} elseif ($getMode === 2) {
-    // delete current announcements, right checks were done before
-    $announcement->delete();
-
-    // Delete successful -> Return for XMLHttpRequest
-    echo 'done';
+} catch (AdmException|Exception $e) {
+    if ($getMode === 'edit') {
+        $gMessage->show($e->getMessage());
+    } else {
+        echo $e->getMessage();
+    }
 }

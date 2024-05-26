@@ -16,97 +16,94 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-// check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('announcements_module_enabled') === 0) {
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-
-// Initialize and check the parameters
-$getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
-$getCopy     = admFuncVariableIsValid($_GET, 'copy', 'bool');
-
-// set headline of the script
-if ($getCopy) {
-    $headline = $gL10n->get('SYS_COPY_ENTRY');
-} elseif ($getAnnUuid !== '') {
-    $headline = $gL10n->get('SYS_EDIT_ENTRY');
-} else {
-    $headline = $gL10n->get('SYS_CREATE_ENTRY');
-}
-
 try {
+    // check if the module is enabled and disallow access if it's disabled
+    if ((int)$gSettingsManager->get('announcements_module_enabled') === 0) {
+        throw new AdmException('SYS_MODULE_DISABLED');
+    }
+
+    // Initialize and check the parameters
+    $getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
+    $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
+
+    // set headline of the script
+    if ($getCopy) {
+        $headline = $gL10n->get('SYS_COPY_ENTRY');
+    } elseif ($getAnnUuid !== '') {
+        $headline = $gL10n->get('SYS_EDIT_ENTRY');
+    } else {
+        $headline = $gL10n->get('SYS_CREATE_ENTRY');
+    }
+
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
-} catch (AdmException $e) {
-    $e->showHtml();
-}
 
-// Create announcements object
-$announcement = new TableAnnouncement($gDb);
+    // Create announcements object
+    $announcement = new TableAnnouncement($gDb);
 
-if ($getAnnUuid !== '') {
-    $announcement->readDataByUuid($getAnnUuid);
+    if ($getAnnUuid !== '') {
+        $announcement->readDataByUuid($getAnnUuid);
 
-    if ($getCopy === true) {
-        $getAnnUuid = '';
+        if ($getCopy === true) {
+            $getAnnUuid = '';
+        }
+
+        // check if the current user could edit this announcement
+        if (!$announcement->isEditable()) {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
+    } else {
+        // check if the user has the right to edit at least one category
+        if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
     }
 
-    // check if the current user could edit this announcement
-    if (!$announcement->isEditable()) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+    if (isset($_SESSION['announcements_request'])) {
+        // due to incorrect input the user has returned to this form
+        // now write the previously entered contents into the object
+        $announcementDescription = admFuncVariableIsValid($_SESSION['announcements_request'], 'ann_description', 'html');
+        $announcement->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['announcements_request'])));
+        $announcement->setValue('ann_description', $announcementDescription);
+        unset($_SESSION['announcements_request']);
     }
-} else {
-    // check if the user has the right to edit at least one category
-    if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
+
+    // create html page object
+    $page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
+
+    // show form
+    $form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => 'edit')), $page);
+    $form->addInput(
+        'ann_headline',
+        $gL10n->get('SYS_TITLE'),
+        $announcement->getValue('ann_headline'),
+        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+    );
+    $form->addSelectBoxForCategories(
+        'ann_cat_id',
+        $gL10n->get('SYS_CATEGORY'),
+        $gDb,
+        'ANN',
+        HtmlForm::SELECT_BOX_MODUS_EDIT,
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('cat_uuid'))
+    );
+    $form->addEditor(
+        'ann_description',
+        $gL10n->get('SYS_TEXT'),
+        $announcement->getValue('ann_description'),
+        array('property' => HtmlForm::FIELD_REQUIRED)
+    );
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addHtml(admFuncShowCreateChangeInfoById(
+        (int)$announcement->getValue('ann_usr_id_create'),
+        $announcement->getValue('ann_timestamp_create'),
+        (int)$announcement->getValue('ann_usr_id_change'),
+        $announcement->getValue('ann_timestamp_change')
+    ));
+
+    // add form to html page and show page
+    $page->addHtml($form->show());
+    $page->show();
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
 }
-
-if (isset($_SESSION['announcements_request'])) {
-    // due to incorrect input the user has returned to this form
-    // now write the previously entered contents into the object
-    $announcementDescription = admFuncVariableIsValid($_SESSION['announcements_request'], 'ann_description', 'html');
-    $announcement->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['announcements_request'])));
-    $announcement->setValue('ann_description', $announcementDescription);
-    unset($_SESSION['announcements_request']);
-}
-
-// create html page object
-$page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
-
-// show form
-$form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => '1')), $page);
-$form->addInput(
-    'ann_headline',
-    $gL10n->get('SYS_TITLE'),
-    $announcement->getValue('ann_headline'),
-    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
-);
-$form->addSelectBoxForCategories(
-    'ann_cat_id',
-    $gL10n->get('SYS_CATEGORY'),
-    $gDb,
-    'ANN',
-    HtmlForm::SELECT_BOX_MODUS_EDIT,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('cat_uuid'))
-);
-$form->addEditor(
-    'ann_description',
-    $gL10n->get('SYS_TEXT'),
-    $announcement->getValue('ann_description'),
-    array('property' => HtmlForm::FIELD_REQUIRED)
-);
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-$form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $announcement->getValue('ann_usr_id_create'),
-    $announcement->getValue('ann_timestamp_create'),
-    (int) $announcement->getValue('ann_usr_id_change'),
-    $announcement->getValue('ann_timestamp_change')
-));
-
-// add form to html page and show page
-$page->addHtml($form->show());
-$page->show();
