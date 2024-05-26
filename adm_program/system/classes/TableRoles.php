@@ -69,6 +69,20 @@ class TableRoles extends TableAccess
     }
 
     /**
+     * Set the current role active.
+     * Event roles could not be set active.
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function activate(): void
+    {
+        if ($this->type === self::ROLE_EVENT) {
+            throw new AdmException('Event role cannot be set to inactive.');
+        }
+        $this->toggleValid(true);
+    }
+
+    /**
      * checks if user is allowed to assign members to this role
      * @param User $user UserObject of user who should be checked
      * @return bool
@@ -187,6 +201,22 @@ class TableRoles extends TableAccess
         $pdoStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
         return $rolMaxMembers - $pdoStatement->rowCount();
+    }
+
+    /**
+     * Set the current role inactive.
+     * Administrator and event roles could not be set inactive.
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function deactivate(): void
+    {
+        if ($this->getValue('rol_administrator')) {
+            throw new AdmException('Administrator role cannot be set to inactive.');
+        } elseif ($this->type === self::ROLE_EVENT) {
+            throw new AdmException('Event role cannot be set to inactive.');
+        }
+        $this->toggleValid(false);
     }
 
     /**
@@ -468,36 +498,6 @@ class TableRoles extends TableAccess
         }
 
         return $returnValue;
-    }
-
-    /**
-     * Set the current role active.
-     * Event roles could not be set active.
-     * @throws AdmException
-     * @throws Exception
-     */
-    public function setActive(): void
-    {
-        if ($this->type === self::ROLE_EVENT) {
-            throw new AdmException('Event role cannot be set to inactive.');
-        }
-        $this->toggleValid(true);
-    }
-
-    /**
-     * Set the current role inactive.
-     * Administrator and event roles could not be set inactive.
-     * @throws AdmException
-     * @throws Exception
-     */
-    public function setInactive(): void
-    {
-        if ($this->getValue('rol_administrator')) {
-            throw new AdmException('Administrator role cannot be set to inactive.');
-        } elseif ($this->type === self::ROLE_EVENT) {
-            throw new AdmException('Event role cannot be set to inactive.');
-        }
-        $this->toggleValid(false);
     }
 
     /**

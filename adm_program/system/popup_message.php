@@ -108,15 +108,15 @@ switch ($getType) {
         $callbackFunction = 'callbackFormerRoles';
         break;
     case 'rol':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 4, 'role_uuid' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 'delete', 'role_uuid' => $getDatabaseId));
         $text = 'SYS_DELETE_ROLE_DESC';
         break;
-    case 'rol_enable':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 5, 'role_uuid' => $getDatabaseId));
+    case 'rol_activate':
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 'activate', 'role_uuid' => $getDatabaseId));
         $text = 'SYS_ACTIVATE_ROLE_DESC';
         break;
-    case 'rol_disable':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 3, 'role_uuid' => $getDatabaseId));
+    case 'rol_deactivate':
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 'deactivate', 'role_uuid' => $getDatabaseId));
         $text = 'SYS_DEACTIVATE_ROLE_DESC';
         break;
     case 'room':

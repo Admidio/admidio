@@ -13,11 +13,11 @@
  * Parameters:
  *
  * role_uuid : UUID of role, that should be edited
- * mode :  2 - create or edit role
- *         3 - set role inaktive
- *         4 - delete role
- *         5 - set role active
- *         6 - Export vCard of role
+ * mode :  edit       - create or edit role
+ *         delete     - delete role
+ *         export     - Export vCard of role
+ *         activate   - set role active
+ *         deactivate - set role inactive
  *
  *****************************************************************************/
 
@@ -27,13 +27,13 @@ require(__DIR__ . '/../../system/login_valid.php');
 try {
     // Initialize and check the parameters
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(2, 3, 4, 5, 6)));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'export', 'activate', 'deactivate')));
 
-    if (in_array($getMode, array(3, 4, 5))) {
+    if (in_array($getMode, array('delete', 'activate', 'deactivate'))) {
         $gMessage->showHtmlTextOnly();
     }
 
-    if ($getMode !== 6) {
+    if ($getMode !== 'export') {
         // only members who are allowed to create and edit roles should have access to these functions
         if (!$gCurrentUser->manageRoles()) {
             throw new AdmException('SYS_NO_RIGHTS');
@@ -59,7 +59,7 @@ try {
     $_SESSION['roles_request'] = $_POST;
     $rolName = $role->getValue('rol_name');
 
-    if ($getMode === 2) {
+    if ($getMode === 'edit') {
         // create or edit role
 
         if (!array_key_exists('rol_name', $_POST) || $_POST['rol_name'] === '') {
@@ -247,24 +247,24 @@ try {
         $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
         // => EXIT
-    } elseif ($getMode === 3) {
+    } elseif ($getMode === 'deactivate') {
         // set role inactive
         // event roles and administrator cannot be set inactive
-        $role->setInactive();
+        $role->deactivate();
         echo 'done';
         exit();
-    } elseif ($getMode === 4) {
+    } elseif ($getMode === 'delete') {
         // delete role from database
         if ($role->delete()) {
             echo 'done';
         }
         exit();
-    } elseif ($getMode === 5) {
+    } elseif ($getMode === 'activate') {
         // set role active
-        $role->setActive();
+        $role->activate();
         echo 'done';
         exit();
-    } elseif ($getMode === 6) {
+    } elseif ($getMode === 'export') {
         // Export every member of a role into one vCard file
 
         $role = new TableRoles($gDb);
