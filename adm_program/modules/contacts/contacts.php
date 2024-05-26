@@ -32,8 +32,15 @@ $headline = $gL10n->get('SYS_CONTACTS');
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
-$contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('contacts_list_configuration'));
-$_SESSION['contacts_list_configuration'] = $contactsListConfig;
+try {
+    if ($gSettingsManager->getInt('contacts_list_configuration') === 0) {
+        throw new Exception('No contact list configuration was set in the preferences.');
+    }
+    $contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('contacts_list_configuration'));
+    $_SESSION['contacts_list_configuration'] = $contactsListConfig;
+} catch (Exception $e) {
+    $gMessage->show($e->getMessage());
+}
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 $flagShowMembers = !$getMembers;

@@ -877,6 +877,10 @@ class ListConfiguration extends TableLists
               ORDER BY lsc_number ASC';
         $lscStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('lst_id')));
 
+        if ($lscStatement->rowCount() === 0) {
+            throw new Exception('List-Configuration was not found.');
+        }
+
         while ($lscRow = $lscStatement->fetch()) {
             $usfId = (int)$lscRow['lsc_usf_id'];
 
