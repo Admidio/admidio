@@ -239,7 +239,7 @@ a {
 /***********************************/
 /* Mark mandatory fields */
 /***********************************/
-.admidio-form-group-required .form-label:after,
+.admidio-form-group-required .col-form-label:after,
 .admidio-form-group-required > .form-check-label:after,
 .admidio-form-required-notice span:after {
     font-family: "bootstrap-icons", serif;
