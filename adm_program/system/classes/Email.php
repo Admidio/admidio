@@ -646,6 +646,10 @@ class Email extends PHPMailer
     public function sendEmail()
     {
         global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n, $gDisableEmailSending;
+
+        $errorMessage = '';
+        $errorRecipients = array();
+
         try {
             // If email sending is disabled in the config.php than don't send emails.
             // This should only be used for demo systems so the email UI should still be there.
@@ -655,31 +659,44 @@ class Email extends PHPMailer
             // If sending mode is "SINGLE" every E-mail is send on its own, so we do not need to check anything else here
             if($this->sendingMode == Email::SENDINGMODE_SINGLE) {
                 foreach ($this->emRecipientsArray as $recipient) {
-                    $this->clearAllRecipients();
-                    $this->addAddress($recipient['address'], $recipient['name']);
-                    if ($gDebug) {
-                        $gLogger->notice('Email send as TO to ' . $recipient['name'] . ' (' . $recipient['address'] . ')');
-                    }
-
-                    // add body to the email
-                    if($gValidLogin) {
-                        if ($this->emSendAsHTML) {
-                            $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
-                            $this->msgHTML($html);
-                        } else {
-                            $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
-                            $this->Body = $txt;
+                    try {
+                        $this->clearAllRecipients();
+                        $this->addAddress($recipient['address'], $recipient['name']);
+                        if ($gDebug) {
+                            $gLogger->notice('Email send as TO to ' . $recipient['name'] . ' (' . $recipient['address'] . ')');
                         }
+
+                        // add body to the email
+                        if($gValidLogin) {
+                            if ($this->emSendAsHTML) {
+                                $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
+                                $this->msgHTML($html);
+                            } else {
+                                $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
+                                $this->Body = $txt;
+                            }
+                        } else {
+                            if ($this->emSendAsHTML) {
+                                $this->msgHTML($this->emHtmlText);
+                            } else {
+                                $this->Body = $this->emText;
+                            }
+                        }
+
+                        // now send mail
+                        $this->send();
+                    } catch (Exception $e) {
+                        $errorMessage = $e->getMessage();
+                        $errorRecipients[] = $recipient['name'] . ' (' . $recipient['address'] . ')';
+                    }
+                }
+
+                if ($errorMessage !== '') {
+                    if ($gCurrentUser->isAdministrator()) {
+                        throw new AdmException('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, implode('<br />', $errorRecipients)));
                     } else {
-                        if ($this->emSendAsHTML) {
-                            $this->msgHTML($this->emHtmlText);
-                        } else {
-                            $this->Body = $this->emText;
-                        }
+                        throw new AdmException('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, count($errorRecipients) . ' ' . $gL10n->get('SYS_RECIPIENT')));
                     }
-
-                    // now send mail
-                    $this->send();
                 }
             } else {
                 // add body to the email
@@ -747,11 +764,11 @@ class Email extends PHPMailer
             }
         } catch (Exception $e) {
             return $e->errorMessage();
-        } catch (\Exception $e) {
+        } catch (AdmException|\Exception $e) {
             return $e->getMessage();
         }
 
-        // initialize recipient addresses so same email could be send to other recipients
+        // initialize recipient addresses so same email could be sent to other recipients
         $this->emRecipientsNames = array();
         $this->clearAddresses();
 

@@ -609,6 +609,7 @@
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Diese E-Mail wurde über die Webseite #VAR1# der Organisation #VAR2# mit den dort hinterlegten E-Mail-Einstellungen versendet.</string>
   <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
   <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
+  <string name="SYS_EMAIL_NOT_SEND_TO_RECIPIENTS">#VAR1#\n\nDer E-Mail-Versand war nicht möglich an:\n#VAR2#</string>
   <string name="SYS_EMAIL_PARAMETERS_DESC">Du kannst im E-Mail-Text folgende Platzhalter benutzen um den Empfänger der E-Mail direkt anzusprechen. #VAR1# für den Vornamen, #VAR2# für den Nachnamen, #VAR3# für Vor- und Nachname, sowie #VAR4# für die E-Mail-Adresse.</string>
   <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
   <string name="SYS_EMAIL_TEMPLATE">E-Mail-Vorlage</string>
