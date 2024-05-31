@@ -609,6 +609,7 @@
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">This email was sent via the #VAR1# website of the #VAR2# organization with the email settings stored there.</string>
   <string name="SYS_EMAIL_INVALID">E-mail address in field #VAR1_BOLD# includes invalid characters or is incomplete.</string>
   <string name="SYS_EMAIL_NOT_SEND">The email could not be sent to #VAR1_BOLD#.\n\nThe following error occurred:\n#VAR2#</string>
+  <string name="SYS_EMAIL_NOT_SEND_TO_RECIPIENTS">#VAR1#\n\nIt was not possible to send an e-mail to:\n#VAR2#</string>
   <string name="SYS_EMAIL_PARAMETERS_DESC">You can use the following placeholders in the email text to directly address the recipient of the email. #VAR1# for the first name, #VAR2# for the last name, #VAR3# for first and last name, and #VAR4# for the email address.</string>
   <string name="SYS_EMAIL_SEND">Mail has been send successfully</string>
   <string name="SYS_EMAIL_TEMPLATE">E-mail template</string>
