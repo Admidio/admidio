@@ -735,7 +735,7 @@ class Database
 
             if ($showError) {
                 $gLogger->critical('PDOException: ' . $exception->getMessage());
-                $this->showError();
+                $this->showError($exception->getMessage(), $exception->getCode());
                 // => EXIT
             }
 
@@ -794,7 +794,7 @@ class Database
 
             if ($showError) {
                 $gLogger->critical('PDOException: ' . $exception->getMessage());
-                $this->showError();
+                $this->showError($exception->getMessage(), $exception->getCode());
                 // => EXIT
             }
 
@@ -929,31 +929,32 @@ class Database
      * The error must be read by the child method. This method will call a backtrace, so
      * you see the script and specific line in which the error occurred.
      * @param string $errorMessage Optional an error message could be set and integrated in the output of the sql error.
+     * @param int $code Optional a code for the error be set and integrated in the output of the sql error.
      * @return void Will exit the script and returns a html output with the error information.
      * @throws Exception
      */
-    public function showError(string $errorMessage = '')
+    public function showError(string $errorMessage = '', int $code = 0)
     {
         global $gLogger, $gSettingsManager, $gL10n;
+
+        if ($errorMessage === '') {
+            // transform the database error to html
+            $code = $this->pdo->errorCode();
+            $errorMessage = $this->pdo->errorInfo()[2];
+        }
 
         // Rollback on open transaction
         if ($this->transactions > 0) {
             $this->pdo->rollBack();
         }
 
-        // transform the database error to html
-        $errorCode = $this->pdo->errorCode();
-        $errorInfo = $this->pdo->errorInfo();
-
-        $gLogger->critical($errorCode.': '.$errorInfo[1].' | '.$errorInfo[2]);
+        $gLogger->critical($code . ': ' . $errorMessage);
 
         $htmlOutput = '
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>
-                 ' . $errorMessage . '
-                 <p><strong>CODE:</strong> ' . $errorCode . '</p>
-                 ' . $errorInfo[1] . '<br /><br />
-                 ' . $errorInfo[2] . '<br /><br />
+                 <p>' . $errorMessage . '</p>
+                 <p><strong>CODE:</strong> ' . $code . '</p>
                  <strong>B A C K T R A C E</strong><br />
                  ' . $this->getBacktrace() . '
              </div>';
