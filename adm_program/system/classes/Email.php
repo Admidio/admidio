@@ -645,8 +645,13 @@ class Email extends PHPMailer
      */
     public function sendEmail()
     {
-        global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n;
+        global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n, $gDisableEmailSending;
         try {
+            // If email sending is disabled in the config.php than don't send emails.
+            // This should only be used for demo systems so the email UI should still be there.
+            if (isset($gDisableEmailSending) && $gDisableEmailSending) {
+                return true;
+            }
             // If sending mode is "SINGLE" every E-mail is send on its own, so we do not need to check anything else here
             if($this->sendingMode == Email::SENDINGMODE_SINGLE) {
                 foreach ($this->emRecipientsArray as $recipient) {
