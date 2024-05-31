@@ -136,7 +136,7 @@ class UserRegistration extends User
         // adopt all registration fields to the user if this is enabled in the settings
         if ($GLOBALS['gSettingsManager']->getBool('registration_adopt_all_data')) {
             foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
-                if ($profileField->getValue('usf_registration') && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '') {
+                if ((string) $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '') {
                     $user->setValue($profileField->getValue('usf_name_intern'), $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern'), 'database'));
                 }
             }
