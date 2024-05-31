@@ -388,6 +388,11 @@ label {
     height: 95%;
 }
 
+.admidio-blog img, .admidio-card img {
+    max-width: 100%;
+    height: auto;
+}
+
 .admidio-card li {
     padding-left: 0;
     padding-right: 0;
