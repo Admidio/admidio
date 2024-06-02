@@ -27,7 +27,7 @@
         "phpmailer/phpmailer": "^6.4",
         "phpoffice/phpspreadsheet": "^1.18",
         "ramsey/uuid": "^4.1",
-        "smarty/smarty": "^4.0",
+        "smarty/smarty": "4.4.1",
         "tecnickcom/tcpdf": "^6.2"
     },
     "require-dev": {},
