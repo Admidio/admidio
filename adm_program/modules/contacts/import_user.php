@@ -98,7 +98,7 @@ try {
             $columnValue = trim(strip_tags($columnValue));
 
             if (Uuid::isValid($assignedFieldColumnId)) {
-                // special case for date columns from excel. We read the data without format
+                // special case for date columns from Excel. We read the data without format
                 // so excel give us an integer for the date that must be converted
                 if ($gProfileFields->getPropertyByUuid($assignedFieldColumnId, 'usf_type') === 'DATE' && is_numeric($columnValue)) {
                     $columnValue = date($gSettingsManager->getString('system_date'), \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($columnValue));
@@ -156,6 +156,6 @@ try {
     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts.php');
     $gMessage->show($gL10n->get('SYS_IMPORT_SUCCESSFUL', array($countImportNewUser, $countImportEditUser, $countImportEditRole, $importMessage)));
     // => EXIT
-} catch (AdmException $e) {
+} catch (AdmException|Exception $e) {
     $e->showHtml();
 }
