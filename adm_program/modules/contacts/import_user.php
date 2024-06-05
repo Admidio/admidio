@@ -157,5 +157,5 @@ try {
     $gMessage->show($gL10n->get('SYS_IMPORT_SUCCESSFUL', array($countImportNewUser, $countImportEditUser, $countImportEditRole, $importMessage)));
     // => EXIT
 } catch (AdmException|Exception $e) {
-    $e->showHtml();
+    $gMessage->show($e->getMessage());
 }
