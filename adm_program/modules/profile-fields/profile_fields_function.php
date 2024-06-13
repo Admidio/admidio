@@ -203,7 +203,7 @@ if ($postMode === 'edit') {
     exit();
 } elseif ($postMode === 'sequence') {
     // update field order
-    $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
+    $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
 
     try {
         if (!empty($postOrder)) {
