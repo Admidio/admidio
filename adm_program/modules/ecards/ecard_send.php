@@ -92,7 +92,7 @@ foreach ($_POST['ecard_recipients'] as $value) {
             $arrayRoles[] = $roleId;
         }
     } else {
-        $arrayUsers[] = (int) $value;
+        $arrayUsers[] = $value;
     }
 }
 
