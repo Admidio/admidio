@@ -177,7 +177,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                     $group = $moduleMessages->msgGroupSplit($value);
 
                     // check if role rights are granted to the User
-                    $sql = 'SELECT rol_mail_this_role, rol_id, rol_uuid, rol_name
+                    $sql = 'SELECT rol_mail_this_role, rol_id, rol_name
                           FROM ' . TBL_ROLES . '
                     INNER JOIN ' . TBL_CATEGORIES . '
                             ON cat_id = rol_cat_id
@@ -198,7 +198,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                     }
 
                     // add role to the message object
-                    $message->addRole($row['rol_uuid'], $group['role_mode'], $row['rol_name']);
+                    $message->addRole($row['rol_id'], $group['role_mode'], $row['rol_name']);
 
                     // add all role members as recipients to the email
                     $email->addRecipientsByRole($group['uuid'], $group['status']);
@@ -210,7 +210,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                     // only send email to user if current user is allowed to view this user, and he has a valid email address
                     if ($gCurrentUser->hasRightViewProfile($user)) {
                         // add user to the message object
-                        $message->addUser($user->getValue('usr_uuid'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+                        $message->addUser($user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 
                         // add user as recipients to the email
                         $email->addRecipientsByUser($user->getValue('usr_uuid'));
@@ -364,7 +364,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
         $user = new User($gDb, $gProfileFields, $postTo[0]);
 
         // add user to the message object
-        $message->addUser($user->getValue('usr_uuid'));
+        $message->addUser($user->getValue('usr_id'));
         $message->setValue('msg_read', 1);
     } catch (AdmException $e) {
         $e->showHtml();

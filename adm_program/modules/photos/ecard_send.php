@@ -180,7 +180,7 @@ if (count($arrayRoles) > 0) {
 
     // add roles to message object
     foreach ($arrayRoles as $roleUUID) {
-        $message->addRole($roleUUID, 0);
+        $message->addRoleUUID($roleUUID, 0);
     }
 }
 
@@ -222,7 +222,7 @@ if (count($arrayUsers) > 0) {
 
     // add roles to message object
     foreach ($arrayUsers as $userUUID) {
-        $message->addUser($userUUID);
+        $message->addUserByUUID($userUUID);
     }
 }
 

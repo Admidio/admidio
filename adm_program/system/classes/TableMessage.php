@@ -60,7 +60,7 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * A role could be added to the class to which the email was sent. This information will
+     * A role could be added to the class by their UUID to which the email was sent. This information will
      * later be stored in the database. If you need the role name within the class before the
      * data is stored in database than you should set the role name with the parameter $roleName.
      * @param string $roleUUID UUID of the role to which the message was sent.
@@ -72,14 +72,31 @@ class TableMessage extends TableAccess
      * @throws AdmException
      * @throws Exception
      */
-    public function addRole(string $roleUUID, int $roleMode, string $roleName = '')
+    public function addRoleUUID(string $roleUUID, int $roleMode, string $roleName = '')
     {
         $role = new TableRoles($this->db);
         $role->readDataByUuid($roleUUID);
+        $this->addRole($role->getValue('rol_id'), $roleMode, $roleName);
+    }
 
+    /**
+     * A role could be added to the class by their ID to which the email was sent. This information will
+     * later be stored in the database. If you need the role name within the class before the
+     * data is stored in database than you should set the role name with the parameter $roleName.
+     * @param int $roleID ID of the role to which the message was sent.
+     * @param int $roleMode This parameter has the following values:
+     *                      0 - only active members of the role
+     *                      1 - only former members of the role
+     *                      2 - active and former members of the role
+     * @param string $roleName Optional the name of the role. Should be set if the name should be used within the class.
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function addRole(int $roleID, int $roleMode, string $roleName = '')
+    {
         // first search if role already exists in recipients list
         foreach ($this->msgRecipientsObjectArray as $messageRecipientObject) {
-            if ($messageRecipientObject->getValue('msr_rol_id') === $role->getValue('rol_id')) {
+            if ($messageRecipientObject->getValue('msr_rol_id') === $roleID) {
                 // if object found than update role mode and exist function
                 $messageRecipientObject->setValue('msr_role_mode', $roleMode);
                 return;
@@ -89,14 +106,14 @@ class TableMessage extends TableAccess
         // save message recipient as TableAccess object to the array
         $messageRecipient = new TableAccess($this->db, TBL_MESSAGES_RECIPIENTS, 'msr');
         $messageRecipient->setValue('msr_msg_id', $this->getValue('msg_id'));
-        $messageRecipient->setValue('msr_rol_id', $role->getValue('rol_id'));
+        $messageRecipient->setValue('msr_rol_id', $roleID);
         $messageRecipient->setValue('msr_role_mode', $roleMode);
         $this->msgRecipientsObjectArray[] = $messageRecipient;
 
         // now save message recipient into a simple array
         $this->msgRecipientsArray[] =
             array('type'   => 'role',
-                  'id'     => $role->getValue('rol_id'),
+                  'id'     => $roleID,
                   'name'   => $roleName,
                   'mode'   => $roleMode,
                   'msr_id' => null
@@ -104,7 +121,7 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * A user could be added to the class to which the email was sent. This information will
+     * A user could be added to the class with theirs UUID to which the email was sent. This information will
      * later be stored in the database. If you need the users name within the class before the
      * data is stored in database than you should set the users name with the parameter $fullName.
      * @param string $userUUID UUID of the user to which the message was sent
@@ -112,12 +129,24 @@ class TableMessage extends TableAccess
      * @throws AdmException
      * @throws Exception
      */
-    public function addUser(string $userUUID, string $fullName = '')
+    public function addUserByUUID(string $userUUID, string $fullName = '')
     {
         $user = new User($this->db);
         $user->readDataByUuid($userUUID);
-        $userID = $user->getValue('usr_id');
+        $this->addUser($user->getValue('usr_id'), $fullName);
+    }
 
+    /**
+     * A user could be added to the class with theirs ID to which the email was sent. This information will
+     * later be stored in the database. If you need the users name within the class before the
+     * data is stored in database than you should set the users name with the parameter $fullName.
+     * @param int $userID ID of the user to which the message was sent
+     * @param string $fullName Optional the name of the user. Should be set if the name should be used within the class.
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function addUser(int $userID, string $fullName = '')
+    {
         // PM always update the recipient if the message exists
         if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM) {
             if (count($this->msgRecipientsObjectArray) === 1) {
