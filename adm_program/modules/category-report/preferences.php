@@ -19,49 +19,50 @@
 require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/../../system/login_valid.php');
 
-// only authorized user are allowed to start this module
-if (!$gCurrentUser->isAdministrator()) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
+try {
+    // only authorized user are allowed to start this module
+    if (!$gCurrentUser->isAdministrator()) {
+        throw new AdmException('SYS_NO_RIGHTS');
+    }
 
-// Initialize and check the parameters
-$getAdd = admFuncVariableIsValid($_GET, 'add', 'bool');
-$getDelete = admFuncVariableIsValid($_GET, 'delete', 'numeric', array('defaultValue' => 0));
-$getCopy = admFuncVariableIsValid($_GET, 'copy', 'numeric', array('defaultValue' => 0));
+    // Initialize and check the parameters
+    $getAdd = admFuncVariableIsValid($_GET, 'add', 'bool');
+    $getDelete = admFuncVariableIsValid($_GET, 'delete', 'numeric', array('defaultValue' => 0));
+    $getCopy = admFuncVariableIsValid($_GET, 'copy', 'numeric', array('defaultValue' => 0));
 
-$report = new CategoryReport();
-$config = $report->getConfigArray();
-$catReportConfigs = array();
+    $report = new CategoryReport();
+    $config = $report->getConfigArray();
+    $catReportConfigs = array();
 
-$headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
+    $headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
 
-if ($getAdd) {
-    $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf' => false);
-    // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
-}
+    if ($getAdd) {
+        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf' => false);
+        // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
+    }
 
-if ($getDelete > 0) {
-    $config[$getDelete - 1]['id'] = $config[$getDelete - 1]['id'] * (-1);                   // id negieren, als Kennzeichen für "Deleted"
-    $config = $report->saveConfigArray($config);
-}
+    if ($getDelete > 0) {
+        $config[$getDelete - 1]['id'] = $config[$getDelete - 1]['id'] * (-1);                   // id negieren, als Kennzeichen für "Deleted"
+        $config = $report->saveConfigArray($config);
+    }
 
-if ($getCopy > 0) {
-    $config[] = array('id' => '',
-        'name' => $report->createName($config[$getCopy - 1]['name']),
-        'col_fields' => $config[$getCopy - 1]['col_fields'],
-        'selection_role' => $config[$getCopy - 1]['selection_role'],
-        'selection_cat' => $config[$getCopy - 1]['selection_cat'],
-        'number_col' => $config[$getCopy - 1]['number_col'],
-        'default_conf' => false);
-    $config = $report->saveConfigArray($config);
-}
+    if ($getCopy > 0) {
+        $config[] = array('id' => '',
+            'name' => $report->createName($config[$getCopy - 1]['name']),
+            'col_fields' => $config[$getCopy - 1]['col_fields'],
+            'selection_role' => $config[$getCopy - 1]['selection_role'],
+            'selection_cat' => $config[$getCopy - 1]['selection_cat'],
+            'number_col' => $config[$getCopy - 1]['number_col'],
+            'default_conf' => false);
+        $config = $report->saveConfigArray($config);
+    }
 
-$gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_CONFIGURATIONS'));
+    $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_CONFIGURATIONS'));
 
 // create html page object
-$page = new HtmlPage('plg-category-report-preferences', $headline);
+    $page = new HtmlPage('plg-category-report-preferences', $headline);
 
-$page->addJavascript('
+    $page->addJavascript('
     $(".form-preferences").submit(function(event) {
         var id = $(this).attr("id");
         var action = $(this).attr("action");
@@ -90,15 +91,15 @@ $page->addJavascript('
             }
         });
     });',
-    true
-);
+        true
+    );
 
-$javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
+    $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
 
 // create an array with the necessary data
-foreach ($config as $key => $value) {
-    $catReportConfigs[$key] = $value['name'];
-    $javascriptCode .= '
+    foreach ($config as $key => $value) {
+        $catReportConfigs[$key] = $value['name'];
+        $javascriptCode .= '
 
         var arr_default_fields' . $key . ' = createColumnsArray' . $key . '();
         var fieldNumberIntern' . $key . '  = 0;
@@ -152,69 +153,69 @@ foreach ($config as $key => $value) {
     	function createColumnsArray' . $key . '()
     	{
         	var default_fields = new Array(); ';
-    $fields = explode(',', $value['col_fields']);
-    for ($number = 0; $number < count($fields); $number++) {
-        // this is only to check whether this release still exists
-        // it could be that a profile field or role has been deleted since the last save
-        $found = $report->isInHeaderSelection($fields[$number]);
-        if ($found > 0) {
-            $javascriptCode .= '
+        $fields = explode(',', $value['col_fields']);
+        for ($number = 0; $number < count($fields); $number++) {
+            // this is only to check whether this release still exists
+            // it could be that a profile field or role has been deleted since the last save
+            $found = $report->isInHeaderSelection($fields[$number]);
+            if ($found > 0) {
+                $javascriptCode .= '
                 	default_fields[' . $number . '] 		  = new Object();
                 	default_fields[' . $number . ']["id"]   = "' . $report->headerSelection[$found]["id"] . '";
                 	default_fields[' . $number . ']["data"] = "' . $report->headerSelection[$found]["data"] . '";
                 	';
+            }
         }
-    }
-    $javascriptCode .= '
+        $javascriptCode .= '
         	return default_fields;
     	}
     	';
-}
+    }
 
-$javascriptCode .= '
+    $javascriptCode .= '
     function createProfileFieldsArray()
     {
         var user_fields = new Array(); ';
 
 // create an array for all columns with the necessary data
-foreach ($report->headerSelection as $key => $value) {
-    $javascriptCode .= '
+    foreach ($report->headerSelection as $key => $value) {
+        $javascriptCode .= '
                 user_fields[' . $key . '] 			= new Object();
                 user_fields[' . $key . ']["id"]   	= "' . $report->headerSelection[$key]['id'] . '";
                 user_fields[' . $key . ']["cat_name"] = "' . $report->headerSelection[$key]['cat_name'] . '";
                 user_fields[' . $key . ']["data"]   	= "' . $report->headerSelection[$key]['data'] . '";
                 ';
-}
-$javascriptCode .= '
+    }
+    $javascriptCode .= '
         return user_fields;
     }
 ';
-$page->addJavascript($javascriptCode);
-$javascriptCodeExecute = '';
+    $page->addJavascript($javascriptCode);
+    $javascriptCodeExecute = '';
 
-foreach ($config as $key => $value) {
-    $javascriptCodeExecute .= '
+    foreach ($config as $key => $value) {
+        $javascriptCodeExecute .= '
     	for(var counter = 0; counter < ' . count(explode(',', $value['col_fields'])) . '; counter++) {
         	addColumn' . $key . '();
     	}
     	';
-}
-$page->addJavascript($javascriptCodeExecute, true);
+    }
+    $page->addJavascript($javascriptCodeExecute, true);
 
-$formConfigurations = new HtmlForm(
-    'configurations_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences_function.php', array('form' => 'configurations')),
-    $page, array('class' => 'form-preferences')
-);
+    $formConfigurations = new HtmlForm(
+        'configurations_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences_function.php', array('form' => 'configurations')),
+        $page, array('class' => 'form-preferences')
+    );
 
-$formConfigurations->addDescription($gL10n->get('SYS_CONFIGURATIONS_HEADER'));
-$formConfigurations->addLine();
-$currentNumberConf = 0;
+    $formConfigurations->addDescription($gL10n->get('SYS_CONFIGURATIONS_HEADER'));
+    $formConfigurations->addLine();
+    $currentNumberConf = 0;
 
-foreach ($config as $key => $value) {
-    $formConfigurations->openGroupBox('configurations_group', ++$currentNumberConf . '. ' . $gL10n->get('SYS_CONFIGURATION'));
-    $formConfigurations->addInput('name' . $key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
-        array('property' => HtmlForm::FIELD_REQUIRED));
-    $html = '
+    foreach ($config as $key => $value) {
+        $formConfigurations->openGroupBox('configurations_group', ++$currentNumberConf . '. ' . $gL10n->get('SYS_CONFIGURATION'));
+        $formConfigurations->addInput('name' . $key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
+            array('property' => HtmlForm::FIELD_REQUIRED));
+        $html = '
 	   <div class="table-responsive">
     		<table class="table table-condensed" id="mylist_fields_table">
         		<thead>
@@ -232,48 +233,51 @@ foreach ($config as $key => $value) {
         		</tbody>
     		</table>
     	</div>';
-    $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html, array('helpTextId' => 'SYS_COLUMN_SELECTION_DESC'));
+        $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html, array('helpTextId' => 'SYS_COLUMN_SELECTION_DESC'));
 
-    $sql = 'SELECT rol_id, rol_name, cat_name
+        $sql = 'SELECT rol_id, rol_name, cat_name
               FROM ' . TBL_CATEGORIES . ' , ' . TBL_ROLES . '
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = ' . $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_role' . $key, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,
-        array('defaultValue' => explode(',', (string)$value['selection_role']), 'multiselect' => true, 'helpTextId' => 'SYS_ROLE_SELECTION_CONF_DESC'));
+        $formConfigurations->addSelectBoxFromSql('selection_role' . $key, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,
+            array('defaultValue' => explode(',', (string)$value['selection_role']), 'multiselect' => true, 'helpTextId' => 'SYS_ROLE_SELECTION_CONF_DESC'));
 
-    $sql = 'SELECT cat_id, cat_name
+        $sql = 'SELECT cat_id, cat_name
               FROM ' . TBL_CATEGORIES . ' , ' . TBL_ROLES . '
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = ' . $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_cat' . $key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
-        array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextId' => 'SYS_CAT_SELECTION_CONF_DESC'));
-    $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
-    $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => HtmlForm::FIELD_HIDDEN));
-    $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => HtmlForm::FIELD_HIDDEN));
-    $html = '<a id="copy_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('copy' => $key + 1)) . '">
+        $formConfigurations->addSelectBoxFromSql('selection_cat' . $key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
+            array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextId' => 'SYS_CAT_SELECTION_CONF_DESC'));
+        $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
+        $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => HtmlForm::FIELD_HIDDEN));
+        $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => HtmlForm::FIELD_HIDDEN));
+        $html = '<a id="copy_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('copy' => $key + 1)) . '">
             <i class="bi bi-copy"></i> ' . $gL10n->get('SYS_COPY_CONFIGURATION') . '</a>';
-    if (count($config) > 1 && $value['default_conf'] == false) {
-        $html .= '&nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('delete' => $key + 1)) . '">
+        if (count($config) > 1 && $value['default_conf'] == false) {
+            $html .= '&nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('delete' => $key + 1)) . '">
             <i class="bi bi-trash"></i> ' . $gL10n->get('SYS_DELETE_CONFIGURATION') . '</a>';
+        }
+        if (!empty($value['name'])) {
+            $formConfigurations->addCustomContent('', $html);
+        }
+        $formConfigurations->closeGroupBox();
     }
-    if (!empty($value['name'])) {
-        $formConfigurations->addCustomContent('', $html);
-    }
-    $formConfigurations->closeGroupBox();
-}
 
-$formConfigurations->addLine();
-$html = '<a id="add_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)) . '">
+    $formConfigurations->addLine();
+    $html = '<a id="add_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)) . '">
             <i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_ANOTHER_CONFIG') . '
         </a>';
-$htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
+    $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
                 <i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '
             </div>';
-$formConfigurations->addCustomContent('', $html, array('helpTextId' => $htmlDesc));
-$formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $formConfigurations->addCustomContent('', $html, array('helpTextId' => $htmlDesc));
+    $formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
-$page->addHtml($formConfigurations->show());
+    $page->addHtml($formConfigurations->show());
 
-$page->show();
+    $page->show();
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
+}

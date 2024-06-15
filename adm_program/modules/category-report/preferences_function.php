@@ -15,26 +15,19 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
-// only authorized user are allowed to start this module
-if (!$gCurrentUser->isAdministrator()) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
-
-// Initialize and check the parameters
-$getForm = admFuncVariableIsValid($_GET, 'form', 'string');
-
-$gMessage->showHtmlTextOnly(true);
-
 try {
+    // only authorized user are allowed to start this module
+    if (!$gCurrentUser->isAdministrator()) {
+        throw new AdmException('SYS_NO_RIGHTS');
+    }
+
+    // Initialize and check the parameters
+    $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
+
     switch ($getForm) {
         case 'configurations':
-            try {
-                // check the CSRF token of the form against the session token
-                SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-            } catch (AdmException $exception) {
-                $exception->showText();
-                // => EXIT
-            }
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
             for ($conf = 0; isset($_POST['name' . $conf]); $conf++) {
                 $values['id'] = $_POST['id' . $conf];
@@ -55,7 +48,7 @@ try {
                 }
 
                 if ($allColumnsEmpty) {
-                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_COLUMN'))));
+                    throw new AdmException('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
                 }
 
                 $values['col_fields'] = substr($fields, 0, -1);
@@ -67,10 +60,10 @@ try {
             break;
 
         default:
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
-} catch (AdmException $e) {
-    $e->showText();
+} catch (AdmException|Exception $e) {
+    echo $e->getMessage();
 }
 
 echo 'success';
