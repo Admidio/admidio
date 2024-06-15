@@ -43,7 +43,7 @@ if ($getUrtUuid !== '') {
 $page = new HtmlPage('admidio-relationtypes-edit', $headline);
 
 // show form
-$form = new HtmlForm('relationtype_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_uuid' => $getUrtUuid, 'mode' => '1')), $page);
+$form = new HtmlForm('relationtype_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_uuid' => $getUrtUuid, 'mode' => 'create')), $page);
 
 $form->openGroupBox('gb_user_relationship', $gL10n->get('SYS_USER_RELATION'));
 $form->addInput(

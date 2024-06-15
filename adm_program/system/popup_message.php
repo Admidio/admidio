@@ -129,7 +129,7 @@ try {
             $getElementId = $getDatabaseId;
             break;
         case 'urt':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 2, 'urt_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 'delete', 'urt_uuid' => $getDatabaseId));
             $text = 'SYS_RELATIONSHIP_TYPE_DELETE';
             break;
         case 'ure':
