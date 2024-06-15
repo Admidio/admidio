@@ -22,6 +22,8 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
+use Ramsey\Uuid\Uuid;
+
 try {
     unset($list);
 
@@ -41,6 +43,11 @@ try {
     }
 
     $roleUuidList = explode(',', $getRoleList);
+    foreach ($roleUuidList as $key => $roleUuid) {
+        if (!UUID::isValid($roleUuid)) {
+            unset($roleUuidList[$key]);
+        }
+    }
     $numberRoles = count($roleUuidList);
 
     if ($numberRoles === 0) {
