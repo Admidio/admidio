@@ -31,5 +31,14 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="240">UPDATE %PREFIX%_user_fields SET usf_icon = null WHERE usf_name_intern = 'XING'</step>
     <step id="250">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'events_ical_days_past'</step>
     <step id="260">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'events_ical_days_future'</step>
+    <step id="270">ALTER TABLE %PREFIX%_messages_attachments ADD COLUMN msa_uuid varchar(36)</step>
+    <step id="280">ALTER TABLE %PREFIX%_user_relations ADD COLUMN ure_uuid varchar(36)</step>
+    <step id="290">ComponentUpdateSteps::updateStep50AddUuid</step>
+    <step id="300" database="mysql">ALTER TABLE %PREFIX%_messages_attachments MODIFY COLUMN msa_uuid varchar(36) NOT NULL</step>
+    <step id="310" database="pgsql">ALTER TABLE %PREFIX%_messages_attachments ALTER COLUMN msa_uuid SET NOT NULL</step>
+    <step id="320">CREATE UNIQUE INDEX %PREFIX%_idx_msa_uuid ON %PREFIX%_messages_attachments (msa_uuid)</step>
+    <step id="330" database="mysql">ALTER TABLE %PREFIX%_user_relations MODIFY COLUMN ure_uuid varchar(36) NOT NULL</step>
+    <step id="340" database="pgsql">ALTER TABLE %PREFIX%_user_relations ALTER COLUMN ure_uuid SET NOT NULL</step>
+    <step id="350">CREATE UNIQUE INDEX %PREFIX%_idx_ure_uuid ON %PREFIX%_user_relations (ure_uuid)</step>
     <step>stop</step>
 </update>

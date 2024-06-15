@@ -296,7 +296,7 @@ class TableMessage extends TableAccess
     {
         $attachments = array();
 
-        $sql = 'SELECT msa_id, msa_original_file_name, msa_file_name
+        $sql = 'SELECT msa_id, msa_uuid, msa_original_file_name, msa_file_name
                   FROM ' . TBL_MESSAGES_ATTACHMENTS .'
                  WHERE msa_msg_id = ? -- $this->getValue(\'msg_id\')';
         $attachmentsStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));

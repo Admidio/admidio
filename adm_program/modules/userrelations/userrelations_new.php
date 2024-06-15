@@ -57,7 +57,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-userrelations-edit', $headline);
 
 // show form
-$form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => '1')), $page);
+$form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'create')), $page);
 
 $sqlData = array();
 if ($gCurrentUser->editUsers()) {

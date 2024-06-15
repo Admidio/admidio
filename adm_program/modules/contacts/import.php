@@ -54,8 +54,8 @@ if (!isset($formValues['import_enclosure'])) {
 if (!isset($formValues['user_import_mode'])) {
     $formValues['user_import_mode'] = 1;
 }
-if (!isset($formValues['import_role_id'])) {
-    $formValues['import_role_id'] = 0;
+if (!isset($formValues['import_role_uuid'])) {
+    $formValues['import_role_uuid'] = 0;
 }
 
 // create html page object
@@ -185,7 +185,7 @@ if (!$gCurrentUser->isAdministrator()) {
     $condition .= ' AND rol_administrator = false ';
 }
 
-$sql = 'SELECT rol_id, rol_name, cat_name
+$sql = 'SELECT rol_uuid, rol_name, cat_name
           FROM ' . TBL_ROLES . '
     INNER JOIN ' . TBL_CATEGORIES . '
             ON cat_id = rol_cat_id
@@ -199,15 +199,15 @@ $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 $roles = array();
 
 while ($row = $statement->fetch()) {
-    $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
+    $roles[] = array($row['rol_uuid'], $row['rol_name'], $row['cat_name']);
 }
 $form->addSelectBox(
-    'import_role_id',
+    'import_role_uuid',
     $gL10n->get('SYS_ASSIGN_ROLE'),
     $roles,
     array(
         'property' => HtmlForm::FIELD_REQUIRED,
-        'defaultValue' => $formValues['import_role_id'],
+        'defaultValue' => $formValues['import_role_uuid'],
         'helpTextId' => 'SYS_ASSIGN_ROLE_FOR_IMPORT'
     )
 );
