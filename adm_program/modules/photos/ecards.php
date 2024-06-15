@@ -165,7 +165,7 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 $list = array();
 
 // list all roles where login users could send mails to
-$sql = 'SELECT rol_id, rol_name
+$sql = 'SELECT rol_uuid, rol_name
           FROM ' . TBL_ROLES . '
     INNER JOIN ' . TBL_CATEGORIES . '
             ON cat_id = rol_cat_id
@@ -175,14 +175,14 @@ $sql = 'SELECT rol_id, rol_name
 $statement = $gDb->queryPrepared($sql, $gCurrentUser->getRolesWriteMails());
 
 while ($row = $statement->fetch()) {
-    $list[] = array('groupID: ' . $row['rol_id'], $row['rol_name'], $gL10n->get('SYS_ROLES'));
+    $list[] = array('groupID: ' . $row['rol_uuid'], $row['rol_name'], $gL10n->get('SYS_ROLES'));
 }
 
 // select all users
 $arrayRoles = array_merge($gCurrentUser->getRolesWriteMails(), $gCurrentUser->getRolesViewMemberships());
 $arrayUniqueRoles = array_unique($arrayRoles);
 
-$sql = 'SELECT DISTINCT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name
+$sql = 'SELECT DISTINCT usr_uuid, first_name.usd_value AS first_name, last_name.usd_value AS last_name
           FROM ' . TBL_MEMBERS . '
     INNER JOIN ' . TBL_ROLES . '
             ON rol_id = mem_rol_id
@@ -212,7 +212,7 @@ $queryParams = array_merge(
 $statement = $gDb->queryPrepared($sql, $queryParams);
 
 while ($row = $statement->fetch()) {
-    $list[] = array($row['usr_id'], $row['last_name'] . ', ' . $row['first_name'], $gL10n->get('SYS_CONTACTS'));
+    $list[] = array($row['usr_uuid'], $row['last_name'] . ', ' . $row['first_name'], $gL10n->get('SYS_CONTACTS'));
 }
 
 $form->addSelectBox(

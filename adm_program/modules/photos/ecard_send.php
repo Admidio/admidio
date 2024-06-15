@@ -10,6 +10,8 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
+use Ramsey\Uuid\Uuid;
+
 // check if the photo module is enabled and eCard is enabled
 if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -87,12 +89,19 @@ $sqlEmailField  = '';
 
 foreach ($_POST['ecard_recipients'] as $value) {
     if (str_contains($value, 'groupID')) {
-        $roleId = (int) substr($value, 9);
-        if ($gCurrentUser->hasRightSendMailToRole($roleId)) {
-            $arrayRoles[] = $roleId;
+        if (Uuid::isValid(substr($value, 9))) {
+            $role_uuid = substr($value, 9);
+
+            $role = new TableRoles($gDb);
+            $role->readDataByUuid($role_uuid);
+            if ($gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id'))) {
+                $arrayRoles[] = $role_uuid;
+            }
         }
     } else {
-        $arrayUsers[] = (int) $value;
+        if (Uuid::isValid($value)) {
+            $arrayUsers[] = $value;
+        }
     }
 }
 
@@ -141,18 +150,23 @@ if (count($arrayRoles) > 0) {
         INNER JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-             WHERE rol_id           IN ('.implode(',', $arrayRoles).')
-               AND cat_org_id       = ? -- $gCurrentOrgId
-               AND mem_begin       <= ? -- DATE_NOW
-               AND mem_end          > ? -- DATE_NOW
-               AND usr_valid        = true
+             WHERE rol_uuid    IN ('.Database::getQmForValues($arrayRoles).')
+               AND cat_org_id  = ? -- $gCurrentOrgId
+               AND mem_begin  <= ? -- DATE_NOW
+               AND mem_end     > ? -- DATE_NOW
+               AND usr_valid   = true
           ORDER BY last_name, first_name';
-    $queryParams = array(
-        $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-        $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-        $gCurrentOrgId,
-        DATE_NOW,
-        DATE_NOW
+    $queryParams = array_merge(
+        array(
+            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+        ),
+        $arrayRoles,
+        array(
+            $gCurrentOrgId,
+            DATE_NOW,
+            DATE_NOW
+        )
     );
     $usersStatement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -165,8 +179,8 @@ if (count($arrayRoles) > 0) {
     }
 
     // add roles to message object
-    foreach ($arrayRoles as $roleId) {
-        $message->addRole($roleId, 0);
+    foreach ($arrayRoles as $roleUUID) {
+        $message->addRole($roleUUID, 0);
     }
 }
 
@@ -186,12 +200,15 @@ if (count($arrayUsers) > 0) {
         INNER JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-             WHERE usr_id           IN ('.implode(',', $arrayUsers).')
-               AND usr_valid        = true
+             WHERE usr_uuid  IN ('.Database::getQmForValues($arrayUsers).')
+               AND usr_valid = true
           ORDER BY last_name, first_name';
-    $queryParams = array(
-        $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-        $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+    $queryParams = array_merge(
+        array(
+            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+        ),
+        $arrayUsers
     );
     $usersStatement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -204,8 +221,8 @@ if (count($arrayUsers) > 0) {
     }
 
     // add roles to message object
-    foreach ($arrayUsers as $userId) {
-        $message->addUser($userId);
+    foreach ($arrayUsers as $userUUID) {
+        $message->addUser($userUUID);
     }
 }
 
