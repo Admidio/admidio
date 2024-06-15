@@ -17,7 +17,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 try {
     // Initialize and check the parameters
-    $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
+    $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
 
     // Initialize local parameters
     $showSystemCategory = false;

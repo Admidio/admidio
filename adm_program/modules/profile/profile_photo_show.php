@@ -17,7 +17,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requireValue' => true));
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
 $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
 
 // read user data and show error if user doesn't exists

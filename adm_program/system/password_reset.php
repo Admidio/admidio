@@ -17,7 +17,7 @@ require_once(__DIR__ . '/common.php');
 
 // Initialize and check the parameters
 $getResetId  = admFuncVariableIsValid($_GET, 'id', 'string');
-$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
 
 // "systemmail" and "request password" must be activated
 if (!$gSettingsManager->getBool('system_notifications_enabled') || !$gSettingsManager->getBool('enable_password_recovery')) {

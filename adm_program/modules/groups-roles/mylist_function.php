@@ -20,7 +20,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
+$getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'uuid');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
 $getName = admFuncVariableIsValid($_GET, 'name', 'string');
 

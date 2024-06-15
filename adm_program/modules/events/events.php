@@ -33,8 +33,8 @@ unset($_SESSION['events_request']);
 // Initialize and check the parameters
 $getMode      = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getStart     = admFuncVariableIsValid($_GET, 'start', 'int');
-$getCatUuid   = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-$getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
+$getCatUuid   = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
+$getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
 $getShow      = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
 $getDateFrom  = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo    = admFuncVariableIsValid($_GET, 'date_to', 'date');

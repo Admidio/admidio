@@ -15,8 +15,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string', array('requireValue' => true));
-$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
+$getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid', array('requireValue' => true));
+$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
 // Initialize local variables
 $disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;

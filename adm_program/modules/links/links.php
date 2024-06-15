@@ -18,8 +18,8 @@ unset($_SESSION['links_request']);
 
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
-$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
+$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {

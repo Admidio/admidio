@@ -27,10 +27,10 @@ require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMsgType    = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
-$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
 $getSubject    = admFuncVariableIsValid($_GET, 'subject', 'string');
-$getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
-$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
+$getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
+$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 $getForward    = admFuncVariableIsValid($_GET, 'forward', 'bool');
@@ -40,7 +40,7 @@ $postListUuid = '';
 // Check form values
 if ($gValidLogin) {
     $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
-    $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
+    $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
 }
 
 $message = new TableMessage($gDb);

@@ -23,7 +23,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string', array('requireValue' => true));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'uuid', array('requireValue' => true));
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 
 // check if the module is enabled and disallow access if it's disabled

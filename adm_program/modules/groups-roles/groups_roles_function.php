@@ -26,7 +26,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 try {
     // Initialize and check the parameters
-    $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
+    $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'export', 'activate', 'deactivate')));
 
     if (in_array($getMode, array('delete', 'activate', 'deactivate'))) {

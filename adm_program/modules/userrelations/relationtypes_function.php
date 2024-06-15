@@ -22,7 +22,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'string');
+$getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'uuid');
 $getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2)));
 
 if (!$gSettingsManager->getBool('contacts_user_relations_enabled')) {

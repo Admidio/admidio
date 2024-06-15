@@ -25,8 +25,8 @@ try {
 
     // Initialize and check the parameters
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
-    $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-    $getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
+    $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
+    $getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'uuid');
     $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
     $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date');
 

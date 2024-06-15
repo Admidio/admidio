@@ -27,9 +27,9 @@ if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
 
 // Initialize and check the parameters
 $getMode           = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
-$getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
-$getUserUuid       = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('directOutput' => true));
-$getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'string');
+$getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid', array('requireValue' => true, 'directOutput' => true));
+$getUserUuid       = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('directOutput' => true));
+$getFilterRoleUuid   = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'uuid');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 
 // create object of the committed role

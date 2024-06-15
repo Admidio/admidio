@@ -16,7 +16,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {

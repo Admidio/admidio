@@ -24,7 +24,7 @@ $filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
 $filterDateFrom->modify('-'.$gSettingsManager->getInt('contacts_field_history_days').' day');
 
 // Initialize and check the parameters
-$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
 $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
 $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 

@@ -16,7 +16,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUsfUuid = admFuncVariableIsValid($_GET, 'usf_uuid', 'string');
+$getUsfUuid = admFuncVariableIsValid($_GET, 'usf_uuid', 'uuid');
 
 // only authorized users can edit the profile fields
 if (!$gCurrentUser->isAdministrator()) {

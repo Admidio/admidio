@@ -30,7 +30,7 @@ try {
     $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
     $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_NOW));
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'ods', 'csv', 'html', 'print', 'pdf', 'pdfl')));
-    $getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
+    $getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'uuid');
     $getRoleList = admFuncVariableIsValid($_GET, 'role_list', 'string');
     $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
     $getRelationTypeList = admFuncVariableIsValid($_GET, 'relation_type_list', 'string'); // could be int or int[], so string is necessary

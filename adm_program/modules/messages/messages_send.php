@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 use PHPMailer\PHPMailer\Exception;
 
 // Initialize and check the parameters
-$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
+$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
 $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
 // Check form values

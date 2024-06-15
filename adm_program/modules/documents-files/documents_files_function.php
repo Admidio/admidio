@@ -26,8 +26,8 @@ require(__DIR__ . '/../../system/login_valid.php');
 try {
     // Initialize and check the parameters
     $getMode       = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(2, 3, 4, 5, 6, 7, 8)));
-    $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
-    $getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'string');
+    $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
+    $getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
     $getName       = admFuncVariableIsValid($_GET, 'name', 'file');
 
     if (in_array($getMode, array(2, 5))) {

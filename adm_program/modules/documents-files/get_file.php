@@ -16,7 +16,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getFileUuid = admFuncVariableIsValid($_GET, 'file_uuid', 'string', array('requireValue' => true));
+$getFileUuid = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid', array('requireValue' => true));
 $getView     = admFuncVariableIsValid($_GET, 'view', 'bool');
 
 // check if the module is enabled and disallow access if it's disabled

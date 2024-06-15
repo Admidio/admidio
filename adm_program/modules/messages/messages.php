@@ -24,7 +24,7 @@ if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBo
 }
 
 // Initialize and check the parameters
-$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
+$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
 
 if ($getMsgUuid !== '') {
     try {

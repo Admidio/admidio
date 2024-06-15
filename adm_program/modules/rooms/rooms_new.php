@@ -16,7 +16,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid', 'string');
+$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid', 'uuid');
 
 // only authorized users are allowed to edit the rooms
 if (!$gCurrentUser->isAdministrator()) {

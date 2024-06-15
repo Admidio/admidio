@@ -21,7 +21,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
+$getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
 $getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'EVT', 'AWA')));
 
 $roleViewSet = array(0);

@@ -16,7 +16,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string', array('requireValue' => true));
+$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid', array('requireValue' => true));
 
 $headline = $gL10n->get('SYS_CREATE_FOLDER');
 

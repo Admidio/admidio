@@ -30,8 +30,8 @@ if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
 }
 
 // Initialize and check the parameters
-$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string', array('requireValue' => true));
-$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'uuid', array('requireValue' => true));
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
 $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireValue' => true));
 $showPage = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultValue' => 1));
 

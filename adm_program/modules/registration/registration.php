@@ -24,7 +24,7 @@ try {
 
     // Initialize and check the parameters
     $getRegistrationId = admFuncVariableIsValid($_GET, 'id', 'string');
-    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('show_similar')));
 
     if ($getRegistrationId === '') {

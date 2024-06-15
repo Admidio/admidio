@@ -26,7 +26,7 @@ if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
 }
 
 // Initialize and check the parameters
-$getPhotoUuid      = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
+$getPhotoUuid      = admFuncVariableIsValid($_GET, 'photo_uuid', 'uuid');
 $getStart          = admFuncVariableIsValid($_GET, 'start', 'int');
 $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
 $getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr', 'int');

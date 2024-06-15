@@ -30,7 +30,7 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('delete_explain_msg', 'remove', 'delete', 'send_login', 'send_login_msg', 'delete_msg')));
-    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requireValue' => true));
+    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
 
     // Only users with user-edit rights are allowed
     if (!$gCurrentUser->editUsers()) {

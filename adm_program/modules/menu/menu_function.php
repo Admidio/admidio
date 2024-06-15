@@ -23,7 +23,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$postMenuUUID = admFuncVariableIsValid($_POST, 'uuid', 'string');
+$postMenuUUID = admFuncVariableIsValid($_POST, 'uuid', 'uuid');
 $postMode     = admFuncVariableIsValid($_POST, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
 
 if (in_array($postMode, array('delete', 'sequence'))) {
