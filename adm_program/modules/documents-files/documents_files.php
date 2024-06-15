@@ -18,7 +18,7 @@ try {
     unset($_SESSION['documents_files_request']);
 
     // Initialize and check the parameters
-    $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
+    $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
 
     // Check if module is activated
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {

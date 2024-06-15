@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2)));
 
 try {

@@ -23,8 +23,8 @@ require(__DIR__ . '/../../system/login_valid.php');
 try {
     // Initialize and check the parameters
     $getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('assign_member', 'assign_user', 'delete_user', 'create_user', 'send_login')));
-    $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
-    $getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+    $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'uuid', array('requireValue' => true));
+    $getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
 
     if ($getMode === 'delete_user') {
         $gMessage->showHtmlTextOnly();

@@ -17,7 +17,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
+$getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
 $getCopy     = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 // check if module is active

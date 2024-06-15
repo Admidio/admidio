@@ -17,8 +17,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
-$getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'string');
+$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
+$getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
 
 // set headline of the script
 if ($getFileUuid !== '') {

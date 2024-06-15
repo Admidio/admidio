@@ -24,7 +24,7 @@ require_once(__DIR__ . '/../../system/common.php');
 try {
     // Initialize and check the parameters
     $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
-    $getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
+    $getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getRoleType = admFuncVariableIsValid($_GET, 'role_type', 'int', array('defaultValue' => 1));
     $getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'card', 'validValues' => array('card', 'permissions')));
 

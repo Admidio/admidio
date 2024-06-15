@@ -24,7 +24,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$postUsfUUID  = admFuncVariableIsValid($_POST, 'uuid', 'string');
+$postUsfUUID  = admFuncVariableIsValid($_POST, 'uuid', 'uuid');
 $postMode     = admFuncVariableIsValid($_POST, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
 $postOrder    = admFuncVariableIsValid($_POST, 'order', 'array');
 

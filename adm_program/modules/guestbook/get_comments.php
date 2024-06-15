@@ -17,7 +17,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getCommentGboUuid = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
+$getCommentGboUuid = admFuncVariableIsValid($_GET, 'gbo_uuid', 'uuid');
 $getModeration     = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 
 if ($getCommentGboUuid !== '') {

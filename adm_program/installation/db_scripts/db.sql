@@ -440,6 +440,7 @@ CREATE UNIQUE INDEX %PREFIX%_idx_msg_uuid ON %PREFIX%_messages (msg_uuid);
 CREATE TABLE %PREFIX%_messages_attachments
 (
     msa_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    msa_uuid                    varchar(36)         NOT NULL,
     msa_msg_id                  integer unsigned    NOT NULL,
     msa_file_name               varchar(256)        NOT NULL,
     msa_original_file_name      varchar(256)        NOT NULL,
@@ -448,6 +449,8 @@ CREATE TABLE %PREFIX%_messages_attachments
 ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_msa_uuid ON %PREFIX%_messages_attachments (msa_uuid);
 
 /*==============================================================*/
 /* Table: adm_messages_content                                  */
@@ -860,6 +863,7 @@ CREATE UNIQUE INDEX %PREFIX%_idx_urt_uuid ON %PREFIX%_user_relation_types (urt_u
 CREATE TABLE %PREFIX%_user_relations
 (
     ure_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ure_uuid                    varchar(36)         NOT NULL,
     ure_urt_id                  integer unsigned    NOT NULL,
     ure_usr_id1                 integer unsigned    NOT NULL,
     ure_usr_id2                 integer unsigned    NOT NULL,
@@ -874,7 +878,7 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt_id, ure_usr_id1, ure_usr_id2);
-
+CREATE UNIQUE INDEX %PREFIX%_idx_ure_uuid ON %PREFIX%_user_relations (ure_uuid);
 
 /*==============================================================*/
 /* Foreign Key Constraints                                      */

@@ -31,7 +31,7 @@ if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
 // Initialize and check the parameters
 $getStart      = admFuncVariableIsValid($_GET, 'start', 'int');
 $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
-$getGboUuid    = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
+$getGboUuid    = admFuncVariableIsValid($_GET, 'gbo_uuid', 'uuid');
 
 if ($getModeration && !$gCurrentUser->editGuestbookRight()) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));

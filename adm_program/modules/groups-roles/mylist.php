@@ -22,7 +22,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListUuid    = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
+$getListUuid    = admFuncVariableIsValid($_GET, 'list_uuid', 'uuid');
 $getRoleList    = admFuncVariableIsValid($_GET, 'role_list', 'string');
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');

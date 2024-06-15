@@ -23,7 +23,7 @@ try {
     }
 
     // Initialize and check the parameters
-    $getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
+    $getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'uuid');
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
     // set headline of the script

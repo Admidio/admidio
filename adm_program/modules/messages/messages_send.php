@@ -16,9 +16,10 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 use PHPMailer\PHPMailer\Exception;
+use Ramsey\Uuid\Uuid;
 
 // Initialize and check the parameters
-$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
+$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
 $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
 // Check form values
@@ -34,7 +35,7 @@ $postListUuid = '';
 
 if ($gValidLogin) {
     $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
-    $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
+    $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
 }
 
 // save form data in session for back navigation
@@ -158,6 +159,11 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
     if (isset($postTo)) {
         if ($postListUuid !== '') { // the uuid of a list was passed
             $postTo = explode(',', $postUserUuidList);
+            foreach ($postListUuid as $key => $uuid) {
+                if (!UUID::isValid($uuid)) {
+                    unset($postListUuid[$key]);
+                }
+            }
         }
 
         // Create new Email Object
@@ -210,7 +216,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                     // only send email to user if current user is allowed to view this user, and he has a valid email address
                     if ($gCurrentUser->hasRightViewProfile($user)) {
                         // add user to the message object
-                        $message->addUser((int)$user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+                        $message->addUser($user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 
                         // add user as recipients to the email
                         $email->addRecipientsByUser($user->getValue('usr_uuid'));
@@ -364,7 +370,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
         $user = new User($gDb, $gProfileFields, $postTo[0]);
 
         // add user to the message object
-        $message->addUser((int) $user->getValue('usr_id'));
+        $message->addUser($user->getValue('usr_id'));
         $message->setValue('msg_read', 1);
     } catch (AdmException $e) {
         $e->showHtml();

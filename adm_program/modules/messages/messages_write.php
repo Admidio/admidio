@@ -27,10 +27,10 @@ require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMsgType    = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
-$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
 $getSubject    = admFuncVariableIsValid($_GET, 'subject', 'string');
-$getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
-$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
+$getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
+$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 $getForward    = admFuncVariableIsValid($_GET, 'forward', 'bool');
@@ -40,7 +40,7 @@ $postListUuid = '';
 // Check form values
 if ($gValidLogin) {
     $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
-    $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
+    $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
 }
 
 $message = new TableMessage($gDb);
@@ -632,7 +632,7 @@ if (isset($messageStatement)) {
                 $attachmentPath = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'];
 
                 if (file_exists($attachmentPath)) {
-                    $messageFooter .= '<span class="admidio-attachment mr-3"><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_id' => $attachment['msa_id'])) . '">' . $attachment['file_name'] . '</a></span>';
+                    $messageFooter .= '<span class="admidio-attachment mr-3"><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_uuid' => $attachment['msa_uuid'])) . '">' . $attachment['file_name'] . '</a></span>';
                 } else {
                     $messageFooter .= '<span class="admidio-attachment mr-3">' . $attachment['file_name'] . '</span>';
                 }

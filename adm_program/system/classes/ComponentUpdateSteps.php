@@ -29,6 +29,34 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will add a uuid to each row of the tables adm_users and adm_roles
+     */
+    public static function updateStep50AddUuid()
+    {
+        $updateTablesUuid = array(
+            array('table' => TBL_MESSAGES_ATTACHMENTS, 'column_id' => 'msa_id', 'column_uuid' => 'msa_uuid'),
+            array('table' => TBL_USER_RELATIONS, 'column_id' => 'ure_id', 'column_uuid' => 'ure_uuid')
+        );
+
+        foreach ($updateTablesUuid as $tableUuid) {
+            $sql = 'SELECT ' . $tableUuid['column_id'] . '
+                      FROM ' . $tableUuid['table'] . '
+                     WHERE ' . $tableUuid['column_uuid'] . ' IS NULL ';
+            $statement = self::$db->queryPrepared($sql);
+
+            while ($row = $statement->fetch()) {
+                $uuid = Uuid::uuid4();
+
+                $sql = 'UPDATE ' . $tableUuid['table'] . ' SET ' . $tableUuid['column_uuid'] . ' = ? -- $uuid
+                     WHERE ' . $tableUuid['column_id'] . ' = ? -- $row[$tableUuid[\'column_id\']]';
+                self::$db->queryPrepared($sql, array($uuid, $row[$tableUuid['column_id']]));
+            }
+        }
+
+        self::$db->initializeTableColumnProperties();
+    }
+
+    /**
      * This method removes wrong configured visible roles of category Basic_Data
      */
     public static function updateStep43RemoveInvalidVisibleRoleRights()
@@ -371,7 +399,7 @@ final class ComponentUpdateSteps
             array('table' => TBL_ROOMS, 'column_id' => 'room_id', 'column_uuid' => 'room_uuid'),
             array('table' => TBL_USERS, 'column_id' => 'usr_id', 'column_uuid' => 'usr_uuid'),
             array('table' => TBL_USER_FIELDS, 'column_id' => 'usf_id', 'column_uuid' => 'usf_uuid'),
-            array('table' => TBL_USER_RELATION_TYPES, 'column_id' => 'urt_id', 'column_uuid' => 'urt_uuid'),
+            array('table' => TBL_USER_RELATION_TYPES, 'column_id' => 'urt_id', 'column_uuid' => 'urt_uuid')
         );
 
         foreach ($updateTablesUuid as $tableUuid) {

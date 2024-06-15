@@ -133,7 +133,7 @@ try {
             $text = 'SYS_RELATIONSHIP_TYPE_DELETE';
             break;
         case 'ure':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('mode' => 2, 'ure_id' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('mode' => 'delete', 'ure_uuid' => $getDatabaseId));
             break;
         default:
             $url = '';

@@ -26,7 +26,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'int');
 $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
 

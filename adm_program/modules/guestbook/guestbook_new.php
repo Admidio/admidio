@@ -15,7 +15,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
+$getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'uuid');
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {

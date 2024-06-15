@@ -1536,8 +1536,10 @@ class User extends TableAccess
     public function readDataByUuid(string $uuid): bool
     {
         if (parent::readDataByUuid($uuid)) {
-            // read data of all user fields from current user
-            $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
+            if (is_object($this->mProfileFieldsData)) {
+                // read data of all user fields from current user
+                $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
+            }
             return true;
         } else {
             $this->setDefaultValues();

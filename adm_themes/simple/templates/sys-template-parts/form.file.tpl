@@ -1,6 +1,10 @@
-<div id="{$id}_group" class="admidio-form-group{if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}{if $property eq 1} admidio-form-group-required{/if}">
+<div id="{$id}_group" class="admidio-form-group
+    {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}row{/if}
+    {if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}
+    {if $property eq 1} admidio-form-group-required{/if}">
+
     {if $data.formtype neq "navbar"}
-        <label for="{$id}" class="form-label">
+        <label for="{$id}" class="{if $data.formtype neq "vertical" and $data.formtype neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
             {include file="sys-template-parts/parts/form.part.icon.tpl"}
             {$label}
         </label>
@@ -8,6 +12,9 @@
     {if $maxUploadSize}
         <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="{$maxUploadSize}" />
     {/if}
+
+    {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}<div class="col-sm-9">{/if}
+
     {if $hideUploadField != true OR !$enableMultiUploads}
         <input type="file" name="userfile[]" class="form-control mb-2 focus-ring {$class}"
             {foreach $data.attributes as $itemvar}
@@ -34,4 +41,5 @@
         {include file="sys-template-parts/parts/form.part.helptext.tpl"}
     {/if}
     {include file="sys-template-parts/parts/form.part.warning.tpl"}
+    {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}</div>{/if}
 </div>

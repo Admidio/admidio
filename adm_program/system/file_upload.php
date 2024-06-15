@@ -22,7 +22,7 @@ require(__DIR__ . '/login_valid.php');
 // Initialize and check the parameters
 $getModule = admFuncVariableIsValid($_GET, 'module', 'string', array('validValues' => array('photos', 'documents_files')));
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
-$getUuid   = admFuncVariableIsValid($_GET, 'uuid', 'string', array('requireValue' => true));
+$getUuid   = admFuncVariableIsValid($_GET, 'uuid', 'uuid', array('requireValue' => true));
 
 // Initialize variables
 $destinationName         = '';

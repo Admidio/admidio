@@ -20,7 +20,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 header('Content-type: text/html; charset=utf-8');
 
 // Initialize and check the parameters
-$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requireValue' => true));
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
 
 // in ajax mode only return simple text on error
