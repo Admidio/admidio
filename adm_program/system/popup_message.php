@@ -55,10 +55,10 @@ try {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $getDatabaseId));
             break;
         case 'fil':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 2, 'file_uuid' => $getDatabaseId, 'folder_uuid' => $getDatabaseId2));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'delete_file', 'file_uuid' => $getDatabaseId, 'folder_uuid' => $getDatabaseId2));
             break;
         case 'fol':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 5, 'folder_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'delete_folder', 'folder_uuid' => $getDatabaseId));
             break;
         case 'gbo':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 2, 'gbo_uuid' => $getDatabaseId));

@@ -147,7 +147,7 @@ class ModuleDocumentsFiles extends HtmlPage
             $templateRow['folder'] = $row['folder'];
             $templateRow['name'] = $row['name'];
             $templateRow['size'] = $row['size'];
-            $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '6', 'folder_uuid' => $this->folder->getValue('fol_uuid'), 'name' => $row['name']));
+            $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => 'add', 'folder_uuid' => $this->folder->getValue('fol_uuid'), 'name' => $row['name']));
 
             $templateUnregisteredData[] = $templateRow;
         }

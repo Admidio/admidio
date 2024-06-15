@@ -15,69 +15,66 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
-// Initialize and check the parameters
-$getFileUuid = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid', array('requireValue' => true));
-$getView     = admFuncVariableIsValid($_GET, 'view', 'bool');
-
-// check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-
 try {
+    // Initialize and check the parameters
+    $getFileUuid = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid', array('requireValue' => true));
+    $getView = admFuncVariableIsValid($_GET, 'view', 'bool');
+
+    // check if the module is enabled and disallow access if it's disabled
+    if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
+        throw new AdmException('SYS_MODULE_DISABLED');
+    }
+
     // get recordset of current file from database
     $file = new TableFile($gDb);
     $file->getFileForDownload($getFileUuid);
-} catch (AdmException $e) {
-    $e->showHtml();
-    // => EXIT
-}
 
-// get complete path with filename of the file
-$completePath = $file->getFullFilePath();
+    // get complete path with filename of the file
+    $completePath = $file->getFullFilePath();
 
-// check if the file already exists
-if (!is_file($completePath)) {
-    $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
-    // => EXIT
-}
-
-// Increment download counter
-$file->setValue('fil_counter', (int) $file->getValue('fil_counter') + 1);
-$file->save();
-
-// determine filesize
-$fileSize = filesize($completePath);
-
-if ($getView) {
-    $content = 'inline';
-} else {
-    $content = 'attachment';
-}
-
-// Create appropriate header information of the file
-header('Content-Type: ' . $file->getMimeType());
-header('Content-Length: ' . $fileSize);
-header('Content-Disposition: ' . $content . '; filename="' . $file->getValue('fil_name') . '"');
-
-// necessary for IE, because without it the download with SSL has problems
-header('Cache-Control: private');
-header('Pragma: public');
-
-// file output
-if ($fileSize > 10 * 1024 * 1024) {
-    // file output for large files (> 10MB)
-    $chunkSize = 1024 * 1024;
-    $handle = fopen($completePath, 'rb');
-    while (!feof($handle)) {
-        $buffer = fread($handle, $chunkSize);
-        echo $buffer;
-        ob_flush();
-        flush();
+    // check if the file already exists
+    if (!is_file($completePath)) {
+        throw new AdmException('SYS_FILE_NOT_EXIST');
     }
-    fclose($handle);
-} else {
-    // file output for small files (< 10MB)
-    readfile($completePath);
+
+    // Increment download counter
+    $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
+    $file->save();
+
+    // determine filesize
+    $fileSize = filesize($completePath);
+
+    if ($getView) {
+        $content = 'inline';
+    } else {
+        $content = 'attachment';
+    }
+
+    // Create appropriate header information of the file
+    header('Content-Type: ' . $file->getMimeType());
+    header('Content-Length: ' . $fileSize);
+    header('Content-Disposition: ' . $content . '; filename="' . $file->getValue('fil_name') . '"');
+
+    // necessary for IE, because without it the download with SSL has problems
+    header('Cache-Control: private');
+    header('Pragma: public');
+
+    // file output
+    if ($fileSize > 10 * 1024 * 1024) {
+        // file output for large files (> 10MB)
+        $chunkSize = 1024 * 1024;
+        $handle = fopen($completePath, 'rb');
+        while (!feof($handle)) {
+            $buffer = fread($handle, $chunkSize);
+            echo $buffer;
+            ob_flush();
+            flush();
+        }
+        fclose($handle);
+    } else {
+        // file output for small files (< 10MB)
+        readfile($completePath);
+    }
+} catch (Exception|AdmException|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
 }

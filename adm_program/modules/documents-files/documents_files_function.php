@@ -9,13 +9,13 @@
  ***********************************************************************************************
  * Parameters:
  *
- * mode   :  2 - Delete file
- *           3 - Create folder
- *           4 - Rename file/folder
- *           5 - Delete folder
- *           6 - Add file/folder to database
- *           7 - Save access to folder
- *           8 - Move file / folder
+ * mode   :  create_folder - Create folder
+ *           delete_folder - Delete folder
+ *           delete_file   - Delete file
+ *           save_access   - Save access to folder
+ *           add    - Add file/folder to database
+ *           rename - Rename file/folder
+ *           move   - Move file / folder
  * folder_uuid : UUID of the folder in the database
  * file_uuid   : UUID of the file in the database
  * name        : Name of the file/folder that should be added to the database
@@ -25,14 +25,10 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 try {
     // Initialize and check the parameters
-    $getMode       = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(2, 3, 4, 5, 6, 7, 8)));
+    $getMode       = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create_folder', 'delete_folder', 'delete_file', 'add', 'rename', 'move', 'save_access')));
     $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
     $getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
     $getName       = admFuncVariableIsValid($_GET, 'name', 'file');
-
-    if (in_array($getMode, array(2, 5))) {
-        $gMessage->showHtmlTextOnly();
-    }
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
@@ -54,12 +50,12 @@ try {
     }
 
     // check the CSRF token of the form against the session token
-    if (in_array($getMode, array(2, 3, 4, 5, 7))) {
+    if (in_array($getMode, array('create_folder', 'delete_folder', 'delete_file', 'rename', 'save_access'))) {
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
 
     // Delete file
-    if ($getMode === 2) {
+    if ($getMode === 'delete_file') {
         if ($getFileUuid !== '') {
             // get recordset of current file from database
             $file = new TableFile($gDb);
@@ -78,7 +74,7 @@ try {
     }
 
     // create folder
-    elseif ($getMode === 3) {
+    elseif ($getMode === 'create_folder') {
         if ($getFolderUuid === '') {
             // Folder UUID is required to create a sub-folder
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
@@ -140,7 +136,7 @@ try {
     }
 
     // rename folder or file
-    elseif ($getMode === 4) {
+    elseif ($getMode === 'rename') {
         if (!$getFileUuid && !$getFolderUuid) {
             // file UUID and/or folder UUID must be set
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
@@ -170,9 +166,7 @@ try {
                         try {
                             FileSystemUtils::moveFile($oldFile, $newPath . $newFile);
                         } catch (RuntimeException $exception) {
-                            $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                            $gMessage->show($gL10n->get('SYS_FILE_RENAME_ERROR', array($oldName)));
-                            // => EXIT
+                            throw new AdmException('SYS_FILE_RENAME_ERROR', array($oldName));
                         }
                     }
 
@@ -208,9 +202,7 @@ try {
 
                             $folder->rename($newFolder, $folder->getValue('fol_path'));
                         } catch (RuntimeException $exception) {
-                            $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                            $gMessage->show($gL10n->get('SYS_FOLDER_RENAME_ERROR', array($oldName)));
-                            // => EXIT
+                            throw new AdmException('SYS_FOLDER_RENAME_ERROR', array($oldName));
                         }
                     }
 
@@ -238,7 +230,7 @@ try {
     }
 
     // delete folder
-    elseif ($getMode === 5) {
+    elseif ($getMode === 'delete_folder') {
         if ($getFolderUuid === '') {
             // the uuid of the current folder must be set
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
@@ -253,7 +245,7 @@ try {
     }
 
     // add file / folder to database
-    elseif ($getMode === 6) {
+    elseif ($getMode === 'add') {
         if ($getFolderUuid === '') {
             // the uuid of the current folder must be set
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
@@ -274,7 +266,7 @@ try {
     }
 
     // save view or upload rights for a folder
-    elseif ($getMode === 7) {
+    elseif ($getMode === 'save_access') {
         if (!isset($_POST['adm_roles_view_right'])) {
             throw new AdmException('SYS_FIELD_EMPTY', array('SYS_VISIBLE_FOR'));
         }
@@ -340,7 +332,7 @@ try {
         // => EXIT
     }
     // move file to another folder
-    elseif ($getMode === 8) {
+    elseif ($getMode === 'move') {
         $destFolderUUID = admFuncVariableIsValid($_POST, 'dest_folder_uuid', 'string', array('requireValue' => true));
 
         if ($getFileUuid !== '') {
@@ -357,5 +349,10 @@ try {
         admRedirect($gNavigation->getUrl());
     }
 } catch (AdmException | Exception | RuntimeException | UnexpectedValueException $e) {
-    $gMessage->show($e->getMessage());
+    if (in_array($getMode, array('delete_file', 'delete_folder'))) {
+        echo $e->getMessage();
+    } else {
+        $gMessage->show($e->getMessage());
+
+    }
 }
