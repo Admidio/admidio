@@ -8,6 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Ramsey\Uuid\Uuid;
+
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
     exit('This page may not be called directly!');
 }
@@ -241,7 +243,7 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  *
  * @param array<string,mixed> $array The array with the element that should be checked
  * @param string $variableName Name of the array element that should be checked
- * @param string $datatype The datatype like **string**, **numeric**, **int**, **float**, **bool**, **boolean**, **html**,
+ * @param string $datatype The datatype like **string**, **uuid**, **numeric**, **int**, **float**, **bool**, **boolean**, **html**,
  *                                          **url**, **date**, **file** or **folder** that is expected and which will be checked.
  *                                          Datatype **date** expects a date that has the Admidio default format from the
  *                                          preferences or the english date format **Y-m-d**
@@ -385,6 +387,12 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
 
             $filter = new HTMLPurifier($config);
             $value = $filter->purify($value);
+            break;
+
+        case 'uuid':
+            if (!Uuid::isValid($value)) {
+                throw new AdmException('The parameter "' . $variableName . '" is not a valid UUID!');
+            }
             break;
 
         case 'url':
