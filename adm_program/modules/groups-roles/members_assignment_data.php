@@ -362,6 +362,8 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (AdmException|Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Exception|AdmException $e) {
+    $jsonArray['error'] = $e->getMessage();
+    echo json_encode($jsonArray);
+    exit();
 }

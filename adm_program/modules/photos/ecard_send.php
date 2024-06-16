@@ -15,11 +15,9 @@ use Ramsey\Uuid\Uuid;
 try {
     // check if the photo module is enabled and eCard is enabled
     if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
-        $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-        // => EXIT
+        throw new AdmException('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-        // => EXIT
+        throw new AdmException('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 2) {
         // only logged-in users can access the module
         require(__DIR__ . '/../../system/login_valid.php');
@@ -222,8 +220,7 @@ try {
         $gMessage->show($gL10n->get('SYS_ECARD_SUCCESSFULLY_SEND'));
         // => EXIT
     } else {
-        $gMessage->show($gL10n->get('SYS_ECARD_NOT_SUCCESSFULLY_SEND'));
-        // => EXIT
+        throw new AdmException('SYS_ECARD_NOT_SUCCESSFULLY_SEND');
     }
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

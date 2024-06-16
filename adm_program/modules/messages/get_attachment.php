@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * msa_id  :  The id of the attachment file that should be returned
- * view    :  If set to true than the output will be shown in the browser
+ * msa_uuid :  The UUID of the attachment file that should be returned
+ * view     :  If set to true than the output will be shown in the browser
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
