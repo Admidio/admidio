@@ -71,5 +71,6 @@ try {
     $gCurrentUser->setOrganization($gCurrentOrgId);
     $rss->getRssFeed();
 } catch (AdmException|Exception $e) {
+    $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($e->getMessage());
 }

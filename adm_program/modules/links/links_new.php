@@ -66,7 +66,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-weblinks-edit', $headline);
 
 // show form
-$form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('link_uuid' => $getLinkUuid, 'mode' => 1)), $page);
+$form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('link_uuid' => $getLinkUuid, 'mode' => 'create')), $page);
 $form->addInput(
     'lnk_name',
     $gL10n->get('SYS_LINK_NAME'),

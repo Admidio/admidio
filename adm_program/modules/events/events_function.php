@@ -48,7 +48,6 @@ try {
 
     // check if module is active
     if ((int)$gSettingsManager->get('events_module_enabled') === 0) {
-        // Module is not active
         throw new AdmException('SYS_MODULE_DISABLED');
     }
 

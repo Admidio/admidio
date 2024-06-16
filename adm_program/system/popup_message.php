@@ -61,13 +61,13 @@ try {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'delete_folder', 'folder_uuid' => $getDatabaseId));
             break;
         case 'gbo':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 2, 'gbo_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 'delete_entry', 'gbo_uuid' => $getDatabaseId));
             break;
         case 'gbc':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 5, 'gbc_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 'delete_comment', 'gbc_uuid' => $getDatabaseId));
             break;
         case 'lnk':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 2, 'link_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 'delete', 'link_uuid' => $getDatabaseId));
             break;
         case 'men':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 2, 'menu_uuid' => $getDatabaseId));

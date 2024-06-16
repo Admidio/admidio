@@ -14,197 +14,199 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
-unset($_SESSION['links_request']);
+try {
+    unset($_SESSION['links_request']);
 
-// Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
-$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
-$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
+    // Initialize and check the parameters
+    $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
+    $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
+    $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
 
-// check if the module is enabled for use
-if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
-    // module is disabled
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-// => EXIT
-} elseif ((int) $gSettingsManager->get('enable_weblinks_module') === 2) {
-    // available only with valid login
-    require(__DIR__ . '/../../system/login_valid.php');
-}
+    // check if the module is enabled for use
+    if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
+        throw new AdmException('SYS_MODULE_DISABLED');
+    } elseif ((int)$gSettingsManager->get('enable_weblinks_module') === 2) {
+        // available only with valid login
+        require(__DIR__ . '/../../system/login_valid.php');
+    }
 
-$headline = $gL10n->get('SYS_WEBLINKS');
+    $headline = $gL10n->get('SYS_WEBLINKS');
 
-$category = new TableCategory($gDb);
+    $category = new TableCategory($gDb);
 
-if ($getCatUuid !== '') {
-    $category->readDataByUuid($getCatUuid);
-    $headline .= ' - '.$category->getValue('cat_name');
-}
+    if ($getCatUuid !== '') {
+        $category->readDataByUuid($getCatUuid);
+        $headline .= ' - ' . $category->getValue('cat_name');
+    }
 
-// Create Link object
-$weblinks = new ModuleWeblinks();
-$weblinks->setParameter('lnk_uuid', $getLinkUuid);
-$weblinks->setParameter('cat_id', $category->getValue('cat_id'));
-$weblinksCount = $weblinks->getDataSetCount();
+    // Create Link object
+    $weblinks = new ModuleWeblinks();
+    $weblinks->setParameter('lnk_uuid', $getLinkUuid);
+    $weblinks->setParameter('cat_id', $category->getValue('cat_id'));
+    $weblinksCount = $weblinks->getDataSetCount();
 
-// number of weblinks per page
-if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
-    $weblinksPerPage = $gSettingsManager->getInt('weblinks_per_page');
-} else {
-    $weblinksPerPage = $weblinksCount;
-}
+    // number of weblinks per page
+    if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
+        $weblinksPerPage = $gSettingsManager->getInt('weblinks_per_page');
+    } else {
+        $weblinksPerPage = $weblinksCount;
+    }
 
-// add url to navigation stack
-if ($getLinkUuid  !== '') {
-    $gNavigation->addUrl(CURRENT_URL, $headline);
-} else {
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-link-45deg');
-}
+    // add url to navigation stack
+    if ($getLinkUuid !== '') {
+        $gNavigation->addUrl(CURRENT_URL, $headline);
+    } else {
+        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-link-45deg');
+    }
 
-// create html page object
-$page = new HtmlPage('admidio-weblinks', $headline);
+    // create html page object
+    $page = new HtmlPage('admidio-weblinks', $headline);
 
-if ($gSettingsManager->getBool('enable_rss')) {
-    $page->addRssFile(
-        ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
-        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $headline))
-    );
-}
-
-$page->addHtml('<div id="links_overview">');
-
-// show icon links and navigation
-
-if ($weblinks->getId() === 0) {
-    if (count($gCurrentUser->getAllEditableCategories('LNK')) > 0) {
-        // show link to create new weblink
-        $page->addPageFunctionsMenuItem(
-            'menu_item_links_add',
-            $gL10n->get('SYS_CREATE_WEBLINK'),
-            ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php',
-            'bi-plus-circle-fill'
+    if ($gSettingsManager->getBool('enable_rss')) {
+        $page->addRssFile(
+            ADMIDIO_URL . FOLDER_MODULES . '/links/rss_links.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
+            $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $headline))
         );
     }
 
-    if ($gCurrentUser->editWeblinksRight()) {
-        // show link to maintain categories
-        $page->addPageFunctionsMenuItem(
-            'menu_item_links_maintain_categories',
-            $gL10n->get('SYS_EDIT_CATEGORIES'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')),
-            'bi-hdd-stack-fill'
-        );
-    }
+    $page->addHtml('<div id="links_overview">');
 
-    $page->addJavascript(
-        '
+    // show icon links and navigation
+
+    if ($weblinks->getId() === 0) {
+        if (count($gCurrentUser->getAllEditableCategories('LNK')) > 0) {
+            // show link to create new weblink
+            $page->addPageFunctionsMenuItem(
+                'menu_item_links_add',
+                $gL10n->get('SYS_CREATE_WEBLINK'),
+                ADMIDIO_URL . FOLDER_MODULES . '/links/links_new.php',
+                'bi-plus-circle-fill'
+            );
+        }
+
+        if ($gCurrentUser->editWeblinksRight()) {
+            // show link to maintain categories
+            $page->addPageFunctionsMenuItem(
+                'menu_item_links_maintain_categories',
+                $gL10n->get('SYS_EDIT_CATEGORIES'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'LNK')),
+                'bi-hdd-stack-fill'
+            );
+        }
+
+        $page->addJavascript(
+            '
         $("#cat_uuid").change(function() {
             $("#navbar_filter_form").submit();
         });',
-        true
-    );
+            true
+        );
 
-    // create filter menu with elements for category
-    $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addSelectBoxForCategories(
-        'cat_uuid',
-        $gL10n->get('SYS_CATEGORY'),
-        $gDb,
-        'LNK',
-        HtmlForm::SELECT_BOX_MODUS_FILTER,
-        array('defaultValue' => $getCatUuid)
-    );
-    $filterNavbar->addForm($form->show());
-    $page->addHtml($filterNavbar->show());
-}
-
-if ($weblinksCount === 0) {
-    // no weblink found
-    if ($weblinks->getId() > 0) {
-        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>');
-    } else {
-        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
+        // create filter menu with elements for category
+        $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
+        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL . FOLDER_MODULES . '/links/links.php', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form->addSelectBoxForCategories(
+            'cat_uuid',
+            $gL10n->get('SYS_CATEGORY'),
+            $gDb,
+            'LNK',
+            HtmlForm::SELECT_BOX_MODUS_FILTER,
+            array('defaultValue' => $getCatUuid)
+        );
+        $filterNavbar->addForm($form->show());
+        $page->addHtml($filterNavbar->show());
     }
-} else {
-    $getStart = $weblinks->getStartElement();
-    $weblinksDataSet = $weblinks->getDataSet($getStart);
-    $weblink = new TableWeblink($gDb);
 
-    $j = 0;         // counter for fetchObject
-    $i = 0;         // counter for links in category
-    $previousCatId = -1;  // previous Cat Id
-    $newCategory = true;  // maybe new category
+    if ($weblinksCount === 0) {
+        // no weblink found
+        if ($weblinks->getId() > 0) {
+            $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRY') . '</p>');
+        } else {
+            $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
+        }
+    } else {
+        $getStart = $weblinks->getStartElement();
+        $weblinksDataSet = $weblinks->getDataSet($getStart);
+        $weblink = new TableWeblink($gDb);
 
-    if ($weblinksDataSet['numResults'] > 0) {
-        // show all weblinks
-        foreach ($weblinksDataSet['recordset'] as $row) {
-            // initialize weblink object and read new recordset into this object
-            $weblink->clear();
-            $weblink->setArray($row);
+        $j = 0;         // counter for fetchObject
+        $i = 0;         // counter for links in category
+        $previousCatId = -1;  // previous category ID
+        $newCategory = true;  // maybe new category
 
-            $lnkUuid  = $weblink->getValue('lnk_uuid');
-            $lnkCatId = (int) $weblink->getValue('lnk_cat_id');
-            $lnkName  = $weblink->getValue('lnk_name');
-            $lnkDescription = $weblink->getValue('lnk_description');
+        if ($weblinksDataSet['numResults'] > 0) {
+            // show all weblinks
+            foreach ($weblinksDataSet['recordset'] as $row) {
+                // initialize weblink object and read new recordset into this object
+                $weblink->clear();
+                $weblink->setArray($row);
 
-            if ($lnkCatId !== $previousCatId) {
-                $i = 0;
-                $newCategory = true;
-                if ($j > 0) {
-                    $page->addHtml('</div></div>');
-                }
-                $page->addHtml('<div class="card admidio-blog">
-                    <div class="card-header">'.$weblink->getValue('cat_name').'</div>
+                $lnkUuid = $weblink->getValue('lnk_uuid');
+                $lnkCatId = (int)$weblink->getValue('lnk_cat_id');
+                $lnkName = $weblink->getValue('lnk_name');
+                $lnkDescription = $weblink->getValue('lnk_description');
+
+                if ($lnkCatId !== $previousCatId) {
+                    $i = 0;
+                    $newCategory = true;
+                    if ($j > 0) {
+                        $page->addHtml('</div></div>');
+                    }
+                    $page->addHtml('<div class="card admidio-blog">
+                    <div class="card-header">' . $weblink->getValue('cat_name') . '</div>
                     <div class="card-body">');
-            }
+                }
 
-            $page->addHtml('<div class="mb-4" id="lnk_'.$lnkUuid.'">');
+                $page->addHtml('<div class="mb-4" id="lnk_' . $lnkUuid . '">');
 
-            // show weblink
-            $page->addHtml('
-                <a class="icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('link_uuid' => $lnkUuid)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
-                    <i class="bi bi-link"></i>'.$lnkName.'</a>');
-
-            // change and delete only users with rights
-            if ($weblink->isEditable()) {
+                // show weblink
                 $page->addHtml('
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $lnkUuid)). '">
-                        <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+                <a class="icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_redirect.php', array('link_uuid' => $lnkUuid)) . '" target="' . $gSettingsManager->getString('weblinks_target') . '">
+                    <i class="bi bi-link"></i>' . $lnkName . '</a>');
+
+                // change and delete only users with rights
+                if ($weblink->isEditable()) {
+                    $page->addHtml('
+                    <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_new.php', array('link_uuid' => $lnkUuid)) . '">
+                        <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'lnk',
-                        'element_id' => 'lnk_'.$lnkUuid, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkUuid)).'">
-                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
-            }
+                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'lnk',
+                            'element_id' => 'lnk_' . $lnkUuid, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkUuid)) . '">
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>');
+                }
 
-            // get available description
-            if (strlen($lnkDescription) > 0) {
-                $page->addHtml('<div class="admidio-weblink-description">'.$lnkDescription.'</div>');
-            }
+                // get available description
+                if (strlen($lnkDescription) > 0) {
+                    $page->addHtml('<div class="admidio-weblink-description">' . $lnkDescription . '</div>');
+                }
 
-            $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('SYS_COUNTER'). ': '.(int) $weblink->getValue('lnk_counter').'</small></div>
+                $page->addHtml('<div class="weblink-counter"><small>' . $gL10n->get('SYS_COUNTER') . ': ' . (int)$weblink->getValue('lnk_counter') . '</small></div>
             </div>');
 
-            ++$j;
-            ++$i;
+                ++$j;
+                ++$i;
 
-            // set current category to privious
-            $previousCatId = $lnkCatId;
+                // set current category to previous
+                $previousCatId = $lnkCatId;
 
-            $newCategory = false;
-        }  // End While-loop
+                $newCategory = false;
+            }  // End While-loop
 
-        $page->addHtml('</div></div>');
-    } else {
-        // No links or 1 link is hidden
-        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
-    }
-} // end if at least 1 recordset
+            $page->addHtml('</div></div>');
+        } else {
+            // No links or 1 link is hidden
+            $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
+        }
+    } // end if at least 1 recordset
 
-$page->addHtml('</div>');
+    $page->addHtml('</div>');
 
-// If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('cat_uuid' => $getCatUuid));
-$page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement()));
+    // If necessary show links to navigate to next and previous records of the query
+    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links.php', array('cat_uuid' => $getCatUuid));
+    $page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement()));
 
-// show html of complete page
-$page->show();
+    // show html of complete page
+    $page->show();
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
+}
