@@ -10,80 +10,75 @@
  * Parameters:
  *
  * room_uuid : UUID of room, that should be shown
- * mode      : 1 - create or edit room
- *             2 - delete room
+ * mode      : create - create or edit room
+ *             delete - delete room
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
-// Initialize and check the parameters
-$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid', 'uuid');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2)));
-
-// only authorized users are allowed to edit the rooms
-if (!$gCurrentUser->isAdministrator()) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
+    // Initialize and check the parameters
+    $getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid', 'uuid');
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create', 'delete')));
+
+    // only authorized users are allowed to edit the rooms
+    if (!$gCurrentUser->isAdministrator()) {
+        throw new AdmException('SYS_NO_RIGHTS');
+    }
+
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-} catch (AdmException $exception) {
-    if ($getMode === 1) {
-        $exception->showHtml();
-    } else {
-        $exception->showText();
+
+    $room = new TableRooms($gDb);
+
+    if ($getRoomUuid !== '') {
+        $room->readDataByUuid($getRoomUuid);
     }
-    // => EXIT
-}
 
-$room = new TableRooms($gDb);
+    if ($getMode === 'create') {
+        $_SESSION['rooms_request'] = $_POST;
 
-if ($getRoomUuid !== '') {
-    $room->readDataByUuid($getRoomUuid);
-}
+        if (!array_key_exists('room_name', $_POST) || $_POST['room_name'] === '') {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_ROOM'));
+        }
+        if (!array_key_exists('room_capacity', $_POST) || $_POST['room_capacity'] === '') {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CAPACITY'));
+        }
 
-if ($getMode === 1) {
-    $_SESSION['rooms_request'] = $_POST;
+        // make html in description secure
+        $_POST['room_description'] = admFuncVariableIsValid($_POST, 'room_description', 'html');
 
-    if (!array_key_exists('room_name', $_POST) || $_POST['room_name'] === '') {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROOM'))));
+        // POST variables to the room object
+        foreach ($_POST as $key => $value) { // TODO possible security issue
+            if (str_starts_with($key, 'room_')) {
+                $room->setValue($key, $value);
+            }
+        }
+
+        $room->save();
+
+        unset($_SESSION['rooms_request']);
+        $gNavigation->deleteLastUrl();
+
+        admRedirect($gNavigation->getUrl());
         // => EXIT
-    }
-    if (!array_key_exists('room_capacity', $_POST) || $_POST['room_capacity'] === '') {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CAPACITY'))));
-        // => EXIT
-    }
+    } // delete the room
+    elseif ($getMode === 'delete') {
+        $sql = 'SELECT 1
+              FROM ' . TBL_EVENTS . '
+             WHERE dat_room_id = ? -- $room->getValue(\'room_id\') ';
+        $statement = $gDb->queryPrepared($sql, array($room->getValue('room_id')));
 
-    // make html in description secure
-    $_POST['room_description'] = admFuncVariableIsValid($_POST, 'room_description', 'html');
-
-    // POST variables to the room object
-    foreach ($_POST as $key => $value) { // TODO possible security issue
-        if (str_starts_with($key, 'room_')) {
-            $room->setValue($key, $value);
+        if ($statement->rowCount() === 0) {
+            $room->delete();
+            echo 'done';
+            // Delete successful -> return for XMLHttpRequest
         }
     }
-
-    $room->save();
-
-    unset($_SESSION['rooms_request']);
-    $gNavigation->deleteLastUrl();
-
-    admRedirect($gNavigation->getUrl());
-// => EXIT
-}
-// delete the room
-elseif ($getMode === 2) {
-    $sql = 'SELECT 1
-              FROM '.TBL_EVENTS.'
-             WHERE dat_room_id = ? -- $room->getValue(\'room_id\') ';
-    $statement = $gDb->queryPrepared($sql, array($room->getValue('room_id')));
-
-    if ($statement->rowCount() === 0) {
-        $room->delete();
-        echo 'done';
-        // Delete successful -> return for XMLHttpRequest
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    if ($getMode === 'delete') {
+        echo $e->getMessage();
+    } else {
+        $gMessage->show($e->getMessage());
     }
 }

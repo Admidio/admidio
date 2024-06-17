@@ -14,10 +14,10 @@
  * name          - Name of the element displayed in the modal window
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/common.php');
-require(__DIR__ . '/login_valid.php');
-
 try {
+    require_once(__DIR__ . '/common.php');
+    require(__DIR__ . '/login_valid.php');
+
     // Initialize and check the parameters
     $gMessage->showInModalWindow();
     $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true));
@@ -121,7 +121,7 @@ try {
             $text = 'SYS_DEACTIVATE_ROLE_DESC';
             break;
         case 'room':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 2, 'room_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 'delete', 'room_uuid' => $getDatabaseId));
             break;
         case 'usf':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 2, 'usf_uuid' => $getDatabaseId));

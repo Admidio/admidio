@@ -8,37 +8,42 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/common.php');
 
-$gValidLogin = false;
+try {
+    require_once(__DIR__ . '/common.php');
 
-// remove user from session
-$gCurrentSession->logout();
+    $gValidLogin = false;
 
-// if login organization is different to organization of config file then create new session variables
-if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0 && $g_organization !== '') {
-    // read organization of config file with their preferences
-    $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
+    // remove user from session
+    $gCurrentSession->logout();
 
-    // read new profile field structure for this organization
-    $gProfileFields->readProfileFields($gCurrentOrgId);
+    // if login organization is different to organization of config file then create new session variables
+    if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0 && $g_organization !== '') {
+        // read organization of config file with their preferences
+        $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
 
-    // save new organization id to session
-    $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
-    $gCurrentSession->save();
+        // read new profile field structure for this organization
+        $gProfileFields->readProfileFields($gCurrentOrgId);
 
-    // read all settings from the new organization
-    $gSettingsManager = new SettingsManager($gDb, $gCurrentOrgId);
+        // save new organization id to session
+        $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
+        $gCurrentSession->save();
+
+        // read all settings from the new organization
+        $gSettingsManager = new SettingsManager($gDb, $gCurrentOrgId);
+    }
+
+    // clear data from global objects
+    $gCurrentUser->clear();
+    $gMenu->initialize();
+
+    // set homepage to logout page
+    $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
+
+    // message logout successful and go to homepage
+    $gMessage->setForwardUrl($gHomepage, 2000);
+    $gMessage->show($gL10n->get('SYS_LOGOUT_SUCCESSFUL'));
+    // => EXIT
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
 }
-
-// clear data from global objects
-$gCurrentUser->clear();
-$gMenu->initialize();
-
-// set homepage to logout page
-$gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
-
-// message logout successful and go to homepage
-$gMessage->setForwardUrl($gHomepage, 2000);
-$gMessage->show($gL10n->get('SYS_LOGOUT_SUCCESSFUL'));
-// => EXIT

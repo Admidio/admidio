@@ -9,21 +9,25 @@
  ***********************************************************************************************
  */
 
-// if config file doesn't exists, than show installation dialog
-if (!is_file(dirname(__DIR__) . '/adm_my_files/config.php')) {
-    header('Location: installation/index.php');
-    exit();
+try {
+    // if config file doesn't exist, then show installation dialog
+    if (!is_file(dirname(__DIR__) . '/adm_my_files/config.php')) {
+        header('Location: installation/index.php');
+        exit();
+    }
+
+    require_once(__DIR__ . '/system/common.php');
+
+    $headline = $gL10n->get('SYS_OVERVIEW');
+
+    // Navigation of the module starts here
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-house-door-fill');
+
+    // create html page object and load template file
+    $page = new HtmlPage('admidio-overview', $headline);
+    $page->addTemplateFile('overview.tpl');
+
+    $page->show();
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
 }
-
-require_once(__DIR__ . '/system/common.php');
-
-$headline = $gL10n->get('SYS_OVERVIEW');
-
-// Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-house-door-fill');
-
-// create html page object and load template file
-$page = new HtmlPage('admidio-overview', $headline);
-$page->addTemplateFile('overview.tpl');
-
-$page->show();

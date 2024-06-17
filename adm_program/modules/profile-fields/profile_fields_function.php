@@ -23,148 +23,115 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-// Initialize and check the parameters
-$postUsfUUID  = admFuncVariableIsValid($_POST, 'uuid', 'uuid');
-$postMode     = admFuncVariableIsValid($_POST, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
-$postOrder    = admFuncVariableIsValid($_POST, 'order', 'array');
+try {
+    // Initialize and check the parameters
+    $postUsfUUID = admFuncVariableIsValid($_POST, 'uuid', 'uuid');
+    $postMode = admFuncVariableIsValid($_POST, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
+    $postOrder = admFuncVariableIsValid($_POST, 'order', 'array');
 
-if (in_array($postMode, array('delete', 'sequence'))) {
-    $gMessage->showHtmlTextOnly();
-}
-
-if ($postMode !== 'sequence' || empty($postOrder)) {
-    try {
+    if ($postMode !== 'sequence' || empty($postOrder)) {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    } catch (AdmException $exception) {
-        if ($postMode === 'edit') {
-            $exception->showHtml();
-        } else {
-            $exception->showText();
+    }
+
+    // only authorized users can edit the profile fields
+    if (!$gCurrentUser->isAdministrator()) {
+        throw new AdmException('SYS_NO_RIGHTS');
+    }
+
+    // create user field object
+    $userField = new TableUserField($gDb);
+
+    if ($postUsfUUID !== '') {
+        $userField->readDataByUuid($postUsfUUID);
+
+        // check if profile field belongs to actual organization
+        if ($userField->getValue('cat_org_id') > 0
+            && (int)$userField->getValue('cat_org_id') !== $gCurrentOrgId) {
+            throw new AdmException('SYS_NO_RIGHTS');
         }
-        // => EXIT
-    }
-}
 
-// only authorized users can edit the profile fields
-if (!$gCurrentUser->isAdministrator()) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
-// create user field object
-$userField = new TableUserField($gDb);
-
-if ($postUsfUUID !== '') {
-    $userField->readDataByUuid($postUsfUUID);
-
-    // check if profile field belongs to actual organization
-    if ($userField->getValue('cat_org_id') > 0
-    && (int) $userField->getValue('cat_org_id') !== $gCurrentOrgId) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+        // if system profile field then set usf_type to default
+        if ($userField->getValue('usf_system') == 1) {
+            $_POST['usf_type'] = $userField->getValue('usf_type');
+        }
     }
 
-    // if system profile field then set usf_type to default
-    if ($userField->getValue('usf_system') == 1) {
-        $_POST['usf_type'] = $userField->getValue('usf_type');
-    }
-}
+    if ($postMode === 'edit') {
+        // Create or edit profile field
 
-if ($postMode === 'edit') {
-    // Create or edit profile field
+        $_SESSION['fields_request'] = $_POST;
 
-    $_SESSION['fields_request'] = $_POST;
+        // Check if mandatory fields are filled
+        // (in case of system fields, these fields must not be changed)
+        if ($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '') {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
+        }
 
-    try {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    } catch (AdmException $exception) {
-        $exception->showHtml();
-        // => EXIT
-    }
+        if ($userField->getValue('usf_system') == 0 && $_POST['usf_type'] === '') {
+            throw new AdmException('SYS_FIELD_EMPTY', array('ORG_DATATYPE'));
+        }
 
-    // Check if mandatory fields are filled
-    // (in case of system fields, these fields must not be changed)
-    if ($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '') {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
-        // => EXIT
-    }
+        if ($userField->getValue('usf_system') == 0 && strlen($_POST['usf_cat_id']) === 0) {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CATEGORY'));
+        }
 
-    if ($userField->getValue('usf_system') == 0 && $_POST['usf_type'] === '') {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_DATATYPE'))));
-        // => EXIT
-    }
+        if (($_POST['usf_type'] === 'DROPDOWN' || $_POST['usf_type'] === 'RADIO_BUTTON')
+            && $_POST['usf_value_list'] === '') {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_VALUE_LIST'));
+        }
 
-    if ($userField->getValue('usf_system') == 0 && strlen($_POST['usf_cat_id']) === 0) {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
-        // => EXIT
-    }
+        if ($_POST['usf_url'] !== '' && !StringUtils::strValidCharacters($_POST['usf_url'], 'url')) {
+            throw new AdmException('SYS_URL_INVALID_CHAR', array('SYS_URL'));
+        }
 
-    if (($_POST['usf_type'] === 'DROPDOWN' || $_POST['usf_type'] === 'RADIO_BUTTON')
-    && $_POST['usf_value_list'] === '') {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_VALUE_LIST'))));
-        // => EXIT
-    }
-
-    if ($_POST['usf_url'] !== '' && !StringUtils::strValidCharacters($_POST['usf_url'], 'url')) {
-        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_URL'))));
-        // => EXIT
-    }
-
-    if ($_POST['usf_default_value'] !== '' && $_POST['usf_default_value'] !== $userField->getValue('usf_default_value')) {
-        try {
+        if ($_POST['usf_default_value'] !== '' && $_POST['usf_default_value'] !== $userField->getValue('usf_default_value')) {
             $profileFields = new ProfileFields($gDb, $gCurrentOrgId);
             $profileFields->setValue($userField->getValue('usf_name_intern'), $_POST['usf_default_value']);
-        } catch (AdmException $e) {
-            $e->showHtml();
         }
-    }
 
-    // lastname and firstname must always be mandatory fields and visible in registration dialog
-    if ($userField->getValue('usf_name_intern') === 'LAST_NAME'
-    || $userField->getValue('usf_name_intern') === 'FIRST_NAME') {
-        $_POST['usf_required_input'] = 1;
-        $_POST['usf_registration'] = 1;
-    }
+        // lastname and firstname must always be mandatory fields and visible in registration dialog
+        if ($userField->getValue('usf_name_intern') === 'LAST_NAME'
+            || $userField->getValue('usf_name_intern') === 'FIRST_NAME') {
+            $_POST['usf_required_input'] = 1;
+            $_POST['usf_registration'] = 1;
+        }
 
-    // email must always be visible in registration dialog
-    if ($userField->getValue('usf_name_intern') === 'EMAIL') {
-        $_POST['usf_registration'] = 1;
-    }
+        // email must always be visible in registration dialog
+        if ($userField->getValue('usf_name_intern') === 'EMAIL') {
+            $_POST['usf_registration'] = 1;
+        }
 
-    if (isset($_POST['usf_name']) && $userField->getValue('usf_name') !== $_POST['usf_name']) {
-        // See if the field already exists
-        $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_USER_FIELDS.'
+        if (isset($_POST['usf_name']) && $userField->getValue('usf_name') !== $_POST['usf_name']) {
+            // See if the field already exists
+            $sql = 'SELECT COUNT(*) AS count
+                  FROM ' . TBL_USER_FIELDS . '
                  WHERE usf_name   = ? -- $_POST[\'usf_name\']
                    AND usf_cat_id = ? -- $_POST[\'usf_cat_id\']
                    AND usf_uuid  <> ? -- $postUsfUUID';
-        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int) $_POST['usf_cat_id'], $postUsfUUID));
+            $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int)$_POST['usf_cat_id'], $postUsfUUID));
 
-        if ($pdoStatement->fetchColumn() > 0) {
-            $gMessage->show($gL10n->get('ORG_FIELD_EXIST'));
-            // => EXIT
+            if ($pdoStatement->fetchColumn() > 0) {
+                throw new AdmException('ORG_FIELD_EXIST');
+            }
         }
-    }
 
-    // Swap input, because the field name is different from the dialog
-    if (isset($_POST['usf_hidden'])) {
-        $_POST['usf_hidden'] = 0;
-    } else {
-        $_POST['usf_hidden'] = 1;
-    }
-    if (!isset($_POST['usf_disabled'])) {
-        $_POST['usf_disabled'] = 0;
-    }
-    if (!isset($_POST['usf_registration'])) {
-        $_POST['usf_registration'] = 0;
-    }
+        // Swap input, because the field name is different from the dialog
+        if (isset($_POST['usf_hidden'])) {
+            $_POST['usf_hidden'] = 0;
+        } else {
+            $_POST['usf_hidden'] = 1;
+        }
+        if (!isset($_POST['usf_disabled'])) {
+            $_POST['usf_disabled'] = 0;
+        }
+        if (!isset($_POST['usf_registration'])) {
+            $_POST['usf_registration'] = 0;
+        }
 
-    // make html in description secure
-    $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');
+        // make html in description secure
+        $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');
 
-    try {
         // POST Variablen in das UserField-Objekt schreiben
         foreach ($_POST as $key => $value) {
             if (str_starts_with($key, 'usf_')) { // TODO possible security issue
@@ -173,36 +140,31 @@ if ($postMode === 'edit') {
         }
 
         $userField->save();
-    } catch (AdmException $e) {
-        $e->showHtml();
-    }
 
-    $gNavigation->deleteLastUrl();
-    unset($_SESSION['fields_request']);
+        $gNavigation->deleteLastUrl();
+        unset($_SESSION['fields_request']);
 
-    // return to the members management settings
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
-// => EXIT
-} elseif ($postMode === 'delete') {
-    // delete profile field
-
-    if ($userField->getValue('usf_system') == 1) {
-        // System fields must not be deleted
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // return to the members management settings
+        $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+        $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
         // => EXIT
-    }
+    } elseif ($postMode === 'delete') {
+        // delete profile field
 
-    if ($userField->delete()) {
-        // Delete successful -> return for XMLHttpRequest
-        echo 'done';
-    }
-    exit();
-} elseif ($postMode === 'sequence') {
-    // update field order
-    $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
+        if ($userField->getValue('usf_system') == 1) {
+            // System fields must not be deleted
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
-    try {
+        if ($userField->delete()) {
+            // Delete successful -> return for XMLHttpRequest
+            echo 'done';
+        }
+        exit();
+    } elseif ($postMode === 'sequence') {
+        // update field order
+        $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
+
         if (!empty($postOrder)) {
             // set new order (drag and drop)
             $userField->setSequence($postOrder);
@@ -214,8 +176,12 @@ if ($postMode === 'edit') {
                 echo 'Sequence could not be changed.';
             }
         }
-    } catch (AdmException $e) {
-        echo $e->getMessage();
+        exit();
     }
-    exit();
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    if (in_array($postMode, array('delete', 'sequence'))) {
+        echo $e->getMessage();
+    } else {
+        $gMessage->show($e->getMessage());
+    }
 }

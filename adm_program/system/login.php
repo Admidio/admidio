@@ -15,59 +15,55 @@
  *
  * **********************************************************************************************
  */
-require_once(__DIR__ . '/common.php');
 
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'check')));
-$getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
+try {
+    require_once(__DIR__ . '/common.php');
 
-if ($getMode === 'dialog') {
-    $headline = $gL10n->get('SYS_LOGIN');
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'check')));
+    $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
 
-// remember url (will be removed in login_check)
-    $gNavigation->addUrl(CURRENT_URL, $headline);
+    if ($getMode === 'dialog') {
+        $headline = $gL10n->get('SYS_LOGIN');
 
-    try {
+        // remember url (will be removed in login_check)
+        $gNavigation->addUrl(CURRENT_URL, $headline);
+
         // create html page object
         $page = new HtmlPage('admidio-login', $headline);
         $loginModule = new ModuleLogin();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();
-    } catch (AdmException $e) {
-        $e->showHtml();
-    }
-} elseif ($getMode === 'check') {
-    // check the data of the login dialog
-    try {
+    } elseif ($getMode === 'check') {
+        // check the data of the login dialog
         $loginModule = new ModuleLogin();
         $loginModule->checkLogin();
-    } catch (AdmException $e) {
-        $e->showHtml();
-    }
 
-    // check if browser can set cookies and throw error if not
-    if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
-        $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', array(DOMAIN)));
+        // check if browser can set cookies and throw error if not
+        if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
+            throw new AdmException('SYS_COOKIE_NOT_SET', array(DOMAIN));
+        }
+
+        // remove login page from navigation stack
+        try {
+            if (str_ends_with($gNavigation->getUrl(), '/login.php')) {
+                $gNavigation->deleteLastUrl();
+            }
+        } catch (AdmException $e) {
+            $gNavigation->clear();
+        }
+
+        // If no forward url has been set, then refer to the start page after login
+        if (array_key_exists('login_forward_url', $_SESSION)) {
+            $forwardUrl = $_SESSION['login_forward_url'];
+        } else {
+            $forwardUrl = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_login');
+        }
+
+        unset($_SESSION['login_forward_url']);
+
+        admRedirect($forwardUrl);
         // => EXIT
     }
-
-    // remove login page from navigation stack
-    try {
-        if (str_ends_with($gNavigation->getUrl(), '/login.php')) {
-            $gNavigation->deleteLastUrl();
-        }
-    } catch (AdmException $e) {
-        $gNavigation->clear();
-    }
-
-    // If no forward url has been set, then refer to the start page after login
-    if (array_key_exists('login_forward_url', $_SESSION)) {
-        $forwardUrl = $_SESSION['login_forward_url'];
-    } else {
-        $forwardUrl = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_login');
-    }
-
-    unset($_SESSION['login_forward_url']);
-
-    admRedirect($forwardUrl);
-    // => EXIT
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
 }

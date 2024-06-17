@@ -9,26 +9,30 @@
  *
  * Parameters:
  *
- * module : Name of module (Foldername) in adm_my_files where the image lies
+ * module : Name of module (folder name) in adm_my_files where the image lies
  * file   : Name of image file that should be shown (without path)
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/common.php');
+try {
+    require_once(__DIR__ . '/common.php');
 
-// Initialize and check the parameters
-$getModule = admFuncVariableIsValid($_GET, 'module', 'file', array('requireValue' => true, 'directOutput' => true));
-$getFile   = admFuncVariableIsValid($_GET, 'file', 'file', array('requireValue' => true, 'directOutput' => true));
+    // Initialize and check the parameters
+    $getModule = admFuncVariableIsValid($_GET, 'module', 'file', array('requireValue' => true, 'directOutput' => true));
+    $getFile = admFuncVariableIsValid($_GET, 'file', 'file', array('requireValue' => true, 'directOutput' => true));
 
-// Initialize locale parameters
-$imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $getModule . '/images/' . $getFile;
+    // Initialize locale parameters
+    $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $getModule . '/images/' . $getFile;
 
-// check if image exists
-if (!is_file($imageServerPath)) {
-    http_response_code(404);
-    exit();
+    // check if image exists
+    if (!is_file($imageServerPath)) {
+        http_response_code(404);
+        exit();
+    }
+
+    $image = new Image($imageServerPath);
+    header('Content-Type: ' . $image->getMimeType());
+    $image->copyToBrowser();
+    $image->delete();
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    $gMessage->show($e->getMessage());
 }
-
-$image = new Image($imageServerPath);
-header('Content-Type: ' . $image->getMimeType());
-$image->copyToBrowser();
-$image->delete();
