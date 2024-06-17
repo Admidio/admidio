@@ -66,7 +66,7 @@ class ModuleContacts extends HtmlPage
                     SecurityUtils::encodeUrl(
                         ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php',
                         array(
-                            'new_user' => '3',
+                            'new_user' => 'accept_registration',
                             'user_uuid' => $userUuid
                         )
                     )
@@ -88,7 +88,7 @@ class ModuleContacts extends HtmlPage
                 SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php',
                     array(
-                        'new_user' => '1',
+                        'new_user' => 'create',
                         'lastname' => $user->getValue('LAST_NAME'),
                         'firstname' => $user->getValue('FIRST_NAME')
                     )

@@ -94,17 +94,17 @@ try {
             $callbackFunction = 'callbackProfilePhoto';
             break;
         case 'pro_role':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 2, 'member_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 'stop_membership', 'member_uuid' => $getDatabaseId));
             $text = 'SYS_MEMBERSHIP_DELETE';
             $callbackFunction = 'callbackRoles';
             break;
         case 'pro_future':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'member_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 'remove_former_membership', 'member_uuid' => $getDatabaseId));
             $text = 'SYS_LINK_MEMBERSHIP_DELETE';
             $callbackFunction = 'callbackFutureRoles';
             break;
         case 'pro_former':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'member_uuid' => $getDatabaseId));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 'remove_former_membership', 'member_uuid' => $getDatabaseId));
             $text = 'SYS_LINK_MEMBERSHIP_DELETE';
             $callbackFunction = 'callbackFormerRoles';
             break;

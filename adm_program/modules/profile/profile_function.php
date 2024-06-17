@@ -9,13 +9,13 @@
  *
  * Parameters:
  *
- * mode   :  1 - Export vCard of user
- *           2 - Stop membership of role
- *           3 - Remove former membership of role
- *           4 - reload Role Memberships
- *           5 - reload former role memberships
- *           6 - reload future role memberships
- *           7 - save membership data
+ * mode   :  export          - Export vCard of user
+ *           save_membership - save membership data
+ *           stop_membership - Stop membership of role
+ *           remove_former_membership   - Remove former membership of role
+ *           reload_current_memberships - reload Role Memberships
+ *           reload_former_memberships  - reload former role memberships
+ *           reload_future_memberships  - reload future role memberships
  * user_uuid   : UUID of the user to be edited
  * member_uuid : UUID of role membership that should be edited
  ***********************************************************************************************
@@ -24,146 +24,135 @@ require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/roles_functions.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-// Initialize and check the parameters
-$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
-$getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'uuid');
-$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int', array('validValues' => array(1, 2, 3, 4, 5, 6, 7)));
+try {
+    // Initialize and check the parameters
+    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
+    $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'uuid');
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('export', 'stop_membership', 'remove_former_membership', 'reload_current_memberships', 'reload_former_memberships', 'reload_future_memberships', 'save_membership')));
 
-if (in_array($getMode, array(2, 3, 7))) {
-    try {
-        // in ajax mode only return simple text on error
-        $gMessage->showHtmlTextOnly(true);
-
+    if (in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership'))) {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    } catch (AdmException $exception) {
-        $exception->showText();
-        // => EXIT
-    }
-}
-
-// create user object
-$user = new User($gDb, $gProfileFields);
-$user->readDataByUuid($getUserUuid);
-
-if ($getMode === 1) {
-    // Export vCard of user
-
-    if (!$gCurrentUser->hasRightViewProfile($user)) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        exit();
     }
 
-    $filename = $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
+    // create user object
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
 
-    $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.vcf';
+    if ($getMode === 'export') {
+        // Export vCard of user
 
-    header('Content-Type: text/vcard; charset=utf-8');
-    header('Content-Disposition: attachment; filename="'.$filename.'"');
-
-    // necessary for IE, because without it the download with SSL has problems
-    header('Cache-Control: private');
-    header('Pragma: public');
-
-    // create vcard and check if user is allowed to edit profile, so he can see more data
-    echo $user->getVCard();
-} elseif ($getMode === 2) {
-    // Cancel membership of role
-    $member = new TableMembers($gDb);
-    $member->readDataByUuid($getMemberUuid);
-    $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
-
-    // if user has the right then cancel membership
-    if ($role->allowedToAssignMembers($gCurrentUser)) {
-        try {
-            $role->stopMembership($member->getValue('mem_usr_id'));
-        } catch (AdmException $e) {
-            $e->showText();
-            // => EXIT
+        if (!$gCurrentUser->hasRightViewProfile($user)) {
+            throw new AdmException('SYS_NO_RIGHTS');
         }
 
-        echo 'done';
-    } else {
-        echo $gL10n->get('SYS_NO_RIGHTS');
-    }
-} elseif ($getMode === 3) {
-    // Remove former membership of role
-    if ($gCurrentUser->isAdministrator()) {
+        $filename = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
+
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.vcf';
+
+        header('Content-Type: text/vcard; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        // necessary for IE, because without it the download with SSL has problems
+        header('Cache-Control: private');
+        header('Pragma: public');
+
+        // create vcard and check if user is allowed to edit profile, so he can see more data
+        echo $user->getVCard();
+    } elseif ($getMode === 'stop_membership') {
+        // Cancel membership of role
         $member = new TableMembers($gDb);
         $member->readDataByUuid($getMemberUuid);
-        $member->delete();
+        $role = new TableRoles($gDb, (int)$member->getValue('mem_rol_id'));
 
-        echo 'done';
-    }
-} elseif ($getMode === 4) {
-    // reload role memberships
-    $roleStatement  = getRolesFromDatabase($user->getValue('usr_id'));
-    $countRole      = $roleStatement->rowCount();
-    echo getRoleMemberships('role_list', $user, $roleStatement);
-} elseif ($getMode === 5) {
-    // reload former role memberships
-    $roleStatement  = getFormerRolesFromDatabase($user->getValue('usr_id'));
-    $countRole      = $roleStatement->rowCount();
-    echo getRoleMemberships('former_role_list', $user, $roleStatement);
+        // if user has the right then cancel membership
+        if ($role->allowedToAssignMembers($gCurrentUser)) {
+            $role->stopMembership($member->getValue('mem_usr_id'));
 
-    if ($countRole === 0) {
-        echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
-    } else {
-        echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'block\' })</script>';
-    }
-} elseif ($getMode === 6) {
-    // reload future role memberships
-    $roleStatement  = getFutureRolesFromDatabase($user->getValue('usr_id'));
-    $countRole      = $roleStatement->rowCount();
-    echo getRoleMemberships('future_role_list', $user, $roleStatement);
+            echo 'done';
+        } else {
+            throw new AdmException('SYS_NO_RIGHTS');
+        }
+    } elseif ($getMode === 'remove_former_membership') {
+        // Remove former membership of role
+        if ($gCurrentUser->isAdministrator()) {
+            $member = new TableMembers($gDb);
+            $member->readDataByUuid($getMemberUuid);
+            $member->delete();
 
-    if ($countRole === 0) {
-        echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
-    } else {
-        echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'block\' })</script>';
-    }
-} elseif ($getMode === 7) {
-    // save membership date changes
-    $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date_'.$getMemberUuid, 'date', array('requireValue' => true));
-    $postMembershipEnd   = admFuncVariableIsValid($_POST, 'membership_end_date_'.$getMemberUuid, 'date', array('requireValue' => true));
+            echo 'done';
+        }
+    } elseif ($getMode === 'reload_current_memberships') {
+        // reload role memberships
+        $roleStatement = getRolesFromDatabase($user->getValue('usr_id'));
+        $countRole = $roleStatement->rowCount();
+        echo getRoleMemberships('role_list', $user, $roleStatement);
+    } elseif ($getMode === 'reload_former_memberships') {
+        // reload former role memberships
+        $roleStatement = getFormerRolesFromDatabase($user->getValue('usr_id'));
+        $countRole = $roleStatement->rowCount();
+        echo getRoleMemberships('former_role_list', $user, $roleStatement);
 
-    $member = new TableMembers($gDb);
-    $member->readDataByUuid($getMemberUuid);
-    $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
+        if ($countRole === 0) {
+            echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
+        } else {
+            echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'block\' })</script>';
+        }
+    } elseif ($getMode === 'reload_future_memberships') {
+        // reload future role memberships
+        $roleStatement = getFutureRolesFromDatabase($user->getValue('usr_id'));
+        $countRole = $roleStatement->rowCount();
+        echo getRoleMemberships('future_role_list', $user, $roleStatement);
 
-    // check if user has the right to edit this membership
-    if (!$role->allowedToAssignMembers($gCurrentUser)) {
-        exit($gL10n->get('SYS_NO_RIGHTS'));
-    }
+        if ($countRole === 0) {
+            echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
+        } else {
+            echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'block\' })</script>';
+        }
+    } elseif ($getMode === 'save_membership') {
+        // save membership date changes
+        $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date_' . $getMemberUuid, 'date', array('requireValue' => true));
+        $postMembershipEnd = admFuncVariableIsValid($_POST, 'membership_end_date_' . $getMemberUuid, 'date', array('requireValue' => true));
 
-    // Check the start date
-    $startDate = DateTime::createFromFormat('Y-m-d', $postMembershipStart);
-    if ($startDate === false) {
-        exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
-    }
+        $member = new TableMembers($gDb);
+        $member->readDataByUuid($getMemberUuid);
+        $role = new TableRoles($gDb, (int)$member->getValue('mem_rol_id'));
 
-    // If set, the end date is checked
-    if ($postMembershipEnd !== '') {
-        $endDate = DateTime::createFromFormat('Y-m-d', $postMembershipEnd);
-        if ($endDate === false) {
-            exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
+        // check if user has the right to edit this membership
+        if (!$role->allowedToAssignMembers($gCurrentUser)) {
+            throw new AdmException('SYS_NO_RIGHTS');
         }
 
-        // If start-date is later/bigger or on same day than end-date we show an error
-        if ($startDate > $endDate) {
-            exit($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+        // Check the start date
+        $startDate = DateTime::createFromFormat('Y-m-d', $postMembershipStart);
+        if ($startDate === false) {
+            throw new AdmException('SYS_DATE_INVALID', array('SYS_START', $gSettingsManager->getString('system_date')));
         }
-    } else {
-        $postMembershipEnd = DATE_MAX;
-    }
 
-    // save role membership
-    try {
+        // If set, the end date is checked
+        if ($postMembershipEnd !== '') {
+            $endDate = DateTime::createFromFormat('Y-m-d', $postMembershipEnd);
+            if ($endDate === false) {
+                throw new AdmException('SYS_DATE_INVALID', array('SYS_END', $gSettingsManager->getString('system_date')));
+            }
+
+            // If start-date is later/bigger or on same day than end-date we show an error
+            if ($startDate > $endDate) {
+                throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
+            }
+        } else {
+            $postMembershipEnd = DATE_MAX;
+        }
+
+        // save role membership
         $role->setMembership($user->getValue('usr_id'), $postMembershipStart, $postMembershipEnd, $member->getValue('mem_leader'));
-    } catch (AdmException $e) {
-        $e->showText();
-        // => EXIT
-    }
 
-    echo 'success';
+        echo 'success';
+    }
+} catch (AdmException|Exception|\Smarty\Exception $e) {
+    if (in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership'))) {
+        echo $e->getMessage();
+    } else {
+        $gMessage->show($e->getMessage());
+    }
 }

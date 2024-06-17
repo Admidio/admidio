@@ -17,7 +17,7 @@ function ProfileJS(gRootPath) {
 
     this.reloadRoleMemberships = function () {
         $.get({
-            url: this.url + "?mode=4&user_uuid=" + this.userUuid,
+            url: this.url + "?mode=reload_current_memberships&user_uuid=" + this.userUuid,
             dataType: "html",
             success: function(responseText) {
                 $("#profile_roles_box_body").html(responseText);
@@ -31,7 +31,7 @@ function ProfileJS(gRootPath) {
     this.reloadFormerRoleMemberships = function () {
         $.get(
             {
-                url: this.url + "?mode=5&user_uuid=" + this.userUuid,
+                url: this.url + "?mode=reload_former_memberships&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
                     $("#profile_former_roles_box_body").html(responseText);
@@ -43,7 +43,7 @@ function ProfileJS(gRootPath) {
     this.reloadFutureRoleMemberships = function () {
         $.get(
             {
-                url: this.url + "?mode=6&user_uuid=" + this.userUuid,
+                url: this.url + "?mode=reload_future_memberships&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
                     $("#profile_future_roles_box_body").html(responseText);

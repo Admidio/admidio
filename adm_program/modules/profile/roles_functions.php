@@ -198,7 +198,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                     <li class="list-group-item" id="membership_period_'.$memberUuid.'" style="visibility: hidden; display: none;">';
             $form = new HtmlForm(
                 'membership_period_form_'.$memberUuid,
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_uuid' => $user->getValue('usr_uuid'), 'member_uuid' => $row['mem_uuid'])),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => 'save_membership', 'user_uuid' => $user->getValue('usr_uuid'), 'member_uuid' => $row['mem_uuid'])),
                 null,
                 array('type' => 'navbar', 'method' => 'post', 'setFocus' => false, 'class' => 'admidio-form-membership-period')
             );
