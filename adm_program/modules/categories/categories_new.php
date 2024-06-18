@@ -236,6 +236,24 @@ if ($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false ||
         $roleEditSet[] = '';
     }
 
+    if ($gCurrentOrganization->countAllRecords() > 1) {
+        if ((int) $category->getValue('cat_org_id') === 0) {
+            $firstEntryName = $gL10n->get('SYS_ALL_ORGANIZATIONS');
+        } else {
+            $firstEntryName = $gL10n->get('SYS_ALL_THIS_ORGANIZATION');
+        }
+
+        if ($getType !== 'USF') {
+            $firstEntryName .= ' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+        }
+    } else {
+        if ($getType === 'USF') {
+            $firstEntryName = $gL10n->get('SYS_ALL_THIS_ORGANIZATION');
+        } else {
+            $firstEntryName = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+        }
+    }
+
     // show selectbox with all assigned roles
     $form->addSelectBoxFromSql(
         'adm_categories_view_right',
@@ -246,7 +264,7 @@ if ($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false ||
             'property'     => HtmlForm::FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,
             'multiselect'  => true,
-            'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null),
+            'firstEntry'   => array('0', $firstEntryName, null),
             'helpTextIdInline' => $roleViewDescription
         )
     );
