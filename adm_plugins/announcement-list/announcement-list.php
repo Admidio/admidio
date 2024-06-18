@@ -65,7 +65,6 @@ try {
     }
 
     if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
-        throw new AdmException('SYS_NO_RIGHTS');
         // create announcements object
         $plgAnnouncements = new ModuleAnnouncements();
         $plgAnnouncements->setParameter('cat_id', $getCatId);
@@ -150,6 +149,5 @@ try {
         echo '</div>';
     }
 } catch (AdmException|Exception|\Smarty\Exception $e) {
-    $gMessage->showHtmlTextOnly();
-    $gMessage->show($e->getMessage());
+    echo $e->getMessage();
 }

@@ -217,6 +217,5 @@ try {
 
     echo '</div>';
 } catch (AdmException|Exception|\Smarty\Exception $e) {
-    $gMessage->showHtmlTextOnly();
-    $gMessage->show($e->getMessage());
+    echo $e->getMessage();
 }

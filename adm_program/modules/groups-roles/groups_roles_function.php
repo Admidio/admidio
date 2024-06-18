@@ -21,17 +21,13 @@
  *
  *****************************************************************************/
 
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'export', 'activate', 'deactivate')));
-
-    if (in_array($getMode, array('delete', 'activate', 'deactivate'))) {
-        $gMessage->showHtmlTextOnly();
-    }
 
     if ($getMode !== 'export') {
         // only members who are allowed to create and edit roles should have access to these functions
@@ -300,5 +296,9 @@ try {
         }
     }
 } catch (AdmException|Exception $e) {
-    $gMessage->show($e->getMessage());
+    if (in_array($getMode, array('delete', 'activate', 'deactivate'))) {
+        echo $e->getMessage();
+    } else {
+        $gMessage->show($e->getMessage());
+    }
 }

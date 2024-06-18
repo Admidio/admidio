@@ -19,18 +19,13 @@
  ***********************************************************************************************
  */
 
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'save', 'validValues' => array('save', 'new_org_dialog', 'new_org_create', 'htaccess', 'test_email', 'backup')));
     $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
-
-    // in ajax mode only return simple text on error
-    if ($getMode === 'save') {
-        $gMessage->showHtmlTextOnly();
-    }
 
     // only administrators are allowed to edit organization preferences or create new organizations
     if (!$gCurrentUser->isAdministrator()) {
@@ -460,6 +455,9 @@ try {
             break;
     }
 } catch (AdmException|Exception $exception) {
-    $gMessage->show($exception->getMessage());
-    // => EXIT
+    if ($getMode === 'save') {
+        echo $e->getMessage();
+    } else {
+        $gMessage->show($exception->getMessage());
+    }
 }

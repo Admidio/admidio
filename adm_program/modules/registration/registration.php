@@ -14,9 +14,9 @@
  * mode      : show_similar - Show users with similar names with the option to assign the registration to them.
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // check if module is active
     if (!$gSettingsManager->getBool('registration_enable_module')) {
         throw new AdmException('SYS_MODULE_DISABLED');

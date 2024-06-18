@@ -25,12 +25,8 @@
  *             if this parameter is not set than this date is set to 31.12.9999
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
 try {
-    if ($_GET['mode'] == 'delete') {
-        $gMessage->showHtmlTextOnly();
-    }
+    require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
@@ -518,5 +514,9 @@ try {
         $gMessage->show($outputMessage, $gL10n->get('SYS_PARTICIPATE'));
     }
 } catch (AdmException|Exception $e) {
-    $gMessage->show($e->getMessage());
+    if ($getMode == 'delete') {
+        echo $e->getMessage();
+    } else {
+        $gMessage->show($e->getMessage());
+    }
 }
