@@ -103,7 +103,7 @@ class SmartyPlugins
     {
         global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
         global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
-        global $g_root_path, $gPreferences, $gCurrentOrgId, $gCurrentUserId;
+        global $g_root_path, $gPreferences, $gCurrentOrgId, $gCurrentUserId, $gMessage;
 
         if (empty($params['plugin'])) {
             throw new \UnexpectedValueException('Smarty function load_admidio_plugin: missing "plugin" parameter');
