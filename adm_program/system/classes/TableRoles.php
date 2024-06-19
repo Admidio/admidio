@@ -573,7 +573,7 @@ class TableRoles extends TableAccess
                             $membership->save();
                         }
                     }
-                } elseif ($startDate <= $row['mem_begin'] && $endDate > $row['mem_begin'] && !$newMembershipSaved) {
+                } elseif ($startDate <= $row['mem_begin'] && $endDate >= $row['mem_begin'] && !$newMembershipSaved) {
                     // new period starts before existing period and ends in existing period
                     if ($leader === (bool)$row['mem_leader']) {
                         $newMembershipSaved = true;
