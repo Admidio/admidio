@@ -273,20 +273,29 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                         }
 
                         if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK) {
-                            // check the size of the attachment
-                            $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
-                            if ($attachmentSize > Email::getMaxAttachmentSize()) {
-                                $gMessage->show($gL10n->get('SYS_ATTACHMENT_TO_LARGE'));
-                                // => EXIT
-                            }
-
-                            // set file type to standard if not given
-                            if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0) {
-                                $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
-                            }
-
-                            // add the attachment to the email and message object
                             try {
+                                // check filename and throw exception if something is wrong
+                                StringUtils::strIsValidFileName($_FILES['userfile']['name'][$currentAttachmentNo], false);
+
+                                // check for valid file extension of attachment
+                                if(!FileSystemUtils::allowedFileExtension($_FILES['userfile']['name'][$currentAttachmentNo])) {
+                                    $gMessage->show($gL10n->get('SYS_FILE_EXTENSION_INVALID'));
+                                    // => EXIT
+                                }
+
+                                // check the size of the attachment
+                                $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
+                                if ($attachmentSize > Email::getMaxAttachmentSize()) {
+                                    $gMessage->show($gL10n->get('SYS_ATTACHMENT_TO_LARGE'));
+                                    // => EXIT
+                                }
+
+                                // set file type to standard if not given
+                                if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0) {
+                                    $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
+                                }
+
+                                // add the attachment to the email and message object
                                 $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
                                 $message->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo]);
                             } catch (Exception $e) {
