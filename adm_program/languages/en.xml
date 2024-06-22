@@ -1342,9 +1342,9 @@
   <string name="SYS_TEST_MAIL_DESC">Before you call this function, all settings for email sending must be saved!\nA simple email with the subject #VAR1_BOLD# will be sent to the email address of the logged in user based on the saved email settings. In the process, a dispatch log is output during SMTP dispatch, which can help in case of problems.</string>
   <string name="SYS_TEXT">Text</string>
   <string name="SYS_THUMBNAIL_SCALING">Thumbnail scaling</string>
-  <string name="SYS_THUMBNAIL_SCALING_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (default: 160 pixels)</string>
+  <string name="SYS_THUMBNAIL_SCALING_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (Default: #VAR1# pixels)</string>
   <string name="SYS_THUMBNAILS_PER_PAGE">Thumbnails per page</string>
-  <string name="SYS_THUMBNAILS_PER_PAGE_DESC">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: 16)</string>
+  <string name="SYS_THUMBNAILS_PER_PAGE_DESC">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: #VAR1#)</string>
   <string name="SYS_THURSDAY">Thursday</string>
   <string name="SYS_TIME">Time</string>
   <string name="SYS_TIME_FROM">Time from</string>

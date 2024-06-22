@@ -1232,19 +1232,19 @@ try {
         'photo_albums_per_page',
         $gL10n->get('SYS_NUMBER_OF_ALBUMS_PER_PAGE'),
         $formValues['photo_albums_per_page'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(24)))
     );
     $formPhotos->addInput(
         'photo_thumbs_page',
         $gL10n->get('SYS_THUMBNAILS_PER_PAGE'),
         $formValues['photo_thumbs_page'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_THUMBNAILS_PER_PAGE_DESC')
+        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAILS_PER_PAGE_DESC', array(24)))
     );
     $formPhotos->addInput(
         'photo_thumbs_scale',
         $gL10n->get('SYS_THUMBNAIL_SCALING'),
         $formValues['photo_thumbs_scale'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_THUMBNAIL_SCALING_DESC')
+        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAIL_SCALING_DESC', array(500)))
     );
     $formPhotos->addInput(
         'photo_show_width',
@@ -1256,7 +1256,7 @@ try {
         'photo_show_height',
         $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
         $formValues['photo_show_height'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1000, 800)))
+        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1200, 1200)))
     );
     $formPhotos->addInput(
         'photo_image_text',
