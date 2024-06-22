@@ -237,10 +237,10 @@ class HtmlPage
     /**
      * Public method to assign new variables to the Smarty template of the HtmlPage.
      * @param string $variable Name of the variable within the Smarty template.
-     * @param string $value Value of the variable.
+     * @param string|array $value Value of the variable.
      * @return void
      */
-    public function assignSmartyVariable(string $variable, string $value)
+    public function assignSmartyVariable(string $variable, $value)
     {
         $this->smarty->assign($variable, $value);
     }
@@ -528,6 +528,7 @@ class HtmlPage
 
         // add translation object
         $this->smarty->assign('l10n', $gL10n);
+        $this->smarty->assign('settings', $gSettingsManager);
 
         try {
             if ($this->modeInline || $gLayoutReduced) {

@@ -73,6 +73,10 @@ class Form
      */
     protected string $id;
     /**
+     * @var string Smarty template with necessary path
+     */
+    protected string $template;
+    /**
      * @var array Array with all possible attributes of the form e.g. class, action, id ...
      */
     protected array $attributes = array();
@@ -110,7 +114,7 @@ class Form
      *                             is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function __construct(string $id, string $action = '', \HtmlPage $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $template, string $action = '', \HtmlPage $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -131,6 +135,7 @@ class Form
         $this->showRequiredFields = $optionsAll['showRequiredFields'];
         $this->type   = $optionsAll['type'];
         $this->id     = $id;
+        $this->template = $template;
 
         // set specific Admidio css form class
         $this->attributes['role'] = 'form';
@@ -224,8 +229,7 @@ class Form
         }
 
         $optionsAll['attributes'] = $attributes;
-        $this->elements[] = $optionsAll;
-        $this->render('form.button', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -247,7 +251,12 @@ class Form
             $("#' . $id . '_refresh").click(function() {
                 document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
             });', true);
-        $this->render('form.captcha', ['formtype' => $this->type, 'class' => $class, 'id' => $id]);
+        $this->elements[$id] = array(
+            'template' => 'sys-template-parts/form/captcha.tpl',
+            'formtype' => $this->type,
+            'class'    => $class,
+            'id'       => $id
+        );
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,
@@ -324,8 +333,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->elements[] = $optionsAll;
-        $this->render('form.checkbox', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -364,8 +372,7 @@ class Form
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $this->elements[] = $optionsAll;
-        $this->render('form.customcontent', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -475,8 +482,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->elements[] = $optionsAll;
-        $this->render('form.editor', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -574,8 +580,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->elements[] = $optionsAll;
-        $this->render('form.file', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -786,8 +791,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->elements[] = $optionsAll;
-        $this->render("form.input", $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -908,8 +912,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->elements[] = $optionsAll;
-        $this->render('form.multiline', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -976,8 +979,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->elements[] = $optionsAll;
-        $this->render('form.radio', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -1181,8 +1183,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
-        $this->elements[] = $optionsAll;
-        $this->render('form.select', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -1551,8 +1552,7 @@ class Form
             'value'            => $value);
         $optionsAll     = array_replace($optionsDefault, $options);
 
-        $this->elements[] = $optionsAll;
-        $this->render('form.static', $optionsAll);
+        $this->elements[$id] = $optionsAll;
     }
 
     /**
@@ -1598,12 +1598,19 @@ class Form
     }
 
     /**
-     * Close an open bootstrap btn-group
+     * This method add the form attributes and all form elements to the HtmlPage object. Also, the
+     * template file of the form is set to the page. After this method is called the whole form
+     * could be rendered through the HtmlPage.
+     * @return void
      */
-    public function closeButtonGroup()
+    public function addToHtmlPage()
     {
-        $this->buttonGroupOpen = false;
-        $this->htmlString .= '</div><div class="form-alert" style="display: none;">&nbsp;</div>';
+        if (is_object($this->htmlPage)) {
+            $this->htmlPage->assignSmartyVariable('attributes', $this->attributes);
+            $this->htmlPage->assignSmartyVariable('elements', $this->elements);
+            $this->htmlPage->assignSmartyVariable('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
+            $this->htmlPage->addTemplateFile($this->template);
+        }
     }
 
     /**
@@ -1677,17 +1684,6 @@ class Form
     }
 
     /**
-     * Open a bootstrap btn-group if the form need more than one button.
-     */
-
-
-    public function openButtonGroup()
-    {
-        $this->buttonGroupOpen = true;
-        $this->htmlString .= '<div class="btn-group" role="group">';
-    }
-
-    /**
      * Add a new groupbox to the form. This could be used to group some elements
      * together. There is also the option to set a headline to this group box.
      * @param string $id       ID of the groupbox.
@@ -1704,63 +1700,5 @@ class Form
             $this->htmlString .= '<div class="card-header">' . $headline . '</div>';
         }
         $this->htmlString .= '<div class="card-body">';
-    }
-
-    /**
-     * Create the html code from the template and add this to the internal $htmlString variable.
-     * @param string $templateName Name of the template file that should be used.
-     * @param array $assigns Array with variables that should be assigned to the template.
-     * @return void
-     * @throws \Smarty\Exception
-     */
-    private function render(string $templateName, array $assigns)
-    {
-        global $gL10n;
-
-        if (is_object($this->htmlPage)) {
-            $smarty = $this->htmlPage->getSmartyTemplate();
-        } else {
-            $smarty = \HtmlPage::createSmartyObject();
-        }
-
-        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
-        $smarty->assign('formtype', $this->type);
-        $smarty->assign('data', $assigns);
-
-        $smarty->assign('l10n', $gL10n);
-        $this->htmlString .= $smarty->fetch("sys-template-parts/".$templateName.'.tpl');
-    }
-
-    /**
-     * This method create the whole html code of the form. Call this method
-     * if you have finished your form layout. If mandatory fields were set than a notice
-     * which marker represents the mandatory will be shown before the form.
-     * @return string Return the html code of the form.
-     * @throws \Exception
-     */
-    public function show(): string
-    {
-        // if there are no elements in the form then return nothing
-        if ($this->countElements === 0) {
-            return '';
-        }
-
-        if (is_object($this->htmlPage)) {
-            $smarty = $this->htmlPage->getSmartyTemplate();
-        } else {
-            $smarty = \HtmlPage::createSmartyObject();
-        }
-
-        foreach($this->attributes as $key => $assign) {
-            $smarty->assign($key, $assign);
-        }
-
-        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
-        $smarty->assign('content', $this->htmlString);
-        $smarty->assign('elements', $this->elements);
-        // If required fields were set than a notice which marker represents the required fields will be shown.
-        $smarty->assign('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
-        // now create smarty template output for this form
-        return $smarty->fetch('sys-template-parts/form.tpl');
     }
 }

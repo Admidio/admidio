@@ -66,6 +66,7 @@ class ModuleLogin
         // show form
         $form = new Form(
             'login_form',
+            'login.tpl',
             ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
             $page,
             array('showRequiredFields' => false)
@@ -85,33 +86,20 @@ class ModuleLogin
         );
 
         // show selectbox with all organizations of database
-        if ($gSettingsManager->getBool('system_organization_select')) {
-            $sql = 'SELECT org_shortname, org_longname
-                      FROM '.TBL_ORGANIZATIONS.'
-                  ORDER BY org_longname ASC, org_shortname ASC';
-            $form->addSelectBoxFromSql(
-                'org_shortname',
-                $gL10n->get('SYS_ORGANIZATION'),
-                $gDb,
-                $sql,
-                array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $organizationShortName, 'class' => 'form-control-small')
-            );
-        }
+        $sql = 'SELECT org_shortname, org_longname
+                  FROM '.TBL_ORGANIZATIONS.'
+              ORDER BY org_longname ASC, org_shortname ASC';
+        $form->addSelectBoxFromSql(
+            'org_shortname',
+            $gL10n->get('SYS_ORGANIZATION'),
+            $gDb,
+            $sql,
+            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $organizationShortName, 'class' => 'form-control-small')
+        );
 
-        if ($gSettingsManager->getBool('enable_auto_login')) {
-            $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
-        }
-        $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right'));
-        $page->addHtml($form->show());
-
-        if ($gSettingsManager->getBool('registration_enable_module')) {
-            $page->addHtml('
-                <div id="login_registration_link">
-                    <small>
-                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a>
-                    </small>
-                </div>');
-        }
+        $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
+        $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right', 'class' => 'offset-sm-3'));
+        $form->addToHtmlPage();
 
         // show link if user has login problems
         if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
@@ -124,11 +112,7 @@ class ModuleLogin
             // show link to send mail with local mail-client to administrator
             $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:'.$gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
-
-        $page->addHtml('
-            <div id="login_forgot_password_link" class="admidio-margin-bottom">
-                <small><a href="'.$forgotPasswordLink.'">'.$gL10n->get('SYS_FORGOT_MY_PASSWORD').'</a></small>
-            </div>');
+        $page->assignSmartyVariable('forgotPasswordLink', $forgotPasswordLink);
     }
 
     /**

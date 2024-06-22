@@ -1,4 +1,6 @@
-<form id="{$id}" class="{$class}" action="{$action}" method="{$method}" role="form">
+<form {foreach $attributes as $attribute}
+        {$attribute@key}="{$attribute}"
+    {/foreach}>
     {if $hasRequiredFields}
         <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
     {/if}
