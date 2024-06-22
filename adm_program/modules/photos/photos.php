@@ -205,7 +205,7 @@ try {
 
         for ($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); ++$actThumbnail) {
             if ($actThumbnail <= $photoAlbum->getValue('pho_quantity')) {
-                $photoThumbnailTable .= '<div class="col-sm-6 col-lg-4 col-xl-3 admidio-album-thumbnail" id="div_image_' . $actThumbnail . '">';
+                $photoThumbnailTable .= '<div class="col-xxl-2 col-xl-3 col-lg-4 col-sm-6 admidio-album-thumbnail" id="div_image_' . $actThumbnail . '">';
 
                 // Modal with lightbox 2
                 if ((int)$gSettingsManager->get('photo_show_mode') === 1) {
@@ -222,7 +222,7 @@ try {
                 }
 
                 if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
-                    $photoThumbnailTable .= '<div id="image_preferences_' . $actThumbnail . '" class="text-center" style="width: ' . $gSettingsManager->getInt('photo_thumbs_scale') . 'px">';
+                    $photoThumbnailTable .= '<div id="image_preferences_' . $actThumbnail . '" class="text-center">';
                 }
 
 

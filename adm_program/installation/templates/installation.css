@@ -418,40 +418,6 @@ label {
     margin-left: 0.5rem;
 }
 
-.admidio-profile-user-right {
-    cursor: help;
-}
-
-.admidio-event-highlight .card-header {
-    background-color: var(--bs-secondary);
-    color: var(--bs-tertiary);
-}
-
-tr.admidio-event-highlight {
-    font-weight: bold;
-}
-
-.admidio-event-approval-state-attend .bi {
-    color: #00b100 !important;
-}
-
-.admidio-event-approval-state-tentative .bi {
-    color: #9b009b !important;
-}
-
-.admidio-event-approval-state-cancel .bi {
-    color: #df2424 !important;
-}
-
-.admidio-album-thumbnail {
-    margin-bottom: 2rem;
-}
-
-.admidio-img-presenter img {
-    max-width: 100%;
-    height: auto;
-}
-
 #admidio-password-strength {
     margin-top: 0.5rem;
 }
