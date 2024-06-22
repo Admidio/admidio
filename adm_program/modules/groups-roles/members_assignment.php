@@ -36,8 +36,6 @@ $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array
 $role = new TableRoles($gDb);
 $role->readDataByUuid($getRoleUuid);
 
-$_SESSION['set_rol_id'] = $role->getValue('rol_id');
-
 // check if user is allowed to assign members to this role
 if (!$role->allowedToAssignMembers($gCurrentUser)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -89,8 +87,9 @@ if ($getMode === 'assign') {
 } else {
     // show html list with all users and their membership to this role
 
-    // set headline of the script
-    $headline = $gL10n->get('SYS_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
+    $javascriptCode = '';
+    $headline = $gL10n->get('SYS_MEMBER_ASSIGNMENT') . ' - ' . $role->getValue('rol_name');
+    $_SESSION['set_rol_id'] = $role->getValue('rol_id');
 
     // add current url to navigation stack if last url was not the same page
     if (!str_contains($gNavigation->getUrl(), 'members_assignment.php')) {
@@ -99,8 +98,6 @@ if ($getMode === 'assign') {
 
     // create html page object
     $page = new HtmlPage('admidio-members-assignement', $headline);
-
-    $javascriptCode = '';
 
     if ($getMembersShowAll) {
         $javascriptCode .= '$("#mem_show_all").prop("checked", true);';
