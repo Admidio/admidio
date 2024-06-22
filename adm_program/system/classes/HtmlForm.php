@@ -506,6 +506,7 @@ class HtmlForm
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
             'multiUploadLabel'   => '',
+            'alertWarning'       => '',
             'helpTextId'         => '',
             'icon'               => '',
             'class'              => '',
@@ -826,6 +827,7 @@ class HtmlForm
         $optionsDefault = array('formtype' => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'maxLength'        => 0,
+            'alertWarning'     => '',
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
@@ -923,6 +925,7 @@ class HtmlForm
             'property'          => self::FIELD_DEFAULT,
             'defaultValue'      => '',
             'showNoValueButton' => false,
+            'alertWarning'      => '',
             'helpTextId'        => '',
             'icon'              => '',
             'class'             => '',
@@ -1509,6 +1512,7 @@ class HtmlForm
         $optionsDefault = array(
             'formtype'         => $this->type,
             'property'         => '',
+            'alertWarning'     => '',
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
@@ -1683,9 +1687,6 @@ class HtmlForm
             $smarty = HtmlPage::createSmartyObject();
         }
 
-        foreach($assigns as $key => $assign) {
-            $smarty->assign($key, $assign);
-        }
         $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
         $smarty->assign('formtype', $this->type);
         $smarty->assign('data', $assigns);

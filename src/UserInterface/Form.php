@@ -31,6 +31,8 @@
  * ```
  */
 namespace Admidio\UserInterface;
+use Smarty\Exception;
+
 class Form
 {
     public const FIELD_DEFAULT  = 0;
@@ -71,13 +73,13 @@ class Form
      */
     protected string $id;
     /**
-     * @var string Content of the action attribute ot the form
-     */
-    protected string $action;
-    /**
-     * @var string CSS classes of the form
+     * @var array Array with all possible attributes of the form e.g. class, action, id ...
      */
     protected array $attributes = array();
+    /**
+     * @var array Array with all elements of the form and their attributes as array
+     */
+    protected array $elements = array();
     /**
      * @var bool Flag that indicates if a bootstrap button-group is open and should be closed later
      */
@@ -106,6 +108,7 @@ class Form
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
+     * @throws Exception
      */
     public function __construct(string $id, string $action = '', \HtmlPage $htmlPage = null, array $options = array())
     {
@@ -128,10 +131,10 @@ class Form
         $this->showRequiredFields = $optionsAll['showRequiredFields'];
         $this->type   = $optionsAll['type'];
         $this->id     = $id;
-        $this->action = $action;
 
         // set specific Admidio css form class
         $this->attributes['role'] = 'form';
+        $this->attributes['action'] = $action;
         $this->attributes['method'] = $optionsAll['method'];
 
         if ($this->type === 'default') {
@@ -191,6 +194,7 @@ class Form
         ++$this->countElements;
         // create array with all options
         $optionsDefault = array(
+            'template'     => 'sys-template-parts/form.button.tpl',
             'formtype'     => $this->type,
             'property'     => self::FIELD_DEFAULT,
             'icon'         => '',
@@ -220,6 +224,7 @@ class Form
         }
 
         $optionsAll['attributes'] = $attributes;
+        $this->elements[] = $optionsAll;
         $this->render('form.button', $optionsAll);
     }
 
@@ -249,9 +254,10 @@ class Form
             $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'),
             '',
             array(
-                'property' => self::FIELD_REQUIRED,
+                'template'   => 'sys-template-parts/form.captcha.tpl',
+                'property'   => self::FIELD_REQUIRED,
                 'helpTextId' => 'SYS_CAPTCHA_DESCRIPTION',
-                'class' => 'form-control-small'
+                'class'      => 'form-control-small'
             )
         );
 
@@ -285,6 +291,7 @@ class Form
 
         // create array with all options
         $optionsDefault = array(
+            'template'         => 'sys-template-parts/form.checkbox.tpl',
             'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'helpTextId'       => '',
@@ -317,6 +324,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
+        $this->elements[] = $optionsAll;
         $this->render('form.checkbox', $optionsAll);
     }
 
@@ -342,7 +350,9 @@ class Form
     public function addCustomContent(string $label, string $content, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'template'         => 'sys-template-parts/form.customcontent.tpl',
+            'formtype'         => $this->type,
             'property'         => '',
             'referenceId'      => '',
             'helpTextId'       => '',
@@ -354,6 +364,7 @@ class Form
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
+        $this->elements[] = $optionsAll;
         $this->render('form.customcontent', $optionsAll);
     }
 
@@ -396,7 +407,9 @@ class Form
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'template'         => 'sys-template-parts/form.editor.tpl',
+            'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
             'alertWarning'     => '',
@@ -462,6 +475,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
+        $this->elements[] = $optionsAll;
         $this->render('form.editor', $optionsAll);
     }
 
@@ -499,13 +513,16 @@ class Form
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'template'           => 'sys-template-parts/form.file.tpl',
+            'formtype'           => $this->type,
             'property'           => self::FIELD_DEFAULT,
             'maxUploadSize'      => \PhpIniUtils::getFileUploadMaxFileSize(),
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
             'multiUploadLabel'   => '',
+            'alertWarning'       => '',
             'helpTextId'         => '',
             'icon'               => '',
             'class'              => '',
@@ -557,6 +574,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
+        $this->elements[] = $optionsAll;
         $this->render('form.file', $optionsAll);
     }
 
@@ -609,7 +627,9 @@ class Form
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'template'         => 'sys-template-parts/form.input.tpl',
+            'formtype'         => $this->type,
             'id'               => $id,
             'label'            => $label,
             'value'            => $value,
@@ -766,6 +786,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
+        $this->elements[] = $optionsAll;
         $this->render("form.input", $optionsAll);
     }
 
@@ -823,9 +844,12 @@ class Form
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'template'         => 'sys-template-parts/form.multiline.tpl',
+            'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'maxLength'        => 0,
+            'alertWarning'     => '',
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
@@ -884,6 +908,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
+        $this->elements[] = $optionsAll;
         $this->render('form.multiline', $optionsAll);
     }
 
@@ -919,10 +944,13 @@ class Form
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'template'          => 'sys-template-parts/form.radio.tpl',
+            'formtype'          => $this->type,
             'property'          => self::FIELD_DEFAULT,
             'defaultValue'      => '',
             'showNoValueButton' => false,
+            'alertWarning'      => '',
             'helpTextId'        => '',
             'icon'              => '',
             'class'             => '',
@@ -948,6 +976,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
+        $this->elements[] = $optionsAll;
         $this->render('form.radio', $optionsAll);
     }
 
@@ -1006,7 +1035,9 @@ class Form
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
+            'template'                       => 'sys-template-parts/form.select.tpl',
+            'formtype'                       => $this->type,
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
@@ -1150,6 +1181,7 @@ class Form
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
+        $this->elements[] = $optionsAll;
         $this->render('form.select', $optionsAll);
     }
 
@@ -1507,8 +1539,10 @@ class Form
 
         // create array with all options
         $optionsDefault = array(
+            'template'         => 'sys-template-parts/form.static.tpl',
             'formtype'         => $this->type,
             'property'         => '',
+            'alertWarning'     => '',
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
@@ -1517,6 +1551,7 @@ class Form
             'value'            => $value);
         $optionsAll     = array_replace($optionsDefault, $options);
 
+        $this->elements[] = $optionsAll;
         $this->render('form.static', $optionsAll);
     }
 
@@ -1540,7 +1575,12 @@ class Form
     public function addSubmitButton(string $id, string $text, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,'icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
+        $optionsDefault = array(
+            'formtype' => $this->type,
+            'icon'     => '',
+            'link'     => '',
+            'class'    => '',
+            'type'     => 'submit');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css classes
@@ -1683,9 +1723,6 @@ class Form
             $smarty = \HtmlPage::createSmartyObject();
         }
 
-        foreach($assigns as $key => $assign) {
-            $smarty->assign($key, $assign);
-        }
         $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
         $smarty->assign('formtype', $this->type);
         $smarty->assign('data', $assigns);
@@ -1703,27 +1740,27 @@ class Form
      */
     public function show(): string
     {
-        global $gL10n;
-
         // if there are no elements in the form then return nothing
         if ($this->countElements === 0) {
             return '';
         }
 
-        $html = '';
+        if (is_object($this->htmlPage)) {
+            $smarty = $this->htmlPage->getSmartyTemplate();
+        } else {
+            $smarty = \HtmlPage::createSmartyObject();
+        }
 
+        foreach($this->attributes as $key => $assign) {
+            $smarty->assign($key, $assign);
+        }
+
+        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
+        $smarty->assign('content', $this->htmlString);
+        $smarty->assign('elements', $this->elements);
         // If required fields were set than a notice which marker represents the required fields will be shown.
-        if ($this->flagRequiredFields && $this->showRequiredFields) {
-            $html .= '<div class="admidio-form-required-notice"><span>' . $gL10n->get('SYS_REQUIRED_INPUT') . '</span></div>';
-        }
-
-        // now get whole form html code
-        $html .= '<form id="'.$this->id.'" action="'.$this->action.'"';
-        foreach($this->attributes as $name => $value) {
-            $html .= ' '.$name.'="'.$value.'"';
-        }
-        $html .= '>' . $this->htmlString . '</form>';
-
-        return $html;
+        $smarty->assign('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
+        // now create smarty template output for this form
+        return $smarty->fetch('sys-template-parts/form.tpl');
     }
 }
