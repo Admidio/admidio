@@ -50,6 +50,8 @@ try {
     // check if a special role should be set
     if (isset($_SESSION['set_rol_id'])) {
         $setRoleId = (int)$_SESSION['set_rol_id'];
+        $role = new TableRoles($gDb, $setRoleId);
+        $role->startMembership($user->getValue('usr_id'));
         unset($_SESSION['set_rol_id']);
     }
 
