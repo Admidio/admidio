@@ -18,10 +18,10 @@
  *                2 - show active and former members of role
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'uuid');
     $getRoleList = admFuncVariableIsValid($_GET, 'role_list', 'string');

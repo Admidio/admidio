@@ -45,10 +45,10 @@
  *                 be returned (although that negates any benefits of server-side processing!)
  * search[value] - Global search value.
  *****************************************************************************/
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid', array('requireValue' => true, 'directOutput' => true));
     $getFilterRoleUuid = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'uuid');

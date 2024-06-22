@@ -19,9 +19,9 @@
  *      - permissions : Show permissions of all groups and roles in list view
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // Initialize and check the parameters
     $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
     $getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');

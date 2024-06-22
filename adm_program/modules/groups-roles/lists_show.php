@@ -20,11 +20,11 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
 use Ramsey\Uuid\Uuid;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     unset($list);
 
     // Initialize and check the parameters
