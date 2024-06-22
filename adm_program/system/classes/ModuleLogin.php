@@ -21,6 +21,8 @@
  * $page->show();
  * ```
  */
+use Admidio\UserInterface\Form;
+
 class ModuleLogin
 {
     /**
@@ -62,7 +64,7 @@ class ModuleLogin
         $roleAdministrator = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
 
         // show form
-        $form = new HtmlForm(
+        $form = new Form(
             'login_form',
             ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
             $page,
