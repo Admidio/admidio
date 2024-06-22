@@ -75,7 +75,7 @@ try {
             // otherwise go to previous url (default roles are assigned automatically)
             if ($gCurrentUser->manageRoles()) {
                 // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
-                admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'new_user' => 3)));
+                admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'accept_registration' => true)));
                 // => EXIT
             } else {
                 $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
@@ -108,7 +108,7 @@ try {
         // if current user has the right to assign roles then show roles dialog
         // otherwise go to previous url (default roles are assigned automatically)
         if ($gCurrentUser->manageRoles()) {
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'user_uuid' => $getNewUserUuid)));
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('accept_registration' => true, 'user_uuid' => $getNewUserUuid)));
         // => EXIT
         } else {
             $gMessage->setForwardUrl($gNavigation->getPreviousUrl());

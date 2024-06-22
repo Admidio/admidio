@@ -663,7 +663,7 @@ try {
         // if you have the right to assign roles then show the link to assign new roles to this user
         if ($gCurrentUser->assignRoles()) {
             $page->addHtml('<a class="btn btn-secondary float-end openPopup" id="profile_role_memberships_change" data-class="modal-lg"
-                    href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => '1')) . '">
+                    href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)) . '">
                     <i class="bi bi-pencil-square me-1"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
         }
         $page->addHtml('</div>

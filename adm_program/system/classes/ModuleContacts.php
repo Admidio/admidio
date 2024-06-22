@@ -66,7 +66,7 @@ class ModuleContacts extends HtmlPage
                     SecurityUtils::encodeUrl(
                         ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php',
                         array(
-                            'new_user' => 'accept_registration',
+                            'accept_registration' => true,
                             'user_uuid' => $userUuid
                         )
                     )
@@ -88,7 +88,6 @@ class ModuleContacts extends HtmlPage
                 SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php',
                     array(
-                        'new_user' => 'create',
                         'lastname' => $user->getValue('LAST_NAME'),
                         'firstname' => $user->getValue('FIRST_NAME')
                     )
@@ -145,7 +144,7 @@ class ModuleContacts extends HtmlPage
                         $button['description'] = $gL10n->get('SYS_USER_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_longname')));
                     }
                 } else {
-                    $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $userUuid));
+                    $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $userUuid, 'new_user' => true));
                     $button['description'] = $gL10n->get('SYS_USER_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname')));
                 }
             }

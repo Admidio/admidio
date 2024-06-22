@@ -200,7 +200,7 @@ input[type=time] {
     max-width: 100px;
 }
 
-.form-check-input:not(:checked) {
+.form-switch .form-check-input:not(:checked) {
     background-color: #bbbbbb !important;
     border-color: #999999 !important;
 }

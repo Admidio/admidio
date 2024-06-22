@@ -13,10 +13,8 @@
  * Parameters:
  *
  * user_uuid : UUID of the user whose roles should be edited
- * new_user  : 0 - (Default) Edit roles of an existing user
- *             1 - Edit roles of a new user
- *             2 - (not relevant)
- *             3 - Edit roles of a registration
+ * accept_registration : If set to true, another forward url to role assignment will be set.
+ * new_user  : If set to true, edit roles of a new user and set other forward url
  * inline    : false - wird als eigene Seite angezeigt
  *             true  - nur "body" HTML Code
  *
@@ -28,8 +26,9 @@ require(__DIR__ . '/../../system/login_valid.php');
 try {
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
-    $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'int');
+    $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'bool');
     $getInline = admFuncVariableIsValid($_GET, 'inline', 'bool');
+    $getAcceptRegistration = admFuncVariableIsValid($_GET, 'accept_registration', 'bool');
 
     $html = '';
     $setRoleId = 0;
@@ -125,34 +124,38 @@ try {
         // create html page object
         $page = new HtmlPage('admidio-profile-roles', $headline);
         $page->addJavascript($javascript, true);
+        $messageId = '';
 
-        if ($getNewUser === 3) {
-            $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
+        if ($getAcceptRegistration) {
+            $messageId = $gL10n->get('SYS_ASSIGN_REGISTRATION_SUCCESSFUL');
             $nextUrl = $gNavigation->getStackEntryUrl(0);
-        } elseif ($getNewUser === 1) {
-            $messageId = 'SYS_SAVE_DATA';
+        } elseif ($getNewUser) {
             $nextUrl = $gNavigation->getStackEntryUrl($gNavigation->count() - 3);
         } else {
-            $messageId = 'SYS_SAVE_DATA';
             $nextUrl = $gNavigation->getPreviousUrl();
         }
         $page->addJavascript('
         $("#btn-next").click(function() {
-            $oneMembershipSet = false;
+            var oneMembershipSet = false;
+            var messageOk = "' . $messageId . '";
             $("#role_assignment_table input[type=checkbox]").each(function(){
                 if($(this).data("type") === "membership" && $(this).prop("checked")) {
-                    $oneMembershipSet = true;
+                    oneMembershipSet = true;
                 }
             });
 
-            if($oneMembershipSet) {
-                $("#btn-next").prop("disabled", true) ;
-                $("#admidio-profile-roles-alert").attr("class", "alert alert-success form-alert");
-                $("#admidio-profile-roles-alert").fadeIn();
-                $("#admidio-profile-roles-alert").html("<i class=\"bi bi-check-lg\"></i>' . $gL10n->get($messageId) . '");
-                setTimeout(function() {
+            if(oneMembershipSet) {
+                if(messageOk == "") {
                     window.location.href = "' . $nextUrl . '";
-                }, 3000);
+                } else {
+                    $("#btn-next").prop("disabled", true) ;
+                    $("#admidio-profile-roles-alert").attr("class", "alert alert-success form-alert");
+                    $("#admidio-profile-roles-alert").fadeIn();
+                    $("#admidio-profile-roles-alert").html("<i class=\"bi bi-check-lg\"></i>" + messageOk);
+                    setTimeout(function() {
+                        window.location.href = "' . $nextUrl . '";
+                    }, 3000);
+                 }
             } else {
                 $("#admidio-profile-roles-alert").fadeIn();
                 $("#admidio-profile-roles-alert").html("<i class=\"bi bi-exclamation-circle-fill\"></i>' . $gL10n->get('SYS_ASSIGN_ROLE_TO_USER') . '");
@@ -244,7 +247,7 @@ try {
 
         // if user is assigned to this role
         // or if user is created in contacts.php of list module
-        if ($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int)$role->getValue('rol_id') === $setRoleId)) {
+        if ($row['mem_usr_id'] > 0 || (!$getAcceptRegistration && (int)$role->getValue('rol_id') === $setRoleId)) {
             $memberChecked = ' checked="checked" ';
         }
 

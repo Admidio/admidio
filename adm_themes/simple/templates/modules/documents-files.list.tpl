@@ -68,7 +68,7 @@
                     <td class="text-right">{$row.size}</td>
                     <td class="text-right">
                         <a class="admidio-icon-link" href="{$row.url}">
-                            <i class="bi bi-plus-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ADD_TO_DATABASE')}"></i>
+                            <i class="bi bi-plus-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ADD_TO_DATABASE')}"></i>
                         </a>
                     </td>
                 </tr>

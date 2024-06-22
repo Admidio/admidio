@@ -13,13 +13,10 @@
  * Parameters:
  *
  * user_uuid  : Uuid of the user who should be edited
- * new_user   : create - Create a new user
- *              edit   - Edit user of the user UUID
- *              create_registration - Create a registration
- *              accept_registration - assign/accept a registration
+ * copy       : true - The user of the user_id will be copied and the base for this new user
+ * accept_registration : If set to true, another forward url to role assignment will be set.
  * lastname   : (Optional) Lastname could be set and will than be preassigned for new users
  * firstname  : (Optional) First name could be set and will than be preassigned for new users
- * copy       : true - The user of the user_id will be copied and the base for this new user
  *
  *****************************************************************************/
 
@@ -28,24 +25,10 @@ require_once(__DIR__ . '/../../system/common.php');
 try {
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
-    $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'string');
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
+    $getAcceptRegistration = admFuncVariableIsValid($_GET, 'accept_registration', 'bool');
 
     $registrationOrgId = $gCurrentOrgId;
-
-    // if current user has no login then only show registration dialog
-    if ($getNewUser === '' && !$gValidLogin) {
-        $getNewUser = 'create_registration';
-    } elseif ($getNewUser === '' && $gValidLogin) {
-        $getNewUser = 'create';
-    }
-
-    // Take over user UUID only if an existing user is also edited
-    if ($getUserUuid === '' && in_array($getNewUser, array('edit', 'accept_registration'))) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
-    } elseif ($getUserUuid !== '' && in_array($getNewUser, array('create', 'create_registration'))) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
-    }
 
     // read user data
     $user = new User($gDb, $gProfileFields);
@@ -57,12 +40,11 @@ try {
         // if we want to copy the user than set id = 0
         $user->setValue('usr_id', 0);
         $userId = 0;
-        $getNewUser = 'create';
         $getUserUuid = '';
         $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
-    } elseif ($getNewUser === 'create') {
+    } elseif ($getUserUuid === '' && $gValidLogin) {
         $headline = $gL10n->get('SYS_CREATE_MEMBER');
-    } elseif ($getNewUser === 'create_registration') {
+    } elseif ($getUserUuid === '' && !$gValidLogin) {
         $headline = $gL10n->get('SYS_REGISTRATION');
     } elseif ($userId === $gCurrentUserId) {
         $headline = $gL10n->get('SYS_EDIT_MY_PROFILE');
@@ -71,15 +53,13 @@ try {
     }
 
     // check if module may be called
-    switch ($getNewUser) {
-        case 'edit':
-            // checks if the user has the necessary rights to change the corresponding profile
-            if (!$gCurrentUser->hasRightEditProfile($user)) {
-                throw new AdmException('SYS_NO_RIGHTS');
-            }
-            break;
-
-        case 'create':
+    if (!$gValidLogin) {
+        // Registration disabled, so also lock this mode
+        if (!$gSettingsManager->getBool('registration_enable_module')) {
+            throw new AdmException('SYS_MODULE_DISABLED');
+        }
+    } else {
+        if ($getUserUuid === '') {
             // checks if the user has the necessary rights to create new users
             if (!$gCurrentUser->editUsers()) {
                 throw new AdmException('SYS_NO_RIGHTS');
@@ -90,15 +70,12 @@ try {
                 $user->setValue('LAST_NAME', stripslashes($_GET['lastname']));
                 $user->setValue('FIRST_NAME', stripslashes($_GET['firstname']));
             }
-            break;
-
-        case 'create_registration': // fallthrough
-        case 'accept_registration':
-            // Registration disabled, so also lock this mode
-            if (!$gSettingsManager->getBool('registration_enable_module')) {
-                throw new AdmException('SYS_MODULE_DISABLED');
+        } else {
+            // checks if the user has the necessary rights to change the corresponding profile
+            if (!$gCurrentUser->hasRightEditProfile($user)) {
+                throw new AdmException('SYS_NO_RIGHTS');
             }
-            break;
+        }
     }
 
     $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -129,7 +106,7 @@ try {
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
 
     // create html form
-    $form = new HtmlForm('edit_profile_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_save.php', array('user_uuid' => $getUserUuid, 'new_user' => $getNewUser)), $page);
+    $form = new HtmlForm('edit_profile_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_save.php', array('user_uuid' => $getUserUuid, 'accept_registration' => $getAcceptRegistration)), $page);
 
     // *******************************************************************************
     // Loop over all categories and profile fields
@@ -141,10 +118,10 @@ try {
         $showField = false;
 
         // at registration check if the field is enabled for registration
-        if ($getNewUser === 'create_registration' && $field->getValue('usf_registration') == 1) {
+        if (!$gValidLogin && $field->getValue('usf_registration') == 1) {
             $showField = true;
         } // check if the current user has the right to edit this profile field of the selected user
-        elseif ($getNewUser !== 'create_registration' && $gCurrentUser->allowedEditProfileField($user, $field->getValue('usf_name_intern'))) {
+        elseif ($gValidLogin && $gCurrentUser->allowedEditProfileField($user, $field->getValue('usf_name_intern'))) {
             $showField = true;
         }
 
@@ -161,10 +138,10 @@ try {
 
             if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
                 // edit login name if it's a new record or administrator or approval of new registration
-                if (($userId > 0 && $gCurrentUser->isAdministrator()) || $getNewUser !== 'edit') {
+                if (($userId > 0 && $gCurrentUser->isAdministrator()) || $getUserUuid === '') {
                     $fieldProperty = HtmlForm::FIELD_DEFAULT;
 
-                    if ($getNewUser >= 'create_registration') {
+                    if (!$gValidLogin || $getAcceptRegistration) {
                         $fieldProperty = HtmlForm::FIELD_REQUIRED;
                     }
 
@@ -175,7 +152,7 @@ try {
                         array('maxLength' => 254, 'property' => $fieldProperty, 'helpTextId' => 'SYS_USERNAME_DESCRIPTION', 'class' => 'form-control-small')
                     );
 
-                    if ($getNewUser === 'create_registration') {
+                    if (!$gValidLogin) {
                         // at registration add password and password confirm to form
                         $form->addInput(
                             'usr_password',
@@ -224,10 +201,10 @@ try {
             $usfNameIntern = $field->getValue('usf_name_intern');
 
             if ($gProfileFields->getProperty($usfNameIntern, 'usf_disabled') == 1
-                && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 'edit') {
+                && !$gCurrentUser->hasRightEditProfile($user, false) && $getUserUuid !== '') {
                 // disable field if this is configured in profile field configuration
                 $fieldProperty = HtmlForm::FIELD_DISABLED;
-            } elseif ($gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 'create_registration' || $getNewUser === 'accept_registration') ? true : false))) {
+            } elseif ($gProfileFields->hasRequiredInput($usfNameIntern, $userId, ((!$gValidLogin || $getAcceptRegistration) ? true : false))) {
                 $fieldProperty = HtmlForm::FIELD_REQUIRED;
             }
 
@@ -280,7 +257,7 @@ try {
             } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {
                 $showDummyRadioButton = false;
 
-                if (!$gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 'create_registration' || $getNewUser === 'accept_registration') ? true : false))) {
+                if (!$gProfileFields->hasRequiredInput($usfNameIntern, $userId, ((!$gValidLogin || $getAcceptRegistration) ? true : false))) {
                     $showDummyRadioButton = true;
                 }
 
@@ -351,20 +328,20 @@ try {
     $form->closeGroupBox();
 
     // if captchas are enabled then visitors of the website must resolve this
-    if ($getNewUser === 'create_registration' && $gSettingsManager->getBool('registration_enable_captcha')) {
+    if (!$gValidLogin && $gSettingsManager->getBool('registration_enable_captcha')) {
         $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
         $form->addCaptcha('captcha_code');
         $form->closeGroupBox();
     }
 
-    if ($getNewUser === 'create_registration') {
+    if (!$gValidLogin) {
         // Registration
         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
     } else {
         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
     }
 
-    if ($getNewUser === 'edit') {
+    if ($getUserUuid !== '') {
         // show information about user who creates the recordset and changed it
         $form->addHtml(admFuncShowCreateChangeInfoById(
             (int)$user->getValue('usr_usr_id_create'),

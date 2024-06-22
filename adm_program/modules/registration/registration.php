@@ -30,7 +30,7 @@ try {
     if ($getRegistrationId === '') {
         if (!$gValidLogin) {
             // if there is no login then show a profile form where the user can register himself
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('new_user' => 'create_registration')));
+            admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php');
             // => EXIT
         } elseif (!$gCurrentUser->approveUsers()) {
             // Only Users with the right "approve users" can work with registrations, otherwise exit.

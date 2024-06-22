@@ -40,7 +40,7 @@ try {
                         formMembersAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_USER_COULD_BE_CREATED') . '</strong>");
                         formMembersAlert.fadeIn("slow");
                         setTimeout(function() {
-                            self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('new_user' => 'create')) . '&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
+                            self.location.href = "' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php?lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
                         }, 2500);
                     } else {
                         if (data.length > 1000) {
