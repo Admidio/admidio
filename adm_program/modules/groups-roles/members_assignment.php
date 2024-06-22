@@ -37,18 +37,6 @@ try {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    if ($getMembersShowAll) {
-        $getFilterRoleUuid = 0;
-    }
-
-    if ($getFilterRoleUuid !== '') {
-        $filterRole = new TableRoles($gDb);
-        $filterRole->readDataByUuid($getFilterRoleUuid);
-        if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
-            throw new AdmException('SYS_NO_RIGHTS_VIEW_LIST');
-        }
-    }
-
     if ($getMode === 'assign') {
         // change membership of that user
         // this must be called as ajax request
@@ -79,6 +67,18 @@ try {
         $javascriptCode = '';
         $headline = $gL10n->get('SYS_MEMBER_ASSIGNMENT') . ' - ' . $role->getValue('rol_name');
         $_SESSION['set_rol_id'] = $role->getValue('rol_id');
+
+        if ($getMembersShowAll) {
+            $getFilterRoleUuid = 0;
+        }
+
+        if ($getFilterRoleUuid !== '') {
+            $filterRole = new TableRoles($gDb);
+            $filterRole->readDataByUuid($getFilterRoleUuid);
+            if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
+                throw new AdmException('SYS_NO_RIGHTS_VIEW_LIST');
+            }
+        }
 
         // add current url to navigation stack if last url was not the same page
         if (!str_contains($gNavigation->getUrl(), 'members_assignment.php')) {
