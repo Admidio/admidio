@@ -210,7 +210,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
 
     for ($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); ++$actThumbnail) {
         if ($actThumbnail <= $photoAlbum->getValue('pho_quantity')) {
-            $photoThumbnailTable .= '<div class="col-sm-6 col-lg-4 col-xl-3 admidio-album-thumbnail" id="div_image_'.$actThumbnail.'">';
+            $photoThumbnailTable .= '<div class="col-sm-6 col-lg-4 col-xl-2 admidio-album-thumbnail" id="div_image_'.$actThumbnail.'">';
 
             // Popup window
             if ((int) $gSettingsManager->get('photo_show_mode') === 0) {
@@ -237,9 +237,8 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
             }
 
             if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
-                $photoThumbnailTable .= '<div id="image_preferences_'.$actThumbnail.'" class="text-center" style="width: ' . $gSettingsManager->getInt('photo_thumbs_scale') . 'px">';
+                $photoThumbnailTable .= '<div id="image_preferences_'.$actThumbnail.'" class="text-center">';
             }
-
 
             if ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) {
                 $photoThumbnailTable .= '

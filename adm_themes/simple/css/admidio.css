@@ -536,8 +536,18 @@ input[type=time] {
     color: #df2424 !important;
 }
 
+.card-img, .card-img-top {
+    height: 200px !important;
+    object-fit: cover !important;
+}
+
 .admidio-album-thumbnail {
     margin-bottom: 25px;
+}
+
+.admidio-album-thumbnail .rounded {
+    width: 100% !important;
+    object-fit: contain !important;
 }
 
 .admidio-img-presenter img {

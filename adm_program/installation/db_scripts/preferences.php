@@ -156,11 +156,11 @@ $defaultOrgPreferences = array(
     'photo_image_text_size'  => '40',
     'photo_keep_original'    => '0',
     'photo_module_enabled'   => '1',
-    'photo_show_width'       => '1000',
-    'photo_show_height'      => '800',
+    'photo_show_width'       => '1200',
+    'photo_show_height'      => '1200',
     'photo_show_mode'        => '1',
-    'photo_thumbs_page'      => '16',
-    'photo_thumbs_scale'     => '200',
+    'photo_thumbs_page'      => '24',
+    'photo_thumbs_scale'     => '500',
 
     // Profile
     'profile_log_edit_fields'   => '1',

@@ -115,5 +115,13 @@
     <step id="1130">UPDATE %PREFIX%_menu SET men_description = 'SYS_EVENTS_DESC' WHERE men_name_intern = 'events'</step>
     <step id="1140">ComponentUpdateSteps::updateStep43RemoveInvalidVisibleRoleRights</step>
     <step id="1150">UPDATE %PREFIX%_menu SET men_standard = false WHERE men_name_intern IN ('statistics', 'statistics_editor');</step>
+    <step id="1160" database="mysql">UPDATE %PREFIX%_preferences SET prf_value = '500' WHERE prf_name = 'photo_thumbs_scale' AND CAST(prf_value AS unsigned) &lt; 500</step>
+    <step id="1170" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '500' WHERE prf_name = 'photo_thumbs_scale' AND prf_value::int &lt; 500</step>
+    <step id="1180" database="mysql">UPDATE %PREFIX%_preferences SET prf_value = '1200' WHERE prf_name = 'photo_show_width' AND CAST(prf_value AS unsigned) &lt; 1200</step>
+    <step id="1190" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '1200' WHERE prf_name = 'photo_show_width' AND prf_value::int &lt; 1200</step>
+    <step id="1200" database="mysql">UPDATE %PREFIX%_preferences SET prf_value = '1200' WHERE prf_name = 'photo_show_height' AND CAST(prf_value AS unsigned) &lt; 800</step>
+    <step id="1210" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '1200' WHERE prf_name = 'photo_show_height' AND prf_value::int &lt; 800</step>
+    <step id="1220" database="mysql">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_thumbs_page' AND CAST(prf_value AS unsigned) = 16</step>
+    <step id="1230" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_thumbs_page' AND prf_value::int = 16</step>
     <step>stop</step>
 </update>
