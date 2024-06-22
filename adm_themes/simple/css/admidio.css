@@ -547,7 +547,7 @@ input[type=time] {
 
 .admidio-album-thumbnail .rounded {
     width: 100% !important;
-    object-fit: contain !important;
+    object-fit: cover !important;
 }
 
 .admidio-img-presenter img {
