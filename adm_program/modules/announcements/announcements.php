@@ -18,10 +18,8 @@
  *             if no date information is delivered
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
 try {
-    unset($_SESSION['announcements_request']);
+    require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');

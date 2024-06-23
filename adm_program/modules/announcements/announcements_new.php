@@ -13,10 +13,12 @@
  * copy = true : The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('announcements_module_enabled') === 0) {
         throw new AdmException('SYS_MODULE_DISABLED');
@@ -59,20 +61,16 @@ try {
         }
     }
 
-    if (isset($_SESSION['announcements_request'])) {
-        // due to incorrect input the user has returned to this form
-        // now write the previously entered contents into the object
-        $announcementDescription = admFuncVariableIsValid($_SESSION['announcements_request'], 'ann_description', 'html');
-        $announcement->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['announcements_request'])));
-        $announcement->setValue('ann_description', $announcementDescription);
-        unset($_SESSION['announcements_request']);
-    }
-
     // create html page object
     $page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
 
     // show form
-    $form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => 'edit')), $page);
+    $form = new Form(
+        'announcements_edit_form',
+        'modules/announcements.edit.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => 'edit')),
+        $page
+    );
     $form->addInput(
         'ann_headline',
         $gL10n->get('SYS_TITLE'),
@@ -94,15 +92,12 @@ try {
         array('property' => HtmlForm::FIELD_REQUIRED)
     );
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-    $form->addHtml(admFuncShowCreateChangeInfoById(
-        (int)$announcement->getValue('ann_usr_id_create'),
-        $announcement->getValue('ann_timestamp_create'),
-        (int)$announcement->getValue('ann_usr_id_change'),
-        $announcement->getValue('ann_timestamp_change')
-    ));
+    $form->addToHtmlPage();
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $page->assignSmartyVariable('nameUserCreated', $announcement->getNameOfCreatingUser());
+    $page->assignSmartyVariable('timestampUserCreated', $announcement->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('nameLastUserEdited', $announcement->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('timestampLastUserEdited', $announcement->getValue('ann_timestamp_change'));
     $page->show();
 } catch (AdmException|Exception|\Smarty\Exception $e) {
     $gMessage->show($e->getMessage());

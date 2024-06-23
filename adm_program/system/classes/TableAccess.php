@@ -38,49 +38,49 @@ class TableAccess
     /**
      * @var array<string,string> Array with sub array that contains additional tables and their connected fields that should be selected when data is read
      */
-    protected $additionalTables = array();
+    protected array $additionalTables = array();
     /**
      * @var string Name of the database table of this object. This must be the table name with the installation specific prefix e.g. **demo_users**
      */
-    protected $tableName;
+    protected string $tableName;
     /**
      * @var string The prefix of each column that this table has. E.g. the table adm_users has the column prefix **usr**
      */
-    protected $columnPrefix;
+    protected string $columnPrefix;
     /**
      * @var string Name of the unique autoincrement index column of the database table
      */
-    protected $keyColumnName;
+    protected string $keyColumnName;
     /**
      * @var Database An object of the class Database for communication with the database
      */
-    protected $db;
+    protected Database $db;
 
     /**
      * @var bool Flag whether a new data set or existing data set is being edited
      */
-    protected $newRecord;
+    protected bool $newRecord;
     /**
      * @var bool Flag if the data of this record must be inserted or updated
      */
-    protected $insertRecord;
+    protected bool $insertRecord;
     /**
      * @var bool Flag will be set to true if data in array dbColumns was changed
      */
-    protected $columnsValueChanged;
+    protected bool $columnsValueChanged;
     /**
      * @var array<string,mixed> Array over all fields of the corresponding table for the selected record
      */
-    protected $dbColumns = array();
+    protected array $dbColumns = array();
     /**
      * @var array<string,array<string,mixed>> Array which stores further information (changed yes/no, field type)
      */
-    protected $columnsInfos = array();
+    protected array $columnsInfos = array();
     /**
      * @var bool If this flag is set then some right checks will be disabled, so that the object could be saved also
      * if the current user doesn't have the right to do this.
      */
-    protected $saveChangesWithoutRights;
+    protected bool $saveChangesWithoutRights;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
@@ -96,11 +96,6 @@ class TableAccess
         $this->db          =& $database;
         $this->tableName    = $tableName;
         $this->columnPrefix = $columnPrefix;
-
-        // only initialize if not set before through child constructor
-        if (!is_array($this->additionalTables)) {
-            $this->additionalTables = array();
-        }
 
         // if an ID is committed, then read data out of database
         if ($id > 0) {
@@ -206,13 +201,86 @@ class TableAccess
     }
 
     /**
+     * Get the first name and last name of the person who has created this record. In dependence of the preference
+     * system_show_create_edit the login name will be shown. If the current user has a valid login and the
+     * parameter **$linkToProfile** is set than a html link to the profile is set around the name.
+     * @param bool $linkToProfile If set to **true** a link to the profile is set around the name.
+     * @return string Returns the first name and last name of the person optional with a link to the profile.
+     * @throws Exception
+     */
+    public function getNameOfCreatingUser(bool $linkToProfile = true): string
+    {
+        global $gDb, $gProfileFields, $gL10n, $gSettingsManager, $gValidLogin;
+
+        $nameOfCreatingUser = '';
+
+        if ($this->getValue($this->columnPrefix . '_timestamp_create') !== '') {
+            if ((int)$this->getValue($this->columnPrefix . '_usr_id_create') > 0) {
+                $userCreated = new User($gDb, $gProfileFields, $this->getValue($this->columnPrefix . '_usr_id_create'));
+
+                if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
+                    $nameOfCreatingUser = $userCreated->getValue('FIRST_NAME') . ' ' . $userCreated->getValue('LAST_NAME');
+                } else {
+                    $nameOfCreatingUser = $userCreated->getValue('usr_login_name');
+                }
+
+                // if valid login and a user id is given than create a link to the profile of this user
+                if ($linkToProfile && $gValidLogin && $nameOfCreatingUser !== $gL10n->get('SYS_SYSTEM')) {
+                    $nameOfCreatingUser = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userCreated->getValue('usr_uuid'))) .
+                        '">' . $nameOfCreatingUser . '</a>';
+                }
+            } else {
+                $nameOfCreatingUser = $gL10n->get('SYS_DELETED_USER');
+            }
+        }
+        return $nameOfCreatingUser;
+    }
+
+    /**
+     * Get the first name and last name of the person who was the last editor of this record. In dependence of the preference
+     * system_show_create_edit the login name will be shown. If the current user has a valid login and the
+     * parameter **$linkToProfile** is set than a html link to the profile is set around the name.
+     * @param bool $linkToProfile If set to **true** a link to the profile is set around the name.
+     * @return string Returns the first name and last name of the person optional with a link to the profile.
+     * @throws Exception
+     */
+    public function getNameOfLastEditingUser(bool $linkToProfile = true): string
+    {
+        global $gDb, $gProfileFields, $gL10n, $gSettingsManager, $gValidLogin;
+
+        $nameOfLastEditingUser = '';
+
+        if ($this->getValue($this->columnPrefix . '_timestamp_create') !== '') {
+            if ((int)$this->getValue($this->columnPrefix . '_usr_id_change') > 0) {
+                $userLastEdited = new User($gDb, $gProfileFields, $this->getValue($this->columnPrefix . '_usr_id_change'));
+
+                if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
+                    $nameOfLastEditingUser = $userLastEdited->getValue('FIRST_NAME') . ' ' . $userLastEdited->getValue('LAST_NAME');
+                } else {
+                    $nameOfLastEditingUser = $userLastEdited->getValue('usr_login_name');
+                }
+
+                // if valid login and a user id is given than create a link to the profile of this user
+                if ($linkToProfile && $gValidLogin && $nameOfLastEditingUser !== $gL10n->get('SYS_SYSTEM')) {
+                    $nameOfLastEditingUser = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userLastEdited->getValue('usr_uuid'))) .
+                        '">' . $nameOfLastEditingUser . '</a>';
+                }
+            } else {
+                $nameOfLastEditingUser = $gL10n->get('SYS_DELETED_USER');
+            }
+        }
+        return $nameOfLastEditingUser;
+    }
+
+    /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      * @see TableAccess#setValue
      */
     public function getValue(string $columnName, string $format = '')
@@ -624,6 +692,7 @@ class TableAccess
      *     ...
      * }
      * ```
+     * @throws AdmException
      */
     public function setArray(array $fieldArray)
     {
@@ -642,7 +711,7 @@ class TableAccess
 
     /**
      * Read all columns with their information like **type** (integer, varchar, boolean),
-     * **null** (or not), **key** and **serial**. Also the changed flag will be set to false.
+     * **null** (or not), **key** and **serial**. Also, the changed flag will be set to false.
      * @throws Exception
      */
     protected function setColumnsInfos()
@@ -706,13 +775,13 @@ class TableAccess
      * @param mixed  $newValue   The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException If **columnName** doesn't exists. exception->text contains a string with the reason why the login failed.
+     * @throws AdmException If **columnName** doesn't exist. exception->text contains a string with the reason why the login failed.
      * @see TableAccess#getValue
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         if (!array_key_exists($columnName, $this->dbColumns)) {
-            throw new AdmException('Column ' . $columnName . ' doesn\'t exists in table ' . $this->tableName . '!');
+            throw new AdmException('Column ' . $columnName . ' does not exists in table ' . $this->tableName . '!');
         }
 
         // General plausibility checks based on the field type

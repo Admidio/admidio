@@ -1615,7 +1615,7 @@ class Form
                             var returnData = JSON.parse(data);
                             var returnStatus = returnData.status;
                             var returnMessage = "";
-                            forwardUrl = "' . $gNavigation->getPreviousUrl() . '";
+                            var forwardUrl = "' . $gNavigation->getPreviousUrl() . '";
 
                             if (typeof returnData.message !== "undefined") {
                                 returnMessage = returnData.message;

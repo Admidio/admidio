@@ -98,8 +98,10 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
             }
         } else {
             // entry could not be deleted, then show content of data or a common error message
-            const message = (data.length > 0) ? data : "Error: Undefined error occurred!";
-            messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>" + message + "</div>");
+            if (returnMessage.length === 0) {
+                returnMessage = "Error: Undefined error occurred!";
+            }
+            messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage + "</div>");
         }
     });
 }

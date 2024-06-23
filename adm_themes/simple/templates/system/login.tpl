@@ -2,6 +2,7 @@
         {$attribute@key}="{$attribute}"
     {/foreach}>
 
+    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['usr_login_name']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['usr_password']}
     {if $settings->getBool('system_organization_select')}

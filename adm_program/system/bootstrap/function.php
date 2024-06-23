@@ -415,6 +415,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
  * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
  * @throws Exception
+ * @deprecated 5.0.0:5.1.0 "admFuncShowCreateChangeInfoById()" is deprecated, use "TableAccess::getNameOfCreatingUser()" instead.
  */
 function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCreate, int $userIdEdited = 0, string $timestampEdited = ''): string
 {
@@ -490,6 +491,7 @@ function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCr
  *                                      If uuid is set than a link to the user profile will be created
  * @return string Returns a html string with usernames who creates item and edit item the last time
  * @throws Exception
+ * @deprecated 5.0.0:5.1.0 "admFuncShowCreateChangeInfoByName()" is deprecated, use "TableAccess::getNameOfCreatingUser()" instead.
  */
 function admFuncShowCreateChangeInfoByName(string $userNameCreated, string $timestampCreate, string $userNameEdited = '', string $timestampEdited = '', string $userUuidCreated = '', string $userUuidEdited = ''): string
 {
