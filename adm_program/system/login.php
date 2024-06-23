@@ -38,6 +38,9 @@ if ($getMode === 'dialog') {
 } elseif ($getMode === 'check') {
     // check the data of the login dialog
     try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         $loginModule = new ModuleLogin();
         $loginModule->checkLogin();
     } catch (AdmException $e) {
