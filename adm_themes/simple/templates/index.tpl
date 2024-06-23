@@ -11,7 +11,7 @@
 
     <title>{$title}</title>
 
-    {include file="js_css_files.tpl"}
+    {include file="system/js_css_files.tpl"}
 
     {* Additional header informations that will be displayed if the header was set through $page->addHeader() *}
     {$additionalHeaderData}
@@ -54,7 +54,7 @@
 
     {* If activated in the Admidio settings a cookie note script will be integrated and show a cookie message that the user must accept *}
     {if $cookieNote}
-        {include file="cookie_note.tpl"}
+        {include file="system/cookie_note.tpl"}
     {/if}
 </head>
 <body id="{$id}" class="admidio">
