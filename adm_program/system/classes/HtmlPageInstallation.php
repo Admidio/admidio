@@ -159,7 +159,7 @@ class HtmlPageInstallation extends HtmlPage
         $this->smarty->assign('outputMode', $outputMode);
         $this->smarty->assign('messageHeadline', $headline);
         $this->smarty->assign('messageText', $text);
-        $this->addTemplateFile('message.tpl');
+        $this->addTemplateFile('system/message.tpl');
 
         // add form with submit button
         $form = new HtmlForm('installation-form', $destinationUrl);

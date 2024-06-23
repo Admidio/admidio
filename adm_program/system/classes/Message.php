@@ -174,13 +174,13 @@ class Message
             $smarty->assign('url', $this->url);
             $smarty->assign('showYesNoButtons', $this->showYesNoButtons);
             $smarty->assign('l10n', $gL10n);
-            $smarty->display('message_modal.tpl');
+            $smarty->display('system/message_modal.tpl');
         } else {
             // show an Admidio html page with complete theme header and body
             $page->assignSmartyVariable('message', $content);
             $page->assignSmartyVariable('url', $this->url);
             $page->assignSmartyVariable('showYesNoButtons', $this->showYesNoButtons);
-            $page->addTemplateFile('message.tpl');
+            $page->addTemplateFile('system/message.tpl');
             $page->show();
         }
         exit();

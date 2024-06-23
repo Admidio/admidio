@@ -66,7 +66,7 @@ class ModuleLogin
         // show form
         $form = new Form(
             'login_form',
-            'login.tpl',
+            'system/login.tpl',
             ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
             $page,
             array('showRequiredFields' => false)
