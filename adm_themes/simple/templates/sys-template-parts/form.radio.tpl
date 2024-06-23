@@ -6,13 +6,13 @@
     >
 {else}
     <div id="{$data.id}_group" class="admidio-form-group
-        {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}row{/if}
-        {if $data.formtype neq "navbar"} mb-4{/if}{if $data.property eq 1} admidio-form-group-required{/if}">
-        <label for="{$data.id}" class="{if $data.formtype neq "vertical" and $data.formtype neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
+        {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
+        {if $formType neq "navbar"} mb-4{/if}{if $data.property eq 1} admidio-form-group-required{/if}">
+        <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
             {include file="sys-template-parts/parts/form.part.icon.tpl"}
             {$data.label}
         </label>
-        <div{if $data.formtype neq "vertical" and $data.formtype neq "navbar"} class="col-sm-9"{/if}>
+        <div{if $formType neq "vertical" and $formType neq "navbar"} class="col-sm-9"{/if}>
             {if $data.showNoValueButton}
                 <div class="form-check form-check-inline">
                     <input id="{$data.id}_0" name="{$data.id}" class="form-check-input {$data.class}" type="radio" value="0">
@@ -31,7 +31,7 @@
                 </div>
             {/foreach}
 
-            {if $data.formtype eq "navbar"}
+            {if $formType eq "navbar"}
                 {include file="sys-template-parts/parts/form.part.iconhelp.tpl"}
             {else}
                 {include file="sys-template-parts/parts/form.part.helptext.tpl"}

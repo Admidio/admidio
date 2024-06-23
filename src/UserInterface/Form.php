@@ -200,7 +200,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'     => 'sys-template-parts/form.button.tpl',
-            'formtype'     => $this->type,
             'property'     => self::FIELD_DEFAULT,
             'icon'         => '',
             'link'         => '',
@@ -253,7 +252,6 @@ class Form
             });', true);
         $this->elements[$id] = array(
             'template' => 'sys-template-parts/form/captcha.tpl',
-            'formtype' => $this->type,
             'class'    => $class,
             'id'       => $id
         );
@@ -301,7 +299,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'         => 'sys-template-parts/form.checkbox.tpl',
-            'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'helpTextId'       => '',
             'icon'             => '',
@@ -360,7 +357,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'         => 'sys-template-parts/form.customcontent.tpl',
-            'formtype'         => $this->type,
             'property'         => '',
             'referenceId'      => '',
             'helpTextId'       => '',
@@ -416,7 +412,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'         => 'sys-template-parts/form.editor.tpl',
-            'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
             'alertWarning'     => '',
@@ -521,7 +516,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'           => 'sys-template-parts/form.file.tpl',
-            'formtype'           => $this->type,
             'property'           => self::FIELD_DEFAULT,
             'maxUploadSize'      => \PhpIniUtils::getFileUploadMaxFileSize(),
             'allowedMimeTypes'   => array(),
@@ -634,7 +628,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'         => 'sys-template-parts/form.input.tpl',
-            'formtype'         => $this->type,
             'id'               => $id,
             'label'            => $label,
             'value'            => $value,
@@ -850,7 +843,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'         => 'sys-template-parts/form.multiline.tpl',
-            'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'maxLength'        => 0,
             'alertWarning'     => '',
@@ -949,7 +941,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'          => 'sys-template-parts/form.radio.tpl',
-            'formtype'          => $this->type,
             'property'          => self::FIELD_DEFAULT,
             'defaultValue'      => '',
             'showNoValueButton' => false,
@@ -1039,7 +1030,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'                       => 'sys-template-parts/form.select.tpl',
-            'formtype'                       => $this->type,
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
@@ -1382,7 +1372,7 @@ class Form
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'arrayKeyIsNotValue'             => false,
@@ -1541,7 +1531,6 @@ class Form
         // create array with all options
         $optionsDefault = array(
             'template'         => 'sys-template-parts/form.static.tpl',
-            'formtype'         => $this->type,
             'property'         => '',
             'alertWarning'     => '',
             'helpTextId'       => '',
@@ -1576,7 +1565,6 @@ class Form
     {
         // create array with all options
         $optionsDefault = array(
-            'formtype' => $this->type,
             'icon'     => '',
             'link'     => '',
             'class'    => '',
@@ -1606,6 +1594,7 @@ class Form
     public function addToHtmlPage()
     {
         if (is_object($this->htmlPage)) {
+            $this->htmlPage->assignSmartyVariable('formType', $this->type);
             $this->htmlPage->assignSmartyVariable('attributes', $this->attributes);
             $this->htmlPage->assignSmartyVariable('elements', $this->elements);
             $this->htmlPage->assignSmartyVariable('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));

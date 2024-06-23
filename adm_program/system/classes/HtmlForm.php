@@ -191,7 +191,6 @@ class HtmlForm
         ++$this->countElements;
         // create array with all options
         $optionsDefault = array(
-            'formtype'     => $this->type,
             'property'     => self::FIELD_DEFAULT,
             'icon'         => '',
             'link'         => '',
@@ -242,7 +241,7 @@ class HtmlForm
             $("#' . $id . '_refresh").click(function() {
                 document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
             });', true);
-        $this->render('form.captcha', ['formtype' => $this->type, 'class' => $class, 'id' => $id]);
+        $this->render('form.captcha', ['class' => $class, 'id' => $id]);
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,
@@ -285,7 +284,6 @@ class HtmlForm
 
         // create array with all options
         $optionsDefault = array(
-            'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'helpTextId'       => '',
             'icon'             => '',
@@ -342,7 +340,7 @@ class HtmlForm
     public function addCustomContent(string $label, string $content, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'         => '',
             'referenceId'      => '',
             'helpTextId'       => '',
@@ -396,7 +394,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'         => self::FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
             'alertWarning'     => '',
@@ -499,7 +497,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'           => self::FIELD_DEFAULT,
             'maxUploadSize'      => PhpIniUtils::getFileUploadMaxFileSize(),
             'allowedMimeTypes'   => array(),
@@ -610,7 +608,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'id'               => $id,
             'label'            => $label,
             'value'            => $value,
@@ -824,7 +822,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'         => self::FIELD_DEFAULT,
             'maxLength'        => 0,
             'alertWarning'     => '',
@@ -921,7 +919,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'          => self::FIELD_DEFAULT,
             'defaultValue'      => '',
             'showNoValueButton' => false,
@@ -1009,7 +1007,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
@@ -1352,7 +1350,7 @@ class HtmlForm
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'arrayKeyIsNotValue'             => false,
@@ -1510,7 +1508,6 @@ class HtmlForm
 
         // create array with all options
         $optionsDefault = array(
-            'formtype'         => $this->type,
             'property'         => '',
             'alertWarning'     => '',
             'helpTextId'       => '',
@@ -1544,7 +1541,7 @@ class HtmlForm
     public function addSubmitButton(string $id, string $text, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,'icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
+        $optionsDefault = array('icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css classes
@@ -1688,7 +1685,7 @@ class HtmlForm
         }
 
         $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
-        $smarty->assign('formtype', $this->type);
+        $smarty->assign('formType', $this->type);
         $smarty->assign('data', $assigns);
 
         $smarty->assign('l10n', $gL10n);

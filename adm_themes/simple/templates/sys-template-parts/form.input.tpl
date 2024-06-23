@@ -6,30 +6,30 @@
     >
 {else}
     <div id="{$data.id}_group" class="admidio-form-group
-        {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}row{/if}
-        {if $data.formtype eq "navbar"} form-floating{else} mb-4{/if}
+        {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
+        {if $formType eq "navbar"} form-floating{else} mb-4{/if}
         {if $data.property eq 1} admidio-form-group-required{/if}
         {if $data.type == "datetime"} row{/if}">
 
-        {if $data.formtype neq "navbar"}
-            <label for="{$data.id}" class="{if $data.formtype neq "vertical" and $data.formtype neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
+        {if $formType neq "navbar"}
+            <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
                 {include file="sys-template-parts/parts/form.part.icon.tpl"}
                 {$data.label}
             </label>
         {/if}
 
-        {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}<div class="col-sm-9">{/if}
+        {if $formType neq "vertical" and $formType neq "navbar"}<div class="col-sm-9">{/if}
 
         {if $data.type == "datetime"}
-            {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}<div class="row">{/if}
-            <div class="{if $data.formtype neq "vertical" and $data.formtype neq "navbar"}col-sm-3{else}col-auto{/if}">
+            {if $formType neq "vertical" and $formType neq "navbar"}<div class="row">{/if}
+            <div class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3{else}col-auto{/if}">
                 <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="date" value="{$data.attributes.dateValue}"
                     {foreach $data.attributes.dateValueAttributes as $itemvar}
                         {$itemvar@key}="{$itemvar}"
                     {/foreach}
                 >
             </div>
-            <div class="{if $data.formtype neq "vertical" and $data.formtype neq "navbar"}col-sm-2{else}col-auto{/if}">
+            <div class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-2{else}col-auto{/if}">
                 <input id="{$data.id}_time" name="{$data.id}_time" class="form-control focus-ring {$data.class}" type="time" value="{$data.attributes.timeValue}"
                     {foreach $data.attributes.timeValueAttributes as $itemvar}
                         {$itemvar@key}="{$itemvar}"
@@ -37,7 +37,7 @@
                 >
             </div>
             {$data.htmlAfter}
-            {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}</div>{/if}
+            {if $formType neq "vertical" and $formType neq "navbar"}</div>{/if}
         {elseif $data.type == "date"}
             <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="date" value="{$data.value}"
                 {foreach $data.attributes as $itemvar}
@@ -67,18 +67,18 @@
             {$data.htmlAfter}
         {/if}
 
-        {if $data.formtype eq "navbar"}
+        {if $formType eq "navbar"}
             <label for="{$data.id}" class="form-label">
                 {include file="sys-template-parts/parts/form.part.icon.tpl"}
                 {$data.label}
             </label>
         {/if}
-        {if $data.formtype eq "navbar"}
+        {if $formType eq "navbar"}
             {include file="sys-template-parts/parts/form.part.iconhelp.tpl"}
         {else}
             {include file="sys-template-parts/parts/form.part.helptext.tpl"}
         {/if}
         {include file="sys-template-parts/parts/form.part.warning.tpl"}
-        {if $data.formtype neq "vertical" and $data.formtype neq "navbar"}</div>{/if}
+        {if $formType neq "vertical" and $formType neq "navbar"}</div>{/if}
     </div>
 {/if}

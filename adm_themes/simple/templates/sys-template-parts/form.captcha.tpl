@@ -1,4 +1,4 @@
-{if $data.formtype neq "vertical" and $data.formtype neq "navbar"}
+{if $formType neq "vertical" and $formType neq "navbar"}
     <div class="row mb-3">
         <div class="col-sm-9 offset-sm-3">
 {/if}
@@ -8,4 +8,4 @@
         <i class="bi bi-arrow-repeat" style="font-size: 22pt;" data-bs-toggle="tooltip" title="{$l10n->get("SYS_RELOAD")}"></i>
     </a>
 </div>
-{if $data.formtype neq "vertical" and $data.formtype neq "navbar"}</div></div>{/if}
+{if $formType neq "vertical" and $formType neq "navbar"}</div></div>{/if}
