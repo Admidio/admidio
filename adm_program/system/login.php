@@ -61,9 +61,16 @@ try {
 
         unset($_SESSION['login_forward_url']);
 
-        admRedirect($forwardUrl);
-        // => EXIT
+        echo json_encode(array(
+            'status' => 'success',
+            'url' => $forwardUrl
+        ));
+        exit();
     }
 } catch (AdmException|Exception|\Smarty\Exception $e) {
-    $gMessage->show($e->getMessage());
+    if($getMode === 'check') {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    } else {
+        $gMessage->show($e->getMessage());
+    }
 }

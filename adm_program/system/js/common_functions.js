@@ -70,13 +70,13 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
                 messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>" + returnMessage + "</div>");
                 setTimeout(function(){
                         $("#admidio-modal").modal("hide");
-                        if (callback === 'callbackRoles') {
+                        if (callback === "callbackRoles") {
                             $(entryDeleted).fadeOut("slow", callbackRoles);
-                        } else if (callback === 'callbackFormerRoles') {
+                        } else if (callback === "callbackFormerRoles") {
                             $(entryDeleted).fadeOut("slow", callbackFormerRoles);
-                        } else if (callback === 'callbackFutureRoles') {
+                        } else if (callback === "callbackFutureRoles") {
                             $(entryDeleted).fadeOut("slow", callbackFutureRoles);
-                        } else if (callback === 'callbackProfilePhoto') {
+                        } else if (callback === "callbackProfilePhoto") {
                             callbackProfilePhoto();
                         } else {
                             $(entryDeleted).fadeOut("slow");

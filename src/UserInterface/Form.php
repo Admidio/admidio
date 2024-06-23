@@ -84,10 +84,6 @@ class Form
      * @var array Array with all elements of the form and their attributes as array
      */
     protected array $elements = array();
-    /**
-     * @var bool Flag that indicates if a bootstrap button-group is open and should be closed later
-     */
-    protected bool $buttonGroupOpen = false;
 
     /**
      * Constructor creates the form element
@@ -138,6 +134,7 @@ class Form
         $this->template = $template;
 
         // set specific Admidio css form class
+        $this->attributes['id'] = $this->id;
         $this->attributes['role'] = 'form';
         $this->attributes['action'] = $action;
         $this->attributes['method'] = $optionsAll['method'];
@@ -1579,10 +1576,6 @@ class Form
 
         // now add button to form
         $this->addButton($id, $text, $optionsAll);
-
-        if (!$this->buttonGroupOpen) {
-            $this->htmlString .= '<div class="form-alert" style="display: none;">&nbsp;</div>';
-        }
     }
 
     /**
@@ -1593,6 +1586,8 @@ class Form
      */
     public function addToHtmlPage()
     {
+        global $gNavigation;
+
         if (is_object($this->htmlPage)) {
             $this->htmlPage->assignSmartyVariable('formType', $this->type);
             $this->htmlPage->assignSmartyVariable('attributes', $this->attributes);
@@ -1600,6 +1595,64 @@ class Form
             $this->htmlPage->assignSmartyVariable('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
             $this->htmlPage->addTemplateFile($this->template);
         }
+
+        // add javascript for handling of success and error messages from the form submit
+        $this->addJavascriptCode('
+            $("#' . $this->id . '").submit(function(event) {
+                var iconClass = $("button[type=submit] i").attr("class");
+                var formAlert = $("#' . $this->id . ' .form-alert");
+                $("button[type=submit] i").attr("class", "spinner-border spinner-border-sm");
+                formAlert.hide();
+
+                // disable default form submit
+                event.preventDefault();
+
+                $.post({
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        try {
+                            var returnData = JSON.parse(data);
+                            var returnStatus = returnData.status;
+                            var returnMessage = "";
+                            forwardUrl = "' . $gNavigation->getPreviousUrl() . '";
+
+                            if (typeof returnData.message !== "undefined") {
+                                returnMessage = returnData.message;
+                            }
+                            if (typeof returnData.url !== "undefined") {
+                                forwardUrl = returnData.url;
+                            }
+                        } catch (e) {
+                            // no expected JSON response
+                            returnStatus = "error";
+                            returnMessage = "Something went wrong while processing your request.";
+                        }
+
+                        if (returnStatus === "success") {
+                            if (returnMessage.length > 0) {
+                                formAlert.attr("class", "alert alert-success form-alert");
+                                formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>" + returnMessage + "</strong>");
+                                formAlert.fadeIn("slow");
+                                setTimeout(function() {
+                                    self.location.href = forwardUrl;
+                                }, 2500);
+                            } else {
+                                self.location.href = forwardUrl;
+                            }
+                        } else {
+                            if (returnMessage.length == 0) {
+                                returnMessage = "Error: Undefined error occurred!";
+                            }
+                            $("button[type=submit] i").attr("class", iconClass);
+                            formAlert.attr("class", "alert alert-danger form-alert");
+                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage);
+                            formAlert.fadeIn();
+                        }
+                    }
+                });
+            });
+        ', true);
     }
 
     /**

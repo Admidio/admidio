@@ -11,6 +11,7 @@
         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['auto_login']}
     {/if}
     {include 'sys-template-parts/form.button.tpl' data=$elements['btn_login']}
+    <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>
 
 {if $settings->getBool('enable_auto_login')}
