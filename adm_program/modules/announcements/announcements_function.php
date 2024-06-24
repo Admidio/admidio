@@ -44,9 +44,6 @@ try {
         }
     }
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     if ($getMode === 'edit') {
         $announcementEditForm = $gCurrentSession->getObject('announcements_edit_form');
         $announcementEditForm->validate($_POST);
@@ -74,6 +71,9 @@ try {
         ));
         exit();
     } elseif ($getMode === 'delete') {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // delete current announcements, right checks were done before
         $announcement->delete();
 

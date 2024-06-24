@@ -1754,9 +1754,12 @@ class Form
      */
     public function validate(array $fieldValues)
     {
+        // check the CSRF token of the form against the session token
+        \SecurityUtils::validateCsrfToken($fieldValues['admidio-csrf-token']);
+
         foreach ($fieldValues as $key => $value) {
             // security check if the form payload includes unexpected fields
-            if (!in_array($key, $this->elements)) {
+            if (!array_key_exists($key, $this->elements)) {
                 throw new \AdmException('Invalid payload of the form!');
             }
         }
