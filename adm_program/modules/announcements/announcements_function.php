@@ -48,15 +48,8 @@ try {
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
     if ($getMode === 'edit') {
-        if (strlen($_POST['ann_headline']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_HEADLINE'));
-        }
-        if (strlen($_POST['ann_description']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TEXT'));
-        }
-        if (strlen($_POST['ann_cat_id']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CATEGORY'));
-        }
+        $announcementEditForm = $gCurrentSession->getObject('announcements_edit_form');
+        $announcementEditForm->validate($_POST);
 
         // make html in description secure
         $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');

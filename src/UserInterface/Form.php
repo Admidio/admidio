@@ -1743,4 +1743,34 @@ class Form
         }
         $this->htmlString .= '<div class="card-body">';
     }
+
+    /**
+     * Validates the input of a form against the form definition. Therefore, this method needs
+     * the $_POST variable as parameter $fieldValues. An exception is thrown if a required
+     * form field doesn't has a value in the $fieldValues array.
+     * @param array $fieldValues Array with field name as key and field value as array value.
+     * @return void
+     * @throws \AdmException
+     */
+    public function validate(array $fieldValues)
+    {
+        foreach ($fieldValues as $key => $value) {
+            // security check if the form payload includes unexpected fields
+            if (!in_array($key, $this->elements)) {
+                throw new \AdmException('Invalid payload of the form!');
+            }
+        }
+
+        foreach($this->elements as $element) {
+            // check if element is required and given value in array $fieldValues is empty
+            if ($element['property'] === $this::FIELD_REQUIRED
+            && isset($fieldValues[$element['id']])
+            && (string) $fieldValues[$element['id']] === '') {
+                throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+            } elseif ($element['property'] === $this::FIELD_REQUIRED
+            && !isset($fieldValues[$element['id']])) {
+                throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+            }
+        }
+    }
 }

@@ -93,6 +93,7 @@ try {
     );
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
     $form->addToHtmlPage();
+    $gCurrentSession->addObject('announcements_edit_form', $form);
 
     $page->assignSmartyVariable('nameUserCreated', $announcement->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $announcement->getValue('ann_timestamp_create'));
