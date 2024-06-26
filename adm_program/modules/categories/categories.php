@@ -116,7 +116,6 @@ try {
     }
 
     $gNavigation->addUrl(CURRENT_URL, $navigationHeadline);
-    unset($_SESSION['categories_request']);
 
     // create html page object
     $page = new HtmlPage('admidio-categories', $headline);

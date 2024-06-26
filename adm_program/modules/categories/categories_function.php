@@ -92,11 +92,12 @@ try {
     if ($postMode === 'edit') {
         // create or edit category
 
-        $_SESSION['categories_request'] = $_POST;
-
+        $categoryEditForm = $gCurrentSession->getObject('categories_edit_form');
+        $categoryEditForm->validate($_POST);
+/*
         if ((!array_key_exists('cat_name', $_POST) || $_POST['cat_name'] === '') && $category->getValue('cat_system') == 0) {
             throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
-        }
+        }*/
 
         if ($postType !== 'ROL'
             && ((bool)$category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)
@@ -210,7 +211,6 @@ try {
         $gDb->endTransaction();
 
         $gNavigation->deleteLastUrl();
-        unset($_SESSION['categories_request']);
 
         admRedirect($gNavigation->getUrl());
         // => EXIT
