@@ -4,7 +4,7 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step, com_update_completed)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.3.8', 0, 1150, true)
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.3.10', 0, 1150, true)
                               , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.3.0', 0, 0, true)
                               , (30, 'MODULE', 'SYS_EVENTS', 'EVENTS', '4.3.0', 0, 0, true)
                               , (40, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.3.0', 0, 0, true)
@@ -310,11 +310,11 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (7300, 1, 'photo_image_text', '© demo.admidio.org'),
     (7305, 1, 'photo_image_text_size', '40'),
     (7350, 1, 'photo_albums_per_page', '24'),
-    (7500, 1, 'photo_show_width', '1000'),
-    (7600, 1, 'photo_show_height', '750'),
+    (7500, 1, 'photo_show_width', '1200'),
+    (7600, 1, 'photo_show_height', '1200'),
     (7700, 1, 'photo_show_mode', '1'),
-    (7800, 1, 'photo_thumbs_scale', '200'),
-    (7900, 1, 'photo_thumbs_page', '16'),
+    (7800, 1, 'photo_thumbs_scale', '500'),
+    (7900, 1, 'photo_thumbs_page', '24'),
     (8000, 1, 'photo_keep_original', '0'),
     (8100, 1, 'photo_download_enabled', '1'),
     (8200, 1, 'profile_log_edit_fields', '1'),
@@ -427,11 +427,11 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (73000, 2, 'photo_albums_per_page', '24'),
     (73025, 2, 'photo_image_text', '© demo.admidio.org'),
     (73050, 2, 'photo_image_text_size', '40'),
-    (75001, 2, 'photo_show_width', '1000'),
-    (76001, 2, 'photo_show_height', '750'),
+    (75001, 2, 'photo_show_width', '1200'),
+    (76001, 2, 'photo_show_height', '1200'),
     (77001, 2, 'photo_show_mode', '1'),
-    (78001, 2, 'photo_thumbs_scale', '200'),
-    (79001, 2, 'photo_thumbs_page', '16'),
+    (78001, 2, 'photo_thumbs_scale', '500'),
+    (79001, 2, 'photo_thumbs_page', '24'),
     (80001, 2, 'photo_keep_original', '0'),
     (81001, 2, 'photo_download_enabled', '0'),
     (82001, 2, 'profile_log_edit_fields', '1'),
