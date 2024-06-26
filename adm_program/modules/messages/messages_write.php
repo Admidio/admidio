@@ -87,7 +87,7 @@ if ($getMsgUuid !== '') {
         $messageStatement = $message->getConversation($message->getValue('msg_id'));
     }
 
-    $getSubject = $message->getValue('msg_subject');
+    $getSubject = $message->getValue('msg_subject', 'database');
     if($gCurrentUserId !== $message->getValue('msg_usr_id_sender')) {
         $user = new User($gDb, $gProfileFields, $message->getValue('msg_usr_id_sender'));
     } else {
