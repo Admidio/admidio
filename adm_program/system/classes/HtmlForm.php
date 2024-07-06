@@ -347,6 +347,7 @@ class HtmlForm
             'alertWarning'     => '',
             'icon'             => '',
             'class'            => '',
+            'id'               => $label,
             'label'            => $label,
             'content'          => $content,
         );
