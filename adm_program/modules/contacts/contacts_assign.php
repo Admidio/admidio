@@ -39,8 +39,13 @@ try {
     echo $page->getPageContent();
 } catch (AdmException|Exception|\Smarty\Exception $e) {
     if ($e->getMessage() === 'No similar users found.') {
-        echo 'success';
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => $gL10n->get('SYS_USER_COULD_BE_CREATED'),
+            'url' => ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php?lastname=' . $postLastname . '&firstname=' . $postFirstname)
+        );
+        exit();
     } else {
-        echo $e->getMessage();
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
 }

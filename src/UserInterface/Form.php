@@ -1604,60 +1604,7 @@ class Form
 
         // add javascript for handling of success and error messages from the form submit
         $this->addJavascriptCode('
-            $("#' . $this->id . '").submit(function(event) {
-                var iconClass = $("button[type=submit] i").attr("class");
-                var formAlert = $("#' . $this->id . ' .form-alert");
-                $("button[type=submit] i").attr("class", "spinner-border spinner-border-sm");
-                formAlert.hide();
-
-                // disable default form submit
-                event.preventDefault();
-
-                $.post({
-                    url: $(this).attr("action"),
-                    data: $(this).serialize(),
-                    success: function(data) {
-                        try {
-                            var returnData = JSON.parse(data);
-                            var returnStatus = returnData.status;
-                            var returnMessage = "";
-                            var forwardUrl = "' . $gNavigation->getPreviousUrl() . '";
-
-                            if (typeof returnData.message !== "undefined") {
-                                returnMessage = returnData.message;
-                            }
-                            if (typeof returnData.url !== "undefined") {
-                                forwardUrl = returnData.url;
-                            }
-                        } catch (e) {
-                            // no expected JSON response
-                            returnStatus = "error";
-                            returnMessage = "Something went wrong while processing your request.";
-                        }
-
-                        if (returnStatus === "success") {
-                            if (returnMessage.length > 0) {
-                                formAlert.attr("class", "alert alert-success form-alert");
-                                formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>" + returnMessage + "</strong>");
-                                formAlert.fadeIn("slow");
-                                setTimeout(function() {
-                                    self.location.href = forwardUrl;
-                                }, 2500);
-                            } else {
-                                self.location.href = forwardUrl;
-                            }
-                        } else {
-                            if (returnMessage.length == 0) {
-                                returnMessage = "Error: Undefined error occurred!";
-                            }
-                            $("button[type=submit] i").attr("class", iconClass);
-                            formAlert.attr("class", "alert alert-danger form-alert");
-                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage);
-                            formAlert.fadeIn();
-                        }
-                    }
-                });
-            });
+            $("#' . $this->id . '").submit(formSubmit);
         ', true);
     }
 
