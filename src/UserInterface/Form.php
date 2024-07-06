@@ -55,7 +55,7 @@ class Form
     /**
      * @var \HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
-    protected $htmlPage;
+    protected \HtmlPage $htmlPage;
     /**
      * @var string String with prepared html
      */
@@ -67,7 +67,7 @@ class Form
     /**
      * @var string Form type. Possible values are **default**, **vertical** or **navbar**.
      */
-    protected $type;
+    protected string $type;
     /**
      * @var string ID of the form
      */
@@ -1772,13 +1772,15 @@ class Form
 
         foreach($this->elements as $element) {
             // check if element is required and given value in array $fieldValues is empty
-            if ($element['property'] === $this::FIELD_REQUIRED
-            && isset($fieldValues[$element['id']])
-            && (string) $fieldValues[$element['id']] === '') {
-                throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
-            } elseif ($element['property'] === $this::FIELD_REQUIRED
-            && !isset($fieldValues[$element['id']])) {
-                throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+            if ($element['property'] === $this::FIELD_REQUIRED) {
+               if (isset($fieldValues[$element['id']])) {
+                   if ((is_array($fieldValues[$element['id']]) && count($fieldValues[$element['id']]) === 0)
+                   || (!is_array($fieldValues[$element['id']]) && (string) $fieldValues[$element['id']] === '')) {
+                       throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                   }
+               } else {
+                   throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+               }
             }
         }
     }

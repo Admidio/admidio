@@ -55,7 +55,9 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
         try {
             const returnData = JSON.parse(data);
             returnStatus = returnData.status;
-            returnMessage = returnData.message;
+            if (typeof returnData.message !== 'undefined') {
+                returnMessage = returnData.message;
+            }
         } catch (e) {
             // fallback for old implementation without JSON response
             if (data === "done") {
@@ -209,7 +211,25 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
             "uuid": elementId,
             "mode": "sequence"
         }, function(data) {
-            if (data === "done") {
+            var returnStatus = "error";
+            var returnMessage = "";
+
+            try {
+                const returnData = JSON.parse(data);
+                returnStatus = returnData.status;
+                if (typeof returnData.message !== 'undefined') {
+                    returnMessage = returnData.message;
+                }
+            } catch (e) {
+                // fallback for old implementation without JSON response
+                if (data === "done") {
+                    returnStatus = "success";
+                } else {
+                    returnMessage = data;
+                }
+            }
+
+            if (returnStatus === "success") {
                 const id = "#row_" + elementId;
                 $(".admidio-icon-link .bi").tooltip("hide");
 
@@ -219,9 +239,11 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
                     $(id).next().after($(id));
                 }
             } else {
-                if(data.length > 0) {
-                    alert(data);
+                // entry could not be deleted, then show content of data or a common error message
+                if (returnMessage.length === 0) {
+                    returnMessage = "Error: Undefined error occurred!";
                 }
+                alert(returnMessage);
             }
         });
 }

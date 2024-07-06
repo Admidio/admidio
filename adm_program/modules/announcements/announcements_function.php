@@ -65,10 +65,7 @@ try {
 
         $gNavigation->deleteLastUrl();
 
-        echo json_encode(array(
-            'status' => 'success',
-            'url' => $gNavigation->getUrl()
-        ));
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
         exit();
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
@@ -77,8 +74,8 @@ try {
         // delete current announcements, right checks were done before
         $announcement->delete();
 
-        // Delete successful -> Return for XMLHttpRequest
-        echo 'done';
+        echo json_encode(array('status' => 'success'));
+        exit();
     }
 } catch (AdmException|Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));

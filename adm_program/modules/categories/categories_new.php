@@ -337,7 +337,7 @@ try {
     );
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3'));
     $form->addToHtmlPage();
-    $gCurrentSession->addObject('categories_edit_form', $form);
+    $_SESSION['categories_edit_form'] = $form;
 
     $page->assignSmartyVariable('nameUserCreated', $category->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $category->getValue('cat_timestamp_create'));

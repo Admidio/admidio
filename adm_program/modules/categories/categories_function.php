@@ -92,12 +92,8 @@ try {
     if ($postMode === 'edit') {
         // create or edit category
 
-        $categoryEditForm = $gCurrentSession->getObject('categories_edit_form');
+        $categoryEditForm = $_SESSION['categories_edit_form'];
         $categoryEditForm->validate($_POST);
-/*
-        if ((!array_key_exists('cat_name', $_POST) || $_POST['cat_name'] === '') && $category->getValue('cat_system') == 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
-        }*/
 
         if ($postType !== 'ROL'
             && ((bool)$category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)
@@ -212,12 +208,12 @@ try {
 
         $gNavigation->deleteLastUrl();
 
-        admRedirect($gNavigation->getUrl());
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     } elseif ($postMode === 'delete') {
         // delete category
         if ($category->delete()) {
-            echo 'done';
+            echo json_encode(array('status' => 'success'));
             exit();
         }
     } elseif ($postMode === 'sequence') {
@@ -225,16 +221,12 @@ try {
         $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableCategory::MOVE_UP, TableCategory::MOVE_DOWN)));
 
         if ($category->moveSequence($postSequence)) {
-            echo 'done';
+            echo json_encode(array('status' => 'success'));
         } else {
-            echo 'Sequence could not be changed.';
+            throw new AdmException('Sequence could not be changed.');
         }
         exit();
     }
 } catch (AdmException|Exception $e) {
-    if ($postMode === 'edit') {
-        $gMessage->show($e->getMessage());
-    } else {
-        echo $e->getMessage();
-    }
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
