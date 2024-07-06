@@ -20,7 +20,7 @@ try {
     echo '
     <script type="text/javascript">
         $("body").on("shown.bs.modal", ".modal", function() {
-            $("#form_contacts_new:first *:input[type!=hidden]:first").focus();
+            $("#lastname").trigger("focus")
         });
 
         $("#form_contacts_new").submit(formSubmit);

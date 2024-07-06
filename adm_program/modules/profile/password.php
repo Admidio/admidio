@@ -104,7 +104,7 @@ try {
         echo '<script type="text/javascript">
         $(function() {
             $("body").on("shown.bs.modal", ".modal", function() {
-                $("#password_form:first *:input[type!=hidden]:first").focus();
+                $("#password_form").find("*").filter(":input:visible:first").focus();
 
                 $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * ' . $passwordStrengthLevel . ')");
 
