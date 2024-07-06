@@ -45,7 +45,7 @@ try {
     }
 
     if ($getMode === 'edit') {
-        $announcementEditForm = $gCurrentSession->getObject('announcements_edit_form');
+        $announcementEditForm = $_SESSION['announcements_edit_form'];
         $announcementEditForm->validate($_POST);
 
         // make html in description secure

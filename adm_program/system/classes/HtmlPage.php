@@ -35,67 +35,67 @@ class HtmlPage
     /**
      * @var Smarty An object ot the Smarty template engine.
      */
-    protected $smarty;
+    protected Smarty $smarty;
     /**
      * @var string The id of the html page that will be set within the <body> tag.
      */
-    protected $id = '';
+    protected string $id = '';
     /**
      * @var string The title for the html page and the headline for the Admidio content.
      */
-    protected $title = '';
+    protected string $title = '';
     /**
      * @var string Additional header that could not be set with the other methods. This content will be added to head of html page without parsing.
      */
-    protected $header = '';
+    protected string $header = '';
     /**
      * @var string The main headline for the html page.
      */
-    protected $headline = '';
+    protected string $headline = '';
     /**
      * @var string Contains the custom html of the current page. This will be added to the default html of each page.
      */
-    protected $pageContent = '';
+    protected string $pageContent = '';
     /**
      * @var MenuNode An object that represents all functions of the current page that should be shown in the menu of this page
      */
-    protected $menuNodePageFunctions;
+    protected MenuNode $menuNodePageFunctions;
     /**
      * @var array<int,string> An array with all necessary cascading style sheets files for the html page.
      */
-    protected $cssFiles = array();
+    protected array $cssFiles = array();
     /**
      * @var array<int,string> An array with all necessary javascript files for the html page.
      */
-    protected $jsFiles = array();
+    protected array $jsFiles = array();
     /**
      * @var array<int|string,string> An array with all necessary rss files for the html page.
      */
-    protected $rssFiles = array();
+    protected array $rssFiles = array();
     /**
      * @var bool A flag that indicates if the page should be styled in print mode then no colors will be shown
      */
-    protected $printView = false;
+    protected bool $printView = false;
     /**
      * @var string Contains the custom javascript of the current page. This will be added to the header part of the page.
      */
-    protected $javascriptContent = '';
+    protected string $javascriptContent = '';
     /**
      * @var string Contains the custom javascript of the current page that should be executed after page load. This will be added to the header part of the page.
      */
-    protected $javascriptContentExecute = '';
+    protected string $javascriptContentExecute = '';
     /**
      * @var bool If set to true then a page without header menu and sidebar menu will be created. The main template file will be index_inline.tpl
      */
-    protected $modeInline = false;
+    protected bool $modeInline = false;
     /**
      * @var string Name of an additional template file that should be loaded within the current page.
      */
-    protected $templateFile = '';
+    protected string $templateFile = '';
     /**
-     * @var string Flag that will be responsible for a back button with the url to the previous page will be shown.
+     * @var bool Flag that will be responsible for a back button with the url to the previous page will be shown.
      */
-    protected $showBackLink = '';
+    protected bool $showBackLink = false;
 
     /**
      * Constructor creates the page object and initialized all parameters.

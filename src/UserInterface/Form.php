@@ -108,7 +108,7 @@ class Form
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     public function __construct(string $id, string $template, string $action = '', \HtmlPage $htmlPage = null, array $options = array())
     {
@@ -177,6 +177,22 @@ class Form
     }
 
     /**
+     * We need the sleep function at this place because otherwise the system will serialize a SimpleXMLElement
+     * which will lead to an exception.
+     * @return array<int,string>
+     */
+    public function __sleep()
+    {
+        global $gLogger;
+
+        if ($gLogger instanceof \Psr\Log\LoggerInterface) {
+            $gLogger->debug('FORM: sleep/serialize!');
+        }
+
+        return array('flagRequiredFields', 'showRequiredFields', 'htmlString', 'countElements', 'type', 'id', 'template', 'attributes', 'elements');
+    }
+
+    /**
      * Add a new button with a custom text to the form. This button could have
      * an icon in front of the text.
      * @param string $id ID of the button. This will also be the name of the button.
@@ -189,7 +205,6 @@ class Form
      *                        - **class** : Optional an additional css classname. The class **admButton**
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
-     * @throws \Smarty\Exception
      */
     public function addButton(string $id, string $text, array $options = array())
     {
@@ -234,8 +249,7 @@ class Form
      * @param string $id ID of the captcha field. This will also be the name of the captcha field.
      * @param string $class (optional) An additional css classname. The class **admTextInput**
      *                      is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
-     * @throws \Exception
+     * @throws Exception|\Exception
      */
     public function addCaptcha(string $id, string $class = '')
     {
@@ -283,11 +297,10 @@ class Form
      *                          If you need an additional parameter for the text you can add an array. The first entry
      *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                          will be the text of the alertbox
+     *                          will be the text of the alert box
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
      */
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
@@ -343,13 +356,12 @@ class Form
      *                          If you need an additional parameter for the text you can add an array. The first entry
      *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                          will be the text of the alertbox
+     *                          will be the text of the alert box
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
      */
-    public function addCustomContent(string $label, string $content, array $options = array())
+    public function addCustomContent(string $id, string $label, string $content, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -397,7 +409,7 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
+     * @throws \Exception
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
     {
@@ -504,7 +516,6 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
@@ -608,12 +619,11 @@ class Form
      *                          If you need an additional parameter for the text you can add an array. The first entry
      *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                          will be the text of the alertbox
+     *                          will be the text of the alert box
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      *                        - **htmlAfter** : Add html code after the input field.
-     * @throws \Smarty\Exception
      * @throws \Exception
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
@@ -831,7 +841,6 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
      */
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
@@ -925,11 +934,10 @@ class Form
      *                          If you need an additional parameter for the text you can add an array. The first entry
      *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                          will be the text of the alertbox
+     *                          will be the text of the alert box
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
      */
     public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
@@ -1005,17 +1013,17 @@ class Form
      *                        - **maximumSelectionNumber** : If **multiselect** is enabled then you can configure the maximum number
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
-     *                          onother array with the combination of attributes name and attributes value.
+     *                          another array with the combination of attributes name and attributes value.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
      *                          If you need an additional parameter for the text you can add an array. The first entry
      *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                          will be the text of the alertbox
+     *                          will be the text of the alert box
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
+     * @throws Exception
      * @throws \Exception
      */
     public function addSelectBox(string $id, string $label, array $values, array $options = array())
@@ -1213,7 +1221,7 @@ class Form
      *                                 If you need an additional parameter for the text you can add an array. The first entry
      *                                 must be the unique text id and the second entry will be a parameter of the text id.
      *                               - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                                 will be the text of the alertbox
+     *                                 will be the text of the alert box
      *                               - **icon** : An icon can be set. This will be placed in front of the label.
      *                               - **class** : An additional css classname. The class **admSelectbox**
      *                                 is set as default and need not set with this parameter.
@@ -1225,7 +1233,7 @@ class Form
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show();
      * ```
-     * @throws \Smarty\Exception
+     * @throws Exception
      * @throws \Exception
      */
     public function addSelectBoxFromSql(string $id, string $label, \Database $database, $sql, array $options = array())
@@ -1292,7 +1300,7 @@ class Form
      *                          If you need an additional parameter for the text you can add an array. The first entry
      *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                          will be the text of the alertbox
+     *                          will be the text of the alert box
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -1312,7 +1320,7 @@ class Form
             $value = '';
 
             /**
-             * @var \SimpleXMLElement $xmlChildChildNode
+             * @var \SimpleXMLElement $xmlChildNode
              */
             foreach ($xmlChildNode->children() as $xmlChildChildNode) {
                 if ($xmlChildChildNode->getName() === $xmlValueTag) {
@@ -1357,11 +1365,11 @@ class Form
      *                                   If you need an additional parameter for the text you can add an array. The first entry
      *                                   must be the unique text id and the second entry will be a parameter of the text id.
      *                                 - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                                   will be the text of the alertbox
+     *                                   will be the text of the alert box
      *                                 - **icon** : An icon can be set. This will be placed in front of the label.
      *                                 - **class** : An additional css classname. The class **admSelectbox**
      *                                   is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
+     * @throws Exception
      * @throws \Exception
      */
     public function addSelectBoxForCategories(string $id, string $label, \Database $database, string $categoryType, string $selectBoxModus, array $options = array())
@@ -1515,11 +1523,10 @@ class Form
      *                          If you need an additional parameter for the text you can add an array. The first entry
      *                          must be the unique text id and the second entry will be a parameter of the text id.
      *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                          will be the text of the alertbox
+     *                          will be the text of the alert box
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
      */
     public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
@@ -1556,7 +1563,6 @@ class Form
      *                          is set as default and need not set with this parameter.
      *                        - **type** : If set to true this button get the type **submit**. This will
      *                          be the default.
-     * @throws \Smarty\Exception
      */
     public function addSubmitButton(string $id, string $text, array $options = array())
     {
@@ -1747,7 +1753,7 @@ class Form
     /**
      * Validates the input of a form against the form definition. Therefore, this method needs
      * the $_POST variable as parameter $fieldValues. An exception is thrown if a required
-     * form field doesn't has a value in the $fieldValues array.
+     * form field doesn't have a value in the $fieldValues array.
      * @param array $fieldValues Array with field name as key and field value as array value.
      * @return void
      * @throws \AdmException
