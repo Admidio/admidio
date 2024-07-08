@@ -29,8 +29,6 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
-    unset($_SESSION['events_request']);
-
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');

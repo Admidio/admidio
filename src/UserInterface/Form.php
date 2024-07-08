@@ -57,9 +57,9 @@ class Form
      */
     protected \HtmlPage $htmlPage;
     /**
-     * @var string String with prepared html
+     * @var string Javascript of this form that must be integrated in the html page.
      */
-    protected string $htmlString = '';
+    protected string $javascript;
     /**
      * @var string Form type. Possible values are **default**, **vertical** or **navbar**.
      */
@@ -185,7 +185,7 @@ class Form
             $gLogger->debug('FORM: sleep/serialize!');
         }
 
-        return array('flagRequiredFields', 'showRequiredFields', 'htmlString', 'type', 'id', 'template', 'attributes', 'elements');
+        return array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'template', 'attributes', 'elements');
     }
 
     /**
@@ -350,15 +350,6 @@ class Form
         ), $options));
 
         $this->elements[$id] = $optionsAll;
-    }
-
-    /**
-     * Add a line with a custom description to the form. No form elements will be displayed in this line.
-     * @param string $text The (html) text that should be displayed.
-     */
-    public function addDescription(string $text)
-    {
-        $this->htmlString .= '<p>' . $text . '</p>';
     }
 
     /**
@@ -545,16 +536,6 @@ class Form
     }
 
     /**
-     * Add any string to the html output. If the main element wasn't written to the
-     * html string than this will be done before your string will be added.
-     * @param string $string Text as string in current string position
-     */
-    public function addHtml(string $string)
-    {
-        $this->htmlString .= $string;
-    }
-
-    /**
      * Add a new input field with a label to the form.
      * @param string $id ID of the input field. This will also be the name of the input field.
      * @param string $label The label of the input field.
@@ -586,7 +567,7 @@ class Form
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
     {
-        global $gSettingsManager, $gLogger;
+        global $gSettingsManager, $gLogger, $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'template'         => 'sys-template-parts/form.input.tpl',
@@ -692,6 +673,13 @@ class Form
 
             $attributes['timeValueAttributes'] = array();
             $attributes['timeValueAttributes']['class'] = 'form-control datetime-time-control';
+
+            // add time input field to elements array
+            $optionsTime = $optionsAll;
+            $optionsTime['id'] = $id . '_time';
+            $optionsTime['label'] = $label . ' ' . $gL10n->get('SYS_TIME');
+            $optionsTime['type'] = 'time';
+            $this->elements[$id . '_time'] = $optionsTime;
         } elseif ($optionsAll['type'] === 'date') {
             $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
             if (!empty($value) && is_object($datetime))
@@ -744,7 +732,7 @@ class Form
 
     /**
      * Adds any javascript content to the page. The javascript will be added to the page header or as inline script.
-     * @param string $javascriptCode       A valid javascript code that will be added to the header of the page or as inline script.
+     * @param string $javascriptCode     A valid javascript code that will be added to the header of the page or as inline script.
      * @param bool $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
      *                                     the page is fully loaded.
      */
@@ -758,15 +746,7 @@ class Form
         if ($executeAfterPageLoad) {
             $javascriptCode = '$(function() { ' . $javascriptCode . ' });';
         }
-        $this->htmlString .= '<script type="text/javascript">' . $javascriptCode . '</script>';
-    }
-
-    /**
-     * Add a simple line to the form. This could be used to structure a form. The line has only a visual effect.
-     */
-    public function addLine()
-    {
-        $this->htmlString .= '<hr />';
+        $this->javascript .= '<script type="text/javascript">' . $javascriptCode . '</script>';
     }
 
     /**
@@ -1301,6 +1281,10 @@ class Form
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'template'                       => 'sys-template-parts/form.select.tpl',
+            'type'                           => 'select',
+            'id'                             => $id,
+            'label'                          => $label,
             'defaultValue'                   => '',
             'arrayKeyIsNotValue'             => false,
             'showContextDependentFirstEntry' => true,
@@ -1500,17 +1484,15 @@ class Form
     public function addToHtmlPage()
     {
         if (is_object($this->htmlPage)) {
+            $this->htmlPage->addJavascript('
+                $("#' . $this->id . '").submit(formSubmit);
+            ', true);
             $this->htmlPage->assignSmartyVariable('formType', $this->type);
             $this->htmlPage->assignSmartyVariable('attributes', $this->attributes);
             $this->htmlPage->assignSmartyVariable('elements', $this->elements);
             $this->htmlPage->assignSmartyVariable('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
             $this->htmlPage->addTemplateFile($this->template);
         }
-
-        // add javascript for handling of success and error messages from the form submit
-        $this->addJavascriptCode('
-            $("#' . $this->id . '").submit(formSubmit);
-        ', true);
     }
 
     /**
@@ -1535,14 +1517,6 @@ class Form
             'alertWarning' => '',
         );
         return array_replace($optionsDefault, $options);
-    }
-
-    /**
-     * Close all html elements of a groupbox that was created before.
-     */
-    public function closeGroupBox()
-    {
-        $this->htmlString .= '</div></div>';
     }
 
     /**
@@ -1604,25 +1578,6 @@ class Form
             }
         }
         return $text;
-    }
-
-    /**
-     * Add a new groupbox to the form. This could be used to group some elements
-     * together. There is also the option to set a headline to this group box.
-     * @param string $id       ID of the groupbox.
-     * @param string|null $headline (optional) A headline that will be shown to the user.
-     * @param string $class    (optional) An additional css classname for the row. The class **admFieldRow**
-     *                         is set as default and need not set with this parameter.
-     */
-
-    public function openGroupBox(string $id, string $headline = null, string $class = '')
-    {
-        $this->htmlString .= '<div id="' . $id . '" class="card admidio-field-group ' . $class . '">';
-        // add headline to groupbox
-        if ($headline !== null) {
-            $this->htmlString .= '<div class="card-header">' . $headline . '</div>';
-        }
-        $this->htmlString .= '<div class="card-body">';
     }
 
     /**

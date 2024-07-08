@@ -79,47 +79,23 @@ try {
         }
     }
 
-    if ($getMode === 'edit') {  // Create a new event or edit an existing event
-        $_SESSION['events_request'] = $_POST;
+    if ($getMode === 'edit') {
+        // Create a new event or edit an existing event
 
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
-        // ------------------------------------------------
-        // check if all necessary fields are filled
-        // ------------------------------------------------
+        $eventEditForm = $_SESSION['events_edit_form'];
+        $eventEditForm->validate($_POST);
 
         if (!isset($_POST['event_participation_possible'])) {
             $_POST['event_participation_possible'] = 0;
         }
         if ($_POST['event_participation_possible'] == 1
             && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)) {
-            $_SESSION['events_request']['adm_event_participation_right'] = '';
             throw new AdmException('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));
         }
 
-        if (strlen($_POST['dat_headline']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TITLE'));
-        }
-        if (strlen($_POST['event_from']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_START'));
-        }
-        if (strlen($_POST['event_to']) === 0 && $_POST['dat_repeat_type'] == 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_END'));
-        }
-        if (strlen($_POST['event_from_time']) === 0 && !isset($_POST['dat_all_day'])) {
-            throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_START')));
-        }
-        if (strlen($_POST['event_to_time']) === 0 && !isset($_POST['dat_all_day'])) {
-            throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_END')));
-        }
-        if (strlen($_POST['cat_uuid']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CALENDAR'));
-        } else {
-            $calendar = new TableCategory($gDb);
-            $calendar->readDataByUuid($_POST['cat_uuid']);
-            $_POST['dat_cat_id'] = $calendar->getValue('cat_id');
-        }
+        $calendar = new TableCategory($gDb);
+        $calendar->readDataByUuid($_POST['cat_uuid']);
+        $_POST['dat_cat_id'] = $calendar->getValue('cat_id');
 
         if (isset($_POST['dat_all_day'])) {
             $_POST['event_from_time'] = '00:00';
@@ -381,12 +357,10 @@ try {
         }
 
         $gDb->endTransaction();
-
-        unset($_SESSION['events_request']);
         $gNavigation->deleteLastUrl();
 
-        admRedirect($gNavigation->getUrl());
-    // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
@@ -394,8 +368,8 @@ try {
         // delete current announcements, right checks were done before
         $event->delete();
 
-        // Delete successful -> Return for XMLHttpRequest
-        echo 'done';
+        echo json_encode(array('status' => 'success'));
+        exit();
     } elseif ($getMode === 'export') {  // export event in iCal format
         // If iCal enabled and module is public
         if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
@@ -514,8 +488,8 @@ try {
         $gMessage->show($outputMessage, $gL10n->get('SYS_PARTICIPATE'));
     }
 } catch (AdmException|Exception $e) {
-    if ($getMode == 'delete') {
-        echo $e->getMessage();
+    if (in_array($getMode, array('edit', 'delete'), true)) {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());
     }
