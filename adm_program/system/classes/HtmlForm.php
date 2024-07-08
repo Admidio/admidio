@@ -353,7 +353,7 @@ class HtmlForm
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $this->render('form.customcontent', $optionsAll);
+        $this->render('form.custom-content', $optionsAll);
     }
 
     /**
@@ -598,7 +598,6 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     *                        - **htmlAfter** : Add html code after the input field.
      * @throws \Smarty\Exception
      * @throws Exception
      */
@@ -627,7 +626,6 @@ class HtmlForm
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
-            'htmlAfter'        => '',
             'alertWarning'     => ''
         );
         $optionsAll = array_replace($optionsDefault, $options);

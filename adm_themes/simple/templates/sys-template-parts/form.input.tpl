@@ -36,7 +36,6 @@
                     {/foreach}
                 >
             </div>
-            {$data.htmlAfter}
             {if $formType neq "vertical" and $formType neq "navbar"}</div>{/if}
         {elseif $data.type == "date"}
             <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="date" value="{$data.value}"
@@ -44,7 +43,6 @@
                     {$itemvar@key}="{$itemvar}"
                 {/foreach}
             >
-            {$data.htmlAfter}
         {elseif $data.type == "password"}
             <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="{$data.type}" value="{$data.value}"
                 {foreach $data.attributes as $itemvar}
@@ -57,14 +55,12 @@
                     <div id="admidio-password-strength-minimum"></div>
                 </div>
             {/if}
-            {$data.htmlAfter}
         {else}
             <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="{$data.type}" value="{$data.value}"
                 {foreach $data.attributes as $itemvar}
                     {$itemvar@key}="{$itemvar}"
                 {/foreach}
             >
-            {$data.htmlAfter}
         {/if}
 
         {if $formType eq "navbar"}

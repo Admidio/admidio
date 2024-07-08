@@ -61,10 +61,6 @@ class Form
      */
     protected string $htmlString = '';
     /**
-     * @var int Number of visible elements in this form. Hidden elements are not count because no interaction is possible.
-     */
-    protected int $countElements = 0;
-    /**
      * @var string Form type. Possible values are **default**, **vertical** or **navbar**.
      */
     protected string $type;
@@ -189,7 +185,7 @@ class Form
             $gLogger->debug('FORM: sleep/serialize!');
         }
 
-        return array('flagRequiredFields', 'showRequiredFields', 'htmlString', 'countElements', 'type', 'id', 'template', 'attributes', 'elements');
+        return array('flagRequiredFields', 'showRequiredFields', 'htmlString', 'type', 'id', 'template', 'attributes', 'elements');
     }
 
     /**
@@ -208,20 +204,12 @@ class Form
      */
     public function addButton(string $id, string $text, array $options = array())
     {
-        ++$this->countElements;
-        // create array with all options
-        $optionsDefault = array(
-            'template'     => 'sys-template-parts/form.button.tpl',
-            'property'     => self::FIELD_DEFAULT,
-            'icon'         => '',
-            'link'         => '',
-            'class'        => '',
-            'type'         => 'button',
-            'data-admidio' => '',
-            'id'           => $id,
-            'value'        => $text,
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'template' => 'sys-template-parts/form.button.tpl',
+            'type'     => 'button',
+            'id'       => $id,
+            'value'    => $text
+        ), $options));
         $attributes = array();
         $attributes['type'] = $optionsAll['type'];
         $attributes['data-admidio'] = $optionsAll['data-admidio'];
@@ -254,8 +242,6 @@ class Form
     public function addCaptcha(string $id, string $class = '')
     {
         global $gL10n;
-
-        ++$this->countElements;
 
         $this->addJavascriptCode('
             $("#' . $id . '_refresh").click(function() {
@@ -304,20 +290,12 @@ class Form
      */
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
-        ++$this->countElements;
-
-        // create array with all options
-        $optionsDefault = array(
-            'template'         => 'sys-template-parts/form.checkbox.tpl',
-            'property'         => self::FIELD_DEFAULT,
-            'helpTextId'       => '',
-            'icon'             => '',
-            'class'            => '',
-            'alertWarning'     => '',
-            'id'               => $id,
-            'label'            => $label
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'template' => 'sys-template-parts/form.checkbox.tpl',
+            'type'     => 'checkbox',
+            'id'       => $id,
+            'label'    => $label
+        ), $options));
         $attributes = array();
 
         // disable field
@@ -363,19 +341,13 @@ class Form
      */
     public function addCustomContent(string $id, string $label, string $content, array $options = array())
     {
-        // create array with all options
-        $optionsDefault = array(
-            'template'         => 'sys-template-parts/form.customcontent.tpl',
-            'property'         => '',
-            'referenceId'      => '',
-            'helpTextId'       => '',
-            'alertWarning'     => '',
-            'icon'             => '',
-            'class'            => '',
-            'label'            => $label,
-            'content'          => $content,
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'template' => 'sys-template-parts/form.custom-content.tpl',
+            'type'     => 'custom-content',
+            'id'       => $id,
+            'label'    => $label,
+            'content'  => $content
+        ), $options));
 
         $this->elements[$id] = $optionsAll;
     }
@@ -416,23 +388,17 @@ class Form
         global $gSettingsManager, $gL10n;
 
         $flagLabelVertical = $this->type;
-        ++$this->countElements;
 
-        // create array with all options
-        $optionsDefault = array(
-            'template'         => 'sys-template-parts/form.editor.tpl',
-            'property'         => self::FIELD_DEFAULT,
-            'toolbar'          => 'AdmidioDefault',
-            'alertWarning'     => '',
-            'helpTextId'       => '',
-            'labelVertical'    => true,
-            'icon'             => '',
-            'class'            => '',
-            'id'               => $id,
-            'label'            => $label,
-            'value'            => $value,
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'template'      => 'sys-template-parts/form.editor.tpl',
+            'type'          => 'editor',
+            'id'            => $id,
+            'label'         => $label,
+            'toolbar'       => 'AdmidioDefault',
+            'labelVertical' => true,
+            'value'         => $value
+        ), $options));
+
         $attributes = array();
 
         if ($optionsAll['labelVertical']) {
@@ -519,25 +485,18 @@ class Form
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
-        ++$this->countElements;
-
-        // create array with all options
-        $optionsDefault = array(
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
             'template'           => 'sys-template-parts/form.file.tpl',
-            'property'           => self::FIELD_DEFAULT,
+            'type'               => 'file',
+            'id'                 => $id,
+            'label'              => $label,
             'maxUploadSize'      => \PhpIniUtils::getFileUploadMaxFileSize(),
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
-            'multiUploadLabel'   => '',
-            'alertWarning'       => '',
-            'helpTextId'         => '',
-            'icon'               => '',
-            'class'              => '',
-            'id'                 => $id,
-            'label'              => $label,
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+            'multiUploadLabel'   => ''
+        ), $options));
+
         $attributes = array();
 
         // disable field
@@ -623,22 +582,18 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     *                        - **htmlAfter** : Add html code after the input field.
      * @throws \Exception
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
     {
         global $gSettingsManager, $gLogger;
 
-        ++$this->countElements;
-
-        // create array with all options
-        $optionsDefault = array(
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
             'template'         => 'sys-template-parts/form.input.tpl',
+            'type'             => 'text',
             'id'               => $id,
             'label'            => $label,
             'value'            => $value,
-            'type'             => 'text',
             'placeholder'      => '',
             'pattern'          => '',
             'minLength'        => null,
@@ -646,16 +601,9 @@ class Form
             'minNumber'        => null,
             'maxNumber'        => null,
             'step'             => null,
-            'property'         => self::FIELD_DEFAULT,
             'passwordStrength' => false,
-            'passwordUserData' => array(),
-            'helpTextId'       => '',
-            'icon'             => '',
-            'class'            => '',
-            'htmlAfter'        => '',
-            'alertWarning'     => ''
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+            'passwordUserData' => array()
+        ), $options));
 
         $optionsAll['helpTextId'] = self::getHelpText($optionsAll['helpTextId']);
 
@@ -844,22 +792,14 @@ class Form
      */
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
-        ++$this->countElements;
-
-        // create array with all options
-        $optionsDefault = array(
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
             'template'         => 'sys-template-parts/form.multiline.tpl',
-            'property'         => self::FIELD_DEFAULT,
-            'maxLength'        => 0,
-            'alertWarning'     => '',
-            'helpTextId'       => '',
-            'icon'             => '',
-            'class'            => '',
+            'type'             => 'multiline',
             'id'               => $id,
             'label'            => $label,
+            'maxLength'        => 0,
             'value'            => $value
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+        ), $options));
         $attributes = array();
 
         // set field properties
@@ -941,23 +881,15 @@ class Form
      */
     public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
-        ++$this->countElements;
-
-        // create array with all options
-        $optionsDefault = array(
-            'template'          => 'sys-template-parts/form.radio.tpl',
-            'property'          => self::FIELD_DEFAULT,
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'template'         => 'sys-template-parts/form.radio.tpl',
+            'type'             => 'radio',
+            'id'               => $id,
+            'label'            => $label,
             'defaultValue'      => '',
             'showNoValueButton' => false,
-            'alertWarning'      => '',
-            'helpTextId'        => '',
-            'icon'              => '',
-            'class'             => '',
-            'id'                => $id,
-            'label'             => $label,
             'values'            => $values
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+        ), $options));
         $attributes = array();
 
         // disable field
@@ -1030,12 +962,11 @@ class Form
     {
         global $gL10n;
 
-        ++$this->countElements;
-
-        // create array with all options
-        $optionsDefault = array(
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
             'template'                       => 'sys-template-parts/form.select.tpl',
-            'property'                       => self::FIELD_DEFAULT,
+            'type'                           => 'select',
+            'id'                             => $id,
+            'label'                          => $label,
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
             'firstEntry'                     => '',
@@ -1044,15 +975,8 @@ class Form
             'search'                         => false,
             'placeholder'                    => '',
             'maximumSelectionNumber'         => 0,
-            'valueAttributes'                => '',
-            'alertWarning'                   => '',
-            'helpTextId'                     => '',
-            'icon'                           => '',
-            'class'                          => '',
-            'id'                             => $id,
-            'label'                          => $label
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+            'valueAttributes'                => ''
+        ), $options));
         $attributes = array('name' => $id);
 
         // set field properties
@@ -1530,22 +1454,13 @@ class Form
      */
     public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
-        ++$this->countElements;
-
-        // create array with all options
-        $optionsDefault = array(
-            'template'         => 'sys-template-parts/form.static.tpl',
-            'property'         => '',
-            'alertWarning'     => '',
-            'helpTextId'       => '',
-            'icon'             => '',
-            'class'            => '',
-            'id'               => $id,
-            'label'            => $label,
-            'value'            => $value);
-        $optionsAll     = array_replace($optionsDefault, $options);
-
-        $this->elements[$id] = $optionsAll;
+        $this->elements[$id] = $this->buildOptionsArray(array_replace(array(
+            'template' => 'sys-template-parts/form.static.tpl',
+            'type'     => 'static',
+            'id'       => $id,
+            'label'    => $label,
+            'value'    => $value
+        ), $options));
     }
 
     /**
@@ -1566,22 +1481,21 @@ class Form
      */
     public function addSubmitButton(string $id, string $text, array $options = array())
     {
-        // create array with all options
-        $optionsDefault = array(
-            'icon'     => '',
-            'link'     => '',
-            'class'    => '',
-            'type'     => 'submit');
-        $optionsAll     = array_replace($optionsDefault, $options);
+        $options['type'] = 'submit';
 
-        // add default css classes
-        $optionsAll['class'] .= ' btn-primary';
+        if (!isset($options['class'])) {
+            $options['class'] = '';
+        }
+        $options['class'] .= ' btn-primary';
         if ($this->type !== 'navbar') {
-            $optionsAll['class'] .= '  admidio-margin-bottom';
+            $options['class'] .= ' admidio-margin-bottom';
+        }
+        if (!isset($options['link'])) {
+            $options['link'] = '';
         }
 
         // now add button to form
-        $this->addButton($id, $text, $optionsAll);
+        $this->addButton($id, $text, $options);
     }
 
     /**
@@ -1609,9 +1523,32 @@ class Form
     }
 
     /**
+     * Method merge the default options of all fields with the initial options set for the
+     * specific field.
+     * @param array $options Array with all initial options for the field.
+     * @return array Array with initial options and default options of the field.
+     */
+    protected function buildOptionsArray(array $options): array
+    {
+        $optionsDefault = array(
+            'template'     => '',
+            'property'     => self::FIELD_DEFAULT,
+            'type'         => '',
+            'data-admidio' => '',
+            'id'           => 'admidio_form_field_' . (count($this->elements) + 1),
+            'label'        => '',
+            'value'        => '',
+            'helpTextId'   => '',
+            'icon'         => '',
+            'class'        => '',
+            'alertWarning' => '',
+        );
+        return array_replace($optionsDefault, $options);
+    }
+
+    /**
      * Close all html elements of a groupbox that was created before.
      */
-
     public function closeGroupBox()
     {
         $this->htmlString .= '</div></div>';
