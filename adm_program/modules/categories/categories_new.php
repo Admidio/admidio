@@ -343,9 +343,6 @@ try {
     $page->assignSmartyVariable('timestampUserCreated', $category->getValue('cat_timestamp_create'));
     $page->assignSmartyVariable('nameLastUserEdited', $category->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $category->getValue('cat_timestamp_change'));
-    $page->assignSmartyVariable('countOrganizations', $gCurrentOrganization->countAllRecords());
-    $page->assignSmartyVariable('categoryType', $getType);
-    $page->assignSmartyVariable('categorySystem', (int)$category->getValue('cat_system'));
     $page->show();
 } catch (AdmException|Exception|\Smarty\Exception $e) {
     $gMessage->show($e->getMessage());

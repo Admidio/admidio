@@ -1300,20 +1300,13 @@ class Form
     {
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
-        // create array with all options
-        $optionsDefault = array(
-            'property'                       => self::FIELD_DEFAULT,
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
             'defaultValue'                   => '',
             'arrayKeyIsNotValue'             => false,
             'showContextDependentFirstEntry' => true,
             'multiselect'                    => false,
-            'showSystemCategory'             => true,
-            'alertWarning'                   => '',
-            'helpTextId'                     => '',
-            'icon'                           => '',
-            'class'                          => ''
-        );
-        $optionsAll = array_replace($optionsDefault, $options);
+            'showSystemCategory'             => true
+        ), $options));
 
         if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->countAllRecords() > 1) {
             $optionsAll['alertWarning'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', array(implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true))));
@@ -1506,8 +1499,6 @@ class Form
      */
     public function addToHtmlPage()
     {
-        global $gNavigation;
-
         if (is_object($this->htmlPage)) {
             $this->htmlPage->assignSmartyVariable('formType', $this->type);
             $this->htmlPage->assignSmartyVariable('attributes', $this->attributes);

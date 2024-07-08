@@ -8,14 +8,16 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['uuid']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['type']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['cat_name']}
-    {if $categoryType != 'ROL' && ($categorySystem == 0 || $countOrganizations == 1)}
+    {if {array_key_exists array=$elements key='adm_categories_view_right'}}
         {include 'sys-template-parts/form.select.tpl' data=$elements['adm_categories_view_right']}
-        {if $categoryType != 'USF'}
-            {include 'sys-template-parts/form.select.tpl' data=$elements['adm_categories_edit_right']}
-        {/if}
     {/if}
-    {if $categoryType != 'ROL' && $categorySystem == 0 && $countOrganizations > 1}
+    {if {array_key_exists array=$elements key='adm_categories_edit_right'}}
+        {include 'sys-template-parts/form.select.tpl' data=$elements['adm_categories_edit_right']}
+    {/if}
+    {if {array_key_exists array=$elements key='adm_administrators'}}
         {include 'sys-template-parts/form.input.tpl' data=$elements['adm_administrators']}
+    {/if}
+    {if {array_key_exists array=$elements key='show_in_several_organizations'}}
         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['show_in_several_organizations']}
     {/if}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['cat_default']}

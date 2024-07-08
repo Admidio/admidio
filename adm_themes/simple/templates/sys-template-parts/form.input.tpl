@@ -37,30 +37,19 @@
                 >
             </div>
             {if $formType neq "vertical" and $formType neq "navbar"}</div>{/if}
-        {elseif $data.type == "date"}
-            <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="date" value="{$data.value}"
-                {foreach $data.attributes as $itemvar}
-                    {$itemvar@key}="{$itemvar}"
-                {/foreach}
-            >
-        {elseif $data.type == "password"}
-            <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="{$data.type}" value="{$data.value}"
-                {foreach $data.attributes as $itemvar}
-                    {$itemvar@key}="{$itemvar}"
-                {/foreach}
-            >
-            {if $data.passwordStrength eq 1}
-                <div id="admidio-password-strength" class="progress {$data.class}">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                    <div id="admidio-password-strength-minimum"></div>
-                </div>
-            {/if}
         {else}
             <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="{$data.type}" value="{$data.value}"
                 {foreach $data.attributes as $itemvar}
                     {$itemvar@key}="{$itemvar}"
                 {/foreach}
             >
+        {/if}
+
+        {if $data.type == "password" && $data.passwordStrength eq 1}
+            <div id="admidio-password-strength" class="progress {$data.class}">
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                <div id="admidio-password-strength-minimum"></div>
+            </div>
         {/if}
 
         {if $formType eq "navbar"}
