@@ -21,7 +21,7 @@
         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['show_in_several_organizations']}
     {/if}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['cat_default']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
+    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
     {include file="sys-template-parts/system.info-create-edit.tpl"}
 </form>

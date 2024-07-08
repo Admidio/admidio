@@ -13,12 +13,9 @@
  *           false  : Show active and inactive contacts of all organizations in database
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/../../system/login_valid.php');
-
-
 try {
-    unset($_SESSION['import_request']);
+    require_once(__DIR__ . '/../../system/common.php');
+    require_once(__DIR__ . '/../../system/login_valid.php');
 
     // Initialize and check the parameters
     $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));// if only active members should be shown then set parameter

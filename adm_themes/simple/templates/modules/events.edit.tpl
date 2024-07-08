@@ -49,7 +49,7 @@
             {include 'sys-template-parts/form.editor.tpl' data=$elements['dat_description']}
         </div>
     </div>
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
+    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
     {include file="sys-template-parts/system.info-create-edit.tpl"}
 </form>

@@ -533,6 +533,7 @@ class Form
         }
 
         $this->elements[$id] = $optionsAll;
+        $this->elements['MAX_FILE_SIZE'] = array('id' => 'MAX_FILE_SIZE', 'type' => 'hidden');
     }
 
     /**
@@ -1602,10 +1603,15 @@ class Form
 
         foreach($this->elements as $element) {
             // check if element is required and given value in array $fieldValues is empty
-            if ($element['property'] === $this::FIELD_REQUIRED) {
+            if (isset($element['property']) && $element['property'] === $this::FIELD_REQUIRED) {
                if (isset($fieldValues[$element['id']])) {
                    if ((is_array($fieldValues[$element['id']]) && count($fieldValues[$element['id']]) === 0)
-                   || (!is_array($fieldValues[$element['id']]) && (string) $fieldValues[$element['id']] === '')) {
+                       || (!is_array($fieldValues[$element['id']]) && (string)$fieldValues[$element['id']] === '')) {
+                       throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                   }
+               } elseif ($element['type'] === 'file') {
+                   // file field has no POST variable but the FILES array should be filled
+                   if (count($_FILES) === 0 || strlen($_FILES['userfile']['tmp_name'][0]) === 0) {
                        throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
                    }
                } else {

@@ -265,7 +265,9 @@ function formSubmit(event) {
 
     $.post({
         url: $(this).attr("action"),
-        data: $(this).serialize(),
+        data: new FormData($(this)[0]),
+        processData: false,
+        contentType: false,
         success: function(data) {
             try {
                 var returnData = JSON.parse(data);

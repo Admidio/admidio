@@ -42,11 +42,10 @@ try {
     $postRoleUUID = admFuncVariableIsValid($_POST, 'import_role_uuid', 'uuid');
     $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', array('requireValue' => true));
 
-    $_SESSION['import_request'] = $_POST;
     unset($_SESSION['import_csv_request']);
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    $contactsImportForm = $_SESSION['contacts_import_form'];
+    $contactsImportForm->validate($_POST);
 
     // only authorized users should import users
     if (!$gCurrentUser->editUsers()) {
@@ -142,8 +141,11 @@ try {
         }
     }
 
-    admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_column_config.php');
-    // => EXIT
-} catch (AdmException | Exception | \Smarty\Exception|\PhpOffice\PhpSpreadsheet\Exception|Exception $e) {
-    $gMessage->show($e->getMessage());
+    echo json_encode(array(
+        'status' => 'success',
+        'url' => ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_column_config.php'
+    ));
+    exit();
+} catch (AdmException |\Smarty\Exception|\PhpOffice\PhpSpreadsheet\Exception|Exception $e) {
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
