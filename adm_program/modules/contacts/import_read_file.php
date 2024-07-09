@@ -42,8 +42,6 @@ try {
     $postRoleUUID = admFuncVariableIsValid($_POST, 'import_role_uuid', 'uuid');
     $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', array('requireValue' => true));
 
-    unset($_SESSION['import_csv_request']);
-
     $contactsImportForm = $_SESSION['contacts_import_form'];
     $contactsImportForm->validate($_POST);
 
@@ -133,8 +131,7 @@ try {
         }
 
         if (empty($sheet)) {
-            $gMessage->show($gL10n->get('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
-            // => EXIT
+            throw new AdmException('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet));
         } else {
             // read data to array without any format
             $_SESSION['import_data'] = $sheet->toArray(null, true, false);

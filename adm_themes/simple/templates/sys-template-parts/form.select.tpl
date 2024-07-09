@@ -20,7 +20,7 @@
                 <optgroup label="{$optionvar["group"]}">
                 {assign "group" "{$optionvar["group"]}"}
             {/if}
-            <option value="{$optionvar["id"]}" {if $data.defaultValue eq $optionvar["id"]}selected="selected"{/if}>{$optionvar["value"]}</option>
+            <option value="{$optionvar["id"]}" {if $data.defaultValue eq $optionvar["id"] || $data.defaultValue eq $optionvar["value"]}selected="selected"{/if}>{$optionvar["value"]}</option>
         {/foreach}
         {if $group neq ""}</optgroup>{/if}
     </select>

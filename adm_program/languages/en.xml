@@ -303,6 +303,7 @@
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="SYS_ASSIGN_FIELDS">Assign fields</string>
   <string name="SYS_ASSIGN_FIELDS_DESC">In the left column of the following table all profile fields are displayed. In the right column, the columns from the file to be imported are displayed in a selection list. All columns from the file you want to import should now be assigned to a profile field.\n\nExisting members are identified by first name and last name. If you have the unique Admidio-ID (UUID) of the member available in your file, you can select it in the mapping. The members will then be automatically identified by this Admidio-ID and no longer by first name and last name.</string>
+  <string name="SYS_ASSIGN_FILE_COLUMN">Assign file column</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Assign login data</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login data has been successfully assigned.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login data has been successfully assigned and user has been informed via e-mail.</string>
@@ -674,7 +675,6 @@
   <string name="SYS_FIELDS_EMPTY">Some fields are empty.</string>
   <string name="SYS_FILE">File</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
-  <string name="SYS_FILE_COLUMN">File column</string>
   <string name="SYS_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
   <string name="SYS_FILE_NAME_RULES">The file should be named in such a way that you can infer the content from the name. The file name has an influence on the display order. In a folder where, for example, meeting minutes are stored, the file names should always begin with the date (yyyy-mm-dd).</string>
@@ -757,7 +757,7 @@
   <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Import was successful.\n\n#VAR1# new contacts have been created.\n#VAR2# contacts have been edited.\n#VAR3# role memberships have been assigned.\n\n#VAR4#</string>
-  <string name="SYS_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned any profile fields:</string>
+  <string name="SYS_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned to any profile fields:</string>
   <string name="SYS_IMPRINT">Imprint</string>
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
