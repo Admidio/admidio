@@ -13,6 +13,9 @@
                     {if $element.type == 'text' || $element.type == 'date'}
                         {include 'sys-template-parts/form.input.tpl' data=$element}
                     {/if}
+                    {if $element.type == 'checkbox'}
+                        {include 'sys-template-parts/form.checkbox.tpl' data=$element}
+                    {/if}
                     {if $element.type == 'select'}
                         {include 'sys-template-parts/form.select.tpl' data=$element}
                     {/if}

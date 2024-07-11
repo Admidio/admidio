@@ -12,9 +12,11 @@
  * link_uuid : Uuid of a single link that should be shown.
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     unset($_SESSION['links_request']);
 
     // Initialize and check the parameters
@@ -103,8 +105,13 @@ try {
         );
 
         // create filter menu with elements for category
-        $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
-        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL . FOLDER_MODULES . '/links/links.php', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form = new Form(
+            'navbar_filter_form',
+            'sys-template-parts/form.filter.tpl',
+            ADMIDIO_URL . FOLDER_MODULES . '/links/links.php',
+            $page,
+            array('type' => 'navbar', 'setFocus' => false)
+        );
         $form->addSelectBoxForCategories(
             'cat_uuid',
             $gL10n->get('SYS_CATEGORY'),
@@ -113,8 +120,7 @@ try {
             HtmlForm::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $getCatUuid)
         );
-        $filterNavbar->addForm($form->show());
-        $page->addHtml($filterNavbar->show());
+        $form->addToHtmlPage();
     }
 
     if ($weblinksCount === 0) {

@@ -19,6 +19,8 @@
  *      - permissions : Show permissions of all groups and roles in list view
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
@@ -133,8 +135,13 @@ try {
     );
 
     // create filter menu with elements for category
-    $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', $groupsRoles, array('type' => 'navbar', 'setFocus' => false));
+    $form = new Form(
+        'navbar_filter_form',
+        'sys-template-parts/form.filter.tpl',
+        ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php',
+        $groupsRoles,
+        array('type' => 'navbar', 'setFocus' => false)
+    );
     $form->addInput('show', '', $getShow, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSelectBoxForCategories(
         'cat_uuid',
@@ -152,8 +159,7 @@ try {
             array('defaultValue' => $getRoleType)
         );
     }
-    $filterNavbar->addForm($form->show());
-    $groupsRoles->addHtml($filterNavbar->show());
+    $form->addToHtmlPage();
     $groupsRoles->readData($getRoleType, $getCatUuid);
 
     if ($groupsRoles->countRoles() === 0) {

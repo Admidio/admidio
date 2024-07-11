@@ -13,6 +13,8 @@
  *           false  : Show active and inactive contacts of all organizations in database
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require_once(__DIR__ . '/../../system/login_valid.php');
@@ -69,11 +71,15 @@ try {
         // show checkbox to select all users or only active members
         if ($gSettingsManager->getBool('contacts_show_all')) {
             // create filter menu with elements for category
-            $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
-            $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
+            $form = new Form(
+                'navbar_filter_form',
+                'sys-template-parts/form.filter.tpl',
+                '',
+                $page,
+                array('type' => 'navbar', 'setFocus' => false)
+            );
             $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), $flagShowMembers, array('helpTextId' => 'SYS_SHOW_ALL_DESC'));
-            $filterNavbar->addForm($form->show());
-            $page->addHtml($filterNavbar->show());
+            $form->addToHtmlPage();
         }
 
         // show link to import users

@@ -20,6 +20,7 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
 use Ramsey\Uuid\Uuid;
 
 try {
@@ -411,8 +412,13 @@ try {
         $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('SYS_CONFIGURATION'));
 
         // add navbar with filter elements and the select box with all lists configurations
-        $filterNavbar = new HtmlNavbar('menu_list_filter', '', null, 'filter');
-        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form = new Form(
+            'navbar_filter_form',
+            'sys-template-parts/form.filter.tpl',
+            ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php',
+            $page,
+            array('type' => 'navbar', 'setFocus' => false)
+        );
         $form->addSelectBox(
             'list_configurations',
             $gL10n->get('SYS_CONFIGURATION_LIST'),
@@ -433,8 +439,7 @@ try {
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
         }
 
-        $filterNavbar->addForm($form->show());
-        $page->addHtml($filterNavbar->show());
+        $form->addToHtmlPage();
 
         $page->addHtml('<h5 class="admidio-content-subheader">' . $htmlSubHeadline . '</h5>');
         $page->addJavascript(

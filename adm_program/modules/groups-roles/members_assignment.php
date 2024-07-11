@@ -17,6 +17,8 @@
  * mem_show_all - true  : (Default) Show active and inactive members of all organizations in database
  *                false : Show only active members of the current organization
  *****************************************************************************/
+use Admidio\UserInterface\Form;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
@@ -69,7 +71,7 @@ try {
         $_SESSION['set_rol_id'] = $role->getValue('rol_id');
 
         if ($getMembersShowAll) {
-            $getFilterRoleUuid = 0;
+            $getFilterRoleUuid = '';
         }
 
         if ($getFilterRoleUuid !== '') {
@@ -178,8 +180,13 @@ try {
         $sqlData['params'] = $allVisibleRoles;
 
         // create filter menu with elements for role
-        $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
-        $form = new HtmlForm('navbar_filter_form_roles', '', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form = new Form(
+            'navbar_filter_form_roles',
+            'sys-template-parts/form.filter.tpl',
+            '',
+            $page,
+            array('type' => 'navbar', 'setFocus' => false)
+        );
         $form->addSelectBoxFromSql(
             'filter_rol_uuid',
             $gL10n->get('SYS_ROLE'),
@@ -188,8 +195,7 @@ try {
             array('defaultValue' => $getFilterRoleUuid, 'firstEntry' => $gL10n->get('SYS_ALL'))
         );
         $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), false, array('helpTextId' => 'SYS_SHOW_ALL_DESC'));
-        $filterNavbar->addForm($form->show());
-        $page->addHtml($filterNavbar->show());
+        $form->addToHtmlPage();
 
         // create table object
         $table = new HtmlTable('tbl_assign_role_membership', $page, true, true, 'table table-condensed');

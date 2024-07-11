@@ -17,9 +17,11 @@
  * config            : the selected configuration
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('category_report_enable_module')) {
         throw new AdmException('SYS_MODULE_DISABLED');
@@ -269,8 +271,13 @@ try {
             }
 
             // create filter menu with elements for role
-            $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
-            $form = new HtmlForm('navbar_filter_form_category_report', '', $page, array('type' => 'navbar', 'setFocus' => false));
+            $form = new Form(
+                'navbar_filter_form_category_report',
+                'sys-template-parts/form.filter.tpl',
+                '',
+                $page,
+                array('type' => 'navbar', 'setFocus' => false)
+            );
             $form->addSelectBox(
                 'crt_id',
                 $gL10n->get('SYS_SELECT_CONFIGURATION'),
@@ -281,8 +288,7 @@ try {
                 $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);
             }
             $form->addCheckbox('export_and_filter', $gL10n->get('SYS_FILTER_TO_EXPORT'), $getExportAndFilter);
-            $filterNavbar->addForm($form->show());
-            $page->addHtml($filterNavbar->show());
+            $form->addToHtmlPage();
 
             $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
 
