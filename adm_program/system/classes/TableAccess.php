@@ -250,7 +250,7 @@ class TableAccess
 
         $nameOfLastEditingUser = '';
 
-        if ($this->getValue($this->columnPrefix . '_timestamp_create') !== '') {
+        if ($this->getValue($this->columnPrefix . '_timestamp_change') !== '') {
             if ((int)$this->getValue($this->columnPrefix . '_usr_id_change') > 0) {
                 $userLastEdited = new User($gDb, $gProfileFields, $this->getValue($this->columnPrefix . '_usr_id_change'));
 

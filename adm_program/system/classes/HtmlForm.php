@@ -1454,29 +1454,29 @@ class HtmlForm
         $optionsAll['valueAttributes'] = array();
 
         if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && $countCategories > 1) {
-            $categoriesArray[0] = $gL10n->get('SYS_ALL');
+            $categoriesArray[] = array('', $gL10n->get('SYS_ALL'));
             $optionsAll['valueAttributes'][0] = array('data-global' => 0);
         }
 
         while ($row = $pdoStatement->fetch()) {
             // if several categories exist than select default category
             if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === ''
-            && ($countCategories === 1 || $row['cat_default'] === 1)) {
+                && ($countCategories === 1 || $row['cat_default'] === 1)) {
                 $optionsAll['defaultValue'] = $row['cat_uuid'];
             }
 
-            // if text is a translation-id then translate it
-            $categoriesArray[$row['cat_uuid']] = Language::translateIfTranslationStrId($row['cat_name']);
-
             // add label that this category is visible to all organizations
             if ($row['cat_org_id'] === null) {
-                if ($categoriesArray[$row['cat_uuid']] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
-                    $categoriesArray[$row['cat_uuid']] = $categoriesArray[$row['cat_uuid']] . ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
+                if ($row['cat_name'] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
+                    $row['cat_name'] .=  ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
                 }
                 $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 1);
             } else {
                 $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 0);
+
             }
+            // if text is a translation-id then translate it
+            $categoriesArray[] = array($row['cat_uuid'], \Language::translateIfTranslationStrId($row['cat_name']));
         }
 
         // now call method to create select box from array

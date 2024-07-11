@@ -336,13 +336,14 @@ try {
         array('icon' => 'bi-star-fill')
     );
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3'));
-    $form->addToHtmlPage();
-    $_SESSION['categories_edit_form'] = $form;
 
     $page->assignSmartyVariable('nameUserCreated', $category->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $category->getValue('cat_timestamp_create'));
     $page->assignSmartyVariable('nameLastUserEdited', $category->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $category->getValue('cat_timestamp_change'));
+    $form->addToHtmlPage();
+    $_SESSION['categories_edit_form'] = $form;
+
     $page->show();
 } catch (AdmException|Exception|\Smarty\Exception $e) {
     $gMessage->show($e->getMessage());

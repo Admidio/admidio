@@ -333,18 +333,16 @@ try {
     );
     $form->addCheckbox('event_right_list_view', $gL10n->get('SYS_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
     $form->addCheckbox('event_right_send_mail', $gL10n->get('SYS_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
-
     $form->addEditor('dat_description', '', $event->getValue('dat_description'));
-
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-
-    $form->addToHtmlPage();
-    $_SESSION['events_edit_form'] = $form;
 
     $page->assignSmartyVariable('nameUserCreated', $event->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $event->getValue('dat_timestamp_create'));
     $page->assignSmartyVariable('nameLastUserEdited', $event->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $event->getValue('dat_timestamp_change'));
+    $form->addToHtmlPage();
+    $_SESSION['events_edit_form'] = $form;
+
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

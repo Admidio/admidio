@@ -92,13 +92,14 @@ try {
         array('property' => HtmlForm::FIELD_REQUIRED)
     );
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-    $form->addToHtmlPage();
-    $_SESSION['announcements_edit_form'] = $form;
 
     $page->assignSmartyVariable('nameUserCreated', $announcement->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $announcement->getValue('ann_timestamp_create'));
     $page->assignSmartyVariable('nameLastUserEdited', $announcement->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $announcement->getValue('ann_timestamp_change'));
+    $form->addToHtmlPage();
+    $_SESSION['announcements_edit_form'] = $form;
+
     $page->show();
 } catch (AdmException|Exception|\Smarty\Exception $e) {
     $gMessage->show($e->getMessage());

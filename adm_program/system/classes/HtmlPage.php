@@ -118,6 +118,7 @@ class HtmlPage
         }
 
         $this->smarty = $this->createSmartyObject();
+        $this->assignBasicSmartyVariables();
 
         if (is_object($gSettingsManager) && $gSettingsManager->has('system_browser_update_check')
         && $gSettingsManager->getBool('system_browser_update_check')) {
@@ -204,6 +205,18 @@ class HtmlPage
         $this->pageContent .= $html;
     }
 
+
+    /**
+     * Adds html content from a Smarty template file. Therefore, the template file will be fetched and
+     * the html content will be added to the page content.
+     * @param string $template Template name with relative template path that should be fetched.
+     * @throws \Smarty\Exception
+     */
+    public function addHtmlByTemplate(string $template)
+    {
+        $this->pageContent .= $this->smarty->fetch($template);
+    }
+
     /**
      * Add a new menu item to the page menu part. This is only the menu that will show functions of the
      * current page. The menu header will automatically the name of the page. If a dropdown menu item should
@@ -232,6 +245,75 @@ class HtmlPage
     public function addTemplateFile(string $templateFile)
     {
         $this->templateFile = $templateFile;
+    }
+
+    /**
+     * Public method to assign new variables to the Smarty template of the HtmlPage.
+     * @param string $variable Name of the variable within the Smarty template.
+     * @param string|array $value Value of the variable.
+     * @return void
+     */
+    private function assignBasicSmartyVariables()
+    {
+        global $gDebug, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager,
+               $gSetCookieForDomain, $gNavigation;
+
+        $urlImprint = '';
+        $urlDataProtection = '';
+        $hasPreviousUrl = false;
+
+        // if there is more than 1 url in the stack than show the back button
+        if ($this->showBackLink && $gNavigation->count() > 1) {
+            $hasPreviousUrl = true;
+        }
+
+        $this->smarty->assign('languageIsoCode', $gL10n->getLanguageIsoCode());
+        $this->smarty->assign('id', $this->id);
+        $this->smarty->assign('title', $this->title);
+        $this->smarty->assign('headline', $this->headline);
+        $this->smarty->assign('hasPreviousUrl', $hasPreviousUrl);
+        $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
+        $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
+        $this->smarty->assign('urlTheme', THEME_URL);
+        $this->smarty->assign('navigationStack', $gNavigation->getStack());
+
+        $this->smarty->assign('currentUser', $gCurrentUser);
+        $this->smarty->assign('validLogin', $gValidLogin);
+        $this->smarty->assign('debug', $gDebug);
+        $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
+
+        // add imprint and data protection
+        if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {
+            $urlImprint = $gSettingsManager->getString('system_url_imprint');
+        }
+        if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0) {
+            $urlDataProtection = $gSettingsManager->getString('system_url_data_protection');
+        }
+        $this->smarty->assign('urlImprint', $urlImprint);
+        $this->smarty->assign('urlDataProtection', $urlDataProtection);
+        $this->smarty->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
+
+        // show cookie note
+        if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note')) {
+            $this->smarty->assign('cookieDomain', DOMAIN);
+            $this->smarty->assign('cookiePrefix', COOKIE_PREFIX);
+
+            if ($gSetCookieForDomain) {
+                $this->smarty->assign('cookiePath', '/');
+            } else {
+                $this->smarty->assign('cookiePath', ADMIDIO_URL_PATH . '/');
+            }
+
+            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0) {
+                $this->smarty->assign('cookieDataProtectionUrl', '"href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ');
+            } else {
+                $this->smarty->assign('cookieDataProtectionUrl', '');
+            }
+        }
+
+        // add translation object
+        $this->smarty->assign('l10n', $gL10n);
+        $this->smarty->assign('settings', $gSettingsManager);
     }
 
     /**
@@ -458,77 +540,20 @@ class HtmlPage
      */
     public function show()
     {
-        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager,
-               $gSetCookieForDomain, $gNavigation, $gLayoutReduced;
-
-        $urlImprint = '';
-        $urlDataProtection = '';
-        $hasPreviousUrl = false;
-
-        // if there is more than 1 url in the stack than show the back button
-        if ($this->showBackLink && $gNavigation->count() > 1) {
-            $hasPreviousUrl = true;
-        }
+        global $gSettingsManager, $gLayoutReduced, $gMenu;
 
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
 
         $this->smarty->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
-        $this->smarty->assign('languageIsoCode', $gL10n->getLanguageIsoCode());
-        $this->smarty->assign('id', $this->id);
-        $this->smarty->assign('title', $this->title);
-        $this->smarty->assign('headline', $this->headline);
-        $this->smarty->assign('hasPreviousUrl', $hasPreviousUrl);
-        $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
-        $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
-        $this->smarty->assign('urlTheme', THEME_URL);
         $this->smarty->assign('javascriptContent', $this->javascriptContent);
         $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
-        $this->smarty->assign('navigationStack', $gNavigation->getStack());
-
-        $this->smarty->assign('currentUser', $gCurrentUser);
-        $this->smarty->assign('validLogin', $gValidLogin);
-        $this->smarty->assign('debug', $gDebug);
-        $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
 
         $this->smarty->assign('printView', $this->printView);
         $this->smarty->assign('menuNavigation', $gMenu->getAllMenuItems());
         $this->smarty->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
-
-        // add imprint and data protection
-        if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {
-            $urlImprint = $gSettingsManager->getString('system_url_imprint');
-        }
-        if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0) {
-            $urlDataProtection = $gSettingsManager->getString('system_url_data_protection');
-        }
-        $this->smarty->assign('urlImprint', $urlImprint);
-        $this->smarty->assign('urlDataProtection', $urlDataProtection);
-        $this->smarty->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
-
-        // show cookie note
-        if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note')) {
-            $this->smarty->assign('cookieDomain', DOMAIN);
-            $this->smarty->assign('cookiePrefix', COOKIE_PREFIX);
-
-            if ($gSetCookieForDomain) {
-                $this->smarty->assign('cookiePath', '/');
-            } else {
-                $this->smarty->assign('cookiePath', ADMIDIO_URL_PATH . '/');
-            }
-
-            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0) {
-                $this->smarty->assign('cookieDataProtectionUrl', '"href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ');
-            } else {
-                $this->smarty->assign('cookieDataProtectionUrl', '');
-            }
-        }
-
-        // add translation object
-        $this->smarty->assign('l10n', $gL10n);
-        $this->smarty->assign('settings', $gSettingsManager);
 
         try {
             if ($this->modeInline || $gLayoutReduced) {
