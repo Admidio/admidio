@@ -75,6 +75,7 @@ class HtmlNavbar
      *                           default: will be the standard navbar of all modules.
      *                           filter:  should be used if this navbar is used to filter data of within the script.
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     public function __construct(string $id, string $name = '', HtmlPage $htmlPage = null, string $type = 'default')
     {

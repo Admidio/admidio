@@ -26,9 +26,11 @@
  * view      - Content output in different views like 'detail', 'list'
  *             (Default: according to preferences)
  *****************************************************************************/
-require_once(__DIR__ . '/../../system/common.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
@@ -153,8 +155,13 @@ try {
             }
 
             // create filter menu with elements for calendar and start/end date
-            $filterNavbar = new HtmlNavbar('menu_events_filter', '', null, 'filter');
-            $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', $page, array('type' => 'navbar', 'setFocus' => false));
+            $form = new Form(
+                'navbar_filter_form',
+                'sys-template-parts/form.filter.tpl',
+                ADMIDIO_URL . FOLDER_MODULES . '/events/events.php',
+                $page,
+                array('type' => 'navbar', 'setFocus' => false)
+            );
             if ($gSettingsManager->getBool('events_rooms_enabled')) {
                 $selectBoxEntries = array(
                     'detail' => $gL10n->get('SYS_DETAILED'),
@@ -199,8 +206,7 @@ try {
             );
             $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-            $filterNavbar->addForm($form->show());
-            $page->addHtml($filterNavbar->show());
+            $form->addToHtmlPage();
         }
     } else { // $getViewMode = 'print'
         $datatable = false;

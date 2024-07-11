@@ -106,6 +106,7 @@ class HtmlForm
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlForm" is deprecated, use class "Form" instead.
      */
     public function __construct(string $id, string $action = '', HtmlPage $htmlPage = null, array $options = array())
     {

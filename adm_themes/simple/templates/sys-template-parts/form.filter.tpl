@@ -10,11 +10,14 @@
                 {/foreach}>
 
                 {foreach $elements as $element}
-                    {if $element.type == 'text'}
+                    {if $element.type == 'text' || $element.type == 'date'}
                         {include 'sys-template-parts/form.input.tpl' data=$element}
                     {/if}
                     {if $element.type == 'select'}
                         {include 'sys-template-parts/form.select.tpl' data=$element}
+                    {/if}
+                    {if $element.type == 'submit' || $element.type == 'button'}
+                        {include 'sys-template-parts/form.button.tpl' data=$element}
                     {/if}
                 {/foreach}
             </form>
