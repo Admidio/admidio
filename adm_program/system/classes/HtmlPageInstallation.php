@@ -44,10 +44,16 @@ class HtmlPageInstallation extends HtmlPage
      */
     public function __construct(string $id, string $headline = '')
     {
-        parent::__construct($id, $headline);
+        $this->id = $id;
+
+        if ($headline !== '') {
+            $this->setHeadline($headline);
+        }
 
         // initialize php template engine smarty
+        $this->smarty = $this->createSmartyObject();
         $this->smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');
+        $this->assignBasicSmartyVariables();
 
         // if no modus set then set installation modus
         if ($headline === '') {
@@ -59,7 +65,7 @@ class HtmlPageInstallation extends HtmlPage
      * Internal method that will assign a default set of variables to the Smarty template engine.
      * These variables are available in all installation and update template files.
      */
-    private function assignDefaultVariables()
+    private function assignBasicSmartyVariables()
     {
         global $gDebug, $gSettingsManager, $gValidLogin, $gL10n;
 
@@ -72,15 +78,11 @@ class HtmlPageInstallation extends HtmlPage
         $this->smarty->assign('headline', $this->headline);
         $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
         $this->smarty->assign('urlTheme', THEME_URL);
-        $this->smarty->assign('javascriptContent', $this->javascriptContent);
-        $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
 
         $this->smarty->assign('validLogin', $gValidLogin);
         $this->smarty->assign('debug', $gDebug);
 
         $this->smarty->assign('printView', $this->printView);
-        $this->smarty->assign('templateFile', $this->templateFile);
-        $this->smarty->assign('content', $this->pageContent);
 
         // add translation object
         $this->smarty->assign('l10n', $gL10n);
@@ -134,7 +136,10 @@ class HtmlPageInstallation extends HtmlPage
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
 
-        $this->assignDefaultVariables();
+        $this->smarty->assign('javascriptContent', $this->javascriptContent);
+        $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
+        $this->smarty->assign('templateFile', $this->templateFile);
+        $this->smarty->assign('content', $this->pageContent);
         $this->smarty->display('index.tpl');
     }
 
@@ -160,13 +165,14 @@ class HtmlPageInstallation extends HtmlPage
         $this->smarty->assign('messageHeadline', $headline);
         $this->smarty->assign('messageText', $text);
         $this->addTemplateFile('system/message.tpl');
+        $this->smarty->assign('templateFile', $this->templateFile);
+        $this->smarty->assign('content', $this->pageContent);
 
         // add form with submit button
         $form = new HtmlForm('installation-form', $destinationUrl);
         $form->addSubmitButton('next_page', $buttonText, array('icon' => $buttonIcon));
         $this->addHtml($form->show());
 
-        $this->assignDefaultVariables();
         $this->smarty->display('index.tpl');
         exit();
     }

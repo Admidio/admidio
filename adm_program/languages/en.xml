@@ -44,7 +44,6 @@
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">The database parameters have not been entered completely!</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Enter the name of the database server here. This can be a URL or localhost if the database is running on the same machine as the webpage.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
   <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>

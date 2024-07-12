@@ -9,21 +9,22 @@
  *
  * Parameters:
  *
- * mode = 1 : (Default) Check update status and show dialog with status
- *        2 : Perform update
- *        3 : Show result of update
+ * mode = dialog : (Default) Check update status and show dialog with status
+ *        update : Perform update
+ *        result : Show result of update
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
 
-/**
- * Shows an error dialog with an error message to the user.
- * @param string $message Message that should be shown to the user.
- * @param bool $reloadPage If set to **true** than the user could reload the update page.
- * @return void
- */
 const THEME_URL = 'layout';
 
 try {
+    /**
+     * Shows an error dialog with an error message to the user.
+     * @param string $message Message that should be shown to the user.
+     * @param bool $reloadPage If set to **true** than the user could reload the update page.
+     * @return void
+     */
     function showErrorMessage(string $message, bool $reloadPage = false)
     {
         global $gL10n;
@@ -65,7 +66,7 @@ try {
 
     // Initialize and check the parameters
 
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'update', 'result')));
 
     // connect to database
     $gDb = Database::createDatabaseInstance();
@@ -188,7 +189,7 @@ try {
         // => EXIT
     }
 
-    if ($getMode === 1) {
+    if ($getMode === 'dialog') {
         $gLogger->info('UPDATE: Show update start-view');
 
         // if database version is smaller than source version -> update
@@ -199,56 +200,34 @@ try {
             $page = new HtmlPageInstallation('admidio-update');
             $page->addTemplateFile('update.tpl');
             $page->setUpdateModus();
-            $page->addJavascript('
-            $("#next_page").on("click", function() {
-                var showProgress = true;
-                var requiredInput = $("input[required]");
-
-                // check if all required fields have values
-                for(var i = 0; i < requiredInput.length; i++)
-                {
-                    if(requiredInput[i].value == "")
-                    {
-                        showProgress = false;
-                    }
-                }
-
-                if(showProgress == true)
-                {
-                    $(this).prop("disabled", true);
-                    $(this).html("<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> ' . $gL10n->get('INS_DATABASE_IS_UPDATED') . '");
-                    $("#update_login_form").submit();
-                }
-            });', true);
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
 
             // create form with login and update button
-            $form = new HtmlForm('update_login_form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
-
-            if (!isset($gLoginForUpdate) || $gLoginForUpdate) {
-                $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
-                $form->addInput(
-                    'login_name',
-                    $gL10n->get('SYS_USERNAME'),
-                    '',
-                    array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
-                );
-                // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
-                $form->addInput(
-                    'password',
-                    $gL10n->get('SYS_PASSWORD'),
-                    '',
-                    array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
-                );
-            }
-
-            $form->addButton(
+            $form = new Form(
+                'update_login_form',
+                'update.tpl',
+                SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 'update')),
+                $page
+            );
+            $form->addInput(
+                'login_name',
+                $gL10n->get('SYS_USERNAME'),
+                '',
+                array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+            );
+            $form->addInput(
+                'password',
+                $gL10n->get('SYS_PASSWORD'),
+                '',
+                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+            );
+            $form->addSubmitButton(
                 'next_page',
                 $gL10n->get('INS_UPDATE_DATABASE'),
-                array('icon' => 'bi-arrow-repeat', 'class' => 'btn-primary')
+                array('icon' => 'bi-arrow-repeat')
             );
-
-            $page->addHtml($form->show());
+            $page->assignSmartyVariable('loginForUpdate', $gLoginForUpdate);
+            $form->addToHtmlPage();
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
@@ -281,7 +260,7 @@ try {
             );
             // => EXIT
         }
-    } elseif ($getMode === 2) {
+    } elseif ($getMode === 'update') {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
@@ -289,6 +268,12 @@ try {
         $update = new Update();
         $update->doAdmidioUpdate($installedDbVersion);
 
+        echo json_encode(array(
+            'status' => 'success',
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 'result'))
+        ));
+        exit();
+    } elseif ($getMode === 'result') {
         // show notice that update was successful
         $page = new HtmlPageInstallation('admidio-update-successful');
         $page->addTemplateFile('update_successful.tpl');
@@ -316,5 +301,9 @@ try {
         $page->show();
     }
 } catch (AdmException|Exception|UnexpectedValueException|RuntimeException $e) {
-    showErrorMessage($e->getMessage(), true);
+    if ($getMode === 'update') {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    } else {
+        showErrorMessage($e->getMessage(), true);
+    }
 }

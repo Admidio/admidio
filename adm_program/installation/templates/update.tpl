@@ -23,4 +23,15 @@
     </div>
 {/if}
 
-{$content}
+<form {foreach $attributes as $attribute}
+{$attribute@key}="{$attribute}"
+{/foreach}>
+    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {if $loginForUpdate}
+        <p>{$l10n->get('INS_ADMINISTRATOR_LOGIN_DESC')}</p>
+        {include 'sys-template-parts/form.input.tpl' data=$elements['login_name']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['password']}
+    {/if}
+    <div class="form-alert" style="display: none;">&nbsp;</div>
+    {include 'sys-template-parts/form.button.tpl' data=$elements['next_page']}
+</form>

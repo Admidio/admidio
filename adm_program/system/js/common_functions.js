@@ -254,10 +254,12 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
  * which the user will be guided if the form was successfully processed.
  */
 function formSubmit(event) {
-    var submitButtonIcon = $("button[type=submit] i");
+    var submitButtonID = $("#" + $(this).attr("id") + " button[type=submit]").attr("id");
+    var submitButtonIcon = $("#" + submitButtonID + " i");
     var iconClass = submitButtonIcon.attr("class");
     var formAlert = $("#" + $(this).attr("id") + " .form-alert");
     submitButtonIcon.attr("class", "spinner-border spinner-border-sm");
+    $("#" + submitButtonID).attr("disabled", true);
     formAlert.hide();
 
     // disable default form submit
@@ -305,6 +307,7 @@ function formSubmit(event) {
                 if (returnMessage.length == 0) {
                     returnMessage = "Error: Undefined error occurred!";
                 }
+                $("#" + submitButtonID).attr("disabled", false);
                 submitButtonIcon.attr("class", iconClass);
                 formAlert.attr("class", "alert alert-danger form-alert");
                 formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage);

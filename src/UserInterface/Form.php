@@ -218,7 +218,9 @@ class Form
         if ($optionsAll['property'] === self::FIELD_DISABLED) {
             $attributes['disabled'] = 'disabled';
         }
-
+        if (!isset($options['link'])) {
+            $optionsAll['link'] = '';
+        }
         if(strstr($optionsAll['class'], 'btn-') === false) {
             $optionsAll['class'] .= " btn-primary";
 
