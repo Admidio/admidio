@@ -251,6 +251,14 @@ try {
                             }
 
                             if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK) {
+                                // check filename and throw exception if something is wrong
+                                StringUtils::strIsValidFileName($_FILES['userfile']['name'][$currentAttachmentNo], false);
+
+                                // check for valid file extension of attachment
+                                if(!FileSystemUtils::allowedFileExtension($_FILES['userfile']['name'][$currentAttachmentNo])) {
+                                    throw new AdmException('SYS_FILE_EXTENSION_INVALID');
+                                }
+
                                 // check the size of the attachment
                                 $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
                                 if ($attachmentSize > Email::getMaxAttachmentSize()) {
