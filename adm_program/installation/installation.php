@@ -83,8 +83,7 @@ try {
         $language = $_SESSION['language'];
     }
 
-    $gLanguageData = new LanguageData($language);
-    $gL10n = new Language($gLanguageData);
+    $gL10n = new Language($language);
 
     $language = $gL10n->getLanguage();
 
