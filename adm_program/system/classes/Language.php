@@ -12,25 +12,12 @@
  *
  * The class will read a language specific text that is identified with their
  * text id out of a language xml file. The access will be managed with the
- * \SimpleXMLElement which search through xml files. An object of this class
- * can't be stored in a PHP session because it creates PHP core objects which
- * couldn't be stored in sessions. Therefore, an object of **LanguageData**
- * should be assigned to this class that stored all necessary data and can be
- * stored in a session.
+ * \SimpleXMLElement which search through xml files.
  *
  * **Code example**
  * ```
- * // show how to use this class with the language data class and sessions
- * script_a.php
  * // create a language data object and assign it to the language object
- * $languageData = new LanguageData('de');
- * $language = new Language($languageData);
- * $session->addObject('languageData', $languageData);
- *
- * script_b.php
- * // read language data from session and add it to language object
- * $languageData = $session->getObject('languageData')
- * $language = new Language();
+ * $gL10n = new Language('de');
  *
  * // read and display a language specific text with placeholders for individual content
  * echo $gL10n->get('SYS_CREATED_BY_AND_AT', array('John Doe', '2019-04-13'));
@@ -38,35 +25,78 @@
  */
 class Language
 {
+    public const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
+
     /**
-     * @var LanguageData An object of the class **LanguageData** that stores all necessary language data in a session
+     * @var string The code of the language that should be read in this object
      */
-    private $languageData;
+    private string $language = '';
+    /**
+     * @var string The ISO 639-1 code of the language
+     */
+    private string $languageIsoCode = '';
+    /**
+     * @var string The language code for external libraries.
+     */
+    private string $languageLibs = '';
+    /**
+     * @var array<int,string> Array with all relevant language files
+     */
+    private array $languageFolderPaths = array();
+    /**
+     * @var array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     */
+    private array $countries = array();
+    /**
+     * @var array<string,string> Stores all read text data in an array to get quick access if a text is required several times
+     */
+    private array $textCache = array();
+    /**
+     * @var bool Set to true if the language folders of the plugins are already loaded.
+     */
+    private bool $pluginLanguageFoldersLoaded = false;
     /**
      * @var array<string,string> An Array with all available languages and their ISO codes
      */
-    private $languages = array();
+    private array $languages = array();
     /**
-     * @var array<string,SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in **$languageData**.
+     * @var array<string,SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in **$languageFolderPaths**.
      */
-    private $xmlLanguageObjects = array();
+    private array $xmlLanguageObjects = array();
     /**
-     * @var array<string,SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in **$languageData**.
+     * @var array<string,SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in **$languageFolderPaths**.
      */
-    private $xmlRefLanguageObjects = array();
+    private array $xmlRefLanguageObjects = array();
 
     /**
      * Language constructor.
-     * @param LanguageData|null $languageDataObject An object of the class **LanguageData**.
+     * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
+     *                         If no language is set than the browser language will be determined.
+     * @throws Exception
      */
-    public function __construct(LanguageData $languageDataObject = null)
+    public function __construct(string $language = '')
     {
         global $gSettingsManager;
 
-        if ($languageDataObject === null) {
-            $languageDataObject = new LanguageData($gSettingsManager->getString('system_language'));
+        if ($language === '') {
+            // get browser language and set this language as default
+            $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
         }
-        $this->languageData =& $languageDataObject;
+
+        $this->setLanguage($language);
+        $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
+
+        $this->addPluginLanguageFolderPaths();
+    }
+
+    /**
+     * We need the sleep function at this place because otherwise the system will serialize a SimpleXMLElement
+     * which will lead to an exception.
+     * @return array<int,string>
+     */
+    public function __sleep()
+    {
+        return array('language', 'languageIsoCode', 'languageLibs', 'languageFolderPaths', 'languages', 'countries', 'textCache', 'pluginLanguageFoldersLoaded');
     }
 
     /**
@@ -78,7 +108,80 @@ class Language
      */
     public function addLanguageFolderPath(string $languageFolderPath): bool
     {
-        return $this->languageData->addLanguageFolderPath($languageFolderPath);
+        if ($languageFolderPath === '' || !is_dir($languageFolderPath)) {
+            throw new UnexpectedValueException('Invalid folder path!');
+        }
+
+        if (in_array($languageFolderPath, $this->languageFolderPaths, true)) {
+            return false;
+        }
+
+        $this->languageFolderPaths[] = $languageFolderPath;
+
+        return true;
+    }
+
+    /**
+     * Read language folder of each plugin in adm_plugins and add this folder to the language folder
+     * array of this class.
+     */
+    public function addPluginLanguageFolderPaths()
+    {
+        global $gLogger;
+
+        if (!$this->pluginLanguageFoldersLoaded) {
+            try {
+                $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
+
+                foreach ($pluginFolders as $pluginFolder => $type) {
+                    $languageFolder = $pluginFolder . '/languages';
+
+                    if (is_dir($languageFolder)) {
+                        $this->addLanguageFolderPath($languageFolder);
+                    }
+                }
+
+                $this->pluginLanguageFoldersLoaded = true;
+            } catch (RuntimeException $exception) {
+                $gLogger->error('L10N: Plugins folder content could not be loaded!', array('errorMessage' => $exception->getMessage()));
+            }
+        }
+    }
+
+    /**
+     * Determine the language from the browser preferences of the user.
+     * @param string $defaultLanguage This language will be set if no browser language could be determined
+     * @return string Return the preferred language code of the client browser
+     */
+    public static function determineBrowserLanguage(string $defaultLanguage): string
+    {
+        if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            return $defaultLanguage;
+        }
+
+        $languages = preg_split('/\s*,\s*/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $languageSelected = $defaultLanguage;
+        $prioritySelected = 0;
+
+        foreach ($languages as $value) {
+            if (!preg_match('/^([a-z]{2,3}(?:-[a-zA-Z]{2,3})?|\*)(?:\s*;\s*q=(0(?:\.\d{1,3})?|1(?:\.0{1,3})?))?$/', $value, $matches)) {
+                continue;
+            }
+
+            $langCodes = explode('-', $matches[1]);
+
+            $priority = 1.0;
+            if (isset($matches[2])) {
+                $priority = (float) $matches[2];
+            }
+
+            if ($prioritySelected < $priority && $langCodes[0] !== '*') {
+                $languageSelected = $langCodes[0];
+                $prioritySelected = $priority;
+            }
+        }
+
+        return $languageSelected;
     }
 
     /**
@@ -115,7 +218,7 @@ class Language
             $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
 
             // Read language folders of the plugins. Maybe there was a new plugin installed.
-            $this->languageData->addPluginLanguageFolderPaths();
+            $this->addPluginLanguageFolderPaths();
 
             // no text found then write #undefined text#
             return '#' . $textId . '#';
@@ -145,8 +248,8 @@ class Language
      */
     private function getCountryFile(): string
     {
-        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . $this->languageData->getLanguage() . '.xml';
-        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
+        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . $this->language . '.xml';
+        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . $this::REFERENCE_LANGUAGE   . '.xml';
 
         if (is_file($langFile)) {
             return $langFile;
@@ -165,14 +268,11 @@ class Language
      */
     public function getCountries(): array
     {
-        $countries = $this->languageData->getCountries();
-
-        if (count($countries) === 0) {
-            $countries = $this->loadCountries();
-            $this->languageData->setCountries($countries);
+        if (count($this->countries) === 0) {
+            $this->countries = $this->loadCountries();
         }
 
-        return $countries;
+        return $this->countries;
     }
 
     /**
@@ -233,7 +333,7 @@ class Language
      */
     public function getLanguage(): string
     {
-        return $this->languageData->getLanguage();
+        return $this->language;
     }
 
     /**
@@ -242,7 +342,7 @@ class Language
      */
     public function getLanguageIsoCode(): string
     {
-        return $this->languageData->getLanguageIsoCode();
+        return $this->languageIsoCode;
     }
 
     /**
@@ -251,7 +351,21 @@ class Language
      */
     public function getLanguageLibs(): string
     {
-        return $this->languageData->getLanguageLibs();
+        return $this->languageLibs;
+    }
+
+    /**
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @return string Returns the cached text or empty string if text id isn't found
+     *@throws OutOfBoundsException
+     */
+    private function getTextCache(string $textId): string
+    {
+        if (!array_key_exists($textId, $this->textCache)) {
+            throw new OutOfBoundsException('Text-id is not cached!');
+        }
+
+        return $this->textCache[$textId];
     }
 
     /**
@@ -265,17 +379,17 @@ class Language
     {
         // first search text id in text-cache
         try {
-            return $this->languageData->getTextCache($textId);
+            return $this->getTextCache($textId);
         } catch (OutOfBoundsException $exception) {
             // if text id wasn't found than search for it in language
             try {
                 // search for text id in every \SimpleXMLElement (language file) of the object array
-                return $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
+                return $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->language, $textId);
             } catch (OutOfBoundsException $exception) {
                 // if text id wasn't found than search for it in reference language
                 try {
                     // search for text id in every \SimpleXMLElement (language file) of the object array
-                    return $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, LanguageData::REFERENCE_LANGUAGE, $textId);
+                    return $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, $this::REFERENCE_LANGUAGE, $textId);
                 } catch (OutOfBoundsException $exception) {
                     throw new OutOfBoundsException($exception->getMessage());
                 }
@@ -410,7 +524,7 @@ class Language
 
         $text = self::prepareXmlText((string) $xmlNodes[0]);
 
-        $this->languageData->setTextCache($textId, $text);
+        $this->textCache[$textId] = $text;
 
         return $text;
     }
@@ -425,8 +539,7 @@ class Language
      */
     private function searchTextIdInLangObject(array &$xmlLanguageObjects, string $language, string $textId): string
     {
-        $languageFolderPaths = $this->languageData->getLanguageFolderPaths();
-        foreach ($languageFolderPaths as $languageFolderPath) {
+        foreach ($this->languageFolderPaths as $languageFolderPath) {
             try {
                 $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
 
@@ -446,15 +559,21 @@ class Language
      */
     public function setLanguage(string $language): bool
     {
-        if ($language === $this->languageData->getLanguage()) {
+        global $gSupportedLanguages;
+
+        if ($language === $this->language) {
             return false;
         }
 
         // initialize data
         $this->xmlLanguageObjects    = array();
         $this->xmlRefLanguageObjects = array();
+        $this->countries = array();
+        $this->textCache = array();
 
-        $this->languageData->setLanguage($language);
+        $this->language = $language;
+        $this->languageLibs = $gSupportedLanguages[$language]['libs'];
+        $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
 
         return true;
     }

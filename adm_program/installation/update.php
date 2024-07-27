@@ -29,8 +29,7 @@ try {
         global $gL10n;
 
         if (!is_object($gL10n)) {
-            $gLanguageData = new LanguageData('en');
-            $gL10n = new Language($gLanguageData);
+            $gL10n = new Language('en');
         }
 
         $page = new HtmlPageInstallation('admidio-update-message');
@@ -120,8 +119,7 @@ try {
     if (!$gSettingsManager->has('system_language')) {
         $gSettingsManager->set('system_language', 'de');
     }
-    $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
-    $gL10n = new Language($gLanguageData);
+    $gL10n = new Language($gSettingsManager->getString('system_language'));
     $gChangeNotification = new ChangeNotification();
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files

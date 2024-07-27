@@ -79,9 +79,9 @@ if (array_key_exists('gCurrentSession', $_SESSION)
     $gSystemComponent =& $gCurrentSession->getObject('gSystemComponent');
     // read language data from session and assign them to the language object
     /**
-     * @var LanguageData $gLanguageData
+     * @var Language $gL10n
      */
-    $gLanguageData =& $gCurrentSession->getObject('gLanguageData');
+    $gL10n =& $gCurrentSession->getObject('gL10n');
     // read organization data from session object
     /**
      * @var Organization $gCurrentOrganization
@@ -130,8 +130,8 @@ if (array_key_exists('gCurrentSession', $_SESSION)
     $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
 
     // create a language data object and assign it to the language object
-    $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
-    $gCurrentSession->addObject('gLanguageData', $gLanguageData);
+    $gL10n = new Language($gSettingsManager->getString('system_language'));
+    $gCurrentSession->addObject('gL10n', $gL10n);
 
     // delete old entries in session table
     $gCurrentSession->tableCleanup($gSettingsManager->getInt('logout_minutes'));
@@ -146,8 +146,6 @@ if (array_key_exists('iframe', $_GET)) {
 } else {
     $gLayoutReduced = false;
 }
-
-$gL10n = new Language($gLanguageData);
 
 $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
 
