@@ -74,10 +74,8 @@ class Language
      *                         If no language is set than the browser language will be determined.
      * @throws Exception
      */
-    public function __construct(string $language = '')
+    public function __construct(string $language)
     {
-        global $gSettingsManager;
-
         if ($language === '') {
             // get browser language and set this language as default
             $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
