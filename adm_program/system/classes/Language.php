@@ -412,7 +412,7 @@ class Language
      */
     private static function loadAvailableLanguages(): array
     {
-        global $gSupportedLanguages;
+        require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
 
         return array_map(function ($languageInfos) {
             return $languageInfos['name'];
@@ -557,7 +557,7 @@ class Language
      */
     public function setLanguage(string $language): bool
     {
-        global $gSupportedLanguages;
+        require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
 
         if ($language === $this->language) {
             return false;
