@@ -27,7 +27,7 @@ try {
     require(__DIR__ . '/../../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'save', 'validValues' => array('save', 'html_form', 'new_org_dialog', 'new_org_create', 'htaccess', 'test_email', 'backup')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('save', 'html_form', 'new_org_dialog', 'new_org_create', 'htaccess', 'test_email', 'backup')));
     $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
     // only administrators are allowed to edit organization preferences or create new organizations
@@ -63,7 +63,7 @@ try {
 
             // first check the fields of the submitted form
             switch ($getForm) {
-                case 'common':
+                case 'Common':
                     $checkboxes = array(
                         'system_cookie_note', 'enable_rss',
                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
@@ -81,7 +81,7 @@ try {
                     }
                     break;
 
-                case 'security':
+                case 'Security':
                     $checkboxes = array(
                         'enable_auto_login', 'enable_password_recovery'
                     );
@@ -97,7 +97,7 @@ try {
                     }
                     break;
 
-                case 'organization':
+                case 'Organization':
                     $checkboxes = array('system_organization_select');
 
                     if ($_POST['org_longname'] === '') {
@@ -113,7 +113,7 @@ try {
                     }
                     break;
 
-                case 'regional_settings':
+                case 'RegionalSettings':
                     if (!StringUtils::strIsValidFolderName($_POST['system_language'])
                         || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml')) {
                         throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
@@ -257,10 +257,19 @@ try {
         // Returns the html of the requested form
         case 'html_form':
             $preferencesUI = new Preferences('common');
-            
+
             switch ($getForm) {
-                case 'common':
+                case 'Common':
                     echo $preferencesUI->createCommonForm();
+                    break;
+                case 'Security':
+                    echo $preferencesUI->createSecurityForm();
+                    break;
+                case 'Organization':
+                    echo $preferencesUI->createOrganizationForm();
+                    break;
+                case 'RegionalSettings':
+                    echo $preferencesUI->createRegionalSettingsForm();
                     break;
             }
             break;

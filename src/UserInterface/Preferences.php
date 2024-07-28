@@ -70,114 +70,114 @@ class Preferences extends HtmlPage
 
         $this->accordionCommonPanels = array(
             'common' => array(
-                'id' => 'common',
+                'id' => 'Common',
                 'title' => $gL10n->get('SYS_COMMON'),
                 'icon' => 'bi-gear-fill'
             ),
             'security' => array(
-                'id' => 'security',
+                'id' => 'Security',
                 'title' => $gL10n->get('SYS_SECURITY'),
                 'icon' => 'bi-shield-fill'
             ),
             'organization' => array(
-                'id' => 'organization',
+                'id' => 'Organization',
                 'title' => $gL10n->get('SYS_ORGANIZATION'),
                 'icon' => 'bi-diagram-3-fill'
             ),
             'regional_settings' => array(
-                'id' => 'regional_settings',
+                'id' => 'RegionalSettings',
                 'title' => $gL10n->get('ORG_REGIONAL_SETTINGS'),
                 'icon' => 'bi-globe2'
             ),
             'registration' => array(
-                'id' => 'registration',
+                'id' => 'Registration',
                 'title' => $gL10n->get('SYS_REGISTRATION'),
                 'icon' => 'bi-card-checklist'
             ),
             'email_dispatch' => array(
-                'id' => 'email_dispatch',
+                'id' => 'EmailDispatch',
                 'title' => $gL10n->get('SYS_MAIL_DISPATCH'),
                 'icon' => 'bi-envelope-open-fill'
             ),
             'system_notification' => array(
-                'id' => 'system_notification',
+                'id' => 'SystemNotification',
                 'title' => $gL10n->get('SYS_SYSTEM_MAILS'),
                 'icon' => 'bi-broadcast-pin'
             ),
             'captcha' => array(
-                'id' => 'captcha',
+                'id' => 'Captcha',
                 'title' => $gL10n->get('SYS_CAPTCHA'),
                 'icon' => 'bi-fonts'
             ),
             'admidio_update' => array(
-                'id' => 'admidio_update',
+                'id' => 'AdmidioUpdate',
                 'title' => $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'),
                 'icon' => 'bi-cloud-arrow-down-fill'
             ),
             'php' => array(
-                'id' => 'php',
+                'id' => 'Php',
                 'title' => $gL10n->get('SYS_PHP'),
                 'icon' => 'bi-filetype-php'
             ),
             'system_information' => array(
-                'id' => 'system_information',
+                'id' => 'SystemInformation',
                 'title' => $gL10n->get('ORG_SYSTEM_INFORMATION'),
                 'icon' => 'bi-info-circle-fill'
             )
         );
         $this->accordionModulePanels = array(
             'announcements' => array(
-                'id' => 'announcements',
+                'id' => 'Announcements',
                 'title' => $gL10n->get('SYS_ANNOUNCEMENTS'),
                 'icon' => 'bi-newspaper'
             ),
             'contacts' => array(
-                'id' => 'contacts',
+                'id' => 'Contacts',
                 'title' => $gL10n->get('SYS_CONTACTS'),
                 'icon' => 'bi-person-vcard-fill'
             ),
             'documents_files' => array(
-                'id' => 'documents_files',
+                'id' => 'DocumentsFiles',
                 'title' => $gL10n->get('SYS_DOCUMENTS_FILES'),
                 'icon' => 'bi-file-earmark-arrow-down-fill'
             ),
             'photos' => array(
-                'id' => 'photos',
+                'id' => 'Photos',
                 'title' => $gL10n->get('SYS_PHOTOS'),
                 'icon' => 'bi-image-fill'
             ),
             'guestbook' => array(
-                'id' => 'guestbook',
+                'id' => 'Guestbook',
                 'title' => $gL10n->get('GBO_GUESTBOOK'),
                 'icon' => 'bi-book-half'
             ),
             'groups_roles' => array(
-                'id' => 'groups_roles',
+                'id' => 'GroupsRoles',
                 'title' => $gL10n->get('SYS_GROUPS_ROLES'),
                 'icon' => 'bi-people-fill'
             ),
             'category_report' => array(
-                'id' => 'category_report',
+                'id' => 'CategoryReport',
                 'title' => $gL10n->get('SYS_CATEGORY_REPORT'),
                 'icon' => 'bi-list-stars'
             ),
             'messages' => array(
-                'id' => 'messages',
+                'id' => 'Messages',
                 'title' => $gL10n->get('SYS_MESSAGES'),
                 'icon' => 'bi-envelope-fill'
             ),
             'profile' => array(
-                'id' => 'profile',
+                'id' => 'Profile',
                 'title' => $gL10n->get('SYS_PROFILE'),
                 'icon' => 'bi-person-fill'
             ),
             'events' => array(
-                'id' => 'events',
+                'id' => 'Events',
                 'title' => $gL10n->get('SYS_EVENTS'),
                 'icon' => 'bi-calendar-week-fill'
             ),
             'links' => array(
-                'id' => 'links',
+                'id' => 'Links',
                 'title' => $gL10n->get('SYS_WEBLINKS'),
                 'icon' => 'bi-link-45deg'
             )
@@ -185,11 +185,12 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the common preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the common preferences.
      * @throws AdmException
      * @throws Exception
-     * @throws \Exception
      */
-    public function createCommonForm()
+    public function createCommonForm(): string
     {
         global $gL10n, $gCurrentOrganization, $gSettingsManager;
 
@@ -197,9 +198,9 @@ class Preferences extends HtmlPage
         $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
 
         $formCommon = new Form(
-            'common_preferences_form',
+            'preferencesFormCommon',
             'preferences/preferences.common.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'common')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Common')),
             null,
             array('class' => 'form-preferences')
         );
@@ -279,7 +280,7 @@ class Preferences extends HtmlPage
         $formCommon->addSubmitButton(
             'btn_save_common',
             $gL10n->get('SYS_SAVE'),
-            array('icon' => 'bi-check-lg')
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
         $smarty = $this->getSmartyTemplate();
@@ -288,10 +289,225 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the organization preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the organization preferences.
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function createOrganizationForm(): string
+    {
+        global $gL10n, $gCurrentOrganization, $gSettingsManager, $gCurrentOrgId;
+
+        // read organization and all system preferences values into form array
+        $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
+
+        $formOrganization = new Form(
+            'preferencesFormOrganization',
+            'preferences/preferences.organization.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Organization')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formOrganization->addInput(
+            'org_shortname',
+            $gL10n->get('SYS_NAME_ABBREVIATION'),
+            $formValues['org_shortname'],
+            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small')
+        );
+        $formOrganization->addInput(
+            'org_longname',
+            $gL10n->get('SYS_NAME'),
+            $formValues['org_longname'],
+            array('maxLength' => 60, 'property' => Form::FIELD_REQUIRED)
+        );
+        $formOrganization->addInput(
+            'org_homepage',
+            $gL10n->get('SYS_WEBSITE'),
+            $formValues['org_homepage'],
+            array('maxLength' => 60)
+        );
+        $formOrganization->addInput(
+            'email_administrator',
+            $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
+            $formValues['email_administrator'],
+            array('type' => 'email', 'maxLength' => 50, 'helpTextId' => 'SYS_EMAIL_ADMINISTRATOR_DESC')
+        );
+
+        if ($gCurrentOrganization->countAllRecords() > 1) {
+            // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
+            if (!$gCurrentOrganization->isParentOrganization()) {
+                $sqlData = array();
+                $sqlData['query'] = 'SELECT org_id, org_longname
+                               FROM ' . TBL_ORGANIZATIONS . '
+                              WHERE org_id <> ? -- $gCurrentOrgId
+                                AND org_org_id_parent IS NULL
+                           ORDER BY org_longname, org_shortname';
+                $sqlData['params'] = array($gCurrentOrgId);
+                $formOrganization->addSelectBoxFromSql(
+                    'org_org_id_parent',
+                    $gL10n->get('ORG_PARENT_ORGANIZATION'),
+                    $gDb,
+                    $sqlData,
+                    array('defaultValue' => $formValues['org_org_id_parent'], 'helpTextId' => 'ORG_PARENT_ORGANIZATION_DESC')
+                );
+            }
+
+            $formOrganization->addCheckbox(
+                'system_organization_select',
+                $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'),
+                (bool)$formValues['system_organization_select'],
+                array('helpTextId' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC')
+            );
+        }
+
+        $html = '<a class="btn btn-secondary" id="add_another_organization" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'new_org_dialog')) . '">
+            <i class="bi bi-plus-circle-fill"></i>' . $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION') . '</a>';
+        $formOrganization->addCustomContent('new_organization', $gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextId' => 'ORG_ADD_ORGANIZATION_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+        $formOrganization->addSubmitButton(
+            'btn_save_organization',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formOrganization->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.organization.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the regional settings preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the regional settings preferences.
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function createRegionalSettingsForm(): string
+    {
+        global $gL10n, $gCurrentOrganization, $gSettingsManager, $gTimezone;
+
+        // read organization and all system preferences values into form array
+        $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
+
+        $formRegionalSettings = new Form(
+            'preferencesFormOrganization',
+            'preferences/preferences.regional-settings.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'RegionalSettings')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formRegionalSettings->addInput(
+            'system_timezone',
+            $gL10n->get('ORG_TIMEZONE'),
+            $gTimezone,
+            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextId' => 'ORG_TIMEZONE_DESC')
+        );
+        $formRegionalSettings->addSelectBox(
+            'system_language',
+            $gL10n->get('SYS_LANGUAGE'),
+            $gL10n->getAvailableLanguages(),
+            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
+        );
+        $formRegionalSettings->addSelectBox(
+            'default_country',
+            $gL10n->get('SYS_DEFAULT_COUNTRY'),
+            $gL10n->getCountries(),
+            array('defaultValue' => $formValues['default_country'], 'helpTextId' => 'SYS_DEFAULT_COUNTRY_DESC')
+        );
+        $formRegionalSettings->addInput(
+            'system_date',
+            $gL10n->get('ORG_DATE_FORMAT'),
+            $formValues['system_date'],
+            array('maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+        );
+        $formRegionalSettings->addInput(
+            'system_time',
+            $gL10n->get('ORG_TIME_FORMAT'),
+            $formValues['system_time'],
+            array('maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+        );
+        $formRegionalSettings->addInput(
+            'system_currency',
+            $gL10n->get('ORG_CURRENCY'),
+            $formValues['system_currency'],
+            array('maxLength' => 20, 'helpTextId' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small')
+        );
+        $formRegionalSettings->addSubmitButton(
+            'btn_save_regional_settings',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formRegionalSettings->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.regional-settings.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the security preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the security preferences.
+     * @throws AdmException
+     * @throws Exception
+     */
+    public function createSecurityForm(): string
+    {
+        global $gL10n, $gCurrentOrganization, $gSettingsManager;
+
+        // read organization and all system preferences values into form array
+        $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
+
+        $formSecurity = new Form(
+            'preferencesFormSecurity',
+            'preferences/preferences.security.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Security')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        $formSecurity->addInput(
+            'logout_minutes',
+            $gL10n->get('ORG_AUTOMATIC_LOGOUT_AFTER'),
+            $formValues['logout_minutes'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_AUTOMATIC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
+        );
+        $selectBoxEntries = array(
+            0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),
+            1 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_LOW'),
+            2 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_MID'),
+            3 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_HIGH'),
+            4 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH')
+        );
+        $formSecurity->addSelectBox(
+            'password_min_strength',
+            $gL10n->get('ORG_PASSWORD_MIN_STRENGTH'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['password_min_strength'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_PASSWORD_MIN_STRENGTH_DESC')
+        );
+        $formSecurity->addCheckbox(
+            'enable_auto_login',
+            $gL10n->get('ORG_LOGIN_AUTOMATICALLY'),
+            (bool)$formValues['enable_auto_login'],
+            array('helpTextId' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
+        );
+        $formSecurity->addCheckbox(
+            'enable_password_recovery',
+            $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
+            (bool)$formValues['enable_password_recovery'],
+            array('helpTextId' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('SYS_ENABLE_NOTIFICATIONS')))
+        );
+        $formSecurity->addSubmitButton(
+            'btn_save_security',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formSecurity->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.security.tpl');
+    }
+
+    /**
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
-     * @throws \Exception
      */
     public function show()
     {
@@ -300,19 +516,19 @@ class Preferences extends HtmlPage
             if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
                 $this->addJavascript(
                     '
-                $("#tabs_nav_modules").attr("class", "nav-link active");
-                $("#tabs-modules").attr("class", "tab-pane fade show active");
-                $("#collapse_' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
-                location.hash = "#" + "panel_' . $this->preferencesPanelToShow . '";',
+                $("#tabsNavModules").attr("class", "nav-link active");
+                $("#tabsModules").attr("class", "tab-pane fade show active");
+                $("#collapsePreferencesModule' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
+                location.hash = "#admidioPanelPreferencesModule' . $this->preferencesPanelToShow . '";',
                     true
                 );
             } else {
                 $this->addJavascript(
                     '
-                $("#tabs_nav_common").attr("class", "nav-link active");
-                $("#tabs-common").attr("class", "tab-pane fade show active");
-                $("#collapse_' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
-                location.hash = "#" + "panel_' . $this->preferencesPanelToShow . '";',
+                $("#tabsNavCommon").attr("class", "nav-link active");
+                $("#tabsCommon").attr("class", "tab-pane fade show active");
+                $("#collapsePreferencesCommon' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
+                location.hash = "#admidioPanelPreferencesModule' . $this->preferencesPanelToShow . '";',
                     true
                 );
             }
@@ -320,15 +536,20 @@ class Preferences extends HtmlPage
 
         $this->addJavascript(
             '
-            $("#admidio-panel-common-preferences-common .accordion-header").click(function (e) {
-                if ($("#admidio-panel-common-preferences-common h2").attr("aria-expanded") == "true") {
-                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php?mode=html_form&form=common", function (data) {
-                        $("#collapse-common-preferences-common .accordion-body").html(data);
-                    });
-                }
-            });
+            var panels = ["Common", "Security", "Organization", "RegionalSettings"];
 
-            $(document).on("submit", "#common_preferences_form", formSubmit);
+            for(var i = 0; i < panels.length; i++) {
+                $("#admidioPanelPreferencesCommon" + panels[i] + " .accordion-header").click(function (e) {
+                    var id = $(this).data("preferences-panel");
+                    if ($("#admidioPanelPreferencesCommon" + id + " h2").attr("aria-expanded") == "true") {
+                        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php?mode=html_form&form=" + id, function (data) {
+                            $("#admidioPanelPreferencesCommon" + id + " .accordion-body").html(data);
+                        });
+                    }
+                });
+
+                $(document).on("submit", "#preferencesForm" + panels[i], formSubmit);
+            }
 
             $("#captcha-refresh").click(function() {
                 document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();

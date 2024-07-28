@@ -1483,23 +1483,27 @@ class Form
      * template file of the form is set to the page. After this method is called the whole form
      * could be rendered through the HtmlPage.
      * @return void
-     * @throws Exception
+     * @throws AdmException
      */
     public function addToHtmlPage()
     {
-        if (is_object($this->htmlPage)) {
-            if ($this->type === 'navbar') {
-                $this->htmlPage->assignSmartyVariable('navbarID', 'navbar_' . $this->id);
-            } else {
-                $this->htmlPage->addJavascript('
-                    $("#' . $this->id . '").submit(formSubmit);
-                ', true);
+        try {
+            if (is_object($this->htmlPage)) {
+                if ($this->type === 'navbar') {
+                    $this->htmlPage->assignSmartyVariable('navbarID', 'navbar_' . $this->id);
+                } else {
+                    $this->htmlPage->addJavascript('
+                        $("#' . $this->id . '").submit(formSubmit);
+                    ', true);
+                }
+                $this->htmlPage->assignSmartyVariable('formType', $this->type);
+                $this->htmlPage->assignSmartyVariable('attributes', $this->attributes);
+                $this->htmlPage->assignSmartyVariable('elements', $this->elements);
+                $this->htmlPage->assignSmartyVariable('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
+                $this->htmlPage->addHtmlByTemplate($this->template);
             }
-            $this->htmlPage->assignSmartyVariable('formType', $this->type);
-            $this->htmlPage->assignSmartyVariable('attributes', $this->attributes);
-            $this->htmlPage->assignSmartyVariable('elements', $this->elements);
-            $this->htmlPage->assignSmartyVariable('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
-            $this->htmlPage->addHtmlByTemplate($this->template);
+        } catch (Exception $e) {
+            throw new AdmException($e->getMessage());
         }
     }
 
@@ -1509,7 +1513,6 @@ class Form
      * template file of the form is set to the page. After this method is called the whole form
      * could be rendered through the HtmlPage.
      * @return void
-     * @throws Exception
      */
     public function addToSmarty(Smarty $smarty)
     {
