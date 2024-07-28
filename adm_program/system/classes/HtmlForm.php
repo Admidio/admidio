@@ -1684,10 +1684,9 @@ class HtmlForm
             $smarty = HtmlPage::createSmartyObject();
         }
 
-        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
         $smarty->assign('formType', $this->type);
         $smarty->assign('data', $assigns);
-
+        $smarty->assign('urlAdmidio', ADMIDIO_URL);
         $smarty->assign('l10n', $gL10n);
         $this->htmlString .= $smarty->fetch("sys-template-parts/".$templateName.'.tpl');
     }

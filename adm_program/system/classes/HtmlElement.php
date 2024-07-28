@@ -513,9 +513,8 @@ abstract class HtmlElement
         foreach($assigns as $key => $assign) {
             $smarty->assign($key, $assign);
         }
-        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
         $smarty->assign('data', $assigns);
-
+        $smarty->assign('urlAdmidio', ADMIDIO_URL);
         $smarty->assign('l10n', $gL10n);
         return $smarty->fetch("sys-template-parts/".$templateName.'.tpl');
     }

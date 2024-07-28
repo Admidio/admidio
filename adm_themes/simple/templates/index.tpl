@@ -90,7 +90,7 @@
                 </li>
                 {if $registrationEnabled}
                     <li class="nav-item">
-                        <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/registration/registration.php">{$l10n->get('SYS_REGISTRATION')}</a>
+                        <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/registration/registration.php">{$l10n->get('SYS_REGISTER')}</a>
                     </li>
                 {/if}
             {/if}

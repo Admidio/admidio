@@ -63,6 +63,18 @@ class ModuleLogin
         // create role object for administrator
         $roleAdministrator = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
 
+        // show link if user has login problems
+        if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
+            // request to reset the password
+            $forgotPasswordLink = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
+        } elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
+            // show link of message module to send mail to administrator role
+            $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+        } else {
+            // show link to send mail with local mail-client to administrator
+            $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:'.$gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+        }
+
         // show form
         $form = new Form(
             'login_form',
@@ -76,13 +88,17 @@ class ModuleLogin
             'usr_login_name',
             $gL10n->get('SYS_USERNAME'),
             '',
-            array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+            array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addInput(
             'usr_password',
             $gL10n->get('SYS_PASSWORD'),
             '',
-            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+            array(
+                'type' => 'password',
+                'property' => HtmlForm::FIELD_REQUIRED,
+                'helpTextId' => '<a href="' . $forgotPasswordLink . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'
+            )
         );
 
         // show selectbox with all organizations of database
@@ -94,25 +110,12 @@ class ModuleLogin
             $gL10n->get('SYS_ORGANIZATION'),
             $gDb,
             $sql,
-            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $organizationShortName, 'class' => 'form-control-small')
+            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $organizationShortName)
         );
 
         $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
         $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right', 'class' => 'offset-sm-3'));
         $form->addToHtmlPage();
-
-        // show link if user has login problems
-        if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
-            // request to reset the password
-            $forgotPasswordLink = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
-        } elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
-            // show link of message module to send mail to administrator role
-            $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
-        } else {
-            // show link to send mail with local mail-client to administrator
-            $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:'.$gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
-        }
-        $page->assignSmartyVariable('forgotPasswordLink', $forgotPasswordLink);
     }
 
     /**

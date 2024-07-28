@@ -704,7 +704,8 @@
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
-  <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
+    <string name="SYS_REGISTER">Registrieren</string>
+    <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
   <string name="SYS_FIRSTNAME">Vorname</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Vorname und Nachname</string>
@@ -1110,6 +1111,7 @@
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist nicht gültig.</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
+    <string name="SYS_NO_LOGIN_DATA">Du hast keinen Anmeldenamen und Passwort?</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer:innen übernehmen</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert eine neu registrierte Benutzerin oder ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Datensatz übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Anmeldename und das Passwort übernommen. Bei Benutzerinnen und Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
   <string name="SYS_REGISTRATION_AT">Registrierung am #VAR1# um #VAR2# Uhr</string>

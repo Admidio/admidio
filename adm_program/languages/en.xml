@@ -707,7 +707,6 @@
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_MEMBERS">Former members</string>
@@ -933,6 +932,7 @@
   <string name="SYS_NO_ENTRY">Requested entry does not exist in the database.</string>
   <string name="SYS_NO_ENTRIES">No entries available.</string>
   <string name="SYS_NO_LEADER">No leader</string>
+  <string name="SYS_NO_LOGIN_DATA">Don't have a login name and password?</string>
   <string name="SYS_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">No new registrations available.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">No permissions have been assigned.</string>
@@ -1087,6 +1087,7 @@
   <string name="SYS_REDIRECT">Redirect</string>
   <string name="SYS_REDIRECT_DESC">You are leaving the website of #VAR1_BOLD# and will be redirected automatically to #VAR3# in #VAR2# seconds.\n\nIf the automatic redirection is not working please click #VAR4#here#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">The specified redirect URL is not valid.</string>
+  <string name="SYS_REGISTER">Register</string>
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Adopt all data from the registration for the existing user</string>
@@ -1417,7 +1418,6 @@
   <string name="SYS_VISITORS">Guests</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
-  <string name="SYS_WANT_REGISTER">I want to register!</string>
   <string name="SYS_WARNING">Warning</string>
   <string name="SYS_WEBLINKS">Web links</string>
   <string name="SYS_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>
