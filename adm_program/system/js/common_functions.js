@@ -297,9 +297,14 @@ function formSubmit(event) {
                     formAlert.attr("class", "alert alert-success form-alert");
                     formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>" + returnMessage + "</strong>");
                     formAlert.fadeIn("slow");
-                    setTimeout(function() {
-                        self.location.href = forwardUrl;
-                    }, 2500);
+                    if (forwardUrl !== "") {
+                        setTimeout(function () {
+                            self.location.href = forwardUrl;
+                        }, 2500);
+                    } else {
+                        $("#" + submitButtonID).attr("disabled", false);
+                        submitButtonIcon.attr("class", iconClass);
+                    }
                 } else {
                     self.location.href = forwardUrl;
                 }

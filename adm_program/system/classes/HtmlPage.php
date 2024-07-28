@@ -102,6 +102,7 @@ class HtmlPage
      * @param string $id ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
+     * @throws AdmException
      * @throws Exception
      */
     public function __construct(string $id, string $headline = '')
@@ -332,23 +333,27 @@ class HtmlPage
      * current theme. The all cacheable and compilable files will be stored in the templates folder
      * of **adm_my_files**.
      * @return Smarty Returns the initialized Smarty object.
-     * @throws \Smarty\Exception
+     * @throws AdmException
      */
     public static function createSmartyObject(): Smarty
     {
         $smartyObject = new Smarty();
 
-        // initialize php template engine smarty
-        if (defined('THEME_PATH')) {
-            $smartyObject->setTemplateDir(THEME_PATH . '/templates/');
-        }
+        try {
+            // initialize php template engine smarty
+            if (defined('THEME_PATH')) {
+                $smartyObject->setTemplateDir(THEME_PATH . '/templates/');
+            }
 
-        $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
-        $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-        $smartyObject->registerPlugin('function', 'array_key_exists', 'SmartyPlugins::arrayKeyExists');
-        $smartyObject->registerPlugin('function', 'is_translation_string_id', 'SmartyPlugins::isTranslationStringID');
-        $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'SmartyPlugins::loadAdmidioPlugin');
-        return $smartyObject;
+            $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
+            $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
+            $smartyObject->registerPlugin('function', 'array_key_exists', 'SmartyPlugins::arrayKeyExists');
+            $smartyObject->registerPlugin('function', 'is_translation_string_id', 'SmartyPlugins::isTranslationStringID');
+            $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'SmartyPlugins::loadAdmidioPlugin');
+            return $smartyObject;
+        } catch (\Smarty\Exception $e) {
+            throw new AdmException($e->getMessage());
+        }
     }
 
     /**

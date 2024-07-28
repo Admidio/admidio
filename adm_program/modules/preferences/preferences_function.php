@@ -10,6 +10,7 @@
  * Parameters:
  *
  * mode     : save           - Save organization preferences
+ *            html_form      - Returns the html of the requested form
  *            new_org_dialog - show welcome dialog for new organization
  *            new_org_create - Create basic data for new organization in database
  *            htaccess       - set directory protection, write htaccess
@@ -19,12 +20,14 @@
  ***********************************************************************************************
  */
 
+use Admidio\UserInterface\Preferences;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'save', 'validValues' => array('save', 'new_org_dialog', 'new_org_create', 'htaccess', 'test_email', 'backup')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'save', 'validValues' => array('save', 'html_form', 'new_org_dialog', 'new_org_create', 'htaccess', 'test_email', 'backup')));
     $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
     // only administrators are allowed to edit organization preferences or create new organizations
@@ -248,7 +251,18 @@ try {
             // clean up
             $gCurrentSession->reloadAllSessions();
 
-            echo 'success';
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
+            break;
+
+        // Returns the html of the requested form
+        case 'html_form':
+            $preferencesUI = new Preferences('common');
+            
+            switch ($getForm) {
+                case 'common':
+                    echo $preferencesUI->createCommonForm();
+                    break;
+            }
             break;
 
         // show welcome dialog for new organization
@@ -456,7 +470,7 @@ try {
     }
 } catch (AdmException|Exception $exception) {
     if ($getMode === 'save') {
-        echo $e->getMessage();
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($exception->getMessage());
     }

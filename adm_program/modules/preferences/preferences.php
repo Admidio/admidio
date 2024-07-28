@@ -13,6 +13,8 @@
  *               Example: SYS_COMMON or
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Preferences;
+
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
@@ -20,12 +22,26 @@ try {
     // Initialize and check the parameters
     $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 
-    $headline = $gL10n->get('SYS_SETTINGS');
-
     // only administrators are allowed to edit organization preferences
     if (!$gCurrentUser->isAdministrator()) {
         throw new AdmException('SYS_NO_RIGHTS');
     }
+
+    $headline = $gL10n->get('SYS_SETTINGS');
+
+    if ($showOption !== '') {
+        // add current url to navigation stack
+        $gNavigation->addUrl(CURRENT_URL, $headline);
+    } else {
+        // Navigation of the module starts here
+        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
+    }
+
+    // create html page object
+    $page = new Preferences('admidio-preferences', $headline);
+    $page->show();
+    exit();
+
 
     /**
      * Read all file names of a folder and return an array where the file names are the keys and a readable
@@ -46,107 +62,6 @@ try {
         unset($templateName);
 
         return $files;
-    }
-
-    // read organization and all system preferences values into form array
-    $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
-
-    // create html page object
-    $page = new HtmlPage('admidio-preferences', $headline);
-
-    $showOptionValidModules = array(
-        'announcements', 'documents-files', 'guestbook', 'groups-roles',
-        'messages', 'photos', 'profile', 'events', 'links', 'contacts', 'category-report'
-    );
-
-    // open the modules tab if the options of a module should be shown
-    if (in_array($showOption, $showOptionValidModules, true)) {
-        $page->addJavascript(
-            '
-        $("#tabs_nav_modules").attr("class", "nav-link active");
-        $("#tabs-modules").attr("class", "tab-pane fade show active");
-        $("#collapse_' . $showOption . '").attr("class", "collapse show");
-        location.hash = "#" + "panel_' . $showOption . '";',
-            true
-        );
-    } else {
-        $page->addJavascript(
-            '
-        $("#tabs_nav_common").attr("class", "nav-link active");
-        $("#tabs-common").attr("class", "tab-pane fade show active");
-        $("#collapse_' . $showOption . '").attr("class", "collapse show");
-        location.hash = "#" + "panel_' . $showOption . '";',
-            true
-        );
-    }
-
-    $page->addJavascript(
-        '
-    $(".form-preferences").submit(function(event) {
-        var id = $(this).attr("id");
-        var action = $(this).attr("action");
-        var formAlert = $("#" + id + " .form-alert");
-        formAlert.hide();
-
-        // disable default form submit
-        event.preventDefault();
-
-        $.post({
-            url: action,
-            data: $(this).serialize(),
-            success: function(data) {
-                if (data === "success") {
-                    if (id === "captcha_preferences_form") {
-                        // reload captcha if form is saved
-                        $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random());
-                    }
-                    formAlert.attr("class", "alert alert-success form-alert");
-                    formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
-                    formAlert.fadeIn("slow");
-                    formAlert.animate({opacity: 1.0}, 2500);
-                    formAlert.fadeOut("slow");
-                } else {
-                    formAlert.attr("class", "alert alert-danger form-alert");
-                    formAlert.fadeIn();
-                    formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
-                }
-            }
-        });
-    });
-
-    $("#captcha-refresh").click(function() {
-        document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
-    });
-
-    $("#link_check_for_update").click(function() {
-        var admVersionContent = $("#admidio_version_content");
-
-        admVersionContent.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
-            admVersionContent.html(htmlVersion);
-        });
-        return false;
-    });
-
-    $("#link_directory_protection").click(function() {
-        var dirProtectionStatus = $("#directory_protection_status");
-
-        dirProtectionStatus.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php", {mode: "htaccess"}, function(statusText) {
-            var directoryProtection = dirProtectionStatus.parent().parent().parent();
-            directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
-        });
-        return false;
-    });',
-        true
-    );
-
-    if ($showOption !== '') {
-        // add current url to navigation stack
-        $gNavigation->addUrl(CURRENT_URL, $headline);
-    } else {
-        // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
     }
 
     /**
@@ -187,22 +102,24 @@ try {
         return $html;
     }
 
-    $page->addHtml('
-    <ul id="admidio-preferences-tabs" class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-            <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-bs-toggle="tab" role="tab">' . $gL10n->get('SYS_COMMON') . '</a>
-        </li>
-        <li class="nav-item">
-            <a id="tabs_nav_modules" class="nav-link" href="#tabs-modules" data-bs-toggle="tab" role="tab">' . $gL10n->get('SYS_MODULES') . '</a>
-        </li>
-    </ul>
+    /*
 
-    <div id="admidio-preferences-tab-content" class="tab-content">
-        <div class="tab-pane fade" id="tabs-common" role="tabpanel">
-            <div class="accordion" id="accordion_preferences">');
+        $page->addHtml('
+        <ul id="admidio-preferences-tabs" class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-bs-toggle="tab" role="tab">' . $gL10n->get('SYS_COMMON') . '</a>
+            </li>
+            <li class="nav-item">
+                <a id="tabs_nav_modules" class="nav-link" href="#tabs-modules" data-bs-toggle="tab" role="tab">' . $gL10n->get('SYS_MODULES') . '</a>
+            </li>
+        </ul>
 
+        <div id="admidio-preferences-tab-content" class="tab-content">
+            <div class="tab-pane fade" id="tabs-common" role="tabpanel">
+                <div class="accordion" id="accordion_preferences">');
+    */
     // PANEL: COMMON
-
+/*
     $formCommon = new HtmlForm(
         'common_preferences_form',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'common')),
@@ -289,9 +206,9 @@ try {
     );
 
     $page->addHtml(getPreferencePanel('common', 'accordion_preferences', $gL10n->get('SYS_COMMON'), 'bi-gear-fill', $formCommon->show()));
-
+*/
     // PANEL: SECURITY
-
+/*
     $formSecurity = new HtmlForm(
         'security_preferences_form',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'security')),
@@ -1819,13 +1736,13 @@ try {
     );
 
     $page->addHtml(getPreferencePanel('links', 'accordion_modules', $gL10n->get('SYS_WEBLINKS'), 'bi-link-45deg', $formWeblinks->show()));
-
+*/
+/*
     $page->addHtml('
             </div>
         </div>
-    </div>');
+    </div>');*/
 
-    $page->show();
 } catch (AdmException|Exception|\Smarty\Exception|UnexpectedValueException $e) {
     $gMessage->show($e->getMessage());
 }

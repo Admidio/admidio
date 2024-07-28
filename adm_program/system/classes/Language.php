@@ -199,7 +199,7 @@ class Language
      * // display a text with placeholders for individual content
      * echo $gL10n->get('SYS_CREATED_BY_AND_AT', array('John Doe', '2019-04-13'));
      * ```
-     * @throws Exception
+     * @throws AdmException
      */
     public function get(string $textId, array $params = array()): string
     {
@@ -452,7 +452,7 @@ class Language
      * @param string $text The translation string with the static placeholders
      * @param array<int,string> $params An array with values for each placeholder of the string.
      * @return string Returns the translation string with the replaced placeholders.
-     * @throws Exception
+     * @throws AdmException
      */
     private function prepareTextPlaceholders(string $text, array $params): string
     {
@@ -580,7 +580,7 @@ class Language
      * Checks if a given string is a translation-string-id and translate it
      * @param string $string The string to check for translation
      * @return string Returns the translated or original string
-     * @throws Exception
+     * @throws AdmException
      */
     public static function translateIfTranslationStrId(string $string): string
     {

@@ -31,7 +31,9 @@
  * ```
  */
 namespace Admidio\UserInterface;
+use AdmException;
 use Smarty\Exception;
+use Smarty\Smarty;
 
 class Form
 {
@@ -59,19 +61,19 @@ class Form
     /**
      * @var string Javascript of this form that must be integrated in the html page.
      */
-    protected string $javascript;
+    protected string $javascript = '';
     /**
      * @var string Form type. Possible values are **default**, **vertical** or **navbar**.
      */
-    protected string $type;
+    protected string $type = '';
     /**
      * @var string ID of the form
      */
-    protected string $id;
+    protected string $id = '';
     /**
      * @var string Smarty template with necessary path
      */
-    protected string $template;
+    protected string $template = '';
     /**
      * @var array Array with all possible attributes of the form e.g. class, action, id ...
      */
@@ -104,7 +106,7 @@ class Form
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
-     * @throws Exception|\Exception
+     * @throws AdmException
      */
     public function __construct(string $id, string $template, string $action = '', \HtmlPage $htmlPage = null, array $options = array())
     {
@@ -239,7 +241,7 @@ class Form
      * @param string $id ID of the captcha field. This will also be the name of the captcha field.
      * @param string $class (optional) An additional css classname. The class **admTextInput**
      *                      is set as default and need not set with this parameter.
-     * @throws Exception|\Exception
+     * @throws AdmException
      */
     public function addCaptcha(string $id, string $class = '')
     {
@@ -562,6 +564,7 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws AdmException
      * @throws \Exception
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
@@ -737,7 +740,7 @@ class Form
      */
     protected function addJavascriptCode(string $javascriptCode, bool $executeAfterPageLoad = false)
     {
-        if ($this->htmlPage instanceof \HtmlPage) {
+        if (isset($this->htmlPage)) {
             $this->htmlPage->addJavascript($javascriptCode, $executeAfterPageLoad);
             return;
         }
@@ -934,8 +937,7 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws Exception
-     * @throws \Exception
+     * @throws AdmException
      */
     public function addSelectBox(string $id, string $label, array $values, array $options = array())
     {
@@ -1138,7 +1140,7 @@ class Form
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show();
      * ```
-     * @throws Exception
+     * @throws AdmException
      * @throws \Exception
      */
     public function addSelectBoxFromSql(string $id, string $label, \Database $database, $sql, array $options = array())
@@ -1209,6 +1211,7 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws AdmException
      * @throws \Exception
      */
     public function addSelectBoxFromXml(string $id, string $label, string $xmlFile, string $xmlValueTag, string $xmlViewTag, array $options = array())
@@ -1274,8 +1277,7 @@ class Form
      *                                 - **icon** : An icon can be set. This will be placed in front of the label.
      *                                 - **class** : An additional css classname. The class **admSelectbox**
      *                                   is set as default and need not set with this parameter.
-     * @throws Exception
-     * @throws \Exception
+     * @throws AdmException
      */
     public function addSelectBoxForCategories(string $id, string $label, \Database $database, string $categoryType, string $selectBoxModus, array $options = array())
     {
@@ -1501,6 +1503,26 @@ class Form
         }
     }
 
+
+    /**
+     * This method add the form attributes and all form elements to the HtmlPage object. Also, the
+     * template file of the form is set to the page. After this method is called the whole form
+     * could be rendered through the HtmlPage.
+     * @return void
+     * @throws Exception
+     */
+    public function addToSmarty(Smarty $smarty)
+    {
+        global $gL10n;
+
+        $smarty->assign('urlAdmidio', ADMIDIO_URL);
+        $smarty->assign('l10n', $gL10n);
+        $smarty->assign('formType', $this->type);
+        $smarty->assign('attributes', $this->attributes);
+        $smarty->assign('elements', $this->elements);
+        $smarty->assign('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
+    }
+
     /**
      * Method merge the default options of all fields with the initial options set for the
      * specific field.
@@ -1534,7 +1556,7 @@ class Form
      * @param string $title A text-id that represents the title of the help text. Default will be SYS_NOTE.
      * @param array $parameter If you need an additional parameters for the text you can set this parameter values within an array.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
-     * @throws \Exception
+     * @throws AdmException
      */
     public static function getHelpTextIcon(string $string, string $title = 'SYS_NOTE', array $parameter = array()): string
     {
@@ -1557,7 +1579,7 @@ class Form
     }
 
     /**
-     * @throws \Exception
+     * @throws AdmException
      */
     public static function getHelpText($text)
     {
