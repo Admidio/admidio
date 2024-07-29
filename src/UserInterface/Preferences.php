@@ -23,7 +23,6 @@
  */
 
 namespace Admidio\UserInterface;
-use Admidio\UserInterface\Form;
 use FileSystemUtils;
 use HtmlPage;
 use AdmException;
@@ -188,14 +187,13 @@ class Preferences extends HtmlPage
      * Generates the html of the form from the common preferences and will return the complete html.
      * @return string Returns the complete html of the form from the common preferences.
      * @throws AdmException
-     * @throws Exception
+     * @throws \Exception
      */
     public function createCommonForm(): string
     {
-        global $gL10n, $gCurrentOrganization, $gSettingsManager;
+        global $gL10n, $gSettingsManager;
 
-        // read organization and all system preferences values into form array
-        $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
+        $formValues = $gSettingsManager->getAll();
 
         $formCommon = new Form(
             'preferencesFormCommon',
@@ -289,14 +287,172 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the email dispatch preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the email dispatch preferences.
+     * @throws AdmException
+     * @throws \Exception
+     */
+    public function createEmailDispatchForm(): string
+    {
+        global $gL10n, $gCurrentOrganization, $gSettingsManager;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formEmailDispatch = new Form(
+            'preferencesFormOrganization',
+            'preferences/preferences.email-dispatch.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'EmailDispatch')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'));
+        $formEmailDispatch->addSelectBox(
+            'mail_send_method',
+            $gL10n->get('SYS_SEND_METHOD'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SEND_METHOD_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_sendmail_address',
+            $gL10n->get('SYS_SENDER_EMAIL'),
+            $formValues['mail_sendmail_address'],
+            array('maxLength' => 50, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
+        );
+        $formEmailDispatch->addInput(
+            'mail_sendmail_name',
+            $gL10n->get('SYS_SENDER_NAME'),
+            $formValues['mail_sendmail_name'],
+            array('maxLength' => 50, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
+        );
+
+        // Add js to show or hide mail options
+        $this->addJavascript('
+            $(function(){
+                var fieldsToHideOnSingleMode = "#mail_recipients_with_roles_group, #mail_into_to_group, #mail_number_recipients_group";
+                if($("#mail_sending_mode").val() == 1) {
+                    $(fieldsToHideOnSingleMode).hide();
+                }
+                $("#mail_sending_mode").on("change", function() {
+                    if($("#mail_sending_mode").val() == 1) {
+                        $(fieldsToHideOnSingleMode).hide();
+                    } else {
+                        $(fieldsToHideOnSingleMode).show();
+                    }
+                });
+            });
+        ');
+
+        $selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
+        $formEmailDispatch->addSelectBox(
+            'mail_sending_mode',
+            $gL10n->get('SYS_MAIL_SENDING_MODE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_sending_mode'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MAIL_SENDING_MODE_DESC')
+        );
+
+        $selectBoxEntries = array(0 => $gL10n->get('SYS_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
+        $formEmailDispatch->addSelectBox(
+            'mail_recipients_with_roles',
+            $gL10n->get('SYS_MULTIPLE_RECIPIENTS'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
+        );
+        $formEmailDispatch->addCheckbox(
+            'mail_into_to',
+            $gL10n->get('SYS_INTO_TO'),
+            (bool)$formValues['mail_into_to'],
+            array('helpTextId' => 'SYS_INTO_TO_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_number_recipients',
+            $gL10n->get('SYS_NUMBER_RECIPIENTS'),
+            $formValues['mail_number_recipients'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC')
+        );
+
+        $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
+        $formEmailDispatch->addSelectBox(
+            'mail_character_encoding',
+            $gL10n->get('SYS_CHARACTER_ENCODING'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_character_encoding'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_CHARACTER_ENCODING_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_host',
+            $gL10n->get('SYS_SMTP_HOST'),
+            $formValues['mail_smtp_host'],
+            array('maxLength' => 50, 'helpTextId' => 'SYS_SMTP_HOST_DESC')
+        );
+        $formEmailDispatch->addCheckbox(
+            'mail_smtp_auth',
+            $gL10n->get('SYS_SMTP_AUTH'),
+            (bool)$formValues['mail_smtp_auth'],
+            array('helpTextId' => 'SYS_SMTP_AUTH_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_port',
+            $gL10n->get('SYS_SMTP_PORT'),
+            $formValues['mail_smtp_port'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SMTP_PORT_DESC')
+        );
+        $selectBoxEntries = array(
+            '' => $gL10n->get('SYS_SMTP_SECURE_NO'),
+            'ssl' => $gL10n->get('SYS_SMTP_SECURE_SSL'),
+            'tls' => $gL10n->get('SYS_SMTP_SECURE_TLS')
+        );
+        $formEmailDispatch->addSelectBox(
+            'mail_smtp_secure',
+            $gL10n->get('SYS_SMTP_SECURE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SMTP_SECURE_DESC')
+        );
+        $selectBoxEntries = array(
+            '' => $gL10n->get('SYS_AUTO_DETECT'),
+            'LOGIN' => $gL10n->get('SYS_SMTP_AUTH_LOGIN'),
+            'PLAIN' => $gL10n->get('SYS_SMTP_AUTH_PLAIN'),
+            'CRAM-MD5' => $gL10n->get('SYS_SMTP_AUTH_CRAM_MD5')
+        );
+        $formEmailDispatch->addSelectBox(
+            'mail_smtp_authentication_type',
+            $gL10n->get('SYS_SMTP_AUTH_TYPE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_smtp_authentication_type'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SMTP_AUTH_TYPE_DESC', array('SYS_AUTO_DETECT')))
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_user',
+            $gL10n->get('SYS_SMTP_USER'),
+            $formValues['mail_smtp_user'],
+            array('maxLength' => 100, 'helpTextId' => 'SYS_SMTP_USER_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_password',
+            $gL10n->get('SYS_SMTP_PASSWORD'),
+            $formValues['mail_smtp_password'],
+            array('type' => 'password', 'maxLength' => 50, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
+        );
+        $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'test_email')) . '">
+            <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
+        $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
+        $formEmailDispatch->addSubmitButton(
+            'btn_save_email_dispatch',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formEmailDispatch->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.email-dispatch.tpl');
+    }
+
+    /**
      * Generates the html of the form from the organization preferences and will return the complete html.
      * @return string Returns the complete html of the form from the organization preferences.
      * @throws AdmException
-     * @throws Exception
+     * @throws \Exception
      */
     public function createOrganizationForm(): string
     {
-        global $gL10n, $gCurrentOrganization, $gSettingsManager, $gCurrentOrgId;
+        global $gDb, $gL10n, $gCurrentOrganization, $gSettingsManager, $gCurrentOrgId;
 
         // read organization and all system preferences values into form array
         $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
@@ -378,17 +534,16 @@ class Preferences extends HtmlPage
      * Generates the html of the form from the regional settings preferences and will return the complete html.
      * @return string Returns the complete html of the form from the regional settings preferences.
      * @throws AdmException
-     * @throws Exception
+     * @throws \Exception
      */
     public function createRegionalSettingsForm(): string
     {
-        global $gL10n, $gCurrentOrganization, $gSettingsManager, $gTimezone;
+        global $gL10n, $gSettingsManager, $gTimezone;
 
-        // read organization and all system preferences values into form array
-        $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
+        $formValues = $gSettingsManager->getAll();
 
         $formRegionalSettings = new Form(
-            'preferencesFormOrganization',
+            'preferencesFormRegionalSettings',
             'preferences/preferences.regional-settings.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'RegionalSettings')),
             null,
@@ -442,17 +597,76 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the registration preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the registration preferences.
+     * @throws AdmException
+     * @throws \Exception
+     */
+    public function createRegistrationForm(): string
+    {
+        global $gL10n, $gSettingsManager;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formRegistration = new Form(
+            'preferencesFormRegistration',
+            'preferences/preferences.registration.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Registration')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formRegistration->addCheckbox(
+            'registration_enable_module',
+            $gL10n->get('ORG_ENABLE_REGISTRATION_MODULE'),
+            (bool)$formValues['registration_enable_module'],
+            array('helpTextId' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC')
+        );
+        $formRegistration->addCheckbox(
+            'registration_manual_approval',
+            $gL10n->get('SYS_MANUAL_APPROVAL'),
+            (bool)$formValues['registration_manual_approval'],
+            array('helpTextId' => array('SYS_MANUAL_APPROVAL_DESC', array('SYS_RIGHT_APPROVE_USERS')))
+        );
+        $formRegistration->addCheckbox(
+            'registration_enable_captcha',
+            $gL10n->get('ORG_ENABLE_CAPTCHA'),
+            (bool)$formValues['registration_enable_captcha'],
+            array('helpTextId' => 'ORG_CAPTCHA_REGISTRATION')
+        );
+        $formRegistration->addCheckbox(
+            'registration_adopt_all_data',
+            $gL10n->get('SYS_REGISTRATION_ADOPT_ALL_DATA'),
+            (bool)$formValues['registration_adopt_all_data'],
+            array('helpTextId' => 'SYS_REGISTRATION_ADOPT_ALL_DATA_DESC')
+        );
+        $formRegistration->addCheckbox(
+            'registration_send_notification_email',
+            $gL10n->get('ORG_EMAIL_ALERTS'),
+            (bool)$formValues['registration_send_notification_email'],
+            array('helpTextId' => array('ORG_EMAIL_ALERTS_DESC', array('SYS_RIGHT_APPROVE_USERS')))
+        );
+        $formRegistration->addSubmitButton(
+            'btn_save_registration',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formRegistration->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.registration.tpl');
+    }
+
+    /**
      * Generates the html of the form from the security preferences and will return the complete html.
      * @return string Returns the complete html of the form from the security preferences.
      * @throws AdmException
-     * @throws Exception
+     * @throws \Exception
      */
     public function createSecurityForm(): string
     {
-        global $gL10n, $gCurrentOrganization, $gSettingsManager;
+        global $gL10n, $gSettingsManager;
 
-        // read organization and all system preferences values into form array
-        $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
+        $formValues = $gSettingsManager->getAll();
 
         $formSecurity = new Form(
             'preferencesFormSecurity',
@@ -461,7 +675,6 @@ class Preferences extends HtmlPage
             null,
             array('class' => 'form-preferences')
         );
-
         $formSecurity->addInput(
             'logout_minutes',
             $gL10n->get('ORG_AUTOMATIC_LOGOUT_AFTER'),
@@ -536,7 +749,7 @@ class Preferences extends HtmlPage
 
         $this->addJavascript(
             '
-            var panels = ["Common", "Security", "Organization", "RegionalSettings"];
+            var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#admidioPanelPreferencesCommon" + panels[i] + " .accordion-header").click(function (e) {

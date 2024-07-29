@@ -128,11 +128,11 @@ try {
                     }
                     break;
 
-                case 'registration':
+                case 'Registration':
                     $checkboxes = array('registration_adopt_all_data', 'registration_enable_module', 'registration_enable_captcha', 'registration_manual_approval', 'registration_send_notification_email');
                     break;
 
-                case 'email_dispatch':
+                case 'EmailDispatch':
                     $checkboxes = array('mail_into_to', 'mail_smtp_auth');
 
                     if ($_POST['mail_sendmail_address'] !== '') {
@@ -270,6 +270,12 @@ try {
                     break;
                 case 'RegionalSettings':
                     echo $preferencesUI->createRegionalSettingsForm();
+                    break;
+                case 'Registration':
+                    echo $preferencesUI->createRegistrationForm();
+                    break;
+                case 'EmailDispatch':
+                    echo $preferencesUI->createEmailDispatchForm();
                     break;
             }
             break;
