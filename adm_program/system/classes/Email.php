@@ -413,7 +413,11 @@ class Email extends PHPMailer
 
         if ($outputGlobalVar) {
             $this->Debugoutput = function ($str, $level) {
-                $GLOBALS['phpmailer_output_debug'] .= $level . ': ' . $str . '<br />';
+                if (isset($GLOBALS['phpmailer_output_debug'])) {
+                    $GLOBALS['phpmailer_output_debug'] .= $level . ': ' . $str . '<br />';
+                } else {
+                    $GLOBALS['phpmailer_output_debug'] = $level . ': ' . $str . '<br />';
+                }
             };
         } else {
             $this->Debugoutput = $gLogger;
