@@ -365,7 +365,7 @@ class TableRoles extends TableAccess
      *                                * 'database' : returns the value that is stored in database with no format applied
      * @return int|float|string|bool Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws Exception
+     * @throws AdmException
      */
     public function getValue(string $columnName, string $format = '')
     {

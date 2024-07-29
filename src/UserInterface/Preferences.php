@@ -24,7 +24,6 @@
 
 namespace Admidio\UserInterface;
 use ComponentUpdate;
-use Database;
 use FileSystemUtils;
 use HtmlPage;
 use AdmException;
@@ -225,8 +224,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the captcha preferences and will return the complete html.
      * @return string Returns the complete html of the form from the captcha preferences.
-     * @throws AdmException
-     * @throws \Exception
+     * @throws AdmException|Exception
      */
     public function createCaptchaForm(): string
     {
@@ -346,8 +344,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the common preferences and will return the complete html.
      * @return string Returns the complete html of the form from the common preferences.
-     * @throws AdmException
-     * @throws \Exception
+     * @throws AdmException|Exception
      */
     public function createCommonForm(): string
     {
@@ -449,8 +446,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the email dispatch preferences and will return the complete html.
      * @return string Returns the complete html of the form from the email dispatch preferences.
-     * @throws AdmException
-     * @throws \Exception
+     * @throws AdmException|Exception
      */
     public function createEmailDispatchForm(): string
     {
@@ -607,8 +603,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the organization preferences and will return the complete html.
      * @return string Returns the complete html of the form from the organization preferences.
-     * @throws AdmException
-     * @throws \Exception
+     * @throws AdmException|Exception
      */
     public function createOrganizationForm(): string
     {
@@ -779,8 +774,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the regional settings preferences and will return the complete html.
      * @return string Returns the complete html of the form from the regional settings preferences.
-     * @throws AdmException
-     * @throws \Exception
+     * @throws AdmException|Exception
      */
     public function createRegionalSettingsForm(): string
     {
@@ -845,8 +839,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the registration preferences and will return the complete html.
      * @return string Returns the complete html of the form from the registration preferences.
-     * @throws AdmException
-     * @throws \Exception
+     * @throws AdmException|Exception
      */
     public function createRegistrationForm(): string
     {
@@ -905,8 +898,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the security preferences and will return the complete html.
      * @return string Returns the complete html of the form from the security preferences.
-     * @throws AdmException
-     * @throws \Exception
+     * @throws AdmException|Exception
      */
     public function createSecurityForm(): string
     {
@@ -1075,8 +1067,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the system notifications preferences and will return the complete html.
      * @return string Returns the complete html of the form from the system notifications preferences.
-     * @throws AdmException
-     * @throws \Exception
+     * @throws AdmException|Exception
      */
     public function createSystemNotificationsForm(): string
     {

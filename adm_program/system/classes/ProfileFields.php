@@ -57,7 +57,7 @@ class ProfileFields
      * constructor that will initialize variables and read the profile field structure
      * @param Database $database Database object (should be **$gDb**)
      * @param int $organizationId The id of the organization for which the profile field structure should be read
-     * @throws Exception
+     * @throws AdmException
      */
     public function __construct(Database $database, int $organizationId)
     {
@@ -152,7 +152,7 @@ class ProfileFields
      *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return mixed Returns for the profile field with the given uuid the value.
-     * @throws Exception
+     * @throws AdmException
      */
     public function getProperty(string $fieldNameIntern, string $column, string $format = '')
     {
@@ -554,7 +554,7 @@ class ProfileFields
      * and adds an object for each field structure to the **mProfileFields** array.
      * @param int $organizationId The id of the organization for which the profile fields
      *                            structure should be read.
-     * @throws Exception
+     * @throws AdmException
      */
     public function readProfileFields(int $organizationId)
     {

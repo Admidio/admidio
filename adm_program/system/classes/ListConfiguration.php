@@ -45,7 +45,7 @@ class ListConfiguration extends TableLists
      * Constructor that will create an object to handle the configuration of lists.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $lstId The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
-     * @throws Exception
+     * @throws AdmException
      */
     public function __construct(Database $database, $lstId = 0)
     {
@@ -865,7 +865,7 @@ class ListConfiguration extends TableLists
      * Read data of responsible columns and store in object. Only columns of profile fields which the current
      * user is allowed to view will be stored in the object. If only the role membership should be shown than
      * remove all columns except first name, last name and assignment timestamps.
-     * @throws Exception
+     * @throws AdmException
      */
     public function readColumns()
     {
@@ -880,7 +880,7 @@ class ListConfiguration extends TableLists
         $lscStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('lst_id')));
 
         if ($lscStatement->rowCount() === 0) {
-            throw new Exception('List-Configuration was not found.');
+            throw new AdmException('List-Configuration was not found.');
         }
 
         while ($lscRow = $lscStatement->fetch()) {

@@ -155,7 +155,7 @@ class TableUserField extends TableAccess
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws Exception
+     * @throws AdmException
      */
     public function getValue(string $columnName, string $format = '')
     {

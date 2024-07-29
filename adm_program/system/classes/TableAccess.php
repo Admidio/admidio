@@ -89,7 +89,7 @@ class TableAccess
      * @param string $tableName The name of the database table. Because of specific prefixes this should be the defined value e.g. **TBL_USERS**
      * @param string $columnPrefix The prefix of each column of that table. E.g. for table **adm_roles** this is **rol**
      * @param string|int $id The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
-     * @throws Exception
+     * @throws AdmException
      */
     public function __construct(Database $database, string $tableName, string $columnPrefix, $id = '')
     {
@@ -121,7 +121,7 @@ class TableAccess
      * Initializes all class parameters and deletes all read data.
      * Also, the database structure of the associated table will be
      * read and stored in the arrays **dbColumns** and **columnsInfos**
-     * @throws Exception
+     * @throws AdmException
      */
     public function clear()
     {
@@ -173,7 +173,7 @@ class TableAccess
     /**
      * Reads the number of all records of this table
      * @return int Number of records of this table
-     * @throws Exception
+     * @throws AdmException
      */
     public function countAllRecords(): int
     {
@@ -186,7 +186,7 @@ class TableAccess
     /**
      * Deletes the selected record of the table and initializes the class
      * @return true Returns **true** if no error occurred
-     * @throws Exception
+     * @throws AdmException
      */
     public function delete(): bool
     {
@@ -206,7 +206,7 @@ class TableAccess
      * parameter **$linkToProfile** is set than a html link to the profile is set around the name.
      * @param bool $linkToProfile If set to **true** a link to the profile is set around the name.
      * @return string Returns the first name and last name of the person optional with a link to the profile.
-     * @throws Exception
+     * @throws AdmException
      */
     public function getNameOfCreatingUser(bool $linkToProfile = true): string
     {
@@ -242,7 +242,7 @@ class TableAccess
      * parameter **$linkToProfile** is set than a html link to the profile is set around the name.
      * @param bool $linkToProfile If set to **true** a link to the profile is set around the name.
      * @return string Returns the first name and last name of the person optional with a link to the profile.
-     * @throws Exception
+     * @throws AdmException
      */
     public function getNameOfLastEditingUser(bool $linkToProfile = true): string
     {
@@ -280,7 +280,7 @@ class TableAccess
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws Exception
+     * @throws AdmException
      * @see TableAccess#setValue
      */
     public function getValue(string $columnName, string $format = '')
@@ -380,10 +380,10 @@ class TableAccess
      * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
-     * @throws Exception
-     * @see TableAccess#readDataByUuid
+     * @throws AdmException
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readDataById
+     * @see TableAccess#readDataByUuid
      */
     protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
@@ -443,10 +443,10 @@ class TableAccess
      * Per default all columns of the default table will be read and stored in the object.
      * @param int $id Unique id of id column of the table.
      * @return bool Returns **true** if one record is found
-     * @throws Exception
-     * @see TableAccess#readDataByUuid
+     * @throws AdmException
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
+     * @see TableAccess#readDataByUuid
      */
     public function readDataById(int $id): bool
     {
@@ -469,10 +469,10 @@ class TableAccess
      * Not every Admidio table has a UUID. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
-     * @throws Exception
-     * @see TableAccess#readDataById
+     * @throws AdmException
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
+     * @see TableAccess#readDataById
      */
     public function readDataByUuid(string $uuid): bool
     {
@@ -505,10 +505,9 @@ class TableAccess
      * $member->readDataByColumn(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
      * ```
      * @throws AdmException
-     * @throws Exception
-     * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readData
+     * @see TableAccess#readDataById
      */
     public function readDataByColumns(array $columnArray): bool
     {
@@ -556,7 +555,6 @@ class TableAccess
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
-     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -712,7 +710,7 @@ class TableAccess
     /**
      * Read all columns with their information like **type** (integer, varchar, boolean),
      * **null** (or not), **key** and **serial**. Also, the changed flag will be set to false.
-     * @throws Exception
+     * @throws AdmException
      */
     protected function setColumnsInfos()
     {
