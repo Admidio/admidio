@@ -230,7 +230,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Se esta opção estiver ativa, ex-membros e membros das outras organizações serão exibidos junto aos membros ativos da atual organização. Caso contrário, apenas os membros da atual organização serão exibidos. Ao criar outros usuários ou atribuir registos, todas as organizações continuarão a ser verificadas quanto à existência de usuários.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Exibir seleção da organização</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Caso haja várias organizações guardadas na base de dados, o ecrã de início de sessão exibirá uma caixa de seleção com todas as organizações disponíveis. O usuário poderá então, ao iniciar a sessão, selecionar outra organização (outra que não esteja definida no config.php). Entretanto, o usuário deve ser um membro registado da organização selecionada.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Informações do sistema</string>
+  <string name="SYS_SYSTEM_INFORMATION">Informações do sistema</string>
   <string name="ORG_THEME_FOLDER_OPEN">Não foi possível abrir/ler a pasta de temas.</string>
   <string name="ORG_TIME_FORMAT">Formato de hora</string>
   <string name="ORG_TIME_FORMAT_DESC">O formato está em conformidade com a função PHP #VAR1#. (predefinição: H:i)</string>

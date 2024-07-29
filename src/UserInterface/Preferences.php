@@ -23,11 +23,17 @@
  */
 
 namespace Admidio\UserInterface;
+use ComponentUpdate;
+use Database;
 use FileSystemUtils;
 use HtmlPage;
 use AdmException;
+use PhpIniUtils;
+use RuntimeException;
 use SecurityUtils;
 use Smarty\Exception;
+use SystemInfoUtils;
+use TableText;
 
 class Preferences extends HtmlPage
 {
@@ -98,8 +104,8 @@ class Preferences extends HtmlPage
                 'title' => $gL10n->get('SYS_MAIL_DISPATCH'),
                 'icon' => 'bi-envelope-open-fill'
             ),
-            'system_notification' => array(
-                'id' => 'SystemNotification',
+            'system_notifications' => array(
+                'id' => 'SystemNotifications',
                 'title' => $gL10n->get('SYS_SYSTEM_MAILS'),
                 'icon' => 'bi-broadcast-pin'
             ),
@@ -114,13 +120,13 @@ class Preferences extends HtmlPage
                 'icon' => 'bi-cloud-arrow-down-fill'
             ),
             'php' => array(
-                'id' => 'Php',
+                'id' => 'PHP',
                 'title' => $gL10n->get('SYS_PHP'),
                 'icon' => 'bi-filetype-php'
             ),
             'system_information' => array(
                 'id' => 'SystemInformation',
-                'title' => $gL10n->get('ORG_SYSTEM_INFORMATION'),
+                'title' => $gL10n->get('SYS_SYSTEM_INFORMATION'),
                 'icon' => 'bi-info-circle-fill'
             )
         );
@@ -181,6 +187,160 @@ class Preferences extends HtmlPage
                 'icon' => 'bi-link-45deg'
             )
         );
+    }
+
+    /**
+     * Generates the html of the form from the Admidio update preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the Admidio update preferences.
+     * @throws AdmException|Exception
+     */
+    public function createAdmidioUpdateForm(): string
+    {
+        global $gDb, $gSystemComponent;
+
+        $component = new ComponentUpdate($gDb);
+        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+        $updateStep = (int) $gSystemComponent->getValue('com_update_step');
+        $maxStep = $component->getMaxUpdateStep();
+        $updateStepText = $updateStep . ' / ' . $maxStep;
+        if ($updateStep === $maxStep) {
+            $updateStepColorClass = 'text-success';
+        } elseif ($updateStep > $maxStep) {
+            $updateStepColorClass = 'text-warning';
+        } else {
+            $updateStepColorClass = 'text-danger';
+        }
+
+        $this->assignSmartyVariable('admidioVersion', ADMIDIO_VERSION_TEXT);
+        $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
+        $this->assignSmartyVariable('updateStepText', $updateStepText);
+        $this->assignSmartyVariable('databaseEngine', DB_ENGINE);
+        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'backup')));
+        $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
+
+        $smarty = $this->getSmartyTemplate();
+        return $smarty->fetch('preferences/preferences.admidio-update.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the captcha preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the captcha preferences.
+     * @throws AdmException
+     * @throws \Exception
+     */
+    public function createCaptchaForm(): string
+    {
+        global $gL10n, $gSettingsManager;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formCaptcha = new Form(
+            'preferencesFormCaptcha',
+            'preferences/preferences.captcha.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Captcha')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        // search all available themes in theme folder
+        $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
+        if (count($themes) === 0) {
+            throw new AdmException('SYS_TEMPLATE_FOLDER_OPEN');
+        }
+        $selectBoxEntries = array(
+            'pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'),
+            'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'),
+            'word' => $gL10n->get('ORG_CAPTCHA_TYPE_WORDS')
+        );
+        $formCaptcha->addSelectBox(
+            'captcha_type',
+            $gL10n->get('ORG_CAPTCHA_TYPE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_CAPTCHA_TYPE_TEXT')
+        );
+
+        $fonts = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . '/adm_program/system/fonts/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+        asort($fonts);
+        $formCaptcha->addSelectBox(
+            'captcha_fonts',
+            $gL10n->get('SYS_FONT'),
+            $fonts,
+            array('defaultValue' => $formValues['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_CAPTCHA_FONT')
+        );
+        $formCaptcha->addInput(
+            'captcha_width',
+            $gL10n->get('SYS_WIDTH') . ' (' . $gL10n->get('ORG_PIXEL') . ')',
+            $formValues['captcha_width'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'ORG_CAPTCHA_WIDTH_DESC')
+        );
+        $formCaptcha->addInput(
+            'captcha_lines_numbers',
+            $gL10n->get('ORG_CAPTCHA_LINES_NUMBERS'),
+            $formValues['captcha_lines_numbers'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 25, 'step' => 1, 'helpTextId' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC')
+        );
+        $formCaptcha->addInput(
+            'captcha_perturbation',
+            $gL10n->get('ORG_CAPTCHA_DISTORTION'),
+            $formValues['captcha_perturbation'],
+            array('type' => 'string', 'helpTextId' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small')
+        );
+        $backgrounds = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_LIBS . '/securimage/backgrounds/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+        asort($backgrounds);
+        $formCaptcha->addSelectBox(
+            'captcha_background_image',
+            $gL10n->get('ORG_CAPTCHA_BACKGROUND_IMAGE'),
+            $backgrounds,
+            array('defaultValue' => $formValues['captcha_background_image'], 'showContextDependentFirstEntry' => true, 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_CAPTCHA_BACKGROUND_IMAGE_DESC')
+        );
+        $formCaptcha->addInput(
+            'captcha_background_color',
+            $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'),
+            $formValues['captcha_background_color'],
+            array('maxLength' => 7, 'class' => 'form-control-small')
+        );
+        $formCaptcha->addInput(
+            'captcha_text_color',
+            $gL10n->get('ORG_CAPTCHA_CHARACTERS_COLOR'),
+            $formValues['captcha_text_color'],
+            array('maxLength' => 7, 'class' => 'form-control-small')
+        );
+        $formCaptcha->addInput(
+            'captcha_line_color',
+            $gL10n->get('ORG_CAPTCHA_LINE_COLOR'),
+            $formValues['captcha_line_color'],
+            array('maxLength' => 7, 'helpTextId' => array('ORG_CAPTCHA_COLOR_DESC', array('<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>')), 'class' => 'form-control-small')
+        );
+        $formCaptcha->addInput(
+            'captcha_charset',
+            $gL10n->get('ORG_CAPTCHA_SIGNS'),
+            $formValues['captcha_charset'],
+            array('maxLength' => 80, 'helpTextId' => 'ORG_CAPTCHA_SIGNS_TEXT')
+        );
+        $formCaptcha->addInput(
+            'captcha_signature',
+            $gL10n->get('ORG_CAPTCHA_SIGNATURE'),
+            $formValues['captcha_signature'],
+            array('maxLength' => 60, 'helpTextId' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
+        );
+        $html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
+         <a id="captcha-refresh" class="admidio-icon-link" href="javascript:void(0)">
+            <i class="bi bi-arrow-repeat" style="font-size: 22pt;" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_RELOAD') . '"></i></a>';
+        $formCaptcha->addCustomContent(
+            'captchaPreview',
+            $gL10n->get('ORG_CAPTCHA_PREVIEW'),
+            $html,
+            array('helpTextId' => 'ORG_CAPTCHA_PREVIEW_TEXT')
+        );
+        $formCaptcha->addSubmitButton(
+            'btn_save_captcha',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formCaptcha->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.captcha.tpl');
     }
 
     /**
@@ -531,6 +691,92 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the PHP preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the PHP preferences.
+     * @throws AdmException|Exception
+     */
+    public function createPHPForm(): string
+    {
+        global $gL10n;
+
+        if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+            $phpVersionColorClass = 'text-danger';
+            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION));
+        } elseif (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+            $phpVersionColorClass = 'text-warning';
+            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>'));
+        } else {
+            $phpVersionColorClass = 'text-success';
+            $phpVersionInfo = '';
+        }
+        $this->assignSmartyVariable('phpVersionColorClass', $phpVersionColorClass);
+        $this->assignSmartyVariable('phpVersionText', PHP_VERSION);
+        $this->assignSmartyVariable('phpVersionInfo', $phpVersionInfo);
+
+        $postMaxSize = PhpIniUtils::getPostMaxSize();
+        if (is_infinite($postMaxSize)) {
+            $postMaxSizeColorClass = 'text-warning';
+            $postMaxSizeText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $postMaxSizeColorClass = 'text-success';
+            $postMaxSizeText = FileSystemUtils::getHumanReadableBytes($postMaxSize);
+        }
+        $this->assignSmartyVariable('postMaxSizeColorClass', $postMaxSizeColorClass);
+        $this->assignSmartyVariable('postMaxSizeText', $postMaxSizeText);
+
+        $memoryLimit = PhpIniUtils::getMemoryLimit();
+        if (is_infinite($memoryLimit)) {
+            $memoryLimitColorClass = 'text-warning';
+            $memoryLimitText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $memoryLimitColorClass = 'text-success';
+            $memoryLimitText = FileSystemUtils::getHumanReadableBytes($memoryLimit);
+        }
+        $this->assignSmartyVariable('memoryLimitColorClass', $memoryLimitColorClass);
+        $this->assignSmartyVariable('memoryLimitText', $memoryLimitText);
+
+        if (PhpIniUtils::isFileUploadEnabled()) {
+            $fileUploadsColorClass = 'text-success';
+            $fileUploadsText = $gL10n->get('SYS_ON');
+        } else {
+            $fileUploadsColorClass = 'text-danger';
+            $fileUploadsText = $gL10n->get('SYS_OFF');
+        }
+        $this->assignSmartyVariable('fileUploadsColorClass', $fileUploadsColorClass);
+        $this->assignSmartyVariable('fileUploadsText', $fileUploadsText);
+
+        $fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
+        if (is_infinite($fileUploadMaxFileSize)) {
+            $uploadMaxFilesizeColorClass = 'text-warning';
+            $uploadMaxFilesizeText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $uploadMaxFilesizeColorClass = 'text-success';
+            $uploadMaxFilesizeText = FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize);
+        }
+        $this->assignSmartyVariable('uploadMaxFilesizeColorClass', $uploadMaxFilesizeColorClass);
+        $this->assignSmartyVariable('uploadMaxFilesizeText', $uploadMaxFilesizeText);
+
+        try {
+            SecurityUtils::getRandomInt(0, 1, true);
+            $prnGeneratorColorClass = 'text-success';
+            $prnGeneratorText = $gL10n->get('SYS_SECURE');
+            $prnGeneratorInfo = '';
+        } catch (AdmException $e) {
+            $prnGeneratorColorClass = 'text-danger';
+            $prnGeneratorText = $gL10n->get('SYS_PRNG_INSECURE');
+            $prnGeneratorInfo =  '<br />' . $e->getMessage();
+        }
+        $this->assignSmartyVariable('prnGeneratorColorClass', $prnGeneratorColorClass);
+        $this->assignSmartyVariable('prnGeneratorText', $prnGeneratorText);
+        $this->assignSmartyVariable('prnGeneratorInfo', $prnGeneratorInfo);
+
+        $this->assignSmartyVariable('admidioUrl', ADMIDIO_URL);
+
+        $smarty = $this->getSmartyTemplate();
+        return $smarty->fetch('preferences/preferences.php.tpl');
+    }
+
+    /**
      * Generates the html of the form from the regional settings preferences and will return the complete html.
      * @return string Returns the complete html of the form from the regional settings preferences.
      * @throws AdmException
@@ -718,6 +964,214 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the system information preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the system information preferences.
+     * @throws AdmException|Exception
+     */
+    public function createSystemInformationForm(): string
+    {
+        global $gL10n, $gDb, $gLogger;
+
+        $this->assignSmartyVariable('operatingSystemName', SystemInfoUtils::getOS());
+        $this->assignSmartyVariable('operatingSystemUserName', SystemInfoUtils::getUname());
+
+        if (SystemInfoUtils::is64Bit()) {
+            $architectureOSColorClass = 'text-success';
+            $architectureOSText = $gL10n->get('SYS_YES');
+        } else {
+            $architectureOSColorClass = '';
+            $architectureOSText = $gL10n->get('SYS_NO');
+        }
+        $this->assignSmartyVariable('architectureOSColorClass', $architectureOSColorClass);
+        $this->assignSmartyVariable('architectureOSText', $architectureOSText);
+
+        if (SystemInfoUtils::isUnixFileSystem()) {
+            $unixText = $gL10n->get('SYS_YES');
+        } else {
+            $unixText = $gL10n->get('SYS_NO');
+        }
+        $this->assignSmartyVariable('unixText', $unixText);
+
+        $this->assignSmartyVariable('directorySeparator', SystemInfoUtils::getDirectorySeparator());
+        $this->assignSmartyVariable('pathSeparator', SystemInfoUtils::getPathSeparator());
+        $this->assignSmartyVariable('maxPathLength', SystemInfoUtils::getMaxPathLength());
+
+        if (version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<')) {
+            $databaseVersionColorClass = 'text-danger';
+            $databaseVersionText = $gDb->getVersion();
+            $databaseVersionInfo = ' &rarr; ' . $gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion()));
+        } else {
+            $databaseVersionColorClass = 'text-success';
+            $databaseVersionText = $gDb->getVersion();
+            $databaseVersionInfo = '';
+        }
+        $this->assignSmartyVariable('databaseVersionName', $gDb->getName() . '-' . $gL10n->get('SYS_VERSION'));
+        $this->assignSmartyVariable('databaseVersionColorClass', $databaseVersionColorClass);
+        $this->assignSmartyVariable('databaseVersionText', $databaseVersionText);
+        $this->assignSmartyVariable('databaseVersionInfo', $databaseVersionInfo);
+
+        if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess')) {
+            $directoryProtectionColorClass = 'text-success';
+            $directoryProtectionText = $gL10n->get('SYS_SECURE');
+            $directoryProtectionInfo = '';
+        } else {
+            $directoryProtectionColorClass = 'text-danger';
+            $directoryProtectionText = '<span id="directory_protection_status">' . $gL10n->get('SYS_OFF') . '</span>';
+            $directoryProtectionInfo = ' &rarr; <a id="link_directory_protection" href="#link_directory_protection" title="' . $gL10n->get('SYS_CREATE_HTACCESS') . '">' . $gL10n->get('SYS_CREATE_HTACCESS') . '</a>';
+        }
+        $this->assignSmartyVariable('directoryProtectionColorClass', $directoryProtectionColorClass);
+        $this->assignSmartyVariable('directoryProtectionText', $directoryProtectionText);
+        $this->assignSmartyVariable('directoryProtectionInfo', $directoryProtectionInfo);
+
+        $this->assignSmartyVariable('maxProcessableImageSize', round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2) . ' ' . $gL10n->get('SYS_MEGAPIXEL'));
+
+        if (isset($gDebug) && $gDebug) {
+            $debugModeColorClass = 'text-danger';
+            $debugModeText = $gL10n->get('SYS_ON');
+        } else {
+            $debugModeColorClass = 'text-success';
+            $debugModeText = $gL10n->get('SYS_OFF');
+        }
+        $this->assignSmartyVariable('debugModeColorClass', $debugModeColorClass);
+        $this->assignSmartyVariable('debugModeText', $debugModeText);
+
+        if (isset($gImportDemoData) && $gImportDemoData) {
+            $importModeColorClass = 'text-danger';
+            $importModeText = $gL10n->get('SYS_ON');
+        } else {
+            $importModeColorClass = 'text-success';
+            $importModeText = $gL10n->get('SYS_OFF');
+        }
+        $this->assignSmartyVariable('importModeColorClass', $importModeColorClass);
+        $this->assignSmartyVariable('importModeText', $importModeText);
+
+        try {
+            $diskSpace = FileSystemUtils::getDiskSpace();
+            $progressBarClass = '';
+
+            $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
+            if ($diskUsagePercent > 90) {
+                $progressBarClass = ' progress-bar-danger';
+            } elseif ($diskUsagePercent > 70) {
+                $progressBarClass = ' progress-bar-warning';
+            }
+            $diskSpaceContent = '
+                <div class="progress">
+                    <div class="progress-bar' . $progressBarClass . '" role="progressbar" aria-valuenow="' . $diskSpace['used'] . '" aria-valuemin="0" aria-valuemax="' . $diskSpace['total'] . '" style="width: ' . $diskUsagePercent . '%;">
+                        ' . FileSystemUtils::getHumanReadableBytes($diskSpace['used']) . ' / ' . FileSystemUtils::getHumanReadableBytes($diskSpace['total']) . '
+                    </div>
+                </div>';
+        } catch (RuntimeException $exception) {
+            $gLogger->error('FILE-SYSTEM: Disk space could not be determined!');
+
+            $diskSpaceContent = $gL10n->get('SYS_DISK_SPACE_ERROR', array($exception->getMessage()));
+        }
+        $this->assignSmartyVariable('diskSpaceContent', $diskSpaceContent);
+
+        $smarty = $this->getSmartyTemplate();
+        return $smarty->fetch('preferences/preferences.system-information.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the system notifications preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the system notifications preferences.
+     * @throws AdmException
+     * @throws \Exception
+     */
+    public function createSystemNotificationsForm(): string
+    {
+        global $gL10n, $gDb, $gSettingsManager, $gCurrentOrgId;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formSystemNotification = new Form(
+            'preferencesFormSystemNotifications',
+            'preferences/preferences.system-notifications.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'SystemNotifications')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formSystemNotification->addCheckbox(
+            'system_notifications_enabled',
+            $gL10n->get('SYS_ENABLE_NOTIFICATIONS'),
+            (bool)$formValues['system_notifications_enabled'],
+            array('helpTextId' => 'SYS_ENABLE_NOTIFICATIONS_DESC')
+        );
+        $formSystemNotification->addCheckbox(
+            'system_notifications_new_entries',
+            $gL10n->get('SYS_NOTIFICATION_NEW_ENTRIES'),
+            (bool)$formValues['system_notifications_new_entries'],
+            array('helpTextId' => 'SYS_NOTIFICATION_NEW_ENTRIES_DESC')
+        );
+        $formSystemNotification->addCheckbox(
+            'system_notifications_profile_changes',
+            $gL10n->get('SYS_NOTIFICATION_PROFILE_CHANGES'),
+            (bool)$formValues['system_notifications_profile_changes'],
+            array('helpTextId' => 'SYS_NOTIFICATION_PROFILE_CHANGES_DESC')
+        );
+
+        // read all roles of the organization
+        $sqlData = array();
+        $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
+               FROM ' . TBL_ROLES . '
+         INNER JOIN ' . TBL_CATEGORIES . '
+                 ON cat_id = rol_cat_id
+         INNER JOIN ' . TBL_ORGANIZATIONS . '
+                 ON org_id = cat_org_id
+              WHERE rol_valid  = true
+                AND rol_system = false
+                AND rol_all_lists_view = true
+                AND cat_org_id = ? -- $gCurrentOrgId
+                AND cat_name_intern <> \'EVENTS\'
+           ORDER BY cat_name, rol_name';
+        $sqlData['params'] = array($gCurrentOrgId);
+        $formSystemNotification->addSelectBoxFromSql(
+            'system_notifications_role',
+            $gL10n->get('SYS_NOTIFICATION_ROLE'),
+            $gDb,
+            $sqlData,
+            array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
+        );
+
+        $text = new TableText($gDb);
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_CONFIRMATION', 'txt_org_id' => $gCurrentOrgId));
+        $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_CONFIRMATION', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_CONFIRMATION'), $text->getValue('txt_text'), 7);
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_NEW', 'txt_org_id' => $gCurrentOrgId));
+        $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_NEW', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_APPROVED', 'txt_org_id' => $gCurrentOrgId));
+        $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_REFUSED', 'txt_org_id' => $gCurrentOrgId));
+        $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrgId));
+        $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
+        $formSystemNotification->addMultilineTextInput(
+            'SYSMAIL_NEW_PASSWORD',
+            $gL10n->get('ORG_SEND_NEW_PASSWORD'),
+            $text->getValue('txt_text'),
+            7,
+            array('helpTextId' => $htmlDesc)
+        );
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $gCurrentOrgId));
+        $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
+        $formSystemNotification->addMultilineTextInput(
+            'SYSMAIL_PASSWORD_RESET',
+            $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
+            $text->getValue('txt_text'),
+            7,
+            array('helpTextId' => $htmlDesc)
+        );
+        $formSystemNotification->addSubmitButton(
+            'btn_save_system_notification',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formSystemNotification->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.system-notifications.tpl');
+    }
+
+    /**
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
@@ -749,7 +1203,7 @@ class Preferences extends HtmlPage
 
         $this->addJavascript(
             '
-            var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch"];
+            var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#admidioPanelPreferencesCommon" + panels[i] + " .accordion-header").click(function (e) {
@@ -764,11 +1218,11 @@ class Preferences extends HtmlPage
                 $(document).on("submit", "#preferencesForm" + panels[i], formSubmit);
             }
 
-            $("#captcha-refresh").click(function() {
+            $(document).on("click", "#captcha-refresh", (function() {
                 document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
-            });
+            }));
 
-            $("#link_check_for_update").click(function() {
+            $(document).on("click", "#link_check_for_update", (function() {
                 var admVersionContent = $("#admidio_version_content");
 
                 admVersionContent.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
@@ -776,9 +1230,9 @@ class Preferences extends HtmlPage
                     admVersionContent.html(htmlVersion);
                 });
                 return false;
-            });
+            }));
 
-            $("#link_directory_protection").click(function() {
+            $(document).on("click", "#link_directory_protection", (function() {
                 var dirProtectionStatus = $("#directory_protection_status");
 
                 dirProtectionStatus.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
@@ -787,7 +1241,7 @@ class Preferences extends HtmlPage
                     directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
                 });
                 return false;
-            });',
+            }));',
             true
         );
 

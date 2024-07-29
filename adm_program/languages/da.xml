@@ -230,7 +230,7 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Nogle steder vises skaberen og brugeren med den sidste ændring til en post sammen med et tidsstempel. Denne indstilling kan bruges til at bestemme, om denne information overhovedet vises, og om brugeren skal vises med brugernavnet eller med deres for- og efternavn.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
+  <string name="SYS_SYSTEM_INFORMATION">Systeminformation</string>
   <string name="ORG_THEME_FOLDER_OPEN">Tema folderen kunne ikke åbnes eller læses.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
   <string name="ORG_TIME_FORMAT_DESC">Formatet efterkommer standarden i PHP funktionen #VAR1#. (Standard: H:i)</string>

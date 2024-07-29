@@ -142,11 +142,11 @@ try {
                     }
                     break;
 
-                case 'system_notification':
+                case 'SystemNotifications':
                     $checkboxes = array('system_notifications_enabled', 'system_notifications_new_entries', 'system_notifications_profile_changes');
                     break;
 
-                case 'captcha':
+                case 'Captcha':
                 case 'announcements':
                     break;
 
@@ -276,6 +276,21 @@ try {
                     break;
                 case 'EmailDispatch':
                     echo $preferencesUI->createEmailDispatchForm();
+                    break;
+                case 'SystemNotifications':
+                    echo $preferencesUI->createSystemNotificationsForm();
+                    break;
+                case 'Captcha':
+                    echo $preferencesUI->createCaptchaForm();
+                    break;
+                case 'AdmidioUpdate':
+                    echo $preferencesUI->createAdmidioUpdateForm();
+                    break;
+                case 'PHP':
+                    echo $preferencesUI->createPHPForm();
+                    break;
+                case 'SystemInformation':
+                    echo $preferencesUI->createSystemInformationForm();
                     break;
             }
             break;
@@ -486,6 +501,8 @@ try {
 } catch (AdmException|Exception $exception) {
     if ($getMode === 'save') {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    } elseif ($getMode === 'html_form') {
+        echo $exception->getMessage();
     } else {
         $gMessage->show($exception->getMessage());
     }

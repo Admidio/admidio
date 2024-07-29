@@ -234,7 +234,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Jos tämä asetus on asetettu, entiset jäsenet ja muiden organisaatioiden jäsenet voidaan valinnaisesti näyttää jäsenhallinnossa nykyisen organisaation aktiivisten jäsenten lisäksi. Muutoin vain nykyisen organisaation aktiiviset jäsenet näytetään. Uusia jäseniä luotaessa tai rekisteröintejä tehtäessä järjestelmä kuitenkin jatkaa olemassa olevien käyttäjien etsimistä kaikkien organisaatioiden koko tietokannasta. </string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Näytä organisaation valinta</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Jos tietokantaan on tallennettu useita organisaatioita, kirjautumisnäyttö voi näyttää valintaruudun, jossa näkyvät kaikki käytettävissä olevat organisaatiot. Käyttäjä voi kirjautumisen yhteydessä valita toisen organisaation (muun kuin config.php -määritelmän). Käyttäjän on kuitenkin oltava valitun organisaation rekisteröity jäsen.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Järjestelmätiedot</string>
+  <string name="SYS_SYSTEM_INFORMATION">Järjestelmätiedot</string>
   <string name="ORG_THEME_FOLDER_OPEN">Teemat -kansiota ei voitu avata/lukea.</string>
   <string name="ORG_TIME_FORMAT">Aikamuoto</string>
   <string name="ORG_TIME_FORMAT_DESC">Muoto on PHP -funktion #VAR1# mukainen. (oletus: H:i)</string>
