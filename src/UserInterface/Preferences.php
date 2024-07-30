@@ -222,6 +222,60 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the announcements preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the announcements preferences.
+     * @throws AdmException|Exception
+     */
+    public function createAnnouncementsForm(): string
+    {
+        global $gL10n, $gSettingsManager;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formAnnouncements = new Form(
+            'preferencesFormAnnouncements',
+            'preferences/preferences.announcements.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Announcements')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formAnnouncements->addSelectBox(
+            'announcements_module_enabled',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['announcements_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+        );
+        $formAnnouncements->addInput(
+            'announcements_per_page',
+            $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
+            $formValues['announcements_per_page'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+        );
+        $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'ANN')) . '">
+            <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
+        $formAnnouncements->addCustomContent(
+            'maintainCategories',
+            $gL10n->get('SYS_EDIT_CATEGORIES'),
+            $html,
+            array('helpTextId' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+        );
+        $formAnnouncements->addSubmitButton(
+            'btn_save_announcements',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formAnnouncements->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.announcements.tpl');
+    }
+
+    /**
      * Generates the html of the form from the captcha preferences and will return the complete html.
      * @return string Returns the complete html of the form from the captcha preferences.
      * @throws AdmException|Exception
@@ -1194,14 +1248,15 @@ class Preferences extends HtmlPage
 
         $this->addJavascript(
             '
-            var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation"];
+            var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation",
+                "Announcements"];
 
             for(var i = 0; i < panels.length; i++) {
-                $("#admidioPanelPreferencesCommon" + panels[i] + " .accordion-header").click(function (e) {
+                $("#admidioPanelPreferences" + panels[i] + " .accordion-header").click(function (e) {
                     var id = $(this).data("preferences-panel");
-                    if ($("#admidioPanelPreferencesCommon" + id + " h2").attr("aria-expanded") == "true") {
+                    if ($("#admidioPanelPreferences" + id + " h2").attr("aria-expanded") == "true") {
                         $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php?mode=html_form&form=" + id, function (data) {
-                            $("#admidioPanelPreferencesCommon" + id + " .accordion-body").html(data);
+                            $("#admidioPanelPreferences" + id + " .accordion-body").html(data);
                         });
                     }
                 });

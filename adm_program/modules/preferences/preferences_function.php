@@ -147,7 +147,7 @@ try {
                     break;
 
                 case 'Captcha':
-                case 'announcements':
+                case 'Announcements':
                     break;
 
                 case 'contacts':
@@ -291,6 +291,9 @@ try {
                     break;
                 case 'SystemInformation':
                     echo $preferencesUI->createSystemInformationForm();
+                    break;
+                case 'Announcements':
+                    echo $preferencesUI->createAnnouncementsForm();
                     break;
             }
             break;

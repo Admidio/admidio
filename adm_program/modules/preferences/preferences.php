@@ -15,10 +15,10 @@
  */
 use Admidio\UserInterface\Preferences;
 
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 
