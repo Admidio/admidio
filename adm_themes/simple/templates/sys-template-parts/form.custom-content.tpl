@@ -3,7 +3,7 @@
     {if $formType neq "navbar"} mb-4{/if}">
     <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
         {include file="sys-template-parts/parts/form.part.icon.tpl"}
-        {$label}
+        {$data.label}
     </label>
     {if $formType neq "vertical" and $formType neq "navbar"}<div class="col-sm-9">{/if}
     <div id="{$data.id}"{if $data.class neq ""} class="{$data.class}"{/if}>{$data.content}</div>
