@@ -150,11 +150,11 @@ try {
                 case 'Announcements':
                     break;
 
-                case 'contacts':
+                case 'Contacts':
                     $checkboxes = array('contacts_show_all', 'contacts_user_relations_enabled');
                     break;
 
-                case 'documents-files':
+                case 'DocumentsFiles':
                     $checkboxes = array('documents_files_module_enabled');
                     break;
 
@@ -294,6 +294,12 @@ try {
                     break;
                 case 'Announcements':
                     echo $preferencesUI->createAnnouncementsForm();
+                    break;
+                case 'Contacts':
+                    echo $preferencesUI->createContactsForm();
+                    break;
+                case 'DocumentsFiles':
+                    echo $preferencesUI->createDocumentsFilesForm();
                     break;
             }
             break;

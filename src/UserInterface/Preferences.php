@@ -498,6 +498,130 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the contacts preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the contacts preferences.
+     * @throws AdmException|Exception
+     */
+    public function createContactsForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formContacts = new Form(
+            'preferencesFormContacts',
+            'preferences/preferences.contacts.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Contacts')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        // read all global lists
+        $sqlData = array();
+        $sqlData['query'] = 'SELECT lst_id, lst_name
+                       FROM ' . TBL_LISTS . '
+                      WHERE lst_org_id = ? -- $gCurrentOrgId
+                        AND lst_global = true
+                        AND NOT EXISTS (SELECT 1
+                                       FROM ' . TBL_LIST_COLUMNS . '
+                                       WHERE lsc_lst_id = lst_id
+                                       AND lsc_special_field LIKE \'mem%\')
+                   ORDER BY lst_name, lst_timestamp DESC';
+        $sqlData['params'] = array($gCurrentOrgId);
+        $formContacts->addSelectBoxFromSql(
+            'contacts_list_configuration',
+            $gL10n->get('SYS_CONFIGURATION_LIST'),
+            $gDb,
+            $sqlData,
+            array('defaultValue' => $formValues['contacts_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MEMBERS_CONFIGURATION_DESC')
+        );
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $formContacts->addSelectBox(
+            'contacts_per_page',
+            $gL10n->get('SYS_CONTACTS_PER_PAGE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
+        );
+        $formContacts->addInput(
+            'contacts_field_history_days',
+            $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
+            $formValues['contacts_field_history_days'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
+        );
+        $formContacts->addCheckbox(
+            'contacts_show_all',
+            $gL10n->get('SYS_SHOW_ALL_CONTACTS'),
+            (bool)$formValues['contacts_show_all'],
+            array('helpTextId' => 'SYS_SHOW_ALL_CONTACTS_DESC')
+        );
+        $formContacts->addCheckbox(
+            'contacts_user_relations_enabled',
+            $gL10n->get('SYS_ENABLE_USER_RELATIONS'),
+            (bool)$formValues['contacts_user_relations_enabled'],
+            array('helpTextId' => 'SYS_ENABLE_USER_RELATIONS_DESC')
+        );
+
+        $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes.php">
+            <i class="bi bi-person-heart"></i>' . $gL10n->get('SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION') . '</a>';
+        $formContacts->addCustomContent(
+            'userRelations',
+            $gL10n->get('SYS_USER_RELATIONS'),
+            $html,
+            array('helpTextId' => 'SYS_MAINTAIN_USER_RELATION_TYPES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+
+        $formContacts->addSubmitButton(
+            'btn_save_contacts',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formContacts->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.contacts.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the documents & files preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the documents & files preferences.
+     * @throws AdmException|Exception
+     */
+    public function createDocumentsFilesForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formDocumentsFiles = new Form(
+            'preferencesFormDocumentsFiles',
+            'preferences/preferences.documents-files.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'DocumentsFiles')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formDocumentsFiles->addCheckbox(
+            'documents_files_module_enabled',
+            $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'),
+            (bool)$formValues['documents_files_module_enabled'],
+            array('helpTextId' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
+        );
+        $formDocumentsFiles->addInput(
+            'documents_files_max_upload_size',
+            $gL10n->get('SYS_MAXIMUM_FILE_SIZE') . ' (MB)',
+            $formValues['documents_files_max_upload_size'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextId' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
+        );
+        $formDocumentsFiles->addSubmitButton(
+            'btn_save_documents_files',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formDocumentsFiles->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.documents-files.tpl');
+    }
+
+    /**
      * Generates the html of the form from the email dispatch preferences and will return the complete html.
      * @return string Returns the complete html of the form from the email dispatch preferences.
      * @throws AdmException|Exception
@@ -1249,7 +1373,7 @@ class Preferences extends HtmlPage
         $this->addJavascript(
             '
             var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation",
-                "Announcements"];
+                "Announcements", "Contacts", "DocumentsFiles"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#admidioPanelPreferences" + panels[i] + " .accordion-header").click(function (e) {
