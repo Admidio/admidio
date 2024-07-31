@@ -158,20 +158,20 @@ try {
                     $checkboxes = array('documents_files_module_enabled');
                     break;
 
-                case 'guestbook':
+                case 'Guestbook':
                     $checkboxes = array('enable_guestbook_captcha', 'enable_gbook_comments4all',
                         'enable_intial_comments_loading');
                     break;
 
-                case 'groups-roles':
+                case 'GroupsRoles':
                     $checkboxes = array('groups_roles_enable_module');
                     break;
 
-                case 'category-report':
+                case 'CategoryReport':
                     $checkboxes = array('category_report_enable_module');
                     break;
 
-                case 'messages':
+                case 'Messages':
                     $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha',
                         'mail_send_to_all_addresses', 'mail_html_registered_users', 'mail_show_former', 'mail_save_attachments');
 
@@ -181,7 +181,7 @@ try {
                     }
                     break;
 
-                case 'photos':
+                case 'Photos':
                     $checkboxes = array('photo_download_enabled', 'photo_keep_original', 'photo_ecard_enabled');
 
                     // get real filename of the template file
@@ -190,16 +190,16 @@ try {
                     }
                     break;
 
-                case 'profile':
+                case 'Profile':
                     $checkboxes = array('profile_log_edit_fields', 'profile_show_map_link', 'profile_show_roles',
                         'profile_show_former_roles', 'profile_show_extern_roles');
                     break;
 
-                case 'events':
+                case 'Events':
                     $checkboxes = array('events_ical_export_enabled', 'events_show_map_link', 'events_rooms_enabled', 'events_save_cancellations', 'events_may_take_part');
                     break;
 
-                case 'links':
+                case 'Links':
                     if (!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0) {
                         throw new AdmException('SYS_FIELD_EMPTY', array('SYS_DISPLAY_REDIRECT'));
                     }
@@ -300,6 +300,12 @@ try {
                     break;
                 case 'DocumentsFiles':
                     echo $preferencesUI->createDocumentsFilesForm();
+                    break;
+                case 'Photos':
+                    echo $preferencesUI->createPhotosForm();
+                    break;
+                case 'Guestbook':
+                    echo $preferencesUI->createGuestbookForm();
                     break;
             }
             break;

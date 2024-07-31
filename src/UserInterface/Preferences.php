@@ -587,7 +587,7 @@ class Preferences extends HtmlPage
      */
     public function createDocumentsFilesForm(): string
     {
-        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+        global $gL10n, $gSettingsManager;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -779,6 +779,87 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the guestbook preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the guestbook preferences.
+     * @throws AdmException|Exception
+     */
+    public function createGuestbookForm(): string
+    {
+        global $gL10n, $gSettingsManager;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formGuestbook = new Form(
+            'preferencesFormGuestbook',
+            'preferences/preferences.guestbook.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Guestbook')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formGuestbook->addSelectBox(
+            'enable_guestbook_module',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['enable_guestbook_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+        );
+        $formGuestbook->addInput(
+            'guestbook_entries_per_page',
+            $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
+            $formValues['guestbook_entries_per_page'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+        );
+        $formGuestbook->addCheckbox(
+            'enable_guestbook_captcha',
+            $gL10n->get('ORG_ENABLE_CAPTCHA'),
+            (bool)$formValues['enable_guestbook_captcha'],
+            array('helpTextId' => 'GBO_CAPTCHA_DESC')
+        );
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_NOBODY'),
+            '1' => $gL10n->get('GBO_ONLY_VISITORS'),
+            '2' => $gL10n->get('SYS_ALL')
+        );
+        $formGuestbook->addSelectBox(
+            'enable_guestbook_moderation',
+            $gL10n->get('GBO_GUESTBOOK_MODERATION'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['enable_guestbook_moderation'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'GBO_GUESTBOOK_MODERATION_DESC')
+        );
+        $formGuestbook->addCheckbox(
+            'enable_gbook_comments4all',
+            $gL10n->get('GBO_COMMENTS4ALL'),
+            (bool)$formValues['enable_gbook_comments4all'],
+            array('helpTextId' => 'GBO_COMMENTS4ALL_DESC')
+        );
+        $formGuestbook->addCheckbox(
+            'enable_intial_comments_loading',
+            $gL10n->get('GBO_INITIAL_COMMENTS_LOADING'),
+            (bool)$formValues['enable_intial_comments_loading'],
+            array('helpTextId' => 'GBO_INITIAL_COMMENTS_LOADING_DESC')
+        );
+        $formGuestbook->addInput(
+            'flooding_protection_time',
+            $gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL'),
+            $formValues['flooding_protection_time'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'GBO_FLOODING_PROTECTION_INTERVALL_DESC')
+        );
+        $formGuestbook->addSubmitButton(
+            'btn_save_guestbook',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formGuestbook->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.guestbook.tpl');
+    }
+
+    /**
      * Generates the html of the form from the organization preferences and will return the complete html.
      * @return string Returns the complete html of the form from the organization preferences.
      * @throws AdmException|Exception
@@ -861,6 +942,135 @@ class Preferences extends HtmlPage
         $smarty = $this->getSmartyTemplate();
         $formOrganization->addToSmarty($smarty);
         return $smarty->fetch('preferences/preferences.organization.tpl');
+    }
+
+
+    /**
+     * Generates the html of the form from the photos preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the photos preferences.
+     * @throws AdmException|Exception
+     */
+    public function createPhotosForm(): string
+    {
+        global $gL10n, $gSettingsManager;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formPhotos = new Form(
+            'preferencesFormPhotos',
+            'preferences/preferences.photos.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Photos')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formPhotos->addSelectBox(
+            'photo_module_enabled',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['photo_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+        );
+        $selectBoxEntries = array(
+            '1' => $gL10n->get('SYS_MODAL_WINDOW'),
+            '2' => $gL10n->get('SYS_SAME_WINDOW')
+        );
+        $formPhotos->addSelectBox(
+            'photo_show_mode',
+            $gL10n->get('SYS_PHOTOS_PRESENTATION'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_PHOTOS_PRESENTATION_DESC')
+        );
+        $formPhotos->addInput(
+            'photo_albums_per_page',
+            $gL10n->get('SYS_NUMBER_OF_ALBUMS_PER_PAGE'),
+            $formValues['photo_albums_per_page'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(24)))
+        );
+        $formPhotos->addInput(
+            'photo_thumbs_page',
+            $gL10n->get('SYS_THUMBNAILS_PER_PAGE'),
+            $formValues['photo_thumbs_page'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAILS_PER_PAGE_DESC', array(24)))
+        );
+        $formPhotos->addInput(
+            'photo_thumbs_scale',
+            $gL10n->get('SYS_THUMBNAIL_SCALING'),
+            $formValues['photo_thumbs_scale'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAIL_SCALING_DESC', array(500)))
+        );
+        $formPhotos->addInput(
+            'photo_show_width',
+            $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
+            $formValues['photo_show_width'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
+        );
+        $formPhotos->addInput(
+            'photo_show_height',
+            $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
+            $formValues['photo_show_height'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1200, 1200)))
+        );
+        $formPhotos->addInput(
+            'photo_image_text',
+            $gL10n->get('SYS_SHOW_WATERMARK'),
+            $formValues['photo_image_text'],
+            array('maxLength' => 60, 'helpTextId' => array('SYS_SHOW_WATERMARK_DESC', array('© ' . DOMAIN)))
+        );
+        $formPhotos->addInput(
+            'photo_image_text_size',
+            $gL10n->get('SYS_CAPTION_SIZE'),
+            $formValues['photo_image_text_size'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_CAPTION_SIZE_DESC')
+        );
+        $formPhotos->addCheckbox(
+            'photo_download_enabled',
+            $gL10n->get('SYS_ENABLE_DOWNLOAD'),
+            (bool)$formValues['photo_download_enabled'],
+            array('helpTextId' => array('SYS_ENABLE_DOWNLOAD_DESC', array('SYS_KEEP_ORIGINAL')))
+        );
+        $formPhotos->addCheckbox(
+            'photo_keep_original',
+            $gL10n->get('SYS_KEEP_ORIGINAL'),
+            (bool)$formValues['photo_keep_original'],
+            array('helpTextId' => array('SYS_KEEP_ORIGINAL_DESC', array('SYS_ENABLE_DOWNLOAD')))
+        );
+        $formPhotos->addCheckbox(
+            'photo_ecard_enabled',
+            $gL10n->get('SYS_ENABLE_GREETING_CARDS'),
+            (bool)$formValues['photo_ecard_enabled'],
+            array('helpTextId' => 'SYS_ENABLE_GREETING_CARDS_DESC')
+        );
+        $formPhotos->addInput(
+            'photo_ecard_scale',
+            $gL10n->get('SYS_THUMBNAIL_SCALING'),
+            $formValues['photo_ecard_scale'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
+        );
+        $formPhotos->addSelectBox(
+            'photo_ecard_template',
+            $gL10n->get('SYS_TEMPLATE'),
+            $this->getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
+            array(
+                'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $formValues['photo_ecard_template']))),
+                'showContextDependentFirstEntry' => false,
+                'arrayKeyIsNotValue' => true,
+                'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
+                'helpTextId' => 'SYS_TEMPLATE_DESC'
+            )
+        );
+        $formPhotos->addSubmitButton(
+            'btn_save_photos',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formPhotos->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.photos.tpl');
     }
 
     /**
@@ -1341,6 +1551,25 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Read all file names of a folder and return an array where the file names are the keys and a readable
+     * version of the file names are the values.
+     * @param string $folder Server path with folder name of whom the files should be read.
+     * @return array<int,string> Array with all file names of the given folder.
+     */
+    private function getArrayFileNames(string $folder): array
+    {
+        // get all files from the folder
+        $files = array_keys(FileSystemUtils::getDirectoryContent($folder, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+
+        foreach ($files as &$templateName) {
+            $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace(array('.tpl', '.html', '.txt'), '', $templateName)));
+        }
+        unset($templateName);
+
+        return $files;
+    }
+
+    /**
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
@@ -1373,7 +1602,7 @@ class Preferences extends HtmlPage
         $this->addJavascript(
             '
             var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation",
-                "Announcements", "Contacts", "DocumentsFiles"];
+                "Announcements", "Contacts", "DocumentsFiles", "Photos", "Guestbook"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#admidioPanelPreferences" + panels[i] + " .accordion-header").click(function (e) {
