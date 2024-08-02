@@ -115,8 +115,7 @@ class Message
      * Alternatively there is the possibility to display only the message text.
      * @param string $content The message text that should be shown. The content could have html.
      * @param string $headline Optional a headline for the message. Default will be SYS_NOTE.
-     * @throws \Smarty\Exception
-     * @throws Exception
+     * @throws AdmException
      */
     public function show(string $content, string $headline = '')
     {
@@ -174,7 +173,11 @@ class Message
             $smarty->assign('url', $this->url);
             $smarty->assign('showYesNoButtons', $this->showYesNoButtons);
             $smarty->assign('l10n', $gL10n);
-            $smarty->display('system/message_modal.tpl');
+            try {
+                $smarty->display('system/message_modal.tpl');
+            } catch (\Smarty\Exception|Exception $exception) {
+                throw new AdmException($exception->getMessage());
+            }
         } else {
             // show an Admidio html page with complete theme header and body
             $page->assignSmartyVariable('message', $content);

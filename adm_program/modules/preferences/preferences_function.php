@@ -307,6 +307,24 @@ try {
                 case 'Guestbook':
                     echo $preferencesUI->createGuestbookForm();
                     break;
+                case 'GroupsRoles':
+                    echo $preferencesUI->createGroupsRolesForm();
+                    break;
+                case 'CategoryReport':
+                    echo $preferencesUI->createCategoryReportForm();
+                    break;
+                case 'Messages':
+                    echo $preferencesUI->createMessagesForm();
+                    break;
+                case 'Profile':
+                    echo $preferencesUI->createProfileForm();
+                    break;
+                case 'Events':
+                    echo $preferencesUI->createEventsForm();
+                    break;
+                case 'Links':
+                    echo $preferencesUI->createLinksForm();
+                    break;
             }
             break;
 

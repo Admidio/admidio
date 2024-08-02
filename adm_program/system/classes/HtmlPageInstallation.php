@@ -129,7 +129,7 @@ class HtmlPageInstallation extends HtmlPage
      * This method will set all variables for the Smarty engine and then send the whole html
      * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
-     * @throws \Smarty\Exception
+     * @throws AdmException
      */
     public function show()
     {
@@ -140,7 +140,11 @@ class HtmlPageInstallation extends HtmlPage
         $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
-        $this->smarty->display('index.tpl');
+        try {
+            $this->smarty->display('index.tpl');
+        } catch (\Smarty\Exception|Exception $exception) {
+            throw new AdmException($exception->getMessage());
+        }
     }
 
     /**

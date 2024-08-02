@@ -269,7 +269,6 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
  * ```
  * @throws AdmException
- * @throws Exception
  */
 function admFuncVariableIsValid(array $array, string $variableName, string $datatype, array $options = array())
 {
@@ -569,7 +568,6 @@ function admFuncCheckUrl(string $url)
  * This is a safe method for redirecting.
  * @param string $url The URL where redirecting to. Must be an absolute URL. (www.example.org)
  * @param int $statusCode The status-code which should be sent. (301, 302, 303 (default), 307)
- * @throws \Smarty\Exception
  * @throws Exception
  * @see https://www.owasp.org/index.php/Open_redirect
  */

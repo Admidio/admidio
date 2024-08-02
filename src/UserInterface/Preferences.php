@@ -396,6 +396,56 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the category report preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the category report preferences.
+     * @throws AdmException|Exception
+     */
+    public function createCategoryReportForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formCategoryReport = new Form(
+            'preferencesFormCategoryReport',
+            'preferences/preferences.category-report.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'CategoryReport')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formCategoryReport->addCheckbox(
+            'category_report_enable_module',
+            $gL10n->get('SYS_ENABLE_CATEGORY_REPORT'),
+            (bool)$formValues['category_report_enable_module'],
+            array('helpTextId' => array('SYS_ENABLE_CATEGORY_REPORT_DESC', array($gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'))))
+        );
+        // read all global lists
+        $sqlData = array();
+        $sqlData['query'] = 'SELECT crt_id, crt_name
+                       FROM ' . TBL_CATEGORY_REPORT . '
+                      WHERE crt_org_id = ? -- $gCurrentOrgId
+                   ORDER BY crt_name';
+        $sqlData['params'] = array($gCurrentOrgId);
+        $formCategoryReport->addSelectBoxFromSql(
+            'category_report_default_configuration',
+            $gL10n->get('SYS_DEFAULT_CONFIGURATION'),
+            $gDb,
+            $sqlData,
+            array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC')
+        );
+
+        $formCategoryReport->addSubmitButton(
+            'btn_save_category_report',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formCategoryReport->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.category-report.tpl');
+    }
+
+    /**
      * Generates the html of the form from the common preferences and will return the complete html.
      * @return string Returns the complete html of the form from the common preferences.
      * @throws AdmException|Exception
@@ -779,6 +829,232 @@ class Preferences extends HtmlPage
     }
 
     /**
+     * Generates the html of the form from the events preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the events preferences.
+     * @throws AdmException|Exception
+     */
+    public function createEventsForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formEvents = new Form(
+            'preferencesFormEvents',
+            'preferences/preferences.events.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Events')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formEvents->addSelectBox(
+            'events_module_enabled',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['events_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+        );
+        if ($gSettingsManager->getBool('events_rooms_enabled')) {
+            $selectBoxEntries = array(
+                'detail' => $gL10n->get('SYS_DETAILED'),
+                'compact' => $gL10n->get('SYS_COMPACT'),
+                'room' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_ROOM'),
+                'participants' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_PARTICIPANTS'),
+                'description' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_DESCRIPTION')
+            );
+        } else {
+            $selectBoxEntries = array(
+                'detail' => $gL10n->get('SYS_DETAILED'),
+                'compact' => $gL10n->get('SYS_COMPACT'),
+                'participants' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_PARTICIPANTS'),
+                'description' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_DESCRIPTION')
+            );
+        }
+        $formEvents->addSelectBox(
+            'events_view',
+            $gL10n->get('SYS_DEFAULT_VIEW'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['events_view'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_DEFAULT_VIEW_DESC', array('SYS_DETAILED', 'SYS_COMPACT')))
+        );
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $formEvents->addSelectBox(
+            'events_per_page',
+            $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+        );
+        $formEvents->addCheckbox(
+            'events_ical_export_enabled',
+            $gL10n->get('SYS_ENABLE_ICAL_EXPORT'),
+            (bool)$formValues['events_ical_export_enabled'],
+            array('helpTextId' => 'SYS_ENABLE_ICAL_EXPORT_DESC')
+        );
+        $formEvents->addCheckbox(
+            'events_show_map_link',
+            $gL10n->get('SYS_SHOW_MAP_LINK'),
+            (bool)$formValues['events_show_map_link'],
+            array('helpTextId' => 'SYS_SHOW_MAP_LINK_DESC')
+        );
+        $sqlData = array();
+        $sqlData['query'] = 'SELECT lst_id, lst_name
+                       FROM ' . TBL_LISTS . '
+                      WHERE lst_org_id = ? -- $gCurrentOrgId
+                        AND lst_global = true
+                   ORDER BY lst_name, lst_timestamp DESC';
+        $sqlData['params'] = array($gCurrentOrgId);
+        $formEvents->addSelectBoxFromSql(
+            'events_list_configuration',
+            $gL10n->get('SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION'),
+            $gDb,
+            $sqlData,
+            array('defaultValue' => $formValues['events_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION_DESC')
+        );
+        $formEvents->addCheckbox(
+            'events_save_cancellations',
+            $gL10n->get('SYS_SAVE_ALL_CANCELLATIONS'),
+            (bool)$formValues['events_save_cancellations'],
+            array('helpTextId' => 'SYS_SAVE_ALL_CANCELLATIONS_DESC')
+        );
+        $formEvents->addCheckbox(
+            'events_may_take_part',
+            $gL10n->get('SYS_MAYBE_PARTICIPATE'),
+            (bool)$formValues['events_may_take_part'],
+            array('helpTextId' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'SYS_CANCEL', 'SYS_EVENT_PARTICIPATION_TENTATIVE')))
+        );
+        $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'EVT')) . '">
+            <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CALENDAR_MANAGEMENT') . '</a>';
+        $formEvents->addCustomContent(
+            'editCalendars',
+            $gL10n->get('SYS_EDIT_CALENDARS'),
+            $html,
+            array('helpTextId' => 'SYS_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+        );
+        $formEvents->addCheckbox(
+            'events_rooms_enabled',
+            $gL10n->get('SYS_ROOM_SELECTABLE'),
+            (bool)$formValues['events_rooms_enabled'],
+            array('helpTextId' => 'SYS_ROOM_SELECTABLE_DESC')
+        );
+        $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms.php">
+            <i class="bi bi-house-door-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_ROOM_MANAGEMENT') . '</a>';
+        $formEvents->addCustomContent(
+            'editRooms',
+            $gL10n->get('SYS_EDIT_ROOMS'),
+            $html,
+            array('helpTextId' => 'SYS_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+        );
+        $formEvents->addSubmitButton(
+            'btn_save_events',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formEvents->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.events.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the groups and roles preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the groups and roles preferences.
+     * @throws AdmException|Exception
+     */
+    public function createGroupsRolesForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formGroupsRoles = new Form(
+            'preferencesFormGroupsRoles',
+            'preferences/preferences.groups-roles.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'GroupsRoles')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formGroupsRoles->addCheckbox(
+            'groups_roles_enable_module',
+            $gL10n->get('SYS_ENABLE_GROUPS_ROLES'),
+            (bool)$formValues['groups_roles_enable_module'],
+            array('helpTextId' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
+        );
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $formGroupsRoles->addSelectBox(
+            'groups_roles_members_per_page',
+            $gL10n->get('SYS_MEMBERS_PER_PAGE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['groups_roles_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MEMBERS_PER_PAGE_DESC')
+        );
+        // read all global lists
+        $sqlData = array();
+        $sqlData['query'] = 'SELECT lst_id, lst_name
+                       FROM ' . TBL_LISTS . '
+                      WHERE lst_org_id = ? -- $gCurrentOrgId
+                        AND lst_global = true
+                   ORDER BY lst_name, lst_timestamp DESC';
+        $sqlData['params'] = array($gCurrentOrgId);
+        $formGroupsRoles->addSelectBoxFromSql(
+            'groups_roles_default_configuration',
+            $gL10n->get('SYS_DEFAULT_CONFIGURATION'),
+            $gDb,
+            $sqlData,
+            array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_CONFIGURATION_LISTS_DESC')
+        );
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_NOBODY'),
+            '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_ASSIGN_ROLES')))),
+            '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
+        );
+        $formGroupsRoles->addSelectBox(
+            'groups_roles_show_former_members',
+            $gL10n->get('SYS_SHOW_FORMER_MEMBERS'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
+        );
+        $selectBoxEntriesExport = array(
+            '0' => $gL10n->get('SYS_NOBODY'),
+            '1' => $gL10n->get('SYS_ALL'),
+            '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
+        );
+        $formGroupsRoles->addSelectBox(
+            'groups_roles_export',
+            $gL10n->get('SYS_EXPORT_LISTS'),
+            $selectBoxEntriesExport,
+            array('defaultValue' => $formValues['groups_roles_export'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_EXPORT_LISTS_DESC')
+        );
+        $selectBoxEntriesEditLists = array(
+            '1' => $gL10n->get('SYS_ALL'),
+            '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER')))),
+            '3' => $gL10n->get('SYS_ADMINISTRATORS')
+        );
+        $formGroupsRoles->addSelectBox(
+            'groups_roles_edit_lists',
+            $gL10n->get('SYS_CONFIGURE_LISTS'),
+            $selectBoxEntriesEditLists,
+            array('defaultValue' => $formValues['groups_roles_edit_lists'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_CONFIGURE_LISTS_DESC')
+        );
+        $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'ROL')) . '">
+            <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
+        $formGroupsRoles->addCustomContent(
+            'editCategories',
+            $gL10n->get('SYS_EDIT_CATEGORIES'),
+            $html,
+            array('helpTextId' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+        $formGroupsRoles->addSubmitButton(
+            'btn_save_lists',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formGroupsRoles->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.groups-roles.tpl');
+    }
+
+    /**
      * Generates the html of the form from the guestbook preferences and will return the complete html.
      * @return string Returns the complete html of the form from the guestbook preferences.
      * @throws AdmException|Exception
@@ -857,6 +1133,179 @@ class Preferences extends HtmlPage
         $smarty = $this->getSmartyTemplate();
         $formGuestbook->addToSmarty($smarty);
         return $smarty->fetch('preferences/preferences.guestbook.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the links preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the links preferences.
+     * @throws AdmException|Exception
+     */
+    public function createLinksForm(): string
+    {
+        global $gL10n, $gSettingsManager;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formWeblinks = new Form(
+            'preferencesFormLinks',
+            'preferences/preferences.links.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Links')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formWeblinks->addSelectBox(
+            'enable_weblinks_module',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['enable_weblinks_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+        );
+        $formWeblinks->addInput(
+            'weblinks_per_page',
+            $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
+            $formValues['weblinks_per_page'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
+        );
+        $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
+        $formWeblinks->addSelectBox(
+            'weblinks_target',
+            $gL10n->get('SYS_LINK_TARGET'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['weblinks_target'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_LINK_TARGET_DESC')
+        );
+        $formWeblinks->addInput(
+            'weblinks_redirect_seconds',
+            $gL10n->get('SYS_DISPLAY_REDIRECT'),
+            $formValues['weblinks_redirect_seconds'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_DISPLAY_REDIRECT_DESC')
+        );
+        $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'LNK')) . '">
+            <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
+        $formWeblinks->addCustomContent(
+            'editCategories',
+            $gL10n->get('SYS_EDIT_CATEGORIES'),
+            $html,
+            array('helpTextId' => $gL10n->get('SYS_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+        );
+        $formWeblinks->addSubmitButton(
+            'btn_save_links',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formWeblinks->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.links.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the messages preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the messages preferences.
+     * @throws AdmException|Exception
+     */
+    public function createMessagesForm(): string
+    {
+        global $gL10n, $gSettingsManager;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formMessages = new Form(
+            'preferencesFormMessages',
+            'preferences/preferences.messages.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Messages')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formMessages->addCheckbox(
+            'enable_mail_module',
+            $gL10n->get('SYS_ENABLE_EMAILS'),
+            (bool)$formValues['enable_mail_module'],
+            array('helpTextId' => 'SYS_ENABLE_EMAILS_DESC')
+        );
+        $formMessages->addCheckbox(
+            'enable_pm_module',
+            $gL10n->get('SYS_ENABLE_PM_MODULE'),
+            (bool)$formValues['enable_pm_module'],
+            array('helpTextId' => 'SYS_ENABLE_PM_MODULE_DESC')
+        );
+        $formMessages->addCheckbox(
+            'enable_mail_captcha',
+            $gL10n->get('ORG_ENABLE_CAPTCHA'),
+            (bool)$formValues['enable_mail_captcha'],
+            array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
+        );
+
+        $formMessages->addSelectBox(
+            'mail_template',
+            $gL10n->get('SYS_EMAIL_TEMPLATE'),
+            $this->getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
+            array(
+                'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.html', '', $formValues['mail_template']))),
+                'showContextDependentFirstEntry' => true,
+                'arrayKeyIsNotValue' => true,
+                'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
+                'helpTextId' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
+        );
+        $formMessages->addInput(
+            'mail_max_receiver',
+            $gL10n->get('SYS_MAX_RECEIVER'),
+            $formValues['mail_max_receiver'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_MAX_RECEIVER_DESC')
+        );
+        $formMessages->addCheckbox(
+            'mail_send_to_all_addresses',
+            $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'),
+            (bool)$formValues['mail_send_to_all_addresses'],
+            array('helpTextId' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
+        );
+        $formMessages->addCheckbox(
+            'mail_show_former',
+            $gL10n->get('SYS_SEND_EMAIL_FORMER'),
+            (bool)$formValues['mail_show_former'],
+            array('helpTextId' => 'SYS_SEND_EMAIL_FORMER_DESC')
+        );
+        $formMessages->addInput(
+            'max_email_attachment_size',
+            $gL10n->get('SYS_ATTACHMENT_SIZE') . ' (MB)',
+            $formValues['max_email_attachment_size'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'step' => 1, 'helpTextId' => 'SYS_ATTACHMENT_SIZE_DESC')
+        );
+        $formMessages->addCheckbox(
+            'mail_save_attachments',
+            $gL10n->get('SYS_SAVE_ATTACHMENTS'),
+            (bool)$formValues['mail_save_attachments'],
+            array('helpTextId' => 'SYS_SAVE_ATTACHMENTS_DESC')
+        );
+        $formMessages->addCheckbox(
+            'mail_html_registered_users',
+            $gL10n->get('SYS_HTML_MAILS_REGISTERED_USERS'),
+            (bool)$formValues['mail_html_registered_users'],
+            array('helpTextId' => 'SYS_HTML_MAILS_REGISTERED_USERS_DESC')
+        );
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formMessages->addSelectBox(
+            'mail_delivery_confirmation',
+            $gL10n->get('SYS_DELIVERY_CONFIRMATION'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_delivery_confirmation'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DELIVERY_CONFIRMATION_DESC')
+        );
+        $formMessages->addSubmitButton(
+            'btn_save_messages',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formMessages->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.messages.tpl');
     }
 
     /**
@@ -943,7 +1392,6 @@ class Preferences extends HtmlPage
         $formOrganization->addToSmarty($smarty);
         return $smarty->fetch('preferences/preferences.organization.tpl');
     }
-
 
     /**
      * Generates the html of the form from the photos preferences and will return the complete html.
@@ -1157,6 +1605,84 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         return $smarty->fetch('preferences/preferences.php.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the profile preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the profile preferences.
+     * @throws AdmException|Exception
+     */
+    public function createProfileForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gCurrentOrganization;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formProfile = new Form(
+            'preferencesFormProfile',
+            'preferences/preferences.profile.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'save', 'form' => 'Profile')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields.php">
+            <i class="bi bi-ui-radios"></i>' . $gL10n->get('SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION') . '</a>';
+        $formProfile->addCustomContent(
+            'editProfileFields',
+            $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
+            $html,
+            array('helpTextId' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+        );
+        $formProfile->addCheckbox(
+            'profile_log_edit_fields',
+            $gL10n->get('SYS_LOG_ALL_CHANGES'),
+            (bool)$formValues['profile_log_edit_fields'],
+            array('helpTextId' => 'SYS_LOG_ALL_CHANGES_DESC')
+        );
+        $formProfile->addCheckbox(
+            'profile_show_map_link',
+            $gL10n->get('SYS_SHOW_MAP_LINK'),
+            (bool)$formValues['profile_show_map_link'],
+            array('helpTextId' => 'SYS_SHOW_MAP_LINK_PROFILE_DESC')
+        );
+        $formProfile->addCheckbox(
+            'profile_show_roles',
+            $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP'),
+            (bool)$formValues['profile_show_roles'],
+            array('helpTextId' => 'SYS_SHOW_ROLE_MEMBERSHIP_DESC')
+        );
+        $formProfile->addCheckbox(
+            'profile_show_former_roles',
+            $gL10n->get('SYS_SHOW_FORMER_ROLE_MEMBERSHIP'),
+            (bool)$formValues['profile_show_former_roles'],
+            array('helpTextId' => 'SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
+        );
+
+        if ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization()) {
+            $formProfile->addCheckbox(
+                'profile_show_extern_roles',
+                $gL10n->get('SYS_SHOW_ROLES_OTHER_ORGANIZATIONS'),
+                (bool)$formValues['profile_show_extern_roles'],
+                array('helpTextId' => 'SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC')
+            );
+        }
+
+        $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
+        $formProfile->addSelectBox(
+            'profile_photo_storage',
+            $gL10n->get('SYS_LOCATION_PROFILE_PICTURES'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['profile_photo_storage'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_LOCATION_PROFILE_PICTURES_DESC')
+        );
+        $formProfile->addSubmitButton(
+            'btn_save_profile',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formProfile->addToSmarty($smarty);
+        return $smarty->fetch('preferences/preferences.profile.tpl');
     }
 
     /**
@@ -1602,7 +2128,7 @@ class Preferences extends HtmlPage
         $this->addJavascript(
             '
             var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation",
-                "Announcements", "Contacts", "DocumentsFiles", "Photos", "Guestbook"];
+                "Announcements", "Contacts", "DocumentsFiles", "Photos", "Guestbook", "GroupsRoles", "CategoryReport", "Messages", "Profile", "Events", "Links"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#admidioPanelPreferences" + panels[i] + " .accordion-header").click(function (e) {
