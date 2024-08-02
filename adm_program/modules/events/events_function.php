@@ -158,12 +158,6 @@ try {
             throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
         }
 
-        if (!isset($_POST['dat_highlight'])) {
-            $_POST['dat_highlight'] = 0;
-        }
-        if (!isset($_POST['dat_all_day'])) {
-            $_POST['dat_all_day'] = 0;
-        }
         if (!isset($_POST['dat_room_id'])) {
             $_POST['dat_room_id'] = 0;
         }
@@ -179,12 +173,6 @@ try {
                 // minimum value must fit to current number of participants
                 $_POST['dat_max_members'] = $totalMembers;
             }
-        }
-        if (!isset($_POST['dat_allow_comments'])) {
-            $_POST['dat_allow_comments'] = 0;
-        }
-        if (!isset($_POST['dat_additional_guests'])) {
-            $_POST['dat_additional_guests'] = 0;
         }
 
         if ($_POST['event_participation_possible'] == 1 && (string)$_POST['event_deadline'] !== '') {

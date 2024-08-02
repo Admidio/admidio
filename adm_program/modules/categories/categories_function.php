@@ -136,16 +136,6 @@ try {
             }
         }
 
-        // for all checkboxes it must be checked whether a value was transferred here, if not,
-        // hen set the value here to 0, since 0 is not transferred
-        $checkboxes = array('cat_default');
-
-        foreach ($checkboxes as $value) {
-            if (!isset($_POST[$value]) || $_POST[$value] != 1) {
-                $_POST[$value] = 0;
-            }
-        }
-
         // POST Writing variables to the UserField object
         foreach ($_POST as $key => $value) { // TODO possible security issue
             if (str_starts_with($key, 'cat_')) {

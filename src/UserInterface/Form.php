@@ -1615,11 +1615,11 @@ class Form
      * Validates the input of a form against the form definition. Therefore, this method needs
      * the $_POST variable as parameter $fieldValues. An exception is thrown if a required
      * form field doesn't have a value in the $fieldValues array.
-     * @param array $fieldValues Array with field name as key and field value as array value.
+     * @param array &$fieldValues Array with field name as key and field value as array value.
      * @return void
      * @throws \AdmException
      */
-    public function validate(array $fieldValues)
+    public function validate(array &$fieldValues)
     {
         // check the CSRF token of the form against the session token
         \SecurityUtils::validateCsrfToken($fieldValues['admidio-csrf-token']);
@@ -1632,6 +1632,12 @@ class Form
         }
 
         foreach($this->elements as $element) {
+            // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
+            if (isset($element['type']) && $element['type'] === 'checkbox'
+            && !isset($fieldValues[$element['id']])) {
+                $fieldValues[$element['id']] = "0";
+            }
+
             // check if element is required and given value in array $fieldValues is empty
             if (isset($element['property']) && $element['property'] === $this::FIELD_REQUIRED) {
                if (isset($fieldValues[$element['id']])) {

@@ -272,6 +272,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formAnnouncements->addToSmarty($smarty);
+        $_SESSION['preferencesAnnouncementsForm'] = $formAnnouncements;
         return $smarty->fetch('preferences/preferences.announcements.tpl');
     }
 
@@ -392,6 +393,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formCaptcha->addToSmarty($smarty);
+        $_SESSION['preferencesCaptchaForm'] = $formCaptcha;
         return $smarty->fetch('preferences/preferences.captcha.tpl');
     }
 
@@ -442,6 +444,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formCategoryReport->addToSmarty($smarty);
+        $_SESSION['preferencesCategoryReportForm'] = $formCategoryReport;
         return $smarty->fetch('preferences/preferences.category-report.tpl');
     }
 
@@ -544,6 +547,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formCommon->addToSmarty($smarty);
+        $_SESSION['preferencesCommonForm'] = $formCommon;
         return $smarty->fetch('preferences/preferences.common.tpl');
     }
 
@@ -627,6 +631,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formContacts->addToSmarty($smarty);
+        $_SESSION['preferencesContactsForm'] = $formContacts;
         return $smarty->fetch('preferences/preferences.contacts.tpl');
     }
 
@@ -668,6 +673,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formDocumentsFiles->addToSmarty($smarty);
+        $_SESSION['preferencesDocumentsFilesForm'] = $formDocumentsFiles;
         return $smarty->fetch('preferences/preferences.documents-files.tpl');
     }
 
@@ -825,6 +831,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formEmailDispatch->addToSmarty($smarty);
+        $_SESSION['preferencesEmailDispatchForm'] = $formEmailDispatch;
         return $smarty->fetch('preferences/preferences.email-dispatch.tpl');
     }
 
@@ -954,6 +961,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formEvents->addToSmarty($smarty);
+        $_SESSION['preferencesEventsForm'] = $formEvents;
         return $smarty->fetch('preferences/preferences.events.tpl');
     }
 
@@ -1051,6 +1059,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formGroupsRoles->addToSmarty($smarty);
+        $_SESSION['preferencesGroupsRolesForm'] = $formGroupsRoles;
         return $smarty->fetch('preferences/preferences.groups-roles.tpl');
     }
 
@@ -1132,6 +1141,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formGuestbook->addToSmarty($smarty);
+        $_SESSION['preferencesGuestbookForm'] = $formGuestbook;
         return $smarty->fetch('preferences/preferences.guestbook.tpl');
     }
 
@@ -1199,6 +1209,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formWeblinks->addToSmarty($smarty);
+        $_SESSION['preferencesLinksForm'] = $formWeblinks;
         return $smarty->fetch('preferences/preferences.links.tpl');
     }
 
@@ -1305,6 +1316,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formMessages->addToSmarty($smarty);
+        $_SESSION['preferencesMessagesForm'] = $formMessages;
         return $smarty->fetch('preferences/preferences.messages.tpl');
     }
 
@@ -1349,7 +1361,7 @@ class Preferences extends HtmlPage
             'email_administrator',
             $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
             $formValues['email_administrator'],
-            array('type' => 'email', 'maxLength' => 50, 'helpTextId' => 'SYS_EMAIL_ADMINISTRATOR_DESC')
+            array('type' => 'email', 'property' => Form::FIELD_REQUIRED, 'maxLength' => 50, 'helpTextId' => 'SYS_EMAIL_ADMINISTRATOR_DESC')
         );
 
         if ($gCurrentOrganization->countAllRecords() > 1) {
@@ -1390,6 +1402,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formOrganization->addToSmarty($smarty);
+        $_SESSION['preferencesOrganizationForm'] = $formOrganization;
         return $smarty->fetch('preferences/preferences.organization.tpl');
     }
 
@@ -1518,6 +1531,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formPhotos->addToSmarty($smarty);
+        $_SESSION['preferencesPhotosForm'] = $formPhotos;
         return $smarty->fetch('preferences/preferences.photos.tpl');
     }
 
@@ -1682,6 +1696,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formProfile->addToSmarty($smarty);
+        $_SESSION['preferencesProfileForm'] = $formProfile;
         return $smarty->fetch('preferences/preferences.profile.tpl');
     }
 
@@ -1725,13 +1740,13 @@ class Preferences extends HtmlPage
             'system_date',
             $gL10n->get('ORG_DATE_FORMAT'),
             $formValues['system_date'],
-            array('maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            array('property' => Form::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
         );
         $formRegionalSettings->addInput(
             'system_time',
             $gL10n->get('ORG_TIME_FORMAT'),
             $formValues['system_time'],
-            array('maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            array('property' => Form::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
         );
         $formRegionalSettings->addInput(
             'system_currency',
@@ -1747,6 +1762,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formRegionalSettings->addToSmarty($smarty);
+        $_SESSION['preferencesRegionalSettingsForm'] = $formRegionalSettings;
         return $smarty->fetch('preferences/preferences.regional-settings.tpl');
     }
 
@@ -1806,6 +1822,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formRegistration->addToSmarty($smarty);
+        $_SESSION['preferencesRegistrationForm'] = $formRegistration;
         return $smarty->fetch('preferences/preferences.registration.tpl');
     }
 
@@ -1866,6 +1883,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formSecurity->addToSmarty($smarty);
+        $_SESSION['preferencesSecurityForm'] = $formSecurity;
         return $smarty->fetch('preferences/preferences.security.tpl');
     }
 
@@ -2073,6 +2091,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formSystemNotification->addToSmarty($smarty);
+        $_SESSION['preferencesSystemNotificationForm'] = $formSystemNotification;
         return $smarty->fetch('preferences/preferences.system-notifications.tpl');
     }
 

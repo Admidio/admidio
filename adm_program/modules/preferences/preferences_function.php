@@ -20,6 +20,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\UserInterface\Form;
 use Admidio\UserInterface\Preferences;
 
 try {
@@ -61,14 +62,12 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
+            $form = $_SESSION['preferences' . $getForm . 'Form'];
+            $form->validate($_POST);
+
             // first check the fields of the submitted form
             switch ($getForm) {
                 case 'Common':
-                    $checkboxes = array(
-                        'system_cookie_note', 'enable_rss',
-                        'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
-                    );
-
                     if (!StringUtils::strIsValidFolderName($_POST['theme'])
                         || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html')) {
                         throw new AdmException('ORG_INVALID_THEME');
@@ -82,10 +81,6 @@ try {
                     break;
 
                 case 'Security':
-                    $checkboxes = array(
-                        'enable_auto_login', 'enable_password_recovery'
-                    );
-
                     if (!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0) {
                         throw new AdmException('SYS_FIELD_EMPTY', array('ORG_AUTOMATIC_LOGOUT_AFTER'));
                     }
@@ -98,18 +93,8 @@ try {
                     break;
 
                 case 'Organization':
-                    $checkboxes = array('system_organization_select');
-
-                    if ($_POST['org_longname'] === '') {
-                        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
-                    }
-
-                    if ($_POST['email_administrator'] === '') {
-                        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_EMAIL_ADMINISTRATOR'));
-                    } else {
-                        if (!StringUtils::strValidCharacters($_POST['email_administrator'], 'email')) {
-                            throw new AdmException('SYS_EMAIL_INVALID', array('SYS_EMAIL_ADMINISTRATOR'));
-                        }
+                    if (!StringUtils::strValidCharacters($_POST['email_administrator'], 'email')) {
+                        throw new AdmException('SYS_EMAIL_INVALID', array('SYS_EMAIL_ADMINISTRATOR'));
                     }
                     break;
 
@@ -118,23 +103,9 @@ try {
                         || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml')) {
                         throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
                     }
-
-                    if ($_POST['system_date'] === '') {
-                        throw new AdmException('SYS_FIELD_EMPTY', array('ORG_DATE_FORMAT'));
-                    }
-
-                    if ($_POST['system_time'] === '') {
-                        throw new AdmException('SYS_FIELD_EMPTY', array('ORG_TIME_FORMAT'));
-                    }
-                    break;
-
-                case 'Registration':
-                    $checkboxes = array('registration_adopt_all_data', 'registration_enable_module', 'registration_enable_captcha', 'registration_manual_approval', 'registration_send_notification_email');
                     break;
 
                 case 'EmailDispatch':
-                    $checkboxes = array('mail_into_to', 'mail_smtp_auth');
-
                     if ($_POST['mail_sendmail_address'] !== '') {
                         if (!StringUtils::strValidCharacters($_POST['mail_sendmail_address'], 'email')) {
                             throw new AdmException('SYS_EMAIL_INVALID', array('SYS_SENDER_EMAIL'));
@@ -142,39 +113,20 @@ try {
                     }
                     break;
 
+                case 'Registration':
                 case 'SystemNotifications':
-                    $checkboxes = array('system_notifications_enabled', 'system_notifications_new_entries', 'system_notifications_profile_changes');
-                    break;
-
                 case 'Captcha':
                 case 'Announcements':
-                    break;
-
                 case 'Contacts':
-                    $checkboxes = array('contacts_show_all', 'contacts_user_relations_enabled');
-                    break;
-
                 case 'DocumentsFiles':
-                    $checkboxes = array('documents_files_module_enabled');
-                    break;
-
                 case 'Guestbook':
-                    $checkboxes = array('enable_guestbook_captcha', 'enable_gbook_comments4all',
-                        'enable_intial_comments_loading');
-                    break;
-
                 case 'GroupsRoles':
-                    $checkboxes = array('groups_roles_enable_module');
-                    break;
-
                 case 'CategoryReport':
-                    $checkboxes = array('category_report_enable_module');
+                case 'Profile':
+                case 'Events':
                     break;
 
                 case 'Messages':
-                    $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha',
-                        'mail_send_to_all_addresses', 'mail_html_registered_users', 'mail_show_former', 'mail_save_attachments');
-
                     // get real filename of the template file
                     if ($_POST['mail_template'] !== $gSettingsManager->getString('mail_template')) {
                         $_POST['mail_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $_POST['mail_template']);
@@ -182,21 +134,10 @@ try {
                     break;
 
                 case 'Photos':
-                    $checkboxes = array('photo_download_enabled', 'photo_keep_original', 'photo_ecard_enabled');
-
                     // get real filename of the template file
                     if ($_POST['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
                         $_POST['photo_ecard_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $_POST['photo_ecard_template']);
                     }
-                    break;
-
-                case 'Profile':
-                    $checkboxes = array('profile_log_edit_fields', 'profile_show_map_link', 'profile_show_roles',
-                        'profile_show_former_roles', 'profile_show_extern_roles');
-                    break;
-
-                case 'Events':
-                    $checkboxes = array('events_ical_export_enabled', 'events_show_map_link', 'events_rooms_enabled', 'events_save_cancellations', 'events_may_take_part');
                     break;
 
                 case 'Links':
@@ -207,14 +148,6 @@ try {
 
                 default:
                     throw new AdmException('SYS_INVALID_PAGE_VIEW');
-            }
-
-            // check every checkbox if a value was committed
-            // if no value is found then set 0 because 0 will not be committed in a html checkbox element
-            foreach ($checkboxes as $value) {
-                if (!isset($_POST[$value]) || $_POST[$value] != 1) {
-                    $_POST[$value] = 0;
-                }
             }
 
             // then update the database with the new values
