@@ -168,7 +168,7 @@ class HtmlPageInstallation extends HtmlPage
         $this->smarty->assign('outputMode', $outputMode);
         $this->smarty->assign('messageHeadline', $headline);
         $this->smarty->assign('messageText', $text);
-        $this->addTemplateFile('system/message.tpl');
+        $this->addTemplateFile('message.tpl');
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
 

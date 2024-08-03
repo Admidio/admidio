@@ -46,12 +46,10 @@
   <string name="INS_DATABASE_HOST_INFO">Enter the name of the database server here. This can be a URL or localhost if the database is running on the same machine as the webpage.</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
-  <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>
   <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here.</string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MySQL and PostgreSQL.</string>
-  <string name="INS_DATABASE_USER_INVALID">The database user contains invalid characters!</string>
   <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Creating database</string>
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
@@ -87,7 +85,6 @@
   <string name="INS_SETUP_WAS_SUCCESSFUL">Set up successful</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">We would appreciate a lot if you could support the development of Admidio with your donation!</string>
   <string name="INS_TABLE_PREFIX">Table prefix</string>
-  <string name="INS_TABLE_PREFIX_INVALID">Table prefix includes invalid character!</string>
   <string name="INS_TEAMS">Teams</string>
   <string name="INS_TRAINING">Training</string>
   <string name="INS_UPDATE">Update</string>

@@ -95,7 +95,7 @@ if (isset($_POST['db_host'])) {
         $page->showMessage(
             'error',
             $gL10n->get('SYS_NOTE'),
-            $gL10n->get('INS_DATABASE_NAME_INVALID'),
+            $gL10n->get('SYS_FIELD_INVALID_INPUT', array('SYS_DATABASE')),
             $gL10n->get('SYS_BACK'),
             'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
@@ -109,7 +109,7 @@ if (isset($_POST['db_host'])) {
         $page->showMessage(
             'error',
             $gL10n->get('SYS_NOTE'),
-            $gL10n->get('INS_DATABASE_USER_INVALID'),
+            $gL10n->get('SYS_FIELD_INVALID_INPUT', array('SYS_USERNAME')),
             $gL10n->get('SYS_BACK'),
             'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
@@ -129,7 +129,7 @@ if (isset($_POST['db_host'])) {
         $page->showMessage(
             'error',
             $gL10n->get('SYS_NOTE'),
-            $gL10n->get('INS_TABLE_PREFIX_INVALID'),
+            $gL10n->get('SYS_FIELD_INVALID_INPUT', array('INS_TABLE_PREFIX')),
             $gL10n->get('SYS_BACK'),
             'bi-arrow-left-circle-fill',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
