@@ -57,11 +57,6 @@ try {
 
     switch ($getMode) {
         case 'save':
-            $checkboxes = array();
-
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
             if (isset($_SESSION['preferences' . $getForm . 'Form'])) {
                 $form = $_SESSION['preferences' . $getForm . 'Form'];
                 $form->validate($_POST);
@@ -147,76 +142,9 @@ try {
 
         // Returns the html of the requested form
         case 'html_form':
-            $preferencesUI = new Preferences('common');
-
-            switch ($getForm) {
-                case 'Common':
-                    echo $preferencesUI->createCommonForm();
-                    break;
-                case 'Security':
-                    echo $preferencesUI->createSecurityForm();
-                    break;
-                case 'Organization':
-                    echo $preferencesUI->createOrganizationForm();
-                    break;
-                case 'RegionalSettings':
-                    echo $preferencesUI->createRegionalSettingsForm();
-                    break;
-                case 'Registration':
-                    echo $preferencesUI->createRegistrationForm();
-                    break;
-                case 'EmailDispatch':
-                    echo $preferencesUI->createEmailDispatchForm();
-                    break;
-                case 'SystemNotifications':
-                    echo $preferencesUI->createSystemNotificationsForm();
-                    break;
-                case 'Captcha':
-                    echo $preferencesUI->createCaptchaForm();
-                    break;
-                case 'AdmidioUpdate':
-                    echo $preferencesUI->createAdmidioUpdateForm();
-                    break;
-                case 'PHP':
-                    echo $preferencesUI->createPHPForm();
-                    break;
-                case 'SystemInformation':
-                    echo $preferencesUI->createSystemInformationForm();
-                    break;
-                case 'Announcements':
-                    echo $preferencesUI->createAnnouncementsForm();
-                    break;
-                case 'Contacts':
-                    echo $preferencesUI->createContactsForm();
-                    break;
-                case 'DocumentsFiles':
-                    echo $preferencesUI->createDocumentsFilesForm();
-                    break;
-                case 'Photos':
-                    echo $preferencesUI->createPhotosForm();
-                    break;
-                case 'Guestbook':
-                    echo $preferencesUI->createGuestbookForm();
-                    break;
-                case 'GroupsRoles':
-                    echo $preferencesUI->createGroupsRolesForm();
-                    break;
-                case 'CategoryReport':
-                    echo $preferencesUI->createCategoryReportForm();
-                    break;
-                case 'Messages':
-                    echo $preferencesUI->createMessagesForm();
-                    break;
-                case 'Profile':
-                    echo $preferencesUI->createProfileForm();
-                    break;
-                case 'Events':
-                    echo $preferencesUI->createEventsForm();
-                    break;
-                case 'Links':
-                    echo $preferencesUI->createLinksForm();
-                    break;
-            }
+            $preferencesUI = new Preferences('preferencesForm');
+            $methodName = 'create' . $getForm . 'Form';
+            echo $preferencesUI->{$methodName}();
             break;
 
         // show welcome dialog for new organization
