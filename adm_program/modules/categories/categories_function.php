@@ -92,8 +92,12 @@ try {
     if ($postMode === 'edit') {
         // create or edit category
 
-        $categoryEditForm = $_SESSION['categories_edit_form'];
-        $categoryEditForm->validate($_POST);
+        if (isset($_SESSION['categories_edit_form'])) {
+            $categoryEditForm = $_SESSION['categories_edit_form'];
+            $categoryEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
         if ($postType !== 'ROL'
             && ((bool)$category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)

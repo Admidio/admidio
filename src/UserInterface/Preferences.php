@@ -519,13 +519,13 @@ class Preferences extends HtmlPage
             'system_url_data_protection',
             $gL10n->get('SYS_DATA_PROTECTION'),
             $formValues['system_url_data_protection'],
-            array('maxLength' => 250, 'helpTextId' => 'SYS_DATA_PROTECTION_DESC')
+            array('type' => 'url', 'maxLength' => 250, 'helpTextId' => 'SYS_DATA_PROTECTION_DESC')
         );
         $formCommon->addInput(
             'system_url_imprint',
             $gL10n->get('SYS_IMPRINT'),
             $formValues['system_url_imprint'],
-            array('maxLength' => 250, 'helpTextId' => 'SYS_IMPRINT_DESC')
+            array('type' => 'url', 'maxLength' => 250, 'helpTextId' => 'SYS_IMPRINT_DESC')
         );
         $formCommon->addCheckbox(
             'system_js_editor_enabled',
@@ -706,7 +706,7 @@ class Preferences extends HtmlPage
             'mail_sendmail_address',
             $gL10n->get('SYS_SENDER_EMAIL'),
             $formValues['mail_sendmail_address'],
-            array('maxLength' => 50, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
+            array('type' => 'email', 'maxLength' => 50, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
         );
         $formEmailDispatch->addInput(
             'mail_sendmail_name',

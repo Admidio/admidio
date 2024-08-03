@@ -45,8 +45,12 @@ try {
     }
 
     if ($getMode === 'edit') {
-        $announcementEditForm = $_SESSION['announcements_edit_form'];
-        $announcementEditForm->validate($_POST);
+        if (isset($_SESSION['announcements_edit_form'])) {
+            $announcementEditForm = $_SESSION['announcements_edit_form'];
+            $announcementEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
         // make html in description secure
         $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');

@@ -28,8 +28,12 @@ try {
     }
 
     if ($getMode === 'import') {
-        $contactsImportAssignFieldsForm = $_SESSION['contacts_import_assign_fields_form'];
-        $contactsImportAssignFieldsForm->validate($_POST);
+        if (isset($_SESSION['contacts_import_assign_fields_form'])) {
+            $contactsImportAssignFieldsForm = $_SESSION['contacts_import_assign_fields_form'];
+            $contactsImportAssignFieldsForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
         // go through each line from the file one by one and create the user in the DB
         $line = reset($_SESSION['import_data']);

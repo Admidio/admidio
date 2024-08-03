@@ -42,12 +42,16 @@ try {
     $postRoleUUID = admFuncVariableIsValid($_POST, 'import_role_uuid', 'uuid');
     $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', array('requireValue' => true));
 
-    $contactsImportForm = $_SESSION['contacts_import_form'];
-    $contactsImportForm->validate($_POST);
-
     // only authorized users should import users
     if (!$gCurrentUser->editUsers()) {
         throw new AdmException('SYS_NO_RIGHTS');
+    }
+
+    if (isset($_SESSION['contacts_import_form'])) {
+        $contactsImportForm = $_SESSION['contacts_import_form'];
+        $contactsImportForm->validate($_POST);
+    } else {
+        throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
 
     $importfile = $_FILES['userfile']['tmp_name'][0];

@@ -34,6 +34,7 @@ namespace Admidio\UserInterface;
 use AdmException;
 use Smarty\Exception;
 use Smarty\Smarty;
+use StringUtils;
 
 class Form
 {
@@ -1632,27 +1633,48 @@ class Form
         }
 
         foreach($this->elements as $element) {
-            // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
-            if (isset($element['type']) && $element['type'] === 'checkbox'
-            && !isset($fieldValues[$element['id']])) {
-                $fieldValues[$element['id']] = "0";
-            }
-
             // check if element is required and given value in array $fieldValues is empty
             if (isset($element['property']) && $element['property'] === $this::FIELD_REQUIRED) {
-               if (isset($fieldValues[$element['id']])) {
-                   if ((is_array($fieldValues[$element['id']]) && count($fieldValues[$element['id']]) === 0)
-                       || (!is_array($fieldValues[$element['id']]) && (string)$fieldValues[$element['id']] === '')) {
-                       throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
-                   }
-               } elseif ($element['type'] === 'file') {
-                   // file field has no POST variable but the FILES array should be filled
-                   if (count($_FILES) === 0 || strlen($_FILES['userfile']['tmp_name'][0]) === 0) {
-                       throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
-                   }
-               } else {
-                   throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
-               }
+                if (isset($fieldValues[$element['id']])) {
+                    if ((is_array($fieldValues[$element['id']]) && count($fieldValues[$element['id']]) === 0)
+                        || (!is_array($fieldValues[$element['id']]) && (string)$fieldValues[$element['id']] === '')) {
+                        throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                    }
+                } elseif ($element['type'] === 'file') {
+                    // file field has no POST variable but the FILES array should be filled
+                    if (count($_FILES) === 0 || strlen($_FILES['userfile']['tmp_name'][0]) === 0) {
+                        throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                    }
+                } else {
+                    throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                }
+            }
+
+            // check value depending on the field type
+            if (isset($element['type'])) {
+                switch ($element['type']) {
+                    case 'checkbox':
+                        // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
+                        if (!isset($fieldValues[$element['id']])) {
+                            $fieldValues[$element['id']] = "0";
+                        }
+                        break;
+                    case 'email':
+                        if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'email')) {
+                            throw new AdmException('SYS_EMAIL_INVALID', array($element['label']));
+                        }
+                        break;
+                    case 'number':
+                        if (!is_numeric($fieldValues[$element['id']]) || $fieldValues[$element['id']] < 0) {
+                            throw new AdmException('SYS_FIELD_INVALID_INPUT', array($element['label']));
+                        }
+                        break;
+                    case 'url':
+                        if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
+                            throw new AdmException('SYS_URL_INVALID_CHAR', array($element['label']));
+                        }
+                        break;
+                }
             }
         }
     }

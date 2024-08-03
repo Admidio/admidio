@@ -82,12 +82,13 @@ try {
     if ($getMode === 'edit') {
         // Create a new event or edit an existing event
 
-        $eventEditForm = $_SESSION['events_edit_form'];
-        $eventEditForm->validate($_POST);
-
-        if (!isset($_POST['event_participation_possible'])) {
-            $_POST['event_participation_possible'] = 0;
+        if (isset($_SESSION['events_edit_form'])) {
+            $eventEditForm = $_SESSION['events_edit_form'];
+            $eventEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
+
         if ($_POST['event_participation_possible'] == 1
             && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)) {
             throw new AdmException('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));

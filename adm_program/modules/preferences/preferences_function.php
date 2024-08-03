@@ -62,8 +62,12 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
-            $form = $_SESSION['preferences' . $getForm . 'Form'];
-            $form->validate($_POST);
+            if (isset($_SESSION['preferences' . $getForm . 'Form'])) {
+                $form = $_SESSION['preferences' . $getForm . 'Form'];
+                $form->validate($_POST);
+            } else {
+                throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            }
 
             // first check the fields of the submitted form
             switch ($getForm) {
@@ -72,29 +76,13 @@ try {
                         || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html')) {
                         throw new AdmException('ORG_INVALID_THEME');
                     }
-                    if ($_POST['system_url_imprint'] !== '' && !StringUtils::strValidCharacters($_POST['system_url_imprint'], 'url')) {
-                        throw new AdmException('SYS_URL_INVALID_CHAR', array('SYS_IMPRINT'));
-                    }
-                    if ($_POST['system_url_data_protection'] !== '' && !StringUtils::strValidCharacters($_POST['system_url_data_protection'], 'url')) {
-                        throw new AdmException('SYS_URL_INVALID_CHAR', array('SYS_DATA_PROTECTION'));
-                    }
                     break;
 
                 case 'Security':
-                    if (!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0) {
-                        throw new AdmException('SYS_FIELD_EMPTY', array('ORG_AUTOMATIC_LOGOUT_AFTER'));
-                    }
-
                     if (!isset($_POST['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login')) {
                         // if auto login was deactivated than delete all saved logins
                         $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
                         $gDb->queryPrepared($sql);
-                    }
-                    break;
-
-                case 'Organization':
-                    if (!StringUtils::strValidCharacters($_POST['email_administrator'], 'email')) {
-                        throw new AdmException('SYS_EMAIL_INVALID', array('SYS_EMAIL_ADMINISTRATOR'));
                     }
                     break;
 
@@ -103,27 +91,6 @@ try {
                         || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml')) {
                         throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
                     }
-                    break;
-
-                case 'EmailDispatch':
-                    if ($_POST['mail_sendmail_address'] !== '') {
-                        if (!StringUtils::strValidCharacters($_POST['mail_sendmail_address'], 'email')) {
-                            throw new AdmException('SYS_EMAIL_INVALID', array('SYS_SENDER_EMAIL'));
-                        }
-                    }
-                    break;
-
-                case 'Registration':
-                case 'SystemNotifications':
-                case 'Captcha':
-                case 'Announcements':
-                case 'Contacts':
-                case 'DocumentsFiles':
-                case 'Guestbook':
-                case 'GroupsRoles':
-                case 'CategoryReport':
-                case 'Profile':
-                case 'Events':
                     break;
 
                 case 'Messages':
@@ -139,15 +106,6 @@ try {
                         $_POST['photo_ecard_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $_POST['photo_ecard_template']);
                     }
                     break;
-
-                case 'Links':
-                    if (!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0) {
-                        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_DISPLAY_REDIRECT'));
-                    }
-                    break;
-
-                default:
-                    throw new AdmException('SYS_INVALID_PAGE_VIEW');
             }
 
             // then update the database with the new values
@@ -466,7 +424,7 @@ try {
     }
 } catch (AdmException|Exception $exception) {
     if ($getMode === 'save') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        echo json_encode(array('status' => 'error', 'message' => $exception->getMessage()));
     } elseif ($getMode === 'html_form') {
         echo $exception->getMessage();
     } else {
