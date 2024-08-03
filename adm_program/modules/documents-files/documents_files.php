@@ -12,10 +12,9 @@
  * folder_uuid : UUID of the current folder that should be shown
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
 
 try {
-    unset($_SESSION['documents_files_request']);
+    require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
     $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');

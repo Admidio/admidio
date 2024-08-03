@@ -12,10 +12,12 @@
  * folder_uuid : UUID of the current folder to configure the rights
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid', array('requireValue' => true));
 
@@ -110,11 +112,15 @@ try {
 
     // create html page object
     $page = new HtmlPage('admidio-documents-files-config-folder', $headline);
-
-    $page->addHtml('<p class="lead admidio-max-with">' . $gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))) . '</p>');
+    $page->assignSmartyVariable('folderName', $folder->getValue('fol_name'));
 
     // show form
-    $form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'save_access', 'folder_uuid' => $getFolderUuid)), $page);
+    $form = new Form(
+        'folder_permissions_form',
+        'modules/documents-files.folder.permissions.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'permissions', 'folder_uuid' => $getFolderUuid)),
+        $page
+    );
     $form->addSelectBoxFromSql(
         'adm_roles_view_right',
         $gL10n->get('SYS_VISIBLE_FOR'),
@@ -148,11 +154,12 @@ try {
     $form->addSubmitButton(
         'btn_save',
         $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
+        array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
     );
 
     // add form to html page and show page
-    $page->addHtml($form->show());
+    $form->addToHtmlPage();
+    $_SESSION['documentsFilesFolderPermissionsForm'] = $form;
     $page->show();
 } catch (Exception|AdmException|\Smarty\Exception $e) {
     $gMessage->show($e->getMessage());

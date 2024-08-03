@@ -12,7 +12,7 @@
  * mode   :  create_folder - Create folder
  *           delete_folder - Delete folder
  *           delete_file   - Delete file
- *           save_access   - Save access to folder
+ *           permissions   - Save permissions of folder
  *           add    - Add file/folder to database
  *           rename - Rename file/folder
  *           move   - Move file / folder
@@ -25,7 +25,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 try {
     // Initialize and check the parameters
-    $getMode       = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create_folder', 'delete_folder', 'delete_file', 'add', 'rename', 'move', 'save_access')));
+    $getMode       = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create_folder', 'delete_folder', 'delete_file', 'add', 'rename', 'move', 'permissions')));
     $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
     $getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
     $getName       = admFuncVariableIsValid($_GET, 'name', 'file');
@@ -34,8 +34,6 @@ try {
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
         throw new AdmException('SYS_MODULE_DISABLED');
     }
-
-    $_SESSION['documents_files_request'] = $_POST;
 
     // Check path in adm_my_files and create if necessary
     FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName());
@@ -50,7 +48,7 @@ try {
     }
 
     // check the CSRF token of the form against the session token
-    if (in_array($getMode, array('create_folder', 'delete_folder', 'delete_file', 'rename', 'save_access'))) {
+    if (in_array($getMode, array('delete_folder', 'delete_file'))) {
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
 
@@ -69,8 +67,6 @@ try {
             // if no file id was set then show error
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
-
-        unset($_SESSION['documents_files_request']);
     }
 
     // create folder
@@ -83,6 +79,13 @@ try {
         try {
             $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
             $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
+
+            if (isset($_SESSION['documentsFilesFolderNewForm'])) {
+                $documentsFilesFolderNewForm = $_SESSION['documentsFilesFolderNewForm'];
+                $documentsFilesFolderNewForm->validate($_POST);
+            } else {
+                throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            }
 
             // Test if the folder already exists in the file system
             if (is_dir($folder->getFullFolderPath() . '/' . $newFolderName)) {
@@ -113,15 +116,12 @@ try {
                     $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
                 } else {
                     // the corresponding folder could not be created
-                    $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php');
-                    $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
-                    // => EXIT
+                    throw new AdmException($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
                 }
 
-                unset($_SESSION['documents_files_request']);
                 $gNavigation->deleteLastUrl();
-                admRedirect($gNavigation->getUrl());
-                // => EXIT
+                echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+                exit();
             }
         } catch (AdmException $e) {
             if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
@@ -130,8 +130,7 @@ try {
             if ($e->getMessage() === 'SYS_FILENAME_INVALID') {
                 $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
             }
-            $e->showHtml();
-            // => EXIT
+            throw new AdmException($e->getMessage());
         }
     }
 
@@ -145,6 +144,13 @@ try {
         try {
             $newName = admFuncVariableIsValid($_POST, 'new_name', 'file', array('requireValue' => true));
             $newDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
+
+            if (isset($_SESSION['documentsFilesRenameForm'])) {
+                $documentsFilesRenameForm = $_SESSION['documentsFilesRenameForm'];
+                $documentsFilesRenameForm->validate($_POST);
+            } else {
+                throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            }
 
             if ($getFileUuid !== '') {
                 // get recordset of current file from database and throw exception if necessary
@@ -174,10 +180,9 @@ try {
                     $file->setValue('fil_description', $newDescription);
                     $file->save();
 
-                    unset($_SESSION['documents_files_request']);
                     $gNavigation->deleteLastUrl();
-                    admRedirect($gNavigation->getUrl());
-                    // => EXIT
+                    echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+                    exit();
                 }
             } elseif ($getFolderUuid !== '') {
                 // main folder could not be renamed
@@ -209,10 +214,9 @@ try {
                     $folder->setValue('fol_description', $newDescription);
                     $folder->save();
 
-                    unset($_SESSION['documents_files_request']);
                     $gNavigation->deleteLastUrl();
-                    admRedirect($gNavigation->getUrl());
-                    // => EXIT
+                    echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+                    exit();
                 }
             }
         }
@@ -224,8 +228,7 @@ try {
             if ($e->getMessage() === 'SYS_FILENAME_INVALID' && $getFolderUuid !== '') {
                 $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
             }
-            $e->showHtml();
-            // => EXIT
+            throw new AdmException($e->getMessage());
         }
     }
 
@@ -240,8 +243,6 @@ try {
                 echo 'done';
             }
         }
-
-        unset($_SESSION['documents_files_request']);
     }
 
     // add file / folder to database
@@ -266,7 +267,7 @@ try {
     }
 
     // save view or upload rights for a folder
-    elseif ($getMode === 'save_access') {
+    elseif ($getMode === 'permissions') {
         if (!isset($_POST['adm_roles_view_right'])) {
             throw new AdmException('SYS_FIELD_EMPTY', array('SYS_VISIBLE_FOR'));
         }
@@ -284,6 +285,13 @@ try {
         // only users with documents & files administration rights should set new roles rights
         if (!$gCurrentUser->adminDocumentsFiles()) {
             throw new AdmException('SYS_NO_RIGHTS');
+        }
+
+        if (isset($_SESSION['documentsFilesFolderPermissionsForm'])) {
+            $documentsFilesFolderPermissionsForm = $_SESSION['documentsFilesFolderPermissionsForm'];
+            $documentsFilesFolderPermissionsForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         $postIntRolesViewRight   = array_map('intval', $_POST['adm_roles_view_right']);
@@ -323,17 +331,22 @@ try {
 
         $folder->addRolesOnFolder('folder_upload', $addUploadRoles);
         $folder->removeRolesOnFolder('folder_upload', $removeUploadRoles);
-
         $folder->save();
 
-        unset($_SESSION['documents_files_request']);
         $gNavigation->deleteLastUrl();
-        admRedirect($gNavigation->getUrl());
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     }
     // move file to another folder
     elseif ($getMode === 'move') {
         $destFolderUUID = admFuncVariableIsValid($_POST, 'dest_folder_uuid', 'string', array('requireValue' => true));
+
+        if (isset($_SESSION['documentsFilesMoveForm'])) {
+            $documentsFilesMoveForm = $_SESSION['documentsFilesMoveForm'];
+            $documentsFilesMoveForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
         if ($getFileUuid !== '') {
             $file = new TableFile($gDb);
@@ -346,13 +359,13 @@ try {
         }
 
         $gNavigation->deleteLastUrl();
-        admRedirect($gNavigation->getUrl());
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     }
 } catch (AdmException | Exception | RuntimeException | UnexpectedValueException $e) {
     if (in_array($getMode, array('delete_file', 'delete_folder'))) {
         echo $e->getMessage();
     } else {
-        $gMessage->show($e->getMessage());
-
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
 }
