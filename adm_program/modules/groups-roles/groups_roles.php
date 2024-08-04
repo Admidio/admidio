@@ -70,9 +70,6 @@ try {
         $headline .= ' - '.$category->getValue('cat_name');
     }
 
-    // create html page object
-    $groupsRoles = new ModuleGroupsRoles('admidio-groups-roles', $headline);
-
     if ($getShow === 'card') {
         // Navigation of the module starts here
         $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-people-fill');
@@ -81,6 +78,8 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_PERMISSIONS'));
     }
 
+    // create html page object
+    $groupsRoles = new ModuleGroupsRoles('admidio-groups-roles', $headline);
 
     if ($gCurrentUser->manageRoles()) {
         // show link to create new role
