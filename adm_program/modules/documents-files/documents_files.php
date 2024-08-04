@@ -80,7 +80,7 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_documents_permissions',
                 $gL10n->get('SYS_PERMISSIONS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_config.php', array('folder_uuid' => $getFolderUUID)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_permissions.php', array('folder_uuid' => $getFolderUUID)),
                 'bi-shield-lock-fill'
             );
         }
