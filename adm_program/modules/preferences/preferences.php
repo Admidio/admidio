@@ -20,7 +20,6 @@
  * panel    : The name of the preferences panel that should be shown or saved.
  ***********************************************************************************************
  */
-use Admidio\UserInterface\Form;
 use Admidio\UserInterface\Preferences;
 
 try {

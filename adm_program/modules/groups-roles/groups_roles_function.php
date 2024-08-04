@@ -35,8 +35,10 @@ try {
             throw new AdmException('SYS_NO_RIGHTS');
         }
 
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        if(in_array($getMode, array('delete', 'activate', 'deactivate'))) {
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        }
     }
 
     $eventRole = false;
@@ -52,23 +54,17 @@ try {
         }
     }
 
-    $_SESSION['roles_request'] = $_POST;
-    $rolName = $role->getValue('rol_name');
-
     if ($getMode === 'edit') {
         // create or edit role
 
-        if (!array_key_exists('rol_name', $_POST) || $_POST['rol_name'] === '') {
-            // not all fields are filled
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
+        if (isset($_SESSION['groupsRolesEditForm'])) {
+            $groupsRolesEditForm = $_SESSION['groupsRolesEditForm'];
+            $groupsRolesEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
-        if (strlen($_POST['rol_cat_id']) === 0) {
-            // not all fields are filled
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CATEGORY'));
-        }
-
-        if ($rolName !== $_POST['rol_name']) {
+        if ($role->getValue('rol_name') !== $_POST['rol_name']) {
             // check if the role already exists
             $sql = 'SELECT COUNT(*) AS count
                       FROM ' . TBL_ROLES . '
@@ -89,33 +85,6 @@ try {
 
             if ($pdoStatement->fetchColumn() > 0) {
                 throw new AdmException('SYS_ROLE_NAME_EXISTS');
-            }
-        }
-
-        // for all checkboxes must be checked if a value was transferred
-        // if not, then set the value here to 0, since 0 is not transferred.
-
-        $checkboxes = array(
-            'rol_assign_roles',
-            'rol_approve_users',
-            'rol_announcements',
-            'rol_events',
-            'rol_default_registration',
-            'rol_photo',
-            'rol_documents_files',
-            'rol_guestbook',
-            'rol_guestbook_comments',
-            'rol_edit_user',
-            'rol_weblinks',
-            'rol_all_lists_view',
-            'rol_mail_to_all',
-            'rol_profile'
-        );
-
-        foreach ($checkboxes as $value) {
-            // initialize the roles rights if value not set, it's not = 1, it's an event role
-            if (!isset($_POST[$value]) || $_POST[$value] != 1 || $eventRole) {
-                $_POST[$value] = 0;
             }
         }
 
@@ -184,7 +153,7 @@ try {
             $numFreePlaces = $role->countVacancies();
 
             if ($numFreePlaces < 0) {
-                throw new AdmException('SYS_ROLE_MAX_MEMBERS', array($rolName));
+                throw new AdmException('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name')));
             }
         }
 
@@ -238,11 +207,8 @@ try {
         $gDb->endTransaction();
 
         $gNavigation->deleteLastUrl();
-        unset($_SESSION['roles_request']);
-
-        $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-        $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     } elseif ($getMode === 'deactivate') {
         // set role inactive
         // event roles and administrator cannot be set inactive
@@ -298,6 +264,8 @@ try {
 } catch (AdmException|Exception $e) {
     if (in_array($getMode, array('delete', 'activate', 'deactivate'))) {
         echo $e->getMessage();
+    } elseif ($getMode === 'edit') {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());
     }

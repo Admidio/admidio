@@ -1660,17 +1660,20 @@ class Form
                         }
                         break;
                     case 'email':
-                        if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'email')) {
+                        if (strlen($fieldValues[$element['id']]) > 0
+                            && !StringUtils::strValidCharacters($fieldValues[$element['id']], 'email')) {
                             throw new AdmException('SYS_EMAIL_INVALID', array($element['label']));
                         }
                         break;
                     case 'number':
-                        if (!is_numeric($fieldValues[$element['id']]) || $fieldValues[$element['id']] < 0) {
+                        if (strlen($fieldValues[$element['id']]) > 0
+                            && (!is_numeric($fieldValues[$element['id']]) || $fieldValues[$element['id']] < 0)) {
                             throw new AdmException('SYS_FIELD_INVALID_INPUT', array($element['label']));
                         }
                         break;
                     case 'url':
-                        if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
+                        if (strlen($fieldValues[$element['id']]) > 0
+                            && !StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
                             throw new AdmException('SYS_URL_INVALID_CHAR', array($element['label']));
                         }
                         break;
