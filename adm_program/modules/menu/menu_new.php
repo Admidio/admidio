@@ -12,10 +12,12 @@
  * menu_uuid: UUID of the menu entry that should be edited
  *
  ****************************************************************************/
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid', 'uuid');
 
@@ -84,13 +86,6 @@ try {
         $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
     }
 
-    if (isset($_SESSION['menu_request'])) {
-        // due to incorrect input, the user has returned to this form
-        // Now write the previously entered content into the object
-        $menu->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['menu_request'])));
-        unset($_SESSION['menu_request']);
-    }
-
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
@@ -120,27 +115,32 @@ try {
     }
 
     // show form
-    $form = new HtmlForm('menu_edit_form', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', $page);
+    $form = new Form(
+        'menu_edit_form',
+        'modules/menu.edit.tpl',
+        ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php',
+        $page
+    );
     // add a hidden field with context information
     $form->addInput(
         'mode',
         'mode',
         'edit',
-        array('property' => HtmlForm::FIELD_HIDDEN)
+        array('property' => Form::FIELD_HIDDEN)
     );
     $form->addInput(
         'uuid',
         'uuid',
         $getMenuUuid,
-        array('property' => HtmlForm::FIELD_HIDDEN)
+        array('property' => Form::FIELD_HIDDEN)
     );
 
-    $fieldRequired = HtmlForm::FIELD_REQUIRED;
-    $fieldDefault = HtmlForm::FIELD_DEFAULT;
+    $fieldRequired = Form::FIELD_REQUIRED;
+    $fieldDefault = Form::FIELD_DEFAULT;
 
     if ($menu->getValue('men_standard')) {
-        $fieldRequired = HtmlForm::FIELD_DISABLED;
-        $fieldDefault = HtmlForm::FIELD_DISABLED;
+        $fieldRequired = Form::FIELD_DISABLED;
+        $fieldDefault = Form::FIELD_DISABLED;
     }
 
     $menuList = array();
@@ -150,7 +150,7 @@ try {
         'men_name',
         $gL10n->get('SYS_NAME'),
         htmlentities($menu->getValue('men_name', 'database'), ENT_QUOTES),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'SYS_MENU_NAME_DESC')
+        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'SYS_MENU_NAME_DESC')
     );
 
     if ($getMenuUuid !== '') {
@@ -158,7 +158,7 @@ try {
             'men_name_intern',
             $gL10n->get('SYS_INTERNAL_NAME'),
             $menu->getValue('men_name_intern'),
-            array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
+            array('maxLength' => 100, 'property' => Form::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
         );
     }
 
@@ -169,13 +169,12 @@ try {
         2,
         array('maxLength' => 4000)
     );
-
     $form->addSelectBox(
         'men_men_id_parent',
         $gL10n->get('SYS_MENU_LEVEL'),
         $menuList,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
+            'property' => Form::FIELD_REQUIRED,
             'defaultValue' => (int)$menu->getValue('men_men_id_parent')
         )
     );
@@ -195,7 +194,6 @@ try {
                 'helpTextId' => 'SYS_MENU_MODULE_RIGHTS_DESC'
             )
         );
-
         $form->addSelectBox(
             'menu_view',
             $gL10n->get('SYS_VISIBLE_FOR'),
@@ -228,16 +226,19 @@ try {
             'class' => 'form-control-small'
         )
     );
-
     $form->addSubmitButton(
         'btn_save',
         $gL10n->get('SYS_SAVE'),
         array('icon' => 'bi-check-lg')
     );
 
-// add form to html page and show page
-    $page->addHtml($form->show());
+    $page->assignSmartyVariable('nameUserCreated', $menu->getNameOfCreatingUser());
+    $page->assignSmartyVariable('timestampUserCreated', $menu->getValue('men_timestamp_create'));
+    $page->assignSmartyVariable('nameLastUserEdited', $menu->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('timestampLastUserEdited', $menu->getValue('men_timestamp_change'));
+    $form->addToHtmlPage();
+    $_SESSION['menuEditForm'] = $form;
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

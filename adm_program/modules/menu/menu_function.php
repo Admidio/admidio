@@ -39,12 +39,14 @@ try {
         $menu->readDataByUuid($postMenuUUID);
     }
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     // create menu or update it
     if ($postMode === 'edit') {
-        $_SESSION['menu_request'] = $_POST;
+        if (isset($_SESSION['menuEditForm'])) {
+            $menuEditForm = $_SESSION['menuEditForm'];
+            $menuEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
         $postIdParent = admFuncVariableIsValid($_POST, 'men_men_id_parent', 'int');
         $postComId = admFuncVariableIsValid($_POST, 'men_com_id', 'int');
@@ -58,19 +60,13 @@ try {
             $postUrl = $menu->getValue('men_url');
         }
 
-        // Check if mandatory fields are filled
-        if ($postName === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
-        }
-
+        // check url here because it could be a real url or a relative local url
         if (!StringUtils::strValidCharacters($postUrl, 'url')
             && !preg_match('=^[^*;:~<>|\"\\\\]+$=', $postUrl)) {
             throw new AdmException('SYS_URL_INVALID_CHAR', array('SYS_URL'));
         }
 
-        if ($postUrl === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_URL'));
-        }
+        $gDb->startTransaction();
 
         $menu->setValue('men_icon', $postIcon);
         $menu->setValue('men_men_id_parent', $postIdParent);
@@ -92,18 +88,22 @@ try {
         $rightMenuView = new RolesRights($gDb, 'menu_view', $menu->getValue('men_id'));
         $rightMenuView->saveRoles($menuViewRoles);
 
+        $gDb->endTransaction();
+
         if ($gNavigation->count() > 1) {
             $gNavigation->deleteLastUrl();
         } else {
             $gNavigation->addUrl($gHomepage, 'Home');
         }
 
-        unset($_SESSION['menu_request']);
-
-        header('Location: ' . $gNavigation->getUrl());
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
         exit();
     } elseif ($postMode === 'delete') {
         // delete menu
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         if ($menu->delete()) {
             echo 'done';
         }
@@ -112,6 +112,9 @@ try {
         // Update menu sequence
         $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
 
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         if ($menu->moveSequence($postDirection)) {
             echo 'done';
         } else {
@@ -119,10 +122,10 @@ try {
         }
         exit();
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if (in_array($postMode, array('delete', 'sequence'))) {
         echo $e->getMessage();
     } else {
-        $gMessage->show($e->getMessage());
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
 }

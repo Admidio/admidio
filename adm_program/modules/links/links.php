@@ -17,8 +17,6 @@ use Admidio\UserInterface\Form;
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
-    unset($_SESSION['links_request']);
-
     // Initialize and check the parameters
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
@@ -213,6 +211,6 @@ try {
 
     // show html of complete page
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

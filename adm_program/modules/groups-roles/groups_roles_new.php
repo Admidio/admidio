@@ -378,13 +378,13 @@ try {
     $page->assignSmartyVariable('eventRole', $eventRole);
     $page->assignSmartyVariable('roleName', $roleName);
     $page->assignSmartyVariable('nameUserCreated', $role->getNameOfCreatingUser());
-    $page->assignSmartyVariable('timestampUserCreated', $role->getValue('cat_timestamp_create'));
+    $page->assignSmartyVariable('timestampUserCreated', $role->getValue('rol_timestamp_create'));
     $page->assignSmartyVariable('nameLastUserEdited', $role->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('timestampLastUserEdited', $role->getValue('cat_timestamp_change'));
+    $page->assignSmartyVariable('timestampLastUserEdited', $role->getValue('rol_timestamp_change'));
     $form->addToHtmlPage();
     $_SESSION['groupsRolesEditForm'] = $form;
 
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

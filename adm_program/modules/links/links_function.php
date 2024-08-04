@@ -14,10 +14,11 @@
  *             delete : Delete link
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create', 'delete')));
@@ -48,20 +49,15 @@ try {
     }
 
     if ($getMode === 'create') {
-        $_SESSION['links_request'] = $_POST;
-
-        if (strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LINK_NAME'));
-        }
-        if (strlen(StringUtils::strStripTags($_POST['lnk_url'])) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LINK_ADDRESS'));
-        }
-        if (strlen($_POST['lnk_cat_id']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CATEGORY'));
-        }
-
         // make html in description secure
         $_POST['lnk_description'] = admFuncVariableIsValid($_POST, 'lnk_description', 'html');
+
+        if (isset($_SESSION['linksEditForm'])) {
+            $linksEditForm = $_SESSION['linksEditForm'];
+            $linksEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
         // POST variables to the announcements object
         foreach ($_POST as $key => $value) { // TODO possible security issue
@@ -70,21 +66,14 @@ try {
             }
         }
 
-        // Set link counter to 0
-        if ($weblinkIsNew) {
-            $link->setValue('lnk_counter', 0);
-        }
-
         if ($link->save()) {
             // Notification an email for new or changed entries to all members of the notification role
             $link->sendNotification();
         }
 
-        unset($_SESSION['links_request']);
         $gNavigation->deleteLastUrl();
-
-        admRedirect($gNavigation->getUrl());
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     } elseif ($getMode === 'delete') {
         // delete current announcements, right checks were done before
         $link->delete();
@@ -92,9 +81,9 @@ try {
         // Delete successful -> Return for XMLHttpRequest
         echo 'done';
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($getMode === 'create') {
-        $gMessage->show($e->getMessage());
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         echo $e->getMessage();
     }
