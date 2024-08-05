@@ -208,7 +208,6 @@ class Form
     public function addButton(string $id, string $text, array $options = array())
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template' => 'sys-template-parts/form.button.tpl',
             'type'     => 'button',
             'id'       => $id,
             'value'    => $text
@@ -252,18 +251,12 @@ class Form
             $("#' . $id . '_refresh").click(function() {
                 document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
             });', true);
-        $this->elements[$id] = array(
-            'template' => 'sys-template-parts/form/captcha.tpl',
-            'class'    => $class,
-            'id'       => $id
-        );
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,
             $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'),
             '',
             array(
-                'template'   => 'sys-template-parts/form.captcha.tpl',
                 'property'   => self::FIELD_REQUIRED,
                 'helpTextId' => 'SYS_CAPTCHA_DESCRIPTION',
                 'class'      => 'form-control-small'
@@ -296,7 +289,6 @@ class Form
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template' => 'sys-template-parts/form.checkbox.tpl',
             'type'     => 'checkbox',
             'id'       => $id,
             'label'    => $label
@@ -347,7 +339,6 @@ class Form
     public function addCustomContent(string $id, string $label, string $content, array $options = array())
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template' => 'sys-template-parts/form.custom-content.tpl',
             'type'     => 'custom-content',
             'id'       => $id,
             'label'    => $label,
@@ -386,7 +377,6 @@ class Form
         $flagLabelVertical = $this->type;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template'      => 'sys-template-parts/form.editor.tpl',
             'type'          => 'editor',
             'id'            => $id,
             'label'         => $label,
@@ -482,7 +472,6 @@ class Form
     public function addFileUpload(string $id, string $label, array $options = array())
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template'           => 'sys-template-parts/form.file.tpl',
             'type'               => 'file',
             'id'                 => $id,
             'label'              => $label,
@@ -573,7 +562,6 @@ class Form
         global $gSettingsManager, $gLogger, $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template'         => 'sys-template-parts/form.input.tpl',
             'type'             => 'text',
             'id'               => $id,
             'label'            => $label,
@@ -776,7 +764,6 @@ class Form
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template'         => 'sys-template-parts/form.multiline.tpl',
             'type'             => 'multiline',
             'id'               => $id,
             'label'            => $label,
@@ -865,7 +852,6 @@ class Form
     public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template'         => 'sys-template-parts/form.radio.tpl',
             'type'             => 'radio',
             'id'               => $id,
             'label'            => $label,
@@ -945,7 +931,6 @@ class Form
         global $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template'                       => 'sys-template-parts/form.select.tpl',
             'type'                           => 'select',
             'id'                             => $id,
             'label'                          => $label,
@@ -1285,7 +1270,6 @@ class Form
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'template'                       => 'sys-template-parts/form.select.tpl',
             'type'                           => 'select',
             'id'                             => $id,
             'label'                          => $label,
@@ -1436,7 +1420,6 @@ class Form
     public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
         $this->elements[$id] = $this->buildOptionsArray(array_replace(array(
-            'template' => 'sys-template-parts/form.static.tpl',
             'type'     => 'static',
             'id'       => $id,
             'label'    => $label,
@@ -1536,7 +1519,6 @@ class Form
     protected function buildOptionsArray(array $options): array
     {
         $optionsDefault = array(
-            'template'     => '',
             'property'     => self::FIELD_DEFAULT,
             'type'         => '',
             'data-admidio' => '',
@@ -1648,10 +1630,14 @@ class Form
                 } else {
                     throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
                 }
+            } elseif (isset($element['property']) && $element['property'] === $this::FIELD_DISABLED) {
+                if (isset($fieldValues[$element['id']])) {
+                    unset($fieldValues[$element['id']]);
+                }
             }
 
             // check value depending on the field type
-            if (isset($element['type'])) {
+            if (isset($element['type']) && isset($fieldValues[$element['id']])) {
                 switch ($element['type']) {
                     case 'checkbox':
                         // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked

@@ -13,12 +13,11 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
-use PHPMailer\PHPMailer\Exception;
 use Ramsey\Uuid\Uuid;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // Initialize and check the parameters
     $getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
@@ -27,7 +26,6 @@ try {
     $postFrom = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
     $postName = admFuncVariableIsValid($_POST, 'namefrom', 'string');
     $postSubject = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be sent without html conversations
-    $postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject', 'string');
     $postBody = admFuncVariableIsValid($_POST, 'msg_body', 'html');
     $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
     $postCaptcha = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
@@ -39,27 +37,15 @@ try {
         $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
     }
 
-    // save form data in session for back navigation
-    $_SESSION['message_request'] = $_POST;
-
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    if (isset($_SESSION['messagesSendForm'])) {
+        $messagesSendForm = $_SESSION['messagesSendForm'];
+        $messagesSendForm->validate($_POST);
+    } else {
+        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+    }
 
     if (isset($_POST['msg_to'])) {
         $postTo = $_POST['msg_to'];
-    } else {
-        // message when no receiver is given
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TO'));
-    }
-
-    if ($postSubjectSQL === '') {
-        // message when no subject is given
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_SUBJECT'));
-    }
-
-    if ($postBody === '') {
-        // message when no email content is given
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_MESSAGE'));
     }
 
     $message = new TableMessage($gDb);
@@ -110,13 +96,6 @@ try {
         $postName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
         if (!StringUtils::strValidCharacters($postFrom, 'email')) {
             $postFrom = $gCurrentUser->getValue('EMAIL');
-        }
-    } else {
-        if ($postName === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_YOUR_NAME'));
-        }
-        if (!StringUtils::strValidCharacters($postFrom, 'email')) {
-            throw new AdmException('SYS_EMAIL_INVALID', array('SYS_YOUR_EMAIL'));
         }
     }
 
@@ -361,20 +340,15 @@ try {
 
         // after sending remove the send page from navigation stack
         $gNavigation->deleteLastUrl();
-        unset($_SESSION['message_request']);
 
         // message if sending was OK
-        if ($gNavigation->count() > 0) {
-            $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-        } else {
-            $gMessage->setForwardUrl($gHomepage, 2000);
-        }
-
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
-            throw new AdmException('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
+            $successMessage = $gL10n->get('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         } else {
-            throw new AdmException('SYS_EMAIL_SEND');
+            $successMessage = $gL10n->get('SYS_EMAIL_SEND');
         }
+        echo json_encode(array('status' => 'success', 'message' => $successMessage, 'url' => $gNavigation->getUrl()));
+        exit();
     } else {
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             throw new AdmException('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult));
@@ -383,5 +357,5 @@ try {
         }
     }
 } catch (AdmException|Exception $e) {
-    $gMessage->show($e->getMessage());
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
