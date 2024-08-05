@@ -101,6 +101,6 @@ try {
     $_SESSION['announcements_edit_form'] = $form;
 
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

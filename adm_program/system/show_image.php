@@ -33,6 +33,6 @@ try {
     header('Content-Type: ' . $image->getMimeType());
     $image->copyToBrowser();
     $image->delete();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

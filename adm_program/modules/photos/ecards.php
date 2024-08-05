@@ -243,6 +243,6 @@ try {
     // add form to html page and show page
     $page->addHtml($form->show());
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception|RuntimeException $e) {
+} catch (AdmException|Exception|RuntimeException $e) {
     $gMessage->show($e->getMessage());
 }

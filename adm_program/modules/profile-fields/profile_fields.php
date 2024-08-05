@@ -200,6 +200,6 @@ try {
 
     $page->addHtml($table->show());
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

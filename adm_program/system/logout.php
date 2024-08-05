@@ -44,6 +44,6 @@ try {
     $gMessage->setForwardUrl($gHomepage, 2000);
     $gMessage->show($gL10n->get('SYS_LOGOUT_SUCCESSFUL'));
     // => EXIT
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

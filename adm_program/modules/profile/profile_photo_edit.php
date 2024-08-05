@@ -253,7 +253,7 @@ try {
         $page->addHtml($form->show());
         $page->show();
     }
-} catch (AdmException|Exception|\Smarty\Exception|RuntimeException $e) {
+} catch (AdmException|Exception|RuntimeException $e) {
     if ($getMode === 'delete') {
         echo $e->getMessage();
     } else {

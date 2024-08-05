@@ -213,6 +213,6 @@ try {
     $form->addToHtmlPage();
     $_SESSION['contacts_import_form'] = $form;
     $page->show();
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

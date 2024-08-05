@@ -124,6 +124,6 @@ try {
 
     $page->addHtml($contactsTable->show());// show html of complete page
     $page->show();
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

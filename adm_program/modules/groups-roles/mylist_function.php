@@ -130,6 +130,6 @@ try {
         admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php');
         // => EXIT
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

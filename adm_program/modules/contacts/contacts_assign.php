@@ -37,7 +37,7 @@ try {
     $newUser->setValue('FIRST_NAME', $postFirstname);
     $page->createContentAssignUser($newUser);
     echo $page->getPageContent();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($e->getMessage() === 'No similar users found.') {
         echo json_encode(array(
             'status' => 'success',

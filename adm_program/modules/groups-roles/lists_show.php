@@ -769,6 +769,6 @@ try {
     }
 } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
     echo $e->getMessage();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

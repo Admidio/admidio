@@ -148,6 +148,6 @@ try {
     $form->addToHtmlPage();
     $_SESSION['contacts_import_assign_fields_form'] = $form;
     $page->show();
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

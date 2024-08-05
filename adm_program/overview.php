@@ -28,6 +28,6 @@ try {
     $page->addTemplateFile('system/overview.tpl');
 
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

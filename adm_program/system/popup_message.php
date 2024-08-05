@@ -149,6 +149,6 @@ try {
 
     $gMessage->setYesNoButton('callUrlHideElement(\'' . $getElementId . '\', \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $mode . '\'' . $callbackFunction . ')');
     $gMessage->show($gL10n->get($text, array($getName, '')), $gL10n->get('SYS_NOTE'));
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

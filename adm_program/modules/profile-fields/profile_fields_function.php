@@ -178,7 +178,7 @@ try {
         }
         exit();
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if (in_array($postMode, array('delete', 'sequence'))) {
         echo $e->getMessage();
     } else {

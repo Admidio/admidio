@@ -75,7 +75,7 @@ try {
             // Delete successful -> return for XMLHttpRequest
         }
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($getMode === 'delete') {
         echo $e->getMessage();
     } else {

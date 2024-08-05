@@ -57,6 +57,6 @@ try {
         );
         echo $form->show();
     echo '</div>';
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

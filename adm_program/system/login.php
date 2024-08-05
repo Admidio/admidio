@@ -70,7 +70,7 @@ try {
         ));
         exit();
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if($getMode === 'check') {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

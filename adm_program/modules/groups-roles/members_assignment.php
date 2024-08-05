@@ -258,7 +258,7 @@ try {
 
         $page->show();
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
         // ajax mode then only show text if error occurs
         echo $e->getMessage();

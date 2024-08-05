@@ -190,7 +190,7 @@ try {
         echo $form->show();
         echo '</div>';
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($getMode === 'change') {
         echo $e->getMessage();
     } else {

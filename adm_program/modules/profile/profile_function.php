@@ -149,7 +149,7 @@ try {
 
         echo 'success';
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if (in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership'))) {
         echo $e->getMessage();
     } else {

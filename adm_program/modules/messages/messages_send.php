@@ -382,6 +382,6 @@ try {
             throw new AdmException('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
         }
     }
-} catch (AdmException|\Exception|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

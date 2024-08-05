@@ -98,7 +98,7 @@ try {
 
     // add form to html page and show page
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($getMsgUuid !== '') {
         echo $e->getMessage();
     } else {

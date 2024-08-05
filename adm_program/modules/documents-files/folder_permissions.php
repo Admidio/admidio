@@ -161,6 +161,6 @@ try {
     $form->addToHtmlPage();
     $_SESSION['documentsFilesFolderPermissionsForm'] = $form;
     $page->show();
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

@@ -89,7 +89,7 @@ try {
     $page->readData($getFolderUUID);
     $page->createContentList();
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($e->getMessage() === 'LOGIN') {
         require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
     } else {
