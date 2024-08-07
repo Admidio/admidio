@@ -341,7 +341,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $event->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $event->getValue('dat_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['events_edit_form'] = $form;
+    $_SESSION['eventsEditForm'] = $form;
 
     $page->show();
 } catch (AdmException|Exception $e) {

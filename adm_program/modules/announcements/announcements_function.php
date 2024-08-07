@@ -45,8 +45,8 @@ try {
     }
 
     if ($getMode === 'edit') {
-        if (isset($_SESSION['announcements_edit_form'])) {
-            $announcementEditForm = $_SESSION['announcements_edit_form'];
+        if (isset($_SESSION['announcementsEditForm'])) {
+            $announcementEditForm = $_SESSION['announcementsEditForm'];
             $announcementEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');

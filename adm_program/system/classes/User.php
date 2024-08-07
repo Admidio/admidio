@@ -706,7 +706,7 @@ class User extends TableAccess
      * Creates an array with all categories of one type where the user has the right to edit them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to edit them
-     * @throws Exception
+     * @throws AdmException
      */
     public function getAllEditableCategories(string $categoryType): array
     {
@@ -752,7 +752,7 @@ class User extends TableAccess
      * Creates an array with all categories of one type where the user has the right to view them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to view them
-     * @throws Exception
+     * @throws AdmException
      */
     public function getAllVisibleCategories(string $categoryType): array
     {

@@ -28,8 +28,8 @@ try {
     }
 
     if ($getMode === 'import') {
-        if (isset($_SESSION['contacts_import_assign_fields_form'])) {
-            $contactsImportAssignFieldsForm = $_SESSION['contacts_import_assign_fields_form'];
+        if (isset($_SESSION['contactsImportAssignFieldsForm'])) {
+            $contactsImportAssignFieldsForm = $_SESSION['contactsImportAssignFieldsForm'];
             $contactsImportAssignFieldsForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');

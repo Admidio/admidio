@@ -8,29 +8,42 @@
  */
 
 /**
- * Creates an Admidio specific form with special elements
+ * Creates an Admidio specific form
  *
- * This class inherits the common HtmlFormBasic class and extends their elements
- * with custom Admidio form elements. The class should be used to create the
- * html part of all Admidio forms. The Admidio elements will contain
- * the label of fields and some other specific features like an identification
- * of mandatory fields, help buttons and special css classes for every
- * element.
+ * This class should be used to create a form based on a Smarty template. Therefore, a method for each
+ * possible form field is available and could be customized through various parameters. If the form is fully
+ * defined with all fields it could be added to a HtmlPage object. The form object should be stored in
+ * session parameter so the input could later be validated against the form configuration.
  *
  * **Code examples**
  * ```
+ * script_a.php
  * // create a simple form with one input field and a button
- * $form = new HtmlForm('simple-form', 'next_page.php');
- * $form->openGroupBox('gbSimpleForm', $gL10n->get('SYS_SIMPLE_FORM'));
+ * $form = $form = new Form(
+ *    'announcements_edit_form',
+ *    'modules/announcements.edit.tpl',
+ *    ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php',
+ *    $htmlPage
+ * );
  * $form->addInput('name', $gL10n->get('SYS_NAME'), $formName);
  * $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'),
  *                     array('defaultValue' => 'simple', 'showContextDependentFirstEntry' => true));
- * $form->closeGroupBox();
  * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'bi-arrow-right-circle-fill'));
- * $form->show();
+ * $form->addToHtmlPage();
+ * $_SESSION['announcementsEditForm'] = $form;
+ *
+ * script_b.php
+ * // do the validation of the form input
+ * if (isset($_SESSION['announcementsEditForm'])) {
+ *    $announcementEditForm = $_SESSION['announcementsEditForm'];
+ *    $announcementEditForm->validate($_POST);
+ * } else {
+ *    throw new AdmException('SYS_INVALID_PAGE_VIEW');
+ * }
  * ```
  */
 namespace Admidio\UserInterface;
+use HtmlPage;
 use Smarty\Exception;
 use Smarty\Smarty;
 use AdmException;
@@ -58,9 +71,9 @@ class Form
      */
     protected bool $showRequiredFields;
     /**
-     * @var \HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
-    protected \HtmlPage $htmlPage;
+    protected HtmlPage $htmlPage;
     /**
      * @var string Javascript of this form that must be integrated in the html page.
      */
@@ -90,7 +103,7 @@ class Form
      * Constructor creates the form element
      * @param string $id ID of the form
      * @param string|null $action Action attribute of the form
-     * @param \HtmlPage|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @param HtmlPage|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
      * @param array $options (optional) An array with the following possible entries:
      *                           - **type** : Set the form type. Every type has some special features:
      *                             + **default**  : A form that can be used to edit and save data of a database table. The label
@@ -111,7 +124,7 @@ class Form
      *                             is set as default and need not set with this parameter.
      * @throws AdmException
      */
-    public function __construct(string $id, string $template, string $action = '', \HtmlPage $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $template, string $action = '', HtmlPage $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -167,7 +180,7 @@ class Form
             );
         }
 
-        if ($htmlPage instanceof \HtmlPage) {
+        if ($htmlPage instanceof HtmlPage) {
             $this->htmlPage =& $htmlPage;
         }
 
@@ -241,11 +254,9 @@ class Form
      * Add a captcha with an input field to the form. The captcha could be a picture with a character code
      * or a simple mathematical calculation that must be solved.
      * @param string $id ID of the captcha field. This will also be the name of the captcha field.
-     * @param string $class (optional) An additional css classname. The class **admTextInput**
-     *                      is set as default and need not set with this parameter.
      * @throws AdmException
      */
-    public function addCaptcha(string $id, string $class = '')
+    public function addCaptcha(string $id)
     {
         global $gL10n;
 
@@ -370,7 +381,7 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Exception
+     * @throws AdmException
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
     {
@@ -425,7 +436,7 @@ class Form
 
         if ($gSettingsManager->getBool('system_js_editor_enabled')) {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof \HtmlPage) {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/translations/' . $gL10n->getLanguageLibs() . '.js');
             }
@@ -557,7 +568,6 @@ class Form
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      * @throws AdmException
-     * @throws \Exception
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
     {
@@ -690,7 +700,7 @@ class Form
                 $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
             }
 
-            if ($this->htmlPage instanceof \HtmlPage) {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
                     $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
@@ -807,7 +817,7 @@ class Form
                 });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof \HtmlPage) {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/noblecount/jquery.noblecount.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
@@ -1056,7 +1066,7 @@ class Form
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof \HtmlPage) {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
@@ -1129,7 +1139,6 @@ class Form
      * $form->show();
      * ```
      * @throws AdmException
-     * @throws \Exception
      */
     public function addSelectBoxFromSql(string $id, string $label, \Database $database, $sql, array $options = array())
     {
@@ -1200,13 +1209,16 @@ class Form
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      * @throws AdmException
-     * @throws \Exception
      */
     public function addSelectBoxFromXml(string $id, string $label, string $xmlFile, string $xmlValueTag, string $xmlViewTag, array $options = array())
     {
         $selectBoxEntries = array();
 
-        $xmlRootNode = new \SimpleXMLElement($xmlFile, 0, true);
+        try {
+            $xmlRootNode = new \SimpleXMLElement($xmlFile, 0, true);
+        } catch (\Exception $e) {
+            throw new AdmException($e->getMessage());
+        }
 
         /**
          * @var \SimpleXMLElement $xmlChildNode
@@ -1602,7 +1614,7 @@ class Form
      * form field doesn't have a value in the $fieldValues array.
      * @param array &$fieldValues Array with field name as key and field value as array value.
      * @return void
-     * @throws \AdmException
+     * @throws AdmException
      */
     public function validate(array &$fieldValues)
     {
@@ -1612,7 +1624,7 @@ class Form
         foreach ($fieldValues as $key => $value) {
             // security check if the form payload includes unexpected fields
             if (!array_key_exists($key, $this->elements)) {
-                throw new \AdmException('Invalid payload of the form!');
+                throw new AdmException('Invalid payload of the form!');
             }
         }
 
@@ -1622,15 +1634,15 @@ class Form
                 if (isset($fieldValues[$element['id']])) {
                     if ((is_array($fieldValues[$element['id']]) && count($fieldValues[$element['id']]) === 0)
                         || (!is_array($fieldValues[$element['id']]) && (string)$fieldValues[$element['id']] === '')) {
-                        throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                        throw new AdmException('SYS_FIELD_EMPTY', array($element['label']));
                     }
                 } elseif ($element['type'] === 'file') {
                     // file field has no POST variable but the FILES array should be filled
                     if (count($_FILES) === 0 || strlen($_FILES['userfile']['tmp_name'][0]) === 0) {
-                        throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                        throw new AdmException('SYS_FIELD_EMPTY', array($element['label']));
                     }
                 } else {
-                    throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                    throw new AdmException('SYS_FIELD_EMPTY', array($element['label']));
                 }
             } elseif (isset($element['property']) && $element['property'] === $this::FIELD_DISABLED) {
                 // no value should be set if a field is marked as disabled

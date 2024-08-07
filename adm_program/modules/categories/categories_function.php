@@ -92,8 +92,8 @@ try {
     if ($postMode === 'edit') {
         // create or edit category
 
-        if (isset($_SESSION['categories_edit_form'])) {
-            $categoryEditForm = $_SESSION['categories_edit_form'];
+        if (isset($_SESSION['categoriesEditForm'])) {
+            $categoryEditForm = $_SESSION['categoriesEditForm'];
             $categoryEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');

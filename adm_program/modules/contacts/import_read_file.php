@@ -47,8 +47,8 @@ try {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    if (isset($_SESSION['contacts_import_form'])) {
-        $contactsImportForm = $_SESSION['contacts_import_form'];
+    if (isset($_SESSION['contactsImportForm'])) {
+        $contactsImportForm = $_SESSION['contactsImportForm'];
         $contactsImportForm->validate($_POST);
     } else {
         throw new AdmException('SYS_INVALID_PAGE_VIEW');

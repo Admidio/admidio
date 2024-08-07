@@ -82,8 +82,8 @@ try {
     if ($getMode === 'edit') {
         // Create a new event or edit an existing event
 
-        if (isset($_SESSION['events_edit_form'])) {
-            $eventEditForm = $_SESSION['events_edit_form'];
+        if (isset($_SESSION['eventsEditForm'])) {
+            $eventEditForm = $_SESSION['eventsEditForm'];
             $eventEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
