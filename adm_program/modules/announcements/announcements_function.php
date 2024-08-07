@@ -52,9 +52,6 @@ try {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
-        // make html in description secure
-        $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
-
         // write POST parameters in announcement object
         foreach ($_POST as $key => $value) { // TODO possible security issue
             if (str_starts_with($key, 'ann_')) {

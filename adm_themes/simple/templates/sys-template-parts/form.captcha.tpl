@@ -10,4 +10,6 @@
 </div>
 {if $formType neq "vertical" and $formType neq "navbar"}</div></div>{/if}
 
-{include 'sys-template-parts/form.input.tpl' data=$data}
+{if isset($data.type)}
+    {include 'sys-template-parts/form.input.tpl' data=$data}
+{/if}

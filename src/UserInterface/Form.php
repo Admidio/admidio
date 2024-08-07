@@ -31,9 +31,11 @@
  * ```
  */
 namespace Admidio\UserInterface;
-use AdmException;
 use Smarty\Exception;
 use Smarty\Smarty;
+use AdmException;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 use StringUtils;
 
 class Form
@@ -794,7 +796,7 @@ class Form
         }
 
         if ($optionsAll['maxLength'] > 0) {
-            $attributes['maxlength'] = $optionsAll['maxLength'];
+            $attributes['maxLength'] = $optionsAll['maxLength'];
 
             // if max field length is set then show a counter how many characters still available
             $javascriptCode = '
@@ -1631,35 +1633,42 @@ class Form
                     throw new \AdmException('SYS_FIELD_EMPTY', array($element['label']));
                 }
             } elseif (isset($element['property']) && $element['property'] === $this::FIELD_DISABLED) {
+                // no value should be set if a field is marked as disabled
                 if (isset($fieldValues[$element['id']])) {
                     unset($fieldValues[$element['id']]);
                 }
             }
 
+            // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
+            if ($element['type'] === 'checkbox' && !isset($fieldValues[$element['id']])) {
+                $fieldValues[$element['id']] = "0";
+            }
+
             // check value depending on the field type
-            if (isset($element['type']) && isset($fieldValues[$element['id']])) {
+            if (isset($fieldValues[$element['id']]) && strlen((string) $fieldValues[$element['id']]) > 0) {
                 switch ($element['type']) {
-                    case 'checkbox':
-                        // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
-                        if (!isset($fieldValues[$element['id']])) {
-                            $fieldValues[$element['id']] = "0";
-                        }
+                    case 'editor':
+                        // check html string vor invalid tags and scripts
+                        $config = HTMLPurifier_Config::createDefault();
+                        $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+                        $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+                        $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+
+                        $filter = new HTMLPurifier($config);
+                        $fieldValues[$element['id']] = $filter->purify($fieldValues[$element['id']]);
                         break;
                     case 'email':
-                        if (strlen($fieldValues[$element['id']]) > 0
-                            && !StringUtils::strValidCharacters($fieldValues[$element['id']], 'email')) {
+                        if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'email')) {
                             throw new AdmException('SYS_EMAIL_INVALID', array($element['label']));
                         }
                         break;
                     case 'number':
-                        if (strlen($fieldValues[$element['id']]) > 0
-                            && (!is_numeric($fieldValues[$element['id']]) || $fieldValues[$element['id']] < 0)) {
+                        if (!is_numeric($fieldValues[$element['id']]) || $fieldValues[$element['id']] < 0) {
                             throw new AdmException('SYS_FIELD_INVALID_INPUT', array($element['label']));
                         }
                         break;
                     case 'url':
-                        if (strlen($fieldValues[$element['id']]) > 0
-                            && !StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
+                        if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
                             throw new AdmException('SYS_URL_INVALID_CHAR', array($element['label']));
                         }
                         break;

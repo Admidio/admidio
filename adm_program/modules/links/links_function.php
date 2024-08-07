@@ -49,9 +49,6 @@ try {
     }
 
     if ($getMode === 'create') {
-        // make html in description secure
-        $_POST['lnk_description'] = admFuncVariableIsValid($_POST, 'lnk_description', 'html');
-
         if (isset($_SESSION['linksEditForm'])) {
             $linksEditForm = $_SESSION['linksEditForm'];
             $linksEditForm->validate($_POST);

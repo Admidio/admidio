@@ -194,9 +194,6 @@ try {
             }
         }
 
-        // make html in description secure
-        $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
-
         // ------------------------------------------------
         // Check if the selected room is already reserved for the appointment
         // ------------------------------------------------

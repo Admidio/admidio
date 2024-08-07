@@ -26,7 +26,7 @@ try {
     $postFrom = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
     $postName = admFuncVariableIsValid($_POST, 'namefrom', 'string');
     $postSubject = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be sent without html conversations
-    $postBody = admFuncVariableIsValid($_POST, 'msg_body', 'html');
+    $postBody = $_POST['msg_body']; // html check will be done in form validation
     $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
     $postCaptcha = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
     $postUserUuidList = '';
