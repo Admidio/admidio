@@ -8,11 +8,11 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
 use Ramsey\Uuid\Uuid;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // check if the photo module is enabled and eCard is enabled
     if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
         throw new AdmException('SYS_MODULE_DISABLED');
@@ -35,11 +35,6 @@ try {
     $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
     $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id') . '/' . $postPhotoNr . '.jpg';
 
-    $_SESSION['ecard_request'] = $_POST;
-
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     // check if user has right to view the album
     if (!$photoAlbum->isVisible()) {
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
@@ -50,16 +45,14 @@ try {
         throw new AdmException('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
     }
 
-    $senderName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
+    $senderName  = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
     $senderEmail = $gCurrentUser->getValue('EMAIL');
 
-    if (!isset($_POST['ecard_recipients']) || !is_array($_POST['ecard_recipients'])) {
-        $_SESSION['ecard_request']['ecard_recipients'] = '';
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TO'));
-    }
-
-    if ($postMessage === '') {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_MESSAGE'));
+    if (isset($_SESSION['photosEcardSendForm'])) {
+        $photosEcardSendForm = $_SESSION['photosEcardSendForm'];
+        $photosEcardSendForm->validate($_POST);
+    } else {
+        throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
 
     // read template from file system
@@ -216,12 +209,15 @@ try {
         $message->addContent($ecardHtmlData);
         $message->save();
 
-        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-        $gMessage->show($gL10n->get('SYS_ECARD_SUCCESSFULLY_SEND'));
-        // => EXIT
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => $gL10n->get('SYS_ECARD_SUCCESSFULLY_SEND'),
+            'url' => $gNavigation->getPreviousUrl()
+        ));
+        exit();
     } else {
         throw new AdmException('SYS_ECARD_NOT_SUCCESSFULLY_SEND');
     }
 } catch (AdmException|Exception $e) {
-    $gMessage->show($e->getMessage());
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

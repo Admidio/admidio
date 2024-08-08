@@ -540,11 +540,11 @@ tr.admidio-event-highlight {
     object-fit: cover !important;
 }
 
-.admidio-album-thumbnail {
+.admidio-photos-thumbnail {
     margin-bottom: 2rem;
 }
 
-.admidio-album-thumbnail .rounded {
+.admidio-photos-thumbnail .rounded {
     width: 100% !important;
     object-fit: cover !important;
 }

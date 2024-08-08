@@ -9,17 +9,18 @@
  *
  * Parameters:
  * photo_uuid : UUID of the album that should be edited
- * mode       : - new (new album)
- *              - change (edit album)
+ * parent_photo_uuid : UUID of the parent album in which the new album should be created
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'uuid');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('new', 'change')));
+    $getParentPhotoUuid = admFuncVariableIsValid($_GET, 'parent_photo_uuid', 'uuid');
 
     $photoAlbumsArray = array('ALL' => $gL10n->get('SYS_PHOTO_ALBUMS'));
 
@@ -28,37 +29,23 @@ try {
         throw new AdmException('SYS_MODULE_DISABLED');
     }
 
-    $headline = '';
-    if ($getMode === 'new') {
+    // create photo album object
+    $photoAlbum = new TablePhotos($gDb);
+
+    if ($getPhotoUuid === '') {
         $headline = $gL10n->get('SYS_CREATE_ALBUM');
-    } elseif ($getMode === 'change') {
+    } else {
         $headline = $gL10n->get('SYS_EDIT_ALBUM');
+        $photoAlbum->readDataByUuid($getPhotoUuid);
+        $parentAlbum = new TablePhotos($gDb, (int)$photoAlbum->getValue('pho_pho_id_parent'));
+        $getParentPhotoUuid = $parentAlbum->getValue('pho_uuid');
     }
 
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    // create photo album object
-    $photoAlbum = new TablePhotos($gDb);
-
-    if ($getMode === 'new') {
-        $parentAlbumUuid = $getPhotoUuid;
-        $getPhotoUuid = null;
-    } elseif ($getMode === 'change') {
-        $photoAlbum->readDataByUuid($getPhotoUuid);
-        $parentAlbum = new TablePhotos($gDb, (int)$photoAlbum->getValue('pho_pho_id_parent'));
-        $parentAlbumUuid = $parentAlbum->getValue('pho_uuid');
-    }
-
     // check if the user is allowed to edit this photo album
     if (!$photoAlbum->isEditable()) {
         throw new AdmException('SYS_NO_RIGHTS');
-    }
-
-    if (isset($_SESSION['photo_album_request'])) {
-        // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-        // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-        $photoAlbum->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['photo_album_request'])));
-        unset($_SESSION['photo_album_request']);
     }
 
     /**
@@ -108,7 +95,12 @@ try {
     $page = new HtmlPage('admidio-photo-album-edit', $headline);
 
     // show form
-    $form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => $getMode)), $page);
+    $form = new Form(
+        'photos_edit_form',
+        'modules/photos.edit.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => 'edit')),
+        $page
+    );
     $form->addInput(
         'pho_name',
         $gL10n->get('SYS_ALBUM'),
@@ -122,7 +114,7 @@ try {
         $photoAlbumsArray,
         array(
             'property' => HtmlForm::FIELD_REQUIRED,
-            'defaultValue' => $parentAlbumUuid,
+            'defaultValue' => $getParentPhotoUuid,
             'showContextDependentFirstEntry' => false,
             'helpTextId' => $gL10n->get('SYS_PARENT_ALBUM_DESC', array('SYS_PHOTO_ALBUMS'))
         )
@@ -158,17 +150,19 @@ try {
         (bool)$photoAlbum->getValue('pho_locked'),
         array('helpTextId' => 'SYS_LOCK_ALBUM_DESC')
     );
+    $form->addSubmitButton(
+        'btn_save',
+        $gL10n->get('SYS_SAVE'),
+        array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+    );
 
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-    $form->addHtml(admFuncShowCreateChangeInfoById(
-        (int)$photoAlbum->getValue('pho_usr_id_create'),
-        $photoAlbum->getValue('pho_timestamp_create'),
-        (int)$photoAlbum->getValue('pho_usr_id_change'),
-        $photoAlbum->getValue('pho_timestamp_change')
-    ));
+    $page->assignSmartyVariable('nameUserCreated', $photoAlbum->getNameOfCreatingUser());
+    $page->assignSmartyVariable('timestampUserCreated', $photoAlbum->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('nameLastUserEdited', $photoAlbum->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('timestampLastUserEdited', $photoAlbum->getValue('ann_timestamp_change'));
+    $form->addToHtmlPage();
+    $_SESSION['photosEditForm'] = $form;
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

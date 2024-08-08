@@ -13,6 +13,8 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_CONTACT_DETAILS')}</div>
         <div class="card-body">
+
+
             {include 'sys-template-parts/form.select.tpl' data=$elements['msg_to']}
             <hr />
             {include 'sys-template-parts/form.input.tpl' data=$elements['namefrom']}

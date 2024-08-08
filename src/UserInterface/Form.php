@@ -239,7 +239,7 @@ class Form
             $optionsAll['link'] = '';
         }
         if(strstr($optionsAll['class'], 'btn-') === false) {
-            $optionsAll['class'] .= " btn-primary";
+            $optionsAll['class'] .= " btn-secondary";
 
             if ($this->type !== 'navbar') {
                 $optionsAll['class'] .= '  admidio-margin-bottom';
@@ -1657,7 +1657,7 @@ class Form
             }
 
             // check value depending on the field type
-            if (isset($fieldValues[$element['id']]) && strlen((string) $fieldValues[$element['id']]) > 0) {
+            if (isset($fieldValues[$element['id']]) && !is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {
                 switch ($element['type']) {
                     case 'editor':
                         // check html string vor invalid tags and scripts

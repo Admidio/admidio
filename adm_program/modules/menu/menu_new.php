@@ -229,7 +229,7 @@ try {
     $form->addSubmitButton(
         'btn_save',
         $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
+        array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
     );
 
     $page->assignSmartyVariable('nameUserCreated', $menu->getNameOfCreatingUser());
