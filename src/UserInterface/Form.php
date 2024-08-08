@@ -589,8 +589,6 @@ class Form
             'passwordUserData' => array()
         ), $options));
 
-        $optionsAll['helpTextId'] = self::getHelpText($optionsAll['helpTextId']);
-
         $attributes['placeholder'] = $optionsAll['placeholder'];
 
         // set min/max input length
@@ -1576,36 +1574,6 @@ class Form
             title="' . $gL10n->get($title) . '" data-bs-content="' . \SecurityUtils::encodeHTML($text) . '"></i>';
         }
         return $html;
-    }
-
-    /**
-     * @throws AdmException
-     */
-    public static function getHelpText($text)
-    {
-        $parameters = array();
-
-        if (is_array($text)) {
-            $parameters = $text[1];
-            $text = $text[0];
-        }
-
-        if ($text !== '') {
-            // if text is a translation-id then translate it
-            if (\Language::isTranslationStringId($text)) {
-                foreach ($parameters as &$parameter) {
-                    // parameters should be strings
-                    $parameter = (string)$parameter;
-
-                    // if parameter is a translation-id then translate it
-                    $parameter = \Language::translateIfTranslationStrId($parameter);
-                }
-                unset($parameter);
-
-                $text = $GLOBALS['gL10n']->get($text, $parameters);
-            }
-        }
-        return $text;
     }
 
     /**

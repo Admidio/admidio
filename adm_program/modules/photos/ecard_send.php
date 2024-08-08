@@ -27,7 +27,7 @@ try {
     $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
     $postPhotoUuid = admFuncVariableIsValid($_POST, 'photo_uuid', 'uuid', array('requireValue' => true));
     $postPhotoNr = admFuncVariableIsValid($_POST, 'photo_nr', 'int', array('requireValue' => true));
-    $postMessage = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
+    $postMessage = $_POST['ecard_message'];
 
     $funcClass = new ECard($gL10n);
     $photoAlbum = new TablePhotos($gDb);
