@@ -74,15 +74,9 @@ try {
     } elseif ($getMode === 'delete') {
         // delete current announcements, right checks were done before
         $link->delete();
-
-        // Delete successful -> Return for XMLHttpRequest
-        echo 'done';
+        echo json_encode(array('status' => 'success'));
+        exit();
     }
 } catch (AdmException|Exception $e) {
-    if ($getMode === 'create') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        echo $e->getMessage();
-    }
-
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

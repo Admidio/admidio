@@ -59,10 +59,9 @@ try {
             $file = new TableFile($gDb);
             $file->getFileForDownload($getFileUuid);
 
-            if ($file->delete()) {
-                // Delete successful -> return for XMLHttpRequest
-                echo 'done';
-            }
+            $file->delete();
+            echo json_encode(array('status' => 'success'));
+            exit();
         } else {
             // if no file id was set then show error
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
@@ -238,10 +237,9 @@ try {
             // the uuid of the current folder must be set
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         } else {
-            if ($folder->delete()) {
-                // Delete successful -> return for XMLHttpRequest
-                echo 'done';
-            }
+            $folder->delete();
+            echo json_encode(array('status' => 'success'));
+            exit();
         }
     }
 
@@ -363,9 +361,5 @@ try {
         exit();
     }
 } catch (AdmException | Exception | RuntimeException | UnexpectedValueException $e) {
-    if (in_array($getMode, array('delete_file', 'delete_folder'))) {
-        echo $e->getMessage();
-    } else {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    }
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

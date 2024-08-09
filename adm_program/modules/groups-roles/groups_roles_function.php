@@ -218,7 +218,7 @@ try {
     } elseif ($getMode === 'delete') {
         // delete role from database
         if ($role->delete()) {
-            echo 'done';
+            echo json_encode(array('status' => 'success'));
         }
         exit();
     } elseif ($getMode === 'activate') {
@@ -262,9 +262,9 @@ try {
         }
     }
 } catch (AdmException|Exception $e) {
-    if (in_array($getMode, array('delete', 'activate', 'deactivate'))) {
+    if (in_array($getMode, array('activate', 'deactivate'))) {
         echo $e->getMessage();
-    } elseif ($getMode === 'edit') {
+    } elseif (in_array($getMode, array('edit', 'delete'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());

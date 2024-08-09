@@ -139,9 +139,8 @@ try {
         exit();
     } // delete photo album
     elseif ($getMode === 'delete') {
-        if ($photoAlbum->delete()) {
-            echo 'done';
-        }
+        $photoAlbum->delete();
+        echo json_encode(array('status' => 'success'));
         exit();
     } // lock photo album
     elseif ($getMode === 'lock') {
@@ -159,7 +158,7 @@ try {
         exit();
     }
 } catch (AdmException|Exception $e) {
-    if ($getMode === 'edit') {
+    if (in_array($getMode, array('edit', 'delete'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());

@@ -104,9 +104,8 @@ try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
-        if ($menu->delete()) {
-            echo 'done';
-        }
+        $menu->delete();
+        echo json_encode(array('status' => 'success'));
         exit();
     } elseif ($postMode === 'sequence') {
         // Update menu sequence
@@ -123,7 +122,7 @@ try {
         exit();
     }
 } catch (AdmException|Exception $e) {
-    if (in_array($postMode, array('delete', 'sequence'))) {
+    if ($postMode === 'sequence') {
         echo $e->getMessage();
     } else {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
