@@ -15,19 +15,16 @@ try {
     $postLastname = admFuncVariableIsValid($_POST, 'lastname', 'string');
     $postFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string');
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     // only legitimate users are allowed to call the user management
     if (!$gCurrentUser->editUsers()) {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    if (strlen($_POST['lastname']) === 0) {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LASTNAME'));
-    }
-    if (strlen($_POST['firstname']) === 0) {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_FIRSTNAME'));
+    if (isset($_SESSION['contactsNewForm'])) {
+        $contactsNewForm = $_SESSION['contactsNewForm'];
+        $contactsNewForm->validate($_POST);
+    } else {
+        throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
 
     // create html page object

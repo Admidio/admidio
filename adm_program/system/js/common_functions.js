@@ -304,6 +304,9 @@ function formSubmit(event) {
                     } else {
                         $("#" + submitButtonID).attr("disabled", false);
                         submitButtonIcon.attr("class", iconClass);
+                        setTimeout(function () {
+                            $("#admidio-modal").modal("hide");
+                        }, 2500);
                     }
                 } else {
                     self.location.href = forwardUrl;

@@ -285,7 +285,7 @@ class SettingsManager
      * Loads a specific setting from the database
      * @param string $name The setting name from the wanted value
      * @return string Returns the setting value
-     * @throws AdmException Throws if there is no setting to the given name found
+     * @throws UnexpectedValueException|AdmException Throws if there is no setting to the given name found
      */
     private function load(string $name): string
     {
@@ -296,7 +296,7 @@ class SettingsManager
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
 
         if ($pdoStatement->rowCount() === 0 && $this->throwExceptions) {
-            throw new AdmException('Settings name "' . $name . '" does not exist!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
         return $pdoStatement->fetchColumn();
@@ -373,7 +373,13 @@ class SettingsManager
 
         $this->updateOrInsertSetting($name, (string) $value, $update);
 
-        $this->settings[$name] = $this->load($name);
+        try {
+            $this->settings[$name] = $this->load($name);
+
+            return true;
+        } catch (UnexpectedValueException $e) {
+            return false;
+        }
     }
 
     /**

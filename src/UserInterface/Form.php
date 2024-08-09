@@ -436,7 +436,7 @@ class Form
 
         if ($gSettingsManager->getBool('system_js_editor_enabled')) {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage) {
+            if (isset($this->htmlPage)) {
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/translations/' . $gL10n->getLanguageLibs() . '.js');
             }
@@ -698,7 +698,7 @@ class Form
                 $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
             }
 
-            if ($this->htmlPage instanceof HtmlPage) {
+            if (isset($this->htmlPage)) {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
                     $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
@@ -815,7 +815,7 @@ class Form
                 });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage) {
+            if (isset($this->htmlPage)) {
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/noblecount/jquery.noblecount.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
@@ -1064,7 +1064,7 @@ class Form
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage) {
+            if (isset($this->htmlPage)) {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
@@ -1484,7 +1484,7 @@ class Form
     public function addToHtmlPage()
     {
         try {
-            if (is_object($this->htmlPage)) {
+            if (isset($this->htmlPage)) {
                 if ($this->type === 'navbar') {
                     $this->htmlPage->assignSmartyVariable('navbarID', 'navbar_' . $this->id);
                 } else {
@@ -1586,8 +1586,12 @@ class Form
      */
     public function validate(array &$fieldValues)
     {
-        // check the CSRF token of the form against the session token
-        \SecurityUtils::validateCsrfToken($fieldValues['admidio-csrf-token']);
+        if (isset($fieldValues['admidio-csrf-token'])) {
+            // check the CSRF token of the form against the session token
+            \SecurityUtils::validateCsrfToken($fieldValues['admidio-csrf-token']);
+        } else {
+            throw new AdmException('No CSRF token provided.');
+        }
 
         foreach ($fieldValues as $key => $value) {
             // security check if the form payload includes unexpected fields
