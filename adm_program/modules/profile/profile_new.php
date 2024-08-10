@@ -12,11 +12,13 @@
 /******************************************************************************
  * Parameters:
  *
- * user_uuid  : Uuid of the user who should be edited
- * copy       : true - The user of the user_id will be copied and the base for this new user
+ * user_uuid   : Uuid of the user who should be edited
+ * mode - html : Show form to create or edit a user profile
+ *      - save : Save all data of the user profile form
+ * copy        : true - The user of the user_id will be copied and the base for this new user
  * accept_registration : If set to true, another forward url to role assignment will be set.
- * lastname   : (Optional) Lastname could be set and will than be preassigned for new users
- * firstname  : (Optional) First name could be set and will than be preassigned for new users
+ * lastname    : (Optional) Lastname could be set and will than be preassigned for new users
+ * firstname   : (Optional) First name could be set and will than be preassigned for new users
  *
  *****************************************************************************/
 
@@ -27,31 +29,23 @@ try {
 
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'save')));
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
     $getAcceptRegistration = admFuncVariableIsValid($_GET, 'accept_registration', 'bool');
 
     $registrationOrgId = $gCurrentOrgId;
 
     // read user data
-    $user = new User($gDb, $gProfileFields);
-    $user->readDataByUuid($getUserUuid);
-    $userId = $user->getValue('usr_id');
-
-    // set headline of the script
-    if ($getCopy) {
-        // if we want to copy the user than set id = 0
-        $user->setValue('usr_id', 0);
-        $userId = 0;
-        $getUserUuid = '';
-        $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
-    } elseif ($getUserUuid === '' && $gValidLogin) {
-        $headline = $gL10n->get('SYS_CREATE_MEMBER');
-    } elseif ($getUserUuid === '' && !$gValidLogin) {
-        $headline = $gL10n->get('SYS_REGISTRATION');
-    } elseif ($userId === $gCurrentUserId) {
-        $headline = $gL10n->get('SYS_EDIT_MY_PROFILE');
+    if (!$gValidLogin || $getAcceptRegistration) {
+        // create user registration object and set requested organization
+        $user = new UserRegistration($gDb, $gProfileFields);
+        $user->readDataByUuid($getUserUuid);
+        if (isset($_POST['reg_org_id'])) {
+            $user->setOrganization((int)$_POST['reg_org_id']);
+        }
     } else {
-        $headline = $gL10n->get('SYS_EDIT_PROFILE');
+        $user = new User($gDb, $gProfileFields);
+        $user->readDataByUuid($getUserUuid);
     }
 
     // check if module may be called
@@ -80,108 +74,261 @@ try {
         }
     }
 
-    $gNavigation->addUrl(CURRENT_URL, $headline);
-
-    // create html page object
-    $page = new HtmlPage('admidio-profile-edit', $headline);
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
-
-    // create html form
-    $form = new Form(
-        'profile_edit_form',
-        'modules/profile.edit.tpl',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_save.php', array('user_uuid' => $getUserUuid, 'accept_registration' => $getAcceptRegistration)),
-        $page
-    );
-
-    // *******************************************************************************
-    // Loop over all categories and profile fields
-    // *******************************************************************************
-
-    $category = '';
-    $showLoginData = true;
-
-    foreach ($gProfileFields->getProfileFields() as $field) {
-        $showField = false;
-        $category = $field->getValue('cat_name');
-
-        // at registration check if the field is enabled for registration
-        if (!$gValidLogin && $field->getValue('usf_registration') == 1) {
-            $showField = true;
-        } // check if the current user has the right to edit this profile field of the selected user
-        elseif ($gValidLogin && $gCurrentUser->allowedEditProfileField($user, $field->getValue('usf_name_intern'))) {
-            $showField = true;
+    if ($getMode === 'html') {
+        // set headline of the script
+        if ($getCopy) {
+            // if we want to copy the user than set id = 0
+            $user->setValue('usr_id', 0);
+            $getUserUuid = '';
+            $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
+        } elseif ($getUserUuid === '' && $gValidLogin) {
+            $headline = $gL10n->get('SYS_CREATE_MEMBER');
+        } elseif ($getUserUuid === '' && !$gValidLogin) {
+            $headline = $gL10n->get('SYS_REGISTRATION');
+        } elseif ($user->getValue('usr_id') === $gCurrentUserId) {
+            $headline = $gL10n->get('SYS_EDIT_MY_PROFILE');
+        } else {
+            $headline = $gL10n->get('SYS_EDIT_PROFILE');
         }
 
-        // at category basic data show login information fields
-        // if it's a new record or administrator or approval of new registration
-        if ($field->getValue('cat_name_intern') === 'BASIC_DATA' && $showLoginData
-            && (($userId > 0 && $gCurrentUser->isAdministrator()) || $getUserUuid === '')) {
-            $showLoginData = false;
-            $fieldProperty = Form::FIELD_DEFAULT;
+        $gNavigation->addUrl(CURRENT_URL, $headline);
 
-            if (!$gValidLogin || $getAcceptRegistration) {
-                $fieldProperty = Form::FIELD_REQUIRED;
+        // create html page object
+        $page = new HtmlPage('admidio-profile-edit', $headline);
+        $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
+
+        // create html form
+        $form = new Form(
+            'profile_edit_form',
+            'modules/profile.edit.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $getUserUuid, 'mode' => 'save', 'accept_registration' => $getAcceptRegistration)),
+            $page
+        );
+
+        // *******************************************************************************
+        // Loop over all categories and profile fields
+        // *******************************************************************************
+
+        $category = '';
+        $showLoginData = true;
+
+        foreach ($gProfileFields->getProfileFields() as $field) {
+            $showField = false;
+            $category = $field->getValue('cat_name');
+
+            // at registration check if the field is enabled for registration
+            if (!$gValidLogin && $field->getValue('usf_registration') == 1) {
+                $showField = true;
+            } // check if the current user has the right to edit this profile field of the selected user
+            elseif ($gValidLogin && $gCurrentUser->allowedEditProfileField($user, $field->getValue('usf_name_intern'))) {
+                $showField = true;
             }
 
-            $form->addInput(
-                'usr_login_name',
-                $gL10n->get('SYS_USERNAME'),
-                $user->getValue('usr_login_name'),
-                array(
-                    'maxLength' => 254,
-                    'property' => $fieldProperty,
-                    'helpTextId' => 'SYS_USERNAME_DESCRIPTION',
-                    'class' => 'form-control-small',
-                    'autocomplete' => 'username',
-                    'category' => $category
-                )
-            );
+            // at category basic data show login information fields
+            // if it's a new record or administrator or approval of new registration
+            if ($field->getValue('cat_name_intern') === 'BASIC_DATA' && $showLoginData
+                && (($user->getValue('usr_id') > 0 && $gCurrentUser->isAdministrator()) || $getUserUuid === '')) {
+                $showLoginData = false;
+                $fieldProperty = Form::FIELD_DEFAULT;
 
-            if (!$gValidLogin) {
-                // at registration add password and password confirm to form
+                if (!$gValidLogin || $getAcceptRegistration) {
+                    $fieldProperty = Form::FIELD_REQUIRED;
+                }
+
                 $form->addInput(
-                    'usr_password',
-                    $gL10n->get('SYS_PASSWORD'),
-                    '',
+                    'usr_login_name',
+                    $gL10n->get('SYS_USERNAME'),
+                    $user->getValue('usr_login_name'),
                     array(
-                        'type' => 'password',
-                        'property' => Form::FIELD_REQUIRED,
-                        'minLength' => PASSWORD_MIN_LENGTH,
-                        'passwordStrength' => true,
-                        'helpTextId' => 'SYS_PASSWORD_DESCRIPTION',
+                        'maxLength' => 254,
+                        'property' => $fieldProperty,
+                        'helpTextId' => 'SYS_USERNAME_DESCRIPTION',
                         'class' => 'form-control-small',
-                        'autocomplete' => 'new-password',
-                        'category' => $category
-                    )
-                );
-                $form->addInput(
-                    'password_confirm',
-                    $gL10n->get('SYS_CONFIRM_PASSWORD'),
-                    '',
-                    array(
-                        'type' => 'password',
-                        'property' => Form::FIELD_REQUIRED,
-                        'minLength' => PASSWORD_MIN_LENGTH,
-                        'class' => 'form-control-small',
-                        'autocomplete' => 'new-password',
+                        'autocomplete' => 'username',
                         'category' => $category
                     )
                 );
 
-                // show selectbox with all organizations of database
-                if ($gSettingsManager->getBool('system_organization_select')) {
-                    $sql = 'SELECT org_id, org_longname
+                if (!$gValidLogin) {
+                    // at registration add password and password confirm to form
+                    $form->addInput(
+                        'usr_password',
+                        $gL10n->get('SYS_PASSWORD'),
+                        '',
+                        array(
+                            'type' => 'password',
+                            'property' => Form::FIELD_REQUIRED,
+                            'minLength' => PASSWORD_MIN_LENGTH,
+                            'passwordStrength' => true,
+                            'helpTextId' => 'SYS_PASSWORD_DESCRIPTION',
+                            'class' => 'form-control-small',
+                            'autocomplete' => 'new-password',
+                            'category' => $category
+                        )
+                    );
+                    $form->addInput(
+                        'password_confirm',
+                        $gL10n->get('SYS_CONFIRM_PASSWORD'),
+                        '',
+                        array(
+                            'type' => 'password',
+                            'property' => Form::FIELD_REQUIRED,
+                            'minLength' => PASSWORD_MIN_LENGTH,
+                            'class' => 'form-control-small',
+                            'autocomplete' => 'new-password',
+                            'category' => $category
+                        )
+                    );
+
+                    // show selectbox with all organizations of database
+                    if ($gSettingsManager->getBool('system_organization_select')) {
+                        $sql = 'SELECT org_id, org_longname
                                   FROM ' . TBL_ORGANIZATIONS . '
                               ORDER BY org_longname, org_shortname';
-                    $form->addSelectBoxFromSql(
-                        'reg_org_id',
-                        $gL10n->get('SYS_ORGANIZATION'),
-                        $gDb,
-                        $sql,
+                        $form->addSelectBoxFromSql(
+                            'reg_org_id',
+                            $gL10n->get('SYS_ORGANIZATION'),
+                            $gDb,
+                            $sql,
+                            array(
+                                'property' => Form::FIELD_REQUIRED,
+                                'defaultValue' => $registrationOrgId,
+                                'category' => $category
+                            )
+                        );
+                    }
+                }
+            }
+
+            // only show fields that are enabled for registration or the user has permission to edit that field
+            if ($showField) {
+                // add profile fields to form
+                $fieldProperty = Form::FIELD_DEFAULT;
+                $helpId = '';
+                $usfNameIntern = $field->getValue('usf_name_intern');
+
+                if ($gProfileFields->getProperty($usfNameIntern, 'usf_disabled') == 1
+                    && !$gCurrentUser->hasRightEditProfile($user, false) && $getUserUuid !== '') {
+                    // disable field if this is configured in profile field configuration
+                    $fieldProperty = Form::FIELD_DISABLED;
+                } elseif ($gProfileFields->hasRequiredInput($usfNameIntern, $user->getValue('usr_id'), !$gValidLogin || $getAcceptRegistration)) {
+                    $fieldProperty = Form::FIELD_REQUIRED;
+                }
+
+                if (strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0) {
+                    $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
+                    if (Language::isTranslationStringId($helpId)) {
+                        $helpId = array($helpId, array($gProfileFields->getProperty($usfNameIntern, 'usf_name')));
+                    }
+                }
+
+                // code for different field types
+                if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'CHECKBOX') {
+                    $form->addCheckbox(
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
+                        (bool)$user->getValue($usfNameIntern),
                         array(
-                            'property' => Form::FIELD_REQUIRED,
-                            'defaultValue' => $registrationOrgId,
+                            'property' => $fieldProperty,
+                            'helpTextId' => $helpId,
+                            'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
+                            'category' => $category
+                        )
+                    );
+                } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $usfNameIntern === 'COUNTRY') {
+                    // set array with values and set default value
+                    if ($usfNameIntern === 'COUNTRY') {
+                        $arrListValues = $gL10n->getCountries();
+                        $defaultValue = null;
+
+                        if ((int)$user->getValue('usr_id') === 0 && strlen($gSettingsManager->getString('default_country')) > 0) {
+                            $defaultValue = $gSettingsManager->getString('default_country');
+                        } elseif ($user->getValue('usr_id') > 0 && strlen($user->getValue($usfNameIntern)) > 0) {
+                            $defaultValue = $user->getValue($usfNameIntern, 'database');
+                        }
+                    } else {
+                        $arrListValues = $gProfileFields->getProperty($usfNameIntern, 'usf_value_list');
+                        $defaultValue = $user->getValue($usfNameIntern, 'database');
+                    }
+
+                    $form->addSelectBox(
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
+                        $arrListValues,
+                        array(
+                            'property' => $fieldProperty,
+                            'defaultValue' => $defaultValue,
+                            'helpTextId' => $helpId,
+                            'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
+                            'category' => $category
+                        )
+                    );
+                } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {
+                    $showDummyRadioButton = false;
+
+                    if (!$gProfileFields->hasRequiredInput($usfNameIntern, $user->getValue('usr_id'), !$gValidLogin || $getAcceptRegistration)) {
+                        $showDummyRadioButton = true;
+                    }
+
+                    $form->addRadioButton(
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_value_list', 'html'),
+                        array(
+                            'property' => $fieldProperty,
+                            'defaultValue' => (int)$user->getValue($usfNameIntern, 'database'),
+                            'showNoValueButton' => $showDummyRadioButton,
+                            'helpTextId' => $helpId,
+                            'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
+                            'category' => $category
+                        )
+                    );
+                } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'TEXT_BIG') {
+                    $form->addMultilineTextInput(
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
+                        $user->getValue($usfNameIntern),
+                        3,
+                        array(
+                            'maxLength' => 4000,
+                            'property' => $fieldProperty,
+                            'helpTextId' => $helpId,
+                            'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
+                            'category' => $category
+                        )
+                    );
+                } else {
+                    $fieldType = 'text';
+
+                    if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DATE') {
+                        $fieldType = 'date';
+                        $maxlength = '10';
+                    } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'EMAIL') {
+                        // email could not be longer than 254 characters
+                        $fieldType = 'email';
+                        $maxlength = '254';
+                    } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'URL') {
+                        // maximal browser compatible url length will be 2000 characters
+                        $maxlength = '2000';
+                    } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'NUMBER') {
+                        $fieldType = 'number';
+                        $maxlength = array(0, 9999999999, 1);
+                    } elseif ($gProfileFields->getProperty($usfNameIntern, 'cat_name_intern') === 'SOCIAL_NETWORKS') {
+                        $maxlength = '255';
+                    } else {
+                        $maxlength = '100';
+                    }
+
+                    $form->addInput(
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
+                        $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
+                        $user->getValue($usfNameIntern),
+                        array(
+                            'type' => $fieldType,
+                            'maxLength' => $maxlength,
+                            'property' => $fieldProperty,
+                            'helpTextId' => $helpId,
+                            'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
                             'category' => $category
                         )
                     );
@@ -189,166 +336,177 @@ try {
             }
         }
 
-        // only show fields that are enabled for registration or the user has permission to edit that field
-        if ($showField) {
-            // add profile fields to form
-            $fieldProperty = Form::FIELD_DEFAULT;
-            $helpId = '';
-            $usfNameIntern = $field->getValue('usf_name_intern');
+        // if captchas are enabled then visitors of the website must resolve this
+        if (!$gValidLogin && $gSettingsManager->getBool('registration_enable_captcha')) {
+            $form->addCaptcha('captcha_code');
+        }
 
-            if ($gProfileFields->getProperty($usfNameIntern, 'usf_disabled') == 1
-                && !$gCurrentUser->hasRightEditProfile($user, false) && $getUserUuid !== '') {
-                // disable field if this is configured in profile field configuration
-                $fieldProperty = Form::FIELD_DISABLED;
-            } elseif ($gProfileFields->hasRequiredInput($usfNameIntern, $userId, ((!$gValidLogin || $getAcceptRegistration) ? true : false))) {
-                $fieldProperty = Form::FIELD_REQUIRED;
+        if (!$gValidLogin) {
+            // Registration
+            $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
+        } else {
+            $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+        }
+
+        if ($getUserUuid !== '') {
+            // show information about user who creates the recordset and changed it
+            $page->assignSmartyVariable('nameUserCreated', $user->getNameOfCreatingUser());
+            $page->assignSmartyVariable('timestampUserCreated', $user->getValue('ann_timestamp_create'));
+            $page->assignSmartyVariable('nameLastUserEdited', $user->getNameOfLastEditingUser());
+            $page->assignSmartyVariable('timestampLastUserEdited', $user->getValue('ann_timestamp_change'));
+        }
+
+        $form->addToHtmlPage();
+        $_SESSION['profileEditForm'] = $form;
+
+        $page->show();
+    } elseif ($getMode === 'save') {
+        // ------------------------------------------------------------
+        // Save all data of the profile form to the user object
+        // ------------------------------------------------------------
+
+        if (isset($_SESSION['profileEditForm'])) {
+            $profileEditForm = $_SESSION['profileEditForm'];
+            $formValues = $profileEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
+
+        // Login name and password must be checked during registration
+        if (!$gValidLogin) {
+            // Passwort muss mindestens 8 Zeichen lang sein
+            if (strlen($_POST['usr_password']) < PASSWORD_MIN_LENGTH) {
+                throw new AdmException('SYS_PASSWORD_LENGTH');
             }
 
-            if (strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0) {
-                $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
-                if (Language::isTranslationStringId($helpId)) {
-                    $helpId = array($helpId, array($gProfileFields->getProperty($usfNameIntern, 'usf_name')));
-                }
+            // both password fields must be identical
+            if ($_POST['usr_password'] !== $_POST['password_confirm']) {
+                throw new AdmException('SYS_PASSWORDS_NOT_EQUAL');
             }
 
-            // code for different field types
-            if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'CHECKBOX') {
-                $form->addCheckbox(
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                    (bool)$user->getValue($usfNameIntern),
-                    array(
-                        'property' => $fieldProperty,
-                        'helpTextId' => $helpId,
-                        'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
-                        'category' => $category
-                    )
-                );
-            } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $usfNameIntern === 'COUNTRY') {
-                // set array with values and set default value
-                if ($usfNameIntern === 'COUNTRY') {
-                    $arrListValues = $gL10n->getCountries();
-                    $defaultValue = null;
+            if (PasswordUtils::passwordStrength($_POST['usr_password'], $user->getPasswordUserData()) < $gSettingsManager->getInt('password_min_strength')) {
+                throw new AdmException('SYS_PASSWORD_NOT_STRONG_ENOUGH');
+            }
+        }
 
-                    if ((int)$user->getValue('usr_id') === 0 && strlen($gSettingsManager->getString('default_country')) > 0) {
-                        $defaultValue = $gSettingsManager->getString('default_country');
-                    } elseif ($user->getValue('usr_id') > 0 && strlen($user->getValue($usfNameIntern)) > 0) {
-                        $defaultValue = $user->getValue($usfNameIntern, 'database');
+        // write all profile fields to the user object
+        foreach ($formValues as $key => $value) {
+            if (strpos($key, 'usr_') !== 0) {
+                $user->setValue($key, $value);
+            }
+        }
+
+        if (isset($_POST['usr_login_name']) && ($gCurrentUser->isAdministrator() || $getUserUuid === '')) {
+            // Only administrators could change login name or within a new registration
+            if ($_POST['usr_login_name'] !== $user->getValue('usr_login_name')) {
+                if (strlen($_POST['usr_login_name']) > 0) {
+                    // check if the username is already assigned
+                    $sql = 'SELECT usr_uuid
+                      FROM ' . TBL_USERS . '
+                     WHERE usr_login_name = ?';
+                    $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
+
+                    if ($pdoStatement->rowCount() > 0 && $pdoStatement->fetchColumn() !== $getUserUuid) {
+                        throw new AdmException('SYS_LOGIN_NAME_EXIST');
                     }
+                }
+
+                if (!$user->setValue('usr_login_name', $_POST['usr_login_name'])) {
+                    throw new AdmException('SYS_FIELD_INVALID_CHAR', array('SYS_USERNAME'));
+                }
+            }
+        }
+
+        // if registration, then still fill the corresponding fields
+        if (!$gValidLogin) {
+            $user->setPassword($_POST['usr_password']);
+
+            // At user registration with activated captcha check the captcha input
+            if ($gSettingsManager->getBool('registration_enable_captcha')) {
+                FormValidation::checkCaptcha($_POST['captcha_code']);
+            }
+        }
+
+        // ------------------------------------------------------------
+        // Save user data to database
+        // ------------------------------------------------------------
+        $gDb->startTransaction();
+        $user->save();
+        $gDb->endTransaction();
+
+        // if data of the logged-in user is changed, then update session variables
+        if ((int)$user->getValue('usr_id') === $gCurrentUserId) {
+            $gCurrentUser = $user;
+        }
+
+        // ------------------------------------------------------------
+        // redirect to the correct page depending on the call mode
+        // ------------------------------------------------------------
+
+        if (!$gValidLogin) {
+            // registration was successful then go to homepage
+            $gNavigation->deleteLastUrl();
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $gL10n->get('SYS_REGISTRATION_SAVED'),
+                'url' => $gHomepage
+            ));
+            exit();
+        } else {
+            if ($getUserUuid === '' || $getAcceptRegistration) {
+                // assign a registration or create a new user
+
+                if ($getAcceptRegistration) {
+                    // accept a registration, assign necessary roles and send a notification email
+                    $user->acceptRegistration();
+                    $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
                 } else {
-                    $arrListValues = $gProfileFields->getProperty($usfNameIntern, 'usf_value_list');
-                    $defaultValue = $user->getValue($usfNameIntern, 'database');
+                    // a new user is created with the user management module
+                    // then the user must get the necessary roles
+                    $user->assignDefaultRoles();
+                    $messageId = 'SYS_SAVE_DATA';
                 }
 
-                $form->addSelectBox(
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                    $arrListValues,
-                    array(
-                        'property' => $fieldProperty,
-                        'defaultValue' => $defaultValue,
-                        'helpTextId' => $helpId,
-                        'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
-                        'category' => $category
-                    )
-                );
-            } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {
-                $showDummyRadioButton = false;
-
-                if (!$gProfileFields->hasRequiredInput($usfNameIntern, $userId, ((!$gValidLogin || $getAcceptRegistration) ? true : false))) {
-                    $showDummyRadioButton = true;
+                // if current user has the right to assign roles then show roles dialog
+                // otherwise go to previous url (default roles are assigned automatically)
+                if ($gCurrentUser->assignRoles()) {
+                    echo json_encode(array(
+                        'status' => 'success',
+                        'url' => SecurityUtils::encodeUrl(
+                            ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php',
+                            array(
+                                'user_uuid' => $user->getValue('usr_uuid'),
+                                'accept_registration' => $getAcceptRegistration,
+                                'new_user' => $getUserUuid === ''
+                            ))
+                    ));
+                    exit();
+                } else {
+                    $gNavigation->deleteLastUrl();
+                    echo json_encode(array(
+                        'status' => 'success',
+                        'message' => $messageId,
+                        'url' => $gNavigation->getPreviousUrl()
+                    ));
+                    exit();
                 }
-
-                $form->addRadioButton(
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_value_list', 'html'),
-                    array(
-                        'property' => $fieldProperty,
-                        'defaultValue' => (int)$user->getValue($usfNameIntern, 'database'),
-                        'showNoValueButton' => $showDummyRadioButton,
-                        'helpTextId' => $helpId,
-                        'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
-                        'category' => $category
-                    )
-                );
-            } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'TEXT_BIG') {
-                $form->addMultilineTextInput(
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                    $user->getValue($usfNameIntern),
-                    3,
-                    array(
-                        'maxLength' => 4000,
-                        'property' => $fieldProperty,
-                        'helpTextId' => $helpId,
-                        'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
-                        'category' => $category
-                    )
-                );
+            } elseif (!$user->getValue('usr_valid')) {
+                // a registration was edited then go back to profile view
+                $gNavigation->deleteLastUrl();
+                echo json_encode(array('status' => 'success', 'url' => $gNavigation->getPreviousUrl()));
+                exit();
             } else {
-                $fieldType = 'text';
-
-                if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DATE') {
-                    $fieldType = 'date';
-                    $maxlength = '10';
-                } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'EMAIL') {
-                    // email could not be longer than 254 characters
-                    $fieldType = 'email';
-                    $maxlength = '254';
-                } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'URL') {
-                    // maximal browser compatible url length will be 2000 characters
-                    $maxlength = '2000';
-                } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'NUMBER') {
-                    $fieldType = 'number';
-                    $maxlength = array(0, 9999999999, 1);
-                } elseif ($gProfileFields->getProperty($usfNameIntern, 'cat_name_intern') === 'SOCIAL_NETWORKS') {
-                    $maxlength = '255';
-                } else {
-                    $maxlength = '100';
-                }
-
-                $form->addInput(
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
-                    $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                    $user->getValue($usfNameIntern),
-                    array(
-                        'type' => $fieldType,
-                        'maxLength' => $maxlength,
-                        'property' => $fieldProperty,
-                        'helpTextId' => $helpId,
-                        'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
-                        'category' => $category
-                    )
-                );
+                // go back to profile view
+                $gNavigation->deleteLastUrl();
+                echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+                exit();
             }
         }
     }
-
-    // if captchas are enabled then visitors of the website must resolve this
-    if (!$gValidLogin && $gSettingsManager->getBool('registration_enable_captcha')) {
-        $form->addCaptcha('captcha_code');
-    }
-
-    if (!$gValidLogin) {
-        // Registration
-        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
-    } else {
-        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-    }
-
-    if ($getUserUuid !== '') {
-        // show information about user who creates the recordset and changed it
-        $page->assignSmartyVariable('nameUserCreated', $user->getNameOfCreatingUser());
-        $page->assignSmartyVariable('timestampUserCreated', $user->getValue('ann_timestamp_create'));
-        $page->assignSmartyVariable('nameLastUserEdited', $user->getNameOfLastEditingUser());
-        $page->assignSmartyVariable('timestampLastUserEdited', $user->getValue('ann_timestamp_change'));
-    }
-
-    $form->addToHtmlPage();
-    $_SESSION['profileEditForm'] = $form;
-
-    $page->show();
 } catch (AdmException|Exception $e) {
-    $gMessage->show($e->getMessage());
+    if ($getMode === 'save') {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    } else {
+        $gMessage->show($e->getMessage());
+    }
 }
