@@ -567,6 +567,8 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     *                        - **autocomplete** : Set the html attribute autocomplete to support this feature
+     *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
      * @throws AdmException
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
@@ -719,7 +721,11 @@ class Form
             }
         }
 
-        $optionsAll["attributes"] = $attributes;
+        if (isset($optionsAll['autocomplete'])) {
+            $attributes['autocomplete'] = $optionsAll['autocomplete'];
+        }
+
+        $optionsAll['attributes'] = $attributes;
         // replace quotes with html entities to prevent xss attacks
         $optionsAll['value'] = $value;
 
@@ -934,6 +940,8 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     *                        - **autocomplete** : Set the html attribute autocomplete to support this feature
+     *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
      * @throws AdmException
      */
     public function addSelectBox(string $id, string $label, array $values, array $options = array())
@@ -1071,6 +1079,10 @@ class Form
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
+        }
+
+        if (isset($optionsAll['autocomplete'])) {
+            $attributes['autocomplete'] = $optionsAll['autocomplete'];
         }
 
         $optionsAll["values"] = $valuesArray;
@@ -1581,14 +1593,17 @@ class Form
      * the $_POST variable as parameter $fieldValues. An exception is thrown if a required
      * form field doesn't have a value in the $fieldValues array.
      * @param array &$fieldValues Array with field name as key and field value as array value.
-     * @return void
+     * @return array Returns an array with all valid fields and their values of this form
      * @throws AdmException
      */
-    public function validate(array &$fieldValues)
+    public function validate(array &$fieldValues): array
     {
+        $validFieldValues = array();
+
         if (isset($fieldValues['admidio-csrf-token'])) {
             // check the CSRF token of the form against the session token
             \SecurityUtils::validateCsrfToken($fieldValues['admidio-csrf-token']);
+            unset($fieldValues['admidio-csrf-token']);
         } else {
             throw new AdmException('No CSRF token provided.');
         }
@@ -1628,36 +1643,41 @@ class Form
                 $fieldValues[$element['id']] = "0";
             }
 
-            // check value depending on the field type
-            if (isset($fieldValues[$element['id']]) && !is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {
-                switch ($element['type']) {
-                    case 'editor':
-                        // check html string vor invalid tags and scripts
-                        $config = HTMLPurifier_Config::createDefault();
-                        $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-                        $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
-                        $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+            if (isset($fieldValues[$element['id']])) {
+                $validFieldValues[$element['id']] = $fieldValues[$element['id']];
 
-                        $filter = new HTMLPurifier($config);
-                        $fieldValues[$element['id']] = $filter->purify($fieldValues[$element['id']]);
-                        break;
-                    case 'email':
-                        if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'email')) {
-                            throw new AdmException('SYS_EMAIL_INVALID', array($element['label']));
-                        }
-                        break;
-                    case 'number':
-                        if (!is_numeric($fieldValues[$element['id']]) || $fieldValues[$element['id']] < 0) {
-                            throw new AdmException('SYS_FIELD_INVALID_INPUT', array($element['label']));
-                        }
-                        break;
-                    case 'url':
-                        if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
-                            throw new AdmException('SYS_URL_INVALID_CHAR', array($element['label']));
-                        }
-                        break;
+                // check value depending on the field type
+                if (!is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {
+                    switch ($element['type']) {
+                        case 'editor':
+                            // check html string vor invalid tags and scripts
+                            $config = HTMLPurifier_Config::createDefault();
+                            $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+                            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+                            $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+
+                            $filter = new HTMLPurifier($config);
+                            $validFieldValues[$element['id']] = $filter->purify($fieldValues[$element['id']]);
+                            break;
+                        case 'email':
+                            if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'email')) {
+                                throw new AdmException('SYS_EMAIL_INVALID', array($element['label']));
+                            }
+                            break;
+                        case 'number':
+                            if (!is_numeric($fieldValues[$element['id']]) || $fieldValues[$element['id']] < 0) {
+                                throw new AdmException('SYS_FIELD_INVALID_INPUT', array($element['label']));
+                            }
+                            break;
+                        case 'url':
+                            if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
+                                throw new AdmException('SYS_URL_INVALID_CHAR', array($element['label']));
+                            }
+                            break;
+                    }
                 }
             }
         }
+        return $validFieldValues;
     }
 }

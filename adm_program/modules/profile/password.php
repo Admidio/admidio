@@ -112,7 +112,11 @@ try {
                 'old_password',
                 $gL10n->get('SYS_CURRENT_PASSWORD'),
                 '',
-                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
+                array(
+                    'type' => 'password',
+                    'property' => Form::FIELD_REQUIRED,
+                    'autocomplete' => 'current-password'
+                )
             );
         }
         $form->addInput(
@@ -121,18 +125,24 @@ try {
             '',
             array(
                 'type' => 'password',
-                'property' => HtmlForm::FIELD_REQUIRED,
+                'property' => Form::FIELD_REQUIRED,
                 'minLength' => PASSWORD_MIN_LENGTH,
                 'passwordStrength' => true,
                 'passwordUserData' => $user->getPasswordUserData(),
-                'helpTextId' => 'SYS_PASSWORD_DESCRIPTION'
+                'helpTextId' => 'SYS_PASSWORD_DESCRIPTION',
+                'autocomplete' => 'new-password'
             )
         );
         $form->addInput(
             'new_password_confirm',
             $gL10n->get('SYS_REPEAT'),
             '',
-            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+            array(
+                'type' => 'password',
+                'property' => Form::FIELD_REQUIRED,
+                'minLength' => PASSWORD_MIN_LENGTH,
+                'autocomplete' => 'new-password'
+            )
         );
         $form->addSubmitButton(
             'btn_save',

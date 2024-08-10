@@ -13,7 +13,7 @@
     {$lastCategory = ''}
 
     {foreach $elements as $key => $profileField}
-        {if $key !== 'first_row' &&  $key !== 'admidio-csrf-token' &&  $key !== 'btn_forward'}
+        {if {array_key_exists array=$profileField key="category"}}
             {if $profileField.category != $lastCategory}
                 {if $lastCategory != ''}
                     </div></div>

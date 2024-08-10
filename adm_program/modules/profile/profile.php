@@ -67,8 +67,6 @@ try {
         return $html;
     }
 
-    unset($_SESSION['profile_request']);
-
     $userId = $user->getValue('usr_id');
 
     // set headline
