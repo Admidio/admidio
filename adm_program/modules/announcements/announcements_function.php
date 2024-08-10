@@ -47,13 +47,13 @@ try {
     if ($getMode === 'edit') {
         if (isset($_SESSION['announcementsEditForm'])) {
             $announcementEditForm = $_SESSION['announcementsEditForm'];
-            $announcementEditForm->validate($_POST);
+            $formValues = $announcementEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
-        // write POST parameters in announcement object
-        foreach ($_POST as $key => $value) { // TODO possible security issue
+        // write form values in announcement object
+        foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'ann_')) {
                 $announcement->setValue($key, $value);
             }

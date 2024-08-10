@@ -59,7 +59,7 @@ try {
 
         if (isset($_SESSION['groupsRolesEditForm'])) {
             $groupsRolesEditForm = $_SESSION['groupsRolesEditForm'];
-            $groupsRolesEditForm->validate($_POST);
+            $formValues = $groupsRolesEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
@@ -101,7 +101,7 @@ try {
                 throw new AdmException('SYS_DATE_INVALID', array('SYS_VALID_FROM', 'YYYY-MM-DD'));
             } else {
                 // now write date and time with database format to date object
-                $_POST['rol_start_date'] = $validFromDate->format('Y-m-d');
+                $formValues['rol_start_date'] = $validFromDate->format('Y-m-d');
             }
         }
 
@@ -111,7 +111,7 @@ try {
                 throw new AdmException('SYS_DATE_INVALID', array('SYS_VALID_TO', 'YYYY-MM-DD'));
             } else {
                 // now write date and time with database format to date object
-                $_POST['rol_end_date'] = $validToDate->format('Y-m-d');
+                $formValues['rol_end_date'] = $validToDate->format('Y-m-d');
             }
         }
 
@@ -132,7 +132,7 @@ try {
                 throw new AdmException('SYS_TIME_INVALID', array('SYS_TIME_FROM', 'HH:ii'));
             } else {
                 // now write date and time with database format to date object
-                $_POST['rol_start_time'] = $validFromTime->format('H:i:s');
+                $formValues['rol_start_time'] = $validFromTime->format('H:i:s');
             }
         }
 
@@ -142,7 +142,7 @@ try {
                 throw new AdmException('SYS_TIME_INVALID', array('SYS_TIME_TO', 'HH:ii'));
             } else {
                 // now write date and time with database format to date object
-                $_POST['rol_end_time'] = $validToTime->format('H:i:s');
+                $formValues['rol_end_time'] = $validToTime->format('H:i:s');
             }
         }
 
@@ -158,7 +158,7 @@ try {
         }
 
         // write POST parameters in roles object
-        foreach ($_POST as $key => $value) { // TODO possible security issue
+        foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'rol_')) {
                 $role->setValue($key, $value);
             }

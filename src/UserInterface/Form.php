@@ -44,6 +44,7 @@
  */
 namespace Admidio\UserInterface;
 use HtmlPage;
+use SecurityUtils;
 use Smarty\Exception;
 use Smarty\Smarty;
 use AdmException;
@@ -1644,7 +1645,8 @@ class Form
             }
 
             if (isset($fieldValues[$element['id']])) {
-                $validFieldValues[$element['id']] = $fieldValues[$element['id']];
+                // remove html from every input value
+                $validFieldValues[$element['id']] = SecurityUtils::encodeHTML(StringUtils::strStripTags($fieldValues[$element['id']]));
 
                 // check value depending on the field type
                 if (!is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {

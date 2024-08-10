@@ -51,13 +51,13 @@ try {
     if ($getMode === 'create') {
         if (isset($_SESSION['linksEditForm'])) {
             $linksEditForm = $_SESSION['linksEditForm'];
-            $linksEditForm->validate($_POST);
+            $formValues = $linksEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         // POST variables to the announcements object
-        foreach ($_POST as $key => $value) { // TODO possible security issue
+        foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'lnk_')) {
                 $link->setValue($key, $value);
             }

@@ -94,7 +94,7 @@ try {
 
         if (isset($_SESSION['categoriesEditForm'])) {
             $categoryEditForm = $_SESSION['categoriesEditForm'];
-            $categoryEditForm->validate($_POST);
+            $formValues = $categoryEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
@@ -141,7 +141,7 @@ try {
         }
 
         // POST Writing variables to the UserField object
-        foreach ($_POST as $key => $value) { // TODO possible security issue
+        foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'cat_')) {
                 $category->setValue($key, $value);
             }

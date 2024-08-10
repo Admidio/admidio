@@ -49,7 +49,7 @@ try {
     if ($getMode === 'edit') {
         if (isset($_SESSION['photosEditForm'])) {
             $photosEditForm = $_SESSION['photosEditForm'];
-            $photosEditForm->validate($_POST);
+            $formValues = $photosEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
@@ -59,7 +59,7 @@ try {
             if ($startDate === false) {
                 throw new AdmException('SYS_DATE_INVALID', array('SYS_START', 'YYYY-MM-DD'));
             } else {
-                $_POST['pho_begin'] = $startDate->format('Y-m-d');
+                $formValues['pho_begin'] = $startDate->format('Y-m-d');
             }
         } else {
             throw new AdmException('SYS_FIELD_EMPTY', array('SYS_START'));
@@ -70,10 +70,10 @@ try {
             if ($endDate === false) {
                 throw new AdmException('SYS_DATE_INVALID', array('SYS_END', 'YYYY-MM-DD'));
             } else {
-                $_POST['pho_end'] = $endDate->format('Y-m-d');
+                $formValues['pho_end'] = $endDate->format('Y-m-d');
             }
         } else {
-            $_POST['pho_end'] = $_POST['pho_begin'];
+            $formValues['pho_end'] = $_POST['pho_begin'];
         }
 
         // Start must be before or equal to end
@@ -87,7 +87,7 @@ try {
         $_POST['pho_pho_id_parent'] = $photoAlbumParent->getValue('pho_id');
 
         //  POST Write variables to the Role object
-        foreach ($_POST as $key => $value) { // TODO possible security issue
+        foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'pho_')) {
                 $photoAlbum->setValue($key, $value);
             }

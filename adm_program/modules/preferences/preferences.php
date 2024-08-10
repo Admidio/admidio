@@ -78,7 +78,7 @@ try {
         case 'save':
             if (isset($_SESSION['preferences' . $getPanel . 'Form'])) {
                 $form = $_SESSION['preferences' . $getPanel . 'Form'];
-                $form->validate($_POST);
+                $formValues = $form->validate($_POST);
             } else {
                 throw new AdmException('SYS_INVALID_PAGE_VIEW');
             }
@@ -110,21 +110,21 @@ try {
                 case 'Messages':
                     // get real filename of the template file
                     if ($_POST['mail_template'] !== $gSettingsManager->getString('mail_template')) {
-                        $_POST['mail_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $_POST['mail_template']);
+                        $formValues['mail_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $_POST['mail_template']);
                     }
                     break;
 
                 case 'Photos':
                     // get real filename of the template file
                     if ($_POST['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
-                        $_POST['photo_ecard_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $_POST['photo_ecard_template']);
+                        $formValues['photo_ecard_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $_POST['photo_ecard_template']);
                     }
                     break;
             }
 
             // then update the database with the new values
 
-            foreach ($_POST as $key => $value) { // TODO possible security issue
+            foreach ($formValues as $key => $value) {
                 // Sort out elements that are not stored in adm_preferences here
                 if (!in_array($key, array('save', 'admidio-csrf-token'))) {
                     if (str_starts_with($key, 'org_')) {
