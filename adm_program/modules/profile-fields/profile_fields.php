@@ -23,8 +23,6 @@ try {
 
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    unset($_SESSION['fields_request']);
-
     // create html page object
     $page = new HtmlPage('admidio-profile-fields', $headline);
 
@@ -38,12 +36,9 @@ try {
         stop: function(event, ui) {
             const order = $(this).sortable("toArray", {attribute: "data-id"});
             const uid = ui.item.attr("data-id");
-            $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php",
-            {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '",
-             "mode": "sequence",
-             "uuid": uid,
-             "order": order
-            });
+            $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php?mode=sequence&uuid=" + uid + "&order=" + order,
+                {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"}
+            );
         }
     });
     $(".admidio-field-move").click(function() {

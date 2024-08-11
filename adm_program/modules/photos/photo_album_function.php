@@ -47,6 +47,7 @@ try {
     }
 
     if ($getMode === 'edit') {
+        // check form field input and sanitized it from malicious content
         if (isset($_SESSION['photosEditForm'])) {
             $photosEditForm = $_SESSION['photosEditForm'];
             $formValues = $photosEditForm->validate($_POST);
@@ -86,7 +87,7 @@ try {
         $photoAlbumParent->readDataByUuid($_POST['parent_album_uuid']);
         $_POST['pho_pho_id_parent'] = $photoAlbumParent->getValue('pho_id');
 
-        //  POST Write variables to the Role object
+        // write form values in photos object
         foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'pho_')) {
                 $photoAlbum->setValue($key, $value);

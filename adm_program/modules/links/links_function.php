@@ -49,6 +49,7 @@ try {
     }
 
     if ($getMode === 'create') {
+        // check form field input and sanitized it from malicious content
         if (isset($_SESSION['linksEditForm'])) {
             $linksEditForm = $_SESSION['linksEditForm'];
             $formValues = $linksEditForm->validate($_POST);
@@ -56,7 +57,7 @@ try {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
-        // POST variables to the announcements object
+        // write form values in weblinks object
         foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'lnk_')) {
                 $link->setValue($key, $value);

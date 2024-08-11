@@ -161,27 +161,8 @@ try {
     $form = new Form(
         'categories_edit_form',
         'modules/categories.edit.tpl',
-        ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('uuid' => $getCatUuid, 'mode' => 'edit', 'type' => $getType)),
         $page
-    );
-    // add a hidden field with context information
-    $form->addInput(
-        'mode',
-        'mode',
-        'edit',
-        array('property' => HtmlForm::FIELD_HIDDEN)
-    );
-    $form->addInput(
-        'uuid',
-        'uuid',
-        $getCatUuid,
-        array('property' => HtmlForm::FIELD_HIDDEN)
-    );
-    $form->addInput(
-        'type',
-        'type',
-        $getType,
-        array('property' => HtmlForm::FIELD_HIDDEN)
     );
 
     // system categories should not be renamed

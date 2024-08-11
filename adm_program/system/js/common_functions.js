@@ -36,7 +36,7 @@ function showHideBlock(elementId) {
  * @param {string}   mode       Mode of the script that is called.
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
-function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
+function callUrlHideElement(elementId, url, csrfToken, callback) {
     var entryDeleted = document.getElementById(elementId);
     if (!entryDeleted) {
         entryDeleted = document.getElementById("row_" + elementId);
@@ -45,8 +45,7 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
     // send RequestObject and delete entry
     $.post(url, {
         "admidio-csrf-token": csrfToken,
-        "uuid": elementId,
-        "mode": mode
+        "uuid": elementId
         }, function(data) {
         const messageText = $("#status-message");
         var returnStatus = "error";
@@ -205,7 +204,7 @@ function redirectPost(url, data) {
  * @param {string} csrfToken  If this is set than it will be added to the post request.
  */
 function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
-    $.post(updateSequenceUrl, {
+    $.post(updateSequenceUrl + "?mode=sequence&uuid=" + elementId + "&direction=" + direction, {
             "admidio-csrf-token": csrfToken,
             "direction": direction,
             "uuid": elementId,

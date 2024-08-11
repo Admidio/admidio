@@ -12,10 +12,12 @@
  * usf_uuid : UUID of the profile field that should be edited
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getUsfUuid = admFuncVariableIsValid($_GET, 'usf_uuid', 'uuid');
 
@@ -54,22 +56,6 @@ try {
 
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    if (isset($_SESSION['fields_request'])) {
-        // hidden must be 0, if the flag should be set
-        if ($_SESSION['fields_request']['usf_hidden'] == 1) {
-            $_SESSION['fields_request']['usf_hidden'] = 0;
-        } else {
-            $_SESSION['fields_request']['usf_hidden'] = 1;
-        }
-
-        // due to incorrect input, the user has returned to this form
-        // Now write the previously entered content into the object
-        $userFieldDescription = admFuncVariableIsValid($_SESSION['fields_request'], 'usf_description', 'html');
-        $userField->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['fields_request'])));
-        $userField->setValue('usf_description', $userFieldDescription);
-        unset($_SESSION['fields_request']);
-    }
-
     // create html page object
     $page = new HtmlPage('admidio-profile-fields-edit', $headline);
 
@@ -88,35 +74,26 @@ try {
     );
 
     // show form
-    $form = new HtmlForm('profile_fields_edit_form', ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', $page);
-    // add a hidden field with context information
-    $form->addInput(
-        'mode',
-        'mode',
-        'edit',
-        array('property' => HtmlForm::FIELD_HIDDEN)
-    );
-    $form->addInput(
-        'uuid',
-        'uuid',
-        $getUsfUuid,
-        array('property' => HtmlForm::FIELD_HIDDEN)
+    $form = new Form(
+        'profile_fields_edit_form',
+        'modules/profile-fields.edit.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('uuid' => $getUsfUuid, 'mode' => 'edit')),
+        $page
     );
 
-    $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     if ($userField->getValue('usf_system') == 1) {
         $form->addInput(
             'usf_name',
             $gL10n->get('SYS_NAME'),
             htmlentities($userField->getValue('usf_name', 'database'), ENT_QUOTES),
-            array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
+            array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
         );
     } else {
         $form->addInput(
             'usf_name',
             $gL10n->get('SYS_NAME'),
             htmlentities($userField->getValue('usf_name', 'database'), ENT_QUOTES),
-            array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+            array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
         );
     }
 
@@ -127,7 +104,7 @@ try {
             'usf_name_intern',
             $gL10n->get('SYS_INTERNAL_NAME'),
             $usfNameIntern,
-            array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
+            array('maxLength' => 100, 'property' => Form::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
         );
     }
 
@@ -136,7 +113,7 @@ try {
             'usf_cat_id',
             $gL10n->get('SYS_CATEGORY'),
             $userField->getValue('cat_name'),
-            array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
+            array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
         );
     } else {
         $form->addSelectBoxForCategories(
@@ -144,12 +121,10 @@ try {
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             'USF',
-            HtmlForm::SELECT_BOX_MODUS_EDIT,
-            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('cat_uuid'))
+            Form::SELECT_BOX_MODUS_EDIT,
+            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('cat_uuid'))
         );
     }
-    $form->closeGroupBox();
-    $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
     $userFieldText = array(
         'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
         'DATE' => $gL10n->get('SYS_DATE'),
@@ -171,7 +146,7 @@ try {
             'usf_type',
             $gL10n->get('ORG_DATATYPE'),
             $userFieldText[$userField->getValue('usf_type')],
-            array('maxLength' => 30, 'property' => HtmlForm::FIELD_DISABLED)
+            array('maxLength' => 30, 'property' => Form::FIELD_DISABLED)
         );
     } else {
         // if it's not a system field the user must select the data type
@@ -179,7 +154,7 @@ try {
             'usf_type',
             $gL10n->get('ORG_DATATYPE'),
             $userFieldText,
-            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type'))
+            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type'))
         );
     }
     $form->addMultilineTextInput(
@@ -187,22 +162,22 @@ try {
         $gL10n->get('SYS_VALUE_LIST'),
         htmlentities($userField->getValue('usf_value_list', 'database'), ENT_QUOTES),
         6,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com">', '</a>')))
+        array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com">', '</a>')))
     );
     $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
-    if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
+    if (in_array($usfNameIntern, array('LAST_NAME', 'FIRST_NAME'))) {
         $form->addInput(
             'usf_required_input',
             $gL10n->get('SYS_REQUIRED_INPUT'),
             $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
-            array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+            array('maxLength' => 50, 'property' => Form::FIELD_DISABLED)
         );
     } else {
         $form->addSelectBox(
             'usf_required_input',
             $gL10n->get('SYS_REQUIRED_INPUT'),
             $mandatoryFieldValues,
-            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
+            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
         );
     }
     $form->addCheckbox(
@@ -218,12 +193,12 @@ try {
         array('helpTextId' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'bi-key-fill')
     );
 
-    if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL') {
+    if (in_array($usfNameIntern, array('LAST_NAME', 'FIRST_NAME', 'EMAIL'))) {
         $form->addCheckbox(
             'usf_registration',
             $gL10n->get('ORG_FIELD_REGISTRATION'),
             (bool)$userField->getValue('usf_registration'),
-            array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'bi-card-checklist')
+            array('property' => Form::FIELD_DISABLED, 'icon' => 'bi-card-checklist')
         );
     } else {
         $form->addCheckbox(
@@ -258,27 +233,24 @@ try {
         'usf_url',
         $gL10n->get('SYS_URL'),
         $userField->getValue('usf_url'),
-        array('maxLength' => 2000, 'helpTextId' => 'ORG_FIELD_URL_DESC')
+        array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => 'ORG_FIELD_URL_DESC')
     );
-    $form->closeGroupBox();
-    $form->openGroupBox('gb_description', '', 'admidio-panel-editor');
     $form->addEditor(
         'usf_description',
         $gL10n->get('SYS_DESCRIPTION'),
         $userField->getValue('usf_description'),
         array('toolbar' => 'AdmidioComments'));
-    $form->closeGroupBox();
-
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-    $form->addHtml(admFuncShowCreateChangeInfoById(
-        (int)$userField->getValue('usf_usr_id_create'),
-        $userField->getValue('usf_timestamp_create'),
-        (int)$userField->getValue('usf_usr_id_change'),
-        $userField->getValue('usf_timestamp_change')
-    ));
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $page->assignSmartyVariable('fieldNameIntern', $usfNameIntern);
+    $page->assignSmartyVariable('systemField', $userField->getValue('usf_system'));
+    $page->assignSmartyVariable('nameUserCreated', $userField->getNameOfCreatingUser());
+    $page->assignSmartyVariable('timestampUserCreated', $userField->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('nameLastUserEdited', $userField->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('timestampLastUserEdited', $userField->getValue('ann_timestamp_change'));
+    $form->addToHtmlPage();
+    $_SESSION['profileFieldsEditForm'] = $form;
+
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

@@ -365,6 +365,7 @@ try {
         // Save all data of the profile form to the user object
         // ------------------------------------------------------------
 
+        // check form field input and sanitized it from malicious content
         if (isset($_SESSION['profileEditForm'])) {
             $profileEditForm = $_SESSION['profileEditForm'];
             $formValues = $profileEditForm->validate($_POST);

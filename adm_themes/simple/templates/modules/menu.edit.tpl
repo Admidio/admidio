@@ -4,8 +4,6 @@
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['mode']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['uuid']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['men_name']}
     {if {array_key_exists array=$elements key='men_name_intern'}}
         {include 'sys-template-parts/form.input.tpl' data=$elements['men_name_intern']}

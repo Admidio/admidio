@@ -24,8 +24,8 @@ require_once(__DIR__ . '/../../system/common.php');
 
 try {
     // Initialize and check the parameters
-    $postMenuUUID = admFuncVariableIsValid($_POST, 'uuid', 'uuid');
-    $postMode = admFuncVariableIsValid($_POST, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
+    $getMenuUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
 
     // check rights
     if (!$gCurrentUser->isAdministrator()) {
@@ -35,12 +35,12 @@ try {
     // create menu object
     $menu = new TableMenu($gDb);
 
-    if ($postMenuUUID !== '') {
-        $menu->readDataByUuid($postMenuUUID);
+    if ($getMenuUUID !== '') {
+        $menu->readDataByUuid($getMenuUUID);
     }
 
     // create menu or update it
-    if ($postMode === 'edit') {
+    if ($getMode === 'edit') {
         if (isset($_SESSION['menuEditForm'])) {
             $menuEditForm = $_SESSION['menuEditForm'];
             $menuEditForm->validate($_POST);
@@ -98,7 +98,7 @@ try {
 
         echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
         exit();
-    } elseif ($postMode === 'delete') {
+    } elseif ($getMode === 'delete') {
         // delete menu
 
         // check the CSRF token of the form against the session token
@@ -107,7 +107,7 @@ try {
         $menu->delete();
         echo json_encode(array('status' => 'success'));
         exit();
-    } elseif ($postMode === 'sequence') {
+    } elseif ($getMode === 'sequence') {
         // Update menu sequence
         $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
 
@@ -122,7 +122,7 @@ try {
         exit();
     }
 } catch (AdmException|Exception $e) {
-    if ($postMode === 'sequence') {
+    if ($getMode === 'sequence') {
         echo $e->getMessage();
     } else {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));

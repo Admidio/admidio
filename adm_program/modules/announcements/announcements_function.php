@@ -45,6 +45,7 @@ try {
     }
 
     if ($getMode === 'edit') {
+        // check form field input and sanitized it from malicious content
         if (isset($_SESSION['announcementsEditForm'])) {
             $announcementEditForm = $_SESSION['announcementsEditForm'];
             $formValues = $announcementEditForm->validate($_POST);
@@ -65,7 +66,6 @@ try {
         }
 
         $gNavigation->deleteLastUrl();
-
         echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
         exit();
     } elseif ($getMode === 'delete') {

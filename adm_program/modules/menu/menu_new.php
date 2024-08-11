@@ -118,21 +118,8 @@ try {
     $form = new Form(
         'menu_edit_form',
         'modules/menu.edit.tpl',
-        ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('uuid' => $getMenuUuid, 'mode' => 'edit')),
         $page
-    );
-    // add a hidden field with context information
-    $form->addInput(
-        'mode',
-        'mode',
-        'edit',
-        array('property' => Form::FIELD_HIDDEN)
-    );
-    $form->addInput(
-        'uuid',
-        'uuid',
-        $getMenuUuid,
-        array('property' => Form::FIELD_HIDDEN)
     );
 
     $fieldRequired = Form::FIELD_REQUIRED;

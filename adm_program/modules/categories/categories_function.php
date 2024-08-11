@@ -26,9 +26,9 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 try {
     // Initialize and check the parameters
-    $postCatUUID = admFuncVariableIsValid($_POST, 'uuid', 'uuid');
-    $postType = admFuncVariableIsValid($_POST, 'type', 'string', array('validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'EVT', 'AWA')));
-    $postMode = admFuncVariableIsValid($_POST, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
+    $getCatUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
+    $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'EVT', 'AWA')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
 
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
@@ -36,24 +36,24 @@ try {
     // create category object
     $category = new TableCategory($gDb);
 
-    if ($postCatUUID !== '') {
-        $category->readDataByUuid($postCatUUID);
+    if ($getCatUUID !== '') {
+        $category->readDataByUuid($getCatUUID);
 
         // if system category then set cat_name to default
         if ($category->getValue('cat_system') == 1) {
             $_POST['cat_name'] = $category->getValue('cat_name');
         }
-        if ($postType === '') {
-            $postType = $category->getValue('cat_type');
+        if ($getType === '') {
+            $getType = $category->getValue('cat_type');
         }
     } else {
         // create a new category
         $category->setValue('cat_org_id', $gCurrentOrgId);
-        $category->setValue('cat_type', $postType);
+        $category->setValue('cat_type', $getType);
     }
 
     // set text strings for the different modules
-    switch ($postType) {
+    switch ($getType) {
         case 'ANN':
             $component = 'ANNOUNCEMENTS';
             break;
@@ -89,9 +89,10 @@ try {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    if ($postMode === 'edit') {
+    if ($getMode === 'edit') {
         // create or edit category
 
+        // check form field input and sanitized it from malicious content
         if (isset($_SESSION['categoriesEditForm'])) {
             $categoryEditForm = $_SESSION['categoriesEditForm'];
             $formValues = $categoryEditForm->validate($_POST);
@@ -99,7 +100,7 @@ try {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
-        if ($postType !== 'ROL'
+        if ($getType !== 'ROL'
             && ((bool)$category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)
             && !isset($_POST['adm_categories_view_right'])) {
             throw new AdmException('SYS_FIELD_EMPTY', array('SYS_VISIBLE_FOR'));
@@ -114,9 +115,9 @@ try {
         // set a global category if it's not a role category and the flag was set,
         // if it's a profile field category and only 1 organization exists,
         // if it's the role category of events
-        if (($postType !== 'ROL' && isset($_POST['show_in_several_organizations']))
-            || ($postType === 'USF' && $gCurrentOrganization->countAllRecords() === 1)
-            || ($postType === 'ROL' && $category->getValue('cat_name_intern') === 'EVENTS')) {
+        if (($getType !== 'ROL' && isset($_POST['show_in_several_organizations']))
+            || ($getType === 'USF' && $gCurrentOrganization->countAllRecords() === 1)
+            || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'EVENTS')) {
             $category->setValue('cat_org_id', 0);
             $sqlSearchOrga = ' AND (  cat_org_id = ? -- $gCurrentOrgId
                                OR cat_org_id IS NULL )';
@@ -129,18 +130,18 @@ try {
             // See if the category already exists
             $sql = 'SELECT COUNT(*) AS count
                   FROM ' . TBL_CATEGORIES . '
-                 WHERE cat_type = ? -- $postType
+                 WHERE cat_type = ? -- $getType
                    AND cat_name = ? -- $_POST[\'cat_name\']
-                   AND cat_uuid <> ? -- $postCatUUID
+                   AND cat_uuid <> ? -- $getCatUUID
                        ' . $sqlSearchOrga;
-            $categoriesStatement = $gDb->queryPrepared($sql, array($postType, $_POST['cat_name'], $postCatUUID, $gCurrentOrgId));
+            $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $_POST['cat_name'], $getCatUUID, $gCurrentOrgId));
 
             if ($categoriesStatement->fetchColumn() > 0) {
                 throw new AdmException('SYS_CATEGORY_EXISTS_IN_ORGA');
             }
         }
 
-        // POST Writing variables to the UserField object
+        // write form values in category object
         foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'cat_')) {
                 $category->setValue($key, $value);
@@ -152,7 +153,7 @@ try {
         // write category into database
         $category->save();
 
-        if ($postType !== 'ROL' && $category->getValue('cat_name_intern') !== 'BASIC_DATA') {
+        if ($getType !== 'ROL' && $category->getValue('cat_name_intern') !== 'BASIC_DATA') {
             $rightCategoryView = new RolesRights($gDb, 'category_view', (int)$category->getValue('cat_id'));
 
             // roles have their own preferences for visibility, so only allow this for other types
@@ -166,7 +167,7 @@ try {
                 $rightCategoryView->delete();
             }
 
-            if ($postType === 'USF') {
+            if ($getType === 'USF') {
                 // delete cache with profile categories rights
                 $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
             } else {
@@ -183,11 +184,11 @@ try {
 
         $sql = 'SELECT *
               FROM ' . TBL_CATEGORIES . '
-             WHERE cat_type = ? -- $postType
+             WHERE cat_type = ? -- $getType
                AND (  cat_org_id  = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence';
-        $categoriesStatement = $gDb->queryPrepared($sql, array($postType, $gCurrentOrgId));
+        $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $gCurrentOrgId));
 
         while ($row = $categoriesStatement->fetch()) {
             ++$sequence;
@@ -201,16 +202,15 @@ try {
         $gDb->endTransaction();
 
         $gNavigation->deleteLastUrl();
-
         echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
         exit();
-    } elseif ($postMode === 'delete') {
+    } elseif ($getMode === 'delete') {
         // delete category
         if ($category->delete()) {
             echo json_encode(array('status' => 'success'));
             exit();
         }
-    } elseif ($postMode === 'sequence') {
+    } elseif ($getMode === 'sequence') {
         // Update category sequence
         $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableCategory::MOVE_UP, TableCategory::MOVE_DOWN)));
 
