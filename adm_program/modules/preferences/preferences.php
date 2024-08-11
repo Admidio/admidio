@@ -76,6 +76,7 @@ try {
             $page->show();
             break;
         case 'save':
+            // check form field input and sanitized it from malicious content
             if (isset($_SESSION['preferences' . $getPanel . 'Form'])) {
                 $form = $_SESSION['preferences' . $getPanel . 'Form'];
                 $formValues = $form->validate($_POST);

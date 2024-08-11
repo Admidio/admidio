@@ -41,40 +41,33 @@ try {
 
     // create menu or update it
     if ($getMode === 'edit') {
+        // within standard menu items the url should not be changed
+        if ($menu->getValue('men_standard')) {
+            $_POST['men_com_id'] = $menu->getValue('men_com_id');
+            $_POST['men_url'] = $menu->getValue('men_url');
+        }
+
+        // check form field input and sanitized it from malicious content
         if (isset($_SESSION['menuEditForm'])) {
             $menuEditForm = $_SESSION['menuEditForm'];
-            $menuEditForm->validate($_POST);
+            $formValues = $menuEditForm->validate($_POST);
         } else {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
-        $postIdParent = admFuncVariableIsValid($_POST, 'men_men_id_parent', 'int');
-        $postComId = admFuncVariableIsValid($_POST, 'men_com_id', 'int');
-        $postName = admFuncVariableIsValid($_POST, 'men_name', 'string', array('default' => ''));
-        $postDesc = admFuncVariableIsValid($_POST, 'men_description', 'string', array('default' => ''));
-        $postUrl = admFuncVariableIsValid($_POST, 'men_url', 'string', array('default' => ''));
-        $postIcon = admFuncVariableIsValid($_POST, 'men_icon', 'string', array('default' => ''));
-
-        // within standard menu items the url should not be changed
-        if ($menu->getValue('men_standard')) {
-            $postUrl = $menu->getValue('men_url');
-        }
-
         // check url here because it could be a real url or a relative local url
-        if (!StringUtils::strValidCharacters($postUrl, 'url')
-            && !preg_match('=^[^*;:~<>|\"\\\\]+$=', $postUrl)) {
+        if (!StringUtils::strValidCharacters($_POST['men_url'], 'url')
+            && !preg_match('=^[^*;:~<>|\"\\\\]+$=', $_POST['men_url'])) {
             throw new AdmException('SYS_URL_INVALID_CHAR', array('SYS_URL'));
         }
 
         $gDb->startTransaction();
 
-        $menu->setValue('men_icon', $postIcon);
-        $menu->setValue('men_men_id_parent', $postIdParent);
-        $menu->setValue('men_name', $postName);
-        $menu->setValue('men_description', $postDesc);
-        if (!$menu->getValue('men_standard')) {
-            $menu->setValue('men_url', $postUrl);
-            $menu->setValue('men_com_id', $postComId);
+        // write form values in menu object
+        foreach ($formValues as $key => $value) {
+            if (str_starts_with($key, 'men_')) {
+                $menu->setValue($key, $value);
+            }
         }
         $returnCode = $menu->save();
 
@@ -90,12 +83,7 @@ try {
 
         $gDb->endTransaction();
 
-        if ($gNavigation->count() > 1) {
-            $gNavigation->deleteLastUrl();
-        } else {
-            $gNavigation->addUrl($gHomepage, 'Home');
-        }
-
+        $gNavigation->deleteLastUrl();
         echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
         exit();
     } elseif ($getMode === 'delete') {

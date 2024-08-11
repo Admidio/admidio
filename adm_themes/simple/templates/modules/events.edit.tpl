@@ -8,11 +8,9 @@
         <div class="card-header">{$l10n->get('SYS_TITLE')} &amp; {$l10n->get('SYS_VENUE')}</div>
         <div class="card-body">
             {include 'sys-template-parts/form.input.tpl' data=$elements['dat_headline']}
-            {if {array_key_exists array=$elements key='dat_location'}}
-                {include 'sys-template-parts/form.input.tpl' data=$elements['dat_location']}
-            {/if}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['dat_location']}
             {if {array_key_exists array=$elements key='dat_country'}}
-                {include 'sys-template-parts/form.input.tpl' data=$elements['dat_country']}
+                {include 'sys-template-parts/form.select.tpl' data=$elements['dat_country']}
             {/if}
             {if {array_key_exists array=$elements key='dat_room_id'}}
                 {include 'sys-template-parts/form.select.tpl' data=$elements['dat_room_id']}
