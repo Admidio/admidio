@@ -8,12 +8,28 @@
  */
 final class SecurityUtils
 {
+    public static function myHtmlEntities($value)
+    {
+        if (is_array($value)) {
+            return array_map('SecurityUtils::myHtmlEntities', $value);
+        }
+        return htmlentities($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
+    public static function myHtmlSpecialChars($value)
+    {
+        if (is_array($value)) {
+            return array_map('SecurityUtils::myHtmlSpecialChars', $value);
+        }
+        return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
     /**
      * Encodes all HTML special characters
      * If $encodeAll is false, this method is only secure if encoding is not UTF-7
-     * @param string|array<mixed,string> $input     The input string
-     * @param bool   $encodeAll Set true to encode really all HTML special characters
-     * @param string $encoding  Define character encoding to use
+     * @param string|array<mixed,string> $input The input string
+     * @param bool $encodeAll Set true to encode really all HTML special characters
+     * @param string $encoding Define character encoding to use
      * @return string|array<mixed,string> Encoded string
      */
     public static function encodeHTML($input, bool $encodeAll = false, string $encoding = 'UTF-8')
@@ -22,22 +38,10 @@ final class SecurityUtils
             // call function for every array element
             if ($encodeAll) {
                 // Encodes: all special HTML characters
-                function myHtmlentities($value) {
-                    if (is_array($value)) {
-                        return array_map('myHtmlentities', $value);
-                    }
-                    return htmlentities($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                }
-                $input = array_map('myHtmlentities', $input);
+                $input = array_map('SecurityUtils::myHtmlEntities', $input);
             } else {
                 // Encodes: &, ", ', <, >
-                function myHtmlspecialchars($value) {
-                    if (is_array($value)) {
-                        return array_map('myHtmlspecialchars', $value);
-                    }
-                    return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                }
-                $input = array_map('myHtmlspecialchars', $input);
+                $input = array_map('SecurityUtils::myHtmlSpecialChars', $input);
             }
         } else {
             if ($encodeAll) {
@@ -54,7 +58,7 @@ final class SecurityUtils
 
     /**
      * Build URL with query-string and anker and optional encodes all HTML special characters
-     * @param string $path   The URL path
+     * @param string $path The URL path
      * @param array<string,mixed> $params The query-params
      * @param string $anchor The Url-anker
      * @param bool $encode Set true to also encode all HTML special characters
@@ -83,13 +87,13 @@ final class SecurityUtils
 
     /**
      * Generate an insecure pseudo-random integer
-     * @param int $min                     The min of the range (inclusive)
-     * @param int $max                     The max of the range (inclusive)
+     * @param int $min The min of the range (inclusive)
+     * @param int $max The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @param Error|Exception $exception               The thrown Error or Exception object.
-     * @param string $exceptionMessage        The Admidio Exception-Message.
+     * @param Error|Exception $exception The thrown Error or Exception object.
+     * @param string $exceptionMessage The Admidio Exception-Message.
      * @return int Returns an insecure pseudo-random integer
-     *@throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      */
     private static function getRandomIntFallback(int $min, int $max, bool $exceptionOnInsecurePRNG, $exception, string $exceptionMessage): int
     {
@@ -107,11 +111,11 @@ final class SecurityUtils
 
     /**
      * Generate a cryptographically secure pseudo-random integer
-     * @param int $min                     The min of the range (inclusive)
-     * @param int $max                     The max of the range (inclusive)
+     * @param int $min The min of the range (inclusive)
+     * @param int $max The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
      * @return int Returns a cryptographically secure pseudo-random integer
-     *@throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      */
     public static function getRandomInt(int $min, int $max, bool $exceptionOnInsecurePRNG = false): int
     {
@@ -128,7 +132,7 @@ final class SecurityUtils
 
     /**
      * Generate a cryptographically secure pseudo-random string
-     * @param int $length  The length of the generated string (default = 16)
+     * @param int $length The length of the generated string (default = 16)
      * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
      * @return string Returns a cryptographically secure pseudo-random string
      * @throws UnexpectedValueException Charset contains duplicate chars.
