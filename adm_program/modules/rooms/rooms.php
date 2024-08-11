@@ -19,8 +19,6 @@ try {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    unset($_SESSION['rooms_request']);
-
     $headline = $gL10n->get('SYS_ROOM_MANAGEMENT');
     $textRoom = $gL10n->get('SYS_ROOM');
 
