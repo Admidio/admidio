@@ -652,7 +652,7 @@
   <string name="SYS_EVENT_CHANGED_TITLE">Eine Veranstaltung wurde geändert auf #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">Eine neue Veranstaltung wurde angelegt auf #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Teilnehmende können sich bis zu diesem Datum an der Veranstaltung anmelden. Leiter:innen und Benutzer:innen mit dem Recht Veranstaltungen zu bearbeiten können weiterhin Teilnehmende zuordnen. Wenn kein Datum angegeben wird, dann wird das Startdatum der Veranstaltung als Anmeldeschluss angenommen.</string>
-  <string name="SYS_EVENT_MAX_MEMBERS">Hier kann die Anzahl der Teilnehmenden für diese der Veranstaltung beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
+  <string name="SYS_EVENT_MAX_MEMBERS">Hier kann die Anzahl der Teilnehmenden für diese Veranstaltung beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
   <string name="SYS_EVENT_PARTICIPATION_ATTEND">Ich nehme teil</string>
   <string name="SYS_EVENT_PARTICIPATION_TENTATIVE">Unter Vorbehalt</string>
   <string name="SYS_EVENT_PARTICIPATION_INVITED">Eingeladen</string>
