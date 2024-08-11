@@ -13,7 +13,7 @@
  * Parameters:
  *
  * urt_uuid : UUID of the relation type that should be edited
- * mode     : create - Create or edit relation type
+ * mode     : edit   - Create or edit relation type
  *            delete - Delete relation type
  *
  *****************************************************************************/
@@ -24,7 +24,7 @@ try {
 
     // Initialize and check the parameters
     $getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'uuid');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create', 'delete')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete')));
 
     if (!$gSettingsManager->getBool('contacts_user_relations_enabled')) {
         throw new AdmException('SYS_MODULE_DISABLED');
@@ -34,54 +34,39 @@ try {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     $relationType = new TableUserRelationType($gDb);
 
     if ($getUrtUuid !== '') {
         $relationType->readDataByUuid($getUrtUuid);
     }
 
-    if ($getMode === 'create') {
+    if ($getMode === 'edit') {
         // create or edit relation type
 
-        if (!isset($_POST['urt_edit_user'])) {
-            $_POST['urt_edit_user'] = 0;
-        }
-
-        if (!isset($_POST['urt_edit_user_inverse'])) {
-            $_POST['urt_edit_user_inverse'] = 0;
+        // check form field input and sanitized it from malicious content
+        if (isset($_SESSION['userRelationsTypeEditForm'])) {
+            $userRelationsTypeEditForm = $_SESSION['userRelationsTypeEditForm'];
+            $formValues = $userRelationsTypeEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         $relationType2 = new TableUserRelationType($gDb);
         if ($getUrtUuid !== '') {
+            $formValues['relation_type'] = $relationType->getRelationTypeString();
             $relationType2->readDataById((int)$relationType->getValue('urt_id_inverse'));
         }
 
-        $relationType->setValue('urt_name', $_POST['urt_name']);
-        $relationType->setValue('urt_name_male', empty($_POST['urt_name_male']) ? $_POST['urt_name'] : $_POST['urt_name_male']);
-        $relationType->setValue('urt_name_female', empty($_POST['urt_name_female']) ? $_POST['urt_name'] : $_POST['urt_name_female']);
-        $relationType->setValue('urt_edit_user', $_POST['urt_edit_user']);
+        $relationType->setValue('urt_name', $formValues['urt_name']);
+        $relationType->setValue('urt_name_male', empty($formValues['urt_name_male']) ? $formValues['urt_name'] : $formValues['urt_name_male']);
+        $relationType->setValue('urt_name_female', empty($formValues['urt_name_female']) ? $formValues['urt_name'] : $formValues['urt_name_female']);
+        $relationType->setValue('urt_edit_user', $formValues['urt_edit_user']);
 
-        $postRelationType = admFuncVariableIsValid(
-            $_POST,
-            'relation_type',
-            'string',
-            array(
-                'defaultValue' => $relationType->getRelationTypeString(),
-                'validValues' => array(
-                    TableUserRelationType::USER_RELATION_TYPE_ASYMMETRICAL,
-                    TableUserRelationType::USER_RELATION_TYPE_SYMMETRICAL,
-                    TableUserRelationType::USER_RELATION_TYPE_UNIDIRECTIONAL
-                )
-            )
-        );
-        if ($postRelationType === 'asymmetrical') {
-            $relationType2->setValue('urt_name', $_POST['urt_name_inverse']);
-            $relationType2->setValue('urt_name_male', empty($_POST['urt_name_male_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_male_inverse']);
-            $relationType2->setValue('urt_name_female', empty($_POST['urt_name_female_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_female_inverse']);
-            $relationType2->setValue('urt_edit_user', $_POST['urt_edit_user_inverse']);
+        if ($formValues['relation_type'] === TableUserRelationType::USER_RELATION_TYPE_ASYMMETRICAL) {
+            $relationType2->setValue('urt_name', $formValues['urt_name_inverse']);
+            $relationType2->setValue('urt_name_male', empty($formValues['urt_name_male_inverse']) ? $formValues['urt_name_inverse'] : $formValues['urt_name_male_inverse']);
+            $relationType2->setValue('urt_name_female', empty($formValues['urt_name_female_inverse']) ? $formValues['urt_name_inverse'] : $formValues['urt_name_female_inverse']);
+            $relationType2->setValue('urt_edit_user', $formValues['urt_edit_user_inverse']);
         }
 
         // write data into database
@@ -89,7 +74,7 @@ try {
 
         $relationType->save();
 
-        if ($postRelationType === 'asymmetrical') {
+        if ($formValues['relation_type'] === TableUserRelationType::USER_RELATION_TYPE_ASYMMETRICAL) {
             if ($getUrtUuid === '') {
                 $relationType2->setValue('urt_id_inverse', (int)$relationType->getValue('urt_id'));
             }
@@ -100,7 +85,7 @@ try {
                 $relationType->setValue('urt_id_inverse', (int)$relationType2->getValue('urt_id'));
                 $relationType->save();
             }
-        } elseif ($postRelationType === 'symmetrical') {
+        } elseif ($formValues['relation_type'] === TableUserRelationType::USER_RELATION_TYPE_SYMMETRICAL) {
             $relationType->setValue('urt_id_inverse', (int)$relationType->getValue('urt_id'));
             $relationType->save();
         }
@@ -108,18 +93,18 @@ try {
         $gDb->endTransaction();
 
         $gNavigation->deleteLastUrl();
-        admRedirect($gNavigation->getUrl());
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     } elseif ($getMode === 'delete') {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // delete relation type
-        if ($relationType->delete()) {
-            echo 'done';
-        }
+        $relationType->delete();
+
+        echo json_encode(array('status' => 'success'));
+        exit();
     }
 } catch (AdmException|Exception $e) {
-    if ($getMode === 'create') {
-        $gMessage->show($e->getMessage());
-    } else {
-        echo $e->getMessage();
-    }
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

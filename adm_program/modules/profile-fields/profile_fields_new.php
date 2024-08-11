@@ -61,11 +61,14 @@ try {
 
     $page->addJavascript('
         $("#usf_type").change(function() {
+            $classes = $("#suf_value_list_group").attr("class");
             if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "RADIO_BUTTON") {
-                $("#usf_value_list_group").show("slow");
                 $("#usf_value_list").attr("required", "required");
+                $("#usf_value_list_group").addClass("admidio-form-group-required");
+                $("#usf_value_list_group").show("slow");
             } else {
                 $("#usf_value_list").removeAttr("required");
+                $("#usf_value_list_group").removeClass("admidio-form-group-required");
                 $("#usf_value_list_group").hide();
             }
         });

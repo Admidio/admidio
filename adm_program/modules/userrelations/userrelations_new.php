@@ -12,6 +12,7 @@
  * user_uuid : UUID of the first user in the new relation
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -54,12 +55,17 @@ try {
     $page = new HtmlPage('admidio-userrelations-edit', $headline);
 
     // show form
-    $form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'create')), $page);
+    $form = new Form(
+        'userRelationsEditForm',
+        'modules/user-relations.edit.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'create')),
+        $page
+    );
 
     $sqlData = array();
     if ($gCurrentUser->editUsers()) {
         // the user has the edit right, therefore he can edit all visible users
-        $sqlData['query'] = 'SELECT usr_id, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
+        $sqlData['query'] = 'SELECT usr_uuid, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
                            FROM ' . TBL_MEMBERS . '
                      INNER JOIN ' . TBL_ROLES . '
                              ON rol_id = mem_rol_id
@@ -98,7 +104,7 @@ try {
         );
     } else {
         // select all users which the current user can edit because of role leader rights
-        $sqlData['query'] = 'SELECT usr_id, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
+        $sqlData['query'] = 'SELECT usr_uuid, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
                            FROM ' . TBL_MEMBERS . '
                      INNER JOIN ' . TBL_USERS . '
                              ON usr_id = mem_usr_id
@@ -144,18 +150,18 @@ try {
     }
 
     $form->addSelectBoxFromSql(
-        'usr_id2',
+        'usr_uuid2',
         $gL10n->get('SYS_MEMBER'),
         $gDb,
         $sqlData,
         array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true, 'placeholder' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -')
     );
     // select box showing all relation types
-    $sql = 'SELECT urt_id, REPLACE(\'' . $gL10n->get('SYS_IS_VAR_FROM') . '\', \'#VAR1#\', urt_name)
+    $sql = 'SELECT urt_uuid, REPLACE(\'' . $gL10n->get('SYS_IS_VAR_FROM') . '\', \'#VAR1#\', urt_name)
           FROM ' . TBL_USER_RELATION_TYPES . '
       ORDER BY urt_name';
     $form->addSelectBoxFromSql(
-        'urt_id',
+        'urt_uuid',
         $gL10n->get('SYS_USER_RELATION'),
         $gDb,
         $sql,
@@ -163,7 +169,7 @@ try {
     );
 
     $form->addInput(
-        'usr_id',
+        'selectedUser',
         $gL10n->get('SYS_CURRENT_MEMBER'),
         $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
@@ -171,8 +177,9 @@ try {
 
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $form->addToHtmlPage();
+    $_SESSION['userRelationsEditForm'] = $form;
+
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

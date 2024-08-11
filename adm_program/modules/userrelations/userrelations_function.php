@@ -37,9 +37,6 @@ try {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     $relation = new TableUserRelation($gDb);
     $user1 = new User($gDb, $gProfileFields);
     $user2 = new User($gDb, $gProfileFields);
@@ -54,6 +51,14 @@ try {
     }
 
     if ($getMode === 'create') {
+        // check form field input and sanitized it from malicious content
+        if (isset($_SESSION['userRelationsEditForm'])) {
+            $userRelationsEditForm = $_SESSION['userRelationsEditForm'];
+            $formValues = $userRelationsEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
+
         $user1->readDataByUuid($getUserUuid);
 
         if ($user1->isNewRecord()) {
@@ -64,8 +69,8 @@ try {
             throw new AdmException('SYS_NO_RIGHTS');
         }
 
-        $postUsrId2 = admFuncVariableIsValid($_POST, 'usr_id2', 'int');
-        $user2->readDataById($postUsrId2);
+        $postUsrId2 = admFuncVariableIsValid($_POST, 'usr_uuid2', 'uuid');
+        $user2->readDataByUuid($postUsrId2);
 
         if ($user2->isNewRecord()) {
             throw new AdmException('SYS_NO_ENTRY');
@@ -75,8 +80,9 @@ try {
             throw new AdmException('SYS_NO_RIGHTS');
         }
 
-        $postUrtId = admFuncVariableIsValid($_POST, 'urt_id', 'int');
-        $relationType = new TableUserRelationType($gDb, $postUrtId);
+        $postUrtUUID = admFuncVariableIsValid($_POST, 'urt_uuid', 'uuid');
+        $relationType = new TableUserRelationType($gDb);
+        $relationType->readDataByUuid($postUrtUUID);
 
         if ($relationType->isNewRecord()) {
             throw new AdmException('SYS_NO_ENTRY');
@@ -101,18 +107,18 @@ try {
         $gDb->endTransaction();
 
         $gNavigation->deleteLastUrl();
-        admRedirect($gNavigation->getUrl());
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     } elseif ($getMode === 'delete') {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // delete relation
-        if ($relation->delete()) {
-            echo 'done';
-        }
+        $relation->delete();
+
+        echo json_encode(array('status' => 'success'));
+        exit();
     }
 } catch (AdmException|Exception $e) {
-    if ($getMode === 'create') {
-        $gMessage->show($e->getMessage());
-    } else {
-        echo $e->getMessage();
-    }
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
