@@ -124,7 +124,7 @@ try {
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             'ANN',
-            HtmlForm::SELECT_BOX_MODUS_FILTER,
+            Form::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $getCatUuid)
         );
         $form->addToHtmlPage();

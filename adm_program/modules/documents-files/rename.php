@@ -93,20 +93,20 @@ try {
             'file_type',
             $gL10n->get('SYS_FILE_TYPE'),
             $fileType,
-            array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small')
+            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small')
         );
     }
     $form->addInput(
         'previous_name',
         $gL10n->get('SYS_PREVIOUS_NAME'),
         $originalName,
-        array('property' => HtmlForm::FIELD_DISABLED)
+        array('property' => Form::FIELD_DISABLED)
     );
     $form->addInput(
         'new_name',
         $gL10n->get('SYS_NEW_NAME'),
         $formValues['new_name'],
-        array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'SYS_FILE_NAME_RULES')
+        array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'SYS_FILE_NAME_RULES')
     );
     $form->addMultilineTextInput(
         'new_description',

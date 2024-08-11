@@ -194,7 +194,7 @@ try {
         'dat_headline',
         $gL10n->get('SYS_TITLE'),
         $event->getValue('dat_headline'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
     );
 
     // if a map link should be shown in the event then show help text and a field where the user could choose the country
@@ -249,21 +249,21 @@ try {
         'event_from',
         $gL10n->get('SYS_START'),
         $event->getValue('dat_begin', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
-        array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
+        array('type' => 'datetime', 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
         'event_to',
         $gL10n->get('SYS_END'),
         $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
-        array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
+        array('type' => 'datetime', 'property' => Form::FIELD_REQUIRED)
     );
     $form->addSelectBoxForCategories(
         'cat_uuid',
         $gL10n->get('SYS_CALENDAR'),
         $gDb,
         'EVT',
-        HtmlForm::SELECT_BOX_MODUS_EDIT,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid'))
+        Form::SELECT_BOX_MODUS_EDIT,
+        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid'))
     );
 
     $form->addCheckbox('dat_highlight', $gL10n->get('SYS_HIGHLIGHT_EVENT'), (bool)$event->getValue('dat_highlight'));

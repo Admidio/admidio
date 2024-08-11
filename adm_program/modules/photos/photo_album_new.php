@@ -105,7 +105,7 @@ try {
         'pho_name',
         $gL10n->get('SYS_ALBUM'),
         $photoAlbum->getValue('pho_name'),
-        array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)
+        array('property' => Form::FIELD_REQUIRED, 'maxLength' => 50)
     );
     subfolder(0, '', $photoAlbum->getValue('pho_id'));
     $form->addSelectBox(
@@ -113,7 +113,7 @@ try {
         $gL10n->get('SYS_PARENT_ALBUM'),
         $photoAlbumsArray,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
+            'property' => Form::FIELD_REQUIRED,
             'defaultValue' => $getParentPhotoUuid,
             'showContextDependentFirstEntry' => false,
             'helpTextId' => $gL10n->get('SYS_PARENT_ALBUM_DESC', array('SYS_PHOTO_ALBUMS'))
@@ -123,7 +123,7 @@ try {
         'pho_begin',
         $gL10n->get('SYS_START'),
         $photoAlbum->getValue('pho_begin'),
-        array('property' => HtmlForm::FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10)
+        array('property' => Form::FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10)
     );
     $form->addInput(
         'pho_end',

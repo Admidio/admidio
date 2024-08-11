@@ -141,13 +141,13 @@ try {
         $groupsRoles,
         array('type' => 'navbar', 'setFocus' => false)
     );
-    $form->addInput('show', '', $getShow, array('property' => HtmlForm::FIELD_HIDDEN));
+    $form->addInput('show', '', $getShow, array('property' => Form::FIELD_HIDDEN));
     $form->addSelectBoxForCategories(
         'cat_uuid',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         'ROL',
-        HtmlForm::SELECT_BOX_MODUS_FILTER,
+        Form::SELECT_BOX_MODUS_FILTER,
         array('defaultValue' => $getCatUuid)
     );
     if ($gCurrentUser->manageRoles()) {

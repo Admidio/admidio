@@ -127,7 +127,7 @@ try {
         $gDb,
         $sqlDataView,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
+            'property' => Form::FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,
             'multiselect' => true,
             'firstEntry' => $firstEntryViewRoles
@@ -139,7 +139,7 @@ try {
         $gDb,
         $sqlDataView,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
+            'property' => Form::FIELD_REQUIRED,
             'defaultValue' => $roleUploadSet,
             'multiselect' => true,
             'placeholder' => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
@@ -149,7 +149,7 @@ try {
         'adm_administrators',
         $gL10n->get('SYS_ADMINISTRATORS'),
         implode(', ', $adminRoles),
-        array('property' => HtmlForm::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
+        array('property' => Form::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
     );
     $form->addSubmitButton(
         'btn_save',

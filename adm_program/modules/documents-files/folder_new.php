@@ -58,7 +58,7 @@ try {
         'new_folder',
         $gL10n->get('SYS_NAME'),
         '',
-        array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addMultilineTextInput(
         'new_description',

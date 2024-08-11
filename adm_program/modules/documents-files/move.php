@@ -68,7 +68,7 @@ try {
         $gL10n->get('SYS_MOVE_TO'),
         $folders,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
+            'property' => Form::FIELD_REQUIRED,
             'defaultValue' => $getFolderUuid,
             'showContextDependentFirstEntry' => false
         )

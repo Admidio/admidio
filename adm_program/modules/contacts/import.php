@@ -55,7 +55,7 @@ try {
         array(
             'showContextDependentFirstEntry' => false,
             'defaultValue' => 'AUTO',
-            'property' => HtmlForm::FIELD_REQUIRED
+            'property' => Form::FIELD_REQUIRED
         )
     );
     $page->addJavascript(
@@ -72,7 +72,7 @@ try {
     $form->addFileUpload(
         'userfile',
         $gL10n->get('SYS_CHOOSE_FILE'),
-        array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
+        array('property' => Form::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
             'text/html',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'application/vnd.ms-excel',
@@ -181,7 +181,7 @@ try {
         $gL10n->get('SYS_ASSIGN_ROLE'),
         $roles,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
+            'property' => Form::FIELD_REQUIRED,
             'defaultValue' => 0,
             'helpTextId' => 'SYS_ASSIGN_ROLE_FOR_IMPORT'
         )
@@ -198,7 +198,7 @@ try {
         $gL10n->get('SYS_EXISTING_CONTACTS'),
         $selectBoxEntries,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
+            'property' => Form::FIELD_REQUIRED,
             'defaultValue' => 1,
             'showContextDependentFirstEntry' => false,
             'helpTextId' => 'SYS_IDENTIFY_USERS'

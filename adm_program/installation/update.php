@@ -211,13 +211,13 @@ try {
                 'login_name',
                 $gL10n->get('SYS_USERNAME'),
                 '',
-                array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+                array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
             $form->addInput(
                 'password',
                 $gL10n->get('SYS_PASSWORD'),
                 '',
-                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+                array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
             $form->addSubmitButton(
                 'next_page',
@@ -278,7 +278,7 @@ try {
         $page->setUpdateModus();
         $page->addJavascript('$("#next_page").focus();', true);
 
-        $form = new HtmlForm('update-successful-form', ADMIDIO_HOMEPAGE . 'donate.php', null, array('setFocus' => false));
+        $form = new Form('update-successful-form', ADMIDIO_HOMEPAGE . 'donate.php', null, array('setFocus' => false));
         $form->addButton(
             'main_page',
             $gL10n->get('SYS_LATER'),

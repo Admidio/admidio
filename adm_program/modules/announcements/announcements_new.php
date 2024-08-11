@@ -75,21 +75,21 @@ try {
         'ann_headline',
         $gL10n->get('SYS_TITLE'),
         $announcement->getValue('ann_headline'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addSelectBoxForCategories(
         'ann_cat_id',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         'ANN',
-        HtmlForm::SELECT_BOX_MODUS_EDIT,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('cat_uuid'))
+        Form::SELECT_BOX_MODUS_EDIT,
+        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('cat_uuid'))
     );
     $form->addEditor(
         'ann_description',
         $gL10n->get('SYS_TEXT'),
         $announcement->getValue('ann_description'),
-        array('property' => HtmlForm::FIELD_REQUIRED)
+        array('property' => Form::FIELD_REQUIRED)
     );
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 

@@ -189,7 +189,7 @@ try {
                 $gL10n->get('SYS_CALENDAR'),
                 $gDb,
                 'EVT',
-                HtmlForm::SELECT_BOX_MODUS_FILTER,
+                Form::SELECT_BOX_MODUS_FILTER,
                 array('defaultValue' => $getCatUuid)
             );
             $form->addInput(
@@ -204,7 +204,7 @@ try {
                 $events->getParameter('dateEndFormatEnglish'),
                 array('type' => 'date', 'maxLength' => 10)
             );
-            $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput('view', '', $getView, array('property' => Form::FIELD_HIDDEN));
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $form->addToHtmlPage();
         }

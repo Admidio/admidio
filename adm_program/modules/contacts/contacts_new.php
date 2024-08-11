@@ -30,13 +30,13 @@ try {
         'lastname',
         $gL10n->get('SYS_LASTNAME'),
         '',
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
         'firstname',
         $gL10n->get('SYS_FIRSTNAME'),
         '',
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addSubmitButton(
         'btn_add',

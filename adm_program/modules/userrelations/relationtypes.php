@@ -8,6 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
@@ -48,7 +50,7 @@ try {
     // create array with all column heading values
     $columnHeading = array(
         $gL10n->get('SYS_USER_RELATION'),
-        $gL10n->get('SYS_USER_RELATION_TYPE') . HtmlForm::getHelpTextIcon('SYS_RELATIONSHIP_TYPE_DESC'),
+        $gL10n->get('SYS_USER_RELATION_TYPE') . Form::getHelpTextIcon('SYS_RELATIONSHIP_TYPE_DESC'),
         '&nbsp;'
     );
     $relationTypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));

@@ -54,13 +54,13 @@ try {
         'room_name',
         $gL10n->get('SYS_ROOM'),
         $room->getValue('room_name'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
         'room_capacity',
         $gL10n->get('SYS_CAPACITY') . ' (' . $gL10n->get('SYS_SEATING') . ')',
         (int)$room->getValue('room_capacity'),
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
         'room_overhang',

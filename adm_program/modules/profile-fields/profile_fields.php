@@ -9,10 +9,12 @@
  *
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // only authorized users can edit the profile fields
     if (!$gCurrentUser->isAdministrator()) {
         throw new AdmException('SYS_NO_RIGHTS');
@@ -84,7 +86,7 @@ try {
 
     // create array with all column heading values
     $columnHeading = array(
-        $gL10n->get('SYS_FIELD') . HtmlForm::getHelpTextIcon('ORG_FIELD_DESCRIPTION'),
+        $gL10n->get('SYS_FIELD') . Form::getHelpTextIcon('ORG_FIELD_DESCRIPTION'),
         '&nbsp;',
         $gL10n->get('ORG_DATATYPE'),
         '<i class="bi bi-eye-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('ORG_FIELD_NOT_HIDDEN') . '"></i>',
@@ -173,7 +175,7 @@ try {
 
         // create array with all column values
         $columnValues = array(
-            '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)) . '">' . $userField->getValue('usf_name') . '</a>' . HtmlForm::getHelpTextIcon((string)$userField->getValue('usf_description'), 'SYS_NOTE', array($userField->getValue('usf_name'))),
+            '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)) . '">' . $userField->getValue('usf_name') . '</a>' . Form::getHelpTextIcon((string)$userField->getValue('usf_description'), 'SYS_NOTE', array($userField->getValue('usf_name'))),
             '<a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $usfUuid . '" data-direction="' . TableUserField::MOVE_UP . '">' .
             '<i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $usfUuid . '" data-direction="' . TableUserField::MOVE_DOWN . '">' .

@@ -154,7 +154,7 @@ try {
         $gL10n->get('SYS_MEMBER'),
         $gDb,
         $sqlData,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true, 'placeholder' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -')
+        array('property' => Form::FIELD_REQUIRED, 'search' => true, 'placeholder' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -')
     );
     // select box showing all relation types
     $sql = 'SELECT urt_uuid, REPLACE(\'' . $gL10n->get('SYS_IS_VAR_FROM') . '\', \'#VAR1#\', urt_name)
@@ -165,14 +165,14 @@ try {
         $gL10n->get('SYS_USER_RELATION'),
         $gDb,
         $sql,
-        array('property' => HtmlForm::FIELD_REQUIRED)
+        array('property' => Form::FIELD_REQUIRED)
     );
 
     $form->addInput(
         'selectedUser',
         $gL10n->get('SYS_CURRENT_MEMBER'),
         $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
+        array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
     );
 
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));

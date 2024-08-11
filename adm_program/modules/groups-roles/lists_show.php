@@ -432,9 +432,9 @@ try {
             // create filter menu with elements for start-/end date
             $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('list_uuid', '', $getListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addInput('role_list', '', $getRoleList, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput('list_uuid', '', $getListUuid, array('property' => Form::FIELD_HIDDEN));
+            $form->addInput('role_list', '', $getRoleList, array('property' => Form::FIELD_HIDDEN));
+            $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => Form::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
         }

@@ -246,7 +246,7 @@ try {
             $columnHeading[] = $gL10n->get('SYS_BIRTHDAY');
             $columnAlignment[] = 'left';
         }
-        $columnHeading[] = $gL10n->get('SYS_LEADER') . HtmlForm::getHelpTextIcon($htmlLeaderText);
+        $columnHeading[] = $gL10n->get('SYS_LEADER') . Form::getHelpTextIcon($htmlLeaderText);
         $columnAlignment[] = 'left';
 
         $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_uuid' => $getFilterRoleUuid, 'mem_show_all' => $getMembersShowAll)));

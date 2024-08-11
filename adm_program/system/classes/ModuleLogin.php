@@ -87,7 +87,7 @@ class ModuleLogin
             'usr_login_name',
             $gL10n->get('SYS_USERNAME'),
             '',
-            array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
+            array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
         );
         $form->addInput(
             'usr_password',
@@ -95,7 +95,7 @@ class ModuleLogin
             '',
             array(
                 'type' => 'password',
-                'property' => HtmlForm::FIELD_REQUIRED,
+                'property' => Form::FIELD_REQUIRED,
                 'helpTextId' => '<a href="' . $forgotPasswordLink . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'
             )
         );
@@ -109,7 +109,7 @@ class ModuleLogin
             $gL10n->get('SYS_ORGANIZATION'),
             $gDb,
             $sql,
-            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $organizationShortName)
+            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $organizationShortName)
         );
 
         $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));

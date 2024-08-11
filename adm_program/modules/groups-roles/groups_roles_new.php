@@ -125,9 +125,9 @@ try {
     );
 
     if ($role->getValue('rol_administrator') === 1 || $eventRole) {
-        $fieldProperty = HtmlForm::FIELD_READONLY;
+        $fieldProperty = Form::FIELD_READONLY;
     } else {
-        $fieldProperty = HtmlForm::FIELD_REQUIRED;
+        $fieldProperty = Form::FIELD_REQUIRED;
     }
     $form->addInput(
         'rol_name',
@@ -140,15 +140,15 @@ try {
         $gL10n->get('SYS_DESCRIPTION'),
         $role->getValue('rol_description'),
         3,
-        array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_DEFAULT), 'maxLength' => 4000)
+        array('property' => ($eventRole ? Form::FIELD_READONLY : Form::FIELD_DEFAULT), 'maxLength' => 4000)
     );
     $form->addSelectBoxForCategories(
         'rol_cat_id',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         ($eventRole ? 'ROL_EVENT' : 'ROL'),
-        HtmlForm::SELECT_BOX_MODUS_EDIT,
-        array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
+        Form::SELECT_BOX_MODUS_EDIT,
+        array('property' => ($eventRole ? Form::FIELD_READONLY : Form::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
     );
     if ($gSettingsManager->getBool('enable_mail_module')) {
         $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'));

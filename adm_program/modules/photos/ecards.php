@@ -115,9 +115,9 @@ try {
         ADMIDIO_URL . FOLDER_MODULES . '/photos/ecard_send.php',
         $page
     );
-    $form->addInput('submit_action', '', '', array('property' => HtmlForm::FIELD_HIDDEN));
-    $form->addInput('photo_uuid', '', $getPhotoUuid, array('property' => HtmlForm::FIELD_HIDDEN));
-    $form->addInput('photo_nr', '', $getPhotoNr, array('property' => HtmlForm::FIELD_HIDDEN));
+    $form->addInput('submit_action', '', '', array('property' => Form::FIELD_HIDDEN));
+    $form->addInput('photo_uuid', '', $getPhotoUuid, array('property' => Form::FIELD_HIDDEN));
+    $form->addInput('photo_nr', '', $getPhotoNr, array('property' => Form::FIELD_HIDDEN));
 
     $templates = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 
@@ -199,25 +199,25 @@ try {
         'ecard_recipients',
         $gL10n->get('SYS_TO'),
         $list,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'multiselect' => true)
+        array('property' => Form::FIELD_REQUIRED, 'multiselect' => true)
     );
     $form->addInput(
         'name_from',
         $gL10n->get('SYS_YOUR_NAME'),
         $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
-        array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+        array('maxLength' => 50, 'property' => Form::FIELD_DISABLED)
     );
     $form->addInput(
         'mail_from',
         $gL10n->get('SYS_YOUR_EMAIL'),
         $gCurrentUser->getValue('EMAIL'),
-        array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+        array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_DISABLED)
     );
     $form->addEditor(
         'ecard_message',
         '',
         '',
-        array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
+        array('property' => Form::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
     );
     $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'bi-eye-fill'));
     $form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));

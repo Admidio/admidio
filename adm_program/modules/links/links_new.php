@@ -67,21 +67,21 @@ try {
         'lnk_name',
         $gL10n->get('SYS_LINK_NAME'),
         $link->getValue('lnk_name'),
-        array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 250, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
         'lnk_url',
         $gL10n->get('SYS_LINK_ADDRESS'),
         $link->getValue('lnk_url'),
-        array('type' => 'url', 'maxLength' => 2000, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('type' => 'url', 'maxLength' => 2000, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addSelectBoxForCategories(
         'lnk_cat_id',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         'LNK',
-        HtmlForm::SELECT_BOX_MODUS_EDIT,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $link->getValue('cat_uuid'))
+        Form::SELECT_BOX_MODUS_EDIT,
+        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $link->getValue('cat_uuid'))
     );
     $form->addEditor(
         'lnk_description',

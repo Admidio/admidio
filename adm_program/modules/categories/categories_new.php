@@ -166,9 +166,9 @@ try {
     );
 
     // system categories should not be renamed
-    $fieldPropertyCatName = HtmlForm::FIELD_REQUIRED;
+    $fieldPropertyCatName = Form::FIELD_REQUIRED;
     if ($category->getValue('cat_system') == 1) {
-        $fieldPropertyCatName = HtmlForm::FIELD_DISABLED;
+        $fieldPropertyCatName = Form::FIELD_DISABLED;
     }
 
     $form->addInput(
@@ -232,7 +232,7 @@ try {
             $gDb,
             $sqlDataView,
             array(
-                'property' => HtmlForm::FIELD_REQUIRED,
+                'property' => Form::FIELD_REQUIRED,
                 'defaultValue' => $roleViewSet,
                 'multiselect' => true,
                 'firstEntry' => array('0', $firstEntryName, null),
@@ -259,13 +259,13 @@ try {
     // if current organization has a parent organization or is child organizations then show option to set this category to global
     if ($getType !== 'ROL' && (bool)$category->getValue('cat_system') === false && $gCurrentOrganization->countAllRecords() > 1) {
         if ($gCurrentOrganization->isChildOrganization()) {
-            $fieldProperty = HtmlForm::FIELD_DISABLED;
+            $fieldProperty = Form::FIELD_DISABLED;
             $helpTextId = 'SYS_ONLY_SET_BY_MOTHER_ORGANIZATION';
         } else {
             // show all organizations where this organization is mother or child organization
             $organizations = implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-            $fieldProperty = HtmlForm::FIELD_DEFAULT;
+            $fieldProperty = Form::FIELD_DEFAULT;
             if ($getType === 'USF') {
                 $helpTextId = $gL10n->get('SYS_CATEGORY_VISIBLE_ALL_ORGA', array($organizations));
             } else {
@@ -294,7 +294,7 @@ try {
             'adm_administrators',
             $gL10n->get('SYS_ADMINISTRATORS'),
             implode(', ', $adminRoles),
-            array('property' => HtmlForm::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
+            array('property' => Form::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
         );
 
         $checked = false;
