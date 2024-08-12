@@ -18,6 +18,8 @@
  *                2 - show active and former members of role
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
@@ -55,48 +57,22 @@ try {
     $list = new ListConfiguration($gDb);
     $list->readDataByUuid($getListUuid);
 
-    if (isset($_SESSION['mylist_request'])) {
-        $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['mylist_request']));
-        unset($_SESSION['mylist_request']);
+    // if a saved configuration was loaded then add columns to formValues array
+    if ($getListUuid !== '') {
+        $defaultColumnRows = $list->countColumns();
 
-        if (!isset($formValues['cbx_global_configuration'])) {
-            $formValues['cbx_global_configuration'] = 0;
-        }
+        for ($number = 1, $max = $list->countColumns(); $number <= $max; ++$number) {
+            $column = $list->getColumnObject($number);
+            $userField = new TableUserField($gDb, (int)$column->getValue('lsc_usf_id'));
 
-        if (!isset($formValues['sel_roles'])) {
-            $formValues['sel_roles'] = '';
-        }
-
-        // if rows for columns have been added manually before, they must now be created directly
-        for ($i = $defaultColumnRows + 1; $i > 0; ++$i) {
-            if (isset($formValues['column' . $i])) {
-                ++$defaultColumnRows;
+            if ($column->getValue('lsc_usf_id') > 0) {
+                $formValues['column' . $number] = $userField->getValue('usf_name_intern');
             } else {
-                $i = -1;
+                $formValues['column' . $number] = $column->getValue('lsc_special_field');
             }
-        }
-    } else {
-        $formValues['sel_select_configuration'] = $getListUuid;
-        $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
-        $formValues['sel_roles'] = $getRoleList;
 
-        // if a saved configuration was loaded then add columns to formValues array
-        if ($getListUuid !== '') {
-            $defaultColumnRows = $list->countColumns();
-
-            for ($number = 1, $max = $list->countColumns(); $number <= $max; ++$number) {
-                $column = $list->getColumnObject($number);
-                $userField = new TableUserField($gDb, (int)$column->getValue('lsc_usf_id'));
-
-                if ($column->getValue('lsc_usf_id') > 0) {
-                    $formValues['column' . $number] = $userField->getValue('usf_name_intern');
-                } else {
-                    $formValues['column' . $number] = $column->getValue('lsc_special_field');
-                }
-
-                $formValues['sort' . $number] = $column->getValue('lsc_sort');
-                $formValues['condition' . $number] = $column->getValue('lsc_filter');
-            }
+            $formValues['sort' . $number] = $column->getValue('lsc_sort');
+            $formValues['condition' . $number] = $column->getValue('lsc_filter');
         }
     }
 
@@ -443,33 +419,31 @@ try {
             }
         }
 
-        var myListConfigForm = document.getElementById("mylist_configuration_form");
-
         switch (mode) {
             case "show":
-                myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 'save_temporary')) . '";
-                myListConfigForm.submit();
+                $("#myListConfigurationForm").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 'save_temporary')) . '");
+                $("#myListConfigurationForm").submit();
                 break;
 
             case "save":
-                myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 'save')) . '";
-                myListConfigForm.submit();
+                $("#myListConfigurationForm").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 'save')) . '");
+                $("#myListConfigurationForm").submit();
                 break;
 
             case "save_as":
                 var listName = "";
                 listName = prompt("' . $gL10n->get('SYS_CONFIGURATION_SAVE') . '");
                 if (listName !== null) {
-                    myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 'save')) . '&name=" + listName;
-                    myListConfigForm.submit();
+                    $("#myListConfigurationForm").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 'save_as')) . '&name=" + listName);
+                    $("#myListConfigurationForm").submit();
                 }
                 break;
 
             case "delete":
                 var msg_result = confirm("' . $gL10n->get('SYS_CONFIGURATION_DELETE') . '");
                 if (msg_result) {
-                    myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 'delete')) . '";
-                    myListConfigForm.submit();
+                    $("#myListConfigurationForm").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 'delete')) . '");
+                    $("#myListConfigurationForm").submit();
                 }
                 break;
         }
@@ -490,8 +464,7 @@ try {
     });', true);
 
     // show form
-    $form = new HtmlForm('mylist_configuration_form', '#', $page);
-    $form->openGroupBox('gb_configuration_list', $gL10n->get('SYS_CONFIGURATION'));
+    $form = new Form('myListConfigurationForm', 'modules/groups-roles.mylist.config.tpl', '#', $page);
 
     // read all relevant configurations from database and create an array
     $yourLastConfigurationsGroup = false;
@@ -547,7 +520,7 @@ try {
         'sel_select_configuration',
         $gL10n->get('SYS_SELECT_CONFIGURATION'),
         $configurationsArray,
-        array('defaultValue' => $formValues['sel_select_configuration'], 'showContextDependentFirstEntry' => false)
+        array('defaultValue' => $getListUuid, 'showContextDependentFirstEntry' => false)
     );
 
     // Administrators could upgrade a configuration to a global configuration that is visible to all users
@@ -556,57 +529,29 @@ try {
             'cbx_global_configuration',
             $gL10n->get('SYS_CONFIGURATION_ALL_USERS'),
             (bool)$list->getValue('lst_global'),
-            array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextId' => 'SYS_PRESET_CONFIGURATION_DESC')
+            array('defaultValue' => $list->getValue('lst_global'), 'helpTextId' => 'SYS_PRESET_CONFIGURATION_DESC')
         );
     }
 
-    $form->addDescription($gL10n->get('SYS_ADD_COLUMNS_DESC'));
-    $form->addHtml('
-    <div class="table-responsive">
-    <table class="table table-condensed" id="mylist_fields_table">
-        <thead>
-            <tr>
-                <th style="width: 20%;">' . $gL10n->get('SYS_ABR_NO') . '</th>
-                <th style="width: 37%;">' . $gL10n->get('SYS_CONTENT') . '</th>
-                <th style="width: 18%;">' . $gL10n->get('SYS_ORDER') . '</th>
-                <th style="width: 25%;">' . $gL10n->get('SYS_CONDITION') . '
-                    <a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg"
-                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/msg_window.php', array('message_id' => 'mylist_condition', 'inline' => 'true')) . '">
-                        <i class="bi bi-info-circle-fill admidio-info-icon"></i>
-                    </a>
-                </th>
-            </tr>
-        </thead>
-        <tbody id="mylist_fields_tbody">
-        </tbody>
-    </table>
-    </div>');
-
-    $form->openButtonGroup();
-    $form->addButton('btn_add_column', $gL10n->get('SYS_ADD_COLUMN'), array('icon' => 'bi-plus-circle-fill'));
+    $form->addButton('btn_add_column', $gL10n->get('SYS_ADD_COLUMN'), array('icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'));
     if ($getListUuid !== '' && $list->getValue('lst_name') !== '') {
-        $form->addButton('btn_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'bi-check-lg'));
+        $form->addButton('btn_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'bi-check-lg', 'class' => 'btn-primary'));
     } else {
-        $form->addButton('btn_save', $gL10n->get('SYS_SAVE_CONFIGURATION'), array('icon' => 'bi-check-lg'));
+        $form->addButton('btn_save', $gL10n->get('SYS_SAVE_CONFIGURATION'), array('icon' => 'bi-check-lg', 'class' => 'btn-primary'));
     }
     // your lists could be deleted, administrators are allowed to delete system configurations
     if (($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
         || ($gCurrentUserId === (int)$list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0)) {
-        $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'bi bi-trash'));
+        $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'bi bi-trash', 'class' => 'btn-primary'));
     }
     // current configuration can be duplicated and saved with another name
     if (strlen($list->getValue('lst_name')) > 0) {
         $form->addButton(
             'btn_copy',
             $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
-            array('icon' => 'bi-copy')
+            array('icon' => 'bi-copy', 'class' => 'btn-primary')
         );
     }
-    $form->closeButtonGroup();
-
-    $form->closeGroupBox();
-
-    $form->openGroupBox('gb_select_members', $gL10n->get('SYS_SELECT_MEMBERS'));
 
     // show all roles where the user has the right to view them
     $sqlData = array();
@@ -648,7 +593,7 @@ try {
         $gL10n->get('SYS_ROLE'),
         $gDb,
         $sqlData,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles'], 'multiselect' => true)
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $getRoleList, 'multiselect' => true)
     );
 
     if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
@@ -665,16 +610,21 @@ try {
         );
     }
 
-    $form->closeGroupBox();
-
-    $form->addButton(
+    $form->addSubmitButton(
         'btn_show_list',
         $gL10n->get('SYS_SHOW_LIST'),
-        array('icon' => 'bi-card-list', 'class' => 'btn-primary admidio-margin-bottom')
+        array('icon' => 'bi-card-list')
     );
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $page->assignSmartyVariable('urlConditionHelpText',
+        SecurityUtils::encodeUrl(
+            ADMIDIO_URL . '/adm_program/system/msg_window.php',
+            array('message_id' => 'mylist_condition', 'inline' => 'true')
+        )
+    );
+    $form->addToHtmlPage();
+    $_SESSION['myListConfigurationForm'] = $form;
+
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

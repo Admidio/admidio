@@ -11,6 +11,7 @@
  *
  * list_uuid : UUID of the list configuration that should be edited
  * mode      : save           - Save list configuration
+ *             save_as        - Save list configuration under a specific name
  *             save_temporary - Save temporary list configuration and show list
  *             delete         - Delete list configuration
  * name      : (optional) Name of the list that should be used to save list
@@ -22,10 +23,8 @@ try {
 
     // Initialize and check the parameters
     $getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'uuid');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('save', 'save_temporary', 'delete')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('save', 'save_as', 'save_temporary', 'delete')));
     $getName = admFuncVariableIsValid($_GET, 'name', 'string');
-
-    $_SESSION['mylist_request'] = $_POST;
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('groups_roles_enable_module')
@@ -66,7 +65,7 @@ try {
     }
 
     // save list
-    if (in_array($getMode, array('save', 'save_temporary'), true)) {
+    if (in_array($getMode, array('save', 'save_as', 'save_temporary'))) {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
@@ -91,7 +90,7 @@ try {
         }
 
         // set list global only in save mode
-        if ($getMode === 'save' && $gCurrentUser->isAdministrator()) {
+        if (in_array($getMode, array('save', 'save_as')) && $gCurrentUser->isAdministrator()) {
             $list->setValue('lst_global', $globalConfiguration);
         } else {
             $list->setValue('lst_global', 0);
@@ -102,34 +101,37 @@ try {
         $listUuid = $list->getValue('lst_uuid');
 
         if ($getMode === 'save') {
-            // save new id to session so that we can restore the configuration with new list name
-            $_SESSION['mylist_request']['sel_select_configuration'] = $listUuid;
-
             // go back to mylist configuration
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('list_uuid' => $listUuid)));
-            // => EXIT
+            echo json_encode(array('status' => 'success'));
+            exit();
+        } elseif ($getMode === 'save_as') {
+            // redirect back to myList and show saved list
+            $urlNextPage = SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php',
+                array('list_uuid' => $listUuid)
+            );
+        } else {
+            // redirect to general list page
+            $urlNextPage = SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php',
+                array(
+                    'list_uuid' => $listUuid,
+                    'mode' => 'html',
+                    'role_list' => implode(',', $_POST['sel_roles']),
+                    'relation_type_list' => implode(',', $_POST['sel_relation_types'])
+                )
+            );
         }
-
-        // redirect to general list page
-        admRedirect(SecurityUtils::encodeUrl(
-            ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php',
-            array(
-                'list_uuid' => $listUuid,
-                'mode' => 'html',
-                'role_list' => implode(',', $_POST['sel_roles']),
-                'relation_type_list' => implode(',', $_POST['sel_relation_types'])
-            )
-        ));
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $urlNextPage));
+        exit();
     } elseif ($getMode === 'delete') {
         // delete list configuration
         $list->delete();
-        unset($_SESSION['mylist_request']);
 
         // go back to list configuration
-        admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php');
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php'));
+        exit();
     }
 } catch (AdmException|Exception $e) {
-    $gMessage->show($e->getMessage());
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
