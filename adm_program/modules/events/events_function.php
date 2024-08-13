@@ -36,8 +36,6 @@ try {
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
     $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date');
-    $postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
-    $postUserComment = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
     $participationPossible = true;
     $originalEventUuid = 0;
@@ -393,9 +391,12 @@ try {
     }
     // If participation mode: Set status and write optional parameter from user and show current status message
     if (in_array($getMode, array('participate', 'participate_cancel', 'participate_maybe'), true)) {
-        if ($postAdditionalGuests > 0 || $postUserComment !== '') {
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        // check form field input and sanitized it from malicious content
+        if (isset($_SESSION['eventsParticipationEditForm'])) {
+            $eventsParticipationEditForm = $_SESSION['eventsParticipationEditForm'];
+            $formValues = $eventsParticipationEditForm->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         $member = new TableMembers($gDb);
@@ -404,7 +405,7 @@ try {
         // if current user is allowed to participate or user could edit this event then update user inputs
         if ($event->possibleToParticipate() || $participants->isLeader($gCurrentUserId)) {
             $member->readDataByColumns(array('mem_rol_id' => (int)$event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
-            $member->setValue('mem_comment', $postUserComment); // Comments will be saved in any case. Maybe it is a documentation afterward by a leader or admin
+            $member->setValue('mem_comment', $formValues['dat_comment']); // Comments will be saved in any case. Maybe it is a documentation afterward by a leader or admin
 
             if ($member->isNewRecord()) {
                 $member->setValue('mem_begin', DATE_NOW);
@@ -414,8 +415,8 @@ try {
             if ($event->getValue('dat_max_members') > 0) {
                 $totalMembers = $participants->getCount();
 
-                if ($totalMembers + ($postAdditionalGuests - (int)$member->getValue('mem_count_guests')) < $event->getValue('dat_max_members')) {
-                    $member->setValue('mem_count_guests', $postAdditionalGuests);
+                if ($totalMembers + ($formValues['additional_guests'] - (int)$member->getValue('mem_count_guests')) < $event->getValue('dat_max_members')) {
+                    $member->setValue('mem_count_guests', $formValues['additional_guests']);
                 } else {
                     $participationPossible = false;
                 }
@@ -430,7 +431,7 @@ try {
                     $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . (int)$event->getValue('dat_max_members');
                 }
             } else {
-                $member->setValue('mem_count_guests', $postAdditionalGuests);
+                $member->setValue('mem_count_guests', $formValues['additional_guests']);
             }
 
             $member->save();
@@ -465,16 +466,19 @@ try {
                 }
             }
         } else {
-            $outputMessage = $gL10n->get('SYS_PARTICIPATE_NO_RIGHTS');
+            throw new AdmException('SYS_PARTICIPATE_NO_RIGHTS');
         }
 
-        $gMessage->setForwardUrl($gNavigation->getUrl());
-        $gMessage->show($outputMessage, $gL10n->get('SYS_PARTICIPATE'));
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => $outputMessage,
+            'url' => $gNavigation->getUrl()));
+        exit();
     }
 } catch (AdmException|Exception $e) {
-    if (in_array($getMode, array('edit', 'delete'), true)) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
+    if ($getMode === 'export') {
         $gMessage->show($e->getMessage());
+    } else {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
 }

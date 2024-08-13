@@ -539,7 +539,7 @@ try {
                                 $outputButtonParticipation = '
                             <div class="btn-group" role="group">
                                 <button class="btn btn-primary openPopup ' . $buttonClass . '"
-                                    data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/popup_participation.php', array('dat_uuid' => $dateUuid)) . '">' . $iconParticipationStatus . $buttonText . '
+                                    data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_participation.php', array('dat_uuid' => $dateUuid)) . '">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                             }
                         }
