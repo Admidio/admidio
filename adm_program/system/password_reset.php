@@ -127,7 +127,7 @@ try {
                 '',
                 array(
                     'type' => 'password',
-                    'property' => HtmlForm::FIELD_REQUIRED,
+                    'property' => Form::FIELD_REQUIRED,
                     'minLength' => PASSWORD_MIN_LENGTH,
                     'passwordStrength' => true,
                     'passwordUserData' => $user->getPasswordUserData(),
@@ -138,7 +138,7 @@ try {
                 'new_password_confirm',
                 $gL10n->get('SYS_REPEAT'),
                 '',
-                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+                array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
             );
             $form->addSubmitButton(
                 'btn_save',
@@ -285,7 +285,7 @@ try {
             'recipient_email',
             $gL10n->get('SYS_USERNAME_OR_EMAIL'),
             '',
-            array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
+            array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
         );
 
         // if captchas are enabled then visitors of the website must resolve this

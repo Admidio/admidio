@@ -14,12 +14,14 @@
  *            save           - Save organization preferences
  *            new_org_dialog - show welcome dialog for new organization
  *            new_org_create - Create basic data for new organization in database
+ *            new_org_create_success - Show success dialog if new organization was created
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
  *            backup         - create backup of Admidio database
  * panel    : The name of the preferences panel that should be shown or saved.
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
 use Admidio\UserInterface\Preferences;
 
 try {
@@ -30,7 +32,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'new_org_dialog', 'new_org_create', 'htaccess', 'test_email', 'backup')
+            'validValues' => array('html', 'html_form', 'save', 'new_org_dialog', 'new_org_create', 'new_org_create_success', 'htaccess', 'test_email', 'backup')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
 
@@ -169,44 +171,38 @@ try {
 
         // show welcome dialog for new organization
         case 'new_org_dialog':
-            if (isset($_SESSION['add_organization_request'])) {
-                $formValues = $_SESSION['add_organization_request'];
-                unset($_SESSION['add_organization_request']);
-            } else {
-                $formValues['orgaShortName'] = '';
-                $formValues['orgaLongName'] = '';
-                $formValues['orgaEmail'] = '';
-            }
-
             $headline = $gL10n->get('INS_ADD_ORGANIZATION');
-
-            // create html page object
-            $page = new HtmlPage('admidio-new-organization', $headline);
 
             // add current url to navigation stack
             $gNavigation->addUrl(CURRENT_URL, $headline);
 
-            $page->addHtml('<p class="lead">' . $gL10n->get('ORG_NEW_ORGANIZATION_DESC') . '</p>');
+            // create html page object
+            $page = new HtmlPage('admidio-new-organization', $headline);
 
             // show form
-            $form = new HtmlForm('add_new_organization_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create')), $page);
+            $form = new Form(
+                'newOrganizationForm',
+                'modules/organizations.new.tpl',
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create')),
+                $page
+            );
             $form->addInput(
                 'orgaShortName',
                 $gL10n->get('SYS_NAME_ABBREVIATION'),
-                $formValues['orgaShortName'],
-                array('maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+                '',
+                array('maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
             $form->addInput(
                 'orgaLongName',
                 $gL10n->get('SYS_NAME'),
-                $formValues['orgaLongName'],
-                array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
+                '',
+                array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
             );
             $form->addInput(
                 'orgaEmail',
                 $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
-                $formValues['orgaEmail'],
-                array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
+                '',
+                array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
             );
             $form->addSubmitButton(
                 'btn_forward',
@@ -214,31 +210,29 @@ try {
                 array('icon' => 'bi-wrench')
             );
 
-            // add form to html page and show page
-            $page->addHtml($form->show());
+            $form->addToHtmlPage();
+            $_SESSION['newOrganizationForm'] = $form;
             $page->show();
             break;
 
         // Create basic data for new organization in database
         case 'new_org_create':
-            $_SESSION['add_organization_request'] = $_POST;
-
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
-            // form fields are not filled
-            if ($_POST['orgaShortName'] === '' || $_POST['orgaLongName'] === '') {
-                throw new AdmException('INS_ORGANIZATION_NAME_NOT_COMPLETELY');
+            // check form field input and sanitized it from malicious content
+            if (isset($_SESSION['newOrganizationForm'])) {
+                $newOrganizationForm = $_SESSION['newOrganizationForm'];
+                $formValues = $newOrganizationForm->validate($_POST);
+            } else {
+                throw new AdmException('SYS_INVALID_PAGE_VIEW');
             }
 
-            // check if orga shortname exists
-            $organization = new Organization($gDb, $_POST['orgaShortName']);
+            // check if organization shortname exists
+            $organization = new Organization($gDb, $formValues['orgaShortName']);
             if ($organization->getValue('org_id') > 0) {
-                throw new AdmException('INS_ORGA_SHORTNAME_EXISTS', array($_POST['orgaShortName']));
+                throw new AdmException('INS_ORGA_SHORTNAME_EXISTS', array($formValues['orgaShortName']));
             }
 
             // allow only letters, numbers and special characters like .-_+@
-            if (!StringUtils::strValidCharacters($_POST['orgaShortName'], 'noSpecialChar')) {
+            if (!StringUtils::strValidCharacters($formValues['orgaShortName'], 'noSpecialChar')) {
                 throw new AdmException('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
             }
 
@@ -248,9 +242,10 @@ try {
             $gDb->startTransaction();
 
             // create new organization
-            $newOrganization = new Organization($gDb, $_POST['orgaShortName']);
-            $newOrganization->setValue('org_longname', $_POST['orgaLongName']);
-            $newOrganization->setValue('org_shortname', $_POST['orgaShortName']);
+            $_SESSION['orgaLongName'] = $formValues['orgaLongName'];
+            $newOrganization = new Organization($gDb, $formValues['orgaShortName']);
+            $newOrganization->setValue('org_longname', $formValues['orgaLongName']);
+            $newOrganization->setValue('org_shortname', $formValues['orgaShortName']);
             $newOrganization->setValue('org_homepage', ADMIDIO_URL);
             $newOrganization->save();
 
@@ -258,7 +253,7 @@ try {
             require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
             // set some specific preferences whose values came from user input of the installation wizard
-            $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];
+            $defaultOrgPreferences['email_administrator'] = $formValues['orgaEmail'];
             $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
 
             // create all necessary data for this organization
@@ -279,22 +274,18 @@ try {
             }
 
             $gDb->endTransaction();
+            $gNavigation->deleteLastUrl();
 
-            // create html page object
-            $page = new HtmlPage('admidio-new-organization-successful', $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
+            echo json_encode(array(
+                'status' => 'success',
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create_success'))
+            ));
+            break;
 
-            $page->addHtml('<p class="lead">' . $gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_POST['orgaLongName'])) . '</p>');
-
-            // show form
-            $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', $page);
-            $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => 'bi-arrow-right-circle-fill'));
-
-            // add form to html page and show page
-            $page->addHtml($form->show());
-            $page->show();
-
-            // clean up
-            unset($_SESSION['add_organization_request']);
+        // Show success dialog if new organization was created
+        case 'new_org_create_success':
+            $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php');
+            $gMessage->show($gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_SESSION['orgaLongName'])), $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
             break;
 
         // set directory protection, write htaccess
@@ -371,7 +362,7 @@ try {
             break;
     }
 } catch (AdmException|Exception $exception) {
-    if ($getMode === 'save') {
+    if (in_array($getMode, array('save', 'new_org_create'))) {
         echo json_encode(array('status' => 'error', 'message' => $exception->getMessage()));
     } elseif ($getMode === 'html_form') {
         echo $exception->getMessage();

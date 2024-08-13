@@ -1493,16 +1493,19 @@ class Form
      * This method add the form attributes and all form elements to the HtmlPage object. Also, the
      * template file of the form is set to the page. After this method is called the whole form
      * could be rendered through the HtmlPage.
+     * @param bool $ajaxSubmit If set to true the form will be submitted by an AJAX call and
+     *                         the result will be presented inline. If set to false a default
+     *                         form submit will be done and a new page will be called.
      * @return void
      * @throws AdmException
      */
-    public function addToHtmlPage()
+    public function addToHtmlPage(bool $ajaxSubmit = true)
     {
         try {
             if (isset($this->htmlPage)) {
                 if ($this->type === 'navbar') {
                     $this->htmlPage->assignSmartyVariable('navbarID', 'navbar_' . $this->id);
-                } else {
+                } elseif ($ajaxSubmit) {
                     $this->htmlPage->addJavascript('
                         $("#' . $this->id . '").submit(formSubmit);
                     ', true);
