@@ -31,6 +31,7 @@ try {
     $postCaptcha = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
     $postUserUuidList = '';
     $postListUuid = '';
+    $sendResult = false;
 
     if ($gValidLogin) {
         $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
@@ -39,7 +40,7 @@ try {
 
     if (isset($_SESSION['messagesSendForm'])) {
         $messagesSendForm = $_SESSION['messagesSendForm'];
-        $messagesSendForm->validate($_POST);
+        $formValues = $messagesSendForm->validate($_POST);
     } else {
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
@@ -70,24 +71,11 @@ try {
         throw new AdmException('SYS_MODULE_DISABLED');
     }
 
-    $sendResult = false;
-
     // if message is EMAIL then check the parameters
     if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
-        // allow option to send a copy to your email address only for registered users because of spam abuse
-        $postCarbonCopy = 0;
-        if ($gValidLogin) {
-            $postCarbonCopy = admFuncVariableIsValid($_POST, 'carbon_copy', 'bool');
-        }
-
         // if Attachment size is higher than max_post_size from php.ini, then $_POST is empty.
         if (empty($_POST)) {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
-
-        // Check Captcha if enabled and user logged out
-        if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
-            FormValidation::checkCaptcha($postCaptcha);
         }
     }
 
@@ -269,7 +257,7 @@ try {
         }
 
         // set flag if copy should be sent to sender
-        if (isset($postCarbonCopy) && $postCarbonCopy) {
+        if ( isset($formValues['carbon_copy']) && $formValues['carbon_copy']) {
             $email->setCopyToSenderFlag();
         }
 

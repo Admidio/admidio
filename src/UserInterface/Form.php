@@ -44,6 +44,7 @@
  */
 namespace Admidio\UserInterface;
 use HtmlPage;
+use Securimage;
 use SecurityUtils;
 use Smarty\Exception;
 use Smarty\Smarty;
@@ -271,6 +272,7 @@ class Form
             $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'),
             '',
             array(
+                'type'       => 'captcha',
                 'property'   => self::FIELD_REQUIRED,
                 'helpTextId' => 'SYS_CAPTCHA_DESCRIPTION',
                 'class'      => 'form-control-small'
@@ -1653,6 +1655,9 @@ class Form
                 // check value depending on the field type
                 if (!is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {
                     switch ($element['type']) {
+                        case 'captcha':
+                            $this->validateCaptcha($fieldValues[$element['id']]);
+                            break;
                         case 'editor':
                             // check html string vor invalid tags and scripts
                             $config = HTMLPurifier_Config::createDefault();
@@ -1683,5 +1688,29 @@ class Form
             }
         }
         return $validFieldValues;
+    }
+
+    /**
+     * Checks if the value of the captcha input matches with the captcha image.
+     * @param string $value Value of the captcha input field.
+     * @return true Returns **true** if the value matches the captcha image.
+     *              Otherwise, throw an exception SYS_CAPTCHA_CODE_INVALID.
+     *@throws AdmException SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
+     */
+    public function validateCaptcha(string $value): bool
+    {
+        global $gSettingsManager;
+
+        $secureImage = new Securimage();
+
+        if ($secureImage->check($value)) {
+            return true;
+        }
+
+        if ($gSettingsManager->getString('captcha_type') === 'calc') {
+            throw new AdmException('SYS_CAPTCHA_CALC_CODE_INVALID');
+        }
+
+        throw new AdmException('SYS_CAPTCHA_CODE_INVALID');
     }
 }

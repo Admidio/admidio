@@ -36,7 +36,8 @@ class FormValidation
      * @param string $value Value of the captcha input field.
      * @return true Returns **true** if the value matches the captcha image.
      *              Otherwise, throw an exception SYS_CAPTCHA_CODE_INVALID.
-     *@throws AdmException SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
+     * @throws AdmException SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
+     * @deprecated 5.0.0:5.1.0 Method "FormValidation::checkCaptcha" is deprecated, use Method  "Form::validateCaptcha" instead.
      */
     public static function checkCaptcha(string $value): bool
     {

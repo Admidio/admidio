@@ -2007,26 +2007,26 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formSystemNotification = new Form(
+        $formSystemNotifications = new Form(
             'preferencesFormSystemNotifications',
             'preferences/preferences.system-notifications.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'SystemNotifications')),
             null,
             array('class' => 'form-preferences')
         );
-        $formSystemNotification->addCheckbox(
+        $formSystemNotifications->addCheckbox(
             'system_notifications_enabled',
             $gL10n->get('SYS_ENABLE_NOTIFICATIONS'),
             (bool)$formValues['system_notifications_enabled'],
             array('helpTextId' => 'SYS_ENABLE_NOTIFICATIONS_DESC')
         );
-        $formSystemNotification->addCheckbox(
+        $formSystemNotifications->addCheckbox(
             'system_notifications_new_entries',
             $gL10n->get('SYS_NOTIFICATION_NEW_ENTRIES'),
             (bool)$formValues['system_notifications_new_entries'],
             array('helpTextId' => 'SYS_NOTIFICATION_NEW_ENTRIES_DESC')
         );
-        $formSystemNotification->addCheckbox(
+        $formSystemNotifications->addCheckbox(
             'system_notifications_profile_changes',
             $gL10n->get('SYS_NOTIFICATION_PROFILE_CHANGES'),
             (bool)$formValues['system_notifications_profile_changes'],
@@ -2048,7 +2048,7 @@ class Preferences extends HtmlPage
                 AND cat_name_intern <> \'EVENTS\'
            ORDER BY cat_name, rol_name';
         $sqlData['params'] = array($gCurrentOrgId);
-        $formSystemNotification->addSelectBoxFromSql(
+        $formSystemNotifications->addSelectBoxFromSql(
             'system_notifications_role',
             $gL10n->get('SYS_NOTIFICATION_ROLE'),
             $gDb,
@@ -2058,16 +2058,16 @@ class Preferences extends HtmlPage
 
         $text = new TableText($gDb);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_CONFIRMATION', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_CONFIRMATION', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_CONFIRMATION'), $text->getValue('txt_text'), 7);
+        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_CONFIRMATION', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_CONFIRMATION'), $text->getValue('txt_text'), 7);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_NEW', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_NEW', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
+        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_NEW', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_APPROVED', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
+        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_REFUSED', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
+        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrgId));
         $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
-        $formSystemNotification->addMultilineTextInput(
+        $formSystemNotifications->addMultilineTextInput(
             'SYSMAIL_NEW_PASSWORD',
             $gL10n->get('ORG_SEND_NEW_PASSWORD'),
             $text->getValue('txt_text'),
@@ -2076,22 +2076,22 @@ class Preferences extends HtmlPage
         );
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $gCurrentOrgId));
         $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
-        $formSystemNotification->addMultilineTextInput(
+        $formSystemNotifications->addMultilineTextInput(
             'SYSMAIL_PASSWORD_RESET',
             $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
             $text->getValue('txt_text'),
             7,
             array('helpTextId' => $htmlDesc)
         );
-        $formSystemNotification->addSubmitButton(
+        $formSystemNotifications->addSubmitButton(
             'btn_save_system_notification',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
         $smarty = $this->getSmartyTemplate();
-        $formSystemNotification->addToSmarty($smarty);
-        $_SESSION['preferencesSystemNotificationForm'] = $formSystemNotification;
+        $formSystemNotifications->addToSmarty($smarty);
+        $_SESSION['preferencesSystemNotificationsForm'] = $formSystemNotifications;
         return $smarty->fetch('preferences/preferences.system-notifications.tpl');
     }
 
