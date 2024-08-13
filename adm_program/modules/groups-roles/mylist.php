@@ -593,7 +593,7 @@ try {
         $gL10n->get('SYS_ROLE'),
         $gDb,
         $sqlData,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $getRoleList, 'multiselect' => true)
+        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $getRoleList, 'multiselect' => true)
     );
 
     if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
