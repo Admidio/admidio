@@ -276,26 +276,7 @@ try {
         $page = new HtmlPageInstallation('admidio-update-successful');
         $page->addTemplateFile('update_successful.tpl');
         $page->setUpdateModus();
-        $page->addJavascript('$("#next_page").focus();', true);
-
-        $form = new Form('update-successful-form', ADMIDIO_HOMEPAGE . 'donate.php', null, array('setFocus' => false));
-        $form->addButton(
-            'main_page',
-            $gL10n->get('SYS_LATER'),
-            array(
-                'icon' => 'bi-house-door-fill',
-                'link' => ADMIDIO_URL . '/adm_program/overview.php',
-                'class' => ' btn-secondary admidio-margin-bottom '
-            )
-        );
-        $form->addSubmitButton(
-            'next_page',
-            $gL10n->get('SYS_DONATE'),
-            array('icon' => 'bi-heart-fill')
-        );
-
-        $page->addHtml($updateMessage);
-        $page->addHtml($form->show());
+        $page->addJavascript('$("#buttonDonate").focus();', true);
         $page->show();
     }
 } catch (AdmException|Exception|UnexpectedValueException|RuntimeException $e) {

@@ -12,5 +12,8 @@
         {$l10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT')}
     </p>
 
-    <p>{$content}</p>
+    <p>
+        <a id="buttonLater" class="btn btn-secondary admidio-margin-bottom" href="{$urlAdmidio}/adm_program/overview.php"><i class="bi bi-house-door-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_LATER')}"></i>{$l10n->get('SYS_LATER')}</a>
+        <a id="buttonDonate" class="btn btn-primary admidio-margin-bottom ms-3" href="https://www.admidio.org/donate.php"><i class="bi bi-heart-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DONATE')}"></i>{$l10n->get('SYS_DONATE')}</a>
+    </p>
 </div>
