@@ -201,30 +201,32 @@ try {
 
             // create form with login and update button
             $form = new Form(
-                'update_login_form',
+                'updateLoginForm',
                 'update.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 'update')),
                 $page
             );
-            $form->addInput(
-                'login_name',
-                $gL10n->get('SYS_USERNAME'),
-                '',
-                array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
-            );
-            $form->addInput(
-                'password',
-                $gL10n->get('SYS_PASSWORD'),
-                '',
-                array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
-            );
+            if ($gLoginForUpdate) {
+                $form->addInput(
+                    'login_name',
+                    $gL10n->get('SYS_USERNAME'),
+                    '',
+                    array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+                );
+                $form->addInput(
+                    'password',
+                    $gL10n->get('SYS_PASSWORD'),
+                    '',
+                    array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+                );
+            }
             $form->addSubmitButton(
                 'next_page',
                 $gL10n->get('INS_UPDATE_DATABASE'),
                 array('icon' => 'bi-arrow-repeat')
             );
-            $page->assignSmartyVariable('loginForUpdate', $gLoginForUpdate);
             $form->addToHtmlPage();
+            $_SESSION['updateLoginForm'] = $form;
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
@@ -258,8 +260,12 @@ try {
             // => EXIT
         }
     } elseif ($getMode === 'update') {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        // check form field input and sanitized it from malicious content
+        if (isset($_SESSION['updateLoginForm'])) {
+            $_SESSION['updateLoginForm']->validate($_POST);
+        } else {
+            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        }
 
         // start the update
         $update = new Update();
