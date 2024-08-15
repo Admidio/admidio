@@ -95,7 +95,6 @@ try {
 
         // create html page object
         $page = new HtmlPage('admidio-profile-edit', $headline);
-        $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
 
         // create html form
         $form = new Form(

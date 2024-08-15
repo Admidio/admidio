@@ -19,5 +19,9 @@
         </p>
     {/if}
 
-    <p>{$content}</p>
+    <p>
+        <a id="next_page" class="btn btn-secondary admidio-margin-bottom" href="{$destinationUrl}">
+            <i class="bi {$buttonIcon}" data-bs-toggle="tooltip" title="{$buttonText}"></i>{$buttonText}
+        </a>
+    </p>
 </div>

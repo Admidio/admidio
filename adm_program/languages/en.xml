@@ -31,7 +31,6 @@
   <string name="INS_ADD_ORGANIZATION">Add organization</string>
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
-  <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administrator\'s information is incomplete!</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">An update can only be performed by an administrator. Please define the administrator credentials.</string>
   <string name="INS_BOARD">Association\'s board</string>
   <string name="INS_CONFERENCE_ROOM">Conference room</string>
@@ -41,7 +40,6 @@
   <string name="INS_CREATE_ADMINISTRATOR">Create an administrator</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Creating configuration file</string>
   <string name="INS_DATA_FULLY_ENTERED">You have entered all the necessary data for installing Admidio.\n\nNow the database has to be created and filled with your data.</string>
-  <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">The database parameters have not been entered completely!</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Enter the name of the database server here. This can be a URL or localhost if the database is running on the same machine as the webpage.</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
@@ -50,7 +48,6 @@
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MySQL and PostgreSQL.</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Creating database</string>
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurations file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
@@ -69,15 +66,12 @@
   <string name="INS_INSTALL_ADMIDIO">Install Admidio</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">The database already contains an Admidio installation. An additional installation is not possible.</string>
-  <string name="INS_INSTALLATION_SUCCESSFUL">Admidio database installation and configuration is complete, system is ready for use. Please log in now by using access information of the system administrator.</string>
   <string name="INS_INSTALLATION_VERSION">Installation version #VAR1#</string>
-  <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Installation was successful</string>
   <string name="INS_INTERN">Internal</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">No language has been selected.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Could not find the current installation. If you\'ve used Admidio 1.x update to Admidio 2.x first. Afterwards you can update the version to #VAR1#. If you are already using Admidio 2.x or higher please check the consistency of your database.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organization #VAR1_BOLD# already exists. Please select another name.</string>
-  <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Provided organization name is not complete!</string>
   <string name="INS_PHONE_LIST">Phone list</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Please choose a language</string>
   <string name="INS_SET_ORGANIZATION">Define organization</string>

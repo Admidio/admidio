@@ -72,7 +72,6 @@ class HtmlPageInstallation extends HtmlPage
         $urlImprint = '';
         $urlDataProtection = '';
 
-        $this->smarty->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
         $this->smarty->assign('id', $this->id);
         $this->smarty->assign('title', $this->title);
         $this->smarty->assign('headline', $this->headline);
@@ -136,6 +135,7 @@ class HtmlPageInstallation extends HtmlPage
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
 
+        $this->smarty->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
         $this->smarty->assign('javascriptContent', $this->javascriptContent);
         $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
         $this->smarty->assign('templateFile', $this->templateFile);
@@ -171,11 +171,9 @@ class HtmlPageInstallation extends HtmlPage
         $this->addTemplateFile('message.tpl');
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
-
-        // add form with submit button
-        $form = new HtmlForm('installation-form', $destinationUrl);
-        $form->addSubmitButton('next_page', $buttonText, array('icon' => $buttonIcon));
-        $this->addHtml($form->show());
+        $this->smarty->assign('buttonIcon', $buttonIcon);
+        $this->smarty->assign('buttonText', $buttonText);
+        $this->smarty->assign('destinationUrl', $destinationUrl);
 
         $this->smarty->display('index.tpl');
         exit();

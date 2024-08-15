@@ -89,6 +89,10 @@ class Form
      */
     protected string $id = '';
     /**
+     * @var string a 30 character long CSRF token
+     */
+    protected $csrfToken = '';
+    /**
      * @var string Smarty template with necessary path
      */
     protected string $template = '';
@@ -172,12 +176,12 @@ class Form
             $this->attributes['enctype'] = 'multipart/form-data';
         }
 
-        if ($optionsAll['method'] === 'post' && isset($GLOBALS['gCurrentSession'])) {
+        if ($optionsAll['method'] === 'post') {
             // add a hidden field with the csrf token to each form
             $this->addInput(
                 'admidio-csrf-token',
                 'csrf-token',
-                $GLOBALS['gCurrentSession']->getCsrfToken(),
+                $this->getCsrfToken(),
                 array('property' => self::FIELD_HIDDEN)
             );
         }
@@ -205,7 +209,7 @@ class Form
             $gLogger->debug('FORM: sleep/serialize!');
         }
 
-        return array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'template', 'attributes', 'elements');
+        return array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements');
     }
 
     /**
@@ -1595,6 +1599,25 @@ class Form
     }
 
     /**
+     * Returns a CSRF token from the session. If no CSRF token exists a new one will be
+     * generated and stored within the session. The next call of the method will than
+     * return the existing token. The CSRF token has 30 characters. A new token could
+     * be forced by the parameter **$newToken**
+     * @param bool $newToken If set to true, always a new token will be generated.
+     * @return string Returns the CSRF token
+     * @throws AdmException
+     * @throws AdmException
+     */
+    public function getCsrfToken(bool $newToken = false): string
+    {
+        if ($this->csrfToken === '' || $newToken) {
+            $this->csrfToken = SecurityUtils::getRandomString(30);
+        }
+
+        return $this->csrfToken;
+    }
+
+    /**
      * Validates the input of a form against the form definition. Therefore, this method needs
      * the $_POST variable as parameter $fieldValues. An exception is thrown if a required
      * form field doesn't have a value in the $fieldValues array. EEmails and urls must have a
@@ -1610,7 +1633,9 @@ class Form
 
         if (isset($fieldValues['admidio-csrf-token'])) {
             // check the CSRF token of the form against the session token
-            \SecurityUtils::validateCsrfToken($fieldValues['admidio-csrf-token']);
+            if ($fieldValues['admidio-csrf-token'] !== $this->csrfToken) {
+                throw new AdmException('Invalid or missing CSRF token!');
+            }
             unset($fieldValues['admidio-csrf-token']);
         } else {
             throw new AdmException('No CSRF token provided.');

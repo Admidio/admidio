@@ -16,6 +16,7 @@
  *        create_config        : Creating configuration file
  *        download_config      : Download configuration file
  *        start_installation   : Start installation
+ *        installation_successful : Installation successful finished
  ***********************************************************************************************
  */
 
@@ -55,8 +56,13 @@ try {
 
     require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 
-    $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation');
+    $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation', 'installation_successful');
 
+    if (isset($_GET['mode']) && $_GET['mode'] == 'check') {
+        $mode = 'check';
+    } else {
+        $mode = 'html';
+    }
     if (empty($_GET['step'])) {
         $step = $availableSteps[0];
     } else {
@@ -91,10 +97,19 @@ try {
     InstallationUtils::checkFolderPermissions();
 
     // if config file exists then connect to database
-    if (is_file($configPath)) {
+    if (is_file($configPath) && $step !== 'installation_successful') {
         $db = Database::createDatabaseInstance();
         if (!is_object($db)) {
-            throw new AdmException('SYS_DATABASE_NO_LOGIN_CONFIG_FILE');
+            $page = new HtmlPageInstallation('admidio-installation-message');
+            $page->showMessage(
+                'error',
+                $gL10n->get('SYS_NOTE'),
+                $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE'),
+                $gL10n->get('SYS_OVERVIEW'),
+                'bi-house-door-fill',
+                '../index.php'
+            );
+            // => EXIT
         }
 
         // now check if a valid installation exists
@@ -167,16 +182,12 @@ try {
             $gLogger->info('INSTALLATION: Start installation');
             require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/start_installation.php');
             break;
+
+        case 'installation_successful': // Start installation
+            $gLogger->info('INSTALLATION: Installation_successful');
+            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/installation_successful.php');
+            break;
     }
 } catch (AdmException|Exception|UnexpectedValueException|RuntimeException $e) {
-    $page = new HtmlPageInstallation('admidio-installation-message');
-    $page->showMessage(
-        'error',
-        $gL10n->get('SYS_NOTE'),
-        $gL10n->get($e->getMessage()),
-        $gL10n->get('SYS_OVERVIEW'),
-        'bi-house-door-fill',
-        '../index.php'
-    );
-    // => EXIT
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

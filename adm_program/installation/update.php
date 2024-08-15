@@ -149,7 +149,6 @@ try {
     $installedDbBetaVersion = '';
     $maxUpdateStep = 0;
     $currentUpdateStep = 0;
-    $updateMessage = '';
 
     $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
     if (!$gDb->queryPrepared($sql, array(), false)) {
@@ -274,7 +273,7 @@ try {
     } elseif ($getMode === 'result') {
         // show notice that update was successful
         $page = new HtmlPageInstallation('admidio-update-successful');
-        $page->addTemplateFile('update_successful.tpl');
+        $page->addTemplateFile('update.successful.tpl');
         $page->setUpdateModus();
         $page->addJavascript('$("#buttonDonate").focus();', true);
         $page->show();
