@@ -16,8 +16,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
 
 // check form field input and sanitized it from malicious content
 if (isset($_SESSION['installationInstallAdmidioForm'])) {
-    $installationInstallAdmidioForm = $_SESSION['installationInstallAdmidioForm'];
-    $installationInstallAdmidioForm->validate($_POST);
+    $_SESSION['installationInstallAdmidioForm']->validate($_POST);
 } else {
     throw new AdmException('SYS_INVALID_PAGE_VIEW');
 }

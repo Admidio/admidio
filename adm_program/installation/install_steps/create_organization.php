@@ -85,8 +85,7 @@ if ($mode === 'html') {
 } elseif ($mode === 'check') {
     // check form field input and sanitized it from malicious content
     if (isset($_SESSION['installationCreateOrganizationForm'])) {
-        $installationCreateOrganizationForm = $_SESSION['installationCreateOrganizationForm'];
-        $formValues = $installationCreateOrganizationForm->validate($_POST);
+        $formValues = $_SESSION['installationCreateOrganizationForm']->validate($_POST);
     } else {
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }

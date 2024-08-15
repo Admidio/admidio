@@ -93,8 +93,7 @@ if ($mode === 'html') {
 } elseif ($mode === 'check') {
     // check form field input and sanitized it from malicious content
     if (isset($_SESSION['installationCreateAdministratorForm'])) {
-        $installationCreateAdministratorForm = $_SESSION['installationCreateAdministratorForm'];
-        $formValues = $installationCreateAdministratorForm->validate($_POST);
+        $formValues = $_SESSION['installationCreateAdministratorForm']->validate($_POST);
     } else {
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }

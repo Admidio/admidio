@@ -109,8 +109,7 @@ if ($mode === 'html') {
 } elseif ($mode === 'check') {
     // check form field input and sanitized it from malicious content
     if (isset($_SESSION['installationConnectDatabaseForm'])) {
-        $installationConnectDatabaseForm = $_SESSION['installationConnectDatabaseForm'];
-        $formValues = $installationConnectDatabaseForm->validate($_POST);
+        $formValues = $_SESSION['installationConnectDatabaseForm']->validate($_POST);
     } else {
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }

@@ -56,8 +56,7 @@ if ($mode === 'html') {
 } elseif ($mode === 'check') {
     // check form field input and sanitized it from malicious content
     if (isset($_SESSION['installationWelcomeForm'])) {
-        $installationWelcomeForm = $_SESSION['installationWelcomeForm'];
-        $installationWelcomeForm->validate($_POST);
+        $_SESSION['installationWelcomeForm']->validate($_POST);
     } else {
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
