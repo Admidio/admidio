@@ -648,7 +648,7 @@ $formEmailDispatch->addInput(
     'mail_smtp_password',
     $gL10n->get('SYS_SMTP_PASSWORD'),
     $formValues['mail_smtp_password'],
-    array('type' => 'password', 'maxLength' => 50, 'helpTextIdInline' => 'SYS_SMTP_PASSWORD_DESC')
+    array('type' => 'password', 'maxLength' => 100, 'helpTextIdInline' => 'SYS_SMTP_PASSWORD_DESC')
 );
 $html = '<a class="btn btn-secondary" id="send_test_mail" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '5')).'">
             <i class="fas fa-envelope"></i>'.$gL10n->get('SYS_SEND_TEST_MAIL').'</a>';
