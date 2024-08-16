@@ -15,6 +15,7 @@
  ***********************************************************************************************
  */
 use Admidio\UserInterface\Form;
+use Admidio\UserInterface\Installation;
 
 const THEME_URL = 'layout';
 
@@ -33,7 +34,7 @@ try {
             $gL10n = new Language('en');
         }
 
-        $page = new HtmlPageInstallation('admidio-update-message');
+        $page = new Installation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage(
             'error',
@@ -124,7 +125,7 @@ try {
     $gChangeNotification = new ChangeNotification();
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
-    InstallationUtils::checkFolderPermissions();
+    \Admidio\Utils\Installation::checkFolderPermissions();
 
     // config.php exists at wrong place
     if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA . '/config.php')) {
@@ -137,7 +138,7 @@ try {
     }
 
     // check database version
-    $message = InstallationUtils::checkDatabaseVersion($gDb);
+    $message = \Admidio\Utils\Installation::checkDatabaseVersion($gDb);
 
     if ($message !== '') {
         showErrorMessage($message);
@@ -194,7 +195,7 @@ try {
         if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
             || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
             // create a page with the notice that the installation must be configured on the next pages
-            $page = new HtmlPageInstallation('admidio-update');
+            $page = new Installation('admidio-update');
             $page->addTemplateFile('update.tpl');
             $page->setUpdateModus();
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
@@ -230,7 +231,7 @@ try {
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
-            $page = new HtmlPageInstallation('admidio-update-message');
+            $page = new Installation('admidio-update-message');
             $page->setUpdateModus();
             $page->showMessage(
                 'success',
@@ -243,7 +244,7 @@ try {
             // => EXIT
         } // if source version smaller than database -> show error
         else {
-            $page = new HtmlPageInstallation('admidio-update-message');
+            $page = new Installation('admidio-update-message');
             $page->setUpdateModus();
             $page->showMessage(
                 'error',
@@ -278,7 +279,7 @@ try {
         exit();
     } elseif ($getMode === 'result') {
         // show notice that update was successful
-        $page = new HtmlPageInstallation('admidio-update-successful');
+        $page = new Installation('admidio-update-successful');
         $page->addTemplateFile('update.successful.tpl');
         $page->setUpdateModus();
         $page->addJavascript('$("#buttonDonate").focus();', true);

@@ -19,6 +19,7 @@
  *        installation_successful : Installation successful finished
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Installation;
 
 try {
     /**
@@ -94,13 +95,13 @@ try {
     $language = $gL10n->getLanguage();
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
-    InstallationUtils::checkFolderPermissions();
+    \Admidio\Utils\Installation::checkFolderPermissions();
 
     // if config file exists then connect to database
     if (is_file($configPath) && $step !== 'installation_successful') {
         $db = Database::createDatabaseInstance();
         if (!is_object($db)) {
-            $page = new HtmlPageInstallation('admidio-installation-message');
+            $page = new Installation('admidio-installation-message');
             $page->showMessage(
                 'error',
                 $gL10n->get('SYS_NOTE'),
@@ -119,7 +120,7 @@ try {
         // Check the query for results in case installation is running at this time and the config file is already created but database is not installed so far
         if ($pdoStatement !== false && $pdoStatement->rowCount() > 0) {
             // valid installation exists -> exit installation
-            $page = new HtmlPageInstallation('admidio-installation-message');
+            $page = new Installation('admidio-installation-message');
             $page->showMessage(
                 'error',
                 $gL10n->get('SYS_NOTE'),

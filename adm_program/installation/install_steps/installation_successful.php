@@ -9,12 +9,14 @@
  ***********************************************************************************************
  */
 
+use Admidio\UserInterface\Installation;
+
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
     exit('This page may not be called directly!');
 }
 
 // show dialog with success notification
-$page = new HtmlPageInstallation('admidio-installation-successful');
+$page = new Installation('admidio-installation-successful');
 $page->addTemplateFile('installation.successful.tpl');
 $page->addJavascript('$("#next_page").focus();', true);
 $page->show();

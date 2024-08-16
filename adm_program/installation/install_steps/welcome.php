@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 use Admidio\UserInterface\Form;
+use Admidio\UserInterface\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
     exit('This page may not be called directly!');
@@ -17,7 +18,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
 if ($mode === 'html') {
     // create a page with the notice that the installation must be configured on the next pages
     // create form with select box where user can select a language
-    $page = new HtmlPageInstallation('admidio-installation-welcome');
+    $page = new Installation('admidio-installation-welcome');
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
     $page->assignSmartyVariable('text', $gL10n->get(

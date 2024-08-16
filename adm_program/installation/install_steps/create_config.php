@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 use Admidio\UserInterface\Form;
+use Admidio\UserInterface\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_config.php') {
     exit('This page may not be called directly!');
@@ -47,7 +48,7 @@ $configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces)
 
 $_SESSION['config_file_content'] = $configFileContent;
 
-$page = new HtmlPageInstallation('admidio-installation-create-config');
+$page = new Installation('admidio-installation-create-config');
 $page->addTemplateFile('installation.tpl');
 
 // now save new configuration file in Admidio folder if user has write access to this folder

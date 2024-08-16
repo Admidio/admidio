@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 use Admidio\UserInterface\Form;
+use Admidio\UserInterface\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'connect_database.php') {
     exit('This page may not be called directly!');
@@ -40,7 +41,7 @@ if ($mode === 'html') {
     }
 
     // create a page to enter all necessary database connection information
-    $page = new HtmlPageInstallation('admidio-installation-connect-database');
+    $page = new Installation('admidio-installation-connect-database');
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
@@ -180,7 +181,7 @@ if ($mode === 'html') {
         }
 
         // check database version
-        $message = InstallationUtils::checkDatabaseVersion($db);
+        $message = \Admidio\Utils\Installation::checkDatabaseVersion($db);
         if ($message !== '') {
             throw new AdmException($message);
         }
