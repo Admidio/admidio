@@ -818,7 +818,7 @@ class Preferences extends HtmlPage
             'mail_smtp_password',
             $gL10n->get('SYS_SMTP_PASSWORD'),
             $formValues['mail_smtp_password'],
-            array('type' => 'password', 'maxLength' => 50, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
+            array('type' => 'password', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
         );
         $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'test_email')) . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
