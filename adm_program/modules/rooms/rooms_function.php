@@ -34,12 +34,8 @@ try {
 
     if ($getMode === 'edit') {
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['roomsEditForm'])) {
-            $roomsEditForm = $_SESSION['roomsEditForm'];
-            $formValues = $roomsEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $roomsEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $roomsEditForm->validate($_POST);
 
         // write form values into the room object
         foreach ($formValues as $key => $value) {

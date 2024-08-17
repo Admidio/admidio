@@ -124,7 +124,7 @@ try {
     $page->assignSmartyVariable('nameUserCreated', $nameUserCreated);
     $page->assignSmartyVariable('timestampUserCreated', $timestampUserCreated);
     $form->addToHtmlPage();
-    $_SESSION['documentsFilesRenameForm'] = $form;
+    $gCurrentSession->addFormObject($form);
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

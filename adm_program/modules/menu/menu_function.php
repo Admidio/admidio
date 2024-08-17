@@ -48,12 +48,8 @@ try {
         }
 
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['menuEditForm'])) {
-            $menuEditForm = $_SESSION['menuEditForm'];
-            $formValues = $menuEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $menuEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $menuEditForm->validate($_POST);
 
         // check url here because it could be a real url or a relative local url
         if (!StringUtils::strValidCharacters($_POST['men_url'], 'url')

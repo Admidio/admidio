@@ -50,12 +50,8 @@ try {
 
     if ($getMode === 'create') {
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['linksEditForm'])) {
-            $linksEditForm = $_SESSION['linksEditForm'];
-            $formValues = $linksEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $linksEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $linksEditForm->validate($_POST);
 
         // write form values in weblinks object
         foreach ($formValues as $key => $value) {

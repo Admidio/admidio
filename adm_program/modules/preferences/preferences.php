@@ -79,12 +79,8 @@ try {
             break;
         case 'save':
             // check form field input and sanitized it from malicious content
-            if (isset($_SESSION['preferences' . $getPanel . 'Form'])) {
-                $form = $_SESSION['preferences' . $getPanel . 'Form'];
-                $formValues = $form->validate($_POST);
-            } else {
-                throw new AdmException('SYS_INVALID_PAGE_VIEW');
-            }
+            $preferencesForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $preferencesForm->validate($_POST);
 
             // first check the fields of the submitted form
             switch ($getPanel) {
@@ -211,19 +207,15 @@ try {
             );
 
             $form->addToHtmlPage();
-            $_SESSION['newOrganizationForm'] = $form;
+            $gCurrentSession->addFormObject($form);
             $page->show();
             break;
 
         // Create basic data for new organization in database
         case 'new_org_create':
             // check form field input and sanitized it from malicious content
-            if (isset($_SESSION['newOrganizationForm'])) {
-                $newOrganizationForm = $_SESSION['newOrganizationForm'];
-                $formValues = $newOrganizationForm->validate($_POST);
-            } else {
-                throw new AdmException('SYS_INVALID_PAGE_VIEW');
-            }
+            $newOrganizationForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $newOrganizationForm->validate($_POST);
 
             // check if organization shortname exists
             $organization = new Organization($gDb, $formValues['orgaShortName']);

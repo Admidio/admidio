@@ -79,12 +79,9 @@ try {
             $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
             $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
-            if (isset($_SESSION['documentsFilesFolderNewForm'])) {
-                $documentsFilesFolderNewForm = $_SESSION['documentsFilesFolderNewForm'];
-                $documentsFilesFolderNewForm->validate($_POST);
-            } else {
-                throw new AdmException('SYS_INVALID_PAGE_VIEW');
-            }
+            // check form field input and sanitized it from malicious content
+            $documentsFilesFolderNewForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $documentsFilesFolderNewForm->validate($_POST);
 
             // Test if the folder already exists in the file system
             if (is_dir($folder->getFullFolderPath() . '/' . $newFolderName)) {
@@ -144,12 +141,9 @@ try {
             $newName = admFuncVariableIsValid($_POST, 'new_name', 'file', array('requireValue' => true));
             $newDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
-            if (isset($_SESSION['documentsFilesRenameForm'])) {
-                $documentsFilesRenameForm = $_SESSION['documentsFilesRenameForm'];
-                $documentsFilesRenameForm->validate($_POST);
-            } else {
-                throw new AdmException('SYS_INVALID_PAGE_VIEW');
-            }
+            // check form field input and sanitized it from malicious content
+            $documentsFilesRenameForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $documentsFilesRenameForm->validate($_POST);
 
             if ($getFileUuid !== '') {
                 // get recordset of current file from database and throw exception if necessary
@@ -285,12 +279,9 @@ try {
             throw new AdmException('SYS_NO_RIGHTS');
         }
 
-        if (isset($_SESSION['documentsFilesFolderPermissionsForm'])) {
-            $documentsFilesFolderPermissionsForm = $_SESSION['documentsFilesFolderPermissionsForm'];
-            $documentsFilesFolderPermissionsForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        // check form field input and sanitized it from malicious content
+        $documentsFilesFolderPermissionsForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $documentsFilesFolderPermissionsForm->validate($_POST);
 
         $postIntRolesViewRight   = array_map('intval', $_POST['adm_roles_view_right']);
         $postIntRolesUploadRight = array_map('intval', $_POST['adm_roles_upload_right']);
@@ -339,12 +330,9 @@ try {
     elseif ($getMode === 'move') {
         $destFolderUUID = admFuncVariableIsValid($_POST, 'dest_folder_uuid', 'string', array('requireValue' => true));
 
-        if (isset($_SESSION['documentsFilesMoveForm'])) {
-            $documentsFilesMoveForm = $_SESSION['documentsFilesMoveForm'];
-            $documentsFilesMoveForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        // check form field input and sanitized it from malicious content
+        $documentsFilesMoveForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $documentsFilesMoveForm->validate($_POST);
 
         if ($getFileUuid !== '') {
             $file = new TableFile($gDb);

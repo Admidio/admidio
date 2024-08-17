@@ -80,7 +80,7 @@ try {
     );
 
     $form->addToHtmlPage();
-    $_SESSION['documentsFilesMoveForm'] = $form;
+    $gCurrentSession->addFormObject($form);
     $documentsFiles->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

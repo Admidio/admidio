@@ -161,7 +161,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $photoAlbum->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $photoAlbum->getValue('ann_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['photosEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

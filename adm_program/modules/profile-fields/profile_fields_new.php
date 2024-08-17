@@ -252,7 +252,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $userField->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $userField->getValue('ann_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['profileFieldsEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

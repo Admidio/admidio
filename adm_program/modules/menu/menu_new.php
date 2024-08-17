@@ -224,7 +224,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $menu->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $menu->getValue('men_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['menuEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

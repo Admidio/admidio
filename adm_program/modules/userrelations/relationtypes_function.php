@@ -44,12 +44,8 @@ try {
         // create or edit relation type
 
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['userRelationsTypeEditForm'])) {
-            $userRelationsTypeEditForm = $_SESSION['userRelationsTypeEditForm'];
-            $formValues = $userRelationsTypeEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $userRelationsTypeEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $userRelationsTypeEditForm->validate($_POST);
 
         $relationType2 = new TableUserRelationType($gDb);
         if ($getUrtUuid !== '') {

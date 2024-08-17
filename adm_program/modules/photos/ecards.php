@@ -234,7 +234,7 @@ try {
         )
     );
     $form->addToHtmlPage();
-    $_SESSION['photosEcardSendForm'] = $form;
+    $gCurrentSession->addFormObject($form);
     $page->show();
 } catch (AdmException|Exception|RuntimeException $e) {
     $gMessage->show($e->getMessage());

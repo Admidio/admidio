@@ -98,7 +98,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $announcement->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $announcement->getValue('ann_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['announcementsEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

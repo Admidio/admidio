@@ -146,7 +146,7 @@ try {
     $form->addSubmitButton('btn_forward', $gL10n->get('SYS_IMPORT'), array('icon' => 'bi-upload'));
 
     $form->addToHtmlPage();
-    $_SESSION['contactsImportAssignFieldsForm'] = $form;
+    $gCurrentSession->addFormObject($form);
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

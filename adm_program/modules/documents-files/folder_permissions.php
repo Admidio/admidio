@@ -159,7 +159,7 @@ try {
 
     // add form to html page and show page
     $form->addToHtmlPage();
-    $_SESSION['documentsFilesFolderPermissionsForm'] = $form;
+    $gCurrentSession->addFormObject($form);
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

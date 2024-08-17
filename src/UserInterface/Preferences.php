@@ -228,7 +228,7 @@ class Preferences extends HtmlPage
      */
     public function createAnnouncementsForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -272,7 +272,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formAnnouncements->addToSmarty($smarty);
-        $_SESSION['preferencesAnnouncementsForm'] = $formAnnouncements;
+        $gCurrentSession->addFormObject($formAnnouncements);
         return $smarty->fetch('preferences/preferences.announcements.tpl');
     }
 
@@ -283,7 +283,7 @@ class Preferences extends HtmlPage
      */
     public function createCaptchaForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -393,7 +393,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formCaptcha->addToSmarty($smarty);
-        $_SESSION['preferencesCaptchaForm'] = $formCaptcha;
+        $gCurrentSession->addFormObject($formCaptcha);
         return $smarty->fetch('preferences/preferences.captcha.tpl');
     }
 
@@ -404,7 +404,7 @@ class Preferences extends HtmlPage
      */
     public function createCategoryReportForm(): string
     {
-        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -444,7 +444,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formCategoryReport->addToSmarty($smarty);
-        $_SESSION['preferencesCategoryReportForm'] = $formCategoryReport;
+        $gCurrentSession->addFormObject($formCategoryReport);
         return $smarty->fetch('preferences/preferences.category-report.tpl');
     }
 
@@ -455,7 +455,7 @@ class Preferences extends HtmlPage
      */
     public function createCommonForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -547,7 +547,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formCommon->addToSmarty($smarty);
-        $_SESSION['preferencesCommonForm'] = $formCommon;
+        $gCurrentSession->addFormObject($formCommon);
         return $smarty->fetch('preferences/preferences.common.tpl');
     }
 
@@ -558,7 +558,7 @@ class Preferences extends HtmlPage
      */
     public function createContactsForm(): string
     {
-        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -631,7 +631,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formContacts->addToSmarty($smarty);
-        $_SESSION['preferencesContactsForm'] = $formContacts;
+        $gCurrentSession->addFormObject($formContacts);
         return $smarty->fetch('preferences/preferences.contacts.tpl');
     }
 
@@ -642,7 +642,7 @@ class Preferences extends HtmlPage
      */
     public function createDocumentsFilesForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -673,7 +673,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formDocumentsFiles->addToSmarty($smarty);
-        $_SESSION['preferencesDocumentsFilesForm'] = $formDocumentsFiles;
+        $gCurrentSession->addFormObject($formDocumentsFiles);
         return $smarty->fetch('preferences/preferences.documents-files.tpl');
     }
 
@@ -684,7 +684,7 @@ class Preferences extends HtmlPage
      */
     public function createEmailDispatchForm(): string
     {
-        global $gL10n, $gCurrentOrganization, $gSettingsManager;
+        global $gL10n, $gCurrentOrganization, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -831,7 +831,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formEmailDispatch->addToSmarty($smarty);
-        $_SESSION['preferencesEmailDispatchForm'] = $formEmailDispatch;
+        $gCurrentSession->addFormObject($formEmailDispatch);
         return $smarty->fetch('preferences/preferences.email-dispatch.tpl');
     }
 
@@ -842,7 +842,7 @@ class Preferences extends HtmlPage
      */
     public function createEventsForm(): string
     {
-        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -961,7 +961,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formEvents->addToSmarty($smarty);
-        $_SESSION['preferencesEventsForm'] = $formEvents;
+        $gCurrentSession->addFormObject($formEvents);
         return $smarty->fetch('preferences/preferences.events.tpl');
     }
 
@@ -972,7 +972,7 @@ class Preferences extends HtmlPage
      */
     public function createGroupsRolesForm(): string
     {
-        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId;
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1059,7 +1059,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formGroupsRoles->addToSmarty($smarty);
-        $_SESSION['preferencesGroupsRolesForm'] = $formGroupsRoles;
+        $gCurrentSession->addFormObject($formGroupsRoles);
         return $smarty->fetch('preferences/preferences.groups-roles.tpl');
     }
 
@@ -1070,7 +1070,7 @@ class Preferences extends HtmlPage
      */
     public function createGuestbookForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1141,7 +1141,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formGuestbook->addToSmarty($smarty);
-        $_SESSION['preferencesGuestbookForm'] = $formGuestbook;
+        $gCurrentSession->addFormObject($formGuestbook);
         return $smarty->fetch('preferences/preferences.guestbook.tpl');
     }
 
@@ -1152,7 +1152,7 @@ class Preferences extends HtmlPage
      */
     public function createLinksForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1209,7 +1209,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formWeblinks->addToSmarty($smarty);
-        $_SESSION['preferencesLinksForm'] = $formWeblinks;
+        $gCurrentSession->addFormObject($formWeblinks);
         return $smarty->fetch('preferences/preferences.links.tpl');
     }
 
@@ -1220,7 +1220,7 @@ class Preferences extends HtmlPage
      */
     public function createMessagesForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1316,7 +1316,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formMessages->addToSmarty($smarty);
-        $_SESSION['preferencesMessagesForm'] = $formMessages;
+        $gCurrentSession->addFormObject($formMessages);
         return $smarty->fetch('preferences/preferences.messages.tpl');
     }
 
@@ -1327,7 +1327,7 @@ class Preferences extends HtmlPage
      */
     public function createOrganizationForm(): string
     {
-        global $gDb, $gL10n, $gCurrentOrganization, $gSettingsManager, $gCurrentOrgId;
+        global $gDb, $gL10n, $gCurrentOrganization, $gSettingsManager, $gCurrentOrgId, $gCurrentSession;
 
         // read organization and all system preferences values into form array
         $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
@@ -1402,7 +1402,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formOrganization->addToSmarty($smarty);
-        $_SESSION['preferencesOrganizationForm'] = $formOrganization;
+        $gCurrentSession->addFormObject($formOrganization);
         return $smarty->fetch('preferences/preferences.organization.tpl');
     }
 
@@ -1413,7 +1413,7 @@ class Preferences extends HtmlPage
      */
     public function createPhotosForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1531,7 +1531,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formPhotos->addToSmarty($smarty);
-        $_SESSION['preferencesPhotosForm'] = $formPhotos;
+        $gCurrentSession->addFormObject($formPhotos);
         return $smarty->fetch('preferences/preferences.photos.tpl');
     }
 
@@ -1628,7 +1628,7 @@ class Preferences extends HtmlPage
      */
     public function createProfileForm(): string
     {
-        global $gL10n, $gSettingsManager, $gCurrentOrganization;
+        global $gL10n, $gSettingsManager, $gCurrentOrganization, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1696,7 +1696,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formProfile->addToSmarty($smarty);
-        $_SESSION['preferencesProfileForm'] = $formProfile;
+        $gCurrentSession->addFormObject($formProfile);
         return $smarty->fetch('preferences/preferences.profile.tpl');
     }
 
@@ -1707,7 +1707,7 @@ class Preferences extends HtmlPage
      */
     public function createRegionalSettingsForm(): string
     {
-        global $gL10n, $gSettingsManager, $gTimezone;
+        global $gL10n, $gSettingsManager, $gTimezone, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1762,7 +1762,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formRegionalSettings->addToSmarty($smarty);
-        $_SESSION['preferencesRegionalSettingsForm'] = $formRegionalSettings;
+        $gCurrentSession->addFormObject($formRegionalSettings);
         return $smarty->fetch('preferences/preferences.regional-settings.tpl');
     }
 
@@ -1773,7 +1773,7 @@ class Preferences extends HtmlPage
      */
     public function createRegistrationForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1822,7 +1822,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formRegistration->addToSmarty($smarty);
-        $_SESSION['preferencesRegistrationForm'] = $formRegistration;
+        $gCurrentSession->addFormObject($formRegistration);
         return $smarty->fetch('preferences/preferences.registration.tpl');
     }
 
@@ -1833,7 +1833,7 @@ class Preferences extends HtmlPage
      */
     public function createSecurityForm(): string
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -1883,7 +1883,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formSecurity->addToSmarty($smarty);
-        $_SESSION['preferencesSecurityForm'] = $formSecurity;
+        $gCurrentSession->addFormObject($formSecurity);
         return $smarty->fetch('preferences/preferences.security.tpl');
     }
 
@@ -2003,7 +2003,7 @@ class Preferences extends HtmlPage
      */
     public function createSystemNotificationsForm(): string
     {
-        global $gL10n, $gDb, $gSettingsManager, $gCurrentOrgId;
+        global $gL10n, $gDb, $gSettingsManager, $gCurrentOrgId, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -2091,7 +2091,7 @@ class Preferences extends HtmlPage
 
         $smarty = $this->getSmartyTemplate();
         $formSystemNotifications->addToSmarty($smarty);
-        $_SESSION['preferencesSystemNotificationsForm'] = $formSystemNotifications;
+        $gCurrentSession->addFormObject($formSystemNotifications);
         return $smarty->fetch('preferences/preferences.system-notifications.tpl');
     }
 

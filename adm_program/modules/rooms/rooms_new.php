@@ -76,7 +76,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $room->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $room->getValue('ann_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['roomsEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

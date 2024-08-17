@@ -623,7 +623,7 @@ try {
         )
     );
     $form->addToHtmlPage();
-    $_SESSION['myListConfigurationForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

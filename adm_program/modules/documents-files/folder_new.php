@@ -74,7 +74,7 @@ try {
     );
 
     $form->addToHtmlPage();
-    $_SESSION['documentsFilesFolderNewForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

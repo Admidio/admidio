@@ -75,12 +75,8 @@ try {
         }
 
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['profileFieldsEditForm'])) {
-            $profileFieldsEditForm = $_SESSION['profileFieldsEditForm'];
-            $formValues = $profileFieldsEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $profileFieldsEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $profileFieldsEditForm->validate($_POST);
 
         if (isset($_POST['usf_name']) && $userField->getValue('usf_name') !== $_POST['usf_name']) {
             // See if the field already exists

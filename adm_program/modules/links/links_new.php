@@ -95,7 +95,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $link->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $link->getValue('lnk_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['linksEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

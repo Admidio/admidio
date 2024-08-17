@@ -7,6 +7,8 @@
  ***********************************************************************************************
  */
 
+use Admidio\UserInterface\Form;
+
 /**
  * Handle session data of Admidio and is connected to database table adm_sessions
  *
@@ -35,19 +37,24 @@ class Session extends TableAccess
     /**
      * @var array<string,mixed> Array with all objects of this session object.
      */
-    protected $mObjectArray = array();
+    protected array $mObjectArray = array();
+    /**
+     * @var array<string,mixed> Array with all form objects of this session object.
+     * The array key will be the csrf token of the form.
+     */
+    protected array $mFormObjects = array();
     /**
      * @var AutoLogin|null Object of table auto login that will handle an auto login
      */
-    protected $mAutoLogin;
+    protected ?AutoLogin $mAutoLogin;
     /**
      * @var string
      */
-    protected $cookieAutoLoginId;
+    protected string $cookieAutoLoginId;
     /**
      * @var string a 30 character long CSRF token
      */
-    protected $csrfToken = '';
+    protected string $csrfToken = '';
 
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
@@ -84,6 +91,23 @@ class Session extends TableAccess
 
         // check for a valid auto login
         $this->refreshAutoLogin();
+    }
+
+    /**
+     * Adds a form object to the form object array of this class. Objects in this array
+     * will be stored in the session and could be read with the method **getFormObject**.
+     * The key of the array will be the csrf-token of the form.
+     * @param Form $form The form that should be stored in this class.
+     * @return bool Return false if object isn't type object or objectName already exists
+     * @throws AdmException
+     */
+    public function addFormObject(Form &$form): bool
+    {
+        if (!array_key_exists($form->getCsrfToken(), $this->mFormObjects)) {
+            $this->mFormObjects[$form->getCsrfToken()] = &$form;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -136,6 +160,22 @@ class Session extends TableAccess
     }
 
     /**
+     * Returns a reference of a form object that is stored in the session.
+     * @param string $csrfToken The unique csrf token of the form to identify the correct form object.
+     * @return Form Returns the reference to the form object.
+     * @throws AdmException Requested form not found in session.
+     */
+    public function &getFormObject(string $csrfToken)
+    {
+        if (!array_key_exists($csrfToken, $this->mFormObjects)) {
+            throw new AdmException('Requested form not found in session.');
+        }
+
+        // return reference of Form object
+        return $this->mFormObjects[$csrfToken];
+    }
+
+    /**
      * Returns a reference of an object that is stored in the session.
      * This is necessary because the old database connection is not valid anymore.
      * @param string $objectName Internal unique name of the object. The name was set with the method **addObject**
@@ -158,6 +198,7 @@ class Session extends TableAccess
      * organization may not be the organization of the config.php because the
      * user had set the AutoLogin to a different organization.
      * @return int Returns the organization id of this session
+     * @throws AdmException
      */
     public function getOrganizationId(): int
     {
@@ -447,7 +488,7 @@ class Session extends TableAccess
      *                         With "0" the cookie will expire if the session ends. (When Browser gets closed)
      * @param string $path Specify the path where the cookie should be available. (Also in sub-paths)
      * @param string $domain Specify the domain where the cookie should be available. (Set ".example.org" to allow subdomains)
-     * @param bool|null $secure If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
+     * @param bool|null $secure If "true" cookie is only set if connection is HTTPS. Default is an auto-detection.
      * @param bool $httpOnly If "true" cookie is accessible only via HTTP.
      *                         Set to "false" to allow access for JavaScript. (Possible XSS security leak)
      * @return bool Returns "true" if the cookie is successfully set.
@@ -504,7 +545,7 @@ class Session extends TableAccess
      *                             With "0" the cookie will expire if the session ends. (When Browser gets closed)
      * @param string $path Specify the path where the cookie should be available. (Also in sub-paths)
      * @param string $domain Specify the domain where the cookie should be available. (Set ".example.org" to allow subdomains)
-     * @param bool|null $secure If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
+     * @param bool|null $secure If "true" cookie is only set if connection is HTTPS. Default is an auto-detection.
      * @param bool $httpOnly If "true" cookie is accessible only via HTTP.
      *                             Set to "false" to allow access for JavaScript. (Possible XSS security leak)
      * @throws RuntimeException

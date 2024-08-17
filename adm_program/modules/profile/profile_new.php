@@ -356,7 +356,7 @@ try {
         }
 
         $form->addToHtmlPage();
-        $_SESSION['profileEditForm'] = $form;
+        $gCurrentSession->addFormObject($form);
 
         $page->show();
     } elseif ($getMode === 'save') {
@@ -365,12 +365,8 @@ try {
         // ------------------------------------------------------------
 
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['profileEditForm'])) {
-            $profileEditForm = $_SESSION['profileEditForm'];
-            $formValues = $profileEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $profileEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $profileEditForm->validate($_POST);
 
         // Login name and password must be checked during registration
         if (!$gValidLogin) {

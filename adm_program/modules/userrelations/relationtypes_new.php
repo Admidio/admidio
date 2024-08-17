@@ -159,7 +159,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $relationType1->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $relationType1->getValue('ann_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['userRelationsTypeEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

@@ -178,7 +178,7 @@ try {
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $form->addToHtmlPage();
-    $_SESSION['userRelationsEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

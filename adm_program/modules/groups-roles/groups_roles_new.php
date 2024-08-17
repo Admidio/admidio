@@ -382,7 +382,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $role->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $role->getValue('rol_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['groupsRolesEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

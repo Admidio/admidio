@@ -57,12 +57,9 @@ try {
     if ($getMode === 'edit') {
         // create or edit role
 
-        if (isset($_SESSION['groupsRolesEditForm'])) {
-            $groupsRolesEditForm = $_SESSION['groupsRolesEditForm'];
-            $formValues = $groupsRolesEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        // check form field input and sanitized it from malicious content
+        $groupsRolesEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $groupsRolesEditForm->validate($_POST);
 
         if ($role->getValue('rol_name') !== $_POST['rol_name']) {
             // check if the role already exists

@@ -248,7 +248,7 @@ try {
         // add form to html page
         $page->assignSmartyVariable('userUuid', $getUserUuid);
         $form->addToHtmlPage();
-        $_SESSION['messagesSendForm'] = $form;
+        $gCurrentSession->addFormObject($form);
     } elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '') {
         if ($getUserUuid !== '') {
             // check if the user has email address for receiving an email
@@ -578,7 +578,7 @@ try {
         // add form to html page and show page
         $page->assignSmartyVariable('possibleEmails', $possibleEmails);
         $form->addToHtmlPage();
-        $_SESSION['messagesSendForm'] = $form;
+        $gCurrentSession->addFormObject($form);
     }
 
     if (isset($messageStatement)) {

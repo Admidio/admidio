@@ -28,12 +28,9 @@ try {
     }
 
     if ($getMode === 'import') {
-        if (isset($_SESSION['contactsImportAssignFieldsForm'])) {
-            $contactsImportAssignFieldsForm = $_SESSION['contactsImportAssignFieldsForm'];
-            $contactsImportAssignFieldsForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        // check form field input and sanitized it from malicious content
+        $contactsImportAssignFieldsForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $contactsImportAssignFieldsForm->validate($_POST);
 
         // go through each line from the file one by one and create the user in the DB
         $line = reset($_SESSION['import_data']);

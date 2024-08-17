@@ -22,8 +22,8 @@ try {
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
     // Initialize local variables
-    $disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;
-    $disableComments = HtmlForm::FIELD_HIDDEN;
+    $disableAdditionalGuests = Form::FIELD_HIDDEN;
+    $disableComments = Form::FIELD_HIDDEN;
 
     // Get the date object
     $event = new TableEvent($gDb);
@@ -47,10 +47,10 @@ try {
     // If extended options for participation are allowed then show in form
     if ((int)$event->getValue('dat_allow_comments') === 1 || (int)$event->getValue('dat_additional_guests') === 1) {
         if ((int)$event->getValue('dat_allow_comments') === 1) {
-            $disableComments = HtmlForm::FIELD_DEFAULT;
+            $disableComments = Form::FIELD_DEFAULT;
         }
         if ((int)$event->getValue('dat_additional_guests') === 1) {
-            $disableAdditionalGuests = HtmlForm::FIELD_DEFAULT;
+            $disableAdditionalGuests = Form::FIELD_DEFAULT;
         }
     }
 
@@ -103,7 +103,7 @@ try {
     $smarty->assign('eventHeadline', $event->getValue('dat_headline'));
     $smarty->assign('eventPeriod', $event->getDateTimePeriod());
     $participationForm->addToSmarty($smarty);
-    $_SESSION['eventsParticipationEditForm'] = $participationForm;
+    $gCurrentSession->addFormObject($participationForm);
     echo $smarty->fetch('modules/events.participation.edit.tpl');
 } catch (AdmException|Exception $e) {
     $gMessage->showInModalWindow();

@@ -46,12 +46,8 @@ try {
 
     if ($getMode === 'edit') {
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['announcementsEditForm'])) {
-            $announcementEditForm = $_SESSION['announcementsEditForm'];
-            $formValues = $announcementEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $announcementEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $announcementEditForm->validate($_POST);
 
         // write form values in announcement object
         foreach ($formValues as $key => $value) {

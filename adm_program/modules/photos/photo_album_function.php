@@ -48,12 +48,8 @@ try {
 
     if ($getMode === 'edit') {
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['photosEditForm'])) {
-            $photosEditForm = $_SESSION['photosEditForm'];
-            $formValues = $photosEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $photosEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $photosEditForm->validate($_POST);
 
         if (strlen($_POST['pho_begin']) > 0) {
             $startDate = DateTime::createFromFormat('Y-m-d', $_POST['pho_begin']);

@@ -41,7 +41,7 @@ class ModuleLogin
      */
     public function addHtmlLogin(HtmlPage $page, string $organizationShortName = '')
     {
-        global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization;
+        global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization, $gCurrentSession;
 
         if ($organizationShortName === '') {
             $organizationShortName = $gCurrentOrganization->getValue('org_shortname');
@@ -76,7 +76,7 @@ class ModuleLogin
 
         // show form
         $form = new Form(
-            'login_form',
+            'loginForm',
             'system/login.tpl',
             ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
             $page,
@@ -115,6 +115,7 @@ class ModuleLogin
         $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
         $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right', 'class' => 'offset-sm-3'));
         $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
     }
 
     /**
@@ -129,20 +130,14 @@ class ModuleLogin
         global $gDb, $gCurrentOrganization, $gCurrentOrgId, $gProfileFields, $gCurrentSession, $gSettingsManager;
         global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gL10n;
 
-        $postLoginName = admFuncVariableIsValid($_POST, (isset($_POST['usr_login_name']) ? 'usr_login_name' : 'plg_usr_login_name'), 'string');
-        $postPassword = (isset($_POST['usr_password']) ? $_POST['usr_password'] : $_POST['plg_usr_password']);
-        $postOrgShortName = admFuncVariableIsValid($_POST, (isset($_POST['org_shortname']) ? 'org_shortname' : 'plg_org_shortname'), 'string');
-        $postAutoLogin = admFuncVariableIsValid($_POST, (isset($_POST['auto_login']) ? 'auto_login' : 'plg_auto_login'), 'bool');
+        // check form field input and sanitized it from malicious content
+        $loginForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $loginForm->validate($_POST);
 
-        if ($postLoginName === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_USERNAME')));
-            // => EXIT
-        }
-
-        if ($postPassword === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_PASSWORD')));
-            // => EXIT
-        }
+        $postLoginName = (isset($formValues['usr_login_name']) ? $formValues['usr_login_name'] : $formValues['usr_login_name']);
+        $postPassword = (isset($formValues['usr_password']) ? $formValues['usr_password'] : $formValues['plg_usr_password']);
+        $postOrgShortName = (isset($formValues['org_shortname']) ? $formValues['org_shortname'] : $formValues['org_shortname']);
+        $postAutoLogin = (isset($formValues['auto_login']) ? $formValues['auto_login'] : $formValues['auto_login']);
 
         // Search for username
         $sql = 'SELECT usr_id
@@ -152,7 +147,6 @@ class ModuleLogin
 
         if ($userStatement->rowCount() === 0) {
             throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
-            // => EXIT
         }
 
         // if login organization is different to organization of config file then create new session variables

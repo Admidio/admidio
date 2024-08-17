@@ -47,12 +47,9 @@ try {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    if (isset($_SESSION['contactsImportForm'])) {
-        $contactsImportForm = $_SESSION['contactsImportForm'];
-        $contactsImportForm->validate($_POST);
-    } else {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
-    }
+    // check form field input and sanitized it from malicious content
+    $contactsImportForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $formValues = $contactsImportForm->validate($_POST);
 
     $importfile = $_FILES['userfile']['tmp_name'][0];
     if (strlen($importfile) === 0) {

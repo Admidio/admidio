@@ -65,12 +65,8 @@ try {
         if (!empty($_POST['new_password'])) {
             try {
                 // check form field input and sanitized it from malicious content
-                if (isset($_SESSION['passwordResetSetPasswordForm'])) {
-                    $passwordResetSetPasswordForm = $_SESSION['passwordResetSetPasswordForm'];
-                    $formValues = $passwordResetSetPasswordForm->validate($_POST);
-                } else {
-                    throw new AdmException('SYS_INVALID_PAGE_VIEW');
-                }
+                $passwordResetSetPasswordForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+                $formValues = $passwordResetSetPasswordForm->validate($_POST);
 
                 // check password and save new password in database
                 $newPassword = $formValues['new_password'];
@@ -147,19 +143,15 @@ try {
             );
 
             $form->addToHtmlPage();
-            $_SESSION['passwordResetSetPasswordForm'] = $form;
+            $gCurrentSession->addFormObject($form);
             $page->show();
         }
     } elseif (!empty($_POST['recipient_email'])) {
         // password reset form was send, and now we should create an email for the user
         try {
             // check form field input and sanitized it from malicious content
-            if (isset($_SESSION['passwordResetForm'])) {
-                $passwordResetForm = $_SESSION['passwordResetForm'];
-                $formValues = $passwordResetForm->validate($_POST);
-            } else {
-                throw new AdmException('SYS_INVALID_PAGE_VIEW');
-            }
+            $passwordResetForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $passwordResetForm->validate($_POST);
 
             if (StringUtils::strValidCharacters($formValues['recipient_email'], 'email')) {
                 // search for user with the email address that have a valid login and membership to a role
@@ -300,7 +292,7 @@ try {
         );
 
         $form->addToHtmlPage();
-        $_SESSION['passwordResetForm'] = $form;
+        $gCurrentSession->addFormObject($form);
         $page->show();
     }
 } catch (AdmException|Exception $e) {

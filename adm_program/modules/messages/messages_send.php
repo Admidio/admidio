@@ -38,12 +38,9 @@ try {
         $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
     }
 
-    if (isset($_SESSION['messagesSendForm'])) {
-        $messagesSendForm = $_SESSION['messagesSendForm'];
-        $formValues = $messagesSendForm->validate($_POST);
-    } else {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
-    }
+    // check form field input and sanitized it from malicious content
+    $messagesSendForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $formValues = $messagesSendForm->validate($_POST);
 
     if (isset($_POST['msg_to'])) {
         $postTo = $_POST['msg_to'];

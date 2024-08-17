@@ -41,12 +41,9 @@ try {
     }
 
     if ($getMode === 'change') {
-        if (isset($_SESSION['profilePasswordEditForm'])) {
-            $profilePasswordEditForm = $_SESSION['profilePasswordEditForm'];
-            $profilePasswordEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        // check form field input and sanitized it from malicious content
+        $profilePasswordEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $profilePasswordEditForm->validate($_POST);
 
         if ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId) {
             $oldPassword = '';
@@ -153,7 +150,7 @@ try {
         $smarty = HtmlPage::createSmartyObject();
         $smarty->assign('zxcvbnUserInputs', $zxcvbnUserInputs);
         $form->addToSmarty($smarty);
-        $_SESSION['profilePasswordEditForm'] = $form;
+        $gCurrentSession->addFormObject($form);
         echo $smarty->fetch('modules/profile.password.edit.tpl');
     }
 } catch (AdmException|Exception $e) {

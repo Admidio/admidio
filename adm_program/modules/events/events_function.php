@@ -86,20 +86,16 @@ try {
         }
 
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['eventsEditForm'])) {
-            $eventEditForm = $_SESSION['eventsEditForm'];
-            $formValues = $eventEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $eventEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $eventEditForm->validate($_POST);
 
-        if ($_POST['event_participation_possible'] == 1
-            && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)) {
+        if ($formValues['event_participation_possible'] == 1
+            && (!isset($formValues['adm_event_participation_right']) || array_count_values($formValues['adm_event_participation_right']) == 0)) {
             throw new AdmException('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));
         }
 
         $calendar = new TableCategory($gDb);
-        $calendar->readDataByUuid($_POST['cat_uuid']);
+        $calendar->readDataByUuid($formValues['cat_uuid']);
         $formValues['dat_cat_id'] = $calendar->getValue('cat_id');
 
         if ($formValues['dat_all_day'] === '1') {
@@ -392,12 +388,8 @@ try {
     // If participation mode: Set status and write optional parameter from user and show current status message
     if (in_array($getMode, array('participate', 'participate_cancel', 'participate_maybe'), true)) {
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['eventsParticipationEditForm'])) {
-            $eventsParticipationEditForm = $_SESSION['eventsParticipationEditForm'];
-            $formValues = $eventsParticipationEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $eventsParticipationEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $eventsParticipationEditForm->validate($_POST);
 
         $member = new TableMembers($gDb);
         $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));

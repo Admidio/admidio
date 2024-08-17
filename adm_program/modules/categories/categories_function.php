@@ -93,12 +93,8 @@ try {
         // create or edit category
 
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['categoriesEditForm'])) {
-            $categoryEditForm = $_SESSION['categoriesEditForm'];
-            $formValues = $categoryEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $categoryEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $categoryEditForm->validate($_POST);
 
         if ($getType !== 'ROL'
             && ((bool)$category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)

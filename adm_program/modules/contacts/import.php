@@ -211,7 +211,7 @@ try {
     );
 
     $form->addToHtmlPage();
-    $_SESSION['contactsImportForm'] = $form;
+    $gCurrentSession->addFormObject($form);
     $page->show();
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

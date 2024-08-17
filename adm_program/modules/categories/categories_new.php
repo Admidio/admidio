@@ -327,7 +327,7 @@ try {
     $page->assignSmartyVariable('nameLastUserEdited', $category->getNameOfLastEditingUser());
     $page->assignSmartyVariable('timestampLastUserEdited', $category->getValue('cat_timestamp_change'));
     $form->addToHtmlPage();
-    $_SESSION['categoriesEditForm'] = $form;
+    $gCurrentSession->addFormObject($form);
 
     $page->show();
 } catch (AdmException|Exception $e) {

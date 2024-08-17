@@ -48,12 +48,9 @@ try {
     $senderName  = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
     $senderEmail = $gCurrentUser->getValue('EMAIL');
 
-    if (isset($_SESSION['photosEcardSendForm'])) {
-        $photosEcardSendForm = $_SESSION['photosEcardSendForm'];
-        $photosEcardSendForm->validate($_POST);
-    } else {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
-    }
+    // check form field input and sanitized it from malicious content
+    $photosEcardSendForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $formValues = $photosEcardSendForm->validate($_POST);
 
     // read template from file system
     $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);

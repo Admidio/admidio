@@ -46,7 +46,7 @@ try {
 
     $smarty = HtmlPage::createSmartyObject();
     $form->addToSmarty($smarty);
-    $_SESSION['contactsNewForm'] = $form;
+    $gCurrentSession->addFormObject($form);
     echo $smarty->fetch('modules/contacts.new.tpl');
 } catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());

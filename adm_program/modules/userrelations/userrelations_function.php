@@ -52,12 +52,8 @@ try {
 
     if ($getMode === 'create') {
         // check form field input and sanitized it from malicious content
-        if (isset($_SESSION['userRelationsEditForm'])) {
-            $userRelationsEditForm = $_SESSION['userRelationsEditForm'];
-            $formValues = $userRelationsEditForm->validate($_POST);
-        } else {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
+        $userRelationsEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $userRelationsEditForm->validate($_POST);
 
         $user1->readDataByUuid($getUserUuid);
 

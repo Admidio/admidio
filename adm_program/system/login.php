@@ -34,9 +34,6 @@ try {
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();
     } elseif ($getMode === 'check') {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
         // check the data of the login dialog
         $loginModule = new ModuleLogin();
         $loginModule->checkLogin();

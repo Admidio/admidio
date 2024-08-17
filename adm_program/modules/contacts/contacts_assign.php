@@ -20,12 +20,9 @@ try {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    if (isset($_SESSION['contactsNewForm'])) {
-        $contactsNewForm = $_SESSION['contactsNewForm'];
-        $contactsNewForm->validate($_POST);
-    } else {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
-    }
+    // check form field input and sanitized it from malicious content
+    $contactsNewForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $formValues = $contactsNewForm->validate($_POST);
 
     // create html page object
     $page = new ModuleContacts('admidio-registration-assign', $gL10n->get('SYS_ASSIGN_REGISTRATION'));
