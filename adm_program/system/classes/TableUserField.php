@@ -174,7 +174,7 @@ class TableUserField extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
-        if (empty($value)) {
+        if (strlen((string) $value) === 0 || $value === null) {
             return '';
         }
 

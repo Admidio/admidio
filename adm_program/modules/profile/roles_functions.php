@@ -8,6 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
+
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
     exit('This page may not be called directly!');
 }
@@ -106,7 +108,10 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
     $countShowRoles = 0;
     $member = new TableMembers($gDb);
     $role   = new TableRoles($gDb);
-    $roleMemHTML = '<ul class="list-group admidio-list-roles-assign" id="'.$htmlListId.'">';
+    $smarty = HtmlPage::createSmartyObject();
+    $smarty->assign('listID', $htmlListId);
+    $smarty->assign('l10n', $gL10n);
+    $memberships = array();
 
     while ($row = $roleStatement->fetch()) {
         // you must have the right to view memberships of the role, or it must be your own profile
@@ -139,108 +144,92 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
 
             $memberUuid = $member->getValue('mem_uuid');
 
-            // create list entry for one role
-            $roleMemHTML .= '
-            <li class="list-group-item" id="role_'. $row['rol_uuid']. '">
-                <ul class="list-group admidio-list-roles-assign-pos">
-                    <li class="list-group-item">
-                        <span>'.
-                            $role->getValue('cat_name'). ' - ';
+            $membership = array(
+                'memberUUID' => $memberUuid,
+                'category' => $role->getValue('cat_name'),
+                'showRelationsCreateEdit' => $gSettingsManager->get('system_show_create_edit') > 0
+            );
 
             if ($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id'))) {
-                $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'])). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+                $membership['role'] = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'])). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
             } else {
-                $roleMemHTML .= $role->getValue('rol_name');
+                $membership['role'] = $role->getValue('rol_name');
             }
             if ($member->getValue('mem_leader') == 1) {
-                $roleMemHTML .= ' - '.$gL10n->get('SYS_LEADER');
+                $membership['leader'] = ' - '.$gL10n->get('SYS_LEADER');
             }
 
-            $roleMemHTML .= '&nbsp;
-                        </span>
-                        <span class="float-end text-right">
-                            <span class="me-2">';
             if ($showRoleEndDate) {
-                $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));
+                $membership['period'] = $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));
             } elseif ($futureMembership) {
-                $roleMemHTML .= $gL10n->get('SYS_FROM', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
+                $membership['period'] = $gL10n->get('SYS_FROM', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
             } else {
-                $roleMemHTML .= $gL10n->get('SYS_SINCE', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
+                $membership['period'] = $gL10n->get('SYS_SINCE', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
             }
-            $roleMemHTML .= '</span>';
 
             if ($role->allowedToAssignMembers($gCurrentUser)) {
                 // do not edit administrator role
                 if ($row['rol_administrator'] == 0) {
-                    $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" href="javascript:profileJS.toggleDetailsOn(\''.$memberUuid.'\')"><i
+                    $linkMembershipEdit = '<a class="admidio-icon-link" style="cursor:pointer;" href="javascript:profileJS.toggleDetailsOn(\''.$memberUuid.'\')"><i
                                         class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CHANGE_DATE').'"></i></a>';
                 } else {
-                    $roleMemHTML .= '<a><i class="bi bi-pencil-square invisible"></i></a>';
+                    $linkMembershipEdit = '<a><i class="bi bi-pencil-square invisible"></i></a>';
                 }
+                $membership['linkMembershipEdit'] = $linkMembershipEdit;
 
                 // You are not allowed to delete your own administrator membership, other roles could be deleted
                 if (($role->getValue('rol_administrator') == 1 && $GLOBALS['gCurrentUserId'] !== (int) $user->getValue('usr_id'))
                                 || ($role->getValue('rol_administrator') == 0)) {
-                    $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                    $linkMembershipDelete = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.$role->getValue('rol_uuid'), 'database_id' => $memberUuid, 'name' => $role->getValue('rol_name'))).'"><i
                                         class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
                 } else {
-                    $roleMemHTML .= '<a><i class="bi bi-trash invisible"></i></a>';
+                    $linkMembershipDelete = '<a><i class="bi bi-trash invisible"></i></a>';
                 }
+                $membership['linkMembershipDelete'] = $linkMembershipDelete;
             }
 
-            // only show info if system setting is activated
-            if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
-                $roleMemHTML .= '<a class="admidio-icon-link admMemberInfo" id="member_info_'.$memberUuid.'" href="javascript:void(0)"><i
-                                    class="bi bi-info-circle" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>';
-            }
-            $roleMemHTML .= '</span>
-                    </li>
-                    <li class="list-group-item" id="membership_period_'.$memberUuid.'" style="visibility: hidden; display: none;">';
-            $form = new HtmlForm(
+            $form = new Form(
                 'membership_period_form_'.$memberUuid,
+                'sys-template-parts/form.filter.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => 'save_membership', 'user_uuid' => $user->getValue('usr_uuid'), 'member_uuid' => $row['mem_uuid'])),
                 null,
                 array('type' => 'navbar', 'method' => 'post', 'setFocus' => false, 'class' => 'admidio-form-membership-period')
             );
             $form->addInput(
-                'membership_start_date_'.$memberUuid,
+                'membership_start_date',
                 $gL10n->get('SYS_START'),
                 $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),
                 array('type' => 'date', 'maxLength' => 10)
             );
             $form->addInput(
-                'membership_end_date_'.$memberUuid,
+                'membership_end_date',
                 $gL10n->get('SYS_END'),
                 $member->getValue('mem_end', $gSettingsManager->getString('system_date')),
                 array('type' => 'date', 'maxLength' => 10)
             );
             $form->addSubmitButton(
-                'btn_send_'.$memberUuid,
+                'btn_send',
                 $gL10n->get('SYS_OK'),
                 array('class' => 'btn btn-primary button-membership-period-form', 'data-admidio' => $memberUuid)
             );
-            $roleMemHTML .= $form->show();
-            $roleMemHTML .= '</li>
-                    <li class="list-group-item" id="member_info_'.$memberUuid.'_Content" style="display: none;">';
-            // show information about user who creates the recordset and changed it
-            $roleMemHTML .= admFuncShowCreateChangeInfoById(
-                (int) $member->getValue('mem_usr_id_create'),
-                $member->getValue('mem_timestamp_create'),
-                (int) $member->getValue('mem_usr_id_change'),
-                $member->getValue('mem_timestamp_change')
-            ).'
-                    </li>
-                </ul>
-            </li>';
+            $membership['form'] = array(
+                'attributes' => $form->getAttributes(),
+                'elements' => $form->getElements()
+            );
+
+            // only show info if system setting is activated
+            if ((int)$gSettingsManager->get('system_show_create_edit') > 0) {
+                $membership['nameUserCreated'] = $member->getNameOfCreatingUser();
+                $membership['timestampUserCreated'] = $member->getValue('ure_timestamp_create');
+                $membership['nameLastUserEdited'] = $member->getNameOfLastEditingUser();
+                $membership['timestampLastUserEdited'] = $member->getValue('ure_timestamp_change');
+            }
+
             ++$countShowRoles;
+            $memberships[] = $membership;
         }
     }
-    if ($countShowRoles === 0) {
-        $roleMemHTML = '<div class="block-padding">'.$gL10n->get('SYS_NO_ROLES_VISIBLE').'</div>';
-    } else {
-        $roleMemHTML .= '</ul>';
-    }
-
-    return $roleMemHTML;
+    $smarty->assign('memberships', $memberships);
+    return $smarty->fetch('modules/profile.roles-list.row.tpl');
 }

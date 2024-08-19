@@ -85,20 +85,13 @@ try {
 
     // create html page object
     $page = new HtmlPage('admidio-profile', $headline);
-
+    $page->addTemplateFile('modules/profile.view.tpl');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
     $page->addJavascript('
         var profileJS = new ProfileJS(gRootPath);
         profileJS.userUuid                = "' . $getUserUuid . '";
-
-        /**
-         * @param {object} element
-         */
-        function showHideMembershipInformation(element) {
-            $("#" + element.attr("id") + "_Content").toggle("fast");
-        }
 
         function callbackProfilePhoto() {
             var imgSrc = $("#profile_photo").attr("src");
@@ -172,9 +165,14 @@ try {
         }
     ');
     $page->addJavascript('
-        $(".admMemberInfo").click(function() {
-            showHideMembershipInformation($(this))
+        $(document).on("click", ".admidio-create-edit-info", function() {
+        var test = $(this).attr("id");
+            $("#" + $(this).attr("id") + "_Content").toggle("fast");
         });
+
+        profileJS.reloadRoleMemberships();
+        profileJS.reloadFormerRoleMemberships();
+        profileJS.reloadFutureRoleMemberships();
 
         $("#menu_item_profile_password").attr("href", "javascript:void(0);");
         $("#menu_item_profile_password").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '");
@@ -266,216 +264,116 @@ try {
     // User data block
     // *******************************************************************************
 
-    $page->addHtml('
-    <div class="card admidio-field-group" id="user_data_panel">
-        <div class="card-header">' . $gL10n->get('SYS_BASIC_DATA') . '</div>
-        <div class="card-body">
-            <div class="row">
-            <div class="col-sm-8">');
     // create a static form
     $form = new HtmlForm('profile_basic_data_form');
 
     $bNameOutput = false;    // Flag whether the address has already been displayed
     $bAddressOutput = false;    // Flag whether the address has already been displayed
+    $masterData = array();
+    $profileData = array();
 
     // Loop over all fields of the master data
 
     foreach ($gProfileFields->getProfileFields() as $field) {
         // Display only fields of the basic data
-        if ($field->getValue('cat_name_intern') === 'BASIC_DATA' && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern'))) {
-            switch ($field->getValue('usf_name_intern')) {
-                case 'LAST_NAME': // fallthrough
-                case 'FIRST_NAME': // fallthrough
-                case 'GENDER':
-                    if (!$bNameOutput) {
-                        $bNameOutput = true;
-                        // add lastname and firstname
-                        if (strlen($user->getValue('GENDER')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'GENDER')) {
-                            // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
-                            $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' ' . $user->getValue('GENDER', 'html'));
-                        } else {
-                            $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
-                        }
+        if ($gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern'))) {
+            if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
+                if ($field->getValue('usf_name_intern') === 'GENDER' || $field->getValue('usf_type') === 'CHECKBOX') {
+                    $masterData[$field->getValue('usf_name_intern')] = array(
+                        'id' => $field->getValue('usf_name_intern'),
+                        'label' => $field->getValue('usf_name'),
+                        'value' => $user->getValue($field->getValue('usf_name_intern'), 'html')
+                    );
+                } else {
+                    $masterData[$field->getValue('usf_name_intern')] = array(
+                        'id' => $field->getValue('usf_name_intern'),
+                        'label' => $field->getValue('usf_name'),
+                        'value' => $user->getValue($field->getValue('usf_name_intern'))
+                    );
+                }
 
-                        // add login name
-                        if (strlen($user->getValue('usr_login_name')) > 0) {
-                            $userName = '';
-
-                            if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
-                                $userName .= '<a class="icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)) . '" title="' . $gL10n->get('SYS_WRITE_PM') . '">' .
-                                    '<i class="bi bi-chat-left-fill"></i>' . $user->getValue('usr_login_name') . '</a>';
-                            } else {
-                                $userName .= $user->getValue('usr_login_name');
-                            }
-
-                            if (!empty($user->getValue('usr_actual_login'))
-                                && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())) {
-                                $userName .= HtmlForm::getHelpTextIcon($gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
-                            }
-
-                            $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $userName);
-                        } else {
-                            $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $gL10n->get('SYS_NOT_REGISTERED'));
-                        }
+                if ($field->getValue('usf_name_intern') === 'LAST_NAME') {
+                    if ($user->getValue('usr_login_name') === '') {
+                        $value = $gL10n->get('SYS_NOT_REGISTERED');
+                    } elseif ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
+                        $value = '<a class="icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)) . '" title="' . $gL10n->get('SYS_WRITE_PM') . '">' .
+                            '<i class="bi bi-chat-left-fill"></i>' . $user->getValue('usr_login_name') . '</a>';
+                    } else {
+                        $value = $user->getValue('usr_login_name');
                     }
-                    break;
-
-                case 'STREET': // fallthrough
-                case 'POSTCODE': // fallthrough
-                case 'CITY': // fallthrough
-                case 'COUNTRY':
-                    $street = $user->getValue('STREET');
-                    $postcode = $user->getValue('POSTCODE');
-                    $city = $user->getValue('CITY');
-                    $country = $user->getValue('COUNTRY');
-
-                    if (!$bAddressOutput // output of address only once
-                        && (strlen($street) > 0 || strlen($postcode) > 0 || strlen($city) > 0 || strlen($country) > 0)) {
-                        $bAddressOutput = true;
-                        $urlParam = array();
-                        $address = array();
-
-                        if (strlen($street) > 0 && $gCurrentUser->allowedViewProfileField($user, 'STREET')) {
-                            $urlParam[] = $street;
-                            $address[] = $street;
-                        }
-
-                        // City and postcode should be shown in one line
-                        if (strlen($postcode) > 0 && $gCurrentUser->allowedViewProfileField($user, 'POSTCODE')) {
-                            $urlParam[] = $postcode;
-
-                            if (strlen($city) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY')) {
-                                $urlParam[] = $city;
-
-                                // some countries have the order postcode city others have city postcode
-                                if ((int)$gProfileFields->getProperty('CITY', 'usf_sequence') > (int)$gProfileFields->getProperty('POSTCODE', 'usf_sequence')) {
-                                    $address[] = $postcode . ' ' . $city;
-                                } else {
-                                    $address[] = $city . ' ' . $postcode;
-                                }
-                            }
-                        } elseif (strlen($city) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY')) {
-                            $urlParam[] = $city;
-                            $address[] = $city;
-                        }
-
-                        if (strlen($country) > 0 && $gCurrentUser->allowedViewProfileField($user, 'COUNTRY')) {
-                            $urlParam[] = $country;
-                            $address[] = $country;
-                        }
-
-                        $urlParam = implode(', ', $urlParam);
-                        $origin = implode(', ', array(
-                            $gCurrentUser->getValue('STREET'), $gCurrentUser->getValue('POSTCODE'),
-                            $gCurrentUser->getValue('CITY'), $gCurrentUser->getValue('COUNTRY')
-                        ));
-                        $mapUrl = SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => $urlParam));
-                        $routeUrl = SecurityUtils::encodeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => $origin, 'destination' => $urlParam));
-
-                        $address = implode('<br />', $address) . '<br />';
-
-                        // show route or address link if function is enabled and user has filled address or city
-                        if ($gSettingsManager->getBool('profile_show_map_link') && strlen($street) > 0
-                            && (strlen($postcode) > 0 || strlen($city) > 0)) {
-                            $address .= '
-                                        <a class="icon-link" href="' . $mapUrl . '" target="_blank" title="' . $gL10n->get('SYS_MAP_LINK_HOME_DESC') . '">
-                                            <i class="bi bi-pin-map-fill"></i>' . $gL10n->get('SYS_MAP') . '</a>';
-
-                            // show route link if it's not the profile of CurrentUser
-                            if ($userId !== $gCurrentUserId) {
-                                $address .= ' - <a class="icon-link" href="' . $routeUrl . '" target="_blank" title="' . $gL10n->get('SYS_MAP_LINK_ROUTE_DESC') . '">
-                                            <i class="bi bi-sign-turn-right-fill"></i>' . $gL10n->get('SYS_SHOW_ROUTE') . '</a>';
-                            }
-                        }
-
-                        $form->addStaticControl('address', $gL10n->get('SYS_ADDRESS'), $address);
+                    $masterData['usr_login_name'] = array('id' => 'usr_login_name', 'label' => $gL10n->get('SYS_USERNAME'), 'value' => $value);
+                    if (!empty($user->getValue('usr_actual_login'))
+                        && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())) {
+                        $masterData['usr_actual_login'] = array('id' => 'usr_actual_login', 'label' => '', 'value' => $user->getValue('usr_actual_login'));
                     }
-                    break;
-
-                default:
-                    $fieldNameIntern = $field->getValue('usf_name_intern');
-                    $field = getFieldCode($fieldNameIntern, $user);
-                    if (is_array($field) && $field['value'] !== '') {
-                        $form->addStaticControl(strtolower($fieldNameIntern), $field['label'], $field['value']);
-                    }
+                }
+            }
+            else {
+                if ($field->getValue('usf_name_intern') === 'GENDER' || $field->getValue('usf_type') === 'CHECKBOX') {
+                    $profileData[$field->getValue('usf_name_intern')] = array(
+                        'category' => $field->getValue('cat_name'),
+                        'id' => $field->getValue('usf_name_intern'),
+                        'label' => $field->getValue('usf_name'),
+                        'value' => $user->getValue($field->getValue('usf_name_intern'), 'html')
+                    );
+                } else {
+                    $profileData[$field->getValue('usf_name_intern')] = array(
+                        'category' => $field->getValue('cat_name'),
+                        'id' => $field->getValue('usf_name_intern'),
+                        'label' => $field->getValue('usf_name'),
+                        'value' => $user->getValue($field->getValue('usf_name_intern'))
+                    );
+                }
             }
         }
     }
-    $page->addHtml($form->show());
-    $page->addHtml('</div>
-        <div class="col-sm-4 text-right" id="div_profile_photo">');
 
-    // *******************************************************************************
-    // Profile photo
-    // *******************************************************************************
+    // add missing address fields to masterData so that there is less logic in template necessary
+    if (isset($masterData['STREET']) || isset($masterData['POSTCODE']) || isset($masterData['CITY']) || isset($masterData['COUNTRY'])) {
+        if (!isset($masterData['STREET'])) {
+            $masterData['STREET'] = array('id' => 'ADDRESS', 'label' => '', 'value' => '');
+        }
+        if (!isset($masterData['POSTCODE'])) {
+            $masterData['POSTCODE'] = array('id' => 'POSTCODE', 'label' => '', 'value' => '');
+        }
+        if (!isset($masterData['CITY'])) {
+            $masterData['CITY'] = array('id' => 'CITY', 'label' => '', 'value' => '');
+        }
+        if (!isset($masterData['COUNTRY'])) {
+            $masterData['COUNTRY'] = array('id' => 'COUNTRY', 'label' => '', 'value' => '');
+        }
 
-    $page->addHtml('<img id="profile_photo" class="rounded" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)) . '" alt="' . $gL10n->get('SYS_CURRENT_PROFILE_PICTURE') . '" />');
+        // set urls for map and route
+        $destination = array_filter(array(
+            $masterData['STREET']['value'], $masterData['POSTCODE']['value'],
+            $masterData['CITY']['value'], $masterData['COUNTRY']['value']
+        ));
+        $origin = array_filter(array(
+            $gCurrentUser->getValue('STREET'), $gCurrentUser->getValue('POSTCODE'),
+            $gCurrentUser->getValue('CITY'), $gCurrentUser->getValue('COUNTRY')
+        ));
 
+        $page->assignSmartyVariable('urlMapAddress', SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => implode(',', $destination))));
+        if ($userId !== $gCurrentUserId) {
+            $page->assignSmartyVariable('urlMapRoute', SecurityUtils::encodeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => implode(',', $origin), 'destination' => implode(',', $destination))));
+        }
+    }
+
+    $page->assignSmartyVariable('showCurrentRoles', $gSettingsManager->getBool('profile_show_roles'));
+    $page->assignSmartyVariable('userRightAssignRoles', $gCurrentUser->assignRoles());
+    $page->assignSmartyVariable('userRightEditUser', $gCurrentUser->editUsers());
+    $page->assignSmartyVariable('masterData', $masterData);
+    $page->assignSmartyVariable('profileData', $profileData);
+    $page->assignSmartyVariable('lastLoginInfo', $gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
+    $page->assignSmartyVariable('urlProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)));
     // Only authorized users are allowed to edit the profile photo
     if ($gCurrentUser->hasRightEditProfile($user)) {
-        $page->addHtml('
-                <ul id="profile_picture_links" class="list-unstyled">
-                    <li><a class="icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)) . '">
-                        <i class="bi bi-upload"></i>' . $gL10n->get('SYS_UPLOAD_PROFILE_PICTURE') . '</a></li>');
-
+        $page->assignSmartyVariable('urlProfilePhotoUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)));
         // the image can only be deleted if corresponding rights exist
         if (((string)$user->getValue('usr_photo') !== '' && (int)$gSettingsManager->get('profile_photo_storage') === 0)
             || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $userId . '.jpg') && (int)$gSettingsManager->get('profile_photo_storage') === 1) {
-            $page->addHtml('<li><a id="btn_delete_photo" class="icon-link openPopup" href="javascript:void(0);"
-                                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $getUserUuid)) .
-                '"><i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE_PROFILE_PICTURE') . '</a></li>');
+            $page->assignSmartyVariable('urlProfilePhotoDelete', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $getUserUuid)));
         }
-        $page->addHtml('</ul>');
-    }
-    $page->addHtml('</div>
-            </div>
-        </div>
-    </div>');
-
-    // *******************************************************************************
-    // Loop over all categories and profile fields except the basic data
-    // *******************************************************************************
-
-    $category = '';
-    foreach ($gProfileFields->getProfileFields() as $field) {
-        $fieldNameIntern = $field->getValue('usf_name_intern');
-
-        // Fields of the category basic data was already shown, now show all other hidden
-        // fields only if you have the right to edit this profile
-        if ($field->getValue('cat_name_intern') !== 'BASIC_DATA' && $gCurrentUser->allowedViewProfileField($user, $fieldNameIntern)) {
-            // show new category header if new category and field has value or is a checkbox field
-            if ($category !== $field->getValue('cat_name')
-                && (strlen($user->getValue($fieldNameIntern)) > 0 || $field->getValue('usf_type') === 'CHECKBOX')) {
-                if ($category !== '') {
-                    // new category then show last form and close div container
-                    $page->addHtml($form->show());
-                    $page->addHtml('</div></div>');
-                }
-                $category = $field->getValue('cat_name');
-
-                $page->addHtml('
-                <div class="card admidio-field-group" id="' . $field->getValue('cat_name_intern') . '_data_panel">
-                    <div class="card-header">' . $field->getValue('cat_name') . '</div>
-                    <div class="card-body">');
-
-                // create a static form
-                $form = new HtmlForm('profile_' . $field->getValue('cat_name_intern') . '_form');
-            }
-
-            // show html of field, if user has a value for that field, or it's a checkbox field
-            if (strlen($user->getValue($fieldNameIntern)) > 0 || $field->getValue('usf_type') === 'CHECKBOX') {
-                $field = getFieldCode($fieldNameIntern, $user);
-                if (is_array($field) && $field['value'] !== '') {
-                    $form->addStaticControl(strtolower($fieldNameIntern), $field['label'], $field['value']);
-                }
-            }
-        }
-    }
-
-    if ($category !== '') {
-        // new category then show last form and close div container
-        $page->addHtml($form->show());
-        $page->addHtml('</div></div>');
     }
 
     if ($gSettingsManager->getBool('profile_show_roles')) {
@@ -501,6 +399,7 @@ try {
         );
 
         $rightsOrigin = array();
+        $userRightsArray = array();
 
         // Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
         foreach ($rolesRights as $rolesRightsDbName) {
@@ -531,31 +430,24 @@ try {
             }
         }
 
-        $page->addHtml('
-    <div class="card admidio-field-group" id="profile_authorizations_box">
-        <div class="card-header">' . $gL10n->get('SYS_PERMISSIONS') . '</div>
-        <div class="card-body" id="profile_authorizations_box_body">
-            <div class="row">');
-
         if (count($rightsOrigin) > 0) {
-            $profileRightsArray = array();
 
             if ($user->checkRolesRight('rol_assign_roles')) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_assign_roles'],
                     'right' => $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'),
                     'icon' => 'bi-people-fill'
                 );
             }
             if ($user->checkRolesRight('rol_approve_users')) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_approve_users'],
                     'right' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'),
                     'icon' => 'bi-card-checklist'
                 );
             }
             if ($user->checkRolesRight('rol_edit_user')) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_edit_user'],
                     'right' => $gL10n->get('SYS_RIGHT_EDIT_USER'),
                     'icon' => 'bi-person-fill-gear'
@@ -563,161 +455,80 @@ try {
             }
 
             if ($user->checkRolesRight('rol_mail_to_all')) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_mail_to_all'],
                     'right' => $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'),
                     'icon' => 'bi-envelope-fill'
                 );
             }
             if ($user->checkRolesRight('rol_profile')) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_profile'],
                     'right' => $gL10n->get('SYS_RIGHT_PROFILE'),
                     'icon' => 'bi-person-fill'
                 );
             }
             if ($user->checkRolesRight('rol_announcements') && (int)$gSettingsManager->get('announcements_module_enabled') > 0) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_announcements'],
                     'right' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
                     'icon' => 'bi-newspaper'
                 );
             }
             if ($user->checkRolesRight('rol_events') && (int)$gSettingsManager->get('events_module_enabled') > 0) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_events'],
                     'right' => $gL10n->get('SYS_RIGHT_DATES'),
                     'icon' => 'bi-calendar-week-fill'
                 );
             }
             if ($user->checkRolesRight('rol_photo') && (int)$gSettingsManager->get('photo_module_enabled') > 0) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_photo'],
                     'right' => $gL10n->get('SYS_RIGHT_PHOTOS'),
                     'icon' => 'bi-image-fill'
                 );
             }
             if ($user->checkRolesRight('rol_documents_files') && (int)$gSettingsManager->getBool('documents_files_module_enabled')) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_documents_files'],
                     'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
                     'icon' => 'bi-file-earmark-arrow-down-fill'
                 );
             }
             if ($user->checkRolesRight('rol_guestbook') && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_guestbook'],
                     'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK'),
                     'icon' => 'bi-book-half'
                 );
             }
             if ($user->checkRolesRight('rol_guestbook_comments') && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_guestbook_comments'],
                     'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),
                     'icon' => 'bi-chat-fill'
                 );
             }
             if ($user->checkRolesRight('rol_weblinks') && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_weblinks'],
                     'right' => $gL10n->get('SYS_RIGHT_WEBLINKS'),
                     'icon' => 'bi-link-45deg'
                 );
             }
             if ($user->checkRolesRight('rol_all_lists_view')) {
-                $profileRightsArray[] = array(
+                $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_all_lists_view'],
                     'right' => $gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'),
                     'icon' => 'bi-list-task'
                 );
             }
-
-            foreach ($profileRightsArray as $profileRight) {
-                $page->addHtml('<div class="col-sm-6 col-md-4 admidio-profile-user-right" data-bs-toggle="popover" data-bs-html="true"
-                data-bs-trigger="hover click" data-bs-placement="auto" data-bs-content="' . $gL10n->get('SYS_ASSIGNED_BY_ROLES') . ':
-                <strong>' . $profileRight['roles'] . '</strong>"><i class="bi ' . $profileRight['icon'] . '"></i>' . $profileRight['right'] . '</div>');
-            }
-        } else {
-            $page->addHtml('<div class="col-sm-12">' . $gL10n->get('SYS_NO_PERMISSIONS_ASSIGNED') . '</div>');
         }
-
-        $page->addHtml('
-            </div>
-        </div>
-    </div>');
-
-        // *******************************************************************************
-        // Current roles assignments
-        // *******************************************************************************
-
-        // List all roles assigned to the member
-        $roleStatement = getRolesFromDatabase($userId);
-        $countRole = $roleStatement->rowCount();
-
-        $page->addHtml('
-    <div class="card admidio-field-group" id="profile_roles_box">
-        <div class="card-header">' . $gL10n->get('SYS_ROLE_MEMBERSHIPS'));
-        // if you have the right to assign roles then show the link to assign new roles to this user
-        if ($gCurrentUser->assignRoles()) {
-            $page->addHtml('<a class="btn btn-secondary float-end openPopup" id="profile_role_memberships_change" data-class="modal-lg"
-                    href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)) . '">
-                    <i class="bi bi-pencil-square me-1"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
-        }
-        $page->addHtml('</div>
-        <div class="card-body" id="profile_roles_box_body">
-            ' . getRoleMemberships('role_list', $user, $roleStatement) . '
-        </div>
-    </div>');
-
-        // *******************************************************************************
-        // Future memberships assignments
-        // *******************************************************************************
-
-        $roleStatement = getFutureRolesFromDatabase($userId);
-        $countRole = $roleStatement->rowCount();
-        $visible = '';
-
-        if ($countRole === 0) {
-            $visible = ' style="display: none;" ';
-        } else {
-            $page->addHtml('<script type="text/javascript">profileJS.futureRoleCount="' . $countRole . '";</script>');
-        }
-
-        $page->addHtml('
-    <div class="card admidio-field-group" id="profile_future_roles_box" ' . $visible . '>
-        <div class="card-header">' . $gL10n->get('SYS_FUTURE_ROLE_MEMBERSHIP') . '</div>
-        <div class="card-body" id="profile_future_roles_box_body">
-            ' . getRoleMemberships('future_role_list', $user, $roleStatement) . '
-        </div>
-    </div>');
+        $page->assignSmartyVariable('userRights', $userRightsArray);
+        $page->assignSmartyVariable('urlEditRoles', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
     }
 
-    if ($gSettingsManager->getBool('profile_show_former_roles')) {
-        // *******************************************************************************
-        // Former roles assignments
-        // *******************************************************************************
-
-        // List all roles that were assigned to the member
-
-        $roleStatement = getFormerRolesFromDatabase($userId);
-        $countRole = $roleStatement->rowCount();
-        $visible = '';
-
-        if ($countRole === 0) {
-            $visible = ' style="display: none;" ';
-        } else {
-            $page->addHtml('<script type="text/javascript">profileJS.formerRoleCount="' . $countRole . '";</script>');
-        }
-
-        $page->addHtml('
-    <div class="card admidio-field-group" id="profile_former_roles_box" ' . $visible . '>
-        <div class="card-header">' . $gL10n->get('SYS_FORMER_ROLE_MEMBERSHIP') . '</div>
-        <div class="card-body" id="profile_former_roles_box_body">
-            ' . getRoleMemberships('former_role_list', $user, $roleStatement) . '
-        </div>
-    </div>');
-    }
 
     if ($gSettingsManager->getBool('profile_show_extern_roles')
         && ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization())) {
@@ -744,8 +555,10 @@ try {
         $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrgId));
 
         if ($roleStatement->rowCount() > 0) {
+
             $showRolesOtherOrganizations = false;
             $actualOrganization = 0;
+            $externalRoles = array();
             $role = new TableRoles($gDb);
 
             while ($row = $roleStatement->fetch()) {
@@ -763,40 +576,26 @@ try {
                     $role->setArray($row);
 
                     if (!$showRolesOtherOrganizations) {
-                        $page->addHtml('
-                    <div class="card admidio-field-group" id="profile_other_orga_roles_box">
-                        <div class="card-header">' .
-                            $gL10n->get('SYS_ROLE_MEMBERSHIP_OTHER_ORG') . HtmlForm::getHelpTextIcon('SYS_VIEW_ROLES_OTHER_ORGAS') . '
-                        </div>
-                        <div class="card-body" id="profile_other_orga_roles_box_body">
-                            <ul class="list-group admidio-list-roles-assign">');
-
                         $showRolesOtherOrganizations = true;
+                        $page->assignSmartyVariable('showExternalRoles', true);
                     }
 
                     $startDate = DateTime::createFromFormat('Y-m-d', $row['mem_begin']);
-                    // jede einzelne Rolle anzeigen
-                    $page->addHtml('
-                <li class="list-group-item">
-                    <span>' .
-                        $row['org_shortname'] . ' - ' . $role->getValue('cat_name') . ' - ' . $role->getValue('rol_name'));
-
-                    if ($row['mem_leader'] == 1) {
-                        $page->addHtml(' - ' . $gL10n->get('SYS_LEADER'));
-                    }
-                    $page->addHtml('&nbsp;
-                    </span>
-                    <span class="float-end">' . $gL10n->get('SYS_SINCE', array($startDate->format($gSettingsManager->getString('system_date')))) . '</span>
-                </li>');
+                    $externalRoles[] = array(
+                        'organization' => $row['org_shortname'],
+                        'category' => $role->getValue('cat_name'),
+                        'role' => $role->getValue('rol_name'),
+                        'leader' => $row['mem_leader'],
+                        'timestamp' => $gL10n->get('SYS_SINCE', array($startDate->format($gSettingsManager->getString('system_date'))))
+                    );
                 }
             }
 
             $gCurrentUser->setOrganization($gCurrentOrgId);
-
-            if ($showRolesOtherOrganizations) {
-                $page->addHtml('</ul></div></div>');
-            }
+            $page->assignSmartyVariable('externalRoles', $externalRoles);
         }
+    } else {
+        $page->assignSmartyVariable('showExternalRoles', false);
     }
 
     if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
@@ -815,17 +614,8 @@ try {
         $count = (int)$statement->fetchColumn();
 
         if ($count > 0) {
-            $page->addHtml('
-        <div class="card admidio-field-group" id="profile_user_relations_box">
-            <div class="card-header">' . $gL10n->get('SYS_USER_RELATIONS'));
-            // show link to create relations
-            if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->editUsers()) {
-                $page->addHtml('
-                        <a class="admidio-icon-link float-end" id="profile_relations_new_entry" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)) . '">
-                            <i class="bi bi-plus-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CREATE_RELATIONSHIP') . '"></i></a>');
-            }
-            $page->addHtml('</div>
-            <div class="card-body" id="profile_user_relations_box_body">');
+            $page->assignSmartyVariable('showUserRelations', true);
+            $page->assignSmartyVariable('urlAssignUserRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)));
 
             $sql = 'SELECT *
                   FROM ' . TBL_USER_RELATIONS . '
@@ -841,8 +631,7 @@ try {
             $relationType = new TableUserRelationType($gDb);
             $relation = new TableUserRelation($gDb);
             $otherUser = new User($gDb, $gProfileFields);
-
-            $page->addHtml('<ul class="list-group admidio-list-roles-assign">');
+            $userRelations = array();
 
             while ($row = $relationStatement->fetch()) {
                 $editUserIcon = '';
@@ -860,61 +649,45 @@ try {
                     $relationName = $relationType->getValue('urt_name_female');
                 }
 
+                $userRelation = array(
+                    'uuid' => $relation->getValue('ure_uuid'),
+                    'relationName' => $relationName,
+                    'userFirstName' => $otherUser->getValue('FIRST_NAME'),
+                    'userLastName' => $otherUser->getValue('LAST_NAME'),
+                    'urlUserProfile' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $otherUser->getValue('usr_uuid')))
+                );
+
                 if ($gCurrentUser->hasRightEditProfile($otherUser)) {
-                    $editUserIcon = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid'))) . '"><i
-                    class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER_IN_RELATION') . '"></i></a>';
+                    $userRelation['urlUserEdit'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid')));
                 }
 
-                $page->addHtml('<li id="row_ure_' . $relation->getValue('ure_uuid') . '" class="list-group-item">');
-                $page->addHtml('<div>');
-                $page->addHtml('<span>' . $relationName . ' - <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $otherUser->getValue('usr_uuid'))) .
-                    '">' . $otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME') . '</a> ' . $editUserIcon . '<span>');
-                $page->addHtml('<span class="float-end text-right">');
-
                 if ($gCurrentUser->editUsers()) {
-                    $page->addHtml('<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_' . $relation->getValue('ure_uuid'), 'database_id' => $relation->getValue('ure_uuid'),
-                            'name' => $relationType->getValue('urt_name') . ': ' . $otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME') . ' -> ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '"><i
-                                class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CANCEL_RELATIONSHIP') . '"></i></a>');
+                    $userRelation['urlRelationDelete'] = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_' . $relation->getValue('ure_uuid'), 'database_id' => $relation->getValue('ure_uuid'),
+                        'name' => $relationType->getValue('urt_name') . ': ' . $otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME') . ' -> ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
                 }
 
                 // only show info if system setting is activated
                 if ((int)$gSettingsManager->get('system_show_create_edit') > 0) {
-                    $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_' . (int)$relation->getValue('ure_id') . '" href="javascript:void(0)"><i
-                    class="bi bi-info-circle" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_INFORMATIONS') . '"></i></a>');
+                    $userRelation['nameUserCreated'] = $relation->getNameOfCreatingUser();
+                    $userRelation['timestampUserCreated'] = $relation->getValue('ure_timestamp_create');
+                    $userRelation['nameLastUserEdited'] = $relation->getNameOfLastEditingUser();
+                    $userRelation['timestampLastUserEdited'] = $relation->getValue('ure_timestamp_change');
                 }
-
-                $page->addHtml('</span></div>');
-                if ((int)$gSettingsManager->get('system_show_create_edit') > 0) {
-                    $page->addHtml(
-                        '<div id="relation_info_' . (int)$relation->getValue('ure_id') . '_Content" style="display: none;">' .
-                        admFuncShowCreateChangeInfoById(
-                            (int)$relation->getValue('ure_usr_id_create'),
-                            $relation->getValue('ure_timestamp_create'),
-                            (int)$relation->getValue('ure_usr_id_change'),
-                            $relation->getValue('ure_timestamp_change')
-                        ) .
-                        '</div>'
-                    );
-                }
-                $page->addHtml('</li>');
+                $userRelations[] = $userRelation;
             }
-
-            $page->addHtml('</ul>');
-
-            $page->addHtml('
-            </div>
-        </div>');
+            $page->assignSmartyVariable('showRelationsCreateEdit', $gSettingsManager->get('system_show_create_edit') > 0);
+            $page->assignSmartyVariable('userRelations', $userRelations);
         }
+        $page->assignSmartyVariable('urlAssignRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
+    } else {
+        $page->assignSmartyVariable('showUserRelations', false);
     }
 
     // show information about user who creates the recordset and changed it
-    $page->addHtml(admFuncShowCreateChangeInfoById(
-        (int)$user->getValue('usr_usr_id_create'),
-        $user->getValue('usr_timestamp_create'),
-        (int)$user->getValue('usr_usr_id_change'),
-        $user->getValue('usr_timestamp_change')
-    ));
+    $page->assignSmartyVariable('nameUserCreated', $user->getNameOfCreatingUser());
+    $page->assignSmartyVariable('timestampUserCreated', $user->getValue('usr_timestamp_create'));
+    $page->assignSmartyVariable('nameLastUserEdited', $user->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('timestampLastUserEdited', $user->getValue('usr_timestamp_change'));
 
     $page->show();
 } catch (AdmException|Exception $e) {

@@ -175,7 +175,7 @@ try {
 
         // create array with all column values
         $columnValues = array(
-            '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)) . '">' . $userField->getValue('usf_name') . '</a>' . Form::getHelpTextIcon((string)$userField->getValue('usf_description'), 'SYS_NOTE', array($userField->getValue('usf_name'))),
+            '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)) . '">' . $userField->getValue('usf_name') . '</a>' . Form::getHelpTextIcon((string)$userField->getValue('usf_description'), array($userField->getValue('usf_name'))),
             '<a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $usfUuid . '" data-direction="' . TableUserField::MOVE_UP . '">' .
             '<i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $usfUuid . '" data-direction="' . TableUserField::MOVE_DOWN . '">' .

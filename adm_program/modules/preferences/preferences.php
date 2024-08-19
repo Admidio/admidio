@@ -63,6 +63,10 @@ try {
     switch ($getMode) {
         case 'html':
             $headline = $gL10n->get('SYS_SETTINGS');
+
+            if ($getPanel === '') {
+                $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
+            }
             // create html page object
             $page = new Preferences('admidio-preferences', $headline);
 
@@ -70,9 +74,6 @@ try {
                 $page->setPanelToShow($getPanel);
                 // add current url to navigation stack
                 $gNavigation->addUrl(CURRENT_URL, $headline);
-            } else {
-                // Navigation of the module starts here
-                $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
             }
 
             $page->show();

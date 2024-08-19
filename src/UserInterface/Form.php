@@ -1545,6 +1545,25 @@ class Form
     }
 
     /**
+     * This method returns the attributes array.
+     * @return array Returns all attributes of the form.
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * This method returns the elements array.
+     * @return array Returns all elements of the form.
+     */
+    public function getElements(): array
+    {
+        return $this->elements;
+    }
+
+
+    /**
      * Method merge the default options of all fields with the initial options set for the
      * specific field.
      * @param array $options Array with all initial options for the field.
@@ -1573,12 +1592,11 @@ class Form
      * description if it's an individual text.
      * @param string $string A text that should be shown or a unique text id from the translation xml files
      *                          that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
-     * @param string $title A text-id that represents the title of the help text. Default will be SYS_NOTE.
      * @param array $parameter If you need an additional parameters for the text you can set this parameter values within an array.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      * @throws AdmException
      */
-    public static function getHelpTextIcon(string $string, string $title = 'SYS_NOTE', array $parameter = array()): string
+    public static function getHelpTextIcon(string $string, array $parameter = array()): string
     {
         global $gL10n;
 
@@ -1593,7 +1611,7 @@ class Form
 
             $html = '<i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
             data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
-            title="' . $gL10n->get($title) . '" data-bs-content="' . \SecurityUtils::encodeHTML($text) . '"></i>';
+            data-bs-content="' . \SecurityUtils::encodeHTML($text) . '"></i>';
         }
         return $html;
     }
