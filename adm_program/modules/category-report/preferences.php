@@ -15,11 +15,12 @@
  *
  ***********************************************************************************************
  */
-
-require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require_once(__DIR__ . '/../../system/login_valid.php');
+
     // only authorized user are allowed to start this module
     if (!$gCurrentUser->isAdministrator()) {
         throw new AdmException('SYS_NO_RIGHTS');
@@ -59,44 +60,11 @@ try {
 
     $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_CONFIGURATIONS'));
 
-// create html page object
+    // create html page object
     $page = new HtmlPage('plg-category-report-preferences', $headline);
-
-    $page->addJavascript('
-    $(".form-preferences").submit(function(event) {
-        var id = $(this).attr("id");
-        var action = $(this).attr("action");
-        var formAlert = $("#" + id + " .form-alert");
-        formAlert.hide();
-
-        // disable default form submit
-        event.preventDefault();
-
-        $.post({
-            url: action,
-            data: $(this).serialize(),
-            success: function(data) {
-                if (data === "success") {
-
-                    formAlert.attr("class", "alert alert-success form-alert");
-                    formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
-                    formAlert.fadeIn("slow");
-                    formAlert.animate({opacity: 1.0}, 2500);
-                    formAlert.fadeOut("slow");
-                } else {
-                    formAlert.attr("class", "alert alert-danger form-alert");
-                    formAlert.fadeIn();
-                    formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
-                }
-            }
-        });
-    });',
-        true
-    );
-
     $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
 
-// create an array with the necessary data
+    // create an array with the necessary data
     foreach ($config as $key => $value) {
         $catReportConfigs[$key] = $value['name'];
         $javascriptCode .= '
@@ -202,38 +170,29 @@ try {
     }
     $page->addJavascript($javascriptCodeExecute, true);
 
-    $formConfigurations = new HtmlForm(
-        'configurations_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences_function.php', array('form' => 'configurations')),
-        $page, array('class' => 'form-preferences')
+    $formConfigurations = new Form(
+        'configurations_preferences_form',
+        'modules/category-report.config.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences_function.php', array('form' => 'configurations')),
+        $page,
+        array('class' => 'form-preferences')
     );
 
-    $formConfigurations->addDescription($gL10n->get('SYS_CONFIGURATIONS_HEADER'));
-    $formConfigurations->addLine();
     $currentNumberConf = 0;
+    $categoryReports = array();
 
     foreach ($config as $key => $value) {
-        $formConfigurations->openGroupBox('configurations_group', ++$currentNumberConf . '. ' . $gL10n->get('SYS_CONFIGURATION'));
+        $categoryReport = array(
+            'key' => $key,
+            'name' => 'name' . $key,
+            'selection_role' => 'selection_role' . $key,
+            'selection_cat' => 'selection_cat' . $key,
+            'number_col' => 'number_col' . $key,
+            'id' => 'id' . $key,
+            'default_conf' => 'default_conf' . $key
+        );
         $formConfigurations->addInput('name' . $key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
-            array('property' => HtmlForm::FIELD_REQUIRED));
-        $html = '
-	   <div class="table-responsive">
-    		<table class="table table-condensed" id="mylist_fields_table">
-        		<thead>
-            		<tr>
-                		<th style="width: 20%;">' . $gL10n->get('SYS_ABR_NO') . '</th>
-                		<th style="width: 37%;">' . $gL10n->get('SYS_CONTENT') . '</th>
-            		</tr>
-        		</thead>
-        		<tbody id="mylist_fields_tbody' . $key . '">
-            		<tr id="table_row_button">
-                		<td colspan="2">
-                    		<a class="icon-text-link" href="javascript:addColumn' . $key . '()"><i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_COLUMN') . '</a>
-                		</td>
-            		</tr>
-        		</tbody>
-    		</table>
-    	</div>';
-        $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html, array('helpTextId' => 'SYS_COLUMN_SELECTION_DESC'));
+            array('property' => Form::FIELD_REQUIRED));
 
         $sql = 'SELECT rol_id, rol_name, cat_name
               FROM ' . TBL_CATEGORIES . ' , ' . TBL_ROLES . '
@@ -251,31 +210,23 @@ try {
         $formConfigurations->addSelectBoxFromSql('selection_cat' . $key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
             array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextId' => 'SYS_CAT_SELECTION_CONF_DESC'));
         $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
-        $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => HtmlForm::FIELD_HIDDEN));
-        $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => HtmlForm::FIELD_HIDDEN));
-        $html = '<a id="copy_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('copy' => $key + 1)) . '">
-            <i class="bi bi-copy"></i> ' . $gL10n->get('SYS_COPY_CONFIGURATION') . '</a>';
+        $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => Form::FIELD_HIDDEN));
+        $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => Form::FIELD_HIDDEN));
+
         if (count($config) > 1 && $value['default_conf'] == false) {
-            $html .= '&nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('delete' => $key + 1)) . '">
-            <i class="bi bi-trash"></i> ' . $gL10n->get('SYS_DELETE_CONFIGURATION') . '</a>';
+            $categoryReport['urlConfigDelete'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('delete' => $key + 1));
         }
         if (!empty($value['name'])) {
-            $formConfigurations->addCustomContent('', $html);
+            $categoryReport['urlConfigCopy'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('copy' => $key + 1));
         }
-        $formConfigurations->closeGroupBox();
+        $categoryReports[] = $categoryReport;
     }
-
-    $formConfigurations->addLine();
-    $html = '<a id="add_config" class="icon-text-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)) . '">
-            <i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_ANOTHER_CONFIG') . '
-        </a>';
-    $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '
-            </div>';
-    $formConfigurations->addCustomContent('', $html, array('helpTextId' => $htmlDesc));
+    $page->assignSmartyVariable('categoryReports', $categoryReports);
+    $page->assignSmartyVariable('urlConfigNew', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)));
     $formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
-    $page->addHtml($formConfigurations->show());
+    $formConfigurations->addToHtmlPage();
+    $gCurrentSession->addFormObject($formConfigurations);
 
     $page->show();
 } catch (AdmException|Exception $e) {

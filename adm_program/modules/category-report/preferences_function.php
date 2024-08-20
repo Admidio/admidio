@@ -27,7 +27,10 @@ try {
     switch ($getForm) {
         case 'configurations':
             // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+            $categoryReportConfigForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            if ($_POST['admidio-csrf-token'] !== $categoryReportConfigForm->getCsrfToken()) {
+                throw new AdmException('Invalid or missing CSRF token!');
+            }
 
             for ($conf = 0; isset($_POST['name' . $conf]); $conf++) {
                 $values['id'] = $_POST['id' . $conf];
@@ -57,13 +60,13 @@ try {
 
             $report = new CategoryReport();
             $config = $report->saveConfigArray($config);
+            echo json_encode(array('status' => 'success'));
+            exit();
             break;
 
         default:
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
 } catch (AdmException|Exception $e) {
-    echo $e->getMessage();
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
-
-echo 'success';

@@ -67,7 +67,10 @@ try {
     // save list
     if (in_array($getMode, array('save', 'save_as', 'save_temporary'))) {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        $categoryReportConfigForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        if ($_POST['admidio-csrf-token'] !== $categoryReportConfigForm->getCsrfToken()) {
+            throw new AdmException('Invalid or missing CSRF token!');
+        }
 
         $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
 
