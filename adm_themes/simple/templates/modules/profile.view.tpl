@@ -220,13 +220,7 @@
                     </div>
                     {if $showRelationsCreateEdit}
                         <div id="relation_info_{$userRelation.uuid}_Content" style="display: none;">
-                            <div class="admidio-info-created-edited">
-                                <span class="admidio-info-created">{$l10n->get('SYS_CREATED_BY_AND_AT', array($userRelation.nameUserCreated, $userRelation.timestampUserCreated))}</span>
-
-                                {if isset($userRelation.nameLastUserEdited) && $userRelation.nameLastUserEdited|count_characters > 0}
-                                    <span class="admidio-info-created">{$l10n->get('SYS_LAST_EDITED_BY', array($userRelation.nameLastUserEdited, $userRelation.timestampLastUserEdited))}</span>
-                                {/if}
-                            </div>
+                            {include file="sys-template-parts/system.info-create-edit.tpl" nameUserCreated=$userRelation.nameUserCreated timestampUserCreated=$userRelation.timestampUserCreated nameLastUserEdited=$userRelation.nameLastUserEdited timestampLastUserEdited=$userRelation.timestampLastUserEdited}
                         </div>
                     {/if}
                 </li>

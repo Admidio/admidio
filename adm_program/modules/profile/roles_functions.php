@@ -111,6 +111,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
     $smarty = HtmlPage::createSmartyObject();
     $smarty->assign('listID', $htmlListId);
     $smarty->assign('l10n', $gL10n);
+    $smarty->assign('settings', $gSettingsManager);
     $memberships = array();
 
     while ($row = $roleStatement->fetch()) {

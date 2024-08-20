@@ -35,13 +35,7 @@
                 </li>
                 {if $membership.showRelationsCreateEdit}
                     <li class="list-group-item" id="member_info_{$membership.memberUUID}_Content" style="display: none;">
-                        <div class="admidio-info-created-edited">
-                            <span class="admidio-info-created">{$l10n->get('SYS_CREATED_BY_AND_AT', array($membership.nameUserCreated, $membership.timestampUserCreated))}</span>
-
-                            {if isset($membership.nameLastUserEdited) && $membership.nameLastUserEdited|count_characters > 0}
-                                <span class="admidio-info-created">{$l10n->get('SYS_LAST_EDITED_BY', array($membership.nameLastUserEdited, $membership.timestampLastUserEdited))}</span>
-                            {/if}
-                        </div>
+                        {include file="sys-template-parts/system.info-create-edit.tpl" nameUserCreated=$membership.nameUserCreated timestampUserCreated=$membership.timestampUserCreated nameLastUserEdited=$membership.nameLastUserEdited timestampLastUserEdited=$membership.timestampLastUserEdited}
                     </li>
                 {/if}
             </ul>
