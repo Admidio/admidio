@@ -264,9 +264,6 @@ try {
     // User data block
     // *******************************************************************************
 
-    // create a static form
-    $form = new HtmlForm('profile_basic_data_form');
-
     $bNameOutput = false;    // Flag whether the address has already been displayed
     $bAddressOutput = false;    // Flag whether the address has already been displayed
     $masterData = array();

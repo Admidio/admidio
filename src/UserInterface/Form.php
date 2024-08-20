@@ -1432,33 +1432,6 @@ class Form
     }
 
     /**
-     * Add a new static control to the form. A static control is only a simple text instead of an input field.
-     * This could be used if the value should not be changed by the user.
-     * @param string $id ID of the static control. This will also be the name of the static control.
-     * @param string $label The label of the static control.
-     * @param string $value A value of the static control. The control will be created with this value.
-     * @param array $options (optional) An array with the following possible entries:
-     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
-     *                          If you need an additional parameter for the text you can add an array. The first entry
-     *                          must be the unique text id and the second entry will be a parameter of the text id.
-     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
-     *                          will be the text of the alert box
-     *                        - **icon** : An icon can be set. This will be placed in front of the label.
-     *                        - **class** : An additional css classname. The class **admSelectbox**
-     *                          is set as default and need not set with this parameter.
-     */
-    public function addStaticControl(string $id, string $label, string $value, array $options = array())
-    {
-        $this->elements[$id] = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'static',
-            'id'       => $id,
-            'label'    => $label,
-            'value'    => $value
-        ), $options));
-    }
-
-    /**
      * Add a new button with a custom text to the form. This button could have
      * an icon in front of the text. Different to addButton this method adds an
      * **div** around the button and the type of the button is **submit**.
