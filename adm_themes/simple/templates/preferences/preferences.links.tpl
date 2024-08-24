@@ -1,0 +1,13 @@
+<form {foreach $attributes as $attribute}
+        {$attribute@key}="{$attribute}"
+    {/foreach}>
+
+    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['enable_weblinks_module']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['weblinks_per_page']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['weblinks_target']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['weblinks_redirect_seconds']}
+    {include 'sys-template-parts/form.custom-content.tpl' data=$elements['editCategories']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_links']}
+    <div class="form-alert" style="display: none;">&nbsp;</div>
+</form>

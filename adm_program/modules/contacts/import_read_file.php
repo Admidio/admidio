@@ -42,16 +42,14 @@ try {
     $postRoleUUID = admFuncVariableIsValid($_POST, 'import_role_uuid', 'uuid');
     $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', array('requireValue' => true));
 
-    $_SESSION['import_request'] = $_POST;
-    unset($_SESSION['import_csv_request']);
-
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     // only authorized users should import users
     if (!$gCurrentUser->editUsers()) {
         throw new AdmException('SYS_NO_RIGHTS');
     }
+
+    // check form field input and sanitized it from malicious content
+    $contactsImportForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $formValues = $contactsImportForm->validate($_POST);
 
     $importfile = $_FILES['userfile']['tmp_name'][0];
     if (strlen($importfile) === 0) {
@@ -134,16 +132,18 @@ try {
         }
 
         if (empty($sheet)) {
-            $gMessage->show($gL10n->get('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
-            // => EXIT
+            throw new AdmException('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet));
         } else {
             // read data to array without any format
             $_SESSION['import_data'] = $sheet->toArray(null, true, false);
         }
     }
 
-    admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_column_config.php');
-    // => EXIT
-} catch (AdmException | Exception | \Smarty\Exception|\PhpOffice\PhpSpreadsheet\Exception|Exception $e) {
-    $gMessage->show($e->getMessage());
+    echo json_encode(array(
+        'status' => 'success',
+        'url' => ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_column_config.php'
+    ));
+    exit();
+} catch (AdmException|\PhpOffice\PhpSpreadsheet\Exception|Exception $e) {
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

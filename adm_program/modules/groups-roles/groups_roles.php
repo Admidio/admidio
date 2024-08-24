@@ -19,6 +19,8 @@
  *      - permissions : Show permissions of all groups and roles in list view
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
@@ -68,9 +70,6 @@ try {
         $headline .= ' - '.$category->getValue('cat_name');
     }
 
-    // create html page object
-    $groupsRoles = new ModuleGroupsRoles('admidio-groups-roles', $headline);
-
     if ($getShow === 'card') {
         // Navigation of the module starts here
         $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-people-fill');
@@ -79,6 +78,8 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_PERMISSIONS'));
     }
 
+    // create html page object
+    $groupsRoles = new ModuleGroupsRoles('admidio-groups-roles', $headline);
 
     if ($gCurrentUser->manageRoles()) {
         // show link to create new role
@@ -133,15 +134,20 @@ try {
     );
 
     // create filter menu with elements for category
-    $filterNavbar = new HtmlNavbar('navbar_filter', '', null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', $groupsRoles, array('type' => 'navbar', 'setFocus' => false));
-    $form->addInput('show', '', $getShow, array('property' => HtmlForm::FIELD_HIDDEN));
+    $form = new Form(
+        'navbar_filter_form',
+        'sys-template-parts/form.filter.tpl',
+        ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php',
+        $groupsRoles,
+        array('type' => 'navbar', 'setFocus' => false)
+    );
+    $form->addInput('show', '', $getShow, array('property' => Form::FIELD_HIDDEN));
     $form->addSelectBoxForCategories(
         'cat_uuid',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         'ROL',
-        HtmlForm::SELECT_BOX_MODUS_FILTER,
+        Form::SELECT_BOX_MODUS_FILTER,
         array('defaultValue' => $getCatUuid)
     );
     if ($gCurrentUser->manageRoles()) {
@@ -152,8 +158,7 @@ try {
             array('defaultValue' => $getRoleType)
         );
     }
-    $filterNavbar->addForm($form->show());
-    $groupsRoles->addHtml($filterNavbar->show());
+    $form->addToHtmlPage();
     $groupsRoles->readData($getRoleType, $getCatUuid);
 
     if ($groupsRoles->countRoles() === 0) {
@@ -179,6 +184,6 @@ try {
     }
 
     $groupsRoles->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

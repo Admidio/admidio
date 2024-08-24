@@ -21,33 +21,44 @@
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = new HtmlPageInstallation('admidio-example');
+ * $page = new Installation('admidio-example');
  * $page->addTemplateFile('update.tpl');
  * $page->setUpdateModus();
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
  * $page->show();
  *
  * // create a message
- * $page = new HtmlPageInstallation();
+ * $page = new Installation();
  * $page->setUpdateModus();
  * $page->showMessage('error', 'Message', 'Some error message.', $gL10n->get('SYS_OVERVIEW'), 'bi-house-door-fill', ADMIDIO_URL . '/adm_program/overview.php');
  * ```
  */
-class HtmlPageInstallation extends HtmlPage
+namespace Admidio\UserInterface;
+use AdmException;
+use HtmlPage;
+use Throwable;
+
+class Installation extends HtmlPage
 {
     /**
      * Constructor creates the page object and initialized all parameters.
      * @param string $id ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
-     * @throws Exception
+     * @throws AdmException
      */
     public function __construct(string $id, string $headline = '')
     {
-        parent::__construct($id, $headline);
+        $this->id = $id;
+
+        if ($headline !== '') {
+            $this->setHeadline($headline);
+        }
 
         // initialize php template engine smarty
+        $this->smarty = $this->createSmartyObject();
         $this->smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');
+        $this->assignBasicSmartyVariables();
 
         // if no modus set then set installation modus
         if ($headline === '') {
@@ -58,29 +69,25 @@ class HtmlPageInstallation extends HtmlPage
     /**
      * Internal method that will assign a default set of variables to the Smarty template engine.
      * These variables are available in all installation and update template files.
+     * @throws AdmException
      */
-    private function assignDefaultVariables()
+    private function assignBasicSmartyVariables()
     {
         global $gDebug, $gSettingsManager, $gValidLogin, $gL10n;
 
         $urlImprint = '';
         $urlDataProtection = '';
 
-        $this->smarty->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
         $this->smarty->assign('id', $this->id);
         $this->smarty->assign('title', $this->title);
         $this->smarty->assign('headline', $this->headline);
         $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
         $this->smarty->assign('urlTheme', THEME_URL);
-        $this->smarty->assign('javascriptContent', $this->javascriptContent);
-        $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
 
         $this->smarty->assign('validLogin', $gValidLogin);
         $this->smarty->assign('debug', $gDebug);
 
         $this->smarty->assign('printView', $this->printView);
-        $this->smarty->assign('templateFile', $this->templateFile);
-        $this->smarty->assign('content', $this->pageContent);
 
         // add translation object
         $this->smarty->assign('l10n', $gL10n);
@@ -101,7 +108,7 @@ class HtmlPageInstallation extends HtmlPage
     /**
      * Set the form in the installation modus. Therefore, headline and title will be changed.
      * This is the default modus and will be set automatically if not modus is set in the calling code.
-     * @throws Exception
+     * @throws AdmException
      */
     public function setInstallationModus()
     {
@@ -113,7 +120,7 @@ class HtmlPageInstallation extends HtmlPage
 
     /**
      * Set the form in the update modus. Therefore, headline and title will be changed.
-     * @throws Exception
+     * @throws AdmException
      */
     public function setUpdateModus()
     {
@@ -127,15 +134,23 @@ class HtmlPageInstallation extends HtmlPage
      * This method will set all variables for the Smarty engine and then send the whole html
      * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
-     * @throws \Smarty\Exception
+     * @throws AdmException
      */
     public function show()
     {
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
 
-        $this->assignDefaultVariables();
-        $this->smarty->display('index.tpl');
+        $this->smarty->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
+        $this->smarty->assign('javascriptContent', $this->javascriptContent);
+        $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
+        $this->smarty->assign('templateFile', $this->templateFile);
+        $this->smarty->assign('content', $this->pageContent);
+        try {
+            $this->smarty->display('index.tpl');
+        } catch (Throwable $exception) {
+            throw new AdmException($exception->getMessage());
+        }
     }
 
     /**
@@ -149,25 +164,28 @@ class HtmlPageInstallation extends HtmlPage
      * @param string $buttonText The text of the button which will navigate to the **$destinationUrl**
      * @param string $buttonIcon The icon of the button which will navigate to the **$destinationUrl**
      * @param string $destinationUrl An url to which the user should navigate if he clicks on the button.
-     * @throws \Smarty\Exception
+     * @throws AdmException
      */
     public function showMessage(string $outputMode, string $headline, string $text, string $buttonText, string $buttonIcon, string $destinationUrl)
     {
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
 
-        $this->smarty->assign('outputMode', $outputMode);
-        $this->smarty->assign('messageHeadline', $headline);
-        $this->smarty->assign('messageText', $text);
-        $this->addTemplateFile('message.tpl');
+        try {
+            $this->smarty->assign('outputMode', $outputMode);
+            $this->smarty->assign('messageHeadline', $headline);
+            $this->smarty->assign('messageText', $text);
+            $this->addTemplateFile('message.tpl');
+            $this->smarty->assign('templateFile', $this->templateFile);
+            $this->smarty->assign('content', $this->pageContent);
+            $this->smarty->assign('buttonIcon', $buttonIcon);
+            $this->smarty->assign('buttonText', $buttonText);
+            $this->smarty->assign('destinationUrl', $destinationUrl);
 
-        // add form with submit button
-        $form = new HtmlForm('installation-form', $destinationUrl);
-        $form->addSubmitButton('next_page', $buttonText, array('icon' => $buttonIcon));
-        $this->addHtml($form->show());
-
-        $this->assignDefaultVariables();
-        $this->smarty->display('index.tpl');
+            $this->smarty->display('index.tpl');
+        } catch (Throwable $exception) {
+            throw new AdmException($exception->getMessage());
+        }
         exit();
     }
 }

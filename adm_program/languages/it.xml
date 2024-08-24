@@ -233,7 +233,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Se questa opzione è abilitata, gli ex membri e i membri di altre organizzazioni saranno visualizzati in aggiunta ai membri attivi dell\'organizzazione corrente. Altrimenti saranno visualizzati solo i membri dell\'organizzazione corrente. Quando si creano nuovi utenti o si assegnano delle registrazioni tutte le organizzazioni saranno comunque controllate rispetto agli utenti esistenti.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Visualizza la selezione dell\'organizzazione</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Dovrebbero esserci diverse organizzazioni presenti nel database, la schermata di accesso può visualizzare un box di selezione con tutte le organizzazioni disponibili. L\'utente può in seguito in fase di accesso selezionare un\'altra organizzazione (un\'altra di quelle definite nel file config.php). Comunque l\'utente deve essere un membro registrato dell\'organizzazione selezionata.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Informazioni di sistema</string>
+  <string name="SYS_SYSTEM_INFORMATION">Informazioni di sistema</string>
   <string name="ORG_THEME_FOLDER_OPEN">La cartella Themes non può essere aperta/letta.</string>
   <string name="ORG_TIME_FORMAT">Formato ora</string>
   <string name="ORG_TIME_FORMAT_DESC">Il ormato rispetta la funzione PHP #VAR1#. (predefinito: H:i)</string>

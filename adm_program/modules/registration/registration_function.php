@@ -98,9 +98,8 @@ try {
 
         // delete registration
         $registrationUser->delete();
-
-        // return successful delete for XMLHttpRequest
-        echo 'done';
+        echo json_encode(array('status' => 'success'));
+        exit();
     } elseif ($getMode === 'create_user') {
         // accept a registration, assign necessary roles and send a notification email
         $registrationUser->acceptRegistration();
@@ -129,7 +128,7 @@ try {
     }
 } catch (AdmException | Exception $e) {
     if ($getMode === 'delete_user') {
-        echo $e->getMessage();
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());
     }

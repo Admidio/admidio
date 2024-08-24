@@ -14,18 +14,16 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
     exit('This page may not be called directly!');
 }
 
+// check form field input and sanitized it from malicious content
+if (isset($_SESSION['installationInstallAdmidioForm'])) {
+    $_SESSION['installationInstallAdmidioForm']->validate($_POST);
+} else {
+    throw new AdmException('SYS_INVALID_PAGE_VIEW');
+}
+
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
 if (!is_file($configPath)) {
-    $page = new HtmlPageInstallation('admidio-installation-message');
-    $page->showMessage(
-        'error',
-        $gL10n->get('SYS_NOTE'),
-        $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
-        $gL10n->get('SYS_BACK'),
-        'bi-arrow-left-circle-fill',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config'))
-    );
-    // => EXIT
+    throw new AdmException('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php'));
 }
 
 // first check if session is filled (if installation was aborted then this is not filled)
@@ -38,36 +36,14 @@ if (isset($_SESSION['table_prefix'])
     || $_SESSION['db_username']    !== DB_USERNAME
     || $_SESSION['db_password']    !== DB_PASSWORD
     || $_SESSION['table_prefix']   !== TABLE_PREFIX)) {
-    $page = new HtmlPageInstallation('admidio-installation-message');
-    $page->showMessage(
-        'error',
-        $gL10n->get('SYS_NOTE'),
-        $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
-        $gL10n->get('SYS_BACK'),
-        'bi-arrow-left-circle-fill',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database'))
-    );
-    // => EXIT
+    throw new AdmException('INS_DATA_DO_NOT_MATCH', array('config.php'));
 }
 
 // set execution time to 5 minutes because we have a lot to do
 PhpIniUtils::startNewExecutionTimeLimit(300);
 
 // read data from sql script db.sql and execute all statements to the current database
-$sqlQueryResult = InstallationUtils::querySqlFile($db, 'db.sql');
-
-if (is_string($sqlQueryResult)) {
-    $page = new HtmlPageInstallation('admidio-installation-message');
-    $page->showMessage(
-        'error',
-        $gL10n->get('SYS_NOTE'),
-        $sqlQueryResult,
-        $gL10n->get('SYS_BACK'),
-        'bi-arrow-left-circle-fill',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config'))
-    );
-    // => EXIT
-}
+\Admidio\Utils\Installation::querySqlFile($db, 'db.sql');
 
 // create default data
 
@@ -201,7 +177,7 @@ $sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
          WHERE urt_id = 7';
 $db->queryPrepared($sql);
 
-InstallationUtils::disableSoundexSearchIfPgSql($db);
+\Admidio\Utils\Installation::disableSoundexSearchIfPgSql($db);
 
 // create new organization
 $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
@@ -299,22 +275,7 @@ session_destroy();
 
 $gLogger->info('INSTALLATION: Installation successfully complete');
 
-// show dialog with success notification
-$page = new HtmlPageInstallation('admidio-installation-successful');
-$page->addTemplateFile('installation_successful.tpl');
-$page->addJavascript('$("#next_page").focus();', true);
-
-$form = new HtmlForm('installation-form', ADMIDIO_HOMEPAGE.'donate.php', null, array('setFocus' => false));
-$form->addButton(
-    'main_page',
-    $gL10n->get('SYS_LATER'),
-    array(
-        'icon' => 'bi-house-door-fill',
-        'link' => ADMIDIO_URL . '/adm_program/overview.php',
-        'class' => ' btn-secondary admidio-margin-bottom '
-    )
-);
-$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'bi-heart-fill'));
-
-$page->addHtml($form->show());
-$page->show();
+echo json_encode(array(
+    'status' => 'success',
+    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'installation_successful'))));
+exit();

@@ -13,10 +13,12 @@
  * file_uuid   :  UUID of the file that should be renamed
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
     $getFileUuid = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
@@ -51,17 +53,22 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     $documentsFiles = new ModuleDocumentsFiles('admidio-documents-move-file', $headline);
+    $documentsFiles->assignSmartyVariable('description', $description);
     $folders = $documentsFiles->getUploadableFolderStructure();
-    $documentsFiles->addHtml('<p class="lead admidio-max-with">' . $description . '</p>');
 
     // create html form
-    $form = new HtmlForm('documents_files_move_file', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'move', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $documentsFiles);
+    $form = new Form(
+        'documents_files_move_file',
+        'modules/documents-files.move.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'move', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)),
+        $documentsFiles
+    );
     $form->addSelectBox(
         'dest_folder_uuid',
         $gL10n->get('SYS_MOVE_TO'),
         $folders,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
+            'property' => Form::FIELD_REQUIRED,
             'defaultValue' => $getFolderUuid,
             'showContextDependentFirstEntry' => false
         )
@@ -69,11 +76,12 @@ try {
     $form->addSubmitButton(
         'btn_move',
         $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
+        array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
     );
 
-    $documentsFiles->addHtml($form->show());
+    $form->addToHtmlPage();
+    $gCurrentSession->addFormObject($form);
     $documentsFiles->show();
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

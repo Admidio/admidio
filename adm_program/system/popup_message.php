@@ -28,7 +28,6 @@ try {
 
     // initialize local variables
     $text = 'SYS_DELETE_ENTRY';
-    $mode = '';
     $callbackFunction = '';
 
     // compose URL
@@ -40,8 +39,7 @@ try {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/backup/backup_file_function.php', array('job' => 'delete', 'filename' => $getDatabaseId));
             break;
         case 'cat':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_uuid' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
-            $mode = 'delete';
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_uuid' => $getDatabaseId, 'mode' => 'delete', 'type' => $getDatabaseId2));
             $getElementId = $getDatabaseId;
 
             // get special message for calendars
@@ -70,8 +68,7 @@ try {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 'delete', 'link_uuid' => $getDatabaseId));
             break;
         case 'men':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 2, 'menu_uuid' => $getDatabaseId));
-            $mode = 'delete';
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 'delete', 'menu_uuid' => $getDatabaseId));
             $getElementId = $getDatabaseId;
             break;
         case 'msg':
@@ -124,8 +121,7 @@ try {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 'delete', 'room_uuid' => $getDatabaseId));
             break;
         case 'usf':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 2, 'usf_uuid' => $getDatabaseId));
-            $mode = 'delete';
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 'delete', 'usf_uuid' => $getDatabaseId));
             $getElementId = $getDatabaseId;
             break;
         case 'urt':
@@ -147,8 +143,8 @@ try {
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
 
-    $gMessage->setYesNoButton('callUrlHideElement(\'' . $getElementId . '\', \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $mode . '\'' . $callbackFunction . ')');
+    $gMessage->setYesNoButton('callUrlHideElement(\'' . $getElementId . '\', \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . $callbackFunction . ')');
     $gMessage->show($gL10n->get($text, array($getName, '')), $gL10n->get('SYS_NOTE'));
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

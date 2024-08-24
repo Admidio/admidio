@@ -31,8 +31,6 @@ try {
     $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
     $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 
-    unset($_SESSION['photo_album_request'], $_SESSION['ecard_request']);
-
     // Fotoalbums-Objekt erzeugen oder aus Session lesen
     if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
         $photoAlbum =& $_SESSION['photo_album'];
@@ -128,7 +126,7 @@ try {
         $page->addPageFunctionsMenuItem(
             'menu_item_photos_new_album',
             $gL10n->get('SYS_CREATE_ALBUM'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_new.php', array('mode' => 'new', 'photo_uuid' => $getPhotoUuid)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_new.php', array('parent_photo_uuid' => $getPhotoUuid)),
             'bi-plus-circle-fill'
         );
 
@@ -137,7 +135,7 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_photos_edit_album',
                 $gL10n->get('SYS_EDIT_ALBUM'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_new.php', array('mode' => 'change', 'photo_uuid' => $getPhotoUuid)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_new.php', array('photo_uuid' => $getPhotoUuid)),
                 'bi-pencil-square'
             );
 
@@ -205,7 +203,7 @@ try {
 
         for ($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); ++$actThumbnail) {
             if ($actThumbnail <= $photoAlbum->getValue('pho_quantity')) {
-                $photoThumbnailTable .= '<div class="col-xxl-2 col-xl-3 col-lg-4 col-sm-6 admidio-album-thumbnail" id="div_image_' . $actThumbnail . '">';
+                $photoThumbnailTable .= '<div class="col-xxl-2 col-xl-3 col-lg-4 col-sm-6 admidio-photos-thumbnail" id="div_image_' . $actThumbnail . '">';
 
                 // Modal with lightbox 2
                 if ((int)$gSettingsManager->get('photo_show_mode') === 1) {
@@ -387,7 +385,7 @@ try {
                                         <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_new.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'change')) . '">
+                                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_new.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'))) . '">
                                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT_ALBUM') . '</a>
                                             </li>
                                             ' . $htmlLock . '
@@ -455,6 +453,6 @@ try {
 
     // show html of complete page
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

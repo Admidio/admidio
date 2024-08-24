@@ -216,6 +216,6 @@ try {
     }
 
     echo '</div>';
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     echo $e->getMessage();
 }

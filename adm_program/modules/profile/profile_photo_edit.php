@@ -14,21 +14,19 @@
  *        save      : save new photo in user recordset
  *        dont_save : delete photo in session and show message
  *        upload    : save new photo in session and show dialog with old and new photo
+ *        review    : dialog shows current and new profile photo
  *        delete    : delete current photo in database
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
-
-    if (in_array($getMode, array('delete', 'save', 'upload'))) {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'review', 'delete')));
 
     // checks if the server settings for file_upload are set to ON
     if (!PhpIniUtils::isFileUploadEnabled()) {
@@ -56,9 +54,6 @@ try {
 
     if ($getMode === 'save') {
         // Save photo
-
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
         if ((int)$gSettingsManager->get('profile_photo_storage') === 1) {
             // Save photo in the file system
@@ -125,6 +120,10 @@ try {
         // => EXIT
     } elseif ($getMode === 'delete') {
         // Delete photo
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         if ((int)$gSettingsManager->get('profile_photo_storage') === 1) {
             // Folder storage, delete file
             $filePath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
@@ -160,30 +159,43 @@ try {
         $page = new HtmlPage('admidio-profile-photo-edit', $headline);
 
         // show form
-        $form = new HtmlForm('upload_files_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'upload', 'user_uuid' => $getUserUuid)), $page, array('enableFileUpload' => true));
-        $form->addCustomContent($gL10n->get('SYS_CURRENT_PROFILE_PICTURE'), '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)) . '" alt="' . $gL10n->get('SYS_CURRENT_PROFILE_PICTURE') . '" />');
+        $form = new Form(
+            'admUploadPhotoForm',
+            'modules/profile.new-photo.upload.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'upload', 'user_uuid' => $getUserUuid)),
+            $page,
+            array('enableFileUpload' => true)
+        );
+        $form->addCustomContent(
+            'admCurrentProfilePhoto',
+            $gL10n->get('SYS_CURRENT_PROFILE_PICTURE'),
+            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)) . '" alt="' . $gL10n->get('SYS_CURRENT_PROFILE_PICTURE') . '" />'
+        );
         $form->addFileUpload(
-            'foto_upload_file',
+            'admPhotoUploadFile',
             $gL10n->get('SYS_SELECT_PHOTO'),
             array(
+                'property' => Form::FIELD_REQUIRED,
                 'allowedMimeTypes' => array('image/jpeg', 'image/png'),
                 'helpTextId' => array('SYS_PROFILE_PICTURE_RESTRICTIONS', array(round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2), round(PhpIniUtils::getUploadMaxSize() / 1024 ** 2, 2)))
             )
         );
         $form->addSubmitButton(
-            'btn_upload',
+            'admButtonUpload',
             $gL10n->get('SYS_UPLOAD_PROFILE_PICTURE'),
-            array('icon' => 'bi-upload')
+            array('icon' => 'bi-upload', 'class' => 'offset-sm-3')
         );
 
         // add form to html page and show page
-        $page->addHtml($form->show());
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
         $page->show();
     } elseif ($getMode === 'upload') {
         // Confirm cache photo
 
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        // check form field input and sanitized it from malicious content
+        $profilePhotoUploadForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $profilePhotoUploadForm->validate($_POST);
 
         // File size
         if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
@@ -201,13 +213,13 @@ try {
             throw new AdmException('SYS_PHOTO_FORMAT_INVALID');
         }
 
-        // Auflösungskontrolle
+        // Resolution control
         $imageDimensions = $imageProperties[0] * $imageProperties[1];
         if ($imageDimensions > SystemInfoUtils::getProcessableImageSize()) {
             throw new AdmException('SYS_PHOTO_RESOLUTION_TO_LARGE', array(round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2)));
         }
 
-        // Foto auf entsprechende Groesse anpassen
+        // Adjust photo to appropriate size
         $userImage = new Image($_FILES['userfile']['tmp_name'][0]);
         $userImage->setImageType('jpeg');
         $userImage->scale(130, 170);
@@ -217,18 +229,23 @@ try {
             $userImage->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg');
         } else {
             // Database storage
-            // Foto in PHP-Temp-Ordner übertragen
             $userImage->copyToFile(null, $_FILES['userfile']['tmp_name'][0]);
-            // Foto aus PHP-Temp-Ordner einlesen
             $userImageData = fread(fopen($_FILES['userfile']['tmp_name'][0], 'rb'), $_FILES['userfile']['size'][0]);
 
-            // Zwischenspeichern des neuen Fotos in der Session
             $gCurrentSession->setValue('ses_binary', $userImageData);
             $gCurrentSession->save();
         }
 
-        // Image-Objekt löschen
+        // delete image object
         $userImage->delete();
+
+        echo json_encode(array(
+            'status' => 'success',
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'review', 'user_uuid' => $getUserUuid))
+        ));
+        exit();
+    } elseif ($getMode === 'review') {
+        // show dialog with current and new profile photo for review
 
         if ((int)$user->getValue('usr_id') === $gCurrentUserId) {
             $headline = $gL10n->get('SYS_EDIT_MY_PROFILE_PICTURE');
@@ -238,24 +255,15 @@ try {
 
         // create html page object
         $page = new HtmlPage('admidio-profile-photo-edit', $headline);
-        $page->addJavascript('$("#btn_cancel").click(function() {
-            self.location.href=\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'dont_save', 'user_uuid' => $getUserUuid)) . '\';
-         });', true);
-
-        // show form
-        $form = new HtmlForm('show_new_profile_picture_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'save', 'user_uuid' => $getUserUuid)), $page);
-        $form->addCustomContent($gL10n->get('SYS_CURRENT_PROFILE_PICTURE'), '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)) . '" alt="' . $gL10n->get('SYS_CURRENT_PROFILE_PICTURE') . '" />');
-        $form->addCustomContent($gL10n->get('SYS_NEW_PROFILE_PICTURE'), '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)) . '" alt="' . $gL10n->get('SYS_NEW_PROFILE_PICTURE') . '" />');
-        $form->addLine();
-        $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'bi-upload'));
-
-        // add form to html page and show page
-        $page->addHtml($form->show());
+        $page->addTemplateFile('modules/profile.new-photo.tpl');
+        $page->assignSmartyVariable('urlCurrentProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)) );
+        $page->assignSmartyVariable('urlNewProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)));
+        $page->assignSmartyVariable('urlNextPage', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'save', 'user_uuid' => $getUserUuid)));
         $page->show();
     }
-} catch (AdmException|Exception|\Smarty\Exception|RuntimeException $e) {
-    if ($getMode === 'delete') {
-        echo $e->getMessage();
+} catch (AdmException|Exception|RuntimeException $e) {
+    if (in_array($getMode, array('upload', 'delete'))) {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());
     }

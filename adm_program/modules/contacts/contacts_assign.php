@@ -15,20 +15,14 @@ try {
     $postLastname = admFuncVariableIsValid($_POST, 'lastname', 'string');
     $postFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string');
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     // only legitimate users are allowed to call the user management
     if (!$gCurrentUser->editUsers()) {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
-    if (strlen($_POST['lastname']) === 0) {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LASTNAME'));
-    }
-    if (strlen($_POST['firstname']) === 0) {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_FIRSTNAME'));
-    }
+    // check form field input and sanitized it from malicious content
+    $contactsNewForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $formValues = $contactsNewForm->validate($_POST);
 
     // create html page object
     $page = new ModuleContacts('admidio-registration-assign', $gL10n->get('SYS_ASSIGN_REGISTRATION'));
@@ -37,10 +31,15 @@ try {
     $newUser->setValue('FIRST_NAME', $postFirstname);
     $page->createContentAssignUser($newUser);
     echo $page->getPageContent();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($e->getMessage() === 'No similar users found.') {
-        echo 'success';
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => $gL10n->get('SYS_USER_COULD_BE_CREATED'),
+            'url' => ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php?lastname=' . $postLastname . '&firstname=' . $postFirstname)
+        );
+        exit();
     } else {
-        echo $e->getMessage();
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
 }

@@ -165,7 +165,7 @@ try {
     }
 
     throw new AdmException('SYS_NO_RIGHTS');
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if (in_array($getMode, array('send_login_msg', 'delete_explain_msg', 'delete_msg'))) {
         $gMessage->show($e->getMessage());
     } else {

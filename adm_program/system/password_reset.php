@@ -13,6 +13,8 @@
  * user_uuid : UUID of the user who wants a reset his password
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
+
 try {
     require_once(__DIR__ . '/common.php');
 
@@ -61,15 +63,16 @@ try {
         $gNavigation->clear();
 
         if (!empty($_POST['new_password'])) {
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+            try {
+                // check form field input and sanitized it from malicious content
+                $passwordResetSetPasswordForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+                $formValues = $passwordResetSetPasswordForm->validate($_POST);
 
-            // check password and save new password in database
-            $newPassword = $_POST['new_password'];
-            $newPasswordConfirm = $_POST['new_password_confirm'];
+                // check password and save new password in database
+                $newPassword = $formValues['new_password'];
+                $newPasswordConfirm = $formValues['new_password_confirm'];
 
-            // Handle form input
-            if ($newPassword !== '' && $newPasswordConfirm !== '') {
+                // Handle form input
                 if (strlen($newPassword) >= PASSWORD_MIN_LENGTH) {
                     if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength')) {
                         if ($newPassword === $newPasswordConfirm) {
@@ -83,38 +86,44 @@ try {
                             // so he could log in with the new password immediately
                             $user->resetInvalidLogins();
 
-                            $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/login.php', 2000);
-                            $gMessage->show($gL10n->get('SYS_PASSWORD_RESET_SAVED'));
-                            // => EXIT
+                            echo json_encode(array(
+                                'status' => 'success',
+                                'message' => $gL10n->get('SYS_PASSWORD_RESET_SAVED'),
+                                'url' => ADMIDIO_URL . FOLDER_SYSTEM . '/login.php'
+                            ));
+                            exit();
+
                         } else {
-                            $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
+                            throw new AdmException('SYS_PASSWORDS_NOT_EQUAL');
                         }
                     } else {
-                        $phrase = $gL10n->get('SYS_PASSWORD_NOT_STRONG_ENOUGH');
+                        throw new AdmException('SYS_PASSWORD_NOT_STRONG_ENOUGH');
                     }
                 } else {
-                    $phrase = $gL10n->get('SYS_PASSWORD_LENGTH');
+                    throw new AdmException('SYS_PASSWORD_LENGTH');
                 }
-            } else {
-                $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
+            } catch (AdmException $e) {
+                echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
             }
-
-            $gMessage->show($phrase);
-            // => EXIT
         } else {
             // show dialog to change password
 
             $page = new HtmlPage('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
 
             // show form
-            $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php', array('user_uuid' => $getUserUuid, 'id' => $getResetId)), $page);
+            $form = new Form(
+                'passwordResetSetPasswordForm',
+                'system/password-reset.set-password.tpl',
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php', array('user_uuid' => $getUserUuid, 'id' => $getResetId)),
+                $page
+            );
             $form->addInput(
                 'new_password',
                 $gL10n->get('SYS_NEW_PASSWORD'),
                 '',
                 array(
                     'type' => 'password',
-                    'property' => HtmlForm::FIELD_REQUIRED,
+                    'property' => Form::FIELD_REQUIRED,
                     'minLength' => PASSWORD_MIN_LENGTH,
                     'passwordStrength' => true,
                     'passwordUserData' => $user->getPasswordUserData(),
@@ -125,7 +134,7 @@ try {
                 'new_password_confirm',
                 $gL10n->get('SYS_REPEAT'),
                 '',
-                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+                array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
             );
             $form->addSubmitButton(
                 'btn_save',
@@ -133,21 +142,18 @@ try {
                 array('icon' => 'bi-check-lg')
             );
 
-            $page->addHtml($form->show());
+            $form->addToHtmlPage();
+            $gCurrentSession->addFormObject($form);
             $page->show();
         }
     } elseif (!empty($_POST['recipient_email'])) {
         // password reset form was send, and now we should create an email for the user
         try {
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+            // check form field input and sanitized it from malicious content
+            $passwordResetForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $passwordResetForm->validate($_POST);
 
-            // if user is not logged in and captcha is activated then check captcha
-            if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
-                FormValidation::checkCaptcha($_POST['captcha_code']);
-            }
-
-            if (StringUtils::strValidCharacters($_POST['recipient_email'], 'email')) {
+            if (StringUtils::strValidCharacters($formValues['recipient_email'], 'email')) {
                 // search for user with the email address that have a valid login and membership to a role
                 $sql = 'SELECT usr_id
                       FROM ' . TBL_MEMBERS . '
@@ -160,7 +166,7 @@ try {
                 INNER JOIN ' . TBL_USER_DATA . ' AS email
                         ON email.usd_usr_id = usr_id
                        AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
-                       AND email.usd_value  = ? -- $_POST[\'recipient_email\']
+                       AND email.usd_value  = ? -- $formValues[\'recipient_email\']
                      WHERE LENGTH(usr_login_name) > 0
                        AND rol_valid  = true
                        AND usr_valid  = true
@@ -185,14 +191,14 @@ try {
                         ON cat_id = rol_cat_id
                 INNER JOIN ' . TBL_USERS . '
                         ON usr_id = mem_usr_id
-                     WHERE usr_login_name = ? -- $_POST[\'recipient_email\']
+                     WHERE usr_login_name = ? -- $formValues[\'recipient_email\']
                        AND rol_valid  = true
                        AND usr_valid  = true
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW
                   GROUP BY usr_id';
                 $queryParams = array(
-                    $_POST['recipient_email'],
+                    $formValues['recipient_email'],
                     DATE_NOW,
                     DATE_NOW
                 );
@@ -202,7 +208,7 @@ try {
 
             // show error if more than one user found
             if ($count > 1) {
-                throw new AdmException('SYS_LOSTPW_SEVERAL_EMAIL', array($_POST['recipient_email']));
+                throw new AdmException('SYS_LOSTPW_SEVERAL_EMAIL', array($formValues['recipient_email']));
             } elseif ($count === 1) {
                 // a valid username or email was found then send new password
                 $user = new User($gDb, $gProfileFields, (int)$userStatement->fetchColumn());
@@ -226,12 +232,18 @@ try {
             $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/login.php');
 
             if (StringUtils::strValidCharacters($_POST['recipient_email'], 'email')) {
-                throw new AdmException('SYS_LOSTPW_SEND_EMAIL', array($_POST['recipient_email']));
+                $message = $gL10n->get('SYS_LOSTPW_SEND_EMAIL', array($_POST['recipient_email']));
             } else {
-                throw new AdmException('SYS_LOSTPW_SEND_USERNAME', array($_POST['recipient_email']));
+                $message = $gL10n->get('SYS_LOSTPW_SEND_USERNAME', array($_POST['recipient_email']));
             }
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $message,
+                'url' => ADMIDIO_URL . FOLDER_SYSTEM . '/login.php'
+            ));
+            exit();
         } catch (AdmException $e) {
-            if ($user instanceof User) {
+            if (isset($user)) {
                 // initialize password reset columns
                 $user->setValue('usr_pw_reset_id', '');
                 $user->setValue('usr_pw_reset_timestamp', '');
@@ -239,8 +251,7 @@ try {
                 $user->save(false);
             }
 
-            $e->showHtml();
-            // => EXIT
+            echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
         }
     } else {
         // HTML_PART
@@ -256,12 +267,17 @@ try {
         $page->addHtml('<p class="lead">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION') . '</p>');
 
         // show form
-        $form = new HtmlForm('password_reset_form', ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php', $page);
+        $form = new Form(
+            'passwordResetForm',
+            'system/password-reset.tpl',
+            ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php',
+            $page
+        );
         $form->addInput(
             'recipient_email',
             $gL10n->get('SYS_USERNAME_OR_EMAIL'),
             '',
-            array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
+            array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
         );
 
         // if captchas are enabled then visitors of the website must resolve this
@@ -269,12 +285,16 @@ try {
             $form->addCaptcha('captcha_code');
         }
 
-        $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
+        $form->addSubmitButton(
+            'btn_send',
+            $gL10n->get('SYS_SEND'),
+            array('icon' => 'bi-envelope-fill', 'class' => 'offset-sm-3')
+        );
 
-        // add form to html page and show page
-        $page->addHtml($form->show());
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
         $page->show();
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

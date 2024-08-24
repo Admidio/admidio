@@ -290,7 +290,7 @@ try {
         // Falls der Mode unbekannt ist, ist natürlich auch Ende...
         throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($getMode === 'delete_entry' || $getMode === 'delete_comment') {
         echo $e->getMessage();
     } else {

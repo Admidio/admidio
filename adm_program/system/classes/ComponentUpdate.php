@@ -54,7 +54,7 @@ class ComponentUpdate extends Component
     /**
      * Will open an XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
-     * @param int $mainVersion  Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
+     * @param int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
      * @param int $minorVersion Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
      * @return SimpleXMLElement
      * @throws UnexpectedValueException|Exception
@@ -84,7 +84,7 @@ class ComponentUpdate extends Component
      * Goes step by step through the update xml file of the current database version and search for the maximum step.
      * If the last step is found than the id of this step will be returned.
      * @return int Return the number of the last update step that was found in xml file of the current version.
-     * @throws Exception
+     * @throws AdmException
      */
     public function getMaxUpdateStep(): int
     {
@@ -97,6 +97,8 @@ class ComponentUpdate extends Component
                 $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
             } catch (UnexpectedValueException $exception) {
                 return 0;
+            } catch (Exception $exception) {
+                throw new AdmException($exception->getMessage());
             }
 
             // go step by step through the SQL statements until the last one is found

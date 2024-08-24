@@ -4,6 +4,7 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
  ***********************************************************************************************
  */
 
@@ -75,6 +76,7 @@ class HtmlNavbar
      *                           default: will be the standard navbar of all modules.
      *                           filter:  should be used if this navbar is used to filter data of within the script.
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     public function __construct(string $id, string $name = '', HtmlPage $htmlPage = null, string $type = 'default')
     {
@@ -100,6 +102,7 @@ class HtmlNavbar
     /**
      * This method adds a css class to the main nav tag of the menu.
      * @param string $className The name of a css class that should be added to the main nav tag of the manu
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     public function addCssClass(string $className)
     {
@@ -109,6 +112,7 @@ class HtmlNavbar
     /**
      * Add a form to the menu. The form will be added between the left and the right part of the navbar.
      * @param string $htmlForm A html code of a form that will be added to the menu
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     public function addForm(string $htmlForm)
     {
@@ -127,6 +131,7 @@ class HtmlNavbar
      *                            have already added a dropdown than you can add the item to that
      *                            dropdown. Just commit the id of that item.
      * @param string $class       Optional a css class that will be set for the item.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     public function addItem(string $id, string $url, string $text, string $icon = '', string $orientation = 'left', string $parentItem = 'navbar', string $class = '')
     {
@@ -158,6 +163,7 @@ class HtmlNavbar
      * Creates the html for the menu entry.
      * @param array<string,string> $data An array with all data if the item. This will be **id**, **url**, **text** and **icon**.
      * @return string Returns the html for the menu entry
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     protected function createHtmlLink(array $data): string
     {
@@ -177,6 +183,7 @@ class HtmlNavbar
      * Creates the html for the menu entry.
      * @param array<string,string> $data An array with all data if the item. This will be **id**, **url**, **text** and **icon**.
      * @return string Returns the html for the menu entry
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     protected function createHtmlDropdownLink(array $data): string
     {
@@ -193,6 +200,7 @@ class HtmlNavbar
      * @param array<string,array<string,string|array<string,array<string,string>>>> $items
      * @param string $class
      * @return string
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     private function getNavHtml(array $items, string $class = ''): string
     {
@@ -231,6 +239,7 @@ class HtmlNavbar
     /**
      * Set the name of the navbar that will be shown when navbar changed to vertical mode on small devices.
      * @param string $name New name of the navbar.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     public function setName(string $name)
     {
@@ -241,6 +250,7 @@ class HtmlNavbar
      * Creates the html output of the module menu. Each added menu item will be displayed.
      * If one item has several subitems than a dropdown button will be created.
      * @return string Returns the html output for the complete menu
+     * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
     public function show(): string
     {

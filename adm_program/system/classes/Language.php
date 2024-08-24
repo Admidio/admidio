@@ -199,7 +199,7 @@ class Language
      * // display a text with placeholders for individual content
      * echo $gL10n->get('SYS_CREATED_BY_AND_AT', array('John Doe', '2019-04-13'));
      * ```
-     * @throws Exception
+     * @throws AdmException
      */
     public function get(string $textId, array $params = array()): string
     {
@@ -211,7 +211,7 @@ class Language
             $text = $this->getTextFromTextId($textId);
 
             //$gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
-        } catch (RuntimeException $exception) {
+        } catch (OutOfBoundsException $exception) {
             $gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
             $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
 
@@ -241,8 +241,8 @@ class Language
 
     /**
      * Returns the path of a country file.
-     * @throws UnexpectedValueException
      * @return string
+     * @throws AdmException
      */
     private function getCountryFile(): string
     {
@@ -256,13 +256,13 @@ class Language
             return $langFileRef;
         }
 
-        throw new UnexpectedValueException('Country files not found!');
+        throw new AdmException('Country files not found!');
     }
 
     /**
      * Returns an array with all countries and their ISO codes (ISO 3166 ALPHA-3)
      * @return array<string,string> Array with all countries and their ISO codes (ISO 3166 ALPHA-3) e.g.: array('DEU' => 'Germany' ...)
-     * @throws UnexpectedValueException|Exception
+     * @throws AdmException
      */
     public function getCountries(): array
     {
@@ -279,7 +279,6 @@ class Language
      * @param string $countryIsoCode The three digits ISO code (ISO 3166 ALPHA-3) of the country where the name should be returned.
      * @return string Return the name of the country in the language of this object.
      * @throws AdmException
-     * @throws Exception
      */
     public function getCountryName(string $countryIsoCode): string
     {
@@ -306,7 +305,6 @@ class Language
      * @param string $countryName The name of the country in the language of this object.
      * @return string Return the three digits ISO code (ISO 3166 ALPHA-3) of the country.
      * @throws AdmException
-     * @throws Exception
      */
     public function getCountryIsoCode(string $countryName): string
     {
@@ -355,7 +353,7 @@ class Language
     /**
      * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the cached text or empty string if text id isn't found
-     *@throws OutOfBoundsException
+     * @throws OutOfBoundsException
      */
     private function getTextCache(string $textId): string
     {
@@ -370,8 +368,7 @@ class Language
      * Reads a text string out of a language xml file that is identified with a unique text id e.g. SYS_COMMON.
      * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the text string of the text id.
-     * @throws UnexpectedValueException
-     * @throws OutOfBoundsException|Exception
+     * @throws Exception
      */
     private function getTextFromTextId(string $textId): string
     {
@@ -422,7 +419,7 @@ class Language
     /**
      * Returns an array with all countries and their ISO codes
      * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
-     * @throws UnexpectedValueException|Exception
+     * @throws AdmException
      */
     private function loadCountries(): array
     {
@@ -452,7 +449,7 @@ class Language
      * @param string $text The translation string with the static placeholders
      * @param array<int,string> $params An array with values for each placeholder of the string.
      * @return string Returns the translation string with the replaced placeholders.
-     * @throws Exception
+     * @throws AdmException
      */
     private function prepareTextPlaceholders(string $text, array $params): string
     {
@@ -580,7 +577,7 @@ class Language
      * Checks if a given string is a translation-string-id and translate it
      * @param string $string The string to check for translation
      * @return string Returns the translated or original string
-     * @throws Exception
+     * @throws AdmException
      */
     public static function translateIfTranslationStrId(string $string): string
     {

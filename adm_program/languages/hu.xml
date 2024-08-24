@@ -213,7 +213,7 @@
   <string name="ORG_SECONDS">másodpercek</string>
   <string name="ORG_SEND_NEW_PASSWORD">Új jelszó küldése</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Szervezetkiválasztás mutatása</string>
-  <string name="ORG_SYSTEM_INFORMATION">Rendszerinformációk</string>
+  <string name="SYS_SYSTEM_INFORMATION">Rendszerinformációk</string>
   <string name="ORG_TIME_FORMAT">Időformátum</string>
   <string name="ORG_TIMEZONE">Időzóna</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivációs link az új jelszóhoz</string>

@@ -66,7 +66,7 @@ class ModuleDocumentsFiles extends HtmlPage
                 if ($this->folder->hasUploadRight()) {
                     if ($gCurrentUser->adminDocumentsFiles()) {
                         $templateRow['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_config.php', array('folder_uuid' => $row['uuid'])),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_permissions.php', array('folder_uuid' => $row['uuid'])),
                             'icon' => 'bi bi-shield-lock',
                             'tooltip' => $gL10n->get('SYS_PERMISSIONS')
                         );

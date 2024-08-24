@@ -106,6 +106,8 @@ class HtmlForm
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
+     * @throws \Smarty\Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlForm" is deprecated, use class "Form" instead.
      */
     public function __construct(string $id, string $action = '', HtmlPage $htmlPage = null, array $options = array())
     {
@@ -184,14 +186,13 @@ class HtmlForm
      *                        - **class** : Optional an additional css classname. The class **admButton**
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
-     * @throws \Smarty\Exception
+     * @throws \Smarty\Exception|AdmException
      */
     public function addButton(string $id, string $text, array $options = array())
     {
         ++$this->countElements;
         // create array with all options
         $optionsDefault = array(
-            'formtype'     => $this->type,
             'property'     => self::FIELD_DEFAULT,
             'icon'         => '',
             'link'         => '',
@@ -242,7 +243,7 @@ class HtmlForm
             $("#' . $id . '_refresh").click(function() {
                 document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
             });', true);
-        $this->render('form.captcha', ['formtype' => $this->type, 'class' => $class, 'id' => $id]);
+        $this->render('form.captcha', ['class' => $class, 'id' => $id]);
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,
@@ -277,7 +278,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
+     * @throws \Smarty\Exception|AdmException
      */
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
@@ -285,7 +286,6 @@ class HtmlForm
 
         // create array with all options
         $optionsDefault = array(
-            'formtype'         => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'helpTextId'       => '',
             'icon'             => '',
@@ -337,24 +337,25 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
+     * @throws \Smarty\Exception|AdmException
      */
     public function addCustomContent(string $label, string $content, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'         => '',
             'referenceId'      => '',
             'helpTextId'       => '',
             'alertWarning'     => '',
             'icon'             => '',
             'class'            => '',
+            'id'               => $label,
             'label'            => $label,
             'content'          => $content,
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $this->render('form.customcontent', $optionsAll);
+        $this->render('form.custom-content', $optionsAll);
     }
 
     /**
@@ -386,6 +387,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
+     * @throws AdmException
      * @throws \Smarty\Exception
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
@@ -396,7 +398,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'         => self::FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
             'alertWarning'     => '',
@@ -493,19 +495,21 @@ class HtmlForm
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      * @throws \Smarty\Exception
+     * @throws AdmException
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'           => self::FIELD_DEFAULT,
             'maxUploadSize'      => PhpIniUtils::getFileUploadMaxFileSize(),
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
             'multiUploadLabel'   => '',
+            'alertWarning'       => '',
             'helpTextId'         => '',
             'icon'               => '',
             'class'              => '',
@@ -598,7 +602,6 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     *                        - **htmlAfter** : Add html code after the input field.
      * @throws \Smarty\Exception
      * @throws Exception
      */
@@ -609,7 +612,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'id'               => $id,
             'label'            => $label,
             'value'            => $value,
@@ -627,7 +630,6 @@ class HtmlForm
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
-            'htmlAfter'        => '',
             'alertWarning'     => ''
         );
         $optionsAll = array_replace($optionsDefault, $options);
@@ -816,16 +818,17 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
+     * @throws \Smarty\Exception|AdmException
      */
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'         => self::FIELD_DEFAULT,
             'maxLength'        => 0,
+            'alertWarning'     => '',
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
@@ -912,17 +915,18 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
+     * @throws \Smarty\Exception|AdmException
      */
     public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'          => self::FIELD_DEFAULT,
             'defaultValue'      => '',
             'showNoValueButton' => false,
+            'alertWarning'      => '',
             'helpTextId'        => '',
             'icon'              => '',
             'class'             => '',
@@ -1006,7 +1010,7 @@ class HtmlForm
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
@@ -1349,7 +1353,7 @@ class HtmlForm
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,
+        $optionsDefault = array(
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'arrayKeyIsNotValue'             => false,
@@ -1454,29 +1458,29 @@ class HtmlForm
         $optionsAll['valueAttributes'] = array();
 
         if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && $countCategories > 1) {
-            $categoriesArray[0] = $gL10n->get('SYS_ALL');
+            $categoriesArray[] = array('', $gL10n->get('SYS_ALL'));
             $optionsAll['valueAttributes'][0] = array('data-global' => 0);
         }
 
         while ($row = $pdoStatement->fetch()) {
             // if several categories exist than select default category
             if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === ''
-            && ($countCategories === 1 || $row['cat_default'] === 1)) {
+                && ($countCategories === 1 || $row['cat_default'] === 1)) {
                 $optionsAll['defaultValue'] = $row['cat_uuid'];
             }
 
-            // if text is a translation-id then translate it
-            $categoriesArray[$row['cat_uuid']] = Language::translateIfTranslationStrId($row['cat_name']);
-
             // add label that this category is visible to all organizations
             if ($row['cat_org_id'] === null) {
-                if ($categoriesArray[$row['cat_uuid']] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
-                    $categoriesArray[$row['cat_uuid']] = $categoriesArray[$row['cat_uuid']] . ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
+                if ($row['cat_name'] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
+                    $row['cat_name'] .=  ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
                 }
                 $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 1);
             } else {
                 $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 0);
+
             }
+            // if text is a translation-id then translate it
+            $categoriesArray[] = array($row['cat_uuid'], \Language::translateIfTranslationStrId($row['cat_name']));
         }
 
         // now call method to create select box from array
@@ -1499,7 +1503,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception
+     * @throws \Smarty\Exception|AdmException
      */
     public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
@@ -1507,8 +1511,8 @@ class HtmlForm
 
         // create array with all options
         $optionsDefault = array(
-            'formtype'         => $this->type,
             'property'         => '',
+            'alertWarning'     => '',
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
@@ -1535,12 +1539,12 @@ class HtmlForm
      *                          is set as default and need not set with this parameter.
      *                        - **type** : If set to true this button get the type **submit**. This will
      *                          be the default.
-     * @throws \Smarty\Exception
+     * @throws \Smarty\Exception|AdmException
      */
     public function addSubmitButton(string $id, string $text, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array('formtype' => $this->type,'icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
+        $optionsDefault = array('icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css classes
@@ -1671,7 +1675,7 @@ class HtmlForm
      * @param string $templateName Name of the template file that should be used.
      * @param array $assigns Array with variables that should be assigned to the template.
      * @return void
-     * @throws \Smarty\Exception
+     * @throws \Smarty\Exception|AdmException
      */
     private function render(string $templateName, array $assigns)
     {
@@ -1683,13 +1687,9 @@ class HtmlForm
             $smarty = HtmlPage::createSmartyObject();
         }
 
-        foreach($assigns as $key => $assign) {
-            $smarty->assign($key, $assign);
-        }
-        $smarty->assign('ADMIDIO_URL', ADMIDIO_URL);
-        $smarty->assign('formtype', $this->type);
+        $smarty->assign('formType', $this->type);
         $smarty->assign('data', $assigns);
-
+        $smarty->assign('urlAdmidio', ADMIDIO_URL);
         $smarty->assign('l10n', $gL10n);
         $this->htmlString .= $smarty->fetch("sys-template-parts/".$templateName.'.tpl');
     }

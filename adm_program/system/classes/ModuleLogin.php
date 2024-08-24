@@ -21,6 +21,8 @@
  * $page->show();
  * ```
  */
+use Admidio\UserInterface\Form;
+
 class ModuleLogin
 {
     /**
@@ -35,12 +37,11 @@ class ModuleLogin
      * organization select box could be shown and the flag if auto login should be activated.
      * @param HtmlPage $page Html content will be added to this page.
      * @param string $organizationShortName Optional the organization that should be preselected in the dialog.
-     * @throws AdmException|\Smarty\Exception
-     * @throws Exception
+     * @throws AdmException
      */
     public function addHtmlLogin(HtmlPage $page, string $organizationShortName = '')
     {
-        global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization;
+        global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization, $gCurrentSession;
 
         if ($organizationShortName === '') {
             $organizationShortName = $gCurrentOrganization->getValue('org_shortname');
@@ -61,56 +62,6 @@ class ModuleLogin
         // create role object for administrator
         $roleAdministrator = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
 
-        // show form
-        $form = new HtmlForm(
-            'login_form',
-            ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
-            $page,
-            array('showRequiredFields' => false)
-        );
-
-        $form->addInput(
-            'usr_login_name',
-            $gL10n->get('SYS_USERNAME'),
-            '',
-            array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
-        );
-        $form->addInput(
-            'usr_password',
-            $gL10n->get('SYS_PASSWORD'),
-            '',
-            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
-        );
-
-        // show selectbox with all organizations of database
-        if ($gSettingsManager->getBool('system_organization_select')) {
-            $sql = 'SELECT org_shortname, org_longname
-                      FROM '.TBL_ORGANIZATIONS.'
-                  ORDER BY org_longname ASC, org_shortname ASC';
-            $form->addSelectBoxFromSql(
-                'org_shortname',
-                $gL10n->get('SYS_ORGANIZATION'),
-                $gDb,
-                $sql,
-                array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $organizationShortName, 'class' => 'form-control-small')
-            );
-        }
-
-        if ($gSettingsManager->getBool('enable_auto_login')) {
-            $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
-        }
-        $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right'));
-        $page->addHtml($form->show());
-
-        if ($gSettingsManager->getBool('registration_enable_module')) {
-            $page->addHtml('
-                <div id="login_registration_link">
-                    <small>
-                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a>
-                    </small>
-                </div>');
-        }
-
         // show link if user has login problems
         if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
             // request to reset the password
@@ -123,10 +74,48 @@ class ModuleLogin
             $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:'.$gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
 
-        $page->addHtml('
-            <div id="login_forgot_password_link" class="admidio-margin-bottom">
-                <small><a href="'.$forgotPasswordLink.'">'.$gL10n->get('SYS_FORGOT_MY_PASSWORD').'</a></small>
-            </div>');
+        // show form
+        $form = new Form(
+            'loginForm',
+            'system/login.tpl',
+            ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
+            $page,
+            array('showRequiredFields' => false)
+        );
+
+        $form->addInput(
+            'usr_login_name',
+            $gL10n->get('SYS_USERNAME'),
+            '',
+            array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
+        );
+        $form->addInput(
+            'usr_password',
+            $gL10n->get('SYS_PASSWORD'),
+            '',
+            array(
+                'type' => 'password',
+                'property' => Form::FIELD_REQUIRED,
+                'helpTextId' => '<a href="' . $forgotPasswordLink . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'
+            )
+        );
+
+        // show selectbox with all organizations of database
+        $sql = 'SELECT org_shortname, org_longname
+                  FROM '.TBL_ORGANIZATIONS.'
+              ORDER BY org_longname ASC, org_shortname ASC';
+        $form->addSelectBoxFromSql(
+            'org_shortname',
+            $gL10n->get('SYS_ORGANIZATION'),
+            $gDb,
+            $sql,
+            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $organizationShortName)
+        );
+
+        $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
+        $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right', 'class' => 'offset-sm-3'));
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
     }
 
     /**
@@ -141,20 +130,14 @@ class ModuleLogin
         global $gDb, $gCurrentOrganization, $gCurrentOrgId, $gProfileFields, $gCurrentSession, $gSettingsManager;
         global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gL10n;
 
-        $postLoginName = admFuncVariableIsValid($_POST, (isset($_POST['usr_login_name']) ? 'usr_login_name' : 'plg_usr_login_name'), 'string');
-        $postPassword = (isset($_POST['usr_password']) ? $_POST['usr_password'] : $_POST['plg_usr_password']);
-        $postOrgShortName = admFuncVariableIsValid($_POST, (isset($_POST['org_shortname']) ? 'org_shortname' : 'plg_org_shortname'), 'string');
-        $postAutoLogin = admFuncVariableIsValid($_POST, (isset($_POST['auto_login']) ? 'auto_login' : 'plg_auto_login'), 'bool');
+        // check form field input and sanitized it from malicious content
+        $loginForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $loginForm->validate($_POST);
 
-        if ($postLoginName === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_USERNAME')));
-            // => EXIT
-        }
-
-        if ($postPassword === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_PASSWORD')));
-            // => EXIT
-        }
+        $postLoginName = (isset($formValues['usr_login_name']) ? $formValues['usr_login_name'] : $formValues['usr_login_name']);
+        $postPassword = (isset($formValues['usr_password']) ? $formValues['usr_password'] : $formValues['plg_usr_password']);
+        $postOrgShortName = (isset($formValues['org_shortname']) ? $formValues['org_shortname'] : $formValues['org_shortname']);
+        $postAutoLogin = (isset($formValues['auto_login']) ? $formValues['auto_login'] : $formValues['auto_login']);
 
         // Search for username
         $sql = 'SELECT usr_id
@@ -164,7 +147,6 @@ class ModuleLogin
 
         if ($userStatement->rowCount() === 0) {
             throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
-            // => EXIT
         }
 
         // if login organization is different to organization of config file then create new session variables

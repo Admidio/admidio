@@ -16,7 +16,7 @@ class TableText extends TableAccess
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $name The recordset of the text with this name will be loaded.
      *                           If name isn't set than an empty object of the table is created.
-     * @throws Exception
+     * @throws AdmException
      */
     public function __construct(Database $database, string $name = '')
     {

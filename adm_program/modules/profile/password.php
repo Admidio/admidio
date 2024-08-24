@@ -14,10 +14,12 @@
  *           change : Change password in database
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     header('Content-type: text/html; charset=utf-8');
 
     // Initialize and check the parameters
@@ -39,8 +41,9 @@ try {
     }
 
     if ($getMode === 'change') {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        // check form field input and sanitized it from malicious content
+        $profilePasswordEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $profilePasswordEditForm->validate($_POST);
 
         if ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId) {
             $oldPassword = '';
@@ -53,46 +56,39 @@ try {
 
         // Handle form input
 
-        if (($oldPassword !== '' || $gCurrentUser->isAdministrator())
-            && $newPassword !== '' && $newPasswordConfirm !== '') {
-            if (strlen($newPassword) >= PASSWORD_MIN_LENGTH) {
-                if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength')) {
-                    if ($newPassword === $newPasswordConfirm) {
-                        // check if old password is correct.
-                        // Administrator could change password of other users without this verification.
-                        if (PasswordUtils::verify($oldPassword, $user->getValue('usr_password'))
-                            || ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)) {
-                            $user->saveChangesWithoutRights();
-                            $user->setPassword($newPassword);
-                            $user->save();
+        if (strlen($newPassword) >= PASSWORD_MIN_LENGTH) {
+            if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength')) {
+                if ($newPassword === $newPasswordConfirm) {
+                    // check if old password is correct.
+                    // Administrator could change password of other users without this verification.
+                    if (PasswordUtils::verify($oldPassword, $user->getValue('usr_password'))
+                        || ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)) {
+                        $user->saveChangesWithoutRights();
+                        $user->setPassword($newPassword);
+                        $user->save();
 
-                            // if password of current user changed, then update value in current session
-                            if ($gCurrentUserId === (int)$user->getValue('usr_id')) {
-                                $gCurrentUser->setPassword($newPassword);
-                            }
-
-                            $phrase = 'success';
-                        } else {
-                            $phrase = $gL10n->get('SYS_PASSWORD_OLD_WRONG');
+                        // if password of current user changed, then update value in current session
+                        if ($gCurrentUserId === (int)$user->getValue('usr_id')) {
+                            $gCurrentUser->setPassword($newPassword);
                         }
+
+                        echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PASSWORD_CHANGED')));
+                        exit();
                     } else {
-                        $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
+                        throw new AdmException('SYS_PASSWORD_OLD_WRONG');
                     }
                 } else {
-                    $phrase = $gL10n->get('SYS_PASSWORD_NOT_STRONG_ENOUGH');
+                    throw new AdmException('SYS_PASSWORDS_NOT_EQUAL');
                 }
             } else {
-                $phrase = $gL10n->get('SYS_PASSWORD_LENGTH');
+                throw new AdmException('SYS_PASSWORD_NOT_STRONG_ENOUGH');
             }
         } else {
-            $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
+            throw new AdmException('SYS_PASSWORD_LENGTH');
         }
-
-        echo $phrase;
     } elseif ($getMode === 'html') {
 
         // Show password form
-
 
         $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
@@ -101,67 +97,24 @@ try {
             $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
         }
 
-        echo '<script type="text/javascript">
-        $(function() {
-            $("body").on("shown.bs.modal", ".modal", function() {
-                $("#password_form:first *:input[type!=hidden]:first").focus();
-
-                $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * ' . $passwordStrengthLevel . ')");
-
-                $("#new_password").keyup(function(e) {
-                    var result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
-                    var cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
-
-                    var progressBar = $("#admidio-password-strength .progress-bar");
-                    progressBar.attr("aria-valuenow", result.score * 25);
-                    progressBar.css("width", result.score * 25 + "%");
-                    progressBar.removeClass(cssClasses.join(" "));
-                    progressBar.addClass(cssClasses[result.score]);
-                });
-            });
-
-            $("#password_form").submit(function(event) {
-                var action = $(this).attr("action");
-                var passwordFormAlert = $("#password_form .form-alert");
-                passwordFormAlert.hide();
-
-                // disable default form submit
-                event.preventDefault();
-
-                $.post(action, $(this).serialize(), function(data) {
-                    if (data === "success") {
-                        passwordFormAlert.attr("class", "alert alert-success form-alert");
-                        passwordFormAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_PASSWORD_CHANGED') . '</strong>");
-                        passwordFormAlert.fadeIn("slow");
-                        setTimeout(function() {
-                            $("#admidio-modal").modal("hide");
-                        }, 2000);
-                    } else {
-                        passwordFormAlert.attr("class", "alert alert-danger form-alert");
-                        passwordFormAlert.fadeIn();
-                        passwordFormAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
-                    }
-                });
-            });
-        });
-    </script>
-
-    <div class="modal-header">
-        <h3 class="modal-title">' . $gL10n->get('SYS_EDIT_PASSWORD') . '</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">';
         // show form
-        $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid, 'mode' => 'change')));
+        $form = new Form(
+            'password_edit_form',
+            'modules/profile.password.edit.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid, 'mode' => 'change'))
+        );
         if ($gCurrentUserId === $userId) {
             // to change own password user must enter the valid old password for verification
             $form->addInput(
                 'old_password',
                 $gL10n->get('SYS_CURRENT_PASSWORD'),
                 '',
-                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
+                array(
+                    'type' => 'password',
+                    'property' => Form::FIELD_REQUIRED,
+                    'autocomplete' => 'current-password'
+                )
             );
-            $form->addLine();
         }
         $form->addInput(
             'new_password',
@@ -169,30 +122,40 @@ try {
             '',
             array(
                 'type' => 'password',
-                'property' => HtmlForm::FIELD_REQUIRED,
+                'property' => Form::FIELD_REQUIRED,
                 'minLength' => PASSWORD_MIN_LENGTH,
                 'passwordStrength' => true,
                 'passwordUserData' => $user->getPasswordUserData(),
-                'helpTextId' => 'SYS_PASSWORD_DESCRIPTION'
+                'helpTextId' => 'SYS_PASSWORD_DESCRIPTION',
+                'autocomplete' => 'new-password'
             )
         );
         $form->addInput(
             'new_password_confirm',
             $gL10n->get('SYS_REPEAT'),
             '',
-            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+            array(
+                'type' => 'password',
+                'property' => Form::FIELD_REQUIRED,
+                'minLength' => PASSWORD_MIN_LENGTH,
+                'autocomplete' => 'new-password'
+            )
         );
         $form->addSubmitButton(
             'btn_save',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg')
         );
-        echo $form->show();
-        echo '</div>';
+
+        $smarty = HtmlPage::createSmartyObject();
+        $smarty->assign('zxcvbnUserInputs', $zxcvbnUserInputs);
+        $form->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($form);
+        echo $smarty->fetch('modules/profile.password.edit.tpl');
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($getMode === 'change') {
-        echo $e->getMessage();
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->showInModalWindow();
         $gMessage->show($e->getMessage());

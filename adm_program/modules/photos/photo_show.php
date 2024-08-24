@@ -143,6 +143,6 @@ try {
         $image->copyToBrowser();
         $image->delete();
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

@@ -12,6 +12,8 @@
  * role_uuid: UUID of role, that should be edited
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
@@ -57,13 +59,6 @@ try {
         if ($role->getValue('cat_system') == 1) {
             $showSystemCategory = true;
         }
-    }
-
-    if (isset($_SESSION['roles_request'])) {
-        // due to incorrect input the user has returned to this form
-        // now write the previously entered contents into the object
-        $role->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['roles_request'])));
-        unset($_SESSION['roles_request']);
     }
 
     // get all dependent roles of this role
@@ -122,13 +117,17 @@ try {
     }
 ');
 
-    $form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('role_uuid' => $getRoleUuid, 'mode' => '2')), $page);
-    $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME') . ' & ' . $gL10n->get('SYS_CATEGORY'));
+    $form = new Form(
+        'roles_edit_form',
+        'modules/groups-roles.edit.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('role_uuid' => $getRoleUuid, 'mode' => 'edit')),
+        $page
+    );
 
     if ($role->getValue('rol_administrator') === 1 || $eventRole) {
-        $fieldProperty = HtmlForm::FIELD_READONLY;
+        $fieldProperty = Form::FIELD_READONLY;
     } else {
-        $fieldProperty = HtmlForm::FIELD_REQUIRED;
+        $fieldProperty = Form::FIELD_REQUIRED;
     }
     $form->addInput(
         'rol_name',
@@ -141,18 +140,16 @@ try {
         $gL10n->get('SYS_DESCRIPTION'),
         $role->getValue('rol_description'),
         3,
-        array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_DEFAULT), 'maxLength' => 4000)
+        array('property' => ($eventRole ? Form::FIELD_READONLY : Form::FIELD_DEFAULT), 'maxLength' => 4000)
     );
     $form->addSelectBoxForCategories(
         'rol_cat_id',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         ($eventRole ? 'ROL_EVENT' : 'ROL'),
-        HtmlForm::SELECT_BOX_MODUS_EDIT,
-        array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
+        Form::SELECT_BOX_MODUS_EDIT,
+        array('property' => ($eventRole ? Form::FIELD_READONLY : Form::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
     );
-    $form->closeGroupBox();
-    $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
     if ($gSettingsManager->getBool('enable_mail_module')) {
         $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'));
         $form->addSelectBox(
@@ -245,11 +242,9 @@ try {
             array('defaultValue' => $role->getValue('rol_cost_period'), 'class' => 'form-control-small')
         );
     }
-    $form->closeGroupBox();
 
     // event roles should not set rights, events meetings and dependencies
     if (!$eventRole) {
-        $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
         $form->addCheckbox(
             'rol_assign_roles',
             $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'),
@@ -345,22 +340,17 @@ try {
                 array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'bi-link-45deg')
             );
         }
-        $form->closeGroupBox();
-        $form->openGroupBox('gb_dates_meetings', $gL10n->get('SYS_APPOINTMENTS') . ' / ' . $gL10n->get('SYS_MEETINGS') . '&nbsp;&nbsp;(' . $gL10n->get('SYS_OPTIONAL') . ')');
         $form->addInput('rol_start_date', $gL10n->get('SYS_VALID_FROM'), $role->getValue('rol_start_date'), array('type' => 'date'));
         $form->addInput('rol_end_date', $gL10n->get('SYS_VALID_TO'), $role->getValue('rol_end_date'), array('type' => 'date'));
         $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));
         $form->addInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), array('type' => 'time'));
         $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), DateTimeExtended::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
         $form->addInput('rol_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'), array('maxLength' => 100));
-        $form->closeGroupBox();
 
-        $form->openGroupBox('gb_dependencies', $gL10n->get('SYS_DEPENDENCIES') . '&nbsp;&nbsp;(' . $gL10n->get('SYS_OPTIONAL') . ')');
         $roleName = $gL10n->get('SYS_NEW_ROLE');
         if ($role->getValue('rol_name') !== '') {
             $roleName = $gL10n->get('SYS_ROLE') . ' <strong>' . $role->getValue('rol_name') . '</strong>';
         }
-        $form->addHtml('<p>' . $gL10n->get('SYS_ROLE_DEPENDENCIES_DESC', array($roleName)) . '</p>');
 
         //  list all roles that the user is allowed to see
         $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
@@ -381,20 +371,20 @@ try {
             $sqlData,
             array('defaultValue' => $childRoles, 'multiselect' => true)
         );
-        $form->closeGroupBox();
     }
 
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-    $form->addHtml(admFuncShowCreateChangeInfoById(
-        (int)$role->getValue('rol_usr_id_create'),
-        $role->getValue('rol_timestamp_create'),
-        (int)$role->getValue('rol_usr_id_change'),
-        $role->getValue('rol_timestamp_change')
-    ));
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $page->assignSmartyVariable('eventRole', $eventRole);
+    $page->assignSmartyVariable('roleName', $roleName);
+    $page->assignSmartyVariable('nameUserCreated', $role->getNameOfCreatingUser());
+    $page->assignSmartyVariable('timestampUserCreated', $role->getValue('rol_timestamp_create'));
+    $page->assignSmartyVariable('nameLastUserEdited', $role->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('timestampLastUserEdited', $role->getValue('rol_timestamp_change'));
+    $form->addToHtmlPage();
+    $gCurrentSession->addFormObject($form);
+
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

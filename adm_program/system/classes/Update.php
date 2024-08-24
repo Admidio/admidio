@@ -7,6 +7,8 @@
  ***********************************************************************************************
  */
 
+use Admidio\Utils\Installation;
+
 /**
  * Class to implement useful method for installation and update process.
  */
@@ -69,7 +71,7 @@ class Update
         // disable foreign key checks for mysql, so tables can easily be deleted
         $this->toggleForeignKeyChecks(false);
 
-        InstallationUtils::disableSoundexSearchIfPgSql($gDb);
+        Installation::disableSoundexSearchIfPgSql($gDb);
 
         preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
         $versionArray = array_map('intval', $versionArray);

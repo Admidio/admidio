@@ -16,10 +16,12 @@
  *                    if no date information is delivered
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // calculate default date from which the profile fields history should be shown
     $filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
     $filterDateFrom->modify('-' . $gSettingsManager->getInt('contacts_field_history_days') . ' day');
@@ -146,14 +148,18 @@ try {
     $page = new HtmlPage('admidio-profile-fields-history', $headline);
 
     // create filter menu with input elements for start date and end date
-    $filterNavbar = new HtmlNavbar('menu_profile_field_history_filter', '', null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL . FOLDER_MODULES . '/contacts/profile_field_history.php', $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addInput('user_uuid', '', $getUserUuid, array('property' => HtmlForm::FIELD_HIDDEN));
+    $form = new Form(
+        'navbar_filter_form',
+        'sys-template-parts/form.filter.tpl',
+        ADMIDIO_URL . FOLDER_MODULES . '/contacts/profile_field_history.php',
+        $page,
+        array('type' => 'navbar', 'setFocus' => false)
+    );
+    $form->addInput('user_uuid', '', $getUserUuid, array('property' => Form::FIELD_HIDDEN));
     $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-    $filterNavbar->addForm($form->show());
-    $page->addHtml($filterNavbar->show());
+    $form->addToHtmlPage();
 
     $table = new HtmlTable('profile_field_history_table', $page, true, true);
 
@@ -204,6 +210,6 @@ try {
 
     $page->addHtml($table->show());
     $page->show();
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

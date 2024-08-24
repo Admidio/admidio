@@ -73,7 +73,7 @@ try {
     }
 
     $rss->getRssFeed();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($e->getMessage());
 }

@@ -20,6 +20,7 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
 use Ramsey\Uuid\Uuid;
 
 try {
@@ -411,8 +412,13 @@ try {
         $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('SYS_CONFIGURATION'));
 
         // add navbar with filter elements and the select box with all lists configurations
-        $filterNavbar = new HtmlNavbar('menu_list_filter', '', null, 'filter');
-        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form = new Form(
+            'navbar_filter_form',
+            'sys-template-parts/form.filter.tpl',
+            ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php',
+            $page,
+            array('type' => 'navbar', 'setFocus' => false)
+        );
         $form->addSelectBox(
             'list_configurations',
             $gL10n->get('SYS_CONFIGURATION_LIST'),
@@ -426,15 +432,14 @@ try {
             // create filter menu with elements for start-/end date
             $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('list_uuid', '', $getListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addInput('role_list', '', $getRoleList, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput('list_uuid', '', $getListUuid, array('property' => Form::FIELD_HIDDEN));
+            $form->addInput('role_list', '', $getRoleList, array('property' => Form::FIELD_HIDDEN));
+            $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => Form::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
         }
 
-        $filterNavbar->addForm($form->show());
-        $page->addHtml($filterNavbar->show());
+        $form->addToHtmlPage();
 
         $page->addHtml('<h5 class="admidio-content-subheader">' . $htmlSubHeadline . '</h5>');
         $page->addJavascript(
@@ -635,7 +640,7 @@ try {
             $dateUuid = $datesStatement->fetchColumn();
             // prepare edit icon
             $columnValues[] = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/popup_participation.php', array('dat_uuid' => $dateUuid, 'user_uuid' => $member['usr_uuid'])) . '">
+                                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_participation.php', array('dat_uuid' => $dateUuid, 'user_uuid' => $member['usr_uuid'])) . '">
                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
         }
 
@@ -694,8 +699,6 @@ try {
 
         // create an infobox for the role
         if ($getMode === 'html' && $numberRoles === 1) {
-            $htmlBox = '';
-
             // only show infobox if additional role information fields are filled
             if ($role->getValue('rol_weekday') > 0
                 || (string)$role->getValue('rol_start_date') !== ''
@@ -703,21 +706,20 @@ try {
                 || (string)$role->getValue('rol_location') !== ''
                 || !empty($role->getValue('rol_cost'))
                 || !empty($role->getValue('rol_max_members'))) {
-                $htmlBox = '
-            <div class="card admidio-blog" id="adm_lists_infobox">
-                <div class="card-header">' . $gL10n->get('SYS_INFOBOX') . ': ' . $role->getValue('rol_name') . '</div>
-                <div class="card-body">';
-                $form = new HtmlForm('list_infobox_items');
-                $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
+                $smarty = HtmlPage::createSmartyObject();
+                $smarty->assign('l10n', $gL10n);
+                $smarty->assign('role', $role->getValue('rol_name'));
+
+                $roleProperties = array(array('label' => $gL10n->get('SYS_CATEGORY'), 'value' => $role->getValue('cat_name')));
 
                 // Description
                 if ((string)$role->getValue('rol_description') !== '') {
-                    $form->addStaticControl('infobox_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_DESCRIPTION'), 'value' => $role->getValue('rol_description'));
                 }
 
                 // Period
                 if ((string)$role->getValue('rol_start_date') !== '') {
-                    $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_PERIOD'), 'value' => $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))));
                 }
 
                 // Appointment
@@ -729,34 +731,32 @@ try {
                     $value = $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
                 }
                 if ($role->getValue('rol_weekday') > 0 || (string)$role->getValue('rol_start_time') !== '') {
-                    $form->addStaticControl('infobox_date', $gL10n->get('SYS_APPOINTMENT'), $value);
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_APPOINTMENT'), 'value' => $value);
                 }
 
                 // Meeting Point
                 if ((string)$role->getValue('rol_location') !== '') {
-                    $form->addStaticControl('infobox_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_MEETING_POINT'), 'value' => $role->getValue('rol_location'));
                 }
 
                 // Member Fee
                 if ((string)$role->getValue('rol_cost') !== '') {
-                    $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), (float)$role->getValue('rol_cost') . ' ' . $gSettingsManager->getString('system_currency'));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTIONv'), 'value' => $role->getValue('rol_cost') . ' ' . $gSettingsManager->getString('system_currency'));
                 }
 
                 // Fee period
                 if ((string)$role->getValue('rol_cost_period') !== '' && $role->getValue('rol_cost_period') != 0) {
-                    $form->addStaticControl('infobox_contribution_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods($role->getValue('rol_cost_period')));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTION_PERIOD'), 'value' => TableRoles::getCostPeriods($role->getValue('rol_cost_period')));
                 }
 
                 // max participants
                 if ((string)$role->getValue('rol_max_members') !== '') {
-                    $form->addStaticControl('infobox_max_participants', $gL10n->get('SYS_MAX_PARTICIPANTS'), (int)$role->getValue('rol_max_members'));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_MAX_PARTICIPANTS'), 'value' => $role->getValue('rol_max_members'));
                 }
-                $htmlBox .= $form->show();
-                $htmlBox .= '</div>
-            </div>';
-            } // end of infobox
 
-            $page->addHtml($htmlBox);
+                $smarty->assign('roleProperties', $roleProperties);
+                $page->addHtml($smarty->fetch('modules/groups-roles.infobox.tpl'));
+            } // end of infobox
         }
 
         // show complete html page
@@ -764,6 +764,6 @@ try {
     }
 } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
     echo $e->getMessage();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

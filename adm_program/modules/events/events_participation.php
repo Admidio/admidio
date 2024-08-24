@@ -11,17 +11,19 @@
  * user_uuid - UUID of the user whose participation detail shall be set or changed
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid', array('requireValue' => true));
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
     // Initialize local variables
-    $disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;
-    $disableComments = HtmlForm::FIELD_HIDDEN;
+    $disableAdditionalGuests = Form::FIELD_HIDDEN;
+    $disableComments = Form::FIELD_HIDDEN;
 
     // Get the date object
     $event = new TableEvent($gDb);
@@ -45,10 +47,10 @@ try {
     // If extended options for participation are allowed then show in form
     if ((int)$event->getValue('dat_allow_comments') === 1 || (int)$event->getValue('dat_additional_guests') === 1) {
         if ((int)$event->getValue('dat_allow_comments') === 1) {
-            $disableComments = HtmlForm::FIELD_DEFAULT;
+            $disableComments = Form::FIELD_DEFAULT;
         }
         if ((int)$event->getValue('dat_additional_guests') === 1) {
-            $disableAdditionalGuests = HtmlForm::FIELD_DEFAULT;
+            $disableAdditionalGuests = Form::FIELD_DEFAULT;
         }
     }
 
@@ -61,50 +63,8 @@ try {
     // Write header with charset utf8
     header('Content-type: text/html; charset=utf-8');
 
-    // Add javascript
-    echo '<script>
-    $("button[id^=btn_attend_]").click(function() {
-        // Select current form and action attribute
-        var submitParticipationForm = $(this).get(0).form;
-        var formAction = $(submitParticipationForm).attr("action");
-
-        // add value 3 to mode attribute in link for participation
-        $(submitParticipationForm).attr("action", formAction + "participate");
-        submitParticipationForm.submit();
-    });
-
-    $("button[id^=btn_tentative_]").click(function() {
-        var submitParticipationForm = $(this).get(0).form;
-        var formAction = $(submitParticipationForm).attr("action");
-
-        $(submitParticipationForm).attr("action", formAction + "participate_maybe");
-        submitParticipationForm.submit();
-    });
-
-    $("button[id^=btn_refuse_]").click(function() {
-        var submitParticipationForm = $(this).get(0).form;
-        var formAction = $(submitParticipationForm).attr("action");
-
-        $(submitParticipationForm).attr("action", formAction + "participate_cancel");
-        submitParticipationForm.submit();
-    });
-    </script>';
-
     // Define form
-    $participationForm = new HtmlForm(
-        'participate_form_' . $getEventUuid,
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $getEventUuid, 'user_uuid' => $getUserUuid, 'mode' => '')),
-        null,
-        array('type' => 'default', 'method' => 'post', 'setFocus' => false)
-    );
-    $participationForm->addHtml('
-    <div class="modal-header">
-        <h3 class="modal-title">' . $gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-        <h5>' . $event->getValue('dat_headline') . ': ' . $event->getDateTimePeriod() . '</h5>
-    ');
+    $participationForm = new Form('eventsParticipationEditForm','modules/events.participation.edit.tpl', '#');
     $participationForm->addMultilineTextInput(
         'dat_comment',
         $gL10n->get('SYS_COMMENT'),
@@ -118,31 +78,33 @@ try {
         (int)$member->getValue('mem_count_guests'),
         array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests)
     );
-    $participationForm->addHtml('</div><div class="modal-footer">');
-    $participationForm->openButtonGroup();
     $participationForm->addButton(
-        'btn_attend_' . $getEventUuid,
+        'btn_attend',
         $gL10n->get('SYS_PARTICIPATE'),
         array('icon' => 'bi-check-circle-fill', 'class' => 'admidio-event-approval-state-attend')
     );
 
     if ($gSettingsManager->getBool('events_may_take_part')) {
         $participationForm->addButton(
-            'btn_tentative_' . $getEventUuid,
+            'btn_tentative',
             $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE'),
             array('icon' => 'bi-question-circle-fill', 'class' => 'admidio-event-approval-state-tentative')
         );
     }
 
     $participationForm->addButton(
-        'btn_refuse_' . $getEventUuid,
+        'btn_refuse',
         $gL10n->get('SYS_CANCEL'),
         array('icon' => 'bi-x-circle-fill', 'class' => 'admidio-event-approval-state-cancel')
     );
-    $participationForm->closeButtonGroup();
-    $participationForm->addHtml('</div></div>');
-    // Output form
-    echo $participationForm->show();
+
+    $smarty = HtmlPage::createSmartyObject();
+    $smarty->assign('urlFormAction', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $getEventUuid, 'user_uuid' => $getUserUuid, 'mode' => '')));
+    $smarty->assign('eventHeadline', $event->getValue('dat_headline'));
+    $smarty->assign('eventPeriod', $event->getDateTimePeriod());
+    $participationForm->addToSmarty($smarty);
+    $gCurrentSession->addFormObject($participationForm);
+    echo $smarty->fetch('modules/events.participation.edit.tpl');
 } catch (AdmException|Exception $e) {
     $gMessage->showInModalWindow();
     $gMessage->show($e->getMessage());

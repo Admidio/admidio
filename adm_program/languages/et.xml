@@ -234,7 +234,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Kui see suvand on määratud, saab liikmehalduses lisaks praeguse organisatsiooni aktiivsetele liikmetele kuvada ka endisi liikmeid ja teiste organisatsioonide liikmeid. Vastasel juhul kuvatakse ainult praeguse organisatsiooni aktiivsed liikmed. Uute liikmete loomisel või registreeringute määramisel jätkab süsteem aga olemasolevate kasutajate otsimist kõigi organisatsioonide kogu andmebaasist.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Kuva organisatsiooni valik</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Mitme andmebaasi salvestatud organisatsiooni puhul on sisselogimisekraanil võimalik kuvada valikukast kõigi saadaolevate organisatsioonidega. Seejärel saab kasutaja sisse logides valida mõne muu organisatsiooni (muu kui failis config.php määratletud). Kasutaja peab aga olema valitud organisatsiooni registreeritud liige.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Süsteemi teave</string>
+  <string name="SYS_SYSTEM_INFORMATION">Süsteemi teave</string>
   <string name="ORG_THEME_FOLDER_OPEN">Teemade kausta ei saanud avada/lugeda.</string>
   <string name="ORG_TIME_FORMAT">Aja formaat</string>
   <string name="ORG_TIME_FORMAT_DESC">Vorming vastab PHP funktsioonile #VAR1#. (vaikimisi: H:i)</string>

@@ -22,10 +22,11 @@
  * forward : true - The message of the msg_id will be copied and the base for this new message
  *
  *****************************************************************************/
-
-require_once(__DIR__ . '/../../system/common.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // Initialize and check the parameters
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
@@ -82,6 +83,7 @@ try {
             $getMsgUuid = '';
         } else {
             $messageStatement = $message->getConversation($message->getValue('msg_id'));
+            $message->addContent('');
         }
 
         $getSubject = $message->getValue('msg_subject', 'database');
@@ -92,6 +94,7 @@ try {
         }
         $getUserUuid = $user->getValue('usr_uuid');
     } elseif ($getUserUuid !== '') {
+        $message->setValue('msg_subject', $getSubject);
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
     }
@@ -170,33 +173,6 @@ try {
         }
     }
 
-    // After back navigation the form should be filled with the values from the session
-    // otherwise initialize the form values
-    if (isset($_SESSION['message_request'])) {
-        $message->addContent(admFuncVariableIsValid($_SESSION['message_request'], 'msg_body', 'html'));
-        $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['message_request']));
-        $message->setArray($formValues);
-        unset($_SESSION['message_request']);
-
-        if (!isset($formValues['carbon_copy'])) {
-            $formValues['carbon_copy'] = false;
-        }
-        if (!isset($formValues['delivery_confirmation'])) {
-            $formValues['delivery_confirmation'] = false;
-        }
-    } else {
-        $message->setValue('msg_subject', $getSubject);
-        $formValues['namefrom'] = '';
-        $formValues['mailfrom'] = '';
-        $formValues['msg_to'] = '';
-        $formValues['carbon_copy'] = $getCarbonCopy;
-        $formValues['delivery_confirmation'] = $getDeliveryConfirmation;
-
-        if ($getForward === false) {
-            $message->addContent('');
-        }
-    }
-
     if (!$gValidLogin && $getUserUuid === '' && $getRoleUuid === '') {
         // visitors have no message modul and start the navigation here
         $gNavigation->addStartUrl(CURRENT_URL, $headline);
@@ -204,44 +180,56 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
     }
 
-// create html page object
+    // create html page object
     $page = new HtmlPage('admidio-messages-write', $headline);
 
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         // show form
-        $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUuid)), $page, array('enableFileUpload' => true));
+        $form = new Form(
+            'pm_send_form',
+            'modules/messages.pm.send.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUuid)),
+            $page,
+            array('enableFileUpload' => true)
+        );
 
         if ($getUserUuid === '') {
-            $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
             $form->addSelectBox(
                 'msg_to',
                 $gL10n->get('SYS_TO'),
                 $list,
                 array(
-                    'property' => HtmlForm::FIELD_REQUIRED,
+                    'property' => Form::FIELD_REQUIRED,
                     'multiselect' => true,
                     'maximumSelectionNumber' => $maxNumberRecipients,
                     'helpTextId' => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
                 )
             );
-            $form->closeGroupBox();
             $sendTo = '';
         } else {
-            $form->addInput('msg_to', '', $user->getValue('usr_id'), array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput(
+                'msg_to',
+                '',
+                $user->getValue('usr_id'),
+                array('property' => Form::FIELD_HIDDEN)
+            );
             $sendTo = ' ' . $gL10n->get('SYS_TO') . ' ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' (' . $user->getValue('usr_login_name') . ')';
         }
-
-        $form->openGroupBox('gb_pm_message', $gL10n->get('SYS_MESSAGE') . $sendTo);
 
         if ($getSubject === '') {
             $form->addInput(
                 'msg_subject',
                 $gL10n->get('SYS_SUBJECT'),
                 $message->getValue('msg_subject'),
-                array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
+                array('maxLength' => 77, 'property' => Form::FIELD_REQUIRED)
             );
         } else {
-            $form->addInput('msg_subject', '', $message->getValue('msg_subject'), array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput(
+                'msg_subject',
+                '',
+                $message->getValue('msg_subject'),
+                array('property' => Form::FIELD_HIDDEN)
+            );
         }
 
         $form->addMultilineTextInput(
@@ -249,15 +237,18 @@ try {
             $gL10n->get('SYS_MESSAGE'),
             $message->getContent('database'),
             10,
-            array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
+            array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
+        );
+        $form->addSubmitButton(
+            'btn_send',
+            $gL10n->get('SYS_SEND'),
+            array('icon' => 'bi-envelope-fill')
         );
 
-        $form->closeGroupBox();
-
-        $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
-
         // add form to html page
-        $page->addHtml($form->show());
+        $page->assignSmartyVariable('userUuid', $getUserUuid);
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
     } elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '') {
         if ($getUserUuid !== '') {
             // check if the user has email address for receiving an email
@@ -282,12 +273,18 @@ try {
         }
 
         // show form
-        $form = new HtmlForm('mail_send_form', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', $page, array('enableFileUpload' => true));
-        $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
+        $form = new Form(
+            'email_send_form',
+            'modules/messages.email.send.tpl',
+            ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php',
+            $page,
+            array('enableFileUpload' => true)
+        );
 
         $sqlRoleUUIDs = array();
         $sqlUserIds = '';
         $sqlParticipationRoles = '';
+        $possibleEmails = 0;
 
         if ($getUserUuid !== '') {
             // usr_id was committed then write email to this user
@@ -300,7 +297,7 @@ try {
         } else {
             // no user or role was committed then show list with all roles and users
             // where the current user has the right to send email
-            $preloadData = $formValues['msg_to'] ?? '';
+            $preloadData = '';
             $sqlRoleUUIDs = $gCurrentUser->getRolesWriteMails();
             $sqlParticipationRoles = ' AND cat_name_intern <> \'EVENTS\' ';
         }
@@ -431,8 +428,8 @@ try {
             $showList = new ListConfiguration($gDb);
             $showList->readDataByUuid($postListUuid);
             $list = array('dummy' => $gL10n->get('SYS_LIST') . (strlen($showList->getValue('lst_name')) > 0 ? ' - ' . $showList->getValue('lst_name') : ''));
-            $form->addInput('userUuidList', '', $postUserUuidList, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addInput('list_uuid', '', $postListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput('userUuidList', '', $postUserUuidList, array('property' => Form::FIELD_HIDDEN));
+            $form->addInput('list_uuid', '', $postListUuid, array('property' => Form::FIELD_HIDDEN));
         }
 
         // no roles or users found then show message
@@ -445,15 +442,13 @@ try {
             $gL10n->get('SYS_TO'),
             $list,
             array(
-                'property' => HtmlForm::FIELD_REQUIRED,
+                'property' => Form::FIELD_REQUIRED,
                 'multiselect' => true,
                 'maximumSelectionNumber' => $maxNumberRecipients,
                 'helpTextId' => 'SYS_SEND_MAIL_TO_ROLE',
                 'defaultValue' => $preloadData
             )
         );
-
-        $form->addLine();
 
         if ($gCurrentUserId > 0) {
             $sql = 'SELECT COUNT(*) AS count
@@ -468,10 +463,10 @@ try {
             $possibleEmails = $pdoStatement->fetchColumn();
 
             $form->addInput(
-                'name',
+                'namefrom',
                 $gL10n->get('SYS_YOUR_NAME'),
                 $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
-                array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+                array('maxLength' => 50, 'property' => Form::FIELD_DISABLED)
             );
 
             if ($possibleEmails > 1) {
@@ -494,49 +489,46 @@ try {
                     $gL10n->get('SYS_YOUR_EMAIL'),
                     $gDb,
                     $sqlData,
-                    array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
+                    array('maxLength' => 100, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
                 );
             } else {
                 $form->addInput(
                     'mailfrom',
                     $gL10n->get('SYS_YOUR_EMAIL'),
                     $gCurrentUser->getValue('EMAIL'),
-                    array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+                    array('type' => 'email', 'maxLength' => 100, 'property' => Form::FIELD_DISABLED)
                 );
             }
         } else {
             $form->addInput(
                 'namefrom',
                 $gL10n->get('SYS_YOUR_NAME'),
-                $formValues['namefrom'],
-                array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
+                '',
+                array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
             );
             $form->addInput(
                 'mailfrom',
                 $gL10n->get('SYS_YOUR_EMAIL'),
-                $formValues['mailfrom'],
-                array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
+                '',
+                array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
             );
         }
 
         // show option to send a copy to your email address only for registered users because of spam abuse
         if ($gValidLogin) {
-            $form->addCheckbox('carbon_copy', $gL10n->get('SYS_SEND_COPY'), $formValues['carbon_copy']);
+            $form->addCheckbox('carbon_copy', $gL10n->get('SYS_SEND_COPY'), $getCarbonCopy);
         }
 
         // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
         if (($gCurrentUserId > 0 && (int)$gSettingsManager->get('mail_delivery_confirmation') === 2) || (int)$gSettingsManager->get('mail_delivery_confirmation') === 1) {
-            $form->addCheckbox('delivery_confirmation', $gL10n->get('SYS_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
+            $form->addCheckbox('delivery_confirmation', $gL10n->get('SYS_DELIVERY_CONFIRMATION'), $getDeliveryConfirmation);
         }
 
-        $form->closeGroupBox();
-
-        $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
         $form->addInput(
             'msg_subject',
             $gL10n->get('SYS_SUBJECT'),
             $message->getValue('msg_subject'),
-            array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
+            array('maxLength' => 77, 'property' => Form::FIELD_REQUIRED)
         );
 
         // add multiline text element or ckeditor to form
@@ -546,7 +538,7 @@ try {
                 $gL10n->get('SYS_TEXT'),
                 $message->getContent(),
                 array(
-                    'property' => HtmlForm::FIELD_REQUIRED,
+                    'property' => Form::FIELD_REQUIRED,
                     'helpTextId' => ($gValidLogin && $gSettingsManager->getInt('mail_sending_mode') === Email::SENDINGMODE_SINGLE) ? array('SYS_EMAIL_PARAMETERS_DESC', array('#recipient_firstname#', '#recipient_lastname#', '#recipient_name#', '#recipient_email#')) : null
                 )
             );
@@ -556,7 +548,7 @@ try {
                 $gL10n->get('SYS_TEXT'),
                 $message->getContent('database'),
                 10,
-                array('property' => HtmlForm::FIELD_REQUIRED)
+                array('property' => Form::FIELD_REQUIRED)
             );
         }
 
@@ -576,19 +568,17 @@ try {
             );
         }
 
-        $form->closeGroupBox();
-
         // if captchas are enabled then visitors of the website must resolve this
         if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
-            $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
             $form->addCaptcha('captcha_code');
-            $form->closeGroupBox();
         }
 
         $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 
         // add form to html page and show page
-        $page->addHtml($form->show());
+        $page->assignSmartyVariable('possibleEmails', $possibleEmails);
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
     }
 
     if (isset($messageStatement)) {
@@ -648,6 +638,6 @@ try {
 
     // show page
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

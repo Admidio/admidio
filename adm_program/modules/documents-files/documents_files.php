@@ -12,10 +12,9 @@
  * folder_uuid : UUID of the current folder that should be shown
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
 
 try {
-    unset($_SESSION['documents_files_request']);
+    require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
     $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
@@ -81,7 +80,7 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_documents_permissions',
                 $gL10n->get('SYS_PERMISSIONS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_config.php', array('folder_uuid' => $getFolderUUID)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_permissions.php', array('folder_uuid' => $getFolderUUID)),
                 'bi-shield-lock-fill'
             );
         }
@@ -90,7 +89,7 @@ try {
     $page->readData($getFolderUUID);
     $page->createContentList();
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if ($e->getMessage() === 'LOGIN') {
         require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
     } else {

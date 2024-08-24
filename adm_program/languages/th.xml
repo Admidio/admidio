@@ -230,7 +230,7 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">ในบางสถานที่ ผู้สร้างและผู้ใช้ที่มีการเปลี่ยนแปลงบันทึกครั้งล่าสุดจะแสดงพร้อมกับการประทับเวลา การตั้งค่านี้สามารถใช้เพื่อกำหนดว่าข้อมูลนี้จะ แสดงหรือไม่ และควรแสดงผู้ใช้ด้วย ชื่อผู้ใช้ หรือด้วยชื่อและนามสกุลของพวกเขา</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">แสดง การเลือก องค์กร</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">ใน กรณี ที่มีหลายองค์กรเก็บไว้ในฐานข้อมูล หน้าจอเข้าสู่ระบบ สามารถ แสดงกล่องตัวเลือกกับองค์กรที่มีอยู่ทั้งหมดได้ จากนั้นผู้ใช้สามารถ เข้า สู่ระบบเพื่อเลือกองค์กรอื่น (นอกเหนือจากที่กำหนดไว้ใน config.php ) อย่างไรก็ตาม ผู้ใช้จะต้องเป็นสมาชิกที่ลงทะเบียนขององค์กรที่เลือก</string>
-  <string name="ORG_SYSTEM_INFORMATION">ข้อมูล ระบบ</string>
+  <string name="SYS_SYSTEM_INFORMATION">ข้อมูล ระบบ</string>
   <string name="ORG_THEME_FOLDER_OPEN">โฟลเดอร์ธีมไม่สามารถเปิด/อ่านได้</string>
   <string name="ORG_TIME_FORMAT">รูปแบบเวลา</string>
   <string name="ORG_TIME_FORMAT_DESC">รูปแบบสอดคล้องกับฟังก์ชัน PHP #VAR1# (ค่าเริ่มต้น: H:i )</string>

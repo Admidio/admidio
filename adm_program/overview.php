@@ -25,9 +25,9 @@ try {
 
     // create html page object and load template file
     $page = new HtmlPage('admidio-overview', $headline);
-    $page->addTemplateFile('overview.tpl');
+    $page->addTemplateFile('system/overview.tpl');
 
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

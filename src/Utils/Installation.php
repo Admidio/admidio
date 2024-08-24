@@ -10,13 +10,21 @@
 /**
  * Class to implement useful method for installation and update process.
  */
-class InstallationUtils
+namespace Admidio\Utils;
+
+use AdmException;
+use Database;
+use FileSystemUtils;
+use RuntimeException;
+use UnexpectedValueException;
+
+class Installation
 {
     /**
      * Checks whether the minimum requirements for PHP and MySQL have been met.
      * @param Database $database Object of the database that should be checked. A connection should be established.
      * @return string Returns an error text if the database doesn't meet the necessary requirements.
-     * @throws Exception
+     * @throws AdmException
      */
     public static function checkDatabaseVersion(Database $database): string
     {
@@ -75,6 +83,7 @@ class InstallationUtils
 
     /**
      * @param Database $db
+     * @throws AdmException
      */
     public static function disableSoundexSearchIfPgSql(Database $db)
     {
@@ -91,29 +100,25 @@ class InstallationUtils
      * Read data from sql file and execute all statements to the current database
      * @param Database $db
      * @param string $sqlFileName
-     * @return true|string Returns true no error occurs ales error message is returned
+     * @throws AdmException
      */
     public static function querySqlFile(Database $db, string $sqlFileName)
     {
-        global $gL10n;
-
         $sqlPath = ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/';
         $sqlFilePath = $sqlPath . $sqlFileName;
 
         if (!is_file($sqlFilePath)) {
-            return $gL10n->get('INS_DATABASE_FILE_NOT_FOUND', array($sqlFileName, $sqlPath));
+            throw new AdmException('INS_DATABASE_FILE_NOT_FOUND', array($sqlFileName, $sqlPath));
         }
 
         try {
             $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFilePath);
         } catch (RuntimeException $exception) {
-            return $gL10n->get('INS_ERROR_OPEN_FILE', array($sqlFilePath));
+            throw new AdmException('INS_ERROR_OPEN_FILE', array($sqlFilePath));
         }
 
         foreach ($sqlStatements as $sqlStatement) {
             $db->queryPrepared($sqlStatement);
         }
-
-        return true;
     }
 }

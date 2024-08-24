@@ -11,7 +11,7 @@
 
     <title>{$title}</title>
 
-    {include file="js_css_files.tpl"}
+    {include file="system/js_css_files.tpl"}
 
     {if $printView}
         <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/print.css" />
