@@ -79,7 +79,7 @@ try {
 
             $userImport->setImportMode((int)$_SESSION['user_import_mode']);
             if ($identifyUserByUuid) {
-                $userImport->readDataByUuid($line[$importProfileFields['usr_uuid']]);
+                $userImport->readDataByUuid($line[$importProfileFields['usr_uuid']] ?? '');
             } else {
                 $userImport->readDataByFirstnameLastName(
                     trim($line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_uuid')]]),
