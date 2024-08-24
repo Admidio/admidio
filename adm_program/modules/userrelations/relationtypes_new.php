@@ -12,6 +12,7 @@
  * urt_uuid : UUID of the relation type that should be edited
  ***********************************************************************************************
  */
+use Admidio\UserInterface\Form;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -41,16 +42,57 @@ try {
 
     // create html page object
     $page = new HtmlPage('admidio-relationtypes-edit', $headline);
+    $page->addJavascript('
+        function checkRelationTypeNames() {
+            $("#btn_save").prop("disabled", $("#urt_name").val() === $("#urt_name_inverse").val());
+        }
+        $("#urt_name").on("input", checkRelationTypeNames);
+        $("#urt_name_inverse").on("input", checkRelationTypeNames);
+
+        /**
+         * @param {object} element
+         * @param {int}    duration
+         */
+        function updateRelationType(element, duration) {
+            if ($(element).val() === "unidirectional" || $(element).val() === "symmetrical") {
+                $("#urt_name_inverse").prop("required", false);
+                $("#gb_opposite_relationship").hide(duration);
+                $("#urt_name_inverse_group").removeClass("admidio-form-group-required");
+                $("#urt_name_inverse_group").hide(duration);
+                $("#urt_name_male_inverse_group").hide(duration);
+                $("#urt_name_female_inverse_group").hide(duration);
+                $("#urt_edit_user_inverse_group").hide(duration);
+            }
+            else if ($(element).val() === "asymmetrical") {
+                $("#urt_name_inverse").prop("required", true);
+                $("#gb_opposite_relationship").show(duration);
+                $("#urt_name_inverse_group").addClass("admidio-form-group-required");
+                $("#urt_name_inverse_group").show(duration);
+                $("#urt_name_male_inverse_group").show(duration);
+                $("#urt_name_female_inverse_group").show(duration);
+                $("#urt_edit_user_inverse_group").show(duration);
+            }
+        }
+        $("input[type=radio][name=relation_type]").change(function() {
+            updateRelationType(this, "slow");
+        });
+        updateRelationType($("input[type=radio][name=relation_type]:checked"));
+        ',
+        true
+    );
 
     // show form
-    $form = new HtmlForm('relationtype_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('urt_uuid' => $getUrtUuid, 'mode' => 'create')), $page);
-
-    $form->openGroupBox('gb_user_relationship', $gL10n->get('SYS_USER_RELATION'));
+    $form = new Form(
+        'userRelationsTypeEditForm',
+        'modules/user-relations.type.edit.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('urt_uuid' => $getUrtUuid, 'mode' => 'edit')),
+        $page
+    );
     $form->addInput(
         'urt_name',
         $gL10n->get('SYS_NAME'),
         $relationType1->getValue('urt_name'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
         'urt_name_male',
@@ -73,7 +115,7 @@ try {
 
     $options = array('defaultValue' => $relationType1->getRelationTypeString(), 'helpTextId' => 'SYS_RELATIONSHIP_TYPE_DESC');
     if (!$relationType1->isNewRecord()) {
-        $options['property'] = HtmlForm::FIELD_DISABLED;
+        $options['property'] = Form::FIELD_DISABLED;
     }
 
     $form->addRadioButton(
@@ -86,51 +128,11 @@ try {
         ),
         $options
     );
-    $form->closeGroupBox();
-
-    $form->openGroupBox('gb_opposite_relationship', $gL10n->get('SYS_OPPOSITE_RELATIONSHIP'));
-    $page->addJavascript('
-        function checkRelationTypeNames() {
-            $("#btn_save").prop("disabled", $("#urt_name").val() === $("#urt_name_inverse").val());
-        }
-        $("#urt_name").on("input", checkRelationTypeNames);
-        $("#urt_name_inverse").on("input", checkRelationTypeNames);
-
-        /**
-         * @param {object} element
-         * @param {int}    duration
-         */
-        function updateRelationType(element, duration) {
-            if ($(element).val() === "unidirectional" || $(element).val() === "symmetrical") {
-                $("#urt_name_inverse").prop("required", false);
-                $("#gb_opposite_relationship").hide(duration);
-                $("#urt_name_inverse_group").hide(duration);
-                $("#urt_name_male_inverse_group").hide(duration);
-                $("#urt_name_female_inverse_group").hide(duration);
-                $("#urt_edit_user_inverse_group").hide(duration);
-            }
-            else if ($(element).val() === "asymmetrical") {
-                $("#urt_name_inverse").prop("required", true);
-                $("#gb_opposite_relationship").show(duration);
-                $("#urt_name_inverse_group").show(duration);
-                $("#urt_name_male_inverse_group").show(duration);
-                $("#urt_name_female_inverse_group").show(duration);
-                $("#urt_edit_user_inverse_group").show(duration);
-            }
-        }
-        $("input[type=radio][name=relation_type]").change(function() {
-            updateRelationType(this, "slow");
-        });
-        updateRelationType($("input[type=radio][name=relation_type]:checked"));
-        ',
-        true
-    );
-
     $form->addInput(
         'urt_name_inverse',
         $gL10n->get('SYS_NAME'),
         $relationType2->getValue('urt_name'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+        array('maxLength' => 100)
     );
     $form->addInput(
         'urt_name_male_inverse',
@@ -150,19 +152,16 @@ try {
         (bool)$relationType2->getValue('urt_edit_user'),
         array('helpTextId' => 'SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC')
     );
-    $form->closeGroupBox();
-
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-    $form->addHtml(admFuncShowCreateChangeInfoById(
-        (int)$relationType1->getValue('urt_usr_id_create'),
-        $relationType1->getValue('urt_timestamp_create'),
-        (int)$relationType1->getValue('urt_usr_id_change'),
-        $relationType1->getValue('urt_timestamp_change')
-    ));
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $page->assignSmartyVariable('nameUserCreated', $relationType1->getNameOfCreatingUser());
+    $page->assignSmartyVariable('timestampUserCreated', $relationType1->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('nameLastUserEdited', $relationType1->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('timestampLastUserEdited', $relationType1->getValue('ann_timestamp_change'));
+    $form->addToHtmlPage();
+    $gCurrentSession->addFormObject($form);
+
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

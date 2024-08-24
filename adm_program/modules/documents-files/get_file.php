@@ -75,6 +75,6 @@ try {
         // file output for small files (< 10MB)
         readfile($completePath);
     }
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

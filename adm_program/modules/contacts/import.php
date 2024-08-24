@@ -8,10 +8,12 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // only authorized users can import users
     if (!$gCurrentUser->editUsers()) {
         throw new AdmException('SYS_NO_RIGHTS');
@@ -27,41 +29,17 @@ try {
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    if (isset($_SESSION['import_request'])) {
-        // due to incorrect input the user has returned to this form
-        // now write the previously entered contents into the object
-        $formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['import_request']));
-        unset($_SESSION['import_request']);
-    }
-
-    // Make sure all potential form values have either a value from the previous request or the default
-    if (!isset($formValues['format'])) {
-        $formValues['format'] = '';
-    }
-    if (!isset($formValues['import_sheet'])) {
-        $formValues['import_sheet'] = '';
-    }
-    if (!isset($formValues['import_coding'])) {
-        $formValues['import_coding'] = '';
-    }
-    if (!isset($formValues['import_separator'])) {
-        $formValues['import_separator'] = '';
-    }
-    if (!isset($formValues['import_enclosure'])) {
-        $formValues['import_enclosure'] = 'AUTO';
-    }
-    if (!isset($formValues['user_import_mode'])) {
-        $formValues['user_import_mode'] = 1;
-    }
-    if (!isset($formValues['import_role_uuid'])) {
-        $formValues['import_role_uuid'] = 0;
-    }
-
-// create html page object
+    // create html page object
     $page = new HtmlPage('admidio-members-import', $headline);
 
-// show form
-    $form = new HtmlForm('import_users_form', ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_read_file.php', $page, array('enableFileUpload' => true));
+    // show form
+    $form = new Form(
+        'contacts_import_form',
+        'modules/contacts.import.tpl',
+        ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_read_file.php',
+        $page,
+        array('enableFileUpload' => true)
+    );
     $formats = array(
         'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
         'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),
@@ -76,8 +54,8 @@ try {
         $formats,
         array(
             'showContextDependentFirstEntry' => false,
-            'property' => HtmlForm::FIELD_REQUIRED,
-            'defaultValue' => $formValues['format']
+            'defaultValue' => 'AUTO',
+            'property' => Form::FIELD_REQUIRED
         )
     );
     $page->addJavascript(
@@ -94,7 +72,7 @@ try {
     $form->addFileUpload(
         'userfile',
         $gL10n->get('SYS_CHOOSE_FILE'),
-        array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
+        array('property' => Form::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
             'text/html',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'application/vnd.ms-excel',
@@ -103,10 +81,10 @@ try {
         )
     );
 
-// Add format-specific settings (if specific format is selected)
-// o) Worksheet: AUTO, XLSX, XLS, ODS, HTML (not CSV)
-// o) Encoding (Default/Detect/UTF-8/ISO-8859-1/CP1252): CSV, HTML
-// o) Delimiter (Detect/Comma/Tab/Semicolon): CSV
+    // Add format-specific settings (if specific format is selected)
+    // o) Worksheet: AUTO, XLSX, XLS, ODS, HTML (not CSV)
+    // o) Encoding (Default/Detect/UTF-8/ISO-8859-1/CP1252): CSV, HTML
+    // o) Delimiter (Detect/Comma/Tab/Semicolon): CSV
     $form->addInput(
         'import_sheet',
         $gL10n->get('SYS_WORKSHEET_NAMEINDEX'),
@@ -130,7 +108,6 @@ try {
         $selectBoxEntries,
         array(
             'showContextDependentFirstEntry' => false,
-            'defaultValue' => $formValues['import_coding'],
             'class' => 'import-setting import-CSV import-HTML'
         )
     );
@@ -148,7 +125,6 @@ try {
         $selectBoxEntries,
         array(
             'showContextDependentFirstEntry' => false,
-            'defaultValue' => $formValues['import_separator'],
             'class' => 'import-setting import-CSV'
         )
     );
@@ -165,14 +141,14 @@ try {
         $selectBoxEntries,
         array(
             'showContextDependentFirstEntry' => false,
-            'defaultValue' => $formValues['import_enclosure'],
+            'defaultValue' => 'AUTO',
             'class' => 'import-setting import-CSV'
         )
     );
 
 
-// add a selectbox to the form where the user can choose a role from all roles he could see
-// first read all relevant roles from database and create an array with them
+    // add a selectbox to the form where the user can choose a role from all roles he could see
+    // first read all relevant roles from database and create an array with them
     $condition = '';
 
     if (!$gCurrentUser->manageRoles()) {
@@ -205,8 +181,8 @@ try {
         $gL10n->get('SYS_ASSIGN_ROLE'),
         $roles,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
-            'defaultValue' => $formValues['import_role_uuid'],
+            'property' => Form::FIELD_REQUIRED,
+            'defaultValue' => 0,
             'helpTextId' => 'SYS_ASSIGN_ROLE_FOR_IMPORT'
         )
     );
@@ -222,8 +198,8 @@ try {
         $gL10n->get('SYS_EXISTING_CONTACTS'),
         $selectBoxEntries,
         array(
-            'property' => HtmlForm::FIELD_REQUIRED,
-            'defaultValue' => $formValues['user_import_mode'],
+            'property' => Form::FIELD_REQUIRED,
+            'defaultValue' => 1,
             'showContextDependentFirstEntry' => false,
             'helpTextId' => 'SYS_IDENTIFY_USERS'
         )
@@ -234,9 +210,9 @@ try {
         array('icon' => 'bi-arrow-right-circle-fill')
     );
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $form->addToHtmlPage();
+    $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (Exception|AdmException|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

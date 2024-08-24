@@ -142,8 +142,7 @@ class User extends TableAccess
     /**
      * Assign the user to all roles that have set the flag **rol_default_registration**.
      * These flag should be set if you want that every new user should get this role.
-     * @throws AdmException|\Smarty\Exception
-     * @throws Exception
+     * @throws AdmException
      */
     public function assignDefaultRoles()
     {
@@ -224,7 +223,7 @@ class User extends TableAccess
      * @param string|null $right The database column name of the right that should be checked. If this param
      *                      is not set then only the arrays are filled.
      * @return bool Return true if a special right should be checked and the user has this right.
-     * @throws Exception
+     * @throws AdmException
      */
     public function checkRolesRight(string $right = null): bool
     {
@@ -707,7 +706,7 @@ class User extends TableAccess
      * Creates an array with all categories of one type where the user has the right to edit them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to edit them
-     * @throws Exception
+     * @throws AdmException
      */
     public function getAllEditableCategories(string $categoryType): array
     {
@@ -753,7 +752,7 @@ class User extends TableAccess
      * Creates an array with all categories of one type where the user has the right to view them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to view them
-     * @throws Exception
+     * @throws AdmException
      */
     public function getAllVisibleCategories(string $categoryType): array
     {
@@ -1390,7 +1389,7 @@ class User extends TableAccess
     /**
      * Checks if the user is assigned to the role **Administrator**
      * @return bool Returns **true** if the user is a member of the role **Administrator**
-     * @throws Exception
+     * @throws AdmException
      */
     public function isAdministrator(): bool
     {
@@ -1402,7 +1401,7 @@ class User extends TableAccess
     /**
      * Checks if this user is an admin of the organization that is set in this class.
      * @return bool Return true if user is admin of this organization.
-     * @throws Exception
+     * @throws AdmException
      */
     private function isAdminOfOrganization(): bool
     {

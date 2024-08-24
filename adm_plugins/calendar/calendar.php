@@ -538,6 +538,6 @@ try {
             $(".admidio-calendar-link").popover();
         });
     --></script>';
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     echo $e->getMessage();
 }

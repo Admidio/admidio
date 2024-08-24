@@ -14,10 +14,12 @@
  * user_uuid:  (optional) UUID of the user who should receive the ecard
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // check if the photo module is enabled and eCard is enabled
     if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
         throw new AdmException('SYS_MODULE_DISABLED');
@@ -78,60 +80,44 @@ try {
         }
     }
 
-    if (isset($_SESSION['ecard_request'])) {
-        // if user is returned to this form after he has submitted it,
-        // then try to restore all values that he has entered before
-        $template = $_SESSION['ecard_request']['ecard_template'];
-        $recipients = $_SESSION['ecard_request']['ecard_recipients'];
-        $message = admFuncVariableIsValid($_SESSION['ecard_request'], 'ecard_message', 'html');
-    } else {
-        $template = $gSettingsManager->getString('photo_ecard_template');
-        $recipients = null;
-        $message = '';
-    }
-
     // create html page object
     $page = new HtmlPage('admidio-ecards', $headline);
 
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/css/lightbox.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');
 
-    $page->addJavascript(
-        '
-    $("#btn_ecard_preview").click(function(event) {
-        event.preventDefault();
-        $("#ecard_form input[id=\'submit_action\']").val("preview");
-        $("#ecard_form textarea[name=\'ecard_message\']").text(editor.getData());
+    $page->addJavascript('
+        $("#btn_ecard_preview").click(function(event) {
+            event.preventDefault();
+            $("#ecard_send_form input[id=\'submit_action\']").val("preview");
+            $("#ecard_send_form textarea[name=\'ecard_message\']").text(editor.getData());
 
-        $.post({ // create an AJAX call...
-            data: $("#ecard_form").serialize(), // get the form data
-            url: "ecard_preview.php", // the file to call
-            success: function(response) { // on success..
-                $(".modal-dialog").attr("class", "modal-dialog modal-lg");
-                $(".modal-content").html(response);
-                var myModal = new bootstrap.Modal($("#admidio-modal"), {});
-                myModal.show();
-            }
-        });
+            $.post({ // create an AJAX call...
+                data: $("#ecard_send_form").serialize(), // get the form data
+                url: "ecard_preview.php", // the file to call
+                success: function(response) { // on success..
+                    $(".modal-dialog").attr("class", "modal-dialog modal-lg");
+                    $(".modal-content").html(response);
+                    var myModal = new bootstrap.Modal($("#admidio-modal"), {});
+                    myModal.show();
+                }
+            });
 
-        return false;
-    });',
+            return false;
+        });',
         true
     );
 
     // show form
-    $form = new HtmlForm('ecard_form', 'ecard_send.php', $page);
-    $form->addInput('submit_action', '', '', array('property' => HtmlForm::FIELD_HIDDEN));
-    $form->addInput('photo_uuid', '', $getPhotoUuid, array('property' => HtmlForm::FIELD_HIDDEN));
-    $form->addInput('photo_nr', '', $getPhotoNr, array('property' => HtmlForm::FIELD_HIDDEN));
-
-    $form->openGroupBox('gb_layout', $gL10n->get('SYS_LAYOUT'));
-    $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
-    <a data-lightbox="image" data-title="' . $gL10n->get('SYS_PREVIEW') . '"
-        href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))) . '"><img
-        src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale'))) . '"
-        class="imageFrame" alt="' . $gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED') . '"  title="' . $gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED') . '" />
-    </a>');
+    $form = new Form(
+        'ecard_send_form',
+        'modules/photos.ecard.send.tpl',
+        ADMIDIO_URL . FOLDER_MODULES . '/photos/ecard_send.php',
+        $page
+    );
+    $form->addInput('submit_action', '', '', array('property' => Form::FIELD_HIDDEN));
+    $form->addInput('photo_uuid', '', $getPhotoUuid, array('property' => Form::FIELD_HIDDEN));
+    $form->addInput('photo_nr', '', $getPhotoNr, array('property' => Form::FIELD_HIDDEN));
 
     $templates = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 
@@ -148,10 +134,12 @@ try {
         'ecard_template',
         $gL10n->get('SYS_TEMPLATE'),
         $newTemplateArray,
-        array('defaultValue' => $template, 'property' => HtmlForm::FIELD_REQUIRED, 'showContextDependentFirstEntry' => false)
+        array(
+            'defaultValue' => $gSettingsManager->getString('photo_ecard_template'),
+            'property' => Form::FIELD_REQUIRED,
+            'showContextDependentFirstEntry' => false
+        )
     );
-    $form->closeGroupBox();
-    $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     // create list with all possible recipients
     $list = array();
@@ -211,38 +199,43 @@ try {
         'ecard_recipients',
         $gL10n->get('SYS_TO'),
         $list,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect' => true)
+        array('property' => Form::FIELD_REQUIRED, 'multiselect' => true)
     );
-    $form->addLine();
     $form->addInput(
         'name_from',
         $gL10n->get('SYS_YOUR_NAME'),
         $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
-        array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+        array('maxLength' => 50, 'property' => Form::FIELD_DISABLED)
     );
     $form->addInput(
         'mail_from',
         $gL10n->get('SYS_YOUR_EMAIL'),
         $gCurrentUser->getValue('EMAIL'),
-        array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+        array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_DISABLED)
     );
-    $form->closeGroupBox();
-    $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'admidio-panel-editor');
     $form->addEditor(
         'ecard_message',
         '',
-        $message,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
+        '',
+        array('property' => Form::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
     );
-    $form->closeGroupBox();
-    $form->openButtonGroup();
-    $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'bi-eye-fill', 'class' => 'admidio-margin-bottom'));
+    $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'bi-eye-fill'));
     $form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
-    $form->closeButtonGroup();
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $page->assignSmartyVariable('photoPreviewUrl',
+        SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php',
+            array(
+                'photo_uuid' => $getPhotoUuid,
+                'photo_nr' => $getPhotoNr,
+                'max_width' => $gSettingsManager->getInt('photo_show_width'),
+                'max_height' => $gSettingsManager->getInt('photo_show_height')
+            )
+        )
+    );
+    $form->addToHtmlPage();
+    $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception|RuntimeException $e) {
+} catch (AdmException|Exception|RuntimeException $e) {
     $gMessage->show($e->getMessage());
 }

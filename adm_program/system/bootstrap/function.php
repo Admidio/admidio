@@ -269,7 +269,6 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
  * ```
  * @throws AdmException
- * @throws Exception
  */
 function admFuncVariableIsValid(array $array, string $variableName, string $datatype, array $options = array())
 {
@@ -415,6 +414,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
  * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
  * @throws Exception
+ * @deprecated 5.0.0:5.1.0 "admFuncShowCreateChangeInfoById()" is deprecated, use "TableAccess::getNameOfCreatingUser()" instead.
  */
 function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCreate, int $userIdEdited = 0, string $timestampEdited = ''): string
 {
@@ -490,6 +490,7 @@ function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCr
  *                                      If uuid is set than a link to the user profile will be created
  * @return string Returns a html string with usernames who creates item and edit item the last time
  * @throws Exception
+ * @deprecated 5.0.0:5.1.0 "admFuncShowCreateChangeInfoByName()" is deprecated, use "TableAccess::getNameOfCreatingUser()" instead.
  */
 function admFuncShowCreateChangeInfoByName(string $userNameCreated, string $timestampCreate, string $userNameEdited = '', string $timestampEdited = '', string $userUuidCreated = '', string $userUuidEdited = ''): string
 {
@@ -567,7 +568,6 @@ function admFuncCheckUrl(string $url)
  * This is a safe method for redirecting.
  * @param string $url The URL where redirecting to. Must be an absolute URL. (www.example.org)
  * @param int $statusCode The status-code which should be sent. (301, 302, 303 (default), 307)
- * @throws \Smarty\Exception
  * @throws Exception
  * @see https://www.owasp.org/index.php/Open_redirect
  */

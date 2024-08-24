@@ -116,7 +116,6 @@ try {
     }
 
     $gNavigation->addUrl(CURRENT_URL, $navigationHeadline);
-    unset($_SESSION['categories_request']);
 
     // create html page object
     $page = new HtmlPage('admidio-categories', $headline);
@@ -277,6 +276,6 @@ try {
 
     $page->addHtml($categoriesOverview->show());
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

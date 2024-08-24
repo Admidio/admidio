@@ -14,19 +14,6 @@
  * node as a MenuNode object within an internal array. There are several output methods to use the
  * menu within the layout. You can create a simple html list, a bootstrap media object list or
  * add it to an existing navbar.
- *
- * **Code examples**
- * ```
- * // create an object for the menu and show a html list
- * $menuList = new Menu();
- * $html = $menuList->getHtml();
- *
- *
- * // create an object for the menu and add the menu to the navbar
- * $navbar = new HtmlNavbar('navbar', 'Example');
- * $menuNavbar = new Menu();
- * $menuList->addToNavbar($navbar);
- * ```
  */
 class MainMenu
 {

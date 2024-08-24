@@ -31,7 +31,6 @@
   <string name="INS_ADD_ORGANIZATION">Add organization</string>
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
-  <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administrator\'s information is incomplete!</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">An update can only be performed by an administrator. Please define the administrator credentials.</string>
   <string name="INS_BOARD">Association\'s board</string>
   <string name="INS_CONFERENCE_ROOM">Conference room</string>
@@ -41,19 +40,14 @@
   <string name="INS_CREATE_ADMINISTRATOR">Create an administrator</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Creating configuration file</string>
   <string name="INS_DATA_FULLY_ENTERED">You have entered all the necessary data for installing Admidio.\n\nNow the database has to be created and filled with your data.</string>
-  <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">The database parameters have not been entered completely!</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Enter the name of the database server here. This can be a URL or localhost if the database is running on the same machine as the webpage.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
-  <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>
   <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here.</string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MySQL and PostgreSQL.</string>
-  <string name="INS_DATABASE_USER_INVALID">The database user contains invalid characters!</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Creating database</string>
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurations file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
@@ -72,15 +66,12 @@
   <string name="INS_INSTALL_ADMIDIO">Install Admidio</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">The database already contains an Admidio installation. An additional installation is not possible.</string>
-  <string name="INS_INSTALLATION_SUCCESSFUL">Admidio database installation and configuration is complete, system is ready for use. Please log in now by using access information of the system administrator.</string>
   <string name="INS_INSTALLATION_VERSION">Installation version #VAR1#</string>
-  <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Installation was successful</string>
   <string name="INS_INTERN">Internal</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">No language has been selected.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Could not find the current installation. If you\'ve used Admidio 1.x update to Admidio 2.x first. Afterwards you can update the version to #VAR1#. If you are already using Admidio 2.x or higher please check the consistency of your database.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organization #VAR1_BOLD# already exists. Please select another name.</string>
-  <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Provided organization name is not complete!</string>
   <string name="INS_PHONE_LIST">Phone list</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Please choose a language</string>
   <string name="INS_SET_ORGANIZATION">Define organization</string>
@@ -88,7 +79,6 @@
   <string name="INS_SETUP_WAS_SUCCESSFUL">Set up successful</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">We would appreciate a lot if you could support the development of Admidio with your donation!</string>
   <string name="INS_TABLE_PREFIX">Table prefix</string>
-  <string name="INS_TABLE_PREFIX_INVALID">Table prefix includes invalid character!</string>
   <string name="INS_TEAMS">Teams</string>
   <string name="INS_TRAINING">Training</string>
   <string name="INS_UPDATE">Update</string>
@@ -169,7 +159,6 @@
   <string name="ORG_DATATYPE">Data type</string>
   <string name="ORG_DATE_FORMAT">Date format</string>
   <string name="ORG_DATE_FORMAT_DESC">Format complies with PHP function #VAR1#. (default: d.m.Y)</string>
-  <string name="ORG_DIFFERENT_DATABASE_VERSION">Different database version</string>
   <string name="ORG_EDIT_PROFILE_FIELD">Editing profile field</string>
   <string name="ORG_EMAIL_ALERTS">E-mail alert</string>
   <string name="ORG_EMAIL_ALERTS_DESC">All members of all roles with permission #VAR1_BOLD# receive e-mail in case of new user registration. (default: yes)</string>
@@ -228,7 +217,6 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">In some places the creator and the user with the last change to a record is displayed together with a timestamp. This setting can be used to determine whether this information is displayed at all and whether the user should be displayed with the user name or with their first and last name.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
-  <string name="ORG_SYSTEM_INFORMATION">System informations</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes folder could not be opened/read.</string>
   <string name="ORG_TIME_FORMAT">Time format</string>
   <string name="ORG_TIME_FORMAT_DESC">Format complies with PHP function #VAR1#. (default: H:i)</string>
@@ -303,6 +291,7 @@
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="SYS_ASSIGN_FIELDS">Assign fields</string>
   <string name="SYS_ASSIGN_FIELDS_DESC">In the left column of the following table all profile fields are displayed. In the right column, the columns from the file to be imported are displayed in a selection list. All columns from the file you want to import should now be assigned to a profile field.\n\nExisting members are identified by first name and last name. If you have the unique Admidio-ID (UUID) of the member available in your file, you can select it in the mapping. The members will then be automatically identified by this Admidio-ID and no longer by first name and last name.</string>
+  <string name="SYS_ASSIGN_FILE_COLUMN">Assign file column</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Assign login data</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login data has been successfully assigned.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login data has been successfully assigned and user has been informed via e-mail.</string>
@@ -674,7 +663,6 @@
   <string name="SYS_FIELDS_EMPTY">Some fields are empty.</string>
   <string name="SYS_FILE">File</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
-  <string name="SYS_FILE_COLUMN">File column</string>
   <string name="SYS_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
   <string name="SYS_FILE_NAME_RULES">The file should be named in such a way that you can infer the content from the name. The file name has an influence on the display order. In a folder where, for example, meeting minutes are stored, the file names should always begin with the date (yyyy-mm-dd).</string>
@@ -708,7 +696,6 @@
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_MEMBERS">Former members</string>
@@ -757,11 +744,11 @@
   <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Import was successful.\n\n#VAR1# new contacts have been created.\n#VAR2# contacts have been edited.\n#VAR3# role memberships have been assigned.\n\n#VAR4#</string>
-  <string name="SYS_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned any profile fields:</string>
+  <string name="SYS_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned to any profile fields:</string>
   <string name="SYS_IMPRINT">Imprint</string>
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
-  <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info box</string>
+  <string name="SYS_INFOBOX" description="A small html box that will show additional information">Info box</string>
   <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new contact. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
@@ -934,6 +921,7 @@
   <string name="SYS_NO_ENTRY">Requested entry does not exist in the database.</string>
   <string name="SYS_NO_ENTRIES">No entries available.</string>
   <string name="SYS_NO_LEADER">No leader</string>
+  <string name="SYS_NO_LOGIN_DATA">Don't have a login name and password?</string>
   <string name="SYS_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">No new registrations available.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">No permissions have been assigned.</string>
@@ -1088,6 +1076,7 @@
   <string name="SYS_REDIRECT">Redirect</string>
   <string name="SYS_REDIRECT_DESC">You are leaving the website of #VAR1_BOLD# and will be redirected automatically to #VAR3# in #VAR2# seconds.\n\nIf the automatic redirection is not working please click #VAR4#here#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">The specified redirect URL is not valid.</string>
+  <string name="SYS_REGISTER">Register</string>
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Adopt all data from the registration for the existing user</string>
@@ -1166,6 +1155,7 @@
   <string name="SYS_ROOM">Room</string>
   <string name="SYS_ROOM_INFORMATION">Room information</string>
   <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
+  <string name="SYS_ROOM_COULD_NOT_BE_DELETED">The room cannot be deleted as it is still assigned to at least one event.</string>
   <string name="SYS_ROOM_OVERHANG">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined here.</string>
   <string name="SYS_ROOM_RESERVED">Selected room is already in use at this time.</string>
   <string name="SYS_ROOM_SELECTABLE">Assign rooms</string>
@@ -1332,6 +1322,7 @@
   <string name="SYS_SYSMAIL_REGISTRATION_CONFIRMATION">#subject# Your registration at #organization_long_name#\n#content# Hello #user_first_name#,\nwe are very glad that you have registered on our website #organization_homepage#.\n\nTo complete your registration, please click on the following link: #variable1#. By clicking on the link you will be automatically redirected to our website and your registration will be confirmed.\n\nOnce you have confirmed your registration, we will check it. You will receive a reply within a few hours whether your registration has been accepted and you can log in with your credentials or whether your registration has been rejected.\n\nBest regards\nThe team of #organization_long_name#</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System-wide default list</string>
+  <string name="SYS_SYSTEM_INFORMATION">System information</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it. If you do not want to send any of these notifications, leave the text field empty.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime.</string>
   <string name="SYS_TAB">Tab</string>
@@ -1418,7 +1409,6 @@
   <string name="SYS_VISITORS">Guests</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
-  <string name="SYS_WANT_REGISTER">I want to register!</string>
   <string name="SYS_WARNING">Warning</string>
   <string name="SYS_WEBLINKS">Web links</string>
   <string name="SYS_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>

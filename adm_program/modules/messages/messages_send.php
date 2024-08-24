@@ -13,12 +13,11 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-
-use PHPMailer\PHPMailer\Exception;
 use Ramsey\Uuid\Uuid;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // Initialize and check the parameters
     $getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
@@ -27,39 +26,24 @@ try {
     $postFrom = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
     $postName = admFuncVariableIsValid($_POST, 'namefrom', 'string');
     $postSubject = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be sent without html conversations
-    $postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject', 'string');
-    $postBody = admFuncVariableIsValid($_POST, 'msg_body', 'html');
+    $postBody = $_POST['msg_body']; // html check will be done in form validation
     $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
     $postCaptcha = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
     $postUserUuidList = '';
     $postListUuid = '';
+    $sendResult = false;
 
     if ($gValidLogin) {
         $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
         $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
     }
 
-    // save form data in session for back navigation
-    $_SESSION['message_request'] = $_POST;
-
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    // check form field input and sanitized it from malicious content
+    $messagesSendForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $formValues = $messagesSendForm->validate($_POST);
 
     if (isset($_POST['msg_to'])) {
         $postTo = $_POST['msg_to'];
-    } else {
-        // message when no receiver is given
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TO'));
-    }
-
-    if ($postSubjectSQL === '') {
-        // message when no subject is given
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_SUBJECT'));
-    }
-
-    if ($postBody === '') {
-        // message when no email content is given
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_MESSAGE'));
     }
 
     $message = new TableMessage($gDb);
@@ -84,24 +68,11 @@ try {
         throw new AdmException('SYS_MODULE_DISABLED');
     }
 
-    $sendResult = false;
-
     // if message is EMAIL then check the parameters
     if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
-        // allow option to send a copy to your email address only for registered users because of spam abuse
-        $postCarbonCopy = 0;
-        if ($gValidLogin) {
-            $postCarbonCopy = admFuncVariableIsValid($_POST, 'carbon_copy', 'bool');
-        }
-
         // if Attachment size is higher than max_post_size from php.ini, then $_POST is empty.
         if (empty($_POST)) {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
-        }
-
-        // Check Captcha if enabled and user logged out
-        if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
-            FormValidation::checkCaptcha($postCaptcha);
         }
     }
 
@@ -110,13 +81,6 @@ try {
         $postName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
         if (!StringUtils::strValidCharacters($postFrom, 'email')) {
             $postFrom = $gCurrentUser->getValue('EMAIL');
-        }
-    } else {
-        if ($postName === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_YOUR_NAME'));
-        }
-        if (!StringUtils::strValidCharacters($postFrom, 'email')) {
-            throw new AdmException('SYS_EMAIL_INVALID', array('SYS_YOUR_EMAIL'));
         }
     }
 
@@ -290,7 +254,7 @@ try {
         }
 
         // set flag if copy should be sent to sender
-        if (isset($postCarbonCopy) && $postCarbonCopy) {
+        if ( isset($formValues['carbon_copy']) && $formValues['carbon_copy']) {
             $email->setCopyToSenderFlag();
         }
 
@@ -361,20 +325,15 @@ try {
 
         // after sending remove the send page from navigation stack
         $gNavigation->deleteLastUrl();
-        unset($_SESSION['message_request']);
 
         // message if sending was OK
-        if ($gNavigation->count() > 0) {
-            $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-        } else {
-            $gMessage->setForwardUrl($gHomepage, 2000);
-        }
-
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
-            throw new AdmException('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
+            $successMessage = $gL10n->get('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         } else {
-            throw new AdmException('SYS_EMAIL_SEND');
+            $successMessage = $gL10n->get('SYS_EMAIL_SEND');
         }
+        echo json_encode(array('status' => 'success', 'message' => $successMessage, 'url' => $gNavigation->getUrl()));
+        exit();
     } else {
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             throw new AdmException('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult));
@@ -382,6 +341,6 @@ try {
             throw new AdmException('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
         }
     }
-} catch (AdmException|\Exception|Exception|\Smarty\Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (AdmException|Exception $e) {
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

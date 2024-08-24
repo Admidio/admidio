@@ -235,7 +235,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Jeśli ta opcja jest ustawiona, byli członkowie i członkowie innych organizacji mogą być opcjonalnie wyświetlani w administracji członków oprócz aktywnych członków bieżącej organizacji. W przeciwnym razie wyświetlani są tylko aktywni członkowie bieżącej organizacji. Jednak podczas tworzenia nowych członków lub przypisywania rejestracji system będzie nadal szukał istniejących użytkowników w całej bazie danych wszystkich organizacji.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Pokaż wybór organizacji</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">W przypadku kilku organizacji zapisanych w bazie, ekran logowania może wyświetlić okienko wyboru ze wszystkimi dostępnymi organizacjami. Użytkownik może wtedy podczas logowania wybrać inną organizację (inną niż zdefiniowana w config.php). Jednak użytkownik musi być zarejestrowanym członkiem wybranej organizacji.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Informacje systemowe</string>
+  <string name="SYS_SYSTEM_INFORMATION">Informacje systemowe</string>
   <string name="ORG_THEME_FOLDER_OPEN">Folder z motywami nie mógł być odczytany.</string>
   <string name="ORG_TIME_FORMAT">Format czasu</string>
   <string name="ORG_TIME_FORMAT_DESC">Format zgodny z funkcją PHP #VAR1#. (domyślnie: H:i)</string>

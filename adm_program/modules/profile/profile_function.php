@@ -30,7 +30,7 @@ try {
     $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('export', 'stop_membership', 'remove_former_membership', 'reload_current_memberships', 'reload_former_memberships', 'reload_future_memberships', 'save_membership')));
 
-    if (in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership'))) {
+    if (in_array($getMode, array('stop_membership', 'remove_former_membership'))) {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
@@ -111,8 +111,8 @@ try {
         }
     } elseif ($getMode === 'save_membership') {
         // save membership date changes
-        $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date_' . $getMemberUuid, 'date', array('requireValue' => true));
-        $postMembershipEnd = admFuncVariableIsValid($_POST, 'membership_end_date_' . $getMemberUuid, 'date', array('requireValue' => true));
+        $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date', 'date', array('requireValue' => true));
+        $postMembershipEnd = admFuncVariableIsValid($_POST, 'membership_end_date', 'date', array('requireValue' => true));
 
         $member = new TableMembers($gDb);
         $member->readDataByUuid($getMemberUuid);
@@ -149,7 +149,7 @@ try {
 
         echo 'success';
     }
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     if (in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership'))) {
         echo $e->getMessage();
     } else {

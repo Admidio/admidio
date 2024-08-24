@@ -21,9 +21,6 @@ function ProfileJS(gRootPath) {
             dataType: "html",
             success: function(responseText) {
                 $("#profile_roles_box_body").html(responseText);
-                $(".admMemberInfo").click(function() {
-                    showHideMembershipInformation($(this));
-                });
                 formSubmitEvent('#profile_roles_box_body');
             }
         });

@@ -230,7 +230,7 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">An einigen Stellen wird die Erstellerin bzw. der Ersteller zusammen mit der Benutzerin bzw. der Benutzer mit der letzten Änderung zu einem Datensatz zusammen mit einem Zeitstempel angezeigt. Mit dieser Einstellung kann festgelegt werden, ob diese Informationen überhaupt angezeigt werden und ob die Benutzerin oder der Benutzer mit dem Anmeldenamen oder mit ihrem Vor- und Nachnamen angezeigt werden soll.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
+  <string name="SYS_SYSTEM_INFORMATION">Systeminformationen</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="ORG_TIME_FORMAT">Zeitformat</string>
   <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Voreinstellung: H:i)</string>

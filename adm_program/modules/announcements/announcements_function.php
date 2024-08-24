@@ -14,10 +14,10 @@
  *            delete : Delete announcement
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
-
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('announcements_module_enabled') === 0) {
         throw new AdmException('SYS_MODULE_DISABLED');
@@ -44,27 +44,13 @@ try {
         }
     }
 
-    $_SESSION['announcements_request'] = $_POST;
-
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     if ($getMode === 'edit') {
-        if (strlen($_POST['ann_headline']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_HEADLINE'));
-        }
-        if (strlen($_POST['ann_description']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TEXT'));
-        }
-        if (strlen($_POST['ann_cat_id']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CATEGORY'));
-        }
+        // check form field input and sanitized it from malicious content
+        $announcementEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $announcementEditForm->validate($_POST);
 
-        // make html in description secure
-        $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
-
-        // write POST parameters in announcement object
-        foreach ($_POST as $key => $value) { // TODO possible security issue
+        // write form values in announcement object
+        foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'ann_')) {
                 $announcement->setValue($key, $value);
             }
@@ -75,22 +61,19 @@ try {
             $announcement->sendNotification();
         }
 
-        unset($_SESSION['announcements_request']);
         $gNavigation->deleteLastUrl();
-
-        admRedirect($gNavigation->getUrl());
-        // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     } elseif ($getMode === 'delete') {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // delete current announcements, right checks were done before
         $announcement->delete();
 
-        // Delete successful -> Return for XMLHttpRequest
-        echo 'done';
+        echo json_encode(array('status' => 'success'));
+        exit();
     }
 } catch (AdmException|Exception $e) {
-    if ($getMode === 'edit') {
-        $gMessage->show($e->getMessage());
-    } else {
-        echo $e->getMessage();
-    }
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

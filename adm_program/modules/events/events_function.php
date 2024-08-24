@@ -36,8 +36,6 @@ try {
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
     $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date');
-    $postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
-    $postUserComment = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
     $participationPossible = true;
     $originalEventUuid = 0;
@@ -79,59 +77,30 @@ try {
         }
     }
 
-    if ($getMode === 'edit') {  // Create a new event or edit an existing event
-        $_SESSION['events_request'] = $_POST;
-
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
-        // ------------------------------------------------
-        // check if all necessary fields are filled
-        // ------------------------------------------------
-
-        if (!isset($_POST['event_participation_possible'])) {
-            $_POST['event_participation_possible'] = 0;
-        }
-        if ($_POST['event_participation_possible'] == 1
-            && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)) {
-            $_SESSION['events_request']['adm_event_participation_right'] = '';
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));
-        }
-
-        if (strlen($_POST['dat_headline']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TITLE'));
-        }
-        if (strlen($_POST['event_from']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_START'));
-        }
-        if (strlen($_POST['event_to']) === 0 && $_POST['dat_repeat_type'] == 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_END'));
-        }
-        if (strlen($_POST['event_from_time']) === 0 && !isset($_POST['dat_all_day'])) {
-            throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_START')));
-        }
-        if (strlen($_POST['event_to_time']) === 0 && !isset($_POST['dat_all_day'])) {
-            throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_END')));
-        }
-        if (strlen($_POST['cat_uuid']) === 0) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_CALENDAR'));
-        } else {
-            $calendar = new TableCategory($gDb);
-            $calendar->readDataByUuid($_POST['cat_uuid']);
-            $_POST['dat_cat_id'] = $calendar->getValue('cat_id');
-        }
-
-        if (isset($_POST['dat_all_day'])) {
-            $_POST['event_from_time'] = '00:00';
-            $_POST['event_to_time'] = '00:00';
-            $event->setValue('dat_all_day', 1);
-        } else {
-            $event->setValue('dat_all_day', 0);
-        }
+    if ($getMode === 'edit') {
+        // Create a new event or edit an existing event
 
         // save the country only together with the location
         if (strlen($_POST['dat_location']) === 0) {
             $_POST['dat_country'] = null;
+        }
+
+        // check form field input and sanitized it from malicious content
+        $eventEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $eventEditForm->validate($_POST);
+
+        if ($formValues['event_participation_possible'] == 1
+            && (!isset($formValues['adm_event_participation_right']) || array_count_values($formValues['adm_event_participation_right']) == 0)) {
+            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));
+        }
+
+        $calendar = new TableCategory($gDb);
+        $calendar->readDataByUuid($formValues['cat_uuid']);
+        $formValues['dat_cat_id'] = $calendar->getValue('cat_id');
+
+        if ($formValues['dat_all_day'] === '1') {
+            $formValues['event_from_time'] = '00:00';
+            $formValues['event_to_time'] = '00:00';
         }
 
         // ------------------------------------------------
@@ -150,15 +119,15 @@ try {
             }
         } else {
             // now write date and time with database format to date object
-            $_POST['dat_begin'] = $_POST['event_from'] . ' ' . $_POST['event_from_time'];
+            $formValues['dat_begin'] = $_POST['event_from'] . ' ' . $_POST['event_from_time'];
         }
 
         // if date-to is not filled then take date-from
         if (strlen($_POST['event_to']) === 0) {
-            $_POST['event_to'] = $_POST['event_from'];
+            $formValues['event_to'] = $_POST['event_from'];
         }
         if (strlen($_POST['event_to_time']) === 0) {
-            $_POST['event_to_time'] = $_POST['event_from_time'];
+            $formValues['event_to_time'] = $_POST['event_from_time'];
         }
 
         $endDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['event_to'] . ' ' . $_POST['event_to_time']);
@@ -174,7 +143,7 @@ try {
             }
         } else {
             // now write date and time with database format to date object
-            $_POST['dat_end'] = $_POST['event_to'] . ' ' . $_POST['event_to_time'];
+            $formValues['dat_end'] = $_POST['event_to'] . ' ' . $_POST['event_to_time'];
         }
 
         // DateTo should be greater than DateFrom (Timestamp must be less)
@@ -182,18 +151,12 @@ try {
             throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
         }
 
-        if (!isset($_POST['dat_highlight'])) {
-            $_POST['dat_highlight'] = 0;
-        }
-        if (!isset($_POST['dat_all_day'])) {
-            $_POST['dat_all_day'] = 0;
-        }
         if (!isset($_POST['dat_room_id'])) {
-            $_POST['dat_room_id'] = 0;
+            $formValues['dat_room_id'] = 0;
         }
 
         if (!is_numeric($_POST['dat_max_members'])) {
-            $_POST['dat_max_members'] = 0;
+            $formValues['dat_max_members'] = 0;
         } else {
             // First check the current participants to prevent invalid reduction of the limit
             $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
@@ -201,20 +164,14 @@ try {
 
             if ($_POST['dat_max_members'] < $totalMembers && $_POST['dat_max_members'] > 0) {
                 // minimum value must fit to current number of participants
-                $_POST['dat_max_members'] = $totalMembers;
+                $formValues['dat_max_members'] = $totalMembers;
             }
-        }
-        if (!isset($_POST['dat_allow_comments'])) {
-            $_POST['dat_allow_comments'] = 0;
-        }
-        if (!isset($_POST['dat_additional_guests'])) {
-            $_POST['dat_additional_guests'] = 0;
         }
 
         if ($_POST['event_participation_possible'] == 1 && (string)$_POST['event_deadline'] !== '') {
-            $_POST['dat_deadline'] = $_POST['event_deadline'] . ' ' . ((string)$_POST['event_deadline_time'] === '' ? '00:00' : $_POST['event_deadline_time']);
+            $formValues['dat_deadline'] = $_POST['event_deadline'] . ' ' . ((string)$_POST['event_deadline_time'] === '' ? '00:00' : $_POST['event_deadline_time']);
         } else {
-            $_POST['dat_deadline'] = null;
+            $formValues['dat_deadline'] = null;
         }
 
         if (isset($_POST['adm_event_participation_right'])) {
@@ -228,9 +185,6 @@ try {
                 throw new AdmException('SYS_EVENT_CATEGORIES_ROLES_DIFFERENT', array(implode(', ', $rightCategoryView->getRolesNames())));
             }
         }
-
-        // make html in description secure
-        $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
 
         // ------------------------------------------------
         // Check if the selected room is already reserved for the appointment
@@ -273,8 +227,8 @@ try {
             }
         }
 
-        // write all POST parameters into the date object
-        foreach ($_POST as $key => $value) { // TODO possible security issue
+        // write form values into the event object
+        foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'dat_')) {
                 $event->setValue($key, $value);
             }
@@ -381,12 +335,10 @@ try {
         }
 
         $gDb->endTransaction();
-
-        unset($_SESSION['events_request']);
         $gNavigation->deleteLastUrl();
 
-        admRedirect($gNavigation->getUrl());
-    // => EXIT
+        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+        exit();
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
@@ -394,8 +346,8 @@ try {
         // delete current announcements, right checks were done before
         $event->delete();
 
-        // Delete successful -> Return for XMLHttpRequest
-        echo 'done';
+        echo json_encode(array('status' => 'success'));
+        exit();
     } elseif ($getMode === 'export') {  // export event in iCal format
         // If iCal enabled and module is public
         if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
@@ -435,10 +387,9 @@ try {
     }
     // If participation mode: Set status and write optional parameter from user and show current status message
     if (in_array($getMode, array('participate', 'participate_cancel', 'participate_maybe'), true)) {
-        if ($postAdditionalGuests > 0 || $postUserComment !== '') {
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-        }
+        // check form field input and sanitized it from malicious content
+        $eventsParticipationEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $formValues = $eventsParticipationEditForm->validate($_POST);
 
         $member = new TableMembers($gDb);
         $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
@@ -446,7 +397,7 @@ try {
         // if current user is allowed to participate or user could edit this event then update user inputs
         if ($event->possibleToParticipate() || $participants->isLeader($gCurrentUserId)) {
             $member->readDataByColumns(array('mem_rol_id' => (int)$event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
-            $member->setValue('mem_comment', $postUserComment); // Comments will be saved in any case. Maybe it is a documentation afterward by a leader or admin
+            $member->setValue('mem_comment', $formValues['dat_comment']); // Comments will be saved in any case. Maybe it is a documentation afterward by a leader or admin
 
             if ($member->isNewRecord()) {
                 $member->setValue('mem_begin', DATE_NOW);
@@ -456,8 +407,8 @@ try {
             if ($event->getValue('dat_max_members') > 0) {
                 $totalMembers = $participants->getCount();
 
-                if ($totalMembers + ($postAdditionalGuests - (int)$member->getValue('mem_count_guests')) < $event->getValue('dat_max_members')) {
-                    $member->setValue('mem_count_guests', $postAdditionalGuests);
+                if ($totalMembers + ($formValues['additional_guests'] - (int)$member->getValue('mem_count_guests')) < $event->getValue('dat_max_members')) {
+                    $member->setValue('mem_count_guests', $formValues['additional_guests']);
                 } else {
                     $participationPossible = false;
                 }
@@ -472,7 +423,7 @@ try {
                     $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . (int)$event->getValue('dat_max_members');
                 }
             } else {
-                $member->setValue('mem_count_guests', $postAdditionalGuests);
+                $member->setValue('mem_count_guests', $formValues['additional_guests']);
             }
 
             $member->save();
@@ -507,16 +458,19 @@ try {
                 }
             }
         } else {
-            $outputMessage = $gL10n->get('SYS_PARTICIPATE_NO_RIGHTS');
+            throw new AdmException('SYS_PARTICIPATE_NO_RIGHTS');
         }
 
-        $gMessage->setForwardUrl($gNavigation->getUrl());
-        $gMessage->show($outputMessage, $gL10n->get('SYS_PARTICIPATE'));
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => $outputMessage,
+            'url' => $gNavigation->getUrl()));
+        exit();
     }
 } catch (AdmException|Exception $e) {
-    if ($getMode == 'delete') {
-        echo $e->getMessage();
-    } else {
+    if ($getMode === 'export') {
         $gMessage->show($e->getMessage());
+    } else {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     }
 }

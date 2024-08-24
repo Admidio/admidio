@@ -41,6 +41,9 @@
         "ext-pdo_pgsql": "For PostgreSQL database support"
     },
     "autoload": {
+        "psr-4": {
+            "Admidio\\": "src/"
+        },
         "classmap": [
             "adm_program/system/classes/",
             "adm_program/libs/jquery-file-upload/server/php/",

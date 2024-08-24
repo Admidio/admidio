@@ -36,7 +36,7 @@ function showHideBlock(elementId) {
  * @param {string}   mode       Mode of the script that is called.
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
-function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
+function callUrlHideElement(elementId, url, csrfToken, callback) {
     var entryDeleted = document.getElementById(elementId);
     if (!entryDeleted) {
         entryDeleted = document.getElementById("row_" + elementId);
@@ -45,8 +45,7 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
     // send RequestObject and delete entry
     $.post(url, {
         "admidio-csrf-token": csrfToken,
-        "uuid": elementId,
-        "mode": mode
+        "uuid": elementId
         }, function(data) {
         const messageText = $("#status-message");
         var returnStatus = "error";
@@ -55,7 +54,9 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
         try {
             const returnData = JSON.parse(data);
             returnStatus = returnData.status;
-            returnMessage = returnData.message;
+            if (typeof returnData.message !== 'undefined') {
+                returnMessage = returnData.message;
+            }
         } catch (e) {
             // fallback for old implementation without JSON response
             if (data === "done") {
@@ -70,13 +71,13 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
                 messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>" + returnMessage + "</div>");
                 setTimeout(function(){
                         $("#admidio-modal").modal("hide");
-                        if (callback === 'callbackRoles') {
+                        if (callback === "callbackRoles") {
                             $(entryDeleted).fadeOut("slow", callbackRoles);
-                        } else if (callback === 'callbackFormerRoles') {
+                        } else if (callback === "callbackFormerRoles") {
                             $(entryDeleted).fadeOut("slow", callbackFormerRoles);
-                        } else if (callback === 'callbackFutureRoles') {
+                        } else if (callback === "callbackFutureRoles") {
                             $(entryDeleted).fadeOut("slow", callbackFutureRoles);
-                        } else if (callback === 'callbackProfilePhoto') {
+                        } else if (callback === "callbackProfilePhoto") {
                             callbackProfilePhoto();
                         } else {
                             $(entryDeleted).fadeOut("slow");
@@ -98,8 +99,10 @@ function callUrlHideElement(elementId, url, csrfToken, mode, callback) {
             }
         } else {
             // entry could not be deleted, then show content of data or a common error message
-            const message = (data.length > 0) ? data : "Error: Undefined error occurred!";
-            messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>" + message + "</div>");
+            if (returnMessage.length === 0) {
+                returnMessage = "Error: Undefined error occurred!";
+            }
+            messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage + "</div>");
         }
     });
 }
@@ -201,13 +204,31 @@ function redirectPost(url, data) {
  * @param {string} csrfToken  If this is set than it will be added to the post request.
  */
 function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
-    $.post(updateSequenceUrl, {
+    $.post(updateSequenceUrl + "?mode=sequence&uuid=" + elementId + "&direction=" + direction, {
             "admidio-csrf-token": csrfToken,
             "direction": direction,
             "uuid": elementId,
             "mode": "sequence"
         }, function(data) {
-            if (data === "done") {
+            var returnStatus = "error";
+            var returnMessage = "";
+
+            try {
+                const returnData = JSON.parse(data);
+                returnStatus = returnData.status;
+                if (typeof returnData.message !== 'undefined') {
+                    returnMessage = returnData.message;
+                }
+            } catch (e) {
+                // fallback for old implementation without JSON response
+                if (data === "done") {
+                    returnStatus = "success";
+                } else {
+                    returnMessage = data;
+                }
+            }
+
+            if (returnStatus === "success") {
                 const id = "#row_" + elementId;
                 $(".admidio-icon-link .bi").tooltip("hide");
 
@@ -217,9 +238,88 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
                     $(id).next().after($(id));
                 }
             } else {
-                if(data.length > 0) {
-                    alert(data);
+                // entry could not be deleted, then show content of data or a common error message
+                if (returnMessage.length === 0) {
+                    returnMessage = "Error: Undefined error occurred!";
                 }
+                alert(returnMessage);
             }
         });
+}
+
+/**
+ * The function will override the submitting of a form. It will call the action url and handle the response
+ * of that url. Therefore, a json with status and message key is expected. Also a url key must be provided to
+ * which the user will be guided if the form was successfully processed.
+ */
+function formSubmit(event) {
+    var submitButtonID = $("#" + $(this).attr("id") + " button[type=submit]").attr("id");
+    var submitButtonIcon = $("#" + submitButtonID + " i");
+    var iconClass = submitButtonIcon.attr("class");
+    var formAlert = $("#" + $(this).attr("id") + " .form-alert");
+    submitButtonIcon.attr("class", "spinner-border spinner-border-sm");
+    $("#" + submitButtonID).attr("disabled", true);
+    formAlert.hide();
+
+    // disable default form submit
+    event.preventDefault();
+
+    $.post({
+        url: $(this).attr("action"),
+        data: new FormData($(this)[0]),
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            try {
+                var returnData = JSON.parse(data);
+                var returnStatus = returnData.status;
+                var returnMessage = "";
+                var forwardUrl = "";
+
+                if (typeof returnData.message !== "undefined") {
+                    returnMessage = returnData.message;
+                }
+                if (typeof returnData.url !== "undefined") {
+                    forwardUrl = returnData.url;
+                }
+            } catch (e) {
+                if (typeof $(".modal-body") !== "undefined") {
+                    $(".modal-body").html(data);
+                }
+                // no expected JSON response
+                returnStatus = "error";
+                returnMessage = "Something went wrong while processing your request.";
+            }
+
+            if (returnStatus === "success") {
+                if (returnMessage.length > 0) {
+                    formAlert.attr("class", "alert alert-success form-alert");
+                    formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>" + returnMessage + "</strong>");
+                    formAlert.fadeIn("slow");
+                    if (forwardUrl !== "") {
+                        setTimeout(function () {
+                            self.location.href = forwardUrl;
+                        }, 2500);
+                    } else {
+                        $("#" + submitButtonID).attr("disabled", false);
+                        submitButtonIcon.attr("class", iconClass);
+                        setTimeout(function () {
+                            $("#admidio-modal").modal("hide");
+                        }, 2500);
+                    }
+                } else {
+                    self.location.href = forwardUrl;
+                }
+            } else {
+                if (returnMessage.length == 0) {
+                    returnMessage = "Error: Undefined error occurred!";
+                }
+                $("#" + submitButtonID).attr("disabled", false);
+                submitButtonIcon.attr("class", iconClass);
+                formAlert.attr("class", "alert alert-danger form-alert");
+                formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage);
+                formAlert.fadeIn();
+            }
+        }
+    });
 }

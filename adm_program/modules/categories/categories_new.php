@@ -17,10 +17,12 @@
  *            USF = Categories for profile fields
  *            EVT = Calendars for events
  ****************************************************************************/
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'EVT', 'AWA')));
@@ -106,35 +108,19 @@ try {
     // create category object
     $category = new TableCategory($gDb);
 
-    if (isset($_SESSION['categories_request'])) {
-        // By wrong input, the user returned to this form now write the previously entered contents into the object
+    if ($getCatUuid !== '') {
+        $category->readDataByUuid($getCatUuid);
+        $catId = (int)$category->getValue('cat_id');
 
-        $category->setArray(SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['categories_request'])));
-
-        // get the selected roles for visibility
-        if (isset($_SESSION['categories_request']['adm_categories_view_right'])) {
-            $roleViewSet = $_SESSION['categories_request']['adm_categories_view_right'];
-        }
-
-        if (isset($_SESSION['categories_request']['show_in_several_organizations'])) {
-            $category->setValue('cat_org_id', $gCurrentOrgId);
-        }
-        unset($_SESSION['categories_request']);
+        // get assigned roles of this category
+        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $catId);
+        $roleViewSet = $categoryViewRolesObject->getRolesIds();
+        $categoryEditRolesObject = new RolesRights($gDb, 'category_edit', $catId);
+        $roleEditSet = $categoryEditRolesObject->getRolesIds();
     } else {
-        if ($getCatUuid !== '') {
-            $category->readDataByUuid($getCatUuid);
-            $catId = (int)$category->getValue('cat_id');
-
-            // get assigned roles of this category
-            $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $catId);
-            $roleViewSet = $categoryViewRolesObject->getRolesIds();
-            $categoryEditRolesObject = new RolesRights($gDb, 'category_edit', $catId);
-            $roleEditSet = $categoryEditRolesObject->getRolesIds();
-        } else {
-            // profile fields should be organization independent all other categories should be organization dependent as default
-            if ($getType !== 'USF') {
-                $category->setValue('cat_org_id', $gCurrentOrgId);
-            }
+        // profile fields should be organization independent all other categories should be organization dependent as default
+        if ($getType !== 'USF') {
+            $category->setValue('cat_org_id', $gCurrentOrgId);
         }
     }
 
@@ -172,31 +158,17 @@ try {
     }
 
     // show form
-    $form = new HtmlForm('categories_edit_form', ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', $page);
-    // add a hidden field with context information
-    $form->addInput(
-        'mode',
-        'mode',
-        'edit',
-        array('property' => HtmlForm::FIELD_HIDDEN)
-    );
-    $form->addInput(
-        'uuid',
-        'uuid',
-        $getCatUuid,
-        array('property' => HtmlForm::FIELD_HIDDEN)
-    );
-    $form->addInput(
-        'type',
-        'type',
-        $getType,
-        array('property' => HtmlForm::FIELD_HIDDEN)
+    $form = new Form(
+        'categories_edit_form',
+        'modules/categories.edit.tpl',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('uuid' => $getCatUuid, 'mode' => 'edit', 'type' => $getType)),
+        $page
     );
 
     // system categories should not be renamed
-    $fieldPropertyCatName = HtmlForm::FIELD_REQUIRED;
+    $fieldPropertyCatName = Form::FIELD_REQUIRED;
     if ($category->getValue('cat_system') == 1) {
-        $fieldPropertyCatName = HtmlForm::FIELD_DISABLED;
+        $fieldPropertyCatName = Form::FIELD_DISABLED;
     }
 
     $form->addInput(
@@ -260,7 +232,7 @@ try {
             $gDb,
             $sqlDataView,
             array(
-                'property' => HtmlForm::FIELD_REQUIRED,
+                'property' => Form::FIELD_REQUIRED,
                 'defaultValue' => $roleViewSet,
                 'multiselect' => true,
                 'firstEntry' => array('0', $firstEntryName, null),
@@ -285,15 +257,15 @@ try {
     }
 
     // if current organization has a parent organization or is child organizations then show option to set this category to global
-    if ($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrganization->countAllRecords() > 1) {
+    if ($getType !== 'ROL' && (bool)$category->getValue('cat_system') === false && $gCurrentOrganization->countAllRecords() > 1) {
         if ($gCurrentOrganization->isChildOrganization()) {
-            $fieldProperty = HtmlForm::FIELD_DISABLED;
+            $fieldProperty = Form::FIELD_DISABLED;
             $helpTextId = 'SYS_ONLY_SET_BY_MOTHER_ORGANIZATION';
         } else {
             // show all organizations where this organization is mother or child organization
             $organizations = implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-            $fieldProperty = HtmlForm::FIELD_DEFAULT;
+            $fieldProperty = Form::FIELD_DEFAULT;
             if ($getType === 'USF') {
                 $helpTextId = $gL10n->get('SYS_CATEGORY_VISIBLE_ALL_ORGA', array($organizations));
             } else {
@@ -322,7 +294,7 @@ try {
             'adm_administrators',
             $gL10n->get('SYS_ADMINISTRATORS'),
             implode(', ', $adminRoles),
-            array('property' => HtmlForm::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
+            array('property' => Form::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
         );
 
         $checked = false;
@@ -344,17 +316,20 @@ try {
         (bool)$category->getValue('cat_default'),
         array('icon' => 'bi-star-fill')
     );
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-    $form->addHtml(admFuncShowCreateChangeInfoById(
-        (int)$category->getValue('cat_usr_id_create'),
-        $category->getValue('cat_timestamp_create'),
-        (int)$category->getValue('cat_usr_id_change'),
-        $category->getValue('cat_timestamp_change')
-    ));
+    $form->addSubmitButton(
+        'btn_save',
+        $gL10n->get('SYS_SAVE'),
+        array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+    );
 
-    // add form to html page and show page
-    $page->addHtml($form->show());
+    $page->assignSmartyVariable('nameUserCreated', $category->getNameOfCreatingUser());
+    $page->assignSmartyVariable('timestampUserCreated', $category->getValue('cat_timestamp_create'));
+    $page->assignSmartyVariable('nameLastUserEdited', $category->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('timestampLastUserEdited', $category->getValue('cat_timestamp_change'));
+    $form->addToHtmlPage();
+    $gCurrentSession->addFormObject($form);
+
     $page->show();
-} catch (AdmException|Exception|\Smarty\Exception $e) {
+} catch (AdmException|Exception $e) {
     $gMessage->show($e->getMessage());
 }

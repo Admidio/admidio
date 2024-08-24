@@ -9,1823 +9,357 @@
  *
  * Parameters:
  *
- * show_option : show preferences of module with this text id
- *               Example: SYS_COMMON or
+ * mode     : html           - (default) Show page with all preferences panels
+ *            html_form      - Returns the html of the requested form
+ *            save           - Save organization preferences
+ *            new_org_dialog - show welcome dialog for new organization
+ *            new_org_create - Create basic data for new organization in database
+ *            new_org_create_success - Show success dialog if new organization was created
+ *            htaccess       - set directory protection, write htaccess
+ *            test_email     - send test email
+ *            backup         - create backup of Admidio database
+ * panel    : The name of the preferences panel that should be shown or saved.
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\UserInterface\Form;
+use Admidio\UserInterface\Preferences;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
-    $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
+        array(
+            'defaultValue' => 'html',
+            'validValues' => array('html', 'html_form', 'save', 'new_org_dialog', 'new_org_create', 'new_org_create_success', 'htaccess', 'test_email', 'backup')
+        ));
+    $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
 
-    $headline = $gL10n->get('SYS_SETTINGS');
-
-    // only administrators are allowed to edit organization preferences
+    // only administrators are allowed to view, edit organization preferences or create new organizations
     if (!$gCurrentUser->isAdministrator()) {
         throw new AdmException('SYS_NO_RIGHTS');
     }
 
     /**
-     * Read all file names of a folder and return an array where the file names are the keys and a readable
-     * version of the file names are the values.
      * @param string $folder
-     * @return false|int[]|string[]
-     * @throws UnexpectedValueException
-     * @throws RuntimeException
+     * @param string $templateName
+     * @return string
      */
-    function getArrayFileNames(string $folder)
+    function getTemplateFileName(string $folder, string $templateName): string
     {
         // get all files from the folder
         $files = array_keys(FileSystemUtils::getDirectoryContent($folder, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+        $templateFileName = '';
 
-        foreach ($files as &$templateName) {
-            $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace(array('.tpl', '.html', '.txt'), '', $templateName)));
+        foreach ($files as $fileName) {
+            if ($templateName === ucfirst(preg_replace('/[_-]/', ' ', str_replace(array('.tpl', '.html', '.txt'), '', $fileName)))) {
+                $templateFileName = $fileName;
+            }
         }
-        unset($templateName);
-
-        return $files;
+        return $templateFileName;
     }
 
-    // read organization and all system preferences values into form array
-    $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
+    switch ($getMode) {
+        case 'html':
+            $headline = $gL10n->get('SYS_SETTINGS');
 
-    // create html page object
-    $page = new HtmlPage('admidio-preferences', $headline);
+            if ($getPanel === '') {
+                $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
+            }
+            // create html page object
+            $page = new Preferences('admidio-preferences', $headline);
 
-    $showOptionValidModules = array(
-        'announcements', 'documents-files', 'guestbook', 'groups-roles',
-        'messages', 'photos', 'profile', 'events', 'links', 'contacts', 'category-report'
-    );
+            if ($getPanel !== '') {
+                $page->setPanelToShow($getPanel);
+                // add current url to navigation stack
+                $gNavigation->addUrl(CURRENT_URL, $headline);
+            }
 
-    // open the modules tab if the options of a module should be shown
-    if (in_array($showOption, $showOptionValidModules, true)) {
-        $page->addJavascript(
-            '
-        $("#tabs_nav_modules").attr("class", "nav-link active");
-        $("#tabs-modules").attr("class", "tab-pane fade show active");
-        $("#collapse_' . $showOption . '").attr("class", "collapse show");
-        location.hash = "#" + "panel_' . $showOption . '";',
-            true
-        );
-    } else {
-        $page->addJavascript(
-            '
-        $("#tabs_nav_common").attr("class", "nav-link active");
-        $("#tabs-common").attr("class", "tab-pane fade show active");
-        $("#collapse_' . $showOption . '").attr("class", "collapse show");
-        location.hash = "#" + "panel_' . $showOption . '";',
-            true
-        );
-    }
+            $page->show();
+            break;
+        case 'save':
+            // check form field input and sanitized it from malicious content
+            $preferencesForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $preferencesForm->validate($_POST);
 
-    $page->addJavascript(
-        '
-    $(".form-preferences").submit(function(event) {
-        var id = $(this).attr("id");
-        var action = $(this).attr("action");
-        var formAlert = $("#" + id + " .form-alert");
-        formAlert.hide();
-
-        // disable default form submit
-        event.preventDefault();
-
-        $.post({
-            url: action,
-            data: $(this).serialize(),
-            success: function(data) {
-                if (data === "success") {
-                    if (id === "captcha_preferences_form") {
-                        // reload captcha if form is saved
-                        $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random());
+            // first check the fields of the submitted form
+            switch ($getPanel) {
+                case 'Common':
+                    if (!StringUtils::strIsValidFolderName($_POST['theme'])
+                        || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html')) {
+                        throw new AdmException('ORG_INVALID_THEME');
                     }
-                    formAlert.attr("class", "alert alert-success form-alert");
-                    formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
-                    formAlert.fadeIn("slow");
-                    formAlert.animate({opacity: 1.0}, 2500);
-                    formAlert.fadeOut("slow");
-                } else {
-                    formAlert.attr("class", "alert alert-danger form-alert");
-                    formAlert.fadeIn();
-                    formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
+                    break;
+
+                case 'Security':
+                    if (!isset($_POST['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login')) {
+                        // if auto login was deactivated than delete all saved logins
+                        $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
+                        $gDb->queryPrepared($sql);
+                    }
+                    break;
+
+                case 'RegionalSettings':
+                    if (!StringUtils::strIsValidFolderName($_POST['system_language'])
+                        || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml')) {
+                        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
+                    }
+                    break;
+
+                case 'Messages':
+                    // get real filename of the template file
+                    if ($_POST['mail_template'] !== $gSettingsManager->getString('mail_template')) {
+                        $formValues['mail_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $_POST['mail_template']);
+                    }
+                    break;
+
+                case 'Photos':
+                    // get real filename of the template file
+                    if ($_POST['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
+                        $formValues['photo_ecard_template'] = getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $_POST['photo_ecard_template']);
+                    }
+                    break;
+            }
+
+            // then update the database with the new values
+
+            foreach ($formValues as $key => $value) {
+                // Sort out elements that are not stored in adm_preferences here
+                if (!in_array($key, array('save', 'admidio-csrf-token'))) {
+                    if (str_starts_with($key, 'org_')) {
+                        $gCurrentOrganization->setValue($key, $value);
+                    } elseif (str_starts_with($key, 'SYSMAIL_')) {
+                        $text = new TableText($gDb);
+                        $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
+                        $text->setValue('txt_text', $value);
+                        $text->save();
+                    } elseif ($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->getBool('enable_auto_login')) {
+                        // if deactivate auto login than delete all saved logins
+                        $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
+                        $gDb->queryPrepared($sql);
+                        $gSettingsManager->set($key, $value);
+                    } else {
+                        $gSettingsManager->set($key, $value);
+                    }
                 }
             }
-        });
-    });
 
-    $("#captcha-refresh").click(function() {
-        document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
-    });
+            // now save all data
+            $gCurrentOrganization->save();
 
-    $("#link_check_for_update").click(function() {
-        var admVersionContent = $("#admidio_version_content");
+            // refresh language if necessary
+            if ($gL10n->getLanguage() !== $gSettingsManager->getString('system_language')) {
+                $gL10n->setLanguage($gSettingsManager->getString('system_language'));
+            }
 
-        admVersionContent.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
-            admVersionContent.html(htmlVersion);
-        });
-        return false;
-    });
+            // clean up
+            $gCurrentSession->reloadAllSessions();
 
-    $("#link_directory_protection").click(function() {
-        var dirProtectionStatus = $("#directory_protection_status");
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
+            break;
 
-        dirProtectionStatus.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php", {mode: "htaccess"}, function(statusText) {
-            var directoryProtection = dirProtectionStatus.parent().parent().parent();
-            directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
-        });
-        return false;
-    });',
-        true
-    );
+        // Returns the html of the requested form
+        case 'html_form':
+            $preferencesUI = new Preferences('preferencesForm');
+            $methodName = 'create' . $getPanel . 'Form';
+            echo $preferencesUI->{$methodName}();
+            break;
 
-    if ($showOption !== '') {
-        // add current url to navigation stack
-        $gNavigation->addUrl(CURRENT_URL, $headline);
-    } else {
-        // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
-    }
+        // show welcome dialog for new organization
+        case 'new_org_dialog':
+            $headline = $gL10n->get('INS_ADD_ORGANIZATION');
 
-    /**
-     * @param string $type
-     * @param string $text
-     * @param string $info
-     * @return string
-     */
-    function getStaticText(string $type, string $text, string $info = ''): string
-    {
-        return '<span class="text-' . $type . '"><strong>' . $text . '</strong></span>' . $info;
-    }
+            // add current url to navigation stack
+            $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    /**
-     * @param string $id
-     * @param string $parentId
-     * @param string $title
-     * @param string $icon
-     * @param string $body
-     * @return string
-     */
-    function getPreferencePanel(string $id, string $parentId, string $title, string $icon, string $body): string
-    {
-        $html = '
-        <div id="admidio-panel-' . $id . '" class="accordion-item">
-            <h2 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#collapse_' . $id . '">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_' . $id . '" aria-expanded="true" aria-controls="collapseOne">
-                    <i class="bi ' . $icon . '"></i>' . $title . '
-                </button>
-            </h2>
-            <div id="collapse_' . $id . '" class="accordion-collapse collapse" data-bs-parent="#' . $parentId . '">
-                <div class="accordion-body">
-                    ' . $body . '
-                </div>
-            </div>
-        </div>
-    ';
-        return $html;
-    }
+            // create html page object
+            $page = new HtmlPage('admidio-new-organization', $headline);
 
-    $page->addHtml('
-    <ul id="admidio-preferences-tabs" class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-            <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-bs-toggle="tab" role="tab">' . $gL10n->get('SYS_COMMON') . '</a>
-        </li>
-        <li class="nav-item">
-            <a id="tabs_nav_modules" class="nav-link" href="#tabs-modules" data-bs-toggle="tab" role="tab">' . $gL10n->get('SYS_MODULES') . '</a>
-        </li>
-    </ul>
-
-    <div id="admidio-preferences-tab-content" class="tab-content">
-        <div class="tab-pane fade" id="tabs-common" role="tabpanel">
-            <div class="accordion" id="accordion_preferences">');
-
-    // PANEL: COMMON
-
-    $formCommon = new HtmlForm(
-        'common_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'common')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    // search all available themes in theme folder
-    $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
-    if (count($themes) === 0) {
-        throw new AdmException('SYS_TEMPLATE_FOLDER_OPEN');
-    }
-    $formCommon->addSelectBox(
-        'theme',
-        $gL10n->get('ORG_ADMIDIO_THEME'),
-        $themes,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
-    );
-    $formCommon->addInput(
-        'homepage_logout',
-        $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('SYS_VISITORS') . ')',
-        $formValues['homepage_logout'],
-        array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_VISITORS')
-    );
-    $formCommon->addInput(
-        'homepage_login',
-        $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('ORG_REGISTERED_USERS') . ')',
-        $formValues['homepage_login'],
-        array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS')
-    );
-    $formCommon->addCheckbox(
-        'enable_rss',
-        $gL10n->get('ORG_ENABLE_RSS_FEEDS'),
-        (bool)$formValues['enable_rss'],
-        array('helpTextId' => 'ORG_ENABLE_RSS_FEEDS_DESC')
-    );
-    $formCommon->addCheckbox(
-        'system_cookie_note',
-        $gL10n->get('SYS_COOKIE_NOTE'),
-        (bool)$formValues['system_cookie_note'],
-        array('helpTextId' => 'SYS_COOKIE_NOTE_DESC')
-    );
-    $formCommon->addCheckbox(
-        'system_search_similar',
-        $gL10n->get('ORG_SEARCH_SIMILAR_NAMES'),
-        (bool)$formValues['system_search_similar'],
-        array('helpTextId' => 'ORG_SEARCH_SIMILAR_NAMES_DESC')
-    );
-    $selectBoxEntries = array(0 => $gL10n->get('SYS_DONT_SHOW'), 1 => $gL10n->get('SYS_FIRSTNAME_LASTNAME'), 2 => $gL10n->get('SYS_USERNAME'));
-    $formCommon->addSelectBox(
-        'system_show_create_edit',
-        $gL10n->get('ORG_SHOW_CREATE_EDIT'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['system_show_create_edit'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_SHOW_CREATE_EDIT_DESC')
-    );
-    $formCommon->addInput(
-        'system_url_data_protection',
-        $gL10n->get('SYS_DATA_PROTECTION'),
-        $formValues['system_url_data_protection'],
-        array('maxLength' => 250, 'helpTextId' => 'SYS_DATA_PROTECTION_DESC')
-    );
-    $formCommon->addInput(
-        'system_url_imprint',
-        $gL10n->get('SYS_IMPRINT'),
-        $formValues['system_url_imprint'],
-        array('maxLength' => 250, 'helpTextId' => 'SYS_IMPRINT_DESC')
-    );
-    $formCommon->addCheckbox(
-        'system_js_editor_enabled',
-        $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'),
-        (bool)$formValues['system_js_editor_enabled'],
-        array('helpTextId' => 'ORG_JAVASCRIPT_EDITOR_ENABLE_DESC')
-    );
-    $formCommon->addCheckbox(
-        'system_browser_update_check',
-        $gL10n->get('ORG_BROWSER_UPDATE_CHECK'),
-        (bool)$formValues['system_browser_update_check'],
-        array('helpTextId' => 'ORG_BROWSER_UPDATE_CHECK_DESC')
-    );
-    $formCommon->addSubmitButton(
-        'btn_save_common',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('common', 'accordion_preferences', $gL10n->get('SYS_COMMON'), 'bi-gear-fill', $formCommon->show()));
-
-    // PANEL: SECURITY
-
-    $formSecurity = new HtmlForm(
-        'security_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'security')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $formSecurity->addInput(
-        'logout_minutes',
-        $gL10n->get('ORG_AUTOMATIC_LOGOUT_AFTER'),
-        $formValues['logout_minutes'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_AUTOMATIC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
-    );
-    $selectBoxEntries = array(
-        0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),
-        1 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_LOW'),
-        2 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_MID'),
-        3 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_HIGH'),
-        4 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH')
-    );
-    $formSecurity->addSelectBox(
-        'password_min_strength',
-        $gL10n->get('ORG_PASSWORD_MIN_STRENGTH'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['password_min_strength'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_PASSWORD_MIN_STRENGTH_DESC')
-    );
-    $formSecurity->addCheckbox(
-        'enable_auto_login',
-        $gL10n->get('ORG_LOGIN_AUTOMATICALLY'),
-        (bool)$formValues['enable_auto_login'],
-        array('helpTextId' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
-    );
-    $formSecurity->addCheckbox(
-        'enable_password_recovery',
-        $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
-        (bool)$formValues['enable_password_recovery'],
-        array('helpTextId' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('SYS_ENABLE_NOTIFICATIONS')))
-    );
-
-
-    $formSecurity->addSubmitButton(
-        'btn_save_security',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('security', 'accordion_preferences', $gL10n->get('SYS_SECURITY'), 'bi-shield-fill', $formSecurity->show()));
-
-    // PANEL: ORGANIZATION
-
-    $formOrganization = new HtmlForm(
-        'organization_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'organization')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $formOrganization->addInput(
-        'org_shortname',
-        $gL10n->get('SYS_NAME_ABBREVIATION'),
-        $formValues['org_shortname'],
-        array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small')
-    );
-    $formOrganization->addInput(
-        'org_longname',
-        $gL10n->get('SYS_NAME'),
-        $formValues['org_longname'],
-        array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED)
-    );
-    $formOrganization->addInput(
-        'org_homepage',
-        $gL10n->get('SYS_WEBSITE'),
-        $formValues['org_homepage'],
-        array('maxLength' => 60)
-    );
-    $formOrganization->addInput(
-        'email_administrator',
-        $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
-        $formValues['email_administrator'],
-        array('type' => 'email', 'maxLength' => 50, 'helpTextId' => 'SYS_EMAIL_ADMINISTRATOR_DESC')
-    );
-
-    if ($gCurrentOrganization->countAllRecords() > 1) {
-        // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-        if (!$gCurrentOrganization->isParentOrganization()) {
-            $sqlData = array();
-            $sqlData['query'] = 'SELECT org_id, org_longname
-                               FROM ' . TBL_ORGANIZATIONS . '
-                              WHERE org_id <> ? -- $gCurrentOrgId
-                                AND org_org_id_parent IS NULL
-                           ORDER BY org_longname, org_shortname';
-            $sqlData['params'] = array($gCurrentOrgId);
-            $formOrganization->addSelectBoxFromSql(
-                'org_org_id_parent',
-                $gL10n->get('ORG_PARENT_ORGANIZATION'),
-                $gDb,
-                $sqlData,
-                array('defaultValue' => $formValues['org_org_id_parent'], 'helpTextId' => 'ORG_PARENT_ORGANIZATION_DESC')
+            // show form
+            $form = new Form(
+                'newOrganizationForm',
+                'modules/organizations.new.tpl',
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create')),
+                $page
             );
-        }
+            $form->addInput(
+                'orgaShortName',
+                $gL10n->get('SYS_NAME_ABBREVIATION'),
+                '',
+                array('maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+            );
+            $form->addInput(
+                'orgaLongName',
+                $gL10n->get('SYS_NAME'),
+                '',
+                array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+            );
+            $form->addInput(
+                'orgaEmail',
+                $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
+                '',
+                array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+            );
+            $form->addSubmitButton(
+                'btn_forward',
+                $gL10n->get('INS_SET_UP_ORGANIZATION'),
+                array('icon' => 'bi-wrench')
+            );
 
-        $formOrganization->addCheckbox(
-            'system_organization_select',
-            $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'),
-            (bool)$formValues['system_organization_select'],
-            array('helpTextId' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC')
-        );
-    }
+            $form->addToHtmlPage();
+            $gCurrentSession->addFormObject($form);
+            $page->show();
+            break;
 
-    $html = '<a class="btn btn-secondary" id="add_another_organization" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'new_org_dialog')) . '">
-            <i class="bi bi-plus-circle-fill"></i>' . $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION') . '</a>';
-    $formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextId' => 'ORG_ADD_ORGANIZATION_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
-    $formOrganization->addSubmitButton(
-        'btn_save_organization',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
+        // Create basic data for new organization in database
+        case 'new_org_create':
+            // check form field input and sanitized it from malicious content
+            $newOrganizationForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $newOrganizationForm->validate($_POST);
 
-    $page->addHtml(getPreferencePanel('organization', 'accordion_preferences', $gL10n->get('SYS_ORGANIZATION'), 'bi-diagram-3-fill', $formOrganization->show()));
-
-    // PANEL: REGIONAL SETTINGS
-
-    $formRegionalSettings = new HtmlForm(
-        'regional_settings_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'regional_settings')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $formRegionalSettings->addInput(
-        'system_timezone',
-        $gL10n->get('ORG_TIMEZONE'),
-        $gTimezone,
-        array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextId' => 'ORG_TIMEZONE_DESC')
-    );
-    $formRegionalSettings->addSelectBox(
-        'system_language',
-        $gL10n->get('SYS_LANGUAGE'),
-        $gL10n->getAvailableLanguages(),
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
-    );
-    $formRegionalSettings->addSelectBox(
-        'default_country',
-        $gL10n->get('SYS_DEFAULT_COUNTRY'),
-        $gL10n->getCountries(),
-        array('defaultValue' => $formValues['default_country'], 'helpTextId' => 'SYS_DEFAULT_COUNTRY_DESC')
-    );
-    $formRegionalSettings->addInput(
-        'system_date',
-        $gL10n->get('ORG_DATE_FORMAT'),
-        $formValues['system_date'],
-        array('maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
-    );
-    $formRegionalSettings->addInput(
-        'system_time',
-        $gL10n->get('ORG_TIME_FORMAT'),
-        $formValues['system_time'],
-        array('maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
-    );
-    $formRegionalSettings->addInput(
-        'system_currency',
-        $gL10n->get('ORG_CURRENCY'),
-        $formValues['system_currency'],
-        array('maxLength' => 20, 'helpTextId' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small')
-    );
-    $formRegionalSettings->addSubmitButton(
-        'btn_save_regional_settings',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('regional_settings', 'accordion_preferences', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'bi-globe2', $formRegionalSettings->show()));
-
-    // PANEL: REGISTRATION
-
-    $formRegistration = new HtmlForm(
-        'registration_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'registration')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $formRegistration->addCheckbox(
-        'registration_enable_module',
-        $gL10n->get('ORG_ENABLE_REGISTRATION_MODULE'),
-        (bool)$formValues['registration_enable_module'],
-        array('helpTextId' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC')
-    );
-    $formRegistration->addCheckbox(
-        'registration_manual_approval',
-        $gL10n->get('SYS_MANUAL_APPROVAL'),
-        (bool)$formValues['registration_manual_approval'],
-        array('helpTextId' => array('SYS_MANUAL_APPROVAL_DESC', array('SYS_RIGHT_APPROVE_USERS')))
-    );
-    $formRegistration->addCheckbox(
-        'registration_enable_captcha',
-        $gL10n->get('ORG_ENABLE_CAPTCHA'),
-        (bool)$formValues['registration_enable_captcha'],
-        array('helpTextId' => 'ORG_CAPTCHA_REGISTRATION')
-    );
-    $formRegistration->addCheckbox(
-        'registration_adopt_all_data',
-        $gL10n->get('SYS_REGISTRATION_ADOPT_ALL_DATA'),
-        (bool)$formValues['registration_adopt_all_data'],
-        array('helpTextId' => 'SYS_REGISTRATION_ADOPT_ALL_DATA_DESC')
-    );
-    $formRegistration->addCheckbox(
-        'registration_send_notification_email',
-        $gL10n->get('ORG_EMAIL_ALERTS'),
-        (bool)$formValues['registration_send_notification_email'],
-        array('helpTextId' => array('ORG_EMAIL_ALERTS_DESC', array('SYS_RIGHT_APPROVE_USERS')))
-    );
-    $formRegistration->addSubmitButton(
-        'btn_save_registration',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('registration', 'accordion_preferences', $gL10n->get('SYS_REGISTRATION'), 'bi-card-checklist', $formRegistration->show()));
-
-    // PANEL: EMAIL DISPATCH
-
-    $formEmailDispatch = new HtmlForm(
-        'email_dispatch_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'email_dispatch')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-    $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'));
-    $formEmailDispatch->addSelectBox(
-        'mail_send_method',
-        $gL10n->get('SYS_SEND_METHOD'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SEND_METHOD_DESC')
-    );
-    $formEmailDispatch->addInput(
-        'mail_sendmail_address',
-        $gL10n->get('SYS_SENDER_EMAIL'),
-        $formValues['mail_sendmail_address'],
-        array('maxLength' => 50, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
-    );
-    $formEmailDispatch->addInput(
-        'mail_sendmail_name',
-        $gL10n->get('SYS_SENDER_NAME'),
-        $formValues['mail_sendmail_name'],
-        array('maxLength' => 50, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
-    );
-
-    // Add js to show or hide mail options
-    $page->addJavascript('
-        $(function(){
-            var fieldsToHideOnSingleMode = "#mail_recipients_with_roles_group, #mail_into_to_group, #mail_number_recipients_group";
-            if($("#mail_sending_mode").val() == 1) {
-                $(fieldsToHideOnSingleMode).hide();
+            // check if organization shortname exists
+            $organization = new Organization($gDb, $formValues['orgaShortName']);
+            if ($organization->getValue('org_id') > 0) {
+                throw new AdmException('INS_ORGA_SHORTNAME_EXISTS', array($formValues['orgaShortName']));
             }
-            $("#mail_sending_mode").on("change", function() {
-                if($("#mail_sending_mode").val() == 1) {
-                    $(fieldsToHideOnSingleMode).hide();
-                } else {
-                    $(fieldsToHideOnSingleMode).show();
-                }
-            });
-        });
-    ');
 
-    $selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
-    $formEmailDispatch->addSelectBox(
-        'mail_sending_mode',
-        $gL10n->get('SYS_MAIL_SENDING_MODE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['mail_sending_mode'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MAIL_SENDING_MODE_DESC')
-    );
+            // allow only letters, numbers and special characters like .-_+@
+            if (!StringUtils::strValidCharacters($formValues['orgaShortName'], 'noSpecialChar')) {
+                throw new AdmException('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
+            }
 
-    $selectBoxEntries = array(0 => $gL10n->get('SYS_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
-    $formEmailDispatch->addSelectBox(
-        'mail_recipients_with_roles',
-        $gL10n->get('SYS_MULTIPLE_RECIPIENTS'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
-    );
-    $formEmailDispatch->addCheckbox(
-        'mail_into_to',
-        $gL10n->get('SYS_INTO_TO'),
-        (bool)$formValues['mail_into_to'],
-        array('helpTextId' => 'SYS_INTO_TO_DESC')
-    );
-    $formEmailDispatch->addInput(
-        'mail_number_recipients',
-        $gL10n->get('SYS_NUMBER_RECIPIENTS'),
-        $formValues['mail_number_recipients'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC')
-    );
+            // set execution time to 2 minutes because we have a lot to do
+            PhpIniUtils::startNewExecutionTimeLimit(120);
 
-    $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-    $formEmailDispatch->addSelectBox(
-        'mail_character_encoding',
-        $gL10n->get('SYS_CHARACTER_ENCODING'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['mail_character_encoding'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_CHARACTER_ENCODING_DESC')
-    );
-    $formEmailDispatch->addInput(
-        'mail_smtp_host',
-        $gL10n->get('SYS_SMTP_HOST'),
-        $formValues['mail_smtp_host'],
-        array('maxLength' => 50, 'helpTextId' => 'SYS_SMTP_HOST_DESC')
-    );
-    $formEmailDispatch->addCheckbox(
-        'mail_smtp_auth',
-        $gL10n->get('SYS_SMTP_AUTH'),
-        (bool)$formValues['mail_smtp_auth'],
-        array('helpTextId' => 'SYS_SMTP_AUTH_DESC')
-    );
-    $formEmailDispatch->addInput(
-        'mail_smtp_port',
-        $gL10n->get('SYS_SMTP_PORT'),
-        $formValues['mail_smtp_port'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SMTP_PORT_DESC')
-    );
-    $selectBoxEntries = array(
-        '' => $gL10n->get('SYS_SMTP_SECURE_NO'),
-        'ssl' => $gL10n->get('SYS_SMTP_SECURE_SSL'),
-        'tls' => $gL10n->get('SYS_SMTP_SECURE_TLS')
-    );
-    $formEmailDispatch->addSelectBox(
-        'mail_smtp_secure',
-        $gL10n->get('SYS_SMTP_SECURE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SMTP_SECURE_DESC')
-    );
-    $selectBoxEntries = array(
-        '' => $gL10n->get('SYS_AUTO_DETECT'),
-        'LOGIN' => $gL10n->get('SYS_SMTP_AUTH_LOGIN'),
-        'PLAIN' => $gL10n->get('SYS_SMTP_AUTH_PLAIN'),
-        'CRAM-MD5' => $gL10n->get('SYS_SMTP_AUTH_CRAM_MD5')
-    );
-    $formEmailDispatch->addSelectBox(
-        'mail_smtp_authentication_type',
-        $gL10n->get('SYS_SMTP_AUTH_TYPE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['mail_smtp_authentication_type'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SMTP_AUTH_TYPE_DESC', array('SYS_AUTO_DETECT')))
-    );
-    $formEmailDispatch->addInput(
-        'mail_smtp_user',
-        $gL10n->get('SYS_SMTP_USER'),
-        $formValues['mail_smtp_user'],
-        array('maxLength' => 100, 'helpTextId' => 'SYS_SMTP_USER_DESC')
-    );
-    $formEmailDispatch->addInput(
-        'mail_smtp_password',
-        $gL10n->get('SYS_SMTP_PASSWORD'),
-        $formValues['mail_smtp_password'],
-        array('type' => 'password', 'maxLength' => 50, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
-    );
-    $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'test_email')) . '">
-            <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
-    $formEmailDispatch->addCustomContent($gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
-    $formEmailDispatch->addSubmitButton(
-        'btn_save_email_dispatch',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
+            $gDb->startTransaction();
 
-    $page->addHtml(getPreferencePanel('email_dispatch', 'accordion_preferences', $gL10n->get('SYS_MAIL_DISPATCH'), 'bi-envelope-open-fill', $formEmailDispatch->show()));
+            // create new organization
+            $_SESSION['orgaLongName'] = $formValues['orgaLongName'];
+            $newOrganization = new Organization($gDb, $formValues['orgaShortName']);
+            $newOrganization->setValue('org_longname', $formValues['orgaLongName']);
+            $newOrganization->setValue('org_shortname', $formValues['orgaShortName']);
+            $newOrganization->setValue('org_homepage', ADMIDIO_URL);
+            $newOrganization->save();
 
-    // PANEL: SYSTEM NOTIFICATION
+            // write all preferences from preferences.php in table adm_preferences
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
-    $formSystemNotification = new HtmlForm(
-        'system_notification_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'system_notification')),
-        $page,
-        array('class' => 'form-preferences')
-    );
+            // set some specific preferences whose values came from user input of the installation wizard
+            $defaultOrgPreferences['email_administrator'] = $formValues['orgaEmail'];
+            $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
 
-    $formSystemNotification->addCheckbox(
-        'system_notifications_enabled',
-        $gL10n->get('SYS_ENABLE_NOTIFICATIONS'),
-        (bool)$formValues['system_notifications_enabled'],
-        array('helpTextId' => 'SYS_ENABLE_NOTIFICATIONS_DESC')
-    );
+            // create all necessary data for this organization
+            $settingsManager =& $newOrganization->getSettingsManager();
+            $settingsManager->setMulti($defaultOrgPreferences, false);
+            $newOrganization->createBasicData($gCurrentUserId);
 
-    $formSystemNotification->addCheckbox(
-        'system_notifications_new_entries',
-        $gL10n->get('SYS_NOTIFICATION_NEW_ENTRIES'),
-        (bool)$formValues['system_notifications_new_entries'],
-        array('helpTextId' => 'SYS_NOTIFICATION_NEW_ENTRIES_DESC')
-    );
-    $formSystemNotification->addCheckbox(
-        'system_notifications_profile_changes',
-        $gL10n->get('SYS_NOTIFICATION_PROFILE_CHANGES'),
-        (bool)$formValues['system_notifications_profile_changes'],
-        array('helpTextId' => 'SYS_NOTIFICATION_PROFILE_CHANGES_DESC')
-    );
+            // now refresh the session organization object because of the new organization
+            $currentOrganizationId = $gCurrentOrgId;
+            $gCurrentOrganization = new Organization($gDb, $currentOrganizationId);
 
-    // read all roles of the organization
-    $sqlData = array();
-    $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
-               FROM ' . TBL_ROLES . '
-         INNER JOIN ' . TBL_CATEGORIES . '
-                 ON cat_id = rol_cat_id
-         INNER JOIN ' . TBL_ORGANIZATIONS . '
-                 ON org_id = cat_org_id
-              WHERE rol_valid  = true
-                AND rol_system = false
-                AND rol_all_lists_view = true
-                AND cat_org_id = ? -- $gCurrentOrgId
-                AND cat_name_intern <> \'EVENTS\'
-           ORDER BY cat_name, rol_name';
-    $sqlData['params'] = array($gCurrentOrgId);
-    $formSystemNotification->addSelectBoxFromSql(
-        'system_notifications_role',
-        $gL10n->get('SYS_NOTIFICATION_ROLE'),
-        $gDb,
-        $sqlData,
-        array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
-    );
+            // if installation of second organization than show organization select at login
+            if ($gCurrentOrganization->countAllRecords() === 2) {
+                $sql = 'UPDATE ' . TBL_PREFERENCES . '
+                       SET prf_value = 1
+                     WHERE prf_name = \'system_organization_select\'';
+                $gDb->queryPrepared($sql);
+            }
 
-    $formSystemNotification->addCustomContent(
-        $gL10n->get('SYS_SYSTEM_MAILS'),
-        '<p>' . $gL10n->get('SYS_SYSTEM_MAIL_TEXTS_DESC') . ':</p>
-    <p><strong>#user_first_name#</strong> - ' . $gL10n->get('ORG_VARIABLE_FIRST_NAME') . '<br />
-    <strong>#user_last_name#</strong> - ' . $gL10n->get('ORG_VARIABLE_LAST_NAME') . '<br />
-    <strong>#user_login_name#</strong> - ' . $gL10n->get('ORG_VARIABLE_USERNAME') . '<br />
-    <strong>#user_email#</strong> - ' . $gL10n->get('ORG_VARIABLE_EMAIL') . '<br />
-    <strong>#administrator_email#</strong> - ' . $gL10n->get('ORG_VARIABLE_EMAIL_ORGANIZATION') . '<br />
-    <strong>#organization_short_name#</strong> - ' . $gL10n->get('ORG_VARIABLE_SHORTNAME_ORGANIZATION') . '<br />
-    <strong>#organization_long_name#</strong> - ' . $gL10n->get('ORG_VARIABLE_NAME_ORGANIZATION') . '<br />
-    <strong>#organization_homepage#</strong> - ' . $gL10n->get('ORG_VARIABLE_URL_ORGANIZATION') . '</p>'
-    );
+            $gDb->endTransaction();
+            $gNavigation->deleteLastUrl();
 
-    $text = new TableText($gDb);
-    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_CONFIRMATION', 'txt_org_id' => $gCurrentOrgId));
-    $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_CONFIRMATION', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_CONFIRMATION'), $text->getValue('txt_text'), 7);
-    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_NEW', 'txt_org_id' => $gCurrentOrgId));
-    $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_NEW', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
-    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_APPROVED', 'txt_org_id' => $gCurrentOrgId));
-    $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
-    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_REFUSED', 'txt_org_id' => $gCurrentOrgId));
-    $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
-    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrgId));
-    $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
-    $formSystemNotification->addMultilineTextInput(
-        'SYSMAIL_NEW_PASSWORD',
-        $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-        $text->getValue('txt_text'),
-        7,
-        array('helpTextId' => $htmlDesc)
-    );
-    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $gCurrentOrgId));
-    $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
-    $formSystemNotification->addMultilineTextInput(
-        'SYSMAIL_PASSWORD_RESET',
-        $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
-        $text->getValue('txt_text'),
-        7,
-        array('helpTextId' => $htmlDesc)
-    );
+            echo json_encode(array(
+                'status' => 'success',
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create_success'))
+            ));
+            break;
 
-    $formSystemNotification->addSubmitButton(
-        'btn_save_system_notification',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
+        // Show success dialog if new organization was created
+        case 'new_org_create_success':
+            $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php');
+            $gMessage->show($gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_SESSION['orgaLongName'])), $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
+            break;
 
-    $page->addHtml(getPreferencePanel('system_notification', 'accordion_preferences', $gL10n->get('SYS_SYSTEM_MAILS'), 'bi-broadcast-pin', $formSystemNotification->show()));
+        // set directory protection, write htaccess
+        case 'htaccess':
+            if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess')) {
+                echo $gL10n->get('SYS_ON');
+                return;
+            }
 
-    // PANEL: CAPTCHA
+            // create ".htaccess" file for folder "adm_my_files"
+            $htaccess = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
+            if ($htaccess->protectFolder()) {
+                echo $gL10n->get('SYS_ON');
+                return;
+            }
 
-    $formCaptcha = new HtmlForm(
-        'captcha_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'captcha')),
-        $page,
-        array('class' => 'form-preferences')
-    );
+            $gLogger->warning('htaccess file could not be created!');
 
-    $selectBoxEntries = array(
-        'pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'),
-        'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'),
-        'word' => $gL10n->get('ORG_CAPTCHA_TYPE_WORDS')
-    );
-    $formCaptcha->addSelectBox(
-        'captcha_type',
-        $gL10n->get('ORG_CAPTCHA_TYPE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_CAPTCHA_TYPE_TEXT')
-    );
+            echo $gL10n->get('SYS_OFF');
+            break;
 
-    $fonts = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . '/adm_program/system/fonts/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-    asort($fonts);
-    $formCaptcha->addSelectBox(
-        'captcha_fonts',
-        $gL10n->get('SYS_FONT'),
-        $fonts,
-        array('defaultValue' => $formValues['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_CAPTCHA_FONT')
-    );
-    $formCaptcha->addInput(
-        'captcha_width',
-        $gL10n->get('SYS_WIDTH') . ' (' . $gL10n->get('ORG_PIXEL') . ')',
-        $formValues['captcha_width'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'ORG_CAPTCHA_WIDTH_DESC')
-    );
-    $formCaptcha->addInput(
-        'captcha_lines_numbers',
-        $gL10n->get('ORG_CAPTCHA_LINES_NUMBERS'),
-        $formValues['captcha_lines_numbers'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 25, 'step' => 1, 'helpTextId' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC')
-    );
-    $formCaptcha->addInput(
-        'captcha_perturbation',
-        $gL10n->get('ORG_CAPTCHA_DISTORTION'),
-        $formValues['captcha_perturbation'],
-        array('type' => 'string', 'helpTextId' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small')
-    );
-    $backgrounds = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_LIBS . '/securimage/backgrounds/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-    asort($backgrounds);
-    $formCaptcha->addSelectBox(
-        'captcha_background_image',
-        $gL10n->get('ORG_CAPTCHA_BACKGROUND_IMAGE'),
-        $backgrounds,
-        array('defaultValue' => $formValues['captcha_background_image'], 'showContextDependentFirstEntry' => true, 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_CAPTCHA_BACKGROUND_IMAGE_DESC')
-    );
-    $formCaptcha->addInput(
-        'captcha_background_color',
-        $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'),
-        $formValues['captcha_background_color'],
-        array('maxLength' => 7, 'class' => 'form-control-small')
-    );
-    $formCaptcha->addInput(
-        'captcha_text_color',
-        $gL10n->get('ORG_CAPTCHA_CHARACTERS_COLOR'),
-        $formValues['captcha_text_color'],
-        array('maxLength' => 7, 'class' => 'form-control-small')
-    );
-    $formCaptcha->addInput(
-        'captcha_line_color',
-        $gL10n->get('ORG_CAPTCHA_LINE_COLOR'),
-        $formValues['captcha_line_color'],
-        array('maxLength' => 7, 'helpTextId' => array('ORG_CAPTCHA_COLOR_DESC', array('<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>')), 'class' => 'form-control-small')
-    );
-    $formCaptcha->addInput(
-        'captcha_charset',
-        $gL10n->get('ORG_CAPTCHA_SIGNS'),
-        $formValues['captcha_charset'],
-        array('maxLength' => 80, 'helpTextId' => 'ORG_CAPTCHA_SIGNS_TEXT')
-    );
-    $formCaptcha->addInput(
-        'captcha_signature',
-        $gL10n->get('ORG_CAPTCHA_SIGNATURE'),
-        $formValues['captcha_signature'],
-        array('maxLength' => 60, 'helpTextId' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
-    );
-    $html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
-         <a id="captcha-refresh" class="admidio-icon-link" href="javascript:void(0)">
-            <i class="bi bi-arrow-repeat" style="font-size: 22pt;" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_RELOAD') . '"></i></a>';
-    $formCaptcha->addCustomContent(
-        $gL10n->get('ORG_CAPTCHA_PREVIEW'),
-        $html,
-        array('helpTextId' => 'ORG_CAPTCHA_PREVIEW_TEXT')
-    );
+        // send test email
+        case 'test_email':
+            $debugOutput = '';
 
-    $formCaptcha->addSubmitButton(
-        'btn_save_captcha',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
+            $email = new Email();
+            $email->setDebugMode(true);
 
-    $page->addHtml(getPreferencePanel('captcha', 'accordion_preferences', $gL10n->get('SYS_CAPTCHA'), 'bi-fonts', $formCaptcha->show()));
+            if ($gSettingsManager->getBool('mail_html_registered_users')) {
+                $email->setHtmlMail();
+            }
 
-    // PANEL: ADMIDIO UPDATE
+            // set email data
+            $email->setSender($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+            $email->addRecipientsByUser($gCurrentUser->getValue('usr_uuid'));
+            $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname', 'database'))));
+            $email->setTemplateText(
+                $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),
+                $gCurrentUser->getValue('FIRSTNAME') . ' ' . $gCurrentUser->getValue('LASTNAME'),
+                $gCurrentUser->getValue('EMAIL'),
+                $gCurrentUser->getValue('usr_uuid'),
+                $gL10n->get('SYS_ADMINISTRATOR')
+            );
 
-    $formAdmidioUpdate = new HtmlForm('admidio_update_preferences_form', '', $page);
+            // finally send the mail
+            $sendResult = $email->sendEmail();
 
-    $html = '<span id="admidio_version_content">' . ADMIDIO_VERSION_TEXT . '
-            <a id="link_check_for_update" href="#link_check_for_update" title="' . $gL10n->get('SYS_CHECK_FOR_UPDATE') . '">' . $gL10n->get('SYS_CHECK_FOR_UPDATE') . '</a>
-         </span>';
-    $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_ADMIDIO_VERSION'), $html);
+            if (isset($GLOBALS['phpmailer_output_debug'])) {
+                $debugOutput .= '<br /><br /><h3>' . $gL10n->get('SYS_DEBUG_OUTPUT') . '</h3>' . $GLOBALS['phpmailer_output_debug'];
+            }
 
-    // if database version is different to file version, then show database version
-    if ($gSystemComponent->getValue('com_version') !== ADMIDIO_VERSION) {
-        $formAdmidioUpdate->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
+            // message if send/save is OK
+            if ($sendResult === true) { // don't remove check === true. ($sendResult) won't work
+                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('show_option' => 'email_dispatch')));
+                $gMessage->show($gL10n->get('SYS_EMAIL_SEND') . $debugOutput);
+                // => EXIT
+            } else {
+                $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', array($gL10n->get('SYS_RECIPIENT'), $sendResult)) . $debugOutput);
+                // => EXIT
+            }
+            break;
+
+        // create backup of Admidio database
+        case 'backup':
+            // function not available for other databases except MySQL
+            if (DB_ENGINE !== Database::PDO_ENGINE_MYSQL) {
+                throw new AdmException('SYS_MODULE_DISABLED');
+            }
+
+            $dump = new DatabaseDump($gDb);
+            $dump->create('admidio_dump_' . $g_adm_db . '.sql.gzip');
+            $dump->export();
+            $dump->deleteDumpFile();
+            break;
     }
-
-    $component = new ComponentUpdate($gDb);
-    $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
-    $updateStep = (int)$gSystemComponent->getValue('com_update_step');
-    $maxStep = $component->getMaxUpdateStep();
-    $textStep = $updateStep . ' / ' . $maxStep;
-    if ($updateStep === $maxStep) {
-        $html = getStaticText('success', $textStep);
-    } elseif ($updateStep > $maxStep) {
-        $html = getStaticText('warning', $textStep);
+} catch (AdmException|Exception $exception) {
+    if (in_array($getMode, array('save', 'new_org_create'))) {
+        echo json_encode(array('status' => 'error', 'message' => $exception->getMessage()));
+    } elseif ($getMode === 'html_form') {
+        echo $exception->getMessage();
     } else {
-        $html = getStaticText('danger', $textStep);
+        $gMessage->show($exception->getMessage());
     }
-    $formAdmidioUpdate->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $html);
-
-    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
-        $html = '<a class="btn btn-secondary" id="add_another_organization" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('mode' => 'backup')) . '">
-            <i class="bi bi-download"></i>' . $gL10n->get('SYS_DOWNLOAD_DATABASE_BACKUP') . '</a>';
-        $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_DATABASE_BACKUP'), $html, array('helpTextId' => 'SYS_DATABASE_BACKUP_DESC'));
-    }
-    $html = '<a id="donate" href="' . ADMIDIO_HOMEPAGE . 'donate.php" target="_blank">
-            <i class="bi bi-heart-fill"></i>' . $gL10n->get('SYS_DONATE') . '</a>';
-    $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_SUPPORT_ADMIDIO'), $html, array('helpTextId' => 'INS_SUPPORT_FURTHER_DEVELOPMENT'));
-
-    $page->addHtml(getPreferencePanel('admidio_version_backup', 'accordion_preferences', $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'bi-cloud-arrow-down-fill', $formAdmidioUpdate->show()));
-
-    // PANEL: PHP
-
-    $formPhp = new HtmlForm('php_preferences_form', '', $page);
-
-    if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
-        $html = getStaticText('danger', PHP_VERSION, ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION)));
-    } elseif (version_compare(PHP_VERSION, '7.2', '<')) {
-        $html = getStaticText('warning', PHP_VERSION, ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>')));
-    } else {
-        $html = getStaticText('success', PHP_VERSION);
-    }
-    $formPhp->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
-
-    $postMaxSize = PhpIniUtils::getPostMaxSize();
-    if (is_infinite($postMaxSize)) {
-        $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-    } else {
-        $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($postMaxSize));
-    }
-    $formPhp->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
-
-    $memoryLimit = PhpIniUtils::getMemoryLimit();
-    if (is_infinite($memoryLimit)) {
-        $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-    } else {
-        $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($memoryLimit));
-    }
-    $formPhp->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $html);
-
-    if (PhpIniUtils::isFileUploadEnabled()) {
-        $html = getStaticText('success', $gL10n->get('SYS_ON'));
-    } else {
-        $html = getStaticText('danger', $gL10n->get('SYS_OFF'));
-    }
-    $formPhp->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
-
-    $fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
-    if (is_infinite($fileUploadMaxFileSize)) {
-        $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-    } else {
-        $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize));
-    }
-    $formPhp->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $html);
-
-    try {
-        SecurityUtils::getRandomInt(0, 1, true);
-        $html = getStaticText('success', $gL10n->get('SYS_SECURE'));
-    } catch (AdmException $e) {
-        $html = getStaticText('danger', $gL10n->get('SYS_PRNG_INSECURE'), '<br />' . $e->getMessage());
-    }
-    $formPhp->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
-
-    $html = '<a href="' . ADMIDIO_URL . '/adm_program/system/phpinfo.php' . '" target="_blank">phpinfo()</a> <i class="bi bi-box-arrow-up-right"></i>';
-    $formPhp->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
-
-    $page->addHtml(getPreferencePanel('php', 'accordion_preferences', $gL10n->get('SYS_PHP'), 'bi-filetype-php', $formPhp->show()));
-
-    // PANEL: SYSTEM INFORMATION
-
-    $formSystemInformation = new HtmlForm('system_information_preferences_form', '', $page);
-
-    $formSystemInformation->addStaticControl(
-        'operating_system',
-        $gL10n->get('SYS_OPERATING_SYSTEM'),
-        '<strong>' . SystemInfoUtils::getOS() . '</strong> (' . SystemInfoUtils::getUname() . ')'
-    );
-
-    if (SystemInfoUtils::is64Bit()) {
-        $html = getStaticText('success', $gL10n->get('SYS_YES'));
-    } else {
-        $html = getStaticText('success', $gL10n->get('SYS_NO'));
-    }
-    $formSystemInformation->addStaticControl('64bit', $gL10n->get('SYS_64BIT'), $html);
-
-    if (SystemInfoUtils::isUnixFileSystem()) {
-        $html = '<strong>' . $gL10n->get('SYS_YES') . '</strong>';
-    } else {
-        $html = '<strong>' . $gL10n->get('SYS_NO') . '</strong>';
-    }
-    $formSystemInformation->addStaticControl('unix', $gL10n->get('SYS_UNIX'), $html);
-
-    $formSystemInformation->addStaticControl(
-        'directory_separator',
-        $gL10n->get('SYS_DIRECTORY_SEPARATOR'),
-        '<strong>"' . SystemInfoUtils::getDirectorySeparator() . '"</strong>'
-    );
-
-    $formSystemInformation->addStaticControl(
-        'path_separator',
-        $gL10n->get('SYS_PATH_SEPARATOR'),
-        '<strong>"' . SystemInfoUtils::getPathSeparator() . '"</strong>'
-    );
-
-    $formSystemInformation->addStaticControl(
-        'max_path_length',
-        $gL10n->get('SYS_MAX_PATH_LENGTH'),
-        SystemInfoUtils::getMaxPathLength()
-    );
-
-    if (version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<')) {
-        $html = getStaticText('danger', $gDb->getVersion(), ' &rarr; ' . $gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion())));
-    } else {
-        $html = getStaticText('success', $gDb->getVersion());
-    }
-    $formSystemInformation->addStaticControl('database_version', $gDb->getName() . '-' . $gL10n->get('SYS_VERSION'), $html);
-
-    if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess')) {
-        $html = getStaticText('success', $gL10n->get('SYS_ON'));
-    } else {
-        $html = getStaticText(
-            'danger',
-            '<span id="directory_protection_status">' . $gL10n->get('SYS_OFF') . '</span>',
-            ' &rarr; <a id="link_directory_protection" href="#link_directory_protection" title="' . $gL10n->get('SYS_CREATE_HTACCESS') . '">' . $gL10n->get('SYS_CREATE_HTACCESS') . '</a>'
-        );
-    }
-    $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
-
-    $formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2) . ' ' . $gL10n->get('SYS_MEGAPIXEL'));
-
-    if (isset($gDebug) && $gDebug) {
-        $html = getStaticText('danger', $gL10n->get('SYS_ON'));
-    } else {
-        $html = getStaticText('success', $gL10n->get('SYS_OFF'));
-    }
-    $formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_OUTPUT'), $html);
-
-    if (isset($gImportDemoData) && $gImportDemoData) {
-        $html = getStaticText('danger', $gL10n->get('SYS_ON'));
-    } else {
-        $html = getStaticText('success', $gL10n->get('SYS_OFF'));
-    }
-    $formSystemInformation->addStaticControl('import_mode', $gL10n->get('SYS_IMPORT_MODE'), $html);
-
-    try {
-        $diskSpace = FileSystemUtils::getDiskSpace();
-
-        $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
-        $progressBarClass = '';
-        if ($diskUsagePercent > 90) {
-            $progressBarClass = ' progress-bar-danger';
-        } elseif ($diskUsagePercent > 70) {
-            $progressBarClass = ' progress-bar-warning';
-        }
-        $html = '
-        <div class="progress">
-            <div class="progress-bar' . $progressBarClass . '" role="progressbar" aria-valuenow="' . $diskSpace['used'] . '" aria-valuemin="0" aria-valuemax="' . $diskSpace['total'] . '" style="width: ' . $diskUsagePercent . '%;">
-                ' . FileSystemUtils::getHumanReadableBytes($diskSpace['used']) . ' / ' . FileSystemUtils::getHumanReadableBytes($diskSpace['total']) . '
-            </div>
-        </div>';
-    } catch (RuntimeException $exception) {
-        $gLogger->error('FILE-SYSTEM: Disk space could not be determined!');
-
-        $html = getStaticText('danger', $gL10n->get('SYS_DISK_SPACE_ERROR', array($exception->getMessage())));
-    }
-    $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
-
-    $page->addHtml(getPreferencePanel('system_information', 'accordion_preferences', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'bi-info-circle-fill', $formSystemInformation->show()));
-
-    $page->addHtml('
-        </div>
-    </div>
-    <div class="tab-pane fade" id="tabs-modules" role="tabpanel">
-        <div class="accordion" id="accordion_modules">');
-
-    // PANEL: ANNOUNCEMENTS
-
-    $formAnnouncements = new HtmlForm(
-        'announcements_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'announcements')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $selectBoxEntries = array(
-        '0' => $gL10n->get('SYS_DISABLED'),
-        '1' => $gL10n->get('SYS_ENABLED'),
-        '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
-    );
-    $formAnnouncements->addSelectBox(
-        'announcements_module_enabled',
-        $gL10n->get('ORG_ACCESS_TO_MODULE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['announcements_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
-    );
-    $formAnnouncements->addInput(
-        'announcements_per_page',
-        $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
-        $formValues['announcements_per_page'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
-    );
-    $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'ANN')) . '">
-            <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
-    $formAnnouncements->addCustomContent(
-        $gL10n->get('SYS_EDIT_CATEGORIES'),
-        $html,
-        array('helpTextId' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
-    );
-    $formAnnouncements->addSubmitButton(
-        'btn_save_announcements',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('announcements', 'accordion_modules', $gL10n->get('SYS_ANNOUNCEMENTS'), 'bi-newspaper', $formAnnouncements->show()));
-
-    // PANEL: CONTACTS
-
-    $formUserManagement = new HtmlForm(
-        'contacts_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'contacts')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    // read all global lists
-    $sqlData = array();
-    $sqlData['query'] = 'SELECT lst_id, lst_name
-                       FROM ' . TBL_LISTS . '
-                      WHERE lst_org_id = ? -- $gCurrentOrgId
-                        AND lst_global = true
-                        AND NOT EXISTS (SELECT 1
-                                       FROM ' . TBL_LIST_COLUMNS . '
-                                       WHERE lsc_lst_id = lst_id
-                                       AND lsc_special_field LIKE \'mem%\')
-                   ORDER BY lst_name, lst_timestamp DESC';
-    $sqlData['params'] = array($gCurrentOrgId);
-    $formUserManagement->addSelectBoxFromSql(
-        'contacts_list_configuration',
-        $gL10n->get('SYS_CONFIGURATION_LIST'),
-        $gDb,
-        $sqlData,
-        array('defaultValue' => $formValues['contacts_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MEMBERS_CONFIGURATION_DESC')
-    );
-    $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
-    $formUserManagement->addSelectBox(
-        'contacts_per_page',
-        $gL10n->get('SYS_CONTACTS_PER_PAGE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
-    );
-    $formUserManagement->addInput(
-        'contacts_field_history_days',
-        $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
-        $formValues['contacts_field_history_days'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
-    );
-    $formUserManagement->addCheckbox(
-        'contacts_show_all',
-        $gL10n->get('SYS_SHOW_ALL_CONTACTS'),
-        (bool)$formValues['contacts_show_all'],
-        array('helpTextId' => 'SYS_SHOW_ALL_CONTACTS_DESC')
-    );
-    $formUserManagement->addCheckbox(
-        'contacts_user_relations_enabled',
-        $gL10n->get('SYS_ENABLE_USER_RELATIONS'),
-        (bool)$formValues['contacts_user_relations_enabled'],
-        array('helpTextId' => 'SYS_ENABLE_USER_RELATIONS_DESC')
-    );
-
-    $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes.php">
-            <i class="bi bi-person-heart"></i>' . $gL10n->get('SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION') . '</a>';
-    $formUserManagement->addCustomContent($gL10n->get('SYS_USER_RELATIONS'), $html, array('helpTextId' => 'SYS_MAINTAIN_USER_RELATION_TYPES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
-
-    $formUserManagement->addSubmitButton(
-        'btn_save_contacts',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('contacts', 'accordion_modules', $gL10n->get('SYS_CONTACTS'), 'bi-person-vcard-fill', $formUserManagement->show()));
-
-    // PANEL: DOCUMENTS-FILES
-
-    $formDownloads = new HtmlForm(
-        'documents_files_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'documents-files')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $formDownloads->addCheckbox(
-        'documents_files_module_enabled',
-        $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'),
-        (bool)$formValues['documents_files_module_enabled'],
-        array('helpTextId' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
-    );
-    $formDownloads->addInput(
-        'documents_files_max_upload_size',
-        $gL10n->get('SYS_MAXIMUM_FILE_SIZE') . ' (MB)',
-        $formValues['documents_files_max_upload_size'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextId' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
-    );
-    $formDownloads->addSubmitButton(
-        'btn_save_documents_files',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('documents-files', 'accordion_modules', $gL10n->get('SYS_DOCUMENTS_FILES'), 'bi-file-earmark-arrow-down-fill', $formDownloads->show()));
-
-    // PANEL: PHOTOS
-
-    $formPhotos = new HtmlForm(
-        'photos_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'photos')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $selectBoxEntries = array(
-        '0' => $gL10n->get('SYS_DISABLED'),
-        '1' => $gL10n->get('SYS_ENABLED'),
-        '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
-    );
-    $formPhotos->addSelectBox(
-        'photo_module_enabled',
-        $gL10n->get('ORG_ACCESS_TO_MODULE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['photo_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
-    );
-    $selectBoxEntries = array(
-        '1' => $gL10n->get('SYS_MODAL_WINDOW'),
-        '2' => $gL10n->get('SYS_SAME_WINDOW')
-    );
-    $formPhotos->addSelectBox(
-        'photo_show_mode',
-        $gL10n->get('SYS_PHOTOS_PRESENTATION'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['photo_show_mode'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_PHOTOS_PRESENTATION_DESC')
-    );
-    $formPhotos->addInput(
-        'photo_albums_per_page',
-        $gL10n->get('SYS_NUMBER_OF_ALBUMS_PER_PAGE'),
-        $formValues['photo_albums_per_page'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(24)))
-    );
-    $formPhotos->addInput(
-        'photo_thumbs_page',
-        $gL10n->get('SYS_THUMBNAILS_PER_PAGE'),
-        $formValues['photo_thumbs_page'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAILS_PER_PAGE_DESC', array(24)))
-    );
-    $formPhotos->addInput(
-        'photo_thumbs_scale',
-        $gL10n->get('SYS_THUMBNAIL_SCALING'),
-        $formValues['photo_thumbs_scale'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAIL_SCALING_DESC', array(500)))
-    );
-    $formPhotos->addInput(
-        'photo_show_width',
-        $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
-        $formValues['photo_show_width'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
-    );
-    $formPhotos->addInput(
-        'photo_show_height',
-        $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
-        $formValues['photo_show_height'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1200, 1200)))
-    );
-    $formPhotos->addInput(
-        'photo_image_text',
-        $gL10n->get('SYS_SHOW_WATERMARK'),
-        $formValues['photo_image_text'],
-        array('maxLength' => 60, 'helpTextId' => array('SYS_SHOW_WATERMARK_DESC', array('© ' . DOMAIN)))
-    );
-    $formPhotos->addInput(
-        'photo_image_text_size',
-        $gL10n->get('SYS_CAPTION_SIZE'),
-        $formValues['photo_image_text_size'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_CAPTION_SIZE_DESC')
-    );
-    $formPhotos->addCheckbox(
-        'photo_download_enabled',
-        $gL10n->get('SYS_ENABLE_DOWNLOAD'),
-        (bool)$formValues['photo_download_enabled'],
-        array('helpTextId' => array('SYS_ENABLE_DOWNLOAD_DESC', array('SYS_KEEP_ORIGINAL')))
-    );
-    $formPhotos->addCheckbox(
-        'photo_keep_original',
-        $gL10n->get('SYS_KEEP_ORIGINAL'),
-        (bool)$formValues['photo_keep_original'],
-        array('helpTextId' => array('SYS_KEEP_ORIGINAL_DESC', array('SYS_ENABLE_DOWNLOAD')))
-    );
-    $formPhotos->addCheckbox(
-        'photo_ecard_enabled',
-        $gL10n->get('SYS_ENABLE_GREETING_CARDS'),
-        (bool)$formValues['photo_ecard_enabled'],
-        array('helpTextId' => 'SYS_ENABLE_GREETING_CARDS_DESC')
-    );
-    $formPhotos->addInput(
-        'photo_ecard_scale',
-        $gL10n->get('SYS_THUMBNAIL_SCALING'),
-        $formValues['photo_ecard_scale'],
-        array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
-    );
-
-    $formPhotos->addSelectBox(
-        'photo_ecard_template',
-        $gL10n->get('SYS_TEMPLATE'),
-        getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
-        array(
-            'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $formValues['photo_ecard_template']))),
-            'showContextDependentFirstEntry' => false,
-            'arrayKeyIsNotValue' => true,
-            'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
-            'helpTextId' => 'SYS_TEMPLATE_DESC'
-        )
-    );
-
-    $formPhotos->addSubmitButton(
-        'btn_save_photos',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('photos', 'accordion_modules', $gL10n->get('SYS_PHOTOS'), 'bi-image-fill', $formPhotos->show()));
-
-    // PANEL: GUESTBOOK
-
-    $formGuestbook = new HtmlForm(
-        'guestbook_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'guestbook')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $selectBoxEntries = array(
-        '0' => $gL10n->get('SYS_DISABLED'),
-        '1' => $gL10n->get('SYS_ENABLED'),
-        '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
-    );
-    $formGuestbook->addSelectBox(
-        'enable_guestbook_module',
-        $gL10n->get('ORG_ACCESS_TO_MODULE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['enable_guestbook_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
-    );
-    $formGuestbook->addInput(
-        'guestbook_entries_per_page',
-        $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
-        $formValues['guestbook_entries_per_page'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
-    );
-    $formGuestbook->addCheckbox(
-        'enable_guestbook_captcha',
-        $gL10n->get('ORG_ENABLE_CAPTCHA'),
-        (bool)$formValues['enable_guestbook_captcha'],
-        array('helpTextId' => 'GBO_CAPTCHA_DESC')
-    );
-    $selectBoxEntries = array(
-        '0' => $gL10n->get('SYS_NOBODY'),
-        '1' => $gL10n->get('GBO_ONLY_VISITORS'),
-        '2' => $gL10n->get('SYS_ALL')
-    );
-    $formGuestbook->addSelectBox(
-        'enable_guestbook_moderation',
-        $gL10n->get('GBO_GUESTBOOK_MODERATION'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['enable_guestbook_moderation'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'GBO_GUESTBOOK_MODERATION_DESC')
-    );
-    $formGuestbook->addCheckbox(
-        'enable_gbook_comments4all',
-        $gL10n->get('GBO_COMMENTS4ALL'),
-        (bool)$formValues['enable_gbook_comments4all'],
-        array('helpTextId' => 'GBO_COMMENTS4ALL_DESC')
-    );
-    $formGuestbook->addCheckbox(
-        'enable_intial_comments_loading',
-        $gL10n->get('GBO_INITIAL_COMMENTS_LOADING'),
-        (bool)$formValues['enable_intial_comments_loading'],
-        array('helpTextId' => 'GBO_INITIAL_COMMENTS_LOADING_DESC')
-    );
-    $formGuestbook->addInput(
-        'flooding_protection_time',
-        $gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL'),
-        $formValues['flooding_protection_time'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'GBO_FLOODING_PROTECTION_INTERVALL_DESC')
-    );
-    $formGuestbook->addSubmitButton(
-        'btn_save_guestbook',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('guestbook', 'accordion_modules', $gL10n->get('GBO_GUESTBOOK'), 'bi-book-half', $formGuestbook->show()));
-
-    // PANEL: GROUPS AND ROLES
-
-    $formGroupsRoles = new HtmlForm(
-        'groups_roles_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'groups-roles')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $formGroupsRoles->addCheckbox(
-        'groups_roles_enable_module',
-        $gL10n->get('SYS_ENABLE_GROUPS_ROLES'),
-        (bool)$formValues['groups_roles_enable_module'],
-        array('helpTextId' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
-    );
-    $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
-    $formGroupsRoles->addSelectBox(
-        'groups_roles_members_per_page',
-        $gL10n->get('SYS_MEMBERS_PER_PAGE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['groups_roles_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MEMBERS_PER_PAGE_DESC')
-    );
-    // read all global lists
-    $sqlData = array();
-    $sqlData['query'] = 'SELECT lst_id, lst_name
-                       FROM ' . TBL_LISTS . '
-                      WHERE lst_org_id = ? -- $gCurrentOrgId
-                        AND lst_global = true
-                   ORDER BY lst_name, lst_timestamp DESC';
-    $sqlData['params'] = array($gCurrentOrgId);
-    $formGroupsRoles->addSelectBoxFromSql(
-        'groups_roles_default_configuration',
-        $gL10n->get('SYS_DEFAULT_CONFIGURATION'),
-        $gDb,
-        $sqlData,
-        array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_CONFIGURATION_LISTS_DESC')
-    );
-    $selectBoxEntries = array(
-        '0' => $gL10n->get('SYS_NOBODY'),
-        '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_ASSIGN_ROLES')))),
-        '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
-    );
-    $formGroupsRoles->addSelectBox(
-        'groups_roles_show_former_members',
-        $gL10n->get('SYS_SHOW_FORMER_MEMBERS'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
-    );
-    $selectBoxEntriesExport = array(
-        '0' => $gL10n->get('SYS_NOBODY'),
-        '1' => $gL10n->get('SYS_ALL'),
-        '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
-    );
-    $formGroupsRoles->addSelectBox(
-        'groups_roles_export',
-        $gL10n->get('SYS_EXPORT_LISTS'),
-        $selectBoxEntriesExport,
-        array('defaultValue' => $formValues['groups_roles_export'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_EXPORT_LISTS_DESC')
-    );
-    $selectBoxEntriesEditLists = array(
-        '1' => $gL10n->get('SYS_ALL'),
-        '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER')))),
-        '3' => $gL10n->get('SYS_ADMINISTRATORS')
-    );
-    $formGroupsRoles->addSelectBox(
-        'groups_roles_edit_lists',
-        $gL10n->get('SYS_CONFIGURE_LISTS'),
-        $selectBoxEntriesEditLists,
-        array('defaultValue' => $formValues['groups_roles_edit_lists'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_CONFIGURE_LISTS_DESC')
-    );
-    $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'ROL')) . '">
-            <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
-    $formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, array('helpTextId' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
-    $formGroupsRoles->addSubmitButton(
-        'btn_save_lists',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('groups-roles', 'accordion_modules', $gL10n->get('SYS_GROUPS_ROLES'), 'bi-people-fill', $formGroupsRoles->show()));
-
-    // PANEL: CATEGORY-REPORT
-
-    $formCategoryReport = new HtmlForm(
-        'category_report_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'category-report')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $formCategoryReport->addCheckbox(
-        'category_report_enable_module',
-        $gL10n->get('SYS_ENABLE_CATEGORY_REPORT'),
-        (bool)$formValues['category_report_enable_module'],
-        array('helpTextId' => array('SYS_ENABLE_CATEGORY_REPORT_DESC', array($gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'))))
-    );
-    // read all global lists
-    $sqlData = array();
-    $sqlData['query'] = 'SELECT crt_id, crt_name
-                       FROM ' . TBL_CATEGORY_REPORT . '
-                      WHERE crt_org_id = ? -- $gCurrentOrgId
-                   ORDER BY crt_name';
-    $sqlData['params'] = array($gCurrentOrgId);
-    $formCategoryReport->addSelectBoxFromSql(
-        'category_report_default_configuration',
-        $gL10n->get('SYS_DEFAULT_CONFIGURATION'),
-        $gDb,
-        $sqlData,
-        array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC')
-    );
-
-    $formCategoryReport->addSubmitButton(
-        'btn_save_documents_files',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('category-report', 'accordion_modules', $gL10n->get('SYS_CATEGORY_REPORT'), 'bi-list-stars', $formCategoryReport->show()));
-
-    // PANEL: MESSAGES
-
-    $formMessages = new HtmlForm(
-        'messages_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'messages')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $formMessages->addCheckbox(
-        'enable_mail_module',
-        $gL10n->get('SYS_ENABLE_EMAILS'),
-        (bool)$formValues['enable_mail_module'],
-        array('helpTextId' => 'SYS_ENABLE_EMAILS_DESC')
-    );
-    $formMessages->addCheckbox(
-        'enable_pm_module',
-        $gL10n->get('SYS_ENABLE_PM_MODULE'),
-        (bool)$formValues['enable_pm_module'],
-        array('helpTextId' => 'SYS_ENABLE_PM_MODULE_DESC')
-    );
-    $formMessages->addCheckbox(
-        'enable_mail_captcha',
-        $gL10n->get('ORG_ENABLE_CAPTCHA'),
-        (bool)$formValues['enable_mail_captcha'],
-        array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
-    );
-
-    $formMessages->addSelectBox(
-        'mail_template',
-        $gL10n->get('SYS_EMAIL_TEMPLATE'),
-        getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
-        array(
-            'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.html', '', $formValues['mail_template']))),
-            'showContextDependentFirstEntry' => true,
-            'arrayKeyIsNotValue' => true,
-            'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
-            'helpTextId' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
-    );
-    $formMessages->addInput(
-        'mail_max_receiver',
-        $gL10n->get('SYS_MAX_RECEIVER'),
-        $formValues['mail_max_receiver'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_MAX_RECEIVER_DESC')
-    );
-    $formMessages->addCheckbox(
-        'mail_send_to_all_addresses',
-        $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'),
-        (bool)$formValues['mail_send_to_all_addresses'],
-        array('helpTextId' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
-    );
-    $formMessages->addCheckbox(
-        'mail_show_former',
-        $gL10n->get('SYS_SEND_EMAIL_FORMER'),
-        (bool)$formValues['mail_show_former'],
-        array('helpTextId' => 'SYS_SEND_EMAIL_FORMER_DESC')
-    );
-    $formMessages->addInput(
-        'max_email_attachment_size',
-        $gL10n->get('SYS_ATTACHMENT_SIZE') . ' (MB)',
-        $formValues['max_email_attachment_size'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'step' => 1, 'helpTextId' => 'SYS_ATTACHMENT_SIZE_DESC')
-    );
-    $formMessages->addCheckbox(
-        'mail_save_attachments',
-        $gL10n->get('SYS_SAVE_ATTACHMENTS'),
-        (bool)$formValues['mail_save_attachments'],
-        array('helpTextId' => 'SYS_SAVE_ATTACHMENTS_DESC')
-    );
-    $formMessages->addCheckbox(
-        'mail_html_registered_users',
-        $gL10n->get('SYS_HTML_MAILS_REGISTERED_USERS'),
-        (bool)$formValues['mail_html_registered_users'],
-        array('helpTextId' => 'SYS_HTML_MAILS_REGISTERED_USERS_DESC')
-    );
-    $selectBoxEntries = array(
-        '0' => $gL10n->get('SYS_DISABLED'),
-        '1' => $gL10n->get('SYS_ENABLED'),
-        '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
-    );
-    $formMessages->addSelectBox(
-        'mail_delivery_confirmation',
-        $gL10n->get('SYS_DELIVERY_CONFIRMATION'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['mail_delivery_confirmation'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DELIVERY_CONFIRMATION_DESC')
-    );
-    $formMessages->addSubmitButton(
-        'btn_save_messages',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('messages', 'accordion_modules', $gL10n->get('SYS_MESSAGES'), 'bi-envelope-fill', $formMessages->show()));
-
-    // PANEL: PROFILE
-
-    $formProfile = new HtmlForm(
-        'profile_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'profile')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields.php">
-            <i class="bi bi-ui-radios"></i>' . $gL10n->get('SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION') . '</a>';
-    $formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextId' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
-    $formProfile->addCheckbox(
-        'profile_log_edit_fields',
-        $gL10n->get('SYS_LOG_ALL_CHANGES'),
-        (bool)$formValues['profile_log_edit_fields'],
-        array('helpTextId' => 'SYS_LOG_ALL_CHANGES_DESC')
-    );
-    $formProfile->addCheckbox(
-        'profile_show_map_link',
-        $gL10n->get('SYS_SHOW_MAP_LINK'),
-        (bool)$formValues['profile_show_map_link'],
-        array('helpTextId' => 'SYS_SHOW_MAP_LINK_PROFILE_DESC')
-    );
-    $formProfile->addCheckbox(
-        'profile_show_roles',
-        $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP'),
-        (bool)$formValues['profile_show_roles'],
-        array('helpTextId' => 'SYS_SHOW_ROLE_MEMBERSHIP_DESC')
-    );
-    $formProfile->addCheckbox(
-        'profile_show_former_roles',
-        $gL10n->get('SYS_SHOW_FORMER_ROLE_MEMBERSHIP'),
-        (bool)$formValues['profile_show_former_roles'],
-        array('helpTextId' => 'SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
-    );
-
-    if ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization()) {
-        $formProfile->addCheckbox(
-            'profile_show_extern_roles',
-            $gL10n->get('SYS_SHOW_ROLES_OTHER_ORGANIZATIONS'),
-            (bool)$formValues['profile_show_extern_roles'],
-            array('helpTextId' => 'SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC')
-        );
-    }
-
-    $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
-    $formProfile->addSelectBox(
-        'profile_photo_storage',
-        $gL10n->get('SYS_LOCATION_PROFILE_PICTURES'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['profile_photo_storage'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_LOCATION_PROFILE_PICTURES_DESC')
-    );
-    $formProfile->addSubmitButton(
-        'btn_save_profile',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('profile', 'accordion_modules', $gL10n->get('SYS_PROFILE'), 'bi-person-fill', $formProfile->show()));
-
-    // PANEL: EVENTS
-
-    $formEvents = new HtmlForm(
-        'events_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'events')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $selectBoxEntries = array(
-        '0' => $gL10n->get('SYS_DISABLED'),
-        '1' => $gL10n->get('SYS_ENABLED'),
-        '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
-    );
-    $formEvents->addSelectBox(
-        'events_module_enabled',
-        $gL10n->get('ORG_ACCESS_TO_MODULE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['events_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
-    );
-    if ($gSettingsManager->getBool('events_rooms_enabled')) {
-        $selectBoxEntries = array(
-            'detail' => $gL10n->get('SYS_DETAILED'),
-            'compact' => $gL10n->get('SYS_COMPACT'),
-            'room' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_ROOM'),
-            'participants' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_PARTICIPANTS'),
-            'description' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_DESCRIPTION')
-        );
-    } else {
-        $selectBoxEntries = array(
-            'detail' => $gL10n->get('SYS_DETAILED'),
-            'compact' => $gL10n->get('SYS_COMPACT'),
-            'participants' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_PARTICIPANTS'),
-            'description' => $gL10n->get('SYS_COMPACT') . ' - ' . $gL10n->get('SYS_DESCRIPTION')
-        );
-    }
-    $formEvents->addSelectBox(
-        'events_view',
-        $gL10n->get('SYS_DEFAULT_VIEW'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['events_view'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_DEFAULT_VIEW_DESC', array('SYS_DETAILED', 'SYS_COMPACT')))
-    );
-    $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
-    $formEvents->addSelectBox(
-        'events_per_page',
-        $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
-    );
-    $formEvents->addCheckbox(
-        'events_ical_export_enabled',
-        $gL10n->get('SYS_ENABLE_ICAL_EXPORT'),
-        (bool)$formValues['events_ical_export_enabled'],
-        array('helpTextId' => 'SYS_ENABLE_ICAL_EXPORT_DESC')
-    );
-    $formEvents->addCheckbox(
-        'events_show_map_link',
-        $gL10n->get('SYS_SHOW_MAP_LINK'),
-        (bool)$formValues['events_show_map_link'],
-        array('helpTextId' => 'SYS_SHOW_MAP_LINK_DESC')
-    );
-    $sqlData = array();
-    $sqlData['query'] = 'SELECT lst_id, lst_name
-                       FROM ' . TBL_LISTS . '
-                      WHERE lst_org_id = ? -- $gCurrentOrgId
-                        AND lst_global = true
-                   ORDER BY lst_name, lst_timestamp DESC';
-    $sqlData['params'] = array($gCurrentOrgId);
-    $formEvents->addSelectBoxFromSql(
-        'events_list_configuration',
-        $gL10n->get('SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION'),
-        $gDb,
-        $sqlData,
-        array('defaultValue' => $formValues['events_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION_DESC')
-    );
-    $formEvents->addCheckbox(
-        'events_save_cancellations',
-        $gL10n->get('SYS_SAVE_ALL_CANCELLATIONS'),
-        (bool)$formValues['events_save_cancellations'],
-        array('helpTextId' => 'SYS_SAVE_ALL_CANCELLATIONS_DESC')
-    );
-    $formEvents->addCheckbox(
-        'events_may_take_part',
-        $gL10n->get('SYS_MAYBE_PARTICIPATE'),
-        (bool)$formValues['events_may_take_part'],
-        array('helpTextId' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'SYS_CANCEL', 'SYS_EVENT_PARTICIPATION_TENTATIVE')))
-    );
-    $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'EVT')) . '">
-            <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CALENDAR_MANAGEMENT') . '</a>';
-    $formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextId' => 'SYS_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
-    $formEvents->addCheckbox(
-        'events_rooms_enabled',
-        $gL10n->get('SYS_ROOM_SELECTABLE'),
-        (bool)$formValues['events_rooms_enabled'],
-        array('helpTextId' => 'SYS_ROOM_SELECTABLE_DESC')
-    );
-    $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms.php">
-            <i class="bi bi-house-door-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_ROOM_MANAGEMENT') . '</a>';
-    $formEvents->addCustomContent($gL10n->get('SYS_EDIT_ROOMS'), $html, array('helpTextId' => 'SYS_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
-    $formEvents->addSubmitButton(
-        'btn_save_events',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('events', 'accordion_modules', $gL10n->get('SYS_EVENTS'), 'bi-calendar-week-fill', $formEvents->show()));
-
-    // PANEL: WEBLINKS
-
-    $formWeblinks = new HtmlForm(
-        'links_preferences_form',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences_function.php', array('form' => 'links')),
-        $page,
-        array('class' => 'form-preferences')
-    );
-
-    $selectBoxEntries = array(
-        '0' => $gL10n->get('SYS_DISABLED'),
-        '1' => $gL10n->get('SYS_ENABLED'),
-        '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
-    );
-    $formWeblinks->addSelectBox(
-        'enable_weblinks_module',
-        $gL10n->get('ORG_ACCESS_TO_MODULE'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['enable_weblinks_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
-    );
-    $formWeblinks->addInput(
-        'weblinks_per_page',
-        $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
-        $formValues['weblinks_per_page'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
-    );
-    $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
-    $formWeblinks->addSelectBox(
-        'weblinks_target',
-        $gL10n->get('SYS_LINK_TARGET'),
-        $selectBoxEntries,
-        array('defaultValue' => $formValues['weblinks_target'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_LINK_TARGET_DESC')
-    );
-    $formWeblinks->addInput(
-        'weblinks_redirect_seconds',
-        $gL10n->get('SYS_DISPLAY_REDIRECT'),
-        $formValues['weblinks_redirect_seconds'],
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_DISPLAY_REDIRECT_DESC')
-    );
-    $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'LNK')) . '">
-            <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
-    $formWeblinks->addCustomContent(
-        $gL10n->get('SYS_EDIT_CATEGORIES'),
-        $html,
-        array('helpTextId' => $gL10n->get('SYS_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
-    );
-    $formWeblinks->addSubmitButton(
-        'btn_save_links',
-        $gL10n->get('SYS_SAVE'),
-        array('icon' => 'bi-check-lg')
-    );
-
-    $page->addHtml(getPreferencePanel('links', 'accordion_modules', $gL10n->get('SYS_WEBLINKS'), 'bi-link-45deg', $formWeblinks->show()));
-
-    $page->addHtml('
-            </div>
-        </div>
-    </div>');
-
-    $page->show();
-} catch (AdmException|Exception|\Smarty\Exception|UnexpectedValueException $e) {
-    $gMessage->show($e->getMessage());
 }

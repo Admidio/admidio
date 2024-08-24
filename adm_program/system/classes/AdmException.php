@@ -36,8 +36,9 @@ class AdmException extends Exception
     /**
      * Constructor saves the parameters to the class and will call the parent constructor. Also, a **rollback**
      * of open database translation will be done.
-     * @param string            $message Translation **id** or simple text that should be shown when exception is caught
-     * @param array<int,string> $params  Optional parameter for language string of translation id
+     * @param string $message Translation **id** or simple text that should be shown when exception is caught
+     * @param array<int,string> $params Optional parameter for language string of translation id
+     * @throws AdmException
      */
     public function __construct($message, $params = array())
     {

@@ -185,9 +185,9 @@ a {
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-menu-function-node,
-.dt-container, .admidio-margin-bottom, .admidio-content-subheader,
-.tab-content {
-    margin-bottom: 2.5rem;
+.dt-container, .admidio-margin-bottom, .admidio-content-header,
+.admidio-content-subheader, .tab-content {
+    margin-bottom: 2rem;
 }
 
 /* add 5px distance to all icons within a icon text combination */
@@ -240,6 +240,7 @@ a {
 /* Mark mandatory fields */
 /***********************************/
 .admidio-form-group-required .col-form-label:after,
+.admidio-form-group-required .form-label:after,
 .admidio-form-group-required > .form-check-label:after,
 .admidio-form-required-notice span:after {
     font-family: "bootstrap-icons", serif;
@@ -253,8 +254,7 @@ a {
 
 .admidio-form-required-notice {
     font-size: 9pt;
-    margin-top: 5px;
-    margin-bottom: -10px;
+    margin: 0.5rem 0;
     text-align: right;
     width: 100%;
     display: inline-block;
@@ -540,11 +540,11 @@ tr.admidio-event-highlight {
     object-fit: cover !important;
 }
 
-.admidio-album-thumbnail {
+.admidio-photos-thumbnail {
     margin-bottom: 2rem;
 }
 
-.admidio-album-thumbnail .rounded {
+.admidio-photos-thumbnail .rounded {
     width: 100% !important;
     object-fit: cover !important;
 }

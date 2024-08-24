@@ -230,7 +230,7 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Un champ est généralement visible pour tous les utilisateurs. Si cette fonction n\'est pas séléctionnée, les données ne peuvent être vus seulement par les utilisateurs qui ont le droit de modifier tous les utilisateurs. Dans son propre profil, l\'utilisateur peut visualiser et modifier ces données.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Afficher la séléction d\'organisation</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Si plusieurs organisations sont configurées dans la base de données, le dialogue de connexion avec toutes les organisations peut être affichée dans le dialogue de séléction.  L\'utilisateur peut séléctionner une autre organisation (telle que définie dans config.php) à laquelle il se connecte. Tourefois, l\'utilisateur doit également être inscrit à l\'organisation.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Information du système</string>
+  <string name="SYS_SYSTEM_INFORMATION">Information du système</string>
   <string name="ORG_THEME_FOLDER_OPEN">Le dossier thèmes n\'a pas pu être ouvert oulu.</string>
   <string name="ORG_TIME_FORMAT">Format horaire</string>
   <string name="ORG_TIME_FORMAT_DESC">Le format correspond à la fonction PHP %VAR1. (Par défaut: H:i)</string>

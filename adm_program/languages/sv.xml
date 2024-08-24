@@ -230,7 +230,7 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Ett fält är normalt synligt för alla användare. Om den här funktionen inte är vald kan informationen bara ses av användare som har rätt att redigera alla användare. I sin egen profil kan användaren se och redigera data.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Visa organisationsval</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Om flera organisationer lagras i databasen kan inloggningsskärmen visa en markeringsruta med alla tillgängliga organisationer. Användaren kan sedan logga in för att välja en annan organisation (annat än definierat i config.php). Användaren måste dock vara en registrerad medlem i den valda organisationen.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
+  <string name="SYS_SYSTEM_INFORMATION">Systeminformation</string>
   <string name="ORG_THEME_FOLDER_OPEN">Temamappen kunde inte öppnas / läsas.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
   <string name="ORG_TIME_FORMAT_DESC">Format uppfyller PHP-funktionen #VAR1#. (standard: H: i)</string>
