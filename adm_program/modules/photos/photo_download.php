@@ -18,6 +18,7 @@
  * photo_nr   : Number of photo that should be downloaded
  *
  *****************************************************************************/
+use Admidio\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -29,7 +30,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 2) {
         // only logged-in users can access the module
         require(__DIR__ . '/../../system/login_valid.php');
@@ -37,7 +38,7 @@ try {
 
     // check if download function is enabled
     if (!$gSettingsManager->getBool('photo_download_enabled')) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // create photo album object
@@ -48,11 +49,11 @@ try {
 
     // check if the current user could view this photo album
     if (!$photoAlbum->isVisible()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ((int)$photoAlbum->getValue('pho_quantity') === 0) {
-        throw new AdmException('SYS_ALBUM_CONTAINS_NO_PHOTOS');
+        throw new Exception('SYS_ALBUM_CONTAINS_NO_PHOTOS');
     }
 
     // check whether to take original version instead of scaled one
@@ -214,6 +215,6 @@ try {
             fpassthru($fp);
         }
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

@@ -21,6 +21,7 @@
  * $page->show();
  * ```
  */
+use Admidio\Exception;
 class ModuleContacts extends HtmlPage
 {
     /**
@@ -40,7 +41,7 @@ class ModuleContacts extends HtmlPage
      * @param User $user User object of the user who should be assigned.
      * @param bool $assignRegistration Flag if the user will be assigned through the registration process.
      * @throws \Smarty\Exception
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function createContentAssignUser(User $user, bool $assignRegistration = false)
@@ -53,7 +54,7 @@ class ModuleContacts extends HtmlPage
         $similarUserIDs = $user->searchSimilarUsers();
 
         if (count($similarUserIDs) === 0) {
-            throw new AdmException('No similar users found.');
+            throw new Exception('No similar users found.');
         }
 
 

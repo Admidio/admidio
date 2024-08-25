@@ -13,6 +13,7 @@
  * file_uuid   :  UUID of the file that should be renamed
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -32,7 +33,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -43,7 +44,7 @@ try {
     $targetFolder->getFolderForDownload($getFolderUuid);
 
     if (!$targetFolder->hasUploadRight()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     $originalName = '';
@@ -65,7 +66,7 @@ try {
     } else {
         // main folder should not be renamed
         if ($targetFolder->getValue('fol_fol_id_parent') === '') {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // read folder data to rename the folder
@@ -126,6 +127,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

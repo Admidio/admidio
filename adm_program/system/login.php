@@ -15,6 +15,7 @@
  *
  * **********************************************************************************************
  */
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/common.php');
@@ -40,7 +41,7 @@ try {
 
         // check if browser can set cookies and throw error if not
         if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
-            throw new AdmException('SYS_COOKIE_NOT_SET', array(DOMAIN));
+            throw new Exception('SYS_COOKIE_NOT_SET', array(DOMAIN));
         }
 
         // remove login page from navigation stack
@@ -48,7 +49,7 @@ try {
             if (str_ends_with($gNavigation->getUrl(), '/login.php')) {
                 $gNavigation->deleteLastUrl();
             }
-        } catch (AdmException $e) {
+        } catch (Exception $e) {
             $gNavigation->clear();
         }
 
@@ -67,7 +68,7 @@ try {
         ));
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if($getMode === 'check') {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

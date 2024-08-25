@@ -34,7 +34,7 @@
  * ```
  */
 namespace Admidio\UserInterface;
-use AdmException;
+use Exception;
 use HtmlPage;
 use Throwable;
 
@@ -45,7 +45,7 @@ class Installation extends HtmlPage
      * @param string $id ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(string $id, string $headline = '')
     {
@@ -69,7 +69,7 @@ class Installation extends HtmlPage
     /**
      * Internal method that will assign a default set of variables to the Smarty template engine.
      * These variables are available in all installation and update template files.
-     * @throws AdmException
+     * @throws Exception
      */
     private function assignBasicSmartyVariables()
     {
@@ -108,7 +108,7 @@ class Installation extends HtmlPage
     /**
      * Set the form in the installation modus. Therefore, headline and title will be changed.
      * This is the default modus and will be set automatically if not modus is set in the calling code.
-     * @throws AdmException
+     * @throws Exception
      */
     public function setInstallationModus()
     {
@@ -120,7 +120,7 @@ class Installation extends HtmlPage
 
     /**
      * Set the form in the update modus. Therefore, headline and title will be changed.
-     * @throws AdmException
+     * @throws Exception
      */
     public function setUpdateModus()
     {
@@ -134,7 +134,7 @@ class Installation extends HtmlPage
      * This method will set all variables for the Smarty engine and then send the whole html
      * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
-     * @throws AdmException
+     * @throws Exception
      */
     public function show()
     {
@@ -149,7 +149,7 @@ class Installation extends HtmlPage
         try {
             $this->smarty->display('index.tpl');
         } catch (Throwable $exception) {
-            throw new AdmException($exception->getMessage());
+            throw new Exception($exception->getMessage());
         }
     }
 
@@ -164,7 +164,7 @@ class Installation extends HtmlPage
      * @param string $buttonText The text of the button which will navigate to the **$destinationUrl**
      * @param string $buttonIcon The icon of the button which will navigate to the **$destinationUrl**
      * @param string $destinationUrl An url to which the user should navigate if he clicks on the button.
-     * @throws AdmException
+     * @throws Exception
      */
     public function showMessage(string $outputMode, string $headline, string $text, string $buttonText, string $buttonIcon, string $destinationUrl)
     {
@@ -184,7 +184,7 @@ class Installation extends HtmlPage
 
             $this->smarty->display('index.tpl');
         } catch (Throwable $exception) {
-            throw new AdmException($exception->getMessage());
+            throw new Exception($exception->getMessage());
         }
         exit();
     }

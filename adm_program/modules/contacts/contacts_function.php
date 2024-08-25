@@ -21,11 +21,12 @@
  * user_uuid : UUID of the contact, who should be edited
  *
  *****************************************************************************/
-
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     $gMessage->showInModalWindow();
 
     // Initialize and check the parameters
@@ -34,7 +35,7 @@ try {
 
     // Only users with user-edit rights are allowed
     if (!$gCurrentUser->editUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if (in_array($getMode, array('remove', 'delete', 'send_login'))) {
@@ -91,7 +92,7 @@ try {
         // Administrators could not be deleted
         if (!isMember($user->getValue('usr_id')) || $gCurrentUserId === (int)$user->getValue('usr_id')
             || (!$gCurrentUser->isAdministrator() && $user->isAdministrator())) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $member = new TableMembers($gDb);
@@ -123,7 +124,7 @@ try {
         // User could not delete himself
         // Only administrators are allowed to do this
         if ($isAlsoInOtherOrgas || $gCurrentUserId === (int)$user->getValue('usr_id') || !$gCurrentUser->isAdministrator()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
         // Delete user from database
         $user->delete();
@@ -136,7 +137,7 @@ try {
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_EMAIL_SEND')));
         } else {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
         exit();
     } elseif ($getMode === 'send_login_msg') {
@@ -164,8 +165,8 @@ try {
         }
     }
 
-    throw new AdmException('SYS_NO_RIGHTS');
-} catch (AdmException|Exception $e) {
+    throw new Exception('SYS_NO_RIGHTS');
+} catch (Exception $e) {
     if (in_array($getMode, array('send_login_msg', 'delete_explain_msg', 'delete_msg'))) {
         $gMessage->show($e->getMessage());
     } else {

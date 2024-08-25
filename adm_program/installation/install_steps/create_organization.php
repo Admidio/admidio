@@ -88,7 +88,7 @@ if ($mode === 'html') {
     if (isset($_SESSION['installationCreateOrganizationForm'])) {
         $formValues = $_SESSION['installationCreateOrganizationForm']->validate($_POST);
     } else {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // Save organization data filtered in session variables
@@ -98,12 +98,12 @@ if ($mode === 'html') {
     $_SESSION['orga_timezone']  = $formValues['orga_timezone'];
 
     if (!in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true)) {
-        throw new AdmException('SYS_FIELD_INVALID_INPUT', array('ORG_TIMEZONE'));
+        throw new Exception('SYS_FIELD_INVALID_INPUT', array('ORG_TIMEZONE'));
     }
 
     // allow only letters, numbers and special characters like .-_+@
     if (!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar')) {
-        throw new AdmException('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
+        throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
     }
 
     echo json_encode(array(

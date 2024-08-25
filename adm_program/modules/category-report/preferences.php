@@ -15,6 +15,7 @@
  *
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -23,7 +24,7 @@ try {
 
     // only authorized user are allowed to start this module
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // Initialize and check the parameters
@@ -229,6 +230,6 @@ try {
     $gCurrentSession->addFormObject($formConfigurations);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

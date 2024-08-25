@@ -77,12 +77,14 @@
  * )
  * ```
  */
+use Admidio\Exception;
+
 class ModuleAnnouncements extends Modules
 {
     /**
      * @var array An array with all names of the categories whose announcements should be shown
      */
-    protected $categoriesNames = array();
+    protected array $categoriesNames = array();
 
     /**
      * Get all records and push it to the array
@@ -214,8 +216,9 @@ class ModuleAnnouncements extends Modules
      * **dateEndFormatEnglish** and **dateEndFormatAdmidio** that could be read with
      * getParameter and could be used in the script.
      * @param string $dateRangeStart A date in english or Admidio format that will be the start date of the range.
-     * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
+     * @param string $dateRangeEnd A date in english or Admidio format that will be the end date of the range.
      * @return bool Returns false if invalid date format is submitted
+     * @throws Exception
      */
     public function setDateRange(string $dateRangeStart = '1970-01-01', string $dateRangeEnd = DATE_NOW): bool
     {
@@ -241,6 +244,7 @@ class ModuleAnnouncements extends Modules
      * @param string $dateRangePoint
      * @param string $dateFormat
      * @return bool
+     * @throws Exception
      */
     private function setDateRangeParams(string $dateRange, string $dateRangePoint, string $dateFormat): bool
     {
@@ -261,6 +265,7 @@ class ModuleAnnouncements extends Modules
     /**
      * Get additional tables for sql statement
      * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins, and it's query params.
+     * @throws Exception
      */
     private function sqlGetAdditional(): array
     {

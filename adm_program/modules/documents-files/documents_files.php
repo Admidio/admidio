@@ -12,6 +12,7 @@
  * folder_uuid : UUID of the current folder that should be shown
  ***********************************************************************************************
  */
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -21,7 +22,7 @@ try {
 
     // Check if module is activated
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // get recordset of current folder from database
@@ -89,7 +90,7 @@ try {
     $page->readData($getFolderUUID);
     $page->createContentList();
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if ($e->getMessage() === 'LOGIN') {
         require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
     } else {

@@ -11,14 +11,16 @@
 
 // preview will be called before form is send, so there are now POST parameters available
 // then show nothing. Second call is with POST parameters then show preview
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
     // check if the photo module is enabled and eCard is enabled
     if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 2) {
         // only logged-in users can access the module
         require(__DIR__ . '/../../system/login_valid.php');
@@ -30,7 +32,7 @@ try {
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
     if (strlen($_POST['ecard_template']) === 0) {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TEMPLATE'));
+        throw new Exception('SYS_FIELD_EMPTY', array('SYS_TEMPLATE'));
     }
 
     // Initialize and check the parameters
@@ -50,7 +52,7 @@ try {
     $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);
 
     if ($ecardDataToParse === null) {
-        throw new AdmException('SYS_ERROR_PAGE_NOT_FOUND');
+        throw new Exception('SYS_ERROR_PAGE_NOT_FOUND');
     }
 
     echo '
@@ -64,6 +66,6 @@ try {
     echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $nameRecipient, $emailRecipient);
 
     echo '</div>';
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

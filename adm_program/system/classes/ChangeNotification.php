@@ -29,6 +29,7 @@
  * $gChangeNotifications->sendNotification();
  * ```
  */
+use Admidio\Exception;
 class ChangeNotification
 {
     /** @var array $changes Queued array of changes (user ID as key) made during this
@@ -125,7 +126,7 @@ class ChangeNotification
      * @param bool $deleting Whether the profile is changed due to deleting the
      *                       user. In this case, the change will not be logged
      *                       in the history database.
-     * @throws AdmException
+     * @throws Exception
      */
     public function logProfileChange(int $userID, int $fieldId, string $fieldName, string $old_value, string $new_value, string $old_value_db = '', string $new_value_db = '', $user = null, bool $deleting = false)
     {
@@ -255,7 +256,7 @@ class ChangeNotification
      *
      * @param int $userID The user to whom the change applies
      * @param User|null $user (optional) The User object of the newly created user
-     * @throws AdmException
+     * @throws Exception
      */
     public function logUserCreation(int $userID, User $user = null)
     {
@@ -307,7 +308,7 @@ class ChangeNotification
      *
      * @param int $userID The user to whom the change applies
      * @param User|null $user (optional) The User object of the user to be deleted
-     * @throws AdmException
+     * @throws Exception
      */
     public function logUserDeletion(int $userID, User $user = null)
     {
@@ -378,7 +379,7 @@ class ChangeNotification
      * Send out all queued change notifications, if the configuration has system
      * change notifications enabled at all.
      * @param int $userID The user for whom the notification shall be sent (null for all queued notifications)
-     * @throws AdmException
+     * @throws Exception
      */
     public function sendNotifications(int $userID = 0)
     {
@@ -485,7 +486,7 @@ class ChangeNotification
     {
         try {
             $this->sendNotifications();
-        } catch (AdmException $e) {
+        } catch (Exception $e) {
             $e->showText();
         }
     }

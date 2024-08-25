@@ -21,11 +21,12 @@
  *     $systemComponent = new Component($gDb);
  *     $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
  *     $systemComponent->checkDatabaseVersion(true, 'administrator@example.com');
- * } catch(AdmException $e) {
+ * } catch(Exception $e) {
  *     $e->showHtml();
  * }
  * ```
  */
+use Admidio\Exception;
 class Component extends TableAccess
 {
     /**
@@ -46,7 +47,7 @@ class Component extends TableAccess
      * There will be different messages shown if versions aren't equal. If database has minor
      * version than a link to update the database will be shown. If filesystem has minor version
      * than a link to download current version will be shown.
-     * @throws AdmException SYS_DATABASE_VERSION_INVALID
+     * @throws Exception SYS_DATABASE_VERSION_INVALID
      *                      SYS_FILESYSTEM_VERSION_INVALID
      * @return void Nothing will be returned. If the versions aren't equal a message will be shown.
      */
@@ -70,14 +71,14 @@ class Component extends TableAccess
                 ' of version ' . $dbVersion . '.';
             $gLogger->warning($errorMessage);
 
-            throw new AdmException($errorMessage);
+            throw new Exception($errorMessage);
         } elseif ($this->getValue('com_update_completed') !== true) {
             $errorMessage = 'The update to version ' . $filesystemVersion . ' was not successfully finished!<br />
                 The last update step that was successfully performed was step ' . $this->getValue('com_update_step') .
                 ' of version ' . $dbVersion . '.';
             $gLogger->warning($errorMessage);
 
-            throw new AdmException($errorMessage);
+            throw new Exception($errorMessage);
         }
 
         $returnCode = version_compare($dbVersion, $filesystemVersion);
@@ -88,7 +89,7 @@ class Component extends TableAccess
                 array('versionDB' => $dbVersion, 'versionFileSystem' => $filesystemVersion)
             );
 
-            throw new AdmException('SYS_DATABASE_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
+            throw new Exception('SYS_DATABASE_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
                                    '<a href="' . ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php">', '</a>'));
         }
         if ($returnCode === 1) { // filesystem has minor version
@@ -97,7 +98,7 @@ class Component extends TableAccess
                 array('versionDB' => $dbVersion, 'versionFileSystem' => $filesystemVersion)
             );
 
-            throw new AdmException('SYS_FILESYSTEM_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
+            throw new Exception('SYS_FILESYSTEM_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
                                    '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
         }
     }
@@ -245,7 +246,7 @@ class Component extends TableAccess
                         $documentsRootFolder = new TableFolder($gDb);
                         $documentsRootFolder->getFolderForDownload('');
                         return true;
-                    } catch (AdmException $e) {
+                    } catch (Exception $e) {
                         return false;
                     }
                 }

@@ -41,6 +41,8 @@
  *                 be returned (although that negates any benefits of server-side processing!)
  * search[value] - Global search value.
  *****************************************************************************/
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
@@ -232,7 +234,7 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (Exception|AdmException $e) {
+} catch (Exception $e) {
     $jsonArray['error'] = $e->getMessage();
     echo json_encode($jsonArray);
     exit();

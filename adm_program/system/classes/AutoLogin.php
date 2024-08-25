@@ -26,6 +26,7 @@
  * $autoLogin->delete();
  * ```
  */
+use Admidio\Exception;
 class AutoLogin extends TableAccess
 {
     /**
@@ -34,7 +35,7 @@ class AutoLogin extends TableAccess
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string|int $session The recordset of the auto login with this session will be loaded.
      *                             If session isn't set than an empty object of the table is created.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, $session = 0)
     {
@@ -59,7 +60,7 @@ class AutoLogin extends TableAccess
 
         try {
             $loginId = $userId . ':' . SecurityUtils::getRandomString(40);
-        } catch (AdmException $e) {
+        } catch (Exception $e) {
             $e->showText();
             // => EXIT
         }
@@ -75,7 +76,7 @@ class AutoLogin extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {

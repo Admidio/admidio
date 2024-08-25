@@ -21,6 +21,7 @@
  * $page->show();
  * ```
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 class ModuleLogin
@@ -37,7 +38,7 @@ class ModuleLogin
      * organization select box could be shown and the flag if auto login should be activated.
      * @param HtmlPage $page Html content will be added to this page.
      * @param string $organizationShortName Optional the organization that should be preselected in the dialog.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addHtmlLogin(HtmlPage $page, string $organizationShortName = '')
     {
@@ -122,7 +123,7 @@ class ModuleLogin
      * Check if a user with that username exists and the password is set correct. If the user choose a different
      * organization than the session data will be updated.
      * @return bool Returns **true** if the login data are valid
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function checkLogin(): bool
@@ -146,7 +147,7 @@ class ModuleLogin
         $userStatement = $gDb->queryPrepared($sql, array($postLoginName));
 
         if ($userStatement->rowCount() === 0) {
-            throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
+            throw new Exception('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
         }
 
         // if login organization is different to organization of config file then create new session variables

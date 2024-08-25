@@ -12,6 +12,7 @@
  * urt_uuid : UUID of the relation type that should be edited
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -22,11 +23,11 @@ try {
     $getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'uuid');
 
     if (!$gSettingsManager->getBool('contacts_user_relations_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     $headline = $gL10n->get('SYS_RELATIONSHIP_CONFIGURATION');
@@ -162,6 +163,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

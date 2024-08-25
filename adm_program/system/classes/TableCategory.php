@@ -35,6 +35,7 @@
  * $category->save();
  * ```
  */
+use Admidio\Exception;
 class TableCategory extends TableAccess
 {
     public const MOVE_UP   = 'UP';
@@ -54,7 +55,7 @@ class TableCategory extends TableAccess
      * If the id is set than the specific category will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $catId The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, $catId = 0)
     {
@@ -69,7 +70,7 @@ class TableCategory extends TableAccess
      * @throws Exception
      *                      SYS_DELETE_LAST_CATEGORY
      *                      SYS_DONT_DELETE_CATEGORY
-     * @throws AdmException SYS_DELETE_SYSTEM_CATEGORY
+     * @throws Exception SYS_DELETE_SYSTEM_CATEGORY
      */
     public function delete(): bool
     {
@@ -77,7 +78,7 @@ class TableCategory extends TableAccess
 
         // system-category couldn't be deleted
         if ((int) $this->getValue('cat_system') === 1) {
-            throw new AdmException('SYS_DELETE_SYSTEM_CATEGORY');
+            throw new Exception('SYS_DELETE_SYSTEM_CATEGORY');
         }
 
         // checks if there exists another category of this type. Don't delete the last category of a type!
@@ -90,7 +91,7 @@ class TableCategory extends TableAccess
 
         // Don't delete the last category of a type!
         if ((int) $categoriesStatement->fetchColumn() === 1) {
-            throw new AdmException('SYS_DELETE_LAST_CATEGORY');
+            throw new Exception('SYS_DELETE_LAST_CATEGORY');
         }
 
         $this->db->startTransaction();
@@ -114,7 +115,7 @@ class TableCategory extends TableAccess
         $recordsetStatement = $this->db->queryPrepared($sql, array($catId));
 
         if ($recordsetStatement->rowCount() > 0) {
-            throw new AdmException('SYS_DONT_DELETE_CATEGORY', array($this->getValue('cat_name'), $this->getNumberElements()));
+            throw new Exception('SYS_DONT_DELETE_CATEGORY', array($this->getValue('cat_name'), $this->getNumberElements()));
         }
 
         // delete all roles assignments that have the right to view this category
@@ -345,7 +346,7 @@ class TableCategory extends TableAccess
      * Per default all columns of adm_categories will be read and stored in the object.
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function readDataByColumns(array $columnArray): bool
@@ -389,7 +390,7 @@ class TableCategory extends TableAccess
      * If a new record is inserted than the next free sequence will be determined.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -487,7 +488,7 @@ class TableCategory extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool

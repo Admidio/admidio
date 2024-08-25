@@ -19,6 +19,7 @@
  *             true  - nur "body" HTML Code
  *
  *****************************************************************************/
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -35,7 +36,7 @@ try {
 
     // if user is allowed to assign at least one role then allow access
     if (!$gCurrentUser->assignRoles()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     $user = new User($gDb, $gProfileFields);
@@ -332,6 +333,6 @@ try {
         $page->addHtml($html);
         $page->show();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

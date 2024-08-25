@@ -181,7 +181,7 @@ function setInstallationLanguage(string $language)
 
 /**
  * @return string
- * @throws AdmException
+ * @throws Exception
  */
 function getInstalledDbVersion(): string
 {
@@ -266,7 +266,7 @@ echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 // connect to database
 try {
     $gDb = Database::createDatabaseInstance();
-} catch (AdmException $e) {
+} catch (Exception $e) {
     exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getMessage())));
 }
 
@@ -279,7 +279,7 @@ echo 'Installation successful!<br />';
 // read installed database version
 try {
     $databaseVersion = getInstalledDbVersion();
-} catch (AdmException $e) {
+} catch (Exception $e) {
     exit('<br />'.$e->getMessage());
 }
 

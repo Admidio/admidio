@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 class RoleDependency
 {
     /**
@@ -295,7 +296,7 @@ class RoleDependency
      * If a membership still exists than start date will not be changed. Only
      * the end date will be set to 31.12.9999.
      * @return bool Returns false if no parent or child row exists
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function updateMembership(): bool

@@ -6,6 +6,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 final class StringUtils
 {
     /**
@@ -207,8 +208,8 @@ final class StringUtils
      * @param string $filename     Name of the file that should be checked.
      * @param bool $checkExtension If set to **true** then the extension will be checked against a block-list of extensions:
      *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi, phar
-     * @return true Returns @true if filename contains only valid characters. Otherwise, an AdmException is thrown
-     * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
+     * @return true Returns @true if filename contains only valid characters. Otherwise, an Exception is thrown
+     * @throws Exception SYS_FILENAME_EMPTY : Filename was empty
      *                      SYS_FILENAME_INVALID : Filename contains invalid characters
      *                      SYS_FILE_EXTENSION_INVALID : Filename contains invalid extension
      */
@@ -218,7 +219,7 @@ final class StringUtils
 
         // If the filename was not empty
         if (trim($filename) === '') {
-            throw new AdmException('SYS_FILENAME_EMPTY');
+            throw new Exception('SYS_FILENAME_EMPTY');
         }
 
         // filename should only contain valid characters and don't start with a dot
@@ -230,7 +231,7 @@ final class StringUtils
             (!self::strValidCharacters($filename, 'file') && $checkExtension) ||
             (!self::strValidCharacters($filename, 'folder') && !$checkExtension)
         ) {
-            throw new AdmException('SYS_FILENAME_INVALID', array(SecurityUtils::encodeHTML(self::strStripTags($filename))));
+            throw new Exception('SYS_FILENAME_INVALID', array(SecurityUtils::encodeHTML(self::strStripTags($filename))));
         }
 
         if ($checkExtension) {
@@ -241,7 +242,7 @@ final class StringUtils
             $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
             if (in_array($fileExtension, $extensionBlocklist, true)) {
-                throw new AdmException('SYS_FILE_EXTENSION_INVALID');
+                throw new Exception('SYS_FILE_EXTENSION_INVALID');
             }
         }
 
@@ -252,20 +253,20 @@ final class StringUtils
      * Check if a filename contains invalid characters. The characters will be checked with StringUtils::strValidCharacters.
      * In addition to the function checks if the name contains .. or a . at the beginning.
      * @param string $filename     Name of the file that should be checked.
-     * @return true Returns @true if filename contains only valid characters. Otherwise, an AdmException is thrown
-     * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
+     * @return true Returns @true if filename contains only valid characters. Otherwise, an Exception is thrown
+     * @throws Exception SYS_FILENAME_EMPTY : Filename was empty
      *                      SYS_FILENAME_INVALID : Filename contains invalid characters
      */
     public static function strIsValidFolderName(string $filename): bool
     {
         // If the filename was not empty
         if (trim($filename) === '') {
-            throw new AdmException('SYS_FOLDER_NAME_EMPTY');
+            throw new Exception('SYS_FOLDER_NAME_EMPTY');
         }
 
         // filename should only contain valid characters and don't start with a dot
         if (basename($filename) !== $filename || self::strStartsWith($filename, '.') || !self::strValidCharacters($filename, 'folder')) {
-            throw new AdmException('SYS_FOLDER_NAME_INVALID', array($filename));
+            throw new Exception('SYS_FOLDER_NAME_INVALID', array($filename));
         }
 
         return true;

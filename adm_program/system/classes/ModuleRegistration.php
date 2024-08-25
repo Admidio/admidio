@@ -21,6 +21,7 @@
  * $page->show();
  * ```
  */
+use Admidio\Exception;
 class ModuleRegistration extends HtmlPage
 {
     /**
@@ -58,7 +59,7 @@ class ModuleRegistration extends HtmlPage
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function createContentRegistrationList()

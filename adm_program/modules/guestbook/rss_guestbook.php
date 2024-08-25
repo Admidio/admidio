@@ -13,6 +13,8 @@
  * organization_short_name : short name of the organization whose guestbook entries should be shown
  * *********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -20,12 +22,12 @@ try {
 
     // Check if RSS is active...
     if (!$gSettingsManager->getBool('enable_rss')) {
-        throw new AdmException('SYS_RSS_DISABLED');
+        throw new Exception('SYS_RSS_DISABLED');
     }
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('enable_guestbook_module') !== 1) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     if ($getOrganizationShortName !== '') {
@@ -73,7 +75,7 @@ try {
     }
 
     $rss->getRssFeed();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($e->getMessage());
 }

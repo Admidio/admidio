@@ -16,6 +16,7 @@
  * - Folder: create, is empty, get content, delete content, delete folder, copy, move, chmod
  * - File: delete, copy, move, chmod, read, write
  */
+use Admidio\Exception;
 final class FileSystemUtils
 {
     public const CONTENT_TYPE_DIRECTORY = 'directory';
@@ -754,7 +755,7 @@ final class FileSystemUtils
      * Get a generated filename with a timestamp and a secure random identifier
      * @param string $filename The original filename
      * @return string Returns the generated filename
-     * @throws AdmException Throws if secure random identifier could not be generated
+     * @throws Exception Throws if secure random identifier could not be generated
      * @example "IMG_123456.JPG" => "20180131-123456_0123456789abcdef.jpg"
      */
     public static function getGeneratedFilename(string $filename): string

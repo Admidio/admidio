@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
+use Admidio\Exception;
 class TableWeblink extends TableAccess
 {
     /**
@@ -110,7 +110,7 @@ class TableWeblink extends TableAccess
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -123,7 +123,7 @@ class TableWeblink extends TableAccess
         }
 
         if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('lnk_cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)) {
-            throw new AdmException('Weblink could not be saved because you are not allowed to edit weblinks of this category.');
+            throw new Exception('Weblink could not be saved because you are not allowed to edit weblinks of this category.');
         }
 
         return parent::save($updateFingerPrint);
@@ -135,7 +135,7 @@ class TableWeblink extends TableAccess
      * **system_notifications_role**. The email contains the weblink name, address, the name of the current user,
      * the timestamp and the url to this weblink.
      * @return bool Returns **true** if the notification was sent
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception 'SYS_EMAIL_NOT_SEND'
      * @throws Exception
      */
     public function sendNotification(): bool
@@ -176,7 +176,7 @@ class TableWeblink extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
@@ -191,11 +191,11 @@ class TableWeblink extends TableAccess
                 $category = new TableCategory($this->db);
                 if(is_int($newValue)) {
                     if(!$category->readDataById($newValue)) {
-                        throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
+                        throw new Exception('No Category with the given id '. $newValue. ' was found in the database.');
                     }
                 } else {
                     if(!$category->readDataByUuid($newValue)) {
-                        throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
+                        throw new Exception('No Category with the given uuid '. $newValue. ' was found in the database.');
                     }
                     $newValue = $category->getValue('cat_id');
                 }
@@ -203,7 +203,7 @@ class TableWeblink extends TableAccess
                 $newValue = admFuncCheckUrl($newValue);
 
                 if ($newValue === false) {
-                    throw new AdmException('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_WEBSITE')));
+                    throw new Exception('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_WEBSITE')));
                 }
             }
         }

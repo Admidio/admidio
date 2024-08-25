@@ -26,7 +26,7 @@ namespace Admidio\UserInterface;
 use ComponentUpdate;
 use FileSystemUtils;
 use HtmlPage;
-use AdmException;
+use Exception;
 use PhpIniUtils;
 use RuntimeException;
 use SecurityUtils;
@@ -56,7 +56,7 @@ class Preferences extends HtmlPage
 
     /**
      * Constructor that initialize the class member parameters
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(string $id, string $headline = '')
     {
@@ -66,7 +66,7 @@ class Preferences extends HtmlPage
     }
 
     /**
-     * @throws AdmException
+     * @throws Exception
      */
     private function initialize(): void
     {
@@ -191,7 +191,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the Admidio update preferences and will return the complete html.
      * @return string Returns the complete html of the form from the Admidio update preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createAdmidioUpdateForm(): string
     {
@@ -224,7 +224,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the announcements preferences and will return the complete html.
      * @return string Returns the complete html of the form from the announcements preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createAnnouncementsForm(): string
     {
@@ -279,7 +279,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the captcha preferences and will return the complete html.
      * @return string Returns the complete html of the form from the captcha preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createCaptchaForm(): string
     {
@@ -298,7 +298,7 @@ class Preferences extends HtmlPage
         // search all available themes in theme folder
         $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
         if (count($themes) === 0) {
-            throw new AdmException('SYS_TEMPLATE_FOLDER_OPEN');
+            throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
         }
         $selectBoxEntries = array(
             'pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'),
@@ -400,7 +400,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the category report preferences and will return the complete html.
      * @return string Returns the complete html of the form from the category report preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createCategoryReportForm(): string
     {
@@ -451,7 +451,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the common preferences and will return the complete html.
      * @return string Returns the complete html of the form from the common preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createCommonForm(): string
     {
@@ -470,7 +470,7 @@ class Preferences extends HtmlPage
         // search all available themes in theme folder
         $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
         if (count($themes) === 0) {
-            throw new AdmException('SYS_TEMPLATE_FOLDER_OPEN');
+            throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
         }
         $formCommon->addSelectBox(
             'theme',
@@ -554,7 +554,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the contacts preferences and will return the complete html.
      * @return string Returns the complete html of the form from the contacts preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createContactsForm(): string
     {
@@ -638,7 +638,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the documents & files preferences and will return the complete html.
      * @return string Returns the complete html of the form from the documents & files preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createDocumentsFilesForm(): string
     {
@@ -680,7 +680,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the email dispatch preferences and will return the complete html.
      * @return string Returns the complete html of the form from the email dispatch preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createEmailDispatchForm(): string
     {
@@ -838,7 +838,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the events preferences and will return the complete html.
      * @return string Returns the complete html of the form from the events preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createEventsForm(): string
     {
@@ -968,7 +968,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the groups and roles preferences and will return the complete html.
      * @return string Returns the complete html of the form from the groups and roles preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createGroupsRolesForm(): string
     {
@@ -1066,7 +1066,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the guestbook preferences and will return the complete html.
      * @return string Returns the complete html of the form from the guestbook preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createGuestbookForm(): string
     {
@@ -1148,7 +1148,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the links preferences and will return the complete html.
      * @return string Returns the complete html of the form from the links preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createLinksForm(): string
     {
@@ -1216,7 +1216,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the messages preferences and will return the complete html.
      * @return string Returns the complete html of the form from the messages preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createMessagesForm(): string
     {
@@ -1323,7 +1323,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the organization preferences and will return the complete html.
      * @return string Returns the complete html of the form from the organization preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createOrganizationForm(): string
     {
@@ -1409,7 +1409,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the photos preferences and will return the complete html.
      * @return string Returns the complete html of the form from the photos preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createPhotosForm(): string
     {
@@ -1538,7 +1538,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the PHP preferences and will return the complete html.
      * @return string Returns the complete html of the form from the PHP preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createPHPForm(): string
     {
@@ -1606,7 +1606,7 @@ class Preferences extends HtmlPage
             $prnGeneratorColorClass = 'text-success';
             $prnGeneratorText = $gL10n->get('SYS_SECURE');
             $prnGeneratorInfo = '';
-        } catch (AdmException $e) {
+        } catch (Exception $e) {
             $prnGeneratorColorClass = 'text-danger';
             $prnGeneratorText = $gL10n->get('SYS_PRNG_INSECURE');
             $prnGeneratorInfo =  '<br />' . $e->getMessage();
@@ -1624,7 +1624,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the profile preferences and will return the complete html.
      * @return string Returns the complete html of the form from the profile preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createProfileForm(): string
     {
@@ -1703,7 +1703,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the regional settings preferences and will return the complete html.
      * @return string Returns the complete html of the form from the regional settings preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createRegionalSettingsForm(): string
     {
@@ -1769,7 +1769,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the registration preferences and will return the complete html.
      * @return string Returns the complete html of the form from the registration preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createRegistrationForm(): string
     {
@@ -1829,7 +1829,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the security preferences and will return the complete html.
      * @return string Returns the complete html of the form from the security preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createSecurityForm(): string
     {
@@ -1890,7 +1890,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the system information preferences and will return the complete html.
      * @return string Returns the complete html of the form from the system information preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createSystemInformationForm(): string
     {
@@ -1999,7 +1999,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the system notifications preferences and will return the complete html.
      * @return string Returns the complete html of the form from the system notifications preferences.
-     * @throws AdmException|Exception
+     * @throws Exception|Exception
      */
     public function createSystemNotificationsForm(): string
     {

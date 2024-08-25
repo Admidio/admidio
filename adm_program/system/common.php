@@ -33,7 +33,7 @@ if(!isset($g_organization)) {
 
 try {
     $gDb = Database::createDatabaseInstance();
-} catch (AdmException $e) {
+} catch (Exception $e) {
     $e->showText();
     // => EXIT
 }
@@ -245,7 +245,7 @@ if ($gCurrentSession->hasObject('gNavigation')) {
 try {
     // check version of database against version of file system and show notice if not equal
     $gSystemComponent->checkDatabaseVersion();
-} catch (AdmException $e) {
+} catch (Throwable $e) {
     $gSettingsManager->disableExceptions();
     $gMessage->hideThemeBody();
     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php');

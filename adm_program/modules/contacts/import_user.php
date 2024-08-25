@@ -14,6 +14,7 @@
  ***********************************************************************************************
  */
 use Ramsey\Uuid\Uuid;
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -24,7 +25,7 @@ try {
 
     // only authorized users can import users
     if (!$gCurrentUser->editUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getMode === 'import') {
@@ -119,7 +120,7 @@ try {
             if ($userLoginName !== '' && $userPassword !== '') {
                 try {
                     $userImport->setLoginData($userLoginName, $userPassword);
-                } catch (AdmException|Exception $e) {
+                } catch (Exception $e) {
                     $importMessages[] = $e->getMessage();
                 }
             }
@@ -177,6 +178,6 @@ try {
         ));
         // => EXIT
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

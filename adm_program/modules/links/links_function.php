@@ -14,6 +14,7 @@
  *             delete : Delete link
  ***********************************************************************************************
  */
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -28,7 +29,7 @@ try {
 
     // check if the module is enabled for use
     if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // create weblink object
@@ -39,12 +40,12 @@ try {
 
         // check if the current user could edit this weblink
         if (!$link->isEditable()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     } else {
         // check if the user has the right to edit at least one category
         if (count($gCurrentUser->getAllEditableCategories('LNK')) === 0) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -74,6 +75,6 @@ try {
         echo json_encode(array('status' => 'success'));
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

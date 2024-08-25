@@ -146,6 +146,6 @@ try {
     if ($getInlineView) {
         echo '</div></div>';
     }
-} catch (AdmException|Exception $e) {
+} catch (Throwable $e) {
     $gMessage->show($e->getMessage());
 }

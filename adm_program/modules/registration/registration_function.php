@@ -17,6 +17,8 @@
  * new_user_uuid: UUID of the new registered user to be processed
  * user_uuid:     UUID of the user to whom the new login should be assigned
  *****************************************************************************/
+use Admidio\Exception;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
@@ -28,12 +30,12 @@ try {
 
     // only administrators could approve new users
     if (!$gCurrentUser->approveUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // module must be enabled in the settings
     if (!$gSettingsManager->getBool('registration_enable_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // create user objects
@@ -82,7 +84,7 @@ try {
                 $gMessage->show($message);
                 // => EXIT
             }
-        } catch (AdmException $e) {
+        } catch (Exception $e) {
             // exception is thrown when email couldn't be sent
             // so save user data and then show error
             $user->save();
@@ -126,7 +128,7 @@ try {
         admRedirect(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
         // => EXIT
     }
-} catch (AdmException | Exception $e) {
+} catch (Exception | Exception $e) {
     if ($getMode === 'delete_user') {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

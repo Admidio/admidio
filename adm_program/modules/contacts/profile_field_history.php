@@ -16,6 +16,7 @@
  *                    if no date information is delivered
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -47,7 +48,7 @@ try {
     if (!$gSettingsManager->getBool('profile_log_edit_fields')
         || ($getUserUuid === '' && !$gCurrentUser->editUsers())
         || ($getUserUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // add page to navigation history
@@ -75,7 +76,7 @@ try {
 
     // DateTo should be greater than DateFrom
     if ($objDateFrom > $objDateTo) {
-        throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
+        throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
     }
 
     $dateFromIntern = $objDateFrom->format('Y-m-d');
@@ -138,9 +139,9 @@ try {
 
         // show message if there were no changes for users
         if ($getUserUuid !== '') {
-            throw new AdmException('SYS_NO_CHANGES_LOGGED_PROFIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
+            throw new Exception('SYS_NO_CHANGES_LOGGED_PROFIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         } else {
-            throw new AdmException('SYS_NO_CHANGES_LOGGED');
+            throw new Exception('SYS_NO_CHANGES_LOGGED');
         }
     }
 
@@ -210,6 +211,6 @@ try {
 
     $page->addHtml($table->show());
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

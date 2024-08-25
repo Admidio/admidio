@@ -13,6 +13,7 @@
  * copy = true : The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -21,7 +22,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('announcements_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Initialize and check the parameters
@@ -52,12 +53,12 @@ try {
 
         // check if the current user could edit this announcement
         if (!$announcement->isEditable()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     } else {
         // check if the user has the right to edit at least one category
         if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -101,6 +102,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

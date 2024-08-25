@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
+use Admidio\Exception;
 class TableMessageContent extends TableAccess
 {
     /**
@@ -16,7 +16,7 @@ class TableMessageContent extends TableAccess
      * If the id is set than the specific message will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $mscId The recordset of the relation with this id will be loaded. If id isn't set than an empty object of the table is created.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, int $mscId = 0)
     {
@@ -31,7 +31,7 @@ class TableMessageContent extends TableAccess
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return int|string Returns the value of the database column.
      *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {

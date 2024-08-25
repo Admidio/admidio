@@ -12,7 +12,7 @@
  * link_uuid - UUID of the weblink that should be edited
  ***********************************************************************************************
  */
-
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -24,7 +24,7 @@ try {
 
     // check if the module is enabled for use
     if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // create weblink object
@@ -35,12 +35,12 @@ try {
 
         // check if the current user could edit this weblink
         if (!$link->isEditable()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     } else {
         // check if the user has the right to edit at least one category
         if (count($gCurrentUser->getAllEditableCategories('LNK')) === 0) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -98,6 +98,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

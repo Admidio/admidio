@@ -27,6 +27,7 @@
  * $userImport->save();
  * ```
  */
+use Admidio\Exception;
 class UserImport extends User
 {
     // create readable constants for user import mode
@@ -64,7 +65,7 @@ class UserImport extends User
     /**
      * Additional to the parent method some import parameters will be initialized
      * @return void
-     * @throws AdmException
+     * @throws Exception
      */
     public function clear()
     {
@@ -79,7 +80,7 @@ class UserImport extends User
      * @param string $firstName The first name of the user that should be imported.
      * @param string $lastName The last name of the user that should be imported.
      * @return bool Returns **true** if one record is found
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
@@ -134,7 +135,7 @@ class UserImport extends User
      *                  USER_IMPORT_DUPLICATE If the user exists a new user will be created.
      *                  USER_IMPORT_DISPLACE  All profile field values of the import file will be added to the user.
      *                  USER_IMPORT_COMPLETE  Only profile fields that don't have a value will be added to the user.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setImportMode(int $mode)
@@ -162,7 +163,7 @@ class UserImport extends User
      * be added to the import user.
      * @param string $loginName The login name for the import user that should later be used to log in to this system.
      * @param string $password The password for the import user that should later be used to log in to this system.
-     * @throws AdmException An exception is thrown if the password doesn't meet the minimum requirements.
+     * @throws Exception An exception is thrown if the password doesn't meet the minimum requirements.
      * @throws Exception
      */
     public function setLoginData(string $loginName, string $password)
@@ -170,13 +171,13 @@ class UserImport extends User
         global $gCurrentUser, $gSettingsManager;
 
         if (!$gCurrentUser->isAdministrator()) {
-            throw new AdmException('Current user is not an administrator. Only administrators could import usernames and passwords.');
+            throw new Exception('Current user is not an administrator. Only administrators could import usernames and passwords.');
         } elseif (strlen($this->getValue('usr_login_name')) > 0) {
-            throw new AdmException('Contact ' . $this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' already has a username and password.');
+            throw new Exception('Contact ' . $this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' already has a username and password.');
         } elseif (strlen($password) < PASSWORD_MIN_LENGTH) {
-            throw new AdmException($this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum length of '.PASSWORD_MIN_LENGTH.' characters.');
+            throw new Exception($this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum length of '.PASSWORD_MIN_LENGTH.' characters.');
         } elseif (PasswordUtils::passwordStrength($password, $this->getPasswordUserData()) < $gSettingsManager->getInt('password_min_strength')) {
-            throw new AdmException($this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum passwort strength.');
+            throw new Exception($this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum passwort strength.');
         } else {
             $this->setValue('usr_login_name', $loginName);
             $this->setPassword($password);
@@ -202,7 +203,7 @@ class UserImport extends User
      * // reads data of adm_user_fields
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool

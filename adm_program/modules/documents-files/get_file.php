@@ -13,6 +13,8 @@
  * view      :  If set to true than the output will not be send as attachement
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -22,7 +24,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // get recordset of current file from database
@@ -34,7 +36,7 @@ try {
 
     // check if the file already exists
     if (!is_file($completePath)) {
-        throw new AdmException('SYS_FILE_NOT_EXIST');
+        throw new Exception('SYS_FILE_NOT_EXIST');
     }
 
     // Increment download counter
@@ -75,6 +77,6 @@ try {
         // file output for small files (< 10MB)
         readfile($completePath);
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

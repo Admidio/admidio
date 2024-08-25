@@ -25,6 +25,7 @@
  * $membership->stopMembership();
  * ```
  */
+use Admidio\Exception;
 class TableMembers extends TableAccess
 {
     /**
@@ -51,7 +52,7 @@ class TableMembers extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      * @see TableAccess#getValue
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
@@ -85,7 +86,7 @@ class TableMembers extends TableAccess
      * @param int $roleId Stops the membership of this role
      * @param int $userId The user who should lose the member of the role.
      * @return bool Return **true** if the membership was successfully deleted.
-     * @throws AdmException
+     * @throws Exception
      */
     public function deleteMembership(int $roleId = 0, int $userId = 0): bool
     {
@@ -170,7 +171,7 @@ class TableMembers extends TableAccess
      * with their timestamp will be updated.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -180,7 +181,7 @@ class TableMembers extends TableAccess
         // if role is administrator than only administrator can add new user,
         // but don't change their own membership, because there must be at least one administrator
         if ($this->getValue('rol_administrator') && !$gCurrentUser->isAdministrator()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $newRecord = $this->newRecord;
@@ -248,7 +249,7 @@ class TableMembers extends TableAccess
      * @param bool|null $leader If value **1** then the user will be a leader of the role and get more rights.
      * @param int|null $approvalState Option for User to confirm and adjust the membership ( **1** = User confirmed membership but maybe disagreed, **2** = user accepted membership
      * @return bool Return **true** if the assignment was successful.
-     * @throws AdmException
+     * @throws Exception
      */
     public function startMembership(int $roleId = 0, int $userId = 0, bool $leader = null, int $approvalState = null): bool
     {

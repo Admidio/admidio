@@ -189,6 +189,6 @@ try {
             require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/installation_successful.php');
             break;
     }
-} catch (AdmException|Exception|UnexpectedValueException|RuntimeException $e) {
+} catch (Exception|Exception|UnexpectedValueException|RuntimeException $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

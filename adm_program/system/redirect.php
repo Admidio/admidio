@@ -22,7 +22,7 @@ try {
     $getUrl = admFuncVariableIsValid($_GET, 'url', 'url', array('requireValue' => true));
 
     if (filter_var($getUrl, FILTER_VALIDATE_URL) === false) {
-        throw new AdmException('SYS_REDIRECT_URL_INVALID');
+        throw new \Admidio\Exception('SYS_REDIRECT_URL_INVALID');
     }
 
     // create html page object
@@ -61,6 +61,6 @@ try {
 
     // show html of complete page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Throwable $e) {
     $gMessage->show($e->getMessage());
 }

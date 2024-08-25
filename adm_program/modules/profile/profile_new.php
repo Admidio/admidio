@@ -21,7 +21,7 @@
  * firstname   : (Optional) First name could be set and will than be preassigned for new users
  *
  *****************************************************************************/
-
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -52,13 +52,13 @@ try {
     if (!$gValidLogin) {
         // Registration disabled, so also lock this mode
         if (!$gSettingsManager->getBool('registration_enable_module')) {
-            throw new AdmException('SYS_MODULE_DISABLED');
+            throw new Exception('SYS_MODULE_DISABLED');
         }
     } else {
         if ($getUserUuid === '') {
             // checks if the user has the necessary rights to create new users
             if (!$gCurrentUser->editUsers()) {
-                throw new AdmException('SYS_NO_RIGHTS');
+                throw new Exception('SYS_NO_RIGHTS');
             }
 
             if (isset($_GET['lastname']) && isset($_GET['firstname'])) {
@@ -69,7 +69,7 @@ try {
         } else {
             // checks if the user has the necessary rights to change the corresponding profile
             if (!$gCurrentUser->hasRightEditProfile($user)) {
-                throw new AdmException('SYS_NO_RIGHTS');
+                throw new Exception('SYS_NO_RIGHTS');
             }
         }
     }
@@ -372,16 +372,16 @@ try {
         if (!$gValidLogin) {
             // Passwort muss mindestens 8 Zeichen lang sein
             if (strlen($_POST['usr_password']) < PASSWORD_MIN_LENGTH) {
-                throw new AdmException('SYS_PASSWORD_LENGTH');
+                throw new Exception('SYS_PASSWORD_LENGTH');
             }
 
             // both password fields must be identical
             if ($_POST['usr_password'] !== $_POST['password_confirm']) {
-                throw new AdmException('SYS_PASSWORDS_NOT_EQUAL');
+                throw new Exception('SYS_PASSWORDS_NOT_EQUAL');
             }
 
             if (PasswordUtils::passwordStrength($_POST['usr_password'], $user->getPasswordUserData()) < $gSettingsManager->getInt('password_min_strength')) {
-                throw new AdmException('SYS_PASSWORD_NOT_STRONG_ENOUGH');
+                throw new Exception('SYS_PASSWORD_NOT_STRONG_ENOUGH');
             }
         }
 
@@ -403,12 +403,12 @@ try {
                     $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
 
                     if ($pdoStatement->rowCount() > 0 && $pdoStatement->fetchColumn() !== $getUserUuid) {
-                        throw new AdmException('SYS_LOGIN_NAME_EXIST');
+                        throw new Exception('SYS_LOGIN_NAME_EXIST');
                     }
                 }
 
                 if (!$user->setValue('usr_login_name', $_POST['usr_login_name'])) {
-                    throw new AdmException('SYS_FIELD_INVALID_CHAR', array('SYS_USERNAME'));
+                    throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_USERNAME'));
                 }
             }
         }
@@ -499,7 +499,7 @@ try {
             }
         }
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if ($getMode === 'save') {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

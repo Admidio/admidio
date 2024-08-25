@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
+use Admidio\Exception;
 class TableUserField extends TableAccess
 {
     public const MOVE_UP = 'UP';
@@ -155,7 +155,7 @@ class TableUserField extends TableAccess
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -299,7 +299,7 @@ class TableUserField extends TableAccess
      * Profile field will change the sequence one step up or one step down.
      * @param string $mode mode if the profile field move up or down, values are TableUserField::MOVE_UP, TableUserField::MOVE_DOWN
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function moveSequence(string $mode): bool
@@ -330,7 +330,7 @@ class TableUserField extends TableAccess
      * Profile field will change the complete sequence.
      * @param array $sequence the new sequence of profile fields (field IDs)
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setSequence(array $sequence): bool
@@ -368,7 +368,7 @@ class TableUserField extends TableAccess
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -377,7 +377,7 @@ class TableUserField extends TableAccess
 
         // only administrators can edit profile fields
         if (!$gCurrentUser->isAdministrator() && !$this->saveChangesWithoutRights) {
-            throw new AdmException('Profile field could not be saved because only administrators are allowed to edit profile fields.');
+            throw new Exception('Profile field could not be saved because only administrators are allowed to edit profile fields.');
             // => EXIT
         }
 
@@ -405,7 +405,7 @@ class TableUserField extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
@@ -421,30 +421,30 @@ class TableUserField extends TableAccess
                     $category = new TableCategory($this->db);
                     if (is_int($newValue)) {
                         if (!$category->readDataById($newValue)) {
-                            throw new AdmException('No Category with the given id ' . $newValue . ' was found in the database.');
+                            throw new Exception('No Category with the given id ' . $newValue . ' was found in the database.');
                         }
                     } else {
                         if (!$category->readDataByUuid($newValue)) {
-                            throw new AdmException('No Category with the given uuid ' . $newValue . ' was found in the database.');
+                            throw new Exception('No Category with the given uuid ' . $newValue . ' was found in the database.');
                         }
                         $newValue = $category->getValue('cat_id');
                     }
                 } elseif ($columnName === 'usf_icon' && $newValue !== '') {
                     // check if bootstrap icon syntax is used
                     if (preg_match('/[^a-z0-9-]/', $newValue)) {
-                        throw new AdmException('SYS_INVALID_ICON_NAME');
+                        throw new Exception('SYS_INVALID_ICON_NAME');
                     }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);
 
                     if ($newValue === false) {
-                        throw new AdmException('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_URL')));
+                        throw new Exception('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_URL')));
                     }
                 }
 
                 // name, category and type couldn't be edited if it's a system field
                 if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int)$this->getValue('usf_system') === 1) {
-                    throw new AdmException('The user field ' . $this->getValue('usf_name_intern') . ' as a system field. You could
+                    throw new Exception('The user field ' . $this->getValue('usf_name_intern') . ' as a system field. You could
                         not change the category, type or name.');
                 }
             }

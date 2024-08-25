@@ -15,6 +15,8 @@
  * gbo_uuid   : UUID of one guestbook entry that should be shown
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -22,7 +24,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('enable_guestbook_module') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('enable_guestbook_module') === 2) {
         // only logged-in users can access the module
         require(__DIR__ . '/../../system/login_valid.php');
@@ -34,7 +36,7 @@ try {
     $getGboUuid = admFuncVariableIsValid($_GET, 'gbo_uuid', 'uuid');
 
     if ($getModeration && !$gCurrentUser->editGuestbookRight()) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // add url to navigation stack
@@ -355,6 +357,6 @@ try {
 
     // show html of complete page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

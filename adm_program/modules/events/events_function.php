@@ -25,6 +25,8 @@
  *             if this parameter is not set than this date is set to 31.12.9999
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
@@ -42,7 +44,7 @@ try {
 
     // check if module is active
     if ((int)$gSettingsManager->get('events_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     if ($getMode !== 'export' || (int)$gSettingsManager->get('events_module_enabled') === 2) {
@@ -67,12 +69,12 @@ try {
         if ($getEventUuid !== '') {
             // check if the current user has the right to edit this event
             if (!$event->isEditable()) {
-                throw new AdmException('SYS_NO_RIGHTS');
+                throw new Exception('SYS_NO_RIGHTS');
             }
         } else {
             // check if the user has the right to edit at least one category
             if (count($gCurrentUser->getAllEditableCategories('EVT')) === 0) {
-                throw new AdmException('SYS_NO_RIGHTS');
+                throw new Exception('SYS_NO_RIGHTS');
             }
         }
     }
@@ -91,7 +93,7 @@ try {
 
         if ($formValues['event_participation_possible'] == 1
             && (!isset($formValues['adm_event_participation_right']) || array_count_values($formValues['adm_event_participation_right']) == 0)) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));
         }
 
         $calendar = new TableCategory($gDb);
@@ -113,9 +115,9 @@ try {
             $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['event_from']);
 
             if (!$startDateTime) {
-                throw new AdmException('SYS_DATE_INVALID', array('SYS_START', 'YYYY-MM-DD'));
+                throw new Exception('SYS_DATE_INVALID', array('SYS_START', 'YYYY-MM-DD'));
             } else {
-                throw new AdmException('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_START'), 'HH:ii'));
+                throw new Exception('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_START'), 'HH:ii'));
             }
         } else {
             // now write date and time with database format to date object
@@ -137,9 +139,9 @@ try {
             $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['event_to']);
 
             if (!$endDateTime) {
-                throw new AdmException('SYS_DATE_INVALID', array('SYS_END', 'YYYY-MM-DD'));
+                throw new Exception('SYS_DATE_INVALID', array('SYS_END', 'YYYY-MM-DD'));
             } else {
-                throw new AdmException('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_END'), 'HH:ii'));
+                throw new Exception('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_END'), 'HH:ii'));
             }
         } else {
             // now write date and time with database format to date object
@@ -148,7 +150,7 @@ try {
 
         // DateTo should be greater than DateFrom (Timestamp must be less)
         if ($startDateTime > $endDateTime) {
-            throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
         }
 
         if (!isset($_POST['dat_room_id'])) {
@@ -182,7 +184,7 @@ try {
             // are within the visibility roles set otherwise show error
             if (count($rightCategoryView->getRolesIds()) > 0
                 && count(array_intersect(array_map('intval', $_POST['adm_event_participation_right']), $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right'])) {
-                throw new AdmException('SYS_EVENT_CATEGORIES_ROLES_DIFFERENT', array(implode(', ', $rightCategoryView->getRolesNames())));
+                throw new Exception('SYS_EVENT_CATEGORIES_ROLES_DIFFERENT', array(implode(', ', $rightCategoryView->getRolesNames())));
             }
         }
 
@@ -209,7 +211,7 @@ try {
                 $eventsStatement = $gDb->queryPrepared($sql, $queryParams);
 
                 if ($eventsStatement->fetchColumn()) {
-                    throw new AdmException('SYS_ROOM_RESERVED');
+                    throw new Exception('SYS_ROOM_RESERVED');
                 }
 
                 $event->setValue('dat_room_id', $eventRoomId);
@@ -351,7 +353,7 @@ try {
     } elseif ($getMode === 'export') {  // export event in iCal format
         // If iCal enabled and module is public
         if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
-            throw new AdmException('SYS_ICAL_DISABLED');
+            throw new Exception('SYS_ICAL_DISABLED');
         }
 
         if ($getDateFrom === '') {
@@ -458,7 +460,7 @@ try {
                 }
             }
         } else {
-            throw new AdmException('SYS_PARTICIPATE_NO_RIGHTS');
+            throw new Exception('SYS_PARTICIPATE_NO_RIGHTS');
         }
 
         echo json_encode(array(
@@ -467,7 +469,7 @@ try {
             'url' => $gNavigation->getUrl()));
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if ($getMode === 'export') {
         $gMessage->show($e->getMessage());
     } else {

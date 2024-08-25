@@ -16,6 +16,7 @@
  * uuid   : UUID of the current object (folder, album) where the files should be uploaded
  ***********************************************************************************************
  */
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/common.php');
@@ -35,12 +36,12 @@ try {
     if ($getModule === 'photos') {
         // check if the module is activated
         if ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-            throw new AdmException('SYS_MODULE_DISABLED');
+            throw new Exception('SYS_MODULE_DISABLED');
         }
 
         // check if current user has right to upload photos
         if (!$gCurrentUser->editPhotoRight()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // create photo object or read it from session
@@ -54,7 +55,7 @@ try {
 
         // check if album belongs to current organization
         if ((int)$photoAlbum->getValue('pho_org_id') !== $gCurrentOrgId) {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         $uploadDir = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/';
@@ -73,7 +74,7 @@ try {
         }
     } elseif ($getModule === 'documents_files') {
         if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
-            throw new AdmException('SYS_MODULE_DISABLED');
+            throw new Exception('SYS_MODULE_DISABLED');
         }
 
         $folder = new TableFolder($gDb);
@@ -81,12 +82,12 @@ try {
 
         // check if current user has right to upload files
         if (!$folder->hasUploadRight()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // upload only possible if upload filesize > 0
         if ($gSettingsManager->getInt('documents_files_max_upload_size') === 0) {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // get recordset of current folder from database
@@ -100,7 +101,7 @@ try {
 
     // check if the server allow file uploads
     if (!PhpIniUtils::isFileUploadEnabled()) {
-        throw new AdmException('SYS_SERVER_NO_UPLOAD');
+        throw new Exception('SYS_SERVER_NO_UPLOAD');
     }
 
     if ($getMode === 'choose_files') {
@@ -136,6 +137,6 @@ try {
             ));
         }
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

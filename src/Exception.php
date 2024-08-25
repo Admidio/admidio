@@ -31,7 +31,13 @@
  * }
  * ```
  */
-class Exception extends Exception
+namespace Admidio;
+
+use Database;
+use Language;
+use Message;
+
+class Exception extends \Exception
 {
     /**
      * Constructor saves the parameters to the class and will call the parent constructor. Also, a **rollback**
@@ -63,7 +69,8 @@ class Exception extends Exception
      * Set a new Admidio message id with their parameters. This method should be used
      * if during the exception processing a new better message should be set.
      * @param string $message Translation **id** that should be shown when exception is caught
-     * @param array<int,string> $params  Optional parameter for language string of translation id
+     * @param array<int,string> $params Optional parameter for language string of translation id
+     * @throws Exception
      */
     public function setNewMessage(string $message, array $params = array())
     {

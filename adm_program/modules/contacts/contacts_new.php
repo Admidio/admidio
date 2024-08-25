@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -16,7 +17,7 @@ try {
 
     // only legitimate users are allowed to call the user management
     if (!$gCurrentUser->editUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     $form = new Form(
@@ -48,6 +49,6 @@ try {
     $form->addToSmarty($smarty);
     $gCurrentSession->addFormObject($form);
     echo $smarty->fetch('modules/contacts.new.tpl');
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

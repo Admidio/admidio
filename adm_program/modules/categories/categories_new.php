@@ -17,6 +17,7 @@
  *            USF = Categories for profile fields
  *            EVT = Calendars for events
  ****************************************************************************/
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -100,7 +101,7 @@ try {
 
     // check if the current user has the right to
     if (!Component::isAdministrable($component)) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     $gNavigation->addUrl(CURRENT_URL, $headlineSuffix);
@@ -126,7 +127,7 @@ try {
 
     // check if this category is editable by the current user and current organization
     if (!$category->isEditable()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // create html page object
@@ -330,6 +331,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

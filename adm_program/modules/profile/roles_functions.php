@@ -18,7 +18,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
  * get all memberships where the user is assigned
  * @param int $userId
  * @return PDOStatement
- * @throws Exception
+ * @throws \Admidio\Exception
  */
 function getRolesFromDatabase(int $userId): PDOStatement
 {
@@ -45,7 +45,7 @@ function getRolesFromDatabase(int $userId): PDOStatement
  * get all memberships where the user will be assigned
  * @param int $userId
  * @return PDOStatement
- * @throws Exception
+ * @throws \Admidio\Exception
  */
 function getFutureRolesFromDatabase(int $userId): PDOStatement
 {
@@ -71,7 +71,7 @@ function getFutureRolesFromDatabase(int $userId): PDOStatement
  * get all memberships where the user was assigned
  * @param int $userId
  * @return PDOStatement
- * @throws Exception
+ * @throws \Admidio\Exception
  */
 function getFormerRolesFromDatabase(int $userId): PDOStatement
 {
@@ -98,8 +98,7 @@ function getFormerRolesFromDatabase(int $userId): PDOStatement
  * @param User $user
  * @param PDOStatement $roleStatement
  * @return string
- * @throws AdmException
- * @throws Exception
+ * @throws \Admidio\Exception
  */
 function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleStatement): string
 {
@@ -232,5 +231,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
         }
     }
     $smarty->assign('memberships', $memberships);
-    return $smarty->fetch('modules/profile.roles-list.row.tpl');
+    try {
+        return $smarty->fetch('modules/profile.roles-list.row.tpl');
+    } catch (Throwable $e) {
+        throw new \Admidio\Exception($e->getMessage());
+    }
 }

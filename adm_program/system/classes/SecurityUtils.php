@@ -6,6 +6,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 final class SecurityUtils
 {
     public static function myHtmlEntities($value)
@@ -93,7 +94,7 @@ final class SecurityUtils
      * @param Error|Exception $exception The thrown Error or Exception object.
      * @param string $exceptionMessage The Admidio Exception-Message.
      * @return int Returns an insecure pseudo-random integer
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @throws Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      */
     private static function getRandomIntFallback(int $min, int $max, bool $exceptionOnInsecurePRNG, $exception, string $exceptionMessage): int
     {
@@ -102,7 +103,7 @@ final class SecurityUtils
         $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $exception->getCode(), 'message' => $exception->getMessage()));
 
         if ($exceptionOnInsecurePRNG) {
-            throw new AdmException($exceptionMessage, array($exception->getCode(), $exception->getMessage()));
+            throw new Exception($exceptionMessage, array($exception->getCode(), $exception->getMessage()));
         }
 
         // as a fallback we use the mt_rand method
@@ -115,7 +116,7 @@ final class SecurityUtils
      * @param int $max The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
      * @return int Returns a cryptographically secure pseudo-random integer
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @throws Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      */
     public static function getRandomInt(int $min, int $max, bool $exceptionOnInsecurePRNG = false): int
     {
@@ -137,7 +138,7 @@ final class SecurityUtils
      * @return string Returns a cryptographically secure pseudo-random string
      * @throws UnexpectedValueException Charset contains duplicate chars.
      * @throws UnexpectedValueException Charset must contain at least 2 unique chars.
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @throws Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      * @throws RuntimeException Min-length is 4.
      * @see https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
@@ -173,14 +174,14 @@ final class SecurityUtils
      * Method will check the CSRF token from the parameter against the CSRF token of the
      * current session. If these tokens don't match an exception will be thrown.
      * @param string $csrfToken The CSRF token that should be validated.
-     * @throws AdmException Tokens doesn't match.
+     * @throws Exception Tokens doesn't match.
      */
     public static function validateCsrfToken(string $csrfToken)
     {
         global $gCurrentSession;
 
         if ($csrfToken !== $gCurrentSession->getCsrfToken()) {
-            throw new AdmException('Invalid or missing CSRF token!');
+            throw new Exception('Invalid or missing CSRF token!');
         }
     }
 }

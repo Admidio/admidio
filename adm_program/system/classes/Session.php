@@ -7,6 +7,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 /**
@@ -61,7 +62,7 @@ class Session extends TableAccess
      * If the id is set than the specific session will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $cookiePrefix The prefix that is used for cookies
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function __construct(Database $database, string $cookiePrefix = '')
@@ -99,7 +100,7 @@ class Session extends TableAccess
      * The key of the array will be the csrf-token of the form.
      * @param Form $form The form that should be stored in this class.
      * @return bool Return false if object isn't type object or objectName already exists
-     * @throws AdmException
+     * @throws Exception
      */
     public function addFormObject(Form &$form): bool
     {
@@ -128,7 +129,7 @@ class Session extends TableAccess
 
     /**
      * clear user data
-     * @throws AdmException
+     * @throws Exception
      */
     protected function clearUserData()
     {
@@ -147,8 +148,8 @@ class Session extends TableAccess
      * be forced by the parameter **$newToken**
      * @param bool $newToken If set to true, always a new token will be generated.
      * @return string Returns the CSRF token
-     * @throws AdmException
-     * @throws AdmException
+     * @throws Exception
+     * @throws Exception
      */
     public function getCsrfToken(bool $newToken = false): string
     {
@@ -163,12 +164,12 @@ class Session extends TableAccess
      * Returns a reference of a form object that is stored in the session.
      * @param string $csrfToken The unique csrf token of the form to identify the correct form object.
      * @return Form Returns the reference to the form object.
-     * @throws AdmException Requested form not found in session.
+     * @throws Exception Requested form not found in session.
      */
     public function &getFormObject(string $csrfToken)
     {
         if (!array_key_exists($csrfToken, $this->mFormObjects)) {
-            throw new AdmException('Requested form not found in session.');
+            throw new Exception('Requested form not found in session.');
         }
 
         // return reference of Form object
@@ -198,7 +199,7 @@ class Session extends TableAccess
      * organization may not be the organization of the config.php because the
      * user had set the AutoLogin to a different organization.
      * @return int Returns the organization id of this session
-     * @throws AdmException
+     * @throws Exception
      */
     public function getOrganizationId(): int
     {
@@ -237,7 +238,7 @@ class Session extends TableAccess
      * within the session and the timestamps must be valid
      * @param int $userId The user id must be stored in this session and will be checked if valid.
      * @return bool Returns **true** if the user has a valid session login otherwise **false**;
-     * @throws AdmException
+     * @throws Exception
      */
     public function isValidLogin(int $userId): bool
     {
@@ -296,7 +297,7 @@ class Session extends TableAccess
      * Reload auto login data from database table adm_auto_login. if cookie PREFIX_AUTO_LOGIN_ID
      * is set then there could be an auto login the auto login must be done here because after
      * that the corresponding organization must be set.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function refreshAutoLogin()
@@ -390,7 +391,7 @@ class Session extends TableAccess
     /**
      * This method will replace the current session ID with a new one, and keep the current session information.
      * The new session id will be stored in the database.
-     * @throws AdmException
+     * @throws Exception
      */
     public function regenerateId()
     {
@@ -432,7 +433,7 @@ class Session extends TableAccess
      * For new records the organization, timestamp, begin date and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -457,7 +458,7 @@ class Session extends TableAccess
      * Save all data that is necessary for an auto login. Therefore, an AutoLogin object
      * will be created with an auto_login_id and this id will be stored in a cookie
      * in the browser of the current user.
-     * @throws AdmException
+     * @throws Exception
      */
     public function setAutoLogin()
     {

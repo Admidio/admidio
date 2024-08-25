@@ -30,6 +30,7 @@
  * $form->show();
  * ```
  */
+use Admidio\Exception;
 
 class HtmlForm
 {
@@ -186,7 +187,7 @@ class HtmlForm
      *                        - **class** : Optional an additional css classname. The class **admButton**
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      */
     public function addButton(string $id, string $text, array $options = array())
     {
@@ -278,7 +279,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      */
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
     {
@@ -337,7 +338,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      */
     public function addCustomContent(string $label, string $content, array $options = array())
     {
@@ -387,7 +388,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws AdmException
+     * @throws Exception
      * @throws \Smarty\Exception
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
@@ -495,7 +496,7 @@ class HtmlForm
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      * @throws \Smarty\Exception
-     * @throws AdmException
+     * @throws Exception
      */
     public function addFileUpload(string $id, string $label, array $options = array())
     {
@@ -818,7 +819,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      */
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
     {
@@ -915,7 +916,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      */
     public function addRadioButton(string $id, string $label, array $values, array $options = array())
     {
@@ -1503,7 +1504,7 @@ class HtmlForm
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      */
     public function addStaticControl(string $id, string $label, string $value, array $options = array())
     {
@@ -1539,7 +1540,7 @@ class HtmlForm
      *                          is set as default and need not set with this parameter.
      *                        - **type** : If set to true this button get the type **submit**. This will
      *                          be the default.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      */
     public function addSubmitButton(string $id, string $text, array $options = array())
     {
@@ -1675,7 +1676,7 @@ class HtmlForm
      * @param string $templateName Name of the template file that should be used.
      * @param array $assigns Array with variables that should be assigned to the template.
      * @return void
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      */
     private function render(string $templateName, array $assigns)
     {

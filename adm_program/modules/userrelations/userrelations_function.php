@@ -18,6 +18,7 @@
  *             delete - Delete relation
  *
  *****************************************************************************/
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -29,12 +30,12 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create', 'delete')));
 
     if (!$gSettingsManager->getBool('contacts_user_relations_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // only users who can edit all users are allowed to create user relations
     if (!$gCurrentUser->editUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     $relation = new TableUserRelation($gDb);
@@ -46,7 +47,7 @@ try {
         $user1->readDataById($relation->getValue('ure_usr_id1'));
         $user2->readDataById($relation->getValue('ure_usr_id2'));
         if (!$gCurrentUser->hasRightEditProfile($user1) || !$gCurrentUser->hasRightEditProfile($user2)) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -58,22 +59,22 @@ try {
         $user1->readDataByUuid($getUserUuid);
 
         if ($user1->isNewRecord()) {
-            throw new AdmException('SYS_NO_ENTRY');
+            throw new Exception('SYS_NO_ENTRY');
         }
 
         if (!$gCurrentUser->hasRightEditProfile($user1)) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $postUsrId2 = admFuncVariableIsValid($_POST, 'usr_uuid2', 'uuid');
         $user2->readDataByUuid($postUsrId2);
 
         if ($user2->isNewRecord()) {
-            throw new AdmException('SYS_NO_ENTRY');
+            throw new Exception('SYS_NO_ENTRY');
         }
 
         if (!$gCurrentUser->hasRightEditProfile($user2)) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $postUrtUUID = admFuncVariableIsValid($_POST, 'urt_uuid', 'uuid');
@@ -81,7 +82,7 @@ try {
         $relationType->readDataByUuid($postUrtUUID);
 
         if ($relationType->isNewRecord()) {
-            throw new AdmException('SYS_NO_ENTRY');
+            throw new Exception('SYS_NO_ENTRY');
         }
 
         $gDb->startTransaction();
@@ -115,6 +116,6 @@ try {
         echo json_encode(array('status' => 'success'));
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

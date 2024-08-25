@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 use Ramsey\Uuid\Uuid;
+use Admidio\Exception;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
     exit('This page may not be called directly!');
@@ -268,7 +269,7 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  * // string initialized with actual and the only allowed values are actual and old
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
  * ```
- * @throws AdmException
+ * @throws Exception
  */
 function admFuncVariableIsValid(array $array, string $variableName, string $datatype, array $options = array())
 {
@@ -294,7 +295,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
     } else {
         if ($optionsAll['requireValue']) {
             // if value is required and no value is given then show error
-            throw new AdmException('The mandatory parameter "' . $variableName . '" has no value!');
+            throw new Exception('The mandatory parameter "' . $variableName . '" has no value!');
         } elseif ($optionsAll['defaultValue'] !== null) {
             // if a default value was set then take this value
             if (is_string($optionsAll['defaultValue'])) {
@@ -321,7 +322,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
     // check if parameter has a valid value
     // do a strict check with in_array because the function don't work properly
     if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true)) {
-        throw new AdmException('The parameter "' . $variableName . '" has an invalid value!');
+        throw new Exception('The parameter "' . $variableName . '" has an invalid value!');
     }
 
     switch ($datatype) {
@@ -341,7 +342,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
                 $objEnglishDate = DateTime::createFromFormat('Y-m-d', $value);
 
                 if (!$objEnglishDate) {
-                    throw new AdmException('The date parameter "' . $variableName . '" has an invalid date format!');
+                    throw new Exception('The date parameter "' . $variableName . '" has an invalid date format!');
                 }
             }
             break;
@@ -350,7 +351,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
         case 'boolean':
             $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             if ($valid === null) {
-                throw new AdmException('The boolean parameter "' . $variableName . '" has an invalid value!');
+                throw new Exception('The boolean parameter "' . $variableName . '" has an invalid value!');
             }
             $value = $valid;
             break;
@@ -360,7 +361,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
         case 'numeric':
             // numeric datatype should only contain numbers
             if (!is_numeric($value)) {
-                throw new AdmException('The numeric parameter ' . $variableName . ' has an invalid value!');
+                throw new Exception('The numeric parameter ' . $variableName . ' has an invalid value!');
             } else {
                 if ($datatype === 'int') {
                     $value = filter_var($value, FILTER_VALIDATE_INT);
@@ -390,13 +391,13 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
 
         case 'uuid':
             if (!Uuid::isValid($value)) {
-                throw new AdmException('The parameter "' . $variableName . '" is not a valid UUID!');
+                throw new Exception('The parameter "' . $variableName . '" is not a valid UUID!');
             }
             break;
 
         case 'url':
             if (!StringUtils::strValidCharacters($value, 'url')) {
-                throw new AdmException('The parameter "' . $variableName . '" has an invalid URL!');
+                throw new Exception('The parameter "' . $variableName . '" has an invalid URL!');
             }
             break;
     }

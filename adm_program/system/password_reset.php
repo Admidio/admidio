@@ -13,6 +13,7 @@
  * user_uuid : UUID of the user who wants a reset his password
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -24,12 +25,12 @@ try {
 
     // "systemmail" and "request password" must be activated
     if (!$gSettingsManager->getBool('system_notifications_enabled') || !$gSettingsManager->getBool('enable_password_recovery')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     if ($gValidLogin) {
         $gMessage->setForwardUrl(ADMIDIO_URL . '/adm_program/', 2000);
-        throw new AdmException('SYS_RESET_PW_AREADY_LOGGED_IN');
+        throw new Exception('SYS_RESET_PW_AREADY_LOGGED_IN');
     }
 
     if ($getUserUuid !== '') {
@@ -53,10 +54,10 @@ try {
             $timeGap = time() - strtotime($row['usr_pw_reset_timestamp']);
 
             if ($timeGap > 20 * 60) {
-                throw new AdmException('SYS_PASSWORD_RESET_INVALID', array('<a href="' . ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'));
+                throw new Exception('SYS_PASSWORD_RESET_INVALID', array('<a href="' . ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'));
             }
         } else {
-            throw new AdmException('SYS_PASSWORD_RESET_INVALID', array('<a href="' . ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'));
+            throw new Exception('SYS_PASSWORD_RESET_INVALID', array('<a href="' . ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'));
         }
 
         $user = new User($gDb, $gProfileFields, $row['usr_id']);
@@ -94,15 +95,15 @@ try {
                             exit();
 
                         } else {
-                            throw new AdmException('SYS_PASSWORDS_NOT_EQUAL');
+                            throw new Exception('SYS_PASSWORDS_NOT_EQUAL');
                         }
                     } else {
-                        throw new AdmException('SYS_PASSWORD_NOT_STRONG_ENOUGH');
+                        throw new Exception('SYS_PASSWORD_NOT_STRONG_ENOUGH');
                     }
                 } else {
-                    throw new AdmException('SYS_PASSWORD_LENGTH');
+                    throw new Exception('SYS_PASSWORD_LENGTH');
                 }
-            } catch (AdmException $e) {
+            } catch (Exception $e) {
                 echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
             }
         } else {
@@ -208,7 +209,7 @@ try {
 
             // show error if more than one user found
             if ($count > 1) {
-                throw new AdmException('SYS_LOSTPW_SEVERAL_EMAIL', array($formValues['recipient_email']));
+                throw new Exception('SYS_LOSTPW_SEVERAL_EMAIL', array($formValues['recipient_email']));
             } elseif ($count === 1) {
                 // a valid username or email was found then send new password
                 $user = new User($gDb, $gProfileFields, (int)$userStatement->fetchColumn());
@@ -242,7 +243,7 @@ try {
                 'url' => ADMIDIO_URL . FOLDER_SYSTEM . '/login.php'
             ));
             exit();
-        } catch (AdmException $e) {
+        } catch (Exception $e) {
             if (isset($user)) {
                 // initialize password reset columns
                 $user->setValue('usr_pw_reset_id', '');
@@ -295,6 +296,6 @@ try {
         $gCurrentSession->addFormObject($form);
         $page->show();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

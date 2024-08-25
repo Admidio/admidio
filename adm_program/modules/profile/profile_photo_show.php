@@ -14,9 +14,11 @@
  *             true  - show uploaded photo of current session
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
     $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
@@ -26,7 +28,7 @@ try {
     $user->readDataByUuid($getUserUuid);
 
     if ((int)$user->getValue('usr_id') === 0) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // Initialize local variables of the transfer variables
@@ -70,6 +72,6 @@ try {
     header('Content-Type: ' . $image->getMimeType());
     $image->copyToBrowser();
     $image->delete();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

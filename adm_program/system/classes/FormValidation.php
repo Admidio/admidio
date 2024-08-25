@@ -12,7 +12,7 @@
  *
  * This class can be used to validate form input. Therefore, the methods can be called and get the
  * form input as parameter. The method will return **true** if validation was successful. Otherwise,
- * an AdmException will be thrown. To catch this exception all method calls of this class should
+ * an Exception will be thrown. To catch this exception all method calls of this class should
  * be within a try and catch structure. Also, all method are declared static.
  *
  *
@@ -23,12 +23,13 @@
  * {
  *     FormValidation::checkCaptcha($_POST['captcha_code']);
  * }
- * catch(AdmException $e)
+ * catch(Exception $e)
  * {
  *     $e->showHtml();
  * }
  * ```
  */
+use Admidio\Exception;
 class FormValidation
 {
     /**
@@ -36,7 +37,7 @@ class FormValidation
      * @param string $value Value of the captcha input field.
      * @return true Returns **true** if the value matches the captcha image.
      *              Otherwise, throw an exception SYS_CAPTCHA_CODE_INVALID.
-     * @throws AdmException SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
+     * @throws Exception SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
      * @deprecated 5.0.0:5.1.0 Method "FormValidation::checkCaptcha" is deprecated, use Method  "Form::validateCaptcha" instead.
      */
     public static function checkCaptcha(string $value): bool
@@ -50,9 +51,9 @@ class FormValidation
         }
 
         if ($gSettingsManager->getString('captcha_type') === 'calc') {
-            throw new AdmException('SYS_CAPTCHA_CALC_CODE_INVALID');
+            throw new Exception('SYS_CAPTCHA_CALC_CODE_INVALID');
         }
 
-        throw new AdmException('SYS_CAPTCHA_CODE_INVALID');
+        throw new Exception('SYS_CAPTCHA_CODE_INVALID');
     }
 }

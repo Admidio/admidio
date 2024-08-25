@@ -21,10 +21,12 @@
  *            sequence - Change sequence for parameter cat_id
  * direction : Direction to change the sequence of the category
  *****************************************************************************/
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getCatUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'EVT', 'AWA')));
@@ -81,12 +83,12 @@ try {
 
     // check if the current user has the right to
     if (!Component::isAdministrable($component)) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // check if this category is editable by the current user and current organization
     if (!$category->isEditable()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getMode === 'edit') {
@@ -99,7 +101,7 @@ try {
         if ($getType !== 'ROL'
             && ((bool)$category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)
             && !isset($_POST['adm_categories_view_right'])) {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_VISIBLE_FOR'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_VISIBLE_FOR'));
         }
 
         if (!isset($_POST['adm_categories_edit_right'])) {
@@ -133,7 +135,7 @@ try {
             $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $_POST['cat_name'], $getCatUUID, $gCurrentOrgId));
 
             if ($categoriesStatement->fetchColumn() > 0) {
-                throw new AdmException('SYS_CATEGORY_EXISTS_IN_ORGA');
+                throw new Exception('SYS_CATEGORY_EXISTS_IN_ORGA');
             }
         }
 
@@ -213,10 +215,10 @@ try {
         if ($category->moveSequence($postSequence)) {
             echo json_encode(array('status' => 'success'));
         } else {
-            throw new AdmException('Sequence could not be changed.');
+            throw new Exception('Sequence could not be changed.');
         }
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

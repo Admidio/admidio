@@ -14,7 +14,7 @@
  * If a new user is saved than there will be an additional table entry in the
  * registration table. This entry must be deleted if a registration is confirmed
  * or deleted. If a registration is confirmed or deleted then a notification SystemMail
- * will be sent to the user. If email couldn't be sent than an AdmException will be thrown.
+ * will be sent to the user. If email couldn't be sent than an Exception will be thrown.
  *
  * **Code example**
  * ```
@@ -36,6 +36,7 @@
  * $user->acceptRegistration();
  * ```
  */
+use Admidio\Exception;
 class UserRegistration extends User
 {
     /**
@@ -57,7 +58,7 @@ class UserRegistration extends User
      *                                      with no specific user is created.
      * @param int $organizationId The id of the organization for which the user should be registered.
      *                                      If no id is set than the user will be registered for the current organization.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function __construct(Database $database, ProfileFields $userFields, int $userId = 0, int $organizationId = 0)
@@ -81,7 +82,7 @@ class UserRegistration extends User
      * that have the flag **rol_default_registration**. After that a notification email is send to the user.
      * If function returns **true** than the user can log in for the organization of this object.
      * @return true Returns **true** if the registration was successful
-     * @throws AdmException
+     * @throws Exception
      */
     public function acceptRegistration(): bool
     {
@@ -123,7 +124,7 @@ class UserRegistration extends User
      * be adopted otherwise only username and password will be added to the existing user. The adopted data of the
      * user will not be saved. That must be done in the calling method because of duplicate **usr_login_name**.
      * @param User $user Object of the existing user that should be adopted.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function adoptUser(User $user)
@@ -147,7 +148,7 @@ class UserRegistration extends User
      * delete user because he has no use for the system. After that a notification email is send to the user.
      * If the user is valider than only the registration will be deleted!
      * @return bool **true** if no error occurred
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function delete(): bool
@@ -192,7 +193,7 @@ class UserRegistration extends User
     /**
      * Send a notification email to all role members of roles that can approve registrations
      * therefore the flags system mails and notification mail for roles with approve registration must be activated
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function notifyAuthorizedMembers()
@@ -234,7 +235,7 @@ class UserRegistration extends User
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
@@ -258,7 +259,7 @@ class UserRegistration extends User
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -303,7 +304,7 @@ class UserRegistration extends User
      * of the organization.
      * @param string $validationId A validation ID of the registration that should be checked.
      * @return bool Return **true** if the given data could be joined to a valid registration
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function validate(string $validationId): bool

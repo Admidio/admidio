@@ -127,6 +127,7 @@
  * )
  * ```
  */
+use Admidio\Exception;
 class ModuleEvents extends Modules
 {
     public const MEMBER_APPROVAL_STATE_INVITED   = 0;
@@ -155,7 +156,7 @@ class ModuleEvents extends Modules
      * @param int $startElement Defines the offset of the query (default: 0)
      * @param int $limit Limit of query rows (default: 0)
      * @return array<string,mixed> Array with all results, events and parameters.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getDataSet(int $startElement = 0, int $limit = 0): array
@@ -216,7 +217,7 @@ class ModuleEvents extends Modules
     /**
      * Get number of available events.
      * @return int
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getDataSetCount(): int
@@ -278,7 +279,7 @@ class ModuleEvents extends Modules
      * in this class with the help of parameters will be included.
      * @return \Eluceo\iCal\Presentation\Component Object with the structure of the vCalendar.
      *          This could directly put into the output.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getICalContent(): \Eluceo\iCal\Presentation\Component
@@ -346,7 +347,7 @@ class ModuleEvents extends Modules
     /**
      * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
      * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions, and it's query params.
-     * @throws AdmException
+     * @throws Exception
      */
     private function getSqlConditions(): array
     {
@@ -443,7 +444,7 @@ class ModuleEvents extends Modules
      * @param string $dateRangeStart A date in english or Admidio format that will be the start date of the range.
      * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
      * @return bool Returns false if invalid date format is submitted
-     *@throws AdmException SYS_DATE_END_BEFORE_BEGIN
+     *@throws Exception SYS_DATE_END_BEFORE_BEGIN
      */
     public function setDateRange(string $dateRangeStart = '', string $dateRangeEnd = ''): bool
     {
@@ -506,7 +507,7 @@ class ModuleEvents extends Modules
 
         // DateTo should be greater than DateFrom (Timestamp must be less)
         if ($objDateFrom->getTimestamp() > $objDateTo->getTimestamp()) {
-            throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
         }
 
         return true;

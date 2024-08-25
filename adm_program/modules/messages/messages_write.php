@@ -22,6 +22,7 @@
  * forward : true - The message of the msg_id will be copied and the base for this new message
  *
  *****************************************************************************/
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -56,24 +57,24 @@ try {
     if ((!$gSettingsManager->getBool('enable_mail_module') && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
         || (!$gSettingsManager->getBool('enable_pm_module') && $getMsgType === TableMessage::MESSAGE_TYPE_PM)) {
         // message if the sending of PM is not allowed
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // check for valid login
     if (!$gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // check if the current user has email address for sending an email
     if ($gValidLogin && $getMsgType !== TableMessage::MESSAGE_TYPE_PM && !$gCurrentUser->hasEmail()) {
-        throw new AdmException('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
+        throw new Exception('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
     }
 
     // Update the read status of the message
     if ($getMsgUuid !== '') {
         // check if user is allowed to view message
         if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // update the read-status
@@ -153,14 +154,14 @@ try {
 
         // no roles or users found then show message
         if (count($list) === 0) {
-            throw new AdmException('SYS_NO_ROLES_AND_USERS');
+            throw new Exception('SYS_NO_ROLES_AND_USERS');
         }
     }
 
     if ($getUserUuid !== '') {
         // if a user ID is given, we need to check if the actual user is allowed to contact this user
         if ((!$gCurrentUser->editUsers() && !isMember((int)$user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
-            throw new AdmException('SYS_USER_ID_NOT_FOUND');
+            throw new Exception('SYS_USER_ID_NOT_FOUND');
         }
     }
 
@@ -253,7 +254,7 @@ try {
         if ($getUserUuid !== '') {
             // check if the user has email address for receiving an email
             if (!$user->hasEmail()) {
-                throw new AdmException('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
+                throw new Exception('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
             }
         } elseif ($getRoleUuid !== '') {
             // if a certain role is called, then check if the rights for it are available
@@ -266,7 +267,7 @@ try {
             if ((!$gValidLogin && $role->getValue('rol_mail_this_role') != 3)
                 || ($gValidLogin && !$gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id')))
                 || $role->getValue('rol_id') == null) {
-                throw new AdmException('SYS_INVALID_PAGE_VIEW');
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
 
             $rollenName = $role->getValue('rol_name');
@@ -434,7 +435,7 @@ try {
 
         // no roles or users found then show message
         if (count($list) === 0) {
-            throw new AdmException('SYS_NO_ROLES_AND_USERS');
+            throw new Exception('SYS_NO_ROLES_AND_USERS');
         }
 
         $form->addSelectBox(
@@ -638,6 +639,6 @@ try {
 
     // show page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

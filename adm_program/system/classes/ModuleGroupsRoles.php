@@ -21,6 +21,7 @@
  * $page->show();
  * ```
  */
+use Admidio\Exception;
 class ModuleGroupsRoles extends HtmlPage
 {
     /**
@@ -49,7 +50,7 @@ class ModuleGroupsRoles extends HtmlPage
      * The cards will show various functions like activate, deactivate, vcard export, edit or delete. Also, the
      * role information e.g. description, start and end date, number of active and former members. A button with
      * the link to the default list will be shown.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      * @throws Exception
      */
     public function createContentCards()
@@ -227,7 +228,7 @@ class ModuleGroupsRoles extends HtmlPage
      * The cards will show various functions like activate, deactivate, vcard export, edit or delete. Also, the
      * role information e.g. description, start and end date, number of active and former members. A button with
      * the link to the default list will be shown.
-     * @throws \Smarty\Exception|AdmException
+     * @throws \Smarty\Exception|Exception
      * @throws Exception
      */
     public function createContentPermissionsList()

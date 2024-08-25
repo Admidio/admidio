@@ -59,14 +59,14 @@ if ($mode === 'html') {
     if (isset($_SESSION['installationWelcomeForm'])) {
         $_SESSION['installationWelcomeForm']->validate($_POST);
     } else {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '') {
         $_SESSION['language'] = $_POST['system_language'];
         $gL10n->setLanguage($_SESSION['language']);
     } elseif (!isset($_SESSION['language'])) {
-        throw new AdmException('INS_LANGUAGE_NOT_CHOSEN');
+        throw new Exception('INS_LANGUAGE_NOT_CHOSEN');
     }
 
     echo json_encode(array(

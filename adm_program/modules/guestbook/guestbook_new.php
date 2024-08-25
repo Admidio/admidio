@@ -12,6 +12,8 @@
  * gbo_uuid   - UUID of one guestbook entry that should be shown
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -20,7 +22,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('enable_guestbook_module') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('enable_guestbook_module') === 2) {
         // only logged in users can access the module
         require(__DIR__ . '/../../system/login_valid.php');
@@ -44,14 +46,14 @@ try {
         require(__DIR__ . '/../../system/login_valid.php');
 
         if (!$gCurrentUser->editGuestbookRight()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $guestbook->readDataByUuid($getGboUuid);
 
         // Check if the entry belongs to the current organization
         if ((int)$guestbook->getValue('gbo_org_id') !== $gCurrentOrgId) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -87,7 +89,7 @@ try {
 
         if ($pdoStatement->fetchColumn() > 0) {
             // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-            throw new AdmException('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time')));
+            throw new Exception('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time')));
         }
     }
 
@@ -157,6 +159,6 @@ try {
     // add form to html page and show page
     $page->addHtml($form->show());
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

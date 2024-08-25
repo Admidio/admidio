@@ -20,6 +20,7 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 use Ramsey\Uuid\Uuid;
 
@@ -40,7 +41,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     $roleUuidList = explode(',', $getRoleList);
@@ -52,7 +53,7 @@ try {
     $numberRoles = count($roleUuidList);
 
     if ($numberRoles === 0) {
-        throw new AdmException('SYS_NO_ROLE_GIVEN');
+        throw new Exception('SYS_NO_ROLE_GIVEN');
     }
 
     // determine all roles relevant data
@@ -78,7 +79,7 @@ try {
         // only users with the right to assign roles can view inactive roles
         if (!$gCurrentUser->hasRightViewRole($roleId)
             || ((int)$role['rol_valid'] === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles'))) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // check if the user is allowed to view all profiles
@@ -149,7 +150,7 @@ try {
     $endDateEnglishFormat = $objDateTo->format('Y-m-d');
 
     if ($objDateFrom > $objDateTo) {
-        throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
+        throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
     }
 
     // read names of all used relationships for later output
@@ -176,7 +177,7 @@ try {
     if (in_array($getMode, array('csv', 'xlsx', 'ods', 'pdf'), true)
         && ($gSettingsManager->getInt('groups_roles_export') === 0 // no one should export lists
             || ($gSettingsManager->getInt('groups_roles_export') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')))) { // users who don't have the right to edit all profiles
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // if no list parameter is set then load role default list configuration or system default list configuration
@@ -185,7 +186,7 @@ try {
         $listId = $role->getDefaultList();
 
         if ($listId === 0) {
-            throw new AdmException('SYS_DEFAULT_LIST_NOT_SET_UP');
+            throw new Exception('SYS_DEFAULT_LIST_NOT_SET_UP');
         }
 
         $list = new ListConfiguration($gDb, $listId);
@@ -764,6 +765,6 @@ try {
     }
 } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
     echo $e->getMessage();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

@@ -17,6 +17,8 @@
  * photo_nr:  Number of the photo that should be shown
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
@@ -28,12 +30,12 @@ try {
     $getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('validValues' => array('left', 'right')));
 
     if ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // check if current user has right to upload photos
     if (!$gCurrentUser->editPhotoRight()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     /**
@@ -132,7 +134,7 @@ try {
 
     // check if the user is allowed to edit this photo album
     if (!$photoAlbum->isEditable()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // check the CSRF token of the form against the session token
@@ -164,6 +166,6 @@ try {
         echo 'done';
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

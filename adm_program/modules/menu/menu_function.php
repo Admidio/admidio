@@ -19,6 +19,7 @@
  * direction : Direction to change the sequence of the menu entry
  *
  *****************************************************************************/
+use Admidio\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -29,7 +30,7 @@ try {
 
     // check rights
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // create menu object
@@ -54,7 +55,7 @@ try {
         // check url here because it could be a real url or a relative local url
         if (!StringUtils::strValidCharacters($_POST['men_url'], 'url')
             && !preg_match('=^[^*;:~<>|\"\\\\]+$=', $_POST['men_url'])) {
-            throw new AdmException('SYS_URL_INVALID_CHAR', array('SYS_URL'));
+            throw new Exception('SYS_URL_INVALID_CHAR', array('SYS_URL'));
         }
 
         $gDb->startTransaction();
@@ -105,7 +106,7 @@ try {
         }
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if ($getMode === 'sequence') {
         echo $e->getMessage();
     } else {

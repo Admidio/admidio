@@ -12,6 +12,8 @@
  * link_uuid   - UUID of the weblink that should be redirected
  *
  *****************************************************************************/
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -20,7 +22,7 @@ try {
 
     // check if the module is enabled for use
     if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
     if ((int)$gSettingsManager->get('enable_weblinks_module') === 2) {
         // available only with valid login
@@ -34,7 +36,7 @@ try {
 
     // if no link is set or the weblink is not visible to the user show error
     if (strlen($lnkUrl) === 0 || !$weblink->isVisible()) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // If link is valid, increase counter by one position
@@ -76,6 +78,6 @@ try {
         admRedirect($lnkUrl);
         // => EXIT
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

@@ -18,12 +18,12 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
 if (isset($_SESSION['installationInstallAdmidioForm'])) {
     $_SESSION['installationInstallAdmidioForm']->validate($_POST);
 } else {
-    throw new AdmException('SYS_INVALID_PAGE_VIEW');
+    throw new Exception('SYS_INVALID_PAGE_VIEW');
 }
 
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
 if (!is_file($configPath)) {
-    throw new AdmException('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php'));
+    throw new Exception('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php'));
 }
 
 // first check if session is filled (if installation was aborted then this is not filled)
@@ -36,7 +36,7 @@ if (isset($_SESSION['table_prefix'])
     || $_SESSION['db_username']    !== DB_USERNAME
     || $_SESSION['db_password']    !== DB_PASSWORD
     || $_SESSION['table_prefix']   !== TABLE_PREFIX)) {
-    throw new AdmException('INS_DATA_DO_NOT_MATCH', array('config.php'));
+    throw new Exception('INS_DATA_DO_NOT_MATCH', array('config.php'));
 }
 
 // set execution time to 5 minutes because we have a lot to do
@@ -241,7 +241,7 @@ try {
     $systemUser->saveChangesWithoutRights();
     $systemUser->setValue('LAST_NAME', $gL10n->get('SYS_SYSTEM'));
     $systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
-} catch (AdmException $exeption) {
+} catch (Exception $exeption) {
     $exeption->showHtml();
 }
 // now set current user to system user

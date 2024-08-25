@@ -26,6 +26,7 @@
  ***********************************************************************************************
  */
 use Ramsey\Uuid\Uuid;
+use Admidio\Exception;
 
 class Organization extends TableAccess
 {
@@ -53,7 +54,7 @@ class Organization extends TableAccess
      * @param int|string $organization The recordset of the organization with this id will be loaded.
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, $organization = '')
     {
@@ -74,7 +75,7 @@ class Organization extends TableAccess
     /**
      * Initialize all necessary data of this object.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      */
     public function clear()
     {
@@ -93,7 +94,7 @@ class Organization extends TableAccess
      * Reads the number of all records of this table. In addition to the parent method
      * this method will cache the value and will return the cached value on multiple calls.
      * @return int Number of all organizations in database.
-     * @throws AdmException
+     * @throws Exception
      */
     public function countAllRecords(): int
     {
@@ -108,7 +109,7 @@ class Organization extends TableAccess
      * It will create the basic categories, lists, roles, systemmails etc.
      * @param int $userId The id of the administrator who creates the new organization.
      *                    This will be the first valid user of the new organization.
-     * @throws AdmException
+     * @throws Exception
      */
     public function createBasicData(int $userId)
     {
@@ -377,7 +378,7 @@ class Organization extends TableAccess
      * @param string $organization The organization shortname. If this is set than this organization
      *                                 will be read otherwise the organization with the minimum ID.
      * @return Organization Returns an organization object.
-     * @throws AdmException
+     * @throws Exception
      */
     public static function createDefaultOrganizationObject(Database $db, string $organization = ''): Organization
     {
@@ -395,7 +396,7 @@ class Organization extends TableAccess
 
     /**
      * @return array<int,string> Returns an array with all child organizations
-     * @throws AdmException
+     * @throws Exception
      */
     protected function getChildOrganizations(): array
     {
@@ -414,7 +415,7 @@ class Organization extends TableAccess
      * @param bool $shortname If set to true then a list of all shortnames will be returned
      * @return string Returns a string with a comma separated list of all organization
      *                ids that are parents or children and the own id
-     * @throws AdmException
+     * @throws Exception
      */
     public function getFamilySQL(bool $shortname = false): string
     {
@@ -448,7 +449,7 @@ class Organization extends TableAccess
      * @param bool $longname If set to **true** then the value of the array will be the **org_longname**
      *                       otherwise it will be **org_shortname**
      * @return array<int,string> Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
-     * @throws AdmException
+     * @throws Exception
      */
     public function getOrganizationsInRelationship(bool $child = true, bool $parent = true, bool $longname = false): array
     {
@@ -484,7 +485,7 @@ class Organization extends TableAccess
 
     /**
      * @return SettingsManager
-     * @throws AdmException
+     * @throws Exception
      */
     public function &getSettingsManager(): SettingsManager
     {
@@ -499,7 +500,7 @@ class Organization extends TableAccess
     /**
      * Method checks if the organization is configured as a child organization in the recordset.
      * @return bool Return **true** if the organization is a child of another organization
-     * @throws AdmException
+     * @throws Exception
      */
     public function isChildOrganization(): bool
     {
@@ -509,7 +510,7 @@ class Organization extends TableAccess
     /**
      * Method checks if the organization is configured as a parent organization in the recordset.
      * @return bool Return **true** if the organization is the parent of at least one other organization
-     * @throws AdmException
+     * @throws Exception
      */
     public function isParentOrganization(): bool
     {
@@ -523,7 +524,7 @@ class Organization extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {

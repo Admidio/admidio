@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 class TableText extends TableAccess
 {
     /**
@@ -16,7 +17,7 @@ class TableText extends TableAccess
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $name The recordset of the text with this name will be loaded.
      *                           If name isn't set than an empty object of the table is created.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, string $name = '')
     {
@@ -49,7 +50,7 @@ class TableText extends TableAccess
      * For new records the organization will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -68,7 +69,7 @@ class TableText extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {

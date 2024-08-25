@@ -18,7 +18,7 @@ $gNavigation->deleteLastUrl();
 try {
     // now get the "new" last url from the stack. This should be the last page
     $nextUrl = $gNavigation->getUrl();
-} catch (AdmException $e) {
+} catch (\Admidio\Exception $e) {
     // if no page was found then show the default homepage
     $nextUrl = $gHomepage;
 }

@@ -13,6 +13,8 @@
  * photo_nr   : Number of the photo that should be shown
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -22,7 +24,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 2) {
         // only logged-in users are allowed to use this page
         require(__DIR__ . '/../../system/login_valid.php');
@@ -39,7 +41,7 @@ try {
 
     // check if the current user could view this photo album
     if (!$photoAlbum->isVisible()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // get number of next and previous photo
@@ -92,6 +94,6 @@ try {
 
     // show html of complete page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

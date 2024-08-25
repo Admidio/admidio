@@ -17,6 +17,7 @@
  * mem_show_all - true  : (Default) Show active and inactive members of all organizations in database
  *                false : Show only active members of the current organization
  *****************************************************************************/
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -36,7 +37,7 @@ try {
 
     // check if user is allowed to assign members to this role
     if (!$role->allowedToAssignMembers($gCurrentUser)) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getMode === 'assign') {
@@ -78,7 +79,7 @@ try {
             $filterRole = new TableRoles($gDb);
             $filterRole->readDataByUuid($getFilterRoleUuid);
             if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
-                throw new AdmException('SYS_NO_RIGHTS_VIEW_LIST');
+                throw new Exception('SYS_NO_RIGHTS_VIEW_LIST');
             }
         }
 
@@ -258,7 +259,7 @@ try {
 
         $page->show();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
         // ajax mode then only show text if error occurs
         echo $e->getMessage();

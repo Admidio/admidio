@@ -12,6 +12,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use Admidio\Exception;
 
 /**
  * Mit dieser Klasse kann ein Email-Objekt erstellt
@@ -697,9 +698,9 @@ class Email extends PHPMailer
 
                 if ($errorMessage !== '') {
                     if ($gCurrentUser->isAdministrator()) {
-                        throw new AdmException('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, implode('<br />', $errorRecipients)));
+                        throw new Exception('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, implode('<br />', $errorRecipients)));
                     } else {
-                        throw new AdmException('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, count($errorRecipients) . ' ' . $gL10n->get('SYS_RECIPIENT')));
+                        throw new Exception('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, count($errorRecipients) . ' ' . $gL10n->get('SYS_RECIPIENT')));
                     }
                 }
             } else {
@@ -768,7 +769,7 @@ class Email extends PHPMailer
             }
         } catch (Exception $e) {
             return $e->errorMessage();
-        } catch (AdmException|\Exception $e) {
+        } catch (Exception|\Exception $e) {
             return $e->getMessage();
         }
 
@@ -785,7 +786,7 @@ class Email extends PHPMailer
      * @param string $subject     The subject of the email.
      * @param string $message     The body of the email.
      * @return bool Returns **true** if the notification was sent
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception 'SYS_EMAIL_NOT_SEND'
      */
     public function sendNotification(string $subject, string $message): bool
     {
@@ -817,7 +818,7 @@ class Email extends PHPMailer
 
             // if something went wrong then throw an exception with the error message
             if ($returnCode !== true) {
-                throw new AdmException('SYS_EMAIL_NOT_SEND', array($gSettingsManager->getString('email_administrator'), $returnCode));
+                throw new Exception('SYS_EMAIL_NOT_SEND', array($gSettingsManager->getString('email_administrator'), $returnCode));
             }
 
             return true;

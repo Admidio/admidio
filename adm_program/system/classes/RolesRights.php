@@ -34,6 +34,7 @@
  * $rolesArray = $categoryViewRolesObject->getRolesIds();
  * ```
  */
+use Admidio\Exception;
 class RolesRights extends TableAccess
 {
     /**
@@ -59,7 +60,7 @@ class RolesRights extends TableAccess
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $rolesRightName The recordset of the roles right with this name will be loaded.
      * @param int $objectId ID of the object of which the roles should be loaded.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function __construct(Database $database, string $rolesRightName, int $objectId)
@@ -75,7 +76,7 @@ class RolesRights extends TableAccess
     /**
      * Add all roles of the parameter array to the current roles rights object.
      * @param array<int,int> $roleIds Array with all role ids that should be added.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function addRoles(array $roleIds)
@@ -224,7 +225,7 @@ class RolesRights extends TableAccess
      * If the current right has a parent right then all roles will also be added
      * to the parent right and saved.
      * @param array<int,int> $roleIds Array with all role ids that should be saved.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function saveRoles(array $roleIds)
@@ -257,7 +258,7 @@ class RolesRights extends TableAccess
      * This method should only be called from a child role right, which wants to store its roles
      * in the parent role right.
      * @param array<int,int> $roleIds Array with all role ids that should be saved.
-     * @throws AdmException
+     * @throws Exception
      */
     public function saveRolesOfChildRight(array $roleIds)
     {

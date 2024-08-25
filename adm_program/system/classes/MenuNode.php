@@ -23,6 +23,7 @@
  * $html = $menuNode->getHtml();
  * ```
  */
+use Admidio\Exception;
 class MenuNode
 {
     /**
@@ -176,7 +177,7 @@ class MenuNode
      * user is a member of at least one of these roles.
      * @param int $menuId The id of the menu item that should be checked if it's visible.
      * @return bool Return true if the menu item is visible to the current user.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function menuItemIsVisible(int $menuId): bool

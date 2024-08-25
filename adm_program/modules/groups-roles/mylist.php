@@ -18,6 +18,7 @@
  *                2 - show active and former members of role
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -34,7 +35,7 @@ try {
     if (!$gSettingsManager->getBool('groups_roles_enable_module')
         || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
         || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator())) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // only users with the right to assign roles can view inactive roles
@@ -560,7 +561,7 @@ try {
 
         // check if there are roles that the current user could view
         if (count($allVisibleRoles) === 0) {
-            throw new AdmException('SYS_NO_RIGHTS_VIEW_LIST');
+            throw new Exception('SYS_NO_RIGHTS_VIEW_LIST');
         }
 
         $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
@@ -585,7 +586,7 @@ try {
         // check if there are roles that the current user could view
         $inactiveRolesStatement = $gDb->queryPrepared($sqlData['query'], $sqlData['params']);
         if ($inactiveRolesStatement->rowCount() === 0) {
-            throw new AdmException('SYS_NO_ROLES_VISIBLE');
+            throw new Exception('SYS_NO_ROLES_VISIBLE');
         }
     }
     $form->addSelectBoxFromSql(
@@ -626,6 +627,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }
