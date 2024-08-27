@@ -277,6 +277,7 @@ form, .admidio-blog, .admidio-max-with {
 .form-switch .form-check-input, .form-check-inline input:checked {
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
+
 }
 
 input[type=date], input[type=number] {
@@ -290,6 +291,7 @@ input[type=time] {
 .form-switch .form-check-input:not(:checked) {
     background-color: white !important;
     border-color: #999999 !important;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(125,125,125,1.0)'/></svg>");
 }
 
 .btn-primary:focus {
