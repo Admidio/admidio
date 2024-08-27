@@ -391,7 +391,7 @@ try {
                                             ' . $htmlLock . '
                                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
                                                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid'),
-                            'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_uuid'))) . '">
+                            'name' => $childPhotoAlbum->getValue('pho_name', 'database'), 'database_id' => $childPhotoAlbum->getValue('pho_uuid'))) . '">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE_ALBUM') . '</a>
                                             </li>
                                         </ul>

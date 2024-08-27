@@ -202,7 +202,7 @@ try {
         $arrContent['4'] = $messageObject->getValue('msg_timestamp');
         $arrContent['5'] = $links . '
         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $message['msg_uuid'], 'name' => $messageObject->getValue('msg_subject'), 'database_id' => $message['msg_uuid'])) . '">
+            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $message['msg_uuid'], 'name' => $messageObject->getValue('msg_subject', 'database'), 'database_id' => $message['msg_uuid'])) . '">
             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_MESSAGE') . '"></i>
         </a>';
 

@@ -255,7 +255,7 @@ try {
                 $categoryAdministration .= '<i class="bi bi-trash invisible"></i>';
             } else {
                 $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_' . $categoryUuid, 'name' => $category->getValue('cat_name'), 'database_id' => $categoryUuid, 'database_id_2' => $getType)) . '">' .
+                                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_' . $categoryUuid, 'name' => $category->getValue('cat_name', 'database'), 'database_id' => $categoryUuid, 'database_id_2' => $getType)) . '">' .
                     '<i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
             }
         } else {

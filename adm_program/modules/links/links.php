@@ -175,7 +175,7 @@ try {
                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'lnk',
-                            'element_id' => 'lnk_' . $lnkUuid, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkUuid)) . '">
+                            'element_id' => 'lnk_' . $lnkUuid, 'name' => $weblink->getValue('lnk_name', 'database'), 'database_id' => $lnkUuid)) . '">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>');
                 }
 

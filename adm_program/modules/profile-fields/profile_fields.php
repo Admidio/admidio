@@ -169,7 +169,8 @@ try {
         } else {
             $usfSystem .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_' . $usfUuid,
-                    'name' => $userField->getValue('usf_name'), 'database_id' => $usfUuid)) . '">' .
+                    'name' => $userField->getValue('usf_name', 'database'), 'database_id' => $usfUuid)) . '">' .
+                    'name' => $userField->getValue('usf_name', 'database'), 'database_id' => $usfUuid)) . '">' .
                 '<i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
         }
 

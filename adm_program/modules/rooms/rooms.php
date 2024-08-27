@@ -108,7 +108,8 @@ try {
                             <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                         </li>
                         <li><a class="dropdown-item openPopup" href="javascript:void(0);"
-                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_' . $room->getValue('room_uuid'), 'name' => $room->getValue('room_name'), 'database_id' => $room->getValue('room_uuid'))) . '">
+                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_' . $room->getValue('room_uuid'), 'name' => $room->getValue('room_name', 'database'), 'database_id' => $room->getValue('room_uuid'))) . '">
+                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_' . $room->getValue('room_uuid'), 'name' => $room->getValue('room_name', 'database'), 'database_id' => $room->getValue('room_uuid'))) . '">
                             <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                         </li>
                     </ul>

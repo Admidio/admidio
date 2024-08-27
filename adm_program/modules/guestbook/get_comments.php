@@ -77,7 +77,7 @@ try {
                                     <i class="bi bi-pencil-square"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                                 </li>
                                 <li><a class="dropdown-item openPopup" href="javascript:void(0);"
-                                    data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_' . $gbcUuid, 'database_id' => $gbcUuid, 'database_id_2' => (int)$gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))) . '">
+                                    data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_' . $gbcUuid, 'database_id' => $gbcUuid, 'database_id_2' => (int)$gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name', 'database'))))) . '">
                                     <i class="bi bi-trash"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                                 </li>
                             </ul>

@@ -168,7 +168,7 @@ try {
                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                             </li>
                             <li><a class="dropdown-item openPopup" href="javascript:void(0);"
-                                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_' . $annUuid, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annUuid)) . '">
+                                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_' . $annUuid, 'name' => $announcement->getValue('ann_headline', 'database'), 'database_id' => $annUuid)) . '">
                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                             </li>
                         </ul>

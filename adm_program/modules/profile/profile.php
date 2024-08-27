@@ -660,7 +660,7 @@ try {
 
                 if ($gCurrentUser->editUsers()) {
                     $userRelation['urlRelationDelete'] = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_' . $relation->getValue('ure_uuid'), 'database_id' => $relation->getValue('ure_uuid'),
-                        'name' => $relationType->getValue('urt_name') . ': ' . $otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME') . ' -> ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
+                        'name' => $relationType->getValue('urt_name', 'database') . ': ' . $otherUser->getValue('FIRST_NAME', 'database') . ' ' . $otherUser->getValue('LAST_NAME', 'database') . ' -> ' . $user->getValue('FIRST_NAME', 'database') . ' ' . $user->getValue('LAST_NAME', 'database')));
                 }
 
                 // only show info if system setting is activated
