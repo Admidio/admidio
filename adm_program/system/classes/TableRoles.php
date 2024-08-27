@@ -510,12 +510,14 @@ class TableRoles extends TableAccess
      * @param int $userId ID if the user who should get the membership to this role.
      * @param string $startDate Date in format YYYY-MM-DD at which the role membership should start.
      * @param string $endDate Date in format YYYY-MM-DD at which the role membership should end.
-     * @param bool $leader Flag if the user is assigned as a leader to this role.
+     * @param null|bool $leader Flag if the user is assigned as a leader to this role.
+     *                          If set to null than the leader flag will not be changed if a membership already exists
+     *                          and set to false if it doesn't exist.
      * @return void
      * @throws AdmException
      * @throws Exception
      */
-    public function setMembership(int $userId, string $startDate, string $endDate, bool $leader = false)
+    public function setMembership(int $userId, string $startDate, string $endDate, ?bool $leader = null)
     {
         global $gCurrentUser, $gCurrentUserId, $gCurrentSession;
 
@@ -547,6 +549,11 @@ class TableRoles extends TableAccess
         $this->db->startTransaction();
 
         foreach ($membersList as $row) {
+            if($leader === null && $startDate >= $row['mem_begin'] && $startDate <= $row['mem_end']) {
+                // set leader flag to existing state because the state should not change
+                $leader = (bool) $row['mem_leader'];
+            }
+
             if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin'] && $leader === (bool) $row['mem_leader']) {
                 // assignment already exists and must not be updated
                 $updateNecessary = false;
@@ -637,7 +644,13 @@ class TableRoles extends TableAccess
             $membership->setValue('mem_usr_id', $userId);
             $membership->setValue('mem_begin', $startDate);
             $membership->setValue('mem_end', $endDate);
-            $membership->setValue('mem_leader', $leader);
+            if($leader === null) {
+                // no leader state was set than set it to false
+                $membership->setValue('mem_leader', false);
+            } else {
+                $membership->setValue('mem_leader', $leader);
+            }
+
             if ($this->type === self::ROLE_EVENT) {
                 $membership->setValue('mem_approved', Participants::PARTICIPATION_YES);
             }
@@ -733,12 +746,14 @@ class TableRoles extends TableAccess
      * Starts a new membership of the given user to the role of this class. The membership will start today
      * and will "never" ends. End date is set to 9999-12-31.
      * @param int $userId ID if the user who should get the membership to this role.
-     * @param bool $leader Flag if the user is assigned as a leader to this role.
+     * @param null|bool $leader Flag if the user is assigned as a leader to this role.
+     * *                          If set to null than the leader flag will not be changed if a membership already exists
+     * *                          and set to false if it doesn't exist.
      * @return void
      * @throws AdmException
      * @throws Exception
      */
-    public function startMembership(int $userId, bool $leader = false)
+    public function startMembership(int $userId, ?bool $leader = null)
     {
         if ($this->getValue('rol_max_members') > $this->countMembers()
             || (int)$this->getValue('rol_max_members') === 0) {
