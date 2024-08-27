@@ -157,7 +157,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 $membership['role'] = $role->getValue('rol_name');
             }
             if ($member->getValue('mem_leader') == 1) {
-                $membership['leader'] = ' - '.$gL10n->get('SYS_LEADER');
+                $membership['leader'] = $gL10n->get('SYS_LEADER');
             }
 
             if ($showRoleEndDate) {
