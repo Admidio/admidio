@@ -1935,6 +1935,7 @@ class User extends TableAccess
         // user data from adm_user_fields table (human-readable text representation and raw database value)
         $oldFieldValue = $this->mProfileFieldsData->getValue($columnName);
         $oldFieldValue_db = $this->mProfileFieldsData->getValue($columnName, 'database');
+
         $newValue = (string)$newValue;
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
@@ -1944,6 +1945,10 @@ class User extends TableAccess
             if ($date !== false) {
                 $newValue = $date->format('Y-m-d');
             }
+        } elseif ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'CHECKBOX'
+        && $oldFieldValue === '' && $newValue === '0') {
+            // don't change value if checkbox is not set and old value was emtpy
+            $newValue = '';
         }
 
         // only update if value has changed
