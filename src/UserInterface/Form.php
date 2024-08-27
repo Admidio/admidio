@@ -1669,7 +1669,7 @@ class Form
 
             if (isset($fieldValues[$element['id']])) {
                 // remove html from every input value
-                $validFieldValues[$element['id']] = SecurityUtils::encodeHTML(StringUtils::strStripTags($fieldValues[$element['id']]));
+                $validFieldValues[$element['id']] = StringUtils::strStripTags($fieldValues[$element['id']]);
 
                 // check value depending on the field type
                 if (!is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {
