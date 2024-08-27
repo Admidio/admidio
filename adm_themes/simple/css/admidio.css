@@ -288,7 +288,7 @@ input[type=time] {
 }
 
 .form-switch .form-check-input:not(:checked) {
-    background-color: #bbbbbb !important;
+    background-color: white !important;
     border-color: #999999 !important;
 }
 
