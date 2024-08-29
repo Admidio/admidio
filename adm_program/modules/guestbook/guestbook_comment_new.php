@@ -13,6 +13,8 @@
  * gbc_uuid      - UUID of the comment that should be edited
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -22,12 +24,12 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('enable_guestbook_module') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // One (not two) parameter must be passed: Either gbo_uuid or gbc_uuid...
     if ($getGboUuid !== '' && $getGbcUuid !== '') {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // set create or edit mode
@@ -46,7 +48,7 @@ try {
 
         if (!$gCurrentUser->commentGuestbookRight()) {
             // der User hat kein Recht zu kommentieren
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -56,7 +58,7 @@ try {
 
         if (!$gCurrentUser->editGuestbookRight()) {
             // der User hat kein Recht Kommentare zu editieren
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -70,7 +72,7 @@ try {
 
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if ((int)$gbComment->getValue('gbo_org_id') !== $gCurrentOrgId) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -105,7 +107,7 @@ try {
 
         if ($pdoStatement->fetchColumn() > 0) {
             // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-            throw new AdmException('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time')));
+            throw new Exception('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time')));
         }
     }
 
@@ -162,6 +164,6 @@ try {
     // add form to html page and show page
     $page->addHtml($form->show());
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

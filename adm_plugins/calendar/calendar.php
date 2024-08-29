@@ -538,6 +538,6 @@ try {
             $(".admidio-calendar-link").popover();
         });
     --></script>';
-} catch (AdmException|Exception $e) {
+} catch (Throwable $e) {
     echo $e->getMessage();
 }

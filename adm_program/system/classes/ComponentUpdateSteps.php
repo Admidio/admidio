@@ -8,6 +8,7 @@
  */
 
 use Ramsey\Uuid\Uuid;
+use Admidio\Exception;
 
 // this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
 const TBL_DATES = TABLE_PREFIX . '_dates';
@@ -1031,7 +1032,7 @@ final class ComponentUpdateSteps
             // get recordset of current folder from database
             $folder = new TableFolder(self::$db, $folderId);
             $folder->addRolesOnFolder('folder_upload', $rolesArray);
-        } catch (AdmException $e) {
+        } catch (Exception $e) {
             $e->showText();
             // => EXIT
         }

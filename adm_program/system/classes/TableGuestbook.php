@@ -13,6 +13,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 class TableGuestbook extends TableAccess
 {
     /**
@@ -77,7 +78,7 @@ class TableGuestbook extends TableAccess
 
     /**
      * guestbook entry will be published, if moderate mode is set
-     * @throws AdmException
+     * @throws Exception
      */
     public function moderate()
     {
@@ -94,7 +95,7 @@ class TableGuestbook extends TableAccess
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -112,7 +113,7 @@ class TableGuestbook extends TableAccess
      * **system_notifications_role**. The email contains the guestbook entry text, the name of the user,
      * the timestamp and the url to this guestbook entry.
      * @return bool Returns **true** if the notification was sent
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception 'SYS_EMAIL_NOT_SEND'
      * @throws Exception
      */
     public function sendNotification(): bool
@@ -152,7 +153,7 @@ class TableGuestbook extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {

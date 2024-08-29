@@ -8,10 +8,12 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $postImportFormat = admFuncVariableIsValid(
         $_POST,
@@ -44,7 +46,7 @@ try {
 
     // only authorized users should import users
     if (!$gCurrentUser->editUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // check form field input and sanitized it from malicious content
@@ -53,15 +55,15 @@ try {
 
     $importfile = $_FILES['userfile']['tmp_name'][0];
     if (strlen($importfile) === 0) {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_FILE'));
+        throw new Exception('SYS_FIELD_EMPTY', array('SYS_FILE'));
     } elseif ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
         // check the filesize against the server settings
-        throw new AdmException('SYS_FIELD_EMPTY', array(ini_get('upload_max_filesize')));
+        throw new Exception('SYS_FIELD_EMPTY', array(ini_get('upload_max_filesize')));
     } elseif (!file_exists($importfile) || !is_uploaded_file($importfile)) {
         // check if a file was really uploaded
-        throw new AdmException('SYS_FILE_NOT_EXIST');
+        throw new Exception('SYS_FILE_NOT_EXIST');
     } elseif ($postRoleUUID === '') {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_ROLE'));
+        throw new Exception('SYS_FIELD_EMPTY', array('SYS_ROLE'));
     }
 
     // Read in the role and check whether the user can select it and thereby not possibly
@@ -71,7 +73,7 @@ try {
 
     if (!$gCurrentUser->hasRightViewRole((int)$role->getValue('rol_id'))
         || (!$gCurrentUser->manageRoles() && !$role->getValue('rol_default_registration'))) {
-        throw new AdmException('SYS_ROLE_SELECT_RIGHT', array($role->getValue('rol_name')));
+        throw new Exception('SYS_ROLE_SELECT_RIGHT', array($role->getValue('rol_name')));
     }
 
     // read file using the phpSpreadsheet library
@@ -132,7 +134,7 @@ try {
         }
 
         if (empty($sheet)) {
-            throw new AdmException('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet));
+            throw new Exception('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet));
         } else {
             // read data to array without any format
             $_SESSION['import_data'] = $sheet->toArray(null, true, false);
@@ -144,6 +146,6 @@ try {
         'url' => ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_column_config.php'
     ));
     exit();
-} catch (AdmException|\PhpOffice\PhpSpreadsheet\Exception|Exception $e) {
+} catch (Exception|\PhpOffice\PhpSpreadsheet\Exception|Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

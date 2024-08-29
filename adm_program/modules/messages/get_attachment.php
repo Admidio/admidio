@@ -13,6 +13,8 @@
  * view     :  If set to true than the output will be shown in the browser
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -22,7 +24,7 @@ try {
 
     // check if the call of the page was allowed
     if (!$gSettingsManager->getBool('enable_mail_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // read data from database
@@ -32,7 +34,7 @@ try {
 
     // user of message is not current user than he is not allowed to view the attachment
     if ($gCurrentUserId !== $message->getValue('msg_usr_id_sender')) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // get complete path with filename of the attachment
@@ -40,7 +42,7 @@ try {
 
     // check if the file already exists
     if (!is_file($completePath)) {
-        throw new AdmException('SYS_FILE_NOT_EXIST');
+        throw new Exception('SYS_FILE_NOT_EXIST');
     }
 
     // determine filesize
@@ -78,6 +80,6 @@ try {
         // file output for small files (< 10MB)
         readfile($completePath);
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

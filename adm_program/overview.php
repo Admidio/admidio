@@ -28,6 +28,6 @@ try {
     $page->addTemplateFile('system/overview.tpl');
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Throwable $e) {
     $gMessage->show($e->getMessage());
 }

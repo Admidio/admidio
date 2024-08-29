@@ -26,6 +26,7 @@
  * $componentUpdateHandle->update(ADMIDIO_VERSION);
  * ```
  */
+use Admidio\Exception;
 class ComponentUpdate extends Component
 {
     public const UPDATE_STEP_STOP = 'stop';
@@ -84,7 +85,7 @@ class ComponentUpdate extends Component
      * Goes step by step through the update xml file of the current database version and search for the maximum step.
      * If the last step is found than the id of this step will be returned.
      * @return int Return the number of the last update step that was found in xml file of the current version.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getMaxUpdateStep(): int
     {
@@ -98,7 +99,7 @@ class ComponentUpdate extends Component
             } catch (UnexpectedValueException $exception) {
                 return 0;
             } catch (Exception $exception) {
-                throw new AdmException($exception->getMessage());
+                throw new Exception($exception->getMessage());
             }
 
             // go step by step through the SQL statements until the last one is found
@@ -148,7 +149,7 @@ class ComponentUpdate extends Component
      * the update script.
      * @param SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      * @param string $version A version string of the version corresponding to the $xmlNode
-     * @throws AdmException
+     * @throws Exception
      */
     private function executeStep(SimpleXMLElement $xmlNode, string $version = '')
     {
@@ -216,7 +217,7 @@ class ComponentUpdate extends Component
      * be stopped and the system will be marked with update not completed so that it's possible to continue the
      * update later if the problem was fixed.
      * @param string $targetVersion The target version to update.
-     * @throws AdmException
+     * @throws Exception
      */
     public function update(string $targetVersion)
     {

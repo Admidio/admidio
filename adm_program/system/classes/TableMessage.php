@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
+use Admidio\Exception;
 class TableMessage extends TableAccess
 {
     public const MESSAGE_TYPE_EMAIL = 'EMAIL';
@@ -40,7 +40,7 @@ class TableMessage extends TableAccess
      * If the id is set than the specific message will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $msgId The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, $msgId = 0)
     {
@@ -69,7 +69,7 @@ class TableMessage extends TableAccess
      *                      1 - only former members of the role
      *                      2 - active and former members of the role
      * @param string $roleName Optional the name of the role. Should be set if the name should be used within the class.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addRoleUUID(string $roleUUID, int $roleMode, string $roleName = '')
     {
@@ -88,7 +88,7 @@ class TableMessage extends TableAccess
      *                      1 - only former members of the role
      *                      2 - active and former members of the role
      * @param string $roleName Optional the name of the role. Should be set if the name should be used within the class.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addRole(int $roleID, int $roleMode, string $roleName = '')
     {
@@ -124,7 +124,7 @@ class TableMessage extends TableAccess
      * data is stored in database than you should set the users name with the parameter $fullName.
      * @param string $userUUID UUID of the user to which the message was sent
      * @param string $fullName Optional the name of the user. Should be set if the name should be used within the class.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addUserByUUID(string $userUUID, string $fullName = '')
     {
@@ -139,7 +139,7 @@ class TableMessage extends TableAccess
      * data is stored in database than you should set the users name with the parameter $fullName.
      * @param int $userID ID of the user to which the message was sent
      * @param string $fullName Optional the name of the user. Should be set if the name should be used within the class.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addUser(int $userID, string $fullName = '')
     {
@@ -178,7 +178,7 @@ class TableMessage extends TableAccess
      * Add the content of the message or email. The content will than
      * be saved if the message will be saved.
      * @param string $content Current content of the message.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addContent(string $content)
     {
@@ -192,7 +192,7 @@ class TableMessage extends TableAccess
      * Reads the number of all unread messages of this table
      * @param int $usrId
      * @return int Number of unread messages of this table
-     * @throws AdmException
+     * @throws Exception
      */
     public function countUnreadMessageRecords(int $usrId): int
     {
@@ -209,7 +209,7 @@ class TableMessage extends TableAccess
     /**
      * Reads the number of all conversations in this table
      * @return int Number of conversations in this table
-     * @throws AdmException
+     * @throws Exception
      */
     public function countMessageConversations(): int
     {
@@ -222,7 +222,7 @@ class TableMessage extends TableAccess
     /**
      * Reads the number of all messages in actual conversation
      * @return int Number of all messages in actual conversation
-     * @throws AdmException
+     * @throws Exception
      */
     public function countMessageParts(): int
     {
@@ -239,7 +239,7 @@ class TableMessage extends TableAccess
      * After that the class will be initialized.
      * @return bool **true** if message is deleted or message with additional information if it is marked
      *         for other user to delete. On error, it is false
-     * @throws AdmException
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -286,7 +286,7 @@ class TableMessage extends TableAccess
      * the attachments. The array contains for each attachment a subarray with the following elements:
      * **msa_id** and **file_name** and **admidio_file_name**.
      * @return array Returns an array with all attachments and the following elements: **msa_id** and **file_name**
-     * @throws AdmException
+     * @throws Exception
      */
     public function getAttachmentsInformations(): array
     {
@@ -309,7 +309,7 @@ class TableMessage extends TableAccess
      * the last content will be returned.
      * @param string $format The format can be **database** that would return the original database value without any transformations
      * @return string Returns the content of the message.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getContent(string $format = ''): string
     {
@@ -344,7 +344,7 @@ class TableMessage extends TableAccess
      * get a list with all messages of a conversation.
      * @param int $msgId of the conversation - just for security reasons.
      * @return false|PDOStatement Returns **answer** of the SQL execution
-     * @throws AdmException
+     * @throws Exception
      */
     public function getConversation(int $msgId)
     {
@@ -360,7 +360,7 @@ class TableMessage extends TableAccess
      * If the message type is PM this method will return the conversation partner of the PM. This is the
      * recipient of the message send from **msg_usr_id_sender**.
      * @return int Returns **ID** of the user that is partner in the actual conversation or **false** if it's not a message.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getConversationPartner()
     {
@@ -386,7 +386,7 @@ class TableMessage extends TableAccess
      * number of recipients users will be shown.
      * @param bool $showFullUserNames If set to true the first and last name of each user will be shown.
      * @return string Returns a string with all role names and firstname and lastname of the users.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getRecipientsNamesString(bool $showFullUserNames = true): string
     {
@@ -443,7 +443,7 @@ class TableMessage extends TableAccess
      * Therefore, the current user is not the sender of the PM and the flag **msg_read** is set to 1.
      * Email will always have the status read.
      * @return bool Returns true if the PM was not read from the current user.
-     * @throws AdmException
+     * @throws Exception
      */
     public function isUnread(): bool
     {
@@ -462,7 +462,7 @@ class TableMessage extends TableAccess
      * mode will be only used with roles and the following values are used:
      * + 0 = active members, 1 = former members, 2 = active and former members
      * @return array Returns an array with all recipients (users and roles)
-     * @throws AdmException
+     * @throws Exception
      */
     public function readRecipientsData(): array
     {
@@ -528,7 +528,7 @@ class TableMessage extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if
      *                                table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -564,7 +564,7 @@ class TableMessage extends TableAccess
      * adm_my_files/messages_attachments. Therefore, the filename will get the prefix with the id of this
      * message.
      * @throw RuntimeException Folder could not be created
-     * @throws AdmException
+     * @throws Exception
      */
     protected function saveAttachments()
     {
@@ -600,7 +600,7 @@ class TableMessage extends TableAccess
     /**
      * Set the status of the message to read. Also, the global menu will be initialized to update
      * the read badge of messages.
-     * @throws AdmException
+     * @throws Exception
      */
     public function setReadValue()
     {

@@ -16,6 +16,7 @@
  * you will get the formatted output. It's also possible to set user data and
  * save this data to the database
  */
+use Admidio\Exception;
 class ProfileFields
 {
     /**
@@ -57,7 +58,7 @@ class ProfileFields
      * constructor that will initialize variables and read the profile field structure
      * @param Database $database Database object (should be **$gDb**)
      * @param int $organizationId The id of the organization for which the profile field structure should be read
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, int $organizationId)
     {
@@ -152,7 +153,7 @@ class ProfileFields
      *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return mixed Returns for the profile field with the given uuid the value.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getProperty(string $fieldNameIntern, string $column, string $format = '')
     {
@@ -550,7 +551,7 @@ class ProfileFields
      * and adds an object for each field structure to the **mProfileFields** array.
      * @param int $organizationId The id of the organization for which the profile fields
      *                            structure should be read.
-     * @throws AdmException
+     * @throws Exception
      */
     public function readProfileFields(int $organizationId)
     {
@@ -620,7 +621,7 @@ class ProfileFields
     /**
      * save data of every user field
      * @param int $userId id is necessary if new user, that id was not known before
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function saveUserData(int $userId)
@@ -649,13 +650,13 @@ class ProfileFields
 
     /**
      * Set a value for a profile field. The value will be checked against typical conditions of the data type and
-     * also against the custom regex if this is set. If an invalid value is set an AdmException will be thrown.
+     * also against the custom regex if this is set. If an invalid value is set an Exception will be thrown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
      * @param mixed $fieldValue The new value that should be stored in the profile field.
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                                not be checked.
      * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
-     * @throws AdmException If an invalid value should be set.
+     * @throws Exception If an invalid value should be set.
      * @throws Exception
      *                      exception->text contains a string with the reason why the login failed.
      */
@@ -664,7 +665,7 @@ class ProfileFields
         global $gSettingsManager, $gL10n;
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields)) {
-            throw new AdmException('Profile field ' . $fieldNameIntern . ' doesn\'t exists!');
+            throw new Exception('Profile field ' . $fieldNameIntern . ' doesn\'t exists!');
         }
 
         if (!empty($fieldValue) && $checkValue) {
@@ -672,7 +673,7 @@ class ProfileFields
                 case 'CHECKBOX':
                     // Checkbox may only have 0 or 1
                     if (!$this->noValueCheck && $fieldValue !== '0' && $fieldValue !== '1') {
-                        throw new AdmException('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                        throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                     }
                     break;
                 case 'DATE':
@@ -681,7 +682,7 @@ class ProfileFields
                     if ($date === false) {
                         $date = DateTime::createFromFormat('Y-m-d', $fieldValue);
                         if ($date === false && !$this->noValueCheck) {
-                            throw new AdmException('SYS_DATE_INVALID', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'), $gSettingsManager->getString('system_date')));
+                            throw new Exception('SYS_DATE_INVALID', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'), $gSettingsManager->getString('system_date')));
                         }
                     } else {
                         $fieldValue = $date->format('Y-m-d');
@@ -691,22 +692,22 @@ class ProfileFields
                 case 'RADIO_BUTTON':
                     if ($fieldValue !== 0) { // 0 is the empty value for radio button
                         if (!$this->noValueCheck && !is_numeric($fieldValue)) {
-                            throw new AdmException('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                            throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                         } elseif (!array_key_exists($fieldValue, $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list'))) {
-                            throw new AdmException('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                            throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                         }
                     }
                     break;
                 case 'EMAIL':
                     // Email may only contain valid characters and must conform to a fixed scheme
                     if (!$this->noValueCheck && !StringUtils::strValidCharacters($fieldValue, 'email')) {
-                        throw new AdmException('SYS_EMAIL_INVALID', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                        throw new Exception('SYS_EMAIL_INVALID', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                     }
                     break;
                 case 'NUMBER':
                     // A number must be numeric
                     if (!$this->noValueCheck && !is_numeric($fieldValue)) {
-                        throw new AdmException('SYS_FIELD_NUMERIC', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                        throw new Exception('SYS_FIELD_NUMERIC', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                     }
 
                     // numbers don't have leading zero
@@ -715,7 +716,7 @@ class ProfileFields
                 case 'DECIMAL':
                     // A decimal must be numeric
                     if (!$this->noValueCheck && !is_numeric(str_replace(',', '.', $fieldValue))) {
-                        throw new AdmException('SYS_FIELD_NUMERIC', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                        throw new Exception('SYS_FIELD_NUMERIC', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                     }
 
                     // decimals don't have leading zero
@@ -724,14 +725,14 @@ class ProfileFields
                 case 'PHONE':
                     // check phone number for valid characters
                     if (!$this->noValueCheck && !StringUtils::strValidCharacters($fieldValue, 'phone')) {
-                        throw new AdmException('SYS_PHONE_INVALID_CHAR', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                        throw new Exception('SYS_PHONE_INVALID_CHAR', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                     }
                     break;
                 case 'URL':
                     $fieldValue = admFuncCheckUrl($fieldValue);
 
                     if (!$this->noValueCheck && $fieldValue === false) {
-                        throw new AdmException('SYS_PHONE_INVALID_CHAR', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                        throw new Exception('SYS_PHONE_INVALID_CHAR', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                     }
                     break;
             }
@@ -762,7 +763,7 @@ class ProfileFields
 
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') !== ''
                 && preg_match('/' . $this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') . '/', $fieldValue) === 0) {
-                throw new AdmException('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                throw new Exception('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
             }
         }
 

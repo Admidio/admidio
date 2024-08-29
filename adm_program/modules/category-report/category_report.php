@@ -17,6 +17,7 @@
  * config            : the selected configuration
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -24,12 +25,12 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('category_report_enable_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // user must have the permission "rol_assign_roles"
     if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // Read in the configuration array
@@ -92,7 +93,7 @@ try {
 
     if ($numMembers == 0) {
         // There is no data available !
-        throw new AdmException('SYS_NO_USER_FOUND');
+        throw new Exception('SYS_NO_USER_FOUND');
     }
 
     $columnCount = count($report->headerData);
@@ -494,6 +495,6 @@ try {
 
         $page->show();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

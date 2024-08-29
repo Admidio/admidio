@@ -13,6 +13,7 @@
  * copy : true - The event of the dat_id will be copied and the base for this new event
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -25,7 +26,7 @@ try {
 
     // check if module is active
     if ((int)$gSettingsManager->get('events_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Initialize local parameters
@@ -59,7 +60,7 @@ try {
 
         // check if the current user could edit this event
         if (!$event->isEditable()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // check if a participation to this event is possible
@@ -75,7 +76,7 @@ try {
     } else {
         // check if the user has the right to edit at least one category
         if (count($gCurrentUser->getAllEditableCategories('EVT')) === 0) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // For new events preset event with current event
@@ -344,6 +345,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

@@ -14,13 +14,15 @@
  *            delete : Delete announcement
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('announcements_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Initialize and check the parameters
@@ -35,12 +37,12 @@ try {
 
         // check if the user has the right to edit this announcement
         if (!$announcement->isEditable()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     } else {
         // check if the user has the right to edit at least one category
         if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -74,6 +76,6 @@ try {
         echo json_encode(array('status' => 'success'));
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

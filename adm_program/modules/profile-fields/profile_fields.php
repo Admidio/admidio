@@ -9,6 +9,7 @@
  *
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -17,7 +18,7 @@ try {
 
     // only authorized users can edit the profile fields
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // set module headline
@@ -198,6 +199,6 @@ try {
 
     $page->addHtml($table->show());
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

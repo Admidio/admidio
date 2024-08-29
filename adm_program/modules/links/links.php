@@ -12,6 +12,7 @@
  * link_uuid : Uuid of a single link that should be shown.
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -24,7 +25,7 @@ try {
 
     // check if the module is enabled for use
     if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('enable_weblinks_module') === 2) {
         // available only with valid login
         require(__DIR__ . '/../../system/login_valid.php');
@@ -211,6 +212,6 @@ try {
 
     // show html of complete page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

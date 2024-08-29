@@ -11,6 +11,7 @@
  * user_uuid - UUID of the user whose participation detail shall be set or changed
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -32,11 +33,11 @@ try {
     // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
     if ($gCurrentUser->getValue('usr_uuid') === $getUserUuid) {
         if (!$event->allowedToParticipate()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     } else {
         if (!$gCurrentUser->isAdministrator() && !$gCurrentUser->isLeaderOfRole((int)$event->getValue('dat_rol_id'))) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -105,7 +106,7 @@ try {
     $participationForm->addToSmarty($smarty);
     $gCurrentSession->addFormObject($participationForm);
     echo $smarty->fetch('modules/events.participation.edit.tpl');
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->showInModalWindow();
     $gMessage->show($e->getMessage());
 }

@@ -13,6 +13,7 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Ramsey\Uuid\Uuid;
 
 try {
@@ -60,19 +61,19 @@ try {
 
     // Stop if pm should be sent pm module is disabled
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('enable_pm_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Stop if mail should be sent and mail module is disabled
     if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && !$gSettingsManager->getBool('enable_mail_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // if message is EMAIL then check the parameters
     if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
         // if Attachment size is higher than max_post_size from php.ini, then $_POST is empty.
         if (empty($_POST)) {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
     }
 
@@ -145,7 +146,7 @@ try {
                     if ((!$gValidLogin && (int)$row['rol_mail_this_role'] !== 3)
                         || ($gValidLogin && !$gCurrentUser->hasRightSendMailToRole((int)$row['rol_id']))
                         || $row['rol_id'] === null) {
-                        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+                        throw new Exception('SYS_INVALID_PAGE_VIEW');
                     }
 
                     // add role to the message object
@@ -170,17 +171,17 @@ try {
             }
         } else {
             // message when no receiver is given
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // if no valid recipients exists show message
         if ($email->countRecipients() === 0) {
-            throw new AdmException('SYS_NO_VALID_RECIPIENTS');
+            throw new Exception('SYS_NO_VALID_RECIPIENTS');
         }
 
         // check if name is given
         if ($postName === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_NAME'));
         }
 
         // if valid login then sender should always current user
@@ -196,7 +197,7 @@ try {
                 if (isset($_FILES['userfile'])) {
                     // final check if user is logged in
                     if (!$gValidLogin) {
-                        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+                        throw new Exception('SYS_INVALID_PAGE_VIEW');
                     }
                     $attachmentSize = 0;
                     // add now every attachment
@@ -204,14 +205,14 @@ try {
                         // check if Upload was OK
                         if (($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_OK)
                             && ($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_NO_FILE)) {
-                            throw new AdmException('SYS_ATTACHMENT_TO_LARGE');
+                            throw new Exception('SYS_ATTACHMENT_TO_LARGE');
                         }
 
                         // only check attachment if there was already a file added
                         if (strlen($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) > 0) {
                             // check if a file was really uploaded
                             if (!file_exists($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][$currentAttachmentNo])) {
-                                throw new AdmException('SYS_FILE_NOT_EXIST');
+                                throw new Exception('SYS_FILE_NOT_EXIST');
                             }
 
                             if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK) {
@@ -220,13 +221,13 @@ try {
 
                                 // check for valid file extension of attachment
                                 if(!FileSystemUtils::allowedFileExtension($_FILES['userfile']['name'][$currentAttachmentNo])) {
-                                    throw new AdmException('SYS_FILE_EXTENSION_INVALID');
+                                    throw new Exception('SYS_FILE_EXTENSION_INVALID');
                                 }
 
                                 // check the size of the attachment
                                 $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
                                 if ($attachmentSize > Email::getMaxAttachmentSize()) {
-                                    throw new AdmException('SYS_ATTACHMENT_TO_LARGE');
+                                    throw new Exception('SYS_ATTACHMENT_TO_LARGE');
                                 }
 
                                 // set file type to standard if not given
@@ -242,10 +243,10 @@ try {
                     }
                 }
             } else {
-                throw new AdmException('SYS_FIELD_EMPTY', array('SYS_SUBJECT'));
+                throw new Exception('SYS_FIELD_EMPTY', array('SYS_SUBJECT'));
             }
         } else {
-            throw new AdmException('SYS_EMAIL_INVALID', array('SYS_EMAIL'));
+            throw new Exception('SYS_EMAIL_INVALID', array('SYS_EMAIL'));
         }
 
         // if possible send html mail
@@ -294,7 +295,7 @@ try {
 
         // check if user is allowed to view message
         if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // get user data from Database
@@ -306,12 +307,12 @@ try {
 
         // check if it is allowed to send to this user
         if ((!$gCurrentUser->editUsers() && !isMember((int)$user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
-            throw new AdmException('SYS_USER_ID_NOT_FOUND');
+            throw new Exception('SYS_USER_ID_NOT_FOUND');
         }
 
         // check if receiver of message has valid login
         if ($user->getValue('usr_login_name') === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TO'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_TO'));
         }
 
         $sendResult = true;
@@ -336,11 +337,11 @@ try {
         exit();
     } else {
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
-            throw new AdmException('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult));
+            throw new Exception('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult));
         } else {
-            throw new AdmException('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
+            throw new Exception('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
         }
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

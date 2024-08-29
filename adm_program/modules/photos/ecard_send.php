@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Ramsey\Uuid\Uuid;
 
 try {
@@ -15,9 +16,9 @@ try {
 
     // check if the photo module is enabled and eCard is enabled
     if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 2) {
         // only logged-in users can access the module
         require(__DIR__ . '/../../system/login_valid.php');
@@ -37,12 +38,12 @@ try {
 
     // check if user has right to view the album
     if (!$photoAlbum->isVisible()) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // the logged-in user has no valid mail address stored in his profile, which can be used as sender
     if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '') {
-        throw new AdmException('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
+        throw new Exception('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
     }
 
     $senderName  = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
@@ -57,7 +58,7 @@ try {
 
     // if template was not found then show error
     if ($ecardDataToParse === null) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // check if user has right to send mail to selected roles and users
@@ -213,8 +214,8 @@ try {
         ));
         exit();
     } else {
-        throw new AdmException('SYS_ECARD_NOT_SUCCESSFULLY_SEND');
+        throw new Exception('SYS_ECARD_NOT_SUCCESSFULLY_SEND');
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

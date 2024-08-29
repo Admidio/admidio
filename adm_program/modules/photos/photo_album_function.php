@@ -16,6 +16,8 @@
  *      - unlock : unlock a photo album
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
@@ -26,7 +28,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // create photo album object
@@ -38,7 +40,7 @@ try {
 
     // check if the user is allowed to edit this photo album
     if (!$photoAlbum->isEditable()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getMode !== 'edit') {
@@ -54,18 +56,18 @@ try {
         if (strlen($_POST['pho_begin']) > 0) {
             $startDate = DateTime::createFromFormat('Y-m-d', $_POST['pho_begin']);
             if ($startDate === false) {
-                throw new AdmException('SYS_DATE_INVALID', array('SYS_START', 'YYYY-MM-DD'));
+                throw new Exception('SYS_DATE_INVALID', array('SYS_START', 'YYYY-MM-DD'));
             } else {
                 $formValues['pho_begin'] = $startDate->format('Y-m-d');
             }
         } else {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_START'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_START'));
         }
 
         if (strlen($_POST['pho_end']) > 0) {
             $endDate = DateTime::createFromFormat('Y-m-d', $_POST['pho_end']);
             if ($endDate === false) {
-                throw new AdmException('SYS_DATE_INVALID', array('SYS_END', 'YYYY-MM-DD'));
+                throw new Exception('SYS_DATE_INVALID', array('SYS_END', 'YYYY-MM-DD'));
             } else {
                 $formValues['pho_end'] = $endDate->format('Y-m-d');
             }
@@ -75,7 +77,7 @@ try {
 
         // Start must be before or equal to end
         if (strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin']) {
-            throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
         }
 
         // set parent photo id
@@ -100,7 +102,7 @@ try {
 
                     // the corresponding folder could not be created
                     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php');
-                    throw new AdmException($error['text'], array($error['path'], '<a href="mailto:' . $gSettingsManager->getString('email_administrator') . '">', '</a>'));
+                    throw new Exception($error['text'], array($error['path'], '<a href="mailto:' . $gSettingsManager->getString('email_administrator') . '">', '</a>'));
                 } else {
                     // Notification email for new or changed entries to all members of the notification role
                     $photoAlbum->sendNotification();
@@ -118,7 +120,7 @@ try {
                     FileSystemUtils::moveDirectory($albumPath, $newFolder);
                 } catch (RuntimeException $exception) {
                     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php');
-                    throw new AdmException('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:' . $gSettingsManager->getString('email_administrator') . '">', '</a>'));
+                    throw new Exception('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:' . $gSettingsManager->getString('email_administrator') . '">', '</a>'));
                 }
             }
 
@@ -154,7 +156,7 @@ try {
         echo 'done';
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if (in_array($getMode, array('edit', 'delete'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

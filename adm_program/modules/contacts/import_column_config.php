@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -16,11 +17,11 @@ try {
 
     // only authorized users can import users
     if (!$gCurrentUser->editUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if (count($_SESSION['import_data']) === 0) {
-        throw new AdmException('SYS_FILE_NOT_EXIST');
+        throw new Exception('SYS_FILE_NOT_EXIST');
     }
 
     $headline = $gL10n->get('SYS_ASSIGN_FIELDS');
@@ -148,6 +149,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

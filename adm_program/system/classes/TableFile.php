@@ -14,6 +14,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 class TableFile extends TableAccess
 {
     /**
@@ -90,11 +91,11 @@ class TableFile extends TableAccess
     }
 
     /**
-     * Reads the file recordset from database table **adm_folders** and throws an AdmException
+     * Reads the file recordset from database table **adm_folders** and throws an Exception
      * if the user has no right to see the corresponding folder or the file id doesn't exist.
      * @param string $fileUuid The UUID of the file.
-     * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
-     * @throws AdmException SYS_FOLDER_NO_RIGHTS
+     * @return true Returns **true** if everything is ok otherwise an Exception is thrown.
+     * @throws Exception SYS_FOLDER_NO_RIGHTS
      * @throws Exception
      *                      SYS_INVALID_PAGE_VIEW
      */
@@ -106,7 +107,7 @@ class TableFile extends TableAccess
 
         // Check if a dataset is found
         if ((int)$this->getValue('fil_id') === 0) {
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // If current user has download-admin-rights => allow
@@ -117,7 +118,7 @@ class TableFile extends TableAccess
         // If file is locked (and no download-admin-rights) => throw exception
         if ($this->getValue('fil_locked')) {
             $this->clear();
-            throw new AdmException('SYS_FOLDER_NO_RIGHTS');
+            throw new Exception('SYS_FOLDER_NO_RIGHTS');
         }
 
         // If folder is public (and file is not locked) => allow
@@ -133,7 +134,7 @@ class TableFile extends TableAccess
         }
 
         $this->clear();
-        throw new AdmException('SYS_FOLDER_NO_RIGHTS');
+        throw new Exception('SYS_FOLDER_NO_RIGHTS');
     }
 
     /**
@@ -189,7 +190,7 @@ class TableFile extends TableAccess
      * within the file system and the database structure.
      * @param string $destFolderUUID UUID of the destination folder to which this file is to be moved.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws RuntimeException
      * @throws UnexpectedValueException
      * @throws Exception
@@ -214,7 +215,7 @@ class TableFile extends TableAccess
      * For new records the user and timestamp will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -241,7 +242,7 @@ class TableFile extends TableAccess
      * **system_notifications_role**. The email contains the file name, the name of the current user,
      * the timestamp and the url to the folder of the file.
      * @return bool Returns **true** if the notification was sent
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception 'SYS_EMAIL_NOT_SEND'
      * @throws Exception
      */
     public function sendNotification(): bool

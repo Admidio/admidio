@@ -140,11 +140,11 @@ try {
     }
 
     if ($url === '') {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new \Admidio\Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     $gMessage->setYesNoButton('callUrlHideElement(\'' . $getElementId . '\', \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . $callbackFunction . ')');
     $gMessage->show($gL10n->get($text, array($getName, '')), $gL10n->get('SYS_NOTE'));
-} catch (AdmException|Exception $e) {
+} catch (Throwable $e) {
     $gMessage->show($e->getMessage());
 }

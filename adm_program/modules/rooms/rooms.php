@@ -9,6 +9,7 @@
  *
  ***********************************************************************************************
  */
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -16,7 +17,7 @@ try {
 
     // only administrators are allowed to manage rooms
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     $headline = $gL10n->get('SYS_ROOM_MANAGEMENT');
@@ -152,6 +153,6 @@ try {
 
     // show html of complete page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

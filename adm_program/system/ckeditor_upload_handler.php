@@ -12,6 +12,8 @@
  * id : ID of textarea, that had triggered the upload
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 try {
     require_once(__DIR__ . '/common.php');
     require(__DIR__ . '/login_valid.php');
@@ -20,16 +22,16 @@ try {
 
     // check if a file was really uploaded
     if (!file_exists($_FILES['upload']['tmp_name']) || !is_uploaded_file($_FILES['upload']['tmp_name'])) {
-        throw new AdmException('SYS_FILE_NOT_EXIST');
+        throw new Exception('SYS_FILE_NOT_EXIST');
     }
 
     // checks if the server settings for file_upload are set to ON
     if (!PhpIniUtils::isFileUploadEnabled()) {
-        throw new AdmException('SYS_SERVER_NO_UPLOAD');
+        throw new Exception('SYS_SERVER_NO_UPLOAD');
     }
 
     if (!FileSystemUtils::allowedFileExtension($_FILES['upload']['name'])) {
-        throw new AdmException('SYS_FILE_EXTENSION_INVALID');
+        throw new Exception('SYS_FILE_EXTENSION_INVALID');
     }
 
     // if necessary create the module folders in adm_my_files
@@ -71,7 +73,7 @@ try {
     // check if the file contains a valid image
     if (!getimagesize($fileNamePath)) {
         FileSystemUtils::deleteFileIfExists($fileNamePath);
-        throw new AdmException('SYS_PHOTO_FORMAT_INVALID');
+        throw new Exception('SYS_PHOTO_FORMAT_INVALID');
     }
 
     echo json_encode(
@@ -85,6 +87,6 @@ try {
             )
         )
     );
-} catch (RuntimeException|AdmException|Exception $exception) {
+} catch (Throwable $exception) {
     echo json_encode(array('error' => array('message' => $exception->getMessage())));
 }

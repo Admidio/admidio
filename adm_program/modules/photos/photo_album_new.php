@@ -12,6 +12,7 @@
  * parent_photo_uuid : UUID of the parent album in which the new album should be created
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -26,7 +27,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // create photo album object
@@ -45,7 +46,7 @@ try {
 
     // check if the user is allowed to edit this photo album
     if (!$photoAlbum->isEditable()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     /**
@@ -164,6 +165,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

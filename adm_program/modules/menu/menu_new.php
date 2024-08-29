@@ -12,6 +12,7 @@
  * menu_uuid: UUID of the menu entry that should be edited
  *
  ****************************************************************************/
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -23,7 +24,7 @@ try {
 
     // check rights
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     /**
@@ -226,6 +227,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

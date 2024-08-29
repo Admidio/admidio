@@ -13,6 +13,7 @@
  * file_uuid   :  UUID of the file that should be renamed
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -25,7 +26,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // check the rights of the current folder
@@ -34,7 +35,7 @@ try {
     $targetFolder->getFolderForDownload($getFolderUuid);
 
     if (!$targetFolder->hasUploadRight()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // set headline and description
@@ -82,6 +83,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $documentsFiles->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

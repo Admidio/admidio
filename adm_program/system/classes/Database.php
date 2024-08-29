@@ -25,7 +25,7 @@
  * {
  *     $gDb = new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
  * }
- * catch (AdmException $e)
+ * catch (Exception $e)
  * {
  *     $e->showText();
  * }
@@ -59,6 +59,7 @@
  * ```
  */
 use Ramsey\Uuid\Uuid;
+use Admidio\Exception;
 
 class Database
 {
@@ -68,60 +69,60 @@ class Database
     /**
      * @var string The database engine ("mysql", "pgsql")
      */
-    protected $engine;
+    protected string $engine;
     /**
      * @var string The host of the database server ("localhost", "127.0.0.1")
      */
-    protected $host;
+    protected string $host;
     /**
      * @var int|null The port of the database server. Set to "null" to use default. (Default: mysql=3306 , pgsql=5432)
      */
-    protected $port;
+    protected ?int $port;
     /**
      * @var string The name of the database
      */
-    protected $dbName;
+    protected string $dbName;
     /**
      * @var string|null The username to access the database
      */
-    protected $username;
+    protected ?string $username;
     /**
      * @var string|null The password to access the database
      */
-    protected $password;
+    protected ?string $password;
     /**
      * @var array Driver specific connection options
      */
-    protected $options;
+    protected array $options;
 
     /**
      * @var string The Data-Source-Name for the database connection
      */
-    protected $dsn;
+    protected string $dsn;
     /**
      * @var PDO The PDO object that handles the communication with the database.
      */
-    protected $pdo;
+    protected PDO $pdo;
     /**
      * @var PDOStatement The PDOStatement object which is needed to handle the return of a query.
      */
-    protected $pdoStatement;
+    protected PDOStatement $pdoStatement;
     /**
      * @var int The transaction marker. If this is > 0 than a transaction is open.
      */
-    protected $transactions = 0;
+    protected int $transactions = 0;
     /**
      * @var array<string,array<string,array<string,mixed>>> Array with arrays of every table with their structure
      */
-    protected $dbStructure = array();
+    protected array $dbStructure = array();
     /**
      * @var string The minimum required version of this database that is necessary to run Admidio.
      */
-    protected $minRequiredVersion = '';
+    protected string $minRequiredVersion = '';
     /**
      * @var string The name of the database e.g. 'MySQL'
      */
-    protected $databaseName = '';
+    protected string $databaseName = '';
 
     /**
      * Simple way to create a database object with the default Admidio globals
@@ -152,7 +153,7 @@ class Database
      * @param string|null $username Username to connect to database
      * @param string|null $password Password to connect to database
      * @param array  $options
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(string $engine, string $host, $port, string $dbName, $username = null, $password = null, array $options = array())
     {
@@ -192,7 +193,7 @@ class Database
      * in the current database. You should set the $gDebug on true so an exception will be thrown. Otherwise, the
      * function will only return false,
      * @return bool Return true if write access is set for the current database user.
-     * @throws AdmException
+     * @throws Exception
      */
     public function checkWriteAccess(): bool
     {
@@ -206,7 +207,7 @@ class Database
     }
 
     /**
-     * @throws AdmException
+     * @throws Exception
      */
     protected function connect()
     {
@@ -231,9 +232,9 @@ class Database
             );
             $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
 
-            throw new AdmException($e->getMessage()); // TODO: change exception class
+            throw new Exception($e->getMessage()); // TODO: change exception class
         } catch (Exception $e) {
-            throw new AdmException($e->getMessage()); // TODO: change exception class
+            throw new Exception($e->getMessage()); // TODO: change exception class
         }
     }
 
@@ -242,7 +243,7 @@ class Database
      * transaction counter is greater 1 than only the counter will be
      * decreased and no commit will be performed.
      * @return bool Returns **true** if the commit was successful otherwise **false**
-     * @throws AdmException
+     * @throws Exception
      * @see Database#startTransaction
      * @see Database#rollback
      */
@@ -296,7 +297,7 @@ class Database
      * @param string $sql A valid SQL select statement.
      * @param array $queryParameters Optional the parameters for the SQL statement.
      * @return array Returns array with all rows and a sub array with the columns of each row.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getArrayFromSql(string $sql, array $queryParameters = array()): array
     {
@@ -366,7 +367,7 @@ class Database
     /**
      * Get the minimum required version of the database that is necessary to run Admidio.
      * @return string Returns a string with the minimum required database version e.g. '5.0.1'
-     * @throws AdmException
+     * @throws Exception
      */
     public function getMinimumRequiredVersion(): string
     {
@@ -380,7 +381,7 @@ class Database
     /**
      * Get the name of the database that is running Admidio.
      * @return string Returns a string with the name of the database e.g. 'MySQL' or 'Postgres'
-     * @throws AdmException
+     * @throws Exception
      */
     public function getName(): string
     {
@@ -394,7 +395,7 @@ class Database
     /**
      * @param string $property Property name of the in use database config
      * @return string Returns the value of the chosen property
-     * @throws AdmException
+     * @throws Exception
      */
     protected function getPropertyFromDatabaseConfig(string $property): string
     {
@@ -402,8 +403,8 @@ class Database
             $xmlDatabases = new SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
             $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
             return (string)$node[0];
-        } catch (Exception $e) {
-            throw new AdmException($e->getMessage());
+        } catch (Throwable $e) {
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -437,7 +438,7 @@ class Database
      * Method get all columns and their properties from the database table.
      * @param string $table Name of the database table for which the columns-properties should be shown.
      * @return array<string,array<string,mixed>> Returns an array with column-names.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getTableColumnsProperties(string $table): array
     {
@@ -452,7 +453,7 @@ class Database
      * Method get all columns-names from the database table.
      * @param string $table Name of the database table for which the columns should be shown.
      * @return array<int,string> Returns an array with each column and their properties.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getTableColumns(string $table): array
     {
@@ -466,7 +467,7 @@ class Database
     /**
      * Get the version of the connected database.
      * @return string Returns a string with the database version e.g. '5.5.8'
-     * @throws AdmException
+     * @throws Exception
      */
     public function getVersion(): string
     {
@@ -507,7 +508,7 @@ class Database
      *       https://www.Postgres.org/docs/9.5/static/infoschema-columns.html
      *       https://wiki.Postgres.org/wiki/Retrieve_primary_key_columns
      *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
-     * @throws AdmException
+     * @throws Exception
      */
     private function loadTableColumnsProperties(string $table)
     {
@@ -591,7 +592,7 @@ class Database
      * Returns the ID of the unique id column of the last INSERT operation.
      * This method replace the old method Database#insert_id.
      * @return int Return ID value of the last INSERT operation.
-     * @throws AdmException
+     * @throws Exception
      * @see Database#insert_id
      */
     public function lastInsertId(): int
@@ -708,7 +709,7 @@ class Database
      *                         **false** no error will be shown and the script will be continued.
      * @return PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
-     * @throws AdmException
+     * @throws Exception
      */
     public function query(string $sql, bool $showError = true)
     {
@@ -762,7 +763,7 @@ class Database
      *                                     **false** no error will be shown and the script will be continued.
      * @return PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
-     * @throws AdmException
+     * @throws Exception
      */
     public function queryPrepared(string $sql, array $params = array(), bool $showError = true)
     {
@@ -823,7 +824,7 @@ class Database
      * If there is an open transaction than this method sends a rollback
      * to the database and will set the transaction counter to zero.
      * @return bool
-     * @throws AdmException
+     * @throws Exception
      * @see Database#startTransaction
      * @see Database#endTransaction
      */
@@ -896,6 +897,7 @@ class Database
     /**
      * Set connection specific options like UTF8 connection.
      * These options should always be set if Admidio connect to a database.
+     * @throws Exception
      */
     private function setConnectionOptions()
     {
@@ -933,7 +935,7 @@ class Database
      * @param string $errorMessage Optional an error message could be set and integrated in the output of the sql error.
      * @param int $code Optional a code for the error be set and integrated in the output of the sql error.
      * @return void Will exit the script and returns a html output with the error information.
-     * @throws AdmException
+     * @throws Exception
      */
     public function showError(string $errorMessage = '', int $code = 0)
     {
@@ -978,7 +980,7 @@ class Database
      * Start a transaction if no open transaction exists. If you call this multiple times
      * only 1 transaction will be open, and it will be closed after the last endTransaction was sent.
      * @return bool
-     * @throws AdmException
+     * @throws Exception
      * @see Database#endTransaction
      * @see Database#rollback
      */

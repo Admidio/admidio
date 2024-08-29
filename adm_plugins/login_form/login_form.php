@@ -216,6 +216,6 @@ try {
     }
 
     echo '</div>';
-} catch (AdmException|Exception $e) {
+} catch (Throwable $e) {
     echo $e->getMessage();
 }

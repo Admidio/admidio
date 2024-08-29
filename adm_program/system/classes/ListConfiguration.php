@@ -15,6 +15,7 @@
  * add new columns or remove columns. The object will only list columns of the configuration
  * which the current user is allowed to view.
  */
+use Admidio\Exception;
 class ListConfiguration extends TableLists
 {
     /**
@@ -45,7 +46,7 @@ class ListConfiguration extends TableLists
      * Constructor that will create an object to handle the configuration of lists.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $lstId The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(Database $database, $lstId = 0)
     {
@@ -65,7 +66,7 @@ class ListConfiguration extends TableLists
      * @param string $sort Optional the value **ASC** for ascending and **DESC** for descending.
      * @param string $filter Optional a filter for the values of that column.
      * @return bool Returns true if the field was added to the column list.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function addColumn($field, int $number = 0, string $sort = '', string $filter = ''): bool
@@ -137,7 +138,7 @@ class ListConfiguration extends TableLists
      * @param string $userUuid Uuid of the user for which the content should be converted. This is not the login user.
      * @param bool $setSortValue If set to **true** a special sort value for checkboxes will be set, when using server side processing set to **false**.
      * @return string Returns the converted content.
-     * @throws AdmException
+     * @throws Exception
      */
     public function convertColumnContentForOutput(int $columnNumber, string $format, string $content, string $userUuid, bool $setSortValue = true)
     {
@@ -289,7 +290,7 @@ class ListConfiguration extends TableLists
      * @param int $number
      * @param bool $all Define all columns to be deleted
      * @return bool
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function deleteColumn(int $number, bool $all = false): bool
@@ -325,7 +326,7 @@ class ListConfiguration extends TableLists
     /**
      * Returns an array with all alignments (center, left or right) from all columns of this list.
      * @return array Array with alignments from all columns of this list configuration.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getColumnAlignments(): array
@@ -381,7 +382,7 @@ class ListConfiguration extends TableLists
      * Returns an array with all column names of this list. The names within the array are translated
      * to the current language.
      * @return array Array with all column names of this list configuration.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getColumnNames(): array
@@ -457,7 +458,7 @@ class ListConfiguration extends TableLists
      * @param int $number The internal number of the column. The column number start with 1.
      *                    This will be the position of the column in the list.
      * @return TableAccess|null Returns a TableAccess object of the database table **adm_list_columns**.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getColumnObject(int $number): ?TableAccess
     {
@@ -572,7 +573,7 @@ class ListConfiguration extends TableLists
      *                                 - **endDate** : The end date if memberships that should be considered.The time period of
      *                                   the membership must be at least one day before this date.
      * @return string Returns a valid sql that represents all users with the columns of the list configuration.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getSQL(array $options = array()): string
@@ -865,7 +866,7 @@ class ListConfiguration extends TableLists
      * Read data of responsible columns and store in object. Only columns of profile fields which the current
      * user is allowed to view will be stored in the object. If only the role membership should be shown than
      * remove all columns except first name, last name and assignment timestamps.
-     * @throws AdmException
+     * @throws Exception
      */
     public function readColumns()
     {
@@ -880,7 +881,7 @@ class ListConfiguration extends TableLists
         $lscStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('lst_id')));
 
         if ($lscStatement->rowCount() === 0) {
-            throw new AdmException('List-Configuration was not found.');
+            throw new Exception('List-Configuration was not found.');
         }
 
         while ($lscRow = $lscStatement->fetch()) {
@@ -954,7 +955,7 @@ class ListConfiguration extends TableLists
      * The method will clear all column data of this object and restore all
      * columns from the database. Then the column number will be renewed for all columns.
      * This is in some cases a necessary fix if a column number was lost.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function repair()
@@ -981,7 +982,7 @@ class ListConfiguration extends TableLists
     /**
      * @param bool $updateFingerPrint
      * @return bool
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool

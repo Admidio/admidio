@@ -23,6 +23,8 @@
  * echo $gL10n->get('SYS_CREATED_BY_AND_AT', array('John Doe', '2019-04-13'));
  * ```
  */
+use Admidio\Exception;
+
 class Language
 {
     public const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
@@ -72,7 +74,6 @@ class Language
      * Language constructor.
      * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
      *                         If no language is set than the browser language will be determined.
-     * @throws Exception
      */
     public function __construct(string $language)
     {
@@ -199,7 +200,7 @@ class Language
      * // display a text with placeholders for individual content
      * echo $gL10n->get('SYS_CREATED_BY_AND_AT', array('John Doe', '2019-04-13'));
      * ```
-     * @throws AdmException
+     * @throws Exception
      */
     public function get(string $textId, array $params = array()): string
     {
@@ -242,7 +243,7 @@ class Language
     /**
      * Returns the path of a country file.
      * @return string
-     * @throws AdmException
+     * @throws Exception
      */
     private function getCountryFile(): string
     {
@@ -256,13 +257,13 @@ class Language
             return $langFileRef;
         }
 
-        throw new AdmException('Country files not found!');
+        throw new Exception('Country files not found!');
     }
 
     /**
      * Returns an array with all countries and their ISO codes (ISO 3166 ALPHA-3)
      * @return array<string,string> Array with all countries and their ISO codes (ISO 3166 ALPHA-3) e.g.: array('DEU' => 'Germany' ...)
-     * @throws AdmException
+     * @throws Exception
      */
     public function getCountries(): array
     {
@@ -278,7 +279,7 @@ class Language
      * identified by the ISO code (ISO 3166 ALPHA-3) e.g. 'DEU' or 'GBR' ...
      * @param string $countryIsoCode The three digits ISO code (ISO 3166 ALPHA-3) of the country where the name should be returned.
      * @return string Return the name of the country in the language of this object.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getCountryName(string $countryIsoCode): string
     {
@@ -287,13 +288,13 @@ class Language
         }
 
         if (!preg_match('/^[A-Z]{3}$/', $countryIsoCode)) {
-            throw new AdmException('SYS_COUNTRY_ISO');
+            throw new Exception('SYS_COUNTRY_ISO');
         }
 
         $countries = $this->getCountries();
 
         if (!array_key_exists($countryIsoCode, $countries)) {
-            throw new AdmException('Country-iso-code does not exist!');
+            throw new Exception('Country-iso-code does not exist!');
         }
 
         return $countries[$countryIsoCode];
@@ -304,19 +305,19 @@ class Language
      * by the name in the language of this object
      * @param string $countryName The name of the country in the language of this object.
      * @return string Return the three digits ISO code (ISO 3166 ALPHA-3) of the country.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getCountryIsoCode(string $countryName): string
     {
         if ($countryName === '') {
-            throw new AdmException('Invalid country name!');
+            throw new Exception('Invalid country name!');
         }
 
         $countries = $this->getCountries();
 
         $result = array_search($countryName, $countries, true);
         if ($result === false) {
-            throw new AdmException('Country name does not exist!');
+            throw new Exception('Country name does not exist!');
         }
 
         return $result;
@@ -419,15 +420,18 @@ class Language
     /**
      * Returns an array with all countries and their ISO codes
      * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
-     * @throws AdmException
+     * @throws Exception
      */
     private function loadCountries(): array
     {
         $countryFile = $this->getCountryFile();
 
         // read all countries from xml file
-        $countriesXml = new SimpleXMLElement($countryFile, 0, true);
-
+        try {
+            $countriesXml = new SimpleXMLElement($countryFile, 0, true);
+        } catch (\Exception $exception) {
+            throw new Exception($exception->getMessage());
+        }
         $countries = array();
 
         /**
@@ -449,7 +453,7 @@ class Language
      * @param string $text The translation string with the static placeholders
      * @param array<int,string> $params An array with values for each placeholder of the string.
      * @return string Returns the translation string with the replaced placeholders.
-     * @throws AdmException
+     * @throws Exception
      */
     private function prepareTextPlaceholders(string $text, array $params): string
     {
@@ -494,8 +498,7 @@ class Language
      * @param string $languageFilePath The path of the language file to search in.
      * @param string $textId The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
-     * @throws Exception
-     * @throws OutOfBoundsException
+     * @throws OutOfBoundsException|Exception
      */
     private function searchLanguageText(array &$xmlLanguageObjects, string $languageFilePath, string $textId): string
     {
@@ -507,7 +510,11 @@ class Language
                 throw new OutOfBoundsException('Language file does not exist!');
             }
 
-            $xmlLanguageObjects[$languageFilePath] = new SimpleXMLElement($languageFilePath, 0, true);
+            try {
+                $xmlLanguageObjects[$languageFilePath] = new SimpleXMLElement($languageFilePath, 0, true);
+            } catch (\Exception $exception) {
+                throw new Exception($exception->getMessage());
+            }
         }
 
         // text not in cache -> read from xml file in "Android Resource String" format
@@ -577,7 +584,7 @@ class Language
      * Checks if a given string is a translation-string-id and translate it
      * @param string $string The string to check for translation
      * @return string Returns the translated or original string
-     * @throws AdmException
+     * @throws Exception
      */
     public static function translateIfTranslationStrId(string $string): string
     {

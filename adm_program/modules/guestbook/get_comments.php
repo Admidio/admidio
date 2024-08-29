@@ -14,6 +14,7 @@
  *              true  - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -120,6 +121,6 @@ try {
             }
         }
     }
-} catch (AdmException|Exception $e) {
+} catch (Throwable $e) {
     $gMessage->show($e->getMessage());
 }

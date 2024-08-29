@@ -112,7 +112,7 @@ if ($mode === 'html') {
     if (isset($_SESSION['installationConnectDatabaseForm'])) {
         $formValues = $_SESSION['installationConnectDatabaseForm']->validate($_POST);
     } else {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // PHP-Check Regex-Patterns
@@ -129,13 +129,13 @@ if ($mode === 'html') {
 
     // Check DB-type
     if (!in_array($_SESSION['db_engine'], array(Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL), true)) {
-        throw new AdmException('INS_DATABASE_TYPE_INVALID');
+        throw new Exception('INS_DATABASE_TYPE_INVALID');
     }
 
     // Check host
     // TODO: unix_server is currently not supported
     if (filter_var($_SESSION['db_host'], FILTER_VALIDATE_DOMAIN) === false && filter_var($_SESSION['db_host'], FILTER_VALIDATE_IP) === false) {
-        throw new AdmException('INS_HOST_INVALID');
+        throw new Exception('INS_HOST_INVALID');
     }
 
     // Check port
@@ -144,17 +144,17 @@ if ($mode === 'html') {
     } elseif (is_numeric($_SESSION['db_port']) && (int) $_SESSION['db_port'] > 0 && (int) $_SESSION['db_port'] <= 65535) {
         $_SESSION['db_port'] = (int) $_SESSION['db_port'];
     } else {
-        throw new AdmException('INS_DATABASE_PORT_INVALID');
+        throw new Exception('INS_DATABASE_PORT_INVALID');
     }
 
     // Check database
     if (strlen($_SESSION['db_name']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_name']) !== 1) {
-        throw new AdmException('SYS_FIELD_INVALID_INPUT', array('SYS_DATABASE'));
+        throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_DATABASE'));
     }
 
     // Check user
     if (strlen($_SESSION['db_username']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_username']) !== 1) {
-        throw new AdmException('SYS_FIELD_INVALID_INPUT', array('SYS_USERNAME'));
+        throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_USERNAME'));
     }
 
     // Check password
@@ -165,7 +165,7 @@ if ($mode === 'html') {
 
     // Check prefix
     if (strlen($_SESSION['table_prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_SESSION['table_prefix']) !== 1) {
-        throw new AdmException('SYS_FIELD_INVALID_INPUT', array('INS_TABLE_PREFIX'));
+        throw new Exception('SYS_FIELD_INVALID_INPUT', array('INS_TABLE_PREFIX'));
     }
 
     // for security reasons only check database connection if no config file exists
@@ -176,14 +176,14 @@ if ($mode === 'html') {
             $db = new Database($_SESSION['db_engine'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_name'], $_SESSION['db_username'], $_SESSION['db_password']);
             $db->checkWriteAccess();
             $gDebug = false;
-        } catch (AdmException $e) {
-            throw new AdmException('SYS_DATABASE_NO_LOGIN', array($e->getMessage()));
+        } catch (Exception $e) {
+            throw new Exception('SYS_DATABASE_NO_LOGIN', array($e->getMessage()));
         }
 
         // check database version
         $message = \Admidio\Utils\Installation::checkDatabaseVersion($db);
         if ($message !== '') {
-            throw new AdmException($message);
+            throw new Exception($message);
         }
 
         // now check if a valid installation exists.
@@ -192,7 +192,7 @@ if ($mode === 'html') {
 
         if ($pdoStatement !== false && $pdoStatement->rowCount() > 0) {
             // valid installation exists -> exit installation
-            throw new AdmException('INS_INSTALLATION_EXISTS');
+            throw new Exception('INS_INSTALLATION_EXISTS');
         }
     }
 

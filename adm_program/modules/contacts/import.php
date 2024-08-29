@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -16,12 +17,12 @@ try {
 
     // only authorized users can import users
     if (!$gCurrentUser->editUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // check if file_uploads is set to ON in the current server settings...
     if (!PhpIniUtils::isFileUploadEnabled()) {
-        throw new AdmException('SYS_SERVER_NO_UPLOAD');
+        throw new Exception('SYS_SERVER_NO_UPLOAD');
     }
 
     $headline = $gL10n->get('SYS_IMPORT_CONTACTS');
@@ -213,6 +214,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

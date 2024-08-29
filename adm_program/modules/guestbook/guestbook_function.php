@@ -21,6 +21,8 @@
  *          moderate_comment - Moderate guestbook comment
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -31,7 +33,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('enable_guestbook_module') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('enable_guestbook_module') === 2) {
         // only logged-in users can access the module
         require(__DIR__ . '/../../system/login_valid.php');
@@ -51,7 +53,7 @@ try {
             require(__DIR__ . '/../../system/login_valid.php');
 
             if (!$gCurrentUser->commentGuestbookRight()) {
-                throw new AdmException('SYS_NO_RIGHTS');
+                throw new Exception('SYS_NO_RIGHTS');
             }
         }
     } elseif (in_array($getMode, array('edit_entry', 'delete_entry', 'edit_comment', 'delete_comment'), true)) {
@@ -59,7 +61,7 @@ try {
         require(__DIR__ . '/../../system/login_valid.php');
 
         if (!$gCurrentUser->editGuestbookRight()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -71,7 +73,7 @@ try {
 
             // Check if the entry belongs to the current organization
             if ((int)$guestbook->getValue('gbo_org_id') !== $gCurrentOrgId) {
-                throw new AdmException('SYS_NO_RIGHTS');
+                throw new Exception('SYS_NO_RIGHTS');
             }
         }
     } elseif (in_array($getMode, array('create_comment', 'edit_comment', 'moderate_comment', 'delete_comment'), true)) {
@@ -82,7 +84,7 @@ try {
 
             // Check if the entry belongs to the current organization
             if ((int)$gbComment->getValue('gbo_org_id') !== $gCurrentOrgId) {
-                throw new AdmException('SYS_NO_RIGHTS');
+                throw new Exception('SYS_NO_RIGHTS');
             }
         }
     }
@@ -100,18 +102,18 @@ try {
             if (!$gValidLogin && $gSettingsManager->getBool('enable_guestbook_captcha')) {
                 try {
                     FormValidation::checkCaptcha($_POST['captcha_code']);
-                } catch (AdmException $e) {
-                    $e->showHtml();
+                } catch (Exception $e) {
+                    $gMessage->show($e->getMessage());
                     // => EXIT
                 }
             }
         }
 
         if ((string)$_POST['gbo_name'] === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_NAME'));
         }
         if ((string)$_POST['gbo_text'] === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_TEXT'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_TEXT'));
         }
 
         // make html in description secure
@@ -123,9 +125,9 @@ try {
                 if (!$guestbook->setValue($key, $value)) {
                     // show error message if an invalid email address should be saved
                     if ($key === 'gbo_email') {
-                        throw new AdmException('SYS_EMAIL_INVALID', array('SYS_EMAIL'));
+                        throw new Exception('SYS_EMAIL_INVALID', array('SYS_EMAIL'));
                     } elseif ($key === 'gbo_homepage') {
-                        throw new AdmException('SYS_URL_INVALID_CHAR', array('SYS_WEBSITE'));
+                        throw new Exception('SYS_URL_INVALID_CHAR', array('SYS_WEBSITE'));
                     }
                 }
             }
@@ -148,7 +150,7 @@ try {
                 $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
                 if ($pdoStatement->fetchColumn() > 0) {
-                    throw new AdmException('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time')));
+                    throw new Exception('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time')));
                 }
             }
         }
@@ -173,7 +175,7 @@ try {
         if (((int)$gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
             || ((int)$gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight())) {
             $gMessage->setForwardUrl($url);
-            throw new AdmException('GBO_ENTRY_QUEUED');
+            throw new Exception('GBO_ENTRY_QUEUED');
         }
 
         admRedirect($url);
@@ -216,10 +218,10 @@ try {
         }
 
         if ((string)$_POST['gbc_name'] === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_NAME'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_NAME'));
         }
         if ((string)$_POST['gbc_text'] === '') {
-            throw new AdmException('SYS_FIELD_EMPTY', array('SYS_COMMENT'));
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_COMMENT'));
         }
 
         // make html in description secure
@@ -231,7 +233,7 @@ try {
                 if (!$gbComment->setValue($key, $value)) {
                     // Data was not transferred, output note
                     if ($key === 'gbc_email') {
-                        throw new AdmException('SYS_EMAIL_INVALID', array('SYS_EMAIL'));
+                        throw new Exception('SYS_EMAIL_INVALID', array('SYS_EMAIL'));
                     }
                 }
             }
@@ -256,7 +258,7 @@ try {
                 $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->getInt('flooding_protection_time'), $gbComment->getValue('gbc_ip_address')));
 
                 if ($pdoStatement->fetchColumn() > 0) {
-                    throw new AdmException('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time')));
+                    throw new Exception('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time')));
                 }
             }
         }
@@ -281,16 +283,16 @@ try {
         if (((int)$gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
             || ((int)$gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight())) {
             $gMessage->setForwardUrl($url);
-            throw new AdmException('GBO_ENTRY_QUEUED');
+            throw new Exception('GBO_ENTRY_QUEUED');
         }
 
         admRedirect($url);
         // => EXIT
     } else {
         // Falls der Mode unbekannt ist, ist natürlich auch Ende...
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if ($getMode === 'delete_entry' || $getMode === 'delete_comment') {
         echo $e->getMessage();
     } else {

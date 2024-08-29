@@ -1,14 +1,23 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+namespace Admidio\UserInterface;
+
+use Admidio\Exception;
+use Database;
+use DateTime;
+use HtmlPage;
+use Language;
+use PDO;
+use Securimage;
+use SecurityUtils;
+use SettingsManager;
+use SimpleXMLElement;
+use Smarty\Smarty;
+use HTMLPurifier;
+use HTMLPurifier_Config;
+use StringUtils;
 
 /**
- * Creates an Admidio specific form
+ * @brief Creates an Admidio specific form
  *
  * This class should be used to create a form based on a Smarty template. Therefore, a method for each
  * possible form field is available and could be customized through various parameters. If the form is fully
@@ -38,21 +47,13 @@
  *    $announcementEditForm = $_SESSION['announcementsEditForm'];
  *    $announcementEditForm->validate($_POST);
  * } else {
- *    throw new AdmException('SYS_INVALID_PAGE_VIEW');
+ *    throw new Exception('SYS_INVALID_PAGE_VIEW');
  * }
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-namespace Admidio\UserInterface;
-use HtmlPage;
-use Securimage;
-use SecurityUtils;
-use Smarty\Exception;
-use Smarty\Smarty;
-use AdmException;
-use HTMLPurifier;
-use HTMLPurifier_Config;
-use StringUtils;
-
 class Form
 {
     public const FIELD_DEFAULT  = 0;
@@ -91,7 +92,7 @@ class Form
     /**
      * @var string a 30 character long CSRF token
      */
-    protected $csrfToken = '';
+    protected string $csrfToken = '';
     /**
      * @var string Smarty template with necessary path
      */
@@ -128,7 +129,7 @@ class Form
      *                             of this form.
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
-     * @throws AdmException
+     * @throws Exception
      */
     public function __construct(string $id, string $template, string $action = '', HtmlPage $htmlPage = null, array $options = array())
     {
@@ -260,7 +261,7 @@ class Form
      * Add a captcha with an input field to the form. The captcha could be a picture with a character code
      * or a simple mathematical calculation that must be solved.
      * @param string $id ID of the captcha field. This will also be the name of the captcha field.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addCaptcha(string $id)
     {
@@ -388,7 +389,7 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
     {
@@ -576,7 +577,7 @@ class Form
      *                          is set as default and need not set with this parameter.
      *                        - **autocomplete** : Set the html attribute autocomplete to support this feature
      *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
-     * @throws AdmException
+     * @throws Exception
      */
     public function addInput(string $id, string $label, string $value, array $options = array())
     {
@@ -665,7 +666,7 @@ class Form
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
-            $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
+            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
 
             // now add a date and a time field to the form
             $attributes['dateValue'] = null;
@@ -691,19 +692,19 @@ class Form
             $optionsTime['type'] = 'time';
             $this->elements[$id . '_time'] = $optionsTime;
         } elseif ($optionsAll['type'] === 'date') {
-            $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
+            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
             if (!empty($value) && is_object($datetime))
                 $value = $datetime->format('Y-m-d');
             $attributes['pattern'] = '\d{4}-\d{2}-\d{2}';
         } elseif ($optionsAll['type'] === 'time') {
-            $datetime = \DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);
+            $datetime = DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);
             if (!empty($value) && is_object($datetime))
                 $value = $datetime->format('H:i');
         }
 
         if ($optionsAll['passwordStrength']) {
             $passwordStrengthLevel = 1;
-            if ($gSettingsManager instanceof \SettingsManager && $gSettingsManager->getInt('password_min_strength')) {
+            if ($gSettingsManager instanceof SettingsManager && $gSettingsManager->getInt('password_min_strength')) {
                 $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
             }
 
@@ -949,7 +950,7 @@ class Form
      *                          is set as default and need not set with this parameter.
      *                        - **autocomplete** : Set the html attribute autocomplete to support this feature
      *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
-     * @throws AdmException
+     * @throws Exception
      */
     public function addSelectBox(string $id, string $label, array $values, array $options = array())
     {
@@ -1000,19 +1001,19 @@ class Form
                 if (array_key_exists(2, $arrayValue)) {
                     $valuesArray[] = array(
                         'id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue[1] : $arrayValue[0]),
-                        'value' => \Language::translateIfTranslationStrId($arrayValue[1]),
-                        'group' => \Language::translateIfTranslationStrId($arrayValue[2])
+                        'value' => Language::translateIfTranslationStrId($arrayValue[1]),
+                        'group' => Language::translateIfTranslationStrId($arrayValue[2])
                     );
                 } else {
                     $valuesArray[] = array(
                         'id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue[1] : $arrayValue[0]),
-                        'value' => \Language::translateIfTranslationStrId($arrayValue[1])
+                        'value' => Language::translateIfTranslationStrId($arrayValue[1])
                     );
                 }
             } else {
                 $valuesArray[] = array(
                     'id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue : $arrayKey),
-                    'value' => \Language::translateIfTranslationStrId($arrayValue));
+                    'value' => Language::translateIfTranslationStrId($arrayValue));
             }
         }
 
@@ -1112,7 +1113,7 @@ class Form
      * of the third column changed a new optiongroup will be created.
      * @param string $id ID of the selectbox. This will also be the name of the selectbox.
      * @param string $label The label of the selectbox.
-     * @param \Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param array|string $sql Any SQL statement that return 2 columns. The first column will be the internal value of the
      *                               selectbox item and will be submitted with the form. The second column represents the
      *                               displayed value of the item. Each row of the result will be a new selectbox entry.
@@ -1155,9 +1156,9 @@ class Form
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show();
      * ```
-     * @throws AdmException
+     * @throws Exception
      */
-    public function addSelectBoxFromSql(string $id, string $label, \Database $database, $sql, array $options = array())
+    public function addSelectBoxFromSql(string $id, string $label, Database $database, $sql, array $options = array())
     {
         $selectBoxEntries = array();
 
@@ -1170,11 +1171,11 @@ class Form
         }
 
         // create array from sql result
-        while ($row = $pdoStatement->fetch(\PDO::FETCH_NUM)) {
+        while ($row = $pdoStatement->fetch(PDO::FETCH_NUM)) {
             // if result has 3 columns then create an array in array
             if (array_key_exists(2, $row)) {
                 // translate category name
-                $row[2] = \Language::translateIfTranslationStrId((string) $row[2]);
+                $row[2] = Language::translateIfTranslationStrId((string) $row[2]);
 
                 $selectBoxEntries[] = array($row[0], (string) $row[1], $row[2]);
             } else {
@@ -1225,27 +1226,27 @@ class Form
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
-     * @throws AdmException
+     * @throws Exception
      */
     public function addSelectBoxFromXml(string $id, string $label, string $xmlFile, string $xmlValueTag, string $xmlViewTag, array $options = array())
     {
         $selectBoxEntries = array();
 
         try {
-            $xmlRootNode = new \SimpleXMLElement($xmlFile, 0, true);
+            $xmlRootNode = new SimpleXMLElement($xmlFile, 0, true);
         } catch (\Exception $e) {
-            throw new AdmException($e->getMessage());
+            throw new Exception($e->getMessage());
         }
 
         /**
-         * @var \SimpleXMLElement $xmlChildNode
+         * @var SimpleXMLElement $xmlChildNode
          */
         foreach ($xmlRootNode->children() as $xmlChildNode) {
             $key   = '';
             $value = '';
 
             /**
-             * @var \SimpleXMLElement $xmlChildNode
+             * @var SimpleXMLElement $xmlChildNode
              */
             foreach ($xmlChildNode->children() as $xmlChildChildNode) {
                 if ($xmlChildChildNode->getName() === $xmlValueTag) {
@@ -1268,7 +1269,7 @@ class Form
      * You must define the category type (roles, events, links ...). All categories of this type will be shown.
      * @param string $id ID of the selectbox. This will also be the name of the selectbox.
      * @param string $label The label of the selectbox.
-     * @param \Database $database A Admidio database object that contains a valid connection to a database
+     * @param Database $database A Admidio database object that contains a valid connection to a database
      * @param string $categoryType Type of category ('EVT', 'LNK', 'ROL', 'USF') that should be shown.
      *                                 The type 'ROL' will ot list event role categories. Therefore, you need to set
      *                                 the type 'ROL_EVENT'. It's not possible to show role categories together with
@@ -1294,9 +1295,9 @@ class Form
      *                                 - **icon** : An icon can be set. This will be placed in front of the label.
      *                                 - **class** : An additional css classname. The class **admSelectbox**
      *                                   is set as default and need not set with this parameter.
-     * @throws AdmException
+     * @throws Exception
      */
-    public function addSelectBoxForCategories(string $id, string $label, \Database $database, string $categoryType, string $selectBoxModus, array $options = array())
+    public function addSelectBoxForCategories(string $id, string $label, Database $database, string $categoryType, string $selectBoxModus, array $options = array())
     {
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
@@ -1379,7 +1380,7 @@ class Form
         $sql = 'SELECT DISTINCT cat_id, cat_org_id, cat_uuid, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
-                 WHERE cat_id IN (' . \Database::getQmForValues($catIdParams) . ')
+                 WHERE cat_id IN (' . Database::getQmForValues($catIdParams) . ')
                    AND cat_type = ? -- $categoryType
                        ' . $sqlConditions . '
               ORDER BY cat_sequence ASC';
@@ -1424,7 +1425,7 @@ class Form
 
             }
             // if text is a translation-id then translate it
-            $categoriesArray[] = array($row['cat_uuid'], \Language::translateIfTranslationStrId($row['cat_name']));
+            $categoriesArray[] = array($row['cat_uuid'], Language::translateIfTranslationStrId($row['cat_name']));
         }
 
         // now call method to create select box from array
@@ -1474,7 +1475,7 @@ class Form
      *                         the result will be presented inline. If set to false a default
      *                         form submit will be done and a new page will be called.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      */
     public function addToHtmlPage(bool $ajaxSubmit = true)
     {
@@ -1493,8 +1494,8 @@ class Form
                 $this->htmlPage->assignSmartyVariable('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
                 $this->htmlPage->addHtmlByTemplate($this->template);
             }
-        } catch (Exception $e) {
-            throw new AdmException($e->getMessage());
+        } catch (\Smarty\Exception $e) {
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -1567,7 +1568,7 @@ class Form
      *                          that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
      * @param array $parameter If you need an additional parameters for the text you can set this parameter values within an array.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
-     * @throws AdmException
+     * @throws Exception
      */
     public static function getHelpTextIcon(string $string, array $parameter = array()): string
     {
@@ -1576,7 +1577,7 @@ class Form
         $html = '';
 
         if(strlen($string) > 0) {
-            if (\Language::isTranslationStringId($string)) {
+            if (Language::isTranslationStringId($string)) {
                 $text  = $gL10n->get($string, $parameter);
             } else {
                 $text  = $string;
@@ -1584,7 +1585,7 @@ class Form
 
             $html = '<i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
             data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
-            data-bs-content="' . \SecurityUtils::encodeHTML($text) . '"></i>';
+            data-bs-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
         }
         return $html;
     }
@@ -1596,8 +1597,8 @@ class Form
      * be forced by the parameter **$newToken**
      * @param bool $newToken If set to true, always a new token will be generated.
      * @return string Returns the CSRF token
-     * @throws AdmException
-     * @throws AdmException
+     * @throws Exception
+     * @throws Exception
      */
     public function getCsrfToken(bool $newToken = false): string
     {
@@ -1616,7 +1617,7 @@ class Form
      * from editor fields and html free content of all other fields.
      * @param array &$fieldValues Array with field name as key and field value as array value.
      * @return array Returns an array with all valid fields and their values of this form
-     * @throws AdmException
+     * @throws Exception
      */
     public function validate(array &$fieldValues): array
     {
@@ -1625,17 +1626,17 @@ class Form
         if (isset($fieldValues['admidio-csrf-token'])) {
             // check the CSRF token of the form against the session token
             if ($fieldValues['admidio-csrf-token'] !== $this->csrfToken) {
-                throw new AdmException('Invalid or missing CSRF token!');
+                throw new Exception('Invalid or missing CSRF token!');
             }
             unset($fieldValues['admidio-csrf-token']);
         } else {
-            throw new AdmException('No CSRF token provided.');
+            throw new Exception('No CSRF token provided.');
         }
 
         foreach ($fieldValues as $key => $value) {
             // security check if the form payload includes unexpected fields
             if (!array_key_exists($key, $this->elements)) {
-                throw new AdmException('Invalid payload of the form!');
+                throw new Exception('Invalid payload of the form!');
             }
         }
 
@@ -1645,15 +1646,15 @@ class Form
                 if (isset($fieldValues[$element['id']])) {
                     if ((is_array($fieldValues[$element['id']]) && count($fieldValues[$element['id']]) === 0)
                         || (!is_array($fieldValues[$element['id']]) && (string)$fieldValues[$element['id']] === '')) {
-                        throw new AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                        throw new Exception('SYS_FIELD_EMPTY', array($element['label']));
                     }
                 } elseif ($element['type'] === 'file') {
                     // file field has no POST variable but the FILES array should be filled
                     if (count($_FILES) === 0 || strlen($_FILES['userfile']['tmp_name'][0]) === 0) {
-                        throw new AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                        throw new Exception('SYS_FIELD_EMPTY', array($element['label']));
                     }
                 } else {
-                    throw new AdmException('SYS_FIELD_EMPTY', array($element['label']));
+                    throw new Exception('SYS_FIELD_EMPTY', array($element['label']));
                 }
             } elseif (isset($element['property']) && $element['property'] === $this::FIELD_DISABLED) {
                 // no value should be set if a field is marked as disabled
@@ -1689,17 +1690,17 @@ class Form
                             break;
                         case 'email':
                             if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'email')) {
-                                throw new AdmException('SYS_EMAIL_INVALID', array($element['label']));
+                                throw new Exception('SYS_EMAIL_INVALID', array($element['label']));
                             }
                             break;
                         case 'number':
                             if (!is_numeric($fieldValues[$element['id']]) || $fieldValues[$element['id']] < 0) {
-                                throw new AdmException('SYS_FIELD_INVALID_INPUT', array($element['label']));
+                                throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
                             }
                             break;
                         case 'url':
                             if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
-                                throw new AdmException('SYS_URL_INVALID_CHAR', array($element['label']));
+                                throw new Exception('SYS_URL_INVALID_CHAR', array($element['label']));
                             }
                             break;
                     }
@@ -1714,7 +1715,7 @@ class Form
      * @param string $value Value of the captcha input field.
      * @return true Returns **true** if the value matches the captcha image.
      *              Otherwise, throw an exception SYS_CAPTCHA_CODE_INVALID.
-     *@throws AdmException SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
+     *@throws Exception SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
      */
     public function validateCaptcha(string $value): bool
     {
@@ -1727,9 +1728,9 @@ class Form
         }
 
         if ($gSettingsManager->getString('captcha_type') === 'calc') {
-            throw new AdmException('SYS_CAPTCHA_CALC_CODE_INVALID');
+            throw new Exception('SYS_CAPTCHA_CALC_CODE_INVALID');
         }
 
-        throw new AdmException('SYS_CAPTCHA_CODE_INVALID');
+        throw new Exception('SYS_CAPTCHA_CODE_INVALID');
     }
 }

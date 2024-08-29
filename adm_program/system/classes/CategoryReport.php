@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
+use Admidio\Exception;
 class CategoryReport
 {
     public $headerData = array();          ///< Array mit allen Spaltenueberschriften
@@ -55,7 +55,7 @@ class CategoryReport
     /**
      * Erzeugt die Arrays listData und headerData fuer den Report
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function generate_listData()
@@ -491,7 +491,7 @@ class CategoryReport
      * Funktion speichert das Konfigurationsarray
      * @param array $arrConfiguration
      * @return  array das Konfigurationsarray
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function saveConfigArray(array $arrConfiguration): array

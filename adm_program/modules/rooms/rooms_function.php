@@ -14,6 +14,8 @@
  *             delete - delete room
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
@@ -23,7 +25,7 @@ try {
 
     // only authorized users are allowed to edit the rooms
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     $room = new TableRooms($gDb);
@@ -62,11 +64,11 @@ try {
         if ($statement->rowCount() === 0) {
             $room->delete();
         } else {
-            throw new AdmException('SYS_ROOM_COULD_NOT_BE_DELETED');
+            throw new Exception('SYS_ROOM_COULD_NOT_BE_DELETED');
         }
         echo json_encode(array('status' => 'success'));
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

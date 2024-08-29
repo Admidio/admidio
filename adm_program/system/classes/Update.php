@@ -7,6 +7,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Exception;
 use Admidio\Utils\Installation;
 
 /**
@@ -16,7 +17,7 @@ class Update
 {
     /**
      * checks if login is required and if so, if it is valid
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function checkLogin()
@@ -39,7 +40,7 @@ class Update
 
         if ($userStatement->rowCount() === 0) {
             // show message that username or password is incorrect
-            throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
+            throw new Exception('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
             // => EXIT
         } else {
             // create object with current user field structure und user object
@@ -55,7 +56,7 @@ class Update
 
     /**
      * @param string $installedDbVersion
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function doAdmidioUpdate(string $installedDbVersion)
@@ -119,7 +120,7 @@ class Update
     }
 
     /**
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function updateOrgPreferences()

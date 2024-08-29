@@ -9,6 +9,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 class TableFolder extends TableAccess
 {
     /**
@@ -107,7 +108,7 @@ class TableFolder extends TableAccess
      * subfolders of this folder will be added recursively with this method. The configured rights for viewing and
      * uploading will be adapted to the subfolders.
      * @param string $newFolderFileName Name of the folder or file that should be added to the database.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function addFolderOrFileToDatabase(string $newFolderFileName)
@@ -166,7 +167,7 @@ class TableFolder extends TableAccess
      *                                     e.g. **folder_view** or **folder_upload**
      * @param array<int,int> $rolesArray Array with all role IDs that should be added.
      * @param bool $recursive If set to **true** than the rights will be set recursive to all subfolders
-     * @throws AdmException
+     * @throws Exception
      */
     public function addRolesOnFolder(string $rolesRightNameIntern, array $rolesArray, bool $recursive = true)
     {
@@ -200,7 +201,7 @@ class TableFolder extends TableAccess
      * After that the class will be initialized.
      * @param int $folderId
      * @return bool **true** if no error occurred
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function delete(int $folderId = 0): bool
@@ -279,7 +280,7 @@ class TableFolder extends TableAccess
      * @param array<int,int> $rolesArray
      * @param bool $recursive If set to **true** than the rights will be set recursive to all subfolders
      * @param int $folderId The folder id of the subfolder if this method is called recursive
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     private function editRolesOnFolder(string $mode, string $rolesRightNameIntern, array $rolesArray, bool $recursive, int $folderId = 0)
@@ -318,7 +319,7 @@ class TableFolder extends TableAccess
      * Set the public flag to a folder and all sub-folders.
      * @param bool $publicFlag If set to **1** then all users could see this folder.
      * @param int $folderId The id of the folder where the public flag should be set.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function editPublicFlagOnFolder(bool $publicFlag, int $folderId = 0)
@@ -417,10 +418,10 @@ class TableFolder extends TableAccess
 
     /**
      * Reads the folder recordset from database table **adm_folders** and throws an
-     * AdmException if the user has no right to see the folder or the folder id doesn't exist.
+     * Exception if the user has no right to see the folder or the folder id doesn't exist.
      * @param string $folderUuid The UUID of the folder. If the UUID is empty then the root folder will be shown.
-     * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
-     * @throws AdmException Exception with the relevant message text. If message text = 'LOGIN' than
+     * @return true Returns **true** if everything is ok otherwise an Exception is thrown.
+     * @throws Exception Exception with the relevant message text. If message text = 'LOGIN' than
      *                      login page should be shown.
      * @throws Exception
      */
@@ -444,7 +445,7 @@ class TableFolder extends TableAccess
 
         // Check if a dataset is found
         if ((int)$this->getValue('fol_id') === 0) {
-            throw new AdmException('SYS_FOLDER_NOT_FOUND', array($folderUuid));
+            throw new Exception('SYS_FOLDER_NOT_FOUND', array($folderUuid));
         }
 
         // If current user has download-admin-rights => allow
@@ -465,12 +466,12 @@ class TableFolder extends TableAccess
 
         $this->clear();
         if ($gValidLogin) {
-            throw new AdmException('SYS_FOLDER_NO_RIGHTS');
+            throw new Exception('SYS_FOLDER_NO_RIGHTS');
         } else {
             if ($folderUuid !== '') {
-                throw new AdmException('LOGIN');
+                throw new Exception('LOGIN');
             } else {
-                throw new AdmException('SYS_FOLDER_NO_FILES_VISITOR');
+                throw new Exception('SYS_FOLDER_NO_FILES_VISITOR');
             }
         }
     }
@@ -552,7 +553,7 @@ class TableFolder extends TableAccess
 
     /**
      * @return array<int,array<string,mixed>> All sub-folders with their properties
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getSubfoldersWithProperties(): array
@@ -661,7 +662,7 @@ class TableFolder extends TableAccess
      * adopted recursively from the destination folder.
      * @param string $destFolderUUID UUID of the destination folder to which this folder is to be moved.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws RuntimeException
      * @throws UnexpectedValueException
      * @throws Exception
@@ -698,7 +699,7 @@ class TableFolder extends TableAccess
      * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
@@ -724,7 +725,7 @@ class TableFolder extends TableAccess
      *                                     e.g. **folder_view** or **folder_upload**
      * @param array<int,int> $rolesArray Array with all role IDs that should be removed.
      * @param bool $recursive If set to **true** than the rights will be set recursive to all subfolders.
-     * @throws AdmException
+     * @throws Exception
      */
     public function removeRolesOnFolder(string $rolesRightNameIntern, array $rolesArray, bool $recursive = true)
     {
@@ -736,7 +737,7 @@ class TableFolder extends TableAccess
      * @param string $newName
      * @param string $newPath
      * @param int $folderId
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function rename(string $newName, string $newPath, int $folderId = 0)
@@ -773,7 +774,7 @@ class TableFolder extends TableAccess
      * For new records the user, organization and timestamp will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {

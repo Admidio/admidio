@@ -26,6 +26,7 @@
  * view      - Content output in different views like 'detail', 'list'
  *             (Default: according to preferences)
  *****************************************************************************/
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -44,7 +45,7 @@ try {
 
     // check if module is active
     if ((int)$gSettingsManager->get('events_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('events_module_enabled') === 2) {
         // module only for valid Users
         require(__DIR__ . '/../../system/login_valid.php');
@@ -823,6 +824,6 @@ try {
         $page->addHtml(admFuncGeneratePagination($baseUrl, $eventsResult['totalCount'], $eventsResult['limit'], $getStart));
     }
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

@@ -29,6 +29,7 @@
  */
 
 use Smarty\Smarty;
+use Admidio\Exception;
 
 class HtmlPage
 {
@@ -102,7 +103,7 @@ class HtmlPage
      * @param string $id ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function __construct(string $id, string $headline = '')
@@ -333,7 +334,7 @@ class HtmlPage
      * current theme. The all cacheable and compilable files will be stored in the templates folder
      * of **adm_my_files**.
      * @return Smarty Returns the initialized Smarty object.
-     * @throws AdmException
+     * @throws Exception
      */
     public static function createSmartyObject(): Smarty
     {
@@ -352,7 +353,7 @@ class HtmlPage
             $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'SmartyPlugins::loadAdmidioPlugin');
             return $smartyObject;
         } catch (\Smarty\Exception $e) {
-            throw new AdmException($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -569,7 +570,7 @@ class HtmlPage
         } catch (\Smarty\Exception $exception) {
             echo $exception->getMessage();
             echo '<br />Please check if the theme folder "<strong>' . $gSettingsManager->getString('theme') . '</strong>" exists within the folder "adm_themes".';
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }

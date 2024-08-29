@@ -44,10 +44,12 @@
  * search[value] - Global search value.
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/../../system/login_valid.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require_once(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
     $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
@@ -336,7 +338,7 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (Exception|AdmException $e) {
+} catch (Exception $e) {
     $jsonArray['error'] = $e->getMessage();
     echo json_encode($jsonArray);
     exit();

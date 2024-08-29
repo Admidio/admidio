@@ -35,6 +35,7 @@
  * $announcement->save();
  * ```
  */
+use Admidio\Exception;
 class TableAnnouncement extends TableAccess
 {
     /**
@@ -139,7 +140,7 @@ class TableAnnouncement extends TableAccess
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -147,7 +148,7 @@ class TableAnnouncement extends TableAccess
         global $gCurrentUser;
 
         if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('ann_cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)) {
-            throw new AdmException('Announcement could not be saved because you are not allowed to edit announcements of this category.');
+            throw new Exception('Announcement could not be saved because you are not allowed to edit announcements of this category.');
         }
 
         return parent::save($updateFingerPrint);
@@ -159,7 +160,7 @@ class TableAnnouncement extends TableAccess
      * **system_notifications_role**. The email contains the announcement title, the name of the current user,
      * the timestamp and the url to this announcement.
      * @return bool Returns **true** if the notification was sent
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception 'SYS_EMAIL_NOT_SEND'
      * @throws Exception
      */
     public function sendNotification(): bool
@@ -199,7 +200,7 @@ class TableAnnouncement extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -211,11 +212,11 @@ class TableAnnouncement extends TableAccess
                 $category = new TableCategory($this->db);
                 if(is_int($newValue)) {
                     if(!$category->readDataById($newValue)) {
-                        throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
+                        throw new Exception('No Category with the given id '. $newValue. ' was found in the database.');
                     }
                 } else {
                     if(!$category->readDataByUuid($newValue)) {
-                        throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
+                        throw new Exception('No Category with the given uuid '. $newValue. ' was found in the database.');
                     }
                     $newValue = $category->getValue('cat_id');
                 }

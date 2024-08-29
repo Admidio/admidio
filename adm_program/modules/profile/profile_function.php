@@ -20,11 +20,13 @@
  * member_uuid : UUID of role membership that should be edited
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/roles_functions.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require_once(__DIR__ . '/roles_functions.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
     $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'uuid');
@@ -43,7 +45,7 @@ try {
         // Export vCard of user
 
         if (!$gCurrentUser->hasRightViewProfile($user)) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $filename = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
@@ -71,7 +73,7 @@ try {
 
             echo 'done';
         } else {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     } elseif ($getMode === 'remove_former_membership') {
         // Remove former membership of role
@@ -120,25 +122,25 @@ try {
 
         // check if user has the right to edit this membership
         if (!$role->allowedToAssignMembers($gCurrentUser)) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // Check the start date
         $startDate = DateTime::createFromFormat('Y-m-d', $postMembershipStart);
         if ($startDate === false) {
-            throw new AdmException('SYS_DATE_INVALID', array('SYS_START', $gSettingsManager->getString('system_date')));
+            throw new Exception('SYS_DATE_INVALID', array('SYS_START', $gSettingsManager->getString('system_date')));
         }
 
         // If set, the end date is checked
         if ($postMembershipEnd !== '') {
             $endDate = DateTime::createFromFormat('Y-m-d', $postMembershipEnd);
             if ($endDate === false) {
-                throw new AdmException('SYS_DATE_INVALID', array('SYS_END', $gSettingsManager->getString('system_date')));
+                throw new Exception('SYS_DATE_INVALID', array('SYS_END', $gSettingsManager->getString('system_date')));
             }
 
             // If start-date is later/bigger or on same day than end-date we show an error
             if ($startDate > $endDate) {
-                throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
+                throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
             }
         } else {
             $postMembershipEnd = DATE_MAX;
@@ -149,7 +151,7 @@ try {
 
         echo 'success';
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if (in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership'))) {
         echo $e->getMessage();
     } else {

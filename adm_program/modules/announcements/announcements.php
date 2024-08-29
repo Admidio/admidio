@@ -18,6 +18,7 @@
  *             if no date information is delivered
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -33,7 +34,7 @@ try {
     // check if module is enabled
     if ((int)$gSettingsManager->get('announcements_module_enabled') === 0) {
         // module is disabled
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('announcements_module_enabled') === 2) {
         // Access only with valid login
         require(__DIR__ . '/../../system/login_valid.php');
@@ -104,9 +105,9 @@ try {
     // add filter navbar
     $page->addJavascript(
         '
-    $("#cat_uuid").change(function() {
-        $("#navbar_filter_form").submit();
-    });',
+        $("#cat_uuid").change(function() {
+            $("#navbar_filter_form").submit();
+        });',
         true
     );
 
@@ -204,6 +205,6 @@ try {
 
     // show html of complete page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

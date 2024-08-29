@@ -17,6 +17,7 @@
  *            delete - Delete relation type
  *
  *****************************************************************************/
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -27,11 +28,11 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete')));
 
     if (!$gSettingsManager->getBool('contacts_user_relations_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     $relationType = new TableUserRelationType($gDb);
@@ -101,6 +102,6 @@ try {
         echo json_encode(array('status' => 'success'));
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

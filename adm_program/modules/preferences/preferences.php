@@ -21,6 +21,7 @@
  * panel    : The name of the preferences panel that should be shown or saved.
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 use Admidio\UserInterface\Preferences;
 
@@ -38,7 +39,7 @@ try {
 
     // only administrators are allowed to view, edit organization preferences or create new organizations
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     /**
@@ -88,7 +89,7 @@ try {
                 case 'Common':
                     if (!StringUtils::strIsValidFolderName($_POST['theme'])
                         || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html')) {
-                        throw new AdmException('ORG_INVALID_THEME');
+                        throw new Exception('ORG_INVALID_THEME');
                     }
                     break;
 
@@ -103,7 +104,7 @@ try {
                 case 'RegionalSettings':
                     if (!StringUtils::strIsValidFolderName($_POST['system_language'])
                         || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml')) {
-                        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
+                        throw new Exception('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
                     }
                     break;
 
@@ -221,12 +222,12 @@ try {
             // check if organization shortname exists
             $organization = new Organization($gDb, $formValues['orgaShortName']);
             if ($organization->getValue('org_id') > 0) {
-                throw new AdmException('INS_ORGA_SHORTNAME_EXISTS', array($formValues['orgaShortName']));
+                throw new Exception('INS_ORGA_SHORTNAME_EXISTS', array($formValues['orgaShortName']));
             }
 
             // allow only letters, numbers and special characters like .-_+@
             if (!StringUtils::strValidCharacters($formValues['orgaShortName'], 'noSpecialChar')) {
-                throw new AdmException('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
+                throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
             }
 
             // set execution time to 2 minutes because we have a lot to do
@@ -345,7 +346,7 @@ try {
         case 'backup':
             // function not available for other databases except MySQL
             if (DB_ENGINE !== Database::PDO_ENGINE_MYSQL) {
-                throw new AdmException('SYS_MODULE_DISABLED');
+                throw new Exception('SYS_MODULE_DISABLED');
             }
 
             $dump = new DatabaseDump($gDb);
@@ -354,7 +355,7 @@ try {
             $dump->deleteDumpFile();
             break;
     }
-} catch (AdmException|Exception $exception) {
+} catch (Exception|Exception $exception) {
     if (in_array($getMode, array('save', 'new_org_create'))) {
         echo json_encode(array('status' => 'error', 'message' => $exception->getMessage()));
     } elseif ($getMode === 'html_form') {

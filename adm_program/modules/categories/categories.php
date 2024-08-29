@@ -20,11 +20,12 @@
  *         EVT = Calendars for events
  *
  ****************************************************************************/
-
-require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'EVT', 'AWA')));
 
@@ -35,7 +36,7 @@ try {
         || ($getType === 'USF' && !$gCurrentUser->editUsers())
         || ($getType === 'EVT' && !$gCurrentUser->editEvents())
         || ($getType === 'AWA' && !$gCurrentUser->editUsers())) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // set module headline
@@ -90,12 +91,12 @@ try {
             break;
 
         default:
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // check if the current user has the right to
     if (!Component::isAdministrable($component)) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // read all administrator roles
@@ -276,6 +277,6 @@ try {
 
     $page->addHtml($categoriesOverview->show());
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

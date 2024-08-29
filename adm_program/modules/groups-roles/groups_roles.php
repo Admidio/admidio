@@ -19,6 +19,7 @@
  *      - permissions : Show permissions of all groups and roles in list view
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -32,7 +33,7 @@ try {
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // set headline
@@ -52,7 +53,7 @@ try {
 
     if ($getShow === 'permissions') {
         if (!$gCurrentUser->manageRoles()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $headline .= ' - ' . $gL10n->get('SYS_PERMISSIONS');
@@ -184,6 +185,6 @@ try {
     }
 
     $groupsRoles->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

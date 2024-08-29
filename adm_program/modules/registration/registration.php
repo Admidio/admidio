@@ -14,12 +14,14 @@
  * mode      : show_similar - Show users with similar names with the option to assign the registration to them.
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // check if module is active
     if (!$gSettingsManager->getBool('registration_enable_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Initialize and check the parameters
@@ -34,7 +36,7 @@ try {
             // => EXIT
         } elseif (!$gCurrentUser->approveUsers()) {
             // Only Users with the right "approve users" can work with registrations, otherwise exit.
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     } else {
         // user has clicked the link in his registration email, and now we must check if it's a valid request
@@ -60,7 +62,7 @@ try {
                 // => EXIT
             }
         } else {
-            throw new AdmException('SYS_REGISTRATION_VALIDATION_FAILED');
+            throw new Exception('SYS_REGISTRATION_VALIDATION_FAILED');
         }
     }
 
@@ -90,6 +92,6 @@ try {
         $page->createContentAssignUser($registrationUser, true);
         $page->show();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

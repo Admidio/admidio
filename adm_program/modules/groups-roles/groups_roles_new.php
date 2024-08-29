@@ -12,6 +12,7 @@
  * role_uuid: UUID of role, that should be edited
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -27,7 +28,7 @@ try {
 
     // only users with the special right are allowed to manage roles
     if (!$gCurrentUser->manageRoles()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getRoleUuid !== '') {
@@ -47,12 +48,12 @@ try {
 
         // check if the role belongs to the current organization
         if ((int)$role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // administrator role could only be created or edited by administrators
         if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // hidden roles can also see hidden categories
@@ -385,6 +386,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

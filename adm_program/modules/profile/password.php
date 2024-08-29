@@ -14,6 +14,7 @@
  *           change : Change password in database
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -37,7 +38,7 @@ try {
             || (!$gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)
             || ($gCurrentUser->isAdministrator() && $user->getValue('usr_login_name') === '')
             || ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gSettingsManager->getBool('system_notifications_enabled')))) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getMode === 'change') {
@@ -75,16 +76,16 @@ try {
                         echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PASSWORD_CHANGED')));
                         exit();
                     } else {
-                        throw new AdmException('SYS_PASSWORD_OLD_WRONG');
+                        throw new Exception('SYS_PASSWORD_OLD_WRONG');
                     }
                 } else {
-                    throw new AdmException('SYS_PASSWORDS_NOT_EQUAL');
+                    throw new Exception('SYS_PASSWORDS_NOT_EQUAL');
                 }
             } else {
-                throw new AdmException('SYS_PASSWORD_NOT_STRONG_ENOUGH');
+                throw new Exception('SYS_PASSWORD_NOT_STRONG_ENOUGH');
             }
         } else {
-            throw new AdmException('SYS_PASSWORD_LENGTH');
+            throw new Exception('SYS_PASSWORD_LENGTH');
         }
     } elseif ($getMode === 'html') {
 
@@ -153,7 +154,7 @@ try {
         $gCurrentSession->addFormObject($form);
         echo $smarty->fetch('modules/profile.password.edit.tpl');
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if ($getMode === 'change') {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

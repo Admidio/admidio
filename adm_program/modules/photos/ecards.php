@@ -14,6 +14,7 @@
  * user_uuid:  (optional) UUID of the user who should receive the ecard
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -22,9 +23,9 @@ try {
 
     // check if the photo module is enabled and eCard is enabled
     if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 2) {
         // only logged-in users can access the module
         require(__DIR__ . '/../../system/login_valid.php');
@@ -56,12 +57,12 @@ try {
 
     // check if user has right to view the album
     if (!$photoAlbum->isVisible()) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '') {
         // the logged-in user has no valid mail address stored in his profile, which can be used as sender
-        throw new AdmException('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
+        throw new Exception('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
     }
 
     if ($getUserUuid !== '') {
@@ -71,12 +72,12 @@ try {
 
         // check if the current user has the right communicate with that member
         if ((!$gCurrentUser->editUsers() && !isMember((int)$user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0) {
-            throw new AdmException('SYS_USER_ID_NOT_FOUND');
+            throw new Exception('SYS_USER_ID_NOT_FOUND');
         }
 
         // check if the member has a valid email address
         if (!StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email')) {
-            throw new AdmException('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
+            throw new Exception('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         }
     }
 
@@ -122,7 +123,7 @@ try {
     $templates = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 
     if (count($templates) === 0) {
-        throw new AdmException('SYS_TEMPLATE_FOLDER_OPEN');
+        throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
     }
     // create new array without file extension in visual value
     $newTemplateArray = array();
@@ -236,6 +237,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (AdmException|Exception|RuntimeException $e) {
+} catch (Exception|Exception|RuntimeException $e) {
     $gMessage->show($e->getMessage());
 }

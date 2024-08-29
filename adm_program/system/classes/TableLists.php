@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 
 class TableLists extends TableAccess
 {
@@ -28,7 +29,7 @@ class TableLists extends TableAccess
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
      * @throws Exception
-     * @throws AdmException SYS_ERROR_DELETE_DEFAULT_LIST
+     * @throws Exception SYS_ERROR_DELETE_DEFAULT_LIST
      */
     public function delete(): bool
     {
@@ -38,13 +39,13 @@ class TableLists extends TableAccess
 
         // if this list is the default configuration of a module than it couldn't be deleted
         if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration')) {
-            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_GROUPS_ROLES')));
+            throw new Exception('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_GROUPS_ROLES')));
         }
         if ($lstId === $gSettingsManager->getInt('events_list_configuration')) {
-            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_EVENTS')));
+            throw new Exception('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_EVENTS')));
         }
         if ($lstId === $gSettingsManager->getInt('contacts_list_configuration')) {
-            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_CONTACTS')));
+            throw new Exception('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_CONTACTS')));
         }
 
         $this->db->startTransaction();
@@ -69,7 +70,7 @@ class TableLists extends TableAccess
      * Per default the organization, user and timestamp will be set.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {

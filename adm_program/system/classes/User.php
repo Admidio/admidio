@@ -12,6 +12,7 @@
 /**
  * Handles all the user data and the rights. This is used for the current login user and for other users of the database.
  */
+use Admidio\Exception;
 class User extends TableAccess
 {
     public const MAX_INVALID_LOGINS = 3;
@@ -142,7 +143,7 @@ class User extends TableAccess
     /**
      * Assign the user to all roles that have set the flag **rol_default_registration**.
      * These flag should be set if you want that every new user should get this role.
-     * @throws AdmException
+     * @throws Exception
      */
     public function assignDefaultRoles()
     {
@@ -223,7 +224,7 @@ class User extends TableAccess
      * @param string|null $right The database column name of the right that should be checked. If this param
      *                      is not set then only the arrays are filled.
      * @return bool Return true if a special right should be checked and the user has this right.
-     * @throws AdmException
+     * @throws Exception
      */
     public function checkRolesRight(string $right = null): bool
     {
@@ -394,7 +395,7 @@ class User extends TableAccess
      *                                     the new algorithm. If set to false the password will not be rehashed.
      * @param bool $isAdministrator If set to true check if user is admin of organization.
      * @return true Return true if login was successful
-     * @throws AdmException in case of errors. exception->text contains a string with the reason why the login failed.
+     * @throws Exception in case of errors. exception->text contains a string with the reason why the login failed.
      * @throws Exception
      *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
      *                                       SYS_LOGIN_NOT_ACTIVATED
@@ -407,27 +408,27 @@ class User extends TableAccess
         global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($this->hasMaxInvalidLogins()) {
-            throw new AdmException('SYS_LOGIN_MAX_INVALID_LOGIN');
+            throw new Exception('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
 
         if (!PasswordUtils::verify($password, $this->getValue('usr_password'))) {
             $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
 
-            throw new AdmException($incorrectLoginMessage);
+            throw new Exception($incorrectLoginMessage);
         }
 
         if (!$this->getValue('usr_valid')) {
-            throw new AdmException('SYS_LOGIN_NOT_ACTIVATED');
+            throw new Exception('SYS_LOGIN_NOT_ACTIVATED');
         }
 
         $orgLongName = $this->getOrgLongname();
 
         if (!$this->isMemberOfOrganization()) {
-            throw new AdmException('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName));
+            throw new Exception('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName));
         }
 
         if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization()) {
-            throw new AdmException('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName));
+            throw new Exception('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName));
         }
 
         if ($updateHash) {
@@ -463,7 +464,7 @@ class User extends TableAccess
      * Additional to the parent method the user profile fields and all
      * user rights and role memberships will be initialized
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function clear()
@@ -492,7 +493,7 @@ class User extends TableAccess
      * Also, a notification that the user was deleted will be sent if notification is enabled.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function delete(): bool
@@ -706,7 +707,7 @@ class User extends TableAccess
      * Creates an array with all categories of one type where the user has the right to edit them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to edit them
-     * @throws AdmException
+     * @throws Exception
      */
     public function getAllEditableCategories(string $categoryType): array
     {
@@ -752,7 +753,7 @@ class User extends TableAccess
      * Creates an array with all categories of one type where the user has the right to view them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to view them
-     * @throws AdmException
+     * @throws Exception
      */
     public function getAllVisibleCategories(string $categoryType): array
     {
@@ -1093,7 +1094,7 @@ class User extends TableAccess
     /**
      * Checks if the maximum of invalid logins is reached.
      * @return bool Returns true if the maximum of invalid logins is reached.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     private function hasMaxInvalidLogins(): bool
@@ -1325,7 +1326,7 @@ class User extends TableAccess
     /**
      * Handles the incorrect given login password.
      * @return string Return string with the reason why the login failed.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     private function handleIncorrectPasswordLogin(): string
@@ -1389,7 +1390,7 @@ class User extends TableAccess
     /**
      * Checks if the user is assigned to the role **Administrator**
      * @return bool Returns **true** if the user is a member of the role **Administrator**
-     * @throws AdmException
+     * @throws Exception
      */
     public function isAdministrator(): bool
     {
@@ -1401,7 +1402,7 @@ class User extends TableAccess
     /**
      * Checks if this user is an admin of the organization that is set in this class.
      * @return bool Return true if user is admin of this organization.
-     * @throws AdmException
+     * @throws Exception
      */
     private function isAdminOfOrganization(): bool
     {
@@ -1503,7 +1504,7 @@ class User extends TableAccess
      * found than the default values of all profile fields will be set.
      * @param int $id Unique id of the user that should be read
      * @return bool Returns **true** if one record is found
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function readDataById(int $id): bool
@@ -1527,7 +1528,7 @@ class User extends TableAccess
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
@@ -1551,7 +1552,7 @@ class User extends TableAccess
      * Rehashes the password of the user if necessary.
      * @param string $password The password for the current user. This should not be encoded.
      * @return bool Returns true if password was rehashed.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     private function rehashIfNecessary(string $password): bool
@@ -1589,7 +1590,7 @@ class User extends TableAccess
 
     /**
      * Reset the count of invalid logins. After that it's possible for the user to try another login.
-     * @throws AdmException
+     * @throws Exception
      */
     public function resetInvalidLogins()
     {
@@ -1607,7 +1608,7 @@ class User extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -1619,7 +1620,7 @@ class User extends TableAccess
         // if current user is not new and is not allowed to edit this user
         // and saveChangesWithoutRights isn't true then throw exception
         if (!$this->saveChangesWithoutRights && $usrId > 0 && !$gCurrentUser->hasRightEditProfile($this)) {
-            throw new AdmException('The profile data of user ' . $this->getValue('FIRST_NAME') . ' '
+            throw new Exception('The profile data of user ' . $this->getValue('FIRST_NAME') . ' '
                 . $this->getValue('LAST_NAME') . ' could not be saved because you don\'t have the right to do this.');
         }
 
@@ -1743,7 +1744,7 @@ class User extends TableAccess
      * If email support is enabled and the current user is administrator or has the right to approve new
      * registrations than this method will create a new password and send this to the user.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function sendNewPassword()
@@ -1765,7 +1766,7 @@ class User extends TableAccess
             $sysMail->setVariable(1, $password);
             $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $this);
         } else {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -1773,7 +1774,7 @@ class User extends TableAccess
      * Set the default values that are stored in the profile fields configuration to each profile field.
      * A default value will only be set if **usf_default_value** is not NULL.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setDefaultValues()
@@ -1807,7 +1808,7 @@ class User extends TableAccess
      * @param string $newPassword The new value that should be stored in the database field
      * @param bool $doHashing Should the password get hashed before inserted. Default is true
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setPassword(string $newPassword, bool $doHashing = true): bool
@@ -1858,13 +1859,13 @@ class User extends TableAccess
 
     /**
      * Set a value for a profile field. The value will be checked against typical conditions of the data type and
-     * also against the custom regex if this is set. If an invalid value is set an AdmException will be thrown.
+     * also against the custom regex if this is set. If an invalid value is set an Exception will be thrown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
      * @param mixed $fieldValue The new value that should be stored in the profile field.
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                                not be checked.
      * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
-     * @throws AdmException If an invalid value should be set.
+     * @throws Exception If an invalid value should be set.
      *                      exception->text contains a string with the reason why the login failed.
      */
     public function setProfileFieldsValue(string $fieldNameIntern, $fieldValue, bool $checkValue = true): bool
@@ -1891,7 +1892,7 @@ class User extends TableAccess
      * // reads data of adm_user_fields
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
@@ -1996,7 +1997,7 @@ class User extends TableAccess
      * Update login data for this user. These are timestamps of last login and reset count
      * and timestamp of invalid logins.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function updateLoginData()

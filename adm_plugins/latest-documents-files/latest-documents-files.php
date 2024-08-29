@@ -107,7 +107,7 @@ try {
                     if ($countVisibleDownloads === $plgCountFiles) {
                         break;
                     }
-                } catch (AdmException $e) {
+                } catch (Exception $e) {
                     // do nothing and go to next file
                 }
             }
@@ -129,6 +129,6 @@ try {
         }
     }
     echo '</div>';
-} catch (AdmException|Exception $e) {
+} catch (Throwable $e) {
     echo $e->getMessage();
 }

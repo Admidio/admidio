@@ -13,6 +13,7 @@
  *           false  : Show active and inactive contacts of all organizations in database
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -124,6 +125,6 @@ try {
 
     $page->addHtml($contactsTable->show());// show html of complete page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

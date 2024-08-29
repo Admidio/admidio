@@ -19,6 +19,7 @@
  * passwordStrength()   shows the strength of the given password
  * costBenchmark()      run a benchmark to get the best fitting cost value
  */
+use Admidio\Exception;
 final class PasswordUtils
 {
     public const HASH_ALGORITHM_DEFAULT = 'DEFAULT';
@@ -47,7 +48,7 @@ final class PasswordUtils
      * @param float $maxTime The maximum time the hashing process should take in seconds
      * @param string $password The password to test
      * @return array<string,int|float|array<string,int>> Returns an array with the maximum tested cost with the required time
-     * @throws AdmException
+     * @throws Exception
      */
     public static function costBenchmark(string $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array(), float $maxTime = 0.2, string $password = '123456abcdef_-#:'): ?array
     {
@@ -95,7 +96,7 @@ final class PasswordUtils
      * @param string $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
      * @param array<string,int> $options The hash-options array
      * @return string|false Returns the hashed password or false if an error occurs
-     * @throws AdmException
+     * @throws Exception
      */
     public static function hash(string $password, string $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
     {

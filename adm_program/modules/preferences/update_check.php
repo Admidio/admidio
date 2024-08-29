@@ -13,6 +13,8 @@
  *                2 - Show results of update check
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -20,7 +22,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1, 'directOutput' => true));
 
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     /**
@@ -158,6 +160,6 @@ try {
         </p>
         <strong>' . $versionsText . '</strong>';
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage();
 }

@@ -19,10 +19,10 @@
  * try {
  *    if($bla == 1)
  *    {
- *        throw new AdmException(SYS_NOT_VALID_DATE_FORMAT);
+ *        throw new Exception(SYS_NOT_VALID_DATE_FORMAT);
  *    }
  *    ...
- * } catch(AdmException $e) {
+ * } catch(Exception $e) {
  *    // show html message
  *    $e->showHtml();
  *
@@ -30,6 +30,7 @@
  *    $e->showText();
  * }
  * ```
+ * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
  */
 class AdmException extends Exception
 {
@@ -38,7 +39,8 @@ class AdmException extends Exception
      * of open database translation will be done.
      * @param string $message Translation **id** or simple text that should be shown when exception is caught
      * @param array<int,string> $params Optional parameter for language string of translation id
-     * @throws AdmException
+     * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
      */
     public function __construct($message, $params = array())
     {
@@ -54,7 +56,7 @@ class AdmException extends Exception
             $message = $gL10n->get($message, $params);
         }
 
-        $gLogger->notice('AdmException is thrown!', array('message' => $message));
+        $gLogger->notice('Exception is thrown!', array('message' => $message));
 
         parent::__construct($message);
     }
@@ -64,6 +66,7 @@ class AdmException extends Exception
      * if during the exception processing a new better message should be set.
      * @param string $message Translation **id** that should be shown when exception is caught
      * @param array<int,string> $params  Optional parameter for language string of translation id
+     * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
      */
     public function setNewMessage(string $message, array $params = array())
     {
@@ -79,6 +82,7 @@ class AdmException extends Exception
 
     /**
      * Show html message window with translated message
+     * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
      */
     public function showHtml()
     {
@@ -96,6 +100,7 @@ class AdmException extends Exception
 
     /**
      * Simply return the plain translated error text without any markup and stop the script.
+     * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
      */
     public function showText()
     {

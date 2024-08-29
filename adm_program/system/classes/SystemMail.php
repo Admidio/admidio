@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
+use Admidio\Exception;
 class SystemMail extends Email
 {
     /**
@@ -53,7 +53,7 @@ class SystemMail extends Email
      * @param string $systemMailId Unique name of the corresponding system mail, corresponds to adm_texts.txt_name
      * @param User $user User object for which the data is then read and placed in the appropriate placeholders.
      * @return string Returns the text for the email with the replaced placeholders.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getMailText(string $systemMailId, User $user): string
@@ -135,7 +135,7 @@ class SystemMail extends Email
      * @param string $systemMailId Unique name of the corresponding system mail, corresponds to adm_texts.txt_name
      * @param User $user User object for which the data is then read and placed in the appropriate placeholders.
      * @return true Return **true** if the mail was sent and false if it should not be sent because of preferences.
-     * @throws AdmException SYS_EMAIL_NOT_SEND
+     * @throws Exception SYS_EMAIL_NOT_SEND
      * @throws Exception
      */
     public function sendSystemMail(string $systemMailId, User $user): bool
@@ -155,7 +155,7 @@ class SystemMail extends Email
                     return true;
                 } else {
                     // if something went wrong then throw an exception with the error message
-                    throw new AdmException('SYS_EMAIL_NOT_SEND', array($user->getValue('EMAIL'), $returnMessage));
+                    throw new Exception('SYS_EMAIL_NOT_SEND', array($user->getValue('EMAIL'), $returnMessage));
                 }
             }
         }

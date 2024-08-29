@@ -31,6 +31,7 @@
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  * ```
  */
+use Admidio\Exception;
 class Message
 {
     /**
@@ -115,7 +116,7 @@ class Message
      * Alternatively there is the possibility to display only the message text.
      * @param string $content The message text that should be shown. The content could have html.
      * @param string $headline Optional a headline for the message. Default will be SYS_NOTE.
-     * @throws AdmException
+     * @throws Exception
      */
     public function show(string $content, string $headline = '')
     {
@@ -176,7 +177,7 @@ class Message
             try {
                 $smarty->display('system/message_modal.tpl');
             } catch (\Smarty\Exception|Exception $exception) {
-                throw new AdmException($exception->getMessage());
+                throw new Exception($exception->getMessage());
             }
         } else {
             // show an Admidio html page with complete theme header and body

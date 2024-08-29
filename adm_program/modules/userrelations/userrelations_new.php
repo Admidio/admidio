@@ -12,6 +12,7 @@
  * user_uuid : UUID of the first user in the new relation
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -22,30 +23,30 @@ try {
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
 
     if (!$gSettingsManager->getBool('contacts_user_relations_enabled')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // only users who can edit all users are allowed to create user relations
     if (!$gCurrentUser->editUsers()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getUserUuid === '') {
-        throw new AdmException('SYS_NO_ENTRY');
+        throw new Exception('SYS_NO_ENTRY');
     }
 
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
     if ($user->isNewRecord()) {
-        throw new AdmException('SYS_NO_ENTRY');
+        throw new Exception('SYS_NO_ENTRY');
     }
 
     $sql = 'SELECT COUNT(urt_id) AS count FROM ' . TBL_USER_RELATION_TYPES;
     $relationsStatement = $gDb->queryPrepared($sql);
 
     if ((int)$relationsStatement->fetchColumn() === 0) {
-        throw new AdmException('REL_NO_RELATION_TYPES_FOUND');
+        throw new Exception('REL_NO_RELATION_TYPES_FOUND');
     }
 
     $headline = $gL10n->get('SYS_CREATE_RELATIONSHIP');
@@ -181,6 +182,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

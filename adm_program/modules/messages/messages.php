@@ -9,6 +9,8 @@
  *
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 try {
@@ -20,7 +22,7 @@ try {
 
     // check if the call of the page was allowed
     if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBool('enable_mail_module')) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Initialize and check the parameters
@@ -98,7 +100,7 @@ try {
 
     // add form to html page and show page
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if ($getMsgUuid !== '') {
         echo $e->getMessage();
     } else {

@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 
 class TableMenu extends TableAccess
 {
@@ -105,7 +106,7 @@ class TableMenu extends TableAccess
      * Change the internal sequence of this category. It can be moved one place up or down
      * @param string $mode This could be **UP** or **DOWN**.
      * @return bool Return true if the sequence of the menu could be changed, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function moveSequence(string $mode): bool
@@ -176,7 +177,7 @@ class TableMenu extends TableAccess
      * Per default all columns of adm_categories will be read and stored in the object.
      * @param array $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
-     * @throws AdmException
+     * @throws Exception
      */
     public function readDataByColumns(array $columnArray): bool
     {
@@ -198,7 +199,7 @@ class TableMenu extends TableAccess
      * If a new record is inserted than the next free sequence will be determined.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -240,7 +241,7 @@ class TableMenu extends TableAccess
      * @param mixed  $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     *@throws AdmException
+     *@throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -248,7 +249,7 @@ class TableMenu extends TableAccess
             if ($columnName === 'men_icon' && $newValue !== '') {
                 // check if bootstrap icons syntax is used
                 if (preg_match('/[^a-z0-9-]/', $newValue)) {
-                    throw new AdmException('SYS_INVALID_ICON_NAME');
+                    throw new Exception('SYS_INVALID_ICON_NAME');
                 }
             }
 

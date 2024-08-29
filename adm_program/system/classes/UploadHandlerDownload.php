@@ -23,7 +23,7 @@
  *                                                  'image_versions' => array()));
  * ```
  */
-
+use Admidio\Exception;
 class UploadHandlerDownload extends UploadHandler
 {
     /**
@@ -50,7 +50,7 @@ class UploadHandlerDownload extends UploadHandler
             try {
                 // check filesize against module settings
                 if ($file->size > $gSettingsManager->getInt('documents_files_max_upload_size') * 1024 * 1024) {
-                    throw new AdmException('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('documents_files_max_upload_size')));
+                    throw new Exception('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('documents_files_max_upload_size')));
                 }
 
                 // check filename and throw exception if something is wrong
@@ -71,14 +71,14 @@ class UploadHandlerDownload extends UploadHandler
                 $newFile->setValue('fil_counter', 0);
 
                 if (!$newFile->allowedFileExtension()) {
-                    throw new AdmException('SYS_FILE_EXTENSION_INVALID');
+                    throw new Exception('SYS_FILE_EXTENSION_INVALID');
                 }
 
                 if($newFile->save()) {
                     // Notification an email for new or changed entries to all members of the notification role
                     $newFile->sendNotification();
                 }
-            } catch (AdmException $e) {
+            } catch (Exception $e) {
                 try {
                     FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
                 } catch (RuntimeException $exception) {
@@ -109,7 +109,7 @@ class UploadHandlerDownload extends UploadHandler
         try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_REQUEST['admidio-csrf-token']);
-        } catch (AdmException $exception) {
+        } catch (Exception $exception) {
             $file->error = $exception->getMessage();
             // => EXIT
         }

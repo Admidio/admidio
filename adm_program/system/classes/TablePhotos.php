@@ -13,6 +13,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\Exception;
 class TablePhotos extends TableAccess
 {
     /**
@@ -256,7 +257,7 @@ class TablePhotos extends TableAccess
      * The current organization will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -273,7 +274,7 @@ class TablePhotos extends TableAccess
      * **system_notifications_role**. The email contains the photo album title, the name of the current user,
      * the timestamp and the url to this photo album.
      * @return bool Returns **true** if the notification was sent
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception 'SYS_EMAIL_NOT_SEND'
      * @throws Exception
      */
     public function sendNotification(): bool

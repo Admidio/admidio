@@ -18,6 +18,7 @@
  *        delete    : delete current photo in database
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -30,7 +31,7 @@ try {
 
     // checks if the server settings for file_upload are set to ON
     if (!PhpIniUtils::isFileUploadEnabled()) {
-        throw new AdmException('SYS_SERVER_NO_UPLOAD');
+        throw new Exception('SYS_SERVER_NO_UPLOAD');
     }
 
     // read user data and show error if user doesn't exists
@@ -39,7 +40,7 @@ try {
 
     // checks whether the user has the necessary rights to change the corresponding profile
     if (!$gCurrentUser->hasRightEditProfile($user)) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // when saving folders, check whether the subfolder in adm_my_files exists with the corresponding rights
@@ -49,7 +50,7 @@ try {
     }
 
     if ((int)$user->getValue('usr_id') === 0) {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     if ($getMode === 'save') {
@@ -199,24 +200,24 @@ try {
 
         // File size
         if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
-            throw new AdmException('SYS_PHOTO_FILE_TO_LARGE', array(round(PhpIniUtils::getUploadMaxSize() / 1024 ** 2)));
+            throw new Exception('SYS_PHOTO_FILE_TO_LARGE', array(round(PhpIniUtils::getUploadMaxSize() / 1024 ** 2)));
         }
 
         // check if a file was really uploaded
         if (!file_exists($_FILES['userfile']['tmp_name'][0]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][0])) {
-            throw new AdmException('SYS_NO_PICTURE_SELECTED');
+            throw new Exception('SYS_NO_PICTURE_SELECTED');
         }
 
         // File ending
         $imageProperties = getimagesize($_FILES['userfile']['tmp_name'][0]);
         if ($imageProperties === false || !in_array($imageProperties['mime'], array('image/jpeg', 'image/png'), true)) {
-            throw new AdmException('SYS_PHOTO_FORMAT_INVALID');
+            throw new Exception('SYS_PHOTO_FORMAT_INVALID');
         }
 
         // Resolution control
         $imageDimensions = $imageProperties[0] * $imageProperties[1];
         if ($imageDimensions > SystemInfoUtils::getProcessableImageSize()) {
-            throw new AdmException('SYS_PHOTO_RESOLUTION_TO_LARGE', array(round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2)));
+            throw new Exception('SYS_PHOTO_RESOLUTION_TO_LARGE', array(round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2)));
         }
 
         // Adjust photo to appropriate size
@@ -261,7 +262,7 @@ try {
         $page->assignSmartyVariable('urlNextPage', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'save', 'user_uuid' => $getUserUuid)));
         $page->show();
     }
-} catch (AdmException|Exception|RuntimeException $e) {
+} catch (Exception|Exception|RuntimeException $e) {
     if (in_array($getMode, array('upload', 'delete'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

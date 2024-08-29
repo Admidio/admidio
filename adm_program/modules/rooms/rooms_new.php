@@ -12,6 +12,7 @@
  * room_uuid : UUID of room, that should be shown
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -23,7 +24,7 @@ try {
 
     // only authorized users are allowed to edit the rooms
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // Create room object
@@ -79,6 +80,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

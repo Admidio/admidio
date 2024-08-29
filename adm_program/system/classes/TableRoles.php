@@ -15,6 +15,7 @@
  * For this purpose the information of the role as well as the associated category
  * are read out. But only the role data are written
  */
+use Admidio\Exception;
 class TableRoles extends TableAccess
 {
     public const ROLE_GROUP = 0;
@@ -50,7 +51,7 @@ class TableRoles extends TableAccess
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $rolId The recordset of the role with this id will be loaded.
      *                           If id isn't set than an empty object of the table is created.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function __construct(Database $database, int $rolId = 0)
@@ -71,13 +72,13 @@ class TableRoles extends TableAccess
     /**
      * Set the current role active.
      * Event roles could not be set active.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function activate(): void
     {
         if ($this->type === self::ROLE_EVENT) {
-            throw new AdmException('Event role cannot be set to inactive.');
+            throw new Exception('Event role cannot be set to inactive.');
         }
         $this->toggleValid(true);
     }
@@ -206,15 +207,15 @@ class TableRoles extends TableAccess
     /**
      * Set the current role inactive.
      * Administrator and event roles could not be set inactive.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function deactivate(): void
     {
         if ($this->getValue('rol_administrator')) {
-            throw new AdmException('Administrator role cannot be set to inactive.');
+            throw new Exception('Administrator role cannot be set to inactive.');
         } elseif ($this->type === self::ROLE_EVENT) {
-            throw new AdmException('Event role cannot be set to inactive.');
+            throw new Exception('Event role cannot be set to inactive.');
         }
         $this->toggleValid(false);
     }
@@ -224,7 +225,7 @@ class TableRoles extends TableAccess
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
      * @throws Exception
-     * @throws AdmException
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -244,16 +245,16 @@ class TableRoles extends TableAccess
             $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, $GLOBALS['gCurrentOrgId']));
 
             if ((int)$countRolesStatement->fetchColumn() === 0) {
-                throw new AdmException('SYS_DELETE_NO_DEFAULT_ROLE', array($this->getValue('rol_name'), $gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION')));
+                throw new Exception('SYS_DELETE_NO_DEFAULT_ROLE', array($this->getValue('rol_name'), $gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION')));
             }
         }
 
         // users are not allowed to delete system roles
         if ((int)$this->getValue('rol_system') === 1) {
-            throw new AdmException('SYS_DELETE_SYSTEM_ROLE', array($this->getValue('rol_name')));
+            throw new Exception('SYS_DELETE_SYSTEM_ROLE', array($this->getValue('rol_name')));
         }
         if ((int)$this->getValue('rol_administrator') === 1) {
-            throw new AdmException('SYS_CANT_DELETE_ROLE', array($gL10n->get('SYS_ADMINISTRATOR')));
+            throw new Exception('SYS_CANT_DELETE_ROLE', array($gL10n->get('SYS_ADMINISTRATOR')));
         }
 
         $this->db->startTransaction();
@@ -365,7 +366,7 @@ class TableRoles extends TableAccess
      *                                * 'database' : returns the value that is stored in database with no format applied
      * @return int|float|string|bool Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -407,7 +408,7 @@ class TableRoles extends TableAccess
      * the view properties of the role will be checked. If it's an event role than
      * we also check if the user is a member of the roles that could participate at the event.
      * @return bool Return true if the current user is allowed to view this role
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function isVisible(): bool
@@ -472,7 +473,7 @@ class TableRoles extends TableAccess
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -485,7 +486,7 @@ class TableRoles extends TableAccess
         if (!$this->saveChangesWithoutRights
             && $this->type === TableRoles::ROLE_GROUP
             && !in_array((int)$this->getValue('rol_cat_id'), $gCurrentUser->getAllEditableCategories('ROL'), true)) {
-            throw new AdmException('Role could not be saved because you are not allowed to edit roles of this category.');
+            throw new Exception('Role could not be saved because you are not allowed to edit roles of this category.');
         }
 
         $returnValue = parent::save($updateFingerPrint);
@@ -514,7 +515,7 @@ class TableRoles extends TableAccess
      *                          If set to null than the leader flag will not be changed if a membership already exists
      *                          and set to false if it doesn't exist.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setMembership(int $userId, string $startDate, string $endDate, ?bool $leader = null)
@@ -528,9 +529,9 @@ class TableRoles extends TableAccess
         // but don't change their own membership, because there must be at least one administrator
         if ((bool)$this->getValue('rol_administrator') === true) {
             if (!$gCurrentUser->isAdministrator()) {
-                throw new AdmException('Members to administrator role could only be assigned by administrators!');
+                throw new Exception('Members to administrator role could only be assigned by administrators!');
             } elseif ($gCurrentUser->isAdministrator() && $userId === $gCurrentUserId) {
-                throw new AdmException('You cannot edit your own membership in an administrator role!');
+                throw new Exception('You cannot edit your own membership in an administrator role!');
             }
         }
 
@@ -683,7 +684,7 @@ class TableRoles extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
@@ -695,11 +696,11 @@ class TableRoles extends TableAccess
                 $category = new TableCategory($this->db);
                 if (is_int($newValue)) {
                     if (!$category->readDataById($newValue)) {
-                        throw new AdmException('No Category with the given id ' . $newValue . ' was found in the database.');
+                        throw new Exception('No Category with the given id ' . $newValue . ' was found in the database.');
                     }
                 } else {
                     if (!$category->readDataByUuid($newValue)) {
-                        throw new AdmException('No Category with the given uuid ' . $newValue . ' was found in the database.');
+                        throw new Exception('No Category with the given uuid ' . $newValue . ' was found in the database.');
                     }
                     $newValue = $category->getValue('cat_id');
                 }
@@ -717,7 +718,7 @@ class TableRoles extends TableAccess
                 $pdoStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('rol_id'), $GLOBALS['gCurrentOrgId']));
 
                 if ((int)$pdoStatement->fetchColumn() === 0) {
-                    throw new AdmException('SYS_NO_DEFAULT_ROLE', array($gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION')));
+                    throw new Exception('SYS_NO_DEFAULT_ROLE', array($gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION')));
                 }
             }
 
@@ -750,7 +751,7 @@ class TableRoles extends TableAccess
      * *                          If set to null than the leader flag will not be changed if a membership already exists
      * *                          and set to false if it doesn't exist.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function startMembership(int $userId, ?bool $leader = null)
@@ -769,7 +770,7 @@ class TableRoles extends TableAccess
             }
             $this->db->endTransaction();
         } else {
-            throw new AdmException('SYS_ROLE_MAX_MEMBERS', array($this->getValue('rol_name')));
+            throw new Exception('SYS_ROLE_MAX_MEMBERS', array($this->getValue('rol_name')));
         }
     }
 
@@ -778,7 +779,7 @@ class TableRoles extends TableAccess
      * yesterday.
      * @param int $userId ID if the user who should get the membership to this role.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function stopMembership(int $userId)
@@ -807,7 +808,7 @@ class TableRoles extends TableAccess
     /**
      * Toggle the valid status of a role. The role could be set to inactive or active again.
      * @param bool $status Valid status that should be set.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     private function toggleValid(bool $status): void
@@ -825,7 +826,7 @@ class TableRoles extends TableAccess
             // rights have been changed if they were members of this role
             $gCurrentSession->reloadAllSessions();
         } else {
-            throw new AdmException('Role ' . $this->getValue('rol_name') . ' is a system role and could not be set inactive!');
+            throw new Exception('Role ' . $this->getValue('rol_name') . ' is a system role and could not be set inactive!');
         }
     }
 }

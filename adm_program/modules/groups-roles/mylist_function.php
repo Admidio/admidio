@@ -17,6 +17,8 @@
  * name      : (optional) Name of the list that should be used to save list
  ***********************************************************************************************
  */
+use Admidio\Exception;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
@@ -30,18 +32,18 @@ try {
     if (!$gSettingsManager->getBool('groups_roles_enable_module')
         || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
         || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator())) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // At least one field should be assigned
     if (!isset($_POST['column1']) || strlen($_POST['column1']) === 0) {
-        throw new AdmException('SYS_FIELD_EMPTY', array('1. ' . $gL10n->get('SYS_COLUMN')));
+        throw new Exception('SYS_FIELD_EMPTY', array('1. ' . $gL10n->get('SYS_COLUMN')));
     }
 
     // role must be filled when displaying
     if ($getMode === 'save_temporary'
         && (!isset($_POST['sel_roles']) || !is_array($_POST['sel_roles']))) {
-        throw new AdmException('SYS_FIELD_EMPTY', array('SYS_ROLE'));
+        throw new Exception('SYS_FIELD_EMPTY', array('SYS_ROLE'));
     }
 
     if (!isset($_POST['sel_relation_types'])) {
@@ -57,10 +59,10 @@ try {
     if ($getMode !== 'save_temporary') {
         // global lists can only be edited by administrator
         if ($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator()) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         } elseif ((int)$list->getValue('lst_usr_id') !== $gCurrentUserId
             && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
@@ -69,7 +71,7 @@ try {
         // check the CSRF token of the form against the session token
         $categoryReportConfigForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
         if ($_POST['admidio-csrf-token'] !== $categoryReportConfigForm->getCsrfToken()) {
-            throw new AdmException('Invalid or missing CSRF token!');
+            throw new Exception('Invalid or missing CSRF token!');
         }
 
         $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
@@ -135,6 +137,6 @@ try {
         echo json_encode(array('status' => 'success', 'url' => ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php'));
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

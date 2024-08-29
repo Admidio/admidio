@@ -35,6 +35,7 @@
  * $event->save();
  * ```
  */
+use Admidio\Exception;
 class TableEvent extends TableAccess
 {
     /**
@@ -62,7 +63,7 @@ class TableEvent extends TableAccess
      * the right event_participation. This method will also return **true** if the deadline is exceeded
      * and a further participation isn't possible.
      * @return bool Return true if the current user is allowed to participate in the event.
-     * @throws AdmException
+     * @throws Exception
      */
     public function allowedToParticipate(): bool
     {
@@ -97,7 +98,7 @@ class TableEvent extends TableAccess
      * of the event. If the user is already a member of the event, then this method will return true, if the
      * deadline is not reached.
      * @return bool Return true if it's possible for the current user to participate in the event.
-     * @throws AdmException
+     * @throws Exception
      */
     public function possibleToParticipate(): bool
     {
@@ -124,7 +125,7 @@ class TableEvent extends TableAccess
      * Check if the deadline is in the future than return false or
      * if the deadline is in the past than return true.
      * @return bool Return true if the deadline is exceeded.
-     * @throws AdmException
+     * @throws Exception
      */
     public function deadlineExceeded(): bool
     {
@@ -135,7 +136,7 @@ class TableEvent extends TableAccess
      * Deletes the selected record of the table and all references in other tables.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
-     * @throws AdmException
+     * @throws Exception
      */
     public function delete(): bool
     {
@@ -170,7 +171,7 @@ class TableEvent extends TableAccess
      * If the start and end of the event is at the same day then the date will only include once.
      * Also, the all-day flag will be considered.
      * @return string Returns a formatted date and time string corresponding to the event settings.
-     * @throws AdmException
+     * @throws Exception
      */
     public function getDateTimePeriod($showPeriodEnd = true): string
     {
@@ -209,7 +210,7 @@ class TableEvent extends TableAccess
      *                           the original database value without any transformations
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
@@ -244,7 +245,7 @@ class TableEvent extends TableAccess
     /**
      * This method reads the deadline for participation. If no deadline is set as default the start date of the event will be set.
      * @return string Returns a string with formatted date and time
-     * @throws AdmException
+     * @throws Exception
      */
     public function getValidDeadline(): string
     {
@@ -267,7 +268,7 @@ class TableEvent extends TableAccess
      * The user must be a member of at least one role that have the right to manage events.
      * Global events could be only edited by the parent organization.
      * @return bool Return true if the current user is allowed to edit this event
-     * @throws AdmException
+     * @throws Exception
      */
     public function isEditable(): bool
     {
@@ -294,7 +295,7 @@ class TableEvent extends TableAccess
      * This method checks if the current user is allowed to view this event. Therefore,
      * the visibility of the category is checked.
      * @return bool Return true if the current user is allowed to view this event
-     * @throws AdmException
+     * @throws Exception
      */
     public function isVisible(): bool
     {
@@ -308,7 +309,7 @@ class TableEvent extends TableAccess
      * Method will return true if the event has a maximum count of participants set and this limit
      * is reached.
      * @return bool Return **true** if the limit of participants is reached.
-     * @throws AdmException
+     * @throws Exception
      */
     public function participantLimitReached(): bool
     {
@@ -347,14 +348,14 @@ class TableEvent extends TableAccess
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws AdmException
+     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentUser;
 
         if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('dat_cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)) {
-            throw new AdmException('Event could not be saved because you are not allowed to edit events of this category.');
+            throw new Exception('Event could not be saved because you are not allowed to edit events of this category.');
         }
 
         return parent::save($updateFingerPrint);
@@ -366,7 +367,7 @@ class TableEvent extends TableAccess
      * **system_notifications_role**. The email contains the event title, date, time, location, room,
      * the name of the current user, timestamp and the url to this event.
      * @return bool Returns **true** if the notification was sent
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws Exception 'SYS_EMAIL_NOT_SEND'
      * @throws Exception
      */
     public function sendNotification(): bool
@@ -443,7 +444,7 @@ class TableEvent extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
@@ -456,13 +457,13 @@ class TableEvent extends TableAccess
             } elseif ($columnName === 'dat_cat_id') {
                 $category = new TableCategory($this->db);
                 if(!$category->readDataById($newValue)) {
-                    throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
+                    throw new Exception('No Category with the given id '. $newValue. ' was found in the database.');
                 }
             } elseif ($columnName === 'dat_deadline' && (string) $newValue !== '') {
                 if(!DateTime::createFromFormat('Y-m-d H:i', $newValue)) {
-                    throw new AdmException('SYS_DATE_INVALID', array($gL10n->get('SYS_DEADLINE'), 'YYYY-MM-DD'));
+                    throw new Exception('SYS_DATE_INVALID', array($gL10n->get('SYS_DEADLINE'), 'YYYY-MM-DD'));
                 } elseif (strtotime($newValue) > strtotime($this->getValue('dat_begin'))) {
-                    throw new AdmException('SYS_DEADLINE_AFTER_START');
+                    throw new Exception('SYS_DEADLINE_AFTER_START');
                 }
             }
         }

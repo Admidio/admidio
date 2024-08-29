@@ -29,6 +29,7 @@
  * $gChangeNotifications->sendNotification();
  * ```
  */
+use Admidio\Exception;
 class ChangeNotification
 {
     /** @var array $changes Queued array of changes (user ID as key) made during this
@@ -50,14 +51,15 @@ class ChangeNotification
      *          )
      *      )
      */
-    protected $changes = array();
+    protected array $changes = array();
 
     /** @var string $format Whether to send mails as 'html' or 'text' (as configured)
      */
-    protected $format = 'html';
+    protected string $format = 'html';
 
     /**
      * Constructor that initialize the class member parameters
+     * @throws Exception
      */
     public function __construct()
     {
@@ -90,6 +92,7 @@ class ChangeNotification
      * Initialize the internal data structure to queue changes to a given user ID.
      * @param int $userID The user for whom to prepare the internal data structure.
      * @param User|null $user Optional the user object of the changed user could be set.
+     * @throws Exception
      */
     public function prepareUserChanges(int $userID, User $user = null)
     {
@@ -125,7 +128,7 @@ class ChangeNotification
      * @param bool $deleting Whether the profile is changed due to deleting the
      *                       user. In this case, the change will not be logged
      *                       in the history database.
-     * @throws AdmException
+     * @throws Exception
      */
     public function logProfileChange(int $userID, int $fieldId, string $fieldName, string $old_value, string $new_value, string $old_value_db = '', string $new_value_db = '', $user = null, bool $deleting = false)
     {
@@ -157,6 +160,7 @@ class ChangeNotification
      * @param string $old_value The previous value of the field before the change
      * @param string $new_value The new value of the field after the change
      * @param User|null $user Optional the object of the changed user.
+     * @throws Exception
      */
     public function logUserChange(int $userID, string $fieldName, string $old_value, string $new_value, User $user = null)
     {
@@ -212,6 +216,7 @@ class ChangeNotification
      * @param bool $deleting Whether the profile is changed due to deleting the
      *                       user. In this case, the change will not be logged
      *                       in the history database.
+     * @throws Exception
      */
     public function logRoleChange(int $userID, string $roleName, string $fieldName, string $old_value, string $new_value, User $user = null, bool $deleting = false)
     {
@@ -255,7 +260,7 @@ class ChangeNotification
      *
      * @param int $userID The user to whom the change applies
      * @param User|null $user (optional) The User object of the newly created user
-     * @throws AdmException
+     * @throws Exception
      */
     public function logUserCreation(int $userID, User $user = null)
     {
@@ -307,7 +312,7 @@ class ChangeNotification
      *
      * @param int $userID The user to whom the change applies
      * @param User|null $user (optional) The User object of the user to be deleted
-     * @throws AdmException
+     * @throws Exception
      */
     public function logUserDeletion(int $userID, User $user = null)
     {
@@ -378,7 +383,7 @@ class ChangeNotification
      * Send out all queued change notifications, if the configuration has system
      * change notifications enabled at all.
      * @param int $userID The user for whom the notification shall be sent (null for all queued notifications)
-     * @throws AdmException
+     * @throws Exception
      */
     public function sendNotifications(int $userID = 0)
     {
@@ -485,7 +490,7 @@ class ChangeNotification
     {
         try {
             $this->sendNotifications();
-        } catch (AdmException $e) {
+        } catch (Exception $e) {
             $e->showText();
         }
     }

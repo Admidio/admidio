@@ -19,6 +19,7 @@
  * direction : Direction to change the sequence of the category
  *
  *****************************************************************************/
+use Admidio\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -31,7 +32,7 @@ try {
 
     // only authorized users can edit the profile fields
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // create user field object
@@ -43,7 +44,7 @@ try {
         // check if profile field belongs to actual organization
         if ($userField->getValue('cat_org_id') > 0
             && (int)$userField->getValue('cat_org_id') !== $gCurrentOrgId) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // if system profile field then set usf_type to default
@@ -88,7 +89,7 @@ try {
             $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int)$_POST['usf_cat_id'], $getUsfUUID));
 
             if ($pdoStatement->fetchColumn() > 0) {
-                throw new AdmException('ORG_FIELD_EXIST');
+                throw new Exception('ORG_FIELD_EXIST');
             }
         }
 
@@ -109,7 +110,7 @@ try {
 
         if ($userField->getValue('usf_system') == 1) {
             // System fields must not be deleted
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         $userField->delete();
@@ -131,12 +132,12 @@ try {
             if ($userField->moveSequence($postSequence)) {
                 echo 'done';
             } else {
-                throw new AdmException('Sequence could not be changed.');
+                throw new Exception('Sequence could not be changed.');
             }
         }
         exit();
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     if ($getMode === 'sequence') {
         echo $e->getMessage();
     } else {

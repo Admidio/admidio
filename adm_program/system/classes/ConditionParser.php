@@ -13,7 +13,7 @@
  * The user can write a condition in a special syntax. This class will parse
  * that condition and creates a valid SQL statement which can be used in
  * another SQL statement to select data with these conditions.
- * This class uses AdmExceptions when an error occurred. Make sure you catch these
+ * This class uses Exceptions when an error occurred. Make sure you catch these
  * exceptions when using the class.
  *
  * **Code example**
@@ -24,6 +24,7 @@
  * $sql = 'SELECT * FROM '.TBL_USER_DATA.' WHERE usd_id > 0 AND '.$sqlCondition;
  * ```
  */
+use Admidio\Exception;
 class ConditionParser
 {
     /**
@@ -170,7 +171,7 @@ class ConditionParser
      * @param string $columnType The type of the column. Valid types are **string**, **int**, **date** and **checkbox**
      * @param string $fieldName The name of the profile field. This is used for error output to the end user
      * @return string Returns a valid SQL string with the condition for that column
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function makeSqlStatement(string $sourceCondition, string $columnName, string $columnType, string $fieldName): string
@@ -301,7 +302,7 @@ class ConditionParser
                         if ($formatDate !== '') {
                             $this->destCond .= $formatDate;
                         } else {
-                            throw new AdmException('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
+                            throw new Exception('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
                         }
                         $date = '';
                     }
@@ -340,7 +341,7 @@ class ConditionParser
                     $date .= $character;
                 } elseif ($columnType === 'int' && !is_numeric($character)) {
                     // if numeric field than only numeric characters are allowed
-                    throw new AdmException('SYS_NOT_NUMERIC', array($fieldName));
+                    throw new Exception('SYS_NOT_NUMERIC', array($fieldName));
                 } else {
                     $this->destCond .= $character;
                 }
@@ -357,7 +358,7 @@ class ConditionParser
             if ($formatDate !== '') {
                 $this->destCond .= $formatDate;
             } else {
-                throw new AdmException('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
+                throw new Exception('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
             }
         }
 

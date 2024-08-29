@@ -20,6 +20,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Admidio\Exception;
 
 class ListData
 {
@@ -61,7 +62,7 @@ class ListData
      * Returns an array with all the data prepared for the destination output format.
      * @param string $outputFormat Optional output format. The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
      * @return array[]
-     * @throws AdmException
+     * @throws Exception
      */
     public function getData(string $outputFormat = ''): array
     {
@@ -76,7 +77,7 @@ class ListData
      * Prepares the internal data array for the submitted output format and returns that formatted array.
      * @param string $outputFormat The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
      * @return array Returns copy of the data array with formatted data.
-     * @throws AdmException
+     * @throws Exception
      */
     protected function prepareOutputFormat(string $outputFormat): array
     {
@@ -189,7 +190,7 @@ class ListData
      *                                  - **endDate** : The end date if memberships that should be considered.The time period of
      *                                    the membership must be at least one day before this date.
      * @return void
-     * @throws AdmException
+     * @throws Exception
      * @throws Exception
      */
     public function setDataByConfiguration(ListConfiguration $listConfiguration, array $options)
@@ -222,12 +223,12 @@ class ListData
      * @param string $format The following values are allows: "xlsx", "csv"
      * @return void
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     * @throws AdmException
+     * @throws Exception
      */
     public function export(string $filename, string $format = 'csv')
     {
         if (count($this->data) === 0) {
-            throw new AdmException('The export file will contain no data.');
+            throw new Exception('The export file will contain no data.');
         }
 
         $this->spreadsheet = new Spreadsheet();

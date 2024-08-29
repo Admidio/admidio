@@ -96,7 +96,7 @@ if ($mode === 'html') {
     if (isset($_SESSION['installationCreateAdministratorForm'])) {
         $formValues = $_SESSION['installationCreateAdministratorForm']->validate($_POST);
     } else {
-        throw new AdmException('SYS_INVALID_PAGE_VIEW');
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // Save administrator data filtered in session variables
@@ -109,12 +109,12 @@ if ($mode === 'html') {
 
     // username should only have valid chars
     if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar')) {
-        throw new AdmException('SYS_FIELD_INVALID_CHAR', array('SYS_USERNAME'));
+        throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_USERNAME'));
     }
 
     // Password min length is 8 chars
     if (strlen($_SESSION['user_password']) < PASSWORD_MIN_LENGTH) {
-        throw new AdmException('SYS_PASSWORD_LENGTH');
+        throw new Exception('SYS_PASSWORD_LENGTH');
     }
 
     // check if password is strong enough
@@ -126,12 +126,12 @@ if ($mode === 'html') {
     );
     // Admin Password should have a minimum strength of 1
     if (PasswordUtils::passwordStrength($_SESSION['user_password'], $userData) < 1) {
-        throw new AdmException('SYS_PASSWORD_NOT_STRONG_ENOUGH');
+        throw new Exception('SYS_PASSWORD_NOT_STRONG_ENOUGH');
     }
 
     // password must be the same with password confirm
     if ($_SESSION['user_password'] !== $_SESSION['user_password_confirm']) {
-        throw new AdmException('SYS_PASSWORDS_NOT_EQUAL');
+        throw new Exception('SYS_PASSWORDS_NOT_EQUAL');
     }
 
     echo json_encode(array(

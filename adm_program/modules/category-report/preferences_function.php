@@ -13,12 +13,14 @@
  *
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     // only authorized user are allowed to start this module
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // Initialize and check the parameters
@@ -29,7 +31,7 @@ try {
             // check the CSRF token of the form against the session token
             $categoryReportConfigForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
             if ($_POST['admidio-csrf-token'] !== $categoryReportConfigForm->getCsrfToken()) {
-                throw new AdmException('Invalid or missing CSRF token!');
+                throw new Exception('Invalid or missing CSRF token!');
             }
 
             for ($conf = 0; isset($_POST['name' . $conf]); $conf++) {
@@ -51,7 +53,7 @@ try {
                 }
 
                 if ($allColumnsEmpty) {
-                    throw new AdmException('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
+                    throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
                 }
 
                 $values['col_fields'] = substr($fields, 0, -1);
@@ -65,8 +67,8 @@ try {
             break;
 
         default:
-            throw new AdmException('SYS_INVALID_PAGE_VIEW');
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }

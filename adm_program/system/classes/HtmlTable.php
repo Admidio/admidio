@@ -36,6 +36,8 @@
  * $table->show();
  * ```
  */
+use Admidio\Exception;
+
 class HtmlTable extends HtmlTableBasic
 {
     /**

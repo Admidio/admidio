@@ -13,19 +13,21 @@
  * organization_short_name : short name of the organization whose announcements should be shown
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+
     $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
 
     // Check if RSS is active...
     if (!$gSettingsManager->getBool('enable_rss')) {
-        throw new AdmException('SYS_RSS_DISABLED');
+        throw new Exception('SYS_RSS_DISABLED');
     }
 
     // check if module is active or is public
     if ((int)$gSettingsManager->get('announcements_module_enabled') !== 1) {
-        throw new AdmException('SYS_MODULE_DISABLED');
+        throw new Exception('SYS_MODULE_DISABLED');
     }
 
     $announcements = new ModuleAnnouncements();
@@ -70,7 +72,7 @@ try {
 
     $gCurrentUser->setOrganization($gCurrentOrgId);
     $rss->getRssFeed();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($e->getMessage());
 }

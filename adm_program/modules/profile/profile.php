@@ -13,11 +13,13 @@
  *             the profile of the current user will be shown.
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/roles_functions.php');
-require(__DIR__ . '/../../system/login_valid.php');
+use Admidio\Exception;
 
 try {
+    require_once(__DIR__ . '/../../system/common.php');
+    require_once(__DIR__ . '/roles_functions.php');
+    require(__DIR__ . '/../../system/login_valid.php');
+
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
@@ -27,7 +29,7 @@ try {
 
     // check if right to view profile exists
     if (!$gCurrentUser->hasRightViewProfile($user)) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     /**
@@ -687,6 +689,6 @@ try {
     $page->assignSmartyVariable('timestampLastUserEdited', $user->getValue('usr_timestamp_change'));
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }

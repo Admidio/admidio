@@ -12,6 +12,7 @@
  * usf_uuid : UUID of the profile field that should be edited
  ***********************************************************************************************
  */
+use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 try {
@@ -23,7 +24,7 @@ try {
 
     // only authorized users can edit the profile fields
     if (!$gCurrentUser->isAdministrator()) {
-        throw new AdmException('SYS_NO_RIGHTS');
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // Create user-defined field object
@@ -44,7 +45,7 @@ try {
         // Check whether the field belongs to the current organization
         if ($userField->getValue('cat_org_id') > 0
             && (int)$userField->getValue('cat_org_id') !== $gCurrentOrgId) {
-            throw new AdmException('SYS_NO_RIGHTS');
+            throw new Exception('SYS_NO_RIGHTS');
         }
     } else {
         $headline = $gL10n->get('ORG_CREATE_PROFILE_FIELD');
@@ -255,6 +256,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (AdmException|Exception $e) {
+} catch (Exception $e) {
     $gMessage->show($e->getMessage());
 }
