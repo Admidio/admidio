@@ -5,7 +5,7 @@ use Database;
 use Language;
 
 /**
- * Admidio specific enhancements of the PHP exception class
+ * @brief Admidio specific enhancements of the PHP exception class
  *
  * This class extends the default PHP exception class with an Admidio specific
  * constructor. The exception gets a language string as parameter and returns the

@@ -30,6 +30,7 @@
  *    $e->showText();
  * }
  * ```
+ * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
  */
 class AdmException extends Exception
 {

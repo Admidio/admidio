@@ -29,6 +29,7 @@
  * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'bi-arrow-right-circle-fill'));
  * $form->show();
  * ```
+ * @deprecated 5.0.0:5.1.0 Class "HtmlForm" is deprecated, use class "Form" instead.
  */
 use Admidio\Exception;
 

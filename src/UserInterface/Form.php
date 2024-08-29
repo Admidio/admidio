@@ -1,14 +1,23 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+namespace Admidio\UserInterface;
+
+use Admidio\Exception;
+use Database;
+use DateTime;
+use HtmlPage;
+use Language;
+use PDO;
+use Securimage;
+use SecurityUtils;
+use SettingsManager;
+use SimpleXMLElement;
+use Smarty\Smarty;
+use HTMLPurifier;
+use HTMLPurifier_Config;
+use StringUtils;
 
 /**
- * Creates an Admidio specific form
+ * @brief Creates an Admidio specific form
  *
  * This class should be used to create a form based on a Smarty template. Therefore, a method for each
  * possible form field is available and could be customized through various parameters. If the form is fully
@@ -41,23 +50,10 @@
  *    throw new Exception('SYS_INVALID_PAGE_VIEW');
  * }
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-namespace Admidio\UserInterface;
-use Admidio\Exception;
-use Database;
-use DateTime;
-use HtmlPage;
-use Language;
-use PDO;
-use Securimage;
-use SecurityUtils;
-use SettingsManager;
-use SimpleXMLElement;
-use Smarty\Smarty;
-use HTMLPurifier;
-use HTMLPurifier_Config;
-use StringUtils;
-
 class Form
 {
     public const FIELD_DEFAULT  = 0;

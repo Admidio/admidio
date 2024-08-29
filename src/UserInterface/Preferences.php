@@ -1,14 +1,18 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+namespace Admidio\UserInterface;
+
+use ComponentUpdate;
+use FileSystemUtils;
+use HtmlPage;
+use Exception;
+use PhpIniUtils;
+use RuntimeException;
+use SecurityUtils;
+use SystemInfoUtils;
+use TableText;
 
 /**
- * Class with methods to display the module pages and helpful functions.
+ * @brief Class with methods to display the module pages and helpful functions.
  *
  * This class adds some functions that are used in the registration module to keep the
  * code easy to read and short
@@ -20,19 +24,10 @@
  * $page->createContentRegistrationList();
  * $page->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-
-namespace Admidio\UserInterface;
-use ComponentUpdate;
-use FileSystemUtils;
-use HtmlPage;
-use Exception;
-use PhpIniUtils;
-use RuntimeException;
-use SecurityUtils;
-use SystemInfoUtils;
-use TableText;
-
 class Preferences extends HtmlPage
 {
     /**

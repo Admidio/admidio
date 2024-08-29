@@ -1,14 +1,12 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+namespace Admidio\UserInterface;
+
+use Admidio\Exception;
+use HtmlPage;
+use Throwable;
 
 /**
- * Creates an Admidio specific complete html page specialized for installation and update process
+ * @brief Creates an Admidio specific complete html page specialized for installation and update process
  *
  * This class creates a html page with head and body and integrates some Admidio
  * specific elements like css files, javascript files and javascript code. It
@@ -32,12 +30,10 @@
  * $page->setUpdateModus();
  * $page->showMessage('error', 'Message', 'Some error message.', $gL10n->get('SYS_OVERVIEW'), 'bi-house-door-fill', ADMIDIO_URL . '/adm_program/overview.php');
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-namespace Admidio\UserInterface;
-use Admidio\Exception;
-use HtmlPage;
-use Throwable;
-
 class Installation extends HtmlPage
 {
     /**
