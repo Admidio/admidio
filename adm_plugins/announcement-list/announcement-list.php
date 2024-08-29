@@ -148,6 +148,6 @@ try {
         }
         echo '</div>';
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     echo $e->getMessage();
 }

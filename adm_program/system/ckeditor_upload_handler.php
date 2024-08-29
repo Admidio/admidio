@@ -87,6 +87,6 @@ try {
             )
         )
     );
-} catch (RuntimeException|Exception|Exception $exception) {
+} catch (Throwable $exception) {
     echo json_encode(array('error' => array('message' => $exception->getMessage())));
 }

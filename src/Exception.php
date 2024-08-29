@@ -86,6 +86,7 @@ class Exception extends \Exception
 
     /**
      * Show html message window with translated message
+     * @throws Exception
      */
     public function showHtml()
     {

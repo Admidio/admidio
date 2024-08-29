@@ -133,7 +133,7 @@ try {
         try {
             FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . '/config.php');
         } catch (RuntimeException $exception) {
-            throw new Exception('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL));
+            throw new \Admidio\Exception('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL));
         }
     }
 
@@ -265,7 +265,7 @@ try {
         if (isset($_SESSION['updateLoginForm'])) {
             $_SESSION['updateLoginForm']->validate($_POST);
         } else {
-            throw new Exception('SYS_INVALID_PAGE_VIEW');
+            throw new \Admidio\Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // start the update
@@ -285,7 +285,7 @@ try {
         $page->addJavascript('$("#buttonDonate").focus();', true);
         $page->show();
     }
-} catch (Exception|Exception|UnexpectedValueException|RuntimeException $e) {
+} catch (Throwable $e) {
     if ($getMode === 'update') {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

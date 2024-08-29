@@ -98,6 +98,7 @@ class AutoLogin extends TableAccess
      * Method will clean the database table **adm_auto_login**.
      * All login that had their last login one year ago will be deleted.
      * All counted wrong auto login ids from this user will be reset.
+     * @throws Exception
      */
     public function tableCleanup()
     {

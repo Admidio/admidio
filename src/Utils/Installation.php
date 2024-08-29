@@ -12,7 +12,7 @@
  */
 namespace Admidio\Utils;
 
-use Exception;
+use Admidio\Exception;
 use Database;
 use FileSystemUtils;
 use RuntimeException;

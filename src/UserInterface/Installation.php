@@ -34,7 +34,7 @@
  * ```
  */
 namespace Admidio\UserInterface;
-use Exception;
+use Admidio\Exception;
 use HtmlPage;
 use Throwable;
 

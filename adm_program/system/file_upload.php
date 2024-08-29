@@ -67,7 +67,7 @@ try {
             // delete old stuff in upload folder
             try {
                 FileSystemUtils::deleteDirectoryContentIfExists(ADMIDIO_PATH . FOLDER_DATA . '/photos/upload');
-            } catch (\RuntimeException $exception) {
+            } catch (RuntimeException $exception) {
                 $gLogger->error('Could not delete directory content!', array('directoryPath' => ADMIDIO_PATH . FOLDER_DATA . '/photos/upload'));
                 // TODO
             }

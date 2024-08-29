@@ -51,14 +51,15 @@ class ChangeNotification
      *          )
      *      )
      */
-    protected $changes = array();
+    protected array $changes = array();
 
     /** @var string $format Whether to send mails as 'html' or 'text' (as configured)
      */
-    protected $format = 'html';
+    protected string $format = 'html';
 
     /**
      * Constructor that initialize the class member parameters
+     * @throws Exception
      */
     public function __construct()
     {
@@ -91,6 +92,7 @@ class ChangeNotification
      * Initialize the internal data structure to queue changes to a given user ID.
      * @param int $userID The user for whom to prepare the internal data structure.
      * @param User|null $user Optional the user object of the changed user could be set.
+     * @throws Exception
      */
     public function prepareUserChanges(int $userID, User $user = null)
     {
@@ -158,6 +160,7 @@ class ChangeNotification
      * @param string $old_value The previous value of the field before the change
      * @param string $new_value The new value of the field after the change
      * @param User|null $user Optional the object of the changed user.
+     * @throws Exception
      */
     public function logUserChange(int $userID, string $fieldName, string $old_value, string $new_value, User $user = null)
     {
@@ -213,6 +216,7 @@ class ChangeNotification
      * @param bool $deleting Whether the profile is changed due to deleting the
      *                       user. In this case, the change will not be logged
      *                       in the history database.
+     * @throws Exception
      */
     public function logRoleChange(int $userID, string $roleName, string $fieldName, string $old_value, string $new_value, User $user = null, bool $deleting = false)
     {

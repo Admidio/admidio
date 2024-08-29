@@ -9,11 +9,6 @@
  ***********************************************************************************************
  */
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-use Admidio\Exception;
-
 /**
  * Mit dieser Klasse kann ein Email-Objekt erstellt
  * und anschliessend verschickt werden.
@@ -62,6 +57,10 @@ use Admidio\Exception;
  * Am Ende muss die Mail natuerlich noch gesendet werden:
  * function sendEmail();
  */
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 class Email extends PHPMailer
 {
     public const SIZE_UNIT_BYTE = 'Byte';
@@ -80,42 +79,43 @@ class Email extends PHPMailer
     /**
      * @var string Plain text of email
      */
-    private $emText = '';
+    private string $emText = '';
     /**
      * @var string HTML text of email
      */
-    private $emHtmlText = '';
+    private string $emHtmlText = '';
     /**
      * @var array<int,string> Array with all recipients names
      */
-    private $emRecipientsNames = array();
+    private array $emRecipientsNames = array();
     /**
      * @var array<string,string> Mail sender address and Name
      */
-    private $emSender = array();
+    private array $emSender = array();
     /**
      * @var bool
      */
-    private $emCopyToSender = false;
+    private bool $emCopyToSender = false;
     /**
      * @var bool
      */
-    private $emListRecipients = false;
+    private bool $emListRecipients = false;
     /**
      * @var bool
      */
-    private $emSendAsHTML = false;
+    private bool $emSendAsHTML = false;
     /**
     * @var int The sending mode from the settings: 0 = BULK, 1 = SINGLE
     */
-    private $sendingMode;
+    private int $sendingMode;
     /**
      * @var array<int,array<string,string>>
      */
-    private $emRecipientsArray = array();
+    private array $emRecipientsArray = array();
 
     /**
      * Email constructor.
+     * @throws \Admidio\Exception
      */
     public function __construct()
     {
@@ -184,11 +184,12 @@ class Email extends PHPMailer
     /**
      * Add the name and email address of all users of the role to the email as a normal recipient. If the system setting
      * **mail_send_to_all_addresses** is set than all email addresses of the given users will be added.
-     * @param string $roleUuid  UUID of a role whose users should be the recipients of the email.
+     * @param string $roleUuid UUID of a role whose users should be the recipients of the email.
      * @param int $memberStatus Status of the members who should get the email. Possible values are
      *                          EMAIL_ALL_MEMBERS, EMAIL_ONLY_ACTIVE_MEMBERS, EMAIL_ONLY_FORMER_MEMBERS
      *                          The default value will be EMAIL_ONLY_ACTIVE_MEMBERS.
      * @return int Returns the number of added email addresses.
+     * @throws \Admidio\Exception
      */
     public function addRecipientsByRole(string $roleUuid, int $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS): int
     {
@@ -287,6 +288,7 @@ class Email extends PHPMailer
      * **mail_send_to_all_addresses** is set than all email addresses of the given user will be added.
      * @param string $userUuid UUID of a user who should be the recipient of the email.
      * @return int Returns the number of added email addresses.
+     * @throws \Admidio\Exception
      */
     public function addRecipientsByUser(string $userUuid): int
     {
@@ -347,7 +349,7 @@ class Email extends PHPMailer
             $this->addCC($address, $firstName .' '. $lastName);
         } catch (Exception $e) {
             return $e->errorMessage();
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return $e->getMessage();
         }
 
@@ -367,9 +369,10 @@ class Email extends PHPMailer
 
     /**
      * Returns the maximum size of an attachment
-     * @param string $sizeUnit  'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
+     * @param string $sizeUnit 'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
      * @param int $precision The number of decimal digits to round to
      * @return float The maximum attachment size in the given size-unit
+     * @throws \Admidio\Exception
      */
     public static function getMaxAttachmentSize(string $sizeUnit = self::SIZE_UNIT_BYTE, int $precision = 1): float
     {
@@ -403,7 +406,7 @@ class Email extends PHPMailer
      * Set a debug modus for sending emails. This will only be useful if you use smtp for sending
      * emails. If you still use PHP mail() there fill be no debug output. With the parameter
      * **$outputGlobalVar** you have the option to put the output in a global variable
-     * **$GLOBALS['phpmailer_output_debug']**. Otherwise the output will go to the Admidio log files.
+     * **$GLOBALS['phpmailer_output_debug']**. Otherwise, the output will go to the Admidio log files.
      * @param bool $outputGlobalVar Put the output in a global variable **$GLOBALS['phpmailer_output_debug']**.
      */
     public function setDebugMode(bool $outputGlobalVar = false)
@@ -454,6 +457,7 @@ class Email extends PHPMailer
      * @param string $address
      * @param string $name
      * @return true|string
+     * @throws \Admidio\Exception
      */
     public function setSender(string $address, string $name = '')
     {
@@ -480,7 +484,7 @@ class Email extends PHPMailer
             $this->setFrom($fromAddress, $fromName);
         } catch (Exception $e) {
             return $e->errorMessage();
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return $e->getMessage();
         }
 
@@ -508,7 +512,7 @@ class Email extends PHPMailer
      * @param string $senderEmail The email address of the sender
      * @param string $senderUuid The unique ID of the sender.
      * @param string $recipients List with firstname and lastname of all recipients of this mail
-     * @throws Exception|\Exception
+     * @throws \Admidio\Exception
      */
     public function setTemplateText(string $text, string $senderName, string $senderEmail, string $senderUuid, string $recipients)
     {
@@ -598,7 +602,7 @@ class Email extends PHPMailer
     /**
      * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
      * recipients will be listed in the mail.
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     private function sendCopyMail()
     {
@@ -628,17 +632,21 @@ class Email extends PHPMailer
         $this->emText = $copyHeader . $this->emText;
         $this->emHtmlText = nl2br($copyHeader) . $this->emHtmlText;
 
-        // add the text of the message
-        if ($this->emSendAsHTML) {
-            $this->msgHTML($this->emHtmlText);
-        } else {
-            $this->Body = $this->emText;
+        try {
+            // add the text of the message
+            if ($this->emSendAsHTML) {
+                $this->msgHTML($this->emHtmlText);
+            } else {
+                $this->Body = $this->emText;
+            }
+
+            // now set the sender of the original mail as the recipients of the copy mail
+            $this->addAddress($this->emSender['address'], $this->emSender['name']);
+
+            $this->send();
+        } catch (Exception $e) {
+            throw new \Admidio\Exception($e->errorMessage());
         }
-
-        // now set the sender of the original mail as the recipients of the copy mail
-        $this->addAddress($this->emSender['address'], $this->emSender['name']);
-
-        $this->send();
     }
 
     /**
@@ -769,7 +777,7 @@ class Email extends PHPMailer
             }
         } catch (Exception $e) {
             return $e->errorMessage();
-        } catch (Exception|\Exception $e) {
+        } catch (Throwable $e) {
             return $e->getMessage();
         }
 
@@ -783,10 +791,10 @@ class Email extends PHPMailer
     /**
      * Send a notification email to all members of the notification role. This role is configured within the
      * global preference **system_notifications_role**.
-     * @param string $subject     The subject of the email.
-     * @param string $message     The body of the email.
+     * @param string $subject The subject of the email.
+     * @param string $message The body of the email.
      * @return bool Returns **true** if the notification was sent
-     * @throws Exception 'SYS_EMAIL_NOT_SEND'
+     * @throws \Admidio\Exception
      */
     public function sendNotification(string $subject, string $message): bool
     {
@@ -818,7 +826,7 @@ class Email extends PHPMailer
 
             // if something went wrong then throw an exception with the error message
             if ($returnCode !== true) {
-                throw new Exception('SYS_EMAIL_NOT_SEND', array($gSettingsManager->getString('email_administrator'), $returnCode));
+                throw new \Admidio\Exception('SYS_EMAIL_NOT_SEND', array($gSettingsManager->getString('email_administrator'), $returnCode));
             }
 
             return true;
