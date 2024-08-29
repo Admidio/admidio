@@ -31,7 +31,7 @@
  * }
  * ```
  */
-class Exception extends Exception
+class AdmException extends Exception
 {
     /**
      * Constructor saves the parameters to the class and will call the parent constructor. Also, a **rollback**
@@ -39,6 +39,7 @@ class Exception extends Exception
      * @param string $message Translation **id** or simple text that should be shown when exception is caught
      * @param array<int,string> $params Optional parameter for language string of translation id
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
      */
     public function __construct($message, $params = array())
     {
@@ -64,6 +65,7 @@ class Exception extends Exception
      * if during the exception processing a new better message should be set.
      * @param string $message Translation **id** that should be shown when exception is caught
      * @param array<int,string> $params  Optional parameter for language string of translation id
+     * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
      */
     public function setNewMessage(string $message, array $params = array())
     {
@@ -79,6 +81,7 @@ class Exception extends Exception
 
     /**
      * Show html message window with translated message
+     * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
      */
     public function showHtml()
     {
@@ -96,6 +99,7 @@ class Exception extends Exception
 
     /**
      * Simply return the plain translated error text without any markup and stop the script.
+     * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
      */
     public function showText()
     {

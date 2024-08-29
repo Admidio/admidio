@@ -103,7 +103,7 @@ try {
                 try {
                     FormValidation::checkCaptcha($_POST['captcha_code']);
                 } catch (Exception $e) {
-                    $e->showHtml();
+                    $gMessage->show($e->getMessage());
                     // => EXIT
                 }
             }

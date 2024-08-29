@@ -1,42 +1,35 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+namespace Admidio;
+
+use Database;
+use Language;
 
 /**
- * Admidio specific enhancements of the exception class
+ * Admidio specific enhancements of the PHP exception class
  *
  * This class extends the default PHP exception class with an Admidio specific
- * output. The exception gets a language string as parameter and returns a
- * html or plain text message with the translated error if an exception is thrown
+ * constructor. The exception gets a language string as parameter and returns the
+ * translated error if an exception is thrown
  *
  * **Code example**
  * ```
  * try {
  *    if($bla == 1)
  *    {
- *        throw new Exception(SYS_NOT_VALID_DATE_FORMAT);
+ *        // throw new exception with a translatable text
+ *        throw new Exception('SYS_NOT_VALID_DATE_FORMAT');
  *    }
  *    ...
  * } catch(Exception $e) {
- *    // show html message
- *    $e->showHtml();
- *
- *    // show simply text message
- *    $e->showText();
+ *    // show translated message
+ *    echo $e->getMessage();
  * }
  * ```
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-namespace Admidio;
-
-use Database;
-use Language;
-use Message;
-
 class Exception extends \Exception
 {
     /**
@@ -63,55 +56,5 @@ class Exception extends \Exception
         $gLogger->notice('Exception is thrown!', array('message' => $message));
 
         parent::__construct($message);
-    }
-
-    /**
-     * Set a new Admidio message id with their parameters. This method should be used
-     * if during the exception processing a new better message should be set.
-     * @param string $message Translation **id** that should be shown when exception is caught
-     * @param array<int,string> $params Optional parameter for language string of translation id
-     * @throws Exception
-     */
-    public function setNewMessage(string $message, array $params = array())
-    {
-        global $gL10n;
-
-        // if text is a translation-id then translate it
-        if (Language::isTranslationStringId($message)) {
-            $message = $gL10n->get($message, $params);
-        }
-
-        $this->message = $message;
-    }
-
-    /**
-     * Show html message window with translated message
-     * @throws Exception
-     */
-    public function showHtml()
-    {
-        global $gMessage;
-
-        // display database error to user
-        if ($gMessage instanceof Message) {
-            $gMessage->show($this->getMessage());
-        // => EXIT
-        } else {
-            $this->showText();
-            // => EXIT
-        }
-    }
-
-    /**
-     * Simply return the plain translated error text without any markup and stop the script.
-     */
-    public function showText()
-    {
-        if (!headers_sent()) {
-            header('Content-type: text/html; charset=utf-8');
-        }
-
-        echo $this->getMessage();
-        exit();
     }
 }

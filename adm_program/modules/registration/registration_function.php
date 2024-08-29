@@ -91,7 +91,7 @@ try {
             $gDb->endTransaction();
 
             $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-            $e->showHtml();
+            $gMessage->show($e->getMessage());
             // => EXIT
         }
     } elseif ($getMode === 'delete_user') {

@@ -226,24 +226,21 @@ $params = array(
 );
 $db->queryPrepared($sql, $params);
 
-try {
-    // first create a user object "current user" with administrator rights
-    // because administrator is allowed to edit firstname and lastname
-    $gCurrentUser = new User($db, $gProfileFields, $adminUsrId);
-    $gCurrentUser->saveChangesWithoutRights();
-    $gCurrentUser->setValue('LAST_NAME', $_SESSION['user_last_name']);
-    $gCurrentUser->setValue('FIRST_NAME', $_SESSION['user_first_name']);
-    $gCurrentUser->setValue('EMAIL', $_SESSION['user_email']);
-    $gCurrentUser->save(false);
+// first create a user object "current user" with administrator rights
+// because administrator is allowed to edit firstname and lastname
+$gCurrentUser = new User($db, $gProfileFields, $adminUsrId);
+$gCurrentUser->saveChangesWithoutRights();
+$gCurrentUser->setValue('LAST_NAME', $_SESSION['user_last_name']);
+$gCurrentUser->setValue('FIRST_NAME', $_SESSION['user_first_name']);
+$gCurrentUser->setValue('EMAIL', $_SESSION['user_email']);
+$gCurrentUser->save(false);
 
-    // now create a full user object for system user
-    $systemUser = new User($db, $gProfileFields, $gCurrentUserId);
-    $systemUser->saveChangesWithoutRights();
-    $systemUser->setValue('LAST_NAME', $gL10n->get('SYS_SYSTEM'));
-    $systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
-} catch (Exception $exeption) {
-    $exeption->showHtml();
-}
+// now create a full user object for system user
+$systemUser = new User($db, $gProfileFields, $gCurrentUserId);
+$systemUser->saveChangesWithoutRights();
+$systemUser->setValue('LAST_NAME', $gL10n->get('SYS_SYSTEM'));
+$systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
+
 // now set current user to system user
 $gCurrentUser->readDataById($gCurrentUserId);
 

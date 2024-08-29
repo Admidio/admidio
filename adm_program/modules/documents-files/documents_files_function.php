@@ -123,10 +123,10 @@ try {
             }
         } catch (Exception $e) {
             if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
-                $e->setNewMessage('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME')));
+                throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME')));
             }
             if ($e->getMessage() === 'SYS_FILENAME_INVALID') {
-                $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
+                throw new Exception('SYS_FOLDER_NAME_INVALID');
             }
             throw new Exception($e->getMessage());
         }
@@ -218,10 +218,10 @@ try {
         // exception handling; replace some exception strings with better descriptions
         catch (Exception $e) {
             if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
-                $e->setNewMessage('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NEW_NAME')));
+                throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NEW_NAME')));
             }
             if ($e->getMessage() === 'SYS_FILENAME_INVALID' && $getFolderUuid !== '') {
-                $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
+                throw new Exception('SYS_FOLDER_NAME_INVALID');
             }
             throw new Exception($e->getMessage());
         }
