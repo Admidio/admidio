@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
+ * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
  *
  * The class search in the database table **adm_components** for a specific component
  * and loads the data into this object. A component could be per default the **SYSTEM**
@@ -25,8 +19,10 @@
  *     $e->showHtml();
  * }
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class Component extends TableAccess
 {
     /**

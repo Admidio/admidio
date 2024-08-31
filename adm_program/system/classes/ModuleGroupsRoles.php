@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Class with methods to display the module pages and helpful functions.
+ * @brief Class with methods to display the module pages and helpful functions.
  *
  * This class adds some functions that are used in the groups and roles module to keep the
  * code easy to read and short
@@ -20,21 +14,23 @@
  * $page->createContentRegistrationList();
  * $page->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ModuleGroupsRoles extends HtmlPage
 {
     /**
      * @var array Array with all read groups and roles
      */
-    protected $data = array();
+    protected array $data = array();
     /**
      * @var int Type of the role e.g. ROLE_TYPE_INACTIVE, ROLE_TYPE_ACTIVE, ROLE_TYPE_EVENT_PARTICIPATION
      */
     public const ROLE_TYPE_INACTIVE = 0;
     public const ROLE_TYPE_ACTIVE = 1;
     public const ROLE_TYPE_EVENT_PARTICIPATION = 2;
-    protected $roleType;
+    protected int $roleType;
 
     /**
      * Returns the number of roles that where read in this class.

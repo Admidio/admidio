@@ -1,16 +1,13 @@
 <?php
+use Ifsnop\Mysqldump as IMysqldump;
+
 /**
- ***********************************************************************************************
- * Class will create and export a dump file of the database.
+ * @brief Class will create and export a dump file of the database.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-
-use Ifsnop\Mysqldump as IMysqldump;
-
 class DatabaseDump
 {
     /**

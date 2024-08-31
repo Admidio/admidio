@@ -1,14 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * This class gets information about participants and leaders of events.
+ * @brief This class gets information about participants and leaders of events.
  *
  * This function is developed, to  read the participants and leaders of events from database.
  * Participants and leaders can be counted or be written in an array with surname, firstname and leader-status.
@@ -18,6 +10,10 @@
  * a function.
  * Second possibility is to pass the ID to a function of this object. The stored value in current object will be overwritten.
  * This is recommended looping an array, for example, with various ID´s.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 class Participants
 {
@@ -29,31 +25,31 @@ class Participants
     /**
      * @var int Counter of participants of the date in current object.
      */
-    private $count = -1;
+    private int $count = -1;
     /**
      * @var int The number of leaders of the date in the current object
      */
-    private $leader = -1;
+    private int $leader = -1;
     /**
-     * @var int The number of leaders of the date in the current object
+     * @var array The number of leaders of the date in the current object
      */
-    private $leaders = array();
+    private array $leaders = array();
     /**
      * @var int RolId of the current date of this object.
      */
-    private $roleId;
+    private int $roleId;
     /**
      * @var string SQL order of results. Parameter 'ASC'/'DESC' (Default: 'ASC')
      */
-    private $order = '';
+    private string $order = '';
     /**
      * @var array<int,array<string,string,int,bool>> Array with surname, firstname of all participants of the date in current object.
      */
-    private $memberDate = array();
+    private array $memberDate = array();
     /**
      * @var Database db object must public because of session handling
      */
-    private $db;
+    private Database $db;
 
     /**
      * Constructor that will initialize variables.
@@ -83,7 +79,7 @@ class Participants
     /**
      * Count participants of the date. The count will not include the leaders of the role.
      * @return int Returns the result of count participants as numeric value in current object. Leaders are not counted!
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function getCount(): int
     {
@@ -131,7 +127,7 @@ class Participants
     /**
      * Get the number of leaders.
      * @return int Returns the number of leaders as numeric value of the current object.
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function getNumLeaders(): int
     {
@@ -147,7 +143,7 @@ class Participants
      * Return all participants with surname,firstname, leader and approval status as array
      * @param string $order Values ASC/DESC Default: 'ASC'
      * @return false|array<int,array<string,string|int|bool>> Returns all participants in an array with field names ['usrId'], ['surname'], ['firstname'], ['leader'], ['approved'].
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function getParticipantsArray(string $order = 'ASC')
     {
@@ -198,7 +194,7 @@ class Participants
      * Check if the given user is leader of this participation.
      * @param int $userId ID if the user whose participation should be checked.
      * @return bool Returns true if the user is leader of the event participation.
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function isLeader(int $userId): bool
     {
@@ -214,7 +210,7 @@ class Participants
      * Look for a user ID exists in the current participants array. If the user ID exists the check the approval state of the user. If not disagreed ( Integer 3 ) User is member of the event role
      * @param int $userId
      * @return bool Returns true if userID is found and approval state is not set to disagreement (value: 3)
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function isMemberOfEvent(int $userId): bool
     {

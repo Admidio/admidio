@@ -1,21 +1,20 @@
 <?php
 /**
- ***********************************************************************************************
- * This class is used to create a htaccess file.
+ * @brief This class is used to create a htaccess file.
+ *
  * A folder can be protected with a htaccess file via this class.
  * Access from outside is then no longer permitted.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
 class Htaccess
 {
     /**
      * @var string
      */
-    protected $folderPath;
+    protected string $folderPath;
 
     /**
      * @param string $folderPath

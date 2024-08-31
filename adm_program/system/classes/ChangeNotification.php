@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Object to collect change notifications and optionally send a message to the administrator
+ * @brief Object to collect change notifications and optionally send a message to the administrator
  *
  * This class can be used to log changes to profile fields and role
  * memberships. It stores all changes and at the end of the request,
@@ -28,8 +22,10 @@
  * // Force sending the change notifications (if configured at all)
  * $gChangeNotifications->sendNotification();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ChangeNotification
 {
     /** @var array $changes Queued array of changes (user ID as key) made during this
@@ -491,7 +487,7 @@ class ChangeNotification
         try {
             $this->sendNotifications();
         } catch (Exception $e) {
-            $e->showText();
+            echo $e->getMessage();
         }
     }
 }

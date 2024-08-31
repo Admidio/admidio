@@ -1,12 +1,11 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 final class SecurityUtils
 {
     public static function myHtmlEntities($value)
@@ -116,7 +115,7 @@ final class SecurityUtils
      * @param int $max The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
      * @return int Returns a cryptographically secure pseudo-random integer
-     * @throws Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @throws \Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      */
     public static function getRandomInt(int $min, int $max, bool $exceptionOnInsecurePRNG = false): int
     {
@@ -124,7 +123,7 @@ final class SecurityUtils
             $int = random_int($min, $max);
         } catch (Error $e) {
             $int = self::getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_ERROR');
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $int = self::getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_EXCEPTION');
         }
 
@@ -138,7 +137,7 @@ final class SecurityUtils
      * @return string Returns a cryptographically secure pseudo-random string
      * @throws UnexpectedValueException Charset contains duplicate chars.
      * @throws UnexpectedValueException Charset must contain at least 2 unique chars.
-     * @throws Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @throws \Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      * @throws RuntimeException Min-length is 4.
      * @see https://paragonie.com/b/JvICXzh_jhLyt4y3
      */

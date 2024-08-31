@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Reads language specific texts that are identified with text ids out of language xml files
+ * @brief Reads language specific texts that are identified with text ids out of language xml files
  *
  * The class will read a language specific text that is identified with their
  * text id out of a language xml file. The access will be managed with the
@@ -22,9 +16,10 @@
  * // read and display a language specific text with placeholders for individual content
  * echo $gL10n->get('SYS_CREATED_BY_AND_AT', array('John Doe', '2019-04-13'));
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
-
 class Language
 {
     public const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated

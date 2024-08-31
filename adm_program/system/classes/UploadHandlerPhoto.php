@@ -1,11 +1,5 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
  * Improved checks and update of database after upload of photos.
@@ -24,8 +18,10 @@
  *                                               'accept_file_types' => '/\.(jpe?g|png)$/i'), true,
  *                                               'array('accept_file_types' => $gL10n->get('SYS_PHOTO_FORMAT_INVALID')));
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class UploadHandlerPhoto extends UploadHandler
 {
     /**
@@ -40,7 +36,6 @@ class UploadHandlerPhoto extends UploadHandler
      * @param        $index
      * @param        $content_range
      * @return stdClass
-     * @throws Exception
      */
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null): stdClass
     {

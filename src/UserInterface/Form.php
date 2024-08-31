@@ -1598,7 +1598,6 @@ class Form
      * @param bool $newToken If set to true, always a new token will be generated.
      * @return string Returns the CSRF token
      * @throws Exception
-     * @throws Exception
      */
     public function getCsrfToken(bool $newToken = false): string
     {

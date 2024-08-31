@@ -1,14 +1,13 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_user_fields
+ * @brief Class manages access to database table adm_user_fields
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class TableUserField extends TableAccess
 {
     public const MOVE_UP = 'UP';
@@ -22,11 +21,11 @@ class TableUserField extends TableAccess
     /**
      * @var bool|null Flag if the current user could view this user
      */
-    protected $mViewUserField;
+    protected ?bool $mViewUserField;
     /**
      * @var int|null Flag with the user id of which user the view property was saved
      */
-    protected $mViewUserFieldUserId;
+    protected ?int $mViewUserFieldUserId;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_user_fields.
@@ -300,7 +299,6 @@ class TableUserField extends TableAccess
      * @param string $mode mode if the profile field move up or down, values are TableUserField::MOVE_UP, TableUserField::MOVE_DOWN
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
      * @throws Exception
-     * @throws Exception
      */
     public function moveSequence(string $mode): bool
     {
@@ -330,7 +328,6 @@ class TableUserField extends TableAccess
      * Profile field will change the complete sequence.
      * @param array $sequence the new sequence of profile fields (field IDs)
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
-     * @throws Exception
      * @throws Exception
      */
     public function setSequence(array $sequence): bool
@@ -369,7 +366,6 @@ class TableUserField extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws Exception
-     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -405,7 +401,6 @@ class TableUserField extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool

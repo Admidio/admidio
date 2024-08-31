@@ -1,14 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * Create html tables
+ * @brief Create html tables
  *
  * This class creates html tables.
  * Create a table object, define the elements with optional attributes and pass your content.
@@ -108,41 +100,44 @@
  * $table->addRow($dataArray);
  * echo $table->getHtmlTable();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 class HtmlTableBasic extends HtmlElement
 {
     /**
      * @var int String with border attribute and value of the table
      */
-    protected $border;
+    protected int $border;
     /**
      * @var array<int,string> Class names to design table rows
      */
-    protected $rowClasses = array();
+    protected array $rowClasses = array();
     /**
      * @var array<int,string> Array with values for the columns width
      */
-    protected $columnsWidth = array();
+    protected array $columnsWidth = array();
     /**
-     * @var bool Internal Flag for setted thead element
+     * @var bool Internal Flag for set thead element
      */
-    protected $thead = false;
+    protected bool $thead = false;
     /**
-     * @var bool Internal Flag for setted tfoot element
+     * @var bool Internal Flag for set tfoot element
      */
-    protected $tfoot = false;
+    protected bool $tfoot = false;
     /**
-     * @var bool Internal Flag for setted tbody element
+     * @var bool Internal Flag for set tbody element
      */
-    protected $tbody = false;
+    protected bool $tbody = false;
     /**
-     * @var int Counter for setted columns
+     * @var int Counter for set columns
      */
-    protected $columnCount = 0;
+    protected int $columnCount = 0;
     /**
-     * @var int Counter for setted rows in body element
+     * @var int Counter for set rows in body element
      */
-    protected $rowCount = 0;
+    protected int $rowCount = 0;
 
     /**
      * Constructor initializing all class variables

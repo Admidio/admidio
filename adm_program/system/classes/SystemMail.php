@@ -1,44 +1,44 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * This class is used to send system mails
+ * @brief This class is used to send system mails
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class SystemMail extends Email
 {
     /**
      * @var TableText
      */
-    private $smTextObject;
+    private TableText $smTextObject;
     /**
      * @var Organization
      */
-    private $smOrganization;
+    private Organization $smOrganization;
     /**
      * @var Database An object of the class Database for communication with the database
      */
-    private $db;
+    private Database $db;
     /**
      * @var string
      */
-    private $smMailText;
+    private string $smMailText;
     /**
      * @var string
      */
-    private $smMailHeader;
+    private string $smMailHeader;
     /**
      * @var array<int,string> stores additional variables for the mail text
      */
-    private $smVariables = array();
+    private array $smVariables = array();
 
     /**
      * Constructor that will create an object of a SystemMail to handle all system notifications.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @throws Exception
      */
     public function __construct(Database $database)
     {
@@ -54,7 +54,6 @@ class SystemMail extends Email
      * @param User $user User object for which the data is then read and placed in the appropriate placeholders.
      * @return string Returns the text for the email with the replaced placeholders.
      * @throws Exception
-     * @throws Exception
      */
     public function getMailText(string $systemMailId, User $user): string
     {
@@ -64,7 +63,7 @@ class SystemMail extends Email
         $this->smMailHeader = '';
 
         // create organization object of the organization the current user is assigned (at registration this can be every organization)
-        if (!$this->smOrganization instanceof Organization || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization()) {
+        if (!isset($this->smOrganization) || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization()) {
             $this->smOrganization = new Organization($this->db, $user->getOrganization());
         }
 

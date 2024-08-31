@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Validate various content of form elements
+ * @brief Validate various content of form elements
  *
  * This class can be used to validate form input. Therefore, the methods can be called and get the
  * form input as parameter. The method will return **true** if validation was successful. Otherwise,
@@ -28,8 +22,11 @@
  *     $e->showHtml();
  * }
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ * @deprecated 5.0.0:5.1.0 Class FormValidation is deprecated, use class Admidio/UserInterface/Form instead.
  */
-use Admidio\Exception;
 class FormValidation
 {
     /**

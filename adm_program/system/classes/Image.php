@@ -1,12 +1,10 @@
 <?php
 /**
- ***********************************************************************************************
- * Class manages images and provides methods for customizing them.
+ * @brief Class manages images and provides methods for customizing them.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
 class Image
 {
@@ -17,7 +15,7 @@ class Image
     /**
      * @var string
      */
-    private $imagePath = '';
+    private string $imagePath = '';
     /**
      * @var resource|null
      */
@@ -25,15 +23,15 @@ class Image
     /**
      * @var int
      */
-    private $imageType;
+    private int $imageType;
     /**
      * @var int
      */
-    private $imageWidth  = 0;
+    private int $imageWidth  = 0;
     /**
      * @var int
      */
-    private $imageHeight = 0;
+    private int $imageHeight = 0;
 
     /**
      * @param string $pathAndFilename

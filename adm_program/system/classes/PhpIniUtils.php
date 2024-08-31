@@ -1,12 +1,10 @@
 <?php
 /**
- ***********************************************************************************************
- * Class manages PHP-Ini stuff
+ * @brief Class manages PHP-Ini stuff
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
 final class PhpIniUtils
 {
@@ -16,7 +14,7 @@ final class PhpIniUtils
     /**
      * @var array<int,string> The disabled function names
      */
-    private static $disabledFunctions;
+    private static array $disabledFunctions;
 
     /**
      * Returns the disabled function names

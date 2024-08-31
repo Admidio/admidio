@@ -1,14 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * Class manages weblinks viewable for user
+ * @brief Class manages weblinks viewable for user
  *
  * This class reads all available recordset from table links.
  * and returns an Array with results, recordset and validated parameters from $_GET Array.
@@ -98,6 +90,9 @@
  *         )
  * )
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 class ModuleWeblinks extends Modules
 {

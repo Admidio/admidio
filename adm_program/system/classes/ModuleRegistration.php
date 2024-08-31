@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Class with methods to display the module pages and helpful functions.
+ * @brief Class with methods to display the module pages and helpful functions.
  *
  * This class adds some functions that are used in the registration module to keep the
  * code easy to read and short
@@ -20,8 +14,10 @@
  * $page->createContentRegistrationList();
  * $page->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ModuleRegistration extends HtmlPage
 {
     /**
@@ -59,7 +55,6 @@ class ModuleRegistration extends HtmlPage
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
-     * @throws Exception
      * @throws Exception
      */
     public function createContentRegistrationList()
@@ -125,6 +120,10 @@ class ModuleRegistration extends HtmlPage
 
         $this->smarty->assign('cards', $templateData);
         $this->smarty->assign('l10n', $gL10n);
-        $this->pageContent .= $this->smarty->fetch('modules/registration.cards.tpl');
+        try {
+            $this->pageContent .= $this->smarty->fetch('modules/registration.cards.tpl');
+        } catch (\Smarty\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 }

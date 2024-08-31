@@ -1,14 +1,9 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Ramsey\Uuid\Uuid;
+use Admidio\Exception;
 
-/*
- * Controls read and write access to database tables
+/**
+ * @brief Controls read and write access to database tables
  *
  * This class should help you to read and write records of database tables.
  * You create an object for a special table, and then you are able to read
@@ -29,10 +24,10 @@
  * $role->setValue('rol_max_members', $maxMembers);
  * $role->save();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-
-use Ramsey\Uuid\Uuid;
-use Admidio\Exception;
 class TableAccess
 {
     /**

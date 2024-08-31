@@ -1,18 +1,16 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class handle role rights, cards and other things of users
+ * @brief Class handle role rights, cards and other things of users
+ *
+ * Handles all the user data and the rights. This is used for the current login user and for
+ * other users of the database.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-
-/**
- * Handles all the user data and the rights. This is used for the current login user and for other users of the database.
- */
-use Admidio\Exception;
 class User extends TableAccess
 {
     public const MAX_INVALID_LOGINS = 3;
@@ -20,75 +18,75 @@ class User extends TableAccess
     /**
      * @var bool
      */
-    protected $administrator;
+    protected bool $administrator;
     /**
      * @var ProfileFields object with current user field structure
      */
-    protected $mProfileFieldsData;
+    protected ProfileFields $mProfileFieldsData;
     /**
      * @var array<string,bool> Array with all roles rights and the status of the current user e.g. array('rol_assign_roles' => false, 'rol_approve_users' => true ...)
      */
-    protected $rolesRights = array();
+    protected array $rolesRights = array();
     /**
      * @var array<int,int> Array with all roles e.g. array(0 => role_id_1, 1 => role_id_2, ...)
      */
-    protected $rolesViewMemberships = array();
+    protected array $rolesViewMemberships = array();
     /**
      * @var array<int,int> Array with all roles e.g. array(0 => role_id_1, 1 => role_id_2, ...)
      */
-    protected $rolesViewProfiles = array();
+    protected array $rolesViewProfiles = array();
     /**
      * @var array<int,string> Array with all UUIDs of roles e.g. array(0 => role_uuid_1, 1 => role_uuid_2, ...)
      */
-    protected $rolesViewMembershipsUUID = array();
+    protected array $rolesViewMembershipsUUID = array();
     /**
      * @var array<int,string> Array with all UUIDs of roles e.g. array(0 => role_uuid_1, 1 => role_uuid_2, ...)
      */
-    protected $rolesViewProfilesUUID = array();
+    protected array $rolesViewProfilesUUID = array();
     /**
      * @var array<int,int> Array with all roles e.g. array(0 => role_id_1, 1 => role_id_2, ...)
      */
-    protected $rolesWriteMails = array();
+    protected array $rolesWriteMails = array();
     /**
      * @var array<int,string> Array with all UUIDs of roles e.g. array(0 => role_uuid_1, 1 => role_uuid_2, ...)
      */
-    protected $rolesWriteMailsUUID = array();
+    protected array $rolesWriteMailsUUID = array();
     /**
      * @var array<int,int> Array with all roles who the user is assigned
      */
-    protected $rolesMembership = array();
+    protected array $rolesMembership = array();
     /**
      * @var array<int,int> Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
      */
-    protected $rolesMembershipLeader = array();
+    protected array $rolesMembershipLeader = array();
     /**
      * @var array<int,int> Array with all roles who the user is assigned and is not a leader of the role
      */
-    protected $rolesMembershipNoLeader = array();
+    protected array $rolesMembershipNoLeader = array();
     /**
      * @var int the organization for which the rights are read, could be changed with method **setOrganization**
      */
-    protected $organizationId;
+    protected int $organizationId;
     /**
      * @var bool Flag if the user has the right to assign at least one role
      */
-    protected $assignRoles;
+    protected bool $assignRoles;
     /**
      * @var array<int,bool> Array with all user ids where the current user is allowed to edit the profile.
      */
-    protected $usersEditAllowed = array();
+    protected array $usersEditAllowed = array();
     /**
      * @var array<int,array<string,int|bool>> Array with all users to whom the current user has a relationship
      */
-    protected $relationships = array();
+    protected array $relationships = array();
     /**
      * @var bool Flag if relationships for this user were checked
      */
-    protected $relationshipsChecked = false;
+    protected bool $relationshipsChecked = false;
     /**
      * @var bool Flag if the changes to the user data should be handled by the ChangeNotification service.
      */
-    protected $changeNotificationEnabled;
+    protected bool $changeNotificationEnabled;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -465,7 +463,6 @@ class User extends TableAccess
      * user rights and role memberships will be initialized
      * @return void
      * @throws Exception
-     * @throws Exception
      */
     public function clear()
     {
@@ -475,7 +472,7 @@ class User extends TableAccess
         $this->setValue('usr_valid', 1);
         $this->columnsValueChanged = false;
 
-        if ($this->mProfileFieldsData instanceof ProfileFields) {
+        if (isset($this->mProfileFieldsData)) {
             // data of all profile fields will be deleted, the internal structure will not be destroyed
             $this->mProfileFieldsData->clearUserData();
         }
@@ -493,7 +490,6 @@ class User extends TableAccess
      * Also, a notification that the user was deleted will be sent if notification is enabled.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
-     * @throws Exception
      * @throws Exception
      */
     public function delete(): bool
@@ -1095,7 +1091,6 @@ class User extends TableAccess
      * Checks if the maximum of invalid logins is reached.
      * @return bool Returns true if the maximum of invalid logins is reached.
      * @throws Exception
-     * @throws Exception
      */
     private function hasMaxInvalidLogins(): bool
     {
@@ -1327,7 +1322,6 @@ class User extends TableAccess
      * Handles the incorrect given login password.
      * @return string Return string with the reason why the login failed.
      * @throws Exception
-     * @throws Exception
      */
     private function handleIncorrectPasswordLogin(): string
     {
@@ -1505,7 +1499,6 @@ class User extends TableAccess
      * @param int $id Unique id of the user that should be read
      * @return bool Returns **true** if one record is found
      * @throws Exception
-     * @throws Exception
      */
     public function readDataById(int $id): bool
     {
@@ -1529,14 +1522,13 @@ class User extends TableAccess
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @throws Exception
-     * @throws Exception
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
      */
     public function readDataByUuid(string $uuid): bool
     {
         if (parent::readDataByUuid($uuid)) {
-            if (is_object($this->mProfileFieldsData)) {
+            if (isset($this->mProfileFieldsData)) {
                 // read data of all user fields from current user
                 $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
             }
@@ -1552,7 +1544,6 @@ class User extends TableAccess
      * Rehashes the password of the user if necessary.
      * @param string $password The password for the current user. This should not be encoded.
      * @return bool Returns true if password was rehashed.
-     * @throws Exception
      * @throws Exception
      */
     private function rehashIfNecessary(string $password): bool
@@ -1609,7 +1600,6 @@ class User extends TableAccess
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool
      * @throws Exception
-     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -1636,7 +1626,7 @@ class User extends TableAccess
         }
 
         // if value of a field changed then update timestamp of user object
-        if ($this->mProfileFieldsData instanceof ProfileFields && $this->mProfileFieldsData->hasColumnsValueChanged()) {
+        if (isset($this->mProfileFieldsData) && $this->mProfileFieldsData->hasColumnsValueChanged()) {
             $this->columnsValueChanged = true;
         }
 
@@ -1652,7 +1642,7 @@ class User extends TableAccess
             $returnValue = $returnValue && parent::save($updateFingerPrint);
         }
 
-        if ($this->mProfileFieldsData instanceof ProfileFields) {
+        if (isset($this->mProfileFieldsData)) {
             // save data of all user fields
             $this->mProfileFieldsData->saveUserData($usrId);
         }
@@ -1745,7 +1735,7 @@ class User extends TableAccess
      * registrations than this method will create a new password and send this to the user.
      * @return void
      * @throws Exception
-     * @throws Exception
+     * @throws \Exception
      */
     public function sendNewPassword()
     {
@@ -1774,7 +1764,6 @@ class User extends TableAccess
      * Set the default values that are stored in the profile fields configuration to each profile field.
      * A default value will only be set if **usf_default_value** is not NULL.
      * @return void
-     * @throws Exception
      * @throws Exception
      */
     public function setDefaultValues()
@@ -1808,7 +1797,6 @@ class User extends TableAccess
      * @param string $newPassword The new value that should be stored in the database field
      * @param bool $doHashing Should the password get hashed before inserted. Default is true
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws Exception
      * @throws Exception
      */
     public function setPassword(string $newPassword, bool $doHashing = true): bool
@@ -1892,7 +1880,6 @@ class User extends TableAccess
      * // reads data of adm_user_fields
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
-     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
@@ -1997,7 +1984,6 @@ class User extends TableAccess
      * Update login data for this user. These are timestamps of last login and reset count
      * and timestamp of invalid logins.
      * @return void
-     * @throws Exception
      * @throws Exception
      */
     public function updateLoginData()
@@ -2129,7 +2115,6 @@ class User extends TableAccess
     /**
      * Return the (internal) representation of this user's profile fields
      * @return object<ProfileFields> All profile fields of the user
-     * @throws Exception
      */
     public function getProfileFieldsData()
     {

@@ -1,14 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * Class with methods to display the module pages and helpful functions.
+ * @brief Class with methods to display the module pages and helpful functions.
  *
  * This class adds some functions that are used in the documents and files module to keep the
  * code easy to read and short
@@ -20,21 +12,24 @@
  * $page->createContentRegistrationList();
  * $page->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 class ModuleDocumentsFiles extends HtmlPage
 {
     /**
      * @var array Array with all read folders and files
      */
-    protected $data = array();
+    protected array $data = array();
     /**
      * @var array Array with all read folders and files
      */
-    protected $unregisteredFoldersFiles = array();
+    protected array $unregisteredFoldersFiles = array();
     /**
      * @var TableFolder Object of the current folder
      */
-    protected $folder;
+    protected TableFolder $folder;
 
     /**
      * Show all roles of the organization in card view. The roles must be read before with the method readData.

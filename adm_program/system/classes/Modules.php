@@ -1,14 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * This **abstract class** defines a parameter set for modules
+ * @brief This **abstract class** defines a parameter set for modules
  *
  * This abstract class sets the parameters used in Admidio modules.
  * The class gets a copy of the $_GET Array and validates the values
@@ -36,53 +28,56 @@
  *                                         [system] (date_from => 'string', date_to => 'string'))
  *                                      );
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 abstract class Modules
 {
     /**
      * @var int Integer Active, inactive or event participation roles
      */
-    protected $roleType = 1;
+    protected int $roleType = 1;
     /**
      * @var string String with headline expression
      */
-    protected $headline = '';
+    protected string $headline = '';
     /**
      * @var int ID as integer for chosen category
      */
-    protected $catId = 0;
+    protected int $catId = 0;
     /**
      * @var int ID as integer to choose record
      */
-    protected $id = 0;
+    protected int $id = 0;
     /**
      * @var array Array with date settings in English format and system format
      */
-    protected $daterange = array();
+    protected array $daterange = array();
     /**
      * @var string String with current mode ( Default: "Default" )
      */
-    protected $mode = 'Default';
+    protected string $mode = 'Default';
     /**
      * @var string String with order ASC/DESC ( Default: "ASC" )
      */
-    protected $order = '';
+    protected string $order = '';
     /**
      * @var int Integer for start element
      */
-    protected $start = 0;
+    protected int $start = 0;
     /**
      * @var array<string,mixed> Array with all parameters of the module that were added to this class.
      */
-    protected $parameters = array();
+    protected array $parameters = array();
     /**
      * @var array Array Clone of $_GET Array
      */
-    protected $properties;
+    protected array $properties;
     /**
      * @var array Array with validated parameters
      */
-    protected $arrParameter = array();
+    protected array $arrParameter = array();
 
     /**
      * @param int $startElement
@@ -99,6 +94,7 @@ abstract class Modules
     /**
      * Constructor that will create an object of a parameter set needed in modules to get the recordset.
      * Initialize parameters
+     * @throws \Admidio\Exception
      */
     public function __construct()
     {
@@ -173,6 +169,7 @@ abstract class Modules
 
     /**
      * Set ID
+     * @throws \Admidio\Exception
      */
     protected function setId()
     {
@@ -195,6 +192,7 @@ abstract class Modules
      * Set order
      * @par If user string is set in $_GET Array the string is validated by Admidio function
      * and set as order for the results in the modules. Otherwise, mode is set to default "ASC"
+     * @throws \Admidio\Exception
      */
     protected function setOrder()
     {
@@ -211,6 +209,7 @@ abstract class Modules
      * Set startelement
      * @par If user string is set in $_GET Array the string is validated by Admidio function
      * and set as startelement in the modules. Otherwise, startelement is set to 0
+     * @throws \Admidio\Exception
      */
     protected function setStartElement()
     {

@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Manage the update of a component from the actual version to the target version
+ * @brief Manage the update of a component from the actual version to the target version
  *
  * The class is an extension to the component class and will handle the update of a
  * component. It will read the database version from the component and set this as
@@ -25,8 +19,10 @@
  * $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
  * $componentUpdateHandle->update(ADMIDIO_VERSION);
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ComponentUpdate extends Component
 {
     public const UPDATE_STEP_STOP = 'stop';
@@ -34,6 +30,7 @@ class ComponentUpdate extends Component
     /**
      * Constructor that will create an object for component updating.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @throws Exception
      */
     public function __construct(Database $database)
     {
@@ -69,7 +66,11 @@ class ComponentUpdate extends Component
             $updateFile = ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
             if (is_file($updateFile)) {
-                return new SimpleXMLElement($updateFile, 0, true);
+                try {
+                    return new SimpleXMLElement($updateFile, 0, true);
+                } catch (\Exception $e) {
+                    throw new Exception($e->getMessage());
+                }
             }
 
             $message = 'XML-Update file not found!';
@@ -129,10 +130,11 @@ class ComponentUpdate extends Component
 
     /**
      * Prepares and execute a sql statement.
-     * @param string $sql     The sql statement that should be executed.
+     * @param string $sql The sql statement that should be executed.
      * @param bool $showError If set to **true** the error will be shown and the script will be terminated
      *                        within the Database class.
      * @return bool Return **true** if the sql statement could be successfully executed otherwise **false**
+     * @throws Exception
      */
     private function executeUpdateSql(string $sql, bool $showError): bool
     {

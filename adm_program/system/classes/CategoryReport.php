@@ -1,21 +1,20 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class manages the data for the report of module CategoryReport
+ * @brief Class manages the data for the report of module CategoryReport
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class CategoryReport
 {
-    public $headerData = array();          ///< Array mit allen Spaltenueberschriften
-    public $listData = array();          ///< Array mit den Daten für den Report
-    public $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
-    protected $conf;                               ///< die gewaehlte Konfiguration
-    protected $arrConfiguration = array();         ///< Array with the all configurations from the database
+    public array $headerData = array();          ///< Array mit allen Spaltenueberschriften
+    public array $listData = array();          ///< Array mit den Daten für den Report
+    public array $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
+    protected int $conf;                               ///< die gewaehlte Konfiguration
+    protected array $arrConfiguration = array();         ///< Array with the all configurations from the database
 
     /**
      * CategoryReport constructor
@@ -55,7 +54,6 @@ class CategoryReport
     /**
      * Erzeugt die Arrays listData und headerData fuer den Report
      * @return void
-     * @throws Exception
      * @throws Exception
      */
     public function generate_listData()
@@ -416,7 +414,7 @@ class CategoryReport
     /**
      * get the active configuration
      */
-    public function getConfiguration()
+    public function getConfiguration(): int
     {
         return $this->conf;
     }
@@ -426,7 +424,7 @@ class CategoryReport
      * Note: the column selection list is always up-to-date as it is newly generated,
      * but the value to be checked may be out of date as it comes from the configuration table
      * @param string $search_value
-     * @return    int
+     * @return int
      */
     public function isInHeaderSelection(string $search_value): int
     {
@@ -491,7 +489,6 @@ class CategoryReport
      * Funktion speichert das Konfigurationsarray
      * @param array $arrConfiguration
      * @return  array das Konfigurationsarray
-     * @throws Exception
      * @throws Exception
      */
     public function saveConfigArray(array $arrConfiguration): array

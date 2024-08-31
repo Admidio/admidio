@@ -1,46 +1,42 @@
 <?php
-/**
- ***********************************************************************************************
- * Class manages a data array
- *
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * This class handle the data of a list. Therefore, the data can be added via several methods.
- * The preferred method is based on the ListConfiguration class and will use their configuration
- * to handle the data and the output. It's also possible to add data via an individual sql or
- * just set a custom array. The class delivers several export possibilities such as Excel,
- * ODF-Spreadsheet or CSV file.
- */
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Admidio\Exception;
 
+/**
+ * @brief Class manages a data array
+ *
+ * This class handle the data of a list. Therefore, the data can be added via several methods.
+ * The preferred method is based on the ListConfiguration class and will use their configuration
+ * to handle the data and the output. It's also possible to add data via an individual sql or
+ * just set a custom array. The class delivers several export possibilities such as Excel,
+ * ODF-Spreadsheet or CSV file.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ */
 class ListData
 {
     /**
      * @var array<int,array> Array with all data that should be handled in this class
      */
-    protected $data = array();
+    protected array $data = array();
     /**
      * @var ListConfiguration An object of the ListConfiguration that could be used to read data
      * and to format data to different output formats.
      */
-    protected $listConfiguration;
+    protected ListConfiguration $listConfiguration;
     /**
      * @var Spreadsheet An object of the PhpSpreadsheet which will handle the export
      */
-    protected $spreadsheet;
+    protected Spreadsheet $spreadsheet;
     /**
      * @var boolean Flag if the spreadsheet contains a headline for each column.
      */
-    protected $containsHeadline = false;
+    protected bool $containsHeadline = false;
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -111,6 +107,9 @@ class ListData
         return $outputData;
     }
 
+    /**
+     * @throws Exception
+     */
     protected function format()
     {
         $alphabet = range('A', 'Z');
@@ -134,7 +133,11 @@ class ListData
         for($number = 0; $number < count($this->data[0]); $number++) {
             $this->spreadsheet->getActiveSheet()->getColumnDimension($alphabet[$number])->setAutoSize(true);
         }
-        $this->spreadsheet->getDefaultStyle()->getAlignment()->setWrapText(true);
+        try {
+            $this->spreadsheet->getDefaultStyle()->getAlignment()->setWrapText(true);
+        } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
+            throw new Exception($e);
+        }
     }
     /**
      * Set the column headline for each column of the data array.
@@ -190,7 +193,6 @@ class ListData
      *                                  - **endDate** : The end date if memberships that should be considered.The time period of
      *                                    the membership must be at least one day before this date.
      * @return void
-     * @throws Exception
      * @throws Exception
      */
     public function setDataByConfiguration(ListConfiguration $listConfiguration, array $options)

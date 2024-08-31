@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Class with methods to display the module pages and helpful functions.
+ * @brief Class with methods to display the module pages and helpful functions.
  *
  * This class adds some functions that are used in the contacts module to keep the
  * code easy to read and short
@@ -20,8 +14,10 @@
  * $page->createContentAssignUser();
  * $page->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ModuleContacts extends HtmlPage
 {
     /**
@@ -41,7 +37,6 @@ class ModuleContacts extends HtmlPage
      * @param User $user User object of the user who should be assigned.
      * @param bool $assignRegistration Flag if the user will be assigned through the registration process.
      * @throws \Smarty\Exception
-     * @throws Exception
      * @throws Exception
      */
     public function createContentAssignUser(User $user, bool $assignRegistration = false)

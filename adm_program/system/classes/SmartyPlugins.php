@@ -1,7 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * Plugins for the template engine Smarty
+ * @brief Plugins for the template engine Smarty
  *
  * This class includes several plugins for the template engine Smarty. Each method represents a
  * plugin and must be registered to a Smarty instance. After that the method could be used as a
@@ -12,11 +11,9 @@
  * // register method to smarty instance
  * $smarty->registerPlugin('method', 'array_key_exists', array('SmartyPlugins' => 'array_key_exists'));
  * ```
- *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- * **********************************************************************************************
  */
 class SmartyPlugins
 {
@@ -40,11 +37,11 @@ class SmartyPlugins
     public static function arrayKeyExists(array $params, Smarty\Template $template): bool
     {
         if (empty($params['array'])) {
-            throw new \UnexpectedValueException('Smarty function array_key_exists: missing "array" parameter');
+            throw new UnexpectedValueException('Smarty function array_key_exists: missing "array" parameter');
         }
 
         if (empty($params['key'])) {
-            throw new \UnexpectedValueException('Smarty function array_key_exists: missing "key" parameter');
+            throw new UnexpectedValueException('Smarty function array_key_exists: missing "key" parameter');
         }
 
         if (array_key_exists($params['key'], $params['array'])) {
@@ -70,10 +67,10 @@ class SmartyPlugins
      * {/if}
      * ```
      */
-    public static function isTranslationStringID(array $params, Smarty\Template $template)
+    public static function isTranslationStringID(array $params, Smarty\Template $template): bool
     {
         if (empty($params['string'])) {
-            throw new \UnexpectedValueException('Smarty function is_translation_string_id: missing "string" parameter');
+            throw new UnexpectedValueException('Smarty function is_translation_string_id: missing "string" parameter');
         }
 
         if (Language::isTranslationStringId($params['string'])) {
@@ -99,24 +96,24 @@ class SmartyPlugins
      * <span>Some other html code</span>
      * ```
      */
-    public static function loadAdmidioPlugin(array $params, Smarty\Template $template)
+    public static function loadAdmidioPlugin(array $params, Smarty\Template $template): string
     {
         global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
         global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
         global $g_root_path, $gPreferences, $gCurrentOrgId, $gCurrentUserId, $gMessage;
 
         if (empty($params['plugin'])) {
-            throw new \UnexpectedValueException('Smarty function load_admidio_plugin: missing "plugin" parameter');
+            throw new UnexpectedValueException('Smarty function load_admidio_plugin: missing "plugin" parameter');
         }
 
         if (empty($params['file'])) {
-            throw new \UnexpectedValueException('Smarty function load_admidio_plugin: missing "file" parameter');
+            throw new UnexpectedValueException('Smarty function load_admidio_plugin: missing "file" parameter');
         }
 
         $filename = ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $params['plugin'] . '/' . $params['file'];
 
         if (!is_file($filename)) {
-            throw new \UnexpectedValueException('Invalid plugin file ' . $filename . ' !');
+            throw new UnexpectedValueException('Invalid plugin file ' . $filename . ' !');
         }
 
         ob_start();

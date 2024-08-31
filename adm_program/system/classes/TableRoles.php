@@ -1,21 +1,18 @@
 <?php
-/**
- ***********************************************************************************************
- * Class manages access to database table adm_roles
- *
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
+ * @brief Class manages access to database table adm_roles
+ *
  * This class is used to create a role object.
  * A role can be administered over this class in the database.
  * For this purpose the information of the role as well as the associated category
  * are read out. But only the role data are written
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class TableRoles extends TableAccess
 {
     public const ROLE_GROUP = 0;
@@ -35,15 +32,15 @@ class TableRoles extends TableAccess
     /**
      * @var int number of leaders of this role
      */
-    protected $countLeaders;
+    protected int $countLeaders;
     /**
      * @var int number of members (without leaders) of this role
      */
-    protected $countMembers;
+    protected int $countMembers;
     /**
-     * @var int Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
+     * @var int|null Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
      */
-    protected $type;
+    protected int $type = TableRoles::ROLE_GROUP;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_roles.
@@ -51,7 +48,6 @@ class TableRoles extends TableAccess
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $rolId The recordset of the role with this id will be loaded.
      *                           If id isn't set than an empty object of the table is created.
-     * @throws Exception
      * @throws Exception
      */
     public function __construct(Database $database, int $rolId = 0)
@@ -72,7 +68,6 @@ class TableRoles extends TableAccess
     /**
      * Set the current role active.
      * Event roles could not be set active.
-     * @throws Exception
      * @throws Exception
      */
     public function activate(): void
@@ -208,7 +203,6 @@ class TableRoles extends TableAccess
      * Set the current role inactive.
      * Administrator and event roles could not be set inactive.
      * @throws Exception
-     * @throws Exception
      */
     public function deactivate(): void
     {
@@ -224,7 +218,6 @@ class TableRoles extends TableAccess
      * Deletes the selected role of the table and all references in other tables.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
-     * @throws Exception
      * @throws Exception
      */
     public function delete(): bool
@@ -409,7 +402,6 @@ class TableRoles extends TableAccess
      * we also check if the user is a member of the roles that could participate at the event.
      * @return bool Return true if the current user is allowed to view this role
      * @throws Exception
-     * @throws Exception
      */
     public function isVisible(): bool
     {
@@ -474,7 +466,6 @@ class TableRoles extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws Exception
-     * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -516,7 +507,6 @@ class TableRoles extends TableAccess
      *                          and set to false if it doesn't exist.
      * @return void
      * @throws Exception
-     * @throws Exception
      */
     public function setMembership(int $userId, string $startDate, string $endDate, ?bool $leader = null)
     {
@@ -540,7 +530,7 @@ class TableRoles extends TableAccess
               FROM ' . TBL_MEMBERS . '
              WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
                AND mem_usr_id = ? -- $userId
-             ORDER BY mem_begin ASC';
+             ORDER BY mem_begin';
         $queryParams = array(
             $this->getValue('rol_id'),
             $userId
@@ -685,7 +675,6 @@ class TableRoles extends TableAccess
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
-     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -752,7 +741,6 @@ class TableRoles extends TableAccess
      * *                          and set to false if it doesn't exist.
      * @return void
      * @throws Exception
-     * @throws Exception
      */
     public function startMembership(int $userId, ?bool $leader = null)
     {
@@ -779,7 +767,6 @@ class TableRoles extends TableAccess
      * yesterday.
      * @param int $userId ID if the user who should get the membership to this role.
      * @return void
-     * @throws Exception
      * @throws Exception
      */
     public function stopMembership(int $userId)
@@ -808,7 +795,6 @@ class TableRoles extends TableAccess
     /**
      * Toggle the valid status of a role. The role could be set to inactive or active again.
      * @param bool $status Valid status that should be set.
-     * @throws Exception
      * @throws Exception
      */
     private function toggleValid(bool $status): void

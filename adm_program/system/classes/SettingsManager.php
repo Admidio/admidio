@@ -1,36 +1,35 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class the manage the settings of an organization
+ * @brief Class the manage the settings of an organization
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class SettingsManager
 {
     /**
      * @var Database The Database object
      */
-    private $db;
+    private Database $db;
     /**
      * @var int The organization id
      */
-    private $orgId;
+    private int $orgId;
     /**
      * @var array<string,string> An array with the settings with name and value
      */
-    private $settings = array();
+    private array $settings = array();
     /**
      * @var bool Indicator if settings was already full loaded
      */
-    private $initFullLoad = false;
+    private bool $initFullLoad = false;
     /**
      * @var bool Indicator if exceptions should be thrown when reading settings
      */
-    private $throwExceptions = true;
+    private bool $throwExceptions = true;
 
     /**
      * SettingsManager constructor.
@@ -328,7 +327,7 @@ class SettingsManager
     }
 
     /**
-     * Expects an array with setting name and value and will than add all the settings of the array to
+     * Expects an array with setting name and value and will then add all the settings of the array to
      * the database. Checks the existence of each setting and perform an insert or update.
      * @param array<string,mixed> $settings Array with all setting names and values to set
      * @param bool $update Set true to make a force reload of this setting from the database
@@ -363,7 +362,7 @@ class SettingsManager
      * @param bool $update Set true to make a force reload of this setting from the database
      * @throws Exception
      */
-    public function set(string $name, $value, bool $update = true)
+    public function set(string $name, $value, bool $update = true): bool
     {
         if (!self::isValidName($name)) {
             throw new Exception('Settings name "' . $name . '" is an invalid string!');

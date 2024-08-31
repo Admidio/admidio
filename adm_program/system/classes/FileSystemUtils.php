@@ -1,22 +1,18 @@
 <?php
-/**
- ***********************************************************************************************
- * This class handles the most necessary file-system operations
- *
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+
+use Admidio\Exception;
 
 /**
- * This class handles the most necessary file-system operations like:
+ * @brief This class handles the most necessary file-system operations like:
  * - Function: get normalized path, get human-readable bytes, restrict all operations to specific directories
  * - Info: disk space, process owner/group info, path owner/group info, is path owner, path mode, path permissions
  * - Folder: create, is empty, get content, delete content, delete folder, copy, move, chmod
  * - File: delete, copy, move, chmod, read, write
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 final class FileSystemUtils
 {
     public const CONTENT_TYPE_DIRECTORY = 'directory';
@@ -32,12 +28,12 @@ final class FileSystemUtils
     /**
      * @var array<int,string> The allowed directories
      */
-    private static $allowedDirectories = array();
+    private static array $allowedDirectories = array();
 
     /**
      * @var array<string,string> Array with file extensions and the best Font Awesome icon that should be used
      */
-    private static $iconFileExtension = array(
+    private static array $iconFileExtension = array(
         'bmp'  => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/bmp', 'viewable' => true),
         'gif'  => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/gif', 'viewable' => true),
         'jpg'  => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/jpeg', 'viewable' => true),
@@ -48,7 +44,6 @@ final class FileSystemUtils
         'docx' => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/msword', 'viewable' => false),
         'dot'  => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/msword', 'viewable' => false),
         'dotx' => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/msword', 'viewable' => false),
-        'odt'  => array('icon' => 'bi-file-earmark-text-fill', 'mime-type' => 'application/vnd.oasis.opendocument.text', 'viewable' => false),
         'odt'  => array('icon' => 'bi-file-earmark-text-fill', 'mime-type' => 'application/vnd.oasis.opendocument.text', 'viewable' => false),
         'csv'  => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'text/comma-separated-values', 'viewable' => false),
         'xls'  => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/msexcel', 'viewable' => false),
@@ -763,7 +758,7 @@ final class FileSystemUtils
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $now = new DateTime();
 
-        return $now->format('Ymd-His') . '_' . SecurityUtils::getRandomString(16, $charset = '0123456789abcdefghijklmnopqrstuvwxyz') . '.' . strtolower($extension);
+        return $now->format('Ymd-His') . '_' . SecurityUtils::getRandomString(16, '0123456789abcdefghijklmnopqrstuvwxyz') . '.' . strtolower($extension);
     }
 
     /**
@@ -1222,7 +1217,7 @@ final class FileSystemUtils
         //$filename = preg_replace("/([^\w\s\d\-_~:;<>|\[\]\(\).])/u", '', $filename);
         $filename = preg_replace("/<>:\?\/\*\"'/", '-', $filename);
         // Remove any runs of periods
-        $filename = preg_replace("/([\.]{2,})/u", '', $filename);
+        $filename = preg_replace("/([.]{2,})/u", '', $filename);
 
         return $filename;
     }

@@ -1,14 +1,9 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Smarty\Smarty;
+use Admidio\Exception;
 
 /**
- * Creates an Admidio specific complete html page with the template engine Smarty.
+ * @brief Creates an Admidio specific complete html page with the template engine Smarty.
  *
  * This class creates a html page with head and body and integrates some Admidio
  * specific elements like css files, javascript files and javascript code. The class is derived
@@ -26,11 +21,10 @@
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
  * $page->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-
-use Smarty\Smarty;
-use Admidio\Exception;
-
 class HtmlPage
 {
     /**
@@ -103,7 +97,6 @@ class HtmlPage
      * @param string $id ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
-     * @throws Exception
      * @throws Exception
      */
     public function __construct(string $id, string $headline = '')
@@ -251,9 +244,8 @@ class HtmlPage
 
     /**
      * Public method to assign new variables to the Smarty template of the HtmlPage.
-     * @param string $variable Name of the variable within the Smarty template.
-     * @param string|array $value Value of the variable.
      * @return void
+     * @throws Exception
      */
     private function assignBasicSmartyVariables()
     {
@@ -492,6 +484,7 @@ class HtmlPage
      * was not set until now than this will also be the title.
      * @param string $headline A string that contains the headline for the page.
      * @return void
+     * @throws Exception
      */
     public function setHeadline(string $headline)
     {
@@ -515,6 +508,7 @@ class HtmlPage
      * Set the title of the html page that will be shown in the <title> tag.
      * @param string $title A string that contains the title for the page.
      * @return void
+     * @throws Exception
      */
     public function setTitle(string $title)
     {

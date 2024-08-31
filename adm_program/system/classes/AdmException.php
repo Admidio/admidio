@@ -1,14 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * Admidio specific enhancements of the exception class
+ * @brief Admidio specific enhancements of the exception class
  *
  * This class extends the default PHP exception class with an Admidio specific
  * output. The exception gets a language string as parameter and returns a
@@ -30,6 +22,9 @@
  *    $e->showText();
  * }
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  * @deprecated 5.0.0:5.1.0 Class "AdmException" is deprecated, use class "\Admidio\Exception" instead.
  */
 class AdmException extends Exception

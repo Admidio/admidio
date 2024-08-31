@@ -1,29 +1,26 @@
 <?php
 /**
- ***********************************************************************************************
- * Class creates an RssFeed object according to RSS 2.0.
+ * @brief Class creates an RssFeed object according to RSS 2.0.
  * Specification of RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-
 class RssFeed
 {
     /**
      * @var array
      */
-    protected $channel = array();
+    protected array $channel = array();
     /**
      * @var array<int,array<string,string>>
      */
-    protected $items = array();
+    protected array $items = array();
     /**
      * @var string
      */
-    protected $feed;
+    protected string $feed;
 
     /**
      * Constructor of the RSS class which needs all the information of the channel

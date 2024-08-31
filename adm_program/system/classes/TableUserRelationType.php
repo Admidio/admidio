@@ -1,12 +1,10 @@
 <?php
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_user_relation_types
+ * @brief Class manages access to database table adm_user_relation_types
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
 
 class TableUserRelationType extends TableAccess
@@ -20,7 +18,7 @@ class TableUserRelationType extends TableAccess
      * If the id is set than the specific message will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $urtId The recordset of the relation type with this id will be loaded. If id isn't set than an empty object of the table is created.
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function __construct(Database $database, int $urtId = 0)
     {
@@ -30,7 +28,7 @@ class TableUserRelationType extends TableAccess
     /**
      * Returns the inverse relation type.
      * @return null|self Returns the inverse relation type
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function getInverse(): ?TableUserRelationType
     {
@@ -46,6 +44,7 @@ class TableUserRelationType extends TableAccess
     /**
      * Get the string of the current relationship type.
      * @return string The relationship type could be **asymmetrical**, **symmetrical** or **unidirectional**
+     * @throws \Admidio\Exception
      */
     public function getRelationTypeString(): string
     {
@@ -62,6 +61,7 @@ class TableUserRelationType extends TableAccess
 
     /**
      * @return bool
+     * @throws \Admidio\Exception
      */
     public function isAsymmetrical(): bool
     {
@@ -70,6 +70,7 @@ class TableUserRelationType extends TableAccess
 
     /**
      * @return bool
+     * @throws \Admidio\Exception
      */
     public function isSymmetrical(): bool
     {
@@ -78,6 +79,7 @@ class TableUserRelationType extends TableAccess
 
     /**
      * @return bool
+     * @throws \Admidio\Exception
      */
     public function isUnidirectional(): bool
     {

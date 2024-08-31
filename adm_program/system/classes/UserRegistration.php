@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Creates, assign and update user registrations in database
+ * @brief Creates, assign and update user registrations in database
  *
  * This class extends the User class with some special functions for new registrations.
  * If a new user is saved than there will be an additional table entry in the
@@ -35,18 +29,20 @@
  * // set user to valid and send notification email
  * $user->acceptRegistration();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class UserRegistration extends User
 {
     /**
      * @var bool Flag if the object will send a SystemMail if registration is accepted or deleted.
      */
-    private $sendEmail = true;
+    private bool $sendEmail = true;
     /**
      * @var TableAccess
      */
-    private $tableRegistration;
+    private TableAccess $tableRegistration;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -58,7 +54,6 @@ class UserRegistration extends User
      *                                      with no specific user is created.
      * @param int $organizationId The id of the organization for which the user should be registered.
      *                                      If no id is set than the user will be registered for the current organization.
-     * @throws Exception
      * @throws Exception
      */
     public function __construct(Database $database, ProfileFields $userFields, int $userId = 0, int $organizationId = 0)
@@ -125,7 +120,6 @@ class UserRegistration extends User
      * user will not be saved. That must be done in the calling method because of duplicate **usr_login_name**.
      * @param User $user Object of the existing user that should be adopted.
      * @throws Exception
-     * @throws Exception
      */
     public function adoptUser(User $user)
     {
@@ -148,7 +142,6 @@ class UserRegistration extends User
      * delete user because he has no use for the system. After that a notification email is send to the user.
      * If the user is valider than only the registration will be deleted!
      * @return bool **true** if no error occurred
-     * @throws Exception
      * @throws Exception
      */
     public function delete(): bool
@@ -194,7 +187,6 @@ class UserRegistration extends User
      * Send a notification email to all role members of roles that can approve registrations
      * therefore the flags system mails and notification mail for roles with approve registration must be activated
      * @throws Exception
-     * @throws Exception
      */
     public function notifyAuthorizedMembers()
     {
@@ -236,7 +228,6 @@ class UserRegistration extends User
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @throws Exception
-     * @throws Exception
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
      */
@@ -260,7 +251,7 @@ class UserRegistration extends User
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool
      * @throws Exception
-     * @throws Exception
+     * @throws \Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -304,7 +295,6 @@ class UserRegistration extends User
      * of the organization.
      * @param string $validationId A validation ID of the registration that should be checked.
      * @return bool Return **true** if the given data could be joined to a valid registration
-     * @throws Exception
      * @throws Exception
      */
     public function validate(string $validationId): bool

@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * This class provides static functions for different tasks for passwords and hashing
+ * @brief This class provides static functions for different tasks for passwords and hashing
  *
  * Functions:
  * hash()               hash the given password with the given options
@@ -18,8 +12,11 @@
  * hashInfo()           provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
  * passwordStrength()   shows the strength of the given password
  * costBenchmark()      run a benchmark to get the best fitting cost value
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 final class PasswordUtils
 {
     public const HASH_ALGORITHM_DEFAULT = 'DEFAULT';
@@ -128,8 +125,9 @@ final class PasswordUtils
     /**
      * Prepares the options values
      * @param string $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
-     * @param array<string,int> $options   The hash-options array
+     * @param array<string,int> $options The hash-options array
      * @return array<string,int>
+     * @throws Exception
      */
     private static function getPreparedOptions(string $algorithm, array $options): array
     {
@@ -161,7 +159,7 @@ final class PasswordUtils
     /**
      * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
      * @param string $hash The hash you want the get infos about
-     * @return string|array<string,mixed> Returns an array or string with infos about the given hash
+     * @return string|array<string,mixed>|null Returns an array or string with infos about the given hash
      */
     public static function hashInfo(string $hash)
     {
@@ -183,10 +181,11 @@ final class PasswordUtils
     /**
      * Checks if the given hash is generated from the given options. The default algorithm uses the
      * password_* methods, otherwise the builtin helper for SHA-512 crypt hashes from the operating system.
-     * @param string $hash      The hash string that should be checked
+     * @param string $hash The hash string that should be checked
      * @param string $algorithm The hash-algorithm the hash should match to. Possible values are 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT' or 'SHA512'.
-     * @param array<string,int> $options   The hash-options the hash should match to
+     * @param array<string,int> $options The hash-options the hash should match to
      * @return bool Returns false if the hash match the given options and false if not
+     * @throws Exception
      */
     public static function needsRehash(string $hash, string $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array()): bool
     {

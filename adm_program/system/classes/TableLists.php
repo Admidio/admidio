@@ -1,15 +1,13 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_lists
+ * @brief Class manages access to database table adm_lists
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
-
 class TableLists extends TableAccess
 {
     /**
@@ -28,7 +26,6 @@ class TableLists extends TableAccess
      * Deletes the selected list with all associated fields.
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
-     * @throws Exception
      * @throws Exception SYS_ERROR_DELETE_DEFAULT_LIST
      */
     public function delete(): bool

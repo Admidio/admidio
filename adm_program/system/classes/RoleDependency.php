@@ -1,52 +1,51 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class to manage dependencies between different roles.
+ * @brief Class to manage dependencies between different roles.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class RoleDependency
 {
     /**
      * @var Database An object of the class Database for communication with the database
      */
-    protected $db;
+    protected Database $db;
     /**
      * @var int
      */
-    protected $roleIdParent = 0;
+    protected int $roleIdParent = 0;
     /**
      * @var int
      */
-    protected $roleIdChild  = 0;
+    protected int $roleIdChild  = 0;
     /**
      * @var string
      */
-    protected $comment = '';
+    protected string $comment = '';
     /**
      * @var int
      */
-    protected $usrId = 0;
+    protected int $usrId = 0;
     /**
      * @var string
      */
-    protected $timestamp = '';
+    protected string $timestamp = '';
     /**
      * @var int
      */
-    protected $roleIdParentOrig = 0;
+    protected int $roleIdParentOrig = 0;
     /**
      * @var int
      */
-    protected $roleIdChildOrig = 0;
+    protected int $roleIdChildOrig = 0;
     /**
      * @var bool
      */
-    protected $persisted = false;
+    protected bool $persisted = false;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
@@ -296,7 +295,6 @@ class RoleDependency
      * If a membership still exists than start date will not be changed. Only
      * the end date will be set to 31.12.9999.
      * @return bool Returns false if no parent or child row exists
-     * @throws Exception
      * @throws Exception
      */
     public function updateMembership(): bool

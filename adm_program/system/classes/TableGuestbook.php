@@ -1,7 +1,8 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_guestbook
+ * @brief Class manages access to database table adm_guestbook
  *
  * With the given id a guestbook entry object is created from the data in the database table **adm_guestbook**.
  * The class will handle the communication with the database and give easy access to the data. New
@@ -11,9 +12,7 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class TableGuestbook extends TableAccess
 {
     /**
@@ -54,10 +53,11 @@ class TableGuestbook extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {

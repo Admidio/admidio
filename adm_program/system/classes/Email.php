@@ -1,15 +1,11 @@
 <?php
-/**
- ***********************************************************************************************
- * Create and send a text or html email with attachments
- *
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 /**
+ * @brief Create and send a text or html email with attachments
+ *
  * Mit dieser Klasse kann ein Email-Objekt erstellt
  * und anschliessend verschickt werden.
  *
@@ -56,11 +52,11 @@
  *
  * Am Ende muss die Mail natuerlich noch gesendet werden:
  * function sendEmail();
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
 class Email extends PHPMailer
 {
     public const SIZE_UNIT_BYTE = 'Byte';

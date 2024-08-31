@@ -1,24 +1,21 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
 use Ramsey\Uuid\Uuid;
 use Admidio\Exception;
 
 // this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
 const TBL_DATES = TABLE_PREFIX . '_dates';
 
+/**
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ */
 final class ComponentUpdateSteps
 {
     /**
      * @var Database
      */
-    private static $db;
+    private static Database $db;
 
     /**
      * Set the database
@@ -31,6 +28,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method will add a uuid to each row of the tables adm_users and adm_roles
+     * @throws Exception
      */
     public static function updateStep50AddUuid()
     {
@@ -59,6 +57,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method removes wrong configured visible roles of category Basic_Data
+     * @throws Exception
      */
     public static function updateStep43RemoveInvalidVisibleRoleRights()
     {
@@ -80,6 +79,7 @@ final class ComponentUpdateSteps
     /**
      * This method will add a new profile field LinkedIn and Instagram to the database,
      * but only if the category social networks exists
+     * @throws Exception
      */
     public static function updateStep43AddSocialNetworkProfileFields()
     {
@@ -135,6 +135,7 @@ final class ComponentUpdateSteps
     /**
      * This method will add a new systemmail text to the database table **adm_texts** for each
      * organization in the database.
+     * @throws Exception
      */
     public static function updateStep43AddNewNotificationText()
     {
@@ -154,6 +155,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method only execute an sql statement but because of the use of & it could not done in our XML structure
+     * @throws Exception
      */
     public static function updateStep41CleanUpRoleNames()
     {
@@ -164,6 +166,7 @@ final class ComponentUpdateSteps
     /**
      * This method will add a new default list for the members management module. This list will be used to configure
      * and show the columns of the members management overview.
+     * @throws Exception
      */
     public static function updateStep41CleanUpInternalNameProfileFields()
     {
@@ -184,6 +187,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method will add a uuid to each row of the tables adm_users and adm_roles
+     * @throws Exception
      */
     public static function updateStep41PostgreSqlSetBoolean()
     {
@@ -261,7 +265,7 @@ final class ComponentUpdateSteps
         if (is_dir($ecardThemeFolder)) {
             try {
                 FileSystemUtils::copyDirectory($ecardThemeFolder, $ecardMyFilesFolder);
-            } catch (\RuntimeException $exception) {
+            } catch (RuntimeException $exception) {
                 $gLogger->error('Could not copy directory from ' . $ecardThemeFolder . ' to ' . $ecardMyFilesFolder . '. Please check if Admidio have write rights within adm_my_files.');
                 return;
                 // => EXIT
@@ -269,7 +273,7 @@ final class ComponentUpdateSteps
 
             try {
                 FileSystemUtils::deleteDirectoryIfExists($ecardThemeFolder);
-            } catch (\RuntimeException $exception) {
+            } catch (RuntimeException $exception) {
                 // no rights to delete the old folder, then continue the update process
                 return;
                 // => EXIT
@@ -281,6 +285,7 @@ final class ComponentUpdateSteps
      * This method will migrate the database entries
      * from plugin Kategoriereport (table adm_plugin_preferences)
      * to module category report (table adm_category_report).
+     * @throws Exception
      */
     public static function updateStep41CategoryReportMigration()
     {
@@ -294,18 +299,18 @@ final class ComponentUpdateSteps
             $orgId = (int)$organization['org_id'];
             $config = array();
 
-            // prüfen, ob vom Plugin Kategoriereport eine configdata.php existiert
+            // check whether a configdata.php exists for the category report plugin
             $file = ADMIDIO_PATH . FOLDER_PLUGINS . '/kategoriereport/configdata.php';
             if (file_exists($file)) {
-                include $file;                  // benötigt wird hier der Wert von $dbtoken
+                include $file; // the value of $dbtoken is required here
 
-                // prüfen, ob die Tabelle 'adm_plugin_preferences' existiert
+                // check whether the table 'adm_plugin_preferences' exists
                 $tableName = TABLE_PREFIX . '_plugin_preferences';
                 $sql = 'SHOW TABLES LIKE \'' . $tableName . '\' ';
                 $tableExistStatement = self::$db->queryPrepared($sql);
 
                 if ($tableExistStatement->rowCount()) {
-                    // Konfiguration(en) mit 'PKR_...' einlesen
+                    // Read in configuration(s) with 'PKR_...'
                     $sql = 'SELECT plp_id, plp_name, plp_value
                  	          FROM ' . $tableName . '
                  	         WHERE plp_name LIKE ?
@@ -378,6 +383,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method will add a uuid to each row of the tables adm_users and adm_roles
+     * @throws Exception
      */
     public static function updateStep41AddUuid()
     {
@@ -424,6 +430,7 @@ final class ComponentUpdateSteps
     /**
      * This method will add a new default list for the members management module. This list will be used to configure
      * and show the columns of the members management overview.
+     * @throws Exception
      */
     public static function updateStep41AddMembersManagementDefaultList()
     {
@@ -459,6 +466,7 @@ final class ComponentUpdateSteps
     /**
      * This method will add a new systemmail text to the database table **adm_texts** for each
      * organization in the database.
+     * @throws Exception
      */
     public static function updateStep41AddSystemmailText()
     {
@@ -480,6 +488,7 @@ final class ComponentUpdateSteps
      * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
      * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
      * reference to the message.
+     * @throws Exception
      */
     public static function updateStep41MigrateMessageRecipients()
     {
@@ -515,24 +524,26 @@ final class ComponentUpdateSteps
 
     /**
      * This method adds the email template to the preferences
+     * @throws Exception
      */
     public static function updateStep40AddEmailTemplate()
     {
         if (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/template.html')) {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'template.html\' WHERE prf_name = \'mail_template\'';
-            $pdoStatement = self::$db->queryPrepared($sql);
+            self::$db->queryPrepared($sql);
         } elseif (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/default.html')) {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'default.html\' WHERE prf_name = \'mail_template\'';
-            $pdoStatement = self::$db->queryPrepared($sql);
+            self::$db->queryPrepared($sql);
         } else {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'\' WHERE prf_name = \'mail_template\'';
-            $pdoStatement = self::$db->queryPrepared($sql);
+            self::$db->queryPrepared($sql);
         }
     }
 
     /**
      * Rename the existing folder of the old download module to the new documents and files module
      * with the prefix 'documents' and the shortname of the current organization.
+     * @throws Exception
      */
     public static function updateStep40RenameDownloadRootFolder()
     {
@@ -554,7 +565,7 @@ final class ComponentUpdateSteps
 
             if ($rowFolder = $folderStatement->fetch()) {
                 $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
-                $folderOldName = $folder->getFullFolderPath('documents');
+                $folderOldName = $folder->getFullFolderPath();
                 $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
                 $folder->save();
 
@@ -566,9 +577,9 @@ final class ComponentUpdateSteps
                 if (is_dir($folderOldName)) {
                     try {
                         //rename($folderOldName, $folder->getFullFolderPath());
-                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath('documents'));
-                    } catch (\RuntimeException $exception) {
-                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
+                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
+                    } catch (RuntimeException $exception) {
+                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath()));
                         // TODO
                     }
                 }
@@ -579,6 +590,7 @@ final class ComponentUpdateSteps
     /**
      * This method will migrate all names of the event roles from the former technical name to the name of the event
      * @throws Exception
+     * @throws \Exception
      */
     public static function updateStep40RenameParticipationRoles()
     {
@@ -617,6 +629,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method adds a new global list configuration for participants of events.
+     * @throws Exception
      */
     public static function updateStep33AddDefaultParticipantList()
     {
@@ -675,6 +688,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method adds new categories for all organizations.
+     * @throws Exception
      */
     public static function updateStep33AddGlobalCategories()
     {
@@ -704,6 +718,7 @@ final class ComponentUpdateSteps
     /**
      * Update the existing category confirmation of participation and make it
      * organization depending.
+     * @throws Exception
      */
     public static function updateStep33EventCategory()
     {
@@ -754,6 +769,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method migrate the data of the table adm_date_role to the table adm_roles_rights_data.
+     * @throws Exception
      */
     public static function updateStep33MigrateDatesRightsToFolderRights()
     {
@@ -794,6 +810,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method update the security settings for menus to standard values
+     * @throws Exception
      */
     public static function updateStep33MigrateToStandardMenu()
     {
@@ -828,6 +845,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method set the approval states for all members of an event in the past to confirmed.
+     * @throws Exception
      */
     public static function updateStep33SetParticipantsApprovalStates()
     {
@@ -849,6 +867,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method add all roles to the role right category_view if the role had set the flag cat_hidden = 1
+     * @throws Exception
      */
     public static function updateStep33VisibleCategories()
     {
@@ -882,6 +901,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method renames the download folders of the different organizations to the new secure filename pattern
+     * @throws Exception
      */
     public static function updateStep33DownloadOrgFolderName()
     {
@@ -898,7 +918,7 @@ final class ComponentUpdateSteps
             if ($orgNameOld !== $orgNameNew) {
                 try {
                     FileSystemUtils::moveDirectory($path . strtolower($orgNameOld), $path . strtolower($orgNameNew));
-                } catch (\RuntimeException $exception) {
+                } catch (RuntimeException $exception) {
                     $gLogger->error('Could not move directory!', array('from' => $path . strtolower($orgNameOld), 'to' => $path . strtolower($orgNameNew)));
                     // TODO
                 }
@@ -908,6 +928,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method removes expired messengers like GooglePlus, AOL Messenger and Yahoo. Messenger from the system.
+     * @throws Exception
      */
     public static function updateStep33RemoveExpiredMessengers()
     {
@@ -925,6 +946,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method add new categories for announcements to the database.
+     * @throws Exception
      */
     public static function updateStep32AddAnnouncementsCategories()
     {
@@ -966,6 +988,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method installs the default user relation types
+     * @throws Exception
      */
     public static function updateStep32InstallDefaultUserRelationTypes()
     {
@@ -987,6 +1010,7 @@ final class ComponentUpdateSteps
     /**
      * This method migrate the data of the table adm_folder_roles to the
      * new table adm_roles_rights_data.
+     * @throws Exception
      */
     public static function updateStep32MigrateToFolderRights()
     {
@@ -1028,19 +1052,15 @@ final class ComponentUpdateSteps
             $rolesArray[] = (int)$roleId;
         }
 
-        try {
-            // get recordset of current folder from database
-            $folder = new TableFolder(self::$db, $folderId);
-            $folder->addRolesOnFolder('folder_upload', $rolesArray);
-        } catch (Exception $e) {
-            $e->showText();
-            // => EXIT
-        }
+        // get recordset of current folder from database
+        $folder = new TableFolder(self::$db, $folderId);
+        $folder->addRolesOnFolder('folder_upload', $rolesArray);
     }
 
     /**
      * Create a unique folder name for the root folder of the download module that contains
      * the shortname of the current organization
+     * @throws Exception
      */
     public static function updateStep32NewDownloadRootFolderName()
     {
@@ -1062,7 +1082,7 @@ final class ComponentUpdateSteps
 
             if ($rowFolder = $folderStatement->fetch()) {
                 $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
-                $folderOldName = $folder->getFullFolderPath('documents');
+                $folderOldName = $folder->getFullFolderPath();
                 $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
                 $folder->save();
 
@@ -1073,9 +1093,9 @@ final class ComponentUpdateSteps
 
                 if ($row['org_shortname'] === $g_organization && is_dir($folderOldName)) {
                     try {
-                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath('documents'));
-                    } catch (\RuntimeException $exception) {
-                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
+                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
+                    } catch (RuntimeException $exception) {
+                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath()));
                         // TODO
                     }
                 }
@@ -1096,6 +1116,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method renames the role 'webmaster' to 'administrator'.
+     * @throws Exception
      */
     public static function updateStep32RenameWebmasterToAdministrator()
     {
@@ -1117,7 +1138,7 @@ final class ComponentUpdateSteps
      * @param string $folder
      * @return bool
      */
-    public static function updateStep32RewriteFolderRights(string $folder = '')
+    public static function updateStep32RewriteFolderRights(string $folder = ''): bool
     {
         if (!FileSystemUtils::isUnixWithPosix()) {
             return false;
@@ -1131,13 +1152,14 @@ final class ComponentUpdateSteps
             FileSystemUtils::chmodDirectory($folder, FileSystemUtils::DEFAULT_MODE_DIRECTORY, true);
 
             return true;
-        } catch (\RuntimeException $exception) {
+        } catch (RuntimeException $exception) {
             return false;
         }
     }
 
     /**
      * This method set the default configuration for all organizations
+     * @throws Exception
      */
     public static function updateStep31SetDefaultConfiguration()
     {
@@ -1166,6 +1188,7 @@ final class ComponentUpdateSteps
 
     /**
      * This method deletes all roles that belongs to still deleted events.
+     * @throws Exception
      */
     public static function updateStep30DeleteDateRoles()
     {

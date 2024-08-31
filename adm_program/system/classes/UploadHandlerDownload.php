@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Improved checks and update of database after upload of files.
+ * @brief Improved checks and update of database after upload of files.
  *
  * This class extends the UploadHandler of the jquery-file-upload library. After
  * the upload of the file we do some checks on the file and if no check fails then
@@ -22,8 +16,10 @@
  *                                                  'upload_url' => $uploadUrl,
  *                                                  'image_versions' => array()));
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class UploadHandlerDownload extends UploadHandler
 {
     /**
@@ -38,7 +34,6 @@ class UploadHandlerDownload extends UploadHandler
      * @param        $index
      * @param        $content_range
      * @return stdClass
-     * @throws Exception
      */
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null): stdClass
     {

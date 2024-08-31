@@ -1,14 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * Creates the Javascript output for the jQuery DataTables plugin
+ * @brief Creates the Javascript output for the jQuery DataTables plugin
  *
  * There are some methods that will help to create the correct Javascript for DataTables and handles some
  * table effects that we want to use in Admidio.
@@ -30,6 +22,9 @@
  * $dataTables->setDatatablesColumnsNotHideResponsive(array(8));
  * $dataTables->createJavascript(145, 7);
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 class HtmlDataTables
 {
@@ -99,7 +94,7 @@ class HtmlDataTables
      * Adds javascript libs and code and inits the datatables params for a datatables table
      * @param int $rowCount Number of rows of the current table.
      * @param int $columnCount Number of columns of the current table.
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function createJavascript(int $rowCount = 0, int $columnCount = 0)
     {
@@ -251,7 +246,7 @@ class HtmlDataTables
     }
 
     /**
-     * Datatables will automatically hide columns if the screen will be to small e.g. on smartphones. You must than click
+     * Datatables will automatically hide columns if the screen will be to small e.g. on smartphones. You must then click
      * on a + button and will view the hidden columns. With this method you can remove specific columns from that feature.
      * These columns will always be shown. But be careful if you remove too many columns datatables must hide some columns
      * anyway.

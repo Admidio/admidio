@@ -1,27 +1,25 @@
 <?php
 /**
- ***********************************************************************************************
- * Class to create a file upload page for document & files or photos module
+ * @brief Class to create a file upload page for document & files or photos module
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
 class FileUpload
 {
     /**
-     * @var string Object of HtmlPage that represents the current page where the upload should be integrated
+     * @var HtmlPage Object of HtmlPage that represents the current page where the upload should be integrated
      */
-    protected $page;
+    protected HtmlPage $page;
     /**
      * @var string Name module for which the upload should be done. Preferred modules are 'photos' and 'documents_files'
      */
-    protected $module;
+    protected string $module;
     /**
      * @var string UUID of the destination object that could be the folder or the album
      */
-    protected $destinationUuid;
+    protected string $destinationUuid;
 
     /**
      * Constructor that will create an object of FileUpload.

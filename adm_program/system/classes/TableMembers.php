@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Handle memberships of roles and manage it in the database table adm_members
+ * @brief Handle memberships of roles and manage it in the database table adm_members
  *
  * The class search in the database table **adm_members** for role memberships of
  * users. It has easy methods to start or stop a membership.
@@ -24,15 +18,18 @@
  * $membership->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
  * $membership->stopMembership();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class TableMembers extends TableAccess
 {
     /**
      * Constructor that will create an object of a recordset of the table adm_members.
      * If the id is set than the specific membership will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $memId    The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $memId The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
     public function __construct(Database $database, $memId = 0)
     {
@@ -125,7 +122,6 @@ class TableMembers extends TableAccess
         if (!$this->newRecord && is_object($gChangeNotification)) {
             // Log begin, end and leader as changed (set to NULL)
             $usrId = $this->getValue('mem_usr_id');
-            $memId = $this->getValue('mem_id');
             $membership = $this->getValue('rol_name');
             $gChangeNotification->logRoleChange(
                 $usrId,
@@ -171,7 +167,6 @@ class TableMembers extends TableAccess
      * with their timestamp will be updated.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool

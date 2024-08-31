@@ -1,14 +1,9 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Ramsey\Uuid\Uuid;
+use Admidio\Exception;
 
-/*
- * Handle the connection to the database, send all sql statements and handle the returned rows.
+/**
+ * @brief Handle the connection to the database, send all sql statements and handle the returned rows.
  *
  * This class creates a connection to the database and provides several methods
  * to communicate with the database. There are methods to send sql statements
@@ -57,10 +52,10 @@
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
  * }
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Ramsey\Uuid\Uuid;
-use Admidio\Exception;
-
 class Database
 {
     public const PDO_ENGINE_MYSQL = 'mysql';
@@ -148,14 +143,14 @@ class Database
      * If the engine is invalid or the connection not possible an exception will be thrown.
      * @param string $engine   The database type that is supported from Admidio. **mysql** and **pgsql** are valid values.
      * @param string $host     The hostname or server where the database is running. e.g. localhost or 127.0.0.1
-     * @param int $port        If you don't use the default port of the database then set your port here.
+     * @param int|null $port        If you don't use the default port of the database then set your port here.
      * @param string $dbName   Name of the database you want to connect.
      * @param string|null $username Username to connect to database
      * @param string|null $password Password to connect to database
      * @param array  $options
      * @throws Exception
      */
-    public function __construct(string $engine, string $host, $port, string $dbName, $username = null, $password = null, array $options = array())
+    public function __construct(string $engine, string $host, ?int $port, string $dbName, ?string $username = null, ?string $password = null, array $options = array())
     {
         global $gLogger;
 

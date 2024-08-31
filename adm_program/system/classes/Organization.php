@@ -1,14 +1,9 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Ramsey\Uuid\Uuid;
+use Admidio\Exception;
 
-/*
- * Handle organization data of Admidio and is connected to database table adm_organizations
+/**
+ * @brief Handle organization data of Admidio and is connected to database table adm_organizations
  *
  * This class creates the organization object and manages the access to the
  * organization specific preferences of the table adm_preferences. There
@@ -23,29 +18,28 @@
  * $language        = $settingsManager->get('system_language');
  * // language = 'de'
  * ```
- ***********************************************************************************************
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Ramsey\Uuid\Uuid;
-use Admidio\Exception;
-
 class Organization extends TableAccess
 {
     /**
      * @var bool Flag will be set if the class had already searched for child organizations
      */
-    protected $bCheckChildOrganizations = false;
+    protected bool $bCheckChildOrganizations = false;
     /**
      * @var array<int,string> Array with all child organizations of this organization
      */
-    protected $childOrganizations = array();
+    protected array $childOrganizations = array();
     /**
      * @var SettingsManager Manager for organization preferences
      */
-    protected $settingsManager;
+    protected SettingsManager $settingsManager;
     /**
      * @var int Number of all organizations in database
      */
-    protected $countOrganizations = 0;
+    protected int $countOrganizations = 0;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
@@ -85,7 +79,7 @@ class Organization extends TableAccess
         $this->childOrganizations = array();
         $this->countOrganizations = 0;
 
-        if ($this->settingsManager instanceof SettingsManager) {
+        if (isset($this->settingsManager)) {
             $this->settingsManager->clearAll();
         }
     }
@@ -489,7 +483,7 @@ class Organization extends TableAccess
      */
     public function &getSettingsManager(): SettingsManager
     {
-        if (!$this->settingsManager instanceof SettingsManager) {
+        if (!isset($this->settingsManager)) {
             $this->settingsManager = new SettingsManager($this->db, (int) $this->getValue('org_id'));
             $this->settingsManager->resetAll();
         }

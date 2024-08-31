@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Create a menu node from database and serve several output formats
+ * @brief Create a menu node from database and serve several output formats
  *
  * This class will create a menu node. The data will be read from the database table **adm_menu**.
  * All entries of this menu node will be added to an internal array. There is a method to get
@@ -22,24 +16,26 @@
  * $menuNodes->loadFromDatabase(4711);
  * $html = $menuNode->getHtml();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class MenuNode
 {
     /**
      * @var string Internal id of the node. Should be the value of mem_name_intern from adm_menu.
      */
-    protected $textId;
+    protected string $textId;
 
     /**
      * @var string The name of the node that will be shown as the head of the list. Should be the value of mem_name from adm_menu.
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var array Array with all entries of this node
      */
-    protected $nodeEntries = array();
+    protected array $nodeEntries = array();
 
     /**
      * constructor
@@ -135,7 +131,7 @@ class MenuNode
      */
     public function loadFromDatabase(int $nodeId)
     {
-        global $gDb, $gValidLogin, $gL10n;
+        global $gDb, $gValidLogin;
 
         $sql = 'SELECT men_id, men_com_id, men_name_intern, men_name, men_description, men_url, men_icon, com_name_intern
                   FROM '.TBL_MENU.'
@@ -177,7 +173,6 @@ class MenuNode
      * user is a member of at least one of these roles.
      * @param int $menuId The id of the menu item that should be checked if it's visible.
      * @return bool Return true if the menu item is visible to the current user.
-     * @throws Exception
      * @throws Exception
      */
     public function menuItemIsVisible(int $menuId): bool

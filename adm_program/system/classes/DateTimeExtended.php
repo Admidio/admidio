@@ -1,12 +1,10 @@
 <?php
 /**
- ***********************************************************************************************
- * Class extends the PHP-DateTime object with some useful functions
+ * @brief Class extends the PHP-DateTime object with some useful functions
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
 class DateTimeExtended extends DateTime
 {
@@ -14,7 +12,7 @@ class DateTimeExtended extends DateTime
      * Returns an array with all 7 weekdays with full name in the specific language.
      * @param int $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
      * @return string|string[] with all 7 weekday or if param weekday is set than the full name of that weekday
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public static function getWeekdays(int $weekday = 0)
     {

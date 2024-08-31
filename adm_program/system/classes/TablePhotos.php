@@ -1,7 +1,8 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_photos
+ * @brief Class manages access to database table adm_photos
  *
  * With the given id a photo album object is created from the data in the database table **adm_photos**.
  * The class will handle the communication with the database and give easy access to the data. New
@@ -11,15 +12,13 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class TablePhotos extends TableAccess
 {
     /**
      * @var bool|null Flag if this album has child albums
      */
-    protected $hasChildAlbums;
+    protected ?bool $hasChildAlbums;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_photos.
@@ -78,6 +77,7 @@ class TablePhotos extends TableAccess
     /**
      * Creates the folder for the photo album in the file system.
      * @return array<string,string>|null
+     * @throws Exception
      */
     public function createFolder(): ?array
     {
@@ -178,13 +178,14 @@ class TablePhotos extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format          Returns the field value in a special format **text**, **html**, **database**
+     * @param string $format Returns the field value in a special format **text**, **html**, **database**
      *                                or datetime (detailed description in method description)
      *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
      *                                * 'database' : returns the value that is stored in database with no format applied
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -221,6 +222,7 @@ class TablePhotos extends TableAccess
      * the photo album must be visible to the user and must be of the current organization.
      * The user must be a member of at least one role that have the right to manage photo albums.
      * @return bool Return true if the current user is allowed to edit this photo album
+     * @throws Exception
      */
     public function isEditable(): bool
     {
@@ -234,6 +236,7 @@ class TablePhotos extends TableAccess
      * the album must be from the current organization and should not be locked or the user
      * is a module administrator.
      * @return bool Return true if the current user is allowed to view this photo album
+     * @throws Exception
      */
     public function isVisible(): bool
     {

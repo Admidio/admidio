@@ -1,25 +1,23 @@
 <?php
+use Admidio\Exception;
 
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_folders
+ * @brief Class manages access to database table adm_folders
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class TableFolder extends TableAccess
 {
     /**
      * @var RolesRights|null Object with all roles that could view the current folder
      */
-    protected $folderViewRolesObject;
+    protected ?RolesRights $folderViewRolesObject;
     /**
      * @var RolesRights|null Object with all roles that could upload files the current folder
      */
-    protected $folderUploadRolesObject;
+    protected ?RolesRights $folderUploadRolesObject;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
@@ -36,6 +34,7 @@ class TableFolder extends TableAccess
     /**
      * @param array<string,array<int,array<string,mixed>>> $completeFolder
      * @return array<string,array<int,array<string,mixed>>>
+     * @throws Exception
      */
     public function addAdditionalToFolderContents(array $completeFolder): array
     {
@@ -109,7 +108,6 @@ class TableFolder extends TableAccess
      * uploading will be adapted to the subfolders.
      * @param string $newFolderFileName Name of the folder or file that should be added to the database.
      * @throws Exception
-     * @throws Exception
      */
     public function addFolderOrFileToDatabase(string $newFolderFileName)
     {
@@ -178,6 +176,7 @@ class TableFolder extends TableAccess
      * Legt einen neuen Ordner im Dateisystem an
      * @param string $folderName
      * @return null|array<string,string>
+     * @throws Exception
      */
     public function createFolder(string $folderName): ?array
     {
@@ -201,7 +200,6 @@ class TableFolder extends TableAccess
      * After that the class will be initialized.
      * @param int $folderId
      * @return bool **true** if no error occurred
-     * @throws Exception
      * @throws Exception
      */
     public function delete(int $folderId = 0): bool
@@ -281,7 +279,6 @@ class TableFolder extends TableAccess
      * @param bool $recursive If set to **true** than the rights will be set recursive to all subfolders
      * @param int $folderId The folder id of the subfolder if this method is called recursive
      * @throws Exception
-     * @throws Exception
      */
     private function editRolesOnFolder(string $mode, string $rolesRightNameIntern, array $rolesArray, bool $recursive, int $folderId = 0)
     {
@@ -320,7 +317,6 @@ class TableFolder extends TableAccess
      * @param bool $publicFlag If set to **1** then all users could see this folder.
      * @param int $folderId The id of the folder where the public flag should be set.
      * @throws Exception
-     * @throws Exception
      */
     public function editPublicFlagOnFolder(bool $publicFlag, int $folderId = 0)
     {
@@ -345,6 +341,7 @@ class TableFolder extends TableAccess
     /**
      * Gets the path of the folder (with folder-name)
      * @return string
+     * @throws Exception
      */
     public function getFolderPath(): string
     {
@@ -354,6 +351,7 @@ class TableFolder extends TableAccess
     /**
      * Gets the absolute path of the folder (with folder-name)
      * @return string
+     * @throws Exception
      */
     public function getFullFolderPath(): string
     {
@@ -484,6 +482,7 @@ class TableFolder extends TableAccess
      * @param string $organizationShortname The shortname of the organization for which the folder name should be returned
      *                                      If no shortname is set than shortname of the current organization will be set.
      * @return string Returns the root folder name for the download module.
+     * @throws Exception
      */
     public static function getRootFolderName(string $type = 'documents', string $organizationShortname = ''): string
     {
@@ -554,7 +553,6 @@ class TableFolder extends TableAccess
     /**
      * @return array<int,array<string,mixed>> All sub-folders with their properties
      * @throws Exception
-     * @throws Exception
      */
     public function getSubfoldersWithProperties(): array
     {
@@ -620,6 +618,7 @@ class TableFolder extends TableAccess
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -636,6 +635,7 @@ class TableFolder extends TableAccess
     /**
      * Checks if the current user has the right to upload files to the current folder.
      * @return bool Return **true** if the user has the right to upload files
+     * @throws Exception
      */
     public function hasUploadRight(): bool
     {
@@ -647,6 +647,7 @@ class TableFolder extends TableAccess
     /**
      * Checks if the current user has the right to view files of the current folder.
      * @return bool Return **true** if the user has the right to view files
+     * @throws Exception
      */
     public function hasViewRight(): bool
     {
@@ -700,7 +701,6 @@ class TableFolder extends TableAccess
      * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @throws Exception
-     * @throws Exception
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readDataById
@@ -737,7 +737,6 @@ class TableFolder extends TableAccess
      * @param string $newName
      * @param string $newPath
      * @param int $folderId
-     * @throws Exception
      * @throws Exception
      */
     public function rename(string $newName, string $newPath, int $folderId = 0)

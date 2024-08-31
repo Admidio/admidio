@@ -1,14 +1,13 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_messages
+ * @brief Class manages access to database table adm_messages
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class TableMessage extends TableAccess
 {
     public const MESSAGE_TYPE_EMAIL = 'EMAIL';
@@ -17,23 +16,23 @@ class TableMessage extends TableAccess
     /**
      * @var array<int,string> This array has all the file names of the attachments. First element is the path and second element is the file name.
      */
-    private $msgAttachments = array();
+    private array $msgAttachments = array();
     /**
      * @var array Array with all recipients of the message.
      */
-    protected $msgRecipientsArray = array();
+    protected array $msgRecipientsArray = array();
     /**
      * @var array with TableAccess objects
      */
-    protected $msgRecipientsObjectArray = array();
+    protected array $msgRecipientsObjectArray = array();
     /**
      * @var object of TableAccess for the current content of the message.
      */
-    protected $msgContentObject;
+    protected object $msgContentObject;
     /**
      * @var int ID the conversation partner of a private message. This is the recipient of the message from msg_usr_id_sender.
      */
-    protected $msgConversationPartnerId = 0;
+    protected int $msgConversationPartnerId = 0;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_messages.
@@ -316,7 +315,7 @@ class TableMessage extends TableAccess
         $content = '';
 
         // if content was not set until now than read it from the database if message was already stored there
-        if (!is_object($this->msgContentObject) && $this->getValue('msg_id') > 0) {
+        if (isset($this->msgContentObject) && $this->getValue('msg_id') > 0) {
             $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
                       FROM '. TBL_MESSAGES_CONTENT. ' msc1
                      WHERE msc_msg_id = ? -- $this->getValue(\'msg_id\')
@@ -333,7 +332,7 @@ class TableMessage extends TableAccess
         }
 
         // read content of the content object
-        if (is_object($this->msgContentObject)) {
+        if (isset($this->msgContentObject)) {
             $content = $this->msgContentObject->getValue('msc_message', $format);
         }
 
@@ -546,7 +545,7 @@ class TableMessage extends TableAccess
                 $msgRecipientsObject->save();
             }
 
-            if (is_object($this->msgContentObject)) {
+            if (isset($this->msgContentObject)) {
                 // now save the message to the database
                 $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
                 $this->msgContentObject->setValue('msc_usr_id', $GLOBALS['gCurrentUserId']);

@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Creates a category object from the database table adm_categories
+ * @brief Creates a category object from the database table adm_categories
  *
  * With the given id a category object is created from the data in the database table **adm_categories**.
  * The class will handle the communication with the database and give easy access to the data. New
@@ -34,8 +28,10 @@
  * $category->setValue('cat_type', 'ROL');
  * $category->save();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class TableCategory extends TableAccess
 {
     public const MOVE_UP   = 'UP';
@@ -44,11 +40,11 @@ class TableCategory extends TableAccess
     /**
      * @var string
      */
-    protected $elementTable = '';
+    protected string $elementTable = '';
     /**
      * @var string
      */
-    protected $elementColumn = '';
+    protected string $elementColumn = '';
 
     /**
      * Constructor that will create an object of a recordset of the table adm_category.
@@ -347,7 +343,6 @@ class TableCategory extends TableAccess
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
      * @throws Exception
-     * @throws Exception
      */
     public function readDataByColumns(array $columnArray): bool
     {
@@ -390,7 +385,6 @@ class TableCategory extends TableAccess
      * If a new record is inserted than the next free sequence will be determined.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -488,7 +482,6 @@ class TableCategory extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool

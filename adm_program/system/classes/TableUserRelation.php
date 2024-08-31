@@ -1,14 +1,13 @@
 <?php
+use Admidio\Exception;
+
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_user_relations
+ * @brief Class manages access to database table adm_user_relations
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class TableUserRelation extends TableAccess
 {
     /**
@@ -26,7 +25,6 @@ class TableUserRelation extends TableAccess
     /**
      * Returns the inverse relation.
      * @return null|self Returns the inverse relation
-     * @throws Exception
      * @throws Exception
      */
     public function getInverse(): ?TableUserRelation
@@ -55,7 +53,6 @@ class TableUserRelation extends TableAccess
      * Deletes the selected record of the table and initializes the class
      * @param bool $deleteInverse
      * @return bool Returns **true** if no error occurred
-     * @throws Exception
      * @throws Exception
      */
     public function delete(bool $deleteInverse = true): bool

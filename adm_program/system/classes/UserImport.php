@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Import new users or modify existing users in the database
+ * @brief Import new users or modify existing users in the database
  *
  * This class extends the User class with some special functions for importing new users or modify
  * existing users. If values are set to the object, they will be checked if the values are valid.
@@ -26,8 +20,10 @@
  * // save user data and create new user
  * $userImport->save();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class UserImport extends User
 {
     // create readable constants for user import mode
@@ -39,11 +35,11 @@ class UserImport extends User
     /**
      * @var int Mode how the user will be imported. Details are described at the method setImportMode()
      */
-    private $importMode;
+    private int $importMode;
     /**
      * @var bool Flag if the user already exists (identified by firstname and lastname)
      */
-    private $userExists;
+    private bool $userExists;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -71,7 +67,7 @@ class UserImport extends User
     {
         parent::clear();
 
-        $this->userExists = null;
+        $this->userExists = false;
     }
 
     /**
@@ -80,7 +76,6 @@ class UserImport extends User
      * @param string $firstName The first name of the user that should be imported.
      * @param string $lastName The last name of the user that should be imported.
      * @return bool Returns **true** if one record is found
-     * @throws Exception
      * @throws Exception
      * @see TableAccess#readDataByColumns
      * @see TableAccess#readData
@@ -135,7 +130,6 @@ class UserImport extends User
      *                  USER_IMPORT_DUPLICATE If the user exists a new user will be created.
      *                  USER_IMPORT_DISPLACE  All profile field values of the import file will be added to the user.
      *                  USER_IMPORT_COMPLETE  Only profile fields that don't have a value will be added to the user.
-     * @throws Exception
      * @throws Exception
      */
     public function setImportMode(int $mode)
@@ -204,7 +198,6 @@ class UserImport extends User
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
      * @throws Exception
-     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -243,9 +236,8 @@ class UserImport extends User
                     case 'RADIO_BUTTON':
                         // save position of combobox
                         $arrListValues = $this->mProfileFieldsData->getProperty($columnName, 'usf_value_list', 'text');
-                        $position = 1;
 
-                        foreach ($arrListValues as $value) {
+                        for ($position = 1; $position <= count($arrListValues); $position++) {
                             if (StringUtils::strToLower($newValue) === StringUtils::strToLower(trim($arrListValues[$position]))) {
                                 // if col_value is text than save position if text is equal to text of position
                                 $validValue = $position;
@@ -253,7 +245,6 @@ class UserImport extends User
                                 // if col_value is numeric than save position if col_value is equal to position
                                 $validValue = $newValue;
                             }
-                            ++$position;
                         }
                         break;
                     case 'EMAIL':

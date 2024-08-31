@@ -1,8 +1,8 @@
 <?php
+use Admidio\Exception;
 
 /**
- ***********************************************************************************************
- * Class manages access to database table adm_files
+ * @brief Class manages access to database table adm_files
  *
  * With the given ID a file object is created from the data in the database table **adm_files**.
  * The class will handle the communication with the database and give easy access to the data. New
@@ -12,9 +12,7 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
-use Admidio\Exception;
 class TableFile extends TableAccess
 {
     /**
@@ -36,6 +34,7 @@ class TableFile extends TableAccess
      * Check if the file extension of the current file format is allowed for upload and the
      * documents and files module.
      * @return bool Return true if the file extension is allowed to be used within Admidio.
+     * @throws Exception
      */
     public function allowedFileExtension(): bool
     {
@@ -66,6 +65,7 @@ class TableFile extends TableAccess
     /**
      * Gets the absolute path of the folder (with folder-name)
      * @return string Returns the folder path of the current file.
+     * @throws Exception
      */
     public function getFullFolderPath(): string
     {
@@ -75,6 +75,7 @@ class TableFile extends TableAccess
     /**
      * Gets the absolute path of the file
      * @return string Returns the folder path with the file name of the current file.
+     * @throws Exception
      */
     public function getFullFilePath(): string
     {
@@ -84,6 +85,7 @@ class TableFile extends TableAccess
     /**
      * Get the extension of the file
      * @return string Extension of the file e.g. 'pdf' or 'jpg'
+     * @throws Exception
      */
     public function getFileExtension(): string
     {
@@ -140,6 +142,7 @@ class TableFile extends TableAccess
     /**
      * Get the relevant icon for the current file
      * @return string Returns the name of the icon
+     * @throws Exception
      */
     public function getIcon(): string
     {
@@ -149,6 +152,7 @@ class TableFile extends TableAccess
     /**
      * Get the MIME type of the current file e.g. 'image/jpeg'
      * @return string MIME type of the current file
+     * @throws Exception
      */
     public function getMimeType(): string
     {
@@ -162,6 +166,7 @@ class TableFile extends TableAccess
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -178,6 +183,7 @@ class TableFile extends TableAccess
     /**
      * Check if the current file format could be viewed within a browser.
      * @return bool Return true if the file could be viewed in the browser otherwise false.
+     * @throws Exception
      */
     public function isViewableInBrowser(): bool
     {
@@ -215,7 +221,6 @@ class TableFile extends TableAccess
      * For new records the user and timestamp will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool

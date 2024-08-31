@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Handle the navigation within a module and could create a html navigation bar
+ * @brief Handle the navigation within a module and could create a html navigation bar
  *
  * This class stores every url that you add to the object in a stack. From
  * there it's possible to return the last called url or a previous url. This
@@ -36,15 +30,17 @@
  * // show a navigation bar in your html code
  * ... <br /><?php echo $gNavigation->getHtmlNavigationBar('id-my-navigation'); ?><br /> ...
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class Navigation
 {
     /**
      * @var array<array<string,string,string>> Array with all urls of the navigation class.
      * The sub array will contain the url, a headline and an icon.
      */
-    private $urlStack = array();
+    private array $urlStack = array();
 
     /**
      * Constructor will initialize the local parameters

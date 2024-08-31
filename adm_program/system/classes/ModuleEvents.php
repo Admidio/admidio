@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * This class reads event recordset from database
+ * @brief This class reads event recordset from database
  *
  * This class reads all available recordset from table events.
  * and returns an Array with results, recordset and validated parameters from $_GET Array.
@@ -126,8 +120,10 @@
  *
  * )
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ModuleEvents extends Modules
 {
     public const MEMBER_APPROVAL_STATE_INVITED   = 0;
@@ -138,7 +134,7 @@ class ModuleEvents extends Modules
     /**
      * @var array An array with all names of the calendars whose events should be shown
      */
-    protected $calendarNames = array();
+    protected array $calendarNames = array();
 
     /**
      * Constructor that will create an object of a parameter set needed in modules to get the recordset.
@@ -156,7 +152,6 @@ class ModuleEvents extends Modules
      * @param int $startElement Defines the offset of the query (default: 0)
      * @param int $limit Limit of query rows (default: 0)
      * @return array<string,mixed> Array with all results, events and parameters.
-     * @throws Exception
      * @throws Exception
      */
     public function getDataSet(int $startElement = 0, int $limit = 0): array
@@ -218,7 +213,6 @@ class ModuleEvents extends Modules
      * Get number of available events.
      * @return int
      * @throws Exception
-     * @throws Exception
      */
     public function getDataSetCount(): int
     {
@@ -279,7 +273,7 @@ class ModuleEvents extends Modules
      * in this class with the help of parameters will be included.
      * @return \Eluceo\iCal\Presentation\Component Object with the structure of the vCalendar.
      *          This could directly put into the output.
-     * @throws Exception
+     * @throws \Exception
      * @throws Exception
      */
     public function getICalContent(): \Eluceo\iCal\Presentation\Component
@@ -516,6 +510,7 @@ class ModuleEvents extends Modules
     /**
      * Get additional tables for sql statement
      * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins, and it's query params.
+     * @throws Exception
      */
     private function sqlGetAdditional(): array
     {

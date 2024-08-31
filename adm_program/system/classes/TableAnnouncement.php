@@ -1,11 +1,5 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
  * Creates an announcement object from the database table adm_announcements
@@ -34,8 +28,10 @@
  * $announcement->setValue('ann_description', 'This is the new description.');
  * $announcement->save();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class TableAnnouncement extends TableAccess
 {
     /**
@@ -140,7 +136,6 @@ class TableAnnouncement extends TableAccess
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool

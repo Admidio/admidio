@@ -1,11 +1,5 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
  * Creates an event object from the database table adm_events
@@ -34,20 +28,23 @@
  * $event->setValue('dat_description', 'This is the new description.');
  * $event->save();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class TableEvent extends TableAccess
 {
     /**
-     * @var Participants object to handle all participants of this event
+     * @var Participants|null object to handle all participants of this event
      */
-    private $mParticipants;
+    private ?Participants $mParticipants;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_dates.
      * If the id is set than the specific event will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int      $datId    The recordset of the event with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $datId The recordset of the event with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @throws Exception
      */
     public function __construct(Database $database, $datId = 0)
     {
@@ -82,6 +79,7 @@ class TableEvent extends TableAccess
 
     /**
      * Calls clear() Method of parent class and initialize child class specific parameters
+     * @throws Exception
      */
     public function clear()
     {
@@ -211,7 +209,6 @@ class TableEvent extends TableAccess
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
-     * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
@@ -324,10 +321,12 @@ class TableEvent extends TableAccess
         return false;
     }
 
-    /* Read an event that has the given role has stored as participant role.
-     * @param $roleId ID of the participants role of the event.
+    /**
+     * Read an event that has the given role has stored as participant role.
+     * @param int $roleId ID of the participants role of the event.
+     * @throws Exception
      */
-    public function readDataByRoleId($roleId): bool
+    public function readDataByRoleId(int $roleId): bool
     {
         // initialize the object, so that all fields are empty
         $this->clear();
@@ -444,7 +443,6 @@ class TableEvent extends TableAccess
      * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws Exception
      * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool

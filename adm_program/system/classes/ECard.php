@@ -1,23 +1,21 @@
 <?php
 /**
- ***********************************************************************************************
- * Class will handle some ECard functions
+ * @brief Class will handle some ECard functions
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
 class ECard
 {
-    public $nameRecipientString      = '';
-    public $emailRecipientString     = '';
-    public $yourMessageString        = '';
-    public $newMessageReceivedString = '';
-    public $greetingCardFrom         = '';
-    public $greetingCardString       = '';
-    public $sendToString             = '';
-    public $emailString              = '';
+    public string $nameRecipientString      = '';
+    public string $emailRecipientString     = '';
+    public string $yourMessageString        = '';
+    public string $newMessageReceivedString = '';
+    public string $greetingCardFrom         = '';
+    public string $greetingCardString       = '';
+    public string $sendToString             = '';
+    public string $emailString              = '';
 
     /**
      * @param Language $gL10n
@@ -92,10 +90,11 @@ class ECard
      *  Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
      *  Nachricht:              <%ecard_message%>     * @param string $imageName
      * @param string $ecardMessage
-     * @param string $ecardData      Parsed information from the greeting card template
-     * @param string $recipientName  the name of the recipient
+     * @param string $ecardData Parsed information from the greeting card template
+     * @param string $recipientName the name of the recipient
      * @param string $recipientEmail the email of the recipient
      * @return string
+     * @throws \Admidio\Exception
      */
     public function parseEcardTemplate(string $imageName, string $ecardMessage, string $ecardData, string $recipientName, string $recipientEmail): string
     {
@@ -147,7 +146,7 @@ class ECard
      * @param string $recipientEmail the email of the recipient
      * @param string $photoServerPath the path where the images in the greeting card are located on the server
      * @return bool|string
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws \Admidio\Exception|\PHPMailer\PHPMailer\Exception
      */
     public function sendEcard(string $senderName, string $senderEmail, string $ecardHtmlData, string $recipientFirstName, string $recipientLastName, string $recipientEmail, string $photoServerPath)
     {

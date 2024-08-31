@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Creates an Admidio specific form with special elements
+ * @brief Creates an Admidio specific form with special elements
  *
  * This class inherits the common HtmlFormBasic class and extends their elements
  * with custom Admidio form elements. The class should be used to create the
@@ -29,10 +23,11 @@
  * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'bi-arrow-right-circle-fill'));
  * $form->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  * @deprecated 5.0.0:5.1.0 Class "HtmlForm" is deprecated, use class "Form" instead.
  */
-use Admidio\Exception;
-
 class HtmlForm
 {
     public const FIELD_DEFAULT  = 0;

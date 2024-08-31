@@ -1,31 +1,26 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * Create menu from database and serve several output formats
+ * @brief Create menu from database and serve several output formats
  *
  * This class will read the menu structure from the database table **adm_menu** and stores each main
  * node as a MenuNode object within an internal array. There are several output methods to use the
  * menu within the layout. You can create a simple html list, a bootstrap media object list or
  * add it to an existing navbar.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 class MainMenu
 {
     /**
      * @var array Multidimensional array with the complete menu structure.
      */
-    protected $menuItems;
-
+    protected array $menuItems;
     /**
      * @var bool Flag to remember if the menu must be reloaded from database
      */
-    protected $menuLoaded;
+    protected bool $menuLoaded;
 
     public function __construct()
     {

@@ -20,6 +20,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-pdo": "*",
+        "ext-posix": "*",
         "ext-simplexml": "*",
         "ext-zip": "*",
         "bjeavons/zxcvbn-php": "^1.2.0",

@@ -1,11 +1,6 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
+use Admidio\UserInterface\Form;
 
 /**
  * Class with methods to display the login module and handle the input.
@@ -20,10 +15,10 @@
  * $page->createContentAssignUser();
  * $page->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
-use Admidio\UserInterface\Form;
-
 class ModuleLogin
 {
     /**
@@ -104,7 +99,7 @@ class ModuleLogin
         // show selectbox with all organizations of database
         $sql = 'SELECT org_shortname, org_longname
                   FROM '.TBL_ORGANIZATIONS.'
-              ORDER BY org_longname ASC, org_shortname ASC';
+              ORDER BY org_longname, org_shortname';
         $form->addSelectBoxFromSql(
             'org_shortname',
             $gL10n->get('SYS_ORGANIZATION'),
@@ -124,21 +119,20 @@ class ModuleLogin
      * organization than the session data will be updated.
      * @return bool Returns **true** if the login data are valid
      * @throws Exception
-     * @throws Exception
      */
     public function checkLogin(): bool
     {
         global $gDb, $gCurrentOrganization, $gCurrentOrgId, $gProfileFields, $gCurrentSession, $gSettingsManager;
-        global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gL10n;
+        global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID;
 
         // check form field input and sanitized it from malicious content
         $loginForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
         $formValues = $loginForm->validate($_POST);
 
-        $postLoginName = (isset($formValues['usr_login_name']) ? $formValues['usr_login_name'] : $formValues['usr_login_name']);
-        $postPassword = (isset($formValues['usr_password']) ? $formValues['usr_password'] : $formValues['plg_usr_password']);
-        $postOrgShortName = (isset($formValues['org_shortname']) ? $formValues['org_shortname'] : $formValues['org_shortname']);
-        $postAutoLogin = (isset($formValues['auto_login']) ? $formValues['auto_login'] : $formValues['auto_login']);
+        $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);
+        $postPassword = ($formValues['usr_password'] ?? $formValues['plg_usr_password']);
+        $postOrgShortName = ($formValues['org_shortname'] ?? $formValues['plg_org_shortname']);
+        $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login']);
 
         // Search for username
         $sql = 'SELECT usr_id

@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Handle auto login with Admidio and manage it in the database
+ * @brief Handle auto login with Admidio and manage it in the database
  *
  * The class search in the database table **adm_auto_login** for the session id.
  * If there is an entry for that id then it reads the user id and set this
@@ -25,8 +19,10 @@
  * $autoLogin = new AutoLogin($gDb, $sessionId);
  * $autoLogin->delete();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class AutoLogin extends TableAccess
 {
     /**
@@ -53,19 +49,11 @@ class AutoLogin extends TableAccess
      * Creates a new unique auto login id for this user.
      * @param int $userId The id of the current user.
      * @return string Returns the auto login id.
+     * @throws Exception
      */
     public function generateAutoLoginId(int $userId): string
     {
-        $loginId = '';
-
-        try {
-            $loginId = $userId . ':' . SecurityUtils::getRandomString(40);
-        } catch (Exception $e) {
-            $e->showText();
-            // => EXIT
-        }
-
-        return $loginId;
+        return $userId . ':' . SecurityUtils::getRandomString(40);
     }
 
     /**
@@ -102,7 +90,7 @@ class AutoLogin extends TableAccess
      */
     public function tableCleanup()
     {
-        // Determine the time from which the auto logins are deleted, at least 1 year old
+        // Determine the time from which the auto logins are deleted, at least one year old
         $currDateTime = new DateTime();
         $oneYearDateInterval = new DateInterval('P1Y');
         $oneYearBeforeDateTime = $currDateTime->sub($oneYearDateInterval);

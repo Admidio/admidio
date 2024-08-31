@@ -1,11 +1,5 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
  * Manages the assignment of roles to an object.
@@ -33,26 +27,28 @@
  * $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $categoryId);
  * $rolesArray = $categoryViewRolesObject->getRolesIds();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class RolesRights extends TableAccess
 {
     /**
      * @var array<int,TableAccess>
      */
-    protected $rolesRightsDataObjects;
+    protected array $rolesRightsDataObjects;
     /**
      * @var array<int,int> Array with all roles ids as values
      */
-    protected $rolesIds;
+    protected array $rolesIds;
     /**
      * @var int ID of the object for which the roles right should be loaded.
      */
-    protected $objectId;
+    protected int $objectId;
     /**
      * @var string Name of the current role right
      */
-    protected $rolesRightName;
+    protected string $rolesRightName;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_roles_rights.
@@ -60,7 +56,6 @@ class RolesRights extends TableAccess
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $rolesRightName The recordset of the roles right with this name will be loaded.
      * @param int $objectId ID of the object of which the roles should be loaded.
-     * @throws Exception
      * @throws Exception
      */
     public function __construct(Database $database, string $rolesRightName, int $objectId)
@@ -76,7 +71,6 @@ class RolesRights extends TableAccess
     /**
      * Add all roles of the parameter array to the current roles rights object.
      * @param array<int,int> $roleIds Array with all role ids that should be added.
-     * @throws Exception
      * @throws Exception
      */
     public function addRoles(array $roleIds)
@@ -225,7 +219,6 @@ class RolesRights extends TableAccess
      * If the current right has a parent right then all roles will also be added
      * to the parent right and saved.
      * @param array<int,int> $roleIds Array with all role ids that should be saved.
-     * @throws Exception
      * @throws Exception
      */
     public function saveRoles(array $roleIds)

@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Simple presentation of messages to the user
+ * @brief Simple presentation of messages to the user
  *
  * This class creates a new html page with a simple headline and a message. It's
  * designed to easily integrate this class into your code. An object **$gMessage**
@@ -30,43 +24,45 @@
  * $gMessage->setForwardYesNo('https://www.example.com/mypage.php');
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class Message
 {
     /**
      * @var bool wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
      */
-    private $inline = false;
+    private bool $inline = false;
     /**
      * @var string Url auf die durch den Weiter-Button verwiesen wird
      */
-    private $url = '';
+    private string $url = '';
     /**
      * @var bool Set a flag if the given url should be used as a forward url. If set to no than a POST ajax call
      * will be done.
      */
-    private $forwardMode = false;
+    private bool $forwardMode = false;
     /**
      * @var int Anzahl ms bis automatisch zu url weitergeleitet wird
      */
-    private $timer = 0;
+    private int $timer = 0;
     /**
      * @var bool Includes the header and body of the theme to the message. This will be included as default.
      */
-    private $includeThemeBody = true;
+    private bool $includeThemeBody = true;
     /**
      * @var bool If set to true then no html elements will be shown, only the pure text message.
      */
-    private $showTextOnly = false;
+    private bool $showTextOnly = false;
     /**
      * @var bool If set to true then only the message with their html elements will be shown.
      */
-    private $showHtmlTextOnly = false;
+    private bool $showHtmlTextOnly = false;
     /**
      * @var bool Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
      */
-    private $showYesNoButtons = false;
+    private bool $showYesNoButtons = false;
     /**
      * Constructor that initialize the class member parameters
      */
@@ -176,7 +172,7 @@ class Message
             $smarty->assign('l10n', $gL10n);
             try {
                 $smarty->display('system/message_modal.tpl');
-            } catch (\Smarty\Exception|Exception $exception) {
+            } catch (\Smarty\Exception|\Exception $exception) {
                 throw new Exception($exception->getMessage());
             }
         } else {

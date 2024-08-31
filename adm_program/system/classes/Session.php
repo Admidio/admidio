@@ -1,17 +1,9 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
 use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
 /**
- * Handle session data of Admidio and is connected to database table adm_sessions
+ * @brief Handle session data of Admidio and is connected to database table adm_sessions
  *
  * This class should be used together with the PHP session handling. If you
  * create a PHP session than you should also create this session object. The
@@ -32,6 +24,9 @@ use Admidio\UserInterface\Form;
  *     $organization =& $session->getObject('organization');
  * }
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 class Session extends TableAccess
 {
@@ -62,7 +57,6 @@ class Session extends TableAccess
      * If the id is set than the specific session will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $cookiePrefix The prefix that is used for cookies
-     * @throws Exception
      * @throws Exception
      */
     public function __construct(Database $database, string $cookiePrefix = '')
@@ -149,7 +143,6 @@ class Session extends TableAccess
      * @param bool $newToken If set to true, always a new token will be generated.
      * @return string Returns the CSRF token
      * @throws Exception
-     * @throws Exception
      */
     public function getCsrfToken(bool $newToken = false): string
     {
@@ -166,7 +159,7 @@ class Session extends TableAccess
      * @return Form Returns the reference to the form object.
      * @throws Exception Requested form not found in session.
      */
-    public function &getFormObject(string $csrfToken)
+    public function &getFormObject(string $csrfToken): Form
     {
         if (!array_key_exists($csrfToken, $this->mFormObjects)) {
             throw new Exception('Requested form not found in session.');
@@ -297,7 +290,6 @@ class Session extends TableAccess
      * Reload auto login data from database table adm_auto_login. if cookie PREFIX_AUTO_LOGIN_ID
      * is set then there could be an auto login the auto login must be done here because after
      * that the corresponding organization must be set.
-     * @throws Exception
      * @throws Exception
      */
     public function refreshAutoLogin()
@@ -614,8 +606,7 @@ class Session extends TableAccess
     /**
      * Deletes all sessions in table admSessions that are inactive since **$maxInactiveTime** minutes.
      * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted.
-     * @throws Exception
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     public function tableCleanup(int $maxInactiveMinutes = 30)
     {

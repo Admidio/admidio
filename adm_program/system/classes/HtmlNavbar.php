@@ -1,15 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
- ***********************************************************************************************
- */
-
-/**
- * Class manages display of navbar in modules
+ * @brief Class manages display of navbar in modules
  *
  * This class manage the presentation of a module menu. You can add as many
  * items to the menu and the class tries to display them in the perfect
@@ -30,6 +21,10 @@
  * );
  * $myNavbar->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
  */
 class HtmlNavbar
 {

@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * This class reads announcement recordset from database
+ * @brief This class reads announcement recordset from database
  *
  * This class reads all available recordset from table announcements
  * and returns an Array with results, recordset and validated parameters from $_GET Array.
@@ -76,9 +70,10 @@
  *         )
  * )
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
-
 class ModuleAnnouncements extends Modules
 {
     /**

@@ -1,23 +1,18 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
 use Admidio\Exception;
 use Admidio\Utils\Installation;
 
 /**
- * Class to implement useful method for installation and update process.
+ * @brief Class to implement useful method for installation and update process.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 class Update
 {
     /**
      * checks if login is required and if so, if it is valid
-     * @throws Exception
      * @throws Exception
      */
     public function checkLogin()
@@ -56,7 +51,6 @@ class Update
 
     /**
      * @param string $installedDbVersion
-     * @throws Exception
      * @throws Exception
      */
     public function doAdmidioUpdate(string $installedDbVersion)
@@ -120,7 +114,6 @@ class Update
     }
 
     /**
-     * @throws Exception
      * @throws Exception
      */
     public function updateOrgPreferences()

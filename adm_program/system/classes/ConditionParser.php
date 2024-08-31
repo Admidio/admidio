@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Creates from a custom condition syntax a sql condition
+ * @brief Creates from a custom condition syntax a sql condition
  *
  * The user can write a condition in a special syntax. This class will parse
  * that condition and creates a valid SQL statement which can be used in
@@ -23,26 +17,28 @@
  * $sqlCondition = $parser->makeSqlStatement('> 5 AND <= 100', 'usd_value', 'int');
  * $sql = 'SELECT * FROM '.TBL_USER_DATA.' WHERE usd_id > 0 AND '.$sqlCondition;
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ConditionParser
 {
     /**
      * @var string The source condition with the user specific condition
      */
-    private $srcCond = '';
+    private string $srcCond = '';
     /**
      * @var string The destination string with the valid sql statement
      */
-    private $destCond = '';
+    private string $destCond = '';
     /**
      * @var string Stores the sql statement if a record should not exist when user wants to exclude a column
      */
-    private $notExistsSql = '';
+    private string $notExistsSql = '';
     /**
      * @var bool Flag if there is an open quote in this condition that must be closed before the next condition will be parsed
      */
-    private $openQuotes = false;
+    private bool $openQuotes = false;
 
     /**
      * constructor that will initialize variables
@@ -71,6 +67,7 @@ class ConditionParser
      * @param string $operator The actual operator for the **date** parameter
      * @return string String with a SQL valid date format **YYYY-MM-DD** or empty string
      * @throws Exception
+     * @throws \Exception
      */
     private function getFormatDate(string $date, string $operator): string
     {
@@ -171,7 +168,6 @@ class ConditionParser
      * @param string $columnType The type of the column. Valid types are **string**, **int**, **date** and **checkbox**
      * @param string $fieldName The name of the profile field. This is used for error output to the end user
      * @return string Returns a valid SQL string with the condition for that column
-     * @throws Exception
      * @throws Exception
      */
     public function makeSqlStatement(string $sourceCondition, string $columnName, string $columnType, string $fieldName): string
@@ -372,6 +368,7 @@ class ConditionParser
      * represents a special condition e.g. **!** represents **!=** and **<>**
      * @param string $sourceCondition The user condition string
      * @return string String with the predefined chars for conditions
+     * @throws Exception
      */
     public function makeStandardCondition(string $sourceCondition): string
     {

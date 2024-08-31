@@ -1,45 +1,42 @@
 <?php
-/**
- ***********************************************************************************************
- * Class manages the list configuration
- *
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
+ * @brief Class manages the list configuration
+ *
  * This class creates a list configuration object. With this object it's possible
  * to manage the configuration in the database. You can easily create new lists,
  * add new columns or remove columns. The object will only list columns of the configuration
  * which the current user is allowed to view.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ListConfiguration extends TableLists
 {
     /**
      * @var array<int,TableAccess> Array with all columns of the current list
      */
-    protected $columns = array();
+    protected array $columns = array();
     /**
      * @var array<int,TableAccess> array with all column names of the sql statement that belong to the select clause
      */
-    protected $columnsSqlNames = array();
+    protected array $columnsSqlNames = array();
     /**
      * @var array<int,string> Array with the usr_id as key and the first name, last name as values
      */
-    protected $arrUserNames = array();
+    protected array $arrUserNames = array();
     /**
      * @var boolean Flag if only the name of the user (first name, last name) should be shown and all other fields
      * should be removed.
      */
-    protected $showOnlyNames = false;
+    protected bool $showOnlyNames = false;
     /**
      * @var boolean Flag if leaders should be shown. If there is more than one role this flag is set to **false**.
      * should be removed.
      */
-    protected $showLeaders = false;
+    protected bool $showLeaders = false;
 
 
     /**
@@ -66,7 +63,6 @@ class ListConfiguration extends TableLists
      * @param string $sort Optional the value **ASC** for ascending and **DESC** for descending.
      * @param string $filter Optional a filter for the values of that column.
      * @return bool Returns true if the field was added to the column list.
-     * @throws Exception
      * @throws Exception
      */
     public function addColumn($field, int $number = 0, string $sort = '', string $filter = ''): bool
@@ -291,7 +287,6 @@ class ListConfiguration extends TableLists
      * @param bool $all Define all columns to be deleted
      * @return bool
      * @throws Exception
-     * @throws Exception
      */
     public function deleteColumn(int $number, bool $all = false): bool
     {
@@ -326,7 +321,6 @@ class ListConfiguration extends TableLists
     /**
      * Returns an array with all alignments (center, left or right) from all columns of this list.
      * @return array Array with alignments from all columns of this list configuration.
-     * @throws Exception
      * @throws Exception
      */
     public function getColumnAlignments(): array
@@ -382,7 +376,6 @@ class ListConfiguration extends TableLists
      * Returns an array with all column names of this list. The names within the array are translated
      * to the current language.
      * @return array Array with all column names of this list configuration.
-     * @throws Exception
      * @throws Exception
      */
     public function getColumnNames(): array
@@ -477,7 +470,7 @@ class ListConfiguration extends TableLists
 
     /**
      * Returns an array with all list columns and a search condition for each column. Especially the null value
-     * will be replaced with a default value. This array can than be used to add it to the main sql statement.
+     * will be replaced with a default value. This array can then be used to add it to the main sql statement.
      * @return array<int,string> Returns an array with all list columns and a search condition for each column.
      * @throws Exception
      */
@@ -573,7 +566,6 @@ class ListConfiguration extends TableLists
      *                                 - **endDate** : The end date if memberships that should be considered.The time period of
      *                                   the membership must be at least one day before this date.
      * @return string Returns a valid sql that represents all users with the columns of the list configuration.
-     * @throws Exception
      * @throws Exception
      */
     public function getSQL(array $options = array()): string
@@ -877,7 +869,7 @@ class ListConfiguration extends TableLists
         $sql = 'SELECT *
                   FROM ' . TBL_LIST_COLUMNS . '
                  WHERE lsc_lst_id = ? -- $this->getValue(\'lst_id\')
-              ORDER BY lsc_number ASC';
+              ORDER BY lsc_number';
         $lscStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('lst_id')));
 
         if ($lscStatement->rowCount() === 0) {
@@ -928,10 +920,12 @@ class ListConfiguration extends TableLists
         return $returnValue;
     }
 
-    /* Removes a column from the list configuration array, but only in the memory and not in database.
+    /**
+     * Removes a column from the list configuration array, but only in the memory and not in database.
      * @param string $columnNameOrUsfId Accept the usfId or the name of the special field that should be removed.
+     * @throws Exception
      */
-    public function removeColumn($columnNameOrUsfId)
+    public function removeColumn(string $columnNameOrUsfId)
     {
         $currentNumber = 1;
 
@@ -955,7 +949,6 @@ class ListConfiguration extends TableLists
      * The method will clear all column data of this object and restore all
      * columns from the database. Then the column number will be renewed for all columns.
      * This is in some cases a necessary fix if a column number was lost.
-     * @throws Exception
      * @throws Exception
      */
     public function repair()
@@ -982,7 +975,6 @@ class ListConfiguration extends TableLists
     /**
      * @param bool $updateFingerPrint
      * @return bool
-     * @throws Exception
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool

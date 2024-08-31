@@ -1,28 +1,25 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Reads the user fields structure out of database and give access to it
+ * @brief Reads the user fields structure out of database and give access to it
  *
  * When an object is created than the actual profile fields structure will
  * be read. In addition to this structure you can read the user values for
  * all fields if you call @c readUserData . If you read field values than
  * you will get the formatted output. It's also possible to set user data and
  * save this data to the database
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
 class ProfileFields
 {
     /**
      * @var Database An object of the class Database for communication with the database
      */
-    protected $db;
+    protected Database $db;
     /**
      * @var array<string,TableUserField> Array with all profile fields represented by a user fields objects.
      *      The key is the usf_name_intern and the value is an object of class TableUserField
@@ -32,27 +29,27 @@ class ProfileFields
      *          'STREET' => {TableUserField}
      *      ]
      */
-    protected $mProfileFields = array();
+    protected array $mProfileFields = array();
     /**
      * @var array<int,TableAccess> Array with all user data objects
      */
-    protected $mUserData = array();
+    protected array $mUserData = array();
     /**
      * @var int UserId of the current user of this object
      */
-    protected $mUserId = 0;
+    protected int $mUserId = 0;
     /**
      * @var string UUID of the current user of this object
      */
-    protected $mUserUuid = '';
+    protected string $mUserUuid = '';
     /**
      * @var bool if true, no value will be checked if method setValue is called
      */
-    protected $noValueCheck = false;
+    protected bool $noValueCheck = false;
     /**
      * @var bool flag if a value of one field had changed
      */
-    protected $columnsValueChanged = false;
+    protected bool $columnsValueChanged = false;
 
     /**
      * constructor that will initialize variables and read the profile field structure
@@ -622,7 +619,6 @@ class ProfileFields
      * save data of every user field
      * @param int $userId id is necessary if new user, that id was not known before
      * @throws Exception
-     * @throws Exception
      */
     public function saveUserData(int $userId)
     {
@@ -656,9 +652,7 @@ class ProfileFields
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                                not be checked.
      * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
-     * @throws Exception If an invalid value should be set.
      * @throws Exception
-     *                      exception->text contains a string with the reason why the login failed.
      */
     public function setValue(string $fieldNameIntern, $fieldValue, bool $checkValue = true): bool
     {

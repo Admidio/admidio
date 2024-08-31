@@ -1,14 +1,6 @@
 <?php
 /**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/**
- * This **abstract class** parses html elements
+ * @brief This **abstract class** parses html elements
  *
  * This abstract class is designed to parse html elements.
  * It is only allowed to use extensions of this class.
@@ -132,6 +124,9 @@
  *
  * echo HtmlElement::getHtmlElement();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
 abstract class HtmlElement

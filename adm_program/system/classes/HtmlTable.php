@@ -1,14 +1,8 @@
 <?php
-/**
- ***********************************************************************************************
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
+use Admidio\Exception;
 
 /**
- * Creates an Admidio specific table with special methods
+ * @brief Creates an Admidio specific table with special methods
  *
  * This class inherits the common HtmlTableBasic class and extends their elements
  * with custom Admidio table methods. The class should be used to create the
@@ -35,44 +29,45 @@
  * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '14.07.1995', '38,50'));
  * $table->show();
  * ```
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use Admidio\Exception;
-
 class HtmlTable extends HtmlTableBasic
 {
     /**
      * @var string Html id attribute of the table.
      */
-    protected $id;
+    protected string $id;
     /**
      * @var array<int,string> Array with entry for each column with the alignment of that column of datatables are not used.
      * Values are **right**, **left** or **center**.
      */
-    protected $columnsAlign = array();
+    protected array $columnsAlign = array();
     /**
      * @var bool A flag if the jQuery plugin DataTables should be used to show the table.
      */
-    protected $useDatatables;
+    protected bool $useDatatables;
     /**
      * @var HtmlDataTables An object of the HtmlDataTables class to handle the Javascript output of the jQuery plugin DataTables.
      */
-    protected $datatables;
+    protected HtmlDataTables $datatables;
     /**
      * @var string The text that should be shown if no row was added to the table
      */
-    protected $messageNoRowsFound;
+    protected string $messageNoRowsFound;
     /**
      * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
-    protected $htmlPage;
+    protected HtmlPage $htmlPage;
     /**
      * @var bool A flag that set the server-side processing for datatables.
      */
-    protected $serverSideProcessing = false;
+    protected bool $serverSideProcessing = false;
     /**
      * @var string The script that should be called when using server-side processing.
      */
-    protected $serverSideFile = '';
+    protected string $serverSideFile = '';
 
     /**
      * Constructor creates the table element
@@ -296,7 +291,7 @@ class HtmlTable extends HtmlTableBasic
     }
 
     /**
-     * Datatables will automatically hide columns if the screen will be to small e.g. on smartphones. You must than click
+     * Datatables will automatically hide columns if the screen will be to small e.g. on smartphones. You must then click
      * on a + button and will view the hidden columns. With this method you can remove specific columns from that feature.
      * These columns will always be shown. But be careful if you remove too many columns datatables must hide some columns
      * anyway.
@@ -406,6 +401,7 @@ class HtmlTable extends HtmlTableBasic
      * is activated then the javascript for that plugin will be added. Call this method if you
      * have finished your form layout. If table has no rows then a message will be shown.
      * @return string Return the html code of the table.
+     * @throws Exception
      */
     public function show(): string
     {
@@ -415,7 +411,7 @@ class HtmlTable extends HtmlTableBasic
         }
 
         // show table content
-        if ($this->useDatatables && $this->htmlPage instanceof HtmlPage) {
+        if ($this->useDatatables && isset($this->htmlPage)) {
             $this->datatables->createJavascript($this->rowCount, $this->columnCount);
 
             return $this->getHtmlTable();
