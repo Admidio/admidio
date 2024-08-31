@@ -23,7 +23,7 @@ final class PhpIniUtils
      */
     public static function getDisabledFunctions(): array
     {
-        if (self::$disabledFunctions === null) {
+        if (!isset(self::$disabledFunctions)) {
             self::$disabledFunctions = explode(',', ini_get('disable_functions'));
         }
 
