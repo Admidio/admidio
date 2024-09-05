@@ -182,7 +182,7 @@ class TableUserField extends TableAccess
                 case 'usf_name': // fallthrough
                 case 'cat_name':
                     // if text is a translation-id then translate it
-                    $value = Language::translateIfTranslationStrId($value);
+                    $value = Admidio\Language::translateIfTranslationStrId($value);
 
                     break;
                 case 'usf_value_list':
@@ -206,7 +206,7 @@ class TableUserField extends TableAccess
                                     }
 
                                     // if text is a translation-id then translate it
-                                    $listValueText = Language::translateIfTranslationStrId($listValueText);
+                                    $listValueText = Admidio\Language::translateIfTranslationStrId($listValueText);
 
                                     if ($format === 'html') {
                                         $listValue = Image::getIconHtml($listValueImage, $listValueText) . ' ' . $listValueText;
@@ -222,7 +222,7 @@ class TableUserField extends TableAccess
                             }
 
                             // if text is a translation-id then translate it
-                            $listValue = Language::translateIfTranslationStrId($listValue);
+                            $listValue = Admidio\Language::translateIfTranslationStrId($listValue);
 
                             // save values in new array that starts with key = 1
                             $arrListValuesWithKeys[++$key] = $listValue;

@@ -1,4 +1,7 @@
 <?php
+use Admidio\Language;
+use Admidio\Session;
+
 /**
  ***********************************************************************************************
  * Basic script for all other Admidio scripts with all the necessary data und
@@ -13,7 +16,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php') {
     exit('This page may not be called directly!');
 }
 
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(__DIR__, 2);
 
 // if config file doesn't exists, than show installation dialog
 if (!is_file($rootPath . '/adm_my_files/config.php')) {
@@ -34,14 +37,14 @@ if(!isset($g_organization)) {
 try {
     $gDb = Database::createDatabaseInstance();
 } catch (Exception $e) {
-    $e->showText();
-    // => EXIT
+    echo $e->getMessage();
+    exit();
 }
 
 // check for empty db and redirect to installation wizard
 try {
     $gDb->getTableColumns(TBL_SESSIONS);
-} catch (\Throwable $t) {
+} catch (Throwable $t) {
     header('Location: adm_program/installation/index.php');
     exit();
 }
@@ -54,7 +57,7 @@ try {
 // start PHP session
 try {
     Session::start(COOKIE_PREFIX);
-} catch (\RuntimeException $exception) {
+} catch (RuntimeException $exception) {
     // TODO
 }
 

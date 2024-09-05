@@ -232,7 +232,7 @@ class TableEvent extends TableAccess
                 $value = $gL10n->getCountryName($value);
             } elseif ($columnName === 'cat_name') {
                 // if text is a translation-id then translate it
-                $value = Language::translateIfTranslationStrId($value);
+                $value = Admidio\Language::translateIfTranslationStrId($value);
             }
         }
 
@@ -380,7 +380,7 @@ class TableEvent extends TableAccess
                         WHERE cat_id = ?';
             $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $this->getValue('dat_cat_id')));
             $calendar = $pdoStatement->fetchColumn();
-            if (Language::isTranslationStringId($calendar)) {
+            if (Admidio\Language::isTranslationStringId($calendar)) {
                 $calendar = $gL10n->get($calendar);
             }
 

@@ -2,7 +2,6 @@
 namespace Admidio;
 
 use Database;
-use Language;
 
 /**
  * @brief Admidio specific enhancements of the PHP exception class

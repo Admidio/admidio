@@ -5,7 +5,7 @@ use Admidio\Exception;
 use Database;
 use DateTime;
 use HtmlPage;
-use Language;
+use Admidio\Language;
 use PDO;
 use Securimage;
 use SecurityUtils;

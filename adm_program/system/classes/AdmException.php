@@ -47,7 +47,7 @@ class AdmException extends Exception
         }
 
         // if text is a translation-id then translate it
-        if (Language::isTranslationStringId($message)) {
+        if (Admidio\Language::isTranslationStringId($message)) {
             $message = $gL10n->get($message, $params);
         }
 
@@ -68,7 +68,7 @@ class AdmException extends Exception
         global $gL10n;
 
         // if text is a translation-id then translate it
-        if (Language::isTranslationStringId($message)) {
+        if (Admidio\Language::isTranslationStringId($message)) {
             $message = $gL10n->get($message, $params);
         }
 
