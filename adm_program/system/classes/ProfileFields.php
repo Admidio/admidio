@@ -289,14 +289,14 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            $listValueText = Language::translateIfTranslationStrId($listValueText);
+                            $listValueText = Admidio\Language::translateIfTranslationStrId($listValueText);
 
                             // get html snippet with image tag
                             $listValue = Image::getIconHtml($listValueImage, $listValueText);
                         }
 
                         // if text is a translation-id then translate it
-                        $listValue = Language::translateIfTranslationStrId($listValue);
+                        $listValue = Admidio\Language::translateIfTranslationStrId($listValue);
 
                         // save values in new array that starts with key = 1
                         $arrListValuesWithKeys[++$index] = $listValue;

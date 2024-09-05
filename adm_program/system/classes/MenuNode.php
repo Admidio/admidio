@@ -46,7 +46,7 @@ class MenuNode
     public function __construct(string $nodeTextId, string $nodeName)
     {
         $this->textId = $nodeTextId;
-        $this->name   = Language::translateIfTranslationStrId($nodeName);
+        $this->name   = Admidio\Language::translateIfTranslationStrId($nodeName);
     }
 
     /**
@@ -76,8 +76,8 @@ class MenuNode
         $node['id'] = $id;
 
         // translate name and description
-        $node['name'] = Language::translateIfTranslationStrId($name);
-        $node['description'] = Language::translateIfTranslationStrId($description);
+        $node['name'] = Admidio\Language::translateIfTranslationStrId($name);
+        $node['description'] = Admidio\Language::translateIfTranslationStrId($description);
 
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0) {

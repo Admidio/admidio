@@ -320,7 +320,7 @@ class CategoryReport
         $k = 0;
         while ($row = $statement->fetch()) {
             // check if the category name must be translated
-            if (Language::isTranslationStringId($row['cat_name'])) {
+            if (Admidio\Language::isTranslationStringId($row['cat_name'])) {
                 $row['cat_name'] = $gL10n->get($row['cat_name']);
             }
             $categories[$k]['cat_id'] = $row['cat_id'];

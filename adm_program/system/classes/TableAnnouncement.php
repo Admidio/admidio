@@ -78,7 +78,7 @@ class TableAnnouncement extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value)) {
+        if ($columnName === 'cat_name' && $format !== 'database' && Admidio\Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 

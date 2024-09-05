@@ -77,7 +77,7 @@ try {
 
     // start PHP session
     try {
-        Session::start('ADMIDIO_INSTALLATION');
+        Admidio\Session::start('ADMIDIO_INSTALLATION');
     } catch (RuntimeException $exception) {
         // TODO
     }

@@ -73,7 +73,7 @@ try {
 
     // start PHP session
     try {
-        Session::start(COOKIE_PREFIX);
+        Admidio\Session::start(COOKIE_PREFIX);
     } catch (RuntimeException $exception) {
         // TODO
     }

@@ -73,7 +73,7 @@ class SmartyPlugins
             throw new UnexpectedValueException('Smarty function is_translation_string_id: missing "string" parameter');
         }
 
-        if (Language::isTranslationStringId($params['string'])) {
+        if (Admidio\Language::isTranslationStringId($params['string'])) {
             return true;
         }
         return false;

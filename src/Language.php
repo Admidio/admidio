@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+namespace Admidio;
 
 /**
  * @brief Reads language specific texts that are identified with text ids out of language xml files
@@ -57,11 +57,11 @@ class Language
      */
     private array $languages = array();
     /**
-     * @var array<string,SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in **$languageFolderPaths**.
+     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in **$languageFolderPaths**.
      */
     private array $xmlLanguageObjects = array();
     /**
-     * @var array<string,SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in **$languageFolderPaths**.
+     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in **$languageFolderPaths**.
      */
     private array $xmlRefLanguageObjects = array();
 
@@ -98,12 +98,12 @@ class Language
      * should search for language files.
      * @param string $languageFolderPath Server path where Admidio should search for language files.
      * @return bool Returns true if language path is added.
-     *@throws UnexpectedValueException
+     *@throws \UnexpectedValueException
      */
     public function addLanguageFolderPath(string $languageFolderPath): bool
     {
         if ($languageFolderPath === '' || !is_dir($languageFolderPath)) {
-            throw new UnexpectedValueException('Invalid folder path!');
+            throw new \UnexpectedValueException('Invalid folder path!');
         }
 
         if (in_array($languageFolderPath, $this->languageFolderPaths, true)) {
@@ -125,7 +125,7 @@ class Language
 
         if (!$this->pluginLanguageFoldersLoaded) {
             try {
-                $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
+                $pluginFolders = \FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(\FileSystemUtils::CONTENT_TYPE_DIRECTORY));
 
                 foreach ($pluginFolders as $pluginFolder => $type) {
                     $languageFolder = $pluginFolder . '/languages';
@@ -136,7 +136,7 @@ class Language
                 }
 
                 $this->pluginLanguageFoldersLoaded = true;
-            } catch (RuntimeException $exception) {
+            } catch (\RuntimeException $exception) {
                 $gLogger->error('L10N: Plugins folder content could not be loaded!', array('errorMessage' => $exception->getMessage()));
             }
         }
@@ -207,7 +207,7 @@ class Language
             $text = $this->getTextFromTextId($textId);
 
             //$gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
-        } catch (OutOfBoundsException $exception) {
+        } catch (\OutOfBoundsException $exception) {
             $gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
             $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
 
@@ -349,12 +349,12 @@ class Language
     /**
      * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the cached text or empty string if text id isn't found
-     * @throws OutOfBoundsException
+     * @throws \OutOfBoundsException
      */
     private function getTextCache(string $textId): string
     {
         if (!array_key_exists($textId, $this->textCache)) {
-            throw new OutOfBoundsException('Text-id is not cached!');
+            throw new \OutOfBoundsException('Text-id is not cached!');
         }
 
         return $this->textCache[$textId];
@@ -371,18 +371,18 @@ class Language
         // first search text id in text-cache
         try {
             return $this->getTextCache($textId);
-        } catch (OutOfBoundsException $exception) {
+        } catch (\OutOfBoundsException $exception) {
             // if text id wasn't found than search for it in language
             try {
                 // search for text id in every \SimpleXMLElement (language file) of the object array
                 return $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->language, $textId);
-            } catch (OutOfBoundsException $exception) {
+            } catch (\OutOfBoundsException $exception) {
                 // if text id wasn't found than search for it in reference language
                 try {
                     // search for text id in every \SimpleXMLElement (language file) of the object array
                     return $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, $this::REFERENCE_LANGUAGE, $textId);
-                } catch (OutOfBoundsException $exception) {
-                    throw new OutOfBoundsException($exception->getMessage());
+                } catch (\OutOfBoundsException $exception) {
+                    throw new \OutOfBoundsException($exception->getMessage());
                 }
             }
         }
@@ -423,14 +423,14 @@ class Language
 
         // read all countries from xml file
         try {
-            $countriesXml = new SimpleXMLElement($countryFile, 0, true);
+            $countriesXml = new \SimpleXMLElement($countryFile, 0, true);
         } catch (\Exception $exception) {
             throw new Exception($exception->getMessage());
         }
         $countries = array();
 
         /**
-         * @var SimpleXMLElement $xmlNode
+         * @var \SimpleXMLElement $xmlNode
          */
         foreach ($countriesXml->children() as $xmlNode) {
             $countries[(string) $xmlNode['name']] = (string) $xmlNode;
@@ -462,7 +462,7 @@ class Language
                 '#VAR' . $paramNr . '#'      => $param,
                 '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
             );
-            $text = StringUtils::strMultiReplace($text, $replaces);
+            $text = \StringUtils::strMultiReplace($text, $replaces);
         }
 
         // replace square brackets with html tags
@@ -484,16 +484,16 @@ class Language
             '\''   => '&rsquo;',
             '\\"'  => '&quot;'
         );
-        return StringUtils::strMultiReplace($text, $replaces);
+        return \StringUtils::strMultiReplace($text, $replaces);
     }
 
     /**
      * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
-     * @param array<string,SimpleXMLElement> $xmlLanguageObjects The reference to an array where every SimpleXMLElement of each language path is stored
+     * @param array<string,\SimpleXMLElement> $xmlLanguageObjects The reference to an array where every SimpleXMLElement of each language path is stored
      * @param string $languageFilePath The path of the language file to search in.
      * @param string $textId The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
-     * @throws OutOfBoundsException|Exception
+     * @throws \OutOfBoundsException|Exception
      */
     private function searchLanguageText(array &$xmlLanguageObjects, string $languageFilePath, string $textId): string
     {
@@ -502,11 +502,11 @@ class Language
         if (!array_key_exists($languageFilePath, $xmlLanguageObjects)) {
             if (!is_file($languageFilePath)) {
                 // throw exception and don't log missing file because user could not fix that problem if there is no translation file
-                throw new OutOfBoundsException('Language file does not exist!');
+                throw new \OutOfBoundsException('Language file does not exist!');
             }
 
             try {
-                $xmlLanguageObjects[$languageFilePath] = new SimpleXMLElement($languageFilePath, 0, true);
+                $xmlLanguageObjects[$languageFilePath] = new \SimpleXMLElement($languageFilePath, 0, true);
             } catch (\Exception $exception) {
                 throw new Exception($exception->getMessage());
             }
@@ -516,7 +516,7 @@ class Language
         $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
         if ($xmlNodes === false || count($xmlNodes) === 0) {
-            throw new OutOfBoundsException('Could not found text-id!');
+            throw new \OutOfBoundsException('Could not found text-id!');
         }
 
         $text = self::prepareXmlText((string) $xmlNodes[0]);
@@ -527,12 +527,12 @@ class Language
     }
 
     /**
-     * @param array<string,SimpleXMLElement> $xmlLanguageObjects SimpleXMLElement array of each language path is stored
+     * @param array<string,\SimpleXMLElement> $xmlLanguageObjects SimpleXMLElement array of each language path is stored
      * @param string $language           Language code
      * @param string $textId             Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the text string of the text id.
-     * @throws UnexpectedValueException|Exception
-     * @throws OutOfBoundsException
+     * @throws \UnexpectedValueException|Exception
+     * @throws \OutOfBoundsException
      */
     private function searchTextIdInLangObject(array &$xmlLanguageObjects, string $language, string $textId): string
     {
@@ -541,12 +541,12 @@ class Language
                 $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
 
                 return $this->searchLanguageText($xmlLanguageObjects, $languageFilePath, $textId);
-            } catch (OutOfBoundsException $exception) {
+            } catch (\OutOfBoundsException $exception) {
                 // continue searching, no debug output because this will be default way if you have several language path through plugins
             }
         }
 
-        throw new OutOfBoundsException('Could not found text-id!');
+        throw new \OutOfBoundsException('Could not found text-id!');
     }
 
     /**

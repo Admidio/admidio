@@ -59,7 +59,7 @@ try {
 
     if (!isset($plg_headline) || $plg_headline === '') {
         $plg_headline = $gL10n->get('PLG_ANNOUNCEMENT_LIST_HEADLINE');
-    } elseif (Language::isTranslationStringId($plg_headline)) {
+    } elseif (Admidio\Language::isTranslationStringId($plg_headline)) {
         // if text is a translation-id then translate it
         $plg_headline = $gL10n->get($plg_headline);
     }
