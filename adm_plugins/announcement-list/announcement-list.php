@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Plugins\Overview;
+
 /**
  ***********************************************************************************************
  * Announcement list
@@ -22,9 +25,7 @@ try {
         require_once(__DIR__ . '/config.php');
     }
 
-    $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
-    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
-    $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date');
+    $announcementListPlugin = new Overview($pluginFolder);
 
     // set default values if no value has been stored in the config.php
     if (!isset($plg_announcements_count) || !is_numeric($plg_announcements_count)) {
@@ -39,65 +40,48 @@ try {
         $plgShowFullDescription = 0;
     }
 
-    if (isset($plg_link_target)) {
-        $plg_link_target = strip_tags($plg_link_target);
-    } else {
-        $plg_link_target = '_self';
-    }
-
     if (!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word)) {
         $plg_max_char_per_word = 0;
     }
 
     if (!isset($plg_categories)) {
         $plg_categories = array();
-    }
-
-    if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
-        $plg_show_headline = 1;
-    }
-
-    if (!isset($plg_headline) || $plg_headline === '') {
-        $plg_headline = $gL10n->get('PLG_ANNOUNCEMENT_LIST_HEADLINE');
-    } elseif (Admidio\Language::isTranslationStringId($plg_headline)) {
-        // if text is a translation-id then translate it
-        $plg_headline = $gL10n->get($plg_headline);
+        $plgSqlCategories = '';
+    } else {
+        $plgSqlCategories = ' AND cat_name IN (' . Database::getQmForValues($plg_categories) . ') ';
     }
 
     if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
-        // create announcements object
-        $plgAnnouncements = new ModuleAnnouncements();
-        $plgAnnouncements->setParameter('cat_id', $getCatId);
-        $plgAnnouncements->setDateRange($getDateFrom, $getDateTo);
-        $plgAnnouncements->setCategoriesNames($plg_categories);
+        // read announcements from database
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
 
-        echo '<div id="plugin_' . $pluginFolder . '" class="admidio-plugin-content">';
+        $sql = 'SELECT cat.*, ann.*
+                  FROM ' . TBL_ANNOUNCEMENTS . ' AS ann
+            INNER JOIN ' . TBL_CATEGORIES . ' AS cat
+                    ON cat_id = ann_cat_id
+                 WHERE cat_id IN (' . Database::getQmForValues($catIdParams) . ')
+                       ' . $plgSqlCategories . '
+              ORDER BY ann_timestamp_create DESC
+                 LIMIT ' . $plg_announcements_count;
 
-        if ($plg_show_headline === 1) {
-            echo '<h3>' . $plg_headline . '</h3>';
-        }
+        $pdoStatement = $gDb->queryPrepared($sql, array_merge($catIdParams, $plg_categories));
+        $plgAnnouncementsList = $pdoStatement->fetchAll();
 
         if ($gSettingsManager->getInt('announcements_module_enabled') === 1
             || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) {
-            if ($plgAnnouncements->getDataSetCount() > 0) {
+            if ($pdoStatement->rowCount() > 0) {
                 // get announcements data
-                $plgGetAnnouncements = $plgAnnouncements->getDataSet(0, $plg_announcements_count);
                 $plgAnnouncement = new TableAnnouncement($gDb);
-                echo '<ul class="list-group list-group-flush">';
+                $announcementArray = array();
 
-                foreach ($plgGetAnnouncements['recordset'] as $plgRow) {
+                foreach ($plgAnnouncementsList as $plgRow) {
                     $plgAnnouncement->clear();
                     $plgAnnouncement->setArray($plgRow);
 
-                    echo '<li class="list-group-item">
-                    <h5><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
-                            array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)
-                        ) . '" target="' . $plg_link_target . '">';
-
                     if ($plg_max_char_per_word > 0) {
+                        // Interrupt words of headline if they are too long
                         $plgNewHeadline = '';
 
-                        // Interrupt words if they are too long
                         $plgWords = explode(' ', $plgAnnouncement->getValue('ann_headline'));
 
                         foreach ($plgWords as $plgValue) {
@@ -108,45 +92,43 @@ try {
                                 $plgNewHeadline .= ' ' . $plgValue;
                             }
                         }
-                        echo $plgNewHeadline . '</a></h5>';
                     } else {
-                        echo $plgAnnouncement->getValue('ann_headline') . '</a></h5>';
+                        $plgNewHeadline = $plgAnnouncement->getValue('ann_headline');
                     }
 
                     // show preview text
                     if ($plgShowFullDescription === 1) {
-                        echo '<div>' . $plgAnnouncement->getValue('ann_description') . '</div>';
+                        $plgNewDescription = $plgAnnouncement->getValue('ann_description');
                     } elseif ($plg_show_preview > 0) {
                         // remove all html tags except some format tags
-                        $textPrev = strip_tags($plgAnnouncement->getValue('ann_description'));
+                        $plgNewDescription = strip_tags($plgAnnouncement->getValue('ann_description'));
 
                         // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
-                        $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
-                        $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')) . '
-                        <a class="admidio-icon-link" target="' . $plg_link_target . '" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MORE') . '"
+                        $plgNewDescription = substr($plgNewDescription, 0, $plg_show_preview + 15);
+                        $plgNewDescription = substr($plgNewDescription, 0, strrpos($plgNewDescription, ' ')) . '
+                        <a class="admidio-icon-link" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MORE') . '"
                             href="' . SecurityUtils::encodeUrl(
                                 ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
-                                array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)
+                                array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'))
                             ) . '">»</a>';
-
-                        echo '<div>' . $textPrev . '</div>';
                     }
 
-                    echo '
-                <div><em>(' . $plgAnnouncement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')) . ')</em></div>
-                </li>';
+                    $announcementArray[] = array(
+                        'uuid' => $plgAnnouncement->getValue('ann_uuid'),
+                        'headline' => $plgNewHeadline,
+                        'description' => $plgNewDescription,
+                        'creationDate' => $plgAnnouncement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date'))
+                    );
                 }
 
-                echo '<li class="list-group-item">
-                <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php', array('headline' => $plg_headline)) . '" target="' . $plg_link_target . '">' . $gL10n->get('PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES') . '</a>
-            </li></ul>';
+                $announcementListPlugin->assignTemplateVariable('announcements', $announcementArray);
             } else {
-                echo $gL10n->get('SYS_NO_ENTRIES');
+                $announcementListPlugin->assignTemplateVariable('message',$gL10n->get('SYS_NO_ENTRIES'));
             }
         } else {
-            echo $gL10n->get('PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS');
+            $announcementListPlugin->assignTemplateVariable('message',$gL10n->get('PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS'));
         }
-        echo '</div>';
+        echo $announcementListPlugin->html('plugin.announcement-list.tpl');
     }
 } catch (Throwable $e) {
     echo $e->getMessage();

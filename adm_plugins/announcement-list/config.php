@@ -33,4 +33,4 @@ $plg_max_char_per_word = 0;
 // If you only want to show announcements of a special category you can list the categories in this parameter
 // just use the following syntax $plg_categories = array('category-name-1','category-name-2')
 // If you want to view all announcements just set $plg_categories = array();
-$plg_categories = array();
+$plg_categories = array('Allgemein');
