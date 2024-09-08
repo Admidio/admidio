@@ -106,11 +106,11 @@ try {
                         // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                         $plgNewDescription = substr($plgNewDescription, 0, $plg_show_preview + 15);
                         $plgNewDescription = substr($plgNewDescription, 0, strrpos($plgNewDescription, ' ')) . '
-                        <a class="admidio-icon-link" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MORE') . '"
-                            href="' . SecurityUtils::encodeUrl(
-                                ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
-                                array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'))
-                            ) . '">»</a>';
+                            <a class="admidio-icon-link" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MORE') . '"
+                                href="' . SecurityUtils::encodeUrl(
+                                    ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
+                                    array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'))
+                                ) . '">»</a>';
                     }
 
                     $announcementArray[] = array(
