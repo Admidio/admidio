@@ -27,10 +27,6 @@ $plg_show_email_link = 1;
 // 1 - Show link to logout
 $plg_show_logout_link = 0;
 
-// Specification of the target in which the contents of the links are to be opened
-// You can insert specified values of the html target attribute
-$plg_link_target = '_self';
-
 // A little gimmick
 // Here you can define ranks depending on the number of logins. The rank will be shown
 // after the username. If you don't want this feature just leave a empty array.

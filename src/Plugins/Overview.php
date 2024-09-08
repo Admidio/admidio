@@ -55,10 +55,10 @@ class Overview
 
     /**
      * Creates a Smarty object and store this in a class member.
-     * @return void
+     * @return Smarty Returns the initialized Smarty object.
      * @throws Exception
      */
-    private function createSmartyObject()
+    public function createSmartyObject(): Smarty
     {
         global $gL10n;
 
@@ -67,6 +67,7 @@ class Overview
 
             // initialize php template engine smarty
             $this->smarty->setTemplateDir(THEME_PATH . '/templates/');
+            $this->smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/');
             $this->smarty->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $this->smarty->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
             $this->smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Plugins\Smarty::arrayKeyExists');
@@ -75,6 +76,8 @@ class Overview
             $this->smarty->assign('name', $this->name);
             $this->smarty->assign('l10n', $gL10n);
             $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
+
+            return $this->smarty;
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -92,7 +95,7 @@ class Overview
                 $this->createSmartyObject();
             }
 
-            return $this->smarty->fetch(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/' . $template);
+            return $this->smarty->fetch($template);
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
