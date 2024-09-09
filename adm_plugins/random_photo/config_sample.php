@@ -41,12 +41,3 @@ $plg_photos_picnr = 0;
 // false - Link will not be shown
 // true  - Link will be shown (Default)
 $plg_photos_show_link = true;
-
-// Specification of the target in which the contents of the links are to be opened
-// You can insert specified values of the html target attribute
-$plg_link_target = '_self';
-
-// Should the headline of the plugin be displayed
-// 0 - Headline is not displayed
-// 1 - Headline is displayed (Default)
-$plg_show_headline = 1;

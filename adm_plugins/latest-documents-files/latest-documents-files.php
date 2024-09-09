@@ -1,4 +1,6 @@
 <?php
+use Admidio\Plugins\Overview;
+
 /**
  ***********************************************************************************************
  * Latest documents & files
@@ -21,7 +23,9 @@ try {
         require_once(__DIR__ . '/config.php');
     }
 
-    // set default values if there no value has been stored in the config.php
+    $latestDocumentsFilesPlugin = new Overview($pluginFolder);
+
+    // set default values if there has benn no value stored in the config.php
     if (!isset($plgCountFiles) || !is_numeric($plgCountFiles)) {
         $plgCountFiles = 5;
     }
@@ -34,17 +38,8 @@ try {
         $plg_show_upload_timestamp = true;
     }
 
-    if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
-        $plg_show_headline = 1;
-    }
-
     $countVisibleDownloads = 0;
     $sqlCondition = '';
-
-    echo '<div id="plugin-' . $pluginFolder . '" class="admidio-plugin-content">';
-    if ($plg_show_headline) {
-        echo '<h3>' . $gL10n->get('PLG_LATEST_FILES_HEADLINE') . '</h3>';
-    }
 
     // check if the module is enabled
     if (Component::isVisible('DOCUMENTS-FILES')) {
@@ -70,17 +65,15 @@ try {
         $filesStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
         if ($filesStatement->rowCount() > 0) {
-            echo '<ul class="list-group list-group-flush">';
+            $documentsFilesArray = array();
 
             while ($rowFile = $filesStatement->fetch()) {
-                $errorCode = '';
-
                 try {
                     // get recordset of current file from database
                     $file = new TableFile($gDb);
                     $file->getFileForDownload($rowFile['fil_uuid']);
 
-                    // get filename without extension and extension separatly
+                    // get filename without extension and extension separately
                     $fileName = pathinfo($rowFile['fil_name'], PATHINFO_FILENAME);
                     $fullFolderFileName = $rowFile['fol_path'] . '/' . $rowFile['fol_name'] . '/' . $rowFile['fil_name'];
                     $tooltip = str_replace($downloadFolder, $gL10n->get('SYS_DOCUMENTS_FILES'), $fullFolderFileName);
@@ -99,10 +92,13 @@ try {
                         $tooltip .= '<br />' . $gL10n->get('PLG_LATEST_FILES_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $file->getValue('fil_timestamp')));
                     }
 
-                    echo '<li class="list-group-item">
-                    <a class="icon-link" data-bs-toggle="tooltip" data-html="true" title="' . $tooltip . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/get_file.php', array('file_uuid' => $rowFile['fil_uuid'])) . '">' .
-                        '<i class="bi ' . $file->getIcon() . '"></i>' . $fileName . '.' . $file->getFileExtension() . '</a>
-                </li>';
+                    $documentsFilesArray[] = array(
+                        'uuid' => $rowFile['fil_uuid'],
+                        'icon' => $file->getIcon(),
+                        'fileName' => $fileName,
+                        'fileExtension' => $file->getFileExtension(),
+                        'tooltip' => $tooltip
+                    );
 
                     if ($countVisibleDownloads === $plgCountFiles) {
                         break;
@@ -111,24 +107,18 @@ try {
                     // do nothing and go to next file
                 }
             }
-
-            if ($countVisibleDownloads > 0) {
-                echo '<li class="list-group-item">
-                <a class="icon-link" href="' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php"><i class="bi bi-list-task"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS') . '</a>
-            </li>';
-            }
-            echo '</ul>';
+            $latestDocumentsFilesPlugin->assignTemplateVariable('documentsFiles', $documentsFilesArray);
         }
     }
 
     if ($countVisibleDownloads === 0) {
         if ($gValidLogin) {
-            echo $gL10n->get('PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE');
+            $latestDocumentsFilesPlugin->assignTemplateVariable('message',$gL10n->get('PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE'));
         } else {
-            echo $gL10n->get('SYS_FOLDER_NO_FILES_VISITOR');
+            $latestDocumentsFilesPlugin->assignTemplateVariable('message',$gL10n->get('SYS_FOLDER_NO_FILES_VISITOR'));
         }
     }
-    echo '</div>';
+    echo $latestDocumentsFilesPlugin->html('plugin.latest-documents-files.tpl');
 } catch (Throwable $e) {
     echo $e->getMessage();
 }

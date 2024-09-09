@@ -1,4 +1,6 @@
 <?php
+use Admidio\Plugins\Overview;
+
 /**
  ***********************************************************************************************
  * Random Photo
@@ -22,15 +24,11 @@ try {
         require_once(__DIR__ . '/config.php');
     }
 
+    $randomPhotoPlugin = new Overview($pluginFolder);
+
     // set default values if there no value has been stored in the config.php
     if (!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word)) {
         $plg_max_char_per_word = 0;
-    }
-
-    if (isset($plg_link_target)) {
-        $plg_link_target = strip_tags($plg_link_target);
-    } else {
-        $plg_link_target = '_self';
     }
 
     if (!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width)) {
@@ -50,16 +48,7 @@ try {
         $plg_photos_show_link = true;
     }
 
-    if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
-        $plg_show_headline = 1;
-    }
-
     if ($gSettingsManager->getInt('photo_module_enabled') > 0) {
-        echo '<div id="plugin_' . $pluginFolder . '" class="admidio-plugin-content">';
-        if ($plg_show_headline) {
-            echo '<h3>' . $gL10n->get('SYS_PHOTOS') . '</h3>';
-        }
-
         if ($gSettingsManager->getInt('photo_module_enabled') === 1
             || ($gSettingsManager->getInt('photo_module_enabled') === 2 && $gValidLogin)) {
             // call photo albums
@@ -116,21 +105,17 @@ try {
                 $linkText = $album->getValue('pho_name');
             }
 
-            // show the photo
-            $photoUuid = $album->getValue('pho_uuid');
-            echo '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $photoNr)) . '" target="' . $plg_link_target . '"><img
-            class="rounded d-block w-100" alt="' . $linkText . '" title="' . $linkText . '"
-            src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $photoNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)) . '" /></a>';
-
-            // optional the linked name of the album
-            if ($plg_photos_show_link) {
-                echo '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('photo_uuid' => $photoUuid)) . '" target="' . $plg_link_target . '">' . $linkText . '</a>';
-            }
+            $randomPhotoPlugin->assignTemplateVariable('photoUUID', $album->getValue('pho_uuid'));
+            $randomPhotoPlugin->assignTemplateVariable('photoNr', $photoNr);
+            $randomPhotoPlugin->assignTemplateVariable('photoTitle', $linkText);
+            $randomPhotoPlugin->assignTemplateVariable('photoMaxWidth', $plg_photos_max_width);
+            $randomPhotoPlugin->assignTemplateVariable('photoMaxHeight', $plg_photos_max_height);
+            $randomPhotoPlugin->assignTemplateVariable('photoShowLink', $plg_photos_show_link);
         } else {
-            echo $gL10n->get('PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS');
+            $randomPhotoPlugin->assignTemplateVariable('message',$gL10n->get('PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS'));
         }
 
-        echo '</div>';
+        echo $randomPhotoPlugin->html('plugin.random-photo.tpl');
     }
 } catch (Throwable $e) {
     echo $e->getMessage();

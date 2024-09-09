@@ -35,12 +35,3 @@ $plg_show_self = 1;
 // 0 - (Default) List user names (1 name per line)
 // 1 - List user names side by side
 $plg_show_users_side_by_side = 0;
-
-// Specification of the target in which the contents of the links are to be opened
-// You can insert specified values of the html target attribut
-$plg_link_target = '_self';
-
-// Should the headline of the plugin be displayed
-// 0 - Headline is not displayed
-// 1 - (Default) Headline is displayed
-$plg_show_headline = 1;

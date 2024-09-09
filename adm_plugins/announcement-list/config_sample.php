@@ -34,16 +34,3 @@ $plg_max_char_per_word = 0;
 // just use the following syntax $plg_categories = array('category-name-1','category-name-2')
 // If you want to view all announcements just set $plg_categories = array();
 $plg_categories = array();
-
-// Specification of the target in which the contents of the links are to be opened
-// You can insert specified values of the html target attribute
-$plg_link_target = '_self';
-
-// Should the headline of the plugin be displayed
-// 0 - Headline is not displayed
-// 1 - Headline is displayed (Default)
-$plg_show_headline = 1;
-
-// Set a custom headline for the plugin and also for the announcements module.
-// The headline could also be a translation string e.g. SYS_HEADLINE
-$plg_headline = '';

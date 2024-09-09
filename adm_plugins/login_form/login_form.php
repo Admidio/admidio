@@ -1,4 +1,7 @@
 <?php
+use Admidio\Plugins\Overview;
+use Admidio\UserInterface\Form;
+
 /**
  ***********************************************************************************************
  * Login Form
@@ -23,6 +26,8 @@ try {
         require_once(__DIR__ . '/config.php');
     }
 
+    $loginFormPlugin = new Overview($pluginFolder);
+
     // set default values if there has been no value stored in the config.php
     if (!isset($plg_show_register_link) || !is_numeric($plg_show_register_link)) {
         $plg_show_register_link = 1;
@@ -36,51 +41,11 @@ try {
         $plg_show_logout_link = 0;
     }
 
-    if (isset($plg_link_target)) {
-        $plg_link_target = strip_tags($plg_link_target);
-    } else {
-        $plg_link_target = '_self';
-    }
-
     if (!isset($plg_rank)) {
         $plg_rank = array();
     }
 
-    // if page object is set then integrate css file of this plugin
-    global $page;
-    if (isset($page) && $page instanceof HtmlPage) {
-        $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/login_form/login_form.css');
-    }
-
-    echo '<div id="plugin_' . $pluginFolder . '" class="admidio-plugin-content">';
     if ($gValidLogin) {
-        echo '<h3>' . $gL10n->get('SYS_REGISTERED_AS') . '</h3>';
-    } else {
-        echo '<h3>' . $gL10n->get('SYS_LOGIN') . '</h3>';
-    }
-
-    if ($gValidLogin) {
-        if ($plg_link_target === '' || str_starts_with($plg_link_target, '_')) {
-            $jsContentNextPage = 'self.location.href = \'' . ADMIDIO_URL . FOLDER_SYSTEM . '/logout.php\';';
-        } else {
-            $jsContentNextPage = '
-        parent.' . $plg_link_target . '.location.href = \'' . ADMIDIO_URL . FOLDER_SYSTEM . '/logout.php\';
-        self.location.reload();';
-        }
-
-        $jsContent = '$("#adm_logout_link").click(function() {' . $jsContentNextPage . '});';
-
-        if (isset($page) && $page instanceof HtmlPage) {
-            $page->addJavascript($jsContent, true);
-        } else {
-            echo '
-        <script type="text/javascript">
-            $(function() {
-                ' . $jsContent . '
-            });
-        </script>';
-        }
-
         // show the rank of the user if this is configured in the config.php
         $htmlUserRank = '';
 
@@ -107,24 +72,13 @@ try {
             $lastLogin = $gCurrentUser->getValue('usr_last_login');
         }
 
-        // create a static form
-        $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
-        $form->addStaticControl(
-            'plg_user',
-            $gL10n->get('SYS_MEMBER'),
-            '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $gCurrentUser->getValue('usr_uuid'))) . '" target="' . $plg_link_target . '" title="' . $gL10n->get('SYS_SHOW_PROFILE') . '">'
-            . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
-            '</a>'
-        );
-        $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')));
-        $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $lastLogin);
-        $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), (int)$gCurrentUser->getValue('usr_number_login') . $htmlUserRank);
-        echo $form->show();
-
-        if ($plg_show_logout_link) {
-            // show link for logout
-            echo '<a id="adm_logout_link" class="admidio-icon-link" href="' . ADMIDIO_URL . FOLDER_SYSTEM . '/logout.php"><i class="bi bi-box-arrow-right"></i>' . $gL10n->get('SYS_LOGOUT') . '</a>';
-        }
+        $loginFormPlugin->assignTemplateVariable('userUUID', $gCurrentUser->getValue('usr_uuid'));
+        $loginFormPlugin->assignTemplateVariable('userName', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
+        $loginFormPlugin->assignTemplateVariable('loginActiveSince', $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')));
+        $loginFormPlugin->assignTemplateVariable('lastLogin', $lastLogin);
+        $loginFormPlugin->assignTemplateVariable('numberOfLogins', $gCurrentUser->getValue('usr_number_login') . $htmlUserRank);
+        $loginFormPlugin->assignTemplateVariable('showLogoutLink', $plg_show_logout_link);
+        echo $loginFormPlugin->html('plugin.login-form.view.tpl');
     } else {
         // create and show the login form
 
@@ -132,53 +86,6 @@ try {
         $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
         if ($getOrganizationShortName === '') {
             $getOrganizationShortName = $gCurrentOrganization->getValue('org_shortname');
-        }
-
-        $form = new HtmlForm(
-            'plugin-login-form',
-            ADMIDIO_URL . '/adm_program/system/login.php?mode=check',
-            null,
-            array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
-        );
-        $form->addInput(
-            'plg_usr_login_name',
-            $gL10n->get('SYS_USERNAME'),
-            '',
-            array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 254)
-        );
-        $form->addInput(
-            'plg_usr_password',
-            $gL10n->get('SYS_PASSWORD'),
-            '',
-            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
-        );
-
-        // show selectbox with all organizations of database
-        if ($gSettingsManager->getBool('system_organization_select')) {
-            $sql = 'SELECT org_shortname, org_longname
-                  FROM ' . TBL_ORGANIZATIONS . '
-              ORDER BY org_longname, org_shortname';
-            $form->addSelectBoxFromSql(
-                'plg_org_shortname',
-                $gL10n->get('SYS_ORGANIZATION'),
-                $gDb,
-                $sql,
-                array('defaultValue' => $getOrganizationShortName, 'showContextDependentFirstEntry' => false)
-            );
-        }
-
-        if ($gSettingsManager->getBool('enable_auto_login')) {
-            $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'));
-        }
-
-        $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right'));
-        echo $form->show();
-
-        echo '<ul class="list-group list-group-flush">';
-
-        // show links for registration and help
-        if ($plg_show_register_link && $gSettingsManager->getBool('registration_enable_module')) {
-            echo '<li class="list-group-item"><a class="icon-link" href="' . ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php" target="' . $plg_link_target . '"><i class="bi bi-card-checklist"></i>' . $gL10n->get('SYS_REGISTRATION') . '</a></li>';
         }
 
         if ($plg_show_email_link) {
@@ -209,13 +116,61 @@ try {
                 // show link to send mail with local mail-client to administrator
                 $linkUrl = SecurityUtils::encodeUrl('mailto:' . $gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
             }
-
-            echo '<li class="list-group-item"><a class="icon-link" href="' . $linkUrl . '" target="' . $plg_link_target . '"><i class="bi bi-envelope-fill"></i>' . $linkText . '</a></li>';
+            $forgotPasswordLink = '<a href="' . $linkUrl . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>';
+        } else {
+            $forgotPasswordLink = '';
         }
-        echo '</ul>';
-    }
 
-    echo '</div>';
+        $form = new Form(
+            'pluginLoginForm',
+            'plugin.login-form.edit.tpl',
+            ADMIDIO_URL . '/adm_program/system/login.php?mode=check',
+            null,
+            array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
+        );
+        $form->addInput(
+            'plg_usr_login_name',
+            $gL10n->get('SYS_USERNAME'),
+            '',
+            array('property' => Form::FIELD_REQUIRED, 'maxLength' => 254)
+        );
+        $form->addInput(
+            'plg_usr_password',
+            $gL10n->get('SYS_PASSWORD'),
+            '',
+            array(
+                'type' => 'password',
+                'property' => Form::FIELD_REQUIRED,
+                'helpTextId' => $forgotPasswordLink
+            )
+        );
+
+        // show selectbox with all organizations of database
+        if ($gSettingsManager->getBool('system_organization_select')) {
+            $sql = 'SELECT org_shortname, org_longname
+                  FROM ' . TBL_ORGANIZATIONS . '
+              ORDER BY org_longname, org_shortname';
+            $form->addSelectBoxFromSql(
+                'plg_org_shortname',
+                $gL10n->get('SYS_ORGANIZATION'),
+                $gDb,
+                $sql,
+                array('defaultValue' => $getOrganizationShortName, 'showContextDependentFirstEntry' => false)
+            );
+        }
+
+        if ($gSettingsManager->getBool('enable_auto_login')) {
+            $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'));
+        }
+        $form->addSubmitButton('plg_btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right'));
+
+        $smarty = $loginFormPlugin->createSmartyObject();
+        $smarty->assign('settings', $gSettingsManager);
+        $smarty->assign('showRegisterLink', $plg_show_register_link);
+        $form->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($form);
+        echo $smarty->fetch('plugin.login-form.edit.tpl');
+    }
 } catch (Throwable $e) {
     echo $e->getMessage();
 }

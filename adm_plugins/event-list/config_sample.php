@@ -39,16 +39,3 @@ $plg_max_char_per_word = 0;
 // just use the following syntax $plg_kal_cat = array('calendar-name-1','calendar-name-2')
 // If you want to view all events just set $plg_kal_cat = array();
 $plg_kal_cat = array();
-
-// Specification of the target in which the contents of the links are to be opened
-// You can insert specified values of the html target attribute
-$plg_link_target = '_self';
-
-// Should the headline of the plugin be displayed
-// 0 - Headline is not displayed
-// 1 - Headline is displayed (Default)
-$plg_show_headline = 1;
-
-// Specification of the prefix URL for the call in Joomla
-// if not specified then the default URL of Admidio is used
-$plg_link_url = '';
