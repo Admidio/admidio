@@ -103,12 +103,6 @@ try {
         $plg_show_future = 0;
     }
 
-    // if page object is set then integrate css file of this plugin
-    global $page;
-    if (isset($page) && $page instanceof HtmlPage) {
-        $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/birthday/birthday.css');
-    }
-
     $fieldBirthday = $gProfileFields->getProperty('BIRTHDAY', 'usf_id');
 
     if ($gDbType === 'pgsql') {
