@@ -1,4 +1,9 @@
 <?php
+use Admidio\Language;
+use Admidio\Session;
+use Admidio\UserInterface\Form;
+use Admidio\UserInterface\Installation;
+
 /**
  ***********************************************************************************************
  * Handle update of Admidio database to a new version
@@ -14,9 +19,6 @@
  *        result : Show result of update
  ***********************************************************************************************
  */
-use Admidio\UserInterface\Form;
-use Admidio\UserInterface\Installation;
-
 const THEME_URL = 'layout';
 
 try {
