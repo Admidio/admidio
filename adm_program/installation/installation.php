@@ -1,4 +1,7 @@
 <?php
+use Admidio\Language;
+use Admidio\UserInterface\Installation;
+
 /**
  ***********************************************************************************************
  * Installation and configuration of Admidio database and config file
@@ -19,8 +22,6 @@
  *        installation_successful : Installation successful finished
  ***********************************************************************************************
  */
-use Admidio\UserInterface\Installation;
-
 try {
     /**
      * Get the url of the Admidio installation with all subdirectories, a forwarded host
