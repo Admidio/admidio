@@ -1,4 +1,6 @@
 <?php
+use Admidio\Plugins\Overview;
+
 /**
  ***********************************************************************************************
  * Who is online
@@ -21,6 +23,8 @@ try {
         require_once(__DIR__ . '/config.php');
     }
 
+    $whoIsOnlinePlugin = new Overview($pluginFolder);
+
     // set default values if there has been no value stored in the config.php
     if (!isset($plg_time_online) || !is_numeric($plg_time_online)) {
         $plg_time_online = 10;
@@ -40,16 +44,6 @@ try {
 
     if (!isset($plg_show_users_side_by_side) || !is_numeric($plg_show_users_side_by_side)) {
         $plg_show_users_side_by_side = 0;
-    }
-
-    if (isset($plg_link_target)) {
-        $plg_link_target = strip_tags($plg_link_target);
-    } else {
-        $plg_link_target = '_self';
-    }
-
-    if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
-        $plg_show_headline = 1;
     }
 
     // Set reference time
@@ -78,11 +72,6 @@ try {
      ORDER BY ses_usr_id';
     $onlineUsersStatement = $gDb->queryPrepared($sql, $queryParams);
 
-    echo '<div id="plugin_' . $pluginFolder . '" class="admidio-plugin-content">';
-    if ($plg_show_headline) {
-        echo '<h3>' . $gL10n->get('PLG_ONLINE_HEADLINE') . '</h3>';
-    }
-
     if ($onlineUsersStatement->rowCount() > 0) {
         $usrIdMerker = 0;
         $countMembers = 0;
@@ -94,7 +83,7 @@ try {
             if ($row['ses_usr_id'] > 0) {
                 if (((int)$row['ses_usr_id'] !== $usrIdMerker)
                     && ($plg_show_members == 1 || $gValidLogin)) {
-                    $allVisibleOnlineUsers[] = '<strong><a target="' . $plg_link_target . '" title="' . $gL10n->get('SYS_SHOW_PROFILE') . '"
+                    $allVisibleOnlineUsers[] = '<strong><a title="' . $gL10n->get('SYS_SHOW_PROFILE') . '"
                     href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">' . $row['usr_login_name'] . '</a></strong>';
                     $usrIdMerker = (int)$row['ses_usr_id'];
                 }
@@ -123,15 +112,15 @@ try {
         }
 
         if ($onlineUsersStatement->rowCount() === 1) {
-            echo $gL10n->get('PLG_ONLINE_VAR_ONLINE_IS', array($textOnlineVisitors));
+            $whoIsOnlinePlugin->assignTemplateVariable('message', $gL10n->get('PLG_ONLINE_VAR_ONLINE_IS', array($textOnlineVisitors)));
         } else {
-            echo $gL10n->get('PLG_ONLINE_VAR_ONLINE_ARE', array($textOnlineVisitors));
+            $whoIsOnlinePlugin->assignTemplateVariable('message', $gL10n->get('PLG_ONLINE_VAR_ONLINE_ARE', array($textOnlineVisitors)));
         }
     } else {
-        echo $gL10n->get('PLG_ONLINE_NO_VISITORS_ON_WEBSITE');
+        $whoIsOnlinePlugin->assignTemplateVariable('message', $gL10n->get('PLG_ONLINE_NO_VISITORS_ON_WEBSITE'));
     }
 
-    echo '</div>';
+    echo $whoIsOnlinePlugin->html('plugin.who-is-online.tpl');
 } catch (Throwable $e) {
     echo $e->getMessage();
 }
