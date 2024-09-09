@@ -1,4 +1,6 @@
 <?php
+use Admidio\Plugins\Overview;
+
 /**
  ***********************************************************************************************
  * Birthday
@@ -22,6 +24,8 @@ try {
         require_once(__DIR__ . '/config.php');
     }
 
+    $birthdayPlugin = new Overview($pluginFolder);
+
     // global variable to show names of the members who have birthday
     $plgBirthdayShowNames = false;
 
@@ -40,12 +44,6 @@ try {
 
     if (!isset($plg_show_age) || !is_numeric($plg_show_age)) {
         $plg_show_age = 0;
-    }
-
-    if (isset($plg_link_target)) {
-        $plg_link_target = strip_tags($plg_link_target);
-    } else {
-        $plg_link_target = '_self';
     }
 
     if (!isset($plg_show_hinweis_keiner) || !is_numeric($plg_show_hinweis_keiner)) {
@@ -97,10 +95,6 @@ try {
         $sqlSort = 'DESC';
     } else {
         $sqlSort = $plg_sort_sql;
-    }
-
-    if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
-        $plg_show_headline = 1;
     }
 
     // if no birthdays should be shown than disable future and former birthday periods
@@ -247,17 +241,11 @@ try {
 
     $numberBirthdays = $birthdayStatement->rowCount();
 
-    echo '<div id="plugin_' . $pluginFolder . '" class="admidio-plugin-content">';
-    if ($plg_show_headline) {
-        echo '<h3>' . $gL10n->get('PLG_BIRTHDAY_HEADLINE') . '</h3>';
-    }
-
     if ($numberBirthdays > 0) {
         if ($plgBirthdayShowNames) {
-            echo '<ul class="list-group list-group-flush">';
-
             // how many birthdays should be displayed (as a maximum)
             $birthdayCount = null;
+            $birthdayArray = array();
 
             while (($row = $birthdayStatement->fetch()) && $birthdayCount < $plg_show_display_limit) {
                 // the display type of the name
@@ -290,7 +278,7 @@ try {
                 // show name and e-mail link for registered users
                 if ($gValidLogin) {
                     $plgShowName = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '"
-                        target="' . $plg_link_target . '" title="' . $gL10n->get('SYS_SHOW_PROFILE') . '">' . $plgShowName . '</a>';
+                        title="' . $gL10n->get('SYS_SHOW_PROFILE') . '">' . $plgShowName . '</a>';
 
                     // E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
                     if ((string)$row['email'] !== '' && $plg_show_email_extern < 2) {
@@ -336,30 +324,30 @@ try {
                     $birthdayText .= '_NO_AGE';
                 }
 
-                // now show string with the birthday person
-                echo '<li class="list-group-item"><span id="' . $plgCssClass . '">' .
-                    $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthdayDate->format($gSettingsManager->getString('system_date')))) .
-                    '</span></li>';
+                $birthdayArray[] = array(
+                    'userText' => $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthdayDate->format($gSettingsManager->getString('system_date'))))
+                );
 
                 // counting displayed birthdays
                 $birthdayCount++;
             }
-            echo '</ul>';
+
+            $birthdayPlugin->assignTemplateVariable('birthdays', $birthdayArray);
         } else {
             if ($numberBirthdays === 1) {
-                echo '<p>' . $gL10n->get('PLG_BIRTHDAY_ONE_MEMBER') . '</p>';
+                $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_ONE_MEMBER'));
             } else {
-                echo '<p>' . $gL10n->get('PLG_BIRTHDAY_MORE_MEMBERS', array($numberBirthdays)) . '</p>';
+                $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_MORE_MEMBERS', array($numberBirthdays)));
             }
         }
     } else {
         // If the configuration is set accordingly, a message is output if no member has a birthday today
         if (!$plg_show_hinweis_keiner) {
-            echo '<p>' . $gL10n->get('PLG_BIRTHDAY_NO_MEMBERS') . '</p>';
+            $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_MEMBERS'));
         }
     }
 
-    echo '</div>';
+    echo $birthdayPlugin->html('plugin.birthday.tpl');
 } catch (Throwable $e) {
     echo $e->getMessage();
 }

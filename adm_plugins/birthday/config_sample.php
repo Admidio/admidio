@@ -56,10 +56,6 @@ $plg_show_display_limit = 200;
 // 2 - Only the name without e-mail will be shown for visitors and registered users
 $plg_show_email_extern = 0;
 
-// Specification of the target in which the contents of the links are to be opened
-// You can insert specified values of the html target attribute
-$plg_link_target = '_self';
-
 // You can list role ids (comma separated) whose members are allowed to view the content
 // of this plugin. If the users doesn't have the right only the number of birthdays are shown.
 // Example: $plg_roles_view_plugin_sql = array(2, 4, 10);
@@ -74,8 +70,3 @@ $plg_rolle_sql = array();
 // In which sort order should the birthdays be listed?
 // The values could be ascending = 'ASC' or descending = 'DESC'
 $plg_sort_sql = 'DESC';
-
-// Should the header of the plugin be displayed?
-// 1 - (Default) Header should be shown
-// 0 - Header should not be shown
-$plg_show_headline = 1;
