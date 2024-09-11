@@ -13,9 +13,9 @@
  */
 
 // Show a link to register after the login dialog
-// 0 - Don't show the link to register
-// 1 - Show the link to register (Default)
-$plg_show_register_link = 1;
+// 0 - Don't show the link to register (Default)
+// 1 - Show the link to register
+$plg_show_register_link = 0;
 
 // Show a link to send an email to the administrator if you have login problems
 // 0 - Don't show the link to send an email

@@ -30,7 +30,7 @@ try {
 
     // set default values if there has been no value stored in the config.php
     if (!isset($plg_show_register_link) || !is_numeric($plg_show_register_link)) {
-        $plg_show_register_link = 1;
+        $plg_show_register_link = 0;
     }
 
     if (!isset($plg_show_email_link) || !is_numeric($plg_show_email_link)) {
