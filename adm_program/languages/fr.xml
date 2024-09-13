@@ -299,7 +299,7 @@
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Une nouvelle annonce a été crée à #VAR1#</string>
   <string name="SYS_ANNOUNCEMENTS">Annonces</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Les annonces, les nouvelles ou les informations peuvent être publiées et consultées ici.</string>
-  <string name="SYS_APPLY">Reprendre</string>
+  <string name="SYS_APPLY">Appliquer</string>
   <string name="SYS_APPOINTMENT">Rendez-vous</string>
   <string name="SYS_APPOINTMENTS">Rendez-vous</string>
   <string name="SYS_ANNUALLY">Annuel</string>
@@ -995,7 +995,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">Désactivé</string>
   <string name="SYS_ONE_TIME">Une fois</string>
-  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Administration de membres en ligne</string>
+  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Gestion des adhésions</string>
   <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Uniquement lors de l\'inscription et de votre propre profil</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Ce paramètre ne peut être saisie que par l\'organisation mère.</string>
   <string name="SYS_OPERATING_SYSTEM">Système d\'opération</string>
@@ -1022,7 +1022,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Status des participants</string>
   <string name="SYS_PASSWORD">Mot de passe</string>
   <string name="SYS_PASSWORD_CHANGED">Le mot de passe a été modifié avec succès.</string>
-  <string name="SYS_PASSWORD_DESCRIPTION">Le mot de passe doit comporter au moins 8 caractères. Il devrait contenir des chiffres, des lettres et ainsi que des caractères spéciaux.\n\nLa force de ton mot de passe choisi est indiqué par une barre coloré. La force minimale exigée est indique par une flèche dans la barre.</string>
+  <string name="SYS_PASSWORD_DESCRIPTION">Le mot de passe doit comporter au moins 8 caractères, dont des chiffres, des lettres et des caractères spéciaux.\nLa force du mot de passe sélectionné sera affichée en couleur à l\'aide d\'une barre. La force minimale requise est indiquée par la flèche dans la barre.</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Mot de passe oublié</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Si tu as oublié ton mot de passe, le système peut créer un nouveau mot de passe et l\'envoyer à ton adresse de courriel. Entre ton nom d\'utilisateur ou l\'adresse courriel que tu as utilisée pour t\'inscrire à ce système. Le nouveau mot de passe sera envoyé immédiatement à cette adresse courriel.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Si l\'utilisateur a oublié son mot de passe, il peut demander qu\'un lien lui soit envoyé, grâce auquel il pourra définir un nouveau mot de passe pour son compte sur ce site web. Si cette option est désactivée, l\'utilisateur peut uniquement envoyer une demande par e-mail à l\'administrateur pour recevoir un nouveau mot de passe. Pour que le mot de passe soit envoyé, le paramètre #VAR1_BOLD# doit également être défini. (Par défaut : oui)</string>
@@ -1093,10 +1093,7 @@
   <string name="SYS_PROFILE_FROM">Profil de #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Informations sur le profil</string>
   <string name="SYS_PROFILE_PHOTO">Photo de profil</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1">Tu devrais être sur la photo toi-même.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2">La photo doit être sauvegardée au format JPG ou PNG.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3">Le serveur peut traiter les photos avec une résolution maximale de #VAR1#mégapixels.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4">Les fichiers téléchargés ne doivent pas être supérieur à #VAR1#MB.</string>
+  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Vous devez apparaître sur la photo. La résolution maximale de la photo ne doit pas dépasser #VAR1# mégapixels. Le fichier photo ne doit pas dépasser #VAR1# Mo et doit être au format JPG ou PNG.</string>
   <string name="SYS_PROPERTIES">Propriétés</string>
   <string name="SYS_QUANTITY">Quantité</string>
   <string name="SYS_QUARTERLY">Trimestrielle</string>
@@ -1144,7 +1141,6 @@
   <string name="SYS_REQUIRED_INPUT">Entrée requise</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Vous êtes déjà connecté au système. Il n\'est pas nécessaire de demander un nouveau mot de passe.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">L\'image n\'a pas pu être traitée car la résolution est supérieure à #VAR1# mégapixels.</string>
-  <string name="SYS_RESTRICTIONS">Resctrictions</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Voir la liste des membres de tous les rôles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Gérer les annonces</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Gérer et attribuer des inscriptions</string>
@@ -1185,7 +1181,7 @@
   <string name="SYS_ROLES">Rôles</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Rôles - Certificat de participation</string>
   <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Les membres de ce rôle sont des administrateurs du module et ont accès à tout. Ils peuvent créer, modifier, supprimer des données et éditer des catégories avec leurs droits.</string>
-  <string name="SYS_ROOM">Chambre</string>
+  <string name="SYS_ROOM">Emplacement</string>
   <string name="SYS_ROOM_INFORMATION">Informations sur la salles</string>
   <string name="SYS_ROOM_MANAGEMENT">Administration des salles</string>
   <string name="SYS_ROOM_OVERHANG">S\'il y a des places supplémentaires à attribuer en plus de ceux indiqués ci-dessus, par exemple des chaises supplémentaires ou des places debout possibles, leur nombre peut être indiqué ici dans le excédent.</string>
@@ -1252,7 +1248,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Si ce paramètre est activé, des courriels sont envoyés à toutes les adresses de courriels de l\'utilisateur stockées dans le profil. Si ce paramètre est désactivé, les courriels ne sont envoyés à l\'adresse de courriel qu\'à partir du champ de profil avec le nom interne EMAIL. (Par défaut : Activé)</string>
   <string name="SYS_SEND_GREETING_CARD">Envoyer une carte de vœux</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Envoyer les données de connexion</string>
-  <string name="SYS_SEND_MAIL_TO_ROLE">Ton courriel sera envoyé à tous les membres du rôle séléctionné, s\'ils ont entré leur adresse de courriel dans le système ou aux destinataires sélectionnés.\n\nSi tu es connecté, tu as d\'autres rôles et destinataires auxquels tu peux envoyer des courriels.</string>
+  <string name="SYS_SEND_MAIL_TO_ROLE">Votre e-mail sera envoyé aux destinataires individuels sélectionnés et à tous les membres des rôles sélectionnés, à condition qu\'ils aient enregistré une adresse e-mail.</string>
   <string name="SYS_SEND_MAILS">Envoyer des courriels</string>
   <string name="SYS_SEND_METHOD">Envoyer par</string>
   <string name="SYS_SEND_METHOD_DESC">La fonction mail() de PHP est limitée par certains hébérgeurs et conduit parfois à des soupçons de Spam. Par conséquent, l\'envoi à partir d\'une adresse courriel existante via un serveur SMTP est généralement recommandé. Les paramètres SMTP peuvent être configurés ci-dessous. (Par défaut : PHP mail()))</string>
@@ -1410,11 +1406,11 @@
   <string name="SYS_USER_RELATION_TYPE">Type de relation</string>
   <string name="SYS_USER_VALID_LOGIN">Cet utilisateur dispose déjà d\'un login valide.</string>
   <string name="SYS_USERNAME">Nom d\'utilisateur</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Avec ce nom, tu peux te connecter plus tard sur la page d\'accueil. Le nom doit être unique dans le système. Si ton nom souhaité est déjà attribué, essaye des combinaisons comme Andi78 ou StephaneT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Vous pourrez vous connecter avec ce nom d\'utilisateur.\nCe nom doit être bien défini. Si le nom sélectionné n\'est plus disponible, essayez d\'utiliser des combinaisons comme Andi78 ou SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Nom d\'utilisateur ou courriel</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# sur #VAR2# à #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Nombre de contacts par page</string>
-  <string name="SYS_USING_CURRENT_VERSION">Tu utilise une version actuelle #VAR1# version d\'Admidio!</string>
+  <string name="SYS_USING_CURRENT_VERSION">Tu utilises actuellement une version #VAR1# d\'Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
   <string name="SYS_UTF16LE">UTF-16LE</string>
@@ -1454,7 +1450,7 @@
   <string name="SYS_WIDTH">Largeur</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Feuille de calcul (index ou nom)</string>
   <string name="SYS_WRITE_EMAIL">Écrire un courriel</string>
-  <string name="SYS_WRITE_ENTRY">Écrire une entrée</string>
+  <string name="SYS_WRITE_ENTRY">Écrire un message</string>
   <string name="SYS_WRITE_PM">Écrire un message privé</string>
   <string name="SYS_XING">Xing</string>
   <string name="SYS_YEARS">Années</string>

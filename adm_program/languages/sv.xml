@@ -800,7 +800,7 @@
   <string name="SYS_LANDSCAPE" description="Format for printing">Liggande</string>
   <string name="SYS_LANGUAGE">Språk</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Saknas ditt språk eller vill du översätta fler texter eller förbättra befintliga översättningar? Titta sedan på #VAR1# Wikisida för Admidio #VAR2# för att se hur du kan hjälpa till med översättningen.</string>
-  <string name="SYS_LAST_EDITED_BY">Senast redigerad av #VAR1# på #VAR2#</string>
+  <string name="SYS_LAST_EDITED_BY">Senast redigerad av #VAR1# den #VAR2#</string>
   <string name="SYS_LAST_LOGIN_ON">Senaste inloggningen den #VAR1# #VAR2#</string>
   <string name="SYS_LASTNAME">Efternamn</string>
   <string name="SYS_LATER">Senare</string>
@@ -995,7 +995,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">På</string>
   <string name="SYS_ONE_TIME">En gång</string>
-  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online-medlemskapshantering</string>
+  <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Medlemsadministration</string>
   <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Endast vid registrering och egen profil</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Denna inställning kan endast ställas i av moderorganisationer.</string>
   <string name="SYS_OPERATING_SYSTEM">Operativsystem</string>
@@ -1022,7 +1022,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Deltagarstatus</string>
   <string name="SYS_PASSWORD">Lösenord</string>
   <string name="SYS_PASSWORD_CHANGED">Lösenordet har ändrats</string>
-  <string name="SYS_PASSWORD_DESCRIPTION">Lösenordet måste ha minst 8 tecken inklusive siffror, bokstäver och specialtecken.\n\nStyrkan för ditt valda lösenord visas i färg med en stapel. Den minsta krävda styrkan anges med pilen i fältet.</string>
+  <string name="SYS_PASSWORD_DESCRIPTION">Lösenordet måste ha minst 8 tecken inklusive siffror, bokstäver och specialtecken.\nStyrkan för ditt valda lösenord visas i färg med en stapel. Den minsta krävda styrkan anges med pilen i fältet.</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Glömt lösenord?</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Ange ditt användarnamn eller e-postadress. Du kommer få ett mejl med en länk där du kan sätta ett nytt lösenord.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Om användaren har glömt sitt lösenord kan hen själv efterfråga ett mejl med en länk för att sätta ett nytt lösenord för sitt konto. Om detta alternativ är avaktiverat kan användaren inte själv hantera glömt lösenord. Då behöver administratören sätta ett nytt lösenord. För att lösenordet ska kunna skickas måste inställningen #VAR1_BOLD# också vara inställd. (Standard: ja)</string>
@@ -1093,10 +1093,7 @@
   <string name="SYS_PROFILE_FROM">Profil för #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformation</string>
   <string name="SYS_PROFILE_PHOTO">Bild</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1">Du borde även ses på fotot.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2">Foto måste sparas som JPG eller PNG.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3">Servern kan hantera foton med en maximal storlek på #VAR1# megapixlar.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4">Uppladdade filer får inte vara större än #VAR1# MB.</string>
+  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du bör vara med på bilden. Bilden får ha en upplösning på max #VAR1# MegaPixel. Filen får inte vara större än #VAR1# MB och måste vara i formatet JPG eller PNG.</string>
   <string name="SYS_PROPERTIES">Egenskaper</string>
   <string name="SYS_QUANTITY">Antal</string>
   <string name="SYS_QUARTERLY">Kvartalsvis</string>
@@ -1144,7 +1141,6 @@
   <string name="SYS_REQUIRED_INPUT">Inmatning krävs</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du är redan inloggad på systemet. Det är inte nödvändigt att begära ett nytt lösenord.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Bilden kunde inte hanteras eftersom upplösningen är större än #VAR1# megapixel.</string>
-  <string name="SYS_RESTRICTIONS">Restriktioner</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Visa listor med medlemmar i alla roller och alla medlemmars profiler</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Hantera meddelanden</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organisera och tilldela registreringar</string>
@@ -1252,7 +1248,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Om den här inställningen är aktiverad kommer e-postmeddelanden att skickas till alla användar-e-postadresser som är lagrade i profilen. Om inställningen är inaktiverad skickas e-postmeddelanden endast till e-postadressen från profilfältet med det interna namnet EMAIL. (Standard: aktiverad)</string>
   <string name="SYS_SEND_GREETING_CARD">Skicka gratulationskort</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">INLOGGNINGSINFORMATION</string>
-  <string name="SYS_SEND_MAIL_TO_ROLE">Ditt e-postmeddelande skickas till alla medlemmar med en e-postadress för den valda rollen eller de valda mottagarna. \n\n Ytterligare roller och mottagare är endast tillgängliga för inloggade användare.</string>
+  <string name="SYS_SEND_MAIL_TO_ROLE">Ditt mejl skickas till alla valda medlemmar och alla med den valda rollen förutsatt att de har en mejladress sparad.</string>
   <string name="SYS_SEND_MAILS">Skicka e-mail</string>
   <string name="SYS_SEND_METHOD">Skicka via</string>
   <string name="SYS_SEND_METHOD_DESC">PHP\'s mail()-metod kan vara begränsad av vissa leverantörer och kan flaggas som skräppost. Därför rekommenderas att skicka e-post med hjälp av en befintlig e-postadress och SMTP-server. Du kan konfigurera SMTP-inställningarna nedan (standard: PHP-post ()).</string>
@@ -1410,7 +1406,7 @@
   <string name="SYS_USER_RELATION_TYPE">Relationstyp</string>
   <string name="SYS_USER_VALID_LOGIN">Användaren har redan giltig inloggningsinformation.</string>
   <string name="SYS_USERNAME">Användarnamn</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Du kan logga in med det här användarnamnet. \n\nDetta namn måste vara väl definierat. Om det valda namnet inte är tillgängligt längre, försök att använda kombinationer som Andi78 eller SteveT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Du kommer kunna logga in med detta användarnamn.\nNamnet måste vara väl definierat. Om det önskade namnet redan används, försök att använda kombinationer som Arne78 eller StefanT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">E-postadress</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# vid #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Antal kontakter per sida</string>
