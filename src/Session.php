@@ -130,7 +130,7 @@ class Session extends \TableAccess
     {
         global $gCurrentUser;
 
-        if (isset($gCurrentUser) && $gCurrentUser instanceof \User) {
+        if (isset($gCurrentUser)) {
             $gCurrentUser->clear();
         }
         $this->setValue('ses_usr_id', '');
@@ -197,7 +197,7 @@ class Session extends \TableAccess
      */
     public function getOrganizationId(): int
     {
-        if ($this->mAutoLogin instanceof \AutoLogin) {
+        if (isset($this->mAutoLogin)) {
             return (int)$this->mAutoLogin->getValue('atl_org_id');
         }
 
@@ -245,7 +245,7 @@ class Session extends \TableAccess
 
                 // Check how long the user was inactive. If time range is too long -> logout
                 // if user has auto login than session is also valid
-                if ($this->mAutoLogin instanceof \AutoLogin || $timeGap < $gSettingsManager->getInt('logout_minutes') * 60) {
+                if (isset($this->mAutoLogin) || $timeGap < $gSettingsManager->getInt('logout_minutes') * 60) {
                     return true;
                 }
             }
@@ -271,7 +271,7 @@ class Session extends \TableAccess
         $this->setValue('ses_usr_id', '');
         $this->save();
 
-        if ($this->mAutoLogin instanceof \AutoLogin) {
+        if (isset($this->mAutoLogin)) {
             // remove auto login cookie from users browser by setting expired timestamp to 0
             self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'));
 
@@ -372,7 +372,7 @@ class Session extends \TableAccess
 
         // session in database could be deleted if user was some time inactive and another user
         // clears the table. Therefor we must reset the user id
-        if ($this->mAutoLogin instanceof \AutoLogin) {
+        if (isset($this->mAutoLogin)) {
             if ((int)$this->getValue('ses_usr_id') === 0) {
                 $this->setValue('ses_usr_id', (int)$this->mAutoLogin->getValue('atl_usr_id'));
             }
