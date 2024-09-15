@@ -173,7 +173,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                     $linkMembershipEdit = '<a class="admidio-icon-link" style="cursor:pointer;" href="javascript:profileJS.toggleDetailsOn(\''.$memberUuid.'\')"><i
                                         class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CHANGE_DATE').'"></i></a>';
                 } else {
-                    $linkMembershipEdit = '<a><i class="bi bi-pencil-square invisible"></i></a>';
+                    $linkMembershipEdit = '<a style="padding: 3px;"><i class="bi bi-pencil-square invisible"></i></a>';
                 }
                 $membership['linkMembershipEdit'] = $linkMembershipEdit;
 
@@ -182,10 +182,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                                 || ($role->getValue('rol_administrator') == 0)) {
                     $linkMembershipDelete = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.$role->getValue('rol_uuid'), 'database_id' => $memberUuid, 'name' => $role->getValue('rol_name', 'database'))).'"><i
-                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.$role->getValue('rol_uuid'), 'database_id' => $memberUuid, 'name' => $role->getValue('rol_name', 'database'))).'"><i
                                         class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
                 } else {
-                    $linkMembershipDelete = '<a><i class="bi bi-trash invisible"></i></a>';
+                    $linkMembershipDelete = '<a style="padding: 3px;"><i class="bi bi-trash invisible"></i></a>';
                 }
                 $membership['linkMembershipDelete'] = $linkMembershipDelete;
             }

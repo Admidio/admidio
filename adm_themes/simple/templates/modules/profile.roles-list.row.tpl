@@ -18,7 +18,7 @@
                         {/if}
                         {if $membership.showRelationsCreateEdit}
                             <a class="admidio-icon-link admidio-create-edit-info" id="member_info_{$membership.memberUUID}" href="javascript:void(0)"><i
-                                        class="bi bi-info-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_INFORMATIONS')}"></i></a>
+                                class="bi bi-info-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_INFORMATIONS')}"></i></a>
                         {/if}
                     </span>
                 </li>

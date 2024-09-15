@@ -39,7 +39,7 @@ class UserImport extends User
     /**
      * @var bool Flag if the user already exists (identified by firstname and lastname)
      */
-    private bool $userExists;
+    private bool $userExists = false;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
