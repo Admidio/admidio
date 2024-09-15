@@ -159,7 +159,7 @@ if ($getMode === 1) {
 
     // save role membership
     try {
-        $role->setMembership($user->getValue('usr_id'), $postMembershipStart, $postMembershipEnd, $member->getValue('mem_leader'));
+        $role->setMembership($user->getValue('usr_id'), $postMembershipStart, $postMembershipEnd, $member->getValue('mem_leader'), true);
     } catch (AdmException $e) {
         $e->showText();
         // => EXIT
