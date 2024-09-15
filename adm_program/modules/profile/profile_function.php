@@ -147,7 +147,7 @@ try {
         }
 
         // save role membership
-        $role->setMembership($user->getValue('usr_id'), $postMembershipStart, $postMembershipEnd, $member->getValue('mem_leader'));
+        $role->setMembership($user->getValue('usr_id'), $postMembershipStart, $postMembershipEnd, $member->getValue('mem_leader'), true);
 
         echo 'success';
     }

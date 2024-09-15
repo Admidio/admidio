@@ -505,15 +505,19 @@ class TableRoles extends TableAccess
      * @param null|bool $leader Flag if the user is assigned as a leader to this role.
      *                          If set to null than the leader flag will not be changed if a membership already exists
      *                          and set to false if it doesn't exist.
+     * @param bool $forcePeriod If set, the period of the allocation is shortened if the new period starts later
+     *                          than it is already allocated.
      * @return void
      * @throws Exception
      */
-    public function setMembership(int $userId, string $startDate, string $endDate, ?bool $leader = null)
+    public function setMembership(int $userId, string $startDate, string $endDate, ?bool $leader = null, bool $forcePeriod = false)
     {
         global $gCurrentUser, $gCurrentUserId, $gCurrentSession;
 
         $newMembershipSaved = false;
         $updateNecessary = true;
+        $startDateSaved = '';
+        $endDateSaved = '';
 
         // if role is administrator than only administrator can add new user,
         // but don't change their own membership, because there must be at least one administrator
@@ -545,7 +549,7 @@ class TableRoles extends TableAccess
                 $leader = (bool) $row['mem_leader'];
             }
 
-            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin'] && $leader === (bool) $row['mem_leader']) {
+            if ($endDate === $row['mem_end'] && $startDate >= $row['mem_begin'] && $leader === (bool) $row['mem_leader'] && !$forcePeriod) {
                 // assignment already exists and must not be updated
                 $updateNecessary = false;
             } else {
@@ -560,9 +564,16 @@ class TableRoles extends TableAccess
                         // change existing membership period
                         $membership = new TableMembers($this->db);
                         $membership->setArray($row);
-                        $membership->setValue('mem_begin', $startDate);
-                        $membership->setValue('mem_end', $endDate);
-                        $membership->save();
+                        if ($startDateSaved !== $startDate && $endDateSaved !== $endDate) {
+                            $membership->setValue('mem_begin', $startDate);
+                            $membership->setValue('mem_end', $endDate);
+                            $membership->save();
+                            $startDateSaved = $startDate;
+                            $endDateSaved = $endDate;
+                        } else {
+                            // this period was already saved so delete this duplicate entry
+                            $membership->delete();
+                        }
                     } else {
                         // End existing period and later add new period with changed leader flag
                         $tempEndDate = DateTime::createFromFormat('Y-m-d', $startDate);
@@ -574,30 +585,41 @@ class TableRoles extends TableAccess
                             // leader flag changed at the day the membership started then delete old membership
                             $membership->delete();
                         } else {
-                            $membership->setValue('mem_end', $newEndDate);
-                            $membership->save();
+                            if ($startDateSaved !== $startDate && $endDateSaved !== $endDate) {
+                                $membership->setValue('mem_end', $newEndDate);
+                                $membership->save();
+                                $startDateSaved = $row['mem_begin'];
+                                $endDateSaved = $endDate;
+                            } else {
+                                // this period was already saved so delete this duplicate entry
+                                $membership->delete();
+                            }
                         }
                     }
                 } elseif ($startDate <= $row['mem_begin'] && $endDate >= $row['mem_begin'] && !$newMembershipSaved) {
                     // new period starts before existing period and ends in existing period
-                    if ($leader === (bool)$row['mem_leader']) {
-                        $newMembershipSaved = true;
+                    $membership = new TableMembers($this->db);
+                    $membership->setArray($row);
 
-                        // change existing membership period
-                        $membership = new TableMembers($this->db);
-                        $membership->setArray($row);
-                        $membership->setValue('mem_begin', $startDate);
-                        $membership->setValue('mem_end', $endDate);
+                    if ($startDateSaved !== $startDate && $endDateSaved !== $endDate) {
+                        if ($leader === (bool)$row['mem_leader']) {
+                            // change existing membership period
+                            $newMembershipSaved = true;
+                            $membership->setValue('mem_begin', $startDate);
+                            $membership->setValue('mem_end', $endDate);
+                        } else {
+                            // End existing period and later add new period with changed leader flag
+                            $tempStartDate = DateTime::createFromFormat('Y-m-d', $endDate);
+                            $newStartDate = $tempStartDate->add(new DateInterval('P1D'))->format('Y-m-d');
+                            $membership->setValue('mem_end', $newStartDate);
+                        }
+                        $membership->save();
+                        $startDateSaved = $startDate;
+                        $endDateSaved = $endDate;
                     } else {
-                        // End existing period and later add new period with changed leader flag
-                        $tempStartDate = DateTime::createFromFormat('Y-m-d', $endDate);
-                        $newStartDate = $tempStartDate->add(new DateInterval('P1D'))->format('Y-m-d');
-
-                        $membership = new TableMembers($this->db);
-                        $membership->setArray($row);
-                        $membership->setValue('mem_end', $newStartDate);
+                        // this period was already saved so delete this duplicate entry
+                        $membership->delete();
                     }
-                    $membership->save();
                 } elseif ($oneDayBeforeStartDate === $row['mem_end'] && $leader === (bool)$row['mem_leader']) {
                     // existing period ends 1 day before new period than merge the two periods
                     $newMembershipSaved = true;
@@ -605,8 +627,15 @@ class TableRoles extends TableAccess
                     // save new membership period
                     $membership = new TableMembers($this->db);
                     $membership->setArray($row);
-                    $membership->setValue('mem_end', $endDate);
-                    $membership->save();
+                    if ($startDateSaved !== $startDate && $endDateSaved !== $endDate) {
+                        $membership->setValue('mem_end', $endDate);
+                        $membership->save();
+                        $startDateSaved = $row['mem_begin'];
+                        $endDateSaved = $endDate;
+                    } else {
+                        // this period was already saved so delete this duplicate entry
+                        $membership->delete();
+                    }
                 } elseif ($endDate === $row['mem_end'] && $startDate === $row['mem_begin'] && $leader !== (bool)$row['mem_leader']) {
                     // exact same time period but the leader flag has changed than delete current period
                     // and updated period later
