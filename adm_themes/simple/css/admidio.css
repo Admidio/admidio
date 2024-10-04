@@ -429,6 +429,10 @@ label {
 /* Navbar */
 /***********************************/
 
+.navbar {
+    --bs-navbar-padding-x: 0.5rem;
+}
+
 .navbar-filter {
     background-color: var(--bs-tertiary);
 }
