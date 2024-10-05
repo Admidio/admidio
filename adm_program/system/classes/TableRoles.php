@@ -590,8 +590,6 @@ class TableRoles extends TableAccess
                             if ($startDateSaved !== $startDate && $endDateSaved !== $endDate) {
                                 $membership->setValue('mem_end', $newEndDate);
                                 $membership->save();
-                                $startDateSaved = $row['mem_begin'];
-                                $endDateSaved = $endDate;
                             } else {
                                 // this period was already saved so delete this duplicate entry
                                 $membership->delete();
@@ -609,6 +607,8 @@ class TableRoles extends TableAccess
                             $newMembershipSaved = true;
                             $membership->setValue('mem_begin', $startDate);
                             $membership->setValue('mem_end', $endDate);
+                            $startDateSaved = $startDate;
+                            $endDateSaved = $endDate;
                         } else {
                             // End existing period and later add new period with changed leader flag
                             $tempStartDate = DateTime::createFromFormat('Y-m-d', $endDate);
@@ -616,8 +616,6 @@ class TableRoles extends TableAccess
                             $membership->setValue('mem_end', $newStartDate);
                         }
                         $membership->save();
-                        $startDateSaved = $startDate;
-                        $endDateSaved = $endDate;
                     } else {
                         // this period was already saved so delete this duplicate entry
                         $membership->delete();
