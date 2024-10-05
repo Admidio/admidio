@@ -619,7 +619,7 @@
   <string name="SYS_EMPTY">Empty</string>
   <string name="SYS_ENABLED">Enabled</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Enable category report</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Category report creates a list of all roles and categories a member has. The permission #VAR1_BOLD# is required for access to the category report. (Default: yes)</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">The category report creates a list of all roles and categories to which a member is assigned. The permission #VAR1_BOLD# is required for access to the category report. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Enable documents &amp; files</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Enable download</string>
