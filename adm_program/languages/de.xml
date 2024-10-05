@@ -619,7 +619,7 @@
   <string name="SYS_EMPTY">Leer</string>
   <string name="SYS_ENABLED">Aktiviert</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Kategoriereport aktivieren</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Kategoriereport erstellt eine Liste aller Rollen und Kategorien, die ein Mitglied hat. Das Berechtigung #VAR1_BOLD# ist für den Zugriff auf den Kategoriereport erforderlich. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Der Kategoriereport erstellt eine Liste aller Rollen und Kategorien, der ein Mitglied zugeordnet ist. Die Berechtigung #VAR1_BOLD# ist für den Zugriff auf den Kategoriereport erforderlich. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiviere Dokumente &amp; Dateien</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Modul Dokumente &amp; Dateien kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Download aktivieren</string>
@@ -1433,7 +1433,7 @@
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Rollenmitgliedschaft sehen</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Mit dieser Einstellung kann festgelegt werden, wer die Mitglieder dieser Rolle sehen kann. Der Benutzer bzw. die Benutzerin kann die Rollenmitgliedschaft im Profil der jeweiligen Person sehen und in Listen zu der Rolle. Mit dieser Einstellung wird kein Zugriff auf das Profil der Rollenmitglieder ermöglicht. In Listen werden nur Name und Vorname angezeigt. Das Rollenrecht #VAR1_BOLD# überschreibt dieser Einstellung.</string>
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Es werden dir hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldeten Benutzer:innen sichtbar sind. Falls du auch Mitglied dieser Organisation bist, werden dir zusätzlich die Rollen angezeigt, die du mit deinen Rechten innerhalb der jeweiligen Organisation sehen darfst.</string>
-  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">Profile der Rollenmitglieder sehen</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">Profile der Rollenmitglieder einsehen</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer die Profile der Mitglieder dieser Rolle sehen kann. Der Benutzer bzw. die Benutzerin kann das Profil der jeweiligen Person aufrufen und in Listen zu der Rolle alle hinterlegten Spalten sehen. Das Rollenrecht #VAR1_BOLD# überschreibt dieser Einstellung.</string>
   <string name="SYS_VISIBILITY">Sichtbarkeit</string>
   <string name="SYS_VISIBLE">Sichtbar</string>
