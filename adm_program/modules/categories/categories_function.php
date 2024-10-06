@@ -32,9 +32,6 @@ try {
     $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'EVT', 'AWA')));
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'sequence')));
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     // create category object
     $category = new TableCategory($gDb);
 
@@ -204,6 +201,10 @@ try {
         exit();
     } elseif ($getMode === 'delete') {
         // delete category
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         if ($category->delete()) {
             echo json_encode(array('status' => 'success'));
             exit();
@@ -211,6 +212,9 @@ try {
     } elseif ($getMode === 'sequence') {
         // Update category sequence
         $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableCategory::MOVE_UP, TableCategory::MOVE_DOWN)));
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
         if ($category->moveSequence($postSequence)) {
             echo json_encode(array('status' => 'success'));

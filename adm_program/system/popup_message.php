@@ -39,7 +39,7 @@ try {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/backup/backup_file_function.php', array('job' => 'delete', 'filename' => $getDatabaseId));
             break;
         case 'cat':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_uuid' => $getDatabaseId, 'mode' => 'delete', 'type' => $getDatabaseId2));
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('uuid' => $getDatabaseId, 'mode' => 'delete', 'type' => $getDatabaseId2));
             $getElementId = $getDatabaseId;
 
             // get special message for calendars
