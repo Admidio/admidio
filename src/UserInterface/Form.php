@@ -1614,11 +1614,11 @@ class Form
      * form field doesn't have a value in the $fieldValues array. EEmails and urls must have a
      * valid format. The method will return an array with all form input with sanitized html
      * from editor fields and html free content of all other fields.
-     * @param array &$fieldValues Array with field name as key and field value as array value.
+     * @param array $fieldValues Array with field name as key and field value as array value.
      * @return array Returns an array with all valid fields and their values of this form
      * @throws Exception
      */
-    public function validate(array &$fieldValues): array
+    public function validate(array $fieldValues): array
     {
         $validFieldValues = array();
 
