@@ -24,12 +24,6 @@ try {
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
     // Check form values
-    $postFrom = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
-    $postName = admFuncVariableIsValid($_POST, 'namefrom', 'string');
-    $postSubject = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be sent without html conversations
-    $postBody = $_POST['msg_body']; // html check will be done in form validation
-    $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
-    $postCaptcha = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
     $postUserUuidList = '';
     $postListUuid = '';
     $sendResult = false;
@@ -77,32 +71,32 @@ try {
         }
     }
 
-    // if user is logged in then show sender name and email
-    if ($gCurrentUserId > 0) {
-        $postName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
-        if (!StringUtils::strValidCharacters($postFrom, 'email')) {
-            $postFrom = $gCurrentUser->getValue('EMAIL');
-        }
-    }
-
-    // if no User is set, he is not able to ask for delivery confirmation
-    if (!($gCurrentUserId > 0 && (int)$gSettingsManager->get('mail_delivery_confirmation') === 2)
-        && (int)$gSettingsManager->get('mail_delivery_confirmation') !== 1) {
-        $postDeliveryConfirmation = false;
-    }
-
     // object to handle the current message in the database
     if ($message->isNewRecord()) {
-        $message->setValue('msg_subject', $postSubject);
+        $message->setValue('msg_subject', $formValues['msg_subject']);
     }
     $message->setValue('msg_type', $getMsgType);
     $message->setValue('msg_usr_id_sender', $gCurrentUserId);
-    $message->addContent($postBody);
+    $message->addContent($formValues['msg_body']);
 
     // check if PM or Email and to steps:
     if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
         $sqlConditions = '';
         $sqlEmailField = '';
+
+        // if user is logged in then show sender name and email
+        if ($gCurrentUserId > 0) {
+            $formValues['namefrom'] = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
+            if (!isset($formValues['mailfrom']) || !StringUtils::strValidCharacters((string) $formValues['mailfrom'], 'email')) {
+                $formValues['mailfrom'] = $gCurrentUser->getValue('EMAIL');
+            }
+        }
+
+        // if no User is set, he is not able to ask for delivery confirmation
+        if (!($gCurrentUserId > 0 && (int)$gSettingsManager->get('mail_delivery_confirmation') === 2)
+            && (int)$gSettingsManager->get('mail_delivery_confirmation') !== 1) {
+            $formValues['delivery_confirmation'] = false;
+        }
 
         if (isset($postTo)) {
             if ($postListUuid !== '') { // the uuid of a list was passed
@@ -180,19 +174,14 @@ try {
         }
 
         // check if name is given
-        if ($postName === '') {
+        if ($formValues['namefrom'] === '') {
             throw new Exception('SYS_FIELD_EMPTY', array('SYS_NAME'));
         }
 
-        // if valid login then sender should always current user
-        if ($gValidLogin) {
-            $postName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
-        }
-
         // set sending address
-        if ($email->setSender($postFrom, $postName)) {
+        if ($email->setSender($formValues['mailfrom'], $formValues['namefrom'])) {
             // set subject
-            if ($email->setSubject($postSubject)) {
+            if ($email->setSubject($formValues['msg_subject'])) {
                 // check for attachment
                 if (isset($_FILES['userfile'])) {
                     // final check if user is logged in
@@ -260,7 +249,7 @@ try {
         }
 
         // add confirmation mail to the sender
-        if ($postDeliveryConfirmation) {
+        if ($formValues['delivery_confirmation']) {
             $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
         }
 
@@ -276,7 +265,7 @@ try {
         }
 
         // load mail template and replace text
-        $email->setTemplateText($postBody, $postName, $gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('usr_uuid'), $receiverName);
+        $email->setTemplateText($formValues['msg_body'], $formValues['namefrom'], $gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('usr_uuid'), $receiverName);
 
         // finally send the mail
         $sendResult = $email->sendEmail();
