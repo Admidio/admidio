@@ -224,6 +224,7 @@ class Organization extends TableAccess
         $roleAdministrator->setValue('rol_profile', 1);
         $roleAdministrator->setValue('rol_all_lists_view', 1);
         $roleAdministrator->setValue('rol_administrator', 1);
+        $roleAdministrator->setValue('rol_view_memberships', TableRoles::VIEW_LOGIN_USERS);
         $roleAdministrator->save();
 
         // Create role member
@@ -235,6 +236,7 @@ class Organization extends TableAccess
         $roleMember->setValue('rol_mail_this_role', 2);
         $roleMember->setValue('rol_profile', 1);
         $roleMember->setValue('rol_default_registration', 1);
+        $roleMember->setValue('rol_view_memberships', TableRoles::VIEW_NOBODY);
         $roleMember->save();
 
         // Create role board
@@ -251,6 +253,7 @@ class Organization extends TableAccess
         $roleManagement->setValue('rol_mail_this_role', 2);
         $roleManagement->setValue('rol_profile', 1);
         $roleManagement->setValue('rol_all_lists_view', 1);
+        $roleManagement->setValue('rol_view_memberships', TableRoles::VIEW_LOGIN_USERS);
         $roleManagement->save();
 
         // Create membership for user in role 'Administrator' and 'Members'
