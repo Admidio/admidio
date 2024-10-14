@@ -245,7 +245,7 @@ if ($getUserUuid !== '') {
             // => EXIT
         }
     } catch (AdmException $e) {
-        if ($user instanceof User) {
+        if (isset($user)) {
             // initialize password reset columns
             $user->setValue('usr_pw_reset_id', '');
             $user->setValue('usr_pw_reset_timestamp', '');
