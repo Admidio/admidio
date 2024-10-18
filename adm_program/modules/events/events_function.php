@@ -109,10 +109,10 @@ try {
         // Check valid format of date and time input
         // ------------------------------------------------
 
-        $startDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['event_from'] . ' ' . $_POST['event_from_time']);
+        $startDateTime = DateTime::createFromFormat('Y-m-d H:i', $formValues['event_from'] . ' ' . $formValues['event_from_time']);
         if (!$startDateTime) {
             // Error: now check if date format or time format was wrong and show message
-            $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['event_from']);
+            $startDateTime = DateTime::createFromFormat('Y-m-d', $formValues['event_from']);
 
             if (!$startDateTime) {
                 throw new Exception('SYS_DATE_INVALID', array('SYS_START', 'YYYY-MM-DD'));
@@ -121,22 +121,22 @@ try {
             }
         } else {
             // now write date and time with database format to date object
-            $formValues['dat_begin'] = $_POST['event_from'] . ' ' . $_POST['event_from_time'];
+            $formValues['dat_begin'] = $formValues['event_from'] . ' ' . $formValues['event_from_time'];
         }
 
         // if date-to is not filled then take date-from
-        if (strlen($_POST['event_to']) === 0) {
-            $formValues['event_to'] = $_POST['event_from'];
+        if (strlen($formValues['event_to']) === 0) {
+            $formValues['event_to'] = $formValues['event_from'];
         }
-        if (strlen($_POST['event_to_time']) === 0) {
-            $formValues['event_to_time'] = $_POST['event_from_time'];
+        if (strlen($formValues['event_to_time']) === 0) {
+            $formValues['event_to_time'] = $formValues['event_from_time'];
         }
 
-        $endDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['event_to'] . ' ' . $_POST['event_to_time']);
+        $endDateTime = DateTime::createFromFormat('Y-m-d H:i', $formValues['event_to'] . ' ' . $formValues['event_to_time']);
 
         if (!$endDateTime) {
             // Error: now check if date format or time format was wrong and show message
-            $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['event_to']);
+            $endDateTime = DateTime::createFromFormat('Y-m-d', $formValues['event_to']);
 
             if (!$endDateTime) {
                 throw new Exception('SYS_DATE_INVALID', array('SYS_END', 'YYYY-MM-DD'));
@@ -145,7 +145,7 @@ try {
             }
         } else {
             // now write date and time with database format to date object
-            $formValues['dat_end'] = $_POST['event_to'] . ' ' . $_POST['event_to_time'];
+            $formValues['dat_end'] = $formValues['event_to'] . ' ' . $formValues['event_to_time'];
         }
 
         // DateTo should be greater than DateFrom (Timestamp must be less)
@@ -153,37 +153,37 @@ try {
             throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
         }
 
-        if (!isset($_POST['dat_room_id'])) {
+        if (!isset($formValues['dat_room_id'])) {
             $formValues['dat_room_id'] = 0;
         }
 
-        if (!is_numeric($_POST['dat_max_members'])) {
+        if (!is_numeric($formValues['dat_max_members'])) {
             $formValues['dat_max_members'] = 0;
         } else {
             // First check the current participants to prevent invalid reduction of the limit
             $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
             $totalMembers = $participants->getCount();
 
-            if ($_POST['dat_max_members'] < $totalMembers && $_POST['dat_max_members'] > 0) {
+            if ($formValues['dat_max_members'] < $totalMembers && $formValues['dat_max_members'] > 0) {
                 // minimum value must fit to current number of participants
                 $formValues['dat_max_members'] = $totalMembers;
             }
         }
 
-        if ($_POST['event_participation_possible'] == 1 && (string)$_POST['event_deadline'] !== '') {
-            $formValues['dat_deadline'] = $_POST['event_deadline'] . ' ' . ((string)$_POST['event_deadline_time'] === '' ? '00:00' : $_POST['event_deadline_time']);
+        if ($formValues['event_participation_possible'] == 1 && (string)$formValues['event_deadline'] !== '') {
+            $formValues['dat_deadline'] = $formValues['event_deadline'] . ' ' . ((string)$formValues['event_deadline_time'] === '' ? '00:00' : $formValues['event_deadline_time']);
         } else {
             $formValues['dat_deadline'] = null;
         }
 
-        if (isset($_POST['adm_event_participation_right'])) {
+        if (isset($formValues['adm_event_participation_right'])) {
             // save changed roles rights of the category
             $rightCategoryView = new RolesRights($gDb, 'category_view', (int)$calendar->getValue('cat_id'));
 
             // if roles for visibility are assigned to the category than check if the assigned roles of event participation
             // are within the visibility roles set otherwise show error
             if (count($rightCategoryView->getRolesIds()) > 0
-                && count(array_intersect(array_map('intval', $_POST['adm_event_participation_right']), $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right'])) {
+                && count(array_intersect(array_map('intval', $formValues['adm_event_participation_right']), $rightCategoryView->getRolesIds())) !== count($formValues['adm_event_participation_right'])) {
                 throw new Exception('SYS_EVENT_CATEGORIES_ROLES_DIFFERENT', array(implode(', ', $rightCategoryView->getRolesNames())));
             }
         }
@@ -193,7 +193,7 @@ try {
         // ------------------------------------------------
 
         if ($gSettingsManager->getBool('events_rooms_enabled')) {
-            $eventRoomId = (int)$_POST['dat_room_id'];
+            $eventRoomId = (int)$formValues['dat_room_id'];
 
             if ($eventRoomId > 0) {
                 $sql = 'SELECT COUNT(*) AS count
@@ -219,7 +219,7 @@ try {
                 $room->readDataById($eventRoomId);
                 $number = (int)$room->getValue('room_capacity') + (int)$room->getValue('room_overhang');
                 $event->setValue('dat_max_members', $number);
-                $eventMaxMembers = (int)$_POST['dat_max_members'];
+                $eventMaxMembers = (int)$formValues['dat_max_members'];
 
                 if ($eventMaxMembers > 0 && $eventMaxMembers < $number) {
                     $event->setValue('dat_max_members', $eventMaxMembers);
@@ -243,8 +243,8 @@ try {
         }
 
         // save changed roles rights of the category
-        if (isset($_POST['adm_event_participation_right'])) {
-            $eventParticipationRoles = array_map('intval', $_POST['adm_event_participation_right']);
+        if (isset($formValues['adm_event_participation_right'])) {
+            $eventParticipationRoles = array_map('intval', $formValues['adm_event_participation_right']);
         } else {
             $eventParticipationRoles = array();
         }
@@ -256,7 +256,7 @@ try {
         // if necessary write away role for participation
         // ----------------------------------------------
 
-        if ($_POST['event_participation_possible'] == 1) {
+        if ($formValues['event_participation_possible'] == 1) {
             if ($event->getValue('dat_rol_id') > 0) {
                 // if event exists, and you could register to this event then we must check
                 // if the data of the role must be changed
@@ -265,9 +265,9 @@ try {
                 $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
-                $role->setValue('rol_view_memberships', isset($_POST['event_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
+                $role->setValue('rol_view_memberships', isset($formValues['event_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
                 // role members are allowed to send mail to this role
-                $role->setValue('rol_mail_this_role', isset($_POST['event_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
+                $role->setValue('rol_mail_this_role', isset($formValues['event_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
                 $role->setValue('rol_max_members', (int)$event->getValue('dat_max_members'));
 
                 $role->save();
@@ -295,11 +295,11 @@ try {
                     // these are the default settings for an event role
                     $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
                     // role members are allowed to view lists
-                    $role->setValue('rol_view_memberships', isset($_POST['event_right_list_view']) ? 1 : 3);
+                    $role->setValue('rol_view_memberships', isset($formValues['event_right_list_view']) ? 1 : 3);
                     // role members are allowed to send mail to this role
-                    $role->setValue('rol_mail_this_role', isset($_POST['event_right_send_mail']) ? 1 : 0);
+                    $role->setValue('rol_mail_this_role', isset($formValues['event_right_send_mail']) ? 1 : 0);
                     $role->setValue('rol_leader_rights', TableRoles::ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participants
-                    $role->setValue('rol_max_members', (int)$_POST['dat_max_members']);
+                    $role->setValue('rol_max_members', (int)$formValues['dat_max_members']);
                 }
 
                 $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline', 'database'));
@@ -313,11 +313,11 @@ try {
             }
 
             // check if flag is set that current user wants to participate as leader to the event
-            if (isset($_POST['event_current_user_assigned']) && $_POST['event_current_user_assigned'] == 1
+            if (isset($formValues['event_current_user_assigned']) && $formValues['event_current_user_assigned'] == 1
                 && !$gCurrentUser->isLeaderOfRole((int)$event->getValue('dat_rol_id'))) {
                 // user wants to participate -> add him to event and set approval state to 2 ( user attend )
                 $role->startMembership($user->getValue('usr_id'), true);
-            } elseif (!isset($_POST['event_current_user_assigned'])
+            } elseif (!isset($formValues['event_current_user_assigned'])
                 && $gCurrentUser->isMemberOfRole((int)$event->getValue('dat_rol_id'))) {
                 // user doesn't want to participate as leader -> remove his participation as leader from the event,
                 // don't remove the participation itself!

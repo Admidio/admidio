@@ -1664,7 +1664,7 @@ class Form
 
             // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
             if ($element['type'] === 'checkbox' && !isset($fieldValues[$element['id']])) {
-                $fieldValues[$element['id']] = "0";
+                $validFieldValues[$element['id']] = "0";
             }
 
             if (isset($fieldValues[$element['id']])) {
