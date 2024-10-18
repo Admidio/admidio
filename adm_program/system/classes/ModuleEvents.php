@@ -273,7 +273,8 @@ class ModuleEvents extends Modules
      * in this class with the help of parameters will be included.
      * @return \Eluceo\iCal\Presentation\Component Object with the structure of the vCalendar.
      *          This could directly put into the output.
-     * @throws \Exception
+     * @throws DateInvalidTimeZoneException
+     * @throws DateMalformedStringException
      * @throws Exception
      */
     public function getICalContent(): \Eluceo\iCal\Presentation\Component

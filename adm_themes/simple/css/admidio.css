@@ -529,15 +529,15 @@ tr.admidio-event-highlight {
     font-weight: bold;
 }
 
-.admidio-event-approval-state-attend .bi {
+.admidio-event-approval-state-attend {
     color: #00b100 !important;
 }
 
-.admidio-event-approval-state-tentative .bi {
+.admidio-event-approval-state-tentative {
     color: #9b009b !important;
 }
 
-.admidio-event-approval-state-cancel .bi {
+.admidio-event-approval-state-cancel {
     color: #df2424 !important;
 }
 

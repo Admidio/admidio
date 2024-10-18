@@ -389,9 +389,15 @@ try {
     }
     // If participation mode: Set status and write optional parameter from user and show current status message
     if (in_array($getMode, array('participate', 'participate_cancel', 'participate_maybe'), true)) {
-        // check form field input and sanitized it from malicious content
-        $eventsParticipationEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
-        $formValues = $eventsParticipationEditForm->validate($_POST);
+        if (isset($_POST['admidio-csrf-token'])) {
+            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+            $formValues['dat_comment'] = '';
+            $formValues['additional_guests'] = '';
+        } else {
+            // check form field input and sanitized it from malicious content
+            $eventsParticipationEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $formValues = $eventsParticipationEditForm->validate($_POST);
+        }
 
         $member = new TableMembers($gDb);
         $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
@@ -469,7 +475,7 @@ try {
             'url' => $gNavigation->getUrl()));
         exit();
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if ($getMode === 'export') {
         $gMessage->show($e->getMessage());
     } else {
