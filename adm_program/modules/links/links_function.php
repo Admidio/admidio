@@ -24,9 +24,6 @@ try {
     $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create', 'delete')));
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-
     // check if the module is enabled for use
     if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
@@ -70,6 +67,9 @@ try {
         echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
         exit();
     } elseif ($getMode === 'delete') {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // delete current announcements, right checks were done before
         $link->delete();
         echo json_encode(array('status' => 'success'));
