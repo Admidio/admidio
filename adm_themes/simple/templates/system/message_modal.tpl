@@ -23,6 +23,6 @@
                 <i class="bi bi-arrow-right-circle-fill"></i>
             </button>
         {/if}
-        <div id="status-message" class="mt-4 w-100"></div>
+        <div id="statusMessage" class="mt-4 w-100"></div>
     {/if}
 </div>

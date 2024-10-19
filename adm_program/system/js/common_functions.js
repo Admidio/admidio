@@ -46,7 +46,7 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
         "admidio-csrf-token": csrfToken,
         "uuid": elementId
         }, function(data) {
-        const messageText = $("#status-message");
+        const messageText = $("#statusMessage");
         var returnStatus = "error";
         var returnMessage = "";
 
@@ -70,6 +70,7 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                 messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>" + returnMessage + "</div>");
                 setTimeout(function(){
                         $("#admidio-modal").modal("hide");
+                        $("#admidioModalMessagebox").modal("hide");
                         if (callback === "callbackRoles") {
                             $(entryDeleted).fadeOut("slow", callbackRoles);
                         } else if (callback === "callbackFormerRoles") {
@@ -84,6 +85,7 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                     }, 2000);
             } else {
                 $("#admidio-modal").modal("hide");
+                $("#admidioModalMessagebox").modal("hide");
                 if (callback === 'callbackRoles') {
                     $(entryDeleted).fadeOut("slow", callbackRoles);
                 } else if (callback === 'callbackFormerRoles') {
@@ -249,15 +251,16 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
 /**
  * The function will show a modal window in bootstrap style with a message.
  * @param {string} message Text of the message that should be shown.
- * @param {string} title Optional a title for the modal. If not set the default "notice" will be shown.
- * @param {string} type  Optional a type could be set.
- *                       "warning" - A warning icon and the message with alert-warning class will be shown
- *                       "error"   - A warning icon and the message with alert-danger class will be shown
+ * @param {string} title   Optional a title for the modal. If not set the default "notice" will be shown.
+ * @param {string} type    Optional a type could be set.
+ *                         "warning" - A warning icon and the message with alert-warning class will be shown
+ *                         "error"   - A warning icon and the message with alert-danger class will be shown
+ * @param {string} buttons Optional the setting of the buttons that should be shown.
+ *                         "yes-no" - A primary "Yes" button with a secondary "No" button.
+ * @param {string} href    Optional a link that will be called by a click of the "Yes" button..
  */
-function messageBox(message, title, type) {
-    $("#admidioModalMessagebox .modal-footer").hide();
-    //$("#admidioMessageboxButtonPrimary").html("OK");
-    $("#admidioMessageboxButtonSecondary").hide();
+function messageBox(message, title, type, buttons, href) {
+    $("#statusMessage").html('');
     if (typeof title !== 'undefined') {
         $("#admidioModalMessagebox .modal-title").html(title);
     }
@@ -268,6 +271,12 @@ function messageBox(message, title, type) {
     } else if (type === 'error') {
         $("#admidioModalMessagebox .modal-body").html("<p class=\"alert alert-danger\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
     }
+    if (typeof buttons === 'undefined') {
+        $("#admidioModalMessagebox .modal-footer").hide();
+    } else if (buttons === 'yes-no') {
+        $("#admidioMessageboxButtonYes").attr('onClick', href);
+    }
+
     const myModalAlternative = new bootstrap.Modal("#admidioModalMessagebox");
     myModalAlternative.show();
 }

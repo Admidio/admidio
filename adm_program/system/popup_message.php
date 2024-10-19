@@ -32,12 +32,6 @@ try {
 
     // compose URL
     switch ($getType) {
-        case 'ann':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 'delete', 'ann_uuid' => $getDatabaseId));
-            break;
-        case 'bac':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/backup/backup_file_function.php', array('job' => 'delete', 'filename' => $getDatabaseId));
-            break;
         case 'cat':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('uuid' => $getDatabaseId, 'mode' => 'delete', 'type' => $getDatabaseId2));
             $getElementId = $getDatabaseId;

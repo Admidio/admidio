@@ -38,11 +38,15 @@
 
             // function to handle modal window and load data from url
             $(document).on('click', '.openPopup', function (){
-                $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
-                $('.modal-content').load($(this).attr('data-href'),function(){
-                    var myModal = new bootstrap.Modal($('#admidio-modal'), {});
+                $('#admidio-modal .modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
+                $('#admidio-modal .modal-content').load($(this).attr('data-href'),function(){
+                    const myModal = new bootstrap.Modal($('#admidio-modal'));
                     myModal.show();
                 });
+            });
+            // function to handle modal messagebox window
+            $(document).on('click', '.openMessageBox', function (){
+                messageBox($(this).data('message'), $(this).data('title'), $(this).data('type'), $(this).data('buttons'), $(this).data('href'));
             });
 
             // remove data from modal if modal is closed
@@ -74,8 +78,9 @@
                     <p></p>
                 </div>
                 <div class="modal-footer">
-                    <button id="admidioMessageboxButtonSecondary" type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$l10n->get('SYS_CANCEL')}</button>
-                    <button id="admidioMessageboxButtonPrimary" type="button" class="btn btn-primary">{$l10n->get('SYS_OK')}</button>
+                    <a id="admidioMessageboxButtonYes" type="button" class="btn btn-primary">{$l10n->get('SYS_YES')}</a>
+                    <a id="admidioMessageboxButtonNo" type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$l10n->get('SYS_NO')}</a>
+                    <div id="statusMessage" class="mt-4 w-100"></div>
                 </div>
             </div>
         </div>
