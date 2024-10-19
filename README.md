@@ -10,7 +10,7 @@ In addition to these core features, Admidio boasts a rich array of modules, incl
 [![GitHub forks](https://img.shields.io/github/forks/Admidio/admidio)](https://github.com/Admidio/admidio/network)
 [![GitHub stars](https://img.shields.io/github/stars/Admidio/admidio)](https://github.com/Admidio/admidio/stargazers)
 ![GitHub top language](https://img.shields.io/github/languages/top/admidio/admidio)
-[![GitHub license](https://img.shields.io/github/license/Admidio/admidio)](https://github.com/Admidio/admidio/blob/master/LICENSE.txt)
+[![GitHub license](https://img.shields.io/github/license/Admidio/admidio)](https://github.com/Admidio/admidio/blob/master/LICENSE)
 
 **Supported Languages**: :gb: :de: :denmark: :netherlands: :poland: :estonia: :ukraine: :fr: :bulgaria: :finland: :greece: :sweden: :ru: :es: :brazil: :portugal: :it: :indonesia: :hungary: :norway: :cn:
 
