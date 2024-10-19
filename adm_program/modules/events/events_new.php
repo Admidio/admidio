@@ -147,7 +147,7 @@ try {
 
     $page->addJavascript(
         '
-    var eventParticipationPossible = ' . ($eventParticipationPossible ? 1 : 0) . ';
+    var eventParticipationPossible = ' . $eventParticipationPossible . ';
 
     setAllDay();
     setEventParticipation();
@@ -169,16 +169,13 @@ try {
     });
 
     // if event participation should be removed than ask user
-    $("#btn_save").click(function(event) {
-        event.preventDefault();
-
-        if (eventParticipationPossible == 1 && $("#event_participation_possible").is(":checked") === false) {
+    $("#event_participation_possible").change(function(event) {
+        if (eventParticipationPossible === 1 && $("#event_participation_possible").is(":checked") === false) {
             var msg_result = confirm("' . $gL10n->get('SYS_REMOVE_EVENT_REGISTRATION') . '");
-            if (msg_result) {
-                $("#events_edit_form").submit();
+            if (!msg_result) {
+                $(this).prop("checked", true);
+                setEventParticipation();
             }
-        } else {
-            $("#events_edit_form").submit();
         }
     });',
         true
