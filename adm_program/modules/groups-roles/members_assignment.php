@@ -150,7 +150,7 @@ try {
                             checkbox.prop("checked", true);
                         }
 
-                        alert(data);
+                        messageBox(data, "' . $gL10n->get('SYS_ERROR') . '", "error");
                         return false;
                     }
                     return true;

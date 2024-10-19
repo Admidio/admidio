@@ -33,7 +33,6 @@ function showHideBlock(elementId) {
  * @param {string}   elementId  This is the id of a html element that should be hidden.
  * @param {string}   url        This is the url that will be called.
  * @param {string}   csrfToken  If this is set than it will be added to the post request.
- * @param {string}   mode       Mode of the script that is called.
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
 function callUrlHideElement(elementId, url, csrfToken, callback) {
@@ -245,6 +244,32 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
                 alert(returnMessage);
             }
         });
+}
+
+/**
+ * The function will show a modal window in bootstrap style with a message.
+ * @param {string} message Text of the message that should be shown.
+ * @param {string} title Optional a title for the modal. If not set the default "notice" will be shown.
+ * @param {string} type  Optional a type could be set.
+ *                       "warning" - A warning icon and the message with alert-warning class will be shown
+ *                       "error"   - A warning icon and the message with alert-danger class will be shown
+ */
+function messageBox(message, title, type) {
+    $("#admidioModalMessagebox .modal-footer").hide();
+    //$("#admidioMessageboxButtonPrimary").html("OK");
+    $("#admidioMessageboxButtonSecondary").hide();
+    if (typeof title !== 'undefined') {
+        $("#admidioModalMessagebox .modal-title").html(title);
+    }
+    if (typeof type === 'undefined') {
+        $("#admidioModalMessagebox .modal-body").html("<p>" + message + "</p>");
+    } else if (type === 'warning') {
+        $("#admidioModalMessagebox .modal-body").html("<p class=\"alert alert-warning\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
+    } else if (type === 'error') {
+        $("#admidioModalMessagebox .modal-body").html("<p class=\"alert alert-danger\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
+    }
+    const myModalAlternative = new bootstrap.Modal("#admidioModalMessagebox");
+    myModalAlternative.show();
 }
 
 /**

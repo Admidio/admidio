@@ -125,9 +125,9 @@ try {
                                 ' . ($getView === 'detail' ?
                                 'target.parents("div.admidio-event-approval").children("button").html(target.html());' :
                                 'target.parents("div.admidio-event-approval").children("button").html(target.children("i").clone());') . '
-                                alert(returnData.message);
+                                messageBox(returnData.message);
                             } else {
-                                alert(data);
+                                messageBox(returnData.message, "' . $gL10n->get('SYS_ERROR') . '", "error");
                             }
                         }
                     );
