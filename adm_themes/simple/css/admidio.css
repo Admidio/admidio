@@ -21,6 +21,7 @@
     --bs-secondary-rgb: 38, 51, 64;
     --bs-tertiary: #e9ecef;
     --bs-tertiary-rgb: 233, 236, 269;
+    --bs-success: #04e01a;
     --bs-body-color: #263340;
     --bs-body-bg: #ffffff;
     --bs-link-color: #349aaa;
@@ -530,15 +531,15 @@ tr.admidio-event-highlight {
 }
 
 .admidio-event-approval-state-attend {
-    color: #00b100 !important;
+    color: var(--bs-success);
 }
 
 .admidio-event-approval-state-tentative {
-    color: #9b009b !important;
+    color: var(--bs-info);
 }
 
 .admidio-event-approval-state-cancel {
-    color: #df2424 !important;
+    color: var(--bs-danger);
 }
 
 .card-img, .card-img-top {
