@@ -949,8 +949,8 @@ final class ComponentUpdateSteps
                      , (3, \'' . $gL10n->get('INS_SIBLING') . '\',     \'' . $gL10n->get('INS_BROTHER') . '\',          \'' . $gL10n->get('INS_SISTER') . '\',             3, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
                      , (4, \'' . $gL10n->get('INS_SPOUSE') . '\',      \'' . $gL10n->get('INS_HUSBAND') . '\',          \'' . $gL10n->get('INS_WIFE') . '\',               4, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
                      , (5, \'' . $gL10n->get('INS_COHABITANT') . '\',  \'' . $gL10n->get('INS_COHABITANT_MALE') . '\',  \'' . $gL10n->get('INS_COHABITANT_FEMALE') . '\',  5, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (6, \'' . $gL10n->get('INS_COMPANION') . '\',   \'' . $gL10n->get('INS_BOYFRIEND') . '\',        \'' . $gL10n->get('INS_GIRLFRIEND') . '\',         6, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (7, \'' . $gL10n->get('INS_SUPERIOR') . '\',    \'' . $gL10n->get('INS_SUPERIOR_MALE') . '\',    \'' . $gL10n->get('INS_SUPERIOR_FEMALE') . '\',    8, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (6, \'' . $gL10n->get('SYS_COMPANION') . '\',   \'' . $gL10n->get('SYS_BOYFRIEND') . '\',        \'' . $gL10n->get('SYS_GIRLFRIEND') . '\',         6, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (7, \'' . $gL10n->get('SYS_SUPERIOR') . '\',    \'' . $gL10n->get('SYS_SUPERIOR_MALE') . '\',    \'' . $gL10n->get('SYS_SUPERIOR_FEMALE') . '\',    8, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
                      , (8, \'' . $gL10n->get('INS_SUBORDINATE') . '\', \'' . $gL10n->get('INS_SUBORDINATE_MALE') . '\', \'' . $gL10n->get('INS_SUBORDINATE_FEMALE') . '\', 7, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')';
         self::$db->query($sql); // TODO add more params
     }
