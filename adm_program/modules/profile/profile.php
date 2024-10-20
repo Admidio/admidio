@@ -371,7 +371,7 @@ try {
         // the image can only be deleted if corresponding rights exist
         if (((string)$user->getValue('usr_photo') !== '' && (int)$gSettingsManager->get('profile_photo_storage') === 0)
             || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $userId . '.jpg') && (int)$gSettingsManager->get('profile_photo_storage') === 1) {
-            $page->assignSmartyVariable('urlProfilePhotoDelete', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $getUserUuid)));
+            $page->assignSmartyVariable('urlProfilePhotoDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackProfilePhoto\')');
         }
     }
 
@@ -661,8 +661,7 @@ try {
                 }
 
                 if ($gCurrentUser->editUsers()) {
-                    $userRelation['urlRelationDelete'] = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_' . $relation->getValue('ure_uuid'), 'database_id' => $relation->getValue('ure_uuid'),
-                        'name' => $relationType->getValue('urt_name', 'database') . ': ' . $otherUser->getValue('FIRST_NAME', 'database') . ' ' . $otherUser->getValue('LAST_NAME', 'database') . ' -> ' . $user->getValue('FIRST_NAME', 'database') . ' ' . $user->getValue('LAST_NAME', 'database')));
+                    $userRelation['urlRelationDelete'] = 'callUrlHideElement(\'row_ure_' . $relation->getValue('ure_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/userrelations/userrelations_function.php', array('mode' => 'delete', 'ure_uuid' => $relation->getValue('ure_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 }
 
                 // only show info if system setting is activated

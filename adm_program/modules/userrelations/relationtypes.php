@@ -106,10 +106,10 @@ try {
                 ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_new.php',
                 array('urt_uuid' => $relationType1->getValue('urt_uuid'))
             ) . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>
-            <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_' . $relationType1->getValue('urt_uuid', 'database'),
-                'name' => $relationType1->getValue('urt_name') . ($relationType1->isUnidirectional() ? '' : ('/' . $relationType2->getValue('urt_name'))),
-                'database_id' => $relationType1->getValue('urt_uuid'))) . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
+            <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                data-message="' . $gL10n->get('SYS_RELATIONSHIP_TYPE_DELETE', array($relationType1->getValue('urt_name') . ($relationType1->isUnidirectional() ? '' : ('/' . $relationType2->getValue('urt_name'))))) . '"
+                data-href="callUrlHideElement(\'row_' . $relationType1->getValue('urt_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 'delete', 'urt_uuid' => $relationType1->getValue('urt_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
 
         // create array with all column values
         $columnValues = array(

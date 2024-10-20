@@ -168,10 +168,11 @@ try {
         if ($userField->getValue('usf_system') == 1) {
             $usfSystem .= '<i class="bi bi-trash invisible"></i>';
         } else {
-            $usfSystem .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_' . $usfUuid,
-                    'name' => $userField->getValue('usf_name', 'database'), 'database_id' => $usfUuid)) . '">' .
-                '<i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
+            $usfSystem .= '
+                <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                    data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($userField->getValue('usf_name', 'database'))) . '"
+                    data-href="callUrlHideElement(\'row_' . $usfUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 'delete', 'uuid' => $usfUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
         }
 
         // create array with all column values

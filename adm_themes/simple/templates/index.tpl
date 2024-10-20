@@ -45,7 +45,7 @@
                 });
             });
             // function to handle modal messagebox window
-            $(document).on('click', '.openMessageBox', function (){
+            $(document).on('click', '.admidio-messagebox', function (){
                 messageBox($(this).data('message'), $(this).data('title'), $(this).data('type'), $(this).data('buttons'), $(this).data('href'));
             });
 

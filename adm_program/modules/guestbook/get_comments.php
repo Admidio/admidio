@@ -77,8 +77,9 @@ try {
                                 <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_comment_new.php', array('gbc_uuid' => $gbcUuid)) . '">
                                     <i class="bi bi-pencil-square"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                                 </li>
-                                <li><a class="dropdown-item openPopup" href="javascript:void(0);"
-                                    data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_' . $gbcUuid, 'database_id' => $gbcUuid, 'database_id_2' => (int)$gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name', 'database'))))) . '">
+                                <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                                    data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name', 'database'))))) . '"
+                                    data-href="callUrlHideElement(\'gbc_' . $gbcUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 'delete_comment', 'gbc_uuid' => $gbcUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                     <i class="bi bi-trash"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                                 </li>
                             </ul>

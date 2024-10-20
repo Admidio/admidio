@@ -84,7 +84,8 @@
                         <li><a class="icon-link" href="{$urlProfilePhotoUpload}">
                                 <i class="bi bi-upload"></i>{$l10n->get('SYS_UPLOAD_PROFILE_PICTURE')}</a></li>
                         {if isset($urlProfilePhotoDelete)}
-                            <li><a id="btn_delete_photo" class="icon-link openPopup" href="javascript:void(0);"
+                            <li><a id="btn_delete_photo" class="icon-link admidio-messagebox" href="javascript:void(0);"
+                                   data-buttons="yes-no" data-message="{$l10n->get('SYS_WANT_DELETE_PHOTO')}"
                                    data-href="{$urlProfilePhotoDelete}"><i class="bi bi-trash"></i>{$l10n->get('SYS_DELETE_PROFILE_PICTURE')}</a></li>
                         {/if}
                     </ul>
@@ -209,7 +210,8 @@
                         </span>
                         <span class="float-end text-right">
                             {if $userRightEditUser}
-                                <a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$userRelation.urlRelationDelete}"><i
+                                <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                                   data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$userRelation.relationName}))}" data-href="{$userRelation.urlRelationDelete}"><i
                                     class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_CANCEL_RELATIONSHIP')}"></i></a>
                             {/if}
                             {if $showRelationsCreateEdit}

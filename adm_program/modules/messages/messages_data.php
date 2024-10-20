@@ -203,10 +203,11 @@ try {
         $arrContent['3'] = $iconAttachments;
         $arrContent['4'] = $messageObject->getValue('msg_timestamp');
         $arrContent['5'] = $links . '
-        <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $message['msg_uuid'], 'name' => $messageObject->getValue('msg_subject', 'database'), 'database_id' => $message['msg_uuid'])) . '">
-            <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_MESSAGE') . '"></i>
-        </a>';
+            <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                data-message="' . $gL10n->get('SYS_DELETE_MESSAGE', array($messageObject->getValue('msg_subject', 'database'))) . '"
+                data-href="callUrlHideElement(\'row_message_' . $message['msg_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_uuid' => $message['msg_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_MESSAGE') . '"></i>
+            </a>';
 
         // create array with all column values and add it to the json array
         $jsonArray['data'][] = $arrContent;

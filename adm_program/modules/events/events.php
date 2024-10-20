@@ -362,9 +362,8 @@ try {
                     <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID)) . '">
                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
                     $outputButtonDelete = '
-                    <a class="openPopup" href="javascript:void(0);"
-                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $eventUUID,
-                            'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $eventUUID)) . '">
+                    <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
+                        data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
                 }
             }
@@ -674,7 +673,7 @@ try {
                 }
 
                 $page->addHtml('
-                <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="dat_' . $eventUUID . '">
+                <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="evt_' . $eventUUID . '">
                     <div class="card-header">
                         <i class="bi bi-calendar-week-fill"></i>' .
                     $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
@@ -702,9 +701,8 @@ try {
                                             <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID)) . '">
                                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                                             </li>
-                                            <li><a class="dropdown-item openPopup" href="javascript:void(0);"
-                                                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $eventUUID,
-                                'name' => $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $eventUUID)) . '">
+                                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
+                                                data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                                             </li>');
                     }
@@ -829,7 +827,7 @@ try {
                     $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
                 }
 
-                $compactTable->addRowByArray($columnValues, 'dat_' . $event->getValue('dat_uuid'), array('class' => $cssClass));
+                $compactTable->addRowByArray($columnValues, 'evt_' . $event->getValue('dat_uuid'), array('class' => $cssClass));
             }
         }  // End foreach
 
