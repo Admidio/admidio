@@ -88,7 +88,7 @@ some money](https://www.admidio.org/index.php?page=donate) to the project.
 
 ## Copyright and License
 
-Admidio is release under the [GNU General Public License 2](https://github.com/Admidio/admidio/blob/master/LICENSE.txt). You are
+Admidio is release under the [GNU General Public License 2](https://github.com/Admidio/admidio/blob/master/LICENSE). You are
 free to use, modify and distribute this software, as long as the copyright header
 within the html page and source code is left intact. If you want to support
 us we are happy if you don't remove the link to Admidio within the login
