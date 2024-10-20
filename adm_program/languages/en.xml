@@ -1219,7 +1219,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Send greeting card</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Send login information</string>
-  <string name="SYS_SEND_MAIL_TO_ROLE">Your e-mail will be sent to the individual selected recipients and to all members of the selected roles, provided they have entered an e-mail address.</string>
+  <string name="SYS_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members of the selected role. Further roles and recipients are available for logged in users only.</string>
   <string name="SYS_SEND_MAILS">Send e-mails</string>
   <string name="SYS_SEND_METHOD">Send via</string>
   <string name="SYS_SEND_METHOD_DESC">PHP\'s mail() method might be restricted by some providers and can be a reason for spam suspicion. Hence it is recommended to send mails by using an existing mail address and SMTP server. You can configure the SMTP settings below (default: PHP mail()).</string>
