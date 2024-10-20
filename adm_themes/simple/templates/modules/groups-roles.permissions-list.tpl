@@ -14,7 +14,7 @@
         </thead>
         <tbody>
             {foreach $list as $row}
-                <tr>
+                <tr id="row_{$row.roleUUID}">
                     <td>{$row.category}</td>
                     <td><a href="{$row.roleUrl}">{$row.role}</a></td>
                     <td>

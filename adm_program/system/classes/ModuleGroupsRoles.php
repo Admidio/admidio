@@ -244,6 +244,7 @@ class ModuleGroupsRoles extends HtmlPage
             $templateRow['category'] = $role->getValue('cat_name');
             $templateRow['categoryOrder'] = $role->getValue('cat_sequence');
             $templateRow['role'] = $role->getValue('rol_name');
+            $templateRow['roleUUID'] = $role->getValue('rol_uuid');
             $templateRow['roleUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_new.php', array('role_uuid' => $row['rol_uuid']));
             $templateRow['roleRights'] = array();
             if ($role->getValue('rol_assign_roles') == 1) {
