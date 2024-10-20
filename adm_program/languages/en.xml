@@ -119,9 +119,9 @@
   <string name="INS_SUBORDINATE">Subordinate</string>
   <string name="INS_SUBORDINATE_MALE">Male subordinate</string>
   <string name="INS_SUBORDINATE_FEMALE">Female subordinate</string>
-  <string name="INS_SUPERIOR">Superior</string>
-  <string name="INS_SUPERIOR_MALE">Male superior</string>
-  <string name="INS_SUPERIOR_FEMALE">Female superior</string>
+  <string name="SYS_SUPERIOR">Superior</string>
+  <string name="SYS_SUPERIOR_MALE">Male superior</string>
+  <string name="SYS_SUPERIOR_FEMALE">Female superior</string>
   <string name="INS_SIBLING">Sibling</string>
   <string name="INS_SISTER">Sister</string>
   <string name="INS_SON">Son</string>
