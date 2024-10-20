@@ -148,10 +148,10 @@ try {
             $announcement->clear();
             $announcement->setArray($row);
 
-            $annUuid = $announcement->getValue('ann_uuid');
+            $announcementUUID = $announcement->getValue('ann_uuid');
 
             $page->addHtml('
-        <div class="card admidio-blog" id="ann_' . $annUuid . '">
+        <div class="card admidio-blog" id="ann_' . $announcementUUID . '">
             <div class="card-header">
                 <i class="bi bi-newspaper"></i>' . $announcement->getValue('ann_headline'));
 
@@ -162,14 +162,14 @@ try {
                         <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_new.php', array('ann_uuid' => $annUuid, 'copy' => '1')) . '">
+                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_new.php', array('ann_uuid' => $announcementUUID, 'copy' => '1')) . '">
                                 <i class="bi bi-copy" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_COPY') . '</a>
                             </li>
-                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_new.php', array('ann_uuid' => $annUuid)) . '">
+                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_new.php', array('ann_uuid' => $announcementUUID)) . '">
                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                             </li>
-                            <li><a class="dropdown-item openPopup" href="javascript:void(0);"
-                                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_' . $annUuid, 'name' => $announcement->getValue('ann_headline', 'database'), 'database_id' => $annUuid)) . '">
+                            <li><a class="dropdown-item openMessageBox" href="javascript:void(0);" data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($announcement->getValue('ann_headline', 'database'))) . '" data-buttons="yes-no"
+                                data-href="callUrlHideElement(\'ann_' . $announcementUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 'delete', 'ann_uuid' => $announcementUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                             </li>
                         </ul>
@@ -177,9 +177,9 @@ try {
             }
             $page->addHtml('</div>
 
-            <div class="card-body">' .
-                $announcement->getValue('ann_description') .
-                '</div>
+            <div class="card-body">
+                ' . $announcement->getValue('ann_description') . '
+            </div>
             <div class="card-footer">' .
                 // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName(
@@ -191,8 +191,8 @@ try {
                     (string)$row['change_uuid']
                 ) .
                 '<div class="admidio-info-category">' .
-                $gL10n->get('SYS_CATEGORY') .
-                '&nbsp;<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php', array('cat_uuid' => $announcement->getValue('cat_uuid'))) . '">' . $announcement->getValue('cat_name') . '</a>
+                    $gL10n->get('SYS_CATEGORY') .
+                    '&nbsp;<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php', array('cat_uuid' => $announcement->getValue('cat_uuid'))) . '">' . $announcement->getValue('cat_name') . '</a>
                 </div>
             </div>
         </div>');

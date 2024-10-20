@@ -85,7 +85,7 @@ try {
     if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
         $mySqlMaxColumnAlert = '
     if (fieldNumberIntern >= 57) {
-        alert("' . $gL10n->get('SYS_NO_MORE_COLUMN') . '");
+        messageBox("' . $gL10n->get('SYS_NO_MORE_COLUMN') . '");
         return;
     }';
     }

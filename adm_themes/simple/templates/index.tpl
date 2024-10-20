@@ -38,11 +38,15 @@
 
             // function to handle modal window and load data from url
             $(document).on('click', '.openPopup', function (){
-                $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
-                $('.modal-content').load($(this).attr('data-href'),function(){
-                    var myModal = new bootstrap.Modal($('#admidio-modal'), {});
+                $('#admidio-modal .modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
+                $('#admidio-modal .modal-content').load($(this).attr('data-href'),function(){
+                    const myModal = new bootstrap.Modal($('#admidio-modal'));
                     myModal.show();
                 });
+            });
+            // function to handle modal messagebox window
+            $(document).on('click', '.openMessageBox', function (){
+                messageBox($(this).data('message'), $(this).data('title'), $(this).data('type'), $(this).data('buttons'), $(this).data('href'));
             });
 
             // remove data from modal if modal is closed
@@ -60,7 +64,25 @@
 <body id="{$id}" class="admidio">
     <div id="admidio-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">Test</div>
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div id="admidioModalMessagebox" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{$l10n->get('SYS_NOTE')}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <a id="admidioMessageboxButtonYes" type="button" class="btn btn-primary">{$l10n->get('SYS_YES')}</a>
+                    <a id="admidioMessageboxButtonNo" type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$l10n->get('SYS_NO')}</a>
+                    <div id="statusMessage" class="mt-4 w-100"></div>
+                </div>
+            </div>
         </div>
     </div>
 

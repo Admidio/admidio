@@ -33,7 +33,6 @@ function showHideBlock(elementId) {
  * @param {string}   elementId  This is the id of a html element that should be hidden.
  * @param {string}   url        This is the url that will be called.
  * @param {string}   csrfToken  If this is set than it will be added to the post request.
- * @param {string}   mode       Mode of the script that is called.
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
 function callUrlHideElement(elementId, url, csrfToken, callback) {
@@ -47,7 +46,7 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
         "admidio-csrf-token": csrfToken,
         "uuid": elementId
         }, function(data) {
-        const messageText = $("#status-message");
+        const messageText = $("#statusMessage");
         var returnStatus = "error";
         var returnMessage = "";
 
@@ -71,6 +70,7 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                 messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>" + returnMessage + "</div>");
                 setTimeout(function(){
                         $("#admidio-modal").modal("hide");
+                        $("#admidioModalMessagebox").modal("hide");
                         if (callback === "callbackRoles") {
                             $(entryDeleted).fadeOut("slow", callbackRoles);
                         } else if (callback === "callbackFormerRoles") {
@@ -85,6 +85,7 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                     }, 2000);
             } else {
                 $("#admidio-modal").modal("hide");
+                $("#admidioModalMessagebox").modal("hide");
                 if (callback === 'callbackRoles') {
                     $(entryDeleted).fadeOut("slow", callbackRoles);
                 } else if (callback === 'callbackFormerRoles') {
@@ -245,6 +246,39 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
                 alert(returnMessage);
             }
         });
+}
+
+/**
+ * The function will show a modal window in bootstrap style with a message.
+ * @param {string} message Text of the message that should be shown.
+ * @param {string} title   Optional a title for the modal. If not set the default "notice" will be shown.
+ * @param {string} type    Optional a type could be set.
+ *                         "warning" - A warning icon and the message with alert-warning class will be shown
+ *                         "error"   - A warning icon and the message with alert-danger class will be shown
+ * @param {string} buttons Optional the setting of the buttons that should be shown.
+ *                         "yes-no" - A primary "Yes" button with a secondary "No" button.
+ * @param {string} href    Optional a link that will be called by a click of the "Yes" button..
+ */
+function messageBox(message, title, type, buttons, href) {
+    $("#statusMessage").html('');
+    if (typeof title !== 'undefined') {
+        $("#admidioModalMessagebox .modal-title").html(title);
+    }
+    if (typeof type === 'undefined') {
+        $("#admidioModalMessagebox .modal-body").html("<p>" + message + "</p>");
+    } else if (type === 'warning') {
+        $("#admidioModalMessagebox .modal-body").html("<p class=\"alert alert-warning\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
+    } else if (type === 'error') {
+        $("#admidioModalMessagebox .modal-body").html("<p class=\"alert alert-danger\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
+    }
+    if (typeof buttons === 'undefined') {
+        $("#admidioModalMessagebox .modal-footer").hide();
+    } else if (buttons === 'yes-no') {
+        $("#admidioMessageboxButtonYes").attr('onClick', href);
+    }
+
+    const myModalAlternative = new bootstrap.Modal("#admidioModalMessagebox");
+    myModalAlternative.show();
 }
 
 /**

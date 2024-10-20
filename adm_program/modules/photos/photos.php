@@ -90,7 +90,7 @@ try {
                         // Appending the random number is necessary to trick the browser cache
                         $("#img_" + imageNr).attr("src", "' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php?photo_uuid=' . $getPhotoUuid . '&thumb=1&photo_nr=" + imageNr + "&rand=" + Math.random());
                     } else {
-                        alert(data);
+                        messageBox(data, "' . $gL10n->get('SYS_ERROR') . '", "error");
                     }
                 }
             );
@@ -103,7 +103,7 @@ try {
                     if (data === "done") {
                         location.reload();
                     } else {
-                        alert(data);
+                        messageBox(data, "' . $gL10n->get('SYS_ERROR') . '", "error");
                     }
                 }
             );
