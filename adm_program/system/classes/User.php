@@ -1735,7 +1735,6 @@ class User extends TableAccess
      * registrations than this method will create a new password and send this to the user.
      * @return void
      * @throws Exception
-     * @throws \Exception
      */
     public function sendNewPassword()
     {
