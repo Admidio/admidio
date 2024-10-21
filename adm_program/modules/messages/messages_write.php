@@ -457,7 +457,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             'property'               => HtmlForm::FIELD_REQUIRED,
             'multiselect'            => true,
             'maximumSelectionNumber' => $maxNumberRecipients,
-            'helpTextIdLabel'        => 'SYS_SEND_MAIL_TO_ROLE',
+            'helpTextIdLabel'        => ($gValidLogin ? '' : 'SYS_SEND_MAIL_TO_ROLE'),
             'defaultValue'           => $preloadData
         )
     );
