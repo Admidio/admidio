@@ -155,7 +155,8 @@ class ListConfiguration extends TableLists
         } elseif ($column->getValue('lsc_special_field') === 'usr_photo') {
             // show user photo
             if (in_array($format, array('html', 'print'), true)) {
-                $content = '<img src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $userUuid)) . '" style="vertical-align: middle;" alt="' . $gL10n->get('SYS_PROFILE_PHOTO') . '" />';
+                $content = '<img src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $userUuid)) . '"
+                    style="max-width: 200px; width: 100%; object-fit: cover;" alt="' . $gL10n->get('SYS_PROFILE_PHOTO') . '" />';
             }
             if (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true) && $content != null) {
                 $content = $gL10n->get('SYS_PROFILE_PHOTO');

@@ -517,6 +517,12 @@ label {
     margin-left: 0.5rem;
 }
 
+#profile_photo {
+    max-width: 300px;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
 .admidio-profile-user-right {
     cursor: help;
 }

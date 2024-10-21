@@ -33,7 +33,11 @@ try {
 
     // Initialize local variables of the transfer variables
     $image = null;
-    $picPath = THEME_PATH . '/images/no_profile_pic.png';
+    if ((int) $user->getValue('GENDER', 'database') === 2) {
+        $picPath = THEME_PATH . '/images/profile-photo-female.png';
+    } else {
+        $picPath = THEME_PATH . '/images/profile-photo-male.png';
+    }
 
     if ($gCurrentUser->hasRightViewProfile($user)) {
         if ($getNewPhoto) {
