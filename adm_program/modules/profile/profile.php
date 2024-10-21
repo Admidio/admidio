@@ -181,8 +181,10 @@ try {
         $("#menu_item_profile_password").attr("class", "nav-link btn btn-primary openPopup");
 
         $("#menu_item_profile_send_password").attr("href", "javascript:void(0);");
-        $("#menu_item_profile_send_password").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'send_login_msg')) . '");
-        $("#menu_item_profile_send_password").attr("class", "nav-link btn btn-primary openPopup");
+        $("#menu_item_profile_send_password").attr("data-buttons", "yes-no");
+        $("#menu_item_profile_send_password").attr("data-message", "' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '");
+        $("#menu_item_profile_send_password").attr("data-href", "callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')");
+        $("#menu_item_profile_send_password").attr("class", "nav-link btn btn-primary admidio-messagebox");
 
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
@@ -220,7 +222,7 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_profile_send_password',
                 $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'send_login_msg')),
+                'javascript:void(0)',
                 'bi-key-fill'
             );
         } else {

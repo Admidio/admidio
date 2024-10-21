@@ -271,9 +271,11 @@ try {
             && !empty($row['loginname']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
             if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
                 // if email is set and systemmails are activated then administrators can send a new password to user
-                $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'send_login_msg')) . '">' .
-                    '<i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
+                $userAdministration = '
+                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                        data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'])) . '"
+                        data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                        <i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
             } else {
                 // if user has no email or send email is disabled then administrators could set a new password
                 $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
