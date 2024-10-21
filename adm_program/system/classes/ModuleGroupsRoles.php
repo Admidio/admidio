@@ -51,7 +51,7 @@ class ModuleGroupsRoles extends HtmlPage
      */
     public function createContentCards()
     {
-        global $gSettingsManager, $gCurrentUser, $gL10n, $gDb;
+        global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gL10n, $gDb;
 
         $templateData = array();
 
@@ -96,13 +96,15 @@ class ModuleGroupsRoles extends HtmlPage
                 // set role active or inactive
                 if ($this->roleType === ModuleGroupsRoles::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol_activate', 'element_id' => 'role_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles_function.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($row['rol_name'])),
                         'icon' => 'bi bi-eye',
                         'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                     );
                 } elseif ($this->roleType === ModuleGroupsRoles::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol_deactivate', 'element_id' => 'role_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles_function.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($row['rol_name'])),
                         'icon' => 'bi bi-eye-slash',
                         'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
                     );
@@ -116,7 +118,8 @@ class ModuleGroupsRoles extends HtmlPage
                 );
                 if (!$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'role_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles_function.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['rol_name'])),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                     );
@@ -229,7 +232,7 @@ class ModuleGroupsRoles extends HtmlPage
      */
     public function createContentPermissionsList()
     {
-        global $gSettingsManager, $gL10n, $gDb;
+        global $gSettingsManager, $gL10n, $gDb, $gCurrentSession;
 
         $templateData = array();
 
@@ -241,6 +244,7 @@ class ModuleGroupsRoles extends HtmlPage
             $templateRow['category'] = $role->getValue('cat_name');
             $templateRow['categoryOrder'] = $role->getValue('cat_sequence');
             $templateRow['role'] = $role->getValue('rol_name');
+            $templateRow['roleUUID'] = $role->getValue('rol_uuid');
             $templateRow['roleUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_new.php', array('role_uuid' => $row['rol_uuid']));
             $templateRow['roleRights'] = array();
             if ($role->getValue('rol_assign_roles') == 1) {
@@ -350,20 +354,23 @@ class ModuleGroupsRoles extends HtmlPage
             );
             if ($this->roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
-                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol_activate', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles_function.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($row['rol_name'])),
                     'icon' => 'bi bi-eye',
                     'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                 );
             } elseif ($this->roleType === $this::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
-                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol_deactivate', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles_function.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($row['rol_name'])),
                     'icon' => 'bi bi-eye-slash',
                     'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
                 );
             }
             if (!$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
-                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_' . $row['rol_uuid'], 'name' => $row['rol_name'], 'database_id' => $row['rol_uuid'])),
+                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles_function.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['rol_name'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                 );

@@ -41,7 +41,7 @@ class ModuleDocumentsFiles extends HtmlPage
      */
     public function createContentList()
     {
-        global $gCurrentUser, $gL10n;
+        global $gCurrentUser, $gCurrentSession, $gL10n;
 
         $templateData = array();
         $infoAlert = '';
@@ -79,8 +79,8 @@ class ModuleDocumentsFiles extends HtmlPage
                         );
                     }
                     $templateRow['actions'][] = array(
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php',
-                                array('type' => 'fol', 'element_id' => 'row_'.$row['uuid'], 'name' => $row['name'], 'database_id' => $row['uuid'])),
+                        'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/modules/documents-files/documents_files_function.php',
+                                array('mode' => 'delete_folder', 'folder_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_FOLDER')
                     );
@@ -104,8 +104,8 @@ class ModuleDocumentsFiles extends HtmlPage
                         );
                     }
                     $templateRow['actions'][] = array(
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php',
-                            array('type' => 'fil', 'element_id' => 'row_'.$row['uuid'], 'name' => $row['name'], 'database_id' => $row['uuid'], 'database_id_2' => $this->folder->getValue('fol_uuid'))),
+                        'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/modules/documents-files/documents_files_function.php',
+                            array('mode' => 'delete_file', 'file_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_FILE')
                     );

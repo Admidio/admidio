@@ -14,7 +14,7 @@
         </thead>
         <tbody>
             {foreach $list as $row}
-                <tr>
+                <tr id="role_{$row.roleUUID}">
                     <td>{$row.category}</td>
                     <td><a href="{$row.roleUrl}">{$row.role}</a></td>
                     <td>
@@ -28,7 +28,8 @@
                     <td>{$row.roleLeaderRights}</td>
                     <td class="text-right">
                         {foreach $row.actions as $actionItem}
-                            <a {if isset($actionItem.dataHref)} class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
+                            <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
+                                data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
                                     {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
                                 <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
                         {/foreach}

@@ -121,10 +121,11 @@ try {
 
             // don't allow delete for standard menus
             if (!$menuRow['men_standard']) {
-                $menuAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_' .
-                        $menuRow['men_uuid'], 'name' => $menuName, 'database_id' => $menuRow['men_uuid'])) . '">' .
-                    '<i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
+                $menuAdministration .= '
+                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                        data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($menuName)) . '"
+                        data-href="callUrlHideElement(\'row_' . $menuRow['men_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 'delete', 'uuid' => $menuRow['men_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
             }
 
             // create array with all column values

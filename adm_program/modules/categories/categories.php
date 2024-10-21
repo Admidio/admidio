@@ -44,6 +44,7 @@ try {
     $addButtonText = $gL10n->get('SYS_CREATE_CATEGORY');
     $visibleHeadline = $gL10n->get('SYS_VISIBLE_FOR');
     $navigationHeadline = $gL10n->get('SYS_CATEGORIES');
+    $deleteMessage = 'SYS_WANT_DELETE_CATEGORY';
     $editableHeadline = '';
 
     switch ($getType) {
@@ -68,6 +69,7 @@ try {
             $navigationHeadline = $gL10n->get('SYS_CALENDARS');
             $editableHeadline = $gL10n->get('SYS_EDIT_EVENTS');
             $addButtonText = $gL10n->get('SYS_CREATE_CALENDAR');
+            $deleteMessage = 'SYS_DELETE_ENTRY';
             break;
 
         case 'LNK':
@@ -255,9 +257,11 @@ try {
             if ($category->getValue('cat_system') == 1) {
                 $categoryAdministration .= '<i class="bi bi-trash invisible"></i>';
             } else {
-                $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_' . $categoryUuid, 'name' => $category->getValue('cat_name', 'database'), 'database_id' => $categoryUuid, 'database_id_2' => $getType)) . '">' .
-                    '<i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
+                $categoryAdministration .= '
+                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                        data-message="' . $gL10n->get($deleteMessage, array($category->getValue('cat_name', 'database'))) . '"
+                        data-href="callUrlHideElement(\'row_' . $categoryUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('mode' => 'delete', 'uuid' => $categoryUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
             }
         } else {
             $categoryAdministration = '<i class="bi bi-trash invisible"></i><i class="bi bi-trash invisible"></i>';

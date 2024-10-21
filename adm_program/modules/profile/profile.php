@@ -181,8 +181,10 @@ try {
         $("#menu_item_profile_password").attr("class", "nav-link btn btn-primary openPopup");
 
         $("#menu_item_profile_send_password").attr("href", "javascript:void(0);");
-        $("#menu_item_profile_send_password").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'send_login_msg')) . '");
-        $("#menu_item_profile_send_password").attr("class", "nav-link btn btn-primary openPopup");
+        $("#menu_item_profile_send_password").attr("data-buttons", "yes-no");
+        $("#menu_item_profile_send_password").attr("data-message", "' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '");
+        $("#menu_item_profile_send_password").attr("data-href", "callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')");
+        $("#menu_item_profile_send_password").attr("class", "nav-link btn btn-primary admidio-messagebox");
 
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
@@ -220,7 +222,7 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_profile_send_password',
                 $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'send_login_msg')),
+                'javascript:void(0)',
                 'bi-key-fill'
             );
         } else {
@@ -371,7 +373,7 @@ try {
         // the image can only be deleted if corresponding rights exist
         if (((string)$user->getValue('usr_photo') !== '' && (int)$gSettingsManager->get('profile_photo_storage') === 0)
             || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $userId . '.jpg') && (int)$gSettingsManager->get('profile_photo_storage') === 1) {
-            $page->assignSmartyVariable('urlProfilePhotoDelete', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $getUserUuid)));
+            $page->assignSmartyVariable('urlProfilePhotoDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackProfilePhoto\')');
         }
     }
 
@@ -661,8 +663,7 @@ try {
                 }
 
                 if ($gCurrentUser->editUsers()) {
-                    $userRelation['urlRelationDelete'] = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_' . $relation->getValue('ure_uuid'), 'database_id' => $relation->getValue('ure_uuid'),
-                        'name' => $relationType->getValue('urt_name', 'database') . ': ' . $otherUser->getValue('FIRST_NAME', 'database') . ' ' . $otherUser->getValue('LAST_NAME', 'database') . ' -> ' . $user->getValue('FIRST_NAME', 'database') . ' ' . $user->getValue('LAST_NAME', 'database')));
+                    $userRelation['urlRelationDelete'] = 'callUrlHideElement(\'row_ure_' . $relation->getValue('ure_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/userrelations/userrelations_function.php', array('mode' => 'delete', 'ure_uuid' => $relation->getValue('ure_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 }
 
                 // only show info if system setting is activated

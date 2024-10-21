@@ -59,7 +59,7 @@ class ModuleRegistration extends HtmlPage
      */
     public function createContentRegistrationList()
     {
-        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields, $gCurrentUser;
+        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields, $gCurrentUser, $gCurrentSession;
 
         $registrations = $this->getRegistrationsArray();
         $templateData = array();
@@ -99,7 +99,7 @@ class ModuleRegistration extends HtmlPage
                 'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
             );
             $templateRow['actions'][] = array(
-                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'user_'.$row['usr_uuid'], 'name' => $user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME'), 'database_id' => $row['usr_uuid'])),
+                'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/registration/registration_function.php', array('mode' => 'delete_user', 'new_user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                 'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );

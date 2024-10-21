@@ -174,9 +174,9 @@ try {
                     $page->addHtml('
                     <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_new.php', array('link_uuid' => $lnkUuid)) . '">
                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>
-                    <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'lnk',
-                            'element_id' => 'lnk_' . $lnkUuid, 'name' => $weblink->getValue('lnk_name', 'database'), 'database_id' => $lnkUuid)) . '">
+                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                        data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($weblink->getValue('lnk_name', 'database'))) . '"
+                        data-href="callUrlHideElement(\'lnk_' . $lnkUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 'delete', 'link_uuid' => $lnkUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>');
                 }
 

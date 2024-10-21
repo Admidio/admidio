@@ -98,6 +98,7 @@ class Message
      * a call to the $urlYesButton will be sent. If he chooses no he will be directed back to the previous page
      * or the modal window will be closed.
      * @param string $urlYesButton The full url to which the user should be directed if he chooses **yes**.
+     * @deprecated 5.0.0:5.1.0 Method "setYesNoButton" is deprecated, use modal "admidio-messagebox" instead.
      */
     public function setYesNoButton(string $urlYesButton)
     {

@@ -220,7 +220,7 @@ try {
     $orgName = $gCurrentOrganization->getValue('org_longname');
     $rowNumber = $getStart; // count for every row
 
-// get count of all members and store into json
+    // get count of all members and store into json
     $countSql = 'SELECT COUNT(*) AS count_total FROM (' . $mainSql . ') contacts ';
     $countTotalStatement = $gDb->queryPrepared($countSql, $queryParamsEmail); // TODO add more params
     $jsonArray['recordsTotal'] = (int)$countTotalStatement->fetchColumn();
@@ -271,9 +271,11 @@ try {
             && !empty($row['loginname']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
             if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
                 // if email is set and systemmails are activated then administrators can send a new password to user
-                $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'send_login_msg')) . '">' .
-                    '<i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
+                $userAdministration = '
+                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                        data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'])) . '"
+                        data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                        <i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
             } else {
                 // if user has no email or send email is disabled then administrators could set a new password
                 $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
@@ -303,14 +305,32 @@ try {
                     '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
             }
 
-            // add link to delete user btw. remove user from the current organization
-            if (((!$contactsOfOtherOrganization && $gCurrentUser->isAdministrator()) // not a member of another organization, then administrators may delete
-                    || $contactsOfThisOrganization)                  // active members may be removed by authorized users
-                && $row['usr_uuid'] !== $gCurrentUserUUID) { // no one is allowed to remove their own profile
-                $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_msg')) . '">' .
-                    '<i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
-            </a>';
+            // add link to delete user btw. remove user from the current organization, no one is allowed to remove their own profile
+            if (!$contactsOfOtherOrganization && $gCurrentUser->isAdministrator() && $row['usr_uuid'] !== $gCurrentUserUUID) {
+                if ($contactsOfThisOrganization) {
+                    // User is ONLY member of this organization -> ask if user should make to former member or delete completely
+                    $userAdministration .= '
+                        <a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg')) . '">
+                            <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
+                        </a>';
+                } else {
+                    // User is not member of any organization -> ask if delete completely
+                    $userAdministration .= '
+                        <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                            data-message="' . $gL10n->get('SYS_USER_DELETE_DESC', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'])) . '"
+                            data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                            <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
+                        </a>';
+                }
+            } elseif ($contactsOfOtherOrganization && $contactsOfThisOrganization) {
+                // User could only be removed from this organization -> ask so
+                $userAdministration .= '
+                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                        data-message="' . $gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'], $gCurrentOrganization->getValue('org_longname'))) . '"
+                        data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
+                    </a>';
             }
         }
 

@@ -168,7 +168,8 @@ try {
                             <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_new.php', array('ann_uuid' => $announcementUUID)) . '">
                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                             </li>
-                            <li><a class="dropdown-item openMessageBox" href="javascript:void(0);" data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($announcement->getValue('ann_headline', 'database'))) . '" data-buttons="yes-no"
+                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                                data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($announcement->getValue('ann_headline', 'database'))) . '"
                                 data-href="callUrlHideElement(\'ann_' . $announcementUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 'delete', 'ann_uuid' => $announcementUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                             </li>

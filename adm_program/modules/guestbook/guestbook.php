@@ -238,10 +238,10 @@ try {
                             <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_new.php', array('gbo_uuid' => $gboUuid)) . '">
                                 <i class="bi bi-pencil-square"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                             </li>
-                            <li><a class="dropdown-item openPopup" href="javascript:void(0);"
-                                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'gbo',
-                        'element_id' => 'gbo_' . $gboUuid, 'database_id' => $gboUuid, 'name' => $gboName)) . '">
-                                <i class="bi bi-trash"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
+                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                                    data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($gboName)) . '"
+                                    data-href="callUrlHideElement(\'gbo_' . $gboUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 'delete_entry', 'gbo_uuid' => $gboUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                                    <i class="bi bi-trash"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                             </li>
                         </ul>
                     </div>');

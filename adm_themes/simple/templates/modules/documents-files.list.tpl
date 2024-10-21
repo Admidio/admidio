@@ -31,7 +31,8 @@
                     <td class="text-right">
                         {if {array_key_exists array=$row key='actions'}}
                             {foreach $row.actions as $actionItem}
-                                <a {if isset($actionItem.dataHref)} class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
+                                <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
+                                    data-buttons="yes-no" data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$row.name}))}" data-href="{$actionItem.dataHref}"
                                         {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
                                     <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
                             {/foreach}

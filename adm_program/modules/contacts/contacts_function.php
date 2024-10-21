@@ -14,10 +14,8 @@
  *
  * mode: remove - remove contact ONLY from the member community
  *       delete - delete contact from database
- *       delete_msg - Ask if contact should be deleted
  *       delete_explain_msg - MessageBox that explains the effects of the deletion
  *       send_login - send contact e-mail with new access data
- *       send_login_msg - Ask if access data should be sent
  * user_uuid : UUID of the contact, who should be edited
  *
  *****************************************************************************/
@@ -27,10 +25,8 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
 
-    $gMessage->showInModalWindow();
-
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('delete_explain_msg', 'remove', 'delete', 'send_login', 'send_login_msg', 'delete_msg')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('delete_explain_msg', 'remove', 'delete', 'send_login')));
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
 
     // Only users with user-edit rights are allowed
@@ -38,7 +34,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    if (in_array($getMode, array('remove', 'delete', 'send_login'))) {
+    if ($getMode !== 'delete_explain_msg') {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
@@ -46,22 +42,21 @@ try {
     if ($getMode === 'delete_explain_msg') {
         // ask if contact should only be removed from organization or completely deleted
         echo '
-    <div class="modal-header">
-        <h3 class="modal-title">' . $gL10n->get('SYS_REMOVE_CONTACT') . '</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-        <p><i class="bi bi-person-fill-dash"></i>&nbsp;' . $gL10n->get('SYS_MAKE_FORMER') . '</p>
-        <p><i class="bi bi-trash"></i>&nbsp;' . $gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE'))) . '</p>
-    </div>
-    <div class="modal-footer">
-        <button id="btnFormer" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'remove')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-            <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_FORMER') . '</button>
-        <button id="btnDelete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-            <i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE') . '</button>
-        <div id="status-message" class="mt-4 w-100"></div>
-    </div>';
-
+            <div class="modal-header">
+                <h3 class="modal-title">' . $gL10n->get('SYS_REMOVE_CONTACT') . '</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><i class="bi bi-person-fill-dash"></i>&nbsp;' . $gL10n->get('SYS_MAKE_FORMER') . '</p>
+                <p><i class="bi bi-trash"></i>&nbsp;' . $gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE'))) . '</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnFormer" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'remove')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_FORMER') . '</button>
+                <button id="btnDelete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    <i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE') . '</button>
+                <div id="status-message" class="mt-4 w-100"></div>
+            </div>';
         exit();
     }
 
@@ -69,7 +64,7 @@ try {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
-    if ($getMode === 'delete' || $getMode === 'delete_msg') {
+    if ($getMode === 'delete') {
         // Check if user is also in other organizations
         $sql = 'SELECT COUNT(*) AS count
               FROM ' . TBL_MEMBERS . '
@@ -140,34 +135,12 @@ try {
             throw new Exception('SYS_NO_RIGHTS');
         }
         exit();
-    } elseif ($getMode === 'send_login_msg') {
-        // Ask to send new login-data
-        $gMessage->setYesNoButton('callUrlHideElement(\'row_members\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'send_login')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')');
-        $gMessage->show($gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
-        // => EXIT
-    } elseif ($getMode === 'delete_msg') {
-        if (!$isAlsoInOtherOrgas && $gCurrentUser->isAdministrator()) {
-            if (isMember($user->getValue('usr_id'))) {
-                // User is ONLY member of this organization -> ask if user should make to former member or delete completely
-                admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'delete_explain_msg')));
-                // => EXIT
-            } else {
-                // User is not member of any organization -> ask if delete completely
-                $gMessage->setYesNoButton('callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')');
-                $gMessage->show($gL10n->get('SYS_USER_DELETE_DESC', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))), $gL10n->get('SYS_DELETE'));
-                // => EXIT
-            }
-        } else {
-            // User could only be removed from this organization -> ask so
-            $gMessage->setYesNoButton('callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'remove')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')');
-            $gMessage->show($gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))), $gL10n->get('SYS_REMOVE'));
-            // => EXIT
-        }
     }
 
     throw new Exception('SYS_NO_RIGHTS');
 } catch (Exception $e) {
-    if (in_array($getMode, array('send_login_msg', 'delete_explain_msg', 'delete_msg'))) {
+    if ($getMode == 'delete_explain_msg') {
+        $gMessage->showInModalWindow();
         $gMessage->show($e->getMessage());
     } else {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
