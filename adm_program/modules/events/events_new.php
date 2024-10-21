@@ -147,7 +147,7 @@ try {
 
     $page->addJavascript(
         '
-    var eventParticipationPossible = ' . $eventParticipationPossible . ';
+    var eventParticipationPossible = ' . ($eventParticipationPossible ? 1 : 0) . ';
 
     setAllDay();
     setEventParticipation();
