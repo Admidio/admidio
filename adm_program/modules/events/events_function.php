@@ -389,13 +389,17 @@ try {
     }
     // If participation mode: Set status and write optional parameter from user and show current status message
     if (in_array($getMode, array('participate', 'participate_cancel', 'participate_maybe'), true)) {
-        if (isset($_POST['admidio-csrf-token'])) {
+        try {
+            // check form field input and sanitized it from malicious content
+            $eventsParticipationEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        } catch (Exception $e) {
+            // call was done directly through ajax then check session csrf token
             SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
             $formValues['dat_comment'] = '';
             $formValues['additional_guests'] = '';
-        } else {
-            // check form field input and sanitized it from malicious content
-            $eventsParticipationEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        }
+
+        if (isset($eventsParticipationEditForm)) {
             $formValues = $eventsParticipationEditForm->validate($_POST);
         }
 

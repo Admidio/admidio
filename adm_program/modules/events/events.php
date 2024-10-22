@@ -110,28 +110,22 @@ try {
                 window.open("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'cat_uuid' => $getCatUuid, 'dat_uuid' => $getEventUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'))) . '", "_blank");
             });
 
-            $(".admidio-event-approval").on("hide.bs.dropdown", ({ clickEvent }) => {
-                if (clickEvent?.target) {
-                    if ($(clickEvent.target).is("i")) {
-                        var target = $(clickEvent.target).parent();
-                    } else {
-                        var target = $(clickEvent.target);
-                    }
-                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php?mode=" + target.data("mode") + "&dat_uuid=" + target.data("id"),
-                        {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"},
-                        function(data) {
-                            var returnData = JSON.parse(data);
-                            if (returnData.status === "success") {
-                                ' . ($getView === 'detail' ?
-                                'target.parents("div.admidio-event-approval").children("button").html(target.html());' :
-                                'target.parents("div.admidio-event-approval").children("button").html(target.children("i").clone());') . '
-                                messageBox(returnData.message);
-                            } else {
-                                messageBox(returnData.message, "' . $gL10n->get('SYS_ERROR') . '", "error");
-                            }
+            $(".admidio-event-approval a").click(function() {
+                $approvalStateElement = $(this);
+                $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php?mode=" + $(this).data("mode") + "&dat_uuid=" + $(this).data("id"),
+                    {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"},
+                    function(data) {
+                        var returnData = JSON.parse(data);
+                        if (returnData.status === "success") {
+                            ' . ($getView === 'detail' ?
+                            '$(".admidio-event-approval button").html($approvalStateElement.html());' :
+                            '$(".admidio-event-approval button").html($approvalStateElement.children("i").clone());') . '
+                            messageBox(returnData.message);
+                        } else {
+                            messageBox(returnData.message, "' . $gL10n->get('SYS_ERROR') . '", "error");
                         }
-                    );
-                }
+                    }
+                );
                 $(".admidio-event-approval").show();
             });
         ', true);
