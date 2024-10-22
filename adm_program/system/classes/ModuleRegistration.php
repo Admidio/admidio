@@ -100,6 +100,7 @@ class ModuleRegistration extends HtmlPage
             );
             $templateRow['actions'][] = array(
                 'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/registration/registration_function.php', array('mode' => 'delete_user', 'new_user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME'))),
                 'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
