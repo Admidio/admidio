@@ -216,7 +216,7 @@ try {
             $arrRolesIds = $rightCategoryView->getRolesIds();
 
             if (count($arrRolesIds) > 0) {
-                $htmlViewRolesNames = implode(', ', array_merge($rightCategoryView->getRolesNames(), $adminRoles));
+                $htmlViewRolesNames = implode(', ', array_unique(array_merge($rightCategoryView->getRolesNames(), $adminRoles)));
             } else {
                 if ($gCurrentOrganization->countAllRecords() > 1) {
                     if ((int)$category->getValue('cat_org_id') === 0) {
@@ -246,7 +246,7 @@ try {
                 $htmlEditRolesNames = $gL10n->get('SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA');
             } else {
                 $rightCategoryEdit = new RolesRights($gDb, 'category_edit', $catId);
-                $htmlEditRolesNames = implode(', ', array_merge($rightCategoryEdit->getRolesNames(), $adminRoles));
+                $htmlEditRolesNames = implode(', ', array_unique(array_merge($rightCategoryEdit->getRolesNames(), $adminRoles)));
             }
         }
 

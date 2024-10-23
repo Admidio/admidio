@@ -265,9 +265,9 @@ try {
                 $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
-                $role->setValue('rol_view_memberships', isset($formValues['event_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
+                $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
                 // role members are allowed to send mail to this role
-                $role->setValue('rol_mail_this_role', isset($formValues['event_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
+                $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
                 $role->setValue('rol_max_members', (int)$event->getValue('dat_max_members'));
 
                 $role->save();
@@ -295,9 +295,9 @@ try {
                     // these are the default settings for an event role
                     $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
                     // role members are allowed to view lists
-                    $role->setValue('rol_view_memberships', isset($formValues['event_right_list_view']) ? 1 : 3);
+                    $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
                     // role members are allowed to send mail to this role
-                    $role->setValue('rol_mail_this_role', isset($formValues['event_right_send_mail']) ? 1 : 0);
+                    $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
                     $role->setValue('rol_leader_rights', TableRoles::ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participants
                     $role->setValue('rol_max_members', (int)$formValues['dat_max_members']);
                 }
