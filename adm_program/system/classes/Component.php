@@ -180,10 +180,10 @@ class Component extends TableAccess
                     break;
 
                 case 'CORE': // fallthrough
-                case 'BACKUP': // fallthrough
                 case 'CATEGORIES': // fallthrough
                 case 'MENU': // fallthrough
                 case 'MESSAGES': // fallthrough
+                case 'ORGANIZATIONS': // fallthrough
                 case 'PREFERENCES': // fallthrough
                 case 'ROOMS':
                     if ($gCurrentUser->isAdministrator()) {
@@ -294,9 +294,9 @@ class Component extends TableAccess
                 }
                 break;
 
-            case 'BACKUP': // fallthrough
             case 'CATEGORIES': // fallthrough
             case 'MENU': // fallthrough
+            case 'ORGANIZATIONS': // fallthrough
             case 'PREFERENCES': // fallthrough
             case 'ROOMS':
                 if ($gCurrentUser->isAdministrator()) {
