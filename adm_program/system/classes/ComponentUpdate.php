@@ -175,15 +175,14 @@ class ComponentUpdate extends Component
                 try {
                     self::executeUpdateMethod($updateStepContent);
                 } catch (Throwable $e) {
-                    echo '
+                    throw new Exception('
                         <div style="font-family: monospace;">
                              <p><strong>S C R I P T - E R R O R</strong></p>
                              ' . $errorMessage . '
                              <p><strong>MESSAGE:</strong> ' . $e->getMessage() . '</p>
                              <p><strong>B A C K T R A C E</strong></p>
                              <p>' . str_replace('#', '<br />', $e->getTraceAsString()) . '</p>
-                         </div>';
-                    exit();
+                         </div>');
                 }
             } else {
                 $showError = true;
@@ -192,11 +191,10 @@ class ComponentUpdate extends Component
                     $showError = false;
                 }
 
-                $returnCodeSql = $this->executeUpdateSql($updateStepContent, false);
-
-                if($showError && !$returnCodeSql) {
-                    $this->db->showError($errorMessage);
-                    // => EXIT
+                try {
+                    $this->executeUpdateSql($updateStepContent, $showError);
+                } catch (Throwable $e) {
+                    throw new Exception($errorMessage . '<br />' . $e->getMessage());
                 }
             }
             $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
@@ -252,11 +250,11 @@ class ComponentUpdate extends Component
                 }
 
                 // save current version to system component
-                $this->setValue('com_version', $mainVersion.'.'.$minorVersion.'.0');
+                $this->setValue('com_version', $mainVersion . '.' . $minorVersion . '.0');
                 $this->save();
 
                 // output of the version number for better debugging
-                $gLogger->notice('UPDATE: Start executing update steps to version '.$mainVersion.'.'.$minorVersion);
+                $gLogger->notice('UPDATE: Start executing update steps to version ' . $mainVersion . '.' . $minorVersion);
 
                 // open xml file for this version
                 try {
@@ -264,16 +262,18 @@ class ComponentUpdate extends Component
 
                     // go step by step through the SQL statements and execute them
                     foreach ($xmlObject->children() as $updateStep) {
-                        if ((string) $updateStep === self::UPDATE_STEP_STOP) {
+                        if ((string)$updateStep === self::UPDATE_STEP_STOP) {
                             break;
                         }
-                        if ((int) $updateStep['id'] > (int) $this->getValue('com_update_step')) {
-                            $this->executeStep($updateStep, $mainVersion.'.'.$minorVersion.'.0');
+                        if ((int)$updateStep['id'] > (int)$this->getValue('com_update_step')) {
+                            $this->executeStep($updateStep, $mainVersion . '.' . $minorVersion . '.0');
                         } else {
-                            $gLogger->info('UPDATE: Skip update step Nr: ' . (int) $updateStep['id']);
+                            $gLogger->info('UPDATE: Skip update step Nr: ' . (int)$updateStep['id']);
                         }
                     }
-                } catch (UnexpectedValueException|Exception $exception) {
+                } catch (Exception $exception) {
+                    throw new Exception($exception->getMessage());
+                } catch (UnexpectedValueException|\Exception $exception) {
                     // TODO
                 }
 

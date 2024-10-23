@@ -924,8 +924,8 @@ class Database
     }
 
     /**
-     * Display the error code and error message to the user if a database error occurred.
-     * The error must be read by the child method. This method will call a backtrace, so
+     * Throws a detailed error message that occurs during the SQL execution.
+     * The error must be caught by the child method. This method will call a backtrace, so
      * you see the script and specific line in which the error occurred.
      * @param string $errorMessage Optional an error message could be set and integrated in the output of the sql error.
      * @param int $code Optional a code for the error be set and integrated in the output of the sql error.
@@ -934,7 +934,7 @@ class Database
      */
     public function showError(string $errorMessage = '', int $code = 0)
     {
-        global $gLogger, $gSettingsManager, $gL10n;
+        global $gLogger;
 
         if ($errorMessage === '') {
             // transform the database error to html
@@ -949,26 +949,14 @@ class Database
 
         $gLogger->critical($code . ': ' . $errorMessage);
 
-        $htmlOutput = '
+        throw new Exception('
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>
                  <p>' . $errorMessage . '</p>
                  <p><strong>CODE:</strong> ' . $code . '</p>
                  <strong>B A C K T R A C E</strong><br />
                  ' . $this->getBacktrace() . '
-             </div>';
-
-        // display database error to user
-        if (isset($gSettingsManager) && defined('THEME_PATH') && !headers_sent()) {
-            // create html page object
-            $page = new HtmlPage('admidio-error', $gL10n->get('SYS_DATABASE_ERROR'));
-            $page->addHtml($htmlOutput);
-            $page->show();
-        } else {
-            echo $htmlOutput;
-        }
-
-        exit();
+             </div>');
     }
 
     /**
