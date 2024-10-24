@@ -185,6 +185,7 @@ $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
 $gCurrentOrganization->setValue('org_longname', $_SESSION['orga_longname']);
 $gCurrentOrganization->setValue('org_shortname', $_SESSION['orga_shortname']);
 $gCurrentOrganization->setValue('org_homepage', ADMIDIO_URL);
+$gCurrentOrganization->setValue('org_email_administrator', $_SESSION['orga_email']);
 $gCurrentOrganization->save();
 $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 
@@ -201,8 +202,7 @@ $adminUsrId = $administrator->getValue('usr_id');
 require_once(ADMIDIO_PATH . '/adm_program/installation/db_scripts/preferences.php');
 
 // set some specific preferences whose values came from user input of the installation wizard
-$defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];
-$defaultOrgPreferences['system_language']     = $language;
+$defaultOrgPreferences['system_language'] = $language;
 
 // calculate the best cost value for your server performance
 $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);

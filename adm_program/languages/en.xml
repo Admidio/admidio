@@ -452,7 +452,6 @@
   <string name="SYS_DATABASE_BACKUP">Database backup</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Creates a backup of all Admidio data in a gzip file. In addition to the data, the file also contains the structure of the tables, the indices and the links between the tables. The backup contains sensitive member data and should therefore be stored securely. It should not be possible for third parties to access the file.</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">It is not necessary to update the database.</string>
-  <string name="SYS_DATABASE_ERROR">Database error</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date.</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">No connection to the database could be created!\n\nPlease check the access data in the file config.php in the folder adm_my_files. If the file is still from another installation, please remove the config.php from the folder, because a new file will be created via the installation wizard. After that you can continue the installation.\n\nThe following error occurred: \n#VAR1#.</string>

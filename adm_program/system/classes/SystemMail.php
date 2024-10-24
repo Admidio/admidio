@@ -57,8 +57,6 @@ class SystemMail extends Email
      */
     public function getMailText(string $systemMailId, User $user): string
     {
-        global $gSettingsManager;
-
         $this->smMailText = '';
         $this->smMailHeader = '';
 
@@ -87,7 +85,7 @@ class SystemMail extends Email
                 '/#user_last_name#/' => $user->getValue('LAST_NAME', 'database'),
                 '/#user_login_name#/' => $user->getValue('usr_login_name'),
                 '/#user_email#/' => $user->getValue('EMAIL'),
-                '/#administrator_email#/' => $gSettingsManager->getString('email_administrator'),
+                '/#administrator_email#/' => $this->smOrganization->getValue('org_email_administrator'),
                 '/#organization_short_name#/' => $this->smOrganization->getValue('org_shortname'),
                 '/#organization_long_name#/' => $this->smOrganization->getValue('org_longname'),
                 '/#organization_homepage#/' => $this->smOrganization->getValue('org_homepage')
@@ -144,7 +142,7 @@ class SystemMail extends Email
         if ($gSettingsManager->getBool('system_notifications_enabled')) {
             // only send system mail if there is a mail text available
             if ($this->getMailText($systemMailId, $user) !== '') {
-                $this->setSender($gSettingsManager->getString('email_administrator'));
+                $this->setSender($this->smOrganization->getValue('org_email_administrator'));
                 $this->setSubject($this->smMailHeader);
                 $this->setText($this->smMailText);
 

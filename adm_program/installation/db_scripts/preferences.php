@@ -37,7 +37,6 @@ $defaultOrgPreferences = array(
     'password_min_strength'          => '1',
 
     // Organization
-    'email_administrator'            => 'administrator@'. DOMAIN,
     'system_organization_select'     => '0',
 
     // Registration

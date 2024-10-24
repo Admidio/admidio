@@ -102,7 +102,7 @@ try {
 
                     // the corresponding folder could not be created
                     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php');
-                    throw new Exception($error['text'], array($error['path'], '<a href="mailto:' . $gSettingsManager->getString('email_administrator') . '">', '</a>'));
+                    throw new Exception($error['text'], array($error['path'], '<a href="mailto:' . $gCurrentOrganization->getValue('org_email_administrator') . '">', '</a>'));
                 } else {
                     // Notification email for new or changed entries to all members of the notification role
                     $photoAlbum->sendNotification();
@@ -120,7 +120,7 @@ try {
                     FileSystemUtils::moveDirectory($albumPath, $newFolder);
                 } catch (RuntimeException $exception) {
                     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php');
-                    throw new Exception('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:' . $gSettingsManager->getString('email_administrator') . '">', '</a>'));
+                    throw new Exception('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:' . $gCurrentOrganization->getValue('org_email_administrator') . '">', '</a>'));
                 }
             }
 

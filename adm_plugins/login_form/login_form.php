@@ -114,7 +114,7 @@ try {
                 $linkUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
             } else {
                 // show link to send mail with local mail-client to administrator
-                $linkUrl = SecurityUtils::encodeUrl('mailto:' . $gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+                $linkUrl = SecurityUtils::encodeUrl('mailto:' . $gCurrentOrganization->getValue('org_email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
             }
             $forgotPasswordLink = '<a href="' . $linkUrl . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>';
         } else {
