@@ -10,6 +10,9 @@
     {if {array_key_exists array=$elements key='org_org_id_parent'}}
         {include 'sys-template-parts/form.select.tpl' data=$elements['org_org_id_parent']}
     {/if}
+    {if {array_key_exists array=$elements key='org_show_org_select'}}
+        {include 'sys-template-parts/form.checkbox.tpl' data=$elements['org_show_org_select']}
+    {/if}
     <div class="form-alert" style="display: none;">&nbsp;</div>
     {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
 </form>

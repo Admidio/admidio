@@ -85,6 +85,13 @@ try {
                     array('defaultValue' => $formValues['org_org_id_parent'], 'helpTextId' => 'ORG_PARENT_ORGANIZATION_DESC')
                 );
             }
+
+            $formOrganization->addCheckbox(
+                'org_show_org_select',
+                $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'),
+                $gCurrentOrganization->getValue('org_show_org_select'),
+                array('helpTextId' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC')
+            );
         }
         $formOrganization->addSubmitButton(
             'btn_save',

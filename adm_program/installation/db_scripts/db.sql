@@ -496,6 +496,7 @@ CREATE TABLE %PREFIX%_organizations
     org_org_id_parent           integer unsigned,
     org_homepage                varchar(255)        NOT NULL,
     org_email_administrator     varchar(254)        NOT NULL,
+    org_show_org_select         boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (org_id)
 )
 ENGINE = InnoDB

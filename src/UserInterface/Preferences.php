@@ -77,11 +77,6 @@ class Preferences extends HtmlPage
                 'title' => $gL10n->get('SYS_SECURITY'),
                 'icon' => 'bi-shield-fill'
             ),
-            'Organization' => array(
-                'id' => 'Organization',
-                'title' => $gL10n->get('SYS_ORGANIZATION'),
-                'icon' => 'bi-diagram-3-fill'
-            ),
             'RegionalSettings' => array(
                 'id' => 'RegionalSettings',
                 'title' => $gL10n->get('ORG_REGIONAL_SETTINGS'),
@@ -1327,93 +1322,6 @@ class Preferences extends HtmlPage
     }
 
     /**
-     * Generates the html of the form from the organization preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the organization preferences.
-     * @throws \Admidio\Exception
-     * @throws \Smarty\Exception
-     */
-    public function createOrganizationForm(): string
-    {
-        global $gDb, $gL10n, $gCurrentOrganization, $gSettingsManager, $gCurrentOrgId, $gCurrentSession;
-
-        // read organization and all system preferences values into form array
-        $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
-
-        $formOrganization = new Form(
-            'preferencesFormOrganization',
-            'preferences/preferences.organization.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Organization')),
-            null,
-            array('class' => 'form-preferences')
-        );
-        $formOrganization->addInput(
-            'org_shortname',
-            $gL10n->get('SYS_NAME_ABBREVIATION'),
-            $formValues['org_shortname'],
-            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small')
-        );
-        $formOrganization->addInput(
-            'org_longname',
-            $gL10n->get('SYS_NAME'),
-            $formValues['org_longname'],
-            array('maxLength' => 60, 'property' => Form::FIELD_REQUIRED)
-        );
-        $formOrganization->addInput(
-            'org_homepage',
-            $gL10n->get('SYS_WEBSITE'),
-            $formValues['org_homepage'],
-            array('maxLength' => 60)
-        );
-        $formOrganization->addInput(
-            'email_administrator',
-            $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
-            $formValues['email_administrator'],
-            array('type' => 'email', 'property' => Form::FIELD_REQUIRED, 'maxLength' => 50, 'helpTextId' => 'SYS_EMAIL_ADMINISTRATOR_DESC')
-        );
-
-        if ($gCurrentOrganization->countAllRecords() > 1) {
-            // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-            if (!$gCurrentOrganization->isParentOrganization()) {
-                $sqlData = array();
-                $sqlData['query'] = 'SELECT org_id, org_longname
-                               FROM ' . TBL_ORGANIZATIONS . '
-                              WHERE org_id <> ? -- $gCurrentOrgId
-                                AND org_org_id_parent IS NULL
-                           ORDER BY org_longname, org_shortname';
-                $sqlData['params'] = array($gCurrentOrgId);
-                $formOrganization->addSelectBoxFromSql(
-                    'org_org_id_parent',
-                    $gL10n->get('ORG_PARENT_ORGANIZATION'),
-                    $gDb,
-                    $sqlData,
-                    array('defaultValue' => $formValues['org_org_id_parent'], 'helpTextId' => 'ORG_PARENT_ORGANIZATION_DESC')
-                );
-            }
-
-            $formOrganization->addCheckbox(
-                'system_organization_select',
-                $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'),
-                (bool)$formValues['system_organization_select'],
-                array('helpTextId' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC')
-            );
-        }
-
-        $html = '<a class="btn btn-secondary" id="add_another_organization" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_dialog')) . '">
-            <i class="bi bi-plus-circle-fill"></i>' . $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION') . '</a>';
-        $formOrganization->addCustomContent('new_organization', $gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextId' => 'ORG_ADD_ORGANIZATION_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
-        $formOrganization->addSubmitButton(
-            'btn_save_organization',
-            $gL10n->get('SYS_SAVE'),
-            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
-        );
-
-        $smarty = $this->getSmartyTemplate();
-        $formOrganization->addToSmarty($smarty);
-        $gCurrentSession->addFormObject($formOrganization);
-        return $smarty->fetch('preferences/preferences.organization.tpl');
-    }
-
-    /**
      * Generates the html of the form from the photos preferences and will return the complete html.
      * @return string Returns the complete html of the form from the photos preferences.
      * @throws \Admidio\Exception
@@ -2179,7 +2087,7 @@ class Preferences extends HtmlPage
 
         $this->addJavascript(
             '
-            var panels = ["Common", "Security", "Organization", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation",
+            var panels = ["Common", "Security", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation",
                 "Announcements", "Contacts", "DocumentsFiles", "Photos", "Guestbook", "GroupsRoles", "CategoryReport", "Messages", "Profile", "Events", "Links"];
 
             for(var i = 0; i < panels.length; i++) {

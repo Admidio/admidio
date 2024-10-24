@@ -1,4 +1,4 @@
-<p class="lead">{$l10n->get('ORG_NEW_ORGANIZATION_DESC')}</p>
+<p class="lead">{$l10n->get('ORG_NEW_ORGANIZATION_DESC')}{$l10n->get('ORG_ADD_ORGANIZATION_DESC')}</p>
 <form {foreach $attributes as $attribute}
         {$attribute@key}="{$attribute}"
     {/foreach}>

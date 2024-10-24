@@ -27,7 +27,6 @@
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Display #VAR1# comment(s) of this guest book entry</string>
   <string name="GBO_WRITE_COMMENT">Leave comment</string>
   <!--Phrases only in installation-->
-  <string name="INS_ADD_ANOTHER_ORGANIZATION">Add another organization</string>
   <string name="INS_ADD_ORGANIZATION">Add organization</string>
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
@@ -186,7 +185,6 @@
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Login automatically</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at their visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
-  <string name="ORG_NEW_ORGANIZATION">New organization</string>
   <string name="ORG_NEW_ORGANIZATION_DESC">Enter the abbreviation, the official name and the email address for the organization you want to add. The email address should be a general one. It will be used as sender address when sending automatic system notifications.</string>
   <string name="ORG_NO_FIELD_CREATED">No organization specific field has been created yet!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>

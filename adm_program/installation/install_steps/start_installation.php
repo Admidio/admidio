@@ -265,7 +265,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'bi-gear-fill\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration/registration.php\', \'bi-card-checklist\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'bi-menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ORGANIZATIONS\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'organization\', \''.FOLDER_MODULES.'/organizations/organizations.php\', \'bi-bank2\', \'SYS_ORGANIZATION\', \'SYS_ORGANIZATION_DESC\')';
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ORGANIZATIONS\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'organization\', \''.FOLDER_MODULES.'/organizations/organizations.php\', \'bi-diagram-3-fill\', \'SYS_ORGANIZATION\', \'SYS_ORGANIZATION_DESC\')';
 $db->query($sql);
 
 // delete session data

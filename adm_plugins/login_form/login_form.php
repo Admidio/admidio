@@ -146,7 +146,7 @@ try {
         );
 
         // show selectbox with all organizations of database
-        if ($gSettingsManager->getBool('system_organization_select')) {
+        if ($gCurrentOrganization->getValue('org_show_org_select')) {
             $sql = 'SELECT org_shortname, org_longname
                   FROM ' . TBL_ORGANIZATIONS . '
               ORDER BY org_longname, org_shortname';

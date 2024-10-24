@@ -128,9 +128,7 @@ try {
             foreach ($formValues as $key => $value) {
                 // Sort out elements that are not stored in adm_preferences here
                 if (!in_array($key, array('save', 'admidio-csrf-token'))) {
-                    if (str_starts_with($key, 'org_')) {
-                        $gCurrentOrganization->setValue($key, $value);
-                    } elseif (str_starts_with($key, 'SYSMAIL_')) {
+                    if (str_starts_with($key, 'SYSMAIL_')) {
                         $text = new TableText($gDb);
                         $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
                         $text->setValue('txt_text', $value);
@@ -145,9 +143,6 @@ try {
                     }
                 }
             }
-
-            // now save all data
-            $gCurrentOrganization->save();
 
             // refresh language if necessary
             if ($gL10n->getLanguage() !== $gSettingsManager->getString('system_language')) {

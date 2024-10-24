@@ -131,7 +131,7 @@ class ModuleLogin
 
         $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);
         $postPassword = ($formValues['usr_password'] ?? $formValues['plg_usr_password']);
-        $postOrgShortName = ($formValues['org_shortname'] ?? $formValues['plg_org_shortname']);
+        $postOrgShortName = ($formValues['org_shortname'] ?? ($formValues['plg_org_shortname'] ?? $gCurrentOrganization->getValue('org_shortname')));
         $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login']);
 
         // Search for username
