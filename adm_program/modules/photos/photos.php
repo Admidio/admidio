@@ -83,7 +83,7 @@ try {
 
         $(".admidio-image-rotate").click(function() {
             imageNr = $(this).data("image");
-            $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php?photo_uuid=' . $getPhotoUuid . '&photo_nr=" + $(this).data("image") + "&job=rotate&direction=" + $(this).data("direction"),
+            $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php?photo_uuid=' . $getPhotoUuid . '&photo_nr=" + $(this).data("image") + "&mode=rotate&direction=" + $(this).data("direction"),
                 {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"},
                 function(data) {
                     if (data === "done") {
@@ -248,7 +248,7 @@ try {
                             <i class="bi bi-arrow-counterclockwise" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ROTATE_PHOTO_LEFT') . '"></i></a>
                         <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                             data-message="' . $gL10n->get('SYS_WANT_DELETE_PHOTO') . '"
-                            data-href="callUrlHideElement(\'div_image_' . $actThumbnail . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                            data-href="callUrlHideElement(\'div_image_' . $actThumbnail . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('mode' => 'delete', 'photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
                 }
 
