@@ -35,6 +35,17 @@ try {
         // create html page object
         $page = new HtmlPage('organizationEdit', $headline);
 
+        $page->addJavascript('
+            $("#btn_save").hide();
+
+            $("input").on("input", function() {
+                $("#btn_save").show("slow");
+            })
+            $("select").on("input", function() {
+                $("#btn_save").show("slow");
+            })
+        ', true);
+
         // show form
         $formOrganization = new Form(
             'organizationEditForm',
@@ -79,18 +90,18 @@ try {
                 $sqlData['params'] = array($gCurrentOrgId);
                 $formOrganization->addSelectBoxFromSql(
                     'org_org_id_parent',
-                    $gL10n->get('ORG_PARENT_ORGANIZATION'),
+                    $gL10n->get('SYS_PARENT_ORGANIZATION'),
                     $gDb,
                     $sqlData,
-                    array('defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'), 'helpTextId' => 'ORG_PARENT_ORGANIZATION_DESC')
+                    array('defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'), 'helpTextId' => 'SYS_PARENT_ORGANIZATION_DESC')
                 );
             }
 
             $formOrganization->addCheckbox(
                 'org_show_org_select',
-                $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'),
+                $gL10n->get('SYS_SHOW_ORGANIZATION_SELECT'),
                 $gCurrentOrganization->getValue('org_show_org_select'),
-                array('helpTextId' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC')
+                array('helpTextId' => 'SYS_SHOW_ORGANIZATION_SELECT_DESC')
             );
         }
         $formOrganization->addSubmitButton(
@@ -98,6 +109,13 @@ try {
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
+
+        // create list with all subordinate organizations of the current organization
+        $sql = 'SELECT org.* FROM ' . TBL_ORGANIZATIONS . ' org
+                 WHERE org_org_id_parent = ? /* $gCurrentOrgId */';
+        $queryParameters = array($gCurrentOrgId);
+        $organizations = $gDb->getArrayFromSql($sql, $queryParameters);
+        $page->assignSmartyVariable('organizationsList', $organizations);
 
         $formOrganization->addToHtmlPage();
         $gCurrentSession->addFormObject($formOrganization);

@@ -208,8 +208,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Kun for brugere der er logget ind</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Administrer generelle organisations indstillinger og modul indstillinger.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisation #VAR1_BOLD# er tilføjet med succes. Det kan nu vælges, når du logger ind.\n\nHvis du har en separat hjemmeside til denne organisation skal du tilføje den inden for config.php på den separate hjemmeside.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Forældre organisation</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Definér forældre organisation her. Forældre organisationer kan f.eks. oprette events og beskeder der så vises i de valgte (børne) organisationer.</string>
+  <string name="SYS_PARENT_ORGANIZATION">Forældre organisation</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Definér forældre organisation her. Forældre organisationer kan f.eks. oprette events og beskeder der så vises i de valgte (børne) organisationer.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Kodeords styrke</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Her kan du specificere hvor sikre og komplekse kodeord som minimum skal være.\nVærdien i parentes indikerer hvor mange forsøg der skal til for at knække koden.\n\n No: risikabelt kodeord (&lt;10^3)\n Lav: Beskyttelse imod automatiserede online angreb. (&lt;10^6)\n Middel: Beskyttelse imod ubegrænsede online angreb.(&lt;10^8)\n Høj: Moderat beskyttelse imod offline hashing angreb. (&lt;10 ^10)\n Meget høj: Stærk beskyttelse imod offline hashing angreb. (&gt;= 10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Ingen</string>
@@ -228,8 +228,8 @@
   <string name="ORG_SEND_NEW_PASSWORD">Send nyt kodeord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Vis opretter og tidspunktet for oprettelsen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Nogle steder vises skaberen og brugeren med den sidste ændring til en post sammen med et tidsstempel. Denne indstilling kan bruges til at bestemme, om denne information overhovedet vises, og om brugeren skal vises med brugernavnet eller med deres for- og efternavn.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
   <string name="SYS_SYSTEM_INFORMATION">Systeminformation</string>
   <string name="ORG_THEME_FOLDER_OPEN">Tema folderen kunne ikke åbnes eller læses.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>

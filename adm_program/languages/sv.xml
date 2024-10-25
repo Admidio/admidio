@@ -208,8 +208,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">För inloggade användare endast</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hantera allmänna organisationspreferenser eller modulpreferenser här.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisation #VAR1_BOLD# har lagts till. Det går nu att välja när du loggar in. \n\nOm du har en separat hemsida för denna organisation, lägg till den i config.php på den separata hemsidan.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Överordnad organisation</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Definiera föräldraorganisation här. Moderorganisationen kan till exempelskapa evenemang och meddelanden som visas i utpekade (dotter)organisationer.</string>
+  <string name="SYS_PARENT_ORGANIZATION">Överordnad organisation</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Definiera föräldraorganisation här. Moderorganisationen kan till exempelskapa evenemang och meddelanden som visas i utpekade (dotter)organisationer.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Lösenordsstyrka</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Här kan du ange hur säkra och komplexa lösenord måste vara åtminstone. \nVärdet inom parentes anger hur många försök som krävs i genomsnitt tills lösenordet bestäms. \n\nNej: riskabelt lösenord (&lt;10^3)\nLåg : Skydd mot angripna onlineattacker. (&lt;10^6)\nMitt: skydd mot obegränsade onlineangrepp. (&lt;10^8)\nHögt: Måttligt skydd mot hash offline. (&lt;10^10)\nMycket högt: Starkt skydd mot hash offline. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Inget</string>
@@ -228,8 +228,8 @@
   <string name="ORG_SEND_NEW_PASSWORD">Skicka nytt lösenord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Visa skaparen och tidsstämpeln för skapelsen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Ett fält är normalt synligt för alla användare. Om den här funktionen inte är vald kan informationen bara ses av användare som har rätt att redigera alla användare. I sin egen profil kan användaren se och redigera data.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Visa organisationsval</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Om flera organisationer lagras i databasen kan inloggningsskärmen visa en markeringsruta med alla tillgängliga organisationer. Användaren kan sedan logga in för att välja en annan organisation (annat än definierat i config.php). Användaren måste dock vara en registrerad medlem i den valda organisationen.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Visa organisationsval</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Om flera organisationer lagras i databasen kan inloggningsskärmen visa en markeringsruta med alla tillgängliga organisationer. Användaren kan sedan logga in för att välja en annan organisation (annat än definierat i config.php). Användaren måste dock vara en registrerad medlem i den valda organisationen.</string>
   <string name="SYS_SYSTEM_INFORMATION">Systeminformation</string>
   <string name="ORG_THEME_FOLDER_OPEN">Temamappen kunde inte öppnas / läsas.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>

@@ -210,8 +210,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Alleen voor ingelogde gebruikers</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">De organisatie #VAR1_BOLD# is toegevoegd. Bij de aanmelding kunt u deze nu kiezen.\n\nAls u voor deze organisatie een afzonderlijke homepage hebt gemaakt, moet u de nieuwe organisatie aan de config.php van deze pagina toevoegen.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Hoofdorganisatie</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Bepaal hier de hoofdorganisatie. Hoofdorganisaties kunnen bijvoorbeeld evenementen en mededelingen aanmaken, die ook worden getoond in de geselecteerde (onderliggende) organisatie.</string>
+  <string name="SYS_PARENT_ORGANIZATION">Hoofdorganisatie</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Bepaal hier de hoofdorganisatie. Hoofdorganisaties kunnen bijvoorbeeld evenementen en mededelingen aanmaken, die ook worden getoond in de geselecteerde (onderliggende) organisatie.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Wachtwoord sterkte</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kunt u aangeven hoe veilig en ingewikkeld wachtwoorden op zijn minst moeten zijn.\nDe waarde tussen haakjes geeft aan hoeveel pogingen gemiddeld vereist zijn totdat het wachtwoord is bepaald.\n\nGeen: riskant wachtwoord. (&lt;10^3)\nLaag: bescherming tegen beperkte online aanvallen. (&lt;10^6)\nMidden: bescherming tegen onbeperkte online aanvallen.(&lt;10^8)\nHoog: matige beveiliging tegen offline hash-aanvallen. (&lt;10^10)\nZeer hoog: sterke bescherming tegen offline hash-aanvallen. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Geen</string>
@@ -232,8 +232,8 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Op sommige plaatsen worden de maker en de gebruiker met de laatste wijziging samen in een record weergegeven met een tijdstempel. Deze instelling kan worden gebruikt om te bepalen of deze informatie überhaupt wordt weergegeven en of de gebruiker moet worden weergegeven met gebruikersnaam of met voor- en achternaam.</string>
   <string name="ORG_SHOW_ALL_USERS">Optioneel alle gebruikers tonen</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">Als deze optie is ingeschakeld, kunnen naast actieve leden van de huidige organisatie optioneel ook voormalige leden en leden van andere organisaties in de ledenadministratie worden getoond. Anders worden alleen actieve leden van de huidige organisatie getoond. Bij het aanmaken van nieuwe leden of het toekennen van registraties blijft het systeem echter zoeken naar bestaande gebruikers in de gehele database van alle organisaties.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Toon organisatie selectie</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Als er meerdere organisaties in de database staan, zal in het inlog scherm een keuzeveld getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (anders dan gedefinieerd in het config.php bestand). Echter, de gebruiker moet een geregistreerd lid zijn van de geselecteerde organisatie.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Toon organisatie selectie</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Als er meerdere organisaties in de database staan, zal in het inlog scherm een keuzeveld getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (anders dan gedefinieerd in het config.php bestand). Echter, de gebruiker moet een geregistreerd lid zijn van de geselecteerde organisatie.</string>
   <string name="SYS_SYSTEM_INFORMATION">Systeeminformatie</string>
   <string name="ORG_THEME_FOLDER_OPEN">De thema-map kan niet geopend en/of gelezen worden.</string>
   <string name="ORG_TIME_FORMAT">Tijd formaat</string>

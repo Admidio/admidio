@@ -209,8 +209,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Solo per gli utenti registrati</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gestisci le preferenze organizzative generali o le preferenze del modulo qui.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">L\'organizzazione #VAR1_BOLD# è stata aggiunta con successo. Essa è ora selezionabile quando viene effettuato l\'accesso.\n\nSe hai previsto una home page diversa per questa organizzazione per favore aggiungila come home page separata nel file config.php.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Organizzazione madre</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Definisci l\'organizzazione madre qui. Le organizzazioni madre sono in grado di creare eventi e annunci, per esempio, che saranno visualizzati nelle organizzazioni (figlie) selezionate.</string>
+  <string name="SYS_PARENT_ORGANIZATION">Organizzazione madre</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Definisci l\'organizzazione madre qui. Le organizzazioni madre sono in grado di creare eventi e annunci, per esempio, che saranno visualizzati nelle organizzazioni (figlie) selezionate.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Sicurezza della password</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Qui è possibile specificare quanto devono essere sicure e complesse le password.\n Il valore tra parentesi indica quanti tentativi sono richiesti in media fino a quando la password è determinata.\n No: password rischiosa (&lt;10^3)\n Basso: protezione contro attacchi online \"throttled\". (&lt;10^6)\n Medio: protezione contro gli attacchi online senza restrizioni.(&lt;10^8)\n Alto: Protezione moderata contro l\'hashing offline. (&lt;10^10)\n Molto alto: Forte protezione contro l\'hashing offline. (= 10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Nessuno</string>
@@ -231,8 +231,8 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Un campo è normalmente visibile a tutti gli utenti. Se questa funzione non è selezionata, i dati possono essere visti solo dagli utenti che hanno i permessi per modificare tutti gli utenti. Per il proprio profilo ogni utente può vedere e modificare i dati.</string>
   <string name="ORG_SHOW_ALL_USERS">Opzionale mostra tutti gli utenti</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">Se questa opzione è abilitata, gli ex membri e i membri di altre organizzazioni saranno visualizzati in aggiunta ai membri attivi dell\'organizzazione corrente. Altrimenti saranno visualizzati solo i membri dell\'organizzazione corrente. Quando si creano nuovi utenti o si assegnano delle registrazioni tutte le organizzazioni saranno comunque controllate rispetto agli utenti esistenti.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Visualizza la selezione dell\'organizzazione</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Dovrebbero esserci diverse organizzazioni presenti nel database, la schermata di accesso può visualizzare un box di selezione con tutte le organizzazioni disponibili. L\'utente può in seguito in fase di accesso selezionare un\'altra organizzazione (un\'altra di quelle definite nel file config.php). Comunque l\'utente deve essere un membro registrato dell\'organizzazione selezionata.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Visualizza la selezione dell\'organizzazione</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Dovrebbero esserci diverse organizzazioni presenti nel database, la schermata di accesso può visualizzare un box di selezione con tutte le organizzazioni disponibili. L\'utente può in seguito in fase di accesso selezionare un\'altra organizzazione (un\'altra di quelle definite nel file config.php). Comunque l\'utente deve essere un membro registrato dell\'organizzazione selezionata.</string>
   <string name="SYS_SYSTEM_INFORMATION">Informazioni di sistema</string>
   <string name="ORG_THEME_FOLDER_OPEN">La cartella Themes non può essere aperta/letta.</string>
   <string name="ORG_TIME_FORMAT">Formato ora</string>

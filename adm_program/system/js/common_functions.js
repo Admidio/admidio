@@ -339,6 +339,7 @@ function formSubmit(event) {
                         submitButtonIcon.attr("class", iconClass);
                         setTimeout(function () {
                             $("#admidio-modal").modal("hide");
+                            $(".form-alert").hide("slow");
                         }, 2500);
                     }
                 } else {

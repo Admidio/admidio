@@ -193,8 +193,6 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged in users only</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Manage general organization preferences or module preferences here.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a separate homepage for this organization please add it within the config.php of the separate homepage.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Parent organization</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Define parent organization here. Parent organizations are able to create events and announcements for example which will be displayed in selected (child) organization.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Password strength</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Here you can specify how safe and complex passwords must be at least.\nThe value in brackets indicates how many attempts are required on average until the password is determined.\n\n No: risky password (&lt;10^3)\n Low: Protection against throttled online attacks. (&lt;10^6)\n Middle: protection against unrestricted online attacks.(&lt;10^8)\n High: Moderate protection against offline hashing. (&lt;10 ^10)\n Very high: Strong protection against offline hashing. (&gt;= 10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">None</string>
@@ -213,8 +211,6 @@
   <string name="ORG_SEND_NEW_PASSWORD">Send new password</string>
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">In some places the creator and the user with the last change to a record is displayed together with a timestamp. This setting can be used to determine whether this information is displayed at all and whether the user should be displayed with the user name or with their first and last name.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes folder could not be opened/read.</string>
   <string name="ORG_TIME_FORMAT">Time format</string>
   <string name="ORG_TIME_FORMAT_DESC">Format complies with PHP function #VAR1#. (default: H:i)</string>
@@ -977,6 +973,8 @@
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
   <string name="SYS_PARENT_ALBUM">Parent album</string>
   <string name="SYS_PARENT_ALBUM_DESC">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest level then select #VAR1_BOLD#.</string>
+  <string name="SYS_PARENT_ORGANIZATION">Parent organization</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Define parent organization here. Parent organizations are able to create events and announcements for example which will be displayed in selected (child) organization.</string>
   <string name="SYS_PARTICIPANTS">Members</string>
   <string name="SYS_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="SYS_PARTICIPATE">Participate</string>
@@ -1255,6 +1253,8 @@
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">If the address is stored in the profile, two links to Google Maps are displayed next to the address. The user\'s place of residence is linked and the route from his own place of residence to the place of residence of the user displayed is linked. When accessing the links, the following profile information will be transmitted to Google: street, postcode, city, and country. (Default: no)</string>
   <string name="SYS_SHOW_MAP">Show map</string>
   <string name="SYS_SHOW_MEMBER_LIST">Show member list</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="SYS_SHOW_PARTICIPANTS">Show participants</string>
   <string name="SYS_SHOW_PERMISSIONS">Show permissions</string>
   <string name="SYS_SHOW_PROFILE">Show profile</string>
@@ -1302,6 +1302,7 @@
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUBJECT">Subject</string>
+  <string name="SYS_SUBORDINATE_ORGANIZATIONS">Subordinate organizations</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Switch to calendar management</string>
