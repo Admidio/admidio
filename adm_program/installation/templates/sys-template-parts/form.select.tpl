@@ -1,6 +1,6 @@
 <div id="{$data.id}_group" class="admidio-form-group
     {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
-    {if $formType eq "navbar"} form-floating{else} mb-4{/if}
+    {if $formType eq "navbar"} form-floating{else} mb-3{/if}
     {if $data.property eq 1} admidio-form-group-required{/if}">
     {if $formType neq "navbar"}
         <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
@@ -20,7 +20,7 @@
                 <optgroup label="{$optionvar["group"]}">
                 {assign "group" "{$optionvar["group"]}"}
             {/if}
-            <option value="{$optionvar["id"]}" {if $data.defaultValue eq $optionvar["id"]}selected="selected"{/if}>{$optionvar["value"]}</option>
+            <option value="{$optionvar["id"]}" {if $data.defaultValue eq $optionvar["id"] || $data.defaultValue eq $optionvar["value"]}selected="selected"{/if}>{$optionvar["value"]}</option>
         {/foreach}
         {if $group neq ""}</optgroup>{/if}
     </select>

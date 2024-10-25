@@ -1,6 +1,6 @@
 <div class="admidio-form-group admidio-form-custom-content
     {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
-    {if $formType neq "navbar"} mb-4{/if}">
+    {if $formType neq "navbar"} mb-3{/if}">
     <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
         {include file="sys-template-parts/parts/form.part.icon.tpl"}
         {$data.label}

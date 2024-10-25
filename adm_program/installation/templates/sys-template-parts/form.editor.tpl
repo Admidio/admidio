@@ -1,4 +1,4 @@
-<div id="{$data.id}_group" class="form-group-editor admidio-form-group mb-4
+<div id="{$data.id}_group" class="form-group-editor admidio-form-group mb-3
 {if $data.property eq 1} admidio-form-group-required{/if}">
     <label for="{$data.id}" class="form-label">
         {include file="sys-template-parts/parts/form.part.icon.tpl"}

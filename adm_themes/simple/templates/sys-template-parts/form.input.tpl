@@ -7,7 +7,7 @@
 {else}
     <div id="{$data.id}_group" class="admidio-form-group
         {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
-        {if $formType eq "navbar"} form-floating{else} mb-4{/if}
+        {if $formType eq "navbar"} form-floating{else} mb-3{/if}
         {if $data.property eq 1} admidio-form-group-required{/if}
         {if $data.type == "datetime"} row{/if}">
 

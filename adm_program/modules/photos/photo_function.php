@@ -10,11 +10,11 @@
  * Parameters:
  *
  * photo_uuid: UUID of the photo album
- * job:      delete - Delete the photo
- *           rotate - Rotate the photo
- * direction: left  - Rotate image to the left
- *            right - Rotate image to the right
- * photo_nr:  Number of the photo that should be shown
+ * mode:       delete - Delete the photo
+ *             rotate - Rotate the photo
+ * direction:  left  - Rotate image to the left
+ *             right - Rotate image to the right
+ * photo_nr:   Number of the photo that should be shown
  ***********************************************************************************************
  */
 use Admidio\Exception;
@@ -25,7 +25,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 try {
     // Initialize and check the parameters
     $getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'uuid', array('requireValue' => true));
-    $getJob = admFuncVariableIsValid($_GET, 'job', 'string', array('requireValue' => true, 'validValues' => array('delete', 'rotate')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('delete', 'rotate')));
     $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireValue' => true));
     $getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('validValues' => array('left', 'right')));
 
@@ -141,7 +141,7 @@ try {
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
     // Rotate the photo by 90°
-    if ($getJob === 'rotate') {
+    if ($getMode === 'rotate') {
         if ($getDirection !== '') {
             deleteThumbnail($photoAlbum, $getPhotoNr);
 
@@ -157,7 +157,7 @@ try {
         echo 'done';
         exit();
     } // delete photo from filesystem and update photo album
-    elseif ($getJob === 'delete') {
+    elseif ($getMode === 'delete') {
         deletePhoto($photoAlbum, $getPhotoNr);
 
         $_SESSION['photo_album'] = $photoAlbum;
