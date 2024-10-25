@@ -362,12 +362,6 @@ class Organization extends TableAccess
         $organizationSettings->set('events_list_configuration', $participantList->getValue('lst_id'));
         $organizationSettings->set('contacts_list_configuration', $contactsList->getValue('lst_id'));
         $organizationSettings->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
-
-        // if there are more organizations than show the organization select at login
-        if ($this->countAllRecords() > 1) {
-            $this->setValue('org_show_org_select', true);
-            $this->save();
-        }
     }
 
     /**

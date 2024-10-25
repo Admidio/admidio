@@ -236,13 +236,14 @@ try {
             $newOrganization->setValue('org_longname', $formValues['orgaLongName']);
             $newOrganization->setValue('org_shortname', $formValues['orgaShortName']);
             $newOrganization->setValue('org_homepage', ADMIDIO_URL);
+            $newOrganization->setValue('org_email_administrator', $formValues['orgaEmail']);
+            $newOrganization->setValue('org_show_org_select', true);
             $newOrganization->save();
 
             // write all preferences from preferences.php in table adm_preferences
             require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
             // set some specific preferences whose values came from user input of the installation wizard
-            $defaultOrgPreferences['email_administrator'] = $formValues['orgaEmail'];
             $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
 
             // create all necessary data for this organization
@@ -256,10 +257,8 @@ try {
 
             // if installation of second organization than show organization select at login
             if ($gCurrentOrganization->countAllRecords() === 2) {
-                $sql = 'UPDATE ' . TBL_PREFERENCES . '
-                       SET prf_value = 1
-                     WHERE prf_name = \'system_organization_select\'';
-                $gDb->queryPrepared($sql);
+                $gCurrentOrganization->setValue('org_show_org_select', true);
+                $gCurrentOrganization->save();
             }
 
             $gDb->endTransaction();

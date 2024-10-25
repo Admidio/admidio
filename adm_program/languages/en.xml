@@ -574,7 +574,6 @@
   <string name="SYS_EDITED_BY">Last edited by</string>
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Email Administrator</string>
-  <string name="SYS_EMAIL_ADMINISTRATOR_DESC">The e-mail address of an administrator is displayed in the system whenever an unexpected event has occurred. There is a hint that you should contact an administrator.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was changed</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">The profile data of the user #VAR1# #VAR2# (login: #VAR3#) was changed by #VAR4#.</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was created</string>

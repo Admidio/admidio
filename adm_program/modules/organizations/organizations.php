@@ -64,7 +64,7 @@ try {
             'org_email_administrator',
             $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
             $gCurrentOrganization->getValue('org_email_administrator'),
-            array('type' => 'email', 'property' => Form::FIELD_REQUIRED, 'maxLength' => 254, 'helpTextId' => 'SYS_EMAIL_ADMINISTRATOR_DESC')
+            array('type' => 'email', 'property' => Form::FIELD_REQUIRED, 'maxLength' => 254)
         );
 
         if ($gCurrentOrganization->countAllRecords() > 1) {
@@ -82,7 +82,7 @@ try {
                     $gL10n->get('ORG_PARENT_ORGANIZATION'),
                     $gDb,
                     $sqlData,
-                    array('defaultValue' => $formValues['org_org_id_parent'], 'helpTextId' => 'ORG_PARENT_ORGANIZATION_DESC')
+                    array('defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'), 'helpTextId' => 'ORG_PARENT_ORGANIZATION_DESC')
                 );
             }
 
