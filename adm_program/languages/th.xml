@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">แสดง ความคิดเห็น</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">เพิ่ม องค์กร อื่น</string>
-  <string name="INS_ADD_ORGANIZATION">เพิ่ม องค์กร</string>
+  <string name="SYS_ADD_ORGANIZATION">เพิ่ม องค์กร</string>
   <string name="INS_ADDIDIONAL_DATA">ข้อมูลเพิ่มเติม</string>
   <string name="INS_ADDRESS_LIST">รายการที่อยู่</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">ข้อมูลของ ผู้ดูแลระบบ ไม่สมบูรณ์!</string>

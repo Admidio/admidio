@@ -5,7 +5,7 @@
   <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">部门的最新留言条目 #VAR1#</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">添加其他部门</string>
-  <string name="INS_ADD_ORGANIZATION">添加部门</string>
+  <string name="SYS_ADD_ORGANIZATION">添加部门</string>
   <string name="INS_DATA_OF_ORGANIZATION">部门的数据</string>
   <string name="INS_DESCRIPTION_MEMBER">所有部门成员</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">部门 “#VAR1_BOLD#” 已经存在，请选择其他部门名称。</string>

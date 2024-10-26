@@ -30,7 +30,7 @@ try {
 
     if($getMode === '') {
         $headline = $gL10n->get('SYS_ORGANIZATION');
-        $gNavigation->addUrl(CURRENT_URL, $headline);
+        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-diagram-3-fill');
 
         // create html page object
         $page = new HtmlPage('organizationEdit', $headline);

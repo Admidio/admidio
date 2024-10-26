@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Jätä kommentti</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Lisää toinen organisaatio</string>
-  <string name="INS_ADD_ORGANIZATION">Lisää organisaatio</string>
+  <string name="SYS_ADD_ORGANIZATION">Lisää organisaatio</string>
   <string name="INS_ADDIDIONAL_DATA">Lisätietoja</string>
   <string name="INS_ADDRESS_LIST">Osoiteluettelo</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Järjestelmänvalvojan tiedot ovat puutteelliset!</string>

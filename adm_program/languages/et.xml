@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Jäta kommentaar</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Lisage teine organisatsioon</string>
-  <string name="INS_ADD_ORGANIZATION">Lisage organisatsioon</string>
+  <string name="SYS_ADD_ORGANIZATION">Lisage organisatsioon</string>
   <string name="INS_ADDIDIONAL_DATA">Lisainformatsioon</string>
   <string name="INS_ADDRESS_LIST">Aadresside loend</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administraatori andmed on puudulikud!</string>

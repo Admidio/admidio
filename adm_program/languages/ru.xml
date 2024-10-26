@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Оставить комментарий</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Добавить другую организацию</string>
-  <string name="INS_ADD_ORGANIZATION">Добавить организацию</string>
+  <string name="SYS_ADD_ORGANIZATION">Добавить организацию</string>
   <string name="INS_ADDIDIONAL_DATA">Дополнительная информация</string>
   <string name="INS_ADDRESS_LIST">Список адресов</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Информация администратора неполная!</string>

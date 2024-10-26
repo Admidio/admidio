@@ -3,7 +3,7 @@
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbake til gjesteboken</string>
   <string name="GBO_COMMENTS4ALL">Tillat anonyme kommentarer</string>
-  <string name="INS_ADD_ORGANIZATION">Legg til organisasjon</string>
+  <string name="SYS_ADD_ORGANIZATION">Legg til organisasjon</string>
   <string name="INS_ADDIDIONAL_DATA">Tilleggsinformasjon</string>
   <string name="INS_ADDRESS_LIST">Adresseliste</string>
   <string name="INS_CONTINUE_INSTALLATION">Fortsett installesjon</string>

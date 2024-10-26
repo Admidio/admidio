@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Skriv kommentar</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Tilføj en anden organisation</string>
-  <string name="INS_ADD_ORGANIZATION">Tilføj organisation</string>
+  <string name="SYS_ADD_ORGANIZATION">Tilføj organisation</string>
   <string name="INS_ADDIDIONAL_DATA">Yderligere information</string>
   <string name="INS_ADDRESS_LIST">Adresseliste</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administrators information er ikke fyldestgørende!</string>

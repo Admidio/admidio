@@ -164,7 +164,7 @@ try {
 
         // show welcome dialog for new organization
         case 'new_org_dialog':
-            $headline = $gL10n->get('INS_ADD_ORGANIZATION');
+            $headline = $gL10n->get('SYS_ADD_ORGANIZATION');
 
             // add current url to navigation stack
             $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -189,13 +189,13 @@ try {
                 'orgaLongName',
                 $gL10n->get('SYS_NAME'),
                 '',
-                array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+                array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
             );
             $form->addInput(
                 'orgaEmail',
                 $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
                 '',
-                array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+                array('type' => 'email', 'maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
             );
             $form->addSubmitButton(
                 'btn_forward',
@@ -238,6 +238,7 @@ try {
             $newOrganization->setValue('org_homepage', ADMIDIO_URL);
             $newOrganization->setValue('org_email_administrator', $formValues['orgaEmail']);
             $newOrganization->setValue('org_show_org_select', true);
+            $newOrganization->setValue('org_org_id_parent', $gCurrentOrgId);
             $newOrganization->save();
 
             // write all preferences from preferences.php in table adm_preferences
@@ -272,7 +273,7 @@ try {
 
         // Show success dialog if new organization was created
         case 'new_org_create_success':
-            $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php');
+            $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php');
             $gMessage->show($gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_SESSION['orgaLongName'])), $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
             break;
 

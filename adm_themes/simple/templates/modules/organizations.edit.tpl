@@ -21,6 +21,7 @@
     <div class="card-header">{$l10n->get('SYS_SUBORDINATE_ORGANIZATIONS')}</div>
     <div class="card-body">
         <p class="lead">{$l10n->get('ORG_ADD_ORGANIZATION_DESC')}</p>
+        <p><a class="btn btn-primary" href="{$urlAdmidio}/adm_program/modules/preferences/preferences.php?mode=new_org_dialog"><i class="bi bi-plus-circle-fill"></i>{$l10n->get('SYS_ADD_ORGANIZATION')}</a></p>
 
         {if count($organizationsList) > 0}
             <table id="admOrganizationsTable" class="table table-hover" width="100%" style="width: 100%;">

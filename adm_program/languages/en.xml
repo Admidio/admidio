@@ -27,7 +27,6 @@
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Display #VAR1# comment(s) of this guest book entry</string>
   <string name="GBO_WRITE_COMMENT">Leave comment</string>
   <!--Phrases only in installation-->
-  <string name="INS_ADD_ORGANIZATION">Add organization</string>
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">An update can only be performed by an administrator. Please define the administrator credentials.</string>
@@ -242,6 +241,7 @@
   <string name="SYS_ADD_COLUMN">Add column</string>
   <string name="SYS_ADD_COLUMNS_DESC">Assign any number of columns corresponding to profile fields in the table below. In addition, you can specify the default sorting and add conditions under which the respective members are to be filtered.</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Add event to calendar</string>
+  <string name="SYS_ADD_ORGANIZATION">Add organization</string>
   <string name="SYS_ADD_RECIPIENTS">Add recipient</string>
   <string name="SYS_ADD_TO_DATABASE">Add to database</string>
   <string name="SYS_ADDRESS">Address</string>

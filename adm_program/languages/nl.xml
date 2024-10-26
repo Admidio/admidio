@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Plaats reactie</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Voeg andere organisatie toe</string>
-  <string name="INS_ADD_ORGANIZATION">Voeg organisatie toe</string>
+  <string name="SYS_ADD_ORGANIZATION">Voeg organisatie toe</string>
   <string name="INS_ADDIDIONAL_DATA">Extra informatie</string>
   <string name="INS_ADDRESS_LIST">Adreslijst</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Informatie beheerder niet compleet!</string>

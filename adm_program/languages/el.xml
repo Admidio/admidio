@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Αφήστε σχόλιο</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Προσθήκη άλλου συλλόγου</string>
-  <string name="INS_ADD_ORGANIZATION">Προσθήκη συλλόγου</string>
+  <string name="SYS_ADD_ORGANIZATION">Προσθήκη συλλόγου</string>
   <string name="INS_ADDIDIONAL_DATA">Επιπλέον πληροφορίες</string>
   <string name="INS_ADDRESS_LIST">Λίστα διευθύνσεων</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Τα στοιχεία του διαχειριστή είναι ελλιπή!</string>

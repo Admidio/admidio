@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Lascia commento</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Aggiungi un\'altra organizzazione</string>
-  <string name="INS_ADD_ORGANIZATION">Aggiungi organizzazione</string>
+  <string name="SYS_ADD_ORGANIZATION">Aggiungi organizzazione</string>
   <string name="INS_ADDIDIONAL_DATA">Informazioni aggiuntive</string>
   <string name="INS_ADDRESS_LIST">Elenco indirizzi</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Le informazioni sull\'Amministratore sono incomplete!</string>
