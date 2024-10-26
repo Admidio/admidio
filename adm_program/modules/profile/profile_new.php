@@ -387,7 +387,7 @@ try {
 
         // write all profile fields to the user object
         foreach ($formValues as $key => $value) {
-            if (strpos($key, 'usr_') !== 0) {
+            if (strpos($key, 'usr_') !== 0 && !in_array($key, array('password_confirm', 'reg_org_id', 'captcha_code'))) {
                 $user->setValue($key, $value);
             }
         }
@@ -416,11 +416,6 @@ try {
         // if registration, then still fill the corresponding fields
         if (!$gValidLogin) {
             $user->setPassword($_POST['usr_password']);
-
-            // At user registration with activated captcha check the captcha input
-            if ($gSettingsManager->getBool('registration_enable_captcha')) {
-                FormValidation::checkCaptcha($_POST['captcha_code']);
-            }
         }
 
         // ------------------------------------------------------------
