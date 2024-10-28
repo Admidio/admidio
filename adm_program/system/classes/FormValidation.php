@@ -15,7 +15,7 @@ use Admidio\Exception;
  * // validate the captcha code
  * try
  * {
- *     FormValidation::checkCaptcha($_POST['captcha_code']);
+ *     FormValidation::checkCaptcha($_POST['admCaptchaCode']);
  * }
  * catch(Exception $e)
  * {

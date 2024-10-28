@@ -345,6 +345,10 @@ function formSubmit(event) {
                     self.location.href = forwardUrl;
                 }
             } else {
+                if ($("#admCaptcha").length > 0) {
+                    $("#admCaptcha").attr("src", gRootPath + "/adm_program/libs/securimage/securimage_show.php?" + Math.random());
+                    $("#admCaptchaCode").val("");
+                }
                 if (returnMessage.length == 0) {
                     returnMessage = "Error: Undefined error occurred!";
                 }

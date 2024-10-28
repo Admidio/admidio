@@ -337,7 +337,7 @@ try {
 
         // if captchas are enabled then visitors of the website must resolve this
         if (!$gValidLogin && $gSettingsManager->getBool('registration_enable_captcha')) {
-            $form->addCaptcha('captcha_code');
+            $form->addCaptcha('admCaptchaCode');
         }
 
         if (!$gValidLogin) {
@@ -387,7 +387,7 @@ try {
 
         // write all profile fields to the user object
         foreach ($formValues as $key => $value) {
-            if (strpos($key, 'usr_') !== 0 && !in_array($key, array('password_confirm', 'reg_org_id', 'captcha_code'))) {
+            if (strpos($key, 'usr_') !== 0 && !in_array($key, array('password_confirm', 'reg_org_id', 'admCaptchaCode'))) {
                 $user->setValue($key, $value);
             }
         }

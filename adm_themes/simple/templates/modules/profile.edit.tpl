@@ -34,11 +34,11 @@
     {/foreach}
     </div></div>
 
-    {if {array_key_exists array=$elements key='captcha_code'}}
+    {if {array_key_exists array=$elements key='admCaptchaCode'}}
         <div class="card admidio-field-group">
             <div class="card-header">{$l10n->get('SYS_CONFIRMATION_OF_INPUT')}</div>
             <div class="card-body">
-                {include 'sys-template-parts/form.captcha.tpl' data=$elements['captcha_code']}
+                {include 'sys-template-parts/form.captcha.tpl' data=$elements['admCaptchaCode']}
             </div>
         </div>
     {/if}

@@ -437,7 +437,7 @@ try {
         if (count($list) === 0) {
             throw new Exception('SYS_NO_ROLES_AND_USERS');
         }
-        
+
         $form->addSelectBox(
             'msg_to',
             $gL10n->get('SYS_TO'),
@@ -571,7 +571,7 @@ try {
 
         // if captchas are enabled then visitors of the website must resolve this
         if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
-            $form->addCaptcha('captcha_code');
+            $form->addCaptcha('admCaptchaCode');
         }
 
         $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
