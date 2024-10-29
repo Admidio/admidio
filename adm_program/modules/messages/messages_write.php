@@ -571,7 +571,7 @@ try {
 
         // if captchas are enabled then visitors of the website must resolve this
         if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
-            $form->addCaptcha('admCaptchaCode');
+            $form->addCaptcha('adm_captcha_code');
         }
 
         $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));

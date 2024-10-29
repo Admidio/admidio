@@ -45,11 +45,11 @@
             {/if}
         </div>
     </div>
-    {if {array_key_exists array=$elements key='admCaptchaCode'}}
+    {if {array_key_exists array=$elements key='adm_captcha_code'}}
         <div class="card admidio-field-group">
             <div class="card-header">{$l10n->get('SYS_CONFIRMATION_OF_INPUT')}</div>
             <div class="card-body">
-                {include 'sys-template-parts/form.captcha.tpl' data=$elements['admCaptchaCode']}
+                {include 'sys-template-parts/form.captcha.tpl' data=$elements['adm_captcha_code']}
             </div>
         </div>
     {/if}
