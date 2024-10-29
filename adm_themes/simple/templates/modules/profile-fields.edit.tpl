@@ -9,7 +9,7 @@
         <div class="card-body">
             {include 'sys-template-parts/form.input.tpl' data=$elements['usf_name']}
             {if {array_key_exists array=$elements key='usf_name_intern'}}
-                {include 'sys-template-parts/form.select.tpl' data=$elements['usf_name_intern']}
+                {include 'sys-template-parts/form.input.tpl' data=$elements['usf_name_intern']}
             {/if}
             {if $systemField == 1}
                 {include 'sys-template-parts/form.input.tpl' data=$elements['usf_cat_id']}

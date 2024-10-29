@@ -79,7 +79,7 @@ try {
 
     // show form
     $form = new Form(
-        'profile_fields_edit_form',
+        'adm_profile_fields_edit_form',
         'modules/profile-fields.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('uuid' => $getUsfUuid, 'mode' => 'edit')),
         $page
