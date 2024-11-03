@@ -91,7 +91,7 @@ try {
         '&nbsp;',
         $gL10n->get('ORG_DATATYPE'),
         '<i class="bi bi-eye-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('ORG_FIELD_NOT_HIDDEN') . '"></i>',
-        '<i class="bi bi-key-fill" data-bs-toggle="tooltip" data-html="true" title="' . $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))) . '"></i>',
+        '<i class="bi bi-key-fill" data-bs-toggle="tooltip" data-bs-html="true" title="' . $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))) . '"></i>',
         '<i class="bi bi-card-checklist" data-bs-toggle="tooltip" title="' . $gL10n->get('ORG_FIELD_REGISTRATION') . '"></i>',
         $gL10n->get('SYS_REQUIRED_INPUT'),
         $gL10n->get('SYS_DEFAULT_VALUE'),
@@ -135,7 +135,7 @@ try {
         }
 
         if ($userField->getValue('usf_disabled') == 1) {
-            $disable = '<i class="bi bi-key-fill" data-bs-toggle="tooltip" data-html="true" title="' . $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))) . '"></i>';
+            $disable = '<i class="bi bi-key-fill" data-bs-toggle="tooltip" data-bs-html="true" title="' . $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))) . '"></i>';
         } else {
             $disable = '<i class="bi bi-key-fill admidio-opacity-reduced" data-bs-toggle="tooltip" title="' . $gL10n->get('ORG_FIELD_NOT_DISABLED') . '"></i>';
         }
