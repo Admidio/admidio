@@ -22,8 +22,8 @@ use Admidio\Exception;
 use Admidio\UserInterface\Organizations;
 
 try {
-    require_once(__DIR__ . '/../../system/common.php');
-    require(__DIR__ . '/../../system/login_valid.php');
+    require_once(__DIR__ . '/../system/common.php');
+    require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'edit', 'validValues' => array('edit', 'new_sub', 'save', 'create', 'create_success', 'delete')));
@@ -77,13 +77,13 @@ try {
 
         echo json_encode(array(
             'status' => 'success',
-            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php', array('mode' => 'create_success'))
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations.php', array('mode' => 'create_success'))
         ));
     } elseif ($getMode === 'create_success') {
         // Show dialog if organization was successfully added
         $subOrganization = new Organization($gDb);
         $subOrganization->readDataByUuid($getOrganizationUUID);
-        $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php');
+        $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations.php');
         $gMessage->show($gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_SESSION['organizationLongName'])), $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token

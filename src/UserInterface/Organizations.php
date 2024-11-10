@@ -46,7 +46,7 @@ class Organizations extends HtmlPage
         $formOrganization = new Form(
             'adm_organization_edit_form',
             'modules/organizations.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php', array('mode' => 'save')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations.php', array('mode' => 'save')),
             $this
         );
         $formOrganization->addInput(
@@ -128,7 +128,7 @@ class Organizations extends HtmlPage
         $form = new Form(
             'adm_new_sub_organization_form',
             'modules/organizations.new.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php', array('mode' => 'create')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations.php', array('mode' => 'create')),
             $this
         );
         $form->addInput(
