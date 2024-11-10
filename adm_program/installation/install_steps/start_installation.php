@@ -80,6 +80,7 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.'
              , (\'MODULE\', \'SYS_CONTACTS\',        \'CONTACTS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MESSAGES\',        \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MENU\',            \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_ORGANIZATION\',    \'ORGANIZATIONS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_PHOTOS\',          \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_SETTINGS\',        \'PREFERENCES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_PROFILE\',         \'PROFILE\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -184,6 +185,7 @@ $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
 $gCurrentOrganization->setValue('org_longname', $_SESSION['orga_longname']);
 $gCurrentOrganization->setValue('org_shortname', $_SESSION['orga_shortname']);
 $gCurrentOrganization->setValue('org_homepage', ADMIDIO_URL);
+$gCurrentOrganization->setValue('org_email_administrator', $_SESSION['orga_email']);
 $gCurrentOrganization->save();
 $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 
@@ -200,8 +202,7 @@ $adminUsrId = $administrator->getValue('usr_id');
 require_once(ADMIDIO_PATH . '/adm_program/installation/db_scripts/preferences.php');
 
 // set some specific preferences whose values came from user input of the installation wizard
-$defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];
-$defaultOrgPreferences['system_language']     = $language;
+$defaultOrgPreferences['system_language'] = $language;
 
 // calculate the best cost value for your server performance
 $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
@@ -263,7 +264,8 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'bi-book-half\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'bi-gear-fill\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration/registration.php\', \'bi-card-checklist\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'bi-menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'bi-menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ORGANIZATIONS\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'organization\', \''.FOLDER_MODULES.'/organizations.php\', \'bi-diagram-3-fill\', \'SYS_ORGANIZATION\', \'SYS_ORGANIZATION_DESC\')';
 $db->query($sql);
 
 // delete session data

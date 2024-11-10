@@ -3,7 +3,7 @@
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbake til gjesteboken</string>
   <string name="GBO_COMMENTS4ALL">Tillat anonyme kommentarer</string>
-  <string name="INS_ADD_ORGANIZATION">Legg til organisasjon</string>
+  <string name="SYS_ADD_ORGANIZATION">Legg til organisasjon</string>
   <string name="INS_ADDIDIONAL_DATA">Tilleggsinformasjon</string>
   <string name="INS_ADDRESS_LIST">Adresseliste</string>
   <string name="INS_CONTINUE_INSTALLATION">Fortsett installesjon</string>
@@ -42,7 +42,7 @@
   <string name="ORG_REGISTERED_USERS">Innlogget bruker</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Søk etter lignende navn</string>
   <string name="ORG_SECONDS">Sekunder</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis flere organisasjoner er satt opp i databasen, kan de bli vist en valgboks i påloggingsdialogen med alle organisasjoner. Brukeren kan da velge en annen organisasjon (som satt i config.php) å logge seg på. Imidlertid må brukeren også være registrert i denne organisasjonen.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Hvis flere organisasjoner er satt opp i databasen, kan de bli vist en valgboks i påloggingsdialogen med alle organisasjoner. Brukeren kan da velge en annen organisasjon (som satt i config.php) å logge seg på. Imidlertid må brukeren også være registrert i denne organisasjonen.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
   <string name="ORG_TIMEZONE">Tidssone</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Organisasjonsnavn</string>

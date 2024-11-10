@@ -67,7 +67,7 @@ class ModuleLogin
             $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         } else {
             // show link to send mail with local mail-client to administrator
-            $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:'.$gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+            $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:' . $gCurrentOrganization->getValue('org_email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
 
         // show form
@@ -131,7 +131,7 @@ class ModuleLogin
 
         $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);
         $postPassword = ($formValues['usr_password'] ?? $formValues['plg_usr_password']);
-        $postOrgShortName = ($formValues['org_shortname'] ?? $formValues['plg_org_shortname']);
+        $postOrgShortName = ($formValues['org_shortname'] ?? ($formValues['plg_org_shortname'] ?? $gCurrentOrganization->getValue('org_shortname')));
         $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login']);
 
         // Search for username

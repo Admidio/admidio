@@ -6,7 +6,7 @@
         {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['usr_login_name']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['usr_password']}
-        {if $settings->getBool('system_organization_select')}
+        {if $currentOrganization->getValue('org_show_org_select')}
             {include 'sys-template-parts/form.select.tpl' data=$elements['org_shortname']}
         {/if}
         {if $settings->getBool('enable_auto_login')}

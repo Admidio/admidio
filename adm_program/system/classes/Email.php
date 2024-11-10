@@ -654,7 +654,7 @@ class Email extends PHPMailer
      */
     public function sendEmail()
     {
-        global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n, $gDisableEmailSending;
+        global $gSettingsManager, $gCurrentOrganization, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n, $gDisableEmailSending;
 
         $errorMessage = '';
         $errorRecipients = array();
@@ -751,7 +751,7 @@ class Email extends PHPMailer
                         } elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2
                         || (!$gValidLogin && (int) $gSettingsManager->get('mail_recipients_with_roles') === 1)) {
                             // fill recipient with administrators address to prevent problems with provider
-                            $this->addAddress($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+                            $this->addAddress($gCurrentOrganization->getValue('org_email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
                         }
 
                         // add all recipients as bcc to the mail
@@ -802,7 +802,7 @@ class Email extends PHPMailer
 
             // Set Sender
             if ($gCurrentUser->getValue('EMAIL') === '') {
-                $this->setSender($gSettingsManager->getString('email_administrator'));
+                $this->setSender($gCurrentOrganization->getValue('org_email_administrator'));
             } else {
                 $this->setSender($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
             }
@@ -822,7 +822,7 @@ class Email extends PHPMailer
 
             // if something went wrong then throw an exception with the error message
             if ($returnCode !== true) {
-                throw new \Admidio\Exception('SYS_EMAIL_NOT_SEND', array($gSettingsManager->getString('email_administrator'), $returnCode));
+                throw new \Admidio\Exception('SYS_EMAIL_NOT_SEND', array($gCurrentOrganization->getValue('org_email_administrator'), $returnCode));
             }
 
             return true;

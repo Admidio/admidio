@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Hozzászólás</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Új szervezet hozzáadása</string>
-  <string name="INS_ADD_ORGANIZATION">Szervezet hozzáadása</string>
+  <string name="SYS_ADD_ORGANIZATION">Szervezet hozzáadása</string>
   <string name="INS_ADDIDIONAL_DATA">További információk</string>
   <string name="INS_ADDRESS_LIST">Címjegyzék</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Az adminisztrátor adatai hiányosak!</string>
@@ -212,7 +212,7 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES">Hasonló nevek keresése</string>
   <string name="ORG_SECONDS">másodpercek</string>
   <string name="ORG_SEND_NEW_PASSWORD">Új jelszó küldése</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Szervezetkiválasztás mutatása</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Szervezetkiválasztás mutatása</string>
   <string name="SYS_SYSTEM_INFORMATION">Rendszerinformációk</string>
   <string name="ORG_TIME_FORMAT">Időformátum</string>
   <string name="ORG_TIMEZONE">Időzóna</string>

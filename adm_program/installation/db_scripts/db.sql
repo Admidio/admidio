@@ -422,7 +422,7 @@ CREATE TABLE %PREFIX%_messages
     msg_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     msg_uuid                    varchar(36)         NOT NULL,
     msg_type                    varchar(10)         NOT NULL,
-    msg_subject                 varchar(256)        NOT NULL,
+    msg_subject                 varchar(255)        NOT NULL,
     msg_usr_id_sender           integer unsigned    NOT NULL,
     msg_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     msg_read                    smallint            NOT NULL    DEFAULT 0,
@@ -442,8 +442,8 @@ CREATE TABLE %PREFIX%_messages_attachments
     msa_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     msa_uuid                    varchar(36)         NOT NULL,
     msa_msg_id                  integer unsigned    NOT NULL,
-    msa_file_name               varchar(256)        NOT NULL,
-    msa_original_file_name      varchar(256)        NOT NULL,
+    msa_file_name               varchar(255)        NOT NULL,
+    msa_original_file_name      varchar(255)        NOT NULL,
     PRIMARY KEY (msa_id)
 )
 ENGINE = InnoDB
@@ -492,9 +492,11 @@ CREATE TABLE %PREFIX%_organizations
     org_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     org_uuid                    varchar(36)         NOT NULL,
     org_shortname               varchar(10)         NOT NULL,
-    org_longname                varchar(60)         NOT NULL,
+    org_longname                varchar(255)        NOT NULL,
     org_org_id_parent           integer unsigned,
-    org_homepage                varchar(60)         NOT NULL,
+    org_homepage                varchar(255)        NOT NULL,
+    org_email_administrator     varchar(254)        NOT NULL,
+    org_show_org_select         boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (org_id)
 )
 ENGINE = InnoDB

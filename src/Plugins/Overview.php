@@ -60,7 +60,7 @@ class Overview
      */
     public function createSmartyObject(): Smarty
     {
-        global $gL10n;
+        global $gL10n, $gCurrentOrganization;
 
         try {
             $this->smarty = new Smarty();
@@ -76,6 +76,7 @@ class Overview
             $this->smarty->assign('name', $this->name);
             $this->smarty->assign('l10n', $gL10n);
             $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
+            $this->smarty->assign('currentOrganization', $gCurrentOrganization);
 
             return $this->smarty;
         } catch (\Smarty\Exception $e) {

@@ -250,7 +250,7 @@ class HtmlPage
     private function assignBasicSmartyVariables()
     {
         global $gDebug, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager,
-               $gSetCookieForDomain, $gNavigation;
+               $gSetCookieForDomain, $gNavigation, $gCurrentSession;
 
         $urlImprint = '';
         $urlDataProtection = '';
@@ -266,10 +266,12 @@ class HtmlPage
         $this->smarty->assign('title', $this->title);
         $this->smarty->assign('headline', $this->headline);
         $this->smarty->assign('hasPreviousUrl', $hasPreviousUrl);
+        $this->smarty->assign('currentOrganization', $gCurrentOrganization);
         $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
         $this->smarty->assign('urlTheme', THEME_URL);
         $this->smarty->assign('navigationStack', $gNavigation->getStack());
+        $this->smarty->assign('csrfToken', $gCurrentSession->getCsrfToken());
 
         $this->smarty->assign('currentUser', $gCurrentUser);
         $this->smarty->assign('validLogin', $gValidLogin);

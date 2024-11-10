@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Kommentar schreiben</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Weitere Organisation hinzufügen</string>
-  <string name="INS_ADD_ORGANIZATION">Organisation hinzufügen</string>
+  <string name="SYS_ADD_ORGANIZATION">Organisation hinzufügen</string>
   <string name="INS_ADDIDIONAL_DATA">Zusätzliche Daten</string>
   <string name="INS_ADDRESS_LIST">Adressliste</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Es sind nicht alle Daten für eine:n Administrator:in eingegeben worden!</string>
@@ -208,8 +208,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Sie können diese nun bei der Anmeldung auswählen.\n\nFalls Sie für diese Organisation eine separate Homepage erstellt haben, müssen Sie auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Hier können Sie die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Veranstaltungen und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
+  <string name="SYS_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Hier können Sie die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Veranstaltungen und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit </string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier können Sie festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nSehr hoch: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
@@ -228,8 +228,8 @@
   <string name="ORG_SEND_NEW_PASSWORD">Neues Passwort zuschicken</string>
   <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">An einigen Stellen wird die Erstellerin bzw. der Ersteller zusammen mit der Benutzerin bzw. der Benutzer mit der letzten Änderung zu einem Datensatz zusammen mit einem Zeitstempel angezeigt. Mit dieser Einstellung kann festgelegt werden, ob diese Informationen überhaupt angezeigt werden und ob die Benutzerin oder der Benutzer mit dem Anmeldenamen oder mit ihrem Vor- und Nachnamen angezeigt werden soll.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="SYS_SYSTEM_INFORMATION">Systeminformationen</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="ORG_TIME_FORMAT">Zeitformat</string>

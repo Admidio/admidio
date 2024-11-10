@@ -12,9 +12,6 @@
  * mode     : html           - (default) Show page with all preferences panels
  *            html_form      - Returns the html of the requested form
  *            save           - Save organization preferences
- *            new_org_dialog - show welcome dialog for new organization
- *            new_org_create - Create basic data for new organization in database
- *            new_org_create_success - Show success dialog if new organization was created
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
  *            backup         - create backup of Admidio database
@@ -22,7 +19,6 @@
  ***********************************************************************************************
  */
 use Admidio\Exception;
-use Admidio\UserInterface\Form;
 use Admidio\UserInterface\Preferences;
 
 try {
@@ -33,7 +29,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'new_org_dialog', 'new_org_create', 'new_org_create_success', 'htaccess', 'test_email', 'backup')
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
 
@@ -128,9 +124,7 @@ try {
             foreach ($formValues as $key => $value) {
                 // Sort out elements that are not stored in adm_preferences here
                 if (!in_array($key, array('save', 'admidio-csrf-token'))) {
-                    if (str_starts_with($key, 'org_')) {
-                        $gCurrentOrganization->setValue($key, $value);
-                    } elseif (str_starts_with($key, 'SYSMAIL_')) {
+                    if (str_starts_with($key, 'SYSMAIL_')) {
                         $text = new TableText($gDb);
                         $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
                         $text->setValue('txt_text', $value);
@@ -145,9 +139,6 @@ try {
                     }
                 }
             }
-
-            // now save all data
-            $gCurrentOrganization->save();
 
             // refresh language if necessary
             if ($gL10n->getLanguage() !== $gSettingsManager->getString('system_language')) {
@@ -165,121 +156,6 @@ try {
             $preferencesUI = new Preferences('preferencesForm');
             $methodName = 'create' . $getPanel . 'Form';
             echo $preferencesUI->{$methodName}();
-            break;
-
-        // show welcome dialog for new organization
-        case 'new_org_dialog':
-            $headline = $gL10n->get('INS_ADD_ORGANIZATION');
-
-            // add current url to navigation stack
-            $gNavigation->addUrl(CURRENT_URL, $headline);
-
-            // create html page object
-            $page = new HtmlPage('admidio-new-organization', $headline);
-
-            // show form
-            $form = new Form(
-                'newOrganizationForm',
-                'modules/organizations.new.tpl',
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create')),
-                $page
-            );
-            $form->addInput(
-                'orgaShortName',
-                $gL10n->get('SYS_NAME_ABBREVIATION'),
-                '',
-                array('maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
-            );
-            $form->addInput(
-                'orgaLongName',
-                $gL10n->get('SYS_NAME'),
-                '',
-                array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
-            );
-            $form->addInput(
-                'orgaEmail',
-                $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
-                '',
-                array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
-            );
-            $form->addSubmitButton(
-                'btn_forward',
-                $gL10n->get('INS_SET_UP_ORGANIZATION'),
-                array('icon' => 'bi-wrench')
-            );
-
-            $form->addToHtmlPage();
-            $gCurrentSession->addFormObject($form);
-            $page->show();
-            break;
-
-        // Create basic data for new organization in database
-        case 'new_org_create':
-            // check form field input and sanitized it from malicious content
-            $newOrganizationForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
-            $formValues = $newOrganizationForm->validate($_POST);
-
-            // check if organization shortname exists
-            $organization = new Organization($gDb, $formValues['orgaShortName']);
-            if ($organization->getValue('org_id') > 0) {
-                throw new Exception('INS_ORGA_SHORTNAME_EXISTS', array($formValues['orgaShortName']));
-            }
-
-            // allow only letters, numbers and special characters like .-_+@
-            if (!StringUtils::strValidCharacters($formValues['orgaShortName'], 'noSpecialChar')) {
-                throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
-            }
-
-            // set execution time to 2 minutes because we have a lot to do
-            PhpIniUtils::startNewExecutionTimeLimit(120);
-
-            $gDb->startTransaction();
-
-            // create new organization
-            $_SESSION['orgaLongName'] = $formValues['orgaLongName'];
-            $newOrganization = new Organization($gDb, $formValues['orgaShortName']);
-            $newOrganization->setValue('org_longname', $formValues['orgaLongName']);
-            $newOrganization->setValue('org_shortname', $formValues['orgaShortName']);
-            $newOrganization->setValue('org_homepage', ADMIDIO_URL);
-            $newOrganization->save();
-
-            // write all preferences from preferences.php in table adm_preferences
-            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
-
-            // set some specific preferences whose values came from user input of the installation wizard
-            $defaultOrgPreferences['email_administrator'] = $formValues['orgaEmail'];
-            $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
-
-            // create all necessary data for this organization
-            $settingsManager =& $newOrganization->getSettingsManager();
-            $settingsManager->setMulti($defaultOrgPreferences, false);
-            $newOrganization->createBasicData($gCurrentUserId);
-
-            // now refresh the session organization object because of the new organization
-            $currentOrganizationId = $gCurrentOrgId;
-            $gCurrentOrganization = new Organization($gDb, $currentOrganizationId);
-
-            // if installation of second organization than show organization select at login
-            if ($gCurrentOrganization->countAllRecords() === 2) {
-                $sql = 'UPDATE ' . TBL_PREFERENCES . '
-                       SET prf_value = 1
-                     WHERE prf_name = \'system_organization_select\'';
-                $gDb->queryPrepared($sql);
-            }
-
-            $gDb->endTransaction();
-            $gNavigation->deleteLastUrl();
-
-            echo json_encode(array(
-                'status' => 'success',
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create_success'))
-            ));
-            break;
-
-        // Show success dialog if new organization was created
-        case 'new_org_create_success':
-            $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php');
-            $gMessage->show($gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_SESSION['orgaLongName'])), $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
             break;
 
         // set directory protection, write htaccess
@@ -313,7 +189,7 @@ try {
             }
 
             // set email data
-            $email->setSender($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+            $email->setSender($gCurrentOrganization->getValue('org_email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
             $email->addRecipientsByUser($gCurrentUser->getValue('usr_uuid'));
             $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname', 'database'))));
             $email->setTemplateText(
@@ -355,7 +231,7 @@ try {
             $dump->deleteDumpFile();
             break;
     }
-} catch (Exception|Exception $exception) {
+} catch (Exception $exception) {
     if (in_array($getMode, array('save', 'new_org_create'))) {
         echo json_encode(array('status' => 'error', 'message' => $exception->getMessage()));
     } elseif ($getMode === 'html_form') {

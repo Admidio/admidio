@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Jäta kommentaar</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Lisage teine organisatsioon</string>
-  <string name="INS_ADD_ORGANIZATION">Lisage organisatsioon</string>
+  <string name="SYS_ADD_ORGANIZATION">Lisage organisatsioon</string>
   <string name="INS_ADDIDIONAL_DATA">Lisainformatsioon</string>
   <string name="INS_ADDRESS_LIST">Aadresside loend</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administraatori andmed on puudulikud!</string>
@@ -210,8 +210,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Ainult sisseloginud kasutajatele</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Siin saate hallata organisatsiooni üldisi eelistusi või moodulite eelistusi.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisatsioon #VAR1_BOLD# on edukalt lisatud. See on nüüd sisselogimisel valitav.\n\nKui teil on selle organisatsiooni jaoks eraldi koduleht, lisage see eraldi avalehe config.php-sse.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Peaorganisatsioon</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Siin määratlege peaorganisatsioon. Peaorganisatsioonid saavad luua näiteks sündmusi ja teadaandeid, mida kuvatakse valitud (alam)organisatsioonis.</string>
+  <string name="SYS_PARENT_ORGANIZATION">Peaorganisatsioon</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Siin määratlege peaorganisatsioon. Peaorganisatsioonid saavad luua näiteks sündmusi ja teadaandeid, mida kuvatakse valitud (alam)organisatsioonis.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Salasõna tugevus</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Siin saate määrata, kui turvalised ja keerulised paroolid peavad vähemalt olema.\nVäärtus sulgudes näitab, mitu katset on keskmiselt vaja parooli määramiseni.\n\n Ei: riskantne parool (&lt;10^3)\n Madal: kaitse pidurdatud võrgurünnakute eest. (&lt;10^6)\n Keskmine: kaitse piiramatute võrgurünnakute eest.(&lt;10^8)\n Kõrge: mõõdukas kaitse võrguühenduseta räsimise eest. (&lt;10 ^10)\n Väga kõrge: tugev kaitse võrguühenduseta räsimise eest. (&gt;= 10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Mitte ühtegi</string>
@@ -232,8 +232,8 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Mõnes kohas kuvatakse koos ajatempliga looja ja kasutaja, kelle kirjet on viimati muudetud. Selle sätte abil saab määrata, kas seda teavet üldse kuvatakse ja kas kasutajat tuleks kuvada koos kasutajanime või ees- ja perekonnanimega.</string>
   <string name="ORG_SHOW_ALL_USERS">Valikuline kuva kõik kasutajad</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">Kui see suvand on määratud, saab liikmehalduses lisaks praeguse organisatsiooni aktiivsetele liikmetele kuvada ka endisi liikmeid ja teiste organisatsioonide liikmeid. Vastasel juhul kuvatakse ainult praeguse organisatsiooni aktiivsed liikmed. Uute liikmete loomisel või registreeringute määramisel jätkab süsteem aga olemasolevate kasutajate otsimist kõigi organisatsioonide kogu andmebaasist.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Kuva organisatsiooni valik</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Mitme andmebaasi salvestatud organisatsiooni puhul on sisselogimisekraanil võimalik kuvada valikukast kõigi saadaolevate organisatsioonidega. Seejärel saab kasutaja sisse logides valida mõne muu organisatsiooni (muu kui failis config.php määratletud). Kasutaja peab aga olema valitud organisatsiooni registreeritud liige.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Kuva organisatsiooni valik</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Mitme andmebaasi salvestatud organisatsiooni puhul on sisselogimisekraanil võimalik kuvada valikukast kõigi saadaolevate organisatsioonidega. Seejärel saab kasutaja sisse logides valida mõne muu organisatsiooni (muu kui failis config.php määratletud). Kasutaja peab aga olema valitud organisatsiooni registreeritud liige.</string>
   <string name="SYS_SYSTEM_INFORMATION">Süsteemi teave</string>
   <string name="ORG_THEME_FOLDER_OPEN">Teemade kausta ei saanud avada/lugeda.</string>
   <string name="ORG_TIME_FORMAT">Aja formaat</string>

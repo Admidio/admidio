@@ -36,10 +36,6 @@ $defaultOrgPreferences = array(
     'system_url_data_protection'     => '',
     'password_min_strength'          => '1',
 
-    // Organization
-    'email_administrator'            => 'administrator@'. DOMAIN,
-    'system_organization_select'     => '0',
-
     // Registration
     'registration_adopt_all_data'          => '1',
     'registration_enable_captcha'          => '1',

@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Comentar</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Adicionar outra organização</string>
-  <string name="INS_ADD_ORGANIZATION">Adicionar organização</string>
+  <string name="SYS_ADD_ORGANIZATION">Adicionar organização</string>
   <string name="INS_ADDIDIONAL_DATA">Informação adicional</string>
   <string name="INS_ADDRESS_LIST">Lista de endereços</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">A informação do administrador está incompleta!</string>
@@ -206,8 +206,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Apenas para os utilizadores autenticados</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Controle aqui as preferências gerais da organização ou as preferências de módulo.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">A organização #VAR1_BOLD# foi adicionada com sucesso. Esta está agora selecionável quando inicia a sessão.\n\nSe tem uma página inicial separada para esta organização, por favor, adicione-a ao ficheiro config.php da página inicial separada.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Organização fonte</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Defina aqui a organização fonte. As organizações fontes podem, por exemplo, criar eventos e anúncios, que serão exibidos na organização selecionada (secundária).</string>
+  <string name="SYS_PARENT_ORGANIZATION">Organização fonte</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Defina aqui a organização fonte. As organizações fontes podem, por exemplo, criar eventos e anúncios, que serão exibidos na organização selecionada (secundária).</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Força da palavra-passe</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Aqui pode especificar o quão seguras e complexas as palavras-passe devem ser. \nO valor entre parênteses indica quantas tentativas são necessárias em média até que a palavra-passe seja determinada. \n\nNenhuma: palavra-passe arriscada. (&lt;10^3)\nBaixa: proteção contra ataques \'\'on-line\'\' de força bruta. (&lt;10^6)\nMédia: proteção contra ataques \'\'on-line\'\' sem restrições. (&lt;10^8)\nAlta: proteção moderada contra ataques \'\'off-line hash\'\'. (&lt;10^10)\nMuito alta: forte proteção contra ataques \'\'off-line hash\'\'. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Nenhuma</string>
@@ -228,8 +228,8 @@
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Um campo é normalmente visível para todos os usuários. Se esta função não estiver selecionada, os dados só poderão ser vistos por usuários que possuem permissão para editar todos os usuários. Em seu próprio perfil, o usuário pode ver e editar os dados.</string>
   <string name="ORG_SHOW_ALL_USERS">Opcional mostrar todos os utilizadores</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">Se esta opção estiver ativa, ex-membros e membros das outras organizações serão exibidos junto aos membros ativos da atual organização. Caso contrário, apenas os membros da atual organização serão exibidos. Ao criar outros usuários ou atribuir registos, todas as organizações continuarão a ser verificadas quanto à existência de usuários.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Exibir seleção da organização</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Caso haja várias organizações guardadas na base de dados, o ecrã de início de sessão exibirá uma caixa de seleção com todas as organizações disponíveis. O usuário poderá então, ao iniciar a sessão, selecionar outra organização (outra que não esteja definida no config.php). Entretanto, o usuário deve ser um membro registado da organização selecionada.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Exibir seleção da organização</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Caso haja várias organizações guardadas na base de dados, o ecrã de início de sessão exibirá uma caixa de seleção com todas as organizações disponíveis. O usuário poderá então, ao iniciar a sessão, selecionar outra organização (outra que não esteja definida no config.php). Entretanto, o usuário deve ser um membro registado da organização selecionada.</string>
   <string name="SYS_SYSTEM_INFORMATION">Informações do sistema</string>
   <string name="ORG_THEME_FOLDER_OPEN">Não foi possível abrir/ler a pasta de temas.</string>
   <string name="ORG_TIME_FORMAT">Formato de hora</string>

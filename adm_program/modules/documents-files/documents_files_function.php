@@ -114,7 +114,7 @@ try {
                     $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
                 } else {
                     // the corresponding folder could not be created
-                    throw new Exception($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
+                    throw new Exception($gL10n->get($error['text'], array($error['path'], '<a href="mailto:' . $gCurrentOrganization->getValue('org_email_administrator') . '">', '</a>')));
                 }
 
                 $gNavigation->deleteLastUrl();

@@ -1,4 +1,5 @@
 <?php
+
 use Ramsey\Uuid\Uuid;
 use Admidio\Exception;
 
@@ -362,9 +363,6 @@ class Organization extends TableAccess
         $organizationSettings->set('events_list_configuration', $participantList->getValue('lst_id'));
         $organizationSettings->set('contacts_list_configuration', $contactsList->getValue('lst_id'));
         $organizationSettings->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
-        if ($this->countAllRecords() > 1) {
-            $organizationSettings->set('system_organization_select', true);
-        }
     }
 
     /**
@@ -379,16 +377,216 @@ class Organization extends TableAccess
      */
     public static function createDefaultOrganizationObject(Database $db, string $organization = ''): Organization
     {
-        if($organization !== '') {
+        if ($organization !== '') {
             $organizationObject = new Organization($db, $organization);
         } else {
             $sql = 'SELECT MIN(org_id) as organization_id FROM ' . TBL_ORGANIZATIONS;
             $pdoStatement = $db->queryPrepared($sql, array(), false);
             $row = $pdoStatement->fetch();
-            $organizationObject = new Organization($db, (int) $row['organization_id']);
+            $organizationObject = new Organization($db, (int)$row['organization_id']);
         }
 
         return $organizationObject;
+    }
+
+    /**
+     * Deletes the selected record of the table and all references in other tables.
+     * After that the class will be initialized.
+     * @return bool **true** if no error occurred
+     * @throws Exception
+     */
+    public function delete(): bool
+    {
+        $this->db->startTransaction();
+
+        // delete all category reports
+        $sql = 'DELETE FROM ' . TBL_CATEGORY_REPORT . '
+                 WHERE crt_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all announcements
+        $sql = 'DELETE FROM ' . TBL_ANNOUNCEMENTS . '
+                 WHERE ann_cat_id IN (
+                       SELECT cat.cat_id
+                         FROM (SELECT cat_id
+                                 FROM ' . TBL_CATEGORIES . '
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) cat
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all events
+        $sql = 'SELECT evt.*
+                  FROM ' . TBL_EVENTS . ' evt
+                 INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = dat_cat_id
+                 WHERE cat_org_id = ? -- $this->getValue(\'org_id\') ';
+        $eventsStatement = $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        while ($eventRow = $eventsStatement->fetch()) {
+            $event = new TableEvent($this->db);
+            $event->setArray($eventRow);
+            $event->delete();
+        }
+
+        // delete all photos
+        $sql = 'SELECT pho.*
+                  FROM ' . TBL_PHOTOS . ' pho
+                 WHERE pho_pho_id_parent IS NULL
+                   AND pho_org_id = ? -- $this->getValue(\'org_id\') ';
+        $albumStatement = $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        while ($photoAlbumRow = $albumStatement->fetch()) {
+            $photoAlbum = new TablePhotos($this->db);
+            $photoAlbum->setArray($photoAlbumRow);
+            $photoAlbum->delete();
+        }
+
+        // delete all weblinks
+        $sql = 'DELETE FROM ' . TBL_LINKS . '
+                 WHERE lnk_cat_id IN (
+                       SELECT cat.cat_id
+                         FROM (SELECT cat_id
+                                 FROM ' . TBL_CATEGORIES . '
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) cat
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all roles rights of categories
+        $sql = 'DELETE FROM ' . TBL_ROLES_RIGHTS_DATA . '
+                 WHERE rrd_ror_id IN (
+                       SELECT ror.ror_id
+                         FROM (SELECT ror_id
+                                 FROM ' . TBL_ROLES_RIGHTS . '
+                                INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = ror_ror_id_parent
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                  AND ror_name_intern = \'category_view\'
+                                 ) ror
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all lists
+        $sql = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
+                 WHERE lsc_lst_id IN (
+                       SELECT lst.lst_id
+                         FROM (SELECT lst_id
+                                 FROM ' . TBL_LISTS . '
+                                WHERE lst_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) lst
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        $sql = 'DELETE FROM ' . TBL_LISTS . '
+                 WHERE lst_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all auto logins
+        $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN . '
+                 WHERE atl_org_id = ? -- $this->getValue(\'org_id\') ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all preferences
+        $sql = 'DELETE FROM ' . TBL_PREFERENCES . '
+                 WHERE prf_org_id = ? -- $this->getValue(\'org_id\') ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all registrations
+        $sql = 'DELETE FROM ' . TBL_REGISTRATIONS . '
+                 WHERE reg_org_id = ? -- $this->getValue(\'org_id\') ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all sessions
+        $sql = 'DELETE FROM ' . TBL_SESSIONS . '
+                 WHERE ses_org_id = ? -- $this->getValue(\'org_id\') ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all texts
+        $sql = 'DELETE FROM ' . TBL_TEXTS . '
+                 WHERE txt_org_id = ? -- $this->getValue(\'org_id\') ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all folders
+        $sqlAdminRoles = 'SELECT fol_uuid
+                        FROM ' . TBL_FOLDERS . '
+                       WHERE fol_type = \'DOCUMENTS\'
+                         AND fol_name = \'documents_' . $this->getValue('org_shortname') . '\' ';
+        $statementFolder = $this->db->queryPrepared($sqlAdminRoles);
+        $folder_uuid = $statementFolder->fetchColumn();
+
+        $documentsFilesRootFolder = new TableFolder($this->db);
+        $documentsFilesRootFolder->getFolderForDownload($folder_uuid);
+        $documentsFilesRootFolder->delete();
+
+        // delete all memberships
+        $sql = 'DELETE FROM ' . TBL_MEMBERS . '
+                 WHERE mem_rol_id IN (
+                       SELECT rol.rol_id
+                         FROM (SELECT rol_id
+                                 FROM ' . TBL_ROLES . '
+                                INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) rol
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all roles rights of roles
+        $sql = 'DELETE FROM ' . TBL_ROLES_RIGHTS_DATA . '
+                 WHERE rrd_rol_id IN (
+                       SELECT rol.rol_id
+                         FROM (SELECT rol_id
+                                 FROM ' . TBL_ROLES . '
+                                INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) rol
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all role dependencies
+        $sql = 'DELETE FROM ' . TBL_ROLE_DEPENDENCIES . '
+                 WHERE rld_rol_id_parent IN (
+                       SELECT rol.rol_id
+                         FROM (SELECT rol_id
+                                 FROM ' . TBL_ROLES . '
+                                INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) rol
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        $sql = 'DELETE FROM ' . TBL_ROLE_DEPENDENCIES . '
+                 WHERE rld_rol_id_child IN (
+                       SELECT rol.rol_id
+                         FROM (SELECT rol_id
+                                 FROM ' . TBL_ROLES . '
+                                INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) rol
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all roles
+        $sql = 'DELETE FROM ' . TBL_ROLES . '
+                 WHERE rol_cat_id IN (
+                       SELECT cat.cat_id
+                         FROM (SELECT cat_id
+                                 FROM ' . TBL_CATEGORIES . '
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) cat
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all categories
+        $sql = 'DELETE FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // now delete the organization
+        parent::delete();
+
+        return $this->db->endTransaction();
     }
 
     /**
@@ -425,7 +623,7 @@ class Organization extends TableAccess
              */
             function addQuotationMarks(string $value): string
             {
-                return '\''.$value.'\'';
+                return '\'' . $value . '\'';
             }
 
             $organizationShortnames = array_values($organizations);
@@ -435,7 +633,7 @@ class Organization extends TableAccess
         }
 
         $organizationIds = array_keys($organizations);
-        $organizationIds[] = (int) $this->getValue('org_id');
+        $organizationIds[] = (int)$this->getValue('org_id');
         return implode(',', $organizationIds);
     }
 
@@ -455,22 +653,22 @@ class Organization extends TableAccess
 
         if ($child) {
             $sqlWhere[] = 'org_org_id_parent = ?';
-            $queryParams[] = (int) $this->getValue('org_id');
+            $queryParams[] = (int)$this->getValue('org_id');
         }
-        $orgParentId = (int) $this->getValue('org_org_id_parent');
+        $orgParentId = (int)$this->getValue('org_org_id_parent');
         if ($parent && $orgParentId > 0) {
             $sqlWhere[] = 'org_id = ?';
             $queryParams[] = $orgParentId;
         }
 
         $sql = 'SELECT org_id, org_longname, org_shortname
-                  FROM '.TBL_ORGANIZATIONS.'
-                 WHERE '.implode(' OR ', $sqlWhere);
+                  FROM ' . TBL_ORGANIZATIONS . '
+                 WHERE ' . implode(' OR ', $sqlWhere);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $childOrganizations = array();
         while ($row = $pdoStatement->fetch()) {
-            $orgId = (int) $row['org_id'];
+            $orgId = (int)$row['org_id'];
             if ($longname) {
                 $childOrganizations[$orgId] = $row['org_longname'];
             } else {
@@ -487,7 +685,7 @@ class Organization extends TableAccess
     public function &getSettingsManager(): SettingsManager
     {
         if (!isset($this->settingsManager)) {
-            $this->settingsManager = new SettingsManager($this->db, (int) $this->getValue('org_id'));
+            $this->settingsManager = new SettingsManager($this->db, (int)$this->getValue('org_id'));
             $this->settingsManager->resetAll();
         }
 

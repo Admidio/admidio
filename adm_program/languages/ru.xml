@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Оставить комментарий</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Добавить другую организацию</string>
-  <string name="INS_ADD_ORGANIZATION">Добавить организацию</string>
+  <string name="SYS_ADD_ORGANIZATION">Добавить организацию</string>
   <string name="INS_ADDIDIONAL_DATA">Дополнительная информация</string>
   <string name="INS_ADDRESS_LIST">Список адресов</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Информация администратора неполная!</string>
@@ -208,8 +208,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Только для авторизованных пользователей</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Здесь можно управлять общими привилегиями организации или привилегиями модуля.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Организация #VAR1_BOLD# была успешно добавлена. Теперь ее можно выбрать при входе.\n\nЕсли у вас есть отдельная домашняя страница для этой организации, пожалуйста, добавьте ее в config.php отдельной домашней страницы.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Родительская организация</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Определите здесь родительскую организацию. Родительские организации могут создавать события и анонсы, которые будут отображаться в выбранной (дочерней) организации.</string>
+  <string name="SYS_PARENT_ORGANIZATION">Родительская организация</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Определите здесь родительскую организацию. Родительские организации могут создавать события и анонсы, которые будут отображаться в выбранной (дочерней) организации.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Надежность пароля</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Здесь вы можете указать, насколько безопасными и сложными должны быть пароли.\nЗначение в скобках указывает, сколько попыток в среднем требуется, пока пароль не будет определен.\n\n Нет: рискованный пароль (&lt;10^3)\n Низкий: защита от атак через Интернет с дросселированием. (&lt;10^6)\n Средний: защита от неограниченных онлайн-атак.(&lt;10^8)\n Высокий: Умеренная защита от автономного хеширования. (&lt;10^10)\n Очень высокий: Сильная защита от автономного хеширования. (&gt;= 10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Нет</string>
@@ -228,8 +228,8 @@
   <string name="ORG_SEND_NEW_PASSWORD">Отправить новый пароль</string>
   <string name="ORG_SHOW_CREATE_EDIT">Показать автора и временную метку создания</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">В некоторых местах автор и пользователь, внесший последнее изменение в запись, отображаются вместе с временной меткой. С помощью этой настройки можно определить, отображать ли эту информацию вообще и отображать ли пользователя с именем пользователя или с его именем и фамилией.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Отразить выбор организации</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Если в базе данных хранится несколько организаций, на экране входа в систему можно отобразить окно выбора со всеми доступными организациями. При входе в систему пользователь может выбрать другую организацию (отличную от заданной в config.php). Однако пользователь должен быть зарегистрированным участником выбранной организации.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Отразить выбор организации</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Если в базе данных хранится несколько организаций, на экране входа в систему можно отобразить окно выбора со всеми доступными организациями. При входе в систему пользователь может выбрать другую организацию (отличную от заданной в config.php). Однако пользователь должен быть зарегистрированным участником выбранной организации.</string>
   <string name="SYS_SYSTEM_INFORMATION">Системная информация</string>
   <string name="ORG_THEME_FOLDER_OPEN">Не удалось открыть/прочитать папку «Темы».</string>
   <string name="ORG_TIME_FORMAT">Формат времени</string>

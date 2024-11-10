@@ -28,7 +28,7 @@
   <string name="GBO_WRITE_COMMENT">Écrire un commentaire</string>
   <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Ajouter une autre organisation</string>
-  <string name="INS_ADD_ORGANIZATION">Ajouter une organistaion</string>
+  <string name="SYS_ADD_ORGANIZATION">Ajouter une organistaion</string>
   <string name="INS_ADDIDIONAL_DATA">Données supplémentaires</string>
   <string name="INS_ADDRESS_LIST">Liste des adresses</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Toutes les données n\'ont pas été saisies pour l\'administrateur !</string>
@@ -208,8 +208,8 @@
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Uniquement pour les utilisateurs connectés</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Les paramètres généraux Admidio, ainsi que les paramètres des différents modules, peuvent être définis ici.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">L\'organisation #VAR1_BOLD# a été ajoutée. Tu peux la choisir maintenant lors de ta connexion.\n\nSi tu as créé une page d\'accueil séparée pour cette organisation, tu dois saisir à cette page la nouvelle organisation dans la config.php.</string>
-  <string name="ORG_PARENT_ORGANIZATION">Organisation mère</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Tu peux définir l\'organisation mère. Par exemple, elle peux créer des événements et des annonces qui sont également visibles dans l\'organisation (actuelle).</string>
+  <string name="SYS_PARENT_ORGANIZATION">Organisation mère</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Tu peux définir l\'organisation mère. Par exemple, elle peux créer des événements et des annonces qui sont également visibles dans l\'organisation (actuelle).</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Sécurté par mot de passe</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Ici, tu peux définir le degré de sécurité et de complexité des mots de passe.\nLa valeur entre parenthèses indique combien de tentatives sont nécessaires en moyenne jusqu\'à ce que le mot de passe soit déterminé.\n\nAucun: mot de passe à risques. (&lt;10^3)\nFaible: protection contre les attaques en ligne freinées. (&lt;10^6)\nMoyen: protection contre les attaques en ligne non freinées. (&lt;10^8)\nÉlevé: protection modérée contre les attaques Hashing hors ligne. (&lt;10^10)\nTrès élevé: forte protection contre les attaques Hashing hors ligne. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Aucun</string>
@@ -228,8 +228,8 @@
   <string name="ORG_SEND_NEW_PASSWORD">Envoyer un nouveau mot de passe</string>
   <string name="ORG_SHOW_CREATE_EDIT">Afficher créateur et horodatage</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Un champ est généralement visible pour tous les utilisateurs. Si cette fonction n\'est pas séléctionnée, les données ne peuvent être vus seulement par les utilisateurs qui ont le droit de modifier tous les utilisateurs. Dans son propre profil, l\'utilisateur peut visualiser et modifier ces données.</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT">Afficher la séléction d\'organisation</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Si plusieurs organisations sont configurées dans la base de données, le dialogue de connexion avec toutes les organisations peut être affichée dans le dialogue de séléction.  L\'utilisateur peut séléctionner une autre organisation (telle que définie dans config.php) à laquelle il se connecte. Tourefois, l\'utilisateur doit également être inscrit à l\'organisation.</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT">Afficher la séléction d\'organisation</string>
+  <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Si plusieurs organisations sont configurées dans la base de données, le dialogue de connexion avec toutes les organisations peut être affichée dans le dialogue de séléction.  L\'utilisateur peut séléctionner une autre organisation (telle que définie dans config.php) à laquelle il se connecte. Tourefois, l\'utilisateur doit également être inscrit à l\'organisation.</string>
   <string name="SYS_SYSTEM_INFORMATION">Information du système</string>
   <string name="ORG_THEME_FOLDER_OPEN">Le dossier thèmes n\'a pas pu être ouvert oulu.</string>
   <string name="ORG_TIME_FORMAT">Format horaire</string>

@@ -40,7 +40,7 @@ if ($mode === 'html') {
     $page = new Installation('admidio-installation-create-organization');
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
-    $page->assignSmartyVariable('text', $gL10n->get('ORG_NEW_ORGANIZATION_DESC'));
+    $page->assignSmartyVariable('text', $gL10n->get('SYS_NEW_ORGANIZATION_DESC'));
 
     $form = new Form(
         'installationCreateOrganizationForm',
@@ -58,13 +58,13 @@ if ($mode === 'html') {
         'orga_longname',
         $gL10n->get('SYS_NAME'),
         $orgaLongName,
-        array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
         'orga_email',
         $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
         $orgaEmail,
-        array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+        array('type' => 'email', 'maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addSelectBox(
         'orga_timezone',
