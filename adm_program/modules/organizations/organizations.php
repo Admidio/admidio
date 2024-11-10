@@ -10,10 +10,12 @@
  * Parameters:
  *
  * cat_uuid : Uuid of the category, that should be edited
- * mode     :
+ * mode     : edit    - (Default) Edit current organization and show sub-organizations.
+ *            new_sub - Create a new sub-organization for the current organization.
+ *            save    - Save form data of the current organization
  ****************************************************************************/
 use Admidio\Exception;
-use Admidio\UserInterface\Form;
+use Admidio\UserInterface\Organizations;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -21,105 +23,30 @@ try {
 
     // Initialize and check the parameters
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('save')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'edit', 'validValues' => array('edit', 'new_sub', 'save')));
 
     // check if the current user has the right to
     if (!$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
-    if($getMode === '') {
+    if($getMode === 'edit') {
+        // Edit current organization and show sub-organizations.
         $headline = $gL10n->get('SYS_ORGANIZATION');
         $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-diagram-3-fill');
 
         // create html page object
-        $page = new HtmlPage('organizationEdit', $headline);
+        $page = new Organizations('adm_organization_edit', $headline);
+        $page->createContentEditForm();
+        $page->show();
+    } elseif ($getMode === 'new_sub') {
+        // Create a new sub-organization for the current organization
+        $headline = $gL10n->get('SYS_ADD_ORGANIZATION');
+        $gNavigation->addUrl(CURRENT_URL, $headline);
 
-        $page->addJavascript('
-            $("#btn_save").hide();
-
-            $("input").on("input", function() {
-                $("#btn_save").show("slow");
-            })
-            $("select").on("input", function() {
-                $("#btn_save").show("slow");
-            })
-        ', true);
-
-        // show form
-        $formOrganization = new Form(
-            'organizationEditForm',
-            'modules/organizations.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php', array('mode' => 'save')),
-            $page
-        );
-        $formOrganization->addInput(
-            'org_shortname',
-            $gL10n->get('SYS_NAME_ABBREVIATION'),
-            $gCurrentOrganization->getValue('org_shortname'),
-            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small')
-        );
-        $formOrganization->addInput(
-            'org_longname',
-            $gL10n->get('SYS_NAME'),
-            $gCurrentOrganization->getValue('org_longname'),
-            array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
-        );
-        $formOrganization->addInput(
-            'org_homepage',
-            $gL10n->get('SYS_WEBSITE'),
-            $gCurrentOrganization->getValue('org_homepage'),
-            array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
-        );
-        $formOrganization->addInput(
-            'org_email_administrator',
-            $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
-            $gCurrentOrganization->getValue('org_email_administrator'),
-            array('type' => 'email', 'property' => Form::FIELD_REQUIRED, 'maxLength' => 254)
-        );
-
-        if ($gCurrentOrganization->countAllRecords() > 1) {
-            // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-            if (!$gCurrentOrganization->isParentOrganization()) {
-                $sqlData = array();
-                $sqlData['query'] = 'SELECT org_id, org_longname
-                               FROM ' . TBL_ORGANIZATIONS . '
-                              WHERE org_id <> ? -- $gCurrentOrgId
-                                AND org_org_id_parent IS NULL
-                           ORDER BY org_longname, org_shortname';
-                $sqlData['params'] = array($gCurrentOrgId);
-                $formOrganization->addSelectBoxFromSql(
-                    'org_org_id_parent',
-                    $gL10n->get('SYS_PARENT_ORGANIZATION'),
-                    $gDb,
-                    $sqlData,
-                    array('defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'), 'helpTextId' => 'SYS_PARENT_ORGANIZATION_DESC')
-                );
-            }
-
-            $formOrganization->addCheckbox(
-                'org_show_org_select',
-                $gL10n->get('SYS_SHOW_ORGANIZATION_SELECT'),
-                $gCurrentOrganization->getValue('org_show_org_select'),
-                array('helpTextId' => 'SYS_SHOW_ORGANIZATION_SELECT_DESC')
-            );
-        }
-        $formOrganization->addSubmitButton(
-            'btn_save',
-            $gL10n->get('SYS_SAVE'),
-            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
-        );
-
-        // create list with all subordinate organizations of the current organization
-        $sql = 'SELECT org.* FROM ' . TBL_ORGANIZATIONS . ' org
-                 WHERE org_org_id_parent = ? /* $gCurrentOrgId */';
-        $queryParameters = array($gCurrentOrgId);
-        $organizations = $gDb->getArrayFromSql($sql, $queryParameters);
-        $page->assignSmartyVariable('organizationsList', $organizations);
-
-        $formOrganization->addToHtmlPage();
-        $gCurrentSession->addFormObject($formOrganization);
-
+        // create html page object
+        $page = new Organizations('adm_new_sub_organization', $headline);
+        $page->createContentSubOrganizationForm();
         $page->show();
     } elseif ($getMode === 'save') {
         // check form field input and sanitized it from malicious content

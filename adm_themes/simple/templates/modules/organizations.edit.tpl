@@ -13,15 +13,15 @@
     {if {array_key_exists array=$elements key='org_show_org_select'}}
         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['org_show_org_select']}
     {/if}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>
 
 <div class="card admidio-field-group">
     <div class="card-header">{$l10n->get('SYS_SUBORDINATE_ORGANIZATIONS')}</div>
     <div class="card-body">
-        <p class="lead">{$l10n->get('ORG_ADD_ORGANIZATION_DESC')}</p>
-        <p><a class="btn btn-primary" href="{$urlAdmidio}/adm_program/modules/preferences/preferences.php?mode=new_org_dialog"><i class="bi bi-plus-circle-fill"></i>{$l10n->get('SYS_ADD_ORGANIZATION')}</a></p>
+        <p class="lead">{$l10n->get('SYS_SUBORDINATE_ORGANIZATIONS_DESC', ['<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:mehrere_organisationen_verwalten">', '</a>'])}</p>
+        <p><a class="btn btn-primary" href="{$urlAdmidio}/adm_program/modules/organizations/organizations.php?mode=new_sub"><i class="bi bi-plus-circle-fill"></i>{$l10n->get('SYS_ADD_ORGANIZATION')}</a></p>
 
         {if count($organizationsList) > 0}
             <table id="admOrganizationsTable" class="table table-hover" width="100%" style="width: 100%;">

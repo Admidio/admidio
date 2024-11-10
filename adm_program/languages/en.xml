@@ -118,7 +118,6 @@
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">A new organization will be added to the database including its master data. The current user will be announced as administrator and can maintain the dataset. Users who log into the system need to select the respective organization.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">The current Admidio theme can be selected here. All layouts from the adm_themes folder are displayed. (default: simple)</string>
@@ -184,7 +183,6 @@
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Login automatically</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at their visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
-  <string name="ORG_NEW_ORGANIZATION_DESC">Enter the abbreviation, the official name and the email address for the organization you want to add. The email address should be a general one. It will be used as sender address when sending automatic system notifications.</string>
   <string name="ORG_NO_FIELD_CREATED">No organization specific field has been created yet!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
@@ -894,6 +892,7 @@
   <string name="SYS_NEW_BOTH_AVAILABLE">A new stable version and a new beta version are available!</string>
   <string name="SYS_NEW_MESSAGE_RECEIVED">New message received</string>
   <string name="SYS_NEW_NAME">New name</string>
+  <string name="SYS_NEW_ORGANIZATION_DESC">In this form, enter the abbreviation, the official name and the e-mail address of the organization you want to add. The email address should be a general address of the organization. Among other things, this is used as the sender address for automatic system notifications. A new organization with its master data is then added. You will become the administrator there and can carry out the further setup.</string>
   <string name="SYS_NEW_PASSWORD">New password</string>
   <string name="SYS_NEW_PROFILE_PICTURE">New profile picture</string>
   <string name="SYS_NEW_ROLE">New role</string>
@@ -1302,7 +1301,8 @@
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUBJECT">Subject</string>
-  <string name="SYS_SUBORDINATE_ORGANIZATIONS">Subordinate organizations</string>
+  <string name="SYS_SUBORDINATE_ORGANIZATIONS">Sub-organizations</string>
+  <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Sub-organizations can share profile data of contacts. In some modules (announcements, events) it is possible to display entries from the main organization in the sub-organizations. The administration of a sub-organization is completely independent and can be provided with its own rights concept. You can find more information in the #VAR1#Admidio Wiki#VAR2#.</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Switch to calendar management</string>

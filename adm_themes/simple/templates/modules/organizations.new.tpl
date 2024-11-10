@@ -1,4 +1,4 @@
-<p class="lead">{$l10n->get('ORG_NEW_ORGANIZATION_DESC')}{$l10n->get('ORG_ADD_ORGANIZATION_DESC')}</p>
+<p class="lead">{$l10n->get('SYS_NEW_ORGANIZATION_DESC')}</p>
 <form {foreach $attributes as $attribute}
         {$attribute@key}="{$attribute}"
     {/foreach}>
@@ -9,5 +9,5 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['orgaLongName']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['orgaEmail']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_forward']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_forward']}
 </form>

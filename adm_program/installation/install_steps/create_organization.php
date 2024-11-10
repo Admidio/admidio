@@ -40,7 +40,7 @@ if ($mode === 'html') {
     $page = new Installation('admidio-installation-create-organization');
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
-    $page->assignSmartyVariable('text', $gL10n->get('ORG_NEW_ORGANIZATION_DESC'));
+    $page->assignSmartyVariable('text', $gL10n->get('SYS_NEW_ORGANIZATION_DESC'));
 
     $form = new Form(
         'installationCreateOrganizationForm',

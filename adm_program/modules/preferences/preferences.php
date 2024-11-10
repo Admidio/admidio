@@ -12,7 +12,6 @@
  * mode     : html           - (default) Show page with all preferences panels
  *            html_form      - Returns the html of the requested form
  *            save           - Save organization preferences
- *            new_org_dialog - show welcome dialog for new organization
  *            new_org_create - Create basic data for new organization in database
  *            new_org_create_success - Show success dialog if new organization was created
  *            htaccess       - set directory protection, write htaccess
@@ -33,7 +32,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'new_org_dialog', 'new_org_create', 'new_org_create_success', 'htaccess', 'test_email', 'backup')
+            'validValues' => array('html', 'html_form', 'save', 'new_org_create', 'new_org_create_success', 'htaccess', 'test_email', 'backup')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
 
@@ -160,52 +159,6 @@ try {
             $preferencesUI = new Preferences('preferencesForm');
             $methodName = 'create' . $getPanel . 'Form';
             echo $preferencesUI->{$methodName}();
-            break;
-
-        // show welcome dialog for new organization
-        case 'new_org_dialog':
-            $headline = $gL10n->get('SYS_ADD_ORGANIZATION');
-
-            // add current url to navigation stack
-            $gNavigation->addUrl(CURRENT_URL, $headline);
-
-            // create html page object
-            $page = new HtmlPage('admidio-new-organization', $headline);
-
-            // show form
-            $form = new Form(
-                'newOrganizationForm',
-                'modules/organizations.new.tpl',
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create')),
-                $page
-            );
-            $form->addInput(
-                'orgaShortName',
-                $gL10n->get('SYS_NAME_ABBREVIATION'),
-                '',
-                array('maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
-            );
-            $form->addInput(
-                'orgaLongName',
-                $gL10n->get('SYS_NAME'),
-                '',
-                array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
-            );
-            $form->addInput(
-                'orgaEmail',
-                $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
-                '',
-                array('type' => 'email', 'maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
-            );
-            $form->addSubmitButton(
-                'btn_forward',
-                $gL10n->get('INS_SET_UP_ORGANIZATION'),
-                array('icon' => 'bi-wrench')
-            );
-
-            $form->addToHtmlPage();
-            $gCurrentSession->addFormObject($form);
-            $page->show();
             break;
 
         // Create basic data for new organization in database
