@@ -1,5 +1,6 @@
 <?php
 use Admidio\Exception;
+use Admidio\Session;
 
 /**
  * @brief Class manages access to database table adm_menu
@@ -237,7 +238,7 @@ class TableMenu extends TableAccess
      * @param mixed  $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     *@throws Exception
+     * @throws Exception
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {

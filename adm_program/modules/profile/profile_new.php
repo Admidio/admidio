@@ -40,8 +40,8 @@ try {
         // create user registration object and set requested organization
         $user = new UserRegistration($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
-        if (isset($_POST['reg_org_id'])) {
-            $user->setOrganization((int)$_POST['reg_org_id']);
+        if (isset($_POST['adm_org_id'])) {
+            $user->setOrganization((int)$_POST['adm_org_id']);
         }
     } else {
         $user = new User($gDb, $gProfileFields);
@@ -98,7 +98,7 @@ try {
 
         // create html form
         $form = new Form(
-            'profile_edit_form',
+            'adm_profile_edit_form',
             'modules/profile.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $getUserUuid, 'mode' => 'save', 'accept_registration' => $getAcceptRegistration)),
             $page
@@ -166,7 +166,7 @@ try {
                         )
                     );
                     $form->addInput(
-                        'password_confirm',
+                        'adm_password_confirm',
                         $gL10n->get('SYS_CONFIRM_PASSWORD'),
                         '',
                         array(
@@ -185,7 +185,7 @@ try {
                                   FROM ' . TBL_ORGANIZATIONS . '
                               ORDER BY org_longname, org_shortname';
                         $form->addSelectBoxFromSql(
-                            'reg_org_id',
+                            'adm_org_id',
                             $gL10n->get('SYS_ORGANIZATION'),
                             $gDb,
                             $sql,
@@ -337,14 +337,14 @@ try {
 
         // if captchas are enabled then visitors of the website must resolve this
         if (!$gValidLogin && $gSettingsManager->getBool('registration_enable_captcha')) {
-            $form->addCaptcha('captcha_code');
+            $form->addCaptcha('adm_captcha_code');
         }
 
         if (!$gValidLogin) {
             // Registration
-            $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
+            $form->addSubmitButton('adm_btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
         } else {
-            $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+            $form->addSubmitButton('adm_btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
         }
 
         if ($getUserUuid !== '') {
@@ -376,7 +376,7 @@ try {
             }
 
             // both password fields must be identical
-            if ($_POST['usr_password'] !== $_POST['password_confirm']) {
+            if ($_POST['usr_password'] !== $_POST['adm_password_confirm']) {
                 throw new Exception('SYS_PASSWORDS_NOT_EQUAL');
             }
 
@@ -387,7 +387,7 @@ try {
 
         // write all profile fields to the user object
         foreach ($formValues as $key => $value) {
-            if (strpos($key, 'usr_') !== 0) {
+            if (strpos($key, 'usr_') !== 0 && !in_array($key, array('adm_password_confirm', 'adm_org_id', 'adm_captcha_code'))) {
                 $user->setValue($key, $value);
             }
         }
@@ -416,11 +416,6 @@ try {
         // if registration, then still fill the corresponding fields
         if (!$gValidLogin) {
             $user->setPassword($_POST['usr_password']);
-
-            // At user registration with activated captcha check the captcha input
-            if ($gSettingsManager->getBool('registration_enable_captcha')) {
-                FormValidation::checkCaptcha($_POST['captcha_code']);
-            }
         }
 
         // ------------------------------------------------------------
