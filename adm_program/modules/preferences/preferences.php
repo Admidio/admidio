@@ -12,8 +12,6 @@
  * mode     : html           - (default) Show page with all preferences panels
  *            html_form      - Returns the html of the requested form
  *            save           - Save organization preferences
- *            new_org_create - Create basic data for new organization in database
- *            new_org_create_success - Show success dialog if new organization was created
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
  *            backup         - create backup of Admidio database
@@ -21,7 +19,6 @@
  ***********************************************************************************************
  */
 use Admidio\Exception;
-use Admidio\UserInterface\Form;
 use Admidio\UserInterface\Preferences;
 
 try {
@@ -32,7 +29,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'new_org_create', 'new_org_create_success', 'htaccess', 'test_email', 'backup')
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
 
@@ -161,75 +158,6 @@ try {
             echo $preferencesUI->{$methodName}();
             break;
 
-        // Create basic data for new organization in database
-        case 'new_org_create':
-            // check form field input and sanitized it from malicious content
-            $newOrganizationForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
-            $formValues = $newOrganizationForm->validate($_POST);
-
-            // check if organization shortname exists
-            $organization = new Organization($gDb, $formValues['orgaShortName']);
-            if ($organization->getValue('org_id') > 0) {
-                throw new Exception('INS_ORGA_SHORTNAME_EXISTS', array($formValues['orgaShortName']));
-            }
-
-            // allow only letters, numbers and special characters like .-_+@
-            if (!StringUtils::strValidCharacters($formValues['orgaShortName'], 'noSpecialChar')) {
-                throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
-            }
-
-            // set execution time to 2 minutes because we have a lot to do
-            PhpIniUtils::startNewExecutionTimeLimit(120);
-
-            $gDb->startTransaction();
-
-            // create new organization
-            $_SESSION['orgaLongName'] = $formValues['orgaLongName'];
-            $newOrganization = new Organization($gDb, $formValues['orgaShortName']);
-            $newOrganization->setValue('org_longname', $formValues['orgaLongName']);
-            $newOrganization->setValue('org_shortname', $formValues['orgaShortName']);
-            $newOrganization->setValue('org_homepage', ADMIDIO_URL);
-            $newOrganization->setValue('org_email_administrator', $formValues['orgaEmail']);
-            $newOrganization->setValue('org_show_org_select', true);
-            $newOrganization->setValue('org_org_id_parent', $gCurrentOrgId);
-            $newOrganization->save();
-
-            // write all preferences from preferences.php in table adm_preferences
-            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
-
-            // set some specific preferences whose values came from user input of the installation wizard
-            $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
-
-            // create all necessary data for this organization
-            $settingsManager =& $newOrganization->getSettingsManager();
-            $settingsManager->setMulti($defaultOrgPreferences, false);
-            $newOrganization->createBasicData($gCurrentUserId);
-
-            // now refresh the session organization object because of the new organization
-            $currentOrganizationId = $gCurrentOrgId;
-            $gCurrentOrganization = new Organization($gDb, $currentOrganizationId);
-
-            // if installation of second organization than show organization select at login
-            if ($gCurrentOrganization->countAllRecords() === 2) {
-                $gCurrentOrganization->setValue('org_show_org_select', true);
-                $gCurrentOrganization->save();
-            }
-
-            $gDb->endTransaction();
-            $gNavigation->deleteLastUrl();
-
-            echo json_encode(array(
-                'status' => 'success',
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create_success'))
-            ));
-            break;
-
-        // Show success dialog if new organization was created
-        case 'new_org_create_success':
-            $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php');
-            $gMessage->show($gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_SESSION['orgaLongName'])), $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
-            break;
-
         // set directory protection, write htaccess
         case 'htaccess':
             if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess')) {
@@ -303,7 +231,7 @@ try {
             $dump->deleteDumpFile();
             break;
     }
-} catch (Exception|Exception $exception) {
+} catch (Exception $exception) {
     if (in_array($getMode, array('save', 'new_org_create'))) {
         echo json_encode(array('status' => 'error', 'message' => $exception->getMessage()));
     } elseif ($getMode === 'html_form') {

@@ -9,10 +9,13 @@
  ******************************************************************************
  * Parameters:
  *
- * cat_uuid : Uuid of the category, that should be edited
- * mode     : edit    - (Default) Edit current organization and show sub-organizations.
- *            new_sub - Create a new sub-organization for the current organization.
+ * mode     : edit    - (Default) Edit current organization and show sub-organizations
+ *            new_sub - Create a new sub-organization for the current organization
  *            save    - Save form data of the current organization
+ *            create  - Creates a nre organization for the current organization
+ *            create_success - Show dialog if organization was successfully added
+ *            delete  - Deletes a sub-organization
+ * org_uuid : UUID of the sub-organization
  ****************************************************************************/
 use Admidio\Exception;
 use Admidio\UserInterface\Organizations;
@@ -22,8 +25,8 @@ try {
     require(__DIR__ . '/../../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'edit', 'validValues' => array('edit', 'new_sub', 'save')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'edit', 'validValues' => array('edit', 'new_sub', 'save', 'create', 'create_success', 'delete')));
+    $getOrganizationUUID = admFuncVariableIsValid($_GET, 'org_uuid', 'uuid');
 
     // check if the current user has the right to
     if (!$gCurrentUser->isAdministrator()) {
@@ -65,9 +68,36 @@ try {
 
         echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
         exit();
+    } elseif ($getMode === 'create') {
+        // Creates a nre organization for the current organization
+        $organizationModule = new Admidio\Modules\Organizations();
+        $organizationModule->create();
+        $gNavigation->deleteLastUrl();
+
+        echo json_encode(array(
+            'status' => 'success',
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php', array('mode' => 'create_success'))
+        ));
+    } elseif ($getMode === 'create_success') {
+        // Show dialog if organization was successfully added
+        $subOrganization = new Organization($gDb);
+        $subOrganization->readDataByUuid($getOrganizationUUID);
+        $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php');
+        $gMessage->show($gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_SESSION['organizationLongName'])), $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
+    } elseif ($getMode === 'delete') {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
+        // delete sub-organization
+        $subOrganization = new Organization($gDb);
+        $subOrganization->readDataByUuid($getOrganizationUUID);
+        $subOrganization->delete();
+
+        echo json_encode(array('status' => 'success'));
+        exit();
     }
 } catch (Exception $e) {
-    if ($getMode === 'save') {
+    if (in_array($getMode, array('save', 'create', 'delete'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());

@@ -128,23 +128,23 @@ class Organizations extends HtmlPage
         $form = new Form(
             'adm_new_sub_organization_form',
             'modules/organizations.new.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'new_org_create')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations/organizations.php', array('mode' => 'create')),
             $this
         );
         $form->addInput(
-            'orgaShortName',
+            'adm_organization_short_name',
             $gL10n->get('SYS_NAME_ABBREVIATION'),
             '',
             array('maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
         );
         $form->addInput(
-            'orgaLongName',
+            'adm_organization_long_name',
             $gL10n->get('SYS_NAME'),
             '',
             array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
         );
         $form->addInput(
-            'orgaEmail',
+            'adm_organization_email',
             $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
             '',
             array('type' => 'email', 'maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
