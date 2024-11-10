@@ -945,6 +945,7 @@ class Database
         // Rollback on open transaction
         if ($this->transactions > 0) {
             $this->pdo->rollBack();
+            $this->transactions = 0;
         }
 
         $gLogger->critical($code . ': ' . $errorMessage);

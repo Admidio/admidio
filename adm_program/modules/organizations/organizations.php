@@ -17,6 +17,7 @@
  *            delete  - Deletes a sub-organization
  * org_uuid : UUID of the sub-organization
  ****************************************************************************/
+
 use Admidio\Exception;
 use Admidio\UserInterface\Organizations;
 
@@ -33,7 +34,7 @@ try {
         throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
-    if($getMode === 'edit') {
+    if ($getMode === 'edit') {
         // Edit current organization and show sub-organizations.
         $headline = $gL10n->get('SYS_ORGANIZATION');
         $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-diagram-3-fill');
@@ -91,7 +92,12 @@ try {
         // delete sub-organization
         $subOrganization = new Organization($gDb);
         $subOrganization->readDataByUuid($getOrganizationUUID);
-        $subOrganization->delete();
+        if ($subOrganization->getValue('org_org_id_parent') === $gCurrentOrgId) {
+            $subOrganization->delete();
+        } else {
+            throw new Exception('The organization ' . $subOrganization->getValue('org_longname') . ' is not
+            a sub-organization of the current organization ' . $gCurrentOrganization->getValue('org_longname') . '!');
+        }
 
         echo json_encode(array('status' => 'success'));
         exit();

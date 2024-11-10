@@ -494,6 +494,7 @@
   <string name="SYS_DELETE_LAST_CATEGORY">There is no other category in this area. For this reason, the category can not be deleted.</string>
   <string name="SYS_DELETE_MESSAGE">Should message #VAR1_BOLD# be removed now?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">You can not delete role #VAR1_BOLD#. At least one role requires the #VAR2_BOLD# setting.</string>
+  <string name="SYS_DELETE_ORGANIZATION">Do you really want to delete the organization #VAR1_BOLD#?\n\nAll data (announcements, documents, events, memberships, photos, roles and web links) of this organization will be irretrievably deleted.</string>
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
