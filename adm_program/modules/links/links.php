@@ -162,7 +162,7 @@ try {
                     <div class="card-body">');
                 }
 
-                $page->addHtml('<div class="mb-4" id="lnk_' . $lnkUuid . '">');
+                $page->addHtml('<div class="mb-3" id="lnk_' . $lnkUuid . '">');
 
                 // show weblink
                 $page->addHtml('

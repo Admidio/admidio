@@ -1,4 +1,4 @@
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="phpVersion" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_PHP_VERSION')}
     </label>
@@ -8,7 +8,7 @@
         </div>
     </div>
 </div>
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="postMaxSize" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_POST_MAX_SIZE')}
     </label>
@@ -18,7 +18,7 @@
         </div>
     </div>
 </div>
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="memoryLimit" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_MEMORY_LIMIT')}
     </label>
@@ -28,7 +28,7 @@
         </div>
     </div>
 </div>
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="fileUploads" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_FILE_UPLOADS')}
     </label>
@@ -38,7 +38,7 @@
         </div>
     </div>
 </div>
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="uploadMaxFilesize" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_UPLOAD_MAX_FILESIZE')}
     </label>
@@ -48,7 +48,7 @@
         </div>
     </div>
 </div>
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="prnGenerator" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_PRNG')}
     </label>
@@ -58,7 +58,7 @@
         </div>
     </div>
 </div>
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="phpInfo" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_PHP_INFO')}
     </label>

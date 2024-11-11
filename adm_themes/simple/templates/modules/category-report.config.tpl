@@ -12,7 +12,7 @@
             <div class="card-header">{$l10n->get('SYS_CONFIGURATION')}</div>
             <div class="card-body">
                 {include 'sys-template-parts/form.input.tpl' data=$elements[$categoryReport.name]}
-                <div class="admidio-form-group admidio-form-custom-content row mb-4">
+                <div class="admidio-form-group admidio-form-custom-content row mb-3">
                     <label class="col-sm-3 col-form-label">
                         {$l10n->get('SYS_COLUMN_SELECTION')}
                     </label>

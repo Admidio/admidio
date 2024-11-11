@@ -1,7 +1,7 @@
 <div id="plugin-{$name}" class="admidio-plugin-content">
     <h3>{$l10n->get('SYS_REGISTERED_AS')}</h3>
 
-    <div class="admidio-form-group mb-4">
+    <div class="admidio-form-group mb-3">
         <div>
             {$l10n->get('SYS_MEMBER')}
         </div>
@@ -11,7 +11,7 @@
             </strong>
         </div>
     </div>
-    <div class="admidio-form-group mb-4">
+    <div class="admidio-form-group mb-3">
         <div>
             {$l10n->get('PLG_LOGIN_ACTIVE_SINCE')}
         </div>
@@ -19,7 +19,7 @@
             <strong>{$loginActiveSince}</strong>
         </div>
     </div>
-    <div class="admidio-form-group mb-4">
+    <div class="admidio-form-group mb-3">
         <div>
             {$l10n->get('PLG_LOGIN_LAST_LOGIN')}
         </div>
@@ -27,7 +27,7 @@
             <strong>{$lastLogin}</strong>
         </div>
     </div>
-    <div class="admidio-form-group mb-4">
+    <div class="admidio-form-group mb-3">
         <div>
             {$l10n->get('PLG_LOGIN_NUMBER_OF_LOGINS')}
         </div>

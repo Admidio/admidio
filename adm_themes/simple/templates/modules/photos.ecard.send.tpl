@@ -10,7 +10,7 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_LAYOUT')}</div>
         <div class="card-body">
-            <div class="admidio-form-group admidio-form-custom-content row mb-4">
+            <div class="admidio-form-group admidio-form-custom-content row mb-3">
                 <label for="ecardPhoto" class="col-sm-3 col-form-label">
                     {$l10n->get('SYS_PHOTO')}
                 </label>

@@ -10,7 +10,7 @@
                     {if {$profileField.id} == 'LAST_NAME' || {$profileField.id} == 'FIRST_NAME' || {$profileField.id} == 'GENDER'}
                         {if $showName}
                             {$showName = false}
-                            <div class="admidio-form-group row mb-4">
+                            <div class="admidio-form-group row mb-3">
                                 <div class="col-sm-3">
                                     {$l10n->get('SYS_NAME')}
                                 </div>
@@ -27,7 +27,7 @@
                     {elseif {$profileField.id} == 'usr_login_name' || {$profileField.id} == 'usr_actual_login'}
                         {if $showUsername}
                             {$showUsername = false}
-                            <div class="admidio-form-group row mb-4">
+                            <div class="admidio-form-group row mb-3">
                                 <div class="col-sm-3">
                                     {$profileField.label}
                                 </div>
@@ -44,7 +44,7 @@
                     {elseif {$profileField.id} == 'STREET' || {$profileField.id} == 'POSTCODE' || {$profileField.id} == 'CITY' || {$profileField.id} == 'COUNTRY'}
                             {if $showAddress}
                                 {$showAddress = false}
-                                <div class="admidio-form-group row mb-4">
+                                <div class="admidio-form-group row mb-3">
                                     <div class="col-sm-3">
                                         {$l10n->get('SYS_ADDRESS')}
                                     </div>
@@ -66,7 +66,7 @@
                                 </div>
                             {/if}
                     {else}
-                        <div class="admidio-form-group row mb-4">
+                        <div class="admidio-form-group row mb-3">
                             <div class="col-sm-3">
                                 {$profileField.label}
                             </div>
@@ -109,7 +109,7 @@
                     <div class="card-body">
         {/if}
 
-        <div class="admidio-form-group row mb-4">
+        <div class="admidio-form-group row mb-3">
             <div class="col-sm-3">
                 {$profileField.label}
             </div>

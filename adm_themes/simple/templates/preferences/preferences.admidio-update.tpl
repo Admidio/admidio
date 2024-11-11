@@ -1,4 +1,4 @@
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="admidioVersion" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_ADMIDIO_VERSION')}
     </label>
@@ -10,7 +10,7 @@
         </div>
     </div>
 </div>
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="lastUpdateStep" class="col-sm-3 col-form-label">
         {$l10n->get('ORG_LAST_UPDATE_STEP')}
     </label>
@@ -21,7 +21,7 @@
     </div>
 </div>
 {if $databaseEngine == 'mysql'}
-    <div class="admidio-form-group admidio-form-custom-content row mb-4">
+    <div class="admidio-form-group admidio-form-custom-content row mb-3">
         <label for="admidioVersion" class="col-sm-3 col-form-label">
             {$l10n->get('SYS_DATABASE_BACKUP')}
         </label>
@@ -34,7 +34,7 @@
         </div>
     </div>
 {/if}
-<div class="admidio-form-group admidio-form-custom-content row mb-4">
+<div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="admidioVersion" class="col-sm-3 col-form-label">
         {$l10n->get('SYS_DONATE')}
     </label>

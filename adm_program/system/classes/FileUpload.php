@@ -61,7 +61,7 @@ class FileUpload
         return '
         <p class="lead">'.$textUploadDescription.'</p>
 
-        <span class="btn btn-primary fileinput-button mb-4">
+        <span class="btn btn-primary fileinput-button mb-3">
             <i class="bi bi-upload"></i>'.$textSelectFiles.'
             <input id="fileupload" type="file" name="files[]" multiple>
         </span>
