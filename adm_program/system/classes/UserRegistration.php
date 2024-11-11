@@ -280,7 +280,7 @@ class UserRegistration extends User
             if ($gSettingsManager->getBool('system_notifications_enabled') && $this->sendEmail) {
                 $sysMail = new SystemMail($this->db);
                 $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
-                $sysMail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('user_uuid' => $this->getValue('usr_uuid'), 'id' => $validationId)));
+                $sysMail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration.php', array('user_uuid' => $this->getValue('usr_uuid'), 'id' => $validationId)));
                 $sysMail->sendSystemMail('SYSMAIL_REGISTRATION_CONFIRMATION', $this); // TODO Exception handling
             }
         }

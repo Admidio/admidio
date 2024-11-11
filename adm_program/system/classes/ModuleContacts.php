@@ -70,10 +70,10 @@ class ModuleContacts extends HtmlPage
             } else {
                 $this->smarty->assign('createNewUserUrl',
                     SecurityUtils::encodeUrl(
-                        ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php',
+                        ADMIDIO_URL . FOLDER_MODULES . '/registration.php',
                         array(
                             'mode' => 'create_user',
-                            'new_user_uuid' => $userUuid
+                            'user_uuid' => $userUuid
                         )
                     )
                 );
@@ -115,13 +115,13 @@ class ModuleContacts extends HtmlPage
                         $button['description'] = $gL10n->get('SYS_USER_VALID_LOGIN') . '<br />' . $gL10n->get('SYS_REMINDER_SEND_LOGIN');
                         $button['label'] = $gL10n->get('SYS_SEND_LOGIN_INFORMATION');
                         $button['icon'] = 'bi-key-fill';
-                        $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => 'send_login'));
+                        $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration.php', array('user_uuid' => $userUuid, 'user_uuid_assigned' => $similarUser->getValue('usr_uuid'), 'mode' => 'send_login'));
                     } else {
                         // Login data are NOT available -> assign them now
                         $button['description'] = $gL10n->get('SYS_CONTACT_NO_VALID_LOGIN');
                         $button['label'] = $gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION');
                         $button['icon'] = 'bi-person-check-fill';
-                        $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => 'assign_member'));
+                        $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration.php', array('user_uuid' => $userUuid, 'user_uuid_assigned' => $similarUser->getValue('usr_uuid'), 'mode' => 'assign_member'));
                     }
                 }
             } else {
@@ -130,7 +130,7 @@ class ModuleContacts extends HtmlPage
                 $button['icon'] = 'bi-person-check-fill';
 
                 if($assignRegistration) {
-                    $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => 'assign_user'));
+                    $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration.php', array('user_uuid' => $userUuid, 'user_uuid_assigned' => $similarUser->getValue('usr_uuid'), 'mode' => 'assign_user'));
 
                     if ($similarUser->getValue('usr_login_name') !== '') {
                         // Login data are already available
