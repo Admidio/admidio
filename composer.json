@@ -7,7 +7,7 @@
         "management",
         "organizations"
     ],
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "homepage": "https://www.admidio.org/",
     "config": {
         "platform": {

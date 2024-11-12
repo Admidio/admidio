@@ -84,7 +84,7 @@ try {
         $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-card-checklist');
 
         // create html page object
-        $page = new ModuleRegistration('admidio-registration', $headline);
+        $page = new Admidio\UserInterface\Registration('adm_registration', $headline);
         $page->createContentRegistrationList();
         $page->show();
     }
@@ -100,7 +100,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new ModuleContacts('admidio-registration-assign', $headline);
+        $page = new ModuleContacts('adm_registration_assign', $headline);
         $registrationUser = new User($gDb, $gProfileFields);
         $registrationUser->readDataByUuid($getUserUUID);
         $page->createContentAssignUser($registrationUser, true);

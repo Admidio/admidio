@@ -15,6 +15,7 @@
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
  *            backup         - create backup of Admidio database
+ *            update_check   - Check for a new version of Admidio
  * panel    : The name of the preferences panel that should be shown or saved.
  ***********************************************************************************************
  */
@@ -22,14 +23,14 @@ use Admidio\Exception;
 use Admidio\UserInterface\Preferences;
 
 try {
-    require_once(__DIR__ . '/../../system/common.php');
-    require(__DIR__ . '/../../system/login_valid.php');
+    require_once(__DIR__ . '/../system/common.php');
+    require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup')
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
 
@@ -65,7 +66,7 @@ try {
                 $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
             }
             // create html page object
-            $page = new Preferences('admidio-preferences', $headline);
+            $page = new Preferences('adm_preferences', $headline);
 
             if ($getPanel !== '') {
                 $page->setPanelToShow($getPanel);
@@ -209,7 +210,7 @@ try {
 
             // message if send/save is OK
             if ($sendResult === true) { // don't remove check === true. ($sendResult) won't work
-                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('show_option' => 'email_dispatch')));
+                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('show_option' => 'email_dispatch')));
                 $gMessage->show($gL10n->get('SYS_EMAIL_SEND') . $debugOutput);
                 // => EXIT
             } else {
@@ -229,6 +230,11 @@ try {
             $dump->create('admidio_dump_' . $g_adm_db . '.sql.gzip');
             $dump->export();
             $dump->deleteDumpFile();
+            break;
+
+        case 'update_check':
+            $preferences = new Admidio\Modules\Preferences();
+            echo $preferences->showUpdateInfo();
             break;
     }
 } catch (Exception $exception) {

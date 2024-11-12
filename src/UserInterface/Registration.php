@@ -1,8 +1,14 @@
 <?php
+namespace Admidio\UserInterface;
+
 use Admidio\Exception;
+use DateTime;
+use HtmlPage;
+use SecurityUtils;
+use UserRegistration;
 
 /**
- * @brief Class with methods to display the module pages and helpful functions.
+ * @brief Class with methods to display the module pages of the registration.
  *
  * This class adds some functions that are used in the registration module to keep the
  * code easy to read and short
@@ -18,17 +24,8 @@ use Admidio\Exception;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ModuleRegistration extends HtmlPage
+class Registration extends HtmlPage
 {
-    /**
-     * Constructor that initialize the class member parameters
-     * @throws Exception
-     */
-    public function __construct(string $id, string $headline = '')
-    {
-        parent::__construct($id, $headline);
-    }
-
     /**
      * Creates an array with all available registrations. The array contains the following entries:
      * array(userID, userUUID, loginName, registrationTimestamp, lastName, firstName, email, validationID)

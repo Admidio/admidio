@@ -204,7 +204,7 @@ class Preferences extends HtmlPage
         $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
         $this->assignSmartyVariable('updateStepText', $updateStepText);
         $this->assignSmartyVariable('databaseEngine', DB_ENGINE);
-        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'backup')));
+        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
         $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
 
         $smarty = $this->getSmartyTemplate();
@@ -225,7 +225,7 @@ class Preferences extends HtmlPage
         $formAnnouncements = new Form(
             'preferencesFormAnnouncements',
             'preferences/preferences.announcements.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Announcements')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Announcements')),
             null,
             array('class' => 'form-preferences')
         );
@@ -281,7 +281,7 @@ class Preferences extends HtmlPage
         $formCaptcha = new Form(
             'preferencesFormCaptcha',
             'preferences/preferences.captcha.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Captcha')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Captcha')),
             null,
             array('class' => 'form-preferences')
         );
@@ -403,7 +403,7 @@ class Preferences extends HtmlPage
         $formCategoryReport = new Form(
             'preferencesFormCategoryReport',
             'preferences/preferences.category-report.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'CategoryReport')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'CategoryReport')),
             null,
             array('class' => 'form-preferences')
         );
@@ -455,7 +455,7 @@ class Preferences extends HtmlPage
         $formCommon = new Form(
             'preferencesFormCommon',
             'preferences/preferences.common.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Common')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Common')),
             null,
             array('class' => 'form-preferences')
         );
@@ -559,7 +559,7 @@ class Preferences extends HtmlPage
         $formContacts = new Form(
             'preferencesFormContacts',
             'preferences/preferences.contacts.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Contacts')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Contacts')),
             null,
             array('class' => 'form-preferences')
         );
@@ -644,7 +644,7 @@ class Preferences extends HtmlPage
         $formDocumentsFiles = new Form(
             'preferencesFormDocumentsFiles',
             'preferences/preferences.documents-files.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'DocumentsFiles')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'DocumentsFiles')),
             null,
             array('class' => 'form-preferences')
         );
@@ -687,7 +687,7 @@ class Preferences extends HtmlPage
         $formEmailDispatch = new Form(
             'preferencesFormOrganization',
             'preferences/preferences.email-dispatch.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'EmailDispatch')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'EmailDispatch')),
             null,
             array('class' => 'form-preferences')
         );
@@ -816,7 +816,7 @@ class Preferences extends HtmlPage
             $formValues['mail_smtp_password'],
             array('type' => 'password', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
         );
-        $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'test_email')) . '">
+        $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
         $formEmailDispatch->addSubmitButton(
@@ -846,7 +846,7 @@ class Preferences extends HtmlPage
         $formEvents = new Form(
             'preferencesFormEvents',
             'preferences/preferences.events.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Events')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Events')),
             null,
             array('class' => 'form-preferences')
         );
@@ -977,7 +977,7 @@ class Preferences extends HtmlPage
         $formGroupsRoles = new Form(
             'preferencesFormGroupsRoles',
             'preferences/preferences.groups-roles.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'GroupsRoles')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'GroupsRoles')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1076,7 +1076,7 @@ class Preferences extends HtmlPage
         $formGuestbook = new Form(
             'preferencesFormGuestbook',
             'preferences/preferences.guestbook.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Guestbook')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Guestbook')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1159,7 +1159,7 @@ class Preferences extends HtmlPage
         $formWeblinks = new Form(
             'preferencesFormLinks',
             'preferences/preferences.links.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Links')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Links')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1228,7 +1228,7 @@ class Preferences extends HtmlPage
         $formMessages = new Form(
             'preferencesFormMessages',
             'preferences/preferences.messages.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Messages')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Messages')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1336,7 +1336,7 @@ class Preferences extends HtmlPage
         $formPhotos = new Form(
             'preferencesFormPhotos',
             'preferences/preferences.photos.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Photos')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Photos')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1553,7 +1553,7 @@ class Preferences extends HtmlPage
         $formProfile = new Form(
             'preferencesFormProfile',
             'preferences/preferences.profile.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Profile')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Profile')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1633,7 +1633,7 @@ class Preferences extends HtmlPage
         $formRegionalSettings = new Form(
             'preferencesFormRegionalSettings',
             'preferences/preferences.regional-settings.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'RegionalSettings')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'RegionalSettings')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1700,7 +1700,7 @@ class Preferences extends HtmlPage
         $formRegistration = new Form(
             'preferencesFormRegistration',
             'preferences/preferences.registration.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Registration')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Registration')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1761,7 +1761,7 @@ class Preferences extends HtmlPage
         $formSecurity = new Form(
             'preferencesFormSecurity',
             'preferences/preferences.security.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'Security')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Security')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1933,7 +1933,7 @@ class Preferences extends HtmlPage
         $formSystemNotifications = new Form(
             'preferencesFormSystemNotifications',
             'preferences/preferences.system-notifications.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', array('mode' => 'save', 'panel' => 'SystemNotifications')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'SystemNotifications')),
             null,
             array('class' => 'form-preferences')
         );
@@ -2064,7 +2064,7 @@ class Preferences extends HtmlPage
                 $("#tabsNavCommon").attr("class", "nav-link");
                 $("#tabsCommon").attr("class", "tab-pane fade");
                 $("#collapsePreferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
+                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
                         $("#admidioPanelPreferences' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
                     });
                 location.hash = "#admidioPanelPreferences' . $this->preferencesPanelToShow . '";
@@ -2076,7 +2076,7 @@ class Preferences extends HtmlPage
                 $("#tabsNavCommon").attr("class", "nav-link active");
                 $("#tabsCommon").attr("class", "tab-pane fade show active");
                 $("#collapsePreferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
+                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
                         $("#admidioPanelPreferences' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
                     });
                 location.hash = "#admidioPanelPreferences' . $this->preferencesPanelToShow . '";
@@ -2094,7 +2094,7 @@ class Preferences extends HtmlPage
                 $("#admidioPanelPreferences" + panels[i] + " .accordion-header").click(function (e) {
                     var id = $(this).data("preferences-panel");
                     if ($("#admidioPanelPreferences" + id + " h2").attr("aria-expanded") == "true") {
-                        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php?mode=html_form&panel=" + id, function (data) {
+                        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=" + id, function (data) {
                             $("#admidioPanelPreferences" + id + " .accordion-body").html(data);
                         });
                     }
@@ -2111,7 +2111,7 @@ class Preferences extends HtmlPage
                 var admVersionContent = $("#admidio_version_content");
 
                 admVersionContent.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
+                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {mode: "update_check"}, function(htmlVersion) {
                     admVersionContent.html(htmlVersion);
                 });
                 return false;
@@ -2121,7 +2121,7 @@ class Preferences extends HtmlPage
                 var dirProtectionStatus = $("#directory_protection_status");
 
                 dirProtectionStatus.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php", {mode: "htaccess"}, function(statusText) {
+                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {mode: "htaccess"}, function(statusText) {
                     var directoryProtection = dirProtectionStatus.parent().parent().parent();
                     directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
                 });
