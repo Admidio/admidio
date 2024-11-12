@@ -1,8 +1,14 @@
 <?php
+namespace Admidio\UserInterface;
+
 use Admidio\Exception;
+use DateTime;
+use HtmlPage;
+use SecurityUtils;
+use UserRegistration;
 
 /**
- * @brief Class with methods to display the module pages and helpful functions.
+ * @brief Class with methods to display the module pages of the registration.
  *
  * This class adds some functions that are used in the registration module to keep the
  * code easy to read and short
@@ -18,17 +24,8 @@ use Admidio\Exception;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ModuleRegistration extends HtmlPage
+class Registration extends HtmlPage
 {
-    /**
-     * Constructor that initialize the class member parameters
-     * @throws Exception
-     */
-    public function __construct(string $id, string $headline = '')
-    {
-        parent::__construct($id, $headline);
-    }
-
     /**
      * Creates an array with all available registrations. The array contains the following entries:
      * array(userID, userUUID, loginName, registrationTimestamp, lastName, firstName, email, validationID)
@@ -99,19 +96,19 @@ class ModuleRegistration extends HtmlPage
                 'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
             );
             $templateRow['actions'][] = array(
-                'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/registration/registration_function.php', array('mode' => 'delete_user', 'new_user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/registration.php', array('mode' => 'delete_user', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                 'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME'))),
                 'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
             if (count($similarUserIDs) > 0) {
                 $templateRow['buttons'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('mode' => 'show_similar', 'user_uuid' => $row['usr_uuid'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration.php', array('mode' => 'show_similar', 'user_uuid' => $row['usr_uuid'])),
                     'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION')
                 );
             } else {
                 $templateRow['buttons'][] = array(
-                    'url' => ($gCurrentUser->editUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('accept_registration' => true, 'user_uuid' => $row['usr_uuid'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => 'create_user', 'new_user_uuid' => $row['usr_uuid']))),
+                    'url' => ($gCurrentUser->editUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('accept_registration' => true, 'user_uuid' => $row['usr_uuid'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration.php', array('mode' => 'create_user', 'user_uuid' => $row['usr_uuid']))),
                     'name' => $gL10n->get('SYS_CONFIRM_REGISTRATION')
                 );
             }

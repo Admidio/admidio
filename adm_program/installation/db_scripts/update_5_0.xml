@@ -57,5 +57,7 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="490" database="mysql">UPDATE %PREFIX%_organizations INNER JOIN %PREFIX%_preferences ON prf_org_id = org_id SET org_show_org_select = prf_value WHERE prf_name = 'system_organization_select'</step>
     <step id="500" database="pgsql">UPDATE %PREFIX%_organizations SET org_show_org_select = prf_value FROM %PREFIX%_preferences WHERE prf_org_id = org_id AND prf_name = 'system_organization_select'</step>
     <step id="510">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'system_organization_select'</step>
+    <step id="520">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/registration.php' WHERE men_name_intern = 'registration'</step>
+    <step id="530">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/preferences.php' WHERE men_name_intern = 'orgprop'</step>
     <step>stop</step>
 </update>

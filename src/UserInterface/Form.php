@@ -268,7 +268,7 @@ class Form
         global $gL10n;
 
         $this->addJavascriptCode('
-            $("#' . $id . '_tefresh").click(function() {
+            $("#' . $id . '_refresh").click(function() {
                 $("#adm_captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random());
             });', true);
         // now add a row with a text field where the user can write the solution for the puzzle

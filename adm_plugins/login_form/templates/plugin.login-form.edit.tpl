@@ -24,6 +24,6 @@
     </form>
 
     {if $showRegisterLink && $settings->getBool('registration_enable_module')}
-        <a class="icon-link" href="{$urlAdmidio}/adm_program/modules/registration/registration.php"><i class="bi bi-card-checklist"></i>{$l10n->get('SYS_REGISTRATION')}</a>
+        <a class="icon-link" href="{$urlAdmidio}/adm_program/modules/registration.php"><i class="bi bi-card-checklist"></i>{$l10n->get('SYS_REGISTRATION')}</a>
     {/if}
 </div>

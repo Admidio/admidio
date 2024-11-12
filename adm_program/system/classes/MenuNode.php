@@ -152,7 +152,7 @@ class MenuNode
                         $message = new TableMessage($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
                     } elseif ($node['men_name_intern'] === 'registration') {
-                        $registration = new ModuleRegistration('registration');
+                        $registration = new Admidio\UserInterface\Registration('registration');
                         $badgeCount = count($registration->getRegistrationsArray());
                     }
 

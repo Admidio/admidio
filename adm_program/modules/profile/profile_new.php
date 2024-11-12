@@ -342,9 +342,9 @@ try {
 
         if (!$gValidLogin) {
             // Registration
-            $form->addSubmitButton('adm_btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
+            $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
         } else {
-            $form->addSubmitButton('adm_btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+            $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
         }
 
         if ($getUserUuid !== '') {

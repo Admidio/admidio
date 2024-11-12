@@ -44,7 +44,7 @@
     {/if}
 
     <div class="form-alert" style="display: none;">&nbsp;</div>
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save']}
 
     {if isset($nameUserCreated)}
         {include file="sys-template-parts/system.info-create-edit.tpl"}
