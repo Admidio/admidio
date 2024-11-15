@@ -9,6 +9,6 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['system_date']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['system_time']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['system_currency']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_regional_settings']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_regional_settings']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

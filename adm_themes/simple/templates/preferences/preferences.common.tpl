@@ -14,6 +14,6 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['system_url_imprint']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_js_editor_enabled']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_browser_update_check']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_common']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_common']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

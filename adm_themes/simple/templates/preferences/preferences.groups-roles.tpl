@@ -10,6 +10,6 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['groups_roles_export']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['groups_roles_edit_lists']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['editCategories']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_lists']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_lists']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

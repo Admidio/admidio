@@ -10,6 +10,6 @@
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['enable_gbook_comments4all']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['enable_intial_comments_loading']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['flooding_protection_time']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_guestbook']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_guestbook']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

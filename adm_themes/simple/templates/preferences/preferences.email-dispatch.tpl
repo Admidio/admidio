@@ -35,6 +35,6 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_user']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_password']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['send_test_email']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_email_dispatch']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_email_dispatch']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

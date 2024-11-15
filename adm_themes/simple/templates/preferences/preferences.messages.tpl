@@ -14,6 +14,6 @@
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_save_attachments']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_html_registered_users']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_delivery_confirmation']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_messages']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_messages']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

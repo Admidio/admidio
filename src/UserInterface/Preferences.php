@@ -67,110 +67,110 @@ class Preferences extends HtmlPage
         global $gL10n;
 
         $this->accordionCommonPanels = array(
-            'Common' => array(
-                'id' => 'Common',
+            'common' => array(
+                'id' => 'common',
                 'title' => $gL10n->get('SYS_COMMON'),
                 'icon' => 'bi-gear-fill'
             ),
-            'Security' => array(
-                'id' => 'Security',
+            'security' => array(
+                'id' => 'security',
                 'title' => $gL10n->get('SYS_SECURITY'),
                 'icon' => 'bi-shield-fill'
             ),
-            'RegionalSettings' => array(
-                'id' => 'RegionalSettings',
+            'regional_settings' => array(
+                'id' => 'regional_settings',
                 'title' => $gL10n->get('ORG_REGIONAL_SETTINGS'),
                 'icon' => 'bi-globe2'
             ),
-            'Registration' => array(
-                'id' => 'Registration',
+            'registration' => array(
+                'id' => 'registration',
                 'title' => $gL10n->get('SYS_REGISTRATION'),
                 'icon' => 'bi-card-checklist'
             ),
-            'EmailDispatch' => array(
-                'id' => 'EmailDispatch',
+            'email_dispatch' => array(
+                'id' => 'email_dispatch',
                 'title' => $gL10n->get('SYS_MAIL_DISPATCH'),
                 'icon' => 'bi-envelope-open-fill'
             ),
-            'SystemNotifications' => array(
-                'id' => 'SystemNotifications',
+            'system_notifications' => array(
+                'id' => 'system_notifications',
                 'title' => $gL10n->get('SYS_SYSTEM_MAILS'),
                 'icon' => 'bi-broadcast-pin'
             ),
-            'Captcha' => array(
-                'id' => 'Captcha',
+            'captcha' => array(
+                'id' => 'captcha',
                 'title' => $gL10n->get('SYS_CAPTCHA'),
                 'icon' => 'bi-fonts'
             ),
-            'AdmidioUpdate' => array(
-                'id' => 'AdmidioUpdate',
+            'admidio_update' => array(
+                'id' => 'admidio_update',
                 'title' => $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'),
                 'icon' => 'bi-cloud-arrow-down-fill'
             ),
-            'PHP' => array(
-                'id' => 'PHP',
+            'php' => array(
+                'id' => 'php',
                 'title' => $gL10n->get('SYS_PHP'),
                 'icon' => 'bi-filetype-php'
             ),
-            'SystemInformation' => array(
-                'id' => 'SystemInformation',
+            'system_information' => array(
+                'id' => 'system_information',
                 'title' => $gL10n->get('SYS_SYSTEM_INFORMATION'),
                 'icon' => 'bi-info-circle-fill'
             )
         );
         $this->accordionModulePanels = array(
-            'Announcements' => array(
-                'id' => 'Announcements',
+            'announcements' => array(
+                'id' => 'announcements',
                 'title' => $gL10n->get('SYS_ANNOUNCEMENTS'),
                 'icon' => 'bi-newspaper'
             ),
-            'Contacts' => array(
-                'id' => 'Contacts',
+            'contacts' => array(
+                'id' => 'contacts',
                 'title' => $gL10n->get('SYS_CONTACTS'),
                 'icon' => 'bi-person-vcard-fill'
             ),
-            'DocumentsFiles' => array(
-                'id' => 'DocumentsFiles',
+            'documents_files' => array(
+                'id' => 'documents_files',
                 'title' => $gL10n->get('SYS_DOCUMENTS_FILES'),
                 'icon' => 'bi-file-earmark-arrow-down-fill'
             ),
-            'Photos' => array(
-                'id' => 'Photos',
+            'photos' => array(
+                'id' => 'photos',
                 'title' => $gL10n->get('SYS_PHOTOS'),
                 'icon' => 'bi-image-fill'
             ),
-            'Guestbook' => array(
-                'id' => 'Guestbook',
+            'guestbook' => array(
+                'id' => 'guestbook',
                 'title' => $gL10n->get('GBO_GUESTBOOK'),
                 'icon' => 'bi-book-half'
             ),
-            'GroupsRoles' => array(
-                'id' => 'GroupsRoles',
+            'groups_roles' => array(
+                'id' => 'groups_roles',
                 'title' => $gL10n->get('SYS_GROUPS_ROLES'),
                 'icon' => 'bi-people-fill'
             ),
-            'CategoryReport' => array(
-                'id' => 'CategoryReport',
+            'category_report' => array(
+                'id' => 'category_report',
                 'title' => $gL10n->get('SYS_CATEGORY_REPORT'),
                 'icon' => 'bi-list-stars'
             ),
-            'Messages' => array(
-                'id' => 'Messages',
+            'messages' => array(
+                'id' => 'messages',
                 'title' => $gL10n->get('SYS_MESSAGES'),
                 'icon' => 'bi-envelope-fill'
             ),
-            'Profile' => array(
-                'id' => 'Profile',
+            'profile' => array(
+                'id' => 'profile',
                 'title' => $gL10n->get('SYS_PROFILE'),
                 'icon' => 'bi-person-fill'
             ),
-            'Events' => array(
-                'id' => 'Events',
+            'events' => array(
+                'id' => 'events',
                 'title' => $gL10n->get('SYS_EVENTS'),
                 'icon' => 'bi-calendar-week-fill'
             ),
-            'Links' => array(
-                'id' => 'Links',
+            'links' => array(
+                'id' => 'links',
                 'title' => $gL10n->get('SYS_WEBLINKS'),
                 'icon' => 'bi-link-45deg'
             )
@@ -223,7 +223,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formAnnouncements = new Form(
-            'preferencesFormAnnouncements',
+            'adm_preferences_form_announcements',
             'preferences/preferences.announcements.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Announcements')),
             null,
@@ -255,7 +255,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
         );
         $formAnnouncements->addSubmitButton(
-            'btn_save_announcements',
+            'adm_button_save_announcements',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -279,7 +279,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formCaptcha = new Form(
-            'preferencesFormCaptcha',
+            'adm_preferences_form_captcha',
             'preferences/preferences.captcha.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Captcha')),
             null,
@@ -368,7 +368,7 @@ class Preferences extends HtmlPage
             array('maxLength' => 60, 'helpTextId' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
         );
         $html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
-         <a id="captcha-refresh" class="admidio-icon-link" href="javascript:void(0)">
+         <a id="adm_captcha_refresh" class="admidio-icon-link" href="javascript:void(0)">
             <i class="bi bi-arrow-repeat" style="font-size: 22pt;" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_RELOAD') . '"></i></a>';
         $formCaptcha->addCustomContent(
             'captchaPreview',
@@ -377,7 +377,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => 'ORG_CAPTCHA_PREVIEW_TEXT')
         );
         $formCaptcha->addSubmitButton(
-            'btn_save_captcha',
+            'adm_button_save_captcha',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -401,7 +401,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formCategoryReport = new Form(
-            'preferencesFormCategoryReport',
+            'adm_preferences_form_category_report',
             'preferences/preferences.category-report.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'CategoryReport')),
             null,
@@ -429,7 +429,7 @@ class Preferences extends HtmlPage
         );
 
         $formCategoryReport->addSubmitButton(
-            'btn_save_category_report',
+            'adm_button_save_category_report',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -453,7 +453,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formCommon = new Form(
-            'preferencesFormCommon',
+            'adm_preferences_form_common',
             'preferences/preferences.common.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Common')),
             null,
@@ -533,7 +533,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => 'ORG_BROWSER_UPDATE_CHECK_DESC')
         );
         $formCommon->addSubmitButton(
-            'btn_save_common',
+            'adm_button_save_common',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -557,7 +557,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formContacts = new Form(
-            'preferencesFormContacts',
+            'adm_preferences_form_contacts',
             'preferences/preferences.contacts.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Contacts')),
             null,
@@ -618,7 +618,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => 'SYS_MAINTAIN_USER_RELATION_TYPES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 
         $formContacts->addSubmitButton(
-            'btn_save_contacts',
+            'adm_button_save_contacts',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -642,7 +642,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formDocumentsFiles = new Form(
-            'preferencesFormDocumentsFiles',
+            'adm_preferences_form_documents_files',
             'preferences/preferences.documents-files.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'DocumentsFiles')),
             null,
@@ -661,7 +661,7 @@ class Preferences extends HtmlPage
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextId' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
         );
         $formDocumentsFiles->addSubmitButton(
-            'btn_save_documents_files',
+            'adm_button_save_documents_files',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -685,7 +685,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formEmailDispatch = new Form(
-            'preferencesFormOrganization',
+            'adm_preferences_form_organization',
             'preferences/preferences.email-dispatch.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'EmailDispatch')),
             null,
@@ -820,7 +820,7 @@ class Preferences extends HtmlPage
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
         $formEmailDispatch->addSubmitButton(
-            'btn_save_email_dispatch',
+            'adm_button_save_email_dispatch',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -844,7 +844,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formEvents = new Form(
-            'preferencesFormEvents',
+            'adm_preferences_form_events',
             'preferences/preferences.events.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Events')),
             null,
@@ -951,7 +951,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => 'SYS_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
         );
         $formEvents->addSubmitButton(
-            'btn_save_events',
+            'adm_button_save_events',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -975,7 +975,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formGroupsRoles = new Form(
-            'preferencesFormGroupsRoles',
+            'adm_preferences_form_groups_roles',
             'preferences/preferences.groups-roles.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'GroupsRoles')),
             null,
@@ -1050,7 +1050,7 @@ class Preferences extends HtmlPage
             $html,
             array('helpTextId' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
         $formGroupsRoles->addSubmitButton(
-            'btn_save_lists',
+            'adm_button_save_lists',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1074,7 +1074,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formGuestbook = new Form(
-            'preferencesFormGuestbook',
+            'adm_preferences_form_guestbook',
             'preferences/preferences.guestbook.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Guestbook')),
             null,
@@ -1133,7 +1133,7 @@ class Preferences extends HtmlPage
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'GBO_FLOODING_PROTECTION_INTERVALL_DESC')
         );
         $formGuestbook->addSubmitButton(
-            'btn_save_guestbook',
+            'adm_button_save_guestbook',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1157,7 +1157,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formWeblinks = new Form(
-            'preferencesFormLinks',
+            'adm_preferences_form_links',
             'preferences/preferences.links.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Links')),
             null,
@@ -1202,7 +1202,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => $gL10n->get('SYS_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
         );
         $formWeblinks->addSubmitButton(
-            'btn_save_links',
+            'adm_button_save_links',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1226,7 +1226,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formMessages = new Form(
-            'preferencesFormMessages',
+            'adm_preferences_form_messages',
             'preferences/preferences.messages.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Messages')),
             null,
@@ -1310,7 +1310,7 @@ class Preferences extends HtmlPage
             array('defaultValue' => $formValues['mail_delivery_confirmation'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DELIVERY_CONFIRMATION_DESC')
         );
         $formMessages->addSubmitButton(
-            'btn_save_messages',
+            'adm_button_save_messages',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1334,7 +1334,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formPhotos = new Form(
-            'preferencesFormPhotos',
+            'adm_preferences_form_photos',
             'preferences/preferences.photos.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Photos')),
             null,
@@ -1440,7 +1440,7 @@ class Preferences extends HtmlPage
             )
         );
         $formPhotos->addSubmitButton(
-            'btn_save_photos',
+            'adm_button_save_photos',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1551,7 +1551,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formProfile = new Form(
-            'preferencesFormProfile',
+            'adm_preferences_form_profile',
             'preferences/preferences.profile.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Profile')),
             null,
@@ -1607,7 +1607,7 @@ class Preferences extends HtmlPage
             array('defaultValue' => $formValues['profile_photo_storage'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_LOCATION_PROFILE_PICTURES_DESC')
         );
         $formProfile->addSubmitButton(
-            'btn_save_profile',
+            'adm_button_save_profile',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1631,7 +1631,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formRegionalSettings = new Form(
-            'preferencesFormRegionalSettings',
+            'adm_preferences_form_regional_settings',
             'preferences/preferences.regional-settings.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'RegionalSettings')),
             null,
@@ -1674,7 +1674,7 @@ class Preferences extends HtmlPage
             array('maxLength' => 20, 'helpTextId' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small')
         );
         $formRegionalSettings->addSubmitButton(
-            'btn_save_regional_settings',
+            'adm_button_save_regional_settings',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1698,7 +1698,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formRegistration = new Form(
-            'preferencesFormRegistration',
+            'adm_preferences_form_registration',
             'preferences/preferences.registration.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Registration')),
             null,
@@ -1735,7 +1735,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => array('ORG_EMAIL_ALERTS_DESC', array('SYS_RIGHT_APPROVE_USERS')))
         );
         $formRegistration->addSubmitButton(
-            'btn_save_registration',
+            'adm_button_save_registration',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1759,7 +1759,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formSecurity = new Form(
-            'preferencesFormSecurity',
+            'adm_preferences_form_security',
             'preferences/preferences.security.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Security')),
             null,
@@ -1797,7 +1797,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('SYS_ENABLE_NOTIFICATIONS')))
         );
         $formSecurity->addSubmitButton(
-            'btn_save_security',
+            'adm_button_save_security',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1931,7 +1931,7 @@ class Preferences extends HtmlPage
         $formValues = $gSettingsManager->getAll();
 
         $formSystemNotifications = new Form(
-            'preferencesFormSystemNotifications',
+            'adm_preferences_form_system_notifications',
             'preferences/preferences.system-notifications.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'SystemNotifications')),
             null,
@@ -2007,7 +2007,7 @@ class Preferences extends HtmlPage
             array('helpTextId' => $htmlDesc)
         );
         $formSystemNotifications->addSubmitButton(
-            'btn_save_system_notification',
+            'adm_button_save_system_notification',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -2087,28 +2087,28 @@ class Preferences extends HtmlPage
 
         $this->addJavascript(
             '
-            var panels = ["Common", "Security", "RegionalSettings", "Registration", "EmailDispatch", "SystemNotifications", "Captcha", "AdmidioUpdate", "PHP", "SystemInformation",
-                "Announcements", "Contacts", "DocumentsFiles", "Photos", "Guestbook", "GroupsRoles", "CategoryReport", "Messages", "Profile", "Events", "Links"];
+            var panels = ["common", "security", "regional_settings", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
+                "announcements", "contacts", "documents_files", "photos", "guestbook", "groups_roles", "category_report", "messages", "profile", "events", "links"];
 
             for(var i = 0; i < panels.length; i++) {
-                $("#admidioPanelPreferences" + panels[i] + " .accordion-header").click(function (e) {
+                $("#adm_panel_preferences_" + panels[i] + " .accordion-header").click(function (e) {
                     var id = $(this).data("preferences-panel");
-                    if ($("#admidioPanelPreferences" + id + " h2").attr("aria-expanded") == "true") {
+                    if ($("#adm_panel_preferences_" + id + " h2").attr("aria-expanded") == "true") {
                         $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=" + id, function (data) {
-                            $("#admidioPanelPreferences" + id + " .accordion-body").html(data);
+                            $("#adm_panel_preferences_" + id + " .accordion-body").html(data);
                         });
                     }
                 });
 
-                $(document).on("submit", "#preferencesForm" + panels[i], formSubmit);
+                $(document).on("submit", "#adm_preferences_form_" + panels[i], formSubmit);
             }
 
-            $(document).on("click", "#captcha-refresh", (function() {
+            $(document).on("click", "#adm_captcha_refresh", (function() {
                 document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
             }));
 
-            $(document).on("click", "#link_check_for_update", (function() {
-                var admVersionContent = $("#admidio_version_content");
+            $(document).on("click", "#adm_link_check_update", (function() {
+                var admVersionContent = $("#adm_version_content");
 
                 admVersionContent.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
                 $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {mode: "update_check"}, function(htmlVersion) {

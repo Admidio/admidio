@@ -14,6 +14,6 @@
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['editCalendars']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['events_rooms_enabled']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['editRooms']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_events']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_events']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

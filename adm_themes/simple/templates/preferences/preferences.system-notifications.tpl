@@ -33,6 +33,6 @@
     {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_REGISTRATION_REFUSED']}
     {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_NEW_PASSWORD']}
     {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_PASSWORD_RESET']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_system_notification']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_system_notification']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

@@ -15,6 +15,6 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['captcha_charset']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['captcha_signature']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['captchaPreview']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_captcha']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_captcha']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

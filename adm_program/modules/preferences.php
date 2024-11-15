@@ -67,8 +67,8 @@ try {
 
         // Returns the html of the requested form
         case 'html_form':
-            $preferencesUI = new Preferences('preferencesForm');
-            $methodName = 'create' . $getPanel . 'Form';
+            $preferencesUI = new Preferences('adm_preferences_form');
+            $methodName = 'create' . str_replace('_', '', ucwords($getPanel, '_')) . 'Form';
             echo $preferencesUI->{$methodName}();
             break;
 
