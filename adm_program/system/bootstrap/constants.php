@@ -78,7 +78,7 @@ const FOLDER_CLASSES = '/adm_program/system/classes';
 const FOLDER_INSTALLATION = '/adm_program/installation';
 const FOLDER_LIBS = '/adm_program/libs'; // PHP libs
 const FOLDER_LANGUAGES = '/adm_program/languages';
-const FOLDER_THEMES = '/theme';
+const FOLDER_THEMES = '/themes';
 const FOLDER_MODULES = '/adm_program/modules';
 const FOLDER_PLUGINS = '/adm_plugins';
 
