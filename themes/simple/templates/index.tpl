@@ -38,9 +38,9 @@
 
             // function to handle modal window and load data from url
             $(document).on('click', '.openPopup', function (){
-                $('#admidio-modal .modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
-                $('#admidio-modal .modal-content').load($(this).attr('data-href'),function(){
-                    const myModal = new bootstrap.Modal($('#admidio-modal'));
+                $('#adm_modal .modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
+                $('#adm_modal .modal-content').load($(this).attr('data-href'),function(){
+                    const myModal = new bootstrap.Modal($('#adm_modal'));
                     myModal.show();
                 });
             });
@@ -62,7 +62,7 @@
     {/if}
 </head>
 <body id="{$id}" class="admidio">
-    <div id="admidio-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="adm_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content"></div>
         </div>
@@ -70,18 +70,18 @@
 
     {include 'system/messagebox.tpl'}
 
-    <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
+    <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar">
         <a class="navbar-brand" href="{$urlAdmidio}/adm_program/overview.php">
             <img class="d-none d-md-block align-top" src="{$urlTheme}/images/admidio_logo.png"
                 alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
         </a>
-        <span id="headline-organization" class="d-block d-lg-none">{$organizationName}</span>
-        <span id="headline-membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>
+        <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
+        <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adm_navbar_nav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div id="navbarNav" class="collapse navbar-collapse">
+        <div id="adm_navbar_nav" class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
             {if $validLogin}
                 <li class="nav-item">
@@ -128,7 +128,7 @@
                     </ol>
                 </nav>
 
-                <div id="content" class="admidio-content" role="main">
+                <div id="adm_content" class="admidio-content" role="main">
                     <div class="admidio-content-header">
                         <h1 class="admidio-module-headline">{$headline}</h1>
                         {include file='sys-template-parts/menu.functions.tpl'}
@@ -142,7 +142,7 @@
                         {include file=$templateFile}
                     {/if}
 
-                    <div id="imprint">Powered by <a href="https://www.admidio.org">Admidio</a> &copy; Admidio Team
+                    <div id="adm_imprint">Powered by <a href="https://www.admidio.org">Admidio</a> &copy; Admidio Team
                         {if $urlImprint != ''}
                             &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlImprint}">{$l10n->get('SYS_IMPRINT')}</a>
                         {/if}

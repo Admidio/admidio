@@ -2,11 +2,11 @@
 <div class="admidio-headline-mobile-menu d-md-none p-2">
     <span class="text-uppercase">{$l10n->get("SYS_MENU")}</span>
     <button class="btn btn-link d-md-none collapsed float-end" type="button" data-bs-toggle="collapse"
-            data-bs-target="#admidio-main-menu" aria-controls="admidio-main-menu" aria-expanded="false">
+            data-bs-target="#adm_main_menu" aria-controls="adm_main_menu" aria-expanded="false">
         <i class="bi bi-list"></i>
     </button>
 </div>
-<nav class="admidio-menu-list collapse" id="admidio-main-menu">
+<nav id="adm_main_menu" class="admidio-menu-list collapse">
     {foreach $menuNavigation as $menuGroup}
         <div class="admidio-menu-header">{$menuGroup.name}</div>
         <ul class="nav admidio-menu-node flex-column mb-0">

@@ -31,37 +31,34 @@
     --bs-focus-ring-color: #c4e9ef;
 }
 
-#admidio-main-navbar {
+#adm_main_navbar {
+    color: var(--admidio-header-font-color);
     background-color: var(--bs-primary);
     min-height: 4rem;
     position: sticky;
     padding-bottom: 0;
-}
-
-#admidio-main-navbar {
-    color: var(--admidio-header-font-color);
     font-weight: bold;
     font-size: 1.7rem;
     padding-top: 0;
 }
 
-#admidio-main-navbar .navbar-brand img {
+#adm_main_navbar .navbar-brand img {
     margin-right: 1rem;
 }
 
-#admidio-main-navbar a {
+#adm_main_navbar a {
     color: var(--admidio-header-link-color);
     font-size: 1rem
 }
 
-#admidio-main-navbar a:hover {
+#adm_main_navbar a:hover {
     color: var(--admidio-header-link-color-hover);
 }
 
 @media (max-width: 767px)
 {
     /* navbar should not be fixed at top if in mobile view */
-    #admidio-main-navbar.fixed-top
+    #adm_main_navbar.fixed-top
     {
         position: relative;
         top: auto;
@@ -506,7 +503,7 @@ label {
     border-color: var(--bs-secondary);
 }
 
-#imprint {
+#adm_imprint {
     margin-bottom: 2rem;
     font-size: 80%;
 }
@@ -517,7 +514,7 @@ label {
     margin-left: 0.5rem;
 }
 
-#profile_photo {
+#adm_profile_photo {
     max-width: 300px;
     width: 100% !important;
     object-fit: cover !important;

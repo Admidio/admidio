@@ -197,26 +197,26 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             }
 
             $form = new Form(
-                'membership_period_form_'.$memberUuid,
+                'adm_membership_period_form_'.$memberUuid,
                 'sys-template-parts/form.filter.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => 'save_membership', 'user_uuid' => $user->getValue('usr_uuid'), 'member_uuid' => $row['mem_uuid'])),
                 null,
                 array('type' => 'navbar', 'method' => 'post', 'setFocus' => false, 'class' => 'admidio-form-membership-period')
             );
             $form->addInput(
-                'membership_start_date',
+                'adm_membership_start_date',
                 $gL10n->get('SYS_START'),
                 $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),
                 array('type' => 'date', 'maxLength' => 10)
             );
             $form->addInput(
-                'membership_end_date',
+                'adm_membership_end_date',
                 $gL10n->get('SYS_END'),
                 $member->getValue('mem_end', $gSettingsManager->getString('system_date')),
                 array('type' => 'date', 'maxLength' => 10)
             );
             $form->addSubmitButton(
-                'btn_send',
+                'adm_button_send',
                 $gL10n->get('SYS_OK'),
                 array('class' => 'btn btn-primary button-membership-period-form', 'data-admidio' => $memberUuid)
             );
