@@ -143,7 +143,7 @@ try {
             )
         );
         $form->addSubmitButton(
-            'btn_save',
+            'adm_button_save',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg')
         );

@@ -138,7 +138,7 @@ try {
                 array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
             );
             $form->addSubmitButton(
-                'btn_save',
+                'adm_button_save',
                 $gL10n->get('SYS_SAVE'),
                 array('icon' => 'bi-check-lg')
             );

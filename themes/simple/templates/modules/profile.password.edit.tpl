@@ -36,6 +36,6 @@
         {include 'sys-template-parts/form.input.tpl' data=$elements['new_password']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['new_password_confirm']}
         <div class="form-alert" style="display: none;">&nbsp;</div>
-        {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
+        {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save']}
     </form>
 </div>

@@ -148,7 +148,7 @@ try {
     }
 
     // show information about user who creates the recordset and changed it
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
     $form->addHtml(admFuncShowCreateChangeInfoById(
         (int)$guestbook->getValue('gbo_usr_id_create'),
         $guestbook->getValue('gbo_timestamp_create'),

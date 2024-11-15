@@ -374,7 +374,7 @@ try {
         );
     }
 
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('eventRole', $eventRole);
     $page->assignSmartyVariable('roleName', $roleName);

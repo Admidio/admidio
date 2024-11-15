@@ -88,7 +88,7 @@ try {
         $gL10n->get('SYS_DESCRIPTION'),
         $link->getValue('lnk_description')
     );
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('nameUserCreated', $link->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $link->getValue('lnk_timestamp_create'));

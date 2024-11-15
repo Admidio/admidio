@@ -70,7 +70,7 @@ try {
         array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextId' => 'SYS_ROOM_OVERHANG')
     );
     $form->addEditor('room_description', '', $room->getValue('room_description'));
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('nameUserCreated', $room->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $room->getValue('ann_timestamp_create'));

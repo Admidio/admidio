@@ -153,7 +153,7 @@ try {
     }
 
     // show information about user who creates the recordset and changed it
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
     $form->addHtml(admFuncShowCreateChangeInfoById(
         (int)$gbComment->getValue('gbc_usr_id_create'),
         $gbComment->getValue('gbc_timestamp_create'),

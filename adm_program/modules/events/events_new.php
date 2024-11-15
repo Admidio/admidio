@@ -332,7 +332,7 @@ try {
     $form->addCheckbox('event_right_list_view', $gL10n->get('SYS_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
     $form->addCheckbox('event_right_send_mail', $gL10n->get('SYS_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
     $form->addEditor('dat_description', '', $event->getValue('dat_description'));
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('nameUserCreated', $event->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $event->getValue('dat_timestamp_create'));

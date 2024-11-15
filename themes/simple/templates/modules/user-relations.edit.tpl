@@ -8,5 +8,5 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['urt_uuid']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['selectedUser']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save']}
 </form>

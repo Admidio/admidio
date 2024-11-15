@@ -454,8 +454,8 @@ try {
         $("#sel_select_configuration").change(function() { loadList(); });
         $("#btn_show_list").click(function() { send("show"); });
         $("#btn_add_column").click(function() { addColumn(); });
-        $("#btn_save").click(function() { send("save_as"); });
-        $("#btn_save_changes").click(function() { send("save"); });
+        $("#adm_button_save").click(function() { send("save_as"); });
+        $("#adm_button_save_changes").click(function() { send("save"); });
         $("#btn_delete").click(function() { send("delete"); });
         $("#btn_copy").click(function() { send("save_as"); });
 
@@ -536,9 +536,9 @@ try {
 
     $form->addButton('btn_add_column', $gL10n->get('SYS_ADD_COLUMN'), array('icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'));
     if ($getListUuid !== '' && $list->getValue('lst_name') !== '') {
-        $form->addButton('btn_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'bi-check-lg', 'class' => 'btn-primary'));
+        $form->addButton('adm_button_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'bi-check-lg', 'class' => 'btn-primary'));
     } else {
-        $form->addButton('btn_save', $gL10n->get('SYS_SAVE_CONFIGURATION'), array('icon' => 'bi-check-lg', 'class' => 'btn-primary'));
+        $form->addButton('adm_button_save', $gL10n->get('SYS_SAVE_CONFIGURATION'), array('icon' => 'bi-check-lg', 'class' => 'btn-primary'));
     }
     // your lists could be deleted, administrators are allowed to delete system configurations
     if (($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)

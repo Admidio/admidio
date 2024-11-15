@@ -153,7 +153,7 @@ try {
         array('property' => Form::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
     );
     $form->addSubmitButton(
-        'btn_save',
+        'adm_button_save',
         $gL10n->get('SYS_SAVE'),
         array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
     );

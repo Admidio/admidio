@@ -176,7 +176,7 @@ try {
         array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
     );
 
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);

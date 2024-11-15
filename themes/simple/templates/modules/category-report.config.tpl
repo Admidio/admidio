@@ -64,5 +64,5 @@
     </div>
 
     <div class="form-alert" style="display: none;">&nbsp;</div>
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_configurations']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_configurations']}
 </form>

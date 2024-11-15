@@ -32,11 +32,11 @@
             </div>
             <div class="btn-group" role="group">
                 {include 'sys-template-parts/form.button.tpl' data=$elements['btn_add_column']}
-                {if {array_key_exists array=$elements key='btn_save_changes'}}
-                    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save_changes']}
+                {if {array_key_exists array=$elements key='adm_button_save_changes'}}
+                    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_changes']}
                 {/if}
-                {if {array_key_exists array=$elements key='btn_save'}}
-                    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_save']}
+                {if {array_key_exists array=$elements key='adm_button_save'}}
+                    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save']}
                 {/if}
                 {if {array_key_exists array=$elements key='btn_delete'}}
                     {include 'sys-template-parts/form.button.tpl' data=$elements['btn_delete']}
