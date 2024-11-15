@@ -565,7 +565,7 @@ class HtmlPage
             }
         } catch (\Smarty\Exception $exception) {
             echo $exception->getMessage();
-            echo '<br />Please check if the theme folder "<strong>' . $gSettingsManager->getString('theme') . '</strong>" exists within the folder "theme".';
+            echo '<br />Please check if the theme folder "<strong>' . $gSettingsManager->getString('theme') . '</strong>" exists within the folder "themes".';
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
