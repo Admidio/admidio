@@ -18,5 +18,5 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
 // show dialog with success notification
 $page = new Installation('admidio-installation-successful');
 $page->addTemplateFile('installation.successful.tpl');
-$page->addJavascript('$("#next_page").focus();', true);
+$page->addJavascript('$("#adm_next_page").focus();', true);
 $page->show();

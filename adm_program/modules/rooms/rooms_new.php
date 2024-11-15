@@ -46,7 +46,7 @@ try {
 
     // show form
     $form = new Form(
-        'rooms_edit_form',
+        'adm_rooms_edit_form',
         'modules/rooms.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('room_uuid' => $getRoomUuid, 'mode' => 'edit')),
         $page

@@ -100,7 +100,7 @@ try {
 
         // show form
         $form = new Form(
-            'password_edit_form',
+            'adm_password_edit_form',
             'modules/profile.password.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid, 'mode' => 'change'))
         );

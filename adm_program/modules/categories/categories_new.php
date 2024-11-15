@@ -160,7 +160,7 @@ try {
 
     // show form
     $form = new Form(
-        'categories_edit_form',
+        'adm_categories_edit_form',
         'modules/categories.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('uuid' => $getCatUuid, 'mode' => 'edit', 'type' => $getType)),
         $page

@@ -84,7 +84,7 @@ try {
 
     // create html form
     $form = new Form(
-        'edit_download_form',
+        'adm_edit_download_form',
         'modules/documents-files.rename.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'rename', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)),
         $page

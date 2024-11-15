@@ -58,7 +58,7 @@ try {
 
     // show form
     $form = new Form(
-        'weblinks_edit_form',
+        'adm_weblinks_edit_form',
         'modules/links.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('link_uuid' => $getLinkUuid, 'mode' => 'create')),
         $page

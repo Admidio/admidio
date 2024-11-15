@@ -172,7 +172,7 @@ try {
     $page->addJavascript($javascriptCodeExecute, true);
 
     $formConfigurations = new Form(
-        'configurations_preferences_form',
+        'adm_configurations_preferences_form',
         'modules/category-report.config.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences_function.php', array('form' => 'configurations')),
         $page,

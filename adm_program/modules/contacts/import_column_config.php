@@ -34,7 +34,7 @@ try {
 
     // show form
     $form = new Form(
-        'contacts_import_assign_fields_form',
+        'adm_contacts_import_assign_fields_form',
         'modules/contacts.import.assign-fields.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_user.php?mode=import',
         $page

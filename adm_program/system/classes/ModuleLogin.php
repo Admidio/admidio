@@ -72,7 +72,7 @@ class ModuleLogin
 
         // show form
         $form = new Form(
-            'loginForm',
+            'adm_login_form',
             'system/login.tpl',
             ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
             $page,

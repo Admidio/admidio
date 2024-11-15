@@ -47,7 +47,7 @@ if ($mode === 'html') {
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
 
     $form = new Form(
-        'installationConnectDatabaseForm',
+        'adm_installation_connect_database_form',
         'installation.connect-database.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database', 'mode' => 'check')),
         $page
@@ -97,12 +97,12 @@ if ($mode === 'html') {
         array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
     );
     $form->addButton(
-        'previous_page',
+        'adm_previous_page',
         $gL10n->get('SYS_BACK'),
         array('icon' => 'bi-arrow-left-circle-fill', 'class' => 'admidio-margin-bottom',
             'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')))
     );
-    $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end'));
+    $form->addSubmitButton('adm_next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end'));
 
     $form->addToHtmlPage();
     $_SESSION['installationConnectDatabaseForm'] = $form;

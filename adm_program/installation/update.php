@@ -204,7 +204,7 @@ try {
 
             // create form with login and update button
             $form = new Form(
-                'updateLoginForm',
+                'adm_update_login_form',
                 'update.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 'update')),
                 $page
@@ -224,7 +224,7 @@ try {
                 );
             }
             $form->addSubmitButton(
-                'next_page',
+                'adm_next_page',
                 $gL10n->get('INS_UPDATE_DATABASE'),
                 array('icon' => 'bi-arrow-repeat')
             );

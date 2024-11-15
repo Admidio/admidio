@@ -117,7 +117,7 @@ try {
 
     // show form
     $form = new Form(
-        'folder_permissions_form',
+        'adm_folder_permissions_form',
         'modules/documents-files.folder.permissions.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'permissions', 'folder_uuid' => $getFolderUuid)),
         $page

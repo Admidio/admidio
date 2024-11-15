@@ -97,7 +97,7 @@ try {
 
     // show form
     $form = new Form(
-        'photos_edit_form',
+        'adm_photos_edit_form',
         'modules/photos.album.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => 'edit')),
         $page

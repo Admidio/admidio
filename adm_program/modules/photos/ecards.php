@@ -111,7 +111,7 @@ try {
 
     // show form
     $form = new Form(
-        'ecard_send_form',
+        'adm_ecard_send_form',
         'modules/photos.ecard.send.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/photos/ecard_send.php',
         $page

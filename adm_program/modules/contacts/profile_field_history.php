@@ -150,7 +150,7 @@ try {
 
     // create filter menu with input elements for start date and end date
     $form = new Form(
-        'navbar_filter_form',
+        'adm_navbar_filter_form',
         'sys-template-parts/form.filter.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/profile_field_history.php',
         $page,

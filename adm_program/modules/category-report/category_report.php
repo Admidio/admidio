@@ -273,7 +273,7 @@ try {
 
             // create filter menu with elements for role
             $form = new Form(
-                'navbar_filter_form_category_report',
+                'adm_navbar_filter_form_category_report',
                 'sys-template-parts/form.filter.tpl',
                 '',
                 $page,

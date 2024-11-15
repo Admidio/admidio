@@ -84,7 +84,7 @@ try {
 
     // show form
     $form = new Form(
-        'userRelationsTypeEditForm',
+        'adm_user_relations_type_edit_form',
         'modules/user-relations.type.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('urt_uuid' => $getUrtUuid, 'mode' => 'edit')),
         $page

@@ -67,7 +67,7 @@ try {
 
     // show form
     $form = new Form(
-        'announcements_edit_form',
+        'adm_announcements_edit_form',
         'modules/announcements.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => 'edit')),
         $page

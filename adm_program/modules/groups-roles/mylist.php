@@ -465,7 +465,7 @@ try {
     });', true);
 
     // show form
-    $form = new Form('myListConfigurationForm', 'modules/groups-roles.mylist.config.tpl', '#', $page);
+    $form = new Form('adm_mylist_configuration_form', 'modules/groups-roles.mylist.config.tpl', '#', $page);
 
     // read all relevant configurations from database and create an array
     $yourLastConfigurationsGroup = false;

@@ -182,7 +182,7 @@ try {
 
         // create filter menu with elements for role
         $form = new Form(
-            'navbar_filter_form_roles',
+            'adm_navbar_filter_form_roles',
             'sys-template-parts/form.filter.tpl',
             '',
             $page,

@@ -9,6 +9,6 @@
         </div>
     {/if}
     <div class="form-alert" style="display: none;">&nbsp;</div>
-    {include 'sys-template-parts/form.button.tpl' data=$elements['next_page']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_next_page']}
 </form>
 <br /><br />

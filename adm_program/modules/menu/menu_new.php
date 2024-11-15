@@ -117,7 +117,7 @@ try {
 
     // show form
     $form = new Form(
-        'menu_edit_form',
+        'adm_menu_edit_form',
         'modules/menu.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('uuid' => $getMenuUuid, 'mode' => 'edit')),
         $page

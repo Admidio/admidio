@@ -11,6 +11,7 @@
  * user_uuid - UUID of the user whose participation detail shall be set or changed
  ***********************************************************************************************
  */
+
 use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
@@ -65,7 +66,11 @@ try {
     header('Content-type: text/html; charset=utf-8');
 
     // Define form
-    $participationForm = new Form('eventsParticipationEditForm','modules/events.participation.edit.tpl', '#');
+    $participationForm = new Form(
+        'adm_events_participation_edit_form',
+        'modules/events.participation.edit.tpl',
+        '#'
+    );
     $participationForm->addMultilineTextInput(
         'dat_comment',
         $gL10n->get('SYS_COMMENT'),

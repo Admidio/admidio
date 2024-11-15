@@ -73,7 +73,7 @@ try {
         if ($gSettingsManager->getBool('contacts_show_all')) {
             // create filter menu with elements for category
             $form = new Form(
-                'navbar_filter_form',
+                'adm_navbar_filter_form',
                 'sys-template-parts/form.filter.tpl',
                 '',
                 $page,

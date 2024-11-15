@@ -57,7 +57,7 @@ try {
 
     // show form
     $form = new Form(
-        'userRelationsEditForm',
+        'adm_user_relations_edit_form',
         'modules/user-relations.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'create')),
         $page

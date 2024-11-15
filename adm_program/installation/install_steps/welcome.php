@@ -30,7 +30,7 @@ if ($mode === 'html') {
     ));
 
     $form = new Form(
-        'installationWelcomeForm',
+        'adm_installation_welcome_form',
         'installation.welcome.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome', 'mode' => 'check')),
         $page
@@ -44,7 +44,7 @@ if ($mode === 'html') {
         array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
     );
     $form->addSubmitButton(
-        'next_page',
+        'adm_next_page',
         $gL10n->get('INS_DATABASE_LOGIN'),
         array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end')
     );

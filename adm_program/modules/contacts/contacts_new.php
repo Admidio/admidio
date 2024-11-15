@@ -21,7 +21,7 @@ try {
     }
 
     $form = new Form(
-        'contacts_new_form',
+        'adm_contacts_new_form',
         'modules/contacts.new.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_assign.php',
         null,

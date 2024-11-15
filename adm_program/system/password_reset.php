@@ -113,7 +113,7 @@ try {
 
             // show form
             $form = new Form(
-                'passwordResetSetPasswordForm',
+                'adm_password_reset_set_password_form',
                 'system/password-reset.set-password.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php', array('user_uuid' => $getUserUuid, 'id' => $getResetId)),
                 $page
@@ -269,7 +269,7 @@ try {
 
         // show form
         $form = new Form(
-            'passwordResetForm',
+            'adm_password_reset_form',
             'system/password-reset.tpl',
             ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php',
             $page

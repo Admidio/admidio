@@ -183,7 +183,7 @@ try {
 
     // show form
     $form = new Form(
-        'events_edit_form',
+        'adm_events_edit_form',
         'modules/events.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 'edit', 'copy' => $getCopy)),
         $page

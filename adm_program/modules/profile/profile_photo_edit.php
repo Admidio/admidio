@@ -161,7 +161,7 @@ try {
 
         // show form
         $form = new Form(
-            'admUploadPhotoForm',
+            'adm_upload_photo_form',
             'modules/profile.new-photo.upload.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'upload', 'user_uuid' => $getUserUuid)),
             $page,

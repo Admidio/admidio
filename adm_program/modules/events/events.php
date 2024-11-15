@@ -177,7 +177,7 @@ try {
 
             // create filter menu with elements for calendar and start/end date
             $form = new Form(
-                'navbar_filter_form',
+                'adm_navbar_filter_form',
                 'sys-template-parts/form.filter.tpl',
                 ADMIDIO_URL . FOLDER_MODULES . '/events/events.php',
                 $page,
