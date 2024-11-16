@@ -36,7 +36,7 @@ try {
             $gL10n = new Language('en');
         }
 
-        $page = new Installation('admidio-update-message');
+        $page = new Installation('admidio-update-message', $gL10n->get('INS_UPDATE'));
         $page->setUpdateModus();
         $page->showMessage(
             'error',
@@ -197,7 +197,7 @@ try {
         if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
             || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
             // create a page with the notice that the installation must be configured on the next pages
-            $page = new Installation('admidio-update');
+            $page = new Installation('admidio-update', $gL10n->get('INS_UPDATE'));
             $page->addTemplateFile('update.tpl');
             $page->setUpdateModus();
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
@@ -211,13 +211,13 @@ try {
             );
             if ($gLoginForUpdate) {
                 $form->addInput(
-                    'login_name',
+                    'adm_login_name',
                     $gL10n->get('SYS_USERNAME'),
                     '',
                     array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
                 );
                 $form->addInput(
-                    'password',
+                    'adm_password',
                     $gL10n->get('SYS_PASSWORD'),
                     '',
                     array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
@@ -233,7 +233,7 @@ try {
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
-            $page = new Installation('admidio-update-message');
+            $page = new Installation('admidio-update-message', $gL10n->get('INS_UPDATE'));
             $page->setUpdateModus();
             $page->showMessage(
                 'success',
@@ -246,7 +246,7 @@ try {
             // => EXIT
         } // if source version smaller than database -> show error
         else {
-            $page = new Installation('admidio-update-message');
+            $page = new Installation('admidio-update-message', $gL10n->get('INS_UPDATE'));
             $page->setUpdateModus();
             $page->showMessage(
                 'error',
@@ -281,7 +281,7 @@ try {
         exit();
     } elseif ($getMode === 'result') {
         // show notice that update was successful
-        $page = new Installation('admidio-update-successful');
+        $page = new Installation('admidio-update-successful', $gL10n->get('INS_UPDATE'));
         $page->addTemplateFile('update.successful.tpl');
         $page->setUpdateModus();
         $page->addJavascript('$("#buttonDonate").focus();', true);

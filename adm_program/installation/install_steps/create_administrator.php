@@ -33,7 +33,7 @@ if ($mode === 'html') {
     $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
     // create a page to enter all necessary data to create a administrator user
-    $page = new Installation('admidio-installation-create-administrator');
+    $page = new Installation('adm_installation_create_administrator', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'));
@@ -45,43 +45,43 @@ if ($mode === 'html') {
         $page
     );
     $form->addInput(
-        'user_last_name',
+        'adm_user_last_name',
         $gL10n->get('SYS_LASTNAME'),
         $userLastName,
         array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
-        'user_first_name',
+        'adm_user_first_name',
         $gL10n->get('SYS_FIRSTNAME'),
         $userFirstName,
         array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
-        'user_email',
+        'adm_user_email',
         $gL10n->get('SYS_EMAIL'),
         $userEmail,
         array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
-        'user_login',
+        'adm_user_login',
         $gL10n->get('SYS_USERNAME'),
         $userLogin,
         array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
-        'user_password',
+        'adm_user_password',
         $gL10n->get('SYS_PASSWORD'),
         '',
         array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextId' => 'SYS_PASSWORD_DESCRIPTION')
     );
     $form->addInput(
-        'user_password_confirm',
+        'adm_user_password_confirm',
         $gL10n->get('SYS_CONFIRM_PASSWORD'),
         '',
         array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
     );
     $form->addButton(
-        'adm_previous_page',
+        'adm_adm_previous_page',
         $gL10n->get('SYS_BACK'),
         array('icon' => 'bi-arrow-left-circle-fill', 'class' => 'admidio-margin-bottom',
             'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')))
@@ -100,12 +100,12 @@ if ($mode === 'html') {
     }
 
     // Save administrator data filtered in session variables
-    $_SESSION['user_last_name']        = $formValues['user_last_name'];
-    $_SESSION['user_first_name']       = $formValues['user_first_name'];
-    $_SESSION['user_email']            = $formValues['user_email'];
-    $_SESSION['user_login']            = $formValues['user_login'];
-    $_SESSION['user_password']         = $formValues['user_password'];
-    $_SESSION['user_password_confirm'] = $formValues['user_password_confirm'];
+    $_SESSION['user_last_name']        = $formValues['adm_user_last_name'];
+    $_SESSION['user_first_name']       = $formValues['adm_user_first_name'];
+    $_SESSION['user_email']            = $formValues['adm_user_email'];
+    $_SESSION['user_login']            = $formValues['adm_user_login'];
+    $_SESSION['user_password']         = $formValues['adm_user_password'];
+    $_SESSION['user_password_confirm'] = $formValues['adm_user_password_confirm'];
 
     // username should only have valid chars
     if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar')) {

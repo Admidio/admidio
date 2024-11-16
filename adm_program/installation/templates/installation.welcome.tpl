@@ -2,7 +2,7 @@
 {$attribute@key}="{$attribute}"
 {/foreach}>
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['system_language']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['adm_system_language']}
     {if $admidioBetaVersion > 0}
         <div class="alert alert-warning alert-small" role="alert">
             <i class="bi bi-exclamation-triangle-fill"></i>{$l10n->get('INS_WARNING_BETA_VERSION')}

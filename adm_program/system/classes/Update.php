@@ -24,8 +24,8 @@ class Update
         }
 
         // get username and password
-        $loginName = admFuncVariableIsValid($_POST, 'login_name', 'string', array('requireValue' => true, 'directOutput' => true));
-        $password  = $_POST['password']; // password could contain special chars, so no conversation should be done
+        $loginName = admFuncVariableIsValid($_POST, 'adm_login_name', 'string', array('requireValue' => true, 'directOutput' => true));
+        $password  = $_POST['adm_password']; // password could contain special chars, so no conversation should be done
 
         // Search for username
         $sql = 'SELECT usr_id

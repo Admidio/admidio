@@ -4,6 +4,6 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_previous_page']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['download_config']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_download_config']}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_next_page']}
 </form>

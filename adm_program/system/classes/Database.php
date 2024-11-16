@@ -99,9 +99,9 @@ class Database
      */
     protected PDO $pdo;
     /**
-     * @var PDOStatement The PDOStatement object which is needed to handle the return of a query.
+     * @var The PDOStatement object which is needed to handle the return of a query.
      */
-    protected PDOStatement $pdoStatement;
+    protected $pdoStatement;
     /**
      * @var int The transaction marker. If this is > 0 than a transaction is open.
      */

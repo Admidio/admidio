@@ -27,10 +27,10 @@
 {$attribute@key}="{$attribute}"
 {/foreach}>
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-    {if {array_key_exists array=$elements key='login_name'}}
+    {if {array_key_exists array=$elements key='adm_login_name'}}
         <p>{$l10n->get('INS_ADMINISTRATOR_LOGIN_DESC')}</p>
-        {include 'sys-template-parts/form.input.tpl' data=$elements['login_name']}
-        {include 'sys-template-parts/form.input.tpl' data=$elements['password']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['adm_login_name']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['adm_password']}
     {/if}
     <div class="form-alert" style="display: none;">&nbsp;</div>
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_next_page']}
