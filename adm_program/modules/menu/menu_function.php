@@ -49,7 +49,7 @@ try {
         }
 
         // check form field input and sanitized it from malicious content
-        $menuEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $menuEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $menuEditForm->validate($_POST);
 
         // check url here because it could be a real url or a relative local url
@@ -87,7 +87,7 @@ try {
         // delete menu
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         $menu->delete();
         echo json_encode(array('status' => 'success'));
@@ -97,7 +97,7 @@ try {
         $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         if ($menu->moveSequence($postDirection)) {
             echo 'done';

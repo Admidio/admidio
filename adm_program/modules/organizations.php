@@ -54,7 +54,7 @@ try {
         $page->show();
     } elseif ($getMode === 'save') {
         // check form field input and sanitized it from malicious content
-        $organizationEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $organizationEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $organizationEditForm->validate($_POST);
 
         // write form values in category object
@@ -87,7 +87,7 @@ try {
         $gMessage->show($gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_SESSION['organizationLongName'])), $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         // delete sub-organization
         $subOrganization = new Organization($gDb);

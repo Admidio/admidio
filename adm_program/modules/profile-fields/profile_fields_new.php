@@ -244,7 +244,7 @@ try {
         $gL10n->get('SYS_DESCRIPTION'),
         $userField->getValue('usf_description'),
         array('toolbar' => 'AdmidioComments'));
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('fieldNameIntern', $usfNameIntern);
     $page->assignSmartyVariable('systemField', $userField->getValue('usf_system'));

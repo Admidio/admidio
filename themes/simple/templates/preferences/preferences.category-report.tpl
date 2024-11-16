@@ -2,7 +2,7 @@
         {$attribute@key}="{$attribute}"
     {/foreach}>
 
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['category_report_enable_module']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['category_report_default_configuration']}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_category_report']}

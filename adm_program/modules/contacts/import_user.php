@@ -30,7 +30,7 @@ try {
 
     if ($getMode === 'import') {
         // check form field input and sanitized it from malicious content
-        $contactsImportAssignFieldsForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $contactsImportAssignFieldsForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $contactsImportAssignFieldsForm->validate($_POST);
 
         // go through each line from the file one by one and create the user in the DB

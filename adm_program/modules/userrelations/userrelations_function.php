@@ -53,7 +53,7 @@ try {
 
     if ($getMode === 'create') {
         // check form field input and sanitized it from malicious content
-        $userRelationsEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $userRelationsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $userRelationsEditForm->validate($_POST);
 
         $user1->readDataByUuid($getUserUuid);
@@ -108,7 +108,7 @@ try {
         exit();
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         // delete relation
         $relation->delete();

@@ -367,7 +367,7 @@ class Preferences extends HtmlPage
             $formValues['captcha_signature'],
             array('maxLength' => 60, 'helpTextId' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
         );
-        $html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
+        $html = '<img id="adm_captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
          <a id="adm_captcha_refresh" class="admidio-icon-link" href="javascript:void(0)">
             <i class="bi bi-arrow-repeat" style="font-size: 22pt;" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_RELOAD') . '"></i></a>';
         $formCaptcha->addCustomContent(

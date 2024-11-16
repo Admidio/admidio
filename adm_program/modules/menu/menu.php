@@ -19,11 +19,10 @@ try {
     }
 
     $headline = $gL10n->get('SYS_MENU');
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-menu-button-wide-fill');
 
     // create html page object
     $page = new HtmlPage('admidio-menu', $headline);
-
-    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-menu-button-wide-fill');
 
     $page->addJavascript(
         '

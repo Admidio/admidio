@@ -43,7 +43,7 @@ try {
 
     if ($getMode === 'change') {
         // check form field input and sanitized it from malicious content
-        $profilePasswordEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $profilePasswordEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $profilePasswordEditForm->validate($_POST);
 
         if ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId) {
@@ -100,7 +100,7 @@ try {
 
         // show form
         $form = new Form(
-            'password_edit_form',
+            'adm_password_edit_form',
             'modules/profile.password.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid, 'mode' => 'change'))
         );
@@ -143,7 +143,7 @@ try {
             )
         );
         $form->addSubmitButton(
-            'btn_save',
+            'adm_button_save',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg')
         );

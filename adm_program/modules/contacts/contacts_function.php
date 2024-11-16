@@ -36,7 +36,7 @@ try {
 
     if ($getMode !== 'delete_explain_msg') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
     }
 
     if ($getMode === 'delete_explain_msg') {

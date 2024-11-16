@@ -30,7 +30,7 @@ try {
 
     if ($getMsgUuid !== '') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         $delMessage = new TableMessage($gDb);
         $delMessage->readDataByUuid($getMsgUuid);

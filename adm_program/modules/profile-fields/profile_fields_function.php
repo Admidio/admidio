@@ -76,7 +76,7 @@ try {
         }
 
         // check form field input and sanitized it from malicious content
-        $profileFieldsEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $profileFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $profileFieldsEditForm->validate($_POST);
 
         if (isset($_POST['usf_name']) && $userField->getValue('usf_name') !== $_POST['usf_name']) {
@@ -122,7 +122,7 @@ try {
         $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         if (!empty($getOrder)) {
             // set new order (drag and drop)

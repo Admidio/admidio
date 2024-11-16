@@ -81,7 +81,7 @@ try {
 
         // change data in database
         $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=" + roleUuid + "&user_uuid=' . $getUserUuid . '",
-            "memberFlag=" + roleChecked + "&leaderFlag=" + leaderChecked + "&admidio-csrf-token=' . $gCurrentSession->getCsrfToken() . '",
+            "memberFlag=" + roleChecked + "&leaderFlag=" + leaderChecked + "&adm_csrf_token=' . $gCurrentSession->getCsrfToken() . '",
             function(data) {
                 // check if error occurs
                 if (data === "success") {

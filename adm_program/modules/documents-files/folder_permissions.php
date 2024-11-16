@@ -117,7 +117,7 @@ try {
 
     // show form
     $form = new Form(
-        'folder_permissions_form',
+        'adm_folder_permissions_form',
         'modules/documents-files.folder.permissions.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'permissions', 'folder_uuid' => $getFolderUuid)),
         $page
@@ -153,7 +153,7 @@ try {
         array('property' => Form::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
     );
     $form->addSubmitButton(
-        'btn_save',
+        'adm_button_save',
         $gL10n->get('SYS_SAVE'),
         array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
     );

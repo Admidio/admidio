@@ -51,7 +51,7 @@ try {
 
     // check the CSRF token of the form against the session token
     if (in_array($getMode, array('delete_folder', 'delete_file'))) {
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
     }
 
     // Delete file
@@ -82,7 +82,7 @@ try {
             $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
             // check form field input and sanitized it from malicious content
-            $documentsFilesFolderNewForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $documentsFilesFolderNewForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $documentsFilesFolderNewForm->validate($_POST);
 
             // Test if the folder already exists in the file system
@@ -144,7 +144,7 @@ try {
             $newDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
             // check form field input and sanitized it from malicious content
-            $documentsFilesRenameForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $documentsFilesRenameForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $documentsFilesRenameForm->validate($_POST);
 
             if ($getFileUuid !== '') {
@@ -282,7 +282,7 @@ try {
         }
 
         // check form field input and sanitized it from malicious content
-        $documentsFilesFolderPermissionsForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $documentsFilesFolderPermissionsForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $documentsFilesFolderPermissionsForm->validate($_POST);
 
         $postIntRolesViewRight   = array_map('intval', $_POST['adm_roles_view_right']);
@@ -333,7 +333,7 @@ try {
         $destFolderUUID = admFuncVariableIsValid($_POST, 'dest_folder_uuid', 'string', array('requireValue' => true));
 
         // check form field input and sanitized it from malicious content
-        $documentsFilesMoveForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $documentsFilesMoveForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $documentsFilesMoveForm->validate($_POST);
 
         if ($getFileUuid !== '') {

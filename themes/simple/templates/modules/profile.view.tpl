@@ -1,4 +1,4 @@
-<div class="card admidio-field-group" id="user_data_panel">
+<div id="adm_user_data_panel" class="card admidio-field-group">
     <div class="card-header">{$l10n->get('SYS_BASIC_DATA')}</div>
     <div class="card-body">
         <div class="row">
@@ -77,14 +77,14 @@
                     {/if}
                 {/foreach}
             </div>
-            <div class="col-sm-4 text-right" id="div_profile_photo">
-                <img id="profile_photo" class="rounded" src="{$urlProfilePhoto}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+            <div class="col-sm-4 text-right">
+                <img id="adm_profile_photo" class="rounded" src="{$urlProfilePhoto}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
                 {if isset($urlProfilePhotoUpload)}
-                    <ul id="profile_picture_links" class="list-unstyled">
+                    <ul class="list-unstyled">
                         <li><a class="icon-link" href="{$urlProfilePhotoUpload}">
                                 <i class="bi bi-upload"></i>{$l10n->get('SYS_UPLOAD_PROFILE_PICTURE')}</a></li>
                         {if isset($urlProfilePhotoDelete)}
-                            <li><a id="btn_delete_photo" class="icon-link admidio-messagebox" href="javascript:void(0);"
+                            <li><a id="adm_button_delete_photo" class="icon-link admidio-messagebox" href="javascript:void(0);"
                                    data-buttons="yes-no" data-message="{$l10n->get('SYS_WANT_DELETE_PHOTO')}"
                                    data-href="{$urlProfilePhotoDelete}"><i class="bi bi-trash"></i>{$l10n->get('SYS_DELETE_PROFILE_PICTURE')}</a></li>
                         {/if}
@@ -122,9 +122,9 @@
 </div></div>
 
 {if $showCurrentRoles}
-    <div class="card admidio-field-group" id="profile_authorizations_box">
+    <div class="card admidio-field-group" id="adm_profile_authorizations_box">
         <div class="card-header">{$l10n->get('SYS_PERMISSIONS')}</div>
-        <div class="card-body" id="profile_authorizations_box_body">
+        <div class="card-body">
             <div class="row">
                 {if count($userRights) > 0}
                     {foreach $userRights as $userRight}
@@ -138,7 +138,7 @@
             </div>
         </div>
     </div>
-    <div class="card admidio-field-group" id="profile_roles_box">
+    <div class="card admidio-field-group" id="adm_profile_roles_box">
         <div class="card-header">{$l10n->get('SYS_ROLE_MEMBERSHIPS')}
             {if $userRightAssignRoles}
                 <a class="btn btn-secondary float-end openPopup" id="profile_role_memberships_change"
@@ -146,20 +146,20 @@
                     <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT')}</a>
             {/if}
         </div>
-        <div class="card-body" id="profile_roles_box_body">
+        <div class="card-body">
         </div>
     </div>
-    <div class="card admidio-field-group" id="profile_future_roles_box" style="display: none;">
+    <div class="card admidio-field-group" id="adm_profile_future_roles_box" style="display: none;">
         <div class="card-header">{$l10n->get('SYS_FUTURE_ROLE_MEMBERSHIP')}</div>
-        <div class="card-body" id="profile_future_roles_box_body">
+        <div class="card-body">
         </div>
     </div>
 {/if}
 
 {if $showCurrentRoles}
-    <div class="card admidio-field-group" id="profile_former_roles_box" style="display: none;">
+    <div class="card admidio-field-group" id="adm_profile_former_roles_box" style="display: none;">
         <div class="card-header">{$l10n->get('SYS_FORMER_ROLE_MEMBERSHIP')}</div>
-        <div class="card-body" id="profile_former_roles_box_body">
+        <div class="card-body">
         </div>
     </div>
 {/if}

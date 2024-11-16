@@ -494,7 +494,9 @@ class HtmlPage
             $this->setTitle($headline);
         }
 
-        $this->menuNodePageFunctions->setName($headline);
+        if(isset($this->menuNodePageFunctions)) {
+            $this->menuNodePageFunctions->setName($headline);
+        }
         $this->headline = $headline;
     }
 
@@ -516,10 +518,14 @@ class HtmlPage
     {
         global $gCurrentOrganization;
 
-        if ($title === '') {
-            $this->title = $gCurrentOrganization->getValue('org_longname');
+        if(isset($gCurrentOrganization)) {
+            if ($title === '') {
+                $this->title = $gCurrentOrganization->getValue('org_longname');
+            } else {
+                $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
+            }
         } else {
-            $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
+            $this->title = $title;
         }
     }
 

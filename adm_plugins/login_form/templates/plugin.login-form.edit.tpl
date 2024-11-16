@@ -10,7 +10,7 @@
             {$attribute@key}="{$attribute}"
         {/foreach}>
 
-        {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['plg_usr_login_name']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['plg_usr_password']}
         {if $currentOrganization->getValue('org_show_org_select')}

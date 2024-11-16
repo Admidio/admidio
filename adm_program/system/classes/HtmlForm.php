@@ -14,7 +14,7 @@ use Admidio\Exception;
  * **Code examples**
  * ```
  * // create a simple form with one input field and a button
- * $form = new HtmlForm('simple-form', 'next_page.php');
+ * $form = new HtmlForm('simple-form', 'adm_next_page.php');
  * $form->openGroupBox('gbSimpleForm', $gL10n->get('SYS_SIMPLE_FORM'));
  * $form->addInput('name', $gL10n->get('SYS_NAME'), $formName);
  * $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'),
@@ -153,7 +153,7 @@ class HtmlForm
         if ($optionsAll['method'] === 'post' && isset($GLOBALS['gCurrentSession'])) {
             // add a hidden field with the csrf token to each form
             $this->addInput(
-                'admidio-csrf-token',
+                'adm_csrf_token',
                 'csrf-token',
                 $GLOBALS['gCurrentSession']->getCsrfToken(),
                 array('property' => self::FIELD_HIDDEN)
@@ -1202,7 +1202,7 @@ class HtmlForm
      * ```
      * // create a selectbox with all profile fields of a specific category
      * $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'
-     * $form = new HtmlForm('simple-form', 'next_page.php');
+     * $form = new HtmlForm('simple-form', 'adm_next_page.php');
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show();
      * ```

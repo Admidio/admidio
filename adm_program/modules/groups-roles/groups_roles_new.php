@@ -119,7 +119,7 @@ try {
 ');
 
     $form = new Form(
-        'roles_edit_form',
+        'adm_roles_edit_form',
         'modules/groups-roles.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('role_uuid' => $getRoleUuid, 'mode' => 'edit')),
         $page
@@ -374,7 +374,7 @@ try {
         );
     }
 
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('eventRole', $eventRole);
     $page->assignSmartyVariable('roleName', $roleName);

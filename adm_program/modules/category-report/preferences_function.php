@@ -29,8 +29,8 @@ try {
     switch ($getForm) {
         case 'configurations':
             // check the CSRF token of the form against the session token
-            $categoryReportConfigForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
-            if ($_POST['admidio-csrf-token'] !== $categoryReportConfigForm->getCsrfToken()) {
+            $categoryReportConfigForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            if ($_POST['adm_csrf_token'] !== $categoryReportConfigForm->getCsrfToken()) {
                 throw new Exception('Invalid or missing CSRF token!');
             }
 

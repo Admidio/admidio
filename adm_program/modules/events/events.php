@@ -113,7 +113,7 @@ try {
             $(".admidio-event-approval a").click(function() {
                 $approvalStateElement = $(this);
                 $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php?mode=" + $(this).data("mode") + "&dat_uuid=" + $(this).data("id"),
-                    {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"},
+                    {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"},
                     function(data) {
                         var returnData = JSON.parse(data);
                         if (returnData.status === "success") {
@@ -177,7 +177,7 @@ try {
 
             // create filter menu with elements for calendar and start/end date
             $form = new Form(
-                'navbar_filter_form',
+                'adm_navbar_filter_form',
                 'sys-template-parts/form.filter.tpl',
                 ADMIDIO_URL . FOLDER_MODULES . '/events/events.php',
                 $page,
@@ -226,7 +226,7 @@ try {
                 array('type' => 'date', 'maxLength' => 10)
             );
             $form->addInput('view', '', $getView, array('property' => Form::FIELD_HIDDEN));
-            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+            $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
             $form->addToHtmlPage();
         }
     } else { // $getViewMode = 'print'

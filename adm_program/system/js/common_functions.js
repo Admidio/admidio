@@ -43,10 +43,10 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
 
     // send RequestObject and delete entry
     $.post(url, {
-        "admidio-csrf-token": csrfToken,
+        "adm_csrf_token": csrfToken,
         "uuid": elementId
         }, function(data) {
-        const messageText = $("#statusMessage");
+        const messageText = $("#adm_status_message");
         var returnStatus = "error";
         var returnMessage = "";
 
@@ -69,8 +69,8 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
             if (returnMessage !== "") {
                 messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>" + returnMessage + "</div>");
                 setTimeout(function(){
-                        $("#admidio-modal").modal("hide");
-                        $("#admidioModalMessagebox").modal("hide");
+                        $("#adm_modal").modal("hide");
+                        $("#adm_modal_messagebox").modal("hide");
                         if (callback === "callbackRoles") {
                             $(entryDeleted).fadeOut("slow", callbackRoles);
                         } else if (callback === "callbackFormerRoles") {
@@ -84,8 +84,8 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                         }
                     }, 2000);
             } else {
-                $("#admidio-modal").modal("hide");
-                $("#admidioModalMessagebox").modal("hide");
+                $("#adm_modal").modal("hide");
+                $("#adm_modal_messagebox").modal("hide");
                 if (callback === 'callbackRoles') {
                     $(entryDeleted).fadeOut("slow", callbackRoles);
                 } else if (callback === 'callbackFormerRoles') {
@@ -206,7 +206,7 @@ function redirectPost(url, data) {
  */
 function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
     $.post(updateSequenceUrl + "?mode=sequence&uuid=" + elementId + "&direction=" + direction, {
-            "admidio-csrf-token": csrfToken,
+            "adm_csrf_token": csrfToken,
             "direction": direction,
             "uuid": elementId,
             "mode": "sequence"
@@ -260,24 +260,24 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
  * @param {string} href    Optional a link that will be called by a click of the "Yes" button..
  */
 function messageBox(message, title, type, buttons, href) {
-    $("#statusMessage").html('');
+    $("#adm_status_message").html('');
     if (typeof title !== 'undefined') {
-        $("#admidioModalMessagebox .modal-title").html(title);
+        $("#adm_modal_messagebox .modal-title").html(title);
     }
     if (typeof type === 'undefined') {
-        $("#admidioModalMessagebox .modal-body").html("<p>" + message + "</p>");
+        $("#adm_modal_messagebox .modal-body").html("<p>" + message + "</p>");
     } else if (type === 'warning') {
-        $("#admidioModalMessagebox .modal-body").html("<p class=\"alert alert-warning\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
+        $("#adm_modal_messagebox .modal-body").html("<p class=\"alert alert-warning\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
     } else if (type === 'error') {
-        $("#admidioModalMessagebox .modal-body").html("<p class=\"alert alert-danger\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
+        $("#adm_modal_messagebox .modal-body").html("<p class=\"alert alert-danger\"><i class=\"bi bi-exclamation-triangle-fill\"  style=\"font-size: 2rem;\"></i>" + message + "</p>");
     }
     if (typeof buttons === 'undefined') {
-        $("#admidioModalMessagebox .modal-footer").hide();
+        $("#adm_modal_messagebox .modal-footer").hide();
     } else if (buttons === 'yes-no') {
-        $("#admidioMessageboxButtonYes").attr('onClick', href);
+        $("#adm_messagebox_button_yes").attr('onClick', href);
     }
 
-    const myModalAlternative = new bootstrap.Modal("#admidioModalMessagebox");
+    const myModalAlternative = new bootstrap.Modal("#adm_modal_messagebox");
     myModalAlternative.show();
 }
 
@@ -338,7 +338,7 @@ function formSubmit(event) {
                         $("#" + submitButtonID).attr("disabled", false);
                         submitButtonIcon.attr("class", iconClass);
                         setTimeout(function () {
-                            $("#admidio-modal").modal("hide");
+                            $("#adm_modal").modal("hide");
                             $(".form-alert").hide("slow");
                         }, 2500);
                     }

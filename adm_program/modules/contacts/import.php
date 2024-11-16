@@ -35,7 +35,7 @@ try {
 
     // show form
     $form = new Form(
-        'contacts_import_form',
+        'adm_contacts_import_form',
         'modules/contacts.import.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_read_file.php',
         $page,

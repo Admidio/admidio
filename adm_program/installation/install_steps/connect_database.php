@@ -41,19 +41,19 @@ if ($mode === 'html') {
     }
 
     // create a page to enter all necessary database connection information
-    $page = new Installation('admidio-installation-connect-database');
+    $page = new Installation('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
 
     $form = new Form(
-        'installationConnectDatabaseForm',
+        'adm_installation_connect_database_form',
         'installation.connect-database.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database', 'mode' => 'check')),
         $page
     );
     $form->addSelectBoxFromXml(
-        'db_engine',
+        'adm_db_engine',
         $gL10n->get('INS_DATABASE_SYSTEM'),
         ADMIDIO_PATH . '/adm_program/system/databases.xml',
         'identifier',
@@ -61,48 +61,48 @@ if ($mode === 'html') {
         array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $dbEngine)
     );
     $form->addInput(
-        'db_host',
+        'adm_db_host',
         $gL10n->get('SYS_HOST'),
         $dbHost,
         array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'INS_DATABASE_HOST_INFO')
     );
     $form->addInput(
-        'db_port',
+        'adm_db_port',
         $gL10n->get('SYS_PORT'),
         (string)$dbPort,
         array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextId' => 'INS_DATABASE_PORT_INFO')
     );
     $form->addInput(
-        'db_name',
+        'adm_db_name',
         $gL10n->get('SYS_DATABASE'),
         $dbName,
         array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
-        'db_username',
+        'adm_db_username',
         $gL10n->get('SYS_USERNAME'),
         $dbUsername,
         array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
-        'db_password',
+        'adm_db_password',
         $gL10n->get('SYS_PASSWORD'),
         '',
         array('type' => 'password')
     );
     $form->addInput(
-        'table_prefix',
+        'adm_table_prefix',
         $gL10n->get('INS_TABLE_PREFIX'),
         $tablePrefix,
         array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
     );
     $form->addButton(
-        'previous_page',
+        'adm_previous_page',
         $gL10n->get('SYS_BACK'),
         array('icon' => 'bi-arrow-left-circle-fill', 'class' => 'admidio-margin-bottom',
             'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')))
     );
-    $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end'));
+    $form->addSubmitButton('adm_next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end'));
 
     $form->addToHtmlPage();
     $_SESSION['installationConnectDatabaseForm'] = $form;
@@ -119,13 +119,13 @@ if ($mode === 'html') {
     $sqlIdentifiersRegex = '/^[a-zA-Z0-9_$@-]+$/';
 
     // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-    $_SESSION['db_engine']    = $formValues['db_engine'];
-    $_SESSION['db_host']      = $formValues['db_host'];
-    $_SESSION['db_port']      = $formValues['db_port'];
-    $_SESSION['db_name']      = $formValues['db_name'];
-    $_SESSION['db_username']  = $formValues['db_username'];
-    $_SESSION['db_password']  = $formValues['db_password'];
-    $_SESSION['table_prefix'] = $formValues['table_prefix'];
+    $_SESSION['db_engine']    = $formValues['adm_db_engine'];
+    $_SESSION['db_host']      = $formValues['adm_db_host'];
+    $_SESSION['db_port']      = $formValues['adm_db_port'];
+    $_SESSION['db_name']      = $formValues['adm_db_name'];
+    $_SESSION['db_username']  = $formValues['adm_db_username'];
+    $_SESSION['db_password']  = $formValues['adm_db_password'];
+    $_SESSION['table_prefix'] = $formValues['adm_table_prefix'];
 
     // Check DB-type
     if (!in_array($_SESSION['db_engine'], array(Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL), true)) {

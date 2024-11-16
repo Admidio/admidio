@@ -187,7 +187,7 @@ try {
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         // show form
         $form = new Form(
-            'pm_send_form',
+            'adm_pm_send_form',
             'modules/messages.pm.send.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUuid)),
             $page,
@@ -241,7 +241,7 @@ try {
             array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
         );
         $form->addSubmitButton(
-            'btn_send',
+            'adm_button_send',
             $gL10n->get('SYS_SEND'),
             array('icon' => 'bi-envelope-fill')
         );
@@ -275,7 +275,7 @@ try {
 
         // show form
         $form = new Form(
-            'email_send_form',
+            'adm_email_send_form',
             'modules/messages.email.send.tpl',
             ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php',
             $page,
@@ -574,7 +574,7 @@ try {
             $form->addCaptcha('adm_captcha_code');
         }
 
-        $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
+        $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 
         // add form to html page and show page
         $page->assignSmartyVariable('possibleEmails', $possibleEmails);

@@ -92,7 +92,7 @@ try {
         // create or edit category
 
         // check form field input and sanitized it from malicious content
-        $categoryEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $categoryEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $categoryEditForm->validate($_POST);
 
         if ($getType !== 'ROL'
@@ -203,7 +203,7 @@ try {
         // delete category
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         if ($category->delete()) {
             echo json_encode(array('status' => 'success'));
@@ -214,7 +214,7 @@ try {
         $postSequence = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableCategory::MOVE_UP, TableCategory::MOVE_DOWN)));
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         if ($category->moveSequence($postSequence)) {
             echo json_encode(array('status' => 'success'));

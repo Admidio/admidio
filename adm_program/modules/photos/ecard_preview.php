@@ -29,7 +29,7 @@ try {
     $gMessage->showInModalWindow();
 
     // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
     if (strlen($_POST['ecard_template']) === 0) {
         throw new Exception('SYS_FIELD_EMPTY', array('SYS_TEMPLATE'));

@@ -172,7 +172,7 @@ try {
     $page->addJavascript($javascriptCodeExecute, true);
 
     $formConfigurations = new Form(
-        'configurations_preferences_form',
+        'adm_configurations_preferences_form',
         'modules/category-report.config.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences_function.php', array('form' => 'configurations')),
         $page,
@@ -224,7 +224,7 @@ try {
     }
     $page->assignSmartyVariable('categoryReports', $categoryReports);
     $page->assignSmartyVariable('urlConfigNew', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)));
-    $formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $formConfigurations->addSubmitButton('adm_button_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $formConfigurations->addToHtmlPage();
     $gCurrentSession->addFormObject($formConfigurations);

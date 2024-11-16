@@ -67,7 +67,7 @@ try {
 
     // show form
     $form = new Form(
-        'announcements_edit_form',
+        'adm_announcements_edit_form',
         'modules/announcements.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => 'edit')),
         $page
@@ -92,7 +92,7 @@ try {
         $announcement->getValue('ann_description'),
         array('property' => Form::FIELD_REQUIRED)
     );
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('nameUserCreated', $announcement->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $announcement->getValue('ann_timestamp_create'));

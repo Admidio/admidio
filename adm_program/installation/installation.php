@@ -102,7 +102,7 @@ try {
     if (is_file($configPath) && $step !== 'installation_successful') {
         $db = Database::createDatabaseInstance();
         if (!is_object($db)) {
-            $page = new Installation('admidio-installation-message');
+            $page = new Installation('adm_installation_message', $gL10n->get('INS_INSTALLATION'));
             $page->showMessage(
                 'error',
                 $gL10n->get('SYS_NOTE'),
@@ -121,7 +121,7 @@ try {
         // Check the query for results in case installation is running at this time and the config file is already created but database is not installed so far
         if ($pdoStatement !== false && $pdoStatement->rowCount() > 0) {
             // valid installation exists -> exit installation
-            $page = new Installation('admidio-installation-message');
+            $page = new Installation('adm_installation_message', $gL10n->get('INS_INSTALLATION'));
             $page->showMessage(
                 'error',
                 $gL10n->get('SYS_NOTE'),

@@ -123,7 +123,7 @@ try {
         // Delete photo
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         if ((int)$gSettingsManager->get('profile_photo_storage') === 1) {
             // Folder storage, delete file
@@ -161,7 +161,7 @@ try {
 
         // show form
         $form = new Form(
-            'admUploadPhotoForm',
+            'adm_upload_photo_form',
             'modules/profile.new-photo.upload.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'upload', 'user_uuid' => $getUserUuid)),
             $page,
@@ -195,7 +195,7 @@ try {
         // Confirm cache photo
 
         // check form field input and sanitized it from malicious content
-        $profilePhotoUploadForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $profilePhotoUploadForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $profilePhotoUploadForm->validate($_POST);
 
         // File size

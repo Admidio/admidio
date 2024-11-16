@@ -50,7 +50,7 @@ try {
     }
 
     // check form field input and sanitized it from malicious content
-    $contactsImportForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $contactsImportForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
     $formValues = $contactsImportForm->validate($_POST);
 
     $importfile = $_FILES['userfile']['tmp_name'][0];

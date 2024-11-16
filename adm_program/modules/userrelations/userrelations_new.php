@@ -57,7 +57,7 @@ try {
 
     // show form
     $form = new Form(
-        'userRelationsEditForm',
+        'adm_user_relations_edit_form',
         'modules/user-relations.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'create')),
         $page
@@ -176,7 +176,7 @@ try {
         array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
     );
 
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);

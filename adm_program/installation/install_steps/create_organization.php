@@ -37,48 +37,48 @@ if ($mode === 'html') {
     }
 
     // create a page to enter the organization names
-    $page = new Installation('admidio-installation-create-organization');
+    $page = new Installation('adm_installation_create_organization', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
     $page->assignSmartyVariable('text', $gL10n->get('SYS_NEW_ORGANIZATION_DESC'));
 
     $form = new Form(
-        'installationCreateOrganizationForm',
+        'adm_installation_create_organization_form',
         'installation.create-organization.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization', 'mode' => 'check')),
         $page
     );
     $form->addInput(
-        'orga_shortname',
+        'adm_organization_shortname',
         $gL10n->get('SYS_NAME_ABBREVIATION'),
         $orgaShortName,
         array('maxLength' => 10, 'property' => $shortnameProperty, 'class' => 'form-control-small')
     );
     $form->addInput(
-        'orga_longname',
+        'adm_organization_longname',
         $gL10n->get('SYS_NAME'),
         $orgaLongName,
         array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addInput(
-        'orga_email',
+        'adm_organization_email',
         $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
         $orgaEmail,
         array('type' => 'email', 'maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
     );
     $form->addSelectBox(
-        'orga_timezone',
+        'adm_organization_timezone',
         $gL10n->get('ORG_TIMEZONE'),
         $timezones,
         array('property' => Form::FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get())
     );
     $form->addButton(
-        'previous_page',
+        'adm_previous_page',
         $gL10n->get('SYS_BACK'),
         array('icon' => 'bi-arrow-left-circle-fill', 'class' => 'admidio-margin-bottom',
             'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')))
     );
-    $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end'));
+    $form->addSubmitButton('adm_next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end'));
 
     $form->addToHtmlPage();
     $_SESSION['installationCreateOrganizationForm'] = $form;
@@ -92,10 +92,10 @@ if ($mode === 'html') {
     }
 
     // Save organization data filtered in session variables
-    $_SESSION['orga_shortname'] = $formValues['orga_shortname'];
-    $_SESSION['orga_longname']  = $formValues['orga_longname'];
-    $_SESSION['orga_email']     = $formValues['orga_email'];
-    $_SESSION['orga_timezone']  = $formValues['orga_timezone'];
+    $_SESSION['orga_shortname'] = $formValues['adm_organization_shortname'];
+    $_SESSION['orga_longname']  = $formValues['adm_organization_longname'];
+    $_SESSION['orga_email']     = $formValues['adm_organization_email'];
+    $_SESSION['orga_timezone']  = $formValues['adm_organization_timezone'];
 
     if (!in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true)) {
         throw new Exception('SYS_FIELD_INVALID_INPUT', array('ORG_TIMEZONE'));

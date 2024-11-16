@@ -11,6 +11,7 @@
  * user_uuid - UUID of the user whose participation detail shall be set or changed
  ***********************************************************************************************
  */
+
 use Admidio\Exception;
 use Admidio\UserInterface\Form;
 
@@ -65,7 +66,11 @@ try {
     header('Content-type: text/html; charset=utf-8');
 
     // Define form
-    $participationForm = new Form('eventsParticipationEditForm','modules/events.participation.edit.tpl', '#');
+    $participationForm = new Form(
+        'adm_events_participation_edit_form',
+        'modules/events.participation.edit.tpl',
+        '#'
+    );
     $participationForm->addMultilineTextInput(
         'dat_comment',
         $gL10n->get('SYS_COMMENT'),
@@ -80,21 +85,21 @@ try {
         array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests)
     );
     $participationForm->addButton(
-        'btn_attend',
+        'adm_button_attend',
         $gL10n->get('SYS_PARTICIPATE'),
         array('icon' => 'bi-check-circle-fill admidio-event-approval-state-attend', 'class' => 'btn-primary')
     );
 
     if ($gSettingsManager->getBool('events_may_take_part')) {
         $participationForm->addButton(
-            'btn_tentative',
+            'adm_button_tentative',
             $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE'),
             array('icon' => 'bi-question-circle-fill admidio-event-approval-state-tentative', 'class' => 'btn-primary')
         );
     }
 
     $participationForm->addButton(
-        'btn_refuse',
+        'adm_button_refuse',
         $gL10n->get('SYS_CANCEL'),
         array('icon' => 'bi-x-circle-fill admidio-event-approval-state-cancel', 'class' => 'btn-primary')
     );

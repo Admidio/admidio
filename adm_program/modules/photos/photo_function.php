@@ -138,7 +138,7 @@ try {
     }
 
     // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
     // Rotate the photo by 90°
     if ($getMode === 'rotate') {

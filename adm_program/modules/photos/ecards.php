@@ -99,7 +99,7 @@ try {
                 success: function(response) { // on success..
                     $(".modal-dialog").attr("class", "modal-dialog modal-lg");
                     $(".modal-content").html(response);
-                    var myModal = new bootstrap.Modal($("#admidio-modal"), {});
+                    var myModal = new bootstrap.Modal($("#adm_modal"), {});
                     myModal.show();
                 }
             });
@@ -111,7 +111,7 @@ try {
 
     // show form
     $form = new Form(
-        'ecard_send_form',
+        'adm_ecard_send_form',
         'modules/photos.ecard.send.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/photos/ecard_send.php',
         $page

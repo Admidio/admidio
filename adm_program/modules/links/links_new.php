@@ -58,7 +58,7 @@ try {
 
     // show form
     $form = new Form(
-        'weblinks_edit_form',
+        'adm_weblinks_edit_form',
         'modules/links.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('link_uuid' => $getLinkUuid, 'mode' => 'create')),
         $page
@@ -88,7 +88,7 @@ try {
         $gL10n->get('SYS_DESCRIPTION'),
         $link->getValue('lnk_description')
     );
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('nameUserCreated', $link->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $link->getValue('lnk_timestamp_create'));

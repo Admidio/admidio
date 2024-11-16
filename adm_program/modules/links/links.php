@@ -105,7 +105,7 @@ try {
 
         // create filter menu with elements for category
         $form = new Form(
-            'navbar_filter_form',
+            'adm_navbar_filter_form',
             'sys-template-parts/form.filter.tpl',
             ADMIDIO_URL . FOLDER_MODULES . '/links/links.php',
             $page,

@@ -20,8 +20,8 @@ function ProfileJS(gRootPath) {
             url: this.url + "?mode=reload_current_memberships&user_uuid=" + this.userUuid,
             dataType: "html",
             success: function(responseText) {
-                $("#profile_roles_box_body").html(responseText);
-                formSubmitEvent('#profile_roles_box_body');
+                $("#adm_profile_roles_box .card-body").html(responseText);
+                formSubmitEvent('#adm_profile_roles_box .card-body');
             }
         });
     };
@@ -31,8 +31,8 @@ function ProfileJS(gRootPath) {
                 url: this.url + "?mode=reload_former_memberships&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
-                    $("#profile_former_roles_box_body").html(responseText);
-                    formSubmitEvent('#profile_former_roles_box_body');
+                    $("#adm_profile_former_roles_box .card-body").html(responseText);
+                    formSubmitEvent('#adm_profile_former_roles_box .card-body');
                 }
             }
         );
@@ -43,18 +43,18 @@ function ProfileJS(gRootPath) {
                 url: this.url + "?mode=reload_future_memberships&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
-                    $("#profile_future_roles_box_body").html(responseText);
-                    formSubmitEvent('#profile_future_roles_box_body');
+                    $("#adm_profile_future_roles_box .card-body").html(responseText);
+                    formSubmitEvent('#adm_profile_future_roles_box .card-body');
                 }
             }
         );
     };
 
     this.toggleDetailsOn = function (memberUuid) {
-        $("#membership_period_" + memberUuid).css({"visibility": "visible", "display": "block"});
+        $("#adm_membership_period_" + memberUuid).css({"visibility": "visible", "display": "block"});
     };
 
     this.toggleDetailsOff = function (memberUuid) {
-        $("#membership_period_" + memberUuid).css({"visibility": "hidden", "display": "none"});
+        $("#adm_membership_period_" + memberUuid).css({"visibility": "hidden", "display": "none"});
     };
 }

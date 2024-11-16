@@ -122,7 +122,7 @@ try {
         }
 
         $form = new Form(
-            'pluginLoginForm',
+            'adm_plugin_login_form',
             'plugin.login-form.edit.tpl',
             ADMIDIO_URL . '/adm_program/system/login.php?mode=check',
             null,

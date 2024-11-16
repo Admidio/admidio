@@ -45,7 +45,7 @@ try {
         // create or edit relation type
 
         // check form field input and sanitized it from malicious content
-        $userRelationsTypeEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $userRelationsTypeEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $userRelationsTypeEditForm->validate($_POST);
 
         $relationType2 = new TableUserRelationType($gDb);
@@ -94,7 +94,7 @@ try {
         exit();
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         // delete relation type
         $relationType->delete();

@@ -168,7 +168,7 @@ class UploadHandlerPhoto extends UploadHandler
         // ADM Start
         try {
             // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_REQUEST['admidio-csrf-token']);
+            SecurityUtils::validateCsrfToken($_REQUEST['adm_csrf_token']);
         } catch (Exception $exception) {
             $file->error = $exception->getMessage();
             // => EXIT

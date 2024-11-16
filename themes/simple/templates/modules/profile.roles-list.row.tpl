@@ -22,14 +22,14 @@
                         {/if}
                     </span>
                 </li>
-                <li class="list-group-item" id="membership_period_{$membership.memberUUID}" style="visibility: hidden; display: none;">
+                <li class="list-group-item" id="adm_membership_period_{$membership.memberUUID}" style="visibility: hidden; display: none;">
                     <form {foreach $membership.form.attributes as $attribute}
                             {$attribute@key}="{$attribute}"
                         {/foreach}>
-                        {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['admidio-csrf-token']}
-                        {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['membership_start_date']}
-                        {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['membership_end_date']}
-                        {include 'sys-template-parts/form.button.tpl' data=$membership.form.elements['btn_send']}
+                        {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_csrf_token']}
+                        {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_membership_start_date']}
+                        {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_membership_end_date']}
+                        {include 'sys-template-parts/form.button.tpl' data=$membership.form.elements['adm_button_send']}
                         <div class="form-alert" style="display: none;">&nbsp;</div>
                     </form>
                 </li>

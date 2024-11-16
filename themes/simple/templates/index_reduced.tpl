@@ -35,13 +35,13 @@
     </script>
 </head>
 <body id="{$id}" class="admidio admidio-reduced">
-    <div id="content" class="admidio-content" role="main">
+    <div id="adm_content" class="admidio-content" role="main">
         <div class="admidio-content-header">
             <h1 class="admidio-module-headline">{$headline}</h1>
 
             {if $hasPreviousUrl}
                 <!-- Add link to previous page -->
-                <a id="admidio-back-link" class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="bi bi-arrow-left-circle-fill"></i> {$l10n->get('SYS_BACK')}</a>
+                <a id="adm_back_link" class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="bi bi-arrow-left-circle-fill"></i> {$l10n->get('SYS_BACK')}</a>
             {/if}
         </div>
 

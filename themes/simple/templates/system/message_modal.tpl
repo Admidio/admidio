@@ -9,11 +9,11 @@
 <div class="modal-footer">
     {if $url != ''}
         {if $showYesNoButtons}
-            <button id="admButtonYes" class="btn btn-primary" type="button" onclick="{$url}">
+            <button id="adm_button_yes" class="btn btn-primary" type="button" onclick="{$url}">
                 <i class="bi bi-check-circle-fill"></i>
                 &nbsp;&nbsp;{$l10n->get("SYS_YES")}&nbsp;&nbsp;&nbsp;
             </button>
-            <button id="admButtonNo" class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+            <button id="adm_button_no" class="btn btn-secondary" type="button" data-bs-dismiss="modal">
                 <i class="bi bi-dash-circle-fill"></i>
                 &nbsp;{$l10n->get("SYS_NO")}
             </button>
@@ -23,6 +23,6 @@
                 <i class="bi bi-arrow-right-circle-fill"></i>
             </button>
         {/if}
-        <div id="statusMessage" class="mt-4 w-100"></div>
+        <div id="adm_status_message" class="mt-4 w-100"></div>
     {/if}
 </div>

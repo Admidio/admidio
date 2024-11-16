@@ -34,7 +34,7 @@ try {
 
     if (in_array($getMode, array('stop_membership', 'remove_former_membership'))) {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
     }
 
     // create user object
@@ -96,9 +96,9 @@ try {
         echo getRoleMemberships('former_role_list', $user, $roleStatement);
 
         if ($countRole === 0) {
-            echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
+            echo '<script type="text/javascript">$("#adm_profile_former_roles_box").css({ \'display\':\'none\' })</script>';
         } else {
-            echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'block\' })</script>';
+            echo '<script type="text/javascript">$("#adm_profile_former_roles_box").css({ \'display\':\'block\' })</script>';
         }
     } elseif ($getMode === 'reload_future_memberships') {
         // reload future role memberships
@@ -107,14 +107,14 @@ try {
         echo getRoleMemberships('future_role_list', $user, $roleStatement);
 
         if ($countRole === 0) {
-            echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
+            echo '<script type="text/javascript">$("#adm_profile_future_roles_box").css({ \'display\':\'none\' })</script>';
         } else {
-            echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'block\' })</script>';
+            echo '<script type="text/javascript">$("#adm_profile_future_roles_box").css({ \'display\':\'block\' })</script>';
         }
     } elseif ($getMode === 'save_membership') {
         // save membership date changes
-        $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date', 'date', array('requireValue' => true));
-        $postMembershipEnd = admFuncVariableIsValid($_POST, 'membership_end_date', 'date', array('requireValue' => true));
+        $postMembershipStart = admFuncVariableIsValid($_POST, 'adm_membership_start_date', 'date', array('requireValue' => true));
+        $postMembershipEnd = admFuncVariableIsValid($_POST, 'adm_membership_end_date', 'date', array('requireValue' => true));
 
         $member = new TableMembers($gDb);
         $member->readDataByUuid($getMemberUuid);

@@ -48,7 +48,7 @@ $configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces)
 
 $_SESSION['config_file_content'] = $configFileContent;
 
-$page = new Installation('admidio-installation-create-config');
+$page = new Installation('adm_installation_create_config', $gL10n->get('INS_INSTALLATION'));
 $page->addTemplateFile('installation.tpl');
 
 // now save new configuration file in Admidio folder if user has write access to this folder
@@ -65,13 +65,13 @@ if ($configFileHandle) {
     $page->assignSmartyVariable('urlInstallation', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
 
     $form = new Form(
-        'installationInstallAdmidioForm',
+        'adm_installation_install_admidio_form',
         'installation.install-admidio.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')),
         $page
     );
     $form->addSubmitButton(
-        'next_page',
+        'adm_next_page',
         $gL10n->get('INS_INSTALL_ADMIDIO'),
         array('icon' => 'bi-arrow-repeat', 'class' => ' btn-primary admidio-margin-bottom')
     );
@@ -81,13 +81,13 @@ if ($configFileHandle) {
     $page->assignSmartyVariable('text', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files')));
 
     $form = new Form(
-        'installationInstallAdmidioForm',
+        'adm_installation_install_admidio_form',
         'installation.download-config.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')),
         $page
     );
     $form->addButton(
-        'previous_page',
+        'adm_previous_page',
         $gL10n->get('SYS_BACK'),
         array(
             'icon' => 'bi-arrow-left-circle-fill',
@@ -95,7 +95,7 @@ if ($configFileHandle) {
         )
     );
     $form->addButton(
-        'download_config',
+        'adm_download_config',
         $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'),
         array(
             'icon' => 'bi-download',
@@ -104,7 +104,7 @@ if ($configFileHandle) {
         )
     );
     $form->addSubmitButton(
-        'next_page',
+        'adm_next_page',
         $gL10n->get('INS_INSTALL_ADMIDIO'),
         array(
             'icon' => 'bi-arrow-repeat',

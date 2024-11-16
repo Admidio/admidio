@@ -159,7 +159,7 @@ try {
         }
     } elseif ($getMode === 'delete_user') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         // delete registration
         $registrationUser->delete();

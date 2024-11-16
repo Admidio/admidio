@@ -45,7 +45,7 @@ try {
     $page = new HtmlPage('admidio-relationtypes-edit', $headline);
     $page->addJavascript('
         function checkRelationTypeNames() {
-            $("#btn_save").prop("disabled", $("#urt_name").val() === $("#urt_name_inverse").val());
+            $("#adm_button_save").prop("disabled", $("#urt_name").val() === $("#urt_name_inverse").val());
         }
         $("#urt_name").on("input", checkRelationTypeNames);
         $("#urt_name_inverse").on("input", checkRelationTypeNames);
@@ -84,7 +84,7 @@ try {
 
     // show form
     $form = new Form(
-        'userRelationsTypeEditForm',
+        'adm_user_relations_type_edit_form',
         'modules/user-relations.type.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('urt_uuid' => $getUrtUuid, 'mode' => 'edit')),
         $page
@@ -153,7 +153,7 @@ try {
         (bool)$relationType2->getValue('urt_edit_user'),
         array('helpTextId' => 'SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC')
     );
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+    $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('nameUserCreated', $relationType1->getNameOfCreatingUser());
     $page->assignSmartyVariable('timestampUserCreated', $relationType1->getValue('ann_timestamp_create'));

@@ -50,7 +50,7 @@ try {
 
     // show form
     $form = new Form(
-        'new_folder_form',
+        'adm_new_folder_form',
         'modules/documents-files.folder.new.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'create_folder', 'folder_uuid' => $getFolderUuid)),
         $page

@@ -96,10 +96,10 @@ try {
         profileJS.userUuid                = "' . $getUserUuid . '";
 
         function callbackProfilePhoto() {
-            var imgSrc = $("#profile_photo").attr("src");
+            var imgSrc = $("#adm_profile_photo").attr("src");
             var timestamp = new Date().getTime();
-            $("#btn_delete_photo").hide();
-            $("#profile_photo").attr("src", imgSrc + "&" + timestamp);
+            $("#adm_button_delete_photo").hide();
+            $("#adm_profile_photo").attr("src", imgSrc + "&" + timestamp);
         }
 
         function callbackRoles() {
@@ -113,7 +113,7 @@ try {
             if (profileJS) {
                 profileJS.formerRoleCount--;
                 if (profileJS.formerRoleCount === 0) {
-                    $("#profile_former_roles_box").fadeOut("slow");
+                    $("#adm_profile_former_roles_box").fadeOut("slow");
                 }
             }
         }
@@ -122,7 +122,7 @@ try {
             if (profileJS) {
                 profileJS.futureRoleCount--;
                 if (profileJS.futureRoleCount === 0) {
-                    $("#profile_future_roles_box").fadeOut("slow");
+                    $("#adm_profile_future_roles_box").fadeOut("slow");
                 }
             }
         }
@@ -130,7 +130,7 @@ try {
         function formSubmitEvent(rolesAreaId = "") {
             $(rolesAreaId + " .admidio-form-membership-period").submit(function(event) {
                 var memberUuid = $(this).attr("data-admidio");
-                var formAlert  = $("#membership_period_form_" + memberUuid + " .form-alert");
+                var formAlert  = $("#adm_membership_period_form_" + memberUuid + " .form-alert");
 
                 event.preventDefault(); // avoid to execute the actual submit of the form.
                 formAlert.hide();
@@ -147,7 +147,7 @@ try {
                             formAlert.animate({opacity: 1.0}, 5000);
                             formAlert.fadeOut("slow");
 
-                            var membershipPeriod = $("#membership_period_" + memberUuid);
+                            var membershipPeriod = $("#adm_membership_period_" + memberUuid);
                             membershipPeriod.animate({opacity: 1.0}, 5000);
                             membershipPeriod.fadeOut("slow");
 

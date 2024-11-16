@@ -59,7 +59,7 @@ try {
 
     // create html form
     $form = new Form(
-        'documents_files_move_file',
+        'adm_documents_files_move_file',
         'modules/documents-files.move.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'move', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)),
         $documentsFiles

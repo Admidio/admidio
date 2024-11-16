@@ -66,7 +66,7 @@ try {
         if (!empty($_POST['new_password'])) {
             try {
                 // check form field input and sanitized it from malicious content
-                $passwordResetSetPasswordForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+                $passwordResetSetPasswordForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
                 $formValues = $passwordResetSetPasswordForm->validate($_POST);
 
                 // check password and save new password in database
@@ -113,7 +113,7 @@ try {
 
             // show form
             $form = new Form(
-                'passwordResetSetPasswordForm',
+                'adm_password_reset_set_password_form',
                 'system/password-reset.set-password.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php', array('user_uuid' => $getUserUuid, 'id' => $getResetId)),
                 $page
@@ -138,7 +138,7 @@ try {
                 array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
             );
             $form->addSubmitButton(
-                'btn_save',
+                'adm_button_save',
                 $gL10n->get('SYS_SAVE'),
                 array('icon' => 'bi-check-lg')
             );
@@ -151,7 +151,7 @@ try {
         // password reset form was send, and now we should create an email for the user
         try {
             // check form field input and sanitized it from malicious content
-            $passwordResetForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $passwordResetForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $passwordResetForm->validate($_POST);
 
             if (StringUtils::strValidCharacters($formValues['recipient_email'], 'email')) {
@@ -269,7 +269,7 @@ try {
 
         // show form
         $form = new Form(
-            'passwordResetForm',
+            'adm_password_reset_form',
             'system/password-reset.tpl',
             ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php',
             $page
@@ -287,7 +287,7 @@ try {
         }
 
         $form->addSubmitButton(
-            'btn_send',
+            'adm_button_send',
             $gL10n->get('SYS_SEND'),
             array('icon' => 'bi-envelope-fill', 'class' => 'offset-sm-3')
         );

@@ -23,7 +23,7 @@ try {
     }
 
     // check form field input and sanitized it from malicious content
-    $contactsNewForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $contactsNewForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
     $formValues = $contactsNewForm->validate($_POST);
 
     // create html page object

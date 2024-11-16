@@ -18,7 +18,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
 if ($mode === 'html') {
     // create a page with the notice that the installation must be configured on the next pages
     // create form with select box where user can select a language
-    $page = new Installation('admidio-installation-welcome');
+    $page = new Installation('adm_installation_welcome', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
     $page->assignSmartyVariable('text', $gL10n->get(
@@ -30,7 +30,7 @@ if ($mode === 'html') {
     ));
 
     $form = new Form(
-        'installationWelcomeForm',
+        'adm_installation_welcome_form',
         'installation.welcome.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome', 'mode' => 'check')),
         $page
@@ -38,13 +38,13 @@ if ($mode === 'html') {
 
     // the possible languages will be read from a xml file
     $form->addSelectBox(
-        'system_language',
+        'adm_system_language',
         $gL10n->get('INS_PLEASE_CHOOSE_LANGUAGE'),
         $gL10n->getAvailableLanguages(),
         array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
     );
     $form->addSubmitButton(
-        'next_page',
+        'adm_next_page',
         $gL10n->get('INS_DATABASE_LOGIN'),
         array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end')
     );
@@ -62,8 +62,8 @@ if ($mode === 'html') {
         throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
-    if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '') {
-        $_SESSION['language'] = $_POST['system_language'];
+    if (isset($_POST['adm_system_language']) && trim($_POST['adm_system_language']) !== '') {
+        $_SESSION['language'] = $_POST['adm_system_language'];
         $gL10n->setLanguage($_SESSION['language']);
     } elseif (!isset($_SESSION['language'])) {
         throw new Exception('INS_LANGUAGE_NOT_CHOSEN');

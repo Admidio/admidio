@@ -45,7 +45,7 @@ try {
         // this must be called as ajax request
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         $leadership = false;
         if (isset($_POST['leaderFlag']) && $_POST['leaderFlag'] === 'true') {
@@ -136,7 +136,7 @@ try {
 
             // change data in database
             $.post(gRootPath + "/adm_program/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=' . $getRoleUuid . '&user_uuid=" + userUuid,
-                "memberFlag=" + memberChecked + "&leaderFlag=" + leaderChecked + "&admidio-csrf-token=' . $gCurrentSession->getCsrfToken() . '",
+                "memberFlag=" + memberChecked + "&leaderFlag=" + leaderChecked + "&adm_csrf_token=' . $gCurrentSession->getCsrfToken() . '",
                 function(data) {
                     // check if error occurs
                     if (data !== "success") {
@@ -182,7 +182,7 @@ try {
 
         // create filter menu with elements for role
         $form = new Form(
-            'navbar_filter_form_roles',
+            'adm_navbar_filter_form_roles',
             'sys-template-parts/form.filter.tpl',
             '',
             $page,

@@ -40,7 +40,7 @@ try {
             const order = $(this).sortable("toArray", {attribute: "data-id"});
             const uid = ui.item.attr("data-id");
             $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php?mode=sequence&uuid=" + uid + "&order=" + order,
-                {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"}
+                {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
             );
         }
     });
