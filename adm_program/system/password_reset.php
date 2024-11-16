@@ -66,7 +66,7 @@ try {
         if (!empty($_POST['new_password'])) {
             try {
                 // check form field input and sanitized it from malicious content
-                $passwordResetSetPasswordForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+                $passwordResetSetPasswordForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
                 $formValues = $passwordResetSetPasswordForm->validate($_POST);
 
                 // check password and save new password in database
@@ -151,7 +151,7 @@ try {
         // password reset form was send, and now we should create an email for the user
         try {
             // check form field input and sanitized it from malicious content
-            $passwordResetForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $passwordResetForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $passwordResetForm->validate($_POST);
 
             if (StringUtils::strValidCharacters($formValues['recipient_email'], 'email')) {
@@ -287,7 +287,7 @@ try {
         }
 
         $form->addSubmitButton(
-            'btn_send',
+            'adm_button_send',
             $gL10n->get('SYS_SEND'),
             array('icon' => 'bi-envelope-fill', 'class' => 'offset-sm-3')
         );

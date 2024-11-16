@@ -180,7 +180,7 @@ class Form
         if ($optionsAll['method'] === 'post') {
             // add a hidden field with the csrf token to each form
             $this->addInput(
-                'admidio-csrf-token',
+                'adm_csrf_token',
                 'csrf-token',
                 $this->getCsrfToken(),
                 array('property' => self::FIELD_HIDDEN)
@@ -1622,12 +1622,12 @@ class Form
     {
         $validFieldValues = array();
 
-        if (isset($fieldValues['admidio-csrf-token'])) {
+        if (isset($fieldValues['adm_csrf_token'])) {
             // check the CSRF token of the form against the session token
-            if ($fieldValues['admidio-csrf-token'] !== $this->csrfToken) {
+            if ($fieldValues['adm_csrf_token'] !== $this->csrfToken) {
                 throw new Exception('Invalid or missing CSRF token!');
             }
-            unset($fieldValues['admidio-csrf-token']);
+            unset($fieldValues['adm_csrf_token']);
         } else {
             throw new Exception('No CSRF token provided.');
         }

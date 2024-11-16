@@ -41,7 +41,7 @@ try {
 
     // check the CSRF token of the form against the session token
     if (in_array($getMode, array('create_entry', 'edit_entry', 'delete_entry', 'create_comment', 'edit_comment', 'delete_comment'))) {
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
     }
 
     if ($getMode === 'create_comment') {

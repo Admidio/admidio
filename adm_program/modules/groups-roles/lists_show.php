@@ -437,7 +437,7 @@ try {
             $form->addInput('role_list', '', $getRoleList, array('property' => Form::FIELD_HIDDEN));
             $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => Form::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
-            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+            $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
         }
 
         $form->addToHtmlPage();

@@ -84,7 +84,7 @@ try {
         $(".admidio-image-rotate").click(function() {
             imageNr = $(this).data("image");
             $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php?photo_uuid=' . $getPhotoUuid . '&photo_nr=" + $(this).data("image") + "&mode=rotate&direction=" + $(this).data("direction"),
-                {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"},
+                {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"},
                 function(data) {
                     if (data === "done") {
                         // Appending the random number is necessary to trick the browser cache
@@ -98,7 +98,7 @@ try {
 
         $(".admidio-album-lock").click(function() {
             $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php?mode=" + $(this).data("mode") + "&photo_uuid=" + $(this).data("id"),
-                {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"},
+                {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"},
                 function(data) {
                     if (data === "done") {
                         location.reload();

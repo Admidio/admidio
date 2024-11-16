@@ -38,7 +38,7 @@ try {
 
         if(in_array($getMode, array('delete', 'activate', 'deactivate'))) {
             // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
         }
     }
 
@@ -59,7 +59,7 @@ try {
         // create or edit role
 
         // check form field input and sanitized it from malicious content
-        $groupsRolesEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $groupsRolesEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $groupsRolesEditForm->validate($_POST);
 
         if ($role->getValue('rol_name') !== $_POST['rol_name']) {

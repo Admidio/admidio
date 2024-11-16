@@ -26,7 +26,7 @@
 <form {foreach $attributes as $attribute}
 {$attribute@key}="{$attribute}"
 {/foreach}>
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {if {array_key_exists array=$elements key='login_name'}}
         <p>{$l10n->get('INS_ADMINISTRATOR_LOGIN_DESC')}</p>
         {include 'sys-template-parts/form.input.tpl' data=$elements['login_name']}

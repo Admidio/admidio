@@ -2,7 +2,7 @@
         {$attribute@key}="{$attribute}"
     {/foreach}>
 
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['groups_roles_enable_module']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['groups_roles_members_per_page']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['groups_roles_default_configuration']}

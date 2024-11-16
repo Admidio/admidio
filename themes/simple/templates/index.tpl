@@ -29,11 +29,6 @@
             $("[data-bs-toggle=popover]").popover();
             $("[data-bs-toggle=tooltip]").tooltip();
 
-            // Sidebar toggle behavior
-            $('#sidebarCollapse').on('click', function() {
-                $('#sidebar, #content').toggleClass('active');
-            });
-
             {$javascriptContentExecuteAtPageLoad}
 
             // function to handle modal window and load data from url
@@ -106,7 +101,7 @@
 
     <div class="container-fluid">
         <div class="row flex-xl-nowrap">
-            <div class="col-12 col-md-3 col-xl-2 admidio-sidebar" id="sidebar">
+            <div id="adm_sidebar" class="col-12 col-md-3 col-xl-2 admidio-sidebar">
                 {include file='sys-template-parts/menu.main.tpl'}
             </div>
 

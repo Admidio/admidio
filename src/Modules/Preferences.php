@@ -206,7 +206,7 @@ class Preferences
         global $gL10n, $gSettingsManager, $gCurrentSession, $gDb, $gCurrentOrgId;
 
         // check form field input and sanitized it from malicious content
-        $preferencesForm = $gCurrentSession->getFormObject($formData['admidio-csrf-token']);
+        $preferencesForm = $gCurrentSession->getFormObject($formData['adm_csrf_token']);
         $formValues = $preferencesForm->validate($formData);
 
         // first check the fields of the submitted form
@@ -252,7 +252,7 @@ class Preferences
 
         foreach ($formValues as $key => $value) {
             // Sort out elements that are not stored in adm_preferences here
-            if (!in_array($key, array('save', 'admidio-csrf-token'))) {
+            if (!in_array($key, array('save', 'adm_csrf_token'))) {
                 if (str_starts_with($key, 'SYSMAIL_')) {
                     $text = new TableText($gDb);
                     $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));

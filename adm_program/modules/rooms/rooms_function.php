@@ -36,7 +36,7 @@ try {
 
     if ($getMode === 'edit') {
         // check form field input and sanitized it from malicious content
-        $roomsEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $roomsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $roomsEditForm->validate($_POST);
 
         // write form values into the room object
@@ -54,7 +54,7 @@ try {
     } // delete the room
     elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         $sql = 'SELECT 1
               FROM ' . TBL_EVENTS . '

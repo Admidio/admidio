@@ -50,7 +50,7 @@ try {
     $senderEmail = $gCurrentUser->getValue('EMAIL');
 
     // check form field input and sanitized it from malicious content
-    $photosEcardSendForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $photosEcardSendForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
     $formValues = $photosEcardSendForm->validate($_POST);
 
     // read template from file system

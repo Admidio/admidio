@@ -34,7 +34,7 @@ try {
     }
 
     // check form field input and sanitized it from malicious content
-    $messagesSendForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+    $messagesSendForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
     $formValues = $messagesSendForm->validate($_POST);
 
     if (isset($_POST['msg_to'])) {

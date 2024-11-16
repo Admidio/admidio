@@ -31,7 +31,7 @@
         <h5>{$eventHeadline}: {$eventPeriod}</h5>
             <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
 
-            {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['dat_comment']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['additional_guests']}
         <div class="form-alert" style="display: none;">&nbsp;</div>

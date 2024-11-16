@@ -106,7 +106,7 @@ class FileUpload
                 sequentialUploads: true,
                 dataType: "json",
                 formData: [{
-                    name: "admidio-csrf-token",
+                    name: "adm_csrf_token",
                     value: "' . $GLOBALS['gCurrentSession']->getCsrfToken() . '"
                 }],
                 add: function(e, data) {

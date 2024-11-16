@@ -43,10 +43,10 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
 
     // send RequestObject and delete entry
     $.post(url, {
-        "admidio-csrf-token": csrfToken,
+        "adm_csrf_token": csrfToken,
         "uuid": elementId
         }, function(data) {
-        const messageText = $("#statusMessage");
+        const messageText = $("#adm_status_message");
         var returnStatus = "error";
         var returnMessage = "";
 
@@ -206,7 +206,7 @@ function redirectPost(url, data) {
  */
 function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
     $.post(updateSequenceUrl + "?mode=sequence&uuid=" + elementId + "&direction=" + direction, {
-            "admidio-csrf-token": csrfToken,
+            "adm_csrf_token": csrfToken,
             "direction": direction,
             "uuid": elementId,
             "mode": "sequence"
@@ -260,7 +260,7 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
  * @param {string} href    Optional a link that will be called by a click of the "Yes" button..
  */
 function messageBox(message, title, type, buttons, href) {
-    $("#statusMessage").html('');
+    $("#adm_status_message").html('');
     if (typeof title !== 'undefined') {
         $("#adm_modal_messagebox .modal-title").html(title);
     }

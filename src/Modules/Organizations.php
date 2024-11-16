@@ -34,7 +34,7 @@ class Organizations
         global $gDb, $gCurrentSession, $gCurrentOrgId, $gCurrentUserId, $gSettingsManager;
 
         // check form field input and sanitized it from malicious content
-        $newOrganizationForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $newOrganizationForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $newOrganizationForm->validate($_POST);
 
         // check if organization shortname exists

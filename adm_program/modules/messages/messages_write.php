@@ -241,7 +241,7 @@ try {
             array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
         );
         $form->addSubmitButton(
-            'btn_send',
+            'adm_button_send',
             $gL10n->get('SYS_SEND'),
             array('icon' => 'bi-envelope-fill')
         );
@@ -574,7 +574,7 @@ try {
             $form->addCaptcha('adm_captcha_code');
         }
 
-        $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
+        $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 
         // add form to html page and show page
         $page->assignSmartyVariable('possibleEmails', $possibleEmails);

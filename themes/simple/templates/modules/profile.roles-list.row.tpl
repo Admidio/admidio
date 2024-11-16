@@ -26,7 +26,7 @@
                     <form {foreach $membership.form.attributes as $attribute}
                             {$attribute@key}="{$attribute}"
                         {/foreach}>
-                        {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['admidio-csrf-token']}
+                        {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_csrf_token']}
                         {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_membership_start_date']}
                         {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_membership_end_date']}
                         {include 'sys-template-parts/form.button.tpl' data=$membership.form.elements['adm_button_send']}

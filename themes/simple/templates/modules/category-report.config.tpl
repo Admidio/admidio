@@ -5,7 +5,7 @@
         {$attribute@key}="{$attribute}"
     {/foreach}>
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
 
     {foreach $categoryReports as $categoryReport}
         <div class="card admidio-field-group">

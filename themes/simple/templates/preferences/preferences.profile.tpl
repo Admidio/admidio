@@ -2,7 +2,7 @@
         {$attribute@key}="{$attribute}"
     {/foreach}>
 
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['editProfileFields']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['profile_log_edit_fields']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['profile_show_map_link']}

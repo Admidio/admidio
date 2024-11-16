@@ -3,7 +3,7 @@
     {/foreach}>
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
 
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_DESIGNATION')}</div>
         <div class="card-body">

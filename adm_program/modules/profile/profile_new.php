@@ -365,7 +365,7 @@ try {
         // ------------------------------------------------------------
 
         // check form field input and sanitized it from malicious content
-        $profileEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $profileEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $profileEditForm->validate($_POST);
 
         // Login name and password must be checked during registration

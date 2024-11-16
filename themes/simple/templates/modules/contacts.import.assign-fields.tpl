@@ -2,7 +2,7 @@
         {$attribute@key}="{$attribute}"
     {/foreach}>
     <p class="lead">{$l10n->get('SYS_ASSIGN_FIELDS_DESC')}</p>
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['first_row'] formType="vertical"}
 
     <div class="alert alert-warning alert-small" id="admidio-import-unused">

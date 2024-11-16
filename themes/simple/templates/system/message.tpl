@@ -4,11 +4,11 @@
 
     {if $url != ''}
         {if $showYesNoButtons}
-            <button id="admButtonYes" class="btn btn-primary" type="button" onclick="{$url}">
+            <button id="adm_button_yes" class="btn btn-primary" type="button" onclick="{$url}">
                 <i class="bi bi-check-circle-fill"></i>
                 &nbsp;&nbsp;{$l10n->get("SYS_YES")}&nbsp;&nbsp;&nbsp;
             </button>
-            <button id="admButtonNo" class="btn btn-secondary" type="button" onclick="history.back()">
+            <button id="adm_button_no" class="btn btn-secondary" type="button" onclick="history.back()">
                 <i class="bi bi-dash-circle-fill"></i>
                 &nbsp;{$l10n->get("SYS_NO")}
             </button>

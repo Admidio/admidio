@@ -1,7 +1,7 @@
 <form {foreach $attributes as $attribute}
 {$attribute@key}="{$attribute}"
 {/foreach}>
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['system_language']}
     {if $admidioBetaVersion > 0}
         <div class="alert alert-warning alert-small" role="alert">

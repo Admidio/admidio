@@ -34,7 +34,7 @@ try {
 
     if (in_array($getMode, array('stop_membership', 'remove_former_membership'))) {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
     }
 
     // create user object

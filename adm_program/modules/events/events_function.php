@@ -88,7 +88,7 @@ try {
         }
 
         // check form field input and sanitized it from malicious content
-        $eventEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $eventEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $eventEditForm->validate($_POST);
 
         if ($formValues['event_participation_possible'] == 1
@@ -343,7 +343,7 @@ try {
         exit();
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         // delete current announcements, right checks were done before
         $event->delete();
@@ -391,10 +391,10 @@ try {
     if (in_array($getMode, array('participate', 'participate_cancel', 'participate_maybe'), true)) {
         try {
             // check form field input and sanitized it from malicious content
-            $eventsParticipationEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+            $eventsParticipationEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         } catch (Exception $e) {
             // call was done directly through ajax then check session csrf token
-            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
             $formValues['dat_comment'] = '';
             $formValues['additional_guests'] = '';
         }

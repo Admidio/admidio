@@ -2,7 +2,7 @@
         {$attribute@key}="{$attribute}"
     {/foreach}>
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {if {array_key_exists array=$elements key='userUuidList'}}
         {include 'sys-template-parts/form.select.tpl' data=$elements['userUuidList']}
     {/if}
@@ -54,5 +54,5 @@
         </div>
     {/if}
     <div class="form-alert" style="display: none;">&nbsp;</div>
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_send']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_send']}
 </form>

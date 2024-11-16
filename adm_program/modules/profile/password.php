@@ -43,7 +43,7 @@ try {
 
     if ($getMode === 'change') {
         // check form field input and sanitized it from malicious content
-        $profilePasswordEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $profilePasswordEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $profilePasswordEditForm->validate($_POST);
 
         if ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId) {

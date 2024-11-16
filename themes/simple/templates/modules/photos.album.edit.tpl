@@ -3,7 +3,7 @@
     {/foreach}>
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
 
-    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio-csrf-token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['pho_name']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['parent_album_uuid']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['pho_begin']}

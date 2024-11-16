@@ -153,7 +153,7 @@ class HtmlForm
         if ($optionsAll['method'] === 'post' && isset($GLOBALS['gCurrentSession'])) {
             // add a hidden field with the csrf token to each form
             $this->addInput(
-                'admidio-csrf-token',
+                'adm_csrf_token',
                 'csrf-token',
                 $GLOBALS['gCurrentSession']->getCsrfToken(),
                 array('property' => self::FIELD_HIDDEN)

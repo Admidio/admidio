@@ -45,12 +45,12 @@ try {
 
     if ($getMode !== 'edit') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
     }
 
     if ($getMode === 'edit') {
         // check form field input and sanitized it from malicious content
-        $photosEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $photosEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $photosEditForm->validate($_POST);
 
         if (strlen($_POST['pho_begin']) > 0) {

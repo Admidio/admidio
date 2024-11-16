@@ -48,7 +48,7 @@ try {
 
     if ($getMode === 'edit') {
         // check form field input and sanitized it from malicious content
-        $announcementEditForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $announcementEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $announcementEditForm->validate($_POST);
 
         // write form values in announcement object
@@ -68,7 +68,7 @@ try {
         exit();
     } elseif ($getMode === 'delete') {
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         // delete current announcements, right checks were done before
         $announcement->delete();

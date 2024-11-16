@@ -109,7 +109,7 @@ class ModuleLogin
         );
 
         $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
-        $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right', 'class' => 'offset-sm-3'));
+        $form->addSubmitButton('adm_button_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right', 'class' => 'offset-sm-3'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -126,7 +126,7 @@ class ModuleLogin
         global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID;
 
         // check form field input and sanitized it from malicious content
-        $loginForm = $gCurrentSession->getFormObject($_POST['admidio-csrf-token']);
+        $loginForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $loginForm->validate($_POST);
 
         $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);
