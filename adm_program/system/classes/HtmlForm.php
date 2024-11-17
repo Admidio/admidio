@@ -738,13 +738,13 @@ class HtmlForm
             if ($this->htmlPage instanceof HtmlPage) {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
-                    $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
+                    $("#adm_password_strength_minimum").css("margin-left", "calc(" + $("#adm_password_strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
 
                     $("#' . $id . '").keyup(function(e) {
                         const result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
                         const cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
 
-                        const progressBar = $("#admidio-password-strength .progress-bar");
+                        const progressBar = $("#adm_password_strength .progress-bar");
                         progressBar.attr("aria-valuenow", result.score * 25);
                         progressBar.css("width", result.score * 25 + "%");
                         progressBar.removeClass(cssClasses.join(" "));

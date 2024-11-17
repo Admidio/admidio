@@ -51,11 +51,11 @@ try {
                 <p><i class="bi bi-trash"></i>&nbsp;' . $gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE'))) . '</p>
             </div>
             <div class="modal-footer">
-                <button id="btnFormer" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'remove')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'remove')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_FORMER') . '</button>
-                <button id="btnDelete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                <button id="adm_button_delete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'row_members_' . $getUserUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE') . '</button>
-                <div id="status-message" class="mt-4 w-100"></div>
+                <div id="adm_status_message" class="mt-4 w-100"></div>
             </div>';
         exit();
     }

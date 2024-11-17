@@ -31,17 +31,17 @@
     </script>
 </head>
 <body id="{$id}" class="admidio">
-    <div id="installation-header" class="admidio-area">
+    <div id="adm_installation_header" class="admidio-area">
         <div class="admidio-container container">
-            <img id="admidio-logo" src="{$urlAdmidio}/adm_program/system/logo/admidio_writing_white_150.png" alt="Logo" />
-            <span id="installation-headline" class="align-middle">{$headline}</span>
+            <img id="adm_logo" src="{$urlAdmidio}/adm_program/system/logo/admidio_writing_white_150.png" alt="Logo" />
+            <span id="adm_installation_headline" class="align-middle">{$headline}</span>
         </div>
     </div>
-    <div id="installation-body" class="admidio-area">
+    <div id="adm_installation_body" class="admidio-area">
         <div class="admidio-container container">
             {include file=$templateFile}
 
-            <div id="imprint">Powered by <a href="https://www.admidio.org">Admidio</a> &copy; Admidio Team
+            <div id="adm_imprint">Powered by <a href="https://www.admidio.org">Admidio</a> &copy; Admidio Team
                 {if $urlImprint != ''}
                     &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlImprint}">{$l10n->get('SYS_IMPRINT')}</a>
                 {/if}

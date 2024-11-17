@@ -3,12 +3,12 @@
         $("body").on("shown.bs.modal", ".modal", function() {
             $("#password_edit_form").find("*").filter(":input:visible:first").focus()
             $("#password_edit_form").submit(formSubmit);
-            $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * ' . $passwordStrengthLevel . ')");
+            $("#adm_password_strength_minimum").css("margin-left", "calc(" + $("#adm_password_strength").css("width") + " / 4 * ' . $passwordStrengthLevel . ')");
             $("#new_password").keyup(function(e) {
                 var result = zxcvbn(e.target.value, {$zxcvbnUserInputs});
                 var cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
 
-                var progressBar = $("#admidio-password-strength .progress-bar");
+                var progressBar = $("#adm_password_strength .progress-bar");
                 progressBar.attr("aria-valuenow", result.score * 25);
                 progressBar.css("width", result.score * 25 + "%");
                 progressBar.removeClass(cssClasses.join(" "));

@@ -564,11 +564,11 @@ tr.admidio-event-highlight {
     height: auto;
 }
 
-#admidio-password-strength {
+#adm_password_strength {
     margin-top: 0.5rem;
 }
 
-#admidio-password-strength-minimum {
+#adm_password_strength_minimum {
     position: absolute;
     border: 9px solid transparent;
     border-left-color: var(--bs-body-color);

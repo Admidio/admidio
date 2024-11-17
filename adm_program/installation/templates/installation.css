@@ -30,7 +30,7 @@
     --bs-focus-ring-color: #c4e9ef;
 }
 
-#installation-header {
+#adm_installation_header {
     background-color: var(--bs-primary);
     color: var(--admidio-header-font-color);
 }
@@ -39,7 +39,7 @@
     width: 100%;
 }
 
-#installation-body .admidio-container {
+#adm_installation_body .admidio-container {
     background-color: var(--admidio-header-font-color);
 }
 
@@ -52,7 +52,7 @@
     padding-right: 1.5rem;
 }
 
-#installation-headline {
+#adm_installation_headline {
     font-size: 2rem;
     font-weight: bold;
     letter-spacing: 1px;
@@ -64,7 +64,7 @@
     order: 1;
 }
 
-#installation-message h3, #installation-message p {
+#adm_installation_message h3, #adm_installation_message p {
     margin-bottom: 2rem;
 }
 /***********************************/
@@ -409,7 +409,7 @@ label {
     border-color: var(--bs-secondary);
 }
 
-#imprint {
+#adm_imprint {
     margin-bottom: 2rem;
     font-size: 80%;
 }
@@ -420,11 +420,11 @@ label {
     margin-left: 0.5rem;
 }
 
-#admidio-password-strength {
+#adm_password_strength {
     margin-top: 0.5rem;
 }
 
-#admidio-password-strength-minimum {
+#adm_password_strength_minimum {
     position: absolute;
     border: 9px solid transparent;
     border-left-color: var(--bs-body-color);

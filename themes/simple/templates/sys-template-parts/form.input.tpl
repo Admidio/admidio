@@ -46,9 +46,9 @@
         {/if}
 
         {if $data.type == "password" && $data.passwordStrength eq 1}
-            <div id="admidio-password-strength" class="progress {$data.class}">
+            <div id="adm_password_strength" class="progress {$data.class}">
                 <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                <div id="admidio-password-strength-minimum"></div>
+                <div id="adm_password_strength_minimum"></div>
             </div>
         {/if}
 
