@@ -1325,7 +1325,7 @@
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it. If you do not want to send any of these notifications, leave the text field empty.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime.</string>
   <string name="SYS_TAB">Tab</string>
   <string name="SYS_TEMPLATE">Template</string>
-  <string name="SYS_TEMPLATE_DESC">Here you can define the default template (default: postcard).</string>
+  <string name="SYS_TEMPLATE_DESC">Set the template that is preselected when creating the e-card. (Default: postcard)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Before you call this function, all settings for email sending must be saved!\nA simple email with the subject #VAR1_BOLD# will be sent to the email address of the logged in user based on the saved email settings. In the process, a dispatch log is output during SMTP dispatch, which can help in case of problems.</string>

@@ -100,6 +100,7 @@ class Database
     protected PDO $pdo;
     /**
      * @var The PDOStatement object which is needed to handle the return of a query.
+     * #todo# add union datatype PDOStatement|boolean when minimum requirement is PHP8
      */
     protected $pdoStatement;
     /**
