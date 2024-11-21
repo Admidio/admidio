@@ -65,7 +65,7 @@
 
     {include 'system/messagebox.tpl'}
 
-    <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar">
+    <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">
         <a class="navbar-brand" href="{$urlAdmidio}/adm_program/overview.php">
             <img class="d-none d-md-block align-top" src="{$urlTheme}/images/admidio_logo.png"
                 alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
