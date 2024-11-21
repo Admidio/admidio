@@ -66,9 +66,8 @@
     {include 'system/messagebox.tpl'}
 
     <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">
-        <a class="navbar-brand" href="{$urlAdmidio}/adm_program/overview.php">
-            <img class="d-none d-md-block align-top" src="{$urlTheme}/images/admidio_logo.png"
-                alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
+        <a class="navbar-brand d-none d-md-block" href="{$urlAdmidio}/adm_program/overview.php">
+            <img src="{$urlTheme}/images/admidio_logo.png" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
         </a>
         <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
         <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>

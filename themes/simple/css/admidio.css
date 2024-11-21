@@ -65,13 +65,9 @@
     }
 }
 
-#adm_dropdown_user_photo {
-    margin-right: 0.5em;
-}
-
 #adm_dropdown_user_photo .dropdown-menu {
-    padding: 1em;
-    width: 300px;
+    padding: 1rem;
+    width: 250px;
 }
 
 .admidio-content-col {
@@ -437,7 +433,7 @@ label {
 /***********************************/
 
 .navbar {
-    --bs-navbar-padding-x: 0.5rem;
+    --bs-navbar-padding-x: 1rem;
 }
 
 .navbar-filter {
