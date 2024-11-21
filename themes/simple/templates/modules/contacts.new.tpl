@@ -2,7 +2,7 @@
     $("body").on("shown.bs.modal", ".modal", function() {
         $("#lastname").trigger("focus")
     });
-    $("#contacts_new_form").submit(formSubmit);
+    $("#adm_contacts_new_form").submit(formSubmit);
 </script>
 
 <div class="modal-header">

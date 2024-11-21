@@ -1,21 +1,19 @@
 <script type="text/javascript">
-    $(function() {
-        $("body").on("shown.bs.modal", ".modal", function() {
-            $("#password_edit_form").find("*").filter(":input:visible:first").focus()
-            $("#password_edit_form").submit(formSubmit);
-            $("#adm_password_strength_minimum").css("margin-left", "calc(" + $("#adm_password_strength").css("width") + " / 4 * ' . $passwordStrengthLevel . ')");
-            $("#new_password").keyup(function(e) {
-                var result = zxcvbn(e.target.value, {$zxcvbnUserInputs});
-                var cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
+    $("body").on("shown.bs.modal", ".modal", function() {
+        $("#adm_password_edit_form").find("*").filter(":input:visible:first").focus()
+        $("#adm_password_strength_minimum").css("margin-left", "calc(" + $("#adm_password_strength").css("width") + " / 4 * {$settings->getInt('password_min_strength')})");
+        $("#new_password").keyup(function(e) {
+            var result = zxcvbn(e.target.value, {$zxcvbnUserInputs});
+            var cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
 
-                var progressBar = $("#adm_password_strength .progress-bar");
-                progressBar.attr("aria-valuenow", result.score * 25);
-                progressBar.css("width", result.score * 25 + "%");
-                progressBar.removeClass(cssClasses.join(" "));
-                progressBar.addClass(cssClasses[result.score]);
-            });
+            var progressBar = $("#adm_password_strength .progress-bar");
+            progressBar.attr("aria-valuenow", result.score * 25);
+            progressBar.css("width", result.score * 25 + "%");
+            progressBar.removeClass(cssClasses.join(" "));
+            progressBar.addClass(cssClasses[result.score]);
         });
     });
+    $("#adm_password_edit_form").submit(formSubmit);
 </script>
 
 <div class="modal-header">

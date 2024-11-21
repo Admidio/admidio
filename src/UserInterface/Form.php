@@ -1508,10 +1508,11 @@ class Form
      */
     public function addToSmarty(Smarty $smarty)
     {
-        global $gL10n;
+        global $gL10n, $gSettingsManager;
 
         $smarty->assign('urlAdmidio', ADMIDIO_URL);
         $smarty->assign('l10n', $gL10n);
+        $smarty->assign('settings', $gSettingsManager);
         $smarty->assign('formType', $this->type);
         $smarty->assign('attributes', $this->attributes);
         $smarty->assign('elements', $this->elements);
