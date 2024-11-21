@@ -46,12 +46,12 @@
     margin-right: 1rem;
 }
 
-#adm_main_navbar a {
+#adm_navbar_nav a, #adm_main_navbar .dropdown-toggle {
     color: var(--admidio-header-link-color);
     font-size: 1rem
 }
 
-#adm_main_navbar a:hover {
+#adm_navbar_nav a:hover, #adm_main_navbar .dropdown-toggle {
     color: var(--admidio-header-link-color-hover);
 }
 
@@ -63,6 +63,15 @@
         position: relative;
         top: auto;
     }
+}
+
+#adm_dropdown_user_photo {
+    margin-right: 0.5em;
+}
+
+#adm_dropdown_user_photo .dropdown-menu {
+    padding: 1em;
+    width: 300px;
 }
 
 .admidio-content-col {

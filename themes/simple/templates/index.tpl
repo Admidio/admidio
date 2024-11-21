@@ -65,7 +65,7 @@
 
     {include 'system/messagebox.tpl'}
 
-    <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar">
+    <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">
         <a class="navbar-brand" href="{$urlAdmidio}/adm_program/overview.php">
             <img class="d-none d-md-block align-top" src="{$urlTheme}/images/admidio_logo.png"
                 alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
@@ -73,30 +73,43 @@
         <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
         <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>
 
+        {if $validLogin}
+            <span id="adm_dropdown_user_photo" class="dropdown ms-auto">
+                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img id="adm_profile_photo" style="max-height: 40px; max-width: 40px;" class="rounded-circle" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end text-center">
+                    <li class="nav-item mb-2">
+                        <img id="adm_profile_photo" style="max-height: 200px; max-width: 200px;" class="rounded-circle" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+                    </li>
+                    <li class="nav-item mb-4">
+                        {$currentUser->getValue('FIRST_NAME')} {$currentUser->getValue('LAST_NAME')}
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link link-primary" href="{$urlAdmidio}/adm_program/modules/profile/profile.php">{$l10n->get('SYS_MY_PROFILE')}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link link-primary" href="{$urlAdmidio}/adm_program/system/logout.php">{$l10n->get('SYS_LOGOUT')}</a>
+                    </li>
+                </ul>
+            </span>
+        {else}
+            <div id="adm_navbar_nav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{$urlAdmidio}/adm_program/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
+                    </li>
+                    {if $registrationEnabled}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
+                        </li>
+                    {/if}
+                </ul>
+            </div>
+        {/if}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adm_navbar_nav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div id="adm_navbar_nav" class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-            {if $validLogin}
-                <li class="nav-item">
-                    <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/profile/profile.php">{$l10n->get('SYS_MY_PROFILE')}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{$urlAdmidio}/adm_program/system/logout.php">{$l10n->get('SYS_LOGOUT')}</a>
-                </li>
-            {else}
-                <li class="nav-item">
-                    <a class="nav-link" href="{$urlAdmidio}/adm_program/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
-                </li>
-                {if $registrationEnabled}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
-                    </li>
-                {/if}
-            {/if}
-            </ul>
-        </div>
     </nav>
 
     <div class="container-fluid">
