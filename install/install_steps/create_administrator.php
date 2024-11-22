@@ -41,7 +41,7 @@ if ($mode === 'html') {
     $form = new Form(
         'adm_installation_create_administrator_form',
         'installation.create-administrator.tpl',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator', 'mode' => 'check')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION. '/installation.php', array('step' => 'create_administrator', 'mode' => 'check')),
         $page
     );
     $form->addInput(

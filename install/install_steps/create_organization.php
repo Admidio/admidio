@@ -45,7 +45,7 @@ if ($mode === 'html') {
     $form = new Form(
         'adm_installation_create_organization_form',
         'installation.create-organization.tpl',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization', 'mode' => 'check')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization', 'mode' => 'check')),
         $page
     );
     $form->addInput(
@@ -76,7 +76,7 @@ if ($mode === 'html') {
         'adm_previous_page',
         $gL10n->get('SYS_BACK'),
         array('icon' => 'bi-arrow-left-circle-fill', 'class' => 'admidio-margin-bottom',
-            'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')))
+            'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION. '/installation.php', array('step' => 'connect_database')))
     );
     $form->addSubmitButton('adm_next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'bi-arrow-right-circle-fill', 'class' => 'float-end'));
 

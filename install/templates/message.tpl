@@ -1,5 +1,5 @@
 
-<div id="installation-message">
+<div id="adm_installation_message">
     <h3>{$messageHeadline}</h3>
 
     {if $outputMode == "error"}

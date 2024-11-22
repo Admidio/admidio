@@ -347,7 +347,7 @@ function formSubmit(event) {
                 }
             } else {
                 if ($("#adm_captcha").length > 0) {
-                    $("#adm_captcha").attr("src", gRootPath + "/adm_program/libs/securimage/securimage_show.php?" + Math.random());
+                    $("#adm_captcha").attr("src", gRootPath + "/libs/securimage/securimage_show.php?" + Math.random());
                     $("#adm_captcha_code").val("");
                 }
                 if (returnMessage.length == 0) {

@@ -19,7 +19,7 @@
 
     {$additionalHeaderData}
 
-    <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/adm_program/installation/templates/installation.css" />
+    <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/install/templates/installation.css" />
 
     <script type="text/javascript">
         {$javascriptContent}

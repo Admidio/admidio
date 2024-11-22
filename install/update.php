@@ -48,7 +48,7 @@ try {
         );
     }
 
-    $rootPath = dirname(__DIR__, 2);
+    $rootPath = dirname(__DIR__);
 
     // embed config file
     $g_organization = '';
@@ -95,7 +95,7 @@ try {
 
     if (!$pdoStatement || $pdoStatement->rowCount() === 0) {
         // no valid installation exists -> show installation wizard
-        admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php');
+        admRedirect(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php');
         // => EXIT
     }
 
@@ -206,7 +206,7 @@ try {
             $form = new Form(
                 'adm_update_login_form',
                 'update.tpl',
-                SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 'update')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'update')),
                 $page
             );
             if ($gLoginForUpdate) {
@@ -276,7 +276,7 @@ try {
 
         echo json_encode(array(
             'status' => 'success',
-            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 'result'))
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'result'))
         ));
         exit();
     } elseif ($getMode === 'result') {

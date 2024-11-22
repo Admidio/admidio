@@ -1,5 +1,5 @@
-<link rel="stylesheet" type="text/css" href="{$urlAdmidio}/adm_program/libs/cookieconsent/cookieconsent.min.css" />
-<script src="{$urlAdmidio}/adm_program/libs/cookieconsent/cookieconsent.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{$urlAdmidio}/libs/cookieconsent/cookieconsent.min.css" />
+<script src="{$urlAdmidio}/libs/cookieconsent/cookieconsent.min.js"></script>
 
 <script>
     window.addEventListener("load", function() {

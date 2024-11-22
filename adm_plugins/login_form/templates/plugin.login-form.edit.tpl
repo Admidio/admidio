@@ -1,5 +1,5 @@
 <script type="text/javascript">$(function() {
-        $("#pluginLoginForm").submit(formSubmit);
+        $("#adm_plugin_login_form").submit(formSubmit);
     });
 </script>
 

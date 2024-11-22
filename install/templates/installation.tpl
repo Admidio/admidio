@@ -1,5 +1,5 @@
 
-<div class="installation-dialog">
+<div>
     <h3>{$subHeadline}</h3>
 
     <p>{$text}</p>
