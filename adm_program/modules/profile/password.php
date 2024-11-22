@@ -154,7 +154,7 @@ try {
         $gCurrentSession->addFormObject($form);
         echo $smarty->fetch('modules/profile.password.edit.tpl');
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if ($getMode === 'change') {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

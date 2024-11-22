@@ -1,21 +1,19 @@
 <script type="text/javascript">
-    $(function() {
-        $("body").on("shown.bs.modal", ".modal", function() {
-            $("#eventsParticipationEditForm").find("*").filter(":input:visible:first").focus()
-            $("#eventsParticipationEditForm").submit(formSubmit);
-            $("button[id=adm_button_attend]").click(function() {
-                $("#eventsParticipationEditForm").attr("action", "{$urlFormAction}" + "participate");
-                $("#eventsParticipationEditForm").submit();
+    $("body").on("shown.bs.modal", ".modal", function() {
+        $("#adm_events_participation_edit_form").find("*").filter(":input:visible:first").focus()
+        $("#adm_events_participation_edit_form").submit(formSubmit);
+        $("button[id=adm_button_attend]").click(function() {
+            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "participate");
+            $("#adm_events_participation_edit_form").submit();
 
-            });
-            $("button[id=adm_button_tentative]").click(function() {
-                $("#eventsParticipationEditForm").attr("action", "{$urlFormAction}" + "participate_maybe");
-                $("#eventsParticipationEditForm").submit();
-            });
-            $("button[id=adm_button_refuse]").click(function() {
-                $("#eventsParticipationEditForm").attr("action", "{$urlFormAction}" + "participate_cancel");
-                $("#eventsParticipationEditForm").submit();
-            });
+        });
+        $("button[id=adm_button_tentative]").click(function() {
+            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "participate_maybe");
+            $("#adm_events_participation_edit_form").submit();
+        });
+        $("button[id=adm_button_refuse]").click(function() {
+            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "participate_cancel");
+            $("#adm_events_participation_edit_form").submit();
         });
     });
 </script>

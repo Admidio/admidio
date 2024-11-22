@@ -111,7 +111,7 @@ try {
     $participationForm->addToSmarty($smarty);
     $gCurrentSession->addFormObject($participationForm);
     echo $smarty->fetch('modules/events.participation.edit.tpl');
-} catch (Exception $e) {
+} catch (Throwable $e) {
     $gMessage->showInModalWindow();
     $gMessage->show($e->getMessage());
 }
