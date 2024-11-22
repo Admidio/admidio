@@ -41,7 +41,7 @@
     </div>
     <div class="form-alert" style="display: none;">&nbsp;</div>
     <div class="btn-group" role="group">
-        {include 'sys-template-parts/form.button.tpl' data=$elements['btn_ecard_preview']}
-        {include 'sys-template-parts/form.button.tpl' data=$elements['btn_ecard_submit']}
+        {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_ecard_preview']}
+        {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_ecard_submit']}
     </div>
 </form>

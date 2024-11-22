@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Language;
+
 /**
  * @brief Class will handle some ECard functions
  *
@@ -19,7 +22,7 @@ class ECard
 
     /**
      * @param Language $gL10n
-     * @throws Exception
+     * @throws \Admidio\Exception
      */
     public function __construct(Language $gL10n)
     {

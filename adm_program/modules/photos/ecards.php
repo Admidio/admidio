@@ -82,19 +82,19 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-ecards', $headline);
+    $page = new HtmlPage('adm_ecards', $headline);
 
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/css/lightbox.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');
 
     $page->addJavascript('
-        $("#btn_ecard_preview").click(function(event) {
+        $("#adm_button_ecard_preview").click(function(event) {
             event.preventDefault();
-            $("#ecard_send_form input[id=\'submit_action\']").val("preview");
-            $("#ecard_send_form textarea[name=\'ecard_message\']").text(editor.getData());
+            $("#adm_ecard_send_form input[id=\'submit_action\']").val("preview");
+            $("#adm_ecard_send_form textarea[name=\'ecard_message\']").text(editor.getData());
 
             $.post({ // create an AJAX call...
-                data: $("#ecard_send_form").serialize(), // get the form data
+                data: $("#adm_ecard_send_form").serialize(), // get the form data
                 url: "ecard_preview.php", // the file to call
                 success: function(response) { // on success..
                     $(".modal-dialog").attr("class", "modal-dialog modal-lg");
@@ -220,8 +220,8 @@ try {
         '',
         array('property' => Form::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
     );
-    $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'bi-eye-fill'));
-    $form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
+    $form->addButton('adm_button_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'bi-eye-fill'));
+    $form->addSubmitButton('adm_button_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));
 
     $page->assignSmartyVariable('photoPreviewUrl',
         SecurityUtils::encodeUrl(
@@ -237,6 +237,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (Exception|Exception|RuntimeException $e) {
+} catch (Throwable $e) {
     $gMessage->show($e->getMessage());
 }

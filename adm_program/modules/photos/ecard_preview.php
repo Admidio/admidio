@@ -26,46 +26,33 @@ try {
         require(__DIR__ . '/../../system/login_valid.php');
     }
 
-    $gMessage->showInModalWindow();
+    // check form field input and sanitized it from malicious content
+    $categoryEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+    $formValues = $categoryEditForm->validate($_POST);
 
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
-
-    if (strlen($_POST['ecard_template']) === 0) {
-        throw new Exception('SYS_FIELD_EMPTY', array('SYS_TEMPLATE'));
-    }
-
-    // Initialize and check the parameters
-    $ecardMessage = '';
-    $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
-    $postPhotoUuid = admFuncVariableIsValid($_POST, 'photo_uuid', 'uuid', array('requireValue' => true));
-    $postPhotoNr = admFuncVariableIsValid($_POST, 'photo_nr', 'int', array('requireValue' => true));
-    $nameRecipient = admFuncVariableIsValid($_POST, 'name_recipient', 'string');
-    $emailRecipient = admFuncVariableIsValid($_POST, 'email_recipient', 'string');
-    $ecardMessage = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
-
-    $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => 350, 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
+    $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php',
+        array(
+            'photo_uuid' => $formValues['photo_uuid'],
+            'photo_nr' => $formValues['photo_nr'],
+            'max_width' => 350,
+            'max_height' => $gSettingsManager->getInt('photo_ecard_scale')
+        )
+    );
 
     $funcClass = new ECard($gL10n);
 
     // read content of template file
-    $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);
+    $ecardDataToParse = $funcClass->getEcardTemplate($formValues['ecard_template']);
 
     if ($ecardDataToParse === null) {
         throw new Exception('SYS_ERROR_PAGE_NOT_FOUND');
     }
 
-    echo '
-    <div class="modal-header">
-        <h3 class="modal-title">' . $gL10n->get('SYS_PREVIEW') . '</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body" id="preview_content">';
-
-    // show output of parsed template
-    echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $nameRecipient, $emailRecipient);
-
-    echo '</div>';
-} catch (Exception $e) {
+    $smarty = HtmlPage::createSmartyObject();
+    $smarty->assign('l10n', $gL10n);
+    $smarty->assign('ecardContent', $funcClass->parseEcardTemplate($imageUrl, $formValues['ecard_message'], $ecardDataToParse, '', ''));
+    echo $smarty->fetch('modules/photos.ecard.preview.tpl');
+} catch (Throwable $e) {
+    $gMessage->showInModalWindow();
     $gMessage->show($e->getMessage());
 }
