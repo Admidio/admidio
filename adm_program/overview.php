@@ -12,7 +12,7 @@
 try {
     // if config file doesn't exist, then show installation dialog
     if (!is_file(dirname(__DIR__) . '/adm_my_files/config.php')) {
-        header('Location: installation/index.php');
+        header('Location: ../install/index.php');
         exit();
     }
 

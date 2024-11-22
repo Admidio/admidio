@@ -124,7 +124,7 @@ class Update
         PhpIniUtils::startNewExecutionTimeLimit(120);
 
         // first write the possible new Orga settings in DB
-        require_once(__DIR__ . '/../../installation/db_scripts/preferences.php');
+        require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
         // calculate the best cost value for your server performance
         $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);

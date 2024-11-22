@@ -74,8 +74,7 @@ define('CURRENT_URL', (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['REQUEST_
 const FOLDER_DATA = '/adm_my_files';
 const FOLDER_TEMP_DATA = '/adm_my_files/temp';
 const FOLDER_SYSTEM = '/adm_program/system';
-const FOLDER_CLASSES = '/adm_program/system/classes';
-const FOLDER_INSTALLATION = '/adm_program/installation';
+const FOLDER_INSTALLATION = '/install';
 const FOLDER_LIBS = '/libs'; // PHP libs
 const FOLDER_LANGUAGES = '/adm_program/languages';
 const FOLDER_THEMES = '/themes';

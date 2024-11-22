@@ -39,10 +39,10 @@ try {
         $host = ($checkForwardedHost && isset($_SERVER['HTTP_X_FORWARDED_HOST'])) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : ($_SERVER['HTTP_HOST'] ?? null);
         $host = $host ?? $_SERVER['SERVER_NAME'] . $port;
         $fullUrl = $protocol . '://' . $host . $_SERVER['REQUEST_URI'];
-        return substr($fullUrl, 0, strpos($fullUrl, 'adm_program') - 1);
+        return substr($fullUrl, 0, strpos($fullUrl, 'install/') - 1);
     }
 
-    $rootPath = dirname(__DIR__, 2);
+    $rootPath = dirname(__DIR__);
 
     // if config file already exists then load file with their variables
     $configPath = $rootPath . '/adm_my_files/config.php';
@@ -72,7 +72,7 @@ try {
     }
 
     if (!in_array($step, $availableSteps, true)) {
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')));
         // => EXIT
     }
 
@@ -144,7 +144,7 @@ try {
             $_SESSION['db_password'] = DB_PASSWORD;
             $_SESSION['table_prefix'] = TABLE_PREFIX;
 
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
             // => EXIT
         }
     }
@@ -152,42 +152,42 @@ try {
     switch ($step) {
         case 'welcome': // (Default) Welcome to installation
             $gLogger->info('INSTALLATION: Welcome to installation');
-            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/welcome.php');
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_steps/welcome.php');
             break;
 
         case 'connect_database': // Enter database access information
             $gLogger->info('INSTALLATION: Enter database access information');
-            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/connect_database.php');
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_steps/connect_database.php');
             break;
 
         case 'create_organization': // Creating organization
             $gLogger->info('INSTALLATION: Creating organisation');
-            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/create_organization.php');
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_steps/create_organization.php');
             break;
 
         case 'create_administrator': // Creating administrator
             $gLogger->info('INSTALLATION: Creating administrator');
-            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/create_administrator.php');
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_steps/create_administrator.php');
             break;
 
         case 'create_config': // Creating configuration file
             $gLogger->info('INSTALLATION: Creating configuration file');
-            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/create_config.php');
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_steps/create_config.php');
             break;
 
         case 'download_config': // Download configuration file
             $gLogger->info('INSTALLATION: Download configuration file');
-            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/download_config.php');
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_steps/download_config.php');
             break;
 
         case 'start_installation': // Start installation
             $gLogger->info('INSTALLATION: Start installation');
-            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/start_installation.php');
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_steps/start_installation.php');
             break;
 
         case 'installation_successful': // Start installation
             $gLogger->info('INSTALLATION: Installation_successful');
-            require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/installation_successful.php');
+            require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_steps/installation_successful.php');
             break;
     }
 } catch (Throwable $e) {

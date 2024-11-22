@@ -1,5 +1,5 @@
 
-<div id="installation-message">
+<div id="adm_installation_message">
     <h3>{$l10n->get("SYS_UPDATE_SUCCESSFUL")}</h3>
 
     <div class="alert alert-success form-alert">

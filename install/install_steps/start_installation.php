@@ -199,7 +199,7 @@ $administrator->save(false); // no registered user -> UserIdCreate couldn't be f
 $adminUsrId = $administrator->getValue('usr_id');
 
 // write all preferences from preferences.php in table adm_preferences
-require_once(ADMIDIO_PATH . '/adm_program/installation/db_scripts/preferences.php');
+require_once(ADMIDIO_PATH . FOLDER_INSTALLATION. '/db_scripts/preferences.php');
 
 // set some specific preferences whose values came from user input of the installation wizard
 $defaultOrgPreferences['system_language'] = $language;

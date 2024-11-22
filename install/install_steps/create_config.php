@@ -62,12 +62,12 @@ if ($configFileHandle) {
     // start installation
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_INSTALL_ADMIDIO'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));
-    $page->assignSmartyVariable('urlInstallation', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
+    $page->assignSmartyVariable('urlInstallation', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')));
 
     $form = new Form(
         'adm_installation_install_admidio_form',
         'installation.install-admidio.tpl',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')),
         $page
     );
     $form->addSubmitButton(
@@ -83,7 +83,7 @@ if ($configFileHandle) {
     $form = new Form(
         'adm_installation_install_admidio_form',
         'installation.download-config.tpl',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION. '/installation.php', array('step' => 'start_installation')),
         $page
     );
     $form->addButton(
@@ -91,7 +91,7 @@ if ($configFileHandle) {
         $gL10n->get('SYS_BACK'),
         array(
             'icon' => 'bi-arrow-left-circle-fill',
-            'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator'))
+            'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION. '/installation.php', array('step' => 'create_administrator'))
         )
     );
     $form->addButton(
@@ -100,7 +100,7 @@ if ($configFileHandle) {
         array(
             'icon' => 'bi-download',
             'class' => 'btn-primary admidio-margin-bottom ms-2',
-            'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'download_config'))
+            'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION. '/installation.php', array('step' => 'download_config'))
         )
     );
     $form->addSubmitButton(

@@ -20,7 +20,7 @@ $rootPath = dirname(__DIR__, 2);
 
 // if config file doesn't exists, than show installation dialog
 if (!is_file($rootPath . '/adm_my_files/config.php')) {
-    header('Location: adm_program/installation/index.php');
+    header('Location: install/index.php');
     exit();
 }
 
@@ -45,7 +45,7 @@ try {
 try {
     $gDb->getTableColumns(TBL_SESSIONS);
 } catch (Throwable $t) {
-    header('Location: adm_program/installation/index.php');
+    header('Location: ' . ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
     exit();
 }
 
