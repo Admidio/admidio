@@ -86,49 +86,76 @@ $dateToHtml     = $objDateTo->format($gSettingsManager->getString('system_date')
 $sqlConditions = '';
 $queryParamsConditions = array();
 if ($getUserUuid !== '') {
-    $sqlConditions = ' AND usl_usr_id = ? -- $user->getValue(\'usr_id\')';
-    $queryParamsConditions = array($user->getValue('usr_id'));
+    $sqlConditions = ' AND usr_log.usr_id = :userID -- $user->getValue(\'usr_id\')';
+    $queryParamsConditions = array('userID' => $user->getValue('usr_id'));
 }
 
-// get total count of relevant profile field changes
-$sql = 'SELECT COUNT(*) AS count
-          FROM '.TBL_USER_LOG.'
-         WHERE 1 = 1
-               '.$sqlConditions;
-$pdoStatement = $gDb->queryPrepared($sql, $queryParamsConditions);
-$countChanges = (int) $pdoStatement->fetchColumn();
 
 // create select statement with all necessary data
-$sql = 'SELECT usl_usr_id, usr.usr_uuid as uuid_usr, last_name.usd_value AS last_name, first_name.usd_value AS first_name, usl_usf_id,
-               usl_value_old, usl_value_new, usl_usr_id_create, usr_create.usr_uuid as uuid_usr_create, create_last_name.usd_value AS create_last_name,
-               create_first_name.usd_value AS create_first_name, usl_timestamp_create
-          FROM '.TBL_USER_LOG.'
-    INNER JOIN '.TBL_USERS.' usr_create ON usr_create.usr_id = usl_usr_id_create
-    INNER JOIN '.TBL_USERS.' usr ON usr.usr_id = usl_usr_id
+// First, join thw TBL_USER_LOG and TBL_USERS_PROFILE_LOG
+// Then extract the name for the given user IDs from the user data fields
+$sql = 'SELECT usr_log.usr_id as usr_id, usr.usr_uuid as uuid_usr, last_name.usd_value AS last_name, first_name.usd_value AS first_name, field,
+               value_old, value_new, usr_id_create, usr_create.usr_uuid AS uuid_usr_create, create_last_name.usd_value AS create_last_name,
+               create_first_name.usd_value AS create_first_name, timestamp, type
+FROM (
+    SELECT
+        usl_usr_id AS usr_id,
+        usl_usf_id AS field,
+        usl_value_old AS value_old,
+        usl_value_new AS value_new,
+        usl_usr_id_create as usr_id_create,
+        usl_timestamp_create as timestamp,
+        \'Field\' as type
+    FROM '.TBL_USER_LOG.'
+    WHERE
+            usl_timestamp_create BETWEEN :uslTimeFrom AND :uslTimeUntil
+        AND usl_usf_id in (' .  implode(',', $gProfileFields->getVisibleArray(true)) . ')
+UNION
+    SELECT
+        upl_usr_id AS usr_id,
+        upl_profile_field AS field,
+        upl_value_old AS value_old,
+        upl_value_new AS value_new,
+        upl_usr_id_create AS usr_id_create,
+        upl_timestamp_create as timestamp,
+        \'Profile\' as type
+    FROM '.TBL_USERS_PROFILE_LOG.'
+    WHERE
+            upl_timestamp_create BETWEEN :uplTimeFrom AND :uplTimeUntil
+) AS usr_log
+    INNER JOIN '.TBL_USERS.' usr_create ON usr_create.usr_id = usr_log.usr_id_create
+    INNER JOIN '.TBL_USERS.' usr ON usr.usr_id = usr_log.usr_id
     INNER JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usl_usr_id
-           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+            ON last_name.usd_usr_id = usr_log.usr_id
+           AND last_name.usd_usf_id = :lastName
     INNER JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usl_usr_id
-           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+            ON first_name.usd_usr_id = usr_log.usr_id
+           AND first_name.usd_usf_id = :firstName
     INNER JOIN '.TBL_USER_DATA.' AS create_last_name
-            ON create_last_name.usd_usr_id = usl_usr_id_create
-           AND create_last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+            ON create_last_name.usd_usr_id = usr_log.usr_id_create
+           AND create_last_name.usd_usf_id = :createLastName
     INNER JOIN '.TBL_USER_DATA.' AS create_first_name
-            ON create_first_name.usd_usr_id = usl_usr_id_create
-           AND create_first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-         WHERE usl_timestamp_create BETWEEN ? AND ? -- $dateFromIntern AND $dateToIntern
-           AND usl_usf_id in (' .  implode(',', $gProfileFields->getVisibleArray(true)) . ')
-               '.$sqlConditions.'
-      ORDER BY usl_timestamp_create DESC';
-$queryParams = array(
-    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-    $dateFromIntern . ' 00:00:00',
-    $dateToIntern . ' 23:59:59'
-);
+            ON create_first_name.usd_usr_id = usr_log.usr_id_create
+           AND create_first_name.usd_usf_id = :createFirstName
+WHERE
+    1 = 1
+    '.$sqlConditions.'
+
+ORDER BY timestamp DESC;
+';
+
+// Unfortunately, a named param cannot be used multiple times in prepared queries, so we need to duplicate some params with unique names
+$queryParams = [
+    'lastName' => $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    'firstName' => $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    'createLastName' => $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    'createFirstName' => $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    'uslTimeFrom' => $dateFromIntern . ' 00:00:00',
+    'uslTimeUntil' => $dateToIntern . ' 23:59:59',
+    'uplTimeFrom' => $dateFromIntern . ' 00:00:00',
+    'uplTimeUntil' => $dateToIntern . ' 23:59:59'
+];
+
 $fieldHistoryStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $queryParamsConditions));
 
 if ($fieldHistoryStatement->rowCount() === 0) {
@@ -178,22 +205,30 @@ $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
 $table->addRowHeadingByArray($columnHeading);
 
 while ($row = $fieldHistoryStatement->fetch()) {
-    $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
+    $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
     $columnValues    = array();
 
     if ($getUserUuid === '') {
         $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>';
     }
 
-    $columnValues[] = $gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name');
-    $uslValueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new']);
+    if ($row['type'] == 'Field') {
+        $columnValues[] = $gProfileFields->getPropertyById((int) $row['field'], 'usf_name');
+        $uslValueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $row['value_new']);
+        $uslValueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $row['value_old']);
+    } else {
+        // Profile fields have hardcoded column names stored in the log
+        $columnValues[] = $gL10n->get($row['field']);
+        $uslValueNew = $row['value_new'];
+        $uslValueOld = $row['value_old'];
+    }
+
     if ($uslValueNew !== '') {
         $columnValues[] = $uslValueNew;
     } else {
         $columnValues[] = '&nbsp;';
     }
 
-    $uslValueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old']);
     if ($uslValueOld !== '') {
         $columnValues[] = $uslValueOld;
     } else {

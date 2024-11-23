@@ -16,7 +16,7 @@
  * system notifications for profile field changes are enabled in the configuration of Admidio
  *
  * On startup, a global (singleton) object $gChangeNotifications is created
- * that is automatically used the User and TableMembers classes to log
+ * that is automatically used by the User and TableMembers classes to log
  * changes.
  *
  *
@@ -152,6 +152,8 @@ class ChangeNotification
      * a system notification mail to the admin if configured.
      * Some user fields are special cased (password, photo), others are ignored
      * for irrelevance (internal fields).
+     * The change log ist kept in a separate table in the database from the user
+     * fields changes.
      * @param int $userID The user to whom the change applies
      * @param string $fieldName The ID of the modified profile field.
      * @param string $old_value The previous value of the field before the change
@@ -160,39 +162,54 @@ class ChangeNotification
      */
     public function logUserChange(int $userID, string $fieldName, string $old_value, string $new_value, User $user = null)
     {
-        global $gSettingsManager, $gL10n;
+        global $gSettingsManager, $gL10n, $gDb;
 
-        // 1. Create a database log entry if so configured
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
-            // TODO: User table fields are not yet logged in the database!
-        }
-
-        // 2. Store the change to send out one change notification mail (after all modifications are done)
-        $this->prepareUserChanges($userID, $user);
-
-        $fieldLabel = $fieldName;
-
+        // User Profile fields are accessed by their field name, so we need to extract the identifier for translation
+        // Also, some fields need to be special cased (password replaced by *********, image by [...])
         // Ignore all fields (internal logging about who and when a user was
         // last changed) except explicitly handled (login, pwd, photo)
         $ignore = false;
-
+        $fieldLabel = $fieldName;
+        $fieldTag = $fieldName;
         switch ($fieldName) {
             case 'usr_login_name':
-                $fieldLabel = $gL10n->get('SYS_USERNAME');
+                $fieldTag = 'SYS_USERNAME';
+                $fieldLabel = $gL10n->get($fieldTag);
                 break;
             case 'usr_password':
-                $fieldLabel = $gL10n->get('SYS_PASSWORD');
-                $old_value = $new_value = '********';
+                $fieldTag = 'SYS_PASSWORD';
+                $fieldLabel = $gL10n->get($fieldTag);
+                $old_value = $old_value ? '********' : $old_value;
+                $new_value = $new_value ? '********' : $new_value;
                 break;
             case 'usr_photo':
-                $fieldLabel = $gL10n->get('SYS_PHOTO');
+                $fieldTag = 'SYS_PHOTO';
+                $fieldLabel = $gL10n->get($fieldTag);
                 // Don't show photo data, replace with [...] if set
                 $old_value = $old_value ? '[...]' : $old_value;
                 $new_value = $new_value ? '[...]' : $new_value;
                 break;
+            case 'usr_text':
+                $fieldTag = 'SYS_TEXT';
+                $fieldLabel = $gL10n->get($fieldTag);
+                break;
             default:
                 $ignore = true;
         }
+
+        // 1. Create a database log entry if so configured
+        if (!$ignore && $gSettingsManager->getBool('profile_log_edit_fields')) {
+            $logEntry = new TableAccess($gDb, TBL_USERS_PROFILE_LOG, 'upl');
+            $logEntry->setValue('upl_usr_id', $userID);
+            $logEntry->setValue('upl_profile_field', $fieldTag);
+            $logEntry->setValue('upl_value_old', $old_value);
+            $logEntry->setValue('upl_value_new', $new_value);
+            $logEntry->setValue('upl_comment', '');
+            $logEntry->save();
+        }
+
+        // 2. Store the change to send out one change notification mail (after all modifications are done)
+        $this->prepareUserChanges($userID, $user);
 
         if (!$ignore) {
             $this->changes[$userID]['profile_changes'][] = array($fieldLabel, $old_value, $new_value);
@@ -259,7 +276,7 @@ class ChangeNotification
      */
     public function logUserCreation(int $userID, User $user = null)
     {
-        global $gProfileFields, $gDb;
+        global $gProfileFields, $gDb, $gSettingsManager;
 
         // If user was never created in the DB, no need to log
         if ($userID == 0) {
@@ -269,8 +286,16 @@ class ChangeNotification
             $user = new User($gDb, $gProfileFields, $userID);
         }
 
-        // 1. TODO: Create a history log database entry for the creation
-
+        // 1. Create a history log database entry for the creation
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+            $logEntry = new TableAccess($gDb, TBL_USERS_PROFILE_LOG, 'upl');
+            $logEntry->setValue('upl_usr_id', $userID);
+            $logEntry->setValue('upl_profile_field', 'SYS_USER_CREATED');
+            $logEntry->setValue('upl_value_old', NULL);
+            $logEntry->setValue('upl_value_new', NULL);
+            $logEntry->setValue('upl_comment', NULL);
+            $logEntry->save();
+        }
 
         // 2. Prepare the admin notifications
         $this->prepareUserChanges($userID, $user);
@@ -311,14 +336,23 @@ class ChangeNotification
      */
     public function logUserDeletion(int $userID, User $user = null)
     {
-        global $gProfileFields, $gL10n, $gDb;
+        global $gProfileFields, $gL10n, $gDb, $gSettingsManager;
 
         // If user wasn't yet created in the DB, no need to log anything
         if ($userID == 0) {
             return;
         }
 
-        // 1. TODO: Create a history log database entry for the deletion
+        // 1. Create a history log database entry for the deletion
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+            $logEntry = new TableAccess($gDb, TBL_USERS_PROFILE_LOG, 'upl');
+            $logEntry->setValue('upl_usr_id', $userID);
+            $logEntry->setValue('upl_profile_field', 'SYS_USER_DELETED');
+            $logEntry->setValue('upl_value_old', NULL);
+            $logEntry->setValue('upl_value_new', NULL);
+            $logEntry->setValue('upl_comment', NULL);
+            $logEntry->save();
+        }
 
         // 2. Prepare the admin notifications
         $this->prepareUserChanges($userID, $user);
