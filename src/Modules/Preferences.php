@@ -15,13 +15,6 @@ use TableText;
  * This class adds some functions that are used in the preferences module to keep the
  * code easy to read and short
  *
- * **Code example**
- * ```
- * // generate html output with available Preferences
- * $page = new Preferences();
- * $page->createContentEditForm();
- * $page->show();
- * ```
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only

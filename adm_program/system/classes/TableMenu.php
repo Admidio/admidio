@@ -102,16 +102,15 @@ class TableMenu extends TableAccess
     }
 
     /**
-     * Change the internal sequence of this category. It can be moved one place up or down
+     * Change the internal sequence of this category. It can be moved one place up or down. Method throws an
+     * exception if the sequence could not be changed.
      * @param string $mode This could be **UP** or **DOWN**.
-     * @return bool Return true if the sequence of the menu could be changed, otherwise false.
      * @throws Exception
      */
-    public function moveSequence(string $mode): bool
+    public function moveSequence(string $mode)
     {
         $menOrder = (int) $this->getValue('men_order');
         $menIdParent = (int) $this->getValue('men_men_id_parent');
-        $returnCode = false;
 
         // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if ($mode === self::MOVE_UP) {
@@ -122,7 +121,9 @@ class TableMenu extends TableAccess
                            AND men_order = ? -- $menOrder - 1';
                 $this->db->queryPrepared($sql, array($menOrder, $menIdParent, $menOrder - 1));
                 $this->setValue('men_order', $menOrder - 1);
-                $returnCode = $this->save();
+                if(!$this->save()) {
+                    throw new Exception('Sequence could not be changed.');
+                }
             }
         }
         // the category is increased by one number and is therefore moved further down the list
@@ -142,10 +143,11 @@ class TableMenu extends TableAccess
                            AND men_order = ? -- $menOrder + 1';
                 $this->db->queryPrepared($sql, array($menOrder, $menIdParent, $menOrder + 1));
                 $this->setValue('men_order', $menOrder + 1);
-                $returnCode = $this->save();
+                if(!$this->save()) {
+                    throw new Exception('Sequence could not be changed.');
+                }
             }
         }
-        return $returnCode;
     }
 
     /**

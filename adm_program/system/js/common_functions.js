@@ -230,7 +230,7 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
             }
 
             if (returnStatus === "success") {
-                const id = "#row_" + elementId;
+                const id = "#adm_row_" + elementId;
                 $(".admidio-icon-link .bi").tooltip("hide");
 
                 if (direction === "UP") {

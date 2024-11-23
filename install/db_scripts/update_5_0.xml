@@ -42,7 +42,7 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="350">CREATE UNIQUE INDEX %PREFIX%_idx_ure_uuid ON %PREFIX%_user_relations (ure_uuid)</step>
     <step id="360">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta) VALUES ('MODULE', 'SYS_ORGANIZATION', 'ORGANIZATIONS',  '5.0.0', 0)</step>
     <step id="370">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
-        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'ORGANIZATIONS'), 2, %UUID%, false, 4, true, 'organization', '/adm_program/modules/organizations.php', 'bi-diagram-3-fill', 'SYS_ORGANIZATION', 'SYS_ORGANIZATION_DESC')</step>
+        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'ORGANIZATIONS'), 2, %UUID%, false, 4, true, 'organization', '/adm_program/modules/organizations.php', 'diagram-3-fill', 'SYS_ORGANIZATION', 'SYS_ORGANIZATION_DESC')</step>
     <step id="380" database="mysql">ALTER TABLE %PREFIX%_organizations MODIFY COLUMN org_longname varchar(255) NOT NULL</step>
     <step id="390" database="pgsql">ALTER TABLE %PREFIX%_organizations ALTER COLUMN org_longname TYPE varchar(255)</step>
     <step id="400" database="pgsql">ALTER TABLE %PREFIX%_organizations ALTER COLUMN org_longname SET NOT NULL</step>
@@ -59,5 +59,6 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="510">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'system_organization_select'</step>
     <step id="520">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/registration.php' WHERE men_name_intern = 'registration'</step>
     <step id="530">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/preferences.php' WHERE men_name_intern = 'orgprop'</step>
+    <step id="540">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/menu.php' WHERE men_name_intern = 'menu'</step>
     <step>stop</step>
 </update>

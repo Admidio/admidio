@@ -12,13 +12,6 @@ use StringUtils;
  * This class adds some functions that are used in the organization module to keep the
  * code easy to read and short
  *
- * **Code example**
- * ```
- * // generate html output with available registrations
- * $page = new Organizations('adm_organization', $headline);
- * $page->createContentEditForm();
- * $page->show();
- * ```
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
