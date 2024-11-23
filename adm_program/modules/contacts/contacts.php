@@ -71,7 +71,7 @@ if ($gCurrentUser->editUsers()) {
         $page->addPageFunctionsMenuItem(
             'menu_item_contacts_change_history',
             $gL10n->get('SYS_CHANGE_HISTORY'),
-            ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php',
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'users,user_data,members')),
             'fa-history'
         );
     }

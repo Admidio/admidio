@@ -454,6 +454,7 @@
   <string name="SYS_CREATE_ROLE">Create role</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATE_WEBLINK">Create web link</string>
+  <string name="SYS_CREATED">Created</string>
   <string name="SYS_CREATED_AT">Created at</string>
   <string name="SYS_CREATED_BY">Created by</string>
   <string name="SYS_CREATED_BY_AND_AT">Created by #VAR1# at #VAR2#</string>
@@ -531,6 +532,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
+  <string name="SYS_DELETED">Deleted</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Request delivery confirmation</string>

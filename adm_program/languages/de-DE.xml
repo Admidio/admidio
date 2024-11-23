@@ -454,6 +454,7 @@
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATE_WEBLINK">Weblink anlegen</string>
+  <string name="SYS_CREATED">Angelegt</string>
   <string name="SYS_CREATED_AT">Angelegt am</string>
   <string name="SYS_CREATED_BY">Angelegt von</string>
   <string name="SYS_CREATED_BY_AND_AT">Angelegt von #VAR1# am #VAR2#</string>
@@ -531,6 +532,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Wollen Sie die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Sie dürfen keine Systemkategorien löschen.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">Sie können die Systemrolle #VAR1_BOLD# nicht löschen.</string>
+  <string name="SYS_DELETED">Gelöscht</string>
   <string name="SYS_DELETED_ENTRY">Gelöschter Eintrag</string>
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>

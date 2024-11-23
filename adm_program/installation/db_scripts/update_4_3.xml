@@ -124,5 +124,32 @@
     <step id="1230" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_thumbs_page' AND prf_value::int = 16</step>
     <step id="1240">UPDATE %PREFIX%_categories SET cat_type = 'EVT' WHERE cat_type = 'DAT'</step>
     <step id="1250">UPDATE %PREFIX%_categories SET cat_org_id = 1 WHERE cat_org_id IS NULL AND cat_name_intern = 'EVENTS'</step>
+    <step id="1260">CREATE TABLE %PREFIX%_log_changes
+(
+    log_id                      integer             NOT NULL    AUTO_INCREMENT,
+    log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
+
+    log_record_id               integer unsigned    NOT NULL, -- The record id in the original table
+    log_record_name             text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
+    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id is the mem_id, but the link should point to the group rather than the group membership (which does not have its own page in admidio!)
+
+    log_object_id               integer unsigned    NULL,     -- Optional Secondary object linked to the record id
+    log_object_name             text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
+
+    log_field                   varchar(255)        NULL,     -- Optional Secondary object linked to the record id
+    log_field_name              text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
+
+    log_action                  varchar(32)         NOT NULL, -- enum of "MODIFY", "CREATED", "DELETED"
+    log_value_old               text                NULL,
+    log_value_new               text                NULL,
+
+    log_usr_id_create           integer unsigned    NULL,
+    log_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    log_comment                 text                NULL,
+    PRIMARY KEY (log_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;</step>
     <step>stop</step>
 </update>

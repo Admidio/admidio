@@ -65,6 +65,17 @@ $page->addPageFunctionsMenuItem(
     'fa-plus-circle'
 );
 
+if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More generic logging settings!
+    // show link to view field definition change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_profilefields_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'user_fields')),
+        'fa-history'
+    );
+}
+
+
 // define link to maintain categories
 $page->addPageFunctionsMenuItem(
     'menu_item_maintain_category',

@@ -7,6 +7,9 @@
  ***********************************************************************************************
  */
 
+include_once __DIR__ . '/TableUserData.php';
+
+
 /**
  * Reads the user fields structure out of database and give access to it
  *
@@ -619,7 +622,7 @@ class ProfileFields
 
             while ($row = $userDataStatement->fetch()) {
                 if (!array_key_exists($row['usd_usf_id'], $this->mUserData)) {
-                    $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
+                    $this->mUserData[$row['usd_usf_id']] = new TableUserData($this->db);
                 }
                 $this->mUserData[$row['usd_usf_id']]->setArray($row);
                 if (isset($row['usr_uuid'])) {
@@ -785,7 +788,7 @@ class ProfileFields
         $usfId = (int) $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
 
         if (!array_key_exists($usfId, $this->mUserData) && $fieldValue !== '') {
-            $this->mUserData[$usfId] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
+            $this->mUserData[$usfId] = new TableUserData($this->db);
             $this->mUserData[$usfId]->setValue('usd_usf_id', $usfId);
             $this->mUserData[$usfId]->setValue('usd_usr_id', $this->mUserId);
         }
