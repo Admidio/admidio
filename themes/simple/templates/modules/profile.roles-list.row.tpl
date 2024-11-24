@@ -8,7 +8,7 @@
                             &nbsp;-&nbsp;{$membership.leader}
                         {/if}
                     </span>
-                    <span class="float-end text-right">
+                    <span class="float-end text-end">
                         <span class="me-2">{$membership.period}</span>
                         {if isset($membership.linkMembershipEdit)}
                             {$membership.linkMembershipEdit}

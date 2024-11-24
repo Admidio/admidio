@@ -827,7 +827,7 @@ class GroupsRoles extends HtmlPage
             $this->addPageFunctionsMenuItem(
                 'menu_item_groups_roles_maintain_categories',
                 $gL10n->get('SYS_EDIT_CATEGORIES'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories.php', array('type' => 'ROL')),
                 'bi-hdd-stack-fill'
             );
         }

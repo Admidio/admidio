@@ -170,7 +170,7 @@ try {
                 $page->addPageFunctionsMenuItem(
                     'menu_item_event_categories',
                     $gL10n->get('SYS_EDIT_CALENDARS'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'EVT')),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'EVT')),
                     'bi-hdd-stack-fill'
                 );
             }

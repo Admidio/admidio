@@ -498,6 +498,10 @@ class HtmlPage
             $this->menuNodePageFunctions->setName($headline);
         }
         $this->headline = $headline;
+        if(isset($this->smarty)) {
+            $this->smarty->assign('title', $this->title);
+            $this->smarty->assign('headline', $this->headline);
+        }
     }
 
     /** If set to true then a page without header menu and sidebar menu will be created.

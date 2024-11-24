@@ -42,7 +42,7 @@
                             <td>{$row.org_longname}</td>
                             <td>{$row.org_homepage}</td>
                             <td>{$row.org_email_administrator}</td>
-                            <td class="text-right">
+                            <td class="text-end">
                                 <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$l10n->get('SYS_DELETE_ORGANIZATION', array($row.org_longname))}"
                                     data-href="callUrlHideElement('row_{$row.org_uuid}', '{$urlAdmidio}/adm_program/modules/organizations.php?mode=delete&org_uuid={$row.org_uuid}', '{$csrfToken}')">
                                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DELETE')}"></i></a>

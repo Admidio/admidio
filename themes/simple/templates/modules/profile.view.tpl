@@ -77,7 +77,7 @@
                     {/if}
                 {/foreach}
             </div>
-            <div class="col-sm-4 text-right">
+            <div class="col-sm-4 text-end">
                 <img id="adm_profile_photo" class="rounded" src="{$urlProfilePhoto}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
                 {if isset($urlProfilePhotoUpload)}
                     <ul class="list-unstyled">
@@ -208,7 +208,7 @@
                                     class="bi bi-pencil-square" data-bs-toggle="tooltip" title="{$l10n->get('SYS_EDIT_USER_IN_RELATION')}"></i></a>
                             {/if}
                         </span>
-                        <span class="float-end text-right">
+                        <span class="float-end text-end">
                             {if $userRightEditUser}
                                 <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                                    data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$userRelation.relationName}))}" data-href="{$userRelation.urlRelationDelete}"><i

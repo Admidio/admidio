@@ -34,9 +34,9 @@ class Menu
     {
         $this->db = $database;
         $this->menuRessource = new TableMenu($database);
+        $this->UUID = $menuUUID;
 
         if ($menuUUID !== '') {
-            $this->UUID = $menuUUID;
             $this->menuRessource->readDataByUuid($menuUUID);
         }
     }

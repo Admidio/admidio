@@ -97,7 +97,7 @@ try {
         $page->addPageFunctionsMenuItem(
             'menu_item_announcement_categories',
             $gL10n->get('SYS_EDIT_CATEGORIES'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories.php', array('type' => 'ANN')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ANN')),
             'bi-hdd-stack-fill'
         );
     }

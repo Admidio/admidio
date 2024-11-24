@@ -26,7 +26,7 @@
                     <td>{$row.viewMembership}</td>
                     <td>{$row.viewMembersProfiles}</td>
                     <td>{$row.roleLeaderRights}</td>
-                    <td class="text-right">
+                    <td class="text-end">
                         {foreach $row.actions as $actionItem}
                             <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
                                 data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"

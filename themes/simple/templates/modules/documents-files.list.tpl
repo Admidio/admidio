@@ -9,8 +9,8 @@
                 <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
                 <th>{$l10n->get('SYS_NAME')}</th>
                 <th>{$l10n->get('SYS_DATE_MODIFIED')}</th>
-                <th class="text-right">{$l10n->get('SYS_SIZE')}</th>
-                <th class="text-right">{$l10n->get('SYS_COUNTER')}</th>
+                <th class="text-end">{$l10n->get('SYS_SIZE')}</th>
+                <th class="text-end">{$l10n->get('SYS_COUNTER')}</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -26,9 +26,9 @@
                         {/if}
                     </td>
                     <td>{$row.timestamp}</td>
-                    <td class="text-right">{$row.size}</td>
-                    <td class="text-right">{$row.counter}</td>
-                    <td class="text-right">
+                    <td class="text-end">{$row.size}</td>
+                    <td class="text-end">{$row.counter}</td>
+                    <td class="text-end">
                         {if {array_key_exists array=$row key='actions'}}
                             {foreach $row.actions as $actionItem}
                                 <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
@@ -57,7 +57,7 @@
             <tr>
                 <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
                 <th>{$l10n->get('SYS_NAME')}</th>
-                <th class="text-right">{$l10n->get('SYS_SIZE')}</th>
+                <th class="text-end">{$l10n->get('SYS_SIZE')}</th>
                 <th>&nbsp;</th>
             </tr>
             </thead>
@@ -66,8 +66,8 @@
                 <tr>
                     <td><i class="{$row.icon}" data-bs-toggle="tooltip" title="{$row.title}"></i></td>
                     <td>{$row.name}</td>
-                    <td class="text-right">{$row.size}</td>
-                    <td class="text-right">
+                    <td class="text-end">{$row.size}</td>
+                    <td class="text-end">
                         <a class="admidio-icon-link" href="{$row.url}">
                             <i class="bi bi-plus-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ADD_TO_DATABASE')}"></i>
                         </a>

@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="admRolePermissionsTable" class="table table-hover" width="100%" style="width: 100%;">
+    <table id="adm_table_menu" class="table table-hover" width="100%" style="width: 100%;">
         <thead>
             <tr>
                 <th>{$l10n->get('SYS_TITLE')}</th>
@@ -37,7 +37,7 @@
                                 <i class="bi bi-star-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DEFAULT_VAR', [$l10n->get('SYS_MENU_ITEM')])}"></i>
                             {/if}
                         </td>
-                        <td class="text-right">
+                        <td class="text-end">
                             {foreach $menuEntry.actions as $actionItem}
                                 <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
                                     data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
