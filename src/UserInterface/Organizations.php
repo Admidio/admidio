@@ -15,7 +15,7 @@ use SecurityUtils;
  * ```
  * // generate html output with available registrations
  * $page = new Organizations('adm_organization', $headline);
- * $page->createContentEditForm();
+ * $page->createEditForm();
  * $page->show();
  * ```
  * @copyright The Admidio Team
@@ -28,7 +28,7 @@ class Organizations extends HtmlPage
      * Create the data for the edit form of an organization.
      * @throws Exception
      */
-    public function createContentEditForm()
+    public function createEditForm()
     {
         global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession;
         $this->addJavascript('
@@ -121,7 +121,7 @@ class Organizations extends HtmlPage
      * Create the data for a form to add a new sub-organization to the current organization.
      * @throws Exception
      */
-    public function createContentSubOrganizationForm()
+    public function createSubOrganizationForm()
     {
         global $gL10n, $gCurrentSession;
 

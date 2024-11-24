@@ -9,182 +9,175 @@
  *
  * Parameters:
  *
- * start     : Position of query recordset where the visual output should start
+ * mode - card       : (Default) Show all groups and roles in card view
+ *      - permissions : Show permissions of all groups and roles in list view
+ *      - edit       : Show dialog to create or edit a role.
+ *      - save       : Save data of role form dialog
+ *      - delete     : delete role
+ *      - activate   : set role active
+ *      - deactivate : set role inactive
+ *      - export     : Export vCard of role
  * cat_uuid  : show only roles of this category, if UUID is not set than show all roles
+ * role_uuid: UUID of role, that should be edited
  * role_type : The type of roles that should be shown within this page.
  *             0 - inactive roles
  *             1 - active roles
  *             2 - event participation roles
- * show - card : (Default) Show all groups and roles in card view
- *      - permissions : Show permissions of all groups and roles in list view
  ***********************************************************************************************
  */
 use Admidio\Exception;
-use Admidio\UserInterface\Form;
+use Admidio\UserInterface\GroupsRoles;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
-    $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
-    $getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
+    $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'card', 'validValues' => array('card', 'permissions', 'edit', 'save', 'delete', 'activate', 'deactivate', 'export')));
+    $getCategoryUUID  = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
+    $getRoleUUID = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
     $getRoleType = admFuncVariableIsValid($_GET, 'role_type', 'int', array('defaultValue' => 1));
-    $getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'card', 'validValues' => array('card', 'permissions')));
 
     // check if the module is enabled and disallow access if it's disabled
     if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    // set headline
-    switch ($getRoleType) {
-        case ModuleGroupsRoles::ROLE_TYPE_INACTIVE:
-            $headline = $gL10n->get('SYS_INACTIVE_GROUPS_ROLES');
-            break;
-
-        case ModuleGroupsRoles::ROLE_TYPE_ACTIVE:
-            $headline = $gL10n->get('SYS_GROUPS_ROLES');
-            break;
-
-        case ModuleGroupsRoles::ROLE_TYPE_EVENT_PARTICIPATION:
-            $headline = $gL10n->get('SYS_ROLES_CONFIRMATION_OF_PARTICIPATION');
-            break;
-    }
-
-    if ($getShow === 'permissions') {
+    if ($getMode !== 'card') {
+        // only users with the special right are allowed to manage roles
         if (!$gCurrentUser->manageRoles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
-
-        $headline .= ' - ' . $gL10n->get('SYS_PERMISSIONS');
     }
 
-    // only users with the right to assign roles can view inactive roles
-    if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
-        $getRoleType = ModuleGroupsRoles::ROLE_TYPE_ACTIVE;
-    }
+    if (in_array($getMode, array('card', 'permissions'))) {
+        // set headline
+        switch ($getRoleType) {
+            case GroupsRoles::ROLE_TYPE_INACTIVE:
+                $headline = $gL10n->get('SYS_INACTIVE_GROUPS_ROLES');
+                break;
 
-    $category = new TableCategory($gDb);
+            case GroupsRoles::ROLE_TYPE_ACTIVE:
+                $headline = $gL10n->get('SYS_GROUPS_ROLES');
+                break;
 
-    if (strlen($getCatUuid) > 1) {
-        $category->readDataByUuid($getCatUuid);
-        $headline .= ' - '.$category->getValue('cat_name');
-    }
-
-    if ($getShow === 'card') {
-        // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-people-fill');
-    } else {
-        // In permission mode the navigation should continue
-        $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_PERMISSIONS'));
-    }
-
-    // create html page object
-    $groupsRoles = new ModuleGroupsRoles('admidio-groups-roles', $headline);
-
-    if ($gCurrentUser->manageRoles()) {
-        // show link to create new role
-        $groupsRoles->addPageFunctionsMenuItem(
-            'menu_item_groups_roles_add',
-            $gL10n->get('SYS_CREATE_ROLE'),
-            ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php',
-            'bi-plus-circle-fill'
-        );
-
-        if ($getShow === 'card') {
-            // show permissions of all roles
-            $groupsRoles->addPageFunctionsMenuItem(
-                'menu_item_groups_roles_show_permissions',
-                $gL10n->get('SYS_SHOW_PERMISSIONS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('show' => 'permissions', 'cat_uuid' => $getCatUuid, 'role_type' => $getRoleType)),
-                'bi-shield-lock-fill'
-            );
+            case GroupsRoles::ROLE_TYPE_EVENT_PARTICIPATION:
+                $headline = $gL10n->get('SYS_ROLES_CONFIRMATION_OF_PARTICIPATION');
+                break;
         }
 
-        // show link to maintain categories
-        $groupsRoles->addPageFunctionsMenuItem(
-            'menu_item_groups_roles_maintain_categories',
-            $gL10n->get('SYS_EDIT_CATEGORIES'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
-            'bi-hdd-stack-fill'
-        );
-    }
+        if ($getMode === 'permissions') {
+            $headline .= ' - ' . $gL10n->get('SYS_PERMISSIONS');
+        }
 
-    // show link to create own list
-    if ($gSettingsManager->getInt('groups_roles_edit_lists') === 1 // everyone
-    || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
-    || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && $gCurrentUser->isAdministrator())) {
-        $groupsRoles->addPageFunctionsMenuItem(
-            'menu_item_groups_own_list',
-            $gL10n->get('SYS_CONFIGURE_LISTS'),
-            ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php',
-            'bi-card-list'
-        );
-    }
+        // only users with the right to assign roles can view inactive roles
+        if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
+            $getRoleType = GroupsRoles::ROLE_TYPE_ACTIVE;
+        }
 
-    // add filter navbar
-    $groupsRoles->addJavascript(
-        '
-        $("#cat_uuid").change(function() {
-            $("#navbar_filter_form").submit();
-        });
-        $("#role_type").change(function() {
-            $("#navbar_filter_form").submit();
-        });',
-        true
-    );
+        $category = new TableCategory($gDb);
 
-    // create filter menu with elements for category
-    $form = new Form(
-        'adm_navbar_filter_form',
-        'sys-template-parts/form.filter.tpl',
-        ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php',
-        $groupsRoles,
-        array('type' => 'navbar', 'setFocus' => false)
-    );
-    $form->addInput('show', '', $getShow, array('property' => Form::FIELD_HIDDEN));
-    $form->addSelectBoxForCategories(
-        'cat_uuid',
-        $gL10n->get('SYS_CATEGORY'),
-        $gDb,
-        'ROL',
-        Form::SELECT_BOX_MODUS_FILTER,
-        array('defaultValue' => $getCatUuid)
-    );
-    if ($gCurrentUser->manageRoles()) {
-        $form->addSelectBox(
-            'role_type',
-            $gL10n->get('SYS_ROLE_TYPES'),
-            array(0 => $gL10n->get('SYS_INACTIVE_GROUPS_ROLES'), 1 => $gL10n->get('SYS_ACTIVE_GROUPS_ROLES'), 2 => $gL10n->get('SYS_ROLES_CONFIRMATION_OF_PARTICIPATION')),
-            array('defaultValue' => $getRoleType)
-        );
-    }
-    $form->addToHtmlPage();
-    $groupsRoles->readData($getRoleType, $getCatUuid);
+        if (strlen($getCategoryUUID) > 1) {
+            $category->readDataByUuid($getCategoryUUID);
+            $headline .= ' - ' . $category->getValue('cat_name');
+        }
 
-    if ($groupsRoles->countRoles() === 0) {
-        if ($gValidLogin) {
-            // If login valid, then show message for not available roles
-            if ($getRoleType === ModuleGroupsRoles::ROLE_TYPE_ACTIVE) {
-                $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
-                // => EXIT
-            } else {
-                $gMessage->show($gL10n->get('SYS_NO_ROLES_VISIBLE'));
-                // => EXIT
-            }
+        if ($getMode === 'card') {
+            // Navigation of the module starts here
+            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-people-fill');
         } else {
-            // forward to login page
-            require(__DIR__ . '/../../system/login_valid.php');
+            // In permission mode the navigation should continue
+            $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_PERMISSIONS'));
+        }
+
+        // create html page object
+        $groupsRoles = new GroupsRoles('adm_groups_roles', $headline);
+
+
+        $groupsRoles->readData($getRoleType, $getCategoryUUID);
+
+        if ($groupsRoles->countRoles() === 0) {
+            if ($gValidLogin) {
+                // If login valid, then show message for not available roles
+                if ($getRoleType === GroupsRoles::ROLE_TYPE_ACTIVE) {
+                    $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
+                    // => EXIT
+                } else {
+                    $gMessage->show($gL10n->get('SYS_NO_ROLES_VISIBLE'));
+                    // => EXIT
+                }
+            } else {
+                // forward to login page
+                require(__DIR__ . '/../../system/login_valid.php');
+            }
         }
     }
 
-    if ($getShow === 'card') {
-        $groupsRoles->createContentCards();
-    } else {
-        $groupsRoles->createContentPermissionsList();
-    }
+    switch ($getMode) {
+        case 'card':
+            $groupsRoles->createCards($getCategoryUUID, $getRoleType);
+            $groupsRoles->show();
+            break;
 
-    $groupsRoles->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+        case 'permissions':
+            $groupsRoles->createPermissionsList($getCategoryUUID, $getRoleType);
+            $groupsRoles->show();
+            break;
+
+        case 'edit':
+            if ($getRoleUUID !== '') {
+                $headline = $gL10n->get('SYS_EDIT_ROLE');
+            } else {
+                $headline = $gL10n->get('SYS_CREATE_ROLE');
+            }
+
+            $gNavigation->addUrl(CURRENT_URL, $headline);
+            $groupsRoles = new GroupsRoles('adm_groups_roles_edit', $headline);
+            $groupsRoles->createEditForm($getRoleUUID);
+            $groupsRoles->show();
+            break;
+
+        case 'save':
+            $groupsRoles = new \Admidio\Modules\GroupsRoles($gDb, $getRoleUUID);
+            $groupsRoles->save();
+            $gNavigation->deleteLastUrl();
+            echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+            break;
+
+        case 'delete':
+            // delete role from database
+            $role = new TableRoles($gDb);
+            $role->readDataByUuid($getRoleUUID);
+            if ($role->delete()) {
+                echo json_encode(array('status' => 'success'));
+            }
+            break;
+
+        case 'activate':
+            // set role active
+            $role = new TableRoles($gDb);
+            $role->readDataByUuid($getRoleUUID);
+            $role->activate();
+            echo 'done';
+            break;
+
+        case 'deactivate':
+            // set role inactive
+            $role = new TableRoles($gDb);
+            $role->readDataByUuid($getRoleUUID);
+            $role->deactivate();
+            echo 'done';
+            break;
+
+        case 'export':
+            // Export every member of a role into one vCard file
+            $groupsRoles = new \Admidio\Modules\GroupsRoles($gDb, $getRoleUUID);
+            $groupsRoles->export();
+            break;
+    }
+} catch (Throwable $e) {
+    if (in_array($getMode, array('save', 'delete'))) {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    } else {
+        $gMessage->show($e->getMessage());
+    }
 }

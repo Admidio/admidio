@@ -85,7 +85,7 @@ try {
 
         // create html page object
         $page = new Admidio\UserInterface\Registration('adm_registration', $headline);
-        $page->createContentRegistrationList();
+        $page->createRegistrationList();
         $page->show();
     }
 
@@ -191,6 +191,6 @@ try {
         admRedirect(ADMIDIO_URL.FOLDER_MODULES.'/registration.php');
         // => EXIT
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     $gMessage->show($e->getMessage());
 }

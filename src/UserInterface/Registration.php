@@ -17,7 +17,7 @@ use UserRegistration;
  * ```
  * // generate html output with available registrations
  * $page = new ModuleRegistration('admidio-registration', $headline);
- * $page->createContentRegistrationList();
+ * $page->createRegistrationList();
  * $page->show();
  * ```
  * @copyright The Admidio Team
@@ -54,7 +54,7 @@ class Registration extends HtmlPage
      * parameter **$pageContent**. If no registration is found than show a message to the user.
      * @throws Exception
      */
-    public function createContentRegistrationList()
+    public function createRegistrationList()
     {
         global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields, $gCurrentUser, $gCurrentSession;
 

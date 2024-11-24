@@ -9,7 +9,7 @@
  * ```
  * // generate html output with available registrations
  * $page = new ModuleDocumentsFiles('admidio-groups-roles', $headline);
- * $page->createContentRegistrationList();
+ * $page->createContentList();
  * $page->show();
  * ```
  * @copyright The Admidio Team

@@ -259,10 +259,10 @@ try {
             $page->addJavascript(
                 '
             $("#export_and_filter").change(function() {
-                $("#navbar_filter_form_category_report").submit();
+                $("#adm_navbar_filter_form_category_report").submit();
             });
             $("#crt_id").change(function() {
-                $("#navbar_filter_form_category_report").submit();
+                $("#adm_navbar_filter_form_category_report").submit();
             });',
                 true
             );

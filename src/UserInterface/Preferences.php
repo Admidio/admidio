@@ -21,7 +21,7 @@ use TableText;
  * ```
  * // generate html output with available registrations
  * $page = new ModuleRegistration('admidio-registration', $headline);
- * $page->createContentRegistrationList();
+ * $page->createRegistrationList();
  * $page->show();
  * ```
  * @copyright The Admidio Team

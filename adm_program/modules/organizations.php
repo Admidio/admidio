@@ -41,7 +41,7 @@ try {
 
         // create html page object
         $page = new Organizations('adm_organization_edit', $headline);
-        $page->createContentEditForm();
+        $page->createEditForm();
         $page->show();
     } elseif ($getMode === 'new_sub') {
         // Create a new sub-organization for the current organization
@@ -50,7 +50,7 @@ try {
 
         // create html page object
         $page = new Organizations('adm_new_sub_organization', $headline);
-        $page->createContentSubOrganizationForm();
+        $page->createSubOrganizationForm();
         $page->show();
     } elseif ($getMode === 'save') {
         // check form field input and sanitized it from malicious content
@@ -102,7 +102,7 @@ try {
         echo json_encode(array('status' => 'success'));
         exit();
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if (in_array($getMode, array('save', 'create', 'delete'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

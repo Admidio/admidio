@@ -40,7 +40,7 @@ try {
 
             // create html page object
             $page = new Menu('adm_menu_configuration', $headline);
-            $page->createContentList();
+            $page->createList();
             $page->show();
             break;
 
@@ -54,7 +54,7 @@ try {
 
             // create html page object
             $page = new Menu('adm_menu_configuration_edit', $headline);
-            $page->createContentEditForm($getMenuUUID);
+            $page->createEditForm($getMenuUUID);
             $page->show();
             break;
 
@@ -91,7 +91,7 @@ try {
             echo json_encode(array('status' => 'success'));
             break;
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if (in_array($getMode, array('save', 'delete'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {

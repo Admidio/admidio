@@ -272,7 +272,7 @@ class TableRoles extends TableAccess
 
         $return = parent::delete();
 
-        if ($gCurrentSession instanceof Session) {
+        if (isset($gCurrentSession)) {
             // all active users must renew their user data because maybe their
             // rights have been changed if they were members of this role
             $gCurrentSession->reloadAllSessions();
@@ -483,7 +483,7 @@ class TableRoles extends TableAccess
         $returnValue = parent::save($updateFingerPrint);
 
         // after saving check if user objects have to be read in again
-        if ($fieldsChanged && $gCurrentSession instanceof Session) {
+        if ($fieldsChanged && isset($gCurrentSession)) {
             // all active users must renew their user data because maybe their
             // rights have been changed if they were members of this role
             $gCurrentSession->reloadAllSessions();

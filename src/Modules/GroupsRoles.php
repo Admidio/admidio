@@ -1,68 +1,104 @@
 <?php
+namespace Admidio\Modules;
+
+use Admidio\Exception;
+use Database;
+use DateTime;
+use FileSystemUtils;
+use RoleDependency;
+use TableRoles;
+use User;
+
 /**
- ***********************************************************************************************
- * Various functions for roles handling
+ * @brief Class with methods to display the module pages.
+ *
+ * This class adds some functions that are used in the menu module to keep the
+ * code easy to read and short
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
  */
+class GroupsRoles
+{
+    protected TableRoles $roleRessource;
+    protected Database $db;
+    protected string $UUID;
+    protected bool $eventRole = false;
 
-/******************************************************************************
- * Parameters:
- *
- * role_uuid : UUID of role, that should be edited
- * mode :  edit       - create or edit role
- *         delete     - delete role
- *         export     - Export vCard of role
- *         activate   - set role active
- *         deactivate - set role inactive
- *
- *****************************************************************************/
-use Admidio\Exception;
+    /**
+     * Constructor that will create an object of a recordset of the table adm_lists.
+     * If the id is set than the specific list will be loaded.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param string $roleUUID UUID if the menu ressource that should be managed within this class
+     * @throws Exception
+     */
+    public function __construct(Database $database, string $roleUUID = '')
+    {
+        $this->db = $database;
+        $this->UUID = $roleUUID;
+        $this->roleRessource = new TableRoles($database);
 
-try {
-    require_once(__DIR__ . '/../../system/common.php');
-    require(__DIR__ . '/../../system/login_valid.php');
-
-    // Initialize and check the parameters
-    $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'export', 'activate', 'deactivate')));
-
-    if ($getMode !== 'export') {
-        // only members who are allowed to create and edit roles should have access to these functions
-        if (!$gCurrentUser->manageRoles()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
-        if(in_array($getMode, array('delete', 'activate', 'deactivate'))) {
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+        if ($roleUUID !== '') {
+            $this->roleRessource->readDataByUuid($roleUUID);
+            $this->eventRole = $this->roleRessource->getValue('cat_name_intern') === 'EVENTS';
         }
     }
 
-    $eventRole = false;
-    $role = new TableRoles($gDb);
+    /**
+     * Export every member of a role into one vCard file.
+     * @throws Exception
+     */
+    public function export()
+    {
+        global $gCurrentUser, $gCurrentOrganization, $gProfileFields;
 
-    if ($getRoleUuid !== '') {
-        $role->readDataByUuid($getRoleUuid);
-        $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
+        $role = new TableRoles($this->db);
+        $role->readDataByUuid($this->UUID);
 
-        // Check if the role belongs to the current organization
-        if ((int)$role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
+        if (!$gCurrentUser->hasRightViewProfiles($role->getValue('rol_id'))) {
             throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        // create filename of organization name and role name
+        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $role->getValue('rol_name')) . '.vcf';
+
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
+
+        header('Content-Type: text/vcard; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        // necessary for IE, because without it the download with SSL has problems
+        header('Cache-Control: private');
+        header('Pragma: public');
+
+        $sql = 'SELECT mem_usr_id
+                      FROM ' . TBL_MEMBERS . '
+                     WHERE mem_rol_id = ? -- $role->getValue(\'rol_id\')
+                       AND mem_begin <= ? -- DATE_NOW
+                       AND mem_end    > ? -- DATE_NOW';
+        $pdoStatement = $this->db->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
+
+        while ($memberUserId = $pdoStatement->fetchColumn()) {
+            $user = new User($this->db, $gProfileFields, (int)$memberUserId);
+            // create vcard and check if user is allowed to edit profile, so he can see more data
+            echo $user->getVCard();
         }
     }
 
-    if ($getMode === 'edit') {
-        // create or edit role
+    /**
+     * Save data from the menu form into the database.
+     * @throws Exception
+     */
+    public function save()
+    {
+        global $gCurrentOrgId, $gCurrentSession, $gCurrentUserId;
 
         // check form field input and sanitized it from malicious content
         $groupsRolesEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $groupsRolesEditForm->validate($_POST);
 
-        if ($role->getValue('rol_name') !== $_POST['rol_name']) {
+        if ($this->roleRessource->getValue('rol_name') !== $_POST['rol_name']) {
             // check if the role already exists
             $sql = 'SELECT COUNT(*) AS count
                       FROM ' . TBL_ROLES . '
@@ -76,10 +112,10 @@ try {
             $queryParams = array(
                 $_POST['rol_name'],
                 (int)$_POST['rol_cat_id'],
-                $role->getValue('rol_id'),
+                $this->roleRessource->getValue('rol_id'),
                 $gCurrentOrgId
             );
-            $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
+            $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
             if ($pdoStatement->fetchColumn() > 0) {
                 throw new Exception('SYS_ROLE_NAME_EXISTS');
@@ -145,40 +181,40 @@ try {
         }
 
         // Check whether the maximum number of members has already been exceeded in the event , also if the maximum number of members was reduced.
-        if (isset($_POST['rol_max_members']) && $getRoleUuid !== '' && (int)$_POST['rol_max_members'] !== (int)$role->getValue('rol_max_members')) {
+        if (isset($_POST['rol_max_members']) && $this->UUID !== '' && (int)$_POST['rol_max_members'] !== (int)$this->roleRessource->getValue('rol_max_members')) {
             // Count how many people already have the role, without leaders
-            $role->setValue('rol_max_members', (int)$_POST['rol_max_members']);
-            $numFreePlaces = $role->countVacancies();
+            $this->roleRessource->setValue('rol_max_members', (int)$_POST['rol_max_members']);
+            $numFreePlaces = $this->roleRessource->countVacancies();
 
             if ($numFreePlaces < 0) {
-                throw new Exception('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name')));
+                throw new Exception('SYS_ROLE_MAX_MEMBERS', array($this->roleRessource->getValue('rol_name')));
             }
         }
 
         // write POST parameters in roles object
         foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'rol_')) {
-                $role->setValue($key, $value);
+                $this->roleRessource->setValue($key, $value);
             }
         }
 
-        $gDb->startTransaction();
-        $role->save();
+        $this->db->startTransaction();
+        $this->roleRessource->save();
 
         // save role dependencies in database
-        if (array_key_exists('dependent_roles', $_POST) && !$eventRole) {
+        if (array_key_exists('dependent_roles', $_POST) && !$this->eventRole) {
             $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
 
-            $roleDep = new RoleDependency($gDb);
+            $roleDep = new RoleDependency($this->db);
 
             // Fetches a list of the selected dependent roles
-            $dbChildRoles = RoleDependency::getChildRoles($gDb, $role->getValue('rol_id'));
+            $dbChildRoles = RoleDependency::getChildRoles($this->db, $this->roleRessource->getValue('rol_id'));
 
             // remove all roles that are no longer selected
             if (count($dbChildRoles) > 0) {
                 foreach ($dbChildRoles as $dbChildRole) {
                     if (!in_array($dbChildRole, $sentChildRoles, true)) {
-                        $roleDep->get($dbChildRole, $role->getValue('rol_id'));
+                        $roleDep->get($dbChildRole, $this->roleRessource->getValue('rol_id'));
                         $roleDep->delete();
                     }
                 }
@@ -190,7 +226,7 @@ try {
                     if ($sentChildRole > 0 && !in_array($sentChildRole, $dbChildRoles, true)) {
                         $roleDep->clear();
                         $roleDep->setChild($sentChildRole);
-                        $roleDep->setParent($role->getValue('rol_id'));
+                        $roleDep->setParent($this->roleRessource->getValue('rol_id'));
                         $roleDep->insert($gCurrentUserId);
 
                         // add all members of the ChildRole to the ParentRole
@@ -199,72 +235,9 @@ try {
                 }
             }
         } else {
-            RoleDependency::removeChildRoles($gDb, $role->getValue('rol_id'));
+            RoleDependency::removeChildRoles($this->db, $this->roleRessource->getValue('rol_id'));
         }
 
-        $gDb->endTransaction();
-
-        $gNavigation->deleteLastUrl();
-        echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
-        exit();
-    } elseif ($getMode === 'deactivate') {
-        // set role inactive
-        // event roles and administrator cannot be set inactive
-        $role->deactivate();
-        echo 'done';
-        exit();
-    } elseif ($getMode === 'delete') {
-        // delete role from database
-        if ($role->delete()) {
-            echo json_encode(array('status' => 'success'));
-        }
-        exit();
-    } elseif ($getMode === 'activate') {
-        // set role active
-        $role->activate();
-        echo 'done';
-        exit();
-    } elseif ($getMode === 'export') {
-        // Export every member of a role into one vCard file
-
-        $role = new TableRoles($gDb);
-        $role->readDataByUuid($getRoleUuid);
-
-        if (!$gCurrentUser->hasRightViewProfiles($role->getValue('rol_id'))) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
-        // create filename of organization name and role name
-        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $role->getValue('rol_name')) . '.vcf';
-
-        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
-
-        header('Content-Type: text/vcard; charset=utf-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-
-        // necessary for IE, because without it the download with SSL has problems
-        header('Cache-Control: private');
-        header('Pragma: public');
-
-        $sql = 'SELECT mem_usr_id
-                      FROM ' . TBL_MEMBERS . '
-                     WHERE mem_rol_id = ? -- $role->getValue(\'rol_id\')
-                       AND mem_begin <= ? -- DATE_NOW
-                       AND mem_end    > ? -- DATE_NOW';
-        $pdoStatement = $gDb->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
-
-        while ($memberUserId = $pdoStatement->fetchColumn()) {
-            $user = new User($gDb, $gProfileFields, (int)$memberUserId);
-            // create vcard and check if user is allowed to edit profile, so he can see more data
-            echo $user->getVCard();
-        }
-    }
-} catch (Exception $e) {
-    if (in_array($getMode, array('activate', 'deactivate'))) {
-        echo $e->getMessage();
-    } elseif (in_array($getMode, array('edit', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
+        $this->db->endTransaction();
     }
 }

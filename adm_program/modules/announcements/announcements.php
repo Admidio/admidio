@@ -106,7 +106,7 @@ try {
     $page->addJavascript(
         '
         $("#cat_uuid").change(function() {
-            $("#navbar_filter_form").submit();
+            $("#adm_navbar_filter_form").submit();
         });',
         true
     );

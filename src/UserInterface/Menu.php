@@ -18,7 +18,7 @@ use TableMenu;
  * ```
  * // generate html output with available registrations
  * $page = new Menu('adm_menu', $headline);
- * $page->createContentEditForm();
+ * $page->createEditForm();
  * $page->show();
  * ```
  * @copyright The Admidio Team
@@ -28,10 +28,11 @@ use TableMenu;
 class Menu extends HtmlPage
 {
     /**
-     * Create the data for the edit form of an organization.
+     * Create the data for the edit form of a menu entry.
+     * @param string $menuUUID UUID of the menu entry that should be edited.
      * @throws Exception
      */
-    public function createContentEditForm(string $menuUUID = '')
+    public function createEditForm(string $menuUUID = '')
     {
         global $gDb, $gL10n, $gCurrentSession;
 
@@ -188,7 +189,7 @@ class Menu extends HtmlPage
      * Create the data for a form to add a new sub-organization to the current organization.
      * @throws Exception|\Smarty\Exception
      */
-    public function createContentList()
+    public function createList()
     {
         global $gCurrentSession, $gL10n, $gDb;
 
