@@ -9,20 +9,20 @@
  */
 
 /**
- * The function can be used to show or hide a element. Therefore a small
+ * The function can be used to show or hide an element. Therefore, a small
  * caret is used that will change his orientation if the element is hidden.
- * @param {string} elementId This is the id of the element you must click to show or hide another element.
- *                           The elements have the same id but the element to click has a prefix **group_**
+ * @param {string} element This is the element you must click to show or hide another element.
+ *                         The element must have a data-target attribut which contains the id of the
+ *                         element to hide.
  */
-function showHideBlock(elementId) {
-    const showHideElementId = $('#'+elementId).attr("id").substring(6);
-
-    if($("#"+showHideElementId).is(":hidden")) {
-        $("#"+showHideElementId).show("slow");
-        $('#'+elementId+" .bi").attr("class", "bi bi-caret-down-fill")
+function showHideBlock(element) {
+    var targetElementId = $(element).data("target");
+    if($("#" + targetElementId).is(":hidden")) {
+        $("#" + targetElementId).show("slow");
+        $("#" + $(element).attr("id") + " .bi").attr("class", "bi bi-caret-down-fill")
     } else {
-        $("#"+showHideElementId).hide("slow");
-        $('#'+elementId+" .bi").attr("class", "bi bi-caret-right-fill")
+        $("#" + targetElementId).hide("slow");
+        $("#" + $(element).attr("id") + " .bi").attr("class", "bi bi-caret-right-fill")
     }
 }
 

@@ -195,7 +195,7 @@ class Menu extends HtmlPage
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
-                showHideBlock($(this).attr("id"));
+                showHideBlock($(this));
             });
             $(".admidio-menu-move").click(function() {
                 moveTableRow(

@@ -13,7 +13,7 @@
             <tbody>
                 <tr class="admidio-group-heading">
                     <td id="adm_menu_group_{$menuNode.uuid}" colspan="5">
-                        <a id="adm_menu_caret_{$menuNode.uuid}" class="admidio-icon-link admidio-open-close-caret">
+                        <a id="adm_menu_caret_{$menuNode.uuid}" class="admidio-icon-link admidio-open-close-caret" data-target="adm_menu_entries_{$menuNode.uuid}">
                             <i class="bi bi-caret-down-fill"></i>
                         </a> {$menuNode.name}
                     </td>

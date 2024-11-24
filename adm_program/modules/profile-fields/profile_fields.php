@@ -31,7 +31,7 @@ try {
 
     $page->addJavascript('
     $(".admidio-open-close-caret").click(function() {
-        showHideBlock($(this).attr("id"));
+        showHideBlock($(this));
     });
     $("tbody.admidio-sortable").sortable({
         axis: "y",
@@ -116,12 +116,12 @@ try {
 
         if ($categoryId !== (int)$userField->getValue('cat_id')) {
             $categoryId = (int)$userField->getValue('usf_cat_id');
-            $blockId = 'admCategory' . $categoryId;
+            $blockId = 'adm_category_' . $categoryId;
 
             $table->addTableBody();
             $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'admidio-group-row-' . $categoryId));
             $table->addColumn(
-                '<a id="caret_' . $blockId . '" class="admidio-icon-link admidio-open-close-caret"><i class="bi bi-caret-down-fill"></i></a>' . $userField->getValue('cat_name'),
+                '<a id="caret_' . $blockId . '" class="admidio-icon-link admidio-open-close-caret" data-target="'.$blockId.'"><i class="bi bi-caret-down-fill"></i></a>' . $userField->getValue('cat_name'),
                 array('id' => 'group_' . $blockId, 'colspan' => '10')
             );
             $table->addTableBody('id', $blockId);

@@ -112,7 +112,7 @@ try {
         $html .= '<script type="text/javascript">
         $(function() {
             $(".admidio-open-close-caret").click(function() {
-                showHideBlock($(this).attr("id"));
+                showHideBlock($(this));
             });
         });
         ' . $javascript . '
@@ -282,13 +282,13 @@ try {
 
         // if new category than display a category header
         if ($category !== (int)$role->getValue('cat_id')) {
-            $blockId = 'admCategory' . (int)$role->getValue('cat_id');
+            $blockId = 'adm_category_' . (int)$role->getValue('cat_id');
 
             $table->addTableBody();
             $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_' . $blockId));
             $table->addColumn();
             $table->addAttribute('colspan', '4', 'td');
-            $table->addData('<a id="caret_' . $blockId . '" class="admidio-icon-link admidio-open-close-caret"><i class="bi bi-caret-down-fill"></i></a>' . $role->getValue('cat_name'));
+            $table->addData('<a id="caret_' . $blockId . '" class="admidio-icon-link admidio-open-close-caret" data-target="' . $blockId . '"><i class="bi bi-caret-down-fill"></i></a>' . $role->getValue('cat_name'));
             $table->addTableBody('id', $blockId);
 
             $category = (int)$role->getValue('cat_id');
