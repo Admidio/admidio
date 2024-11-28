@@ -16,7 +16,7 @@ require_once(__DIR__ . '/../../system/common.php');
 try {
     if (!$gValidLogin) {
         // Visitors could not view messages, they are only able to write messages to specific roles
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $getUserUuid, 'mode' => 1)));
+        admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php');
         // => EXIT
     }
 
