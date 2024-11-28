@@ -640,6 +640,7 @@
   <string name="SYS_EXPORT_TO">Export to</string>
   <string name="SYS_EXPORT_VCARD">Export vCard</string>
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Export vCard of #VAR1#</string>
+  <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FADE_IN">Fade in</string>
   <string name="SYS_FAX">Fax</string>
@@ -1030,7 +1031,6 @@
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLEASE_WAIT">Please wait</string>
-  <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>

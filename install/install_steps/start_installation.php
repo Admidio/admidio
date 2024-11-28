@@ -250,7 +250,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
                (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 1, true, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
              , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 2, true, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
-             , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 3, true, \'plugins\', NULL, \'\', \'SYS_PLUGINS\', \'\')
+             , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 3, true, \'extensions\', NULL, \'\', \'SYS_EXTENSIONS\', \'\')
              , (NULL, 1, \'' . Uuid::uuid4() . '\', false, 1, true, \'overview\', \'/adm_program/overview.php\', \'bi-house-door-fill\', \'SYS_OVERVIEW\', \'\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 2, true, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'newspaper\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'EVENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 3, true, \'events\', \''.FOLDER_MODULES.'/events/events.php\', \'calendar-week-fill\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')

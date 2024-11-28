@@ -29,5 +29,9 @@ try {
 
     $page->show();
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    if (isset($gMessage)) {
+        $gMessage->show($e->getMessage());
+    } else {
+        echo $e->getMessage();
+    }
 }
