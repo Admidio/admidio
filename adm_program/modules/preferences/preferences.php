@@ -335,6 +335,12 @@ $formSecurity->addCheckbox(
     (bool) $formValues['enable_password_recovery'],
     array('helpTextIdInline' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('SYS_ENABLE_NOTIFICATIONS')))
 );
+$formSecurity->addCheckbox(
+    'security_login_email_address_enabled',
+    $gL10n->get('ORG_LOGIN_WITH_EMAIL'),
+    (bool) $formValues['security_login_email_address_enabled'],
+    array('helpTextIdInline' => 'ORG_LOGIN_WITH_EMAIL_DESC')
+);
 
 
 $formSecurity->addSubmitButton(

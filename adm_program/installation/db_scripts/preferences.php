@@ -16,6 +16,7 @@ $defaultOrgPreferences = array(
     // System
     'enable_rss'                     => '1',
     'enable_auto_login'              => '1',
+    'security_login_email_address_enabled'      => '0',
     'default_country'                => 'DEU',
     'logout_minutes'                 => '20',
     'homepage_logout'                => 'adm_program/overview.php',
