@@ -291,23 +291,27 @@ class TableCategory extends TableAccess
                  WHERE cat_type     = ? -- $catType
                    AND ( cat_org_id = ? -- $GLOBALS[\'gCurrentOrganization\']->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
-                   AND cat_sequence = ? -- $catSequence';
+                   AND cat_sequence = ? -- $catSequenceNew';
         $queryParams = array($catSequence, $catType, (int) $GLOBALS['gCurrentOrganization']->getValue('org_id'));
 
         // the category is lowered by one number and is thus moved up in the list
         if ($mode === self::MOVE_UP) {
             if ($catOrgId === 0 || $catSequence > $rowCount + 1) {
                 $queryParams[] = $catSequence - 1;
-                $this->db->queryPrepared($sql, $queryParams);
-                $this->setValue('cat_sequence', $catSequence - 1);
+                $sequenceStatement = $this->db->queryPrepared($sql, $queryParams);
+                if ($sequenceStatement->rowCount() > 0) {
+                    $this->setValue('cat_sequence', $catSequence - 1);
+                }
             }
         }
         // the category will be increased by one number and thus will be moved further down in the list
         elseif ($mode === self::MOVE_DOWN) {
             if ($catOrgId > 0 || $catSequence < $rowCount) {
                 $queryParams[] = $catSequence + 1;
-                $this->db->queryPrepared($sql, $queryParams);
-                $this->setValue('cat_sequence', $catSequence + 1);
+                $sequenceStatement = $this->db->queryPrepared($sql, $queryParams);
+                if ($sequenceStatement->rowCount() > 0) {
+                    $this->setValue('cat_sequence', $catSequence + 1);
+                }
             }
         } else {
             return false;

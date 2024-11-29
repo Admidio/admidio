@@ -198,17 +198,19 @@ function redirectPost(url, data) {
 /**
  * The function will move a table row one step up or down in the current table.
  * After that an url is called that should update the database with the new sequence of the row object.
- * @param {string} direction The direction in which the row should be moved.
- *                 Valid values are UP or DOWN.
- * @param {string} elementId Id of the row that should be moved
+ * @param element Element that is clicked. Element should have data-uuid, data-direction and data-target attributes
  * @param {string} updateSequenceUrl Url to update the sequence of the element in the database
  * @param {string} csrfToken  If this is set than it will be added to the post request.
  */
-function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
-    $.post(updateSequenceUrl + "?mode=sequence&uuid=" + elementId + "&direction=" + direction, {
+function moveTableRow(element, updateSequenceUrl, csrfToken) {
+    var uuid = $(element).data("uuid");
+    var direction = $(element).data("direction");
+    var target = $(element).data("target");
+
+    $.post(updateSequenceUrl + "?mode=sequence&uuid=" + uuid + "&direction=" + direction, {
             "adm_csrf_token": csrfToken,
             "direction": direction,
-            "uuid": elementId,
+            "uuid": uuid,
             "mode": "sequence"
         }, function(data) {
             var returnStatus = "error";
@@ -230,13 +232,12 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
             }
 
             if (returnStatus === "success") {
-                const id = "#adm_row_" + elementId;
                 $(".admidio-icon-link .bi").tooltip("hide");
 
                 if (direction === "UP") {
-                    $(id).prev().before($(id));
+                    $("#"+target).prev().before($("#"+target));
                 } else {
-                    $(id).next().after($(id));
+                    $("#"+target).next().after($("#"+target));
                 }
             } else {
                 // entry could not be deleted, then show content of data or a common error message

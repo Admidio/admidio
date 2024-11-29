@@ -199,8 +199,7 @@ class Menu extends HtmlPage
             });
             $(".admidio-menu-move").click(function() {
                 moveTableRow(
-                    $(this).data("direction"),
-                    $(this).data("uuid"),
+                    $(this),
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/menu.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );

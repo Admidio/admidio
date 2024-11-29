@@ -430,8 +430,7 @@ class Categories extends HtmlPage
         $this->addJavascript('
             $(".admidio-category-move").click(function() {
                 moveTableRow(
-                    $(this).data("direction"),
-                    $(this).data("uuid"),
+                    $(this),
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/categories.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );

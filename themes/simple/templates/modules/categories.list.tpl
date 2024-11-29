@@ -17,9 +17,11 @@
                         <td><a href="{$category.urlEdit}">{$category.name}</a></td>
                         <td>
                             {if !$category.system}
-                                <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="{$category.uuid}" data-direction="UP">
+                                <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="{$category.uuid}"
+                                   data-direction="UP" data-target="adm_category_{$category.uuid}">
                                     <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', [$title])}"></i></a>
-                                <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="{$category.uuid}" data-direction="DOWN">
+                                <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="{$category.uuid}"
+                                   data-direction="DOWN" data-target="adm_category_{$category.uuid}">
                                     <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', [$title])}"></i></a>
                             {/if}
                         </td>

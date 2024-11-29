@@ -21,13 +21,15 @@
             </tbody>
             <tbody id="adm_menu_entries_{$menuNode.uuid}">
                 {foreach $menuNode.entries as $menuEntry}
-                    <tr id="adm_row_{$menuEntry.uuid}">
+                    <tr id="adm_menu_entry_{$menuEntry.uuid}">
                         <td><i class="bi bi-{$menuEntry.icon}"></i> {$menuEntry.name}</td>
                         <td>
-                            <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="{$menuEntry.uuid}" data-direction="UP">
+                            <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="{$menuEntry.uuid}"
+                               data-direction="UP" data-target="adm_menu_entry_{$menuEntry.uuid}">
                                 <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', [$headline])}"></i>
                             </a>
-                            <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="{$menuEntry.uuid}" data-direction="DOWN">
+                            <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="{$menuEntry.uuid}"
+                               data-direction="DOWN" data-target="adm_menu_entry_{$menuEntry.uuid}">
                                 <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', [$headline])}"></i>
                             </a>
                         </td>
