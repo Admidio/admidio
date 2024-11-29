@@ -1,9 +1,4 @@
 <?php
-namespace Admidio\Plugins;
-
-use Smarty\Smarty;
-use Admidio\Exception;
-
 /**
  * @brief Support for the plugins used at the overview page
  *
@@ -18,6 +13,11 @@ use Admidio\Exception;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
+namespace Admidio\Plugins;
+
+use Smarty\Smarty;
+use Admidio\Exception;
+
 class Overview
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 use Admidio\Language;
 use Admidio\Session;
+use Admidio\System\Update;
 use Admidio\UserInterface\Form;
 use Admidio\UserInterface\Installation;
 

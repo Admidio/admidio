@@ -1,7 +1,4 @@
 <?php
-use Admidio\Exception;
-use Admidio\Utils\Installation;
-
 /**
  * @brief Class to implement useful method for installation and update process.
  *
@@ -9,6 +6,17 @@ use Admidio\Utils\Installation;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
+namespace Admidio\System;
+
+use Admidio\Exception;
+use Admidio\Utils\Installation;
+use Admidio\Utils\Maintenance;
+use ComponentUpdate;
+use Database;
+use FileSystemUtils;
+use Organization;
+use PhpIniUtils;
+
 class Update
 {
     /**
@@ -39,7 +47,7 @@ class Update
             // => EXIT
         } else {
             // create object with current user field structure und user object
-            $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
+            $gCurrentUser = new \User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
             // check login data. If login failed an exception will be thrown.
             // Don't update the current session with user id and don't do a rehash of the password
@@ -80,7 +88,7 @@ class Update
              WHERE usr_login_name = ?';
         $systemUserStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
 
-        $gCurrentUser = new User($gDb, $gProfileFields, (int) $systemUserStatement->fetchColumn());
+        $gCurrentUser = new \User($gDb, $gProfileFields, (int) $systemUserStatement->fetchColumn());
 
         $componentUpdateHandle = new ComponentUpdate($gDb);
         $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
@@ -90,12 +98,16 @@ class Update
         $this->toggleForeignKeyChecks(true);
 
         // create ".htaccess" file for folder "adm_my_files"
-        $htaccess = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
+        $htaccess = new \Htaccess(ADMIDIO_PATH . FOLDER_DATA);
+
+        // call maintenance scripts to repair possible data issues
+        $maintenance = new Maintenance($gDb);
+        $maintenance->reorganizeCategories();
 
         try {
             // remove compiled templates so new ones will be created with the new version
             FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/templates', true);
-        } catch (UnexpectedValueException|RuntimeException $e) {
+        } catch (\UnexpectedValueException|\RuntimeException $e) {
             $gLogger->warning('Folder adm_my_files/templates could not be deleted!');
         }
 
@@ -127,7 +139,7 @@ class Update
         require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
         // calculate the best cost value for your server performance
-        $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
+        $benchmarkResults = \PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
         $updateOrgPreferences = array();
 
         if (is_int($benchmarkResults['options']['cost'])) {
