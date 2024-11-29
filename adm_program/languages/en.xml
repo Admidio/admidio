@@ -802,6 +802,8 @@
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login data were correct but you are not an active member of this organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">The given username and/or password is incorrect.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
+  <string name="SYS_LOGIN_WITH_EMAIL">Allow e-mail address instead of username for login</string>
+  <string name="SYS_LOGIN_WITH_EMAIL_DESC">If a user has an e-mail address stored in their profile field, and the address is unique, it can be used as the user name for logging in. (default: no)</string>
   <string name="SYS_LOGOUT">Sign out</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Signing out was successful.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">You already signed in. Therefore you must already have the correct password!</string>

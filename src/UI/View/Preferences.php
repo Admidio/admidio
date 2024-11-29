@@ -1797,6 +1797,12 @@ class Preferences extends HtmlPage
             (bool)$formValues['enable_password_recovery'],
             array('helpTextId' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('SYS_ENABLE_NOTIFICATIONS')))
         );
+        $formSecurity->addCheckbox(
+            'security_login_email_address_enabled',
+            $gL10n->get('SYS_LOGIN_WITH_EMAIL'),
+            (bool) $formValues['security_login_email_address_enabled'],
+            array('helpTextId' => 'SYS_LOGIN_WITH_EMAIL_DESC')
+        );
         $formSecurity->addSubmitButton(
             'adm_button_save_security',
             $gL10n->get('SYS_SAVE'),
