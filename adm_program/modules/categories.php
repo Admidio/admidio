@@ -6,17 +6,14 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/******************************************************************************
+ *
  * Parameters:
  *
  * mode  : list     - (default) Show page with a list of all menu entries
  *         edit     - Show form to create or edit a menu entry
  *         save     - Save the data of the form
- *         delete   - Delete menu entry
- *         sequence - Change sequence for parameter men_id
+ *         delete   - Delete a menu entry
+ *         sequence - Change sequence a menu entry
  * type  : Type of categories that could be maintained
  *         ROL = Categories for roles
  *         LNK = Categories for weblinks

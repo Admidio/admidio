@@ -1557,7 +1557,7 @@ class Preferences extends HtmlPage
             null,
             array('class' => 'form-preferences')
         );
-        $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields.php">
+        $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php">
             <i class="bi bi-ui-radios"></i>' . $gL10n->get('SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION') . '</a>';
         $formProfile->addCustomContent(
             'editProfileFields',

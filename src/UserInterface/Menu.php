@@ -233,13 +233,14 @@ class Menu extends HtmlPage
 
             // Get data
             while ($menuRow = $menuStatement->fetch()) {
-                $templateRowMenu = array();
-                $templateRowMenu['uuid'] = $menuRow['men_uuid'];
-                $templateRowMenu['name'] = Language::translateIfTranslationStrId((string)$menuRow['men_name']);
-                $templateRowMenu['description'] = Language::translateIfTranslationStrId((string)$menuRow['men_description']);
-                $templateRowMenu['standard'] = $menuRow['men_standard'];
-                $templateRowMenu['icon'] = $menuRow['men_icon'];
-                $templateRowMenu['url'] = $menuRow['men_url'];
+                $templateRowMenu = array(
+                    'uuid' => $menuRow['men_uuid'],
+                    'name' => Language::translateIfTranslationStrId((string)$menuRow['men_name']),
+                    'description' => Language::translateIfTranslationStrId((string)$menuRow['men_description']),
+                    'standard' => $menuRow['men_standard'],
+                    'icon' => $menuRow['men_icon'],
+                    'url' => $menuRow['men_url']
+                );
 
                 // add root path to link unless the full URL is given
                 if (preg_match('/^http(s?):\/\//', $menuRow['men_url']) === 0) {

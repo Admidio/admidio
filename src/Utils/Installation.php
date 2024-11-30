@@ -1,10 +1,4 @@
 <?php
-/**
- * @brief Class to implement useful method for installation and update process.
- * @copyright The Admidio Team
- * @see https://www.admidio.org/
- * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- */
 namespace Admidio\Utils;
 
 use Admidio\Exception;
@@ -13,6 +7,12 @@ use FileSystemUtils;
 use RuntimeException;
 use UnexpectedValueException;
 
+/**
+ * @brief Class to implement useful method for installation and update process.
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ */
 class Installation
 {
     /**

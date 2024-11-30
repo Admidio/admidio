@@ -183,7 +183,6 @@
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Login automatically</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at their visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
-  <string name="ORG_NO_FIELD_CREATED">No organization specific field has been created yet!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: #VAR1#)</string>

@@ -64,6 +64,11 @@ class TableUserField extends TableAccess
     {
         global $gCurrentSession;
 
+        if ($this->getValue('usf_system') == 1) {
+            // System fields could not be deleted
+            throw new Exception('Profile fields with the flag "system" could not be deleted.');
+        }
+
         $this->db->startTransaction();
 
         // close gap in sequence

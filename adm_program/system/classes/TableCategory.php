@@ -435,7 +435,7 @@ class TableCategory extends TableAccess
 
         $returnValue = parent::save($updateFingerPrint);
 
-        if ($fieldsChanged && $gCurrentSession instanceof Session && $this->getValue('cat_type') === 'USF') {
+        if ($fieldsChanged && isset($gCurrentSession) && $this->getValue('cat_type') === 'USF') {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->reloadAllSessions();
         }

@@ -1,15 +1,15 @@
 <?php
+namespace Admidio\Utils;
+
+use Admidio\Exception;
+use Database;
+
 /**
  * @brief Class to implement useful method maintenance of data in the Admidio database.
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-namespace Admidio\Utils;
-
-use Admidio\Exception;
-use Database;
-
 class Maintenance
 {
     /**

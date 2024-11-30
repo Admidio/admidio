@@ -98,7 +98,7 @@ try {
         $page->addPageFunctionsMenuItem(
             'menu_item_contacts_profile_fields',
             $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
-            ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields.php',
+            ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php',
             'bi-ui-radios'
         );
     }

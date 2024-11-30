@@ -25,8 +25,6 @@ class Categories
     protected string $type;
 
     /**
-     * Constructor that will create an object of a recordset of the table adm_lists.
-     * If the id is set than the specific list will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $type Type of category that should be shown. Values are ROL, ANN, EVT, LNK, USF and AWA.
      * @param string $categoryUUID UUID if the category that should be managed within this class
@@ -45,7 +43,7 @@ class Categories
     }
 
     /**
-     * Save data from the categpry form into the database.
+     * Save data from the category form into the database.
      * @throws Exception
      */
     public function save()
