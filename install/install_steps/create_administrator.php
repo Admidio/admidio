@@ -81,7 +81,7 @@ if ($mode === 'html') {
         array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
     );
     $form->addButton(
-        'adm_adm_previous_page',
+        'adm_previous_page',
         $gL10n->get('SYS_BACK'),
         array('icon' => 'bi-arrow-left-circle-fill', 'class' => 'admidio-margin-bottom',
             'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')))

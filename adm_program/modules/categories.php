@@ -9,11 +9,11 @@
  *
  * Parameters:
  *
- * mode  : list     - (default) Show page with a list of all menu entries
- *         edit     - Show form to create or edit a menu entry
+ * mode  : list     - (default) Show page with a list of all categories
+ *         edit     - Show form to create or edit a category
  *         save     - Save the data of the form
- *         delete   - Delete a menu entry
- *         sequence - Change sequence a menu entry
+ *         delete   - Delete a category
+ *         sequence - Change sequence of a category
  * type  : Type of categories that could be maintained
  *         ROL = Categories for roles
  *         LNK = Categories for weblinks
