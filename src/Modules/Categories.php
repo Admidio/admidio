@@ -107,6 +107,7 @@ class Categories
         $gDb->startTransaction();
 
         // write category into database
+        $this->categoryRessource->setValue('cat_type', $this->type);
         $this->categoryRessource->save();
 
         if ($this->type !== 'ROL' && $this->categoryRessource->getValue('cat_name_intern') !== 'BASIC_DATA') {

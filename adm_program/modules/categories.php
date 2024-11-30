@@ -85,8 +85,8 @@ try {
             break;
 
         case 'save':
-            $menuModule = new \Admidio\Modules\Categories($gDb, $getType, $getCategoryUUID);
-            $menuModule->save();
+            $categoriesModule = new \Admidio\Modules\Categories($gDb, $getType, $getCategoryUUID);
+            $categoriesModule->save();
 
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
