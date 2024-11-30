@@ -2,7 +2,7 @@
 #   IMAGE_NAME="yourUsername/admidio:v4.3.0" ./hooks/build
 
 
-# https://hub.docker.com/_/ubuntu/tags?page=1&name=jammy
+# https://hub.docker.com/_/ubuntu/tags?name=noble
 FROM ubuntu:22.04
 
 # Build-time metadata as defined at http://label-schema.org
@@ -79,11 +79,11 @@ COPY . ${APACHE_DOCUMENT_ROOT}/
 WORKDIR ${APACHE_DOCUMENT_ROOT}
 
 RUN mkdir ${APACHE_DOCUMENT_ROOT}/provisioning && \
-    cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/adm_program ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
-    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/install ${APACHE_DOCUMENT_ROOT}/libs ${APACHE_DOCUMENT_ROOT}/src ${APACHE_DOCUMENT_ROOT}/themes ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/adm_program ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/themes ${APACHE_DOCUMENT_ROOT}/adm_my_files && \
     echo -n ${ADMIDIO_VERSION} > /opt/app-root/src/.admidio_image_version
 
-VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/adm_themes", "/opt/app-root/src/adm_plugins"]
+VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/themes", "/opt/app-root/src/adm_plugins"]
 
 # Latest release
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer

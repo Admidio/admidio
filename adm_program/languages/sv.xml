@@ -133,7 +133,7 @@
   <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation läggs till i databasen inklusive dess stamdata. Den nuvarande användaren kommer att meddelas som administratör och kan behålla datasatsen. Användare som loggar in i systemet måste välja respektive organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Ytterligare variabler</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-tema</string>
-  <string name="ORG_ADMIDIO_THEME_DESC">Välj layout för Admidio. Alla teman sparade i mappen adm_themes visas. (standard: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_DESC">Välj layout för Admidio. Alla teman sparade i mappen themes visas. (standard: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatisk utloggning efter</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Detta värde anger efter hur många minuter en inaktiv användare automatiskt loggas ut. Inaktiv är en användare så länge han inte använder någon sida i Admidio -systemet. Denna inställning ignoreras om användaren har valt #VAR1_BOLD#. (Standard: 20 minuter)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Uppdatera meddelandet för föråldrade webbläsare</string>

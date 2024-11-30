@@ -48,8 +48,8 @@
         },
         "classmap": [
             "adm_program/system/classes/",
-            "adm_program/libs/jquery-file-upload/server/php/",
-            "adm_program/libs/securimage/"
+            "libs/jquery-file-upload/server/php/",
+            "libs/securimage/"
         ]
     },
     "archive": {

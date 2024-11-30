@@ -135,7 +135,7 @@
   <string name="ORG_ADD_ORGANIZATION_DESC">Egy új szervezetet adunk hozzá az adatbázishoz, beleértve annak törzsadatait is. A jelenlegi felhasználó adminisztrátorként lesz bejelentve, és karbantarthatja az adatállományt. A rendszerbe bejelentkező felhasználóknak ki kell választaniuk az adott szervezetet.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">További változók</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-téma</string>
-  <string name="ORG_ADMIDIO_THEME_DESC">Az aktuális Admidio téma itt választható ki. Az adm_themes mappában található összes elrendezés megjelenik. (alapértelmezett: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_DESC">Az aktuális Admidio téma itt választható ki. Az themes mappában található összes elrendezés megjelenik. (alapértelmezett: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatikus kijelentkezés</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Ez az érték azt jelzi, hogy hány perc elteltével egy inaktív felhasználó automatikusan kijelentkezik. Inaktív egy felhasználó mindaddig, amíg nem hívja fel az Admidio rendszer egyetlen oldalát sem. Ez a beállítás figyelmen kívül marad, ha a felhasználó a #VAR1_BOLD# beállítást választotta. (Alapértelmezett: 20 perc)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Frissítő üzenet elavult böngészők számára</string>
