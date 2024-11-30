@@ -135,7 +135,7 @@
   <string name="ORG_ADD_ORGANIZATION_DESC">Ένας νέος σύλλογος θα προστεθεί στη βάση δεδομένων, συμπεριλαμβανομένων των βασικών δεδομένων του. Ο τρέχων χρήστης θα ανακοινωθεί ως διαχειριστής και θα μπορεί να διατηρήσει το σύνολο δεδομένων. Οι χρήστες που συνδέονται στο σύστημα πρέπει να επιλέξουν τον αντίστοιχο σύλλογο.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Πρόσθετες μεταβλητές</string>
   <string name="ORG_ADMIDIO_THEME">Θέμα Admidio</string>
-  <string name="ORG_ADMIDIO_THEME_DESC">Μπορείτε να επιλέξετε το τρέχον θέμα Admidio εδώ. Εμφανίζονται όλες οι διατάξεις από το φάκελο adm_themes. (default: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_DESC">Μπορείτε να επιλέξετε το τρέχον θέμα Admidio εδώ. Εμφανίζονται όλες οι διατάξεις από το φάκελο themes. (default: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Αυτόματη αποσύνδεση μετά</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Αυτή η τιμή υποδεικνύει μετά από πόσα λεπτά ένας ανενεργός χρήστης αποσυνδέεται αυτόματα. Ανενεργός είναι χρήστης εφόσον δεν καλεί καμία σελίδα του συστήματος Admidio. Αυτή η ρύθμιση αγνοείται εάν ο χρήστης έχει επιλέξει #VAR1_BOLD#. (Default: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Μήνυμα ενημέρωσης για παλιά προγράμματα περιήγησης</string>

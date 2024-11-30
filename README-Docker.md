@@ -28,6 +28,12 @@ You can find the releasenotes on Github [admidio/releases](https://github.com/Ad
 
 # How to use this image
 
+## Create a `admidio` docker network (optional)
+Create docker network for mariadb and admidio instance. Both docker container must be in the same network!
+```bash
+docker network create admidio-network
+```
+
 ## Start a `mariadb` server instance (optional)
 Starting a mariadb instance. The admidio database and admidio user will be created automatically.
 
@@ -36,6 +42,7 @@ docker run --detach -it --name "Admidio-MariaDB" \
   --hostname "admidio-mariadb" \
   -p 3306:3306 \
   --restart="unless-stopped" \
+  --network "admidio" \
   -v "Admidio-MariaDB-confd:/etc/mysql/conf.d" \
   -v "Admidio-MariaDB-data:/var/lib/mysql" \
   -e MYSQL_DATABASE="admidio" \
@@ -52,9 +59,10 @@ Starting a admidio instance is quite simple:
 docker run --detach -it --name "Admidio" \
   -p 8080:8080 \
   --restart="unless-stopped" \
+  --network "admidio" \
   -v "Admidio-files:/opt/app-root/src/adm_my_files" \
-  -v "Admidio-themes:/opt/app-root/src/adm_themes" \
   -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
+  -v "Admidio-themes:/opt/app-root/src/themes" \
   -e ADMIDIO_DB_HOST="admidio-mariadb:3306" \
   -e ADMIDIO_DB_NAME="admidio" \
   -e ADMIDIO_DB_USER="admidio" \
@@ -72,8 +80,8 @@ docker run --detach -it --name "Admidio" \
   -p 8080:8080 \
   --restart="unless-stopped" \
   -v "Admidio-files:/opt/app-root/src/adm_my_files" \
-  -v "Admidio-themes:/opt/app-root/src/adm_themes" \
   -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
+  -v "Admidio-themes:/opt/app-root/src/themes" \
   -e ADMIDIO_DB_TYPE="mysql" \
   -e ADMIDIO_DB_HOST="admidio-mariadb:3306" \
   -e ADMIDIO_DB_NAME="admidio" \
@@ -98,8 +106,8 @@ docker run --detach -it --name "Admidio" \
 
 ## Volumes
 * **`-v "Admidio-files:/opt/app-root/src/adm_my_files"`:** admidio config files and data uploads
-* **`-v "Admidio-themes:/opt/app-root/src/adm_themes"`:** admidio themes
 * **`-v "Admidio-plugins:/opt/app-root/src/adm_plugins"`:** admidio plugins
+* **`-v "Admidio-themes:/opt/app-root/src/themes"`:** admidio themes
 
 See https://docs.docker.com/storage/volumes/ for detailed information.
 
@@ -213,11 +221,11 @@ docker rm Admidio
 docker run --detach -it --name "Admidio" \
   -p 8080:8080 \
   --restart="unless-stopped" \
+  --network "admidio" \
   -v "Admidio-files:/opt/app-root/src/adm_my_files" \
-  -v "Admidio-themes:/opt/app-root/src/adm_themes" \
   -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
-  --link "Admidio-MariaDB:db" \
-  -e ADMIDIO_DB_HOST="db:3306" \
+  -v "Admidio-themes:/opt/app-root/src/themes" \
+  -e ADMIDIO_DB_HOST="admidio-mariadb:3306" \
   -e ADMIDIO_DB_NAME="admidio" \
   -e ADMIDIO_DB_USER="admidio" \
   -e ADMIDIO_DB_PASSWORD="my_VerySecureAdmidioUserPassword.01" \
@@ -238,7 +246,7 @@ version: "3.9"
 services:
   admidio-test-db:
     restart: unless-stopped
-    image: mariadb:11.1.2-jammy
+    image: mariadb:latest
     container_name: admidio-test-mariaDB
     volumes:
       - "./admidio-test/mariadb/config:/etc/mysql/conf.d"
@@ -267,8 +275,8 @@ services:
       - admidio-test-db
     volumes:
       - ./admidio-test/files:/opt/app-root/src/adm_my_files
-      - ./admidio-test/themes:/opt/app-root/src/adm_themes
       - ./admidio-test/plugins:/opt/app-root/src/adm_plugins
+      - ./admidio-test/themes:/opt/app-root/src/themes
     ports:
       - 3100:8080
     environment:
