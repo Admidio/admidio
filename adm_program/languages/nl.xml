@@ -135,7 +135,7 @@
   <string name="ORG_ADD_ORGANIZATION_DESC">Voegt een nieuwe organisatie met stamgegevens toe aan de database. De huidige gebruiker wordt automatisch aangewezen als beheerder en kan de verdere instellingen doorvoeren. Gebruikers die zich vervolgens bij het systeem aanmelden, moeten de juiste organisatie selecteren.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Extra variabelen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-thema</string>
-  <string name="ORG_ADMIDIO_THEME_DESC">Het huidige Admidio-thema kan hier geselecteerd worden. Alle layouts uit de adm_themes map worden weergegeven. (Standaard: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_DESC">Het huidige Admidio-thema kan hier geselecteerd worden. Alle layouts uit de themes map worden weergegeven. (Standaard: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatisch uitloggen na</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogt. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (Standaard: 20 minuten)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update melding voor verouderde browser</string>

@@ -2,4 +2,4 @@ languages:
   JavaScript: true
   PHP: true
 exclude_paths:
-- "adm_program/libs/*"
+- "libs/*"

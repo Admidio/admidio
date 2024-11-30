@@ -133,7 +133,7 @@
   <string name="ORG_ADD_ORGANIZATION_DESC">Ajoute une nouvelle organisation avec ces données de bases. L\'utilisateur actuel est automatiquement nommé administrateur et peut effectuer les autres configurations. Les utilisateurs qui se connectent à partir de maintenant au système doivent indiquer le nom de l\'organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variables supplémentaires</string>
   <string name="ORG_ADMIDIO_THEME">Thèmes Admidio</string>
-  <string name="ORG_ADMIDIO_THEME_DESC">Le thème Admidio actuel peut être sélectionné ici. Toutes les mises en page du dossier adm_themes sont affichées. (par défaut: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_DESC">Le thème Admidio actuel peut être sélectionné ici. Toutes les mises en page du dossier themes sont affichées. (par défaut: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Déconnexion automatique après</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Cette valeur indique après combien de minutes un utilisateur inactif est automatiquement déconnecté. Un utilisateur est inactif tant qu\'il n\'appelle aucune page du système Admidio. Ce paramètre est ignoré si l\'utilisateur a #VAR1_BOLD# sélectionné. (Par défaut : 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Message de mis à jour pour les navigateurs désuet</string>

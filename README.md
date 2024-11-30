@@ -51,8 +51,8 @@ docker run --detach -it --name "Admidio" \
   -p 8080:8080 \
   --restart="unless-stopped" \
   -v "Admidio-files:/opt/app-root/src/adm_my_files" \
-  -v "Admidio-themes:/opt/app-root/src/adm_themes" \
   -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
+  -v "Admidio-themes:/opt/app-root/src/themes" \
   -e ADMIDIO_DB_HOST="admidio-mariadb:3306" \
   -e ADMIDIO_DB_NAME="admidio" \
   -e ADMIDIO_DB_USER="admidio" \

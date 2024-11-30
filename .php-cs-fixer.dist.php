@@ -161,7 +161,7 @@ $rules = array(
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
-    ->exclude('adm_program/libs')
+    ->exclude('libs')
     ->exclude('node_modules')
 ;
 

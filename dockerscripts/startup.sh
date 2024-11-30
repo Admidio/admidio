@@ -11,7 +11,7 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 
 
 # check for existing admidio directories in docker volumes
-for dir in "adm_plugins" "adm_themes" "adm_my_files" "adm_program" ; do
+for dir in "adm_plugins" "install" "libs" "src" "themes" "adm_my_files" "adm_program" ; do
     if [ ! -d "${dir}" -o "$(find "${dir}" -maxdepth 0 -type d -empty 2>/dev/null)" != "" ]; then
         echo "[INFO ] provisioning missing directory ${dir}"
         cp -a "provisioning/${dir}" .
@@ -158,12 +158,18 @@ if [ "$(cat ${ADMIDIO_INSTALLED_VERSION} 2>/dev/null)" != "$(cat ${ADMIDIO_IMAGE
     echo "[INFO ] update admidio installation to image version ($(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null)) ..."
     echo "[DEBUG] rsync -a --delete provisioning/adm_program/ adm_program/"
     rsync -a --delete provisioning/adm_program/ adm_program/
+    echo "[DEBUG] rsync -a --delete provisioning/install/ install/"
+    rsync -a --delete provisioning/install/ install/
+    echo "[DEBUG] rsync -a --delete provisioning/libs/ libs/"
+    rsync -a --delete provisioning/libs/ libs/
+    echo "[DEBUG] rsync -a --delete provisioning/src/ src/"
+    rsync -a --delete provisioning/src/ src/
     echo "[DEBUG] rsync -a provisioning/adm_plugins/ adm_plugins/"
     rsync -a provisioning/adm_plugins/ adm_plugins/
-    echo "[DEBUG] rsync -a provisioning/adm_themes/ adm_themes/"
-    rsync -a provisioning/adm_themes/ adm_themes/
-    echo "[DEBUG] rsync -a --delete provisioning/adm_themes/simple/ adm_themes/simple/"
-    rsync -a --delete provisioning/adm_themes/simple/ adm_themes/simple/
+    echo "[DEBUG] rsync -a provisioning/themes/ themes/"
+    rsync -a provisioning/themes/ themes/
+    echo "[DEBUG] rsync -a --delete provisioning/themes/simple/ themes/simple/"
+    rsync -a --delete provisioning/themes/simple/ themes/simple/
     echo "[DEBUG] rsync -a --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/"
     rsync -a --exclude="/config.php" --exclude="/.admidio_installed" --exclude="/.admidio_installed_version" provisioning/adm_my_files/ adm_my_files/
     rm -f "${ADMIDIO_INSTALLED_VERSION}"
