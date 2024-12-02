@@ -2,8 +2,8 @@
 #   IMAGE_NAME="yourUsername/admidio:v4.3.0" ./hooks/build
 
 
-# https://hub.docker.com/_/ubuntu/tags?page=1&name=jammy
-FROM ubuntu:22.04
+# https://hub.docker.com/_/ubuntu/tags?name=noble
+FROM ubuntu:24.04
 
 # Build-time metadata as defined at http://label-schema.org
 ARG ADMIDIO_BUILD_DATE
@@ -36,7 +36,7 @@ RUN apt-get update \
         ca-certificates \
         curl \
         imagemagick \
-        libapache2-mod-php8.1 \
+        libapache2-mod-php8.3 \
         php-bcmath \
         php-bz2 \
         php-cli \
@@ -51,7 +51,6 @@ RUN apt-get update \
         php-json \
         php-ldap \
         php-mbstring \
-        php-mime-type \
         php-mysql \
         php-pear \
         php-pgsql \
