@@ -1,0 +1,9 @@
+.codeclimate.yml
+.editorconfig
+.git/
+.gitattributes
+.github/
+.gitignore
+.php-cs-fixer.dist.php
+.travis.yml
+hooks/
