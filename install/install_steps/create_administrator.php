@@ -134,8 +134,14 @@ if ($mode === 'html') {
         throw new Exception('SYS_PASSWORDS_NOT_EQUAL');
     }
 
-    echo json_encode(array(
-        'status' => 'success',
-        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config'))));
-    exit();
+    // if config file exists than don't create a new one
+    if (is_file($configPath)) {
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')));
+        // => EXIT
+    } else {
+        echo json_encode(array(
+            'status' => 'success',
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config'))));
+        exit();
+    }
 }

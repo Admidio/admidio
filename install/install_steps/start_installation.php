@@ -14,13 +14,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
     exit('This page may not be called directly!');
 }
 
-// check form field input and sanitized it from malicious content
-if (isset($_SESSION['installationInstallAdmidioForm'])) {
-    $_SESSION['installationInstallAdmidioForm']->validate($_POST);
-} else {
-    throw new Exception('SYS_INVALID_PAGE_VIEW');
-}
-
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
 if (!is_file($configPath)) {
     throw new Exception('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php'));

@@ -114,5 +114,4 @@ if ($configFileHandle) {
 }
 
 $form->addToHtmlPage();
-$_SESSION['installationInstallAdmidioForm'] = $form;
 $page->show();
