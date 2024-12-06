@@ -716,6 +716,10 @@ class User extends TableAccess
                             SET usl_usr_id_create = NULL
                           WHERE usl_usr_id_create = ' . $usrId;
 
+        $sqlQueries[] = 'UPDATE ' . TBL_USERS_PROFILE_LOG . '
+                          SET upl_usr_id_create = NULL
+                        WHERE upl_usr_id_create = ' . $usrId;
+
         $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_create = NULL
                           WHERE usr_usr_id_create = ' . $usrId;
@@ -794,6 +798,9 @@ class User extends TableAccess
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
                           WHERE usd_usr_id = ' . $usrId;
+
+         $sqlQueries[] = 'DELETE FROM ' . TBL_USERS_PROFILE_LOG . '
+                          WHERE upl_usr_id = ' . $usrId;
 
         $this->db->startTransaction();
 

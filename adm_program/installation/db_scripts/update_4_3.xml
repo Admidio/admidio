@@ -123,5 +123,36 @@
     <step id="1210" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '1200' WHERE prf_name = 'photo_show_height' AND prf_value::int &lt; 800</step>
     <step id="1220" database="mysql">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_thumbs_page' AND CAST(prf_value AS unsigned) = 16</step>
     <step id="1230" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_thumbs_page' AND prf_value::int = 16</step>
+    <step id="1240">CREATE TABLE %PREFIX%_users_profile_log
+(
+    upl_id                      integer             NOT NULL    AUTO_INCREMENT,
+    upl_usr_id                  integer unsigned    NOT NULL,
+    upl_profile_field           varchar(32)         NOT NULL,
+    upl_value_old               text                NULL,
+    upl_value_new               text                NULL,
+    upl_usr_id_create           integer unsigned    NULL,
+    upl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    upl_comment                 varchar(255)        NULL,
+    PRIMARY KEY (upl_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;</step>
+    <step id="1250">CREATE TABLE %PREFIX%_members_log
+(
+    mel_id                      integer             NOT NULL    AUTO_INCREMENT,
+    mel_rol_id                  integer unsigned    NOT NULL,
+    mel_usr_id                  integer unsigned    NOT NULL,
+    mel_membership_field        varchar(32)         NOT NULL,
+    mel_value_old               varchar(4000)       NULL,
+    mel_value_new               varchar(4000)       NULL,
+    mel_usr_id_create           integer unsigned    NULL,
+    mel_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    mel_comment                 varchar(255)        NULL,
+    PRIMARY KEY (mel_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;</step>
     <step>stop</step>
 </update>

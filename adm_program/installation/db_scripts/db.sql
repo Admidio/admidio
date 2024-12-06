@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_links                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_members              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_members_log          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages_attachments CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages_content     CASCADE;
@@ -45,6 +46,7 @@ DROP TABLE IF EXISTS %PREFIX%_user_data            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_fields          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_categories           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_users                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_users_profile_log    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_organizations        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_ids                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
@@ -387,6 +389,26 @@ COLLATE = utf8_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
 CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid);
+
+/*==============================================================*/
+/* Table: adm_members_log                                          */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_members_log
+(
+    mel_id                      integer             NOT NULL    AUTO_INCREMENT,
+    mel_rol_id                  integer unsigned    NOT NULL,
+    mel_usr_id                  integer unsigned    NOT NULL,
+    mel_membership_field        varchar(32)         NOT NULL,
+    mel_value_old               varchar(4000)       NULL,
+    mel_value_new               varchar(4000)       NULL,
+    mel_usr_id_create           integer unsigned    NULL,
+    mel_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    mel_comment                 varchar(255)        NULL,
+    PRIMARY KEY (mel_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_menu                                             */
@@ -829,6 +851,25 @@ COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_usr_login_name ON %PREFIX%_users (usr_login_name);
 CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid);
+
+/*==============================================================*/
+/* Table: adm_users_profile_log                                          */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_users_profile_log
+(
+    upl_id                      integer             NOT NULL    AUTO_INCREMENT,
+    upl_usr_id                  integer unsigned    NOT NULL,
+    upl_profile_field           varchar(32)         NOT NULL,
+    upl_value_old               text                NULL,
+    upl_value_new               text                NULL,
+    upl_usr_id_create           integer unsigned    NULL,
+    upl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    upl_comment                 varchar(255)        NULL,
+    PRIMARY KEY (upl_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_user_relation_types                               */
