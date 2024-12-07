@@ -162,6 +162,24 @@ class ModuleLogin
              WHERE UPPER(usr_login_name) = UPPER(?)';
         $userStatement = $gDb->queryPrepared($sql, array($postLoginName));
 
+        // Alternatively, allow email addresses instead of username (if configured).
+        if ($gSettingsManager->getBool('enable_login_emailaddress') &&
+            $userStatement->rowCount() === 0)
+        {
+            $sql = 'SELECT usd_usr_id
+                   FROM ' . TBL_USER_DATA . '
+                   WHERE usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
+                     AND UPPER(usd_value) = UPPER(?)';
+            $userStatement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('EMAIL', 'usf_id'), $postLoginName));
+
+            if ($userStatement->rowCount() > 1) {
+                $gLogger->warning('AUTHENTICATION: Multiple Accounts with the given E-Mail address found!', array(
+                    'username' => $postLoginName,
+                    'password' => '*****'
+                ));
+            }
+        }
+
         if ($userStatement->rowCount() === 0) {
             throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
             // => EXIT
