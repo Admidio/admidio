@@ -12,6 +12,8 @@
  * folder_uuid : UUID of the current folder that should be shown
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 
 try {

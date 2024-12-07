@@ -2,10 +2,10 @@
 namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\UI\Component\Form;
 use HtmlPage;
 use SecurityUtils;
-use ProfileField;
 
 /**
  * @brief Class with methods to display the module pages.

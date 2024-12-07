@@ -19,6 +19,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Menu\Entity\MenuEntry;
 use Admidio\UI\View\Menu;
 
 try {
@@ -59,7 +60,7 @@ try {
             break;
 
         case 'save':
-            $menuModule = new \Admidio\Domain\Service\Menu($gDb, $getMenuUUID);
+            $menuModule = new \Admidio\Menu\Service\Menu($gDb, $getMenuUUID);
             $menuModule->save();
 
             $gNavigation->deleteLastUrl();
@@ -80,7 +81,7 @@ try {
 
         case 'sequence':
             // Update menu entry sequence
-            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(Entry::MOVE_UP, Entry::MOVE_DOWN)));
+            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
 
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);

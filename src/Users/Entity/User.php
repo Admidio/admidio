@@ -2,16 +2,16 @@
 namespace Admidio\Users\Entity;
 
 use Admidio\Infrastructure\Database;
-use Admidio\System\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\Messages\Entity\Message;
+use Admidio\Roles\Entity\Role;
+use Admidio\System\Entity\Entity;
 use Admidio\System\Entity\Session;
 use PasswordUtils;
 use ProfileFields;
 use SecurityUtils;
 use StringUtils;
 use SystemMail;
-use Message;
-use Role;
 
 /**
  * @brief Class handle role rights, cards and other things of users

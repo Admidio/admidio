@@ -23,6 +23,8 @@
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
+use Admidio\Users\Entity\UserRegistration;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

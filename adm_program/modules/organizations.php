@@ -19,6 +19,7 @@
  ****************************************************************************/
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Organizations\Entity\Organization;
 use Admidio\UI\View\Organizations;
 
 try {
@@ -71,7 +72,7 @@ try {
         exit();
     } elseif ($getMode === 'create') {
         // Creates a nre organization for the current organization
-        $organizationModule = new Admidio\Domain\Service\Organizations();
+        $organizationModule = new Admidio\Organizations\Service\Organizations();
         $organizationModule->create();
         $gNavigation->deleteLastUrl();
 

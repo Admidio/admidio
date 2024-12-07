@@ -13,7 +13,12 @@
  * copy : true - The event of the dat_id will be copied and the base for this new event
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Event;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Component\Form;
 
 try {

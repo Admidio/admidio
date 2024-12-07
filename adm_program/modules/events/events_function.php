@@ -25,7 +25,15 @@
  *             if this parameter is not set than this date is set to 31.12.9999
  ***********************************************************************************************
  */
+
+use Admidio\Categories\Entity\Category;
+use Admidio\Events\Entity\Event;
+use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Membership;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Entity\RolesRights;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

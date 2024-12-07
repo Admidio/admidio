@@ -14,6 +14,8 @@
  *            delete : Delete announcement
  ***********************************************************************************************
  */
+
+use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 
 try {

@@ -19,6 +19,8 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Menu\Entity\MenuEntry;
+use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\UI\Component\Form;
 
 try {
@@ -58,7 +60,7 @@ try {
             break;
 
         case 'save':
-            $profileFieldsModule = new \Admidio\Domain\Service\ProfileFields($gDb, $getProfileFieldUUID);
+            $profileFieldsModule = new \Admidio\ProfileFields\Service\ProfileFields($gDb, $getProfileFieldUUID);
             $profileFieldsModule->save();
 
             $gNavigation->deleteLastUrl();
@@ -77,7 +79,7 @@ try {
 
         case 'sequence':
             // Update menu entry sequence
-            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(Entry::MOVE_UP, Entry::MOVE_DOWN)));
+            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
             $getOrder      = admFuncVariableIsValid($_GET, 'order', 'array');
 
             // check the CSRF token of the form against the session token

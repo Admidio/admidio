@@ -1,16 +1,16 @@
 <?php
 namespace Admidio\UI\View;
 
-use Admidio\Domain\Entity\ComponentUpdate;
+use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\Exception;
+use Admidio\System\Entity\Text;
 use Admidio\UI\Component\Form;
 use FileSystemUtils;
 use HtmlPage;
-use Exception;
 use PhpIniUtils;
 use RuntimeException;
 use SecurityUtils;
 use SystemInfoUtils;
-use Text;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.

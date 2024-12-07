@@ -63,7 +63,6 @@ try {
             $report = new CategoryReport();
             $config = $report->saveConfigArray($config);
             echo json_encode(array('status' => 'success'));
-            exit();
             break;
 
         default:

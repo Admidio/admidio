@@ -21,6 +21,9 @@
  *          moderate_comment - Moderate guestbook comment
  ***********************************************************************************************
  */
+
+use Admidio\Forum\Entity\Post;
+use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');

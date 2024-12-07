@@ -14,8 +14,12 @@
  * user_uuid:  (optional) UUID of the user who should receive the ecard
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Photos\Entity\Album;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

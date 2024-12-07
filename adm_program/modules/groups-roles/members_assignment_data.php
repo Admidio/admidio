@@ -45,6 +45,10 @@
  *                 be returned (although that negates any benefits of server-side processing!)
  * search[value] - Global search value.
  *****************************************************************************/
+
+use Admidio\Infrastructure\Database;
+use Admidio\Roles\Entity\Role;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');

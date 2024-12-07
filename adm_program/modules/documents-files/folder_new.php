@@ -12,6 +12,8 @@
  * folder_uuid : Folder UUID of the parent folder
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 

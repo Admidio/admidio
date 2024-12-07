@@ -18,7 +18,11 @@
  *                2 - show active and former members of role
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\ProfileFields\Entity\ProfileField;
+use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\UI\Component\Form;
 
 try {

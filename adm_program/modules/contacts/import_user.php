@@ -13,8 +13,11 @@
  *             log    : Show import log of the last import
  ***********************************************************************************************
  */
-use Ramsey\Uuid\Uuid;
+
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Role;
+use Admidio\Users\Entity\UserImport;
+use Ramsey\Uuid\Uuid;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

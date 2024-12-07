@@ -8,7 +8,12 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Messages\Entity\Message;
+use Admidio\Photos\Entity\Album;
+use Admidio\Roles\Entity\Role;
 use Ramsey\Uuid\Uuid;
 
 try {

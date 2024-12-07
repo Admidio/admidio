@@ -15,6 +15,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Weblinks\Entity\Weblink;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

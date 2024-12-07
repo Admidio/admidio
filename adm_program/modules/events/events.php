@@ -26,6 +26,10 @@
  * view      - Content output in different views like 'detail', 'list'
  *             (Default: according to preferences)
  *****************************************************************************/
+
+use Admidio\Categories\Entity\Category;
+use Admidio\Events\Entity\Event;
+use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 

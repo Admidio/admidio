@@ -18,6 +18,9 @@
  *             if no date information is delivered
  ***********************************************************************************************
  */
+
+use Admidio\Announcements\Entity\Announcement;
+use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 

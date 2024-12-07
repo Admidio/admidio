@@ -22,8 +22,15 @@
  * forward : true - The message of the msg_id will be copied and the base for this new message
  *
  *****************************************************************************/
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Messages\Entity\Message;
+use Admidio\Messages\Entity\MessageContent;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

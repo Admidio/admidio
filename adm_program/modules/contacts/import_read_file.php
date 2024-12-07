@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Role;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

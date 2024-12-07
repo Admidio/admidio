@@ -20,6 +20,9 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Membership;
+use Admidio\Roles\Entity\Role;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -138,7 +141,7 @@ try {
     }
 
     throw new Exception('SYS_NO_RIGHTS');
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if ($getMode == 'delete_explain_msg') {
         $gMessage->showInModalWindow();
         $gMessage->show($e->getMessage());

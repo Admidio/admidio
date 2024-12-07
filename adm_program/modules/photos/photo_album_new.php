@@ -13,6 +13,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Photos\Entity\Album;
 use Admidio\UI\Component\Form;
 
 try {

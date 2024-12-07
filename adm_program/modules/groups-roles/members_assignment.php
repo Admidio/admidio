@@ -17,8 +17,12 @@
  * mem_show_all - true  : (Default) Show active and inactive members of all organizations in database
  *                false : Show only active members of the current organization
  *****************************************************************************/
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

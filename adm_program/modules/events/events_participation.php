@@ -12,8 +12,11 @@
  ***********************************************************************************************
  */
 
+use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Membership;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

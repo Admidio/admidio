@@ -14,6 +14,9 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Messages\Entity\Message;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 
 try {

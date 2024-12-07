@@ -13,6 +13,9 @@
  * file_uuid   :  UUID of the file that should be renamed
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\File;
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 

@@ -12,8 +12,12 @@
  * user_uuid : UUID of the first user in the new relation
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

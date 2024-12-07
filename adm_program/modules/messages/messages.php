@@ -32,7 +32,7 @@ try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-        $delMessage = new Message($gDb);
+        $delMessage = new Admidio\Messages\Entity\Message($gDb);
         $delMessage->readDataByUuid($getMsgUuid);
 
         // only delete messages of the current user is allowed

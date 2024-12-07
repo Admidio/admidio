@@ -12,6 +12,8 @@
  * room_uuid : UUID of room, that should be shown
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 

@@ -13,6 +13,8 @@
  * copy = true : The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
+
+use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 

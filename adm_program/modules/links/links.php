@@ -12,8 +12,11 @@
  * link_uuid : Uuid of a single link that should be shown.
  ***********************************************************************************************
  */
+
+use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
+use Admidio\Weblinks\Entity\Weblink;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

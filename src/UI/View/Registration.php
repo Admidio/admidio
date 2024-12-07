@@ -2,10 +2,9 @@
 namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
-use DateTime;
+use Admidio\Users\Entity\UserRegistration;
 use HtmlPage;
 use SecurityUtils;
-use UserRegistration;
 
 /**
  * @brief Class with methods to display the module pages of the registration.
@@ -75,7 +74,7 @@ class Registration extends HtmlPage
             $templateRow['id'] = 'user_'.$row['usr_uuid'];
             $templateRow['title'] = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
 
-            $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
+            $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
             $templateRow['information'][] = $gL10n->get('SYS_REGISTRATION_AT', array($timestampCreate->format($gSettingsManager->getString('system_date')), $timestampCreate->format($gSettingsManager->getString('system_time'))));
             $templateRow['information'][] = $gL10n->get('SYS_USERNAME') . ': ' . $row['usr_login_name'];
             $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': <a href="mailto:'.$user->getValue('EMAIL').'">'.$user->getValue('EMAIL').'</a>';

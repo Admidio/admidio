@@ -21,6 +21,9 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Membership;
+use Admidio\Roles\Entity\Role;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

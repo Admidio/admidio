@@ -18,6 +18,7 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Users\Entity\UserRelationType;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

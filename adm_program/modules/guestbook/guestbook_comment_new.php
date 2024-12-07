@@ -13,6 +13,8 @@
  * gbc_uuid      - UUID of the comment that should be edited
  ***********************************************************************************************
  */
+
+use Admidio\Forum\Entity\Post;
 use Admidio\Infrastructure\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');

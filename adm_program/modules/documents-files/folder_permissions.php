@@ -12,6 +12,9 @@
  * folder_uuid : UUID of the current folder to configure the rights
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\Folder;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 

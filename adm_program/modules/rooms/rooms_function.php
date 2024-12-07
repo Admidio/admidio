@@ -14,6 +14,8 @@
  *             delete - delete room
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 
 try {

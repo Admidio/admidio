@@ -44,6 +44,8 @@
  * search[value] - Global search value.
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 
 try {

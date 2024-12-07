@@ -13,7 +13,10 @@
  * organization_short_name : short name of the organization whose events should be shown
  * *********************************************************************************************
  */
+
+use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Exception;
+use Admidio\Organizations\Entity\Organization;
 
 require_once(__DIR__ . '/../../system/common.php');
 

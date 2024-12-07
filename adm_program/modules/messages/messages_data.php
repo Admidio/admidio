@@ -41,6 +41,8 @@
  *                 be returned (although that negates any benefits of server-side processing!)
  * search[value] - Global search value.
  *****************************************************************************/
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');
@@ -170,11 +172,11 @@ try {
         $cssClass = 'fw-normal';
         $iconAttachments = '';
 
-        $messageObject = new Message($gDb);
+        $messageObject = new Admidio\Messages\Entity\Message($gDb);
         $messageObject->setArray($message);
 
         // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
-        if ($message['msg_type'] === Message::MESSAGE_TYPE_EMAIL) {
+        if ($message['msg_type'] === Admidio\Messages\Entity\Message::MESSAGE_TYPE_EMAIL) {
             $icon = 'bi-envelope-fill';
             $iconText = $gL10n->get('SYS_EMAIL');
             $links = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'], 'forward' => '1')) . '">

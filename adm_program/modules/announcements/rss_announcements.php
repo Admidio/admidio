@@ -13,7 +13,10 @@
  * organization_short_name : short name of the organization whose announcements should be shown
  ***********************************************************************************************
  */
+
+use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
+use Admidio\Organizations\Entity\Organization;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

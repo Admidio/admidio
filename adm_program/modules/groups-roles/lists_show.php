@@ -20,8 +20,14 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Event;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 
 try {

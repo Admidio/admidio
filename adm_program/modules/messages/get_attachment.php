@@ -14,6 +14,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\System\Entity\Entity;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -30,7 +31,7 @@ try {
     // read data from database
     $attachment = new Entity($gDb, TBL_MESSAGES_ATTACHMENTS, 'msa');
     $attachment->readDataByUuid($getMsaUUID);
-    $message = new Message($gDb, $attachment->getValue('msa_msg_id'));
+    $message = new \Admidio\Messages\Entity\Message($gDb, $attachment->getValue('msa_msg_id'));
 
     // user of message is not current user than he is not allowed to view the attachment
     if ($gCurrentUserId !== $message->getValue('msg_usr_id_sender')) {

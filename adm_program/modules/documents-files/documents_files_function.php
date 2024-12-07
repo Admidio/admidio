@@ -20,7 +20,11 @@
  * file_uuid   : UUID of the file in the database
  * name        : Name of the file/folder that should be added to the database
  ***********************************************************************************************/
+
+use Admidio\Documents\Entity\File;
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\RolesRights;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
