@@ -32,7 +32,7 @@ try {
     $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 
     // create object of the committed role
-    $role = new TableRoles($gDb);
+    $role = new Role($gDb);
     $role->readDataByUuid($getRoleUuid);
 
     // check if user is allowed to assign members to this role
@@ -76,7 +76,7 @@ try {
         }
 
         if ($getFilterRoleUuid !== '') {
-            $filterRole = new TableRoles($gDb);
+            $filterRole = new Role($gDb);
             $filterRole->readDataByUuid($getFilterRoleUuid);
             if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
                 throw new Exception('SYS_NO_RIGHTS_VIEW_LIST');
@@ -206,19 +206,19 @@ try {
         $htmlLeaderText = '';
 
         // show icon that leaders have no additional rights
-        if ((int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_NO_RIGHTS) {
+        if ((int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_NO_RIGHTS) {
             $htmlLeaderText .= $gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS');
         }
 
         // show icon with edit user right if leader has this right
-        if ((int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_EDIT
-            || (int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
+        if ((int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_MEMBERS_EDIT
+            || (int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
             $htmlLeaderText .= $gL10n->get('SYS_LEADER_EDIT_MEMBERS');
         }
 
         // show icon with assign role right if leader has this right
-        if ((int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN
-            || (int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
+        if ((int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_MEMBERS_ASSIGN
+            || (int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
             $htmlLeaderText .= $gL10n->get('SYS_LEADER_ASSIGN_MEMBERS');
         }
 

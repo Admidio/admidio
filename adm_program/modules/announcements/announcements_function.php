@@ -30,7 +30,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete')));
 
     // create announcement object
-    $announcement = new TableAnnouncement($gDb);
+    $announcement = new Announcement($gDb);
 
     if ($getAnnUuid !== '') {
         $announcement->readDataByUuid($getAnnUuid);

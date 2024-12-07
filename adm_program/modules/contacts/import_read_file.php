@@ -68,7 +68,7 @@ try {
 
     // Read in the role and check whether the user can select it and thereby not possibly
     // get a role assignment right if he did not have it before.
-    $role = new TableRoles($gDb);
+    $role = new Role($gDb);
     $role->readDataByUuid($postRoleUUID);
 
     if (!$gCurrentUser->hasRightViewRole((int)$role->getValue('rol_id'))

@@ -31,7 +31,7 @@ try {
     $postMessage = $_POST['ecard_message'];
 
     $funcClass = new ECard($gL10n);
-    $photoAlbum = new TablePhotos($gDb);
+    $photoAlbum = new Album($gDb);
     $photoAlbum->readDataByUuid($postPhotoUuid);
     $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
     $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id') . '/' . $postPhotoNr . '.jpg';
@@ -72,7 +72,7 @@ try {
             if (Uuid::isValid(substr($value, 9))) {
                 $role_uuid = substr($value, 9);
 
-                $role = new TableRoles($gDb);
+                $role = new Role($gDb);
                 $role->readDataByUuid($role_uuid);
                 if ($gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id'))) {
                     $arrayRoles[] = $role_uuid;
@@ -92,8 +92,8 @@ try {
     }
 
     // object to handle the current message in the database
-    $message = new TableMessage($gDb);
-    $message->setValue('msg_type', TableMessage::MESSAGE_TYPE_EMAIL);
+    $message = new Message($gDb);
+    $message->setValue('msg_type', Message::MESSAGE_TYPE_EMAIL);
     $message->setValue('msg_subject', $gL10n->get('SYS_GREETING_CARD') . ': ' . $gL10n->get('SYS_NEW_MESSAGE_RECEIVED'));
     $message->setValue('msg_usr_id_sender', $gCurrentUserId);
 

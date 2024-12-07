@@ -28,7 +28,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    $room = new TableRooms($gDb);
+    $room = new Room($gDb);
 
     if ($getRoomUuid !== '') {
         $room->readDataByUuid($getRoomUuid);

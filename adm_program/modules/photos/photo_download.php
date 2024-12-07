@@ -42,7 +42,7 @@ try {
     }
 
     // create photo album object
-    $photoAlbum = new TablePhotos($gDb);
+    $photoAlbum = new Album($gDb);
 
     // get id of album
     $photoAlbum->readDataByUuid($getPhotoUuid);

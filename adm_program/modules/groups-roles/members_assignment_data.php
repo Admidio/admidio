@@ -65,7 +65,7 @@ try {
     header('Content-Type: application/json');
 
     // create object of the commited role
-    $role = new TableRoles($gDb);
+    $role = new Role($gDb);
     $role->readDataByUuid($getRoleUuid);
 
     // check if user is allowed to assign members to this role
@@ -75,7 +75,7 @@ try {
     }
 
     if ($getFilterRoleUuid !== '') {
-        $filterRole = new TableRoles($gDb);
+        $filterRole = new Role($gDb);
         $filterRole->readDataByUuid($getFilterRoleUuid);
         if (!$gCurrentUser->hasRightViewRole($filterRole->getValue('rol_id'))) {
             echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS_VIEW_LIST')));

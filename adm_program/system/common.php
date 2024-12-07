@@ -1,6 +1,11 @@
 <?php
+
+use Admidio\Components\Entity\Component;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
-use Admidio\Domain\Entity\Session;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\System\Entity\Session;
+use Admidio\Users\Entity\User;
 
 /**
  ***********************************************************************************************

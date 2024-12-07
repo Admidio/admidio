@@ -3,7 +3,7 @@ namespace Admidio\UI\Component;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Database;
+use Admidio\Infrastructure\Database;
 use DateTime;
 use HtmlPage;
 use PDO;

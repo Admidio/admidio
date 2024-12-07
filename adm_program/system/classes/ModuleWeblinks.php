@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Infrastructure\Database;
+
 /**
  * @brief Class manages weblinks viewable for user
  *

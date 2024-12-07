@@ -1,5 +1,10 @@
 <?php
+
+use Admidio\Components\Entity\Component;
+use Admidio\Documents\Entity\File;
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\Users\Entity\User;
 
 /**
  ***********************************************************************************************
@@ -47,7 +52,7 @@ try {
             $sqlCondition = ' AND fol_public = true ';
         }
 
-        $rootFolder = new TableFolder($gDb);
+        $rootFolder = new Folder($gDb);
         $rootFolder->readDataByColumns(array('fol_org_id' => $gCurrentOrgId,
             'fol_fol_id_parent' => 'NULL',
             'fol_type' => 'DOCUMENTS'));
@@ -70,7 +75,7 @@ try {
             while ($rowFile = $filesStatement->fetch()) {
                 try {
                     // get recordset of current file from database
-                    $file = new TableFile($gDb);
+                    $file = new File($gDb);
                     $file->getFileForDownload($rowFile['fil_uuid']);
 
                     // get filename without extension and extension separately

@@ -29,7 +29,7 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    $folder = new TableFolder($gDb);
+    $folder = new Folder($gDb);
     $folder->readDataByUuid($getFolderUuid);
 
     // erst prüfen, ob der User auch die entsprechenden Rechte hat

@@ -28,7 +28,7 @@ try {
     }
 
     // create weblink object
-    $link = new TableWeblink($gDb);
+    $link = new Weblink($gDb);
 
     if ($getLinkUuid !== '') {
         $link->readDataByUuid($getLinkUuid);

@@ -1,5 +1,8 @@
 <?php
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
+use Admidio\System\Entity\Session;
 use Admidio\UI\View\Installation;
 
 /**
@@ -78,7 +81,7 @@ try {
 
     // start PHP session
     try {
-        Admidio\Domain\Entity\Session::start('ADMIDIO_INSTALLATION');
+        Session::start('ADMIDIO_INSTALLATION');
     } catch (RuntimeException $exception) {
         // TODO
     }
@@ -96,7 +99,7 @@ try {
     $language = $gL10n->getLanguage();
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
-    \Admidio\Domain\Entity\Utils\Installation::checkFolderPermissions();
+    \Admidio\InstallationUpdate\Service\Installation::checkFolderPermissions();
 
     // if config file exists then connect to database
     if (is_file($configPath) && $step !== 'installation_successful') {

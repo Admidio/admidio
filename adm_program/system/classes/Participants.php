@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Infrastructure\Database;
+
 /**
  * @brief This class gets information about participants and leaders of events.
  *

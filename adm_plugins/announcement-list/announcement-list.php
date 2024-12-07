@@ -1,5 +1,7 @@
 <?php
 
+use Admidio\Announcements\Entity\Announcement;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Plugins\Overview;
 
 /**
@@ -71,7 +73,7 @@ try {
             || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) {
             if ($pdoStatement->rowCount() > 0) {
                 // get announcements data
-                $plgAnnouncement = new TableAnnouncement($gDb);
+                $plgAnnouncement = new Announcement($gDb);
                 $announcementArray = array();
 
                 foreach ($plgAnnouncementsList as $plgRow) {

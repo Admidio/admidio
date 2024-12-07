@@ -1,4 +1,6 @@
 <?php
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 
 /**

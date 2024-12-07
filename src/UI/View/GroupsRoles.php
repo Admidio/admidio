@@ -8,7 +8,7 @@ use HtmlDataTables;
 use HtmlPage;
 use RoleDependency;
 use SecurityUtils;
-use TableRoles;
+use Role;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -75,7 +75,7 @@ class GroupsRoles extends HtmlPage
         $templateDataRoles = array();
 
         foreach ($this->data as $row) {
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->setArray($row);
 
             if ($categoryUUID !== $row['cat_uuid']) {
@@ -209,7 +209,7 @@ class GroupsRoles extends HtmlPage
 
                 // Contributory period
                 if (!empty($role->getValue('rol_cost_period')) && $role->getValue('rol_cost_period') != 0) {
-                    $html .= ' - ' . TableRoles::getCostPeriods($role->getValue('rol_cost_period'));
+                    $html .= ' - ' . Role::getCostPeriods($role->getValue('rol_cost_period'));
                 }
 
                 $templateRow['information'][] = '<h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span></li>';
@@ -272,7 +272,7 @@ class GroupsRoles extends HtmlPage
         $eventRole = false;
 
         // create role object
-        $role = new TableRoles($gDb);
+        $role = new Role($gDb);
 
         if ($roleUUID !== '') {
             $role->readDataByUuid($roleUUID);
@@ -467,7 +467,7 @@ class GroupsRoles extends HtmlPage
             $form->addSelectBox(
                 'rol_cost_period',
                 $gL10n->get('SYS_CONTRIBUTION_PERIOD'),
-                TableRoles::getCostPeriods(),
+                Role::getCostPeriods(),
                 array('defaultValue' => $role->getValue('rol_cost_period'), 'class' => 'form-control-small')
             );
         }
@@ -636,7 +636,7 @@ class GroupsRoles extends HtmlPage
         $templateData = array();
 
         foreach ($this->data as $row) {
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->setArray($row);
 
             $templateRow = array();

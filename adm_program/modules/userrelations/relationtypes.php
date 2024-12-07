@@ -67,8 +67,8 @@ try {
 
     $relationTypesStatement = $gDb->queryPrepared($sql);
 
-    $relationType1 = new TableUserRelationType($gDb);
-    $relationType2 = new TableUserRelationType($gDb);
+    $relationType1 = new UserRelationType($gDb);
+    $relationType2 = new UserRelationType($gDb);
 
     // Get data
     while ($relRow = $relationTypesStatement->fetch()) {

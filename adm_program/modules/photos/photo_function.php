@@ -40,10 +40,10 @@ try {
 
     /**
      * Delete a thumbnail
-     * @param TablePhotos $photoAlbum Reference to object of the relevant album
+     * @param Album $photoAlbum Reference to object of the relevant album
      * @param int $picNr No. of the image whose thumbnail is to be deleted
      */
-    function deleteThumbnail(TablePhotos $photoAlbum, int $picNr)
+    function deleteThumbnail(Album $photoAlbum, int $picNr)
     {
         // Assemble folder path
         $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
@@ -57,10 +57,10 @@ try {
 
     /**
      * Delete the photo from the filesystem and update number of photos in database.
-     * @param TablePhotos $photoAlbum
+     * @param Album $photoAlbum
      * @param int $picNr
      */
-    function deletePhoto(TablePhotos $photoAlbum, int $picNr)
+    function deletePhoto(Album $photoAlbum, int $picNr)
     {
         // get album folder path
         $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id');
@@ -129,7 +129,7 @@ try {
     }
 
     // create photo album object
-    $photoAlbum = new TablePhotos($gDb);
+    $photoAlbum = new Album($gDb);
     $photoAlbum->readDataByUuid($getPhotoUuid);
 
     // check if the user is allowed to edit this photo album

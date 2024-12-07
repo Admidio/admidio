@@ -64,7 +64,7 @@ try {
 
         for ($number = 1, $max = $list->countColumns(); $number <= $max; ++$number) {
             $column = $list->getColumnObject($number);
-            $userField = new TableUserField($gDb, (int)$column->getValue('lsc_usf_id'));
+            $userField = new ProfileField($gDb, (int)$column->getValue('lsc_usf_id'));
 
             if ($column->getValue('lsc_usf_id') > 0) {
                 $formValues['column' . $number] = $userField->getValue('usf_name_intern');

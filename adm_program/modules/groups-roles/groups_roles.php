@@ -74,7 +74,7 @@ try {
             $getRoleType = GroupsRoles::ROLE_TYPE_ACTIVE;
         }
 
-        $category = new TableCategory($gDb);
+        $category = new Category($gDb);
 
         if (strlen($getCategoryUUID) > 1) {
             $category->readDataByUuid($getCategoryUUID);
@@ -145,7 +145,7 @@ try {
 
         case 'delete':
             // delete role from database
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             if ($role->delete()) {
                 echo json_encode(array('status' => 'success'));
@@ -154,7 +154,7 @@ try {
 
         case 'activate':
             // set role active
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             $role->activate();
             echo 'done';
@@ -162,7 +162,7 @@ try {
 
         case 'deactivate':
             // set role inactive
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             $role->deactivate();
             echo 'done';

@@ -1,5 +1,8 @@
 <?php
+
+use Admidio\System\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\Users\Entity\User;
 
 /**
  * @brief Object to collect change notifications and optionally send a message to the administrator
@@ -10,7 +13,7 @@ use Admidio\Infrastructure\Exception;
  * system notifications for profile field changes are enabled in the configuration of Admidio
  *
  * On startup, a global (singleton) object $gChangeNotifications is created
- * that is automatically used the User and TableMembers classes to log
+ * that is automatically used the User and Membership classes to log
  * changes.
  *
  *
@@ -131,7 +134,7 @@ class ChangeNotification
         global $gSettingsManager, $gDb;
         // 1. Create a database log entry if so configured
         if (!$deleting && $userID > 0 && $gSettingsManager->getBool('profile_log_edit_fields')) {
-            $logEntry = new TableAccess($gDb, TBL_USER_LOG, 'usl');
+            $logEntry = new Entity($gDb, TBL_USER_LOG, 'usl');
             $logEntry->setValue('usl_usr_id', $userID);
             $logEntry->setValue('usl_usf_id', $fieldId);
             $logEntry->setValue('usl_value_old', $old_value_db);

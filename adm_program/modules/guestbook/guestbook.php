@@ -173,7 +173,7 @@ try {
         }
     }
 
-    $guestbook = new TableGuestbook($gDb);
+    $guestbook = new Topic($gDb);
 
     // Alle Gaestebucheintraege fuer die aktuelle Seite ermitteln
     $sql = 'SELECT *

@@ -38,7 +38,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    $relation = new TableUserRelation($gDb);
+    $relation = new UserRelation($gDb);
     $user1 = new User($gDb, $gProfileFields);
     $user2 = new User($gDb, $gProfileFields);
 
@@ -78,7 +78,7 @@ try {
         }
 
         $postUrtUUID = admFuncVariableIsValid($_POST, 'urt_uuid', 'uuid');
-        $relationType = new TableUserRelationType($gDb);
+        $relationType = new UserRelationType($gDb);
         $relationType->readDataByUuid($postUrtUUID);
 
         if ($relationType->isNewRecord()) {
@@ -87,14 +87,14 @@ try {
 
         $gDb->startTransaction();
 
-        $relation1 = new TableUserRelation($gDb);
+        $relation1 = new UserRelation($gDb);
         $relation1->setValue('ure_urt_id', (int)$relationType->getValue('urt_id'));
         $relation1->setValue('ure_usr_id1', (int)$user1->getValue('usr_id'));
         $relation1->setValue('ure_usr_id2', (int)$user2->getValue('usr_id'));
         $relation1->save();
 
         if (!$relationType->isUnidirectional()) {
-            $relation2 = new TableUserRelation($gDb);
+            $relation2 = new UserRelation($gDb);
             $relation2->setValue('ure_urt_id', (int)$relationType->getValue('urt_id_inverse'));
             $relation2->setValue('ure_usr_id1', (int)$user2->getValue('usr_id'));
             $relation2->setValue('ure_usr_id2', (int)$user1->getValue('usr_id'));

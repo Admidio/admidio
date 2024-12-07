@@ -28,7 +28,7 @@ try {
     }
 
     // Create room object
-    $room = new TableRooms($gDb);
+    $room = new Room($gDb);
 
     if ($getRoomUuid !== '') {
         $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_ROOM')));

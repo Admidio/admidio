@@ -1,5 +1,10 @@
 <?php
+
+use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
+use Admidio\Roles\Entity\RolesRights;
+use Admidio\UI\View\Registration;
 
 /**
  * @brief Create a menu node from database and serve several output formats
@@ -76,8 +81,8 @@ class MenuNode
         $node['id'] = $id;
 
         // translate name and description
-        $node['name'] = Admidio\Infrastructure\Language::translateIfTranslationStrId($name);
-        $node['description'] = Admidio\Infrastructure\Language::translateIfTranslationStrId($description);
+        $node['name'] = Language::translateIfTranslationStrId($name);
+        $node['description'] = Language::translateIfTranslationStrId($description);
 
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0) {
@@ -149,10 +154,10 @@ class MenuNode
 
                     if ($node['men_name_intern'] === 'messages' && $gValidLogin) {
                         // get number of unread messages for user
-                        $message = new TableMessage($gDb);
+                        $message = new \Admidio\Messages\Entity\Message($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
                     } elseif ($node['men_name_intern'] === 'registration') {
-                        $registration = new Admidio\UI\View\Registration('registration');
+                        $registration = new Registration('registration');
                         $badgeCount = count($registration->getRegistrationsArray());
                     }
 

@@ -1,4 +1,14 @@
 <?php
+
+use Admidio\Categories\Entity\Category;
+use Admidio\Documents\Entity\Folder;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\ProfileFields\Entity\ProfileField;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\RolesRights;
+use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Database;
+use Admidio\System\Entity\Text;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
 
@@ -71,7 +81,7 @@ final class ComponentUpdateSteps
 
         while ($row = $rolesRightsStatement->fetch()) {
             // save roles to role right
-            $rolesRights = new TableAccess(self::$db, TBL_ROLES_RIGHTS_DATA, 'rrd', (int)$row['rrd_id']);
+            $rolesRights = new Entity(self::$db, TBL_ROLES_RIGHTS_DATA, 'rrd', (int)$row['rrd_id']);
             $rolesRights->delete();
         }
     }
@@ -92,7 +102,7 @@ final class ComponentUpdateSteps
             $profileFields = $gProfileFields->getProfileFields();
 
             if (!array_key_exists('LINKEDIN', $profileFields)) {
-                $profileFieldLinkedIn = new TableUserField(self::$db);
+                $profileFieldLinkedIn = new ProfileField(self::$db);
                 $profileFieldLinkedIn->saveChangesWithoutRights();
                 $profileFieldLinkedIn->setValue('usf_cat_id',(int) $row['cat_id']);
                 $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
@@ -105,7 +115,7 @@ final class ComponentUpdateSteps
             }
 
             if (!array_key_exists('INSTAGRAM', $profileFields)) {
-                $profileFieldInstagram = new TableUserField(self::$db);
+                $profileFieldInstagram = new ProfileField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
                 $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
@@ -118,7 +128,7 @@ final class ComponentUpdateSteps
             }
 
             if (!array_key_exists('MASTODON', $profileFields)) {
-                $profileFieldInstagram = new TableUserField(self::$db);
+                $profileFieldInstagram = new ProfileField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
                 $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
@@ -145,7 +155,7 @@ final class ComponentUpdateSteps
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            $textPasswordReset = new TableText(self::$db);
+            $textPasswordReset = new Text(self::$db);
             $textPasswordReset->setValue('txt_org_id', $row['org_id']);
             $textPasswordReset->setValue('txt_name', 'SYSMAIL_REGISTRATION_CONFIRMATION');
             $textPasswordReset->setValue('txt_text', $gL10n->get('SYS_SYSMAIL_REGISTRATION_CONFIRMATION'));
@@ -174,7 +184,7 @@ final class ComponentUpdateSteps
         $userFieldsStatement = self::$db->queryPrepared($sql);
 
         while ($row = $userFieldsStatement->fetch()) {
-            $userField = new TableUserField(self::$db);
+            $userField = new ProfileField(self::$db);
             $userField->setArray($row);
             $userField->saveChangesWithoutRights();
 
@@ -345,7 +355,7 @@ final class ComponentUpdateSteps
                 $config['config_default'] = 0;
 
                 // Read out the role IDs of the "Administrator", "Board" and "Member" roles
-                $role = new TableAccess(self::$db, TBL_ROLES, 'rol');
+                $role = new Entity(self::$db, TBL_ROLES, 'rol');
                 $role->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
                 if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => $orgId))) {
                     $config['col_fields'][0] .= ',r' . $role->getValue('rol_id');
@@ -360,7 +370,7 @@ final class ComponentUpdateSteps
 
             // Write "Kategoriereport" configurations or sample configuration into adm_category_report table
             foreach ($config['col_desc'] as $i => $dummy) {
-                $categoryReport = new TableAccess(self::$db, TBL_CATEGORY_REPORT, 'crt');
+                $categoryReport = new Entity(self::$db, TBL_CATEGORY_REPORT, 'crt');
 
                 $categoryReport->setValue('crt_org_id', $orgId);
                 $categoryReport->setValue('crt_name', $config['col_desc'][$i]);
@@ -476,7 +486,7 @@ final class ComponentUpdateSteps
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            $textPasswordReset = new TableText(self::$db);
+            $textPasswordReset = new Text(self::$db);
             $textPasswordReset->setValue('txt_org_id', $row['org_id']);
             $textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
             $textPasswordReset->setValue('txt_text', $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
@@ -496,7 +506,7 @@ final class ComponentUpdateSteps
         $messagesStatement = self::$db->queryPrepared($sql);
 
         while ($row = $messagesStatement->fetch()) {
-            $messageRecipient = new TableAccess(self::$db, TBL_MESSAGES_RECIPIENTS, 'msr');
+            $messageRecipient = new Entity(self::$db, TBL_MESSAGES_RECIPIENTS, 'msr');
             $recipientsSplit = explode('|', $row['msg_usr_id_receiver']);
 
             foreach ($recipientsSplit as $recipients) {
@@ -564,13 +574,13 @@ final class ComponentUpdateSteps
             $folderStatement = self::$db->queryPrepared($sql, array($rowId));
 
             if ($rowFolder = $folderStatement->fetch()) {
-                $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
+                $folder = new Folder(self::$db, $rowFolder['fol_id']);
                 $folderOldName = $folder->getFullFolderPath();
-                $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
+                $folder->setValue('fol_name', Folder::getRootFolderName('documents', $organization->getValue('org_shortname')));
                 $folder->save();
 
                 $sql = 'UPDATE ' . TBL_FOLDERS . '
-                           SET fol_path = REPLACE(fol_path, \'/' . $rowFolder['fol_name'] . '\', \'/' . TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')) . '\')
+                           SET fol_path = REPLACE(fol_path, \'/' . $rowFolder['fol_name'] . '\', \'/' . Folder::getRootFolderName('documents', $organization->getValue('org_shortname')) . '\')
                          WHERE fol_org_id = ' . $rowId;
                 self::$db->query($sql); // TODO add more params
 
@@ -603,7 +613,7 @@ final class ComponentUpdateSteps
         $rolesStatement = self::$db->queryPrepared($sql);
 
         while ($row = $rolesStatement->fetch()) {
-            $role = new TableAccess(self::$db, TBL_ROLES, 'rol');
+            $role = new Entity(self::$db, TBL_ROLES, 'rol');
             $role->setArray($row);
             $role->saveChangesWithoutRights();
 
@@ -695,19 +705,19 @@ final class ComponentUpdateSteps
         global $gCurrentOrganization;
 
         if ($gCurrentOrganization->countAllRecords() > 1) {
-            $categoryAnnouncement = new TableCategory(self::$db);
+            $categoryAnnouncement = new Category(self::$db);
             $categoryAnnouncement->setValue('cat_type', 'ANN');
             $categoryAnnouncement->setValue('cat_name_intern', 'ANN_ALL_ORGANIZATIONS');
             $categoryAnnouncement->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
             $categoryAnnouncement->save();
 
-            $categoryEvents = new TableCategory(self::$db);
+            $categoryEvents = new Category(self::$db);
             $categoryEvents->setValue('cat_type', 'DAT');
             $categoryEvents->setValue('cat_name_intern', 'DAT_ALL_ORGANIZATIONS');
             $categoryEvents->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
             $categoryEvents->save();
 
-            $categoryWeblinks = new TableCategory(self::$db);
+            $categoryWeblinks = new Category(self::$db);
             $categoryWeblinks->setValue('cat_type', 'LNK');
             $categoryWeblinks->setValue('cat_name_intern', 'LNK_ALL_ORGANIZATIONS');
             $categoryWeblinks->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
@@ -741,7 +751,7 @@ final class ComponentUpdateSteps
                 self::$db->queryPrepared($sql, array($gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'), $rowId));
             } else {
                 // create organization depending category for events
-                $category = new TableCategory(self::$db);
+                $category = new Category(self::$db);
                 $category->setValue('cat_org_id', $rowId);
                 $category->setValue('cat_type', 'ROL');
                 $category->setValue('cat_name', $gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'));
@@ -939,7 +949,7 @@ final class ComponentUpdateSteps
 
         while ($row = $messengerStatement->fetch()) {
             // save roles to role right
-            $rightCategoryView = new TableUserField(self::$db, (int)$row['usf_id']);
+            $rightCategoryView = new ProfileField(self::$db, (int)$row['usf_id']);
             $rightCategoryView->delete();
         }
     }
@@ -1053,7 +1063,7 @@ final class ComponentUpdateSteps
         }
 
         // get recordset of current folder from database
-        $folder = new TableFolder(self::$db, $folderId);
+        $folder = new Folder(self::$db, $folderId);
         $folder->addRolesOnFolder('folder_upload', $rolesArray);
     }
 
@@ -1081,13 +1091,13 @@ final class ComponentUpdateSteps
             $folderStatement = self::$db->queryPrepared($sql, array($rowId));
 
             if ($rowFolder = $folderStatement->fetch()) {
-                $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
+                $folder = new Folder(self::$db, $rowFolder['fol_id']);
                 $folderOldName = $folder->getFullFolderPath();
-                $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
+                $folder->setValue('fol_name', Folder::getRootFolderName('documents', $organization->getValue('org_shortname')));
                 $folder->save();
 
                 $sql = 'UPDATE ' . TBL_FOLDERS . '
-                           SET fol_path = REPLACE(fol_path, \'/' . $rowFolder['fol_name'] . '\', \'/' . TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')) . '\')
+                           SET fol_path = REPLACE(fol_path, \'/' . $rowFolder['fol_name'] . '\', \'/' . Folder::getRootFolderName('documents', $organization->getValue('org_shortname')) . '\')
                          WHERE fol_org_id = ' . $rowId;
                 self::$db->query($sql); // TODO add more params
 
@@ -1102,10 +1112,10 @@ final class ComponentUpdateSteps
             } else {
                 $sql = 'INSERT INTO ' . TBL_FOLDERS . '
                                (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_timestamp)
-                        VALUES (?, \'DOWNLOAD\', ?, ?, 0, 1, ?) -- $rowId, TableFolder::getRootFolderName(), FOLDER_DATA, DATETIME_NOW';
+                        VALUES (?, \'DOWNLOAD\', ?, ?, 0, 1, ?) -- $rowId, Folder::getRootFolderName(), FOLDER_DATA, DATETIME_NOW';
                 $params = array(
                     $rowId,
-                    TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')),
+                    Folder::getRootFolderName('documents', $organization->getValue('org_shortname')),
                     FOLDER_DATA,
                     DATETIME_NOW
                 );
@@ -1203,7 +1213,7 @@ final class ComponentUpdateSteps
         $rolesStatement = self::$db->queryPrepared($sql);
 
         while ($roleId = $rolesStatement->fetchColumn()) {
-            $role = new TableAccess(self::$db, TBL_ROLES, 'rol', (int)$roleId);
+            $role = new Entity(self::$db, TBL_ROLES, 'rol', (int)$roleId);
             $role->delete(); // TODO Exception handling
         }
     }

@@ -137,7 +137,7 @@ try {
             }
 
             // assign role membership to user
-            $role = new TableRoles($gDb, (int)$_SESSION['rol_id']);
+            $role = new Role($gDb, (int)$_SESSION['rol_id']);
             $role->startMembership($userImport->getValue('usr_id'));
             ++$countImportEditRole;
 

@@ -105,8 +105,8 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
     global $gDb, $gL10n, $gCurrentUser, $gSettingsManager, $gCurrentSession;
 
     $countShowRoles = 0;
-    $member = new TableMembers($gDb);
-    $role   = new TableRoles($gDb);
+    $member = new Membership($gDb);
+    $role   = new Role($gDb);
     $smarty = HtmlPage::createSmartyObject();
     $smarty->assign('listID', $htmlListId);
     $smarty->assign('l10n', $gL10n);

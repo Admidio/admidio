@@ -63,9 +63,9 @@ try {
         echo $user->getVCard();
     } elseif ($getMode === 'stop_membership') {
         // Cancel membership of role
-        $member = new TableMembers($gDb);
+        $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);
-        $role = new TableRoles($gDb, (int)$member->getValue('mem_rol_id'));
+        $role = new Role($gDb, (int)$member->getValue('mem_rol_id'));
 
         // if user has the right then cancel membership
         if ($role->allowedToAssignMembers($gCurrentUser)) {
@@ -78,7 +78,7 @@ try {
     } elseif ($getMode === 'remove_former_membership') {
         // Remove former membership of role
         if ($gCurrentUser->isAdministrator()) {
-            $member = new TableMembers($gDb);
+            $member = new Membership($gDb);
             $member->readDataByUuid($getMemberUuid);
             $member->delete();
 
@@ -116,9 +116,9 @@ try {
         $postMembershipStart = admFuncVariableIsValid($_POST, 'adm_membership_start_date', 'date', array('requireValue' => true));
         $postMembershipEnd = admFuncVariableIsValid($_POST, 'adm_membership_end_date', 'date', array('requireValue' => true));
 
-        $member = new TableMembers($gDb);
+        $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);
-        $role = new TableRoles($gDb, (int)$member->getValue('mem_rol_id'));
+        $role = new Role($gDb, (int)$member->getValue('mem_rol_id'));
 
         // check if user has the right to edit this membership
         if (!$role->allowedToAssignMembers($gCurrentUser)) {

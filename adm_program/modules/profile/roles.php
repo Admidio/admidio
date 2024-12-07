@@ -51,7 +51,7 @@ try {
     // check if a special role should be set
     if (isset($_SESSION['set_rol_id'])) {
         $setRoleId = (int)$_SESSION['set_rol_id'];
-        $role = new TableRoles($gDb, $setRoleId);
+        $role = new Role($gDb, $setRoleId);
         $role->startMembership($user->getValue('usr_id'));
         unset($_SESSION['set_rol_id']);
     }
@@ -231,14 +231,14 @@ try {
             $gCurrentUserId,
             DATE_NOW,
             DATE_NOW,
-            TableRoles::ROLE_LEADER_MEMBERS_ASSIGN,
-            TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
+            Role::ROLE_LEADER_MEMBERS_ASSIGN,
+            Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
             $gCurrentOrgId
         );
     }
     $statement = $gDb->queryPrepared($sql, $queryParams);
     $category = null;
-    $role = new TableRoles($gDb);
+    $role = new Role($gDb);
 
     while ($row = $statement->fetch()) {
         $columnValues = array();
@@ -299,25 +299,25 @@ try {
             $leaderChecked . $leaderDisabled . ' value="1" />';
 
         // show icon that leaders have no additional rights
-        if ((int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_NO_RIGHTS) {
+        if ((int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_NO_RIGHTS) {
             $leaderRights .= '<i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS') . '"></i>
                           <i class="bi bi-trash invisible admidio-icon"></i>';
         }
 
         // show icon with edit user right if leader has this right
-        if ((int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_EDIT
-            || (int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
+        if ((int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_MEMBERS_EDIT
+            || (int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
             $leaderRights .= '<i class="bi bi-pencil-fill admidio-icon" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_LEADER_EDIT_MEMBERS') . '"></i>';
         }
 
         // show icon with assign role right if leader has this right
-        if ((int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN
-            || (int)$role->getValue('rol_leader_rights') === TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
+        if ((int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_MEMBERS_ASSIGN
+            || (int)$role->getValue('rol_leader_rights') === Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
             $leaderRights .= '<i class="bi bi-people-fill admidio-icon" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_LEADER_ASSIGN_MEMBERS') . '"></i>';
         }
 
         // show dummy icon if leader has not all rights
-        if ((int)$role->getValue('rol_leader_rights') !== TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
+        if ((int)$role->getValue('rol_leader_rights') !== Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
             $leaderRights .= '<i class="bi bi-trash invisible admidio-icon"></i>';
         }
         $columnValues[] = $leaderRights;

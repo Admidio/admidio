@@ -82,7 +82,7 @@ try {
         $organizationName
     );
 
-    $weblink = new TableWeblink($gDb);
+    $weblink = new Weblink($gDb);
 
     // add the RSS items to the RssFeed object
     while ($row = $statement->fetch()) {

@@ -12,6 +12,12 @@
  * lang : de (default) the language for the demo db
  ***********************************************************************************************
  */
+
+use Admidio\Components\Entity\Component;
+use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Language;
+use Admidio\System\Entity\Session;
+
 $rootPath = dirname(__DIR__);
 
 // embed config file
@@ -244,14 +250,14 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 // start php session and remove session object with all data, so that
 // all data will be read after the update
 try {
-    Admidio\Domain\Entity\Session::start(COOKIE_PREFIX);
+    Session::start(COOKIE_PREFIX);
 } catch (RuntimeException $exception) {
     // TODO
 }
 unset($_SESSION['gCurrentSession']);
 
 // create language object to handle translations
-$gL10n = new Admidio\Infrastructure\Language($getLanguage);
+$gL10n = new Language($getLanguage);
 $gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder

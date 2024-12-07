@@ -53,7 +53,7 @@ try {
 
     // create object and get recordset of available events
 
-    $calendar = new TableCategory($gDb);
+    $calendar = new Category($gDb);
 
     if ($getCatUuid !== '') {
         $calendar->readDataByUuid($getCatUuid);
@@ -297,7 +297,7 @@ try {
         }
 
         // create dummy date object
-        $event = new TableEvent($gDb);
+        $event = new Event($gDb);
 
         foreach ($eventsResult['recordset'] as $row) {
             // write of current event data to date object
@@ -416,7 +416,7 @@ try {
             // if active, then show room information
             $eventRoomId = $event->getValue('dat_room_id');
             if ($eventRoomId > 0) {
-                $room = new TableRooms($gDb, $eventRoomId);
+                $room = new Room($gDb, $eventRoomId);
 
                 if ($getViewMode === 'html') {
                     $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'SYS_ROOM_INFORMATION', 'message_var1' => $eventRoomId, 'inline' => 'true'));

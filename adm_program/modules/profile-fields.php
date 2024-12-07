@@ -69,7 +69,7 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $profileFields = new TableUserField($gDb);
+            $profileFields = new ProfileField($gDb);
             $profileFields->readDataByUuid($getProfileFieldUUID);
             $profileFields->delete();
             echo json_encode(array('status' => 'success'));
@@ -77,13 +77,13 @@ try {
 
         case 'sequence':
             // Update menu entry sequence
-            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
+            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(Entry::MOVE_UP, Entry::MOVE_DOWN)));
             $getOrder      = admFuncVariableIsValid($_GET, 'order', 'array');
 
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $profileFields = new TableUserField($gDb);
+            $profileFields = new ProfileField($gDb);
             $profileFields->readDataByUuid($getProfileFieldUUID);
             if (!empty($getOrder)) {
                 // set new order (drag and drop)

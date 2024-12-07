@@ -33,7 +33,7 @@ try {
 
     $headline = $gL10n->get('SYS_WEBLINKS');
 
-    $category = new TableCategory($gDb);
+    $category = new Category($gDb);
 
     if ($getCatUuid !== '') {
         $category->readDataByUuid($getCatUuid);
@@ -132,7 +132,7 @@ try {
     } else {
         $getStart = $weblinks->getStartElement();
         $weblinksDataSet = $weblinks->getDataSet($getStart);
-        $weblink = new TableWeblink($gDb);
+        $weblink = new Weblink($gDb);
 
         $j = 0;         // counter for fetchObject
         $i = 0;         // counter for links in category

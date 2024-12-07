@@ -1,5 +1,8 @@
 <?php
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Role;
 
 /**
  * @brief Class to manage dependencies between different roles.
@@ -311,7 +314,7 @@ class RoleDependency
         $membershipStatement = $this->db->queryPrepared($sql, array($this->roleIdChild, DATE_NOW, DATE_NOW));
 
         if ($membershipStatement->rowCount() > 0) {
-            $parentRole = new TableRoles($this->db, $this->roleIdParent);
+            $parentRole = new Role($this->db, $this->roleIdParent);
 
             while ($memberUserId = $membershipStatement->fetchColumn()) {
                 $parentRole->startMembership((int) $memberUserId);

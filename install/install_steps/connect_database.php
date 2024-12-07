@@ -8,6 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Database;
 use Admidio\UI\Component\Form;
 use Admidio\UI\View\Installation;
 
@@ -181,7 +183,7 @@ if ($mode === 'html') {
         }
 
         // check database version
-        $message = \Admidio\Domain\Entity\Utils\Installation::checkDatabaseVersion($db);
+        $message = \Admidio\InstallationUpdate\Service\Installation::checkDatabaseVersion($db);
         if ($message !== '') {
             throw new Exception($message);
         }

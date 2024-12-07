@@ -16,7 +16,10 @@
  * uuid   : UUID of the current object (folder, album) where the files should be uploaded
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Photos\Entity\Album;
 
 try {
     require_once(__DIR__ . '/common.php');
@@ -48,7 +51,7 @@ try {
         if (isset($_SESSION['photo_album']) && (int)$_SESSION['photo_album']->getValue('pho_uuid') === $getUuid) {
             $photoAlbum =& $_SESSION['photo_album'];
         } else {
-            $photoAlbum = new TablePhotos($gDb);
+            $photoAlbum = new Album($gDb);
             $photoAlbum->readDataByUuid($getUuid);
             $_SESSION['photo_album'] = $photoAlbum;
         }
@@ -77,7 +80,7 @@ try {
             throw new Exception('SYS_MODULE_DISABLED');
         }
 
-        $folder = new TableFolder($gDb);
+        $folder = new Folder($gDb);
         $folder->readDataByUuid($getUuid);
 
         // check if current user has right to upload files

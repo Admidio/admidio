@@ -41,7 +41,7 @@ try {
         $commentStatement = $gDb->queryPrepared($sql, array($getCommentGboUuid, $gCurrentOrgId));
 
         if ($commentStatement->rowCount() > 0) {
-            $gbComment = new TableGuestbookComment($gDb);
+            $gbComment = new Post($gDb);
 
             // Jetzt nur noch die Kommentare auflisten
             while ($row = $commentStatement->fetch()) {

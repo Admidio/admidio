@@ -1,5 +1,9 @@
 <?php
+
+use Admidio\Roles\Entity\Role;
+use Admidio\System\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\Users\Entity\User;
 
 /**
  * @brief Class manages the data for the report of module CategoryReport
@@ -258,7 +262,7 @@ class CategoryReport
                 if ($data['type'] == 'p') {
                     $this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'), 'database');
                 } elseif ($data['type'] == 'a') {              //Sonderfall: Rollengesamtuebersicht erstellen
-                    $role = new TableRoles($gDb);
+                    $role = new Role($gDb);
 
                     $this->listData[$member][$key] = '';
                     foreach ($memberShips as $rol_id) {
@@ -501,7 +505,7 @@ class CategoryReport
 
         foreach ($arrConfiguration as $values) {
             if ($values['id'] === '' || $values['id'] > 0) {                  // id > 0 (=edit a configuration) or '' (=append a configuration)
-                $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
+                $categoryReport = new Entity($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
                 $categoryReport->setValue('crt_org_id', $gCurrentOrgId);
                 $categoryReport->setValue('crt_name', $values['name']);
                 $categoryReport->setValue('crt_col_fields', $values['col_fields']);
@@ -517,7 +521,7 @@ class CategoryReport
                 $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);
             } else {                                                            // delete
                 $values['id'] = $values['id'] * (-1);
-                $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
+                $categoryReport = new Entity($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
                 $categoryReport->delete();
             }
         }

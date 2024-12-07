@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Documents\Entity\File;
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 
 /**
@@ -55,11 +58,11 @@ class UploadHandlerDownload extends UploadHandler
                 $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
 
                 // get recordset of current folder from database and throw exception if necessary
-                $targetFolder = new TableFolder($gDb);
+                $targetFolder = new Folder($gDb);
                 $targetFolder->getFolderForDownload($GLOBALS['getUuid']);
 
                 // now add new file to database
-                $newFile = new TableFile($gDb);
+                $newFile = new File($gDb);
                 $newFile->setValue('fil_fol_id', (int) $targetFolder->getValue('fol_id'));
                 $newFile->setValue('fil_name', $file->name);
                 $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));

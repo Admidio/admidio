@@ -39,7 +39,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // Gaestebuchobjekt anlegen
-    $guestbook = new TableGuestbook($gDb);
+    $guestbook = new Topic($gDb);
 
     if ($getGboUuid !== '') {
         // Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...

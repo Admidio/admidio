@@ -142,8 +142,8 @@ try {
             $gCurrentUserId,
             DATE_NOW,
             DATE_NOW,
-            TableRoles::ROLE_LEADER_MEMBERS_EDIT,
-            TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
+            Role::ROLE_LEADER_MEMBERS_EDIT,
+            Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
             $gCurrentOrgId,
             DATE_NOW,
             DATE_NOW

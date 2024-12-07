@@ -1,4 +1,8 @@
 <?php
+
+use Admidio\ProfileFields\Entity\ProfileField;
+use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 
 /**
@@ -21,17 +25,17 @@ class ProfileFields
      */
     protected Database $db;
     /**
-     * @var array<string,TableUserField> Array with all profile fields represented by a user fields objects.
-     *      The key is the usf_name_intern and the value is an object of class TableUserField
+     * @var array<string,ProfileField> Array with all profile fields represented by a user fields objects.
+     *      The key is the usf_name_intern and the value is an object of class ProfileField
      *      $mProfileFields = [
-     *          'LAST_NAME' => {TableUserField}
-     *          'FIRST_NAME' => {TableUserField}
-     *          'STREET' => {TableUserField}
+     *          'LAST_NAME' => {ProfileField}
+     *          'FIRST_NAME' => {ProfileField}
+     *          'STREET' => {ProfileField}
      *      ]
      */
     protected array $mProfileFields = array();
     /**
-     * @var array<int,TableAccess> Array with all user data objects
+     * @var array<int,Entity> Array with all user data objects
      */
     protected array $mUserData = array();
     /**
@@ -128,11 +132,11 @@ class ProfileFields
 
     /**
      * Returns an array with all profile fields represented by a user fields objects.
-     * The key is the usf_name_intern and the value is an object of class TableUserField
-     * @return array<string,TableUserField> $mProfileFields = [
-     *      'LAST_NAME' => {TableUserField}
-     *      'FIRST_NAME' => {TableUserField}
-     *      'STREET' => {TableUserField}
+     * The key is the usf_name_intern and the value is an object of class ProfileField
+     * @return array<string,ProfileField> $mProfileFields = [
+     *      'LAST_NAME' => {ProfileField}
+     *      'FIRST_NAME' => {ProfileField}
+     *      'STREET' => {ProfileField}
      *  ]
      */
     public function getProfileFields(): array
@@ -568,7 +572,7 @@ class ProfileFields
 
         while ($row = $userFieldsStatement->fetch()) {
             if (!array_key_exists($row['usf_name_intern'], $this->mProfileFields)) {
-                $this->mProfileFields[$row['usf_name_intern']] = new TableUserField($this->db);
+                $this->mProfileFields[$row['usf_name_intern']] = new ProfileField($this->db);
             }
             $this->mProfileFields[$row['usf_name_intern']]->setArray($row);
         }
@@ -605,7 +609,7 @@ class ProfileFields
 
             while ($row = $userDataStatement->fetch()) {
                 if (!array_key_exists($row['usd_usf_id'], $this->mUserData)) {
-                    $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
+                    $this->mUserData[$row['usd_usf_id']] = new Entity($this->db, TBL_USER_DATA, 'usd');
                 }
                 $this->mUserData[$row['usd_usf_id']]->setArray($row);
                 if (isset($row['usr_uuid'])) {
@@ -768,7 +772,7 @@ class ProfileFields
         $usfId = (int)$this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
 
         if (!array_key_exists($usfId, $this->mUserData) && $fieldValue !== '') {
-            $this->mUserData[$usfId] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
+            $this->mUserData[$usfId] = new Entity($this->db, TBL_USER_DATA, 'usd');
             $this->mUserData[$usfId]->setValue('usd_usf_id', $usfId);
             $this->mUserData[$usfId]->setValue('usd_usr_id', $this->mUserId);
         }

@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Events\Entity\Event;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Plugins\Overview;
 
 /**
@@ -75,7 +78,7 @@ try {
             || ($gSettingsManager->getInt('events_module_enabled') === 2 && $gValidLogin)) {
             if ($pdoStatement->rowCount() > 0) {
                 // get announcements data
-                $plgEvent = new TableEvent($gDb);
+                $plgEvent = new Event($gDb);
                 $eventArray = array();
 
                 foreach ($plgEventList as $plgRow) {

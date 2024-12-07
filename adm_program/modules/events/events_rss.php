@@ -52,7 +52,7 @@ try {
 
     // add the RSS items to the RssFeed object
     if ($eventsResult['numResults'] > 0) {
-        $event = new TableEvent($gDb);
+        $event = new Event($gDb);
         foreach ($eventsResult['recordset'] as $row) {
             // move read out event data into event object
             $event->clear();

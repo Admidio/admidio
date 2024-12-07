@@ -560,7 +560,7 @@ try {
             $showRolesOtherOrganizations = false;
             $actualOrganization = 0;
             $externalRoles = array();
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
 
             while ($row = $roleStatement->fetch()) {
                 $orgId = (int)$row['org_id'];
@@ -629,8 +629,8 @@ try {
               ORDER BY urt_name';
             $relationStatement = $gDb->queryPrepared($sql, array($userId));
 
-            $relationType = new TableUserRelationType($gDb);
-            $relation = new TableUserRelation($gDb);
+            $relationType = new UserRelationType($gDb);
+            $relation = new UserRelation($gDb);
             $otherUser = new User($gDb, $gProfileFields);
             $userRelations = array();
 

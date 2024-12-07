@@ -38,7 +38,7 @@ try {
         $photoAlbum =& $_SESSION['photo_album'];
     } else {
         // einlesen des Albums falls noch nicht in Session gespeichert
-        $photoAlbum = new TablePhotos($gDb);
+        $photoAlbum = new Album($gDb);
         if ($getPhotoUuid !== '') {
             $photoAlbum->readDataByUuid($getPhotoUuid);
         }
@@ -336,7 +336,7 @@ try {
             $page->addHtml('<hr />');
         }
 
-        $childPhotoAlbum = new TablePhotos($gDb);
+        $childPhotoAlbum = new Album($gDb);
 
         $page->addHtml('<div class="row admidio-margin-bottom">');
 

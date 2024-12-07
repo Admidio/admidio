@@ -90,7 +90,7 @@ try {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $member = new TableMembers($gDb);
+        $member = new Membership($gDb);
 
         $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
                   FROM ' . TBL_MEMBERS . '
@@ -108,7 +108,7 @@ try {
 
         while ($row = $pdoStatement->fetch()) {
             // stop all role memberships of this organization
-            $role = new TableRoles($gDb, $row['mem_rol_id']);
+            $role = new Role($gDb, $row['mem_rol_id']);
             $role->stopMembership($row['mem_usr_id']);
         }
 

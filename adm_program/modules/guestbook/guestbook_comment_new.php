@@ -65,7 +65,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // Gaestebuchkommentarobjekt anlegen
-    $gbComment = new TableGuestbookComment($gDb);
+    $gbComment = new Post($gDb);
 
     if ($getGbcUuid !== '') {
         $gbComment->readDataByUuid($getGbcUuid);

@@ -40,7 +40,7 @@ try {
 
     // check the rights of the current folder
     // user must be administrator or must have the right to upload files
-    $targetFolder = new TableFolder($gDb);
+    $targetFolder = new Folder($gDb);
     $targetFolder->getFolderForDownload($getFolderUuid);
 
     if (!$targetFolder->hasUploadRight()) {
@@ -52,7 +52,7 @@ try {
 
     if ($getFileUuid !== '') {
         // get recordset of current file from database
-        $file = new TableFile($gDb);
+        $file = new File($gDb);
         $file->getFileForDownload($getFileUuid);
 
         $originalName = pathinfo($file->getValue('fil_name'), PATHINFO_FILENAME);

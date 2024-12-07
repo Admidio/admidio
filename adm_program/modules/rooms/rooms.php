@@ -90,7 +90,7 @@ try {
         // Keine Räume gefunden
         $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
     } else {
-        $room = new TableRooms($gDb);
+        $room = new Room($gDb);
         // Räume auflisten
         while ($row = $roomsStatement->fetch()) {
             // GB-Objekt initialisieren und neuen DS uebergeben

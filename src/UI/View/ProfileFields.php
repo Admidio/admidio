@@ -5,7 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 use HtmlPage;
 use SecurityUtils;
-use TableUserField;
+use ProfileField;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -36,7 +36,7 @@ class ProfileFields extends HtmlPage
         global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb;
 
         // Create user-defined field object
-        $userField = new TableUserField($gDb);
+        $userField = new ProfileField($gDb);
 
         if ($profileFieldUUID !== '') {
             $userField->readDataByUuid($profileFieldUUID);
@@ -312,7 +312,7 @@ class ProfileFields extends HtmlPage
               ORDER BY cat_sequence, usf_sequence';
         $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
-        $userField = new TableUserField($gDb);
+        $userField = new ProfileField($gDb);
         $templateProfileFieldsCategories = array();
         $templateProfileFields = array();
         $profileFieldCategoryID = 0;

@@ -28,7 +28,7 @@ try {
     }
 
     // get recordset of current file from database
-    $file = new TableFile($gDb);
+    $file = new File($gDb);
     $file->getFileForDownload($getFileUuid);
 
     // get complete path with filename of the file

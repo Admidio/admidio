@@ -90,7 +90,7 @@ final class SecurityUtils
      * @param int $min The min of the range (inclusive)
      * @param int $max The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @param Error|Exception $exception The thrown Error or Exception object.
+     * @param Error|Throwable $exception The thrown Error or Exception object.
      * @param string $exceptionMessage The Admidio Exception-Message.
      * @return int Returns an insecure pseudo-random integer
      * @throws Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION

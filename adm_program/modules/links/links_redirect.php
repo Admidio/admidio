@@ -30,7 +30,7 @@ try {
     }
 
     // read link from id
-    $weblink = new TableWeblink($gDb);
+    $weblink = new Weblink($gDb);
     $weblink->readDataByUuid($getLinkUuid);
     $lnkUrl = $weblink->getValue('lnk_url');
 

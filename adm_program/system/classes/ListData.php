@@ -1,9 +1,11 @@
 <?php
+
+use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\ListConfiguration;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Class manages a data array

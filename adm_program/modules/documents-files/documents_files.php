@@ -26,7 +26,7 @@ try {
     }
 
     // get recordset of current folder from database
-    $currentFolder = new TableFolder($gDb);
+    $currentFolder = new Folder($gDb);
     $currentFolder->getFolderForDownload($getFolderUUID);
 
     // set headline of the script

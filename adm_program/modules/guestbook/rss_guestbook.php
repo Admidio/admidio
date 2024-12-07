@@ -55,7 +55,7 @@ try {
         $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', array($organizationName)),
         $organizationName
     );
-    $guestbook = new TableGuestbook($gDb);
+    $guestbook = new Topic($gDb);
 
     // add the RSS items to the RssFeed object
     while ($row = $statement->fetch()) {

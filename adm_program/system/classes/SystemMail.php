@@ -1,5 +1,10 @@
 <?php
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\System\Entity\Text;
+use Admidio\Users\Entity\User;
 
 /**
  * @brief This class is used to send system mails
@@ -11,9 +16,9 @@ use Admidio\Infrastructure\Exception;
 class SystemMail extends Email
 {
     /**
-     * @var TableText
+     * @var Text
      */
-    private TableText $smTextObject;
+    private Text $smTextObject;
     /**
      * @var Organization
      */
@@ -43,7 +48,7 @@ class SystemMail extends Email
     public function __construct(Database $database)
     {
         $this->db =& $database;
-        $this->smTextObject = new TableText($this->db);
+        $this->smTextObject = new Text($this->db);
         parent::__construct();
     }
 

@@ -49,7 +49,7 @@ try {
     );
 
     if ($announcements->getDataSetCount() > 0) {
-        $announcement = new TableAnnouncement($gDb);
+        $announcement = new Announcement($gDb);
         $rows = $announcements->getDataSet(0, 50);
 
         // add the RSS items to the RssFeed object

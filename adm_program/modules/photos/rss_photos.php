@@ -76,7 +76,7 @@ try {
     $queryParams[] = $organizationID;
     $statement = $gDb->queryPrepared($sql, $queryParams);
 
-    $photoAlbum = new TablePhotos($gDb);
+    $photoAlbum = new Album($gDb);
 
     // add the RSS items to the RssFeed object
     $rss = new RssFeed(

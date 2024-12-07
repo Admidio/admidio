@@ -1,4 +1,8 @@
 <?php
+
+use Admidio\Categories\Entity\Category;
+use Admidio\Events\Entity\Event;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 
 /**
@@ -249,7 +253,7 @@ class ModuleEvents extends Modules
 
         // set headline with category name
         if ($this->getParameter('cat_id') > 0) {
-            $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
+            $category  = new Category($gDb, $this->getParameter('cat_id'));
             $headline .= ' - ' . $category->getValue('cat_name');
         }
 
@@ -288,7 +292,7 @@ class ModuleEvents extends Modules
         $events = $this->getDataSet();
 
         foreach ($events['recordset'] as $eventRecord) {
-            $event = new TableEvent($gDb);
+            $event = new Event($gDb);
             $event->setArray($eventRecord);
 
             if ($iCalMinDateTime === '') {
