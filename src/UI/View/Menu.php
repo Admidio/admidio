@@ -1,8 +1,9 @@
 <?php
-namespace Admidio\UserInterface;
+namespace Admidio\UI\View;
 
-use Admidio\Exception;
-use Admidio\Language;
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
+use Admidio\UI\Component\Form;
 use HtmlPage;
 use RolesRights;
 use SecurityUtils;
@@ -89,7 +90,7 @@ class Menu extends HtmlPage
             $fieldDefault = Form::FIELD_DISABLED;
         }
 
-        $subMenu = \Admidio\Modules\Menu::subMenu(1, (int)$menu->getValue('men_id'));
+        $subMenu = \Admidio\Domain\Service\Menu::subMenu(1, (int)$menu->getValue('men_id'));
 
         $form->addInput(
             'men_name',

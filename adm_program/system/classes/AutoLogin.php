@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Handle auto login with Admidio and manage it in the database

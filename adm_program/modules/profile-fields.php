@@ -18,8 +18,8 @@
  * direction : Direction to change the sequence of the profile field
  ***********************************************************************************************
  */
-use Admidio\Exception;
-use Admidio\UserInterface\Form;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\Form;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -38,7 +38,7 @@ try {
         case 'list':
             $headline = $gL10n->get('ORG_PROFILE_FIELDS');
             $gNavigation->addUrl(CURRENT_URL, $headline);
-            $profileFields = new \Admidio\UserInterface\ProfileFields('adm_profile_fields', $headline);
+            $profileFields = new \Admidio\UI\View\ProfileFields('adm_profile_fields', $headline);
             $profileFields->createList();
             $profileFields->show();
             break;
@@ -52,13 +52,13 @@ try {
             }
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
-            $profileFields = new \Admidio\UserInterface\ProfileFields('adm_profile_fields_edit');
+            $profileFields = new \Admidio\UI\View\ProfileFields('adm_profile_fields_edit');
             $profileFields->createEditForm($getProfileFieldUUID);
             $profileFields->show();
             break;
 
         case 'save':
-            $profileFieldsModule = new \Admidio\Modules\ProfileFields($gDb, $getProfileFieldUUID);
+            $profileFieldsModule = new \Admidio\Domain\Service\ProfileFields($gDb, $getProfileFieldUUID);
             $profileFieldsModule->save();
 
             $gNavigation->deleteLastUrl();

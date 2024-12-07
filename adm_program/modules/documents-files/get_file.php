@@ -13,7 +13,7 @@
  * view      :  If set to true than the output will not be send as attachement
  ***********************************************************************************************
  */
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');
 

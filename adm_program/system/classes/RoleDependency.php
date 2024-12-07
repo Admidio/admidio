@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Class to manage dependencies between different roles.

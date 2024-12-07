@@ -1,6 +1,7 @@
 <?php
-namespace Admidio\UserInterface;
+namespace Admidio\UI\View;
 
+use Admidio\UI\Component\Form;
 use ComponentUpdate;
 use FileSystemUtils;
 use HtmlPage;
@@ -50,7 +51,7 @@ class Preferences extends HtmlPage
 
     /**
      * Constructor that initialize the class member parameters
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function __construct(string $id, string $headline = '')
     {
@@ -60,7 +61,7 @@ class Preferences extends HtmlPage
     }
 
     /**
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     private function initialize(): void
     {
@@ -180,7 +181,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the Admidio update preferences and will return the complete html.
      * @return string Returns the complete html of the form from the Admidio update preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createAdmidioUpdateForm(): string
@@ -214,7 +215,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the announcements preferences and will return the complete html.
      * @return string Returns the complete html of the form from the announcements preferences.
-     * @throws \Admidio\Exception|\Smarty\Exception
+     * @throws \Admidio\Infrastructure\Exception|\Smarty\Exception
      */
     public function createAnnouncementsForm(): string
     {
@@ -269,7 +270,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the captcha preferences and will return the complete html.
      * @return string Returns the complete html of the form from the captcha preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createCaptchaForm(): string
@@ -289,7 +290,7 @@ class Preferences extends HtmlPage
         // search all available themes in theme folder
         $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
         if (count($themes) === 0) {
-            throw new \Admidio\Exception('SYS_TEMPLATE_FOLDER_OPEN');
+            throw new \Admidio\Infrastructure\Exception('SYS_TEMPLATE_FOLDER_OPEN');
         }
         $selectBoxEntries = array(
             'pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'),
@@ -391,7 +392,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the category report preferences and will return the complete html.
      * @return string Returns the complete html of the form from the category report preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createCategoryReportForm(): string
@@ -443,7 +444,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the common preferences and will return the complete html.
      * @return string Returns the complete html of the form from the common preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createCommonForm(): string
@@ -463,7 +464,7 @@ class Preferences extends HtmlPage
         // search all available themes in theme folder
         $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
         if (count($themes) === 0) {
-            throw new \Admidio\Exception('SYS_TEMPLATE_FOLDER_OPEN');
+            throw new \Admidio\Infrastructure\Exception('SYS_TEMPLATE_FOLDER_OPEN');
         }
         $formCommon->addSelectBox(
             'theme',
@@ -547,7 +548,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the contacts preferences and will return the complete html.
      * @return string Returns the complete html of the form from the contacts preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createContactsForm(): string
@@ -632,7 +633,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the documents & files preferences and will return the complete html.
      * @return string Returns the complete html of the form from the documents & files preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createDocumentsFilesForm(): string
@@ -675,7 +676,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the email dispatch preferences and will return the complete html.
      * @return string Returns the complete html of the form from the email dispatch preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createEmailDispatchForm(): string
@@ -834,7 +835,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the events preferences and will return the complete html.
      * @return string Returns the complete html of the form from the events preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createEventsForm(): string
@@ -965,7 +966,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the groups and roles preferences and will return the complete html.
      * @return string Returns the complete html of the form from the groups and roles preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createGroupsRolesForm(): string
@@ -1064,7 +1065,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the guestbook preferences and will return the complete html.
      * @return string Returns the complete html of the form from the guestbook preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createGuestbookForm(): string
@@ -1147,7 +1148,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the links preferences and will return the complete html.
      * @return string Returns the complete html of the form from the links preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createLinksForm(): string
@@ -1216,7 +1217,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the messages preferences and will return the complete html.
      * @return string Returns the complete html of the form from the messages preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createMessagesForm(): string
@@ -1324,7 +1325,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the photos preferences and will return the complete html.
      * @return string Returns the complete html of the form from the photos preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createPhotosForm(): string
@@ -1454,7 +1455,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the PHP preferences and will return the complete html.
      * @return string Returns the complete html of the form from the PHP preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createPHPForm(): string
@@ -1541,7 +1542,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the profile preferences and will return the complete html.
      * @return string Returns the complete html of the form from the profile preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createProfileForm(): string
@@ -1621,7 +1622,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the regional settings preferences and will return the complete html.
      * @return string Returns the complete html of the form from the regional settings preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createRegionalSettingsForm(): string
@@ -1688,7 +1689,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the registration preferences and will return the complete html.
      * @return string Returns the complete html of the form from the registration preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createRegistrationForm(): string
@@ -1749,7 +1750,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the security preferences and will return the complete html.
      * @return string Returns the complete html of the form from the security preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createSecurityForm(): string
@@ -1811,7 +1812,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the system information preferences and will return the complete html.
      * @return string Returns the complete html of the form from the system information preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createSystemInformationForm(): string
@@ -1921,7 +1922,7 @@ class Preferences extends HtmlPage
     /**
      * Generates the html of the form from the system notifications preferences and will return the complete html.
      * @return string Returns the complete html of the form from the system notifications preferences.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      * @throws \Smarty\Exception
      */
     public function createSystemNotificationsForm(): string

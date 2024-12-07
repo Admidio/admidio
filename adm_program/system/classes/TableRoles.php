@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Class manages access to database table adm_roles
@@ -372,7 +372,7 @@ class TableRoles extends TableAccess
         }
 
         // if text is a translation-id then translate it
-        if ($columnName === 'cat_name' && $format !== 'database' && Admidio\Language::isTranslationStringId($value)) {
+        if ($columnName === 'cat_name' && $format !== 'database' && Admidio\Infrastructure\Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 

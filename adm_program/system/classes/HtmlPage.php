@@ -1,6 +1,6 @@
 <?php
 use Smarty\Smarty;
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Creates an Admidio specific complete html page with the template engine Smarty.
@@ -342,9 +342,9 @@ class HtmlPage
 
             $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-            $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Plugins\Smarty::arrayKeyExists');
-            $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Plugins\Smarty::isTranslationStringID');
-            $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'Admidio\Plugins\Smarty::loadAdmidioPlugin');
+            $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
+            $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
+            $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'Admidio\Infrastructure\Plugins\Smarty::loadAdmidioPlugin');
             return $smartyObject;
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());

@@ -13,8 +13,8 @@
  * copy : true - The event of the dat_id will be copied and the base for this new event
  ***********************************************************************************************
  */
-use Admidio\Exception;
-use Admidio\UserInterface\Form;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\Form;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

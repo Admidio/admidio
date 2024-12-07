@@ -1,6 +1,6 @@
 <?php
-use Admidio\Language;
-use Admidio\Session;
+use Admidio\Infrastructure\Language;
+use Admidio\Domain\Entity\Session;
 
 /**
  ***********************************************************************************************

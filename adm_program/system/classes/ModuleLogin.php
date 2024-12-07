@@ -1,6 +1,6 @@
 <?php
-use Admidio\Exception;
-use Admidio\UserInterface\Form;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\Form;
 
 /**
  * Class with methods to display the login module and handle the input.

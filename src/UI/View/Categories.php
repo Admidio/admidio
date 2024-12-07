@@ -1,14 +1,13 @@
 <?php
-namespace Admidio\UserInterface;
+namespace Admidio\UI\View;
 
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\Form;
 use Component;
 use HtmlPage;
-use HtmlTable;
 use RolesRights;
 use SecurityUtils;
 use TableCategory;
-use TableMenu;
 
 /**
  * @brief Class with methods to display the module pages.

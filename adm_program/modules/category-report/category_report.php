@@ -17,8 +17,8 @@
  * config            : the selected configuration
  ***********************************************************************************************
  */
-use Admidio\Exception;
-use Admidio\UserInterface\Form;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\Form;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

@@ -18,8 +18,8 @@
  * direction : Direction to change the sequence of the menu entry
  ***********************************************************************************************
  */
-use Admidio\Exception;
-use Admidio\UserInterface\Menu;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\View\Menu;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -59,7 +59,7 @@ try {
             break;
 
         case 'save':
-            $menuModule = new \Admidio\Modules\Menu($gDb, $getMenuUUID);
+            $menuModule = new \Admidio\Domain\Service\Menu($gDb, $getMenuUUID);
             $menuModule->save();
 
             $gNavigation->deleteLastUrl();

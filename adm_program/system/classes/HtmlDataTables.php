@@ -94,7 +94,7 @@ class HtmlDataTables
      * Adds javascript libs and code and inits the datatables params for a datatables table
      * @param int $rowCount Number of rows of the current table.
      * @param int $columnCount Number of columns of the current table.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function createJavascript(int $rowCount = 0, int $columnCount = 0)
     {

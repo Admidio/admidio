@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Class manages the list configuration

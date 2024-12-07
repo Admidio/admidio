@@ -1,7 +1,7 @@
 <?php
 
 use Ramsey\Uuid\Uuid;
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Handle organization data of Admidio and is connected to database table adm_organizations

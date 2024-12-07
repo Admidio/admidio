@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Creates, assign and update user registrations in database

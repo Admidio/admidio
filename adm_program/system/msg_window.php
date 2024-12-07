@@ -140,7 +140,7 @@ try {
         default:
             // In the standard case, the ID is used to read the text from the language file.
             // If the text variable is filled, check whether this is an ID from the language file.
-            echo $gL10n->get(strtoupper($getMessageId), array(Admidio\Language::translateIfTranslationStrId($getMessageVar1)));
+            echo $gL10n->get(strtoupper($getMessageId), array(Admidio\Infrastructure\Language::translateIfTranslationStrId($getMessageVar1)));
     }
 
     if ($getInlineView) {

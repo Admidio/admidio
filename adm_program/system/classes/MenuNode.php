@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Create a menu node from database and serve several output formats
@@ -46,7 +46,7 @@ class MenuNode
     public function __construct(string $nodeTextId, string $nodeName)
     {
         $this->textId = $nodeTextId;
-        $this->name   = Admidio\Language::translateIfTranslationStrId($nodeName);
+        $this->name   = Admidio\Infrastructure\Language::translateIfTranslationStrId($nodeName);
     }
 
     /**
@@ -76,8 +76,8 @@ class MenuNode
         $node['id'] = $id;
 
         // translate name and description
-        $node['name'] = Admidio\Language::translateIfTranslationStrId($name);
-        $node['description'] = Admidio\Language::translateIfTranslationStrId($description);
+        $node['name'] = Admidio\Infrastructure\Language::translateIfTranslationStrId($name);
+        $node['description'] = Admidio\Infrastructure\Language::translateIfTranslationStrId($description);
 
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0) {
@@ -152,7 +152,7 @@ class MenuNode
                         $message = new TableMessage($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
                     } elseif ($node['men_name_intern'] === 'registration') {
-                        $registration = new Admidio\UserInterface\Registration('registration');
+                        $registration = new Admidio\UI\View\Registration('registration');
                         $badgeCount = count($registration->getRegistrationsArray());
                     }
 

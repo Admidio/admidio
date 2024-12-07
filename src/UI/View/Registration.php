@@ -1,7 +1,7 @@
 <?php
-namespace Admidio\UserInterface;
+namespace Admidio\UI\View;
 
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 use DateTime;
 use HtmlPage;
 use SecurityUtils;

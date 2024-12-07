@@ -1,9 +1,9 @@
 <?php
-namespace Admidio\System;
+namespace Admidio\Domain\Service;
 
-use Admidio\Exception;
-use Admidio\Utils\Installation;
-use Admidio\Utils\Maintenance;
+use Admidio\Infrastructure\Exception;
+use Admidio\Domain\Entity\Utils\Installation;
+use Admidio\Domain\Entity\Utils\Maintenance;
 use ComponentUpdate;
 use Database;
 use FileSystemUtils;

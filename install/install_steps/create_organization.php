@@ -8,8 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-use Admidio\UserInterface\Form;
-use Admidio\UserInterface\Installation;
+use Admidio\UI\Component\Form;
+use Admidio\UI\View\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_organization.php') {
     exit('This page may not be called directly!');

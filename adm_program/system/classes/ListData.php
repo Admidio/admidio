@@ -3,7 +3,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Class manages a data array

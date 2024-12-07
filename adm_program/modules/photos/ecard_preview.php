@@ -11,7 +11,7 @@
 
 // preview will be called before form is send, so there are now POST parameters available
 // then show nothing. Second call is with POST parameters then show preview
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');
 

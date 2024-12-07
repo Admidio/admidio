@@ -9,7 +9,7 @@
  ***********************************************************************************************
  */
 use Ramsey\Uuid\Uuid;
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
     exit('This page may not be called directly!');

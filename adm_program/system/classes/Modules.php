@@ -94,7 +94,7 @@ abstract class Modules
     /**
      * Constructor that will create an object of a parameter set needed in modules to get the recordset.
      * Initialize parameters
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function __construct()
     {
@@ -169,7 +169,7 @@ abstract class Modules
 
     /**
      * Set ID
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     protected function setId()
     {
@@ -192,7 +192,7 @@ abstract class Modules
      * Set order
      * @par If user string is set in $_GET Array the string is validated by Admidio function
      * and set as order for the results in the modules. Otherwise, mode is set to default "ASC"
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     protected function setOrder()
     {
@@ -209,7 +209,7 @@ abstract class Modules
      * Set startelement
      * @par If user string is set in $_GET Array the string is validated by Admidio function
      * and set as startelement in the modules. Otherwise, startelement is set to 0
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     protected function setStartElement()
     {

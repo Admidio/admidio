@@ -1,6 +1,6 @@
 <?php
 
-use Admidio\Plugins\Overview;
+use Admidio\Infrastructure\Plugins\Overview;
 
 /**
  ***********************************************************************************************

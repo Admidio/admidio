@@ -25,8 +25,8 @@
  *             2 - event participation roles
  ***********************************************************************************************
  */
-use Admidio\Exception;
-use Admidio\UserInterface\GroupsRoles;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\View\GroupsRoles;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -137,7 +137,7 @@ try {
             break;
 
         case 'save':
-            $groupsRoles = new \Admidio\Modules\GroupsRoles($gDb, $getRoleUUID);
+            $groupsRoles = new \Admidio\Domain\Service\GroupsRoles($gDb, $getRoleUUID);
             $groupsRoles->save();
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
@@ -170,7 +170,7 @@ try {
 
         case 'export':
             // Export every member of a role into one vCard file
-            $groupsRoles = new \Admidio\Modules\GroupsRoles($gDb, $getRoleUUID);
+            $groupsRoles = new \Admidio\Domain\Service\GroupsRoles($gDb, $getRoleUUID);
             $groupsRoles->export();
             break;
     }

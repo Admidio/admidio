@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Class manages access to database table adm_user_fields
@@ -187,7 +187,7 @@ class TableUserField extends TableAccess
                 case 'usf_name': // fallthrough
                 case 'cat_name':
                     // if text is a translation-id then translate it
-                    $value = Admidio\Language::translateIfTranslationStrId($value);
+                    $value = Admidio\Infrastructure\Language::translateIfTranslationStrId($value);
 
                     break;
                 case 'usf_value_list':
@@ -211,7 +211,7 @@ class TableUserField extends TableAccess
                                     }
 
                                     // if text is a translation-id then translate it
-                                    $listValueText = Admidio\Language::translateIfTranslationStrId($listValueText);
+                                    $listValueText = Admidio\Infrastructure\Language::translateIfTranslationStrId($listValueText);
 
                                     if ($format === 'html') {
                                         $listValue = Image::getIconHtml($listValueImage, $listValueText) . ' ' . $listValueText;
@@ -227,7 +227,7 @@ class TableUserField extends TableAccess
                             }
 
                             // if text is a translation-id then translate it
-                            $listValue = Admidio\Language::translateIfTranslationStrId($listValue);
+                            $listValue = Admidio\Infrastructure\Language::translateIfTranslationStrId($listValue);
 
                             // save values in new array that starts with key = 1
                             $arrListValuesWithKeys[++$key] = $listValue;

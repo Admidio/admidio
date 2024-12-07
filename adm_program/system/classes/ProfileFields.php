@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Reads the user fields structure out of database and give access to it
@@ -289,14 +289,14 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            $listValueText = Admidio\Language::translateIfTranslationStrId($listValueText);
+                            $listValueText = Admidio\Infrastructure\Language::translateIfTranslationStrId($listValueText);
 
                             // get html snippet with image tag
                             $listValue = Image::getIconHtml($listValueImage, $listValueText);
                         }
 
                         // if text is a translation-id then translate it
-                        $listValue = Admidio\Language::translateIfTranslationStrId($listValue);
+                        $listValue = Admidio\Infrastructure\Language::translateIfTranslationStrId($listValue);
 
                         // save values in new array that starts with key = 1
                         $arrListValuesWithKeys[++$index] = $listValue;

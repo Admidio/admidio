@@ -22,7 +22,7 @@ try {
     $getUrl = admFuncVariableIsValid($_GET, 'url', 'url', array('requireValue' => true));
 
     if (filter_var($getUrl, FILTER_VALIDATE_URL) === false) {
-        throw new \Admidio\Exception('SYS_REDIRECT_URL_INVALID');
+        throw new \Admidio\Infrastructure\Exception('SYS_REDIRECT_URL_INVALID');
     }
 
     // create html page object

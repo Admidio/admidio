@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-use Admidio\UserInterface\Form;
+use Admidio\UI\Component\Form;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
     exit('This page may not be called directly!');
@@ -18,7 +18,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
  * get all memberships where the user is assigned
  * @param int $userId
  * @return PDOStatement
- * @throws \Admidio\Exception
+ * @throws \Admidio\Infrastructure\Exception
  */
 function getRolesFromDatabase(int $userId): PDOStatement
 {
@@ -45,7 +45,7 @@ function getRolesFromDatabase(int $userId): PDOStatement
  * get all memberships where the user will be assigned
  * @param int $userId
  * @return PDOStatement
- * @throws \Admidio\Exception
+ * @throws \Admidio\Infrastructure\Exception
  */
 function getFutureRolesFromDatabase(int $userId): PDOStatement
 {
@@ -71,7 +71,7 @@ function getFutureRolesFromDatabase(int $userId): PDOStatement
  * get all memberships where the user was assigned
  * @param int $userId
  * @return PDOStatement
- * @throws \Admidio\Exception
+ * @throws \Admidio\Infrastructure\Exception
  */
 function getFormerRolesFromDatabase(int $userId): PDOStatement
 {
@@ -98,7 +98,7 @@ function getFormerRolesFromDatabase(int $userId): PDOStatement
  * @param User $user
  * @param PDOStatement $roleStatement
  * @return string
- * @throws \Admidio\Exception
+ * @throws \Admidio\Infrastructure\Exception
  */
 function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleStatement): string
 {
@@ -241,6 +241,6 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
     try {
         return $smarty->fetch('modules/profile.roles-list.row.tpl');
     } catch (Throwable $e) {
-        throw new \Admidio\Exception($e->getMessage());
+        throw new \Admidio\Infrastructure\Exception($e->getMessage());
     }
 }

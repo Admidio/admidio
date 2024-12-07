@@ -9,8 +9,8 @@
  ***********************************************************************************************
  */
 
-use Admidio\UserInterface\Form;
-use Admidio\UserInterface\Installation;
+use Admidio\UI\Component\Form;
+use Admidio\UI\View\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_administrator.php') {
     exit('This page may not be called directly!');

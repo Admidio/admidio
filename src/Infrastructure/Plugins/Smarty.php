@@ -1,5 +1,5 @@
 <?php
-namespace Admidio\Plugins;
+namespace Admidio\Infrastructure\Plugins;
 
 use Smarty\Template;
 
@@ -77,7 +77,7 @@ class Smarty
             throw new \UnexpectedValueException('Smarty function is_translation_string_id: missing "string" parameter');
         }
 
-        if (\Admidio\Language::isTranslationStringId($params['string'])) {
+        if (\Admidio\Infrastructure\Language::isTranslationStringId($params['string'])) {
             return true;
         }
         return false;

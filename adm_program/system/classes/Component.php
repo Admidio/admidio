@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database

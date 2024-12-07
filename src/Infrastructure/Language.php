@@ -1,5 +1,5 @@
 <?php
-namespace Admidio;
+namespace Admidio\Infrastructure;
 
 /**
  * @brief Reads language specific texts that are identified with text ids out of language xml files

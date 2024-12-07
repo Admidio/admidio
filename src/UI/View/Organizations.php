@@ -1,7 +1,8 @@
 <?php
-namespace Admidio\UserInterface;
+namespace Admidio\UI\View;
 
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\Form;
 use HtmlPage;
 use SecurityUtils;
 

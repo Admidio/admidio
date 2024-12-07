@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bjeavons/zxcvbn-php",
-            "version": "1.3.1",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bjeavons/zxcvbn-php.git",
-                "reference": "994928ae5b17ecff8baa2406832d37bdf01116c0"
+                "reference": "603e015f2c81118a8f42930140311d125eba6f8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/994928ae5b17ecff8baa2406832d37bdf01116c0",
-                "reference": "994928ae5b17ecff8baa2406832d37bdf01116c0",
+                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/603e015f2c81118a8f42930140311d125eba6f8a",
+                "reference": "603e015f2c81118a8f42930140311d125eba6f8a",
                 "shasum": ""
             },
             "require": {
@@ -27,6 +27,7 @@
             },
             "require-dev": {
                 "php-coveralls/php-coveralls": "*",
+                "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^8.5",
                 "squizlabs/php_codesniffer": "3.*"
             },
@@ -57,9 +58,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bjeavons/zxcvbn-php/issues",
-                "source": "https://github.com/bjeavons/zxcvbn-php/tree/1.3.1"
+                "source": "https://github.com/bjeavons/zxcvbn-php/tree/1.4.1"
             },
-            "time": "2021-12-21T18:37:02+00:00"
+            "time": "2024-11-21T22:10:41+00:00"
         },
         {
             "name": "brick/math",
@@ -492,16 +493,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.9.3",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "a30bfe2e142720dfa990d0a7e573997f5d884215"
+                "reference": "5cf826f2991858b54d5c3809bee745560a1042a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/a30bfe2e142720dfa990d0a7e573997f5d884215",
-                "reference": "a30bfe2e142720dfa990d0a7e573997f5d884215",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5cf826f2991858b54d5c3809bee745560a1042a7",
+                "reference": "5cf826f2991858b54d5c3809bee745560a1042a7",
                 "shasum": ""
             },
             "require": {
@@ -578,7 +579,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.9.3"
+                "source": "https://github.com/Seldaek/monolog/tree/2.10.0"
             },
             "funding": [
                 {
@@ -590,7 +591,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-12T20:52:51+00:00"
+            "time": "2024-11-12T12:43:37+00:00"
         },
         {
             "name": "myclabs/php-enum",
@@ -657,16 +658,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.9.2",
+            "version": "v6.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "a7b17b42fa4887c92146243f3d2f4ccb962af17c"
+                "reference": "2f5c94fe7493efc213f643c23b1b1c249d40f47e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/a7b17b42fa4887c92146243f3d2f4ccb962af17c",
-                "reference": "a7b17b42fa4887c92146243f3d2f4ccb962af17c",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/2f5c94fe7493efc213f643c23b1b1c249d40f47e",
+                "reference": "2f5c94fe7493efc213f643c23b1b1c249d40f47e",
                 "shasum": ""
             },
             "require": {
@@ -726,7 +727,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.9.2"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.9.3"
             },
             "funding": [
                 {
@@ -734,20 +735,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-09T10:07:50+00:00"
+            "time": "2024-11-24T18:04:13+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.29.4",
+            "version": "1.29.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "7ca7e325dca3adb6a598385aab81f527b8d6c75d"
+                "reference": "727cb704d5479fe4ddc291497ee471c4ec08f1b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/7ca7e325dca3adb6a598385aab81f527b8d6c75d",
-                "reference": "7ca7e325dca3adb6a598385aab81f527b8d6c75d",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/727cb704d5479fe4ddc291497ee471c4ec08f1b6",
+                "reference": "727cb704d5479fe4ddc291497ee471c4ec08f1b6",
                 "shasum": ""
             },
             "require": {
@@ -837,9 +838,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.29.4"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.29.5"
             },
-            "time": "2024-11-10T16:26:22+00:00"
+            "time": "2024-11-22T05:57:44+00:00"
         },
         {
             "name": "psr/http-client",
@@ -1249,11 +1250,11 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "4.x-dev"
-                },
                 "captainhook": {
                     "force-install": true
+                },
+                "branch-alias": {
+                    "dev-main": "4.x-dev"
                 }
             },
             "autoload": {
@@ -1292,16 +1293,16 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v5.4.1",
+            "version": "v5.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "cd58df7a2603b7d925e5db5c9d50f10987695fd3"
+                "reference": "642a97adcc2bf6c1b2458d6afeeb36ae001c1c2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/cd58df7a2603b7d925e5db5c9d50f10987695fd3",
-                "reference": "cd58df7a2603b7d925e5db5c9d50f10987695fd3",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/642a97adcc2bf6c1b2458d6afeeb36ae001c1c2f",
+                "reference": "642a97adcc2bf6c1b2458d6afeeb36ae001c1c2f",
                 "shasum": ""
             },
             "require": {
@@ -1356,22 +1357,22 @@
             "support": {
                 "forum": "https://github.com/smarty-php/smarty/discussions",
                 "issues": "https://github.com/smarty-php/smarty/issues",
-                "source": "https://github.com/smarty-php/smarty/tree/v5.4.1"
+                "source": "https://github.com/smarty-php/smarty/tree/v5.4.2"
             },
-            "time": "2024-08-29T23:10:45+00:00"
+            "time": "2024-11-20T21:18:16+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v2.5.3",
+            "version": "v2.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "80d075412b557d41002320b96a096ca65aa2c98d"
+                "reference": "605389f2a7e5625f273b53960dc46aeaf9c62918"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/80d075412b557d41002320b96a096ca65aa2c98d",
-                "reference": "80d075412b557d41002320b96a096ca65aa2c98d",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/605389f2a7e5625f273b53960dc46aeaf9c62918",
+                "reference": "605389f2a7e5625f273b53960dc46aeaf9c62918",
                 "shasum": ""
             },
             "require": {
@@ -1409,7 +1410,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v2.5.3"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v2.5.4"
             },
             "funding": [
                 {
@@ -1425,7 +1426,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-24T14:02:46+00:00"
+            "time": "2024-09-25T14:11:13+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

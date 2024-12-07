@@ -13,7 +13,7 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 use Ramsey\Uuid\Uuid;
 
 try {

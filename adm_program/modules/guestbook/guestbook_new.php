@@ -12,7 +12,7 @@
  * gbo_uuid   - UUID of one guestbook entry that should be shown
  ***********************************************************************************************
  */
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');
 

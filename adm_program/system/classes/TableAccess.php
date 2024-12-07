@@ -1,6 +1,6 @@
 <?php
 use Ramsey\Uuid\Uuid;
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Controls read and write access to database tables

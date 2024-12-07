@@ -20,8 +20,8 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
-use Admidio\Exception;
-use Admidio\UserInterface\Form;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\Form;
 use Ramsey\Uuid\Uuid;
 
 try {

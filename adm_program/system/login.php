@@ -15,7 +15,7 @@
  *
  * **********************************************************************************************
  */
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 try {
     require_once(__DIR__ . '/common.php');
