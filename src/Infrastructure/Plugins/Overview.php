@@ -13,10 +13,10 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-namespace Admidio\Plugins;
+namespace Admidio\Infrastructure\Plugins;
 
 use Smarty\Smarty;
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 class Overview
 {
@@ -70,8 +70,8 @@ class Overview
             $this->smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/');
             $this->smarty->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $this->smarty->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
-            $this->smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Plugins\Smarty::arrayKeyExists');
-            $this->smarty->registerPlugin('function', 'is_translation_string_id', 'Admidio\Plugins\Smarty::isTranslationStringID');
+            $this->smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
+            $this->smarty->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
 
             $this->smarty->assign('name', $this->name);
             $this->smarty->assign('l10n', $gL10n);

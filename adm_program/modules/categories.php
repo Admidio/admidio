@@ -23,8 +23,8 @@
  * uuid  : UUID of the category that should be edited
  * direction : Direction to change the sequence of the category
  ****************************************************************************/
-use Admidio\Exception;
-use Admidio\UserInterface\Categories;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\View\Categories;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -82,7 +82,7 @@ try {
             break;
 
         case 'save':
-            $categoriesModule = new \Admidio\Modules\Categories($gDb, $getType, $getCategoryUUID);
+            $categoriesModule = new \Admidio\Domain\Service\Categories($gDb, $getType, $getCategoryUUID);
             $categoriesModule->save();
 
             $gNavigation->deleteLastUrl();

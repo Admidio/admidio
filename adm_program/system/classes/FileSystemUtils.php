@@ -1,6 +1,6 @@
 <?php
 
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief This class handles the most necessary file-system operations like:

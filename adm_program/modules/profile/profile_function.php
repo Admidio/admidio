@@ -20,7 +20,7 @@
  * member_uuid : UUID of role membership that should be edited
  ***********************************************************************************************
  */
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

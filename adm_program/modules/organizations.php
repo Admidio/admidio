@@ -18,8 +18,8 @@
  * org_uuid : UUID of the sub-organization
  ****************************************************************************/
 
-use Admidio\Exception;
-use Admidio\UserInterface\Organizations;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\View\Organizations;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -71,7 +71,7 @@ try {
         exit();
     } elseif ($getMode === 'create') {
         // Creates a nre organization for the current organization
-        $organizationModule = new Admidio\Modules\Organizations();
+        $organizationModule = new Admidio\Domain\Service\Organizations();
         $organizationModule->create();
         $gNavigation->deleteLastUrl();
 

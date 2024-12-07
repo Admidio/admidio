@@ -1,11 +1,11 @@
 <?php
-namespace Admidio\UserInterface;
+namespace Admidio\UI\Component;
 
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Database;
 use DateTime;
 use HtmlPage;
-use Admidio\Language;
 use PDO;
 use Securimage;
 use SecurityUtils;

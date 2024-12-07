@@ -12,7 +12,7 @@
  * id : ID of textarea, that had triggered the upload
  ***********************************************************************************************
  */
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 try {
     require_once(__DIR__ . '/common.php');

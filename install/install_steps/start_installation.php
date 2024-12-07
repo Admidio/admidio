@@ -36,7 +36,7 @@ if (isset($_SESSION['table_prefix'])
 PhpIniUtils::startNewExecutionTimeLimit(300);
 
 // read data from sql script db.sql and execute all statements to the current database
-\Admidio\Utils\Installation::querySqlFile($db, 'db.sql');
+\Admidio\Domain\Entity\Utils\Installation::querySqlFile($db, 'db.sql');
 
 // create default data
 
@@ -171,7 +171,7 @@ $sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
          WHERE urt_id = 7';
 $db->queryPrepared($sql);
 
-\Admidio\Utils\Installation::disableSoundexSearchIfPgSql($db);
+\Admidio\Domain\Entity\Utils\Installation::disableSoundexSearchIfPgSql($db);
 
 // create new organization
 $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);

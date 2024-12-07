@@ -1,6 +1,6 @@
 <?php
 use Ramsey\Uuid\Uuid;
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Handle the connection to the database, send all sql statements and handle the returned rows.

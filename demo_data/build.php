@@ -244,14 +244,14 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 // start php session and remove session object with all data, so that
 // all data will be read after the update
 try {
-    Admidio\Session::start(COOKIE_PREFIX);
+    Admidio\Domain\Entity\Session::start(COOKIE_PREFIX);
 } catch (RuntimeException $exception) {
     // TODO
 }
 unset($_SESSION['gCurrentSession']);
 
 // create language object to handle translations
-$gL10n = new Admidio\Language($getLanguage);
+$gL10n = new Admidio\Infrastructure\Language($getLanguage);
 $gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder

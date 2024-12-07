@@ -1,7 +1,7 @@
 <?php
-namespace Admidio;
+namespace Admidio\Domain\Entity;
 
-use Admidio\UserInterface\Form;
+use Admidio\UI\Component\Form;
 
 /**
  * @brief Handle session data of Admidio and is connected to database table adm_sessions

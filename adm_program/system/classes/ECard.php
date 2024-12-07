@@ -1,6 +1,6 @@
 <?php
 
-use Admidio\Language;
+use Admidio\Infrastructure\Language;
 
 /**
  * @brief Class will handle some ECard functions
@@ -22,7 +22,7 @@ class ECard
 
     /**
      * @param Language $gL10n
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function __construct(Language $gL10n)
     {
@@ -97,7 +97,7 @@ class ECard
      * @param string $recipientName the name of the recipient
      * @param string $recipientEmail the email of the recipient
      * @return string
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function parseEcardTemplate(string $imageName, string $ecardMessage, string $ecardData, string $recipientName, string $recipientEmail): string
     {
@@ -149,7 +149,7 @@ class ECard
      * @param string $recipientEmail the email of the recipient
      * @param string $photoServerPath the path where the images in the greeting card are located on the server
      * @return bool|string
-     * @throws \Admidio\Exception|\PHPMailer\PHPMailer\Exception
+     * @throws \Admidio\Infrastructure\Exception|\PHPMailer\PHPMailer\Exception
      */
     public function sendEcard(string $senderName, string $senderEmail, string $ecardHtmlData, string $recipientFirstName, string $recipientLastName, string $recipientEmail, string $photoServerPath)
     {

@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Class manages the data for the report of module CategoryReport
@@ -320,7 +320,7 @@ class CategoryReport
         $k = 0;
         while ($row = $statement->fetch()) {
             // check if the category name must be translated
-            if (Admidio\Language::isTranslationStringId($row['cat_name'])) {
+            if (Admidio\Infrastructure\Language::isTranslationStringId($row['cat_name'])) {
                 $row['cat_name'] = $gL10n->get($row['cat_name']);
             }
             $categories[$k]['cat_id'] = $row['cat_id'];

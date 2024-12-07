@@ -1,7 +1,7 @@
 <?php
-namespace Admidio\Utils;
+namespace Admidio\Domain\Entity\Utils;
 
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 use Database;
 use FileSystemUtils;
 use RuntimeException;

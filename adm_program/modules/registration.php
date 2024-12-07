@@ -21,7 +21,7 @@
  *             send_login    - Registration does not need to be assigned, simply send login data
  ***********************************************************************************************
  */
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -84,7 +84,7 @@ try {
         $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-card-checklist');
 
         // create html page object
-        $page = new Admidio\UserInterface\Registration('adm_registration', $headline);
+        $page = new Admidio\UI\View\Registration('adm_registration', $headline);
         $page->createRegistrationList();
         $page->show();
     }

@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * Creates an event object from the database table adm_events
@@ -232,7 +232,7 @@ class TableEvent extends TableAccess
                 $value = $gL10n->getCountryName($value);
             } elseif ($columnName === 'cat_name') {
                 // if text is a translation-id then translate it
-                $value = Admidio\Language::translateIfTranslationStrId($value);
+                $value = Admidio\Infrastructure\Language::translateIfTranslationStrId($value);
             }
         }
 
@@ -380,7 +380,7 @@ class TableEvent extends TableAccess
                         WHERE cat_id = ?';
             $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $this->getValue('dat_cat_id')));
             $calendar = $pdoStatement->fetchColumn();
-            if (Admidio\Language::isTranslationStringId($calendar)) {
+            if (Admidio\Infrastructure\Language::isTranslationStringId($calendar)) {
                 $calendar = $gL10n->get($calendar);
             }
 

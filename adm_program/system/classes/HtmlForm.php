@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Creates an Admidio specific form with special elements
@@ -1057,17 +1057,17 @@ class HtmlForm
                 if (array_key_exists(2, $arrayValue)) {
                     $valuesArray[] = array(
                         'id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue[1] : $arrayValue[0]),
-                        'value' => Admidio\Language::translateIfTranslationStrId($arrayValue[1]),
-                        'group' => Admidio\Language::translateIfTranslationStrId($arrayValue[2])
+                        'value' => Admidio\Infrastructure\Language::translateIfTranslationStrId($arrayValue[1]),
+                        'group' => Admidio\Infrastructure\Language::translateIfTranslationStrId($arrayValue[2])
                     );
                 } else {
                     $valuesArray[] = array(
                         'id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue[1] : $arrayValue[0]),
-                        'value' => Admidio\Language::translateIfTranslationStrId($arrayValue[1])
+                        'value' => Admidio\Infrastructure\Language::translateIfTranslationStrId($arrayValue[1])
                     );
                 }
             } else {
-                $valuesArray[] = array('id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue : $arrayKey), 'value' => Admidio\Language::translateIfTranslationStrId($arrayValue));
+                $valuesArray[] = array('id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue : $arrayKey), 'value' => Admidio\Infrastructure\Language::translateIfTranslationStrId($arrayValue));
             }
         }
 
@@ -1226,7 +1226,7 @@ class HtmlForm
             // if result has 3 columns then create an array in array
             if (array_key_exists(2, $row)) {
                 // translate category name
-                $row[2] = Admidio\Language::translateIfTranslationStrId((string) $row[2]);
+                $row[2] = Admidio\Infrastructure\Language::translateIfTranslationStrId((string) $row[2]);
 
                 $selectBoxEntries[] = array($row[0], (string) $row[1], $row[2]);
             } else {
@@ -1477,7 +1477,7 @@ class HtmlForm
 
             }
             // if text is a translation-id then translate it
-            $categoriesArray[] = array($row['cat_uuid'], Admidio\Language::translateIfTranslationStrId($row['cat_name']));
+            $categoriesArray[] = array($row['cat_uuid'], Admidio\Infrastructure\Language::translateIfTranslationStrId($row['cat_name']));
         }
 
         // now call method to create select box from array
@@ -1594,7 +1594,7 @@ class HtmlForm
         $html = '';
 
         if(strlen($string) > 0) {
-            if (Admidio\Language::isTranslationStringId($string)) {
+            if (Admidio\Infrastructure\Language::isTranslationStringId($string)) {
                 $text  = $gL10n->get($string, $parameter);
             } else {
                 $text  = $string;
@@ -1621,13 +1621,13 @@ class HtmlForm
 
         if ($text !== '') {
             // if text is a translation-id then translate it
-            if (Admidio\Language::isTranslationStringId($text)) {
+            if (Admidio\Infrastructure\Language::isTranslationStringId($text)) {
                 foreach ($parameters as &$parameter) {
                     // parameters should be strings
                     $parameter = (string)$parameter;
 
                     // if parameter is a translation-id then translate it
-                    $parameter = Admidio\Language::translateIfTranslationStrId($parameter);
+                    $parameter = Admidio\Infrastructure\Language::translateIfTranslationStrId($parameter);
                 }
                 unset($parameter);
 

@@ -1,6 +1,6 @@
 <?php
-use Admidio\Plugins\Overview;
-use Admidio\UserInterface\Form;
+use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\UI\Component\Form;
 
 /**
  ***********************************************************************************************

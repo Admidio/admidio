@@ -1,7 +1,7 @@
 <?php
-namespace Admidio\Modules;
+namespace Admidio\Domain\Service;
 
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 use Database;
 use ProfileFields;
 use RolesRights;

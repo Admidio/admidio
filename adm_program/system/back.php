@@ -21,7 +21,7 @@ try {
 
     admRedirect($nextUrl);
     // => EXIT
-} catch (\Admidio\Exception $e) {
+} catch (\Admidio\Infrastructure\Exception $e) {
     // if no page was found then show the default homepage
     $nextUrl = $gHomepage;
 }

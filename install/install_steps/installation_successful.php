@@ -9,7 +9,7 @@
  ***********************************************************************************************
  */
 
-use Admidio\UserInterface\Installation;
+use Admidio\UI\View\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
     exit('This page may not be called directly!');

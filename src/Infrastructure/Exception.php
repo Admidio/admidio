@@ -1,5 +1,5 @@
 <?php
-namespace Admidio;
+namespace Admidio\Infrastructure;
 
 use Database;
 

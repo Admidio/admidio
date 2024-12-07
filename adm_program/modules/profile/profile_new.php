@@ -21,8 +21,8 @@
  * firstname   : (Optional) First name could be set and will than be preassigned for new users
  *
  *****************************************************************************/
-use Admidio\Exception;
-use Admidio\UserInterface\Form;
+use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\Form;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -216,7 +216,7 @@ try {
 
                 if (strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0) {
                     $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
-                    if (Admidio\Language::isTranslationStringId($helpId)) {
+                    if (Admidio\Infrastructure\Language::isTranslationStringId($helpId)) {
                         $helpId = array($helpId, array($gProfileFields->getProperty($usfNameIntern, 'usf_name')));
                     }
                 }

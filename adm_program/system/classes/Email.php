@@ -111,7 +111,7 @@ class Email extends PHPMailer
 
     /**
      * Email constructor.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function __construct()
     {
@@ -185,7 +185,7 @@ class Email extends PHPMailer
      *                          EMAIL_ALL_MEMBERS, EMAIL_ONLY_ACTIVE_MEMBERS, EMAIL_ONLY_FORMER_MEMBERS
      *                          The default value will be EMAIL_ONLY_ACTIVE_MEMBERS.
      * @return int Returns the number of added email addresses.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function addRecipientsByRole(string $roleUuid, int $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS): int
     {
@@ -284,7 +284,7 @@ class Email extends PHPMailer
      * **mail_send_to_all_addresses** is set than all email addresses of the given user will be added.
      * @param string $userUuid UUID of a user who should be the recipient of the email.
      * @return int Returns the number of added email addresses.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function addRecipientsByUser(string $userUuid): int
     {
@@ -368,7 +368,7 @@ class Email extends PHPMailer
      * @param string $sizeUnit 'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
      * @param int $precision The number of decimal digits to round to
      * @return float The maximum attachment size in the given size-unit
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public static function getMaxAttachmentSize(string $sizeUnit = self::SIZE_UNIT_BYTE, int $precision = 1): float
     {
@@ -453,7 +453,7 @@ class Email extends PHPMailer
      * @param string $address
      * @param string $name
      * @return true|string
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function setSender(string $address, string $name = '')
     {
@@ -508,7 +508,7 @@ class Email extends PHPMailer
      * @param string $senderEmail The email address of the sender
      * @param string $senderUuid The unique ID of the sender.
      * @param string $recipients List with firstname and lastname of all recipients of this mail
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function setTemplateText(string $text, string $senderName, string $senderEmail, string $senderUuid, string $recipients)
     {
@@ -598,7 +598,7 @@ class Email extends PHPMailer
     /**
      * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
      * recipients will be listed in the mail.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     private function sendCopyMail()
     {
@@ -641,7 +641,7 @@ class Email extends PHPMailer
 
             $this->send();
         } catch (Exception $e) {
-            throw new \Admidio\Exception($e->errorMessage());
+            throw new \Admidio\Infrastructure\Exception($e->errorMessage());
         }
     }
 
@@ -790,7 +790,7 @@ class Email extends PHPMailer
      * @param string $subject The subject of the email.
      * @param string $message The body of the email.
      * @return bool Returns **true** if the notification was sent
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function sendNotification(string $subject, string $message): bool
     {
@@ -822,7 +822,7 @@ class Email extends PHPMailer
 
             // if something went wrong then throw an exception with the error message
             if ($returnCode !== true) {
-                throw new \Admidio\Exception('SYS_EMAIL_NOT_SEND', array($gCurrentOrganization->getValue('org_email_administrator'), $returnCode));
+                throw new \Admidio\Infrastructure\Exception('SYS_EMAIL_NOT_SEND', array($gCurrentOrganization->getValue('org_email_administrator'), $returnCode));
             }
 
             return true;

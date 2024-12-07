@@ -18,7 +18,7 @@ class TableUserRelationType extends TableAccess
      * If the id is set than the specific message will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $urtId The recordset of the relation type with this id will be loaded. If id isn't set than an empty object of the table is created.
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function __construct(Database $database, int $urtId = 0)
     {
@@ -28,7 +28,7 @@ class TableUserRelationType extends TableAccess
     /**
      * Returns the inverse relation type.
      * @return null|self Returns the inverse relation type
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function getInverse(): ?TableUserRelationType
     {
@@ -44,7 +44,7 @@ class TableUserRelationType extends TableAccess
     /**
      * Get the string of the current relationship type.
      * @return string The relationship type could be **asymmetrical**, **symmetrical** or **unidirectional**
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function getRelationTypeString(): string
     {
@@ -61,7 +61,7 @@ class TableUserRelationType extends TableAccess
 
     /**
      * @return bool
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function isAsymmetrical(): bool
     {
@@ -70,7 +70,7 @@ class TableUserRelationType extends TableAccess
 
     /**
      * @return bool
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function isSymmetrical(): bool
     {
@@ -79,7 +79,7 @@ class TableUserRelationType extends TableAccess
 
     /**
      * @return bool
-     * @throws \Admidio\Exception
+     * @throws \Admidio\Infrastructure\Exception
      */
     public function isUnidirectional(): bool
     {

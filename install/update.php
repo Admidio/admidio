@@ -1,9 +1,9 @@
 <?php
-use Admidio\Language;
-use Admidio\Session;
-use Admidio\System\Update;
-use Admidio\UserInterface\Form;
-use Admidio\UserInterface\Installation;
+use Admidio\Infrastructure\Language;
+use Admidio\Domain\Entity\Session;
+use Admidio\Domain\Entity\System\Update;
+use Admidio\UI\Component\Form;
+use Admidio\UI\View\Installation;
 
 /**
  ***********************************************************************************************
@@ -76,7 +76,7 @@ try {
 
     // start PHP session
     try {
-        Admidio\Session::start(COOKIE_PREFIX);
+        Admidio\Domain\Entity\Session::start(COOKIE_PREFIX);
     } catch (RuntimeException $exception) {
         // TODO
     }
@@ -128,7 +128,7 @@ try {
     $gChangeNotification = new ChangeNotification();
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
-    \Admidio\Utils\Installation::checkFolderPermissions();
+    \Admidio\Domain\Entity\Utils\Installation::checkFolderPermissions();
 
     // config.php exists at wrong place
     if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA . '/config.php')) {
@@ -136,12 +136,12 @@ try {
         try {
             FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . '/config.php');
         } catch (RuntimeException $exception) {
-            throw new \Admidio\Exception('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL));
+            throw new \Admidio\Infrastructure\Exception('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL));
         }
     }
 
     // check database version
-    $message = \Admidio\Utils\Installation::checkDatabaseVersion($gDb);
+    $message = \Admidio\Domain\Entity\Utils\Installation::checkDatabaseVersion($gDb);
 
     if ($message !== '') {
         showErrorMessage($message);
@@ -268,7 +268,7 @@ try {
         if (isset($_SESSION['updateLoginForm'])) {
             $_SESSION['updateLoginForm']->validate($_POST);
         } else {
-            throw new \Admidio\Exception('SYS_INVALID_PAGE_VIEW');
+            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // start the update

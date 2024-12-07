@@ -1,6 +1,6 @@
 <?php
-use Admidio\Exception;
-use Admidio\Session;
+use Admidio\Infrastructure\Exception;
+use Admidio\Domain\Entity\Session;
 
 /**
  * @brief Class manages access to database table adm_menu
@@ -94,7 +94,7 @@ class TableMenu extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if ($columnName === 'men_name' && $format !== 'database' && Admidio\Language::isTranslationStringId($value)) {
+        if ($columnName === 'men_name' && $format !== 'database' && Admidio\Infrastructure\Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 

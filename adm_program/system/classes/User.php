@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Class handle role rights, cards and other things of users
@@ -448,7 +448,7 @@ class User extends TableAccess
         if ($updateSessionCookies) {
             // set cookie for session id
             $gCurrentSession->regenerateId();
-            Admidio\Session::setCookie(COOKIE_PREFIX . '_SESSION_ID', $gCurrentSession->getValue('ses_session_id'));
+            Admidio\Domain\Entity\Session::setCookie(COOKIE_PREFIX . '_SESSION_ID', $gCurrentSession->getValue('ses_session_id'));
 
             // count logins and update login events
             $this->saveChangesWithoutRights();

@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * @brief Creates a category object from the database table adm_categories
@@ -193,7 +193,7 @@ class TableCategory extends TableAccess
         }
 
         // if text is a translation-id then translate it
-        if ($columnName === 'cat_name' && $format !== 'database' && Admidio\Language::isTranslationStringId($value)) {
+        if ($columnName === 'cat_name' && $format !== 'database' && Admidio\Infrastructure\Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 

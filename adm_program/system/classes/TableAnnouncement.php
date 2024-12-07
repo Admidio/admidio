@@ -1,5 +1,5 @@
 <?php
-use Admidio\Exception;
+use Admidio\Infrastructure\Exception;
 
 /**
  * Creates an announcement object from the database table adm_announcements
@@ -78,7 +78,7 @@ class TableAnnouncement extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if ($columnName === 'cat_name' && $format !== 'database' && Admidio\Language::isTranslationStringId($value)) {
+        if ($columnName === 'cat_name' && $format !== 'database' && Admidio\Infrastructure\Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 
