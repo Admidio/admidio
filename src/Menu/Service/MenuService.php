@@ -3,9 +3,9 @@ namespace Admidio\Menu\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-use Admidio\Role\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Entry;
+use Admidio\Menu\Entity\MenuEntry;
+use Admidio\Roles\Entity\RolesRights;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -17,9 +17,9 @@ use Entry;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Menu
+class MenuService
 {
-    protected Entry $menuRessource;
+    protected MenuEntry $menuRessource;
     protected Database $db;
     protected string $UUID;
 
@@ -131,7 +131,7 @@ class Menu
             // add entry to array of all menus
             $menuList[(int)$parentMenu->getValue('men_id')] = $einschub . $parentMenu->getValue('men_name');
 
-            Menu::subMenu(++$level, $menuID, (int)$parentMenu->getValue('men_id'), $menuList);
+            MenuService::subMenu(++$level, $menuID, (int)$parentMenu->getValue('men_id'), $menuList);
         }
 
         return $menuList;

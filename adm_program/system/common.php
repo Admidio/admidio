@@ -3,6 +3,7 @@
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
+use Admidio\Menu\ValueObject\Menu;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\System\Entity\Session;
 use Admidio\Users\Entity\User;
@@ -203,12 +204,12 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
 // create a global menu object that reads the menu structure only once
 if ($gCurrentSession->hasObject('gMenu')) {
     /**
-     * @var MainMenu $gMenu
+     * @var Menu $gMenu
      */
     $gMenu =& $gCurrentSession->getObject('gMenu');
 } else {
     // read menu from database
-    $gMenu = new MainMenu();
+    $gMenu = new Menu();
     $gCurrentSession->addObject('gMenu', $gMenu);
 }
 

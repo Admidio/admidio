@@ -21,6 +21,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\Organizations\Service\OrganizationService;
 use Admidio\UI\View\Organizations;
 
 try {
@@ -55,25 +56,14 @@ try {
         $page->createSubOrganizationForm();
         $page->show();
     } elseif ($getMode === 'save') {
-        // check form field input and sanitized it from malicious content
-        $organizationEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        $formValues = $organizationEditForm->validate($_POST);
-
-        // write form values in category object
-        foreach ($formValues as $key => $value) {
-            if (str_starts_with($key, 'org_') && $key !== 'org_shortname') {
-                $gCurrentOrganization->setValue($key, $value);
-            }
-        }
-
-        // write category into database
-        $gCurrentOrganization->save();
+        $organizationModule = new OrganizationService();
+        $organizationModule->save($_POST);
 
         echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
         exit();
     } elseif ($getMode === 'create') {
-        // Creates a nre organization for the current organization
-        $organizationModule = new Admidio\Organizations\Service\Organizations();
+        // Creates a new organization for the current organization
+        $organizationModule = new OrganizationService();
         $organizationModule->create();
         $gNavigation->deleteLastUrl();
 

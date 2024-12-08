@@ -1,4 +1,8 @@
 <?php
+namespace Admidio\Menu\ValueObject;
+
+use Admidio\Infrastructure\Exception;
+
 /**
  * @brief Create menu from database and serve several output formats
  *
@@ -11,7 +15,7 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class MainMenu
+class Menu
 {
     /**
      * @var array Multidimensional array with the complete menu structure.

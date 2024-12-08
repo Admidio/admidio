@@ -16,7 +16,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Organizations
+class OrganizationService
 {
     /**
      * Create the data for the edit form of an organization.
@@ -79,5 +79,29 @@ class Organizations
         }
 
         $gDb->endTransaction();
+    }
+
+    /**
+     * Save the data of an organization's editing form.
+     * @param array $formValues An array with all the form values that are stored in the global POST param
+     * @throws Exception
+     */
+    public function save(array $formValues)
+    {
+        global $gCurrentSession, $gCurrentOrganization;
+
+        // check form field input and sanitized it from malicious content
+        $organizationEditForm = $gCurrentSession->getFormObject($formValues['adm_csrf_token']);
+        $validatedFormValues = $organizationEditForm->validate($formValues);
+
+        // write form values in category object
+        foreach ($validatedFormValues as $key => $value) {
+            if (str_starts_with($key, 'org_') && $key !== 'org_shortname') {
+                $gCurrentOrganization->setValue($key, $value);
+            }
+        }
+
+        // write category into database
+        $gCurrentOrganization->save();
     }
 }

@@ -25,6 +25,7 @@
  ****************************************************************************/
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Categories\Service\CategoryService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
@@ -86,7 +87,7 @@ try {
             break;
 
         case 'save':
-            $categoriesModule = new \Admidio\Categories\Service\Categories($gDb, $getType, $getCategoryUUID);
+            $categoriesModule = new CategoryService($gDb, $getType, $getCategoryUUID);
             $categoriesModule->save();
 
             $gNavigation->deleteLastUrl();

@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Menu\ValueObject;
 
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
@@ -51,7 +52,7 @@ class MenuNode
     public function __construct(string $nodeTextId, string $nodeName)
     {
         $this->textId = $nodeTextId;
-        $this->name   = Admidio\Infrastructure\Language::translateIfTranslationStrId($nodeName);
+        $this->name   = Language::translateIfTranslationStrId($nodeName);
     }
 
     /**
@@ -147,7 +148,7 @@ class MenuNode
 
         $nodesStatement = $gDb->queryPrepared($sql, array($nodeId));
 
-        while ($node = $nodesStatement->fetch(PDO::FETCH_ASSOC)) {
+        while ($node = $nodesStatement->fetch(\PDO::FETCH_ASSOC)) {
             if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern'])) {
                 if ($this->menuItemIsVisible($node['men_id'])) {
                     $badgeCount = 0;

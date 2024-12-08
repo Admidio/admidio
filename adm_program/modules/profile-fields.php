@@ -22,7 +22,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\ProfileFields\Entity\ProfileField;
-use Admidio\UI\Component\Form;
+use Admidio\ProfileFields\Service\ProfileFieldService;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -61,7 +61,7 @@ try {
             break;
 
         case 'save':
-            $profileFieldsModule = new \Admidio\ProfileFields\Service\ProfileFields($gDb, $getProfileFieldUUID);
+            $profileFieldsModule = new ProfileFieldService($gDb, $getProfileFieldUUID);
             $profileFieldsModule->save();
 
             $gNavigation->deleteLastUrl();

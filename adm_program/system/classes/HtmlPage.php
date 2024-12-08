@@ -1,6 +1,8 @@
 <?php
-use Smarty\Smarty;
+
 use Admidio\Infrastructure\Exception;
+use Admidio\Menu\ValueObject\MenuNode;
+use Smarty\Smarty;
 
 /**
  * @brief Creates an Admidio specific complete html page with the template engine Smarty.

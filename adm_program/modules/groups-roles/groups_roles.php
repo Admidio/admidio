@@ -29,6 +29,7 @@
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Service\RoleService;
 use Admidio\UI\View\GroupsRoles;
 
 try {
@@ -140,7 +141,7 @@ try {
             break;
 
         case 'save':
-            $groupsRoles = new \Admidio\Roles\Service\GroupsRoles($gDb, $getRoleUUID);
+            $groupsRoles = new RoleService($gDb, $getRoleUUID);
             $groupsRoles->save();
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
@@ -173,7 +174,7 @@ try {
 
         case 'export':
             // Export every member of a role into one vCard file
-            $groupsRoles = new \Admidio\Roles\Service\GroupsRoles($gDb, $getRoleUUID);
+            $groupsRoles = new RoleService($gDb, $getRoleUUID);
             $groupsRoles->export();
             break;
     }

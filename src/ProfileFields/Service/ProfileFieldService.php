@@ -3,7 +3,7 @@ namespace Admidio\ProfileFields\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-use ProfileField;
+use Admidio\ProfileFields\Entity\ProfileField;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -15,7 +15,7 @@ use ProfileField;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ProfileFields
+class ProfileFieldService
 {
     protected ProfileField $profileFieldRessource;
     protected Database $db;

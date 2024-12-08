@@ -3,8 +3,8 @@ namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Service\RoleService;
 use Admidio\UI\Component\Form;
-use DateTimeExtended;
 use HtmlDataTables;
 use HtmlPage;
 use RoleDependency;
@@ -183,7 +183,7 @@ class GroupsRoles extends HtmlPage
 
                 if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
                     if ($role->getValue('rol_weekday') > 0) {
-                        $html .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')) . ' ';
+                        $html .= RoleService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                     }
                     if (!empty($role->getValue('rol_start_time'))) {
                         $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
@@ -573,7 +573,7 @@ class GroupsRoles extends HtmlPage
             $form->addInput('rol_end_date', $gL10n->get('SYS_VALID_TO'), $role->getValue('rol_end_date'), array('type' => 'date'));
             $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));
             $form->addInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), array('type' => 'time'));
-            $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), DateTimeExtended::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
+            $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), RoleService::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
             $form->addInput('rol_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'), array('maxLength' => 100));
 
             $roleName = $gL10n->get('SYS_NEW_ROLE');

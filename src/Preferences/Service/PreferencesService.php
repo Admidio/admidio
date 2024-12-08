@@ -3,11 +3,11 @@
 namespace Admidio\Preferences\Service;
 
 use Admidio\Infrastructure\Exception;
-use Email;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
-use Htaccess;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Text;
+use Admidio\System\Entity\Text;
+use Email;
+use Htaccess;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -19,7 +19,7 @@ use Text;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Preferences
+class PreferencesService
 {
     /**
      * Function to check an update
@@ -293,7 +293,7 @@ class Preferences
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname', 'database'))));
         $email->setTemplateText(
             $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),
-            $gCurrentUser->getValue('FIRSTNAME') . ' Preferences.php' . $gCurrentUser->getValue('LASTNAME'),
+            $gCurrentUser->getValue('FIRSTNAME') . ' PreferencesService.php' . $gCurrentUser->getValue('LASTNAME'),
             $gCurrentUser->getValue('EMAIL'),
             $gCurrentUser->getValue('usr_uuid'),
             $gL10n->get('SYS_ADMINISTRATOR')

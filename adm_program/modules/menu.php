@@ -21,6 +21,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
+use Admidio\Menu\Service\MenuService;
 use Admidio\UI\View\Menu;
 
 try {
@@ -61,7 +62,7 @@ try {
             break;
 
         case 'save':
-            $menuModule = new \Admidio\Menu\Service\Menu($gDb, $getMenuUUID);
+            $menuModule = new MenuService($gDb, $getMenuUUID);
             $menuModule->save();
 
             $gNavigation->deleteLastUrl();

@@ -3,11 +3,11 @@ namespace Admidio\Roles\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
+use Admidio\Roles\Entity\Role;
+use Admidio\Users\Entity\User;
 use DateTime;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use RoleDependency;
-use Role;
-use User;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -19,7 +19,7 @@ use User;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class GroupsRoles
+class RoleService
 {
     protected Role $roleRessource;
     protected Database $db;
@@ -84,6 +84,33 @@ class GroupsRoles
             // create vcard and check if user is allowed to edit profile, so he can see more data
             echo $user->getVCard();
         }
+    }
+
+    /**
+     * Returns an array with all 7 weekdays with full name in the specific language.
+     * @param int $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
+     * @return string|string[] with all 7 weekday or if param weekday is set than the full name of that weekday
+     * @throws Exception
+     */
+    public static function getWeekdays(int $weekday = 0)
+    {
+        global $gL10n;
+
+        $weekdays = array(
+            1 => $gL10n->get('SYS_MONDAY'),
+            2 => $gL10n->get('SYS_TUESDAY'),
+            3 => $gL10n->get('SYS_WEDNESDAY'),
+            4 => $gL10n->get('SYS_THURSDAY'),
+            5 => $gL10n->get('SYS_FRIDAY'),
+            6 => $gL10n->get('SYS_SATURDAY'),
+            7 => $gL10n->get('SYS_SUNDAY')
+        );
+
+        if ($weekday > 0) {
+            return $weekdays[$weekday];
+        }
+
+        return $weekdays;
     }
 
     /**
