@@ -1,6 +1,9 @@
 <?php
 namespace Admidio\Infrastructure;
 
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
+
 /**
  * @brief Reads language specific texts that are identified with text ids out of language xml files
  *
@@ -125,7 +128,7 @@ class Language
 
         if (!$this->pluginLanguageFoldersLoaded) {
             try {
-                $pluginFolders = \FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(\FileSystemUtils::CONTENT_TYPE_DIRECTORY));
+                $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
 
                 foreach ($pluginFolders as $pluginFolder => $type) {
                     $languageFolder = $pluginFolder . '/languages';
@@ -462,7 +465,7 @@ class Language
                 '#VAR' . $paramNr . '#'      => $param,
                 '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
             );
-            $text = \StringUtils::strMultiReplace($text, $replaces);
+            $text = StringUtils::strMultiReplace($text, $replaces);
         }
 
         // replace square brackets with html tags
@@ -484,7 +487,7 @@ class Language
             '\''   => '&rsquo;',
             '\\"'  => '&quot;'
         );
-        return \StringUtils::strMultiReplace($text, $replaces);
+        return StringUtils::strMultiReplace($text, $replaces);
     }
 
     /**

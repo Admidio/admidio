@@ -7,10 +7,10 @@ use Admidio\Messages\Entity\Message;
 use Admidio\Roles\Entity\Role;
 use Admidio\System\Entity\Entity;
 use Admidio\System\Entity\Session;
-use PasswordUtils;
+use Admidio\Infrastructure\Utils\PasswordUtils;
 use ProfileFields;
-use SecurityUtils;
-use StringUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use SystemMail;
 
 /**

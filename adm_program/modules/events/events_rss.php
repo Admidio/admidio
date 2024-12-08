@@ -16,6 +16,7 @@
 
 use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 
 require_once(__DIR__ . '/../../system/common.php');

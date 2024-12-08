@@ -12,6 +12,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'logging.php') {
     exit('This page may not be called directly!');
 }
 
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Monolog\Logger;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;

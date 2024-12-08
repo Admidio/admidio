@@ -3,8 +3,8 @@ namespace Admidio\Organizations\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Organizations\Entity\Organization;
-use PhpIniUtils;
-use StringUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Class with methods to display the module pages.

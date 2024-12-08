@@ -19,6 +19,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\UI\Component\Form;

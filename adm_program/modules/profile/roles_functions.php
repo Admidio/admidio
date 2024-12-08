@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;

@@ -1,4 +1,9 @@
 <?php
+namespace Admidio\Infrastructure;
+
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
+
 /**
  * @brief Class manages images and provides methods for customizing them.
  *

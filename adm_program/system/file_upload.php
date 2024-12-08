@@ -19,6 +19,8 @@
 
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Photos\Entity\Album;
 
 try {

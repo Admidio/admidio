@@ -16,6 +16,8 @@
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\System\Entity\Session;
 
 $rootPath = dirname(__DIR__);

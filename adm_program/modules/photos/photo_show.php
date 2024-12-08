@@ -23,6 +23,8 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Image;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Photos\Entity\Album;
 
 require_once(__DIR__ . '/../../system/common.php');

@@ -8,13 +8,13 @@ use DateTime;
 use HtmlPage;
 use PDO;
 use Securimage;
-use SecurityUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use SettingsManager;
 use SimpleXMLElement;
 use Smarty\Smarty;
 use HTMLPurifier;
 use HTMLPurifier_Config;
-use StringUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Creates an Admidio specific form

@@ -3,7 +3,7 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use RuntimeException;
 use UnexpectedValueException;
 

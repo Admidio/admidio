@@ -24,6 +24,8 @@
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\RolesRights;
 
 require_once(__DIR__ . '/../../system/common.php');

@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\UI\Component\Form;
 
 try {

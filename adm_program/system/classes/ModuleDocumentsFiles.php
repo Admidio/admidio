@@ -1,6 +1,8 @@
 <?php
 
 use Admidio\Documents\Entity\Folder;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.

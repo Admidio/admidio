@@ -1,6 +1,13 @@
 <?php
+namespace Admidio\Photos\ValueObject;
 
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
+use Email;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Class will handle some ECard functions
@@ -22,7 +29,7 @@ class ECard
 
     /**
      * @param Language $gL10n
-     * @throws \Admidio\Infrastructure\Exception
+     * @throws Exception
      */
     public function __construct(Language $gL10n)
     {
@@ -46,7 +53,7 @@ class ECard
             $directoryFiles = FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE));
 
             return array_keys($directoryFiles);
-        } catch (RuntimeException $exception) {
+        } catch (\RuntimeException $exception) {
             return array();
         }
     }
@@ -124,7 +131,7 @@ class ECard
         $pregRepArray['/<%theme_root_path%>/']            = THEME_URL;
         $pregRepArray['/<%ecard_sender_id%>/']            = $gCurrentUser->getValue('usr_uuid');
         $pregRepArray['/<%ecard_sender_email%>/']         = $gCurrentUser->getValue('EMAIL');
-        $pregRepArray['/<%ecard_sender_name%>/']          = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+        $pregRepArray['/<%ecard_sender_name%>/']          = $gCurrentUser->getValue('FIRST_NAME') . ' ECard.php' .$gCurrentUser->getValue('LAST_NAME');
         $pregRepArray['/<%ecard_reciepient_email%>/']     = SecurityUtils::encodeHTML($recipientEmail);
         $pregRepArray['/<%ecard_reciepient_name%>/']      = SecurityUtils::encodeHTML($recipientName);
         $pregRepArray['/<%ecard_image_name%>/']           = $imageName;
@@ -186,7 +193,7 @@ class ECard
                 // the actual image to be sent must still be adapted to the appropriate format
                 if (str_contains($match, 'photo_show.php')) {
                     $imgName = 'picture.' . $imgType;
-                    $imgNameIntern = substr(md5(uniqid($imgName . time(), true)), 0, 8) . '.' . $imgType;
+                    $imgNameIntern = substr(md5(uniqid($imgName . time(), true)), 0, 8) . 'classes' . $imgType;
                     $imgServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'. $imgNameIntern;
                     $imgPhotoPath  = $imgServerPath;
 
@@ -218,7 +225,7 @@ class ECard
         // now delete the resized image
         try {
             FileSystemUtils::deleteFileIfExists($imgPhotoPath);
-        } catch (RuntimeException $exception) {
+        } catch (\RuntimeException $exception) {
             $gLogger->error('Could not delete file!', array('filePath' => $imgPhotoPath));
             // TODO
         }

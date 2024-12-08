@@ -1,5 +1,6 @@
 <?php
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Creates from a custom condition syntax a sql condition

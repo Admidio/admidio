@@ -2,6 +2,7 @@
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  ***********************************************************************************************

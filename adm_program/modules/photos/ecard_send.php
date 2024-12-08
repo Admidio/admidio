@@ -11,8 +11,10 @@
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Messages\Entity\Message;
 use Admidio\Photos\Entity\Album;
+use Admidio\Photos\ValueObject\ECard;
 use Admidio\Roles\Entity\Role;
 use Ramsey\Uuid\Uuid;
 

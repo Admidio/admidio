@@ -13,6 +13,9 @@
  * file   : Name of image file that should be shown (without path)
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Image;
+
 try {
     require_once(__DIR__ . '/common.php');
 

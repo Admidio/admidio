@@ -1,5 +1,6 @@
 <?php
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
 

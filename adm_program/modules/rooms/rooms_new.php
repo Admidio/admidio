@@ -15,6 +15,7 @@
 
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 
 try {

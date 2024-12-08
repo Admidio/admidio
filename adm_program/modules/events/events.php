@@ -31,6 +31,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 
 try {

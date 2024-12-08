@@ -3,7 +3,7 @@ namespace Admidio\System\Entity;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-use SecurityUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Handle auto login with Admidio and manage it in the database

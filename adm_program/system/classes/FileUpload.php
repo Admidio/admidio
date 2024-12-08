@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Infrastructure\Utils\SecurityUtils;
+
 /**
  * @brief Class to create a file upload page for document & files or photos module
  *

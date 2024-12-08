@@ -2,6 +2,7 @@
 namespace Admidio\System\Entity;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Infrastructure\Database;
 
@@ -150,7 +151,7 @@ class Session extends Entity
     public function getCsrfToken(bool $newToken = false): string
     {
         if ($this->csrfToken === '' || $newToken) {
-            $this->csrfToken = \SecurityUtils::getRandomString(30);
+            $this->csrfToken = SecurityUtils::getRandomString(30);
         }
 
         return $this->csrfToken;

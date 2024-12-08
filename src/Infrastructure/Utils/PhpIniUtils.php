@@ -1,4 +1,6 @@
 <?php
+namespace Admidio\Infrastructure\Utils;
+
 /**
  * @brief Class manages PHP-Ini stuff
  *
@@ -177,26 +179,26 @@ final class PhpIniUtils
     /**
      * Checks if a given directory path exists and is in the base-directories
      * @param string $directoryPath The directory path to check
-     * @throws UnexpectedValueException Throws if a given directory does not exist
-     * @throws RuntimeException         Throws if a given directory is not in the base-directories
+     * @throws \UnexpectedValueException Throws if a given directory does not exist
+     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      */
     private static function checkIsValidDir(string &$directoryPath)
     {
         $directoryPath = FileSystemUtils::getNormalizedPath($directoryPath);
 
         if (!is_dir($directoryPath)) {
-            throw new UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
         if (!self::isInBaseDirs($directoryPath)) {
-            throw new RuntimeException('Directory "' . $directoryPath . '" is not in base-directories!');
+            throw new \RuntimeException('Directory "' . $directoryPath . '" is not in base-directories!');
         }
     }
 
     /**
      * Sets the allowed base-directories
      * @param array<int,string> $directoryPaths The directory paths to set as allowed base-dirs
-     * @throws UnexpectedValueException Throws if a given directory does not exist
-     * @throws RuntimeException         Throws if a given directory is not in the base-directories
+     * @throws \UnexpectedValueException Throws if a given directory does not exist
+     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      * @return bool|string
      * @see https://www.php.net/manual/en/ini.core.php#ini.open-basedir
      */
@@ -214,8 +216,8 @@ final class PhpIniUtils
      * Sets the file upload temporary directory
      * @param string $directoryPath The directory path to set the file upload temporary directory
      * @return bool|string
-     * @throws RuntimeException         Throws if a given directory is not in the base-directories
-     * @throws UnexpectedValueException Throws if a given directory does not exist
+     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
+     * @throws \UnexpectedValueException Throws if a given directory does not exist
      * @see https://www.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
     public static function setUploadTmpDir(string $directoryPath)
@@ -228,7 +230,7 @@ final class PhpIniUtils
     /**
      * Starts a new execution time limit
      * @param int $seconds Execution time limit in seconds
-     * @throws RuntimeException Throws if starting a new execution time limit failed
+     * @throws \RuntimeException Throws if starting a new execution time limit failed
      * @see https://www.php.net/manual/en/function.set-time-limit.php
      * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
      */

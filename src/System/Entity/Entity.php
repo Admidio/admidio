@@ -2,12 +2,11 @@
 namespace Admidio\System\Entity;
 
 use Admidio\Infrastructure\Database;
-use DateTime;
-use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
-use SecurityUtils;
-use StringUtils;
-use User;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Users\Entity\User;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @brief Controls read and write access to database tables
@@ -339,7 +338,7 @@ class Entity
 
                         // try to format the date, else output the available data
                         try {
-                            $datetime = new DateTime($columnValue);
+                            $datetime = new \DateTime($columnValue);
                             $columnValue = $datetime->format($format);
                         } catch (Exception $e) {
                             $columnValue = $this->dbColumns[$columnName];

@@ -4,7 +4,7 @@ namespace Admidio\Roles\Service;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use DateTime;
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use RoleDependency;
 use Role;
 use User;

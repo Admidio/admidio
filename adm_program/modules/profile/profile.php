@@ -14,6 +14,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRelation;

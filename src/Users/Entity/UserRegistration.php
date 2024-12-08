@@ -5,7 +5,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\System\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use ProfileFields;
-use SecurityUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use SystemMail;
 
 /**

@@ -1,5 +1,8 @@
 <?php
+namespace Admidio\Infrastructure\Utils;
+
 use Admidio\Infrastructure\Exception;
+use ZxcvbnPhp\Zxcvbn;
 
 /**
  * @brief This class provides static functions for different tasks for passwords and hashing
@@ -250,7 +253,7 @@ final class PasswordUtils
      */
     public static function passwordStrength(string $password, array $userData = array()): int
     {
-        $zxcvbn = new ZxcvbnPhp\Zxcvbn();
+        $zxcvbn = new Zxcvbn();
         $strength = $zxcvbn->passwordStrength($password, $userData);
 
         return $strength['score'];

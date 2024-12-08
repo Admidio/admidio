@@ -1,5 +1,8 @@
 <?php
 
+use Admidio\Infrastructure\Image;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\System\Entity\Entity;
 use Admidio\Infrastructure\Database;

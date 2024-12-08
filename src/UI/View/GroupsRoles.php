@@ -8,7 +8,7 @@ use DateTimeExtended;
 use HtmlDataTables;
 use HtmlPage;
 use RoleDependency;
-use SecurityUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.

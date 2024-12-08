@@ -4,6 +4,8 @@
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\System\Entity\Session;

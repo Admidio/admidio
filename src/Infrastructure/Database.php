@@ -1,13 +1,13 @@
 <?php
 namespace Admidio\Infrastructure;
 
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use PDO;
 use PDOException;
 use PDOStatement;
 use Ramsey\Uuid\Uuid;
-use SecurityUtils;
-use StringUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Handle the connection to the database, send all sql statements and handle the returned rows.

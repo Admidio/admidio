@@ -14,6 +14,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\System\Entity\Entity;
 
 require_once(__DIR__ . '/../../system/common.php');

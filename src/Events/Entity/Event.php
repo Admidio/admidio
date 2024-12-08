@@ -9,7 +9,7 @@ use Admidio\System\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Email;
 use Participants;
-use StringUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * Creates an event object from the database table adm_events

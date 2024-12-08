@@ -8,8 +8,8 @@ use Admidio\Users\Entity\User;
 use ConditionParser;
 use DateTime;
 use ModuleEvents;
-use SecurityUtils;
-use StringUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Class manages the list configuration

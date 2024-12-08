@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+
 /**
  * @brief This class is used to create a htaccess file.
  *

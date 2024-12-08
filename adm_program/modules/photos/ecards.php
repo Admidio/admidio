@@ -17,7 +17,11 @@
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\Photos\ValueObject\ECard;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
 

@@ -4,7 +4,7 @@ namespace Admidio\Events\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\System\Entity\Entity;
-use StringUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Class manages access to database table adm_rooms

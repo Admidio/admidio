@@ -15,6 +15,7 @@
  */
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Users\Entity\UserImport;
 use Ramsey\Uuid\Uuid;

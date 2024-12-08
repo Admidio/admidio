@@ -15,6 +15,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Image;
 use Admidio\Users\Entity\User;
 
 try {

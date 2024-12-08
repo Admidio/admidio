@@ -1,4 +1,8 @@
 <?php
+
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
+
 /**
  * @brief Class creates an RssFeed object according to RSS 2.0.
  * Specification of RSS 2.0: http://www.feedvalidator.org/docs/rss2.html

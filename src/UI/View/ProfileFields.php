@@ -5,7 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\UI\Component\Form;
 use HtmlPage;
-use SecurityUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class with methods to display the module pages.

@@ -18,6 +18,7 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Users\Entity\UserRelationType;
 
 try {

@@ -10,6 +10,9 @@
  */
 
 use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\Utils\PasswordUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\System\Entity\Entity;
 use Admidio\Users\Entity\User;

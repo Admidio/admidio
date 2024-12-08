@@ -19,6 +19,7 @@
  ****************************************************************************/
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\UI\View\Organizations;
 

@@ -30,6 +30,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;

@@ -5,7 +5,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\System\Entity\Entity;
 use Email;
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 
 /**
  * @brief Class manages access to database table adm_photos

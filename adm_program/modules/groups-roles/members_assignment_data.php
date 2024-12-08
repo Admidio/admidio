@@ -47,6 +47,7 @@
  *****************************************************************************/
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 
 try {

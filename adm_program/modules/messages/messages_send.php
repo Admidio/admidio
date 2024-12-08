@@ -14,6 +14,8 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Messages\Entity\Message;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Users\Entity\User;

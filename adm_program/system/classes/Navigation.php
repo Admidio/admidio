@@ -1,5 +1,6 @@
 <?php
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Handle the navigation within a module and could create a html navigation bar

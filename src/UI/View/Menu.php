@@ -7,7 +7,7 @@ use Admidio\Menu\Entity\MenuEntry;
 use Admidio\UI\Component\Form;
 use HtmlPage;
 use Admidio\Roles\Entity\RolesRights;
-use SecurityUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class with methods to display the module pages.

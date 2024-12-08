@@ -3,9 +3,9 @@ namespace Admidio\Users\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use PasswordUtils;
+use Admidio\Infrastructure\Utils\PasswordUtils;
 use ProfileFields;
-use StringUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Import new users or modify existing users in the database

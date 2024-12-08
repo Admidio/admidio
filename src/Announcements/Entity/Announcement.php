@@ -7,7 +7,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Email;
-use StringUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * Creates an announcement object from the database table adm_announcements

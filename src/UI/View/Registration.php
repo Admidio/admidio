@@ -4,7 +4,7 @@ namespace Admidio\UI\View;
 use Admidio\Infrastructure\Exception;
 use Admidio\Users\Entity\UserRegistration;
 use HtmlPage;
-use SecurityUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class with methods to display the module pages of the registration.

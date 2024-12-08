@@ -5,8 +5,8 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\System\Entity\Entity;
-use FileSystemUtils;
-use StringUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Class manages access to database table adm_folders

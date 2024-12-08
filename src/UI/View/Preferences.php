@@ -5,12 +5,12 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\System\Entity\Text;
 use Admidio\UI\Component\Form;
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use HtmlPage;
-use PhpIniUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use RuntimeException;
-use SecurityUtils;
-use SystemInfoUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\SystemInfoUtils;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.

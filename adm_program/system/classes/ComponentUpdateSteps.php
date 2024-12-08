@@ -2,6 +2,7 @@
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;

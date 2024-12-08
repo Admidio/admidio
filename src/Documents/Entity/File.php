@@ -6,7 +6,7 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\System\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Email;
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 
 /**
  * @brief Class manages access to database table adm_files

@@ -4,7 +4,7 @@ namespace Admidio\Menu\Service;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Role\Entity\RolesRights;
-use StringUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Entry;
 
 /**

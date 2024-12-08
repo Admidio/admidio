@@ -1,4 +1,6 @@
 <?php
+namespace Admidio\Infrastructure\Utils;
+
 /**
  * @brief Class to get system information
  *

@@ -5,10 +5,11 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Users\Entity\User;
-use FileSystemUtils;
-use PhpIniUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 
 /**
  * @brief Class to implement useful method for installation and update process.
@@ -139,7 +140,7 @@ class Update
         require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
         // calculate the best cost value for your server performance
-        $benchmarkResults = \PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
+        $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
         $updateOrgPreferences = array();
 
         if (is_int($benchmarkResults['options']['cost'])) {

@@ -10,6 +10,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 require_once(__DIR__ . '/../../system/common.php');
 

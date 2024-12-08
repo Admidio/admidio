@@ -1,4 +1,6 @@
 <?php
+namespace Admidio\Infrastructure\Utils;
+
 use Admidio\Infrastructure\Exception;
 
 /**
@@ -90,7 +92,7 @@ final class SecurityUtils
      * @param int $min The min of the range (inclusive)
      * @param int $max The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @param Error|Throwable $exception The thrown Error or Exception object.
+     * @param \Error|\Throwable $exception The thrown Error or Exception object.
      * @param string $exceptionMessage The Admidio Exception-Message.
      * @return int Returns an insecure pseudo-random integer
      * @throws Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
@@ -121,9 +123,9 @@ final class SecurityUtils
     {
         try {
             $int = random_int($min, $max);
-        } catch (Error $e) {
+        } catch (\Error $e) {
             $int = self::getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_ERROR');
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $int = self::getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_EXCEPTION');
         }
 
@@ -135,28 +137,28 @@ final class SecurityUtils
      * @param int $length The length of the generated string (default = 16)
      * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
      * @return string Returns a cryptographically secure pseudo-random string
-     * @throws UnexpectedValueException Charset contains duplicate chars.
-     * @throws UnexpectedValueException Charset must contain at least 2 unique chars.
+     * @throws \UnexpectedValueException Charset contains duplicate chars.
+     * @throws \UnexpectedValueException Charset must contain at least 2 unique chars.
      * @throws \Exception SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
-     * @throws RuntimeException Min-length is 4.
+     * @throws \RuntimeException Min-length is 4.
      * @see https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
     public static function getRandomString(int $length = 16, string $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
     {
         if ($length < 4) {
-            throw new RuntimeException('Min-length is 4.');
+            throw new \RuntimeException('Min-length is 4.');
         }
 
         $charsetLength = strlen($charset);
 
         // Check for duplicate chars in charset
         if ($charsetLength !== strlen(implode('', array_unique(str_split($charset))))) {
-            throw new UnexpectedValueException('Charset contains duplicate chars.');
+            throw new \UnexpectedValueException('Charset contains duplicate chars.');
         }
 
         // Check for a minimum of 2 unique chars
         if ($charsetLength < 2) {
-            throw new UnexpectedValueException('Charset must contain at least 2 unique chars.');
+            throw new \UnexpectedValueException('Charset must contain at least 2 unique chars.');
         }
 
         $randomString = '';

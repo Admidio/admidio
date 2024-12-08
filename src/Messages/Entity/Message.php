@@ -5,7 +5,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\System\Entity\Entity;
 use Admidio\Users\Entity\User;
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Role;
 
 /**

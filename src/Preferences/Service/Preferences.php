@@ -4,9 +4,9 @@ namespace Admidio\Preferences\Service;
 
 use Admidio\Infrastructure\Exception;
 use Email;
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Htaccess;
-use StringUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Text;
 
 /**

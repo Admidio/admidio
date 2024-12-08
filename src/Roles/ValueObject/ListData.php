@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Roles\ValueObject;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -122,7 +123,7 @@ class ListData
                 ->getActiveSheet()
                 ->getStyle('A1:'.$column.'1')
                 ->getFill()
-                ->setFillType(PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                 ->getStartColor()
                 ->setARGB('ffdddddd');
             $this->spreadsheet
@@ -216,7 +217,7 @@ class ListData
         global $gDb;
 
         $listStatement = $gDb->queryPrepared($sql, $parameters);
-        $dataSql = $listStatement->fetchAll(PDO::FETCH_ASSOC);
+        $dataSql = $listStatement->fetchAll(\PDO::FETCH_ASSOC);
         $this->data = array_merge($this->data, $dataSql);
     }
 

@@ -6,7 +6,7 @@ use Admidio\UI\Component\Form;
 use Admidio\Components\Entity\Component;
 use HtmlPage;
 use Admidio\Roles\Entity\RolesRights;
-use SecurityUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Categories\Entity\Category;
 
 /**
