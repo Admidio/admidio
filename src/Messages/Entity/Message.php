@@ -3,7 +3,7 @@ namespace Admidio\Messages\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Role;

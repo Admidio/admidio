@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Preferences\ValueObject;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
@@ -226,7 +227,7 @@ class SettingsManager
     public function has(string $name, bool $update = false): bool
     {
         if (!self::isValidName($name) && $this->throwExceptions) {
-            throw new UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+            throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
 
         if ($update || !array_key_exists($name, $this->settings)) {
@@ -234,7 +235,7 @@ class SettingsManager
                 $this->settings[$name] = $this->load($name);
 
                 return true;
-            } catch (UnexpectedValueException $e) {
+            } catch (\UnexpectedValueException $e) {
                 return false;
             }
         }
@@ -287,7 +288,7 @@ class SettingsManager
      * Loads a specific setting from the database
      * @param string $name The setting name from the wanted value
      * @return string Returns the setting value
-     * @throws UnexpectedValueException|Exception Throws if there is no setting to the given name found
+     * @throws \UnexpectedValueException|Exception Throws if there is no setting to the given name found
      */
     private function load(string $name): string
     {
@@ -298,7 +299,7 @@ class SettingsManager
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
 
         if ($pdoStatement->rowCount() === 0 && $this->throwExceptions) {
-            throw new UnexpectedValueException('Settings name "' . $name . '" does not exist!');
+            throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
         return $pdoStatement->fetchColumn();
@@ -379,7 +380,7 @@ class SettingsManager
             $this->settings[$name] = $this->load($name);
 
             return true;
-        } catch (UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException $e) {
             return false;
         }
     }

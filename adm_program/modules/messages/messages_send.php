@@ -13,6 +13,8 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;

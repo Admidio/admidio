@@ -1,5 +1,5 @@
 <?php
-namespace Admidio\System\Entity;
+namespace Admidio\Infrastructure\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;

@@ -21,6 +21,7 @@
  */
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\Service\PreferencesService;

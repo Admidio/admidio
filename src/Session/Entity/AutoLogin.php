@@ -1,9 +1,10 @@
 <?php
-namespace Admidio\System\Entity;
+namespace Admidio\Session\Entity;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  * @brief Handle auto login with Admidio and manage it in the database

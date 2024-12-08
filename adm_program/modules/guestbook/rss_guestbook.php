@@ -16,6 +16,7 @@
 
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\RssFeed;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 

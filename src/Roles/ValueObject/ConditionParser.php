@@ -1,6 +1,10 @@
 <?php
+namespace Admidio\Roles\ValueObject;
+
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\StringUtils;
+use DateInterval;
+use DateTime;
 
 /**
  * @brief Creates from a custom condition syntax a sql condition

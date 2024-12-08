@@ -1,6 +1,6 @@
 <?php
+namespace Admidio\Infrastructure;
 
-use Admidio\Infrastructure\Database;
 use Ifsnop\Mysqldump as IMysqldump;
 
 /**

@@ -8,7 +8,8 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
-use Admidio\System\Entity\Session;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Session\Entity\Session;
 use Admidio\UI\Component\Form;
 use Admidio\UI\View\Installation;
 

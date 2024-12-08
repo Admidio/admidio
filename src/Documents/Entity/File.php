@@ -2,10 +2,10 @@
 namespace Admidio\Documents\Entity;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Email;
 use Admidio\Roles\Entity\RolesRights;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
-use Email;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 
 /**

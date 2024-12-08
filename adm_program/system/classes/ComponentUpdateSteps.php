@@ -7,9 +7,9 @@ use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\RolesRights;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
-use Admidio\System\Entity\Text;
+use Admidio\Infrastructure\Entity\Text;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
 

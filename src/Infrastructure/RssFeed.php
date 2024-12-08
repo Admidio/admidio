@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;

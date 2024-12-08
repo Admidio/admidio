@@ -3,7 +3,7 @@ namespace Admidio\UI\View;
 
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
-use Admidio\System\Entity\Text;
+use Admidio\Infrastructure\Entity\Text;
 use Admidio\UI\Component\Form;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use HtmlPage;

@@ -5,8 +5,8 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\System\Entity\Entity;
-use Email;
+use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Utils\StringUtils;
 
 /**

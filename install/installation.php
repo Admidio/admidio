@@ -3,7 +3,7 @@
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\System\Entity\Session;
+use Admidio\Session\Entity\Session;
 use Admidio\UI\View\Installation;
 
 /**

@@ -1,11 +1,11 @@
 <?php
 namespace Admidio\Roles\Entity;
 
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\ValueObject\ConditionParser;
 use Admidio\Users\Entity\User;
-use ConditionParser;
 use DateTime;
 use ModuleEvents;
 use Admidio\Infrastructure\Utils\SecurityUtils;

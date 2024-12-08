@@ -4,7 +4,7 @@ namespace Admidio\Menu\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  * @brief Class manages access to database table adm_menu

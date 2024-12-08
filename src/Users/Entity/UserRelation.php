@@ -2,7 +2,7 @@
 namespace Admidio\Users\Entity;
 
 use Admidio\Infrastructure\Database;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 
 /**

@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Events\ValueObject;
 
 use Admidio\Infrastructure\Database;
 

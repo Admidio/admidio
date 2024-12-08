@@ -1,6 +1,7 @@
 <?php
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;

@@ -13,6 +13,7 @@
  */
 
 use Admidio\Events\Entity\Event;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;

@@ -2,17 +2,19 @@
 namespace Admidio\Organizations\Entity;
 
 use Admidio\Categories\Entity\Category;
-use Admidio\Domain\Service\ProfileFields;
+use Admidio\Documents\Entity\Folder;
+use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Database;
-use Admidio\Role\Entity\ListConfiguration;
-use Admidio\System\Entity\Entity;
+use Admidio\Photos\Entity\Album;
+use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Membership;
+use Admidio\Roles\Entity\Role;
+use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Entity\Text;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
-use SettingsManager;
-use Folder;
-use Membership;
-use Role;
-use Text;
 
 /**
  * @brief Handle organization data of Admidio and is connected to database table adm_organizations

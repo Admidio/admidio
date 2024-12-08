@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
@@ -349,7 +350,7 @@ class Email extends PHPMailer
             $this->addCC($address, $firstName .' '. $lastName);
         } catch (Exception $e) {
             return $e->errorMessage();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return $e->getMessage();
         }
 
@@ -484,7 +485,7 @@ class Email extends PHPMailer
             $this->setFrom($fromAddress, $fromName);
         } catch (Exception $e) {
             return $e->errorMessage();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return $e->getMessage();
         }
 
@@ -522,7 +523,7 @@ class Email extends PHPMailer
         // load the template and set the new email body with template
         try {
             $emailTemplateText = FileSystemUtils::readFile(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/' . $gSettingsManager->getString('mail_template'));
-        } catch (RuntimeException $exception) {
+        } catch (\RuntimeException $exception) {
             $emailTemplateText = '#message#';
         }
 
@@ -777,7 +778,7 @@ class Email extends PHPMailer
             }
         } catch (Exception $e) {
             return $e->errorMessage();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return $e->getMessage();
         }
 

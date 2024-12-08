@@ -2,11 +2,11 @@
 namespace Admidio\Users\Entity;
 
 use Admidio\Infrastructure\Database;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
-use ProfileFields;
+use Admidio\Infrastructure\SystemMail;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use SystemMail;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 
 /**
  * @brief Creates, assign and update user registrations in database

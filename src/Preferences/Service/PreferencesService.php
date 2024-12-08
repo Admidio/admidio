@@ -3,11 +3,11 @@
 namespace Admidio\Preferences\Service;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\System\Entity\Text;
-use Email;
-use Htaccess;
+use Admidio\Infrastructure\Entity\Text;
+use Admidio\Infrastructure\Email;
 
 /**
  * @brief Class with methods to display the module pages.

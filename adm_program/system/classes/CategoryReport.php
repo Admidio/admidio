@@ -1,7 +1,7 @@
 <?php
 
 use Admidio\Roles\Entity\Role;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Users\Entity\User;
 

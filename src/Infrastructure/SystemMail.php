@@ -1,9 +1,8 @@
 <?php
+namespace Admidio\Infrastructure;
 
-use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Exception;
 use Admidio\Organizations\Entity\Organization;
-use Admidio\System\Entity\Text;
+use Admidio\Infrastructure\Entity\Text;
 use Admidio\Users\Entity\User;
 
 /**

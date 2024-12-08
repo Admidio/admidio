@@ -1,4 +1,6 @@
 <?php
+namespace Admidio\Application;
+
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\StringUtils;
 

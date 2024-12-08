@@ -3,7 +3,7 @@ namespace Admidio\Roles\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  * @brief Handle memberships of roles and manage it in the database table adm_members

@@ -1,11 +1,14 @@
 <?php
 
+use Admidio\Application\Navigation;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\Menu;
 use Admidio\Organizations\Entity\Organization;
-use Admidio\System\Entity\Session;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Session\Entity\Session;
+use Admidio\UI\Component\Message;
 use Admidio\Users\Entity\User;
 
 /**

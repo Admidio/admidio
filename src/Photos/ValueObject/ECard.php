@@ -4,7 +4,7 @@ namespace Admidio\Photos\ValueObject;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
-use Email;
+use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;

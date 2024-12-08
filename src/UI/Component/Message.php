@@ -1,5 +1,8 @@
 <?php
+namespace Admidio\UI\Component;
+
 use Admidio\Infrastructure\Exception;
+use HtmlPage;
 
 /**
  * @brief Simple presentation of messages to the user

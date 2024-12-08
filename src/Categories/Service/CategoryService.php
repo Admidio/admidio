@@ -4,7 +4,7 @@ namespace Admidio\Categories\Service;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-use ProfileFields;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Roles\Entity\RolesRights;
 
 /**

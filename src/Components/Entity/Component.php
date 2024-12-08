@@ -4,7 +4,7 @@ namespace Admidio\Components\Entity;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database

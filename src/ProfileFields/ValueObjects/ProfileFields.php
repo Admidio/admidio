@@ -1,12 +1,15 @@
 <?php
+namespace Admidio\ProfileFields\ValueObjects;
 
 use Admidio\Infrastructure\Image;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\ProfileFields\Entity\ProfileField;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use DateTime;
 
 /**
  * @brief Reads the user fields structure out of database and give access to it
@@ -296,14 +299,14 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            $listValueText = Admidio\Infrastructure\Language::translateIfTranslationStrId($listValueText);
+                            $listValueText = Language::translateIfTranslationStrId($listValueText);
 
                             // get html snippet with image tag
                             $listValue = Image::getIconHtml($listValueImage, $listValueText);
                         }
 
                         // if text is a translation-id then translate it
-                        $listValue = Admidio\Infrastructure\Language::translateIfTranslationStrId($listValue);
+                        $listValue = Language::translateIfTranslationStrId($listValue);
 
                         // save values in new array that starts with key = 1
                         $arrListValuesWithKeys[++$index] = $listValue;

@@ -2,13 +2,13 @@
 namespace Admidio\Events\Entity;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Language;
 use Admidio\Roles\Entity\RolesRights;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
-use Email;
-use Participants;
 use Admidio\Infrastructure\Utils\StringUtils;
 
 /**

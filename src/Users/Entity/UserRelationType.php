@@ -3,7 +3,7 @@ namespace Admidio\Users\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  * @brief Class manages access to database table adm_user_relation_types

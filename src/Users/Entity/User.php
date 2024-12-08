@@ -2,13 +2,14 @@
 namespace Admidio\Users\Entity;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\SystemMail;
 use Admidio\Messages\Entity\Message;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Roles\Entity\Role;
-use Admidio\System\Entity\Entity;
-use Admidio\System\Entity\Session;
+use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
-use ProfileFields;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use SystemMail;

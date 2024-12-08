@@ -1,7 +1,9 @@
 <?php
 
-use Admidio\System\Entity\Entity;
+use Admidio\Infrastructure\Email;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Users\Entity\User;
 
 /**

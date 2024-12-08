@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 
@@ -62,7 +63,7 @@ class Htaccess
             );
             $data = implode("\n", $lines) . "\n";
             FileSystemUtils::writeFile($this->folderPath . '/.htaccess', $data);
-        } catch (RuntimeException $exception) {
+        } catch (\RuntimeException $exception) {
             return false;
         }
 
@@ -77,7 +78,7 @@ class Htaccess
     {
         try {
             FileSystemUtils::deleteFileIfExists($this->folderPath . '/.htaccess');
-        } catch (RuntimeException $exception) {
+        } catch (\RuntimeException $exception) {
             return false;
         }
 
