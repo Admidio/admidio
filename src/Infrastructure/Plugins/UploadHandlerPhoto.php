@@ -1,10 +1,15 @@
 <?php
+namespace Admidio\Infrastructure\Plugins;
+
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
+use RuntimeException;
+use stdClass;
+use UploadHandler;
 
 /**
  * Improved checks and update of database after upload of photos.

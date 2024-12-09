@@ -2,13 +2,13 @@
 namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
+use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Roles\Service\RoleService;
 use Admidio\UI\Component\Form;
 use HtmlDataTables;
 use HtmlPage;
-use RoleDependency;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.

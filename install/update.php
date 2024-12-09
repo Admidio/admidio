@@ -2,6 +2,7 @@
 
 
 use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;

@@ -2,15 +2,15 @@
 namespace Admidio\Roles\Entity;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Users\Entity\User;
 use DateInterval;
 use DateTime;
-use Participants;
-use RoleDependency;
 
 /**
  * @brief Class manages access to database table adm_roles

@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Roles\ValueObject;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;

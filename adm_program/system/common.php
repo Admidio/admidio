@@ -2,6 +2,7 @@
 
 use Admidio\Application\Navigation;
 use Admidio\Components\Entity\Component;
+use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\Menu;

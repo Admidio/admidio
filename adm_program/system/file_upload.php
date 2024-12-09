@@ -19,6 +19,8 @@
 
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\UploadHandlerFile;
+use Admidio\Infrastructure\Plugins\UploadHandlerPhoto;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Photos\Entity\Album;
@@ -134,7 +136,7 @@ try {
                 array('accept_file_types' => $gL10n->get('SYS_PHOTO_FORMAT_INVALID'))
             );
         } elseif ($getModule === 'documents_files') {
-            $uploadHandler = new UploadHandlerDownload(array(
+            $uploadHandler = new UploadHandlerFile(array(
                 'upload_dir' => $uploadDir,
                 'upload_url' => $uploadUrl,
                 'image_versions' => array(),

@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Entity\Entity;

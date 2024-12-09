@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
@@ -6,6 +7,8 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use stdClass;
+use UploadHandler;
 
 /**
  * @brief Improved checks and update of database after upload of files.
@@ -26,7 +29,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class UploadHandlerDownload extends UploadHandler
+class UploadHandlerFile extends UploadHandler
 {
     /**
      * Override the default method to handle the specific things of the download module and
@@ -37,8 +40,8 @@ class UploadHandlerDownload extends UploadHandler
      * @param int $size
      * @param        $type
      * @param        $error
-     * @param        $index
-     * @param        $content_range
+     * @param null $index
+     * @param null $content_range
      * @return stdClass
      */
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null): stdClass
@@ -82,7 +85,7 @@ class UploadHandlerDownload extends UploadHandler
             } catch (Exception $e) {
                 try {
                     FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
-                } catch (RuntimeException $exception) {
+                } catch (\RuntimeException $exception) {
                     $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'].$file->name));
                     // TODO
                 }

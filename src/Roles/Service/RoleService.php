@@ -3,11 +3,11 @@ namespace Admidio\Roles\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Roles\Entity\Role;
+use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Users\Entity\User;
 use DateTime;
-use Admidio\Infrastructure\Utils\FileSystemUtils;
-use RoleDependency;
 
 /**
  * @brief Class with methods to display the module pages.
