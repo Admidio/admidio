@@ -12,7 +12,10 @@
  * folder_uuid : Folder UUID of the parent folder
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 
 try {
@@ -29,7 +32,7 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    $folder = new TableFolder($gDb);
+    $folder = new Folder($gDb);
     $folder->readDataByUuid($getFolderUuid);
 
     // erst prüfen, ob der User auch die entsprechenden Rechte hat

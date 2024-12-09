@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Infrastructure\Image;
+
 /**
  * @brief Class manages display of navbar in modules
  *

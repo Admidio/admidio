@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Infrastructure\Database;
+
 /**
  * @brief Admidio specific enhancements of the exception class
  *

@@ -13,7 +13,11 @@
  * file_uuid   :  UUID of the file that should be renamed
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\File;
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 
 try {
@@ -31,7 +35,7 @@ try {
 
     // check the rights of the current folder
     // user must be administrator or must have the right to upload files
-    $targetFolder = new TableFolder($gDb);
+    $targetFolder = new Folder($gDb);
     $targetFolder->getFolderForDownload($getFolderUuid);
 
     if (!$targetFolder->hasUploadRight()) {
@@ -40,12 +44,12 @@ try {
 
     // set headline and description
     if ($getFileUuid !== '') {
-        $file = new TableFile($gDb);
+        $file = new File($gDb);
         $file->readDataByUuid($getFileUuid);
         $headline = $gL10n->get('SYS_MOVE_FILE');
         $description = $gL10n->get('SYS_MOVE_FILE_DESC', array($file->getValue('fil_name')));
     } else {
-        $folder = new TableFolder($gDb);
+        $folder = new Folder($gDb);
         $folder->readDataByUuid($getFolderUuid);
         $headline = $gL10n->get('SYS_MOVE_FOLDER');
         $description = $gL10n->get('SYS_MOVE_FOLDER_DESC', array($folder->getValue('fol_name')));

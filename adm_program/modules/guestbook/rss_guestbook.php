@@ -13,7 +13,12 @@
  * organization_short_name : short name of the organization whose guestbook entries should be shown
  * *********************************************************************************************
  */
+
+use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Organizations\Entity\Organization;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -55,7 +60,7 @@ try {
         $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', array($organizationName)),
         $organizationName
     );
-    $guestbook = new TableGuestbook($gDb);
+    $guestbook = new Topic($gDb);
 
     // add the RSS items to the RssFeed object
     while ($row = $statement->fetch()) {

@@ -1,7 +1,16 @@
 <?php
+
+
+use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\ChangeNotification;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
-use Admidio\Domain\Entity\Session;
-use Admidio\Domain\Entity\System\Update;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\InstallationUpdate\Service\Update;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Session\Entity\Session;
 use Admidio\UI\Component\Form;
 use Admidio\UI\View\Installation;
 
@@ -76,7 +85,7 @@ try {
 
     // start PHP session
     try {
-        Admidio\Domain\Entity\Session::start(COOKIE_PREFIX);
+        Session::start(COOKIE_PREFIX);
     } catch (RuntimeException $exception) {
         // TODO
     }
@@ -128,7 +137,7 @@ try {
     $gChangeNotification = new ChangeNotification();
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
-    \Admidio\Domain\Entity\Utils\Installation::checkFolderPermissions();
+    \Admidio\InstallationUpdate\Service\Installation::checkFolderPermissions();
 
     // config.php exists at wrong place
     if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA . '/config.php')) {
@@ -141,7 +150,7 @@ try {
     }
 
     // check database version
-    $message = \Admidio\Domain\Entity\Utils\Installation::checkDatabaseVersion($gDb);
+    $message = \Admidio\InstallationUpdate\Service\Installation::checkDatabaseVersion($gDb);
 
     if ($message !== '') {
         showErrorMessage($message);

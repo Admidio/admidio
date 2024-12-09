@@ -13,6 +13,8 @@
  * view      :  If set to true than the output will not be send as attachement
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\File;
 use Admidio\Infrastructure\Exception;
 
 require_once(__DIR__ . '/../../system/common.php');
@@ -28,7 +30,7 @@ try {
     }
 
     // get recordset of current file from database
-    $file = new TableFile($gDb);
+    $file = new File($gDb);
     $file->getFileForDownload($getFileUuid);
 
     // get complete path with filename of the file

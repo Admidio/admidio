@@ -12,7 +12,10 @@
  * gbo_uuid   - UUID of one guestbook entry that should be shown
  ***********************************************************************************************
  */
+
+use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -39,7 +42,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // Gaestebuchobjekt anlegen
-    $guestbook = new TableGuestbook($gDb);
+    $guestbook = new Topic($gDb);
 
     if ($getGboUuid !== '') {
         // Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...

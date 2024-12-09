@@ -16,7 +16,14 @@
  * uuid   : UUID of the current object (folder, album) where the files should be uploaded
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\UploadHandlerFile;
+use Admidio\Infrastructure\Plugins\UploadHandlerPhoto;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Photos\Entity\Album;
 
 try {
     require_once(__DIR__ . '/common.php');
@@ -48,7 +55,7 @@ try {
         if (isset($_SESSION['photo_album']) && (int)$_SESSION['photo_album']->getValue('pho_uuid') === $getUuid) {
             $photoAlbum =& $_SESSION['photo_album'];
         } else {
-            $photoAlbum = new TablePhotos($gDb);
+            $photoAlbum = new Album($gDb);
             $photoAlbum->readDataByUuid($getUuid);
             $_SESSION['photo_album'] = $photoAlbum;
         }
@@ -77,7 +84,7 @@ try {
             throw new Exception('SYS_MODULE_DISABLED');
         }
 
-        $folder = new TableFolder($gDb);
+        $folder = new Folder($gDb);
         $folder->readDataByUuid($getUuid);
 
         // check if current user has right to upload files
@@ -129,7 +136,7 @@ try {
                 array('accept_file_types' => $gL10n->get('SYS_PHOTO_FORMAT_INVALID'))
             );
         } elseif ($getModule === 'documents_files') {
-            $uploadHandler = new UploadHandlerDownload(array(
+            $uploadHandler = new UploadHandlerFile(array(
                 'upload_dir' => $uploadDir,
                 'upload_url' => $uploadUrl,
                 'image_versions' => array(),

@@ -13,6 +13,9 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 try {
     require_once(__DIR__ . '/common.php');

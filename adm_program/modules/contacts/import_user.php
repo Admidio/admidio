@@ -13,8 +13,13 @@
  *             log    : Show import log of the last import
  ***********************************************************************************************
  */
-use Ramsey\Uuid\Uuid;
+
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\ValueObject\RoleDependency;
+use Admidio\Users\Entity\UserImport;
+use Ramsey\Uuid\Uuid;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -137,7 +142,7 @@ try {
             }
 
             // assign role membership to user
-            $role = new TableRoles($gDb, (int)$_SESSION['rol_id']);
+            $role = new Role($gDb, (int)$_SESSION['rol_id']);
             $role->startMembership($userImport->getValue('usr_id'));
             ++$countImportEditRole;
 

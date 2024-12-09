@@ -22,14 +22,23 @@
  * forward : true - The message of the msg_id will be copied and the base for this new message
  *
  *****************************************************************************/
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Messages\Entity\Message;
+use Admidio\Messages\Entity\MessageContent;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
-    $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
+    $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => Message::MESSAGE_TYPE_EMAIL));
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
     $getSubject = admFuncVariableIsValid($_GET, 'subject', 'string');
     $getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
@@ -46,7 +55,7 @@ try {
         $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
     }
 
-    $message = new TableMessage($gDb);
+    $message = new Message($gDb);
     $message->readDataByUuid($getMsgUuid);
 
     if ($getMsgUuid !== '') {
@@ -54,19 +63,19 @@ try {
     }
 
     // check if the call of the page was allowed by settings
-    if ((!$gSettingsManager->getBool('enable_mail_module') && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
-        || (!$gSettingsManager->getBool('enable_pm_module') && $getMsgType === TableMessage::MESSAGE_TYPE_PM)) {
+    if ((!$gSettingsManager->getBool('enable_mail_module') && $getMsgType !== Message::MESSAGE_TYPE_PM)
+        || (!$gSettingsManager->getBool('enable_pm_module') && $getMsgType === Message::MESSAGE_TYPE_PM)) {
         // message if the sending of PM is not allowed
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // check for valid login
-    if (!$gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM) {
+    if (!$gValidLogin && $getMsgType === Message::MESSAGE_TYPE_PM) {
         throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     // check if the current user has email address for sending an email
-    if ($gValidLogin && $getMsgType !== TableMessage::MESSAGE_TYPE_PM && !$gCurrentUser->hasEmail()) {
+    if ($gValidLogin && $getMsgType !== Message::MESSAGE_TYPE_PM && !$gCurrentUser->hasEmail()) {
         throw new Exception('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
     }
 
@@ -101,13 +110,13 @@ try {
     }
 
     $maxNumberRecipients = 1;
-    if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gSettingsManager->getInt('mail_max_receiver') > 0) {
+    if ($getMsgType !== Message::MESSAGE_TYPE_PM && $gSettingsManager->getInt('mail_max_receiver') > 0) {
         $maxNumberRecipients = $gSettingsManager->getInt('mail_max_receiver');
     }
 
     $list = array();
 
-    if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($gCurrentUser->getRolesWriteMails()) > 0) {
+    if ($gValidLogin && $getMsgType === Message::MESSAGE_TYPE_PM && count($gCurrentUser->getRolesWriteMails()) > 0) {
         $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
@@ -169,7 +178,7 @@ try {
         $headline = $gL10n->get('SYS_SUBJECT') . ': ' . SecurityUtils::encodeHTML($getSubject);
     } else {
         $headline = $gL10n->get('SYS_SEND_EMAIL');
-        if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
+        if ($getMsgType === Message::MESSAGE_TYPE_PM) {
             $headline = $gL10n->get('SYS_SEND_PRIVATE_MESSAGE');
         }
     }
@@ -184,7 +193,7 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-messages-write', $headline);
 
-    if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
+    if ($getMsgType === Message::MESSAGE_TYPE_PM) {
         // show form
         $form = new Form(
             'adm_pm_send_form',
@@ -250,7 +259,7 @@ try {
         $page->assignSmartyVariable('userUuid', $getUserUuid);
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
-    } elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '') {
+    } elseif ($getMsgType === Message::MESSAGE_TYPE_EMAIL && $getMsgUuid === '') {
         if ($getUserUuid !== '') {
             // check if the user has email address for receiving an email
             if (!$user->hasEmail()) {
@@ -258,7 +267,7 @@ try {
             }
         } elseif ($getRoleUuid !== '') {
             // if a certain role is called, then check if the rights for it are available
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->readDataByUuid($getRoleUuid);
 
             // Logged-out users are only allowed to write mails to roles with the flag "all visitors of the site"
@@ -329,7 +338,7 @@ try {
                 $rolesArray = $rolesStatement->fetchAll();
 
                 foreach ($rolesArray as $roleArray) {
-                    $role = new TableRoles($gDb);
+                    $role = new Role($gDb);
                     $role->setArray($roleArray);
                     $list[] = array('groupID: ' . $roleArray['rol_uuid'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
                     $listRoleIdsArray[] = $roleArray['rol_uuid'];
@@ -583,13 +592,13 @@ try {
     }
 
     if (isset($messageStatement)) {
-        $messageContent = new TableMessageContent($gDb);
+        $messageContent = new MessageContent($gDb);
 
         while ($row = $messageStatement->fetch()) {
             $messageContent->setArray($row);
             $messageFooter = '';
 
-            if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
+            if ($getMsgType === Message::MESSAGE_TYPE_PM) {
                 if ($messageContent->getValue('msc_usr_id') === $gCurrentUserId) {
                     $sentUser = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
                 } else {

@@ -14,7 +14,10 @@
  *            delete : Delete announcement
  ***********************************************************************************************
  */
+
+use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -30,7 +33,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete')));
 
     // create announcement object
-    $announcement = new TableAnnouncement($gDb);
+    $announcement = new Announcement($gDb);
 
     if ($getAnnUuid !== '') {
         $announcement->readDataByUuid($getAnnUuid);

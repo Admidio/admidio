@@ -8,7 +8,12 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\Membership;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
     exit('This page may not be called directly!');
@@ -105,8 +110,8 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
     global $gDb, $gL10n, $gCurrentUser, $gSettingsManager, $gCurrentSession;
 
     $countShowRoles = 0;
-    $member = new TableMembers($gDb);
-    $role   = new TableRoles($gDb);
+    $member = new Membership($gDb);
+    $role   = new Role($gDb);
     $smarty = HtmlPage::createSmartyObject();
     $smarty->assign('listID', $htmlListId);
     $smarty->assign('l10n', $gL10n);

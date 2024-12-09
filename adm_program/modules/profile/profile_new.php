@@ -22,7 +22,11 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\PasswordUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
+use Admidio\Users\Entity\UserRegistration;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

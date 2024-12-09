@@ -1,6 +1,16 @@
 <?php
+
+use Admidio\Application\Navigation;
+use Admidio\Components\Entity\Component;
+use Admidio\Infrastructure\ChangeNotification;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
-use Admidio\Domain\Entity\Session;
+use Admidio\Menu\ValueObject\Menu;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Session\Entity\Session;
+use Admidio\UI\Component\Message;
+use Admidio\Users\Entity\User;
 
 /**
  ***********************************************************************************************
@@ -198,12 +208,12 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
 // create a global menu object that reads the menu structure only once
 if ($gCurrentSession->hasObject('gMenu')) {
     /**
-     * @var MainMenu $gMenu
+     * @var Menu $gMenu
      */
     $gMenu =& $gCurrentSession->getObject('gMenu');
 } else {
     // read menu from database
-    $gMenu = new MainMenu();
+    $gMenu = new Menu();
     $gCurrentSession->addObject('gMenu', $gMenu);
 }
 

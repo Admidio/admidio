@@ -12,8 +12,13 @@
  ***********************************************************************************************
  */
 
+use Admidio\Events\Entity\Event;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\Membership;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -28,7 +33,7 @@ try {
     $disableComments = Form::FIELD_HIDDEN;
 
     // Get the date object
-    $event = new TableEvent($gDb);
+    $event = new Event($gDb);
     $event->readDataByUuid($getEventUuid);
 
     // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
@@ -59,7 +64,7 @@ try {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
-    $member = new TableMembers($gDb);
+    $member = new Membership($gDb);
     $member->readDataByColumns(array('mem_rol_id' => (int)$event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
 
     // Write header with charset utf8

@@ -14,6 +14,8 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\UI\Component\Form;
 
 try {

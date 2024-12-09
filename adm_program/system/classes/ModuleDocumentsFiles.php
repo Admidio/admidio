@@ -1,4 +1,9 @@
 <?php
+
+use Admidio\Documents\Entity\Folder;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+
 /**
  * @brief Class with methods to display the module pages and helpful functions.
  *
@@ -27,9 +32,9 @@ class ModuleDocumentsFiles extends HtmlPage
      */
     protected array $unregisteredFoldersFiles = array();
     /**
-     * @var TableFolder Object of the current folder
+     * @var Folder Object of the current folder
      */
-    protected TableFolder $folder;
+    protected Folder $folder;
 
     /**
      * Show all roles of the organization in card view. The roles must be read before with the method readData.
@@ -195,7 +200,7 @@ class ModuleDocumentsFiles extends HtmlPage
     {
         global $gDb, $gSettingsManager;
 
-        $this->folder = new TableFolder($gDb);
+        $this->folder = new Folder($gDb);
         $this->folder->readDataByUuid($folderUUID);
 
         $this->data = array();
@@ -276,7 +281,7 @@ class ModuleDocumentsFiles extends HtmlPage
         $filesStatement = $gDb->queryPrepared($sqlFiles, array($folderID));
 
         while($row = $filesStatement->fetch()) {
-            $folder = new TableFolder($gDb, $row['fol_id']);
+            $folder = new Folder($gDb, $row['fol_id']);
 
             if ($folder->hasUploadRight()) {
                 $arrAllUploadableFolders[$folder->getValue('fol_uuid')] = $indent.'- '.$folder->getValue('fol_name');

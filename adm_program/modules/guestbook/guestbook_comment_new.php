@@ -13,7 +13,11 @@
  * gbc_uuid      - UUID of the comment that should be edited
  ***********************************************************************************************
  */
+
+use Admidio\Forum\Entity\Post;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -65,7 +69,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // Gaestebuchkommentarobjekt anlegen
-    $gbComment = new TableGuestbookComment($gDb);
+    $gbComment = new Post($gDb);
 
     if ($getGbcUuid !== '') {
         $gbComment->readDataByUuid($getGbcUuid);

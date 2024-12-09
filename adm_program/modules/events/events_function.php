@@ -25,7 +25,18 @@
  *             if this parameter is not set than this date is set to 31.12.9999
  ***********************************************************************************************
  */
+
+use Admidio\Categories\Entity\Category;
+use Admidio\Events\Entity\Event;
+use Admidio\Events\Entity\Room;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\Membership;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Entity\RolesRights;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -58,7 +69,7 @@ try {
     }
 
     // create event object
-    $event = new TableEvent($gDb);
+    $event = new Event($gDb);
     $event->readDataByUuid($getEventUuid);
 
     // read user data
@@ -96,7 +107,7 @@ try {
             throw new Exception('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));
         }
 
-        $calendar = new TableCategory($gDb);
+        $calendar = new Category($gDb);
         $calendar->readDataByUuid($formValues['cat_uuid']);
         $formValues['dat_cat_id'] = $calendar->getValue('cat_id');
 
@@ -215,7 +226,7 @@ try {
                 }
 
                 $event->setValue('dat_room_id', $eventRoomId);
-                $room = new TableRooms($gDb);
+                $room = new Room($gDb);
                 $room->readDataById($eventRoomId);
                 $number = (int)$room->getValue('room_capacity') + (int)$room->getValue('room_overhang');
                 $event->setValue('dat_max_members', $number);
@@ -260,14 +271,14 @@ try {
             if ($event->getValue('dat_rol_id') > 0) {
                 // if event exists, and you could register to this event then we must check
                 // if the data of the role must be changed
-                $role = new TableRoles($gDb, (int)$event->getValue('dat_rol_id'));
+                $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
 
                 $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
-                $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
+                $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
                 // role members are allowed to send mail to this role
-                $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
+                $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_NOBODY);
                 $role->setValue('rol_max_members', (int)$event->getValue('dat_max_members'));
 
                 $role->save();
@@ -280,7 +291,7 @@ try {
                      WHERE dat_uuid = ?';
                     $pdoStatement = $gDb->queryPrepared($sql, array($originalEventUuid));
 
-                    $role = new TableRoles($gDb, (int)$pdoStatement->fetchColumn());
+                    $role = new Role($gDb, (int)$pdoStatement->fetchColumn());
                     $role->setNewRecord();
                 } else {
                     // Read category for event participation
@@ -289,16 +300,16 @@ try {
                      WHERE cat_name_intern = \'EVENTS\'
                        AND cat_org_id = ?';
                     $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
-                    $role = new TableRoles($gDb);
-                    $role->setType(TableRoles::ROLE_EVENT);
+                    $role = new Role($gDb);
+                    $role->setType(Role::ROLE_EVENT);
 
                     // these are the default settings for an event role
                     $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
                     // role members are allowed to view lists
-                    $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
+                    $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
                     // role members are allowed to send mail to this role
-                    $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
-                    $role->setValue('rol_leader_rights', TableRoles::ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participants
+                    $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_NOBODY);
+                    $role->setValue('rol_leader_rights', Role::ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participants
                     $role->setValue('rol_max_members', (int)$formValues['dat_max_members']);
                 }
 
@@ -321,7 +332,7 @@ try {
                 && $gCurrentUser->isMemberOfRole((int)$event->getValue('dat_rol_id'))) {
                 // user doesn't want to participate as leader -> remove his participation as leader from the event,
                 // don't remove the participation itself!
-                $member = new TableMembers($gDb);
+                $member = new Membership($gDb);
                 $member->readDataByColumns(array('mem_rol_id' => (int)$role->getValue('rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
                 $member->setValue('mem_leader', 0);
                 $member->save();
@@ -329,7 +340,7 @@ try {
         } else {
             if ($event->getValue('dat_rol_id') > 0) {
                 // event participation was deselected -> delete flag in event and than delete role
-                $role = new TableRoles($gDb, (int)$event->getValue('dat_rol_id'));
+                $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
                 $event->setValue('dat_rol_id', '');
                 $event->save();
                 $role->delete();
@@ -370,7 +381,7 @@ try {
             $events->setDateRange($getDateFrom, $getDateTo);
 
             if ($getCatUuid !== '') {
-                $calendar = new TableCategory($gDb);
+                $calendar = new Category($gDb);
                 $events->setParameter('cat_uuid', $getCatUuid);
                 $calendar->readDataByUuid($getCatUuid);
                 $filename .= '-'.$calendar->getValue('cat_name');
@@ -403,7 +414,7 @@ try {
             $formValues = $eventsParticipationEditForm->validate($_POST);
         }
 
-        $member = new TableMembers($gDb);
+        $member = new Membership($gDb);
         $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
 
         // if current user is allowed to participate or user could edit this event then update user inputs

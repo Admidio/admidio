@@ -13,8 +13,13 @@
  * file_uuid   :  UUID of the file that should be renamed
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\File;
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -40,7 +45,7 @@ try {
 
     // check the rights of the current folder
     // user must be administrator or must have the right to upload files
-    $targetFolder = new TableFolder($gDb);
+    $targetFolder = new Folder($gDb);
     $targetFolder->getFolderForDownload($getFolderUuid);
 
     if (!$targetFolder->hasUploadRight()) {
@@ -52,7 +57,7 @@ try {
 
     if ($getFileUuid !== '') {
         // get recordset of current file from database
-        $file = new TableFile($gDb);
+        $file = new File($gDb);
         $file->getFileForDownload($getFileUuid);
 
         $originalName = pathinfo($file->getValue('fil_name'), PATHINFO_FILENAME);

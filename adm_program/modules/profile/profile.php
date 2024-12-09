@@ -14,6 +14,11 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\Role;
+use Admidio\Users\Entity\User;
+use Admidio\Users\Entity\UserRelation;
+use Admidio\Users\Entity\UserRelationType;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -560,7 +565,7 @@ try {
             $showRolesOtherOrganizations = false;
             $actualOrganization = 0;
             $externalRoles = array();
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
 
             while ($row = $roleStatement->fetch()) {
                 $orgId = (int)$row['org_id'];
@@ -629,8 +634,8 @@ try {
               ORDER BY urt_name';
             $relationStatement = $gDb->queryPrepared($sql, array($userId));
 
-            $relationType = new TableUserRelationType($gDb);
-            $relation = new TableUserRelation($gDb);
+            $relationType = new UserRelationType($gDb);
+            $relation = new UserRelation($gDb);
             $otherUser = new User($gDb, $gProfileFields);
             $userRelations = array();
 

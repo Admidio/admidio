@@ -1,5 +1,6 @@
 <?php
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  ***********************************************************************************************

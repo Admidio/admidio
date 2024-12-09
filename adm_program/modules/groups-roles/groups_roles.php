@@ -25,7 +25,11 @@
  *             2 - event participation roles
  ***********************************************************************************************
  */
+
+use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Service\RoleService;
 use Admidio\UI\View\GroupsRoles;
 
 try {
@@ -74,7 +78,7 @@ try {
             $getRoleType = GroupsRoles::ROLE_TYPE_ACTIVE;
         }
 
-        $category = new TableCategory($gDb);
+        $category = new Category($gDb);
 
         if (strlen($getCategoryUUID) > 1) {
             $category->readDataByUuid($getCategoryUUID);
@@ -137,7 +141,7 @@ try {
             break;
 
         case 'save':
-            $groupsRoles = new \Admidio\Domain\Service\GroupsRoles($gDb, $getRoleUUID);
+            $groupsRoles = new RoleService($gDb, $getRoleUUID);
             $groupsRoles->save();
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
@@ -145,7 +149,7 @@ try {
 
         case 'delete':
             // delete role from database
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             if ($role->delete()) {
                 echo json_encode(array('status' => 'success'));
@@ -154,7 +158,7 @@ try {
 
         case 'activate':
             // set role active
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             $role->activate();
             echo 'done';
@@ -162,7 +166,7 @@ try {
 
         case 'deactivate':
             // set role inactive
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             $role->deactivate();
             echo 'done';
@@ -170,7 +174,7 @@ try {
 
         case 'export':
             // Export every member of a role into one vCard file
-            $groupsRoles = new \Admidio\Domain\Service\GroupsRoles($gDb, $getRoleUUID);
+            $groupsRoles = new RoleService($gDb, $getRoleUUID);
             $groupsRoles->export();
             break;
     }

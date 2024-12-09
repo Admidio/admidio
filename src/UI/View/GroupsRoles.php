@@ -2,13 +2,13 @@
 namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\ValueObject\RoleDependency;
+use Admidio\Roles\Service\RoleService;
 use Admidio\UI\Component\Form;
-use DateTimeExtended;
 use HtmlDataTables;
 use HtmlPage;
-use RoleDependency;
-use SecurityUtils;
-use TableRoles;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -75,7 +75,7 @@ class GroupsRoles extends HtmlPage
         $templateDataRoles = array();
 
         foreach ($this->data as $row) {
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->setArray($row);
 
             if ($categoryUUID !== $row['cat_uuid']) {
@@ -183,7 +183,7 @@ class GroupsRoles extends HtmlPage
 
                 if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
                     if ($role->getValue('rol_weekday') > 0) {
-                        $html .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')) . ' ';
+                        $html .= RoleService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                     }
                     if (!empty($role->getValue('rol_start_time'))) {
                         $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
@@ -209,7 +209,7 @@ class GroupsRoles extends HtmlPage
 
                 // Contributory period
                 if (!empty($role->getValue('rol_cost_period')) && $role->getValue('rol_cost_period') != 0) {
-                    $html .= ' - ' . TableRoles::getCostPeriods($role->getValue('rol_cost_period'));
+                    $html .= ' - ' . Role::getCostPeriods($role->getValue('rol_cost_period'));
                 }
 
                 $templateRow['information'][] = '<h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span></li>';
@@ -272,7 +272,7 @@ class GroupsRoles extends HtmlPage
         $eventRole = false;
 
         // create role object
-        $role = new TableRoles($gDb);
+        $role = new Role($gDb);
 
         if ($roleUUID !== '') {
             $role->readDataByUuid($roleUUID);
@@ -467,7 +467,7 @@ class GroupsRoles extends HtmlPage
             $form->addSelectBox(
                 'rol_cost_period',
                 $gL10n->get('SYS_CONTRIBUTION_PERIOD'),
-                TableRoles::getCostPeriods(),
+                Role::getCostPeriods(),
                 array('defaultValue' => $role->getValue('rol_cost_period'), 'class' => 'form-control-small')
             );
         }
@@ -573,7 +573,7 @@ class GroupsRoles extends HtmlPage
             $form->addInput('rol_end_date', $gL10n->get('SYS_VALID_TO'), $role->getValue('rol_end_date'), array('type' => 'date'));
             $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));
             $form->addInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), array('type' => 'time'));
-            $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), DateTimeExtended::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
+            $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), RoleService::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
             $form->addInput('rol_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'), array('maxLength' => 100));
 
             $roleName = $gL10n->get('SYS_NEW_ROLE');
@@ -636,7 +636,7 @@ class GroupsRoles extends HtmlPage
         $templateData = array();
 
         foreach ($this->data as $row) {
-            $role = new TableRoles($gDb);
+            $role = new Role($gDb);
             $role->setArray($row);
 
             $templateRow = array();

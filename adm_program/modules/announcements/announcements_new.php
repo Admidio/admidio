@@ -13,7 +13,10 @@
  * copy = true : The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
+
+use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 
 try {
@@ -42,7 +45,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // Create announcements object
-    $announcement = new TableAnnouncement($gDb);
+    $announcement = new Announcement($gDb);
 
     if ($getAnnUuid !== '') {
         $announcement->readDataByUuid($getAnnUuid);

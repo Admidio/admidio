@@ -13,6 +13,8 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Photos\Entity\Album;
 use Admidio\UI\Component\Form;
 
 try {
@@ -31,14 +33,14 @@ try {
     }
 
     // create photo album object
-    $photoAlbum = new TablePhotos($gDb);
+    $photoAlbum = new Album($gDb);
 
     if ($getPhotoUuid === '') {
         $headline = $gL10n->get('SYS_CREATE_ALBUM');
     } else {
         $headline = $gL10n->get('SYS_EDIT_ALBUM');
         $photoAlbum->readDataByUuid($getPhotoUuid);
-        $parentAlbum = new TablePhotos($gDb, (int)$photoAlbum->getValue('pho_pho_id_parent'));
+        $parentAlbum = new Album($gDb, (int)$photoAlbum->getValue('pho_pho_id_parent'));
         $getParentPhotoUuid = $parentAlbum->getValue('pho_uuid');
     }
 
@@ -61,7 +63,7 @@ try {
 
         $vorschub .= '&nbsp;&nbsp;&nbsp;';
         $sqlConditionParentId = '';
-        $parentPhotoAlbum = new TablePhotos($gDb);
+        $parentPhotoAlbum = new Album($gDb);
 
         $queryParams = array($currentAlbumPhoId, $gCurrentOrgId);
 

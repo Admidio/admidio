@@ -13,6 +13,7 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Weblinks\Entity\Weblink;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -30,7 +31,7 @@ try {
     }
 
     // read link from id
-    $weblink = new TableWeblink($gDb);
+    $weblink = new Weblink($gDb);
     $weblink->readDataByUuid($getLinkUuid);
     $lnkUrl = $weblink->getValue('lnk_url');
 

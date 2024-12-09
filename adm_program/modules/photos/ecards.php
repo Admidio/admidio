@@ -14,8 +14,16 @@
  * user_uuid:  (optional) UUID of the user who should receive the ecard
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Photos\Entity\Album;
+use Admidio\Photos\ValueObject\ECard;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -49,7 +57,7 @@ try {
     if (isset($_SESSION['photo_album']) && (int)$_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
         $photoAlbum =& $_SESSION['photo_album'];
     } else {
-        $photoAlbum = new TablePhotos($gDb);
+        $photoAlbum = new Album($gDb);
         $photoAlbum->readDataByUuid($getPhotoUuid);
 
         $_SESSION['photo_album'] = $photoAlbum;

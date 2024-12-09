@@ -1,5 +1,9 @@
 <?php
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Creates an Admidio specific form with special elements

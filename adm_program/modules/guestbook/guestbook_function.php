@@ -21,7 +21,11 @@
  *          moderate_comment - Moderate guestbook comment
  ***********************************************************************************************
  */
+
+use Admidio\Forum\Entity\Post;
+use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -45,7 +49,7 @@ try {
     }
 
     if ($getMode === 'create_comment') {
-        $guestbook = new TableGuestbook($gDb);
+        $guestbook = new Topic($gDb);
         $guestbook->readDataByUuid($getGboUuid);
 
         // check if only logged-in users could create a comment
@@ -66,7 +70,7 @@ try {
     }
 
     if (in_array($getMode, array('create_entry', 'edit_entry', 'moderate_entry', 'delete_entry'), true)) {
-        $guestbook = new TableGuestbook($gDb);
+        $guestbook = new Topic($gDb);
 
         if ($getGboUuid !== '') {
             $guestbook->readDataByUuid($getGboUuid);
@@ -77,7 +81,7 @@ try {
             }
         }
     } elseif (in_array($getMode, array('create_comment', 'edit_comment', 'moderate_comment', 'delete_comment'), true)) {
-        $gbComment = new TableGuestbookComment($gDb);
+        $gbComment = new Post($gDb);
 
         if ($getGbcUuid !== '' && $getMode !== 'create_comment') {
             $gbComment->readDataByUuid($getGbcUuid);

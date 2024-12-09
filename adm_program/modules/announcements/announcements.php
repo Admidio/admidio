@@ -18,7 +18,11 @@
  *             if no date information is delivered
  ***********************************************************************************************
  */
+
+use Admidio\Announcements\Entity\Announcement;
+use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 
 try {
@@ -41,7 +45,7 @@ try {
     }
 
     $headline = $gL10n->get('SYS_ANNOUNCEMENTS');
-    $category = new TableCategory($gDb);
+    $category = new Category($gDb);
 
     if ($getCatUuid !== '') {
         $category->readDataByUuid($getCatUuid);
@@ -141,7 +145,7 @@ try {
     } else {
         // get all data records
         $announcementsArray = $announcements->getDataSet($getStart, $announcementsPerPage);
-        $announcement = new TableAnnouncement($gDb);
+        $announcement = new Announcement($gDb);
 
         // show all announcements
         foreach ($announcementsArray['recordset'] as $row) {

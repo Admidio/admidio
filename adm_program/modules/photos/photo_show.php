@@ -23,6 +23,9 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Image;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Photos\Entity\Album;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -47,7 +50,7 @@ try {
     if (isset($_SESSION['photo_album']) && (int)$_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
         $photoAlbum =& $_SESSION['photo_album'];
     } else {
-        $photoAlbum = new TablePhotos($gDb);
+        $photoAlbum = new Album($gDb);
         $photoAlbum->readDataByUuid($getPhotoUuid);
         $_SESSION['photo_album'] = $photoAlbum;
     }

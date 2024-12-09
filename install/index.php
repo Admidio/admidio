@@ -10,6 +10,8 @@
  */
 
 
+use Admidio\Infrastructure\Database;
+
 $rootPath = dirname(__DIR__, 2);
 
 // check if installation is necessary

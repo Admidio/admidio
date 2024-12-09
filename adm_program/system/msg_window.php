@@ -13,6 +13,9 @@
  * inline        - true : message should not be shown in separate window
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Room;
+
 try {
     require_once(__DIR__ . '/common.php');
 
@@ -38,7 +41,7 @@ try {
         // room help text
         case 'room_detail':
             if (is_numeric($getMessageVar1)) {
-                $room = new TableRooms($gDb, $getMessageVar1);
+                $room = new Room($gDb, $getMessageVar1);
                 echo '
                 <div class="row">
                     <div class="col-4"><strong>' . $gL10n->get('SYS_ROOM') . ':</strong></div>

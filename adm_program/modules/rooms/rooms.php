@@ -9,7 +9,10 @@
  *
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -90,7 +93,7 @@ try {
         // Keine Räume gefunden
         $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
     } else {
-        $room = new TableRooms($gDb);
+        $room = new Room($gDb);
         // Räume auflisten
         while ($row = $roomsStatement->fetch()) {
             // GB-Objekt initialisieren und neuen DS uebergeben

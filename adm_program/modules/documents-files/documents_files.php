@@ -12,7 +12,10 @@
  * folder_uuid : UUID of the current folder that should be shown
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -26,7 +29,7 @@ try {
     }
 
     // get recordset of current folder from database
-    $currentFolder = new TableFolder($gDb);
+    $currentFolder = new Folder($gDb);
     $currentFolder->getFolderForDownload($getFolderUUID);
 
     // set headline of the script

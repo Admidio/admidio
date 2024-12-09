@@ -3,11 +3,11 @@ namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
-use Component;
+use Admidio\Components\Entity\Component;
 use HtmlPage;
-use RolesRights;
-use SecurityUtils;
-use TableCategory;
+use Admidio\Roles\Entity\RolesRights;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Categories\Entity\Category;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -115,7 +115,7 @@ class Categories extends HtmlPage
         }
 
         // create category object
-        $category = new TableCategory($gDb);
+        $category = new Category($gDb);
 
         if ($categoryUUID !== '') {
             $category->readDataByUuid($categoryUUID);
@@ -453,7 +453,7 @@ class Categories extends HtmlPage
 
         $categoryStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $type));
 
-        $category = new TableCategory($gDb);
+        $category = new Category($gDb);
         $templateCategoryNodes = array();
         $templateCategories = array();
         $categoryOrganizationID = 0;

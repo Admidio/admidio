@@ -12,7 +12,10 @@
  * room_uuid : UUID of room, that should be shown
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 
 try {
@@ -28,7 +31,7 @@ try {
     }
 
     // Create room object
-    $room = new TableRooms($gDb);
+    $room = new Room($gDb);
 
     if ($getRoomUuid !== '') {
         $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_ROOM')));

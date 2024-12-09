@@ -3,11 +3,11 @@ namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Menu\Entity\MenuEntry;
 use Admidio\UI\Component\Form;
 use HtmlPage;
-use RolesRights;
-use SecurityUtils;
-use TableMenu;
+use Admidio\Roles\Entity\RolesRights;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -38,7 +38,7 @@ class Menu extends HtmlPage
         global $gDb, $gL10n, $gCurrentSession;
 
         // create menu object
-        $menu = new TableMenu($gDb);
+        $menu = new MenuEntry($gDb);
 
         // system categories should not be renamed
         $roleViewSet[] = 0;
@@ -90,7 +90,7 @@ class Menu extends HtmlPage
             $fieldDefault = Form::FIELD_DISABLED;
         }
 
-        $subMenu = \Admidio\Domain\Service\Menu::subMenu(1, (int)$menu->getValue('men_id'));
+        $subMenu = \Admidio\Menu\Service\Menu::subMenu(1, (int)$menu->getValue('men_id'));
 
         $form->addInput(
             'men_name',

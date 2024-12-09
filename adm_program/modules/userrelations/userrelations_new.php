@@ -12,8 +12,13 @@
  * user_uuid : UUID of the first user in the new relation
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -142,8 +147,8 @@ try {
             $gCurrentUserId,
             DATE_NOW,
             DATE_NOW,
-            TableRoles::ROLE_LEADER_MEMBERS_EDIT,
-            TableRoles::ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
+            Role::ROLE_LEADER_MEMBERS_EDIT,
+            Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
             $gCurrentOrgId,
             DATE_NOW,
             DATE_NOW

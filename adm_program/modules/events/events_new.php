@@ -13,7 +13,13 @@
  * copy : true - The event of the dat_id will be copied and the base for this new event
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Event;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Component\Form;
 
 try {
@@ -48,7 +54,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create event object
-    $event = new TableEvent($gDb);
+    $event = new Event($gDb);
 
     if ($getEventUuid !== '') {
         // read data from database
@@ -66,7 +72,7 @@ try {
         // check if a participation to this event is possible
         if ((int)$event->getValue('dat_rol_id') > 0) {
             $eventParticipationPossible = true;
-            $role = new TableRoles($gDb, (int)$event->getValue('dat_rol_id'));
+            $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
             $flagDateRightListView = (bool)$role->getValue('rol_view_memberships');
             $flagDateRightSendMail = (bool)$role->getValue('rol_mail_this_role');
         }

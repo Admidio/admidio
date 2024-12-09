@@ -20,7 +20,13 @@
  * file_uuid   : UUID of the file in the database
  * name        : Name of the file/folder that should be added to the database
  ***********************************************************************************************/
+
+use Admidio\Documents\Entity\File;
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\RolesRights;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -38,11 +44,11 @@ try {
     }
 
     // Check path in adm_my_files and create if necessary
-    FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName());
+    FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/' . Folder::getRootFolderName());
 
     // check the rights of the current folder
     // user must be administrator or must have the right to upload files
-    $folder = new TableFolder($gDb);
+    $folder = new Folder($gDb);
     $folder->getFolderForDownload($getFolderUuid);
 
     if (!$folder->hasUploadRight()) {
@@ -58,7 +64,7 @@ try {
     if ($getMode === 'delete_file') {
         if ($getFileUuid !== '') {
             // get recordset of current file from database
-            $file = new TableFile($gDb);
+            $file = new File($gDb);
             $file->getFileForDownload($getFileUuid);
 
             $file->delete();
@@ -96,7 +102,7 @@ try {
                     $folId = (int) $folder->getValue('fol_id');
 
                     // add folder to database
-                    $newFolder = new TableFolder($gDb);
+                    $newFolder = new Folder($gDb);
 
                     $newFolder->setValue('fol_fol_id_parent', $folId);
                     $newFolder->setValue('fol_type', 'DOCUMENTS');
@@ -149,7 +155,7 @@ try {
 
             if ($getFileUuid !== '') {
                 // get recordset of current file from database and throw exception if necessary
-                $file = new TableFile($gDb);
+                $file = new File($gDb);
                 $file->getFileForDownload($getFileUuid);
 
                 $oldFile = $file->getFullFilePath();
@@ -337,11 +343,11 @@ try {
         $formValues = $documentsFilesMoveForm->validate($_POST);
 
         if ($getFileUuid !== '') {
-            $file = new TableFile($gDb);
+            $file = new File($gDb);
             $file->readDataByUuid($getFileUuid);
             $file->moveToFolder($destFolderUUID);
         } else {
-            $folder = new TableFolder($gDb);
+            $folder = new Folder($gDb);
             $folder->readDataByUuid($getFolderUuid);
             $folder->moveToFolder($destFolderUUID);
         }

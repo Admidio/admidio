@@ -1,5 +1,7 @@
 <?php
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Users\Entity\User;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.

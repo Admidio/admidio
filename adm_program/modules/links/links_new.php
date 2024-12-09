@@ -13,7 +13,9 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Weblinks\Entity\Weblink;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -28,7 +30,7 @@ try {
     }
 
     // create weblink object
-    $link = new TableWeblink($gDb);
+    $link = new Weblink($gDb);
 
     if ($getLinkUuid !== '') {
         $link->readDataByUuid($getLinkUuid);

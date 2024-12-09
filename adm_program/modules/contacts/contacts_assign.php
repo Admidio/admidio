@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -33,7 +34,7 @@ try {
     $newUser->setValue('FIRST_NAME', $postFirstname);
     $page->createContentAssignUser($newUser);
     echo $page->getPageContent();
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if ($e->getMessage() === 'No similar users found.') {
         echo json_encode(array(
             'status' => 'success',

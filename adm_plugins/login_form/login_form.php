@@ -1,5 +1,7 @@
 <?php
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
 
 /**
@@ -100,7 +102,7 @@ try {
             $administratorStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
             // create role object for administrator
-            $roleAdministrator = new TableRoles($gDb, (int)$administratorStatement->fetchColumn());
+            $roleAdministrator = new Role($gDb, (int)$administratorStatement->fetchColumn());
 
             $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 

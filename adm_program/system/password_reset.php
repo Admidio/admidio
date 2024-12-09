@@ -14,7 +14,12 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\SystemMail;
+use Admidio\Infrastructure\Utils\PasswordUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 try {
     require_once(__DIR__ . '/common.php');

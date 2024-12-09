@@ -14,7 +14,10 @@
  *             delete - delete room
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -28,7 +31,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    $room = new TableRooms($gDb);
+    $room = new Room($gDb);
 
     if ($getRoomUuid !== '') {
         $room->readDataByUuid($getRoomUuid);

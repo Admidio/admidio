@@ -23,7 +23,12 @@
  * uuid  : UUID of the category that should be edited
  * direction : Direction to change the sequence of the category
  ****************************************************************************/
+
+use Admidio\Categories\Entity\Category;
+use Admidio\Categories\Service\CategoryService;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Menu\Entity\MenuEntry;
 use Admidio\UI\View\Categories;
 
 try {
@@ -82,7 +87,7 @@ try {
             break;
 
         case 'save':
-            $categoriesModule = new \Admidio\Domain\Service\Categories($gDb, $getType, $getCategoryUUID);
+            $categoriesModule = new CategoryService($gDb, $getType, $getCategoryUUID);
             $categoriesModule->save();
 
             $gNavigation->deleteLastUrl();
@@ -95,7 +100,7 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $menu = new TableCategory($gDb);
+            $menu = new Category($gDb);
             $menu->readDataByUuid($getCategoryUUID);
             $menu->delete();
             echo json_encode(array('status' => 'success'));
@@ -103,12 +108,12 @@ try {
 
         case 'sequence':
             // Update menu entry sequence
-            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
+            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
 
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $menu = new TableCategory($gDb);
+            $menu = new Category($gDb);
             $menu->readDataByUuid($getCategoryUUID);
             $menu->moveSequence($postDirection);
             echo json_encode(array('status' => 'success'));

@@ -17,6 +17,8 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Photos\Entity\Album;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -32,7 +34,7 @@ try {
     }
 
     // create photo album object
-    $photoAlbum = new TablePhotos($gDb);
+    $photoAlbum = new Album($gDb);
 
     if ($getPhotoUuid !== '') {
         $photoAlbum->readDataByUuid($getPhotoUuid);
@@ -81,7 +83,7 @@ try {
         }
 
         // set parent photo id
-        $photoAlbumParent = new TablePhotos($gDb);
+        $photoAlbumParent = new Album($gDb);
         $photoAlbumParent->readDataByUuid($_POST['parent_album_uuid']);
         $_POST['pho_pho_id_parent'] = $photoAlbumParent->getValue('pho_id');
 

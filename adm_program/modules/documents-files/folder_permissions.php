@@ -12,7 +12,11 @@
  * folder_uuid : UUID of the current folder to configure the rights
  ***********************************************************************************************
  */
+
+use Admidio\Documents\Entity\Folder;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 
 try {
@@ -41,13 +45,13 @@ try {
     $sqlRolesUploadRight = '';
 
     // get recordset of current folder from database
-    $folder = new TableFolder($gDb);
+    $folder = new Folder($gDb);
     $folder->getFolderForDownload($getFolderUuid);
 
     // read parent folder
     if ($folder->getValue('fol_fol_id_parent')) {
         // get recordset of parent folder from database
-        $parentFolder = new TableFolder($gDb, (int)$folder->getValue('fol_fol_id_parent'));
+        $parentFolder = new Folder($gDb, (int)$folder->getValue('fol_fol_id_parent'));
         $parentFolder->getFolderForDownload($parentFolder->getValue('fol_uuid'));
 
         // get assigned roles of the parent folder

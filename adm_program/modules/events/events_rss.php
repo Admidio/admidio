@@ -13,7 +13,12 @@
  * organization_short_name : short name of the organization whose events should be shown
  * *********************************************************************************************
  */
+
+use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Organizations\Entity\Organization;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -52,7 +57,7 @@ try {
 
     // add the RSS items to the RssFeed object
     if ($eventsResult['numResults'] > 0) {
-        $event = new TableEvent($gDb);
+        $event = new Event($gDb);
         foreach ($eventsResult['recordset'] as $row) {
             // move read out event data into event object
             $event->clear();

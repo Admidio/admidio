@@ -15,6 +15,8 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Photos\Entity\Album;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -38,7 +40,7 @@ try {
         $photoAlbum =& $_SESSION['photo_album'];
     } else {
         // einlesen des Albums falls noch nicht in Session gespeichert
-        $photoAlbum = new TablePhotos($gDb);
+        $photoAlbum = new Album($gDb);
         if ($getPhotoUuid !== '') {
             $photoAlbum->readDataByUuid($getPhotoUuid);
         }
@@ -336,7 +338,7 @@ try {
             $page->addHtml('<hr />');
         }
 
-        $childPhotoAlbum = new TablePhotos($gDb);
+        $childPhotoAlbum = new Album($gDb);
 
         $page->addHtml('<div class="row admidio-margin-bottom">');
 

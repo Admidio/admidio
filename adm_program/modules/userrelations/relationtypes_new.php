@@ -13,7 +13,9 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\UserRelationType;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -33,8 +35,8 @@ try {
     $headline = $gL10n->get('SYS_RELATIONSHIP_CONFIGURATION');
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    $relationType1 = new TableUserRelationType($gDb);
-    $relationType2 = new TableUserRelationType($gDb);
+    $relationType1 = new UserRelationType($gDb);
+    $relationType2 = new UserRelationType($gDb);
 
     if ($getUrtUuid !== '') {
         $relationType1->readDataByUuid($getUrtUuid);

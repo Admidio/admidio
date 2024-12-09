@@ -1,6 +1,10 @@
 <?php
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 
 /**
  * Class with methods to display the login module and handle the input.
@@ -56,7 +60,7 @@ class ModuleLogin
         $pdoStatement = $gDb->queryPrepared($sql, array($organizationShortName));
 
         // create role object for administrator
-        $roleAdministrator = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
+        $roleAdministrator = new Role($gDb, (int) $pdoStatement->fetchColumn());
 
         // show link if user has login problems
         if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {

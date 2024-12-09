@@ -8,6 +8,14 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+
+use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\Utils\PasswordUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
@@ -36,7 +44,7 @@ if (isset($_SESSION['table_prefix'])
 PhpIniUtils::startNewExecutionTimeLimit(300);
 
 // read data from sql script db.sql and execute all statements to the current database
-\Admidio\Domain\Entity\Utils\Installation::querySqlFile($db, 'db.sql');
+\Admidio\InstallationUpdate\Service\Installation::querySqlFile($db, 'db.sql');
 
 // create default data
 
@@ -52,7 +60,7 @@ $component->save();
 
 // create a hidden system user for internal use
 // all recordsets created by installation will get the create id of the system user
-$gCurrentUser = new TableAccess($db, TBL_USERS, 'usr');
+$gCurrentUser = new Entity($db, TBL_USERS, 'usr');
 $gCurrentUser->setValue('usr_login_name', $gL10n->get('SYS_SYSTEM'));
 $gCurrentUser->setValue('usr_valid', '0');
 $gCurrentUser->setValue('usr_timestamp_create', DATETIME_NOW);
@@ -171,7 +179,7 @@ $sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
          WHERE urt_id = 7';
 $db->queryPrepared($sql);
 
-\Admidio\Domain\Entity\Utils\Installation::disableSoundexSearchIfPgSql($db);
+\Admidio\InstallationUpdate\Service\Installation::disableSoundexSearchIfPgSql($db);
 
 // create new organization
 $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);

@@ -14,6 +14,10 @@
  * *********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\Weblinks\Entity\Weblink;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -82,7 +86,7 @@ try {
         $organizationName
     );
 
-    $weblink = new TableWeblink($gDb);
+    $weblink = new Weblink($gDb);
 
     // add the RSS items to the RssFeed object
     while ($row = $statement->fetch()) {

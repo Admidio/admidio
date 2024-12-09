@@ -1,8 +1,6 @@
 <?php
 namespace Admidio\Infrastructure;
 
-use Database;
-
 /**
  * @brief Admidio specific enhancements of the PHP exception class
  *

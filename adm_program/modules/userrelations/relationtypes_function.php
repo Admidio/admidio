@@ -18,6 +18,8 @@
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Users\Entity\UserRelationType;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -35,7 +37,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    $relationType = new TableUserRelationType($gDb);
+    $relationType = new UserRelationType($gDb);
 
     if ($getUrtUuid !== '') {
         $relationType->readDataByUuid($getUrtUuid);
@@ -48,7 +50,7 @@ try {
         $userRelationsTypeEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $userRelationsTypeEditForm->validate($_POST);
 
-        $relationType2 = new TableUserRelationType($gDb);
+        $relationType2 = new UserRelationType($gDb);
         if ($getUrtUuid !== '') {
             $formValues['relation_type'] = $relationType->getRelationTypeString();
             $relationType2->readDataById((int)$relationType->getValue('urt_id_inverse'));
@@ -59,7 +61,7 @@ try {
         $relationType->setValue('urt_name_female', empty($formValues['urt_name_female']) ? $formValues['urt_name'] : $formValues['urt_name_female']);
         $relationType->setValue('urt_edit_user', $formValues['urt_edit_user']);
 
-        if ($formValues['relation_type'] === TableUserRelationType::USER_RELATION_TYPE_ASYMMETRICAL) {
+        if ($formValues['relation_type'] === UserRelationType::USER_RELATION_TYPE_ASYMMETRICAL) {
             $relationType2->setValue('urt_name', $formValues['urt_name_inverse']);
             $relationType2->setValue('urt_name_male', empty($formValues['urt_name_male_inverse']) ? $formValues['urt_name_inverse'] : $formValues['urt_name_male_inverse']);
             $relationType2->setValue('urt_name_female', empty($formValues['urt_name_female_inverse']) ? $formValues['urt_name_inverse'] : $formValues['urt_name_female_inverse']);
@@ -71,7 +73,7 @@ try {
 
         $relationType->save();
 
-        if ($formValues['relation_type'] === TableUserRelationType::USER_RELATION_TYPE_ASYMMETRICAL) {
+        if ($formValues['relation_type'] === UserRelationType::USER_RELATION_TYPE_ASYMMETRICAL) {
             if ($getUrtUuid === '') {
                 $relationType2->setValue('urt_id_inverse', (int)$relationType->getValue('urt_id'));
             }
@@ -82,7 +84,7 @@ try {
                 $relationType->setValue('urt_id_inverse', (int)$relationType2->getValue('urt_id'));
                 $relationType->save();
             }
-        } elseif ($formValues['relation_type'] === TableUserRelationType::USER_RELATION_TYPE_SYMMETRICAL) {
+        } elseif ($formValues['relation_type'] === UserRelationType::USER_RELATION_TYPE_SYMMETRICAL) {
             $relationType->setValue('urt_id_inverse', (int)$relationType->getValue('urt_id'));
             $relationType->save();
         }

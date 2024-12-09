@@ -10,6 +10,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -32,7 +33,7 @@ try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-        $delMessage = new TableMessage($gDb);
+        $delMessage = new Admidio\Messages\Entity\Message($gDb);
         $delMessage->readDataByUuid($getMsgUuid);
 
         // only delete messages of the current user is allowed

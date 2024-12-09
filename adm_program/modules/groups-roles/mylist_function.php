@@ -18,6 +18,9 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Roles\Entity\ListConfiguration;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');

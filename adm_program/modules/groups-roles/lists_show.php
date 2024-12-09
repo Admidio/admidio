@@ -20,8 +20,19 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
+
+use Admidio\Events\Entity\Event;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Service\RoleService;
+use Admidio\Roles\ValueObject\ListData;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 
 try {
@@ -104,7 +115,7 @@ try {
     $htmlSubHeadline = substr($htmlSubHeadline, 2);
 
     if ($numberRoles === 1) {
-        $role = new TableRoles($gDb);
+        $role = new Role($gDb);
         $role->readDataByUuid($roleUuidList[0]);
         $roleID = $role->getValue('rol_id');
         $roleName = $role->getValue('rol_name');
@@ -113,7 +124,7 @@ try {
 
         // If it's an event list and user has right to edit user states then an additional column with edit link is shown
         if ($role->getValue('cat_name_intern') === 'EVENTS') {
-            $event = new TableEvent($gDb);
+            $event = new Event($gDb);
             $event->readDataByRoleId($roleID);
 
             $showComment = $event->getValue('dat_allow_comments');
@@ -726,7 +737,7 @@ try {
                 // Appointment
                 $value = '';
                 if ($role->getValue('rol_weekday') > 0) {
-                    $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')) . ' ';
+                    $value = RoleService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                 }
                 if ((string)$role->getValue('rol_start_time') !== '') {
                     $value = $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
@@ -747,7 +758,7 @@ try {
 
                 // Fee period
                 if ((string)$role->getValue('rol_cost_period') !== '' && $role->getValue('rol_cost_period') != 0) {
-                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTION_PERIOD'), 'value' => TableRoles::getCostPeriods($role->getValue('rol_cost_period')));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTION_PERIOD'), 'value' => Role::getCostPeriods($role->getValue('rol_cost_period')));
                 }
 
                 // max participants

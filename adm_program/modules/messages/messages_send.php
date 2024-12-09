@@ -13,7 +13,14 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
+
+use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Messages\Entity\Message;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 
 try {
@@ -41,7 +48,7 @@ try {
         $postTo = $_POST['msg_to'];
     }
 
-    $message = new TableMessage($gDb);
+    $message = new Message($gDb);
     $message->readDataByUuid($getMsgUuid);
 
     if ($getMsgUuid !== '') {
@@ -49,22 +56,22 @@ try {
     }
 
     // if message not PM it must be Email and then directly check the parameters
-    if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM) {
-        $getMsgType = TableMessage::MESSAGE_TYPE_EMAIL;
+    if ($getMsgType !== Message::MESSAGE_TYPE_PM) {
+        $getMsgType = Message::MESSAGE_TYPE_EMAIL;
     }
 
     // Stop if pm should be sent pm module is disabled
-    if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('enable_pm_module')) {
+    if ($getMsgType === Message::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('enable_pm_module')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Stop if mail should be sent and mail module is disabled
-    if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && !$gSettingsManager->getBool('enable_mail_module')) {
+    if ($getMsgType === Message::MESSAGE_TYPE_EMAIL && !$gSettingsManager->getBool('enable_mail_module')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // if message is EMAIL then check the parameters
-    if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
+    if ($getMsgType === Message::MESSAGE_TYPE_EMAIL) {
         // if Attachment size is higher than max_post_size from php.ini, then $_POST is empty.
         if (empty($_POST)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
@@ -80,7 +87,7 @@ try {
     $message->addContent($formValues['msg_body']);
 
     // check if PM or Email and to steps:
-    if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
+    if ($getMsgType === Message::MESSAGE_TYPE_EMAIL) {
         $sqlConditions = '';
         $sqlEmailField = '';
 
@@ -317,7 +324,7 @@ try {
         $gNavigation->deleteLastUrl();
 
         // message if sending was OK
-        if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
+        if ($getMsgType === Message::MESSAGE_TYPE_PM) {
             $successMessage = $gL10n->get('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         } else {
             $successMessage = $gL10n->get('SYS_EMAIL_SEND');
@@ -325,7 +332,7 @@ try {
         echo json_encode(array('status' => 'success', 'message' => $successMessage, 'url' => $gNavigation->getUrl()));
         exit();
     } else {
-        if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
+        if ($getMsgType === Message::MESSAGE_TYPE_PM) {
             throw new Exception('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult));
         } else {
             throw new Exception('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));

@@ -1,8 +1,9 @@
 <?php
-namespace Admidio\Domain\Entity\Utils;
+namespace Admidio\Infrastructure\Utils;
 
+use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
-use Database;
+use Admidio\Infrastructure\Database;
 
 /**
  * @brief Class to implement useful method maintenance of data in the Admidio database.
@@ -55,7 +56,7 @@ class Maintenance
                 $currentOrganization = (int) $row['cat_org_id'];
             }
 
-            $category = new \TableCategory($this->database);
+            $category = new Category($this->database);
             $category->setArray($row);
             $category->setValue('cat_sequence', $newSequenceOrganization);
             $category->save();

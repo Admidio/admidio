@@ -9,7 +9,9 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Users\Entity\UserRelationType;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -67,8 +69,8 @@ try {
 
     $relationTypesStatement = $gDb->queryPrepared($sql);
 
-    $relationType1 = new TableUserRelationType($gDb);
-    $relationType2 = new TableUserRelationType($gDb);
+    $relationType1 = new UserRelationType($gDb);
+    $relationType2 = new UserRelationType($gDb);
 
     // Get data
     while ($relRow = $relationTypesStatement->fetch()) {

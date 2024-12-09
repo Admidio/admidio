@@ -1,16 +1,16 @@
 <?php
 namespace Admidio\UI\View;
 
+use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Entity\Text;
 use Admidio\UI\Component\Form;
-use ComponentUpdate;
-use FileSystemUtils;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use HtmlPage;
-use Exception;
-use PhpIniUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use RuntimeException;
-use SecurityUtils;
-use SystemInfoUtils;
-use TableText;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\SystemInfoUtils;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -1980,7 +1980,7 @@ class Preferences extends HtmlPage
             array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
         );
 
-        $text = new TableText($gDb);
+        $text = new Text($gDb);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_CONFIRMATION', 'txt_org_id' => $gCurrentOrgId));
         $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_CONFIRMATION', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_CONFIRMATION'), $text->getValue('txt_text'), 7);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_NEW', 'txt_org_id' => $gCurrentOrgId));

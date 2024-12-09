@@ -12,8 +12,12 @@
  * link_uuid : Uuid of a single link that should be shown.
  ***********************************************************************************************
  */
+
+use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Weblinks\Entity\Weblink;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -33,7 +37,7 @@ try {
 
     $headline = $gL10n->get('SYS_WEBLINKS');
 
-    $category = new TableCategory($gDb);
+    $category = new Category($gDb);
 
     if ($getCatUuid !== '') {
         $category->readDataByUuid($getCatUuid);
@@ -132,7 +136,7 @@ try {
     } else {
         $getStart = $weblinks->getStartElement();
         $weblinksDataSet = $weblinks->getDataSet($getStart);
-        $weblink = new TableWeblink($gDb);
+        $weblink = new Weblink($gDb);
 
         $j = 0;         // counter for fetchObject
         $i = 0;         // counter for links in category

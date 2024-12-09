@@ -1,5 +1,6 @@
 <?php
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\Photos\Entity\Album;
 
 /**
  ***********************************************************************************************
@@ -71,7 +72,7 @@ try {
             $photoNr = 0;
             $photoServerPath = '';
             $linkText = '';
-            $album = new TablePhotos($gDb);
+            $album = new Album($gDb);
 
             // loop, if an image is not found directly, but limit to 20 passes
             while (!is_file($photoServerPath) && $i < 20 && $albumStatement->rowCount() > 0) {

@@ -20,7 +20,11 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Preferences\Service\PreferencesService;
 use Admidio\UI\View\Preferences;
 
 try {
@@ -59,7 +63,7 @@ try {
             $page->show();
             break;
         case 'save':
-            $preferences = new Admidio\Domain\Service\Preferences();
+            $preferences = new PreferencesService();
             $preferences->save($getPanel, $_POST);
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
@@ -74,7 +78,7 @@ try {
 
         // set directory protection, write htaccess
         case 'htaccess':
-            $preferences = new Admidio\Domain\Service\Preferences();
+            $preferences = new PreferencesService();
             if ($preferences->setHtaccessProtection()) {
                 echo $gL10n->get('SYS_ON');
             } else {
@@ -85,7 +89,7 @@ try {
         // send test email
         case 'test_email':
             $debugOutput = '';
-            $preferences = new Admidio\Domain\Service\Preferences();
+            $preferences = new PreferencesService();
             $sendResult = $preferences->sendTestEmail();
 
             if (isset($GLOBALS['phpmailer_output_debug'])) {
@@ -117,7 +121,7 @@ try {
             break;
 
         case 'update_check':
-            $preferences = new Admidio\Domain\Service\Preferences();
+            $preferences = new PreferencesService();
             echo $preferences->showUpdateInfo();
             break;
     }
