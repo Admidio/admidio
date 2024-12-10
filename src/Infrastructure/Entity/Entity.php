@@ -328,7 +328,7 @@ class Entity
                     if ($columnValue !== '' && $columnValue !== null) {
                         if ($format === '' && isset($gSettingsManager)) {
                             if (str_contains($this->columnsInfos[$columnName]['type'], 'timestamp')) {
-                                $format = $gSettingsManager->getString('system_date') . ' Entity.php' . $gSettingsManager->getString('system_time');
+                                $format = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
                             } elseif (str_contains($this->columnsInfos[$columnName]['type'], 'date')) {
                                 $format = $gSettingsManager->getString('system_date');
                             } else {

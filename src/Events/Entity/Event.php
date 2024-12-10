@@ -6,6 +6,7 @@ use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Language;
+use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
@@ -264,7 +265,7 @@ class Event extends Entity
             $validDeadline = $this->getValue('dat_deadline');
         }
 
-        $objDateDeadline = \DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' Event.php' .$gSettingsManager->getString('system_time'), $validDeadline);
+        $objDateDeadline = \DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $validDeadline);
 
         return $objDateDeadline->format('Y-m-d H:i:s');
     }
