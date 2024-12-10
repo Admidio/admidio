@@ -3,6 +3,7 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\PasswordUtils;
@@ -99,7 +100,7 @@ class Update
         $this->toggleForeignKeyChecks(true);
 
         // create ".htaccess" file for folder "adm_my_files"
-        $htaccess = new \Htaccess(ADMIDIO_PATH . FOLDER_DATA);
+        $htaccess = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
 
         // call maintenance scripts to repair possible data issues
         $maintenance = new Maintenance($gDb);

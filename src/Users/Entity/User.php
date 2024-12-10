@@ -12,7 +12,6 @@ use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-use SystemMail;
 
 /**
  * @brief Class handle role rights, cards and other things of users
