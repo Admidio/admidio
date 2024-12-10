@@ -4,7 +4,7 @@ namespace Admidio\Users\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
-use ProfileFields;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Infrastructure\Utils\StringUtils;
 
 /**

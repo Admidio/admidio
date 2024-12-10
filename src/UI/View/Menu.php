@@ -4,6 +4,7 @@ namespace Admidio\UI\View;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Menu\Entity\MenuEntry;
+use Admidio\Menu\Service\MenuService;
 use Admidio\UI\Component\Form;
 use HtmlPage;
 use Admidio\Roles\Entity\RolesRights;
@@ -90,7 +91,7 @@ class Menu extends HtmlPage
             $fieldDefault = Form::FIELD_DISABLED;
         }
 
-        $subMenu = \Admidio\Menu\Service\Menu::subMenu(1, (int)$menu->getValue('men_id'));
+        $subMenu = MenuService::subMenu(1, (int)$menu->getValue('men_id'));
 
         $form->addInput(
             'men_name',

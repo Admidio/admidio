@@ -4,6 +4,7 @@ namespace Admidio\UI\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use DateTime;
 use HtmlPage;
 use PDO;
@@ -496,7 +497,7 @@ class Form
             'type'               => 'file',
             'id'                 => $id,
             'label'              => $label,
-            'maxUploadSize'      => \PhpIniUtils::getFileUploadMaxFileSize(),
+            'maxUploadSize'      => PhpIniUtils::getFileUploadMaxFileSize(),
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
@@ -704,7 +705,7 @@ class Form
 
         if ($optionsAll['passwordStrength']) {
             $passwordStrengthLevel = 1;
-            if ($gSettingsManager instanceof SettingsManager && $gSettingsManager->getInt('password_min_strength')) {
+            if (isset($gSettingsManager) && $gSettingsManager->getInt('password_min_strength')) {
                 $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
             }
 

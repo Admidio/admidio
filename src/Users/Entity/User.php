@@ -886,18 +886,9 @@ class User extends Entity
             $this->getValue('COUNTRY')
         );
 
-        if (!function_exists('filterEmptyStrings')) {
-            /**
-             * @param string $value
-             * @return bool
-             */
-            function filterEmptyStrings(string $value): bool
-            {
-                return $value !== '';
-            }
-        }
-
-        return array_filter($userData, 'filterEmptyStrings');
+        return array_filter($userData, function(string $value) {
+            return $value !== '';
+        });
     }
 
     /**
