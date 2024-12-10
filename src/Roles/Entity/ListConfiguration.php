@@ -201,7 +201,7 @@ class ListConfiguration extends Entity
             if (strlen($content) > 0) {
                 // date must be formatted
                 $date = DateTime::createFromFormat('Y-m-d H:i:s', $content);
-                $content = $date->format($gSettingsManager->getString('system_date') . ' ListConfiguration.php' . $gSettingsManager->getString('system_time'));
+                $content = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
             }
         } elseif ($column->getValue('lsc_special_field') === 'mem_approved') {
             // Assign Integer to Language strings

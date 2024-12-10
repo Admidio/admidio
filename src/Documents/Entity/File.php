@@ -268,7 +268,7 @@ class File extends Entity
                 . $gL10n->get('SYS_FILE') . ': ' . $this->getValue('fil_name') . '<br />'
                 . $gL10n->get('SYS_FOLDER') . ': ' . $this->getValue('fol_name') . '<br />'
                 . $gL10n->get('SYS_CREATED_BY') . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
-                . $gL10n->get('SYS_CREATED_AT') . ': ' . date($gSettingsManager->getString('system_date') . ' File.php' . $gSettingsManager->getString('system_time')) . '<br />'
+                . $gL10n->get('SYS_CREATED_AT') . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
                 . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php?folder_uuid=' . $this->getValue('fol_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))),

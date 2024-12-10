@@ -308,7 +308,7 @@ class Album extends Entity
                 . $gL10n->get('SYS_START') . ': ' . $this->getValue('pho_begin') . '<br />'
                 . $gL10n->get('SYS_END') . ': ' . $this->getValue('pho_end') . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
-                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' Album.php' . $gSettingsManager->getString('system_time')) . '<br />'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
                 . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php?photo_uuid=' . $this->getValue('pho_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),

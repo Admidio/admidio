@@ -130,7 +130,7 @@ class Post extends Entity
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
                 . $gL10n->get('SYS_TEXT') . ': ' . $this->getValue('gbc_text') . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $this->getValue('gbc_name') . '<br />'
-                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' Post.php' . $gSettingsManager->getString('system_time')) . '<br />'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
                 . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php?gbo_uuid=' . $this->getValue('gbo_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
