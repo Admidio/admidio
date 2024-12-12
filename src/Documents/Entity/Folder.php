@@ -119,7 +119,7 @@ class Folder extends Entity
     public function addFolderOrFileToDatabase(string $newFolderFileName)
     {
         $newFolderFileName = urldecode($newFolderFileName);
-        $newObjectPath = $this->getFullFolderPath() . 'Folder.php/' . $newFolderFileName;
+        $newObjectPath = $this->getFullFolderPath() . '/' . $newFolderFileName;
         $folderId = (int)$this->getValue('fol_id');
 
         // check if a file or folder should be created
@@ -352,7 +352,7 @@ class Folder extends Entity
      */
     public function getFolderPath(): string
     {
-        return $this->getValue('fol_path') . 'Folder.php/' . $this->getValue('fol_name');
+        return $this->getValue('fol_path') . '/' . $this->getValue('fol_name');
     }
 
     /**
@@ -385,7 +385,7 @@ class Folder extends Entity
 
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetch()) {
-            $filePath = $this->getFullFolderPath() . 'Folder.php/' . $rowFiles['fil_name'];
+            $filePath = $this->getFullFolderPath() . '/' . $rowFiles['fil_name'];
             $fileExists = is_file($filePath);
 
             $fileSize = 0;
@@ -681,12 +681,12 @@ class Folder extends Entity
         $folder->readDataByUuid($destFolderUUID);
 
         if ($folder->hasUploadRight()) {
-            FileSystemUtils::moveDirectory($this->getFullFolderPath(), $folder->getFullFolderPath() . 'Folder.php/' . $this->getValue('fol_name'));
+            FileSystemUtils::moveDirectory($this->getFullFolderPath(), $folder->getFullFolderPath() . '/' . $this->getValue('fol_name'));
 
             $this->db->startTransaction();
             // save new parent folder
             $this->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
-            $this->setValue('fol_path', $folder->getValue('fol_path') . 'Folder.php/' . $folder->getValue('fol_name'));
+            $this->setValue('fol_path', $folder->getValue('fol_path') . '/' . $folder->getValue('fol_name'));
             $this->setValue('fol_public', $folder->getValue('fol_public'));
             $this->setValue('fol_locked', $folder->getValue('fol_locked'));
             $this->save();

@@ -86,7 +86,7 @@ class File extends Entity
      */
     public function getFullFilePath(): string
     {
-        return $this->getFullFolderPath() . 'File.php/' . $this->getValue('fil_name', 'database');
+        return $this->getFullFolderPath() . '/' . $this->getValue('fil_name', 'database');
     }
 
     /**
@@ -214,7 +214,7 @@ class File extends Entity
         $folder->readDataByUuid($destFolderUUID);
 
         if ($folder->hasUploadRight()) {
-            FileSystemUtils::moveFile($this->getFullFilePath(), $folder->getFullFolderPath() . 'File.php/' . $this->getValue('fil_name'));
+            FileSystemUtils::moveFile($this->getFullFilePath(), $folder->getFullFolderPath() . '/' . $this->getValue('fil_name'));
 
             $this->setValue('fil_fol_id', $folder->getValue('fol_id'));
             $this->save();
