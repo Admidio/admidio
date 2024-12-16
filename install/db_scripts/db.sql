@@ -236,6 +236,50 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_fol_uuid ON %PREFIX%_folders (fol_uuid);
 
 /*==============================================================*/
+/* Table: adm_forum_topics                                      */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_forum_topics
+(
+    fot_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    fot_org_id                  integer unsigned    NOT NULL,
+    fot_uuid                    varchar(36)         NOT NULL,
+    fot_text                    text                NOT NULL,
+    fot_locked                  boolean             NOT NULL    DEFAULT false,
+    fot_usr_id_create           integer unsigned,
+    fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    fot_usr_id_change           integer unsigned,
+    fot_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (fot_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT character SET = utf8
+    COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_fot_uuid ON %PREFIX%_forum_topics (fot_uuid);
+
+/*==============================================================*/
+/* Table: adm_forum_posts                                       */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_forum_posts
+(
+    fop_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    fop_fot_id                  integer unsigned    NOT NULL,
+    fop_uuid                    varchar(36)         NOT NULL,
+    fop_text                    text                NOT NULL,
+    fop_locked                  boolean             NOT NULL    DEFAULT false,
+    fop_usr_id_create           integer unsigned,
+    fop_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    fop_usr_id_change           integer unsigned,
+    fop_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (fop_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT character SET = utf8
+    COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_fop_uuid ON %PREFIX%_forum_posts (fop_uuid);
+
+/*==============================================================*/
 /* Table: adm_guestbook                                         */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_guestbook
@@ -917,6 +961,16 @@ ALTER TABLE %PREFIX%_folders
     ADD CONSTRAINT %PREFIX%_fk_fol_org         FOREIGN KEY (fol_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fol_fol_parent  FOREIGN KEY (fol_fol_id_parent)  REFERENCES %PREFIX%_folders (fol_id)             ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fol_usr         FOREIGN KEY (fol_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_forum_topics
+    ADD CONSTRAINT %PREFIX%_fk_fot_org         FOREIGN KEY (fot_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fot_usr_change  FOREIGN KEY (fot_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_forum_posts
+    ADD CONSTRAINT %PREFIX%_fk_fop_gbo         FOREIGN KEY (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)           ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fop_usr_create  FOREIGN KEY (fop_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fop_usr_change  FOREIGN KEY (fop_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_guestbook
     ADD CONSTRAINT %PREFIX%_fk_gbo_org         FOREIGN KEY (gbo_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
