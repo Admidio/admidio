@@ -22,7 +22,6 @@ DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_links                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_members              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_members_log          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages_attachments CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages_content     CASCADE;
@@ -41,15 +40,14 @@ DROP TABLE IF EXISTS %PREFIX%_sessions             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_texts                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relations       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relation_types  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_log             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_data            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_fields          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_categories           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_users                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_users_profile_log    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_organizations        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_ids                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_log_changes          CASCADE;
 
 
 /*==============================================================*/
@@ -389,26 +387,6 @@ COLLATE = utf8_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
 CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid);
-
-/*==============================================================*/
-/* Table: adm_members_log                                          */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_members_log
-(
-    mel_id                      integer             NOT NULL    AUTO_INCREMENT,
-    mel_rol_id                  integer unsigned    NOT NULL,
-    mel_usr_id                  integer unsigned    NOT NULL,
-    mel_membership_field        varchar(32)         NOT NULL,
-    mel_value_old               varchar(4000)       NULL,
-    mel_value_new               varchar(4000)       NULL,
-    mel_usr_id_create           integer unsigned    NULL,
-    mel_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    mel_comment                 varchar(255)        NULL,
-    PRIMARY KEY (mel_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_menu                                             */
@@ -802,25 +780,6 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_usd_usr_usf_id ON %PREFIX%_user_data (usd_usr_id, usd_usf_id);
 
 /*==============================================================*/
-/* Table: adm_user_log                                          */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_user_log
-(
-    usl_id                      integer             NOT NULL    AUTO_INCREMENT,
-    usl_usr_id                  integer unsigned    NOT NULL,
-    usl_usf_id                  integer unsigned    NOT NULL,
-    usl_value_old               varchar(4000)       NULL,
-    usl_value_new               varchar(4000)       NULL,
-    usl_usr_id_create           integer unsigned    NULL,
-    usl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    usl_comment                 varchar(255)        NULL,
-    PRIMARY KEY (usl_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-/*==============================================================*/
 /* Table: adm_users                                             */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_users
@@ -916,6 +875,45 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt_id, ure_usr_id1, ure_usr_id2);
+
+/*==============================================================*/
+/* Table: adm_log_changes                                       */
+/*    Generic table for logging changes to various other tables */
+/*    The meaning of the subsequent columns depend heavily on   */
+/*    the log_table field and describe entries in different     */
+/*    tables. For this reason, no forein key restraints are     */
+/*    possible (or even desired), since the original db record  */
+/*    might even be deleted in the meantime. The corresponding  */
+/*    log records, however, should still exist in the DB for    */
+/*    audit reasons!                                            */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_log_changes
+(
+    log_id                      integer             NOT NULL    AUTO_INCREMENT,
+    log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
+
+    log_record_id               integer unsigned    NOT NULL, -- The record id in the original table
+    log_record_name             text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
+    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id is the mem_id, but the link should point to the group rather than the group membership (which does not have its own page in admidio!)
+
+    log_relates_id              integer unsigned    NULL,     -- Optional Secondary object linked to the record id
+    log_telates_name            text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
+
+    log_field                   varchar(255)        NULL,     -- Optional Secondary object linked to the record id
+    log_field_name              text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
+
+    log_action                  varchar(32)         NOT NULL, -- enum of "MODIFY", "CREATED", "DELETED"
+    log_value_old               text                NULL,
+    log_value_new               text                NULL,
+
+    log_usr_id_create           integer unsigned    NULL,
+    log_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    log_comment                 text                NULL,
+    PRIMARY KEY (log_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 
 /*==============================================================*/
@@ -1059,11 +1057,6 @@ ALTER TABLE %PREFIX%_user_fields
 ALTER TABLE %PREFIX%_user_data
     ADD CONSTRAINT %PREFIX%_fk_usd_usf         FOREIGN KEY (usd_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usd_usr         FOREIGN KEY (usd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_user_log
-    ADD CONSTRAINT %PREFIX%_fk_user_log_1      FOREIGN KEY (usl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_user_log_2      FOREIGN KEY (usl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_user_log_3      FOREIGN KEY (usl_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_users
     ADD CONSTRAINT %PREFIX%_fk_usr_usr_create  FOREIGN KEY (usr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,

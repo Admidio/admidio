@@ -712,38 +712,34 @@ class User extends TableAccess
                             SET rld_usr_id = NULL
                           WHERE rld_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_USER_LOG . '
-                            SET usl_usr_id_create = NULL
+                          $sqlQueries[] = 'UPDATE ' . TBL_USER_LOG . '
+                          SET usl_usr_id_create = NULL
                           WHERE usl_usr_id_create = ' . $usrId;
-
-        $sqlQueries[] = 'UPDATE ' . TBL_USERS_PROFILE_LOG . '
-                          SET upl_usr_id_create = NULL
-                        WHERE upl_usr_id_create = ' . $usrId;
-
-        $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
+                          
+                          $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_create = NULL
-                          WHERE usr_usr_id_create = ' . $usrId;
+                            WHERE usr_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
+                            $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_change = NULL
-                          WHERE usr_usr_id_change = ' . $usrId;
+                            WHERE usr_usr_id_change = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
                           WHERE lsc_lst_id IN (SELECT lst_id
                                                  FROM ' . TBL_LISTS . '
                                                 WHERE lst_usr_id = ' . $usrId . '
-                                                  AND lst_global = false)';
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
-                          WHERE lst_global = false
-                            AND lst_usr_id = ' . $usrId;
+                                                AND lst_global = false)';
+                                                
+                                                $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
+                                                WHERE lst_global = false
+                                                AND lst_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_GUESTBOOK_COMMENTS . '
-                          WHERE gbc_usr_id_create = ' . $usrId;
+        WHERE gbc_usr_id_create = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MEMBERS . '
                           WHERE mem_usr_id = ' . $usrId;
-
+                          
         // MySQL couldn't create delete statement with same table in a sub query.
         // Therefore, we fill a temporary table with all ids that should be deleted and reference on this table
         $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
@@ -778,29 +774,30 @@ class User extends TableAccess
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                                            WHERE msr_msg_id = msc_msg_id)';
+                          WHERE msr_msg_id = msc_msg_id)';
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
+                          $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                                            WHERE msr_msg_id = msg_id)';
-
+                          WHERE msr_msg_id = msg_id)';
+                          
         $sqlQueries[] = 'DELETE FROM ' . TBL_REGISTRATIONS . '
                           WHERE reg_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_AUTO_LOGIN . '
-                          WHERE atl_usr_id = ' . $usrId;
+        WHERE atl_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
                           WHERE ses_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_USER_LOG . '
-                          WHERE usl_usr_id = ' . $usrId;
+        // TODO: Shall we delete all log-entries pertaining to the given user??? That's not audit-proof!
+        // $sqlQueries[] = 'DELETE FROM ' . TBL_LOG . '
+        //                   WHERE usl_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
                           WHERE usd_usr_id = ' . $usrId;
 
-         $sqlQueries[] = 'DELETE FROM ' . TBL_USERS_PROFILE_LOG . '
-                          WHERE upl_usr_id = ' . $usrId;
+        //  $sqlQueries[] = 'DELETE FROM ' . TBL_USERS_PROFILE_LOG . '
+        //                   WHERE upl_usr_id = ' . $usrId;
 
         $this->db->startTransaction();
 
@@ -1989,6 +1986,7 @@ class User extends TableAccess
                     'usr_password',
                     $this->getValue('usr_password'),
                     $newPassword,
+                    "MODIFIED",
                     $this
                 );
             }
@@ -2013,6 +2011,7 @@ class User extends TableAccess
                 'usr_password',
                 $this->getValue('usr_password'),
                 $newPasswordHash,
+                "MODIFIED",
                 $this
             );
         }
@@ -2111,6 +2110,7 @@ class User extends TableAccess
                     $columnName,
                     (string)$this->getValue($columnName),
                     (string)$newValue,
+                    "MODIFIED",
                     $this
                 );
             }

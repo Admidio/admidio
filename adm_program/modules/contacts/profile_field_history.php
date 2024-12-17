@@ -25,15 +25,19 @@ $filterDateFrom->modify('-'.$gSettingsManager->getInt('contacts_field_history_da
 
 // Initialize and check the parameters
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getRoleId = admFuncVariableIsValid($_GET, 'role_id', 'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
 $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
 // create a user object from the user parameter
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
+$role = new TableRoles($gDb, $getRoleId);
 
 // set headline of the script
 if ($getUserUuid !== '') {
+    $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+} elseif ($getRoleId > 0) {
     $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
 } else {
     $headline = $gL10n->get('SYS_CHANGE_HISTORY');
@@ -90,71 +94,79 @@ if ($getUserUuid !== '') {
     $queryParamsConditions = array('userID' => $user->getValue('usr_id'));
 }
 
+// TODO: Snippet for Role link:
+    // if ($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id'))) {
+    //     $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+    // } else {
+    //     $roleMemHTML .= $role->getValue('rol_name');
+    // }
 
+
+// TODO!
 // create select statement with all necessary data
-// First, join thw TBL_USER_LOG and TBL_USERS_PROFILE_LOG
+// First, join the TBL_USER_LOG and TBL_USERS_PROFILE_LOG
 // Then extract the name for the given user IDs from the user data fields
-$sql = 'SELECT usr_log.usr_id as usr_id, usr.usr_uuid as uuid_usr, last_name.usd_value AS last_name, first_name.usd_value AS first_name, field,
-               value_old, value_new, usr_id_create, usr_create.usr_uuid AS uuid_usr_create, create_last_name.usd_value AS create_last_name,
-               create_first_name.usd_value AS create_first_name, timestamp, type
-FROM (
-    SELECT
-        usl_usr_id AS usr_id,
-        usl_usf_id AS field,
-        usl_value_old AS value_old,
-        usl_value_new AS value_new,
-        usl_usr_id_create as usr_id_create,
-        usl_timestamp_create as timestamp,
-        \'Field\' as type
-    FROM '.TBL_USER_LOG.'
-    WHERE
-            usl_timestamp_create BETWEEN :uslTimeFrom AND :uslTimeUntil
-        AND usl_usf_id in (' .  implode(',', $gProfileFields->getVisibleArray(true)) . ')
-UNION
-    SELECT
-        upl_usr_id AS usr_id,
-        upl_profile_field AS field,
-        upl_value_old AS value_old,
-        upl_value_new AS value_new,
-        upl_usr_id_create AS usr_id_create,
-        upl_timestamp_create as timestamp,
-        \'Profile\' as type
-    FROM '.TBL_USERS_PROFILE_LOG.'
-    WHERE
-            upl_timestamp_create BETWEEN :uplTimeFrom AND :uplTimeUntil
-) AS usr_log
-    INNER JOIN '.TBL_USERS.' usr_create ON usr_create.usr_id = usr_log.usr_id_create
-    INNER JOIN '.TBL_USERS.' usr ON usr.usr_id = usr_log.usr_id
-    INNER JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_log.usr_id
-           AND last_name.usd_usf_id = :lastName
-    INNER JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_log.usr_id
-           AND first_name.usd_usf_id = :firstName
-    INNER JOIN '.TBL_USER_DATA.' AS create_last_name
-            ON create_last_name.usd_usr_id = usr_log.usr_id_create
-           AND create_last_name.usd_usf_id = :createLastName
-    INNER JOIN '.TBL_USER_DATA.' AS create_first_name
-            ON create_first_name.usd_usr_id = usr_log.usr_id_create
-           AND create_first_name.usd_usf_id = :createFirstName
-WHERE
-    1 = 1
-    '.$sqlConditions.'
+// $sql = 'SELECT usr_log.usr_id as usr_id, usr.usr_uuid as uuid_usr, last_name.usd_value AS last_name, first_name.usd_value AS first_name, field,
+//                value_old, value_new, usr_id_create, usr_create.usr_uuid AS uuid_usr_create, create_last_name.usd_value AS create_last_name,
+//                create_first_name.usd_value AS create_first_name, timestamp, type
+// FROM (
+//     SELECT
+//         usl_usr_id AS usr_id,
+//         usl_usf_id AS field,
+//         usl_value_old AS value_old,
+//         usl_value_new AS value_new,
+//         usl_usr_id_create as usr_id_create,
+//         usl_timestamp_create as timestamp,
+//         \'Field\' as type
+//     FROM '.TBL_USER_LOG.'
+//     WHERE
+//             usl_timestamp_create BETWEEN :uslTimeFrom AND :uslTimeUntil
+//         AND usl_usf_id in (' .  implode(',', $gProfileFields->getVisibleArray(true)) . ')
+// UNION
+//     SELECT
+//         upl_usr_id AS usr_id,
+//         upl_profile_field AS field,
+//         upl_value_old AS value_old,
+//         upl_value_new AS value_new,
+//         upl_usr_id_create AS usr_id_create,
+//         upl_timestamp_create as timestamp,
+//         \'Profile\' as type
+//     FROM '.TBL_USERS_PROFILE_LOG.'
+//     WHERE
+//             upl_timestamp_create BETWEEN :uplTimeFrom AND :uplTimeUntil
+// ) AS usr_log
+//     INNER JOIN '.TBL_USERS.' usr_create ON usr_create.usr_id = usr_log.usr_id_create
+//     INNER JOIN '.TBL_USERS.' usr ON usr.usr_id = usr_log.usr_id
+//     INNER JOIN '.TBL_USER_DATA.' AS last_name
+//             ON last_name.usd_usr_id = usr_log.usr_id
+//            AND last_name.usd_usf_id = :lastName
+//     INNER JOIN '.TBL_USER_DATA.' AS first_name
+//             ON first_name.usd_usr_id = usr_log.usr_id
+//            AND first_name.usd_usf_id = :firstName
+//     INNER JOIN '.TBL_USER_DATA.' AS create_last_name
+//             ON create_last_name.usd_usr_id = usr_log.usr_id_create
+//            AND create_last_name.usd_usf_id = :createLastName
+//     INNER JOIN '.TBL_USER_DATA.' AS create_first_name
+//             ON create_first_name.usd_usr_id = usr_log.usr_id_create
+//            AND create_first_name.usd_usf_id = :createFirstName
+// WHERE
+//     1 = 1
+//     '.$sqlConditions.'
 
-ORDER BY timestamp DESC;
-';
+// ORDER BY timestamp DESC;
+// ';
 
-// Unfortunately, a named param cannot be used multiple times in prepared queries, so we need to duplicate some params with unique names
-$queryParams = [
-    'lastName' => $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    'firstName' => $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-    'createLastName' => $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    'createFirstName' => $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-    'uslTimeFrom' => $dateFromIntern . ' 00:00:00',
-    'uslTimeUntil' => $dateToIntern . ' 23:59:59',
-    'uplTimeFrom' => $dateFromIntern . ' 00:00:00',
-    'uplTimeUntil' => $dateToIntern . ' 23:59:59'
-];
+// // Unfortunately, a named param cannot be used multiple times in prepared queries, so we need to duplicate some params with unique names
+// $queryParams = [
+//     'lastName' => $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+//     'firstName' => $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+//     'createLastName' => $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+//     'createFirstName' => $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+//     'uslTimeFrom' => $dateFromIntern . ' 00:00:00',
+//     'uslTimeUntil' => $dateToIntern . ' 23:59:59',
+//     'uplTimeFrom' => $dateFromIntern . ' 00:00:00',
+//     'uplTimeUntil' => $dateToIntern . ' 23:59:59'
+// ];
 
 $fieldHistoryStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $queryParamsConditions));
 

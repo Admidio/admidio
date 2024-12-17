@@ -67,8 +67,7 @@ class TableMembers extends TableAccess
             }
             if ($oldValue != $newValue) {
                 $gChangeNotification->logRoleChange(
-                    $this->getValue('mem_usr_id'),
-                    $this->getValue('rol_name'),
+                    $this, 
                     $columnName,
                     (string) $oldValue,
                     (string) $newValue

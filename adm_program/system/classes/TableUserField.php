@@ -91,6 +91,7 @@ class TableUserField extends TableAccess
         }
 
         // delete all dependencies in other tables
+        // TODO: Shall we delete log entries pertaining to the given user and field?
         $sql = 'DELETE FROM '.TBL_USER_LOG.'
                  WHERE usl_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
