@@ -41,7 +41,6 @@ DROP TABLE IF EXISTS %PREFIX%_sessions             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_texts                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relations       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relation_types  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_log             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_data            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_fields          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_categories           CASCADE;
@@ -49,6 +48,7 @@ DROP TABLE IF EXISTS %PREFIX%_users                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_organizations        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_ids                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_log_changes             CASCADE;
 
 
 /*==============================================================*/
@@ -1018,11 +1018,6 @@ ALTER TABLE %PREFIX%_user_fields
 ALTER TABLE %PREFIX%_user_data
     ADD CONSTRAINT %PREFIX%_fk_usd_usf         FOREIGN KEY (usd_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usd_usr         FOREIGN KEY (usd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_user_log
-    ADD CONSTRAINT %PREFIX%_fk_user_log_1      FOREIGN KEY (usl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_user_log_2      FOREIGN KEY (usl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_user_log_3      FOREIGN KEY (usl_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_users
     ADD CONSTRAINT %PREFIX%_fk_usr_usr_create  FOREIGN KEY (usr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
