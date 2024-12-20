@@ -337,9 +337,9 @@ $formSecurity->addCheckbox(
 );
 $formSecurity->addCheckbox(
     'security_login_email_address_enabled',
-    $gL10n->get('ORG_LOGIN_WITH_EMAIL'),
+    $gL10n->get('SYS_LOGIN_WITH_EMAIL'),
     (bool) $formValues['security_login_email_address_enabled'],
-    array('helpTextIdInline' => 'ORG_LOGIN_WITH_EMAIL_DESC')
+    array('helpTextIdInline' => 'SYS_LOGIN_WITH_EMAIL_DESC')
 );
 
 
