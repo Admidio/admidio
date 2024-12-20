@@ -127,7 +127,7 @@ class ModuleLogin
     public function checkLogin(): bool
     {
         global $gDb, $gCurrentOrganization, $gCurrentOrgId, $gProfileFields, $gCurrentSession, $gSettingsManager;
-        global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID;
+        global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gLogger;
 
         // check form field input and sanitized it from malicious content
         $loginForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
@@ -143,6 +143,24 @@ class ModuleLogin
               FROM ' . TBL_USERS . '
              WHERE UPPER(usr_login_name) = UPPER(?)';
         $userStatement = $gDb->queryPrepared($sql, array($postLoginName));
+
+        // Alternatively, allow email addresses instead of username (if configured).
+        if ($gSettingsManager->getBool('security_login_email_address_enabled') &&
+            $userStatement->rowCount() === 0)
+        {
+            $sql = 'SELECT usd_usr_id
+                   FROM ' . TBL_USER_DATA . '
+                   WHERE usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
+                     AND UPPER(usd_value) = UPPER(?)';
+            $userStatement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('EMAIL', 'usf_id'), $postLoginName));
+
+            if ($userStatement->rowCount() > 1) {
+                $gLogger->warning('AUTHENTICATION: Multiple Accounts with the given E-Mail address found!', array(
+                    'username' => $postLoginName,
+                    'password' => '*****'
+                ));
+            }
+        }
 
         if ($userStatement->rowCount() === 0) {
             throw new Exception('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
