@@ -199,6 +199,8 @@
   <string name="ORG_LAST_UPDATE_STEP">Letzter Update-Schritt</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Automatisch anmelden</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Benutzer:innen können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll. Bei einem weiteren Besuch der Homepage sind diese Benutzer:innen dann automatisch angemeldet. Dies kann allerdings auch dazu führen, dass Benutzer:innen diese Option unbedacht einsetzen und so evtl. fremde Personen Zugriff auf die Daten bekommen. (Voreinstellung: ja)</string>
+  <string name="ORG_LOGIN_WITH_EMAIL">Erlaube E-Mail-Adresse anstelle des Benutzernamens</string>
+  <string name="ORG_LOGIN_WITH_EMAIL_DESC">Wenn ein:e Benutzer:in eine E-Mail-Adresse angegeben hat (und diese im System eindeutig ist), kann anstelle des Benutzernamens auch die E-Mail-Adresse für den Login benutzt werden. (Voreinstellung: nein)</string>
   <string name="ORG_NEW_ORGANIZATION">Neue Organisation</string>
   <string name="ORG_NEW_ORGANIZATION_DESC">Geben Sie in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die Sie hinzufügen möchten. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</string>
   <string name="ORG_NO_FIELD_CREATED">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</string>

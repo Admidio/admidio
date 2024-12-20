@@ -87,7 +87,7 @@ switch ($getMode) {
 
                 case 'security':
                     $checkboxes = array(
-                        'enable_auto_login', 'enable_password_recovery'
+                        'enable_auto_login', 'enable_password_recovery', 'security_login_email_address_enabled'
                     );
 
                     if (!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0) {
