@@ -142,7 +142,7 @@ class Component extends Entity
                     }
                     break;
 
-                case 'GUESTBOOK':
+                case 'FORUM':
                     if ($gCurrentUser->editGuestbookRight()) {
                         return true;
                     }
@@ -253,9 +253,8 @@ class Component extends Entity
                 }
                 break;
 
-            case 'GUESTBOOK':
-                if ((int) $gSettingsManager->get('enable_guestbook_module') === 1
-                || ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin)) {
+            case 'FORUM':
+                if ($gSettingsManager->getBool('forum_module_enabled') && $gValidLogin) {
                     return true;
                 }
                 break;

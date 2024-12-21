@@ -544,7 +544,7 @@ class GroupsRoles extends HtmlPage
                     array('helpTextId' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'bi-file-earmark-arrow-down-fill')
                 );
             }
-            if ((int)$gSettingsManager->get('enable_guestbook_module') > 0) {
+            if ($gSettingsManager->getBool('forum_module_enabled')) {
                 $form->addCheckbox(
                     'rol_guestbook',
                     $gL10n->get('SYS_RIGHT_GUESTBOOK'),
@@ -676,10 +676,10 @@ class GroupsRoles extends HtmlPage
             if ($role->getValue('rol_documents_files') == 1 && (int)$gSettingsManager->getBool('documents_files_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
-            if ($role->getValue('rol_guestbook') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
+            if ($role->getValue('rol_guestbook') == 1 && $gSettingsManager->getBool('forum_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-book-half', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK'));
             }
-            if ($role->getValue('rol_guestbook_comments') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0 && !$gSettingsManager->getBool('enable_gbook_comments4all')) {
+            if ($role->getValue('rol_guestbook_comments') == 1 && $gSettingsManager->getBool('forum_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-chat-fill', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'));
             }
             if ($role->getValue('rol_weblinks') == 1 && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {

@@ -27,7 +27,7 @@ try {
     $getGbcUuid = admFuncVariableIsValid($_GET, 'gbc_uuid', 'uuid');
 
     // check if the module is enabled and disallow access if it's disabled
-    if ((int)$gSettingsManager->get('enable_guestbook_module') === 0) {
+    if (!$gSettingsManager->getBool('forum_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
@@ -46,7 +46,7 @@ try {
     }
 
     // Erst einmal die Rechte abklopfen...
-    if (((int)$gSettingsManager->get('enable_guestbook_module') === 2 || !$gSettingsManager->getBool('enable_gbook_comments4all')) && $getGboUuid !== '') {
+    if (((int)$gSettingsManager->get('forum_module_enabled') === 2 || !$gSettingsManager->getBool('enable_gbook_comments4all')) && $getGboUuid !== '') {
         // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
         require(__DIR__ . '/../../system/login_valid.php');
 

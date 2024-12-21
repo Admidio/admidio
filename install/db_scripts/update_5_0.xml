@@ -103,5 +103,18 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
         ADD CONSTRAINT %PREFIX%_fk_fop_gbo         FOREIGN KEY (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)           ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_fop_usr_create  FOREIGN KEY (fop_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_fop_usr_change  FOREIGN KEY (fop_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="620">UPDATE %PREFIX%_components SET com_name = 'SYS_FORUM', com_name_intern = 'FORUM' WHERE com_name_intern = 'GUESTBOOK'</step>
+    <step id="630">UPDATE %PREFIX%_menu SET men_name = 'SYS_FORUM', men_name_intern = 'forum', men_icon='chat-dots-fill', men_url='/adm_program/modules/forum.php', men_description='SYS_FORUM_DESC', men_men_id_parent = 1 WHERE men_name_intern = 'guestbook'</step>
+    <step id="640" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_guestbook_module' SET pr1.prf_value = 0 WHERE pr1.prf_name = 'forum_module_enabled'</step>
+    <step id="650" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_guestbook_module' AND pr1.prf_name = 'forum_module_enabled'</step>
+    <step id="660">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_module'</step>
+    <step id="670" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'guestbook_entries_per_page' SET pr1.prf_value = 25 WHERE pr1.prf_name = 'forum_entries_per_page'</step>
+    <step id="680" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 25 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'guestbook_entries_per_page' AND pr1.prf_name = 'forum_entries_per_page'</step>
+    <step id="690">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'guestbook_entries_per_page'</step>
+    <step id="700">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_captcha'</step>
+    <step id="710">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'flooding_protection_time'</step>
+    <step id="720">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_gbook_comments4all'</step>
+    <step id="730">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_intial_comments_loading'</step>
+    <step id="740">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_moderation'</step>
     <step>stop</step>
 </update>

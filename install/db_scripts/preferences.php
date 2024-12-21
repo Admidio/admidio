@@ -115,14 +115,9 @@ $defaultOrgPreferences = array(
     'groups_roles_members_per_page'      => '25',
     'groups_roles_show_former_members'   => '2',
 
-    // Guestbook
-    'enable_guestbook_module'        => '0',
-    'guestbook_entries_per_page'     => '10',
-    'enable_guestbook_captcha'       => '1',
-    'flooding_protection_time'       => '60',
-    'enable_gbook_comments4all'      => '0',
-    'enable_intial_comments_loading' => '0',
-    'enable_guestbook_moderation'    => '0',
+    // Forum
+    'forum_module_enabled'           => '1',
+    'forum_entries_per_page'     => '10',
 
     // Messages
     'enable_mail_module'          => '1',

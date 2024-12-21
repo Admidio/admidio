@@ -24,11 +24,8 @@ try {
     $getGboUuid = admFuncVariableIsValid($_GET, 'gbo_uuid', 'uuid');
 
     // check if the module is enabled and disallow access if it's disabled
-    if ((int)$gSettingsManager->get('enable_guestbook_module') === 0) {
+    if (!$gSettingsManager->getBool('forum_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ((int)$gSettingsManager->get('enable_guestbook_module') === 2) {
-        // only logged in users can access the module
-        require(__DIR__ . '/../../system/login_valid.php');
     }
 
     // set headline of the script
@@ -97,7 +94,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-guestbook-new', $gL10n->get('GBO_GUESTBOOK') . ' - ' . $headline);
+    $page = new HtmlPage('admidio-guestbook-new', $gL10n->get('SYS_FORUM') . ' - ' . $headline);
 
     // Html des Modules ausgeben
     if ($getGboUuid !== '') {

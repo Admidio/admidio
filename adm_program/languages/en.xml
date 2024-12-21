@@ -2,27 +2,17 @@
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Back to guestbook</string>
-  <string name="GBO_CAPTCHA_DESC">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It\'s necessary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (default: yes)</string>
   <string name="GBO_COMMENT_BY">Comment of #VAR1#</string>
-  <string name="GBO_COMMENTS4ALL">Allow anonyme comments</string>
-  <string name="GBO_COMMENTS4ALL_DESC">Users who are not logged in can comment on the entries in the guestbook after activating this option. The rights assignment for this function via role management is then ignored. (Default: no)</string>
   <string name="GBO_CREATE_COMMENT">Leave comment</string>
   <string name="GBO_EDIT_COMMENT">Edit comment</string>
   <string name="GBO_ENTRY_QUEUED">Entry saved. It will be displayed after moderation.</string>
   <string name="GBO_FLOODING_PROTECTION">Your last entry was created less than #VAR1# seconds ago.</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Interval</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Entries of unregistered users will be checked. Too many entries within the given time intervall are not allowed. This option allows to take control over unwanted entries. If interval is set to 0, no check will be done. (default: 60 seconds)</string>
   <string name="GBO_GUESTBOOK">Guestbook</string>
   <string name="GBO_GUESTBOOK_DESC">Guests and users are able to leave greetings and comments, and can annotate other\'s entries.</string>
-  <string name="GBO_GUESTBOOK_MODERATION">Moderation activated for</string>
-  <string name="GBO_GUESTBOOK_MODERATION_DESC">Guestbook entries will be displayed after moderation. Define if moderation should be performed in case of guests or for logged in users only, or nobody\'s comments should be checked in advance. (default: Nobody)</string>
   <string name="GBO_HIDE_COMMENTS">Hide comments</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING">Display comments right away</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">If this option is active and a guestbook page is being loaded, comments on this page will be loaded right away. Otherwise user has to click a hyperlink in order to reveal comments. (default: no)</string>
   <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Latest guestbook entries of organization #VAR1#</string>
   <string name="GBO_MODERATE_ENTRIES">Moderate posts</string>
   <string name="GBO_MODERATE_VAR">Moderate #VAR1#</string>
-  <string name="GBO_ONLY_VISITORS">Visitors only</string>
   <string name="GBO_SHOW_COMMENTS">Display comments</string>
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Display #VAR1# comment(s) of this guest book entry</string>
   <string name="GBO_WRITE_COMMENT">Leave comment</string>
@@ -692,6 +682,9 @@
   <string name="SYS_FORMER_MEMBERS">Former members</string>
   <string name="SYS_FORMER_PL">Former</string>
   <string name="SYS_FORMER_ROLE_MEMBERSHIP">Former role memberships</string>
+  <string name="SYS_FORUM">Forum</string>
+  <string name="SYS_FORUM_DESC">A simple forum for discussions within an organization. Various topics can be published and discussed.</string>
+  <string name="SYS_FORUM_MODULE_ENABLED_DESC">The forum can be activated via this setting. All registered members then have the opportunity to post or comment on topics in the forum.</string>
   <string name="SYS_FORWARD">Forward</string>
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FROM">from #VAR1#</string>

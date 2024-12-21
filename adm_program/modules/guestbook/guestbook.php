@@ -26,11 +26,8 @@ try {
     unset($_SESSION['guestbook_entry_request'], $_SESSION['guestbook_comment_request']);
 
     // check if the module is enabled and disallow access if it's disabled
-    if ((int)$gSettingsManager->get('enable_guestbook_module') === 0) {
+    if (!$gSettingsManager->get('forum_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ((int)$gSettingsManager->get('enable_guestbook_module') === 2) {
-        // only logged-in users can access the module
-        require(__DIR__ . '/../../system/login_valid.php');
     }
 
     // Initialize and check the parameters
@@ -44,21 +41,21 @@ try {
 
     // add url to navigation stack
     if ($getGboUuid !== '') {
-        $gNavigation->addUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'));
+        $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_FORUM'));
     } elseif ($getModeration) {
-        $gNavigation->addUrl(CURRENT_URL, $gL10n->get('GBO_MODERATE_VAR', array($gL10n->get('GBO_GUESTBOOK'))));
+        $gNavigation->addUrl(CURRENT_URL, $gL10n->get('GBO_MODERATE_VAR', array($gL10n->get('SYS_FORUM'))));
     } else {
-        $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('GBO_GUESTBOOK'), 'bi-book-half');
+        $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('SYS_FORUM'), 'bi-book-half');
     }
 
     // create html page object
     $page = new HtmlPage('admidio-guestbook');
 
     // add rss feed to guestbook
-    if ($gSettingsManager->getBool('enable_rss') && (int)$gSettingsManager->get('enable_guestbook_module') === 1) {
+    if ($gSettingsManager->getBool('enable_rss') && (int)$gSettingsManager->get('forum_module_enabled') === 1) {
         $page->addRssFile(
             ADMIDIO_URL . FOLDER_MODULES . '/guestbook/rss_guestbook.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
-            $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('GBO_GUESTBOOK')))
+            $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_FORUM')))
         );
     }
 
@@ -93,9 +90,9 @@ try {
 
     // add headline and title of module
     if ($getModeration) {
-        $page->setHeadline($gL10n->get('GBO_MODERATE_VAR', array($gL10n->get('GBO_GUESTBOOK'))));
+        $page->setHeadline($gL10n->get('GBO_MODERATE_VAR', array($gL10n->get('SYS_FORUM'))));
     } else {
-        $page->setHeadline($gL10n->get('GBO_GUESTBOOK'));
+        $page->setHeadline($gL10n->get('SYS_FORUM'));
     }
 
     // ------------------------------------------------------
@@ -130,8 +127,8 @@ try {
     $guestbookEntries = (int)$pdoStatement->fetchColumn();
 
     // Anzahl Gaestebucheintraege pro Seite
-    if ($gSettingsManager->getInt('guestbook_entries_per_page') > 0) {
-        $guestbookEntriesPerPage = $gSettingsManager->getInt('guestbook_entries_per_page');
+    if ($gSettingsManager->getInt('forum_entries_per_page') > 0) {
+        $guestbookEntriesPerPage = $gSettingsManager->getInt('forum_entries_per_page');
     } else {
         $guestbookEntriesPerPage = $guestbookEntries;
     }

@@ -31,7 +31,7 @@ try {
     }
 
     // check if the module is enabled and disallow access if it's disabled
-    if ((int)$gSettingsManager->get('enable_guestbook_module') !== 1) {
+    if (!$gSettingsManager->getBool('forum_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
@@ -55,7 +55,7 @@ try {
 
     // create RSS feed object with channel information
     $rss = new RssFeed(
-        $organizationName . ' - ' . $gL10n->get('GBO_GUESTBOOK'),
+        $organizationName . ' - ' . $gL10n->get('SYS_FORUM'),
         $gCurrentOrganization->getValue('org_homepage'),
         $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', array($organizationName)),
         $organizationName

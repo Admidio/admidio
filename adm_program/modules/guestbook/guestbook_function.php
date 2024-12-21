@@ -36,11 +36,8 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create_entry', 'edit_entry', 'moderate_entry', 'delete_entry', 'create_comment', 'edit_comment', 'moderate_comment', 'delete_comment')));
 
     // check if the module is enabled and disallow access if it's disabled
-    if ((int)$gSettingsManager->get('enable_guestbook_module') === 0) {
+    if (!$gSettingsManager->getBool('forum_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ((int)$gSettingsManager->get('enable_guestbook_module') === 2) {
-        // only logged-in users can access the module
-        require(__DIR__ . '/../../system/login_valid.php');
     }
 
     // check the CSRF token of the form against the session token

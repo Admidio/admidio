@@ -502,14 +502,14 @@ try {
                     'icon' => 'bi-file-earmark-arrow-down-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_guestbook') && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
+            if ($user->checkRolesRight('rol_guestbook') && $gSettingsManager->getBool('forum_module_enabled')) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_guestbook'],
                     'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK'),
                     'icon' => 'bi-book-half'
                 );
             }
-            if ($user->checkRolesRight('rol_guestbook_comments') && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
+            if ($user->checkRolesRight('rol_guestbook_comments') && $gSettingsManager->getBool('forum_module_enabled')) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_guestbook_comments'],
                     'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),

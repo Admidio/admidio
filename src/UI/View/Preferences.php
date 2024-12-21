@@ -140,10 +140,10 @@ class Preferences extends HtmlPage
                 'title' => $gL10n->get('SYS_PHOTOS'),
                 'icon' => 'bi-image-fill'
             ),
-            'guestbook' => array(
-                'id' => 'guestbook',
-                'title' => $gL10n->get('GBO_GUESTBOOK'),
-                'icon' => 'bi-book-half'
+            'forum' => array(
+                'id' => 'forum',
+                'title' => $gL10n->get('SYS_FORUM'),
+                'icon' => 'bi-chat-dots-fill'
             ),
             'groups_roles' => array(
                 'id' => 'groups_roles',
@@ -1063,21 +1063,21 @@ class Preferences extends HtmlPage
     }
 
     /**
-     * Generates the html of the form from the guestbook preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the guestbook preferences.
+     * Generates the html of the form from the forum preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the forum preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
-    public function createGuestbookForm(): string
+    public function createForumForm(): string
     {
         global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
         $formGuestbook = new Form(
-            'adm_preferences_form_guestbook',
-            'preferences/preferences.guestbook.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Guestbook')),
+            'adm_preferences_form_forum',
+            'preferences/preferences.forum.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Forum')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1086,55 +1086,20 @@ class Preferences extends HtmlPage
             '1' => $gL10n->get('SYS_ENABLED'),
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
         );
-        $formGuestbook->addSelectBox(
-            'enable_guestbook_module',
+        $formGuestbook->addCheckBox(
+            'forum_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['enable_guestbook_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+            $formValues['forum_module_enabled'],
+            array('helpTextId' => 'SYS_FORUM_MODULE_ENABLED_DESC')
         );
         $formGuestbook->addInput(
-            'guestbook_entries_per_page',
+            'forum_entries_per_page',
             $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
-            $formValues['guestbook_entries_per_page'],
+            $formValues['forum_entries_per_page'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
         );
-        $formGuestbook->addCheckbox(
-            'enable_guestbook_captcha',
-            $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool)$formValues['enable_guestbook_captcha'],
-            array('helpTextId' => 'GBO_CAPTCHA_DESC')
-        );
-        $selectBoxEntries = array(
-            '0' => $gL10n->get('SYS_NOBODY'),
-            '1' => $gL10n->get('GBO_ONLY_VISITORS'),
-            '2' => $gL10n->get('SYS_ALL')
-        );
-        $formGuestbook->addSelectBox(
-            'enable_guestbook_moderation',
-            $gL10n->get('GBO_GUESTBOOK_MODERATION'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['enable_guestbook_moderation'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'GBO_GUESTBOOK_MODERATION_DESC')
-        );
-        $formGuestbook->addCheckbox(
-            'enable_gbook_comments4all',
-            $gL10n->get('GBO_COMMENTS4ALL'),
-            (bool)$formValues['enable_gbook_comments4all'],
-            array('helpTextId' => 'GBO_COMMENTS4ALL_DESC')
-        );
-        $formGuestbook->addCheckbox(
-            'enable_intial_comments_loading',
-            $gL10n->get('GBO_INITIAL_COMMENTS_LOADING'),
-            (bool)$formValues['enable_intial_comments_loading'],
-            array('helpTextId' => 'GBO_INITIAL_COMMENTS_LOADING_DESC')
-        );
-        $formGuestbook->addInput(
-            'flooding_protection_time',
-            $gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL'),
-            $formValues['flooding_protection_time'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'GBO_FLOODING_PROTECTION_INTERVALL_DESC')
-        );
         $formGuestbook->addSubmitButton(
-            'adm_button_save_guestbook',
+            'adm_button_save_forum',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
@@ -1142,7 +1107,7 @@ class Preferences extends HtmlPage
         $smarty = $this->getSmartyTemplate();
         $formGuestbook->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formGuestbook);
-        return $smarty->fetch('preferences/preferences.guestbook.tpl');
+        return $smarty->fetch('preferences/preferences.forum.tpl');
     }
 
     /**
@@ -2089,7 +2054,7 @@ class Preferences extends HtmlPage
         $this->addJavascript(
             '
             var panels = ["common", "security", "regional_settings", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
-                "announcements", "contacts", "documents_files", "photos", "guestbook", "groups_roles", "category_report", "messages", "profile", "events", "links"];
+                "announcements", "contacts", "documents_files", "photos", "forum", "groups_roles", "category_report", "messages", "profile", "events", "links"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#adm_panel_preferences_" + panels[i] + " .accordion-header").click(function (e) {
