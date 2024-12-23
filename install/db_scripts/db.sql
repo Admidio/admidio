@@ -241,10 +241,11 @@ CREATE UNIQUE INDEX %PREFIX%_idx_fol_uuid ON %PREFIX%_folders (fol_uuid);
 CREATE TABLE %PREFIX%_forum_topics
 (
     fot_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    fot_org_id                  integer unsigned    NOT NULL,
     fot_uuid                    varchar(36)         NOT NULL,
-    fot_text                    text                NOT NULL,
-    fot_locked                  boolean             NOT NULL    DEFAULT false,
+    fot_cat_id                  integer unsigned    NOT NULL,
+    fot_first_fop_id            integer unsigned    NOT NULL,
+    fot_title                   varchar(255)        NOT NULL,
+    fot_views                   integer             NOT NULL,
     fot_usr_id_create           integer unsigned,
     fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     fot_usr_id_change           integer unsigned,
@@ -266,7 +267,6 @@ CREATE TABLE %PREFIX%_forum_posts
     fop_fot_id                  integer unsigned    NOT NULL,
     fop_uuid                    varchar(36)         NOT NULL,
     fop_text                    text                NOT NULL,
-    fop_locked                  boolean             NOT NULL    DEFAULT false,
     fop_usr_id_create           integer unsigned,
     fop_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     fop_usr_id_change           integer unsigned,
@@ -278,57 +278,6 @@ CREATE TABLE %PREFIX%_forum_posts
     COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_fop_uuid ON %PREFIX%_forum_posts (fop_uuid);
-
-/*==============================================================*/
-/* Table: adm_guestbook                                         */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_guestbook
-(
-    gbo_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    gbo_org_id                  integer unsigned    NOT NULL,
-    gbo_uuid                    varchar(36)         NOT NULL,
-    gbo_name                    varchar(60)         NOT NULL,
-    gbo_text                    text                NOT NULL,
-    gbo_email                   varchar(254),
-    gbo_homepage                varchar(50),
-    gbo_ip_address              varchar(39)         NOT NULL,
-    gbo_locked                  boolean             NOT NULL    DEFAULT false,
-    gbo_usr_id_create           integer unsigned,
-    gbo_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    gbo_usr_id_change           integer unsigned,
-    gbo_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (gbo_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_gbo_uuid ON %PREFIX%_guestbook (gbo_uuid);
-
-/*==============================================================*/
-/* Table: adm_guestbook_comments                                */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_guestbook_comments
-(
-    gbc_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    gbc_gbo_id                  integer unsigned    NOT NULL,
-    gbc_uuid                    varchar(36)         NOT NULL,
-    gbc_name                    varchar(60)         NOT NULL,
-    gbc_text                    text                NOT NULL,
-    gbc_email                   varchar(254),
-    gbc_ip_address              varchar(39)         NOT NULL,
-    gbc_locked                  boolean             NOT NULL    DEFAULT false,
-    gbc_usr_id_create           integer unsigned,
-    gbc_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    gbc_usr_id_change           integer unsigned,
-    gbc_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (gbc_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_gbc_uuid ON %PREFIX%_guestbook_comments (gbc_uuid);
 
 /*==============================================================*/
 /* Table: adm_ids                                               */
@@ -963,24 +912,15 @@ ALTER TABLE %PREFIX%_folders
     ADD CONSTRAINT %PREFIX%_fk_fol_usr         FOREIGN KEY (fol_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_forum_topics
-    ADD CONSTRAINT %PREFIX%_fk_fot_org         FOREIGN KEY (fot_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fot_cat         FOREIGN KEY (fot_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_first_fop_id)   REFERENCES %PREFIX%_forum_posts (fop_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fot_usr_change  FOREIGN KEY (fot_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_forum_posts
-    ADD CONSTRAINT %PREFIX%_fk_fop_gbo         FOREIGN KEY (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)           ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fop_fot         FOREIGN KEY (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)        ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fop_usr_create  FOREIGN KEY (fop_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fop_usr_change  FOREIGN KEY (fop_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_guestbook
-    ADD CONSTRAINT %PREFIX%_fk_gbo_org         FOREIGN KEY (gbo_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_gbo_usr_create  FOREIGN KEY (gbo_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_gbo_usr_change  FOREIGN KEY (gbo_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_guestbook_comments
-    ADD CONSTRAINT %PREFIX%_fk_gbc_gbo         FOREIGN KEY (gbc_gbo_id)         REFERENCES %PREFIX%_guestbook (gbo_id)           ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_gbc_usr_create  FOREIGN KEY (gbc_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_gbc_usr_change  FOREIGN KEY (gbc_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_ids
     ADD CONSTRAINT %PREFIX%_fk_ids_usr_id      FOREIGN KEY (ids_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;

@@ -21,7 +21,7 @@
 	    ADD CONSTRAINT %PREFIX%_fk_msr_msg_id      FOREIGN KEY (msr_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
 	    ADD CONSTRAINT %PREFIX%_fk_msr_rol_id      FOREIGN KEY (msr_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
 	    ADD CONSTRAINT %PREFIX%_fk_msr_usr_id      FOREIGN KEY (msr_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
-    <step id="60">ComponentUpdateSteps::updateStep41MigrateMessageRecipients</step>
+    <step id="60">UpdateStepsCode::updateStep41MigrateMessageRecipients</step>
     <step id="70">ALTER TABLE %PREFIX%_messages_content DROP COLUMN msc_part_id</step>
     <step id="80">CREATE TABLE %PREFIX%_messages_attachments
         (
@@ -42,9 +42,9 @@
     <step id="130">ALTER TABLE %PREFIX%_users DROP COLUMN usr_activation_code</step>
     <step id="140">ALTER TABLE %PREFIX%_users ADD COLUMN usr_pw_reset_id varchar(50)</step>
     <step id="150">ALTER TABLE %PREFIX%_users ADD COLUMN usr_pw_reset_timestamp timestamp NULL DEFAULT NULL</step>
-    <step id="160">ComponentUpdateSteps::updateStep41AddSystemmailText</step>
+    <step id="160">UpdateStepsCode::updateStep41AddSystemmailText</step>
     <step id="170">DELETE FROM %PREFIX%_texts WHERE txt_name = 'SYSMAIL_ACTIVATION_LINK'</step>
-    <step id="180">ComponentUpdateSteps::updateStep41AddMembersManagementDefaultList</step>
+    <step id="180">UpdateStepsCode::updateStep41AddMembersManagementDefaultList</step>
     <step id="190">UPDATE %PREFIX%_components SET com_name = 'SYS_WEBLINKS' WHERE com_name = 'LNK_WEBLINKS'</step>
     <step id="200">UPDATE %PREFIX%_menu SET men_name = 'SYS_WEBLINKS', men_description = 'SYS_WEBLINKS_DESC' WHERE men_name_intern = 'weblinks'</step>
     <step id="210">UPDATE %PREFIX%_components SET com_name = 'SYS_USER_MANAGEMENT' WHERE com_name = 'MEM_USER_MANAGEMENT'</step>
@@ -71,7 +71,7 @@
     <step id="340">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_uuid varchar(36)</step>
     <step id="350">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_uuid varchar(36)</step>
     <step id="360">ALTER TABLE %PREFIX%_members ADD COLUMN mem_uuid varchar(36)</step>
-    <step id="400">ComponentUpdateSteps::updateStep41AddUuid</step>
+    <step id="400">UpdateStepsCode::updateStep41AddUuid</step>
     <step id="410" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
     <step id="415" database="pgsql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_uuid SET NOT NULL</step>
     <step id="420">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
@@ -132,9 +132,9 @@
     <step id="800">CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid)</step>
     <step id="810">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_reload boolean NOT NULL DEFAULT '0'</step>
     <step id="820">ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_renew</step>
-    <step id="825">ComponentUpdateSteps::updateStep41MoveEcardTemplates</step>
+    <step id="825">UpdateStepsCode::updateStep41MoveEcardTemplates</step>
     <step id="830">ALTER TABLE %PREFIX%_messages DROP COLUMN msg_usr_id_receiver</step>
-    <step id="840" database="pgsql">ComponentUpdateSteps::updateStep41PostgreSqlSetBoolean</step>
+    <step id="840" database="pgsql">UpdateStepsCode::updateStep41PostgreSqlSetBoolean</step>
     <step id="850">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES ('MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0)</step>
     <step id="860">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
@@ -154,7 +154,7 @@
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci</step>
     <step id="880">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
-    <step id="890">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
+    <step id="890">UpdateStepsCode::updateStep41CategoryReportMigration</step>
     <step id="900">UPDATE %PREFIX%_components SET com_name = 'SYS_MEMBERS' WHERE com_name = 'SYS_USER_MANAGEMENT'</step>
     <step id="910">UPDATE %PREFIX%_menu SET men_name = 'SYS_MEMBERS', men_description = 'SYS_MEMBERS_DESC' WHERE men_name_intern = 'usrmgt'</step>
     <step id="920">UPDATE %PREFIX%_user_fields SET usf_value_list = 'fa-mars|SYS_MALE
@@ -167,8 +167,8 @@ fa-mars-stroke-v|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_lis
     <step id="980" database="pgsql">ALTER TABLE %PREFIX%_menu ALTER COLUMN men_icon TYPE varchar(100)</step>
     <step id="990" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_icon varchar(100)</step>
     <step id="1000" database="pgsql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_icon TYPE varchar(100)</step>
-    <step id="1010">ComponentUpdateSteps::updateStep41CleanUpInternalNameProfileFields</step>
-    <step id="1020">ComponentUpdateSteps::updateStep41CleanUpRoleNames</step>
+    <step id="1010">UpdateStepsCode::updateStep41CleanUpInternalNameProfileFields</step>
+    <step id="1020">UpdateStepsCode::updateStep41CleanUpRoleNames</step>
     <step id="1030">update %PREFIX%_preferences set prf_value = 0 WHERE prf_name IN ('enable_announcements_module', 'enable_photo_module', 'enable_guestbook_module', 'enable_dates_module', 'enable_weblinks_module') and prf_value LIKE '' or prf_value is null</step>
     <step>stop</step>
 </update>

@@ -169,6 +169,7 @@ class Organization extends Entity
                      , (?, ?, \'LNK\', \'INTERN\',    \'INS_INTERN\',    false, false, 2, ?, ?)
                      , (?, ?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', false, false, 2, ?, ?)
+                     , (?, ?, \'FOT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'DAT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'DAT\', \'TRAINING\',  \'INS_TRAINING\',  false, false, 2, ?, ?)
                      , (?, ?, \'DAT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)';
