@@ -840,6 +840,8 @@
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Zugangsdaten wurden richtig eingegeben, allerdings bist du kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Anmeldename und/oder das Passwort ist falsch.</string>
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
+  <string name="SYS_LOGIN_WITH_EMAIL">Erlaube E-Mail-Adresse anstelle des Benutzernamens</string>
+  <string name="SYS_LOGIN_WITH_EMAIL_DESC">Wenn ein:e Benutzer:in eine E-Mail-Adresse angegeben hat (und diese im System eindeutig ist), kann anstelle des Benutzernamens auch die E-Mail-Adresse für den Login benutzt werden. (Voreinstellung: nein)</string>
   <string name="SYS_LOGOUT">Abmelden</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Du wurdest erfolgreich abgemeldet.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</string>
