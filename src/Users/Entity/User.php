@@ -251,11 +251,10 @@ class User extends Entity
                 'rol_announcements' => false,
                 'rol_approve_users' => false,
                 'rol_assign_roles' => false,
-                'rol_events' => false,
                 'rol_documents_files' => false,
+                'rol_events' => false,
                 'rol_edit_user' => false,
-                'rol_guestbook' => false,
-                'rol_guestbook_comments' => false,
+                'rol_forum_admin' => false,
                 'rol_mail_to_all' => false,
                 'rol_photo' => false,
                 'rol_profile' => false,
@@ -722,7 +721,7 @@ class User extends Entity
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-            || ($categoryType === 'EVT' && $this->editEvents())
+            || ($categoryType === 'EVT' && $this->administrateEvents())
             || ($categoryType === 'LNK' && $this->editWeblinksRight())
             || ($categoryType === 'USF' && $this->editUsers())
             || ($categoryType === 'ROL' && $this->manageRoles())) {
@@ -768,7 +767,7 @@ class User extends Entity
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-            || ($categoryType === 'EVT' && $this->editEvents())
+            || ($categoryType === 'EVT' && $this->administrateEvents())
             || ($categoryType === 'LNK' && $this->editWeblinksRight())
             || ($categoryType === 'USF' && $this->editUsers())
             || ($categoryType === 'ROL' && $this->assignRoles())) {
@@ -2048,7 +2047,7 @@ class User extends Entity
      * @return bool Return true if the user is admin of the module otherwise false
      * @throws Exception
      */
-    public function editEvents(): bool
+    public function administrateEvents(): bool
     {
         return $this->checkRolesRight('rol_events');
     }
@@ -2058,9 +2057,19 @@ class User extends Entity
      * @return bool Return true if the user is admin of the module otherwise false
      * @throws Exception
      */
-    public function adminDocumentsFiles(): bool
+    public function administrateDocumentsFiles(): bool
     {
         return $this->checkRolesRight('rol_documents_files');
+    }
+
+    /**
+     * Method checks if the current user is allowed to administrate the forum module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function administrateForum(): bool
+    {
+        return $this->checkRolesRight('rol_forum_admin');
     }
 
     /**
@@ -2072,26 +2081,6 @@ class User extends Entity
     public function editUsers(): bool
     {
         return $this->checkRolesRight('rol_edit_user');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the guestbook module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editGuestbookRight(): bool
-    {
-        return $this->checkRolesRight('rol_guestbook');
-    }
-
-    /**
-     * Method checks if the current user is allowed to comment guestbook entries.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function commentGuestbookRight(): bool
-    {
-        return $this->checkRolesRight('rol_guestbook_comments');
     }
 
     /**

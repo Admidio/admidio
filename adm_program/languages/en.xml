@@ -487,6 +487,7 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
+  <string name="SYS_DELETE_TOPIC">Delete topic</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
@@ -1111,8 +1112,8 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roles having this permission can manage the rights for the documents and files module. This includes who can see folders and can upload files.</string>
   <string name="SYS_RIGHT_EDIT_USER">Edit profile of all contacts</string>
   <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other contacts (except passwords). In addition they can add or delete contacts.</string>
-  <string name="SYS_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
-  <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
+  <string name="SYS_RIGHT_FORUM">Manage forum</string>
+  <string name="SYS_RIGHT_FORUM_DESC">Roles having this permission can manage the forum module. They can view all forum and topics and can edit and delete them.</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Participants can send emails to all participants</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send emails to this role via the message module. The role right #VAR1_BOLD# is still above this setting.</string>
   <string name="SYS_RIGHT_MAIL_TO_ALL">Send e-mails to all roles</string>

@@ -224,7 +224,7 @@ class Category extends Entity
         || ($categoryType === 'LNK' && !$gCurrentUser->editWeblinksRight())
         || ($categoryType === 'ANN' && !$gCurrentUser->editAnnouncements())
         || ($categoryType === 'USF' && !$gCurrentUser->editUsers())
-        || ($categoryType === 'EVT' && !$gCurrentUser->editEvents())
+        || ($categoryType === 'EVT' && !$gCurrentUser->administrateEvents())
         || ($categoryType === 'AWA' && !$gCurrentUser->editUsers())) {
             return false;
         }

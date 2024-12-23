@@ -131,19 +131,19 @@ class Component extends Entity
                     break;
 
                 case 'EVENTS':
-                    if ($gCurrentUser->editEvents()) {
+                    if ($gCurrentUser->administrateEvents()) {
                         return true;
                     }
                     break;
 
                 case 'DOCUMENTS-FILES':
-                    if ($gCurrentUser->adminDocumentsFiles()) {
+                    if ($gCurrentUser->administrateDocumentsFiles()) {
                         return true;
                     }
                     break;
 
                 case 'FORUM':
-                    if ($gCurrentUser->editGuestbookRight()) {
+                    if ($gCurrentUser->administrateForum()) {
                         return true;
                     }
                     break;

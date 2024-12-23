@@ -34,7 +34,7 @@ try {
     }
 
     // first check whether the user also has the appropriate rights
-    if (!$gCurrentUser->adminDocumentsFiles()) {
+    if (!$gCurrentUser->administrateDocumentsFiles()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

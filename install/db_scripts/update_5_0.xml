@@ -71,8 +71,6 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
         fot_views                   integer             NOT NULL,
         fot_usr_id_create           integer unsigned,
         fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-        fot_usr_id_change           integer unsigned,
-        fot_timestamp_change        timestamp           NULL        DEFAULT NULL,
         PRIMARY KEY (fot_id)
         )
         ENGINE = InnoDB
@@ -98,8 +96,7 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="600">ALTER TABLE %PREFIX%_forum_topics
         ADD CONSTRAINT %PREFIX%_fk_fot_cat         FOREIGN KEY (fot_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_first_fop_id)   REFERENCES %PREFIX%_forum_posts (fop_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
-        ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
-        ADD CONSTRAINT %PREFIX%_fk_fot_usr_change  FOREIGN KEY (fot_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
+        ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step id="610">ALTER TABLE %PREFIX%_forum_posts
         ADD CONSTRAINT %PREFIX%_fk_fop_fot         FOREIGN KEY (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)        ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_fop_usr_create  FOREIGN KEY (fop_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -118,5 +115,9 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="720">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_gbook_comments4all'</step>
     <step id="730">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_intial_comments_loading'</step>
     <step id="740">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_moderation'</step>
+    <step id="750">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_forum_admin boolean not null default false</step>
+    <step id="760">UPDATE %PREFIX%_roles SET rol_forum_admin = true WHERE rol_administrator = true</step>
+    <step id="770">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_guestbook</step>
+    <step id="780">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_guestbook_comments</step>
     <step>stop</step>
 </update>

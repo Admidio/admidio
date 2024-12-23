@@ -80,7 +80,7 @@ try {
             }
         }
 
-        if ($gCurrentUser->adminDocumentsFiles()) {
+        if ($gCurrentUser->administrateDocumentsFiles()) {
             $page->addPageFunctionsMenuItem(
                 'menu_item_documents_permissions',
                 $gL10n->get('SYS_PERMISSIONS'),

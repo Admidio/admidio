@@ -47,8 +47,8 @@ class Folder extends Entity
     {
         global $gCurrentUser;
 
-        // If user hasn't adminDocumentsFiles, don't add more data
-        if (!$gCurrentUser->adminDocumentsFiles()) {
+        // If user hasn't administrateDocumentsFiles, don't add more data
+        if (!$gCurrentUser->administrateDocumentsFiles()) {
             return $completeFolder;
         }
 
@@ -58,7 +58,7 @@ class Folder extends Entity
             return $completeFolder;
         }
 
-        // User has adminDocumentsFiles and folder exists, so lookup the physical directory for items that aren't in the DB
+        // User has administrateDocumentsFiles and folder exists, so lookup the physical directory for items that aren't in the DB
         $dirHandle = @opendir($folderPath);
         if ($dirHandle) {
             while (($entry = readdir($dirHandle)) !== false) {
@@ -395,8 +395,8 @@ class Folder extends Entity
 
             $addToArray = false;
 
-            // If file exists and file isn't locked or user has adminDocumentsFiles, show it
-            if (($fileExists && !$rowFiles['fil_locked']) || $gCurrentUser->adminDocumentsFiles()) {
+            // If file exists and file isn't locked or user has administrateDocumentsFiles, show it
+            if (($fileExists && !$rowFiles['fil_locked']) || $gCurrentUser->administrateDocumentsFiles()) {
                 $addToArray = true;
             }
 
@@ -454,7 +454,7 @@ class Folder extends Entity
         }
 
         // If current user has download-admin-rights => allow
-        if ($gCurrentUser->adminDocumentsFiles()) {
+        if ($gCurrentUser->administrateDocumentsFiles()) {
             return true;
         }
 
@@ -581,10 +581,10 @@ class Folder extends Entity
 
             $addToArray = false;
 
-            // If user has adminDocumentsFiles, show it
-            if ($gCurrentUser->adminDocumentsFiles()) {
+            // If user has administrateDocumentsFiles, show it
+            if ($gCurrentUser->administrateDocumentsFiles()) {
                 $addToArray = true;
-            } // If user hasn't adminDocumentsFiles, only show if folder exists
+            } // If user hasn't administrateDocumentsFiles, only show if folder exists
             elseif ($folderExists) {
                 // If folder is public and not locked, show it
                 if ($rowFolders['fol_public'] && !$rowFolders['fol_locked']) {
@@ -648,7 +648,7 @@ class Folder extends Entity
     {
         global $gCurrentUser;
 
-        return $this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->adminDocumentsFiles();
+        return $this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->administrateDocumentsFiles();
     }
 
     /**
@@ -660,7 +660,7 @@ class Folder extends Entity
     {
         global $gCurrentUser;
 
-        return $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->adminDocumentsFiles();
+        return $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->administrateDocumentsFiles();
     }
 
     /**

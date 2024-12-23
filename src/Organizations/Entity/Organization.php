@@ -184,6 +184,7 @@ class Organization extends Entity
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW
         );
         $this->db->queryPrepared($sql, $queryParams);
@@ -229,8 +230,7 @@ class Organization extends Entity
         $roleAdministrator->setValue('rol_announcements', 1);
         $roleAdministrator->setValue('rol_events', 1);
         $roleAdministrator->setValue('rol_documents_files', 1);
-        $roleAdministrator->setValue('rol_guestbook', 1);
-        $roleAdministrator->setValue('rol_guestbook_comments', 1);
+        $roleAdministrator->setValue('rol_forum_admin', 1);
         $roleAdministrator->setValue('rol_photo', 1);
         $roleAdministrator->setValue('rol_weblinks', 1);
         $roleAdministrator->setValue('rol_edit_user', 1);

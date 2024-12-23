@@ -45,7 +45,7 @@ try {
         || ($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
         || ($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
         || ($getType === 'USF' && !$gCurrentUser->editUsers())
-        || ($getType === 'EVT' && !$gCurrentUser->editEvents())
+        || ($getType === 'EVT' && !$gCurrentUser->administrateEvents())
         || ($getType === 'AWA' && !$gCurrentUser->editUsers())) {
         throw new Exception('SYS_NO_RIGHTS');
     }

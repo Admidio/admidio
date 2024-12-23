@@ -546,20 +546,11 @@ class GroupsRoles extends HtmlPage
             }
             if ($gSettingsManager->getBool('forum_module_enabled')) {
                 $form->addCheckbox(
-                    'rol_guestbook',
-                    $gL10n->get('SYS_RIGHT_GUESTBOOK'),
-                    (bool)$role->getValue('rol_guestbook'),
-                    array('icon' => 'bi-book-half')
+                    'rol_forum_admin',
+                    $gL10n->get('SYS_RIGHT_FORUM'),
+                    (bool)$role->getValue('rol_forum_admin'),
+                    array('helpTextId' => 'SYS_RIGHT_FORUM_DESC', 'icon' => 'bi-chat-dots-fill')
                 );
-                // if not registered users can set comments than there is no need to set a role dependent right
-                if (!$gSettingsManager->getBool('enable_gbook_comments4all')) {
-                    $form->addCheckbox(
-                        'rol_guestbook_comments',
-                        $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),
-                        (bool)$role->getValue('rol_guestbook_comments'),
-                        array('icon' => 'bi-chat-fill')
-                    );
-                }
             }
             if ((int)$gSettingsManager->get('enable_weblinks_module') > 0) {
                 $form->addCheckbox(
@@ -673,14 +664,11 @@ class GroupsRoles extends HtmlPage
             if ($role->getValue('rol_photo') == 1 && (int)$gSettingsManager->get('photo_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-image-fill', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
             }
-            if ($role->getValue('rol_documents_files') == 1 && (int)$gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getBool('documents_files_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
-            if ($role->getValue('rol_guestbook') == 1 && $gSettingsManager->getBool('forum_module_enabled')) {
-                $templateRow['roleRights'][] = array('icon' => 'bi bi-book-half', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK'));
-            }
-            if ($role->getValue('rol_guestbook_comments') == 1 && $gSettingsManager->getBool('forum_module_enabled')) {
-                $templateRow['roleRights'][] = array('icon' => 'bi bi-chat-fill', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'));
+            if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getBool('forum_module_enabled')) {
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_FORUM'));
             }
             if ($role->getValue('rol_weblinks') == 1 && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-link-45deg', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));

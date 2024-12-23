@@ -248,8 +248,6 @@ CREATE TABLE %PREFIX%_forum_topics
     fot_views                   integer             NOT NULL,
     fot_usr_id_create           integer unsigned,
     fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    fot_usr_id_change           integer unsigned,
-    fot_timestamp_change        timestamp           NULL        DEFAULT NULL,
     PRIMARY KEY (fot_id)
     )
     ENGINE = InnoDB
@@ -593,8 +591,7 @@ CREATE TABLE %PREFIX%_roles
     rol_events                  boolean             NOT NULL    DEFAULT false,
     rol_documents_files         boolean             NOT NULL    DEFAULT false,
     rol_edit_user               boolean             NOT NULL    DEFAULT false,
-    rol_guestbook               boolean             NOT NULL    DEFAULT false,
-    rol_guestbook_comments      boolean             NOT NULL    DEFAULT false,
+    rol_forum_admin             boolean             NOT NULL    DEFAULT false,
     rol_mail_to_all             boolean             NOT NULL    DEFAULT false,
     rol_mail_this_role          smallint            NOT NULL    DEFAULT 0,
     rol_photo                   boolean             NOT NULL    DEFAULT false,
@@ -914,8 +911,7 @@ ALTER TABLE %PREFIX%_folders
 ALTER TABLE %PREFIX%_forum_topics
     ADD CONSTRAINT %PREFIX%_fk_fot_cat         FOREIGN KEY (fot_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_first_fop_id)   REFERENCES %PREFIX%_forum_posts (fop_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_fot_usr_change  FOREIGN KEY (fot_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_forum_posts
     ADD CONSTRAINT %PREFIX%_fk_fop_fot         FOREIGN KEY (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)        ON DELETE RESTRICT ON UPDATE RESTRICT,
