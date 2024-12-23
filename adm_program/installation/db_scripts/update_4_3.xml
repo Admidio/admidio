@@ -42,7 +42,6 @@
     <step id="400">UPDATE %PREFIX%_menu SET men_icon='fa-file-signature' WHERE men_name_intern = 'newreg'</step>
     <step id="410">UPDATE %PREFIX%_components SET com_name = 'SYS_EVENTS', com_name_intern = 'EVENTS' WHERE com_name_intern = 'DATES'</step>
     <step id="420">UPDATE %PREFIX%_menu SET men_name = 'SYS_EVENTS', men_name_intern = 'events', men_url='/adm_program/modules/events/events.php' WHERE men_name_intern = 'dates'</step>
-    <step id="430">UPDATE %PREFIX%_categories SET cat_type = 'EVT' WHERE cat_type = 'DAT'</step>
     <step id="440" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_dates_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'events_module_enabled'</step>
     <step id="450" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_dates_module' AND pr1.prf_name = 'events_module_enabled'</step>
     <step id="460">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_dates_module'</step>
@@ -123,5 +122,6 @@
     <step id="1210" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '1200' WHERE prf_name = 'photo_show_height' AND prf_value::int &lt; 800</step>
     <step id="1220" database="mysql">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_thumbs_page' AND CAST(prf_value AS unsigned) = 16</step>
     <step id="1230" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_thumbs_page' AND prf_value::int = 16</step>
+    <step id="1240">UPDATE %PREFIX%_categories SET cat_type = 'EVT' WHERE cat_type = 'DAT'</step>
     <step>stop</step>
 </update>
