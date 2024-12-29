@@ -47,7 +47,7 @@ try {
      */
     function getFieldCode(string $fieldNameIntern, User $user)
     {
-        global $gCurrentUser, $gProfileFields, $gL10n;
+        global $gCurrentUser, $gProfileFields, $gL10n, $gSettingsManager;
 
         if (!$gCurrentUser->allowedViewProfileField($user, $fieldNameIntern)) {
             return false;
@@ -247,13 +247,13 @@ try {
         }
     }
 
-    // show link to TFA settings if 
-    // TODO: check if Two Factor authentication configured in global settings
-    // - user is current user
+    // show link to TFA settings if Two Factor authentication activated in global settings AND
+    // - user is current user OR
     // - user is administrator and user is member of current organization and user has a login name
     if (
-        $userId === $gCurrentUserId
-        || ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0)
+        $gSettingsManager->getBool('enable_two_factor_authentication') &&
+        ($userId === $gCurrentUserId
+            || ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0))
     ) {
         $page->addPageFunctionsMenuItem(
             'menu_item_profile_tfa',
