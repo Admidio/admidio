@@ -14,7 +14,7 @@
             {$attribute@key}="{$attribute}"
         {/foreach}>
         {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-        <div>{$l10n->get('SYS_RESET_TFA_INFO')}</div>
+        <div>{$l10n->get('SYS_RESET_TFA_DESC')}</div>
         <hr />
         <div class="form-alert" style="display: none;">&nbsp;</div>
         {include 'sys-template-parts/form.button.tpl' data=$elements['tfa_reset_button']}
