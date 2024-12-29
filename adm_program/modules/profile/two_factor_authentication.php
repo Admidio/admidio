@@ -48,7 +48,8 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    $tfa = new TwoFactorAuth(issuer: 'Admidio', qrcodeprovider: new QRServerProvider());
+    $orgName = $gCurrentOrganization->getValue('org_shortname');
+    $tfa = new TwoFactorAuth(issuer: $orgName, qrcodeprovider: new QRServerProvider());
 
     if ($getMode === 'setup') {
         // check form field input and sanitized it from malicious content
@@ -110,7 +111,7 @@ try {
             $gCurrentUser->setValue('usr_tfa_secret', $secret);
 
             // Prepare setup form
-            $qrImageUri = $tfa->getQRCodeImageAsDataUri('Admidio', $secret, 200);
+            $qrImageUri = $tfa->getQRCodeImageAsDataUri($orgName, $secret, 200);
             $html = '<img id="qr_code" src="' . $qrImageUri . '" alt="Secret: ' . $secret . '" />';
             $form->addCustomContent('qr_code', $gL10n->get('SYS_TFA_SCAN_QR'), $html);
             $form->addInput('otp_code', $gL10n->get('SYS_TFA_OTP_CODE'), '', array('type' => 'text', 'required' => true));
