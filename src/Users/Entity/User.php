@@ -1862,6 +1862,35 @@ class User extends Entity
     }
 
     /**
+     * Set a new value for a second factor secret column of the database table.
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
+     * @param string|null $newSecret The new value that should be stored in the database field
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws Exception
+     */
+    public function setSecondFactorSecret(string|null $newSecret): bool
+    {
+        global $gChangeNotification;
+
+        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
+            $gChangeNotification->logUserChange(
+                (int) $this->getValue('usr_id'),
+                'usr_tfa_secret',
+                $this->getValue('usr_tfa_secret'),
+                $newSecret || 'null',
+                "MODIFIED",
+                $this
+            );
+        }
+        if (parent::setValue('usr_tfa_secret', $newSecret, false)) {
+            // for security reasons remove all sessions and auto login of the user
+            return $this->invalidateAllOtherLogins();
+        }
+
+        return false;
+    }
+
+    /**
      * Set a value for a profile field. The value will be checked against typical conditions of the data type and
      * also against the custom regex if this is set. If an invalid value is set an Exception will be thrown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.

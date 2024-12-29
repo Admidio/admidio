@@ -187,6 +187,10 @@ try {
         $("#menu_item_profile_password").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '");
         $("#menu_item_profile_password").attr("class", "nav-link btn btn-primary openPopup");
 
+        $("#menu_item_profile_tfa").attr("href", "javascript:void(0);");
+        $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
+        $("#menu_item_profile_tfa").attr("class", "nav-link btn btn-primary openPopup");
+
         $("#menu_item_profile_send_password").attr("href", "javascript:void(0);");
         $("#menu_item_profile_send_password").attr("data-buttons", "yes-no");
         $("#menu_item_profile_send_password").attr("data-message", "' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '");
@@ -241,6 +245,22 @@ try {
                 'bi-key-fill'
             );
         }
+    }
+
+    // show link to TFA settings if 
+    // TODO: check if Two Factor authentication configured in global settings
+    // - user is current user
+    // - user is administrator and user is member of current organization and user has a login name
+    if (
+        $userId === $gCurrentUserId
+        || ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0)
+    ) {
+        $page->addPageFunctionsMenuItem(
+            'menu_item_profile_tfa',
+            'Two-Factor Authentication', // TODO translate 
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)),
+            'bi-shield-lock-fill'
+        );
     }
 
     // show link to view profile field change history

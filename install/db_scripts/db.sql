@@ -784,6 +784,7 @@ CREATE TABLE %PREFIX%_users
     usr_uuid                    varchar(36)         NOT NULL,
     usr_login_name              varchar(254),
     usr_password                varchar(255),
+    usr_tfa_secret              varchar(255),
     usr_photo                   blob,
     usr_text                    text,
     usr_pw_reset_id             varchar(50),
