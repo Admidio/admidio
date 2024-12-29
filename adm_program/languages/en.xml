@@ -1448,4 +1448,14 @@
   <string name="SYS_YOUR_LISTS">Own lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
+  <string name="SYS_TFA">Two Factor Authentication</string>
+  <string name="SYS_SETUP_TFA">Setup Two Factor Authentication</string>
+  <string name="SYS_RESET_TFA">Reset Two Factor Authentication</string>
+  <string name="SYS_TFA_SCAN_QR">Scan QR Code</string>
+  <string name="SYS_TFA_OTP_CODE">Enter OTP Code</string>
+  <string name="SYS_TFA_WRONG_OTP_CODE">OTP code is incorrect.</string>
+  <string name="SYS_TFA_SETUP_SUCCESSFUL">Two Factor Authentication setup successfully.</string>
+  <string name="SYS_TFA_RESET_SUCCESSFUL">Two Factor Authentication reset successfully.</string>
+  <string name="SYS_RESET_TFA_DESC">Remove the configured second factor.</string>
+  <string name="SYS_RESET_TFA_DESC_ADM">Remove the configured second factor.</string>
 </resources>

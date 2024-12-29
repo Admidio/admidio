@@ -257,7 +257,7 @@ try {
     ) {
         $page->addPageFunctionsMenuItem(
             'menu_item_profile_tfa',
-            'Two-Factor Authentication', // TODO translate 
+            $gL10n->get('SYS_TFA'),
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)),
             'bi-shield-lock-fill'
         );

@@ -68,10 +68,10 @@ try {
             $user->setSecondFactorSecret($secret);
             $user->save();
 
-            echo json_encode(array('status' => 'success', 'message' => 'Two factor authentication setup successfully')); // TODO: translate
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_TFA_SETUP_SUCCESSFUL')));
             exit();
         } else {
-            throw new Exception('wrong otp code'); // TODO: translate
+            throw new Exception('SYS_TFA_WRONG_OTP_CODE');
         }
 
     } elseif ($getMode === 'reset') {
@@ -87,7 +87,7 @@ try {
         $user->setSecondFactorSecret(null);
         $user->save();
 
-        echo json_encode(array('status' => 'success', 'message' => 'Two factor authentication reset successfully')); // TODO: translate
+        echo json_encode(array('status' => 'success', $gL10n->get('SYS_TFA_RESET_SUCCESSFUL')));
         exit();
 
     } elseif ($getMode === 'html') {
@@ -96,7 +96,7 @@ try {
 
             // Admins can only set up two factor authentication for themselves
             if ($gCurrentUserId !== $userId) {
-                throw new Exception('This user did not set up two factor authentication'); // TODO: translate
+                throw new Exception($gL10n->get('SYS_TFA_NOT_SETUP_FOR_USER'));
             }
             $template = 'modules/profile.two-factor-authentication.setup.tpl';
             $form = new FormPresenter(
@@ -112,8 +112,8 @@ try {
             // Prepare setup form
             $qrImageUri = $tfa->getQRCodeImageAsDataUri('Admidio', $secret, 200);
             $html = '<img id="qr_code" src="' . $qrImageUri . '" alt="Secret: ' . $secret . '" />';
-            $form->addCustomContent('qr_code', 'Scan QR code', $html);
-            $form->addInput('otp_code', 'OTP Code', '', array('type' => 'text', 'required' => true));
+            $form->addCustomContent('qr_code', $gL10n->get('SYS_TFA_SCAN_QR'), $html);
+            $form->addInput('otp_code', $gL10n->get('SYS_TFA_OTP_CODE'), '', array('type' => 'text', 'required' => true));
             $form->addSubmitButton(
                 'adm_button_save',
                 $gL10n->get('SYS_SAVE'),
