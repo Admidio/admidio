@@ -287,8 +287,8 @@ try {
                 if ($getCopy) {
                     // copy original role with their settings
                     $sql = 'SELECT dat_rol_id
-                      FROM ' . TBL_EVENTS . '
-                     WHERE dat_uuid = ?';
+                              FROM ' . TBL_EVENTS . '
+                             WHERE dat_uuid = ?';
                     $pdoStatement = $gDb->queryPrepared($sql, array($originalEventUuid));
 
                     $role = new Role($gDb, (int)$pdoStatement->fetchColumn());
@@ -296,15 +296,18 @@ try {
                 } else {
                     // Read category for event participation
                     $sql = 'SELECT cat_id
-                      FROM ' . TBL_CATEGORIES . '
-                     WHERE cat_name_intern = \'EVENTS\'
-                       AND cat_org_id = ?';
+                              FROM ' . TBL_CATEGORIES . '
+                             WHERE cat_name_intern = \'EVENTS\'
+                               AND cat_org_id = ?';
                     $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
+                    if(!$row = $pdoStatement->fetch()) {
+                        throw new Exception('No category found for event participation!');
+                    }
                     $role = new Role($gDb);
                     $role->setType(Role::ROLE_EVENT);
 
-                    // these are the default settings for an event role
-                    $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
+                    // these are the default settings for a event role
+                    $role->setValue('rol_cat_id', (int) $row['cat_id']);
                     // role members are allowed to view lists
                     $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
                     // role members are allowed to send mail to this role
