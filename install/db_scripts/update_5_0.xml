@@ -61,5 +61,6 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="530">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/preferences.php' WHERE men_name_intern = 'orgprop'</step>
     <step id="540">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/menu.php' WHERE men_name_intern = 'menu'</step>
     <step id="550">UPDATE %PREFIX%_menu SET men_name_intern = 'extensions', men_name = 'SYS_EXTENSIONS' WHERE men_id = 3</step>
+    <step id="560">ALTER TABLE %PREFIX%_users ADD COLUMN usr_tfa_secret varchar(255)</step>
     <step>stop</step>
 </update>
