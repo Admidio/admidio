@@ -356,11 +356,14 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                      WHERE cat_name_intern = \'EVENTS\'
                        AND cat_org_id = ?';
                     $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
+                    if(!$row = $pdoStatement->fetch()) {
+                        throw new AdmException('No category found for event participation');
+                    }
                     $role = new TableRoles($gDb);
                     $role->setType(TableRoles::ROLE_EVENT);
 
                     // these are the default settings for a event role
-                    $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
+                    $role->setValue('rol_cat_id', (int) $row['cat_id']);
                     // role members are allowed to view lists
                     $role->setValue('rol_view_memberships', isset($_POST['event_right_list_view']) ? 1 : 3);
                     // role members are allowed to send mail to this role
