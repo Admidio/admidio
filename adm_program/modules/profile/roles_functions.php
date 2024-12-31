@@ -12,7 +12,7 @@
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
@@ -201,7 +201,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 $membership['linkMembershipDelete'] = $linkMembershipDelete;
             }
 
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_membership_period_form_'.$memberUuid,
                 'sys-template-parts/form.filter.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => 'save_membership', 'user_uuid' => $user->getValue('usr_uuid'), 'member_uuid' => $row['mem_uuid'])),

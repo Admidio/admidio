@@ -17,7 +17,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -172,7 +172,7 @@ try {
     }
     $page->addJavascript($javascriptCodeExecute, true);
 
-    $formConfigurations = new Form(
+    $formConfigurations = new FormPresenter(
         'adm_configurations_preferences_form',
         'modules/category-report.config.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences_function.php', array('form' => 'configurations')),
@@ -194,7 +194,7 @@ try {
             'default_conf' => 'default_conf' . $key
         );
         $formConfigurations->addInput('name' . $key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
-            array('property' => Form::FIELD_REQUIRED));
+            array('property' => FormPresenter::FIELD_REQUIRED));
 
         $sql = 'SELECT rol_id, rol_name, cat_name
               FROM ' . TBL_CATEGORIES . ' , ' . TBL_ROLES . '
@@ -212,8 +212,8 @@ try {
         $formConfigurations->addSelectBoxFromSql('selection_cat' . $key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
             array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextId' => 'SYS_CAT_SELECTION_CONF_DESC'));
         $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
-        $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => Form::FIELD_HIDDEN));
-        $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => Form::FIELD_HIDDEN));
+        $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => FormPresenter::FIELD_HIDDEN));
+        $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => FormPresenter::FIELD_HIDDEN));
 
         if (count($config) > 1 && $value['default_conf'] == false) {
             $categoryReport['urlConfigDelete'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('delete' => $key + 1));

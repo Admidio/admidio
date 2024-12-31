@@ -24,7 +24,7 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -166,7 +166,7 @@ try {
         $page = new HtmlPage('admidio-profile-photo-edit', $headline);
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_upload_photo_form',
             'modules/profile.new-photo.upload.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'upload', 'user_uuid' => $getUserUuid)),
@@ -182,7 +182,7 @@ try {
             'admPhotoUploadFile',
             $gL10n->get('SYS_SELECT_PHOTO'),
             array(
-                'property' => Form::FIELD_REQUIRED,
+                'property' => FormPresenter::FIELD_REQUIRED,
                 'allowedMimeTypes' => array('image/jpeg', 'image/png'),
                 'helpTextId' => array('SYS_PROFILE_PICTURE_RESTRICTIONS', array(round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2), round(PhpIniUtils::getUploadMaxSize() / 1024 ** 2, 2)))
             )

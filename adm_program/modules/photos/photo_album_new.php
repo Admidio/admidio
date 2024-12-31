@@ -15,7 +15,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -98,7 +98,7 @@ try {
     $page = new HtmlPage('admidio-photo-album-edit', $headline);
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_photos_edit_form',
         'modules/photos.album.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => 'edit')),
@@ -108,7 +108,7 @@ try {
         'pho_name',
         $gL10n->get('SYS_ALBUM'),
         $photoAlbum->getValue('pho_name'),
-        array('property' => Form::FIELD_REQUIRED, 'maxLength' => 50)
+        array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 50)
     );
     subfolder(0, '', $photoAlbum->getValue('pho_id'));
     $form->addSelectBox(
@@ -116,7 +116,7 @@ try {
         $gL10n->get('SYS_PARENT_ALBUM'),
         $photoAlbumsArray,
         array(
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'defaultValue' => $getParentPhotoUuid,
             'showContextDependentFirstEntry' => false,
             'helpTextId' => $gL10n->get('SYS_PARENT_ALBUM_DESC', array('SYS_PHOTO_ALBUMS'))
@@ -126,7 +126,7 @@ try {
         'pho_begin',
         $gL10n->get('SYS_START'),
         $photoAlbum->getValue('pho_begin'),
-        array('property' => Form::FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10)
+        array('property' => FormPresenter::FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10)
     );
     $form->addInput(
         'pho_end',

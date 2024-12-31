@@ -18,7 +18,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -151,14 +151,14 @@ try {
     $page = new HtmlPage('admidio-profile-fields-history', $headline);
 
     // create filter menu with input elements for start date and end date
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_navbar_filter_form',
         'sys-template-parts/form.filter.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/profile_field_history.php',
         $page,
         array('type' => 'navbar', 'setFocus' => false)
     );
-    $form->addInput('user_uuid', '', $getUserUuid, array('property' => Form::FIELD_HIDDEN));
+    $form->addInput('user_uuid', '', $getUserUuid, array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));

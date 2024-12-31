@@ -22,7 +22,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -186,7 +186,7 @@ try {
         $sqlData['params'] = $allVisibleRoles;
 
         // create filter menu with elements for role
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_navbar_filter_form_roles',
             'sys-template-parts/form.filter.tpl',
             '',
@@ -252,7 +252,7 @@ try {
             $columnHeading[] = $gL10n->get('SYS_BIRTHDAY');
             $columnAlignment[] = 'left';
         }
-        $columnHeading[] = $gL10n->get('SYS_LEADER') . Form::getHelpTextIcon($htmlLeaderText);
+        $columnHeading[] = $gL10n->get('SYS_LEADER') . FormPresenter::getHelpTextIcon($htmlLeaderText);
         $columnAlignment[] = 'left';
 
         $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_uuid' => $getFilterRoleUuid, 'mem_show_all' => $getMembersShowAll)));

@@ -14,7 +14,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Weblinks\Entity\Weblink;
 
 try {
@@ -59,7 +59,7 @@ try {
     $page = new HtmlPage('admidio-weblinks-edit', $headline);
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_weblinks_edit_form',
         'modules/links.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('link_uuid' => $getLinkUuid, 'mode' => 'create')),
@@ -69,21 +69,21 @@ try {
         'lnk_name',
         $gL10n->get('SYS_LINK_NAME'),
         $link->getValue('lnk_name'),
-        array('maxLength' => 250, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'lnk_url',
         $gL10n->get('SYS_LINK_ADDRESS'),
         $link->getValue('lnk_url'),
-        array('type' => 'url', 'maxLength' => 2000, 'property' => Form::FIELD_REQUIRED)
+        array('type' => 'url', 'maxLength' => 2000, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addSelectBoxForCategories(
         'lnk_cat_id',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         'LNK',
-        Form::SELECT_BOX_MODUS_EDIT,
-        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $link->getValue('cat_uuid'))
+        FormPresenter::SELECT_BOX_MODUS_EDIT,
+        array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $link->getValue('cat_uuid'))
     );
     $form->addEditor(
         'lnk_description',

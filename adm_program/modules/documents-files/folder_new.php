@@ -16,7 +16,7 @@
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -52,7 +52,7 @@ try {
     $page->assignSmartyVariable('parentFolderName', $parentFolderName);
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_new_folder_form',
         'modules/documents-files.folder.new.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'create_folder', 'folder_uuid' => $getFolderUuid)),
@@ -62,7 +62,7 @@ try {
         'new_folder',
         $gL10n->get('SYS_NAME'),
         '',
-        array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addMultilineTextInput(
         'new_description',

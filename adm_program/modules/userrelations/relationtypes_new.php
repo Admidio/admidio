@@ -14,7 +14,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\UserRelationType;
 
 try {
@@ -85,7 +85,7 @@ try {
     );
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_user_relations_type_edit_form',
         'modules/user-relations.type.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('urt_uuid' => $getUrtUuid, 'mode' => 'edit')),
@@ -95,7 +95,7 @@ try {
         'urt_name',
         $gL10n->get('SYS_NAME'),
         $relationType1->getValue('urt_name'),
-        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'urt_name_male',
@@ -118,7 +118,7 @@ try {
 
     $options = array('defaultValue' => $relationType1->getRelationTypeString(), 'helpTextId' => 'SYS_RELATIONSHIP_TYPE_DESC');
     if (!$relationType1->isNewRecord()) {
-        $options['property'] = Form::FIELD_DISABLED;
+        $options['property'] = FormPresenter::FIELD_DISABLED;
     }
 
     $form->addRadioButton(

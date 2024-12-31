@@ -16,7 +16,7 @@
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Weblinks\Entity\Weblink;
 
 try {
@@ -108,7 +108,7 @@ try {
         );
 
         // create filter menu with elements for category
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_navbar_filter_form',
             'sys-template-parts/form.filter.tpl',
             ADMIDIO_URL . FOLDER_MODULES . '/links/links.php',
@@ -120,7 +120,7 @@ try {
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             'LNK',
-            Form::SELECT_BOX_MODUS_FILTER,
+            FormPresenter::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $getCatUuid)
         );
         $form->addToHtmlPage();

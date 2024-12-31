@@ -24,7 +24,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -470,7 +470,7 @@ try {
     });', true);
 
     // show form
-    $form = new Form('adm_mylist_configuration_form', 'modules/groups-roles.mylist.config.tpl', '#', $page);
+    $form = new FormPresenter('adm_mylist_configuration_form', 'modules/groups-roles.mylist.config.tpl', '#', $page);
 
     // read all relevant configurations from database and create an array
     $yourLastConfigurationsGroup = false;
@@ -599,7 +599,7 @@ try {
         $gL10n->get('SYS_ROLE'),
         $gDb,
         $sqlData,
-        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $getRoleList, 'multiselect' => true)
+        array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $getRoleList, 'multiselect' => true)
     );
 
     if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {

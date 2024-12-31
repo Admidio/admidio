@@ -16,7 +16,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\ListConfiguration;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -74,7 +74,7 @@ try {
         // show checkbox to select all users or only active members
         if ($gSettingsManager->getBool('contacts_show_all')) {
             // create filter menu with elements for category
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_navbar_filter_form',
                 'sys-template-parts/form.filter.tpl',
                 '',

@@ -3,6 +3,7 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
@@ -58,6 +59,20 @@ final class UpdateStepsCode
             $category->setValue('cat_name', $gL10n->get('SYS_COMMON'));
             $category->setValue('cat_default', '1');
             $category->save();
+
+            $sql = 'SELECT rol_id
+                      FROM ' . TBL_ROLES . '
+                     INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                       AND cat_org_id = ? -- $row[\'org_id\']
+                       AND cat_type = \'ROL\'
+                     WHERE rol_name = ? -- $gL10n->get(\'SYS_MEMBER\') ';
+            $pdoStatement = self::$db->queryPrepared($sql, array($row['org_id'], $gL10n->get('SYS_MEMBER')));
+
+            if (($row = $pdoStatement->fetch()) !== false) {
+                // set edit role rights to forum categories for role member
+                $rightCategoryView = new RolesRights(self::$db, 'category_edit', $category->getValue('cat_id'));
+                $rightCategoryView->saveRoles(array($row['rol_id']));
+            }
         }
     }
 

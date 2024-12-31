@@ -10,7 +10,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\UserRelationType;
 
 try {
@@ -53,7 +53,7 @@ try {
     // create array with all column heading values
     $columnHeading = array(
         $gL10n->get('SYS_USER_RELATION'),
-        $gL10n->get('SYS_USER_RELATION_TYPE') . Form::getHelpTextIcon('SYS_RELATIONSHIP_TYPE_DESC'),
+        $gL10n->get('SYS_USER_RELATION_TYPE') . FormPresenter::getHelpTextIcon('SYS_RELATIONSHIP_TYPE_DESC'),
         '&nbsp;'
     );
     $relationTypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));

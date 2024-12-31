@@ -17,7 +17,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -120,7 +120,7 @@ try {
     $page->assignSmartyVariable('folderName', $folder->getValue('fol_name'));
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_folder_permissions_form',
         'modules/documents-files.folder.permissions.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'permissions', 'folder_uuid' => $getFolderUuid)),
@@ -132,7 +132,7 @@ try {
         $gDb,
         $sqlDataView,
         array(
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,
             'multiselect' => true,
             'firstEntry' => $firstEntryViewRoles
@@ -144,7 +144,7 @@ try {
         $gDb,
         $sqlDataView,
         array(
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'defaultValue' => $roleUploadSet,
             'multiselect' => true,
             'placeholder' => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
@@ -154,7 +154,7 @@ try {
         'adm_administrators',
         $gL10n->get('SYS_ADMINISTRATORS'),
         implode(', ', $adminRoles),
-        array('property' => Form::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
+        array('property' => FormPresenter::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
     );
     $form->addSubmitButton(
         'adm_button_save',

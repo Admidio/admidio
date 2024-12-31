@@ -33,7 +33,7 @@ use Admidio\Events\Entity\Room;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -182,7 +182,7 @@ try {
             }
 
             // create filter menu with elements for calendar and start/end date
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_navbar_filter_form',
                 'sys-template-parts/form.filter.tpl',
                 ADMIDIO_URL . FOLDER_MODULES . '/events/events.php',
@@ -216,7 +216,7 @@ try {
                 $gL10n->get('SYS_CALENDAR'),
                 $gDb,
                 'EVT',
-                Form::SELECT_BOX_MODUS_FILTER,
+                FormPresenter::SELECT_BOX_MODUS_FILTER,
                 array('defaultValue' => $getCatUuid)
             );
             $form->addInput(
@@ -231,7 +231,7 @@ try {
                 $events->getParameter('dateEndFormatEnglish'),
                 array('type' => 'date', 'maxLength' => 10)
             );
-            $form->addInput('view', '', $getView, array('property' => Form::FIELD_HIDDEN));
+            $form->addInput('view', '', $getView, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
             $form->addToHtmlPage();
         }

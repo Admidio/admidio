@@ -16,7 +16,7 @@
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -48,7 +48,7 @@ try {
     $page = new HtmlPage('admidio-rooms-edit', $headline);
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_rooms_edit_form',
         'modules/rooms.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('room_uuid' => $getRoomUuid, 'mode' => 'edit')),
@@ -58,13 +58,13 @@ try {
         'room_name',
         $gL10n->get('SYS_ROOM'),
         $room->getValue('room_name'),
-        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'room_capacity',
         $gL10n->get('SYS_CAPACITY') . ' (' . $gL10n->get('SYS_SEATING') . ')',
         (int)$room->getValue('room_capacity'),
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => Form::FIELD_REQUIRED)
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'room_overhang',

@@ -9,7 +9,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -33,7 +33,7 @@ try {
     $page = new HtmlPage('admidio-members-import-csv', $headline);
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_contacts_import_assign_fields_form',
         'modules/contacts.import.assign-fields.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_user.php?mode=import',
@@ -125,9 +125,9 @@ try {
         }
 
         // set required fields
-        $fieldProperty = Form::FIELD_DEFAULT;
+        $fieldProperty = FormPresenter::FIELD_DEFAULT;
         if ($column['name_intern'] === 'LAST_NAME' || $column['name_intern'] === 'FIRST_NAME') {
-            $fieldProperty = Form::FIELD_REQUIRED;
+            $fieldProperty = FormPresenter::FIELD_REQUIRED;
         }
 
         $form->addSelectBox(

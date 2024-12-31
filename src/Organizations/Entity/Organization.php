@@ -1,9 +1,11 @@
 <?php
+
 namespace Admidio\Organizations\Entity;
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Events\Entity\Event;
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Database;
 use Admidio\Photos\Entity\Album;
 use Admidio\Preferences\ValueObject\SettingsManager;
@@ -13,6 +15,7 @@ use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Roles\Entity\RolesRights;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
 
@@ -270,6 +273,12 @@ class Organization extends Entity
         $roleManagement->setValue('rol_all_lists_view', 1);
         $roleManagement->setValue('rol_view_memberships', Role::VIEW_LOGIN_USERS);
         $roleManagement->save();
+
+        // set edit role rights to forum categories for role member
+        $forumService = new ForumService($this->db);
+        $categories = $forumService->getCategories($orgId);
+        $rightCategoryView = new RolesRights($this->db, 'category_edit', (int)$categories[0]['cat_id']);
+        $rightCategoryView->saveRoles(array($roleMember->getValue('rol_id')));
 
         // Create membership for user in role 'Administrator' and 'Members'
         $membershipAdministrator = new Membership($this->db);

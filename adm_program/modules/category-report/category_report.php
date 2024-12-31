@@ -20,7 +20,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -275,7 +275,7 @@ try {
             }
 
             // create filter menu with elements for role
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_navbar_filter_form_category_report',
                 'sys-template-parts/form.filter.tpl',
                 '',

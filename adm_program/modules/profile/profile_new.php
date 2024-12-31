@@ -24,7 +24,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 
@@ -101,7 +101,7 @@ try {
         $page = new HtmlPage('admidio-profile-edit', $headline);
 
         // create html form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_profile_edit_form',
             'modules/profile.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $getUserUuid, 'mode' => 'save', 'accept_registration' => $getAcceptRegistration)),
@@ -132,10 +132,10 @@ try {
             if ($field->getValue('cat_name_intern') === 'BASIC_DATA' && $showLoginData
                 && (($user->getValue('usr_id') > 0 && $gCurrentUser->isAdministrator()) || $getUserUuid === '')) {
                 $showLoginData = false;
-                $fieldProperty = Form::FIELD_DEFAULT;
+                $fieldProperty = FormPresenter::FIELD_DEFAULT;
 
                 if (!$gValidLogin || $getAcceptRegistration) {
-                    $fieldProperty = Form::FIELD_REQUIRED;
+                    $fieldProperty = FormPresenter::FIELD_REQUIRED;
                 }
 
                 $form->addInput(
@@ -160,7 +160,7 @@ try {
                         '',
                         array(
                             'type' => 'password',
-                            'property' => Form::FIELD_REQUIRED,
+                            'property' => FormPresenter::FIELD_REQUIRED,
                             'minLength' => PASSWORD_MIN_LENGTH,
                             'passwordStrength' => true,
                             'helpTextId' => 'SYS_PASSWORD_DESCRIPTION',
@@ -175,7 +175,7 @@ try {
                         '',
                         array(
                             'type' => 'password',
-                            'property' => Form::FIELD_REQUIRED,
+                            'property' => FormPresenter::FIELD_REQUIRED,
                             'minLength' => PASSWORD_MIN_LENGTH,
                             'class' => 'form-control-small',
                             'autocomplete' => 'new-password',
@@ -194,7 +194,7 @@ try {
                             $gDb,
                             $sql,
                             array(
-                                'property' => Form::FIELD_REQUIRED,
+                                'property' => FormPresenter::FIELD_REQUIRED,
                                 'defaultValue' => $registrationOrgId,
                                 'category' => $category
                             )
@@ -206,16 +206,16 @@ try {
             // only show fields that are enabled for registration or the user has permission to edit that field
             if ($showField) {
                 // add profile fields to form
-                $fieldProperty = Form::FIELD_DEFAULT;
+                $fieldProperty = FormPresenter::FIELD_DEFAULT;
                 $helpId = '';
                 $usfNameIntern = $field->getValue('usf_name_intern');
 
                 if ($gProfileFields->getProperty($usfNameIntern, 'usf_disabled') == 1
                     && !$gCurrentUser->hasRightEditProfile($user, false) && $getUserUuid !== '') {
                     // disable field if this is configured in profile field configuration
-                    $fieldProperty = Form::FIELD_DISABLED;
+                    $fieldProperty = FormPresenter::FIELD_DISABLED;
                 } elseif ($gProfileFields->hasRequiredInput($usfNameIntern, $user->getValue('usr_id'), !$gValidLogin || $getAcceptRegistration)) {
-                    $fieldProperty = Form::FIELD_REQUIRED;
+                    $fieldProperty = FormPresenter::FIELD_REQUIRED;
                 }
 
                 if (strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0) {

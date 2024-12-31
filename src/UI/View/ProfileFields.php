@@ -3,7 +3,7 @@ namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\ProfileFields\Entity\ProfileField;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use HtmlPage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
@@ -75,7 +75,7 @@ class ProfileFields extends HtmlPage
         );
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_profile_fields_edit_form',
             'modules/profile-fields.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('uuid' => $profileFieldUUID, 'mode' => 'save')),
@@ -87,14 +87,14 @@ class ProfileFields extends HtmlPage
                 'usf_name',
                 $gL10n->get('SYS_NAME'),
                 htmlentities($userField->getValue('usf_name', 'database'), ENT_QUOTES),
-                array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             $form->addInput(
                 'usf_name',
                 $gL10n->get('SYS_NAME'),
                 htmlentities($userField->getValue('usf_name', 'database'), ENT_QUOTES),
-                array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         }
 
@@ -105,7 +105,7 @@ class ProfileFields extends HtmlPage
                 'usf_name_intern',
                 $gL10n->get('SYS_INTERNAL_NAME'),
                 $usfNameIntern,
-                array('maxLength' => 100, 'property' => Form::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
             );
         }
 
@@ -114,7 +114,7 @@ class ProfileFields extends HtmlPage
                 'usf_cat_id',
                 $gL10n->get('SYS_CATEGORY'),
                 $userField->getValue('cat_name'),
-                array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             $form->addSelectBoxForCategories(
@@ -122,8 +122,8 @@ class ProfileFields extends HtmlPage
                 $gL10n->get('SYS_CATEGORY'),
                 $gDb,
                 'USF',
-                Form::SELECT_BOX_MODUS_EDIT,
-                array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('cat_uuid'))
+                FormPresenter::SELECT_BOX_MODUS_EDIT,
+                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('cat_uuid'))
             );
         }
         $userFieldText = array(
@@ -147,7 +147,7 @@ class ProfileFields extends HtmlPage
                 'usf_type',
                 $gL10n->get('ORG_DATATYPE'),
                 $userFieldText[$userField->getValue('usf_type')],
-                array('maxLength' => 30, 'property' => Form::FIELD_DISABLED)
+                array('maxLength' => 30, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             // if it's not a system field the user must select the data type
@@ -155,7 +155,7 @@ class ProfileFields extends HtmlPage
                 'usf_type',
                 $gL10n->get('ORG_DATATYPE'),
                 $userFieldText,
-                array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type'))
+                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type'))
             );
         }
         $form->addMultilineTextInput(
@@ -171,14 +171,14 @@ class ProfileFields extends HtmlPage
                 'usf_required_input',
                 $gL10n->get('SYS_REQUIRED_INPUT'),
                 $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
-                array('maxLength' => 50, 'property' => Form::FIELD_DISABLED)
+                array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             $form->addSelectBox(
                 'usf_required_input',
                 $gL10n->get('SYS_REQUIRED_INPUT'),
                 $mandatoryFieldValues,
-                array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
+                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
             );
         }
         $form->addCheckbox(
@@ -199,7 +199,7 @@ class ProfileFields extends HtmlPage
                 'usf_registration',
                 $gL10n->get('ORG_FIELD_REGISTRATION'),
                 (bool)$userField->getValue('usf_registration'),
-                array('property' => Form::FIELD_DISABLED, 'icon' => 'bi-card-checklist')
+                array('property' => FormPresenter::FIELD_DISABLED, 'icon' => 'bi-card-checklist')
             );
         } else {
             $form->addCheckbox(

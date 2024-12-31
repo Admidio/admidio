@@ -1,11 +1,11 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
-use Admidio\UI\Component\Form;
-use HtmlPage;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
@@ -25,7 +25,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Forum extends HtmlPage
+class ForumPresenter extends PagePresenter
 {
     /**
      * @var array Array with all read forum topics and their first post.
@@ -60,7 +60,7 @@ class Forum extends HtmlPage
             $this->addPageFunctionsMenuItem(
                 'menu_item_announcement_categories',
                 $gL10n->get('SYS_EDIT_CATEGORIES'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ANN')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'FOT')),
                 'bi-hdd-stack-fill'
             );
         }
@@ -74,7 +74,7 @@ class Forum extends HtmlPage
         );
 
         // create filter menu with elements for category
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_navbar_forum_filter_form',
             'sys-template-parts/form.filter.tpl',
             ADMIDIO_URL.FOLDER_MODULES.'/forum.php',
@@ -86,7 +86,7 @@ class Forum extends HtmlPage
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             'ROL',
-            Form::SELECT_BOX_MODUS_FILTER,
+            FormPresenter::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $categoryUUID)
         );
         $form->addToHtmlPage();
@@ -127,6 +127,8 @@ class Forum extends HtmlPage
         // create menu object
         $topic = new Topic($gDb);
         $post  = new Post($gDb);
+        $forumService = new ForumService($gDb);
+        $categories = $forumService->getCategories();
 
         if ($topicUUID !== '') {
             $topic->readDataByUuid($topicUUID);
@@ -134,23 +136,31 @@ class Forum extends HtmlPage
         }
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_forum_topic_edit_form',
             'modules/forum.topic.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('topic_uuid' => $topicUUID, 'mode' => 'topic_save')),
             $this
         );
+        if (count($categories) > 1) {
+            $form->addSelectBox(
+                'fot_cat_id',
+                $gL10n->get('SYS_CATEGORY'),
+                $categories,
+                array('property' => FormPresenter::FIELD_REQUIRED)
+            );
+        }
         $form->addInput(
             'fot_title',
             $gL10n->get('SYS_TITLE'),
             $topic->getValue('fot_title'),
-            array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
+            array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addEditor(
             'fop_text',
             $gL10n->get('SYS_TEXT'),
             $post->getValue('fop_text'),
-            array('property' => Form::FIELD_REQUIRED, 'toolbar' => 'AdmidioDefault')
+            array('property' => FormPresenter::FIELD_REQUIRED, 'toolbar' => 'AdmidioDefault')
         );
         $form->addSubmitButton(
             'adm_button_save',

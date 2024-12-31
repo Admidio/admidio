@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Forum\Service;
 
 use Admidio\Forum\Entity\Topic;
@@ -25,6 +26,34 @@ class ForumService
     public function __construct(Database $database)
     {
         $this->db = $database;
+    }
+
+    /**
+     * Get an array with all categories from the forum of this organization.
+     * @param int $organizationID ID of the organization for which the categories should be loaded. Default is the current organization.
+     * @return array<int,array> Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name'
+     * @throws Exception
+     */
+    public function getCategories(int $organizationID = 0): array
+    {
+        global $gCurrentOrgId;
+
+        $categories = array();
+        if ($organizationID === 0) {
+            $organizationID = $gCurrentOrgId;
+        }
+
+        $sql = 'SELECT cat_id, cat_uuid, cat_name
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_org_id = ? -- $gCurrentOrgId
+                   AND cat_type = \'FOT\' ';
+        $pdoStatement = $this->db->queryPrepared($sql, array($organizationID));
+
+        while ($row = $pdoStatement->fetch()) {
+            $categories[] = $row;
+        }
+
+        return $categories;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Forum\Entity;
 
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
@@ -180,20 +181,12 @@ class Topic extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        global $gCurrentOrgId;
-
-        if ($this->newRecord && $this->getValue('fot_cat_id') === '') {
-            $sql = 'SELECT cat.cat_id
-                      FROM '.TBL_CATEGORIES.' cat
-                     WHERE cat.cat_org_id = ? -- $gCurrentOrgId
-                       AND cat.cat_type = \'FOT\'
-                       AND (SELECT count(*)
-                              FROM '.TBL_CATEGORIES.' cat_count
-                             WHERE cat_count.cat_org_id = cat.cat_org_id
-                               AND cat_count.cat_type = cat.cat_type ) = 1 ';
-            $pdoStatement = $this->db->queryPrepared($sql, array($gCurrentOrgId));
-            if (($row = $pdoStatement->fetch()) !== false) {
-                $this->setValue('fot_cat_id', $row['cat_id']);
+        if ($this->newRecord) {
+            // if only one category is available, then set this category as default
+            $forumServices = new ForumService($this->db);
+            $categories = $forumServices->getCategories();
+            if (count($categories) === 1) {
+                $this->setValue('fot_cat_id', $categories[0]['cat_id']);
             }
         }
 

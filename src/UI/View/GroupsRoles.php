@@ -6,7 +6,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Roles\Service\RoleService;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use HtmlDataTables;
 use HtmlPage;
 
@@ -346,7 +346,7 @@ class GroupsRoles extends HtmlPage
             }
         ');
 
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_roles_edit_form',
             'modules/groups-roles.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('role_uuid' => $roleUUID, 'mode' => 'save')),
@@ -354,9 +354,9 @@ class GroupsRoles extends HtmlPage
         );
 
         if ($role->getValue('rol_administrator') === 1 || $eventRole) {
-            $fieldProperty = Form::FIELD_READONLY;
+            $fieldProperty = FormPresenter::FIELD_READONLY;
         } else {
-            $fieldProperty = Form::FIELD_REQUIRED;
+            $fieldProperty = FormPresenter::FIELD_REQUIRED;
         }
         $form->addInput(
             'rol_name',
@@ -369,15 +369,15 @@ class GroupsRoles extends HtmlPage
             $gL10n->get('SYS_DESCRIPTION'),
             $role->getValue('rol_description'),
             3,
-            array('property' => ($eventRole ? Form::FIELD_READONLY : Form::FIELD_DEFAULT), 'maxLength' => 4000)
+            array('property' => ($eventRole ? FormPresenter::FIELD_READONLY : FormPresenter::FIELD_DEFAULT), 'maxLength' => 4000)
         );
         $form->addSelectBoxForCategories(
             'rol_cat_id',
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             ($eventRole ? 'ROL_EVENT' : 'ROL'),
-            Form::SELECT_BOX_MODUS_EDIT,
-            array('property' => ($eventRole ? Form::FIELD_READONLY : Form::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
+            FormPresenter::SELECT_BOX_MODUS_EDIT,
+            array('property' => ($eventRole ? FormPresenter::FIELD_READONLY : FormPresenter::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
         );
         if ($gSettingsManager->getBool('enable_mail_module')) {
             $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'));
@@ -845,20 +845,20 @@ class GroupsRoles extends HtmlPage
         );
 
         // create filter menu with elements for category
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_navbar_filter_form',
             'sys-template-parts/form.filter.tpl',
             ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php',
             $this,
             array('type' => 'navbar', 'setFocus' => false)
         );
-        $form->addInput('mode', '', ($showCards ? 'card' : 'permissions'), array('property' => Form::FIELD_HIDDEN));
+        $form->addInput('mode', '', ($showCards ? 'card' : 'permissions'), array('property' => FormPresenter::FIELD_HIDDEN));
         $form->addSelectBoxForCategories(
             'cat_uuid',
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             'ROL',
-            Form::SELECT_BOX_MODUS_FILTER,
+            FormPresenter::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $categoryUUID)
         );
         if ($gCurrentUser->manageRoles()) {

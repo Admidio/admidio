@@ -1,16 +1,15 @@
 <?php
-namespace Admidio\UI\Component;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\UI\Presenter\PagePresenter;
 use DateTime;
-use HtmlPage;
 use PDO;
 use Securimage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use SettingsManager;
 use SimpleXMLElement;
 use Smarty\Smarty;
 use HTMLPurifier;
@@ -29,7 +28,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * ```
  * script_a.php
  * // create a simple form with one input field and a button
- * $form = $form = new Form(
+ * $form = $form = new FormPresenter(
  *    'announcements_edit_form',
  *    'modules/announcements.edit.tpl',
  *    ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php',
@@ -55,7 +54,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Form
+class FormPresenter
 {
     public const FIELD_DEFAULT  = 0;
     public const FIELD_REQUIRED = 1;
@@ -75,9 +74,9 @@ class Form
      */
     protected bool $showRequiredFields;
     /**
-     * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @var PagePresenter A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
-    protected HtmlPage $htmlPage;
+    protected PagePresenter $htmlPage;
     /**
      * @var string Javascript of this form that must be integrated in the html page.
      */
@@ -111,7 +110,7 @@ class Form
      * Constructor creates the form element
      * @param string $id ID of the form
      * @param string|null $action Action attribute of the form
-     * @param HtmlPage|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @param PagePresenter|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
      * @param array $options (optional) An array with the following possible entries:
      *                           - **type** : Set the form type. Every type has some special features:
      *                             + **default**  : A form that can be used to edit and save data of a database table. The label
@@ -132,7 +131,7 @@ class Form
      *                             is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function __construct(string $id, string $template, string $action = '', HtmlPage $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $template, string $action = '', PagePresenter $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -188,7 +187,7 @@ class Form
             );
         }
 
-        if ($htmlPage instanceof HtmlPage) {
+        if ($htmlPage instanceof PagePresenter) {
             $this->htmlPage =& $htmlPage;
         }
 
@@ -1153,7 +1152,7 @@ class Form
      * ```
      * // create a selectbox with all profile fields of a specific category
      * $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'
-     * $form = new Form('simple-form', 'adm_next_page.php');
+     * $form = new FormPresenter('simple-form', 'adm_next_page.php');
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show();
      * ```

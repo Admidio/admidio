@@ -4,7 +4,7 @@ namespace Admidio\UI\View;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use HtmlPage;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
@@ -223,7 +223,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formAnnouncements = new Form(
+        $formAnnouncements = new FormPresenter(
             'adm_preferences_form_announcements',
             'preferences/preferences.announcements.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Announcements')),
@@ -279,7 +279,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formCaptcha = new Form(
+        $formCaptcha = new FormPresenter(
             'adm_preferences_form_captcha',
             'preferences/preferences.captcha.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Captcha')),
@@ -401,7 +401,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formCategoryReport = new Form(
+        $formCategoryReport = new FormPresenter(
             'adm_preferences_form_category_report',
             'preferences/preferences.category-report.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'CategoryReport')),
@@ -453,7 +453,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formCommon = new Form(
+        $formCommon = new FormPresenter(
             'adm_preferences_form_common',
             'preferences/preferences.common.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Common')),
@@ -470,19 +470,19 @@ class Preferences extends HtmlPage
             'theme',
             $gL10n->get('ORG_ADMIDIO_THEME'),
             $themes,
-            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
         );
         $formCommon->addInput(
             'homepage_logout',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('SYS_VISITORS') . ')',
             $formValues['homepage_logout'],
-            array('maxLength' => 250, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_VISITORS')
+            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_VISITORS')
         );
         $formCommon->addInput(
             'homepage_login',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('ORG_REGISTERED_USERS') . ')',
             $formValues['homepage_login'],
-            array('maxLength' => 250, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS')
+            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS')
         );
         $formCommon->addCheckbox(
             'enable_rss',
@@ -557,7 +557,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formContacts = new Form(
+        $formContacts = new FormPresenter(
             'adm_preferences_form_contacts',
             'preferences/preferences.contacts.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Contacts')),
@@ -642,7 +642,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formDocumentsFiles = new Form(
+        $formDocumentsFiles = new FormPresenter(
             'adm_preferences_form_documents_files',
             'preferences/preferences.documents-files.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'DocumentsFiles')),
@@ -685,7 +685,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formEmailDispatch = new Form(
+        $formEmailDispatch = new FormPresenter(
             'adm_preferences_form_email_dispatch',
             'preferences/preferences.email-dispatch.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'EmailDispatch')),
@@ -844,7 +844,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formEvents = new Form(
+        $formEvents = new FormPresenter(
             'adm_preferences_form_events',
             'preferences/preferences.events.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Events')),
@@ -975,7 +975,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formGroupsRoles = new Form(
+        $formGroupsRoles = new FormPresenter(
             'adm_preferences_form_groups_roles',
             'preferences/preferences.groups-roles.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'GroupsRoles')),
@@ -1074,7 +1074,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formGuestbook = new Form(
+        $formGuestbook = new FormPresenter(
             'adm_preferences_form_forum',
             'preferences/preferences.forum.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Forum')),
@@ -1122,7 +1122,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formWeblinks = new Form(
+        $formWeblinks = new FormPresenter(
             'adm_preferences_form_links',
             'preferences/preferences.links.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Links')),
@@ -1191,7 +1191,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formMessages = new Form(
+        $formMessages = new FormPresenter(
             'adm_preferences_form_messages',
             'preferences/preferences.messages.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Messages')),
@@ -1299,7 +1299,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formPhotos = new Form(
+        $formPhotos = new FormPresenter(
             'adm_preferences_form_photos',
             'preferences/preferences.photos.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Photos')),
@@ -1516,7 +1516,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formProfile = new Form(
+        $formProfile = new FormPresenter(
             'adm_preferences_form_profile',
             'preferences/preferences.profile.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Profile')),
@@ -1596,7 +1596,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formRegionalSettings = new Form(
+        $formRegionalSettings = new FormPresenter(
             'adm_preferences_form_regional_settings',
             'preferences/preferences.regional-settings.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'RegionalSettings')),
@@ -1607,13 +1607,13 @@ class Preferences extends HtmlPage
             'system_timezone',
             $gL10n->get('ORG_TIMEZONE'),
             $gTimezone,
-            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextId' => 'ORG_TIMEZONE_DESC')
+            array('property' => FormPresenter::FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextId' => 'ORG_TIMEZONE_DESC')
         );
         $formRegionalSettings->addSelectBox(
             'system_language',
             $gL10n->get('SYS_LANGUAGE'),
             $gL10n->getAvailableLanguages(),
-            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
         );
         $formRegionalSettings->addSelectBox(
             'default_country',
@@ -1625,13 +1625,13 @@ class Preferences extends HtmlPage
             'system_date',
             $gL10n->get('ORG_DATE_FORMAT'),
             $formValues['system_date'],
-            array('property' => Form::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
         );
         $formRegionalSettings->addInput(
             'system_time',
             $gL10n->get('ORG_TIME_FORMAT'),
             $formValues['system_time'],
-            array('property' => Form::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
         );
         $formRegionalSettings->addInput(
             'system_currency',
@@ -1663,7 +1663,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formRegistration = new Form(
+        $formRegistration = new FormPresenter(
             'adm_preferences_form_registration',
             'preferences/preferences.registration.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Registration')),
@@ -1724,7 +1724,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formSecurity = new Form(
+        $formSecurity = new FormPresenter(
             'adm_preferences_form_security',
             'preferences/preferences.security.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Security')),
@@ -1902,7 +1902,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formSystemNotifications = new Form(
+        $formSystemNotifications = new FormPresenter(
             'adm_preferences_form_system_notifications',
             'preferences/preferences.system-notifications.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'SystemNotifications')),

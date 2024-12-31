@@ -25,9 +25,8 @@
 
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\SystemMail;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\View\Forum;
+use Admidio\UI\Presenter\ForumPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -48,7 +47,7 @@ try {
             $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-chat-dots-fill');
 
             // create html page object
-            $page = new Forum('adm_forum_cards', $headline);
+            $page = new ForumPresenter('adm_forum_cards', $headline);
             $page->createForumCards();
             $page->show();
             break;
@@ -58,7 +57,7 @@ try {
             $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-chat-dots-fill');
 
             // create html page object
-            $page = new Forum('adm_forum_list', $headline);
+            $page = new ForumPresenter('adm_forum_list', $headline);
             $page->createForumList();
             $page->show();
             break;
@@ -72,7 +71,7 @@ try {
             $gNavigation->addUrl(CURRENT_URL, $headline);
 
             // create html page object
-            $page = new Forum('adm_forum_topic_edit', $headline);
+            $page = new ForumPresenter('adm_forum_topic_edit', $headline);
             $page->createTopicEditForm($getTopicUUID);
             $page->show();
             break;

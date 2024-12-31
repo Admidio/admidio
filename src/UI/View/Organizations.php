@@ -2,7 +2,7 @@
 namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use HtmlPage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
@@ -44,7 +44,7 @@ class Organizations extends HtmlPage
         ', true);
 
         // show form
-        $formOrganization = new Form(
+        $formOrganization = new FormPresenter(
             'adm_organization_edit_form',
             'modules/organizations.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations.php', array('mode' => 'save')),
@@ -54,25 +54,25 @@ class Organizations extends HtmlPage
             'org_shortname',
             $gL10n->get('SYS_NAME_ABBREVIATION'),
             $gCurrentOrganization->getValue('org_shortname'),
-            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small')
+            array('property' => FormPresenter::FIELD_DISABLED, 'class' => 'form-control-small')
         );
         $formOrganization->addInput(
             'org_longname',
             $gL10n->get('SYS_NAME'),
             $gCurrentOrganization->getValue('org_longname'),
-            array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
+            array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $formOrganization->addInput(
             'org_homepage',
             $gL10n->get('SYS_WEBSITE'),
             $gCurrentOrganization->getValue('org_homepage'),
-            array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
+            array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $formOrganization->addInput(
             'org_email_administrator',
             $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
             $gCurrentOrganization->getValue('org_email_administrator'),
-            array('type' => 'email', 'property' => Form::FIELD_REQUIRED, 'maxLength' => 254)
+            array('type' => 'email', 'property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 254)
         );
 
         if ($gCurrentOrganization->countAllRecords() > 1) {
@@ -126,7 +126,7 @@ class Organizations extends HtmlPage
     {
         global $gL10n, $gCurrentSession;
 
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_new_sub_organization_form',
             'modules/organizations.new.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/organizations.php', array('mode' => 'create')),
@@ -136,19 +136,19 @@ class Organizations extends HtmlPage
             'adm_organization_short_name',
             $gL10n->get('SYS_NAME_ABBREVIATION'),
             '',
-            array('maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+            array('maxLength' => 10, 'property' => FormPresenter::FIELD_REQUIRED, 'class' => 'form-control-small')
         );
         $form->addInput(
             'adm_organization_long_name',
             $gL10n->get('SYS_NAME'),
             '',
-            array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
+            array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addInput(
             'adm_organization_email',
             $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
             '',
-            array('type' => 'email', 'maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
+            array('type' => 'email', 'maxLength' => 254, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addSubmitButton(
             'adm_button_forward',

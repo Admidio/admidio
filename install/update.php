@@ -11,7 +11,7 @@ use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Session\Entity\Session;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\View\Installation;
 
 /**
@@ -213,7 +213,7 @@ try {
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
 
             // create form with login and update button
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_update_login_form',
                 'update.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'update')),
@@ -224,13 +224,13 @@ try {
                     'adm_login_name',
                     $gL10n->get('SYS_USERNAME'),
                     '',
-                    array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+                    array('maxLength' => 254, 'property' => FormPresenter::FIELD_REQUIRED, 'class' => 'form-control-small')
                 );
                 $form->addInput(
                     'adm_password',
                     $gL10n->get('SYS_PASSWORD'),
                     '',
-                    array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+                    array('type' => 'password', 'property' => FormPresenter::FIELD_REQUIRED, 'class' => 'form-control-small')
                 );
             }
             $form->addSubmitButton(
