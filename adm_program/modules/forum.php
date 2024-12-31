@@ -19,9 +19,11 @@
  *        post_save    - Registration does not need to be assigned, simply send login data
  *        post_delete  - Registration does not need to be assigned, simply send login data
  * topic_uuid     : UUID of the topic that should be shown.
- * category_uuids : Array of category UUIDs whose topics should be shown
+ * category_uuid : Array of category UUIDs whose topics should be shown
  ***********************************************************************************************
  */
+
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\SystemMail;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -36,54 +38,54 @@ try {
     }
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('cards', 'list', 'topic', 'topic_edit', 'topic_save', 'topic_delete', 'post_edit', 'post_save', 'post_delete')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list', 'topic', 'topic_edit', 'topic_save', 'topic_delete', 'post_edit', 'post_save', 'post_delete')));
     $getTopicUUID = admFuncVariableIsValid($_GET, 'topic_uuid', 'uuid');
-    $getCategoryUUIDs = admFuncVariableIsValid($_GET, 'category_uuids', 'array');
+    $getCategoryUUID = admFuncVariableIsValid($_GET, 'category_uuid', 'uuid');
 
     switch ($getMode) {
         case 'cards':
-            $headline = $gL10n->get('SYS_MENU');
-            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-menu-button-wide-fill');
+            $headline = $gL10n->get('SYS_FORUM');
+            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-chat-dots-fill');
 
             // create html page object
-            $page = new Forum('adm_menu_configuration', $headline);
-            $page->createList();
+            $page = new Forum('adm_forum_cards', $headline);
+            $page->createForumCards();
             $page->show();
             break;
 
         case 'list':
             $headline = $gL10n->get('SYS_MENU');
-            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-menu-button-wide-fill');
+            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-chat-dots-fill');
 
             // create html page object
-            $page = new Menu('adm_menu_configuration', $headline);
-            $page->createList();
+            $page = new Forum('adm_forum_list', $headline);
+            $page->createForumList();
             $page->show();
             break;
 
-        case 'edit':
-            if ($getMenuUUID !== '') {
-                $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_MENU')));
+        case 'topic_edit':
+            if ($getTopicUUID !== '') {
+                $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_TOPIC')));
             } else {
-                $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
+                $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_TOPIC')));
             }
             $gNavigation->addUrl(CURRENT_URL, $headline);
 
             // create html page object
-            $page = new Menu('adm_menu_configuration_edit', $headline);
-            $page->createEditForm($getMenuUUID);
+            $page = new Forum('adm_forum_topic_edit', $headline);
+            $page->createTopicEditForm($getTopicUUID);
             $page->show();
             break;
 
-        case 'save':
-            $menuModule = new MenuService($gDb, $getMenuUUID);
-            $menuModule->save();
+        case 'topic_save':
+            $menuModule = new ForumService($gDb);
+            $menuModule->saveTopic($getTopicUUID);
 
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
             break;
 
-        case 'delete':
+        case 'topic_delete':
             // delete menu entry
 
             // check the CSRF token of the form against the session token
@@ -92,19 +94,6 @@ try {
             $menu = new MenuEntry($gDb);
             $menu->readDataByUuid($getMenuUUID);
             $menu->delete();
-            echo json_encode(array('status' => 'success'));
-            break;
-
-        case 'sequence':
-            // Update menu entry sequence
-            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('requireValue' => true, 'validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
-
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
-
-            $menu = new MenuEntry($gDb);
-            $menu->readDataByUuid($getMenuUUID);
-            $menu->moveSequence($postDirection);
             echo json_encode(array('status' => 'success'));
             break;
     }

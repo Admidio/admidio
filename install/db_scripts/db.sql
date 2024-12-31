@@ -243,7 +243,7 @@ CREATE TABLE %PREFIX%_forum_topics
     fot_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     fot_uuid                    varchar(36)         NOT NULL,
     fot_cat_id                  integer unsigned    NOT NULL,
-    fot_first_fop_id            integer unsigned    NOT NULL,
+    fot_first_fop_id            integer unsigned,
     fot_title                   varchar(255)        NOT NULL,
     fot_views                   integer             NOT NULL,
     fot_usr_id_create           integer unsigned,

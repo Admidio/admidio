@@ -411,6 +411,7 @@
   <string name="SYS_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
   <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
+  <string name="SYS_CREATE_TOPIC">Create topic</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATE_WEBLINK">Create web link</string>
   <string name="SYS_CREATED_AT">Created at</string>
@@ -1337,6 +1338,7 @@
   <string name="SYS_TIME_TO">Time to</string>
   <string name="SYS_TITLE">Title</string>
   <string name="SYS_TO" description="E-Mail">To</string>
+  <string name="SYS_TOPIC">Topic</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Type</string>

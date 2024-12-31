@@ -25,15 +25,15 @@ class Post extends Entity
      * Constructor that will create an object of a recordset of the table adm_guestbook_comments.
      * If the id is set than the specific guestbook comment will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int $gbcId The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $fopID The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
      * @throws Exception
      */
-    public function __construct(Database $database, int $gbcId = 0)
+    public function __construct(Database $database, int $fopID = 0)
     {
-        // read also data of assigned guestbook entry
-        $this->connectAdditionalTable(TBL_GUESTBOOK, 'gbo_id', 'gbc_gbo_id');
+        // read also data of assigned topic
+        $this->connectAdditionalTable(TBL_FORUM_TOPICS, 'fot_id', 'fop_fot_id');
 
-        parent::__construct($database, TBL_GUESTBOOK_COMMENTS, 'gbc', $gbcId);
+        parent::__construct($database, TBL_FORUM_POSTS, 'fop', $fopID);
     }
 
     /**
@@ -48,30 +48,19 @@ class Post extends Entity
      */
     public function getValue(string $columnName, string $format = '')
     {
-        if ($columnName === 'gbc_text') {
-            if (!isset($this->dbColumns['gbc_text'])) {
+        if ($columnName === 'fop_text') {
+            if (!isset($this->dbColumns['fop_text'])) {
                 $value = '';
             } elseif ($format === 'database') {
-                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['gbc_text']));
+                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['fop_text']));
             } else {
-                $value = $this->dbColumns['gbc_text'];
+                $value = $this->dbColumns['fop_text'];
             }
 
             return $value;
         }
 
         return parent::getValue($columnName, $format);
-    }
-
-    /**
-     * guestbook entry will be published, if moderate mode is set
-     * @throws Exception
-     */
-    public function moderate()
-    {
-        // unlock entry
-        $this->setValue('gbc_locked', '0');
-        $this->save();
     }
 
     /**
@@ -86,15 +75,11 @@ class Post extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if ($this->newRecord) {
-            $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
-        }
-
         $returnCode = parent::save($updateFingerPrint);
 
         // read data to fill folder information to the object
         if ($this->newRecord) {
-            $this->readDataById((int) $this->getValue('gbc_gbo_id'));
+            $this->readDataById($this->getValue('fop_id'));
             $this->newRecord = true;
         }
 
@@ -152,15 +137,9 @@ class Post extends Entity
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
-            if ($columnName === 'gbc_text') {
-                return parent::setValue($columnName, $newValue, false);
-            }
-
-            if ($columnName === 'gbc_email' && $newValue !== '') {
-                // If Email has an invalid format, it won't be set
-                if (!StringUtils::strValidCharacters($newValue, 'email')) {
-                    return false;
-                }
+            if ($columnName === 'fop_text') {
+                // don't check value because it contains expected html tags
+                $checkValue = false;
             }
         }
 

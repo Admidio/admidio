@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Email;
+use Admidio\Forum\Entity\Post;
 use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
@@ -22,15 +23,25 @@ use Admidio\Infrastructure\Utils\StringUtils;
 class Topic extends Entity
 {
     /**
+     * @var Post Object of the initial post of this topic.
+     */
+    protected Post $firstPost;
+
+    /**
      * Constructor that will create an object of a recordset of the table adm_guestbook.
      * If the id is set than the specific guestbook will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int $gboId The recordset of the guestbook with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $fotID The recordset of the guestbook with this id will be loaded. If id isn't set than an empty object of the table is created.
      * @throws Exception
      */
-    public function __construct(Database $database, int $gboId = 0)
+    public function __construct(Database $database, int $fotID = 0)
     {
-        parent::__construct($database, TBL_GUESTBOOK, 'gbo', $gboId);
+        // read also data of assigned first post
+        $this->connectAdditionalTable(TBL_FORUM_POSTS, 'fop_id', 'fot_first_fop_id');
+
+        parent::__construct($database, TBL_FORUM_TOPICS, 'fot', $fotID);
+
+        $this->firstPost = new Post($this->db);
     }
 
     /**
@@ -43,10 +54,10 @@ class Topic extends Entity
     {
         $this->db->startTransaction();
 
-        // Delete all available comments to this guestbook entry
-        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
-                      WHERE gbc_gbo_id = ? -- $this->getValue(\'gbo_id\')';
-        $this->db->queryPrepared($sql, array((int) $this->getValue('gbo_id')));
+        // Delete all available posts to this forum entry
+        $sql = 'DELETE FROM '.TBL_FORUM_POSTS.'
+                      WHERE fop_fot_id = ? -- $this->getValue(\'fot_id\')';
+        $this->db->queryPrepared($sql, array((int) $this->getValue('fot_id')));
 
         $return = parent::delete();
 
@@ -61,56 +72,17 @@ class Topic extends Entity
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return mixed Returns the value of the database column.
-     *         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @return int|string|bool Returns the value of the database column.
+     *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
     public function getValue(string $columnName, string $format = '')
     {
-        if ($columnName === 'gbo_text') {
-            if (!isset($this->dbColumns['gbo_text'])) {
-                $value = '';
-            } elseif ($format === 'database') {
-                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['gbo_text']));
-            } else {
-                $value = $this->dbColumns['gbo_text'];
-            }
-
-            return $value;
+        if (str_starts_with($columnName, 'fop_')) {
+            return $this->firstPost->getValue($columnName, $format);
         }
 
         return parent::getValue($columnName, $format);
-    }
-
-    /**
-     * guestbook entry will be published, if moderate mode is set
-     * @throws Exception
-     */
-    public function moderate()
-    {
-        // unlock entry
-        $this->setValue('gbo_locked', '0');
-        $this->save();
-    }
-
-    /**
-     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
-     * a new record or if only an update is necessary. The update statement will only update
-     * the changed columns. If the table has columns for creator or editor than these column
-     * with their timestamp will be updated.
-     * For new records the organization and ip address will be set per default.
-     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
-     * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws Exception
-     */
-    public function save(bool $updateFingerPrint = true): bool
-    {
-        if ($this->newRecord) {
-            $this->setValue('gbo_org_id', $GLOBALS['gCurrentOrgId']);
-            $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);
-        }
-
-        return parent::save($updateFingerPrint);
     }
 
     /**
@@ -153,6 +125,93 @@ class Topic extends Entity
     }
 
     /**
+     * Reads a record out of the table in database selected by the unique id column in the table.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param int $id Unique id of id column of the table.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataByUuid
+     */
+    public function readDataById(int $id): bool
+    {
+        $returnValue = parent::readDataById($id);
+
+        if ($returnValue) {
+            $this->firstPost->readDataById($this->getValue('fot_first_fop_id'));
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Reads a record out of the table in database selected by the unique uuid column in the table.
+     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
+     * Per default all columns of the default table will be read and stored in the object.
+     * Not every Admidio table has a UUID. Please check the database structure before you use this method.
+     * @param string $uuid Unique uuid that should be searched.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataById
+     */
+    public function readDataByUuid(string $uuid): bool
+    {
+        $returnValue = parent::readDataByUuid($uuid);
+
+        if ($returnValue) {
+            $this->firstPost->readDataById($this->getValue('fot_first_fop_id'));
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update
+     * the changed columns. If the table has columns for creator or editor than these column
+     * with their timestamp will be updated.
+     * For new records the organization and ip address will be set per default.
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws Exception
+     */
+    public function save(bool $updateFingerPrint = true): bool
+    {
+        global $gCurrentOrgId;
+
+        if ($this->newRecord && $this->getValue('fot_cat_id') === '') {
+            $sql = 'SELECT cat.cat_id
+                      FROM '.TBL_CATEGORIES.' cat
+                     WHERE cat.cat_org_id = ? -- $gCurrentOrgId
+                       AND cat.cat_type = \'FOT\'
+                       AND (SELECT count(*)
+                              FROM '.TBL_CATEGORIES.' cat_count
+                             WHERE cat_count.cat_org_id = cat.cat_org_id
+                               AND cat_count.cat_type = cat.cat_type ) = 1 ';
+            $pdoStatement = $this->db->queryPrepared($sql, array($gCurrentOrgId));
+            if (($row = $pdoStatement->fetch()) !== false) {
+                $this->setValue('fot_cat_id', $row['cat_id']);
+            }
+        }
+
+        $this->db->startTransaction();
+        $returnCode = parent::save($updateFingerPrint);
+
+        if ($returnCode) {
+            $this->firstPost->setValue('fop_fot_id', $this->getValue('fot_id'));
+            $this->firstPost->save();
+            $this->setValue('fot_first_fop_id', $this->firstPost->getValue('fop_id'));
+            $returnCode = parent::save($updateFingerPrint);
+        }
+
+        $this->db->endTransaction();
+        return $returnCode;
+    }
+
+    /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
@@ -163,21 +222,8 @@ class Topic extends Entity
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
-        if ($checkValue) {
-            if ($columnName === 'gbo_text') {
-                return parent::setValue($columnName, $newValue, false);
-            } elseif ($columnName === 'gbo_email' && $newValue !== '') {
-                // If Email has an invalid format, it won't be set
-                if (!StringUtils::strValidCharacters($newValue, 'email')) {
-                    return false;
-                }
-            } elseif ($columnName === 'gbo_homepage' && $newValue !== '') {
-                $newValue = admFuncCheckUrl($newValue);
-
-                if ($newValue === false) {
-                    return false;
-                }
-            }
+        if (str_starts_with($columnName, 'fop_')) {
+            return $this->firstPost->setValue($columnName, $newValue, $checkValue);
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
