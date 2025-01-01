@@ -10,6 +10,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -30,7 +31,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-members-import-csv', $headline);
+    $page = new PagePresenter('admidio-members-import-csv', $headline);
 
     // show form
     $form = new FormPresenter(

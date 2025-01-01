@@ -12,8 +12,10 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Text;
+use DateTime;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
+use RuntimeException;
 
 // this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
 const TBL_DATES = TABLE_PREFIX . '_dates';

@@ -21,6 +21,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -96,7 +97,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-events-edit', $headline);
+    $page = new PagePresenter('admidio-events-edit', $headline);
 
     $page->addJavascript('
     /**

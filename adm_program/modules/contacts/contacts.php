@@ -17,6 +17,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -41,7 +42,7 @@ try {
 
     // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
     $flagShowMembers = !$getMembers;// create html page object
-    $page = new HtmlPage('admidio-contacts', $headline);
+    $page = new PagePresenter('admidio-contacts', $headline);
 
     if ($gCurrentUser->editUsers()) {
         $page->addJavascript('

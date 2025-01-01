@@ -2,7 +2,7 @@
 namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
-use HtmlPage;
+use Admidio\UI\Presenter\PagePresenter;
 use Throwable;
 
 /**
@@ -34,7 +34,7 @@ use Throwable;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Installation extends HtmlPage
+class Installation extends PagePresenter
 {
     /**
      * Constructor creates the page object and initialized all parameters.

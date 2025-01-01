@@ -24,6 +24,7 @@
  *****************************************************************************/
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -32,6 +33,7 @@ use Admidio\Messages\Entity\MessageContent;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -191,7 +193,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-messages-write', $headline);
+    $page = new PagePresenter('admidio-messages-write', $headline);
 
     if ($getMsgType === Message::MESSAGE_TYPE_PM) {
         // show form

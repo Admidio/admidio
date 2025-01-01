@@ -23,6 +23,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Photos\Entity\Album;
 use Admidio\Photos\ValueObject\ECard;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -90,7 +91,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('adm_ecards', $headline);
+    $page = new PagePresenter('adm_ecards', $headline);
 
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/css/lightbox.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');

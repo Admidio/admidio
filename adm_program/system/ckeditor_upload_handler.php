@@ -45,6 +45,9 @@ try {
         case 'dat_description':
             $folderName = 'events';
             break;
+        case 'fop_text':
+            $folderName = 'forum';
+            break;
         case 'lnk_description':
             $folderName = 'weblinks';
             break;

@@ -15,6 +15,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\UserRelationType;
 
 try {
@@ -44,7 +45,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-relationtypes-edit', $headline);
+    $page = new PagePresenter('admidio-relationtypes-edit', $headline);
     $page->addJavascript('
         function checkRelationTypeNames() {
             $("#adm_button_save").prop("disabled", $("#urt_name").val() === $("#urt_name_inverse").val());

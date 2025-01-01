@@ -2,8 +2,8 @@
 namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\UserRegistration;
-use HtmlPage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
@@ -23,7 +23,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Registration extends HtmlPage
+class Registration extends PagePresenter
 {
     /**
      * Creates an array with all available registrations. The array contains the following entries:

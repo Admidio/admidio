@@ -3,8 +3,8 @@ namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\FormPresenter;
-use HtmlPage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -23,7 +23,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Organizations extends HtmlPage
+class Organizations extends PagePresenter
 {
     /**
      * Create the data for the edit form of an organization.

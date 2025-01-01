@@ -19,6 +19,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -148,7 +149,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-profile-fields-history', $headline);
+    $page = new PagePresenter('admidio-profile-fields-history', $headline);
 
     // create filter menu with input elements for start date and end date
     $form = new FormPresenter(

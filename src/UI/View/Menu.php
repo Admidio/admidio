@@ -6,7 +6,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Menu\Service\MenuService;
 use Admidio\UI\Presenter\FormPresenter;
-use HtmlPage;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
@@ -27,7 +27,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Menu extends HtmlPage
+class Menu extends PagePresenter
 {
     /**
      * Create the data for the edit form of a menu entry.

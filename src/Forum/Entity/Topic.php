@@ -55,6 +55,10 @@ class Topic extends Entity
     {
         $this->db->startTransaction();
 
+        // delete reference to first post
+        $this->setValue('fot_first_fop_id', 0);
+        $this->save();
+
         // Delete all available posts to this forum entry
         $sql = 'DELETE FROM '.TBL_FORUM_POSTS.'
                       WHERE fop_fot_id = ? -- $this->getValue(\'fot_id\')';
@@ -193,11 +197,13 @@ class Topic extends Entity
         $this->db->startTransaction();
         $returnCode = parent::save($updateFingerPrint);
 
-        if ($returnCode) {
+        if ($this->newRecord) {
             $this->firstPost->setValue('fop_fot_id', $this->getValue('fot_id'));
             $this->firstPost->save();
             $this->setValue('fot_first_fop_id', $this->firstPost->getValue('fop_id'));
             $returnCode = parent::save($updateFingerPrint);
+        } else {
+            $this->firstPost->save();
         }
 
         $this->db->endTransaction();

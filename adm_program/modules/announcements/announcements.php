@@ -24,6 +24,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -69,7 +70,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-announcements', $headline);
+    $page = new PagePresenter('admidio-announcements', $headline);
 
     // add rss feed to announcements
     if ($gSettingsManager->getBool('enable_rss')) {

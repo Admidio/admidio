@@ -18,6 +18,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -63,7 +64,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_CONFIGURATIONS'));
 
     // create html page object
-    $page = new HtmlPage('plg-category-report-preferences', $headline);
+    $page = new PagePresenter('plg-category-report-preferences', $headline);
     $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
 
     // create an array with the necessary data

@@ -11,6 +11,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\UserRelationType;
 
 try {
@@ -30,7 +31,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-relationtypes', $headline);
+    $page = new PagePresenter('admidio-relationtypes', $headline);
 
     // define link to create new category
     $page->addPageFunctionsMenuItem(

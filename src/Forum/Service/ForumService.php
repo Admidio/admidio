@@ -2,6 +2,7 @@
 
 namespace Admidio\Forum\Service;
 
+use Admidio\Categories\Entity\Category;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
@@ -31,7 +32,7 @@ class ForumService
     /**
      * Get an array with all categories from the forum of this organization.
      * @param int $organizationID ID of the organization for which the categories should be loaded. Default is the current organization.
-     * @return array<int,array> Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name'
+     * @return array<int,array> Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name', 'cat_default'
      * @throws Exception
      */
     public function getCategories(int $organizationID = 0): array
@@ -43,7 +44,7 @@ class ForumService
             $organizationID = $gCurrentOrgId;
         }
 
-        $sql = 'SELECT cat_id, cat_uuid, cat_name
+        $sql = 'SELECT cat_id, cat_uuid, cat_name, cat_default
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_org_id = ? -- $gCurrentOrgId
                    AND cat_type = \'FOT\' ';
@@ -74,10 +75,14 @@ class ForumService
             $topic->readDataByUuid($topicUUID);
         }
 
-        // write form values in category object
+        // write form values in topic object
         foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'fot_') || str_starts_with($key, 'fop_')) {
                 $topic->setValue($key, $value);
+            } elseif ($key === 'adm_category_uuid') {
+                $category = new Category($gDb);
+                $category->readDataByUuid($value);
+                $topic->setValue('fot_cat_id', $category->getValue('cat_id'));
             }
         }
 

@@ -23,6 +23,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -85,14 +86,14 @@ try {
             break;
 
         case 'topic_delete':
-            // delete menu entry
+            // delete forum topic with all posts
 
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $menu = new MenuEntry($gDb);
-            $menu->readDataByUuid($getMenuUUID);
-            $menu->delete();
+            $topic = new Topic($gDb);
+            $topic->readDataByUuid($getTopicUUID);
+            $topic->delete();
             echo json_encode(array('status' => 'success'));
             break;
     }

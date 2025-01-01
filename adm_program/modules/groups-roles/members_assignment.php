@@ -23,6 +23,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -94,7 +95,7 @@ try {
         }
 
         // create html page object
-        $page = new HtmlPage('admidio-members-assignement', $headline);
+        $page = new PagePresenter('admidio-members-assignement', $headline);
 
         if ($getMembersShowAll) {
             $javascriptCode .= '$("#mem_show_all").prop("checked", true);';

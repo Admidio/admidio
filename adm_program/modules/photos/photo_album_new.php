@@ -16,6 +16,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -95,7 +96,7 @@ try {
     }//function
 
     // create html page object
-    $page = new HtmlPage('admidio-photo-album-edit', $headline);
+    $page = new PagePresenter('admidio-photo-album-edit', $headline);
 
     // show form
     $form = new FormPresenter(

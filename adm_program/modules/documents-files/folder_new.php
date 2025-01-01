@@ -17,6 +17,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -48,7 +49,7 @@ try {
     $parentFolderName = $folder->getValue('fol_name');
 
     // create html page object
-    $page = new HtmlPage('admidio-documents-files-new-folder', $headline);
+    $page = new PagePresenter('admidio-documents-files-new-folder', $headline);
     $page->assignSmartyVariable('parentFolderName', $parentFolderName);
 
     // show form

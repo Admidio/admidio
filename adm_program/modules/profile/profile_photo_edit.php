@@ -25,6 +25,7 @@ use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -163,7 +164,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new HtmlPage('admidio-profile-photo-edit', $headline);
+        $page = new PagePresenter('admidio-profile-photo-edit', $headline);
 
         // show form
         $form = new FormPresenter(
@@ -261,7 +262,7 @@ try {
         }
 
         // create html page object
-        $page = new HtmlPage('admidio-profile-photo-edit', $headline);
+        $page = new PagePresenter('admidio-profile-photo-edit', $headline);
         $page->addTemplateFile('modules/profile.new-photo.tpl');
         $page->assignSmartyVariable('urlCurrentProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)) );
         $page->assignSmartyVariable('urlNewProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)));

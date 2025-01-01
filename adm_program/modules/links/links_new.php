@@ -15,6 +15,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Weblinks\Entity\Weblink;
 
 try {
@@ -56,7 +57,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-weblinks-edit', $headline);
+    $page = new PagePresenter('admidio-weblinks-edit', $headline);
 
     // show form
     $form = new FormPresenter(

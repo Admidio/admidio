@@ -143,11 +143,19 @@ class ForumPresenter extends PagePresenter
             $this
         );
         if (count($categories) > 1) {
+            $categoriesValues = array();
+            $categoryDefault = '';
+            foreach ($categories as $category) {
+                $categoriesValues[$category['cat_uuid']] = $category['cat_name'];
+                if ($category['cat_default'] == 1) {
+                    $categoryDefault = $category['cat_uuid'];
+                }
+            }
             $form->addSelectBox(
-                'fot_cat_id',
+                'adm_category_uuid',
                 $gL10n->get('SYS_CATEGORY'),
-                $categories,
-                array('property' => FormPresenter::FIELD_REQUIRED)
+                $categoriesValues,
+                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $categoryDefault)
             );
         }
         $form->addInput(
@@ -160,7 +168,7 @@ class ForumPresenter extends PagePresenter
             'fop_text',
             $gL10n->get('SYS_TEXT'),
             $post->getValue('fop_text'),
-            array('property' => FormPresenter::FIELD_REQUIRED, 'toolbar' => 'AdmidioDefault')
+            array('property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addSubmitButton(
             'adm_button_save',
@@ -232,7 +240,12 @@ class ForumPresenter extends PagePresenter
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'role_' . $forumTopic['fot_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'topic_delete', 'uuid' => $forumTopic['fot_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumTopic['fot_uuid'])),
+                    'icon' => 'bi bi-pencil-square',
+                    'tooltip' => $gL10n->get('SYS_EDIT_TOPIC')
+                );
+                $templateRow['actions'][] = array(
+                    'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumTopic['fot_title'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_TOPIC')

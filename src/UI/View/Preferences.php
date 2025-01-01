@@ -6,7 +6,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
-use HtmlPage;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use RuntimeException;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -29,7 +29,7 @@ use Admidio\Infrastructure\Utils\SystemInfoUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Preferences extends HtmlPage
+class Preferences extends PagePresenter
 {
     /**
      * @var array Array with all possible accordion entries for the system preferences.

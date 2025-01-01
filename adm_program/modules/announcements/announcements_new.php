@@ -18,6 +18,7 @@ use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -66,7 +67,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
+    $page = new PagePresenter('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
 
     // show form
     $form = new FormPresenter(

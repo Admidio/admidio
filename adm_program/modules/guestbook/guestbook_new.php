@@ -16,6 +16,7 @@
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -94,7 +95,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-guestbook-new', $gL10n->get('SYS_FORUM') . ' - ' . $headline);
+    $page = new PagePresenter('admidio-guestbook-new', $gL10n->get('SYS_FORUM') . ' - ' . $headline);
 
     // Html des Modules ausgeben
     if ($getGboUuid !== '') {

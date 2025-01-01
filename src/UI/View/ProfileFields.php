@@ -4,7 +4,7 @@ namespace Admidio\UI\View;
 use Admidio\Infrastructure\Exception;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\UI\Presenter\FormPresenter;
-use HtmlPage;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
@@ -24,7 +24,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ProfileFields extends HtmlPage
+class ProfileFields extends PagePresenter
 {
     /**
      * Create the data for the edit form of a profile field.

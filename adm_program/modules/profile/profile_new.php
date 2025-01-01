@@ -25,6 +25,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 
@@ -98,7 +99,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new HtmlPage('admidio-profile-edit', $headline);
+        $page = new PagePresenter('admidio-profile-edit', $headline);
 
         // create html form
         $form = new FormPresenter(

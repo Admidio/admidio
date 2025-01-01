@@ -21,6 +21,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -117,7 +118,7 @@ try {
         $hoverRows = false;
 
         if ($getMode === 'print') {
-            $page = new HtmlPage('plg-category-report-main-print');
+            $page = new PagePresenter('plg-category-report-main-print');
             $page->setPrintMode();
             $page->setTitle($title);
             $page->setHeadline($headline);
@@ -176,7 +177,7 @@ try {
             $hoverRows = true;
 
             // create html page object
-            $page = new HtmlPage('plg-category-report-main-html');
+            $page = new PagePresenter('plg-category-report-main-html');
             $page->setTitle($title);
             $page->setHeadline($headline);
 

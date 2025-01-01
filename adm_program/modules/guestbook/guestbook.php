@@ -19,6 +19,7 @@
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -49,7 +50,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-guestbook');
+    $page = new PagePresenter('admidio-guestbook');
 
     // add rss feed to guestbook
     if ($gSettingsManager->getBool('enable_rss') && (int)$gSettingsManager->get('forum_module_enabled') === 1) {

@@ -18,6 +18,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -58,7 +59,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-userrelations-edit', $headline);
+    $page = new PagePresenter('admidio-userrelations-edit', $headline);
 
     // show form
     $form = new FormPresenter(

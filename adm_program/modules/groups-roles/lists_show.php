@@ -32,6 +32,7 @@ use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Service\RoleService;
 use Admidio\Roles\ValueObject\ListData;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 
@@ -350,7 +351,7 @@ try {
 
     if ($getMode === 'print') {
         // create html page object without the custom theme files
-        $page = new HtmlPage('admidio-lists-show', $headline);
+        $page = new PagePresenter('admidio-lists-show', $headline);
         $page->setPrintMode();
         $page->setTitle($title);
         $page->addHtml('<h5 class="admidio-content-subheader">' . $htmlSubHeadline . '</h5>');
@@ -393,7 +394,7 @@ try {
         $hoverRows = true;
 
         // create html page object
-        $page = new HtmlPage('admidio-lists-show', $headline);
+        $page = new PagePresenter('admidio-lists-show', $headline);
         $page->setTitle($title);
 
         // create select box with all list configurations

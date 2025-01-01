@@ -34,6 +34,7 @@ use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -93,7 +94,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
+    $page = new PagePresenter('admidio-events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
 
     if ($getViewMode === 'html') {
         $datatable = true;

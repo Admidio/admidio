@@ -17,6 +17,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -67,7 +68,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-photos', $headline);
+    $page = new PagePresenter('admidio-photos', $headline);
 
     // add rss feed to photos
     if ($gSettingsManager->getBool('enable_rss')) {

@@ -16,6 +16,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
@@ -91,7 +92,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-profile', $headline);
+    $page = new PagePresenter('admidio-profile', $headline);
     $page->addTemplateFile('modules/profile.view.tpl');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');

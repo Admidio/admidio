@@ -11,6 +11,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -32,7 +33,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-members-import', $headline);
+    $page = new PagePresenter('admidio-members-import', $headline);
 
     // show form
     $form = new FormPresenter(

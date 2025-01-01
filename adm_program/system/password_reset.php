@@ -19,6 +19,7 @@ use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -114,7 +115,7 @@ try {
         } else {
             // show dialog to change password
 
-            $page = new HtmlPage('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
+            $page = new PagePresenter('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
 
             // show form
             $form = new FormPresenter(
@@ -268,7 +269,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new HtmlPage('admidio-password-reset', $headline);
+        $page = new PagePresenter('admidio-password-reset', $headline);
 
         $page->addHtml('<p class="lead">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION') . '</p>');
 

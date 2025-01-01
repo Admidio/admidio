@@ -7,8 +7,8 @@ use Admidio\Roles\Entity\Role;
 use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Roles\Service\RoleService;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use HtmlDataTables;
-use HtmlPage;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -27,7 +27,7 @@ use HtmlPage;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class GroupsRoles extends HtmlPage
+class GroupsRoles extends PagePresenter
 {
     /**
      * @var array Array with all read groups and roles

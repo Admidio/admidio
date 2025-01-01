@@ -17,6 +17,7 @@ use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -45,7 +46,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-rooms-edit', $headline);
+    $page = new PagePresenter('admidio-rooms-edit', $headline);
 
     // show form
     $form = new FormPresenter(
