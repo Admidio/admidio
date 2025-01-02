@@ -101,6 +101,16 @@ try {
             );
         }
 
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+            // show link to view profile field change history
+            $groupsRoles->addPageFunctionsMenuItem(
+                'menu_item_members_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => ($getShow == 'card') ? 'members' : 'roles')),
+                'fa-history'
+            );
+        }
+
         // show link to maintain categories
         $groupsRoles->addPageFunctionsMenuItem(
             'menu_item_groups_roles_maintain_categories',

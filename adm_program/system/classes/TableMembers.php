@@ -67,8 +67,7 @@ class TableMembers extends TableAccess
             }
             if ($oldValue != $newValue) {
                 $gChangeNotification->logRoleChange(
-                    $this->getValue('mem_usr_id'),
-                    $this->getValue('rol_name'),
+                    $this, 
                     $columnName,
                     (string) $oldValue,
                     (string) $newValue
@@ -127,32 +126,23 @@ class TableMembers extends TableAccess
             $memId = $this->getValue('mem_id');
             $membership = $this->getValue('rol_name');
             $gChangeNotification->logRoleChange(
-                $usrId,
-                $membership,
+                $this,
                 'mem_begin',
                 $this->getValue('mem_begin', 'Y-m-d'),
-                '',
-                null,
-                true
+                ''
             );
             $gChangeNotification->logRoleChange(
-                $usrId,
-                $membership,
+                $this,
                 'mem_end',
                 $this->getValue('mem_end', 'Y-m-d'),
-                '',
-                null,
-                true
+                ''
             );
             if ($this->getValue('mem_leader')) {
                 $gChangeNotification->logRoleChange(
-                    $usrId,
-                    $membership,
+                    $this,
                     'mem_leader',
                     $this->getValue('mem_leader'),
-                    '',
-                    null,
-                    true
+                    ''
                 );
             }
         }
@@ -205,33 +195,25 @@ class TableMembers extends TableAccess
             // Log begin, end and leader as changed (set to NULL)
             $usrId = $obj->getValue('mem_usr_id');
             $membership = $obj->getValue('rol_name');
+
             $gChangeNotification->logRoleChange(
-                $usrId,
-                $membership,
+                $this,
                 'mem_begin',
                 '',
-                $obj->getValue('mem_begin', 'Y-m-d'), // user=
-                null,
-                true
+                $obj->getValue('mem_begin', 'Y-m-d')
             );
             $gChangeNotification->logRoleChange(
-                $usrId,
-                $membership,
+                $this,
                 'mem_end',
                 '',
-                $obj->getValue('mem_end', 'Y-m-d'), // user=
-                null,
-                true
+                $obj->getValue('mem_end', 'Y-m-d')
             );
             if ($obj->getValue('mem_leader')) {
                 $gChangeNotification->logRoleChange(
-                    $usrId,
-                    $membership,
+                    $this,
                     'mem_leader',
                     '',
-                    $obj->getValue('mem_leader'), // user=
-                    null,
-                    true
+                    $obj->getValue('mem_leader')
                 );
             }
         }
@@ -367,5 +349,50 @@ class TableMembers extends TableAccess
         }
 
         return false;
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns.
+     * The Membership table also contains mem_rol_id and mem_usr_id, which cannot be changed,
+     * so their initial setting on creation should not be logged. Instead, they will be used
+     * when displaying the log entry.
+     *
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function logIgnoredColumns(): array
+    {
+        $ignored = parent::logIgnoredColumns();
+        $ignored[] = 'mem_rol_id';
+        $ignored[] = 'mem_usr_id';
+        $ignored[] = 'mem_uuid';
+        return $ignored;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record.
+     *
+     * For group memberships, we want to display the user's name as record name
+     * and link to the user_id (the membership does not have any modification page).
+     * Also, we want to show and link the group as related id&name.
+     *
+     * @param TableLogChanges $logEntry The log entry to adjust
+     *
+     * @return void
+     */
+    protected function adjustLogEntry(TableLogChanges $logEntry) {
+        global $gDb, $gProfileFields;
+        $usrId = (int)$this->getValue('mem_usr_id');
+
+        $user = new User($this->db, $gProfileFields, $usrId);
+        $logEntry->setValue('log_record_name', $user->readableName());
+        $logEntry->setValue('log_record_uuid', $user->getValue('usr_uuid'));
+        $logEntry->setLogLinkID($usrId);
+
+        $rolId = $this->getValue('mem_rol_id');
+        $role = new TableRoles($this->db, $rolId);
+
+        $logEntry->setLogRelated($rolId, $role->getValue('rol_name'));
     }
 }

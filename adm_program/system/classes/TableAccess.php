@@ -7,6 +7,8 @@
  ***********************************************************************************************
  */
 
+include_once __DIR__ . '/TableLogChanges.php';
+
 /*
  * Controls read and write access to database tables
  *
@@ -56,7 +58,7 @@ class TableAccess
      */
     protected $db;
 
-    /**
+    /**     
      * @var bool Flag whether a new data set or existing data set is being edited
      */
     protected $newRecord;
@@ -73,7 +75,7 @@ class TableAccess
      */
     protected $dbColumns = array();
     /**
-     * @var array<string,array<string,mixed>> Array which stores further information (changed yes/no, field type)
+     * @var array<string,array<string,mixed>> Array which stores further information (changed yes/no, field type, previous value)
      */
     protected $columnsInfos = array();
     /**
@@ -140,6 +142,7 @@ class TableAccess
             foreach ($this->dbColumns as $fieldName => &$fieldValue) {
                 $fieldValue = ''; // $this->dbColumns[$fieldName] = '';
                 $this->columnsInfos[$fieldName]['changed'] = false;
+                $this->columnsInfos[$fieldName]['previousValue'] = null;
             }
             unset($fieldValue);
         } else {
@@ -189,6 +192,151 @@ class TableAccess
     }
 
     /**
+     * Return a human-readable representation of this record.
+     * If a column [prefix]_name exists, it is returned, otherwise the id.
+     * This method can be overridden in child classes for custom behavior.
+     * 
+     * @return string The readable representation of the record (can also be a translatable identifier)
+     */
+    public function readableName(): string
+    {
+        if (array_key_exists($this->columnPrefix.'_name', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix.'_name'];
+        } elseif (array_key_exists($this->columnPrefix.'_headline', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix.'_headline'];
+        } else {
+            return $this->dbColumns[$this->keyColumnName];
+        }
+    }
+
+    /**
+     * Return a human-readable representation of the given database field/column.
+     * By default, the column name is returned unmodified. Subclasses can override this method.
+     * @param string $field The database column
+     * @return string The readable representation of the DB column (can also be a translatable identifier)
+     */
+    public function getFieldTitle(string $field): string
+    {
+        return $field;
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns. Subclasses can also add further fields 
+     * (e.g. the users table stores and auto-increments the login count, which 
+     * we do not want to log)
+     * 
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function logIgnoredColumns(): array
+    {
+        $ignored = [
+            $this->columnPrefix . '_uuid',
+            $this->columnPrefix . '_usr_id_create',
+            $this->columnPrefix . '_timestamp_create',
+            $this->columnPrefix . '_usr_id_change', 
+            $this->columnPrefix . '_timestamp_change'
+        ];
+        return $ignored;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record. By default, record_id, record_name are taken
+     * from this record, linkid and related are left empty, and the field is the column name of each change.
+     * 
+     * @param TableLogChanges $logEntry The log entry to adjust
+     * 
+     * @return void
+     */
+    protected function adjustLogEntry(TableLogChanges $logEntry) {}
+
+
+    /**
+     * Logs creation of the DB record
+     * @param integer $id the unique index of the new record in the database table
+     * @param string $record_name the human-readable representation of the record
+     * 
+     * @return true Returns **true** if no error occurred
+     * @throws Exception
+     */
+    public function logCreation(): bool
+    {
+        $table = $this->tableName;
+        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $record_name = $this->readableName();
+        if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
+            $uuid = (string) $this->getValue($this->columnPrefix . '_uuid');
+        } else {
+            $uuid = null;
+        }
+
+        $logEntry = new TableLogChanges($this->db);
+        $logEntry->setLogCreation($table, $this->dbColumns[$this->keyColumnName], $uuid, $record_name);
+        $this->adjustLogEntry($logEntry);
+        return $logEntry->save();
+    }
+
+    /**
+     * Logs deletion of the DB record
+     * 
+     * @return true Returns **true** if no error occurred
+     */
+    public function logDeletion(): bool
+    {
+        $table = $this->tableName;
+        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $record_name = $this->readableName();
+        if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
+            $uuid = (string) $this->getValue($this->columnPrefix . '_uuid');
+        } else {
+            $uuid = null;
+        }
+
+
+        $logEntry = new TableLogChanges($this->db);
+        $logEntry->setLogDeletion($table, $this->dbColumns[$this->keyColumnName], $uuid, $record_name);
+        $this->adjustLogEntry($logEntry);
+        return $logEntry->save();
+    }
+
+
+    /**
+     * Logs all modifications of the DB record
+     * @param array $logChanges Array of all changes, generated by the save method
+     * @return true Returns **true** if no error occurred
+     * @throws Exception
+     */
+    public function logModifications(array $logChanges): bool
+    {
+        $retVal = true;
+        $table = $this->tableName;
+        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $id = $this->dbColumns[$this->keyColumnName];
+        $record_name = $this->readableName();
+        if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
+            $uuid = (string) $this->getValue($this->columnPrefix . '_uuid');
+        } else {
+            $uuid = null;
+        }
+
+
+        $logEntry = new TableLogChanges($this->db, $table);
+
+        // Log each individual record modification
+        foreach ($logChanges as $field => $changes) {
+            $fieldName = $this->getFieldTitle($field);
+            $logEntry->setLogModification($table, $id, $uuid, $record_name, $field, $fieldName, $changes['oldValue'], $changes['newValue']);
+            $this->adjustLogEntry($logEntry);
+            $retVal = $retVal && $logEntry->save();
+            $logEntry->clear();
+            $logEntry->saveChangesWithoutRights();
+        }
+        return $retVal;
+    }
+
+
+    /**
      * Deletes the selected record of the table and initializes the class
      * @return true Returns **true** if no error occurred
      * @throws Exception
@@ -196,6 +344,8 @@ class TableAccess
     public function delete(): bool
     {
         if (array_key_exists($this->keyColumnName, $this->dbColumns) && $this->dbColumns[$this->keyColumnName] !== '') {
+            // Log record deletion, then delete
+            $this->logDeletion();
             $sql = 'DELETE FROM '.$this->tableName.'
                      WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
             $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
@@ -485,7 +635,7 @@ class TableAccess
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For a new record if there is an uuid column a new uuid will be created and stored.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
-     *                                if table has columns like **usr_id_create** or **usr_id_changed**
+     *                                if table has columns like **usr_id_create** or **usr_id_change**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
      * @throws Exception
@@ -526,6 +676,8 @@ class TableAccess
         $queryParams = array();
         $returnCode = false;
 
+        $logChanges = array();
+
         // Loop over all DB fields and add them to the update
         foreach ($this->dbColumns as $key => $value) {
             // fields of other tables must not appear in insert/update
@@ -556,6 +708,10 @@ class TableAccess
                             $queryParams[] = $value;
                         }
                     }
+                    // Ignore the usr_id_create and timestamp_create (and *_change) columns in the change log...
+                    if (!in_array($key, $this->logIgnoredColumns())) {
+                        $logChanges[$key] = array('oldValue' => $this->columnsInfos[$key]['previousValue'], 'newValue' => $value); 
+                    }
 
                     $this->columnsInfos[$key]['changed'] = false;
                 }
@@ -572,6 +728,8 @@ class TableAccess
                 $this->insertRecord = false;
                 if ($this->keyColumnName !== '') {
                     $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+                    $this->logCreation();
+                    $this->logModifications($logChanges);
                 }
             }
         } else {
@@ -581,6 +739,8 @@ class TableAccess
             $queryParams[] = $this->dbColumns[$this->keyColumnName];
             if ($this->db->queryPrepared($sql, $queryParams) !== false) {
                 $returnCode = true;
+                // Log record modification
+                $this->logModifications($logChanges);
             }
         }
 
@@ -628,6 +788,9 @@ class TableAccess
     public function setArray(array $fieldArray)
     {
         foreach ($fieldArray as $field => $value) {
+            if (!empty($this->dbColumns[$field])) {
+                $this->columnsInfos[$field]['previousValue'] = $this->dbColumns[$field];
+            }
             $this->dbColumns[$field] = $value;
             $this->columnsInfos[$field]['changed'] = false;
         }
@@ -667,6 +830,7 @@ class TableAccess
                     }
                 }
                 $this->columnsInfos[$columnName]['changed'] = false;
+                $this->columnsInfos[$columnName]['previousValue'] = null;
                 if(strpos($property['type'], '(') > 0) {
                     $this->columnsInfos[$columnName]['type'] = substr($property['type'], 0, strpos($property['type'], '('));
                 } else {
@@ -762,6 +926,7 @@ class TableAccess
 
         // only mark as "changed" if the value is different (DON'T use binary safe function!)
         if (strcmp((string) $this->dbColumns[$columnName], (string) $newValue) !== 0) {
+            $this->columnsInfos[$columnName]['previousValue'] = $this->dbColumns[$columnName];
             $this->dbColumns[$columnName] = $newValue;
             $this->columnsValueChanged = true;
             $this->columnsInfos[$columnName]['changed'] = true;

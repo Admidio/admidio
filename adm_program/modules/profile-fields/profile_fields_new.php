@@ -89,6 +89,18 @@ $page->addJavascript(
     true
 );
 
+
+if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+    // show link to view profile field change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_profilefiled_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'user_fields', 'uuid' => $getUsfUuid)),
+        'fa-history'
+    );
+}
+
+
 // show form
 $form = new HtmlForm('profile_fields_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_function.php', $page);
 // add a hidden field with context information

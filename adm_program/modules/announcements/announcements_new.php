@@ -77,6 +77,17 @@ if (isset($_SESSION['announcements_request'])) {
 // create html page object
 $page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
 
+if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+    // show link to view change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_announcement_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'announcements', 'uuid' => $getAnnUuid)),
+        'fa-history'
+    );
+}
+
+
 // show form
 $form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => '1')), $page);
 $form->addInput(
