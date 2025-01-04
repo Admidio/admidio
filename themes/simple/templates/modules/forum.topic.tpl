@@ -1,7 +1,7 @@
 {foreach $cards as $forumTopic}
     <div class="card admidio-blog" id="adm_topic_{$forumTopic.uuid}">
         <div class="card-header">
-            <i class="bi bi-chat-dots-fill"></i> <a href="{$forumTopic.url}">{$forumTopic.title}</a>
+            <i class="bi bi-chat-dots-fill"></i>{$forumTopic.title}
 
             {if $forumTopic.editable}
                 <div class="dropdown float-end">
@@ -23,12 +23,6 @@
 
         <div class="card-body">
             {$forumTopic.text}
-        </div>
-        <div class="card-footer">
-            {$l10n->get('SYS_CREATED_BY_AND_AT', array($forumTopic.userName, $forumTopic.timestamp))}
-            {if {array_key_exists array=$forumTopic key="category"}}
-                <span class="float-end">{$l10n->get('SYS_CATEGORY')}: {$forumTopic.category}</span>
-            {/if}
         </div>
     </div>
 {/foreach}

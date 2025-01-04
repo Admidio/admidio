@@ -1,10 +1,12 @@
 <?php
+
 namespace Admidio\UI\Presenter;
 
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
@@ -36,7 +38,6 @@ class ForumPresenter extends PagePresenter
      */
     protected array $templateForumData = array();
 
-
     /**
      * Create content that is used on several pages and could be called in other methods. It will
      * create a functions menu and a filter navbar.
@@ -46,13 +47,13 @@ class ForumPresenter extends PagePresenter
      */
     protected function createSharedHeader(string $categoryUUID = '')
     {
-        global $gCurrentUser, $gSettingsManager, $gL10n, $gDb;
+        global $gCurrentUser, $gL10n, $gDb;
 
         // show link to create new topic
         $this->addPageFunctionsMenuItem(
             'menu_item_forum_topic_add',
             $gL10n->get('SYS_CREATE_TOPIC'),
-            ADMIDIO_URL.FOLDER_MODULES.'/forum.php?mode=topic_edit',
+            ADMIDIO_URL . FOLDER_MODULES . '/forum.php?mode=topic_edit',
             'bi-plus-circle-fill'
         );
 
@@ -77,7 +78,7 @@ class ForumPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_navbar_forum_filter_form',
             'sys-template-parts/form.filter.tpl',
-            ADMIDIO_URL.FOLDER_MODULES.'/forum.php',
+            ADMIDIO_URL . FOLDER_MODULES . '/forum.php',
             $this,
             array('type' => 'navbar', 'setFocus' => false)
         );
@@ -126,13 +127,13 @@ class ForumPresenter extends PagePresenter
 
         // create menu object
         $topic = new Topic($gDb);
-        $post  = new Post($gDb);
+        $post = new Post($gDb);
         $forumService = new ForumService($gDb);
         $categories = $forumService->getCategories();
 
         if ($topicUUID !== '') {
             $topic->readDataByUuid($topicUUID);
-            $post->readDataById($topic->getValue('fot_first_fop_id'));
+            $post->readDataById($topic->getValue('fot_fop_id_first_post'));
         }
 
         // show form
@@ -191,7 +192,7 @@ class ForumPresenter extends PagePresenter
      */
     public function getForumData(string $categoryUUID = ''): array
     {
-        global $gDb, $gCurrentOrgId;
+        global $gDb, $gCurrentOrgId, $gProfileFields;
 
         $sqlConditions = '';
         $sqlQueryParameters = array();
@@ -201,40 +202,72 @@ class ForumPresenter extends PagePresenter
             $sqlQueryParameters[] = $categoryUUID;
         }
 
-        $sql = 'SELECT fot_uuid, fot_title, fot_views, fop_text, usr_uuid
+        $sql = 'SELECT fot_uuid, fot_title, fot_views, fop_text, fot_timestamp_create, fot_usr_id_create,
+                       cat_name, usr_uuid,
+                       cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname
                   FROM ' . TBL_FORUM_TOPICS . '
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON fot_cat_id = cat_id
             INNER JOIN ' . TBL_FORUM_POSTS . '
-                    ON fop_id = fot_first_fop_id
+                    ON fop_id = fot_fop_id_first_post
             INNER JOIN ' . TBL_USERS . '
                     ON usr_id = fot_usr_id_create
+             LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
+                    ON cre_surname.usd_usr_id = usr_id
+                   AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
+             LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
+                    ON cre_firstname.usd_usr_id = usr_id
+                   AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
                  WHERE (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )
                        ' . $sqlConditions . '
                  ORDER BY fot_timestamp_create DESC';
 
         $queryParameters = array_merge(array(
+            (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
             $gCurrentOrgId
         ), $sqlQueryParameters);
 
         return $gDb->getArrayFromSql($sql, $queryParameters);
     }
 
+    /**
+     * @throws \DateMalformedStringException
+     * @throws Exception
+     */
     public function prepareForumData(string $categoryUUID = '')
     {
-        global $gL10n, $gCurrentUser, $gCurrentSession;
+        global $gDb, $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
 
         $templateRow = array();
         $data = $this->getForumData($categoryUUID);
+        $forum = new ForumService($gDb);
+        $categories = $forum->getCategories();
 
         foreach ($data as $forumTopic) {
             $templateRow['uuid'] = $forumTopic['fot_uuid'];
             $templateRow['title'] = $forumTopic['fot_title'];
             $templateRow['views'] = $forumTopic['fot_views'];
-            $templateRow['text'] = $forumTopic['fop_text'];
+            if (strlen($forumTopic['fop_text']) > 200) {
+                $templateRow['text'] = substr(
+                        substr($forumTopic['fop_text'], 0, 200),
+                        0,
+                        strrpos(substr($forumTopic['fop_text'], 0, 200), ' ')
+                    ) . ' ...';
+            } else {
+                $templateRow['text'] = $forumTopic['fop_text'];
+            }
             $templateRow['userUUID'] = $forumTopic['usr_uuid'];
+            $templateRow['userName'] = $forumTopic['firstname'] . ' ' . $forumTopic['surname'];
+            $datetime = new \DateTime($forumTopic['fot_timestamp_create']);
+            $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $forumTopic['fot_uuid']));
             $templateRow['editable'] = false;
+
+            if (count($categories) > 1) {
+                $templateRow['category'] = Language::translateIfTranslationStrId($forumTopic['cat_name']);
+            }
 
             if ($gCurrentUser->administrateForum()) {
                 $templateRow['editable'] = true;

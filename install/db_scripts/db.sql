@@ -243,7 +243,7 @@ CREATE TABLE %PREFIX%_forum_topics
     fot_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     fot_uuid                    varchar(36)         NOT NULL,
     fot_cat_id                  integer unsigned    NOT NULL,
-    fot_first_fop_id            integer unsigned,
+    fot_fop_id_first_post       integer unsigned,
     fot_title                   varchar(255)        NOT NULL,
     fot_views                   integer             NOT NULL,
     fot_usr_id_create           integer unsigned,
@@ -910,7 +910,7 @@ ALTER TABLE %PREFIX%_folders
 
 ALTER TABLE %PREFIX%_forum_topics
     ADD CONSTRAINT %PREFIX%_fk_fot_cat         FOREIGN KEY (fot_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_first_fop_id)   REFERENCES %PREFIX%_forum_posts (fop_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_fop_id_first_post)   REFERENCES %PREFIX%_forum_posts (fop_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_forum_posts

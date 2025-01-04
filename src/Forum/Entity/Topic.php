@@ -38,7 +38,7 @@ class Topic extends Entity
     public function __construct(Database $database, int $fotID = 0)
     {
         // read also data of assigned first post
-        $this->connectAdditionalTable(TBL_FORUM_POSTS, 'fop_id', 'fot_first_fop_id');
+        $this->connectAdditionalTable(TBL_FORUM_POSTS, 'fop_id', 'fot_fop_id_first_post');
 
         parent::__construct($database, TBL_FORUM_TOPICS, 'fot', $fotID);
 
@@ -56,7 +56,7 @@ class Topic extends Entity
         $this->db->startTransaction();
 
         // delete reference to first post
-        $this->setValue('fot_first_fop_id', 0);
+        $this->setValue('fot_fop_id_first_post', 0);
         $this->save();
 
         // Delete all available posts to this forum entry
@@ -144,7 +144,7 @@ class Topic extends Entity
         $returnValue = parent::readDataById($id);
 
         if ($returnValue) {
-            $this->firstPost->readDataById($this->getValue('fot_first_fop_id'));
+            $this->firstPost->readDataById($this->getValue('fot_fop_id_first_post'));
         }
 
         return $returnValue;
@@ -167,7 +167,7 @@ class Topic extends Entity
         $returnValue = parent::readDataByUuid($uuid);
 
         if ($returnValue) {
-            $this->firstPost->readDataById($this->getValue('fot_first_fop_id'));
+            $this->firstPost->readDataById($this->getValue('fot_fop_id_first_post'));
         }
 
         return $returnValue;
@@ -200,7 +200,7 @@ class Topic extends Entity
         if ($this->newRecord) {
             $this->firstPost->setValue('fop_fot_id', $this->getValue('fot_id'));
             $this->firstPost->save();
-            $this->setValue('fot_first_fop_id', $this->firstPost->getValue('fop_id'));
+            $this->setValue('fot_fop_id_first_post', $this->firstPost->getValue('fop_id'));
             $returnCode = parent::save($updateFingerPrint);
         } else {
             $this->firstPost->save();
