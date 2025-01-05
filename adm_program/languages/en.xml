@@ -1345,6 +1345,18 @@
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Before you call this function, all settings for email sending must be saved!\nA simple email with the subject #VAR1_BOLD# will be sent to the email address of the logged in user based on the saved email settings. In the process, a dispatch log is output during SMTP dispatch, which can help in case of problems.</string>
   <string name="SYS_TEXT">Text</string>
+  <string name="SYS_TFA">Two Factor Authentication</string>
+  <string name="SYS_TFA_ENABLE">Enable Two-Factor Authentication (2FA)</string>
+  <string name="SYS_TFA_ENABLE_DESC">Enable Two-Factor Authentication (2FA) for all users to require an additional verification step, increasing account security and protecting against unauthorized access.</string>
+  <string name="SYS_TFA_RESET">Reset Two Factor Authentication</string>
+  <string name="SYS_TFA_RESET_DESC">Remove the configured second factor.</string>
+  <string name="SYS_TFA_RESET_SUCCESSFUL">Two Factor Authentication reset successfully.</string>
+  <string name="SYS_TFA_SETUP">Setup Two Factor Authentication</string>
+  <string name="SYS_TFA_SETUP_SCAN_QR">Scan QR Code</string>
+  <string name="SYS_TFA_SETUP_SUCCESSFUL">Two Factor Authentication setup successfully.</string>
+  <string name="SYS_TFA_TOTP_CODE">TOTP Code</string>
+  <string name="SYS_TFA_TOTP_CODE_ENTER">Enter TOTP Code</string>
+  <string name="SYS_TFA_TOTP_CODE_INCORRECT">The entered TOTP code is incorrect.</string>
   <string name="SYS_THUMBNAIL_SCALING">Thumbnail scaling</string>
   <string name="SYS_THUMBNAIL_SCALING_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (Default: #VAR1# pixels)</string>
   <string name="SYS_THUMBNAILS_PER_PAGE">Thumbnails per page</string>
@@ -1448,17 +1460,4 @@
   <string name="SYS_YOUR_LISTS">Own lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
-  <string name="SYS_TFA">Two Factor Authentication</string>
-  <string name="SYS_SETUP_TFA">Setup Two Factor Authentication</string>
-  <string name="SYS_RESET_TFA">Reset Two Factor Authentication</string>
-  <string name="SYS_TFA_SCAN_QR">Scan QR Code</string>
-  <string name="SYS_TFA_TOTP_CODE">TOTP Code</string>
-  <string name="SYS_TFA_ENTER_TOTP_CODE">Enter TOTP Code</string>
-  <string name="SYS_TFA_WRONG_TOTP_CODE">The entered TOTP code is incorrect.</string>
-  <string name="SYS_TFA_SETUP_SUCCESSFUL">Two Factor Authentication setup successfully.</string>
-  <string name="SYS_TFA_RESET_SUCCESSFUL">Two Factor Authentication reset successfully.</string>
-  <string name="SYS_RESET_TFA_DESC">Remove the configured second factor.</string>
-  <string name="SYS_RESET_TFA_DESC_ADM">Remove the configured second factor.</string>
-  <string name="SYS_TFA_ENABLE">Enable Two-Factor Authentication (2FA)</string>
-  <string name="SYS_TFA_ENABLE_DESC">Enable Two-Factor Authentication (2FA) for all users to require an additional verification step, increasing account security and protecting against unauthorized access.</string>
 </resources>

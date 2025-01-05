@@ -72,7 +72,7 @@ try {
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_TFA_SETUP_SUCCESSFUL')));
             exit();
         } else {
-            throw new Exception('SYS_TFA_WRONG_TOTP_CODE');
+            throw new Exception('SYS_TFA_TOTP_CODE_INCORRECT');
         }
 
     } elseif ($getMode === 'reset') {
@@ -113,8 +113,8 @@ try {
             // Prepare setup form
             $qrImageUri = $tfa->getQRCodeImageAsDataUri($orgName, $secret, 200);
             $html = '<img id="qr_code" src="' . $qrImageUri . '" alt="Secret: ' . $secret . '" />';
-            $form->addCustomContent('qr_code', $gL10n->get('SYS_TFA_SCAN_QR'), $html);
-            $form->addInput('otp_code', $gL10n->get('SYS_TFA_ENTER_TOTP_CODE'), '', array('type' => 'text', 'required' => true));
+            $form->addCustomContent('qr_code', $gL10n->get('SYS_TFA_SETUP_SCAN_QR'), $html);
+            $form->addInput('otp_code', $gL10n->get('SYS_TFA_TOTP_CODE_ENTER'), '', array('type' => 'text', 'required' => true));
             $form->addSubmitButton(
                 'adm_button_save',
                 $gL10n->get('SYS_SAVE'),

@@ -417,13 +417,13 @@ class User extends Entity
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
      *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
-     *                                       SYS_TFA_WRONG_TOTP_CODE
+     *                                       SYS_TFA_TOTP_CODE_INCORRECT
      */
-    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false,  string $totpCode = null): bool
+    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, string $totpCode = null): bool
     {
-        if($this->checkPassword($password) && $this->checkMembership($isAdministrator ) && $this->checkTotp($totpCode)){
+        if ($this->checkPassword($password) && $this->checkMembership($isAdministrator) && $this->checkTotp($totpCode)) {
             $this->updateSession($setAutoLogin, $updateSessionCookies);
-            if($updateHash){
+            if ($updateHash) {
                 $this->rehashIfNecessary($password);
             }
             return true;
@@ -436,29 +436,29 @@ class User extends Entity
         if ($this->hasMaxInvalidLogins()) {
             throw new Exception('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
-        
+
         if (!PasswordUtils::verify($password, $this->getValue('usr_password'))) {
             $incorrectLoginMessage = $this->handleIncorrectLogin('password');
-            
+
             throw new Exception($incorrectLoginMessage);
         }
         return true;
-    }
-    
-    public function checkMembership(bool $isAdministrator = false): bool    
+        }
+
+    public function checkMembership(bool $isAdministrator = false): bool
     {
         global $gSettingsManager, $gCurrentSession, $installedDbVersion;
-        
+
         if (!$this->getValue('usr_valid')) {
             throw new Exception('SYS_LOGIN_NOT_ACTIVATED');
         }
-        
+
         $orgLongName = $this->getOrgLongname();
-        
+
         if (!$this->isMemberOfOrganization()) {
             throw new Exception('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName));
         }
-        
+
         if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization()) {
             throw new Exception('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName));
         }
@@ -1413,7 +1413,7 @@ class User extends Entity
             case 'password':
         return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
             case 'totp':
-                return 'SYS_TFA_WRONG_TOTP_CODE';
+                return 'SYS_TFA_TOTP_CODE_INCORRECT';
         }
         throw new Exception('Unreachable Case');
     }

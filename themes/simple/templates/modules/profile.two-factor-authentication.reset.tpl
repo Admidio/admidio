@@ -6,7 +6,7 @@
 </script>
 
 <div class="modal-header">
-    <h3 class="modal-title">{$l10n->get('SYS_RESET_TFA')}</h3>
+    <h3 class="modal-title">{$l10n->get('SYS_TFA_RESET')}</h3>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
@@ -14,7 +14,7 @@
             {$attribute@key}="{$attribute}"
         {/foreach}>
         {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-        <div>{$l10n->get('SYS_RESET_TFA_DESC')}</div>
+        <div>{$l10n->get('SYS_TFA_RESET_DESC')}</div>
         <hr />
         <div class="form-alert" style="display: none;">&nbsp;</div>
         {include 'sys-template-parts/form.button.tpl' data=$elements['tfa_reset_button']}
