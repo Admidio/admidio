@@ -1404,6 +1404,7 @@
   <string name="SYS_TFA_TOTP_CODE">TOTP-Code</string>
   <string name="SYS_TFA_TOTP_CODE_ENTER">TOTP-Code eingeben</string>
   <string name="SYS_TFA_TOTP_CODE_INCORRECT">Der eingegebene TOTP-Code ist falsch.</string>
+  <string name="SYS_TFA_TOTP_CODE_MISSING">Du hast die Zwei-Faktor-Authentifizierung für dein Konto aktiviert. Bitte gib den TOTP-Code aus deiner Authentifizierungs-App ein.</string>
   <string name="SYS_THUMBNAIL_SCALING">Skalierung Vorschaubild</string>
   <string name="SYS_THUMBNAIL_SCALING_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite des Vorschaubildes skaliert werden soll. Vorsicht: Werden die Vorschaubilder zu breit, passen weniger nebeneinander. Ggf. weniger Vorschaubildspalten einstellen. (Voreinstellung: 160Pixel)</string>
   <string name="SYS_THUMBNAILS_PER_PAGE">Vorschaubilder pro Seite</string>

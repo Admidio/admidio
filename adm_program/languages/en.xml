@@ -1357,6 +1357,7 @@
   <string name="SYS_TFA_TOTP_CODE">TOTP Code</string>
   <string name="SYS_TFA_TOTP_CODE_ENTER">Enter TOTP Code</string>
   <string name="SYS_TFA_TOTP_CODE_INCORRECT">The entered TOTP code is incorrect.</string>
+  <string name="SYS_TFA_TOTP_CODE_MISSING">You have activated two factor authentication for your account. Please enter the TOTP code from your authenticator app.</string>
   <string name="SYS_THUMBNAIL_SCALING">Thumbnail scaling</string>
   <string name="SYS_THUMBNAIL_SCALING_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (Default: #VAR1# pixels)</string>
   <string name="SYS_THUMBNAILS_PER_PAGE">Thumbnails per page</string>
