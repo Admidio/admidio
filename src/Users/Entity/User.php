@@ -481,7 +481,7 @@ class User extends Entity
         }
         // return false if no totp code entered
         if (!$totpCode) {
-            throw new Exception('no totp code entered');
+            throw new Exception('SYS_TFA_TOTP_CODE_MISSING');
         }
 
         $tfa = new TwoFactorAuth(new QRServerProvider());
