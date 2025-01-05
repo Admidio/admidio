@@ -75,6 +75,11 @@ class Session extends Entity
             $sessionId = session_id();
         }
 
+        if ($sessionId === '') {
+            session_regenerate_id();
+            $sessionId = session_id();
+        }
+
         $this->cookieAutoLoginId = $cookiePrefix . '_AUTO_LOGIN_ID';
 
         if (is_int($sessionId)) {
@@ -395,6 +400,7 @@ class Session extends Entity
         session_regenerate_id();
 
         $this->setValue('ses_session_id', session_id());
+        $this->setValue('ses_timestamp', DATETIME_NOW);
         $this->save();
     }
 
