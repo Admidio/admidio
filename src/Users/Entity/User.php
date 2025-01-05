@@ -13,6 +13,8 @@ use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Changelog\Entity\LogChanges;
+use RobThree\Auth\TwoFactorAuth;
+use RobThree\Auth\Providers\Qr\QRServerProvider;
 
 /**
  * @brief Class handle role rights, cards and other things of users
@@ -415,38 +417,85 @@ class User extends Entity
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
      *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
+     *                                       SYS_TFA_WRONG_TOTP_CODE
      */
-    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false): bool
+    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false,  string $totpCode = null): bool
     {
-        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
+        if($this->checkPassword($password) && $this->checkMembership($isAdministrator ) && $this->checkTotp($totpCode)){
+            $this->updateSession($setAutoLogin, $updateSessionCookies);
+            if($updateHash){
+                $this->rehashIfNecessary($password);
+            }
+            return true;
+        }
+        return false;
+    }
 
+    private function checkPassword(string $password): bool
+    {
         if ($this->hasMaxInvalidLogins()) {
             throw new Exception('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
-
+        
         if (!PasswordUtils::verify($password, $this->getValue('usr_password'))) {
-            $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
-
+            $incorrectLoginMessage = $this->handleIncorrectLogin('password');
+            
             throw new Exception($incorrectLoginMessage);
         }
-
+        return true;
+    }
+    
+    public function checkMembership(bool $isAdministrator = false): bool    
+    {
+        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
+        
         if (!$this->getValue('usr_valid')) {
             throw new Exception('SYS_LOGIN_NOT_ACTIVATED');
         }
-
+        
         $orgLongName = $this->getOrgLongname();
-
+        
         if (!$this->isMemberOfOrganization()) {
             throw new Exception('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName));
         }
-
+        
         if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization()) {
             throw new Exception('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName));
         }
 
-        if ($updateHash) {
-            $this->rehashIfNecessary($password);
+        return true;
+    }
+
+    private function checkTotp(string|null $totpCode): bool
+    {
+        global $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('enable_two_factor_authentication')) {
+            return true;
         }
+
+        $secret = $this->getValue('usr_tfa_secret');
+        // return true if user did not set up two factor authentication
+        if (!$secret) {
+            return true;
+        }
+        // return false if no totp code entered
+        if (!$totpCode) {
+            throw new Exception('no totp code entered');
+        }
+
+        $tfa = new TwoFactorAuth(new QRServerProvider());
+        if (!$tfa->verifyCode($secret, $totpCode)) {
+            $incorrectLoginMessage = $this->handleIncorrectLogin('totp');
+
+            throw new Exception($incorrectLoginMessage);
+        }
+        return true;
+    }
+
+    private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true): bool
+    {
+        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($updateSessionCookies) {
             $gCurrentSession->setValue('ses_usr_id', (int)$this->getValue('usr_id'));
@@ -1334,11 +1383,12 @@ class User extends Entity
     }
 
     /**
-     * Handles the incorrect given login password.
+     * Handles the incorrect given login password or totp code.
+     * @param string $mode Mode to differentiate if password or totp code (2FA) is incorrect. Allowed values: 'password', 'totp'
      * @return string Return string with the reason why the login failed.
      * @throws Exception
      */
-    private function handleIncorrectPasswordLogin(): string
+    private function handleIncorrectLogin(string $mode): string
     {
         // log invalid logins
         if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS) {
@@ -1359,7 +1409,13 @@ class User extends Entity
 
         $this->clear();
 
+        switch ($mode) {
+            case 'password':
         return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
+            case 'totp':
+                return 'SYS_TFA_WRONG_TOTP_CODE';
+        }
+        throw new Exception('Unreachable Case');
     }
 
     /**

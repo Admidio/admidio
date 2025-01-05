@@ -100,6 +100,12 @@ class ModuleLogin
                 'helpTextId' => '<a href="' . $forgotPasswordLink . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'
             )
         );
+        $form->addInput(
+            'usr_totp_code',
+            $gL10n->get('SYS_TFA_TOTP_CODE'),
+            '',
+            array('maxLength' => 6)
+        );
 
         // show selectbox with all organizations of database
         $sql = 'SELECT org_shortname, org_longname
@@ -136,6 +142,7 @@ class ModuleLogin
 
         $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);
         $postPassword = ($formValues['usr_password'] ?? $formValues['plg_usr_password']);
+        $postTotpCode =($formValues['usr_totp_code'] ?? $formValues['plg_usr_totp_code'] ?? null);
         $postOrgShortName = ($formValues['org_shortname'] ?? ($formValues['plg_org_shortname'] ?? $gCurrentOrganization->getValue('org_shortname')));
         $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login']);
 
@@ -192,6 +199,6 @@ class ModuleLogin
         $gCurrentUserId = $gCurrentUser->getValue('usr_id');
         $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');
 
-        return $gCurrentUser->checkLogin($postPassword, $postAutoLogin);
+        return $gCurrentUser->checkLogin(password: $postPassword, totpCode: $postTotpCode, setAutoLogin: $postAutoLogin);
     }
 }

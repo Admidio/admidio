@@ -152,6 +152,15 @@ try {
             )
         );
 
+        if($gSettingsManager->getBool('enable_two_factor_authentication')) {
+            $form->addInput(
+                'usr_totp_code',
+                $gL10n->get('SYS_TFA_TOTP_CODE'),
+                '',
+                array('maxLength' => 6)
+            );
+        }
+
         // show selectbox with all organizations of database
         if ($gCurrentOrganization->getValue('org_show_org_select')) {
             $sql = 'SELECT org_shortname, org_longname

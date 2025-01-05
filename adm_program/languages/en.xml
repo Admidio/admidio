@@ -1452,8 +1452,9 @@
   <string name="SYS_SETUP_TFA">Setup Two Factor Authentication</string>
   <string name="SYS_RESET_TFA">Reset Two Factor Authentication</string>
   <string name="SYS_TFA_SCAN_QR">Scan QR Code</string>
-  <string name="SYS_TFA_OTP_CODE">Enter OTP Code</string>
-  <string name="SYS_TFA_WRONG_OTP_CODE">OTP code is incorrect.</string>
+  <string name="SYS_TFA_TOTP_CODE">TOTP Code</string>
+  <string name="SYS_TFA_ENTER_TOTP_CODE">Enter TOTP Code</string>
+  <string name="SYS_TFA_WRONG_TOTP_CODE">The entered TOTP code is incorrect.</string>
   <string name="SYS_TFA_SETUP_SUCCESSFUL">Two Factor Authentication setup successfully.</string>
   <string name="SYS_TFA_RESET_SUCCESSFUL">Two Factor Authentication reset successfully.</string>
   <string name="SYS_RESET_TFA_DESC">Remove the configured second factor.</string>
