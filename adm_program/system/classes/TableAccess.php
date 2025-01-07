@@ -229,7 +229,7 @@ class TableAccess
      * 
      * @return true Returns the list of database columns to be ignored for logging.
      */
-    public function logIgnoredColumns(): array
+    public function getIgnoredLogColumns(): array
     {
         $ignored = [
             $this->columnPrefix . '_uuid',
@@ -709,7 +709,7 @@ class TableAccess
                         }
                     }
                     // Ignore the usr_id_create and timestamp_create (and *_change) columns in the change log...
-                    if (!in_array($key, $this->logIgnoredColumns())) {
+                    if (!in_array($key, $this->getIgnoredLogColumns())) {
                         $logChanges[$key] = array('oldValue' => $this->columnsInfos[$key]['previousValue'], 'newValue' => $value); 
                     }
 

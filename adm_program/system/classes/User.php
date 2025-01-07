@@ -2336,9 +2336,9 @@ class User extends TableAccess
      * 
      * @return true Returns the list of database columns to be ignored for logging.
      */
-    public function logIgnoredColumns(): array
+    public function getIgnoredLogColumns(): array
     {
-        $ignored = parent::logIgnoredColumns();
+        $ignored = parent::getIgnoredLogColumns();
         $ignored[] = 'usr_uuid';
         $ignored[] = 'usr_pw_reset_id';
         $ignored[] = 'usr_pw_reset_timestamp';

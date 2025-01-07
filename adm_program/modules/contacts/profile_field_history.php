@@ -134,16 +134,6 @@ if (!is_null($getRelatedId) && $getRelatedId > 0) {
 
 
 
-
-
-// TODO: Snippet for Role link:
-    // if ($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id'))) {
-    //     $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
-    // } else {
-    //     $roleMemHTML .= $role->getValue('rol_name');
-    // }
-
-
 $sql = 'SELECT log_id as id, log_table as table_name, 
     log_record_id as record_id, log_record_uuid as uuid, log_record_name as name, log_record_linkid as link_id,
     log_related_id as related_id, log_related_name as related_name,
@@ -175,7 +165,7 @@ $queryParams = [
 ];
 
 
-function createLink(string $text, string $module, int $id, string $uuid) {
+function createLink(string $text, string $module, int $id, string $uuid = '') {
     $url = '';
     switch ($module) {
         case 'users': // Fall through
@@ -320,9 +310,9 @@ while ($row = $fieldHistoryStatement->fetch()) {
     // }
 
 
-    $columnValues[] = createLink($row['name'], ($row['table_name']!='members')? $row['table_name'] : 'users', ($row['link_id']>0)?$row['link_id']:$row['record_id'], $row['uuid']); // TODO_RK: Use record_id and/or record_uuid and/or link_id to link to the record
+    $columnValues[] = createLink($row['name'], ($row['table_name']!='members')? $row['table_name'] : 'users', ($row['link_id']>0)?$row['link_id']:$row['record_id'], $row['uuid'] ?? ''); // TODO_RK: Use record_id and/or record_uuid and/or link_id to link to the record
 
-    $columnValues[] = ($row['related_name'] != '') ? createLink($row['related_name'], ($row['table_name'] == 'members')?"roles":$row['table_name'], ($row['related_id'] > 0)?$row['related_id']:0, $row['uuid']) : ''; // TODO_RK: Use related_id to link to the related record
+    $columnValues[] = ($row['related_name'] != '') ? createLink($row['related_name'], ($row['table_name'] == 'members')?"roles":$row['table_name'], ($row['related_id'] > 0)?$row['related_id']:0, $row['uuid'] ?? '') : ''; // TODO_RK: Use related_id to link to the related record
 
     if ($row['action'] == "DELETED") {
         $columnValues[] = '<em>['.$gL10n->get('SYS_DELETED').']</em>';
