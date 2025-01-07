@@ -130,14 +130,20 @@
     log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
 
     log_record_id               integer unsigned    NOT NULL, -- The record id in the original table
-    log_record_name             text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
-    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id is the mem_id, but the link should point to the group rather than the group membership (which does not have its own page in admidio!)
+    log_record_uuid             varchar(36)         NULL, -- The record uuid in the original table
+    log_record_name             text                NULL,     -- Textual representation in case the original record 
+                                                              -- no longer exists (e.g. group membership was deleted)
+    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id 
+                                                              -- is mem_id, but the link should point to the group 
+                                                              -- (since the membership does not have its own page in admidio!)
 
-    log_object_id               integer unsigned    NULL,     -- Optional Secondary object linked to the record id
-    log_object_name             text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
+    log_related_id              integer unsigned    NULL,     -- Optional Secondary object linked to the record id
+    log_related_name            text                NULL,     -- Textual representation in case the original record 
+                                                              -- no longer exists (e.g. group membership was deleted)
 
     log_field                   varchar(255)        NULL,     -- Optional Secondary object linked to the record id
-    log_field_name              text                NULL,     -- Textual representation in case the original record no longer exists (e.g. group membership was deleted)
+    log_field_name              text                NULL,     -- Textual representation in case the original record 
+                                                              -- no longer exists (e.g. group membership was deleted)
 
     log_action                  varchar(32)         NOT NULL, -- enum of "MODIFY", "CREATED", "DELETED"
     log_value_old               text                NULL,
@@ -151,5 +157,36 @@
 ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;</step>
+   <step id="1270">INSERT INTO %PREFIX%_log_changes 
+SELECT 
+    usl_id as log_id, "user_data" as log_table, 
+    usl_usf_id as log_record_id, u.usr_uuid as log_record_uuid,
+    CONCAT(usd_ln.usd_value, ", ", usd_fn.usd_value) as log_record_name,
+    usl_usr_id as log_record_linkid,
+
+    usf.usf_id as log_field,
+    usf.usf_name as log_field_name,
+
+    "MODIFY" as log_action,
+    usl_value_old as log_value_old, usl_value_new as log_value_new, 
+    usl_usr_id_create as log_usr_id_create, usl_timestamp_create as log_timestamp_create, 
+    usl_comment as log_comment
+FROM %PREFIX%_user_log usl
+LEFT JOIN %PREFIX%_users u
+  ON usl.usl_usr_id = u.usr_id
+LEFT JOIN %PREFIX%_user_fields usf
+  ON usl.usl_usf_id = usf.usf_id
+LEFT JOIN %PREFIX%_user_data usd_fn
+  ON usl.usl_usr_id = usd_fn.usd_usr_id
+LEFT JOIN %PREFIX%_user_fields usf_fn
+  ON usd_fn.usd_usf_id = usf_fn.usf_id
+LEFT JOIN %PREFIX%_user_data usd_ln 
+  ON usl.usl_usr_id = usd_ln.usd_usr_id
+LEFT JOIN %PREFIX%_user_fields usf_ln
+  ON usd_ln.usd_usf_id = usf_ln.usf_id
+WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_NAME'
+    </step>
+    <step id="1280">DROP TABLE %PREFIX%_user_log</step>
+
     <step>stop</step>
 </update>
