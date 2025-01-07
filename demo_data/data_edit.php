@@ -218,21 +218,21 @@ $sqlQueries[] = 'UPDATE '.TBL_LINKS.'
                     SET lnk_timestamp_create = \''.addDaysToDate(4, true).'\'
                   WHERE lnk_id = 3 ';
 
-$sqlQueries[] = 'UPDATE '.TBL_LOG.'
-                    SET log_timestamp_create = \''.addDaysToDate(10, true).' 20:42:25\'
-                  WHERE log_id IN (1,2,3,4,5) ';
+$sqlQueries[] = 'UPDATE '.TBL_USER_LOG.'
+                    SET usl_timestamp_create = \''.addDaysToDate(10, true).' 20:42:25\'
+                  WHERE usl_id IN (1,2,3,4,5) ';
 
-$sqlQueries[] = 'UPDATE '.TBL_LOG.'
-                    SET log_timestamp_create = \''.addDaysToDate(42, true).' 09:42:03\'
-                  WHERE log_id IN (6) ';
+$sqlQueries[] = 'UPDATE '.TBL_USER_LOG.'
+                    SET usl_timestamp_create = \''.addDaysToDate(42, true).' 09:42:03\'
+                  WHERE usl_id IN (6) ';
 
-$sqlQueries[] = 'UPDATE '.TBL_LOG.'
-                    SET log_timestamp_create = \''.addDaysToDate(12, true).' 15:02:03\'
-                  WHERE log_id IN (7) ';
+$sqlQueries[] = 'UPDATE '.TBL_USER_LOG.'
+                    SET usl_timestamp_create = \''.addDaysToDate(12, true).' 15:02:03\'
+                  WHERE usl_id IN (7) ';
 
-$sqlQueries[] = 'UPDATE '.TBL_LOG.'
-                    SET log_timestamp_create = \''.addDaysToDate(20, true).' 04:02:35\'
-                  WHERE log_id IN (8,9) ';
+$sqlQueries[] = 'UPDATE '.TBL_USER_LOG.'
+                    SET usl_timestamp_create = \''.addDaysToDate(20, true).' 04:02:35\'
+                  WHERE usl_id IN (8,9) ';
 
 foreach ($sqlQueries as $sqlQuery) {
     $gDb->queryPrepared($sqlQuery);

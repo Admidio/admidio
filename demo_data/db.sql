@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS %PREFIX%_announcements        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_auto_login           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_category_report      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_components           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_dates                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_events               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
@@ -35,12 +36,12 @@ DROP TABLE IF EXISTS %PREFIX%_roles_rights         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_roles_rights_data    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_list_columns         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_lists                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_log_changes          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_rooms                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sessions             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_texts                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relations       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relation_types  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_log             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_data            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_fields          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_categories           CASCADE;
@@ -155,9 +156,9 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
-/* Table: adm_events                                            */
+/* Table: adm_dates                                             */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_events
+CREATE TABLE %PREFIX%_dates
 (
     dat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     dat_cat_id                  integer unsigned    NOT NULL,
@@ -186,7 +187,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_dat_uuid ON %PREFIX%_events (dat_uuid);
+CREATE UNIQUE INDEX %PREFIX%_idx_dat_uuid ON %PREFIX%_dates (dat_uuid);
 
 /*==============================================================*/
 /* Table: adm_files                                             */
@@ -555,7 +556,6 @@ CREATE TABLE %PREFIX%_registrations
     reg_org_id                  integer unsigned    NOT NULL,
     reg_usr_id                  integer unsigned    NOT NULL,
     reg_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    reg_validation_id           varchar(50),
     PRIMARY KEY (reg_id)
 )
 ENGINE = InnoDB
@@ -592,7 +592,7 @@ CREATE TABLE %PREFIX%_roles
     rol_assign_roles            boolean             NOT NULL    DEFAULT false,
     rol_approve_users           boolean             NOT NULL    DEFAULT false,
     rol_announcements           boolean             NOT NULL    DEFAULT false,
-    rol_events                  boolean             NOT NULL    DEFAULT false,
+    rol_dates                   boolean             NOT NULL    DEFAULT false,
     rol_documents_files         boolean             NOT NULL    DEFAULT false,
     rol_edit_user               boolean             NOT NULL    DEFAULT false,
     rol_guestbook               boolean             NOT NULL    DEFAULT false,
@@ -612,7 +612,7 @@ CREATE TABLE %PREFIX%_roles
     rol_end_date                date,
     rol_end_time                time,
     rol_weekday                 smallint,
-    rol_location                varchar(100),
+    rol_location                varchar(30),
     rol_max_members             integer,
     rol_cost                    float,
     rol_cost_period             smallint,
@@ -717,7 +717,7 @@ CREATE TABLE %PREFIX%_texts
 (
     txt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     txt_org_id                  integer unsigned    NOT NULL,
-    txt_name                    varchar(100)        NOT NULL,
+    txt_name                    varchar(30)         NOT NULL,
     txt_text                    text,
     PRIMARY KEY (txt_id)
 )
@@ -778,6 +778,25 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_usd_usr_usf_id ON %PREFIX%_user_data (usd_usr_id, usd_usf_id);
+
+/*==============================================================*/
+/* Table: adm_user_log                                          */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_user_log
+(
+    usl_id                      integer             NOT NULL    AUTO_INCREMENT,
+    usl_usr_id                  integer unsigned    NOT NULL,
+    usl_usf_id                  integer unsigned    NOT NULL,
+    usl_value_old               varchar(4000)       NULL,
+    usl_value_new               varchar(4000)       NULL,
+    usl_usr_id_create           integer unsigned    NULL,
+    usl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    usl_comment                 varchar(255)        NULL,
+    PRIMARY KEY (usl_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_users                                             */
@@ -857,51 +876,6 @@ COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt_id, ure_usr_id1, ure_usr_id2);
 
-/*==============================================================*/
-/* Table: adm_log_changes                                       */
-/*    Generic table for logging changes to various other tables */
-/*    The meaning of the subsequent columns depend heavily on   */
-/*    the log_table field and describe entries in different     */
-/*    tables. For this reason, no forein key restraints are     */
-/*    possible (or even desired), since the original db record  */
-/*    might even be deleted in the meantime. The corresponding  */
-/*    log records, however, should still exist in the DB for    */
-/*    audit reasons!                                            */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_log_changes
-(
-    log_id                      integer             NOT NULL    AUTO_INCREMENT,
-    log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
-
-    log_record_id               integer unsigned    NOT NULL, -- The record id in the original table
-    log_record_uuid             varchar(36)         NULL, -- The record uuid in the original table
-    log_record_name             text                NULL,     -- Textual representation in case the original record 
-                                                              -- no longer exists (e.g. group membership was deleted)
-    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id 
-                                                              -- is mem_id, but the link should point to the group 
-                                                              -- (since the membership does not have its own page in admidio!)
-
-    log_related_id              integer unsigned    NULL,     -- Optional Secondary object linked to the record id
-    log_related_name            text                NULL,     -- Textual representation in case the original record 
-                                                              -- no longer exists (e.g. group membership was deleted)
-
-    log_field                   varchar(255)        NULL,     -- Optional Secondary object linked to the record id
-    log_field_name              text                NULL,     -- Textual representation in case the original record 
-                                                              -- no longer exists (e.g. group membership was deleted)
-
-    log_action                  varchar(32)         NOT NULL, -- enum of "MODIFY", "CREATED", "DELETED"
-    log_value_old               text                NULL,
-    log_value_new               text                NULL,
-
-    log_usr_id_create           integer unsigned    NULL,
-    log_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    log_comment                 text                NULL,
-    PRIMARY KEY (log_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
 
 /*==============================================================*/
 /* Foreign Key Constraints                                      */
@@ -923,7 +897,7 @@ ALTER TABLE %PREFIX%_categories
 ALTER TABLE %PREFIX%_category_report
     ADD CONSTRAINT %PREFIX%_fk_crt_org         FOREIGN KEY (crt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_events
+ALTER TABLE %PREFIX%_dates
     ADD CONSTRAINT %PREFIX%_fk_dat_cat         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_rol         FOREIGN KEY (dat_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_room        FOREIGN KEY (dat_room_id)        REFERENCES %PREFIX%_rooms (room_id)              ON DELETE SET NULL ON UPDATE RESTRICT,
@@ -1044,6 +1018,11 @@ ALTER TABLE %PREFIX%_user_fields
 ALTER TABLE %PREFIX%_user_data
     ADD CONSTRAINT %PREFIX%_fk_usd_usf         FOREIGN KEY (usd_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usd_usr         FOREIGN KEY (usd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_user_log
+    ADD CONSTRAINT %PREFIX%_fk_user_log_1      FOREIGN KEY (usl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_user_log_2      FOREIGN KEY (usl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_user_log_3      FOREIGN KEY (usl_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_users
     ADD CONSTRAINT %PREFIX%_fk_usr_usr_create  FOREIGN KEY (usr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
