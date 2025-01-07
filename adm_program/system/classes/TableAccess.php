@@ -158,11 +158,11 @@ class TableAccess
      *
      * **Code example**
      * ```
-     * // Constructor of adm_dates object where the category (calendar) is connected
+     * // Constructor of adm_events object where the category (calendar) is connected
      * public function __construct($database, $datId = 0)
      * {
      *     $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
-     *     parent::__construct($db, TBL_DATES, 'dat', $datId);
+     *     parent::__construct($db, TBL_EVENTS, 'dat', $datId);
      * }
      * ```
      */
