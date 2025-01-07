@@ -15,7 +15,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
 /**
  * Creates an event object from the database table adm_events
  *
- * With the given id an event object is created from the data in the database table **adm_dates**.
+ * With the given id an event object is created from the data in the database table **adm_events**.
  * The class will handle the communication with the database and give easy access to the data. New
  * event could be created or existing event could be edited. Special properties of
  * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
@@ -51,7 +51,7 @@ class Event extends Entity
     private ?Participants $mParticipants;
 
     /**
-     * Constructor that will create an object of a recordset of the table adm_dates.
+     * Constructor that will create an object of a recordset of the table adm_events.
      * If the id is set than the specific event will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int $datId The recordset of the event with this id will be loaded. If id isn't set than an empty object of the table is created.
