@@ -85,6 +85,13 @@ class TableAccess
     protected $saveChangesWithoutRights;
 
     /**
+     * Flag to enable/disable logging changes to the database. 
+     * @var bool If this flag is set (default), all changes will be logged to the database, if the corresponding preferences item is set.
+     * Setting this to false will disable logging in all cases, even with the preference set.
+     */
+    private static $loggingEnabled = true;
+
+    /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -221,6 +228,15 @@ class TableAccess
     }
 
     /**
+     * Enable/disable logging globally, irrespective of the preference setting. Used e.g. during setup / updates
+     * @param mixed $enabled Whether logging should be enabled or not.
+     * @return void
+     */
+    public static function setLoggingEnabled($enabled) {
+        self::$loggingEnabled = $enabled;
+    }
+    
+    /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns. Subclasses can also add further fields 
@@ -262,6 +278,7 @@ class TableAccess
      */
     public function logCreation(): bool
     {
+        if (!self::$loggingEnabled) return false;
         $table = $this->tableName;
         $table = str_replace(TABLE_PREFIX . '_', '', $table);
         $record_name = $this->readableName();
@@ -284,6 +301,7 @@ class TableAccess
      */
     public function logDeletion(): bool
     {
+        if (!self::$loggingEnabled) return false;
         $table = $this->tableName;
         $table = str_replace(TABLE_PREFIX . '_', '', $table);
         $record_name = $this->readableName();
@@ -309,6 +327,7 @@ class TableAccess
      */
     public function logModifications(array $logChanges): bool
     {
+        if (!self::$loggingEnabled) return false;
         $retVal = true;
         $table = $this->tableName;
         $table = str_replace(TABLE_PREFIX . '_', '', $table);

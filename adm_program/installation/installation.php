@@ -84,6 +84,11 @@ if (isset($_SESSION['language'])) {
 
 $gLanguageData = new LanguageData($language);
 $gL10n = new Language($gLanguageData);
+/* Disable logging changes to the database. This will not be reverted,
+ *  i.e. during installation / setup no logs are written. The next user 
+ * call will use the default value of true and properly log changes...
+ */
+TableAccess::setLoggingEnabled(false);
 
 $language = $gL10n->getLanguage();
 
