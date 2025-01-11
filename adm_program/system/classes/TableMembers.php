@@ -361,9 +361,9 @@ class TableMembers extends TableAccess
      *
      * @return true Returns the list of database columns to be ignored for logging.
      */
-    public function logIgnoredColumns(): array
+    public function getIgnoredLogColumns(): array
     {
-        $ignored = parent::logIgnoredColumns();
+        $ignored = parent::getIgnoredLogColumns();
         $ignored[] = 'mem_rol_id';
         $ignored[] = 'mem_usr_id';
         $ignored[] = 'mem_uuid';

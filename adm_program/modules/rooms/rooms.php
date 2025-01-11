@@ -37,6 +37,16 @@ $page->addPageFunctionsMenuItem(
     'fa-plus-circle'
 );
 
+// show link to view profile field change history
+if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+    $page->addPageFunctionsMenuItem(
+        'menu_item_room_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'rooms')),
+        'fa-history'
+    );
+}
+
 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
     // show firstname and lastname of create and last change user
     $additionalFields = '

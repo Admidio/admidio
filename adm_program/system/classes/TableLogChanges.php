@@ -34,7 +34,7 @@ class TableLogChanges extends TableAccess
      * Static(global) list of tables, which should not be included in the changelog 
      * @var array
      */
-    public static array $noLogTables = ['log_changes', 'id', 'auto_login', 'sessions', 'components', 'registrations'];
+    public static array $noLogTables = ['auto_login', 'components', 'id', 'log_changes', 'registrations', 'sessions'];
 
     /**
      * Static(global) list of edit pages (depending on the table)

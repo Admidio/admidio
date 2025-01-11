@@ -36,6 +36,66 @@ $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('
 $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
 
+$tableString = array(
+    'user_data' => 'SYS_PROFILE_FIELD',
+    'users' =>  'SYS_PROFILE_FIELD',
+    'members' => 'SYS_ROLE_MEMBERSHIPS',
+    'user_fields' => 'ORG_PROFILE_FIELDS',
+    'announcements' => 'SYS_ANNOUNCEMENTS',
+    'rooms' => 'SYS_ROOM',
+
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+);
+$fieldString = array(
+    'mem_begin' => 'SYS_MEMBERSHIP_START',
+    'mem_end' => 'SYS_MEMBERSHIP_END',
+    'mem_leader' => 'SYS_LEADER',
+    'usr_password' => 'SYS_PASSWORD',
+    'usr_photo' => 'SYS_PROFILE_PHOTO',
+    'usr_login_name' => 'SYS_USERNAME',
+    
+    'usf_cat_id' => 'SYS_CATEGORY',
+    'usf_type' => 'SYS_TYPE',
+    'usf_description' => 'SYS_DESCRIPTION',
+    'usf_description_inline' => 'SYS_DESCRIPTION_INLINE_DESC',
+    'usf_default_value' => 'SYS_DEFAULT_VALUE',
+    'usf_regex' => 'SYS_REGULAR_EXPRESSION',
+    'usf_disabled' => 'SYS_DISABLED',
+    'usf_hidden' => 'SYS_HIDDEN',
+    'usf_registration' => 'ORG_FIELD_REGISTRATION',
+    'usf_sequence' => 'SYS_ORDER',
+    'usf_icon' => 'SYS_ICON',
+    'usf_url' => 'SYS_URL',
+    'usf_disabled' => 'SYS_DISABLED',
+    'usf_hidden' => 'SYS_HIDDEN',
+    'usf_required_input' => 'SYS_REQUIRED_INPUT',
+
+    'ann_cat_id' => 'SYS_CATEGORY',
+    'ann_headline' => 'SYS_HEADLINE',
+    'ann_description' => 'SYS_DESCRIPTION',
+
+
+    'room_name' => 'SYS_NAME',
+    'room_description' => 'SYS_DESCRIPTION',
+    'room_capacity' => 'SYS_CAPACITY',
+    'room_overhang' => 'SYS_OVERHANG',
+
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+);
 
 
 
@@ -43,17 +103,22 @@ $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('de
 $user = new User($gDb, $gProfileFields);
 
 // set headline of the script
-if (in_array("users", $getTables)) {
+if (in_array("users", $getTables) && ($getId || $getUuid)) {
     if ($getUuid) {
         $user->readDataByUuid($getUuid);
     } elseif ($getId) {
         $user->readDataById($getId);
     }
-    if ($user->getValue('usr_id')) {
+    if ($getId || $getUuid) {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     } else {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY');
     }
+//} elseif (in_array('members', $getTables)) {
+
+//} elseif (in_array('user_fields', $getTables)) {
+
+
 // } elseif ($getUuid !== '') {
 //     $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
 // } elseif ($getRoleId > 0) {
@@ -155,7 +220,7 @@ $sql = 'SELECT log_id as id, log_table as table_name,
     WHERE
            `log_timestamp_create` BETWEEN ? AND ? -- $dateFromIntern and $dateToIntern
     ' . $sqlConditions . '
-    ORDER BY `timestamp` DESC';
+    ORDER BY `log_id` DESC';
 
 $queryParams = [
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
@@ -221,8 +286,8 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
         case 'role_dependencies':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
-        // case 'rooms':
-        //     $url = SecurityUtils::encodeUrl(); break;
+        case 'rooms':
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
         // case 'texts':
         //     $url = SecurityUtils::encodeUrl(); break;
         case 'user_fields':
@@ -261,6 +326,21 @@ if ($fieldHistoryStatement->rowCount() === 0) {
 // create html page object
 $page = new HtmlPage('admidio-history', $headline);
 
+// Logic for hiding certain columns:
+// If we have only one table name given, hide the table column
+// If we view the user profile field changes page, hide the column, too
+$showTableColumn = true;
+if (count($getTables) == 1) {
+    $showTableColumn = false;
+}
+// If none of the related-to values is set, hide the related_to column
+$showRelatedColumn = true;
+$noShowRelatedTables = ['user_fields', 'users', 'user_data'];
+if (false/*TODO_RK*/) {
+    $showRelatedColumn = false;
+}
+
+
 // create filter menu with input elements for start date and end date
 $filterNavbar = new HtmlNavbar('menu_history_filter', '', null, 'filter');
 $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/changelog/changelog.php', $page, array('type' => 'navbar', 'setFocus' => false));
@@ -288,11 +368,14 @@ $table = new HtmlTable('history_table', $page, true, true);
 $columnHeading = array();
 
 $table->setDatatablesOrderColumns(array(array(8, 'desc')));
-$columnHeading[] = $gL10n->get('SYS_TABLE');
+if ($showTableColumn) {
+    $columnHeading[] = $gL10n->get('SYS_TABLE');
+}
 $columnHeading[] = $gL10n->get('SYS_NAME');
-$columnHeading[] = $gL10n->get('SYS_RELATED_TO');
+if ($showRelatedColumn) {
+    $columnHeading[] = $gL10n->get('SYS_RELATED_TO');
+}
 $columnHeading[] = $gL10n->get('SYS_FIELD');
-// TODO_RK: Shall we use / show the log_action column in a separate output column?
 $columnHeading[] = $gL10n->get('SYS_NEW_VALUE');
 $columnHeading[] = $gL10n->get('SYS_PREVIOUS_VALUE');
 $columnHeading[] = $gL10n->get('SYS_EDITED_BY');
@@ -304,7 +387,13 @@ while ($row = $fieldHistoryStatement->fetch()) {
     $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
     $columnValues    = array();
 
-    $columnValues[] = $row['table_name'];
+    if ($showTableColumn) {
+        $tblLabel = $row['table_name'];
+        $tblLabel = array_key_exists($tblLabel, $tableString) ? $tableString[$tblLabel] : $tblLabel;
+        // TODO_RK: If possible, add link to listing page of the corresponding DB record type
+        $columnValues[] = Language::translateIfTranslationStrId($tblLabel);
+    }
+
     // if ($getUserUuid === '') {
     //     $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>';
     // }
@@ -312,7 +401,9 @@ while ($row = $fieldHistoryStatement->fetch()) {
 
     $columnValues[] = createLink($row['name'], ($row['table_name']!='members')? $row['table_name'] : 'users', ($row['link_id']>0)?$row['link_id']:$row['record_id'], $row['uuid'] ?? ''); // TODO_RK: Use record_id and/or record_uuid and/or link_id to link to the record
 
-    $columnValues[] = ($row['related_name'] != '') ? createLink($row['related_name'], ($row['table_name'] == 'members')?"roles":$row['table_name'], ($row['related_id'] > 0)?$row['related_id']:0, $row['uuid'] ?? '') : ''; // TODO_RK: Use related_id to link to the related record
+    if ($showRelatedColumn) {
+        $columnValues[] = ($row['related_name'] != '') ? createLink($row['related_name'], ($row['table_name'] == 'members')?"roles":$row['table_name'], ($row['related_id'] > 0)?$row['related_id']:0, $row['uuid'] ?? '') : ''; // TODO_RK: Use related_id to link to the related record
+    }
 
     if ($row['action'] == "DELETED") {
         $columnValues[] = '<em>['.$gL10n->get('SYS_DELETED').']</em>';
@@ -320,7 +411,9 @@ while ($row = $fieldHistoryStatement->fetch()) {
         $columnValues[] = '<em>['.$gL10n->get('SYS_CREATED').']</em>';
     } elseif ($row['field_name'] != '') {
         // Note: Even for user fields, we don't want to use the current user field name from the database, but the name stored in the log table from the time the change was done!.
-        $columnValues[] = $gL10n->get($row['field_name']); // TODO_RK: Use field_id to link to the field
+        $fieldName = $row['field_name'];
+        $fieldName = array_key_exists($fieldName, $fieldString) ? $fieldString[$fieldName] : $fieldName;
+        $columnValues[] = Language::translateIfTranslationStrId($fieldName); // TODO_RK: Use field_id to link to the field -> Target depends on the table!!!!
     } else {
         $columnValues[] = '&nbsp;';
     }

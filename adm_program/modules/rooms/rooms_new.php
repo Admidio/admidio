@@ -50,6 +50,17 @@ if (isset($_SESSION['rooms_request'])) {
 // create html page object
 $page = new HtmlPage('admidio-rooms-edit', $headline);
 
+// show link to view profile field change history
+if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+    $page->addPageFunctionsMenuItem(
+        'menu_item_room_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('uuid' => $getRoomUuid, 'table' => 'rooms')),
+        'fa-history'
+    );
+}
+
+
 // show form
 $form = new HtmlForm('rooms_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_function.php', array('room_uuid' => $getRoomUuid, 'mode' => '1')), $page);
 $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES'));

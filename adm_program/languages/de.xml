@@ -1128,6 +1128,7 @@
   <string name="SYS_REGISTRATIONS">Registrierungen</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulärer Ausdruck</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Es kann ein beliebiger regulärer Ausdruck hinterlegt werden, der auf den eingegebenen Inhalt des Benutzers in dieses Profilfeld angewendet wird. Der Inhalt muss den Bedingungen des regulären Ausdrucks entsprechen, damit der eingegebene Wert in dem Feld gespeichert werden kann. Der reguläre Ausdruck wird zusätzlich zu den allgemeinen Bedingungen des Datentyps geprüft.</string>
+  <string name="SYS_RELATED_TO">Verknüpft mit</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein:e Benutzer:in das Profil einer anderen Benutzerin oder eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer:innen das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur die Benutzer bzw. der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
@@ -1359,6 +1360,7 @@
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst werden. Die Texte sind in zwei Teile unterteilt (Betreff und Inhalt) und werden durch #subject# und #content# gekennzeichnet. Der Inhalt für jeden Abschnitt folgt. Wenn du keine dieser Benachrichtigungen senden möchtest, lass das Textfeld leer.\n\nIn jeder Mail können die folgenden Platzhalter verwendet werden. Sie werden zur Laufzeit durch den entsprechenden Inhalt ersetzt.</string>
+  <string name="SYS_TABLE">Tabelle</string>
   <string name="SYS_TAB">Tabulator</string>
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Voreinstellung: Postcard)</string>
