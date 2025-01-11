@@ -505,7 +505,7 @@
   <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="SYS_DEFAULT_COUNTRY">Standard-Land</string>
-  <string name="SYS_DEFAULT_COUNTRY_DESC">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer:innen vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch von der Benutzerin oder dem Benutzer beliebig geändert werden. (Voreinstellung: Deutschland)</string>
+  <string name="SYS_DEFAULT_COUNTRY_DESC">Angabe eines Landes in dessen Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer:innen vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch von der Benutzerin oder dem Benutzer beliebig geändert werden. (Voreinstellung: Deutschland)</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Standardkodierung (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standardliste</string>
   <string name="SYS_DEFAULT_LIST_DESC">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</string>
@@ -866,7 +866,7 @@
   <string name="SYS_MASTODON">Mastodon</string>
   <string name="SYS_MAX_ATTACHMENT_SIZE">Du kannst so viele Anhänge hinzufügen, wie du möchtest. Die Dateigröße aller Anhänge zusammen darf #VAR1# MB nicht überschreiten.</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmende</string>
-  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmende</string>
+  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmenden</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Breite bzw. Höhe haben darf. Die Fotos werden beim Hochladen auf diese Größe skaliert. Bei einem Modalen-Fenster oder Popup-Fenster wird das Fenster automatisch in die Größe des Foto angepasst. (Voreinstellung: #VAR1# x #VAR2# Pixel)</string>
   <string name="SYS_MAX_PHOTO_SIZE_HEIGHT">Maximale Bildhöhe</string>
@@ -968,7 +968,7 @@
   <string name="SYS_NO_ROLES_AND_USERS">Es sind keine Rollen oder Benutzer:innen freigegeben, an die du Nachrichten schicken kannst.</string>
   <string name="SYS_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
   <string name="SYS_NO_TEMPLATE">Keine Vorlage</string>
-  <string name="SYS_NO_USER_FOUND">Es wurde kein Benutzer:in gefunden, der den gewählten Kriterien entspricht.</string>
+  <string name="SYS_NO_USER_FOUND">Es wurde kein:e Benutzer:in gefunden, der den gewählten Kriterien entspricht.</string>
   <string name="SYS_NO_VALID_RECIPIENTS">Die ausgewählten Rollen und Benutzer:innen besitzen keine gültigen E-Mail-Adressen. Aus diesem Grund kann die E-Mail nicht versendet werden.</string>
   <string name="SYS_NOBODY">Niemand</string>
   <string name="SYS_NONE">Keiner</string>
@@ -1104,7 +1104,7 @@
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
   <string name="SYS_QUOTE">Einfaches Anführungszeichen (\')</string>
   <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
-  <string name="SYS_RECENT_ALBUMS_OF_ORGA">Neuesten Fotoalben der Organisation #VAR1#</string>
+  <string name="SYS_RECENT_ALBUMS_OF_ORGA">Neueste Fotoalben der Organisation #VAR1#</string>
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
   <string name="SYS_RECIPIENT">Empfänger:in</string>
   <string name="SYS_RECIPIENT_EMAIL">Empfänger:in E-Mail</string>
