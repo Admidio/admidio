@@ -473,9 +473,9 @@
   <string name="SYS_DATABASE">Datenbank</string>
   <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
-  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich.</string>
   <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
-  <string name="SYS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell.</string>
   <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nBitte prüfen Sie die Zugangsdaten in der Datei config.php im Order adm_my_files. Sollte die Datei noch von einer anderen Installation stammen, so entfernen Sie die config.php bitte aus dem Ordner, da über den Installationsassistenten eine neue Datei erzeugt wird. Danach kann die Installation fortgesetzt werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Datenbank-Version</string>
@@ -697,7 +697,7 @@
   <string name="SYS_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
   <string name="SYS_FILE_TYPE">Dateityp</string>
-  <string name="SYS_FILE_UPLOADED">Die Datei #VAR1_BOLD# wurde hochgeladen</string>
+  <string name="SYS_FILE_UPLOADED">Die Datei #VAR1_BOLD# wurde hochgeladen.</string>
   <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
@@ -753,7 +753,7 @@
   <string name="SYS_HEADLINE">Überschrift</string>
   <string name="SYS_HELP">Hilfe</string>
   <string name="SYS_HIDE">Ausblenden</string>
-  <string name="SYS_HIDDEN">Versteckt </string>
+  <string name="SYS_HIDDEN">Versteckt</string>
   <string name="SYS_HIGHLIGHT_EVENT">Veranstaltung optisch hervorheben</string>
   <string name="SYS_HOMEPAGE">Startseite</string>
   <string name="SYS_HOST">Host</string>
@@ -870,7 +870,7 @@
   <string name="SYS_MAX_PHOTO_SIZE_HEIGHT">Maximale Bildhöhe</string>
   <string name="SYS_MAX_PHOTO_SIZE_WIDTH">Maximale Bildbreite</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
-  <string name="SYS_MAX_RECEIVER">Maximale Empfänger:innen für E-Mails</string>
+  <string name="SYS_MAX_RECEIVER">Maximale Anzahl Empfänger:innen für E-Mails</string>
   <string name="SYS_MAX_RECEIVER_DESC">Dieser Wert gibt an, wie viele Empfänger:innen man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Benutzer:innen können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Voreinstellung: 3MB)</string>
@@ -1038,7 +1038,7 @@
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
   <string name="SYS_PERIOD">Zeitraum</string>
-  <string name="SYS_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2# </string>
+  <string name="SYS_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
   <string name="SYS_PERMISSIONS">Berechtigungen</string>
   <string name="SYS_PDF">PDF</string>
   <string name="SYS_PHONE">Telefon</string>

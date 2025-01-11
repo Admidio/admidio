@@ -57,7 +57,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if (isset($_SESSION['fields_request'])) {
     // hidden must be 0, if the flag should be set
-    if ($_SESSION['fields_request']['usf_hidden'] == 1) {
+    if (isset($_SESSION['fields_request']['usf_hidden']) && $_SESSION['fields_request']['usf_hidden'] == 1) {
         $_SESSION['fields_request']['usf_hidden'] = 0;
     } else {
         $_SESSION['fields_request']['usf_hidden'] = 1;
