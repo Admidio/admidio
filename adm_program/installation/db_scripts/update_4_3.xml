@@ -124,7 +124,7 @@
     <step id="1230" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_thumbs_page' AND prf_value::int = 16</step>
     <step id="1240">UPDATE %PREFIX%_categories SET cat_type = 'EVT' WHERE cat_type = 'DAT'</step>
     <step id="1250">UPDATE %PREFIX%_categories SET cat_org_id = 1 WHERE cat_org_id IS NULL AND cat_name_intern = 'EVENTS'</step>
-    <step id="1260">CREATE TABLE %PREFIX%_log_changes
+    <step id="1260">CREATE TABLE IF NOT EXISTS %PREFIX%_log_changes
 (
     log_id                      integer             NOT NULL    AUTO_INCREMENT,
     log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
