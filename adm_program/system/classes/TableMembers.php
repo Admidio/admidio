@@ -393,6 +393,6 @@ class TableMembers extends TableAccess
         $rolId = $this->getValue('mem_rol_id');
         $role = new TableRoles($this->db, $rolId);
 
-        $logEntry->setLogRelated($rolId, $role->getValue('rol_name'));
+        $logEntry->setLogRelated((string)$rolId, $role->getValue('rol_name'));
     }
 }

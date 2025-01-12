@@ -160,4 +160,30 @@ class TableGuestbookComment extends TableAccess
 
         return parent::setValue($columnName, $newValue, $checkValue);
     }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns.
+     * The guestbook table also contains gbc_org_id and gbc_ip_address columns, 
+     * which we don't want to log.
+     *
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(), ['gbc_ip_address']);
+    }
+
+    /**
+     * Adjust the changelog entry for this db record: Add the parent guestbook entry as a related object
+     * 
+     * @param TableLogChanges $logEntry The log entry to adjust
+     * 
+     * @return void
+     */
+    protected function adjustLogEntry(TableLogChanges $logEntry) {
+        $gboEntry = new TableGuestbook($this->db, $this->getValue('gbc_gbo_id'));
+        $logEntry->setLogRelated($gboEntry->getValue('gbo_uuid'), $gboEntry->getValue('gbo_name'));
+    }
 }

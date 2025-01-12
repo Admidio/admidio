@@ -31,7 +31,7 @@ $getTable = admFuncVariableIsValid($_GET, 'table','string');
 $getTables = ($getTable !== null && $getTable != "") ? explode(",", $getTable) : [];
 $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'string');
 $getId = admFuncVariableIsValid($_GET, 'id', 'int');
-$getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'int');
+$getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
 $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
 $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
@@ -42,61 +42,165 @@ $tableString = array(
     'members' => 'SYS_ROLE_MEMBERSHIPS',
     'user_fields' => 'ORG_PROFILE_FIELDS',
     'announcements' => 'SYS_ANNOUNCEMENTS',
+    'events' => 'SYS_EVENTS',
     'rooms' => 'SYS_ROOM',
+    'roles' => 'SYS_ROLES',
+    // 'roles_rights_data' => '', // TODO_RK
 
-    '' => '',
-    '' => '',
-    '' => '',
+    'guestbook' => 'GBO_GUESTBOOK',
+    'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
+
+    'links' => 'SYS_WEBLINKS',
+
+    'texts' => 'SYS_SETTINGS',
+    'folders' => 'SYS_FOLDER',
+    'files' => 'SYS_FILE',
+    'organizations' => 'SYS_ORGANIZATION',
+    'menu' => 'SYS_MENU_ITEM',
     '' => '',
     '' => '',
 );
 $fieldString = array(
-    'mem_begin' => 'SYS_MEMBERSHIP_START',
-    'mem_end' => 'SYS_MEMBERSHIP_END',
-    'mem_leader' => 'SYS_LEADER',
-    'usr_password' => 'SYS_PASSWORD',
-    'usr_photo' => 'SYS_PROFILE_PHOTO',
-    'usr_login_name' => 'SYS_USERNAME',
+    'mem_begin' =>                 'SYS_MEMBERSHIP_START',
+    'mem_end' =>                   'SYS_MEMBERSHIP_END',
+    'mem_leader' =>                array('name' => 'SYS_LEADER', 'type' => 'BOOL'),
+    //'mem_approved' =>            '', // TODO_RK
+
+    'usr_password' =>              'SYS_PASSWORD',
+    'usr_photo' =>                 'SYS_PROFILE_PHOTO',
+    'usr_login_name' =>            'SYS_USERNAME',
+
+    'usf_cat_id' =>                'SYS_CATEGORY',
+    'usf_type' =>                  'SYS_TYPE',
+    'usf_description' =>           'SYS_DESCRIPTION',
+    'usf_description_inline' =>    array('name' => 'SYS_DESCRIPTION_INLINE_DESC', 'type' => 'BOOL'),
+    'usf_default_value' =>         'SYS_DEFAULT_VALUE',
+    'usf_regex' =>                 'SYS_REGULAR_EXPRESSION',
+    'usf_disabled' =>              'SYS_DISABLED',
+    'usf_hidden' =>                'SYS_HIDDEN',
+    'usf_registration' =>          'ORG_FIELD_REGISTRATION',
+    'usf_sequence' =>              'SYS_ORDER',
+    'usf_icon' =>                  'SYS_ICON',
+    'usf_url' =>                   'SYS_URL',
+    'usf_disabled' =>              array('name' => 'SYS_DISABLED', 'type' => 'BOOL'),
+    'usf_hidden' =>                array('name' => 'SYS_HIDDEN', 'type' => 'BOOL'),
+    'usf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
+
+    'ann_cat_id' =>                'SYS_CATEGORY',
+    'ann_headline' =>              'SYS_HEADLINE',
+    'ann_description' =>           'SYS_DESCRIPTION',
+
+    'room_name' =>                 'SYS_NAME',
+    'room_description' =>          'SYS_DESCRIPTION',
+    'room_capacity' =>             'SYS_CAPACITY',
+    'room_overhang' =>             'SYS_OVERHANG',
+   
+    'dat_cat_id' =>                'SYS_CATEGORY',
+    // 'dat_rol_id'=>              '', // TODO_RK
+    'dat_room_id' =>               'SYS_ROOM',
+    'dat_begin' =>                 'SYS_START',
+    'dat_end' =>                   'SYS_END',
+    'dat_all_day' =>               array('name' => 'SYS_ALL_DAY', 'type' => 'BOOL'),
+    'dat_headline' =>              'SYS_HEADLINE',
+    'dat_description' =>           'SYS_DESCRIPTION',
+    'dat_highlight' =>             array('name' => 'SYS_HIGHLIGHT_EVENT', 'type' => 'BOOL'),
+    'dat_location' =>              'SYS_VENUE',
+    'dat_country' =>               'SYS_COUNTRY',
+    'dat_deadline' =>              'SYS_DEADLINE',
+    'dat_max_members' =>           'SYS_MAX_PARTICIPANTS',
+    'dat_allow_comments' =>        array('name' => 'SYS_ALLOW_USER_COMMENTS', 'type' => 'BOOL'),
+    'dat_additional_guests' =>     array('name' => 'SYS_ALLOW_ADDITIONAL_GUESTS', 'type' => 'BOOL'),
     
-    'usf_cat_id' => 'SYS_CATEGORY',
-    'usf_type' => 'SYS_TYPE',
-    'usf_description' => 'SYS_DESCRIPTION',
-    'usf_description_inline' => 'SYS_DESCRIPTION_INLINE_DESC',
-    'usf_default_value' => 'SYS_DEFAULT_VALUE',
-    'usf_regex' => 'SYS_REGULAR_EXPRESSION',
-    'usf_disabled' => 'SYS_DISABLED',
-    'usf_hidden' => 'SYS_HIDDEN',
-    'usf_registration' => 'ORG_FIELD_REGISTRATION',
-    'usf_sequence' => 'SYS_ORDER',
-    'usf_icon' => 'SYS_ICON',
-    'usf_url' => 'SYS_URL',
-    'usf_disabled' => 'SYS_DISABLED',
-    'usf_hidden' => 'SYS_HIDDEN',
-    'usf_required_input' => 'SYS_REQUIRED_INPUT',
+    'rol_name' =>                  'SYS_NAME',
+    'rol_description' =>           'SYS_DESCRIPTION',
+    'rol_cat_id' =>                'SYS_CATEGORY',
+    'rol_mail_this_role' =>        'SYS_SEND_MAILS',
+    'rol_view_memberships' =>      'SYS_VIEW_ROLE_MEMBERSHIPS',
+    'rol_view_members_profiles' => 'SYS_VIEW_PROFILES_OF_ROLE_MEMBERS', 
+    'rol_leader_rights' =>         'SYS_LEADER',
+    'rol_lst_id' =>                'SYS_DEFAULT_LIST',
+    'rol_default_registration' =>  array('name' => 'SYS_DEFAULT_ASSIGNMENT_REGISTRATION', 'type' => 'bool'),
+    'rol_max_members' =>           'SYS_MAX_PARTICIPANTS',
+    'rol_cost' =>                  'SYS_CONTRIBUTION',
+    'rol_cost_period' =>           'SYS_CONTRIBUTION_PERIOD',
+    'rol_assign_roles' =>          array('name' => 'SYS_RIGHT_ASSIGN_ROLES', 'type' => 'BOOL'),
+    'rol_all_lists_view' =>        array('name' => 'SYS_RIGHT_ALL_LISTS_VIEW', 'type' => 'BOOL'),
+    'rol_approve_users' =>         array('name' => 'SYS_RIGHT_APPROVE_USERS', 'type' => 'BOOL'),
+    'rol_mail_to_all' =>           array('name' => 'SYS_RIGHT_MAIL_TO_ALL', 'type' => 'BOOL'),
+    'rol_edit_user' =>             array('name' => 'SYS_RIGHT_EDIT_USER', 'type' => 'BOOL'),
+    'rol_profile' =>               array('name' => 'SYS_RIGHT_PROFILE', 'type' => 'BOOL'),
+    'rol_announcements' =>         array('name' => 'SYS_RIGHT_ANNOUNCEMENTS', 'type' => 'BOOL'),
+    'rol_events' =>                array('name' => 'SYS_RIGHT_DATES', 'type' => 'BOOL'),
+    'rol_photo' =>                 array('name' => 'SYS_RIGHT_PHOTOS', 'type' => 'BOOL'),
+    'rol_documents_files' =>       array('name' => 'SYS_RIGHT_DOCUMENTS_FILES', 'type' => 'BOOL'),
+    'rol_guestbook' =>             array('name' => 'SYS_RIGHT_GUESTBOOK', 'type' => 'BOOL'),
+    'rol_guestbook_comments' =>    array('name' => 'SYS_RIGHT_GUESTBOOK_COMMENTS', 'type' => 'BOOL'),
+    'rol_weblinks' =>              array('name' => 'SYS_RIGHT_WEBLINKS', 'type' => 'BOOL'),
 
-    'ann_cat_id' => 'SYS_CATEGORY',
-    'ann_headline' => 'SYS_HEADLINE',
-    'ann_description' => 'SYS_DESCRIPTION',
+    'rol_start_date' =>            'SYS_VALID_FROM',
+    'rol_end_date' =>              'SYS_VALID_TO',
+    'rol_start_time' =>            'SYS_TIME_FROM',
+    'rol_end_time' =>              'SYS_TIME_TO',
+    'rol_weekday' =>               'SYS_WEEKDAY',
+    'rol_location' =>              'SYS_MEETING_POINT',
+  
+    'gbo_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    'gbo_name' =>                  'SYS_NAME',
+    'gbo_text' =>                  'SYS_MESSAGE',
+    'gbo_email' =>                 array('name' => 'SYS_EMAIL', 'type' => 'EMAIL'),
+    'gbo_homepage' =>              array('name' => 'SYS_WEBSITE', 'type' => 'URL'),
+    'gbo_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
 
+    'gbc_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    'gbc_name' =>                  'SYS_NAME',
+    'gbc_text' =>                  'SYS_MESSAGE',
+    'gbc_email' =>                 array('name' => 'SYS_EMAIL', 'type' => 'EMAIL'),
+    'gbc_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
 
-    'room_name' => 'SYS_NAME',
-    'room_description' => 'SYS_DESCRIPTION',
-    'room_capacity' => 'SYS_CAPACITY',
-    'room_overhang' => 'SYS_OVERHANG',
+    'lnk_name' =>                  'SYS_LINK_NAME',
+    'lnk_url' =>                   array('name' => 'SYS_LINK_ADDRESS', 'type' => 'IRL'),
+    'lnk_cat_id' =>                'SYS_CATEGORY',
+    'lnk_description' =>           'SYS_DESCRIPTION',
+    'lnk_counter' =>               'SYS_COUNTER',
 
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
+    'txt_text' =>                  array('name' => 'SYS_TEXT', 'type' => 'TEXT_BIG'),
+    'txt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+
+    'fol_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    // 'fol_fol_id_parent' =>      '', // TODO_RK
+    'fol_name' =>                  'SYS_NAME',
+    'fol_description' =>           'SYS_DESCRIPTION',
+    //'fol_path' =>                '', // TODO_RK
+    // 'fol_locked' =>                array('name' => '', 'type' => 'BOOL'),
+    // 'fol_public' =>                array('name' => '', 'type' => 'BOOL'),
+
+    'fil_fol_id' =>                'SYS_FOLDER',
+    'fil_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    'fil_name' =>                  'SYS_NAME',
+    'fil_description' =>           'SYS_DESCRIPTION',
+    // 'fil_locked' =>                array('name' => '', 'type' => 'BOOL'),
+    // 'fil_counter' =>               '',
+
+    'org_shortname' =>             'SYS_NAME_ABBREVIATION',
+    'org_longname' =>              'SYS_NAME',
+    'org_org_id_parent' =>         array('name' => 'ORG_PARENT_ORGANIZATION', 'type'=> 'ORG'),
+    'org_homepage' =>              array('name' => 'SYS_HOMEPAGE', 'type'=> 'URL'),
+    
+    'men_name' =>                  'SYS_NAME',
+    'men_name_intern' =>           'SYS_INTERNAL_NAME',
+    'men_description' =>           'SYS_DESCRIPTION',
+    'men_men_id_parent' =>         'SYS_MENU_LEVEL',
+    'men_com_id' =>                'SYS_MODULE_RIGHTS',
+    //'men_node' =>                  '', // men_node cannot be set by the user (section headings in the frontend)!
+    'men_order' =>                 'SYS_ORDER',
+    'men_standard' =>              $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))),
+    'men_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
+    'men_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
+
     '' => '',
     '' => '',
     '' => '',
 );
-
 
 
 // create a user object. Will fill it later if we encounter a user id
@@ -245,9 +349,9 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
         case 'events' :
             $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $uuid)); break;
         case 'files' :
-            $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('file_uuid' => $uuid)); break;
+            $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('file_uuid' => $uuid)); break;
         case 'folders' :
-            $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_uuid' => $uuid)); break;
+            $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $uuid)); break;
         case 'guestbook' :
             $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $uuid)); break;
         case 'guestbook_comments' :
@@ -262,19 +366,11 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $id)); break;
         case 'menu':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('menu_uuid' => $uuid)); break;
-        // case 'messages': 
-        //     $url = SecurityUtils::encodeUrl(); break;
-        // case 'messages_attachments':
-        //     $url = SecurityUtils::encodeUrl(); break;
-        // case 'messages_content':
-        //     $url = SecurityUtils::encodeUrl(); break;
-        // case 'messages_recipients':
-        //     $url = SecurityUtils::encodeUrl(); break;
-        // case 'organizations':
+        // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
         //     $url = SecurityUtils::encodeUrl(); break;
         // case 'photos':
         //     $url = SecurityUtils::encodeUrl(); break;
-        // case 'preferences':
+        // case 'preferences': // There is just one preferences page, but no way to link to individual sections or preference items!
         //     $url = SecurityUtils::encodeUrl(); break;
         // case 'registrations':
         //     $url = SecurityUtils::encodeUrl(); break;
@@ -288,7 +384,7 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
         case 'rooms':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
-        // case 'texts':
+        // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
         //     $url = SecurityUtils::encodeUrl(); break;
         case 'user_fields':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $uuid)); break;
@@ -304,14 +400,88 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
     }
 }
 
+function formatValue($value, $type) {
+    global $gSettingsManager, $gCurrentUserUUID;
+    // if value is empty or null, then do nothing
+    if ($value != '') {
+        // create html for each field type
+        $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
+        $htmlValue = $value;
+    
+        switch ($type) {
+            case 'BOOL':
+                if ($value == 1) {
+                    $htmlValue = '<span class="fa-stack">
+                        <i class="fas fa-square-full fa-stack-1x"></i>
+                        <i class="fas fa-check-square fa-stack-1x fa-inverse"></i>
+                    </span>';
+                } else {
+                    $htmlValue = '<span class="fa-stack">
+                        <i class="fas fa-square-full fa-stack-1x"></i>
+                        <i class="fas fa-square fa-stack-1x fa-inverse"></i>
+                    </span>';
+                }
+                break;
+            case 'DATE':
+                if ($value !== '') {
+                    // date must be formatted
+                    $date = DateTime::createFromFormat('Y-m-d', $value);
+                    if ($date instanceof DateTime) {
+                        $htmlValue = $date->format($gSettingsManager->getString('system_date'));
+                    }
+                }
+                break;
+            case 'EMAIL':
+                // the value in db is only the position, now search for the text
+                if ($value !== '') {
+                    if (!$gSettingsManager->getBool('enable_mail_module')) {
+                        $emailLink = 'mailto:' . $value;
+                    } else {
+                        $emailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $gCurrentUserUUID));
+                    }
+                    $htmlValue = '<a href="' . $emailLink . '" title="' . $value . '" style="overflow: visible; display: inline;">' . $value . '</a>';
+                }
+                break;
+
+            case 'URL':
+                if ($value !== '') {
+                    $displayValue = $value;
+    
+                    // trim "http://", "https://", "//"
+                    if (str_contains($displayValue, '//')) {
+                        $displayValue = substr($displayValue, strpos($displayValue, '//') + 2);
+                    }
+                    // trim after the 35th char
+                    if (strlen($value) > 35) {
+                        $displayValue = substr($displayValue, 0, 35) . '...';
+                    }
+                    $htmlValue = '<a href="' . $value . '" target="_blank" title="' . $value . '">' . $displayValue . '</a>';
+                }
+                break;
+            case 'TEXT_BIG':
+                $htmlValue = nl2br($value);
+                break;
+            case 'ICON':
+                $htmlValue = '<div class="fas '.$value.'"> '. $value.'</div>';
+                break;
+        }
+    
+        $value = $htmlValue;
+    }
+    // special case for type BOOL and no value is there, then show unchecked checkbox
+    else {
+        if ($type === 'BOOL') {
+            $value = '<span class="fa-stack">
+                <i class="fas fa-square-full fa-stack-1x"></i>
+                <i class="fas fa-square fa-stack-1x fa-inverse"></i>
+            </span>';
+    
+        }    
+    }
+    return $value;
+}
 
 
-// print_r("<pre>SQL: 
-// $sql
-// </pre><pre>PARAMS:
-// ");
-// print_r(array_merge($queryParams, $queryParamsConditions));
-// print_r('</pre>');
 
 $fieldHistoryStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $queryParamsConditions));
 
@@ -384,9 +554,14 @@ $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
 $table->addRowHeadingByArray($columnHeading);
 
 while ($row = $fieldHistoryStatement->fetch()) {
+    $fieldInfo = $row['field_name'];
+    $fieldInfo = array_key_exists($fieldInfo, $fieldString) ? $fieldString[$fieldInfo] : $fieldInfo;
+
+
     $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
     $columnValues    = array();
 
+    // 1. Column showing DB table name (only if more then one tables are shown; One table should be displayed in the headline!)
     if ($showTableColumn) {
         $tblLabel = $row['table_name'];
         $tblLabel = array_key_exists($tblLabel, $tableString) ? $tableString[$tblLabel] : $tblLabel;
@@ -394,50 +569,75 @@ while ($row = $fieldHistoryStatement->fetch()) {
         $columnValues[] = Language::translateIfTranslationStrId($tblLabel);
     }
 
-    // if ($getUserUuid === '') {
-    //     $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>';
-    // }
 
-
-    $columnValues[] = createLink($row['name'], ($row['table_name']!='members')? $row['table_name'] : 'users', ($row['link_id']>0)?$row['link_id']:$row['record_id'], $row['uuid'] ?? ''); // TODO_RK: Use record_id and/or record_uuid and/or link_id to link to the record
-
-    if ($showRelatedColumn) {
-        $columnValues[] = ($row['related_name'] != '') ? createLink($row['related_name'], ($row['table_name'] == 'members')?"roles":$row['table_name'], ($row['related_id'] > 0)?$row['related_id']:0, $row['uuid'] ?? '') : ''; // TODO_RK: Use related_id to link to the related record
+    // 2. Name column: display name and optionally link it with the linkID or the recordID 
+    //    Some tables need special-casing, though
+    $rowLinkId = ($row['link_id']>0) ? $row['link_id'] : $row['record_id'];
+    $rowName = $row['name'] ?? '';
+    $rowName = Language::translateIfTranslationStrId($rowName);
+    if ($row['table_name'] == 'members') {
+        $columnValues[] = createLink($rowName, 'users', $rowLinkId, $row['uuid'] ?? '');
+    } else {
+        $columnValues[] = createLink($rowName, $row['table_name'], $rowLinkId, $row['uuid'] ?? '');
     }
 
+    // 3. Optional Related-To column, e.g. for group memberships, we show the user as main name and the group as related
+    //    Similarly, files/folders, organizations, guestbook comments, etc. show their parent as related
+    if ($showRelatedColumn) {
+        $relatedTable = $row['table_name'];
+        if ($row['table_name'] == 'members') {
+            $relatedTable = 'roles';
+        }
+        if ($row['table_name'] == 'guestbook_comments') {
+            $relatedTable = 'guestbook';
+        }
+        if ($row['table_name'] == 'files') {
+            $relatedTable = 'folders';
+        }
+        $relatedName = $row['related_name'];
+        if (!empty($relatedName)) {
+            $relID = 0;
+            $relUUID = '';
+            if (ctype_digit($row['related_id'])) { // numeric related_ID -> Interpret it as ID
+                $relID = (int)$row['related_id'];
+            } else { // non-numeric related_ID -> Interpret it as UUID
+                $relUUID = $row['related_id'];
+            }
+            $columnValues[] = createLink($relatedName, $relatedTable, $relID, $relUUID);
+        } else {
+            $columnValues[] = '';
+        }
+    }
+
+    // 4. The field that was changed. For record creation/deletion, show an indicator, too.
     if ($row['action'] == "DELETED") {
         $columnValues[] = '<em>['.$gL10n->get('SYS_DELETED').']</em>';
     } elseif ($row['action'] == 'CREATED') {
         $columnValues[] = '<em>['.$gL10n->get('SYS_CREATED').']</em>';
-    } elseif ($row['field_name'] != '') {
+    } elseif (!empty($fieldInfo)) {
         // Note: Even for user fields, we don't want to use the current user field name from the database, but the name stored in the log table from the time the change was done!.
-        $fieldName = $row['field_name'];
-        $fieldName = array_key_exists($fieldName, $fieldString) ? $fieldString[$fieldName] : $fieldName;
+        $fieldName = (is_array($fieldInfo) && isset($fieldInfo['name'])) ? $fieldInfo['name'] : $fieldInfo;
         $columnValues[] = Language::translateIfTranslationStrId($fieldName); // TODO_RK: Use field_id to link to the field -> Target depends on the table!!!!
     } else {
         $columnValues[] = '&nbsp;';
     }
+
+    // 5. Show new and old values; For some tables we know further details about formatting
+    $valueNew = $row['value_new'];
+    $valueOld = $row['value_old'];
     if ($row['table_name'] == 'user_data') {
         // Format the values depending on the user field type:
-        $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $row['value_new']);
-        $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $row['value_old']);
-    } else {
-        $valueNew = $row['value_new'];
-        $valueOld = $row['value_old'];
+        $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueNew);
+        $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueOld);
+    } elseif (is_array($fieldInfo) && isset($fieldInfo['type'])) {
+        $valueNew = formatValue($valueNew, $fieldInfo['type']);
+        $valueOld = formatValue($valueOld, $fieldInfo['type']);
     }
 
-    if ($valueNew !== '') {
-        $columnValues[] = $valueNew;
-    } else {
-        $columnValues[] = '&nbsp;';
-    }
+    $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';
+    $columnValues[] = (!empty($valueOld)) ? $valueOld : '&nbsp;';
 
-    if ($valueOld !== '') {
-        $columnValues[] = $valueOld;
-    } else {
-        $columnValues[] = '&nbsp;';
-    }
-
+    // 6. User and date of the change
     $columnValues[] = createLink($row['create_last_name'].', '.$row['create_first_name'], 'users', 0, $row['uuid_usr_create']);
     // $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'..'</a>';
     $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));

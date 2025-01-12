@@ -19,6 +19,7 @@ try {
 
     // Initialize and check the parameters
     $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
+    $haveGetFolderUUID = ($getFolderUUID !== ''); // When no folder UUID is given, history should be for the whole folder structure. The UUID will be set to default below!
 
     // Check if module is activated
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
@@ -86,6 +87,16 @@ try {
                 'fa-lock'
             );
         }
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+            // show link to view change history
+            $page->addPageFunctionsMenuItem(
+                'menu_item_folder_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'folders,files', 'uuid' => $haveGetFolderUUID?$getFolderUUID:'')),
+                'fa-history'
+            );
+        }
+        
     }
 
     $page->readData($getFolderUUID);

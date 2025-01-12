@@ -13,6 +13,7 @@
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht angemeldete Benutzer:innen wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer:innen in zu kurzen Zeitabständen hintereinander unerwünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Voreinstellung: 60 Sekunden)</string>
   <string name="GBO_GUESTBOOK">Gästebuch</string>
+  <string name="GBO_GUESTBOOK_COMMENTS">Gästebuch-Kommentare</string>
   <string name="GBO_GUESTBOOK_DESC">Gäste und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation aktivieren für</string>
   <string name="GBO_GUESTBOOK_MODERATION_DESC">Gästebucheinträge werden erst nach einer Sichtprüfung einer Administratorin oder eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Gästen, auch bei angemeldeten Benutzer:innen oder bei niemandem durchgeführt werden soll.  (Voreinstellung: Niemand)</string>

@@ -45,6 +45,16 @@ $page->addPageFunctionsMenuItem(
     ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
     'fa-plus-circle'
 );
+if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+    // show link to view change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_menu_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'menu')),
+        'fa-history'
+    );
+}
+
 
 // Create table object
 $menuOverview = new HtmlTable('tbl_menues', $page, true);

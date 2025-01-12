@@ -109,6 +109,18 @@ try {
 // create html page object
 $page = new HtmlPage('admidio-documents-files-rename', $headline);
 
+if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+    $isFile = ($getFileUuid !== '');
+    // show link to view change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_filefolder_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => $isFile?'files':'folders', 'uuid' => $isFile?$getFileUuid:$getFolderUuid)),
+        'fa-history'
+    );
+}
+
+
 // create html form
 $form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);
 if ($getFileUuid !== '') {

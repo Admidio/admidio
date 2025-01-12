@@ -137,7 +137,7 @@
                                                               -- is mem_id, but the link should point to the group 
                                                               -- (since the membership does not have its own page in admidio!)
 
-    log_related_id              integer unsigned    NULL,     -- Optional Secondary object linked to the record id
+    log_related_id              text                NULL,     -- Optional Secondary object linked to the record id (ID or UUID)
     log_related_name            text                NULL,     -- Textual representation in case the original record 
                                                               -- no longer exists (e.g. group membership was deleted)
 

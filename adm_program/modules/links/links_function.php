@@ -61,6 +61,7 @@ if ($getLinkUuid !== '') {
 
 if ($getMode === 1) {
     $_SESSION['links_request'] = $_POST;
+    $weblinkIsNew = $link->isNewRecord();
 
     if (strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LINK_NAME'))));
@@ -87,7 +88,7 @@ if ($getMode === 1) {
         }
 
         // Set link counter to 0
-        if ($weblinkIsNew) {
+        if ($weblinkIsNew) { 
             $link->setValue('lnk_counter', 0);
         }
 

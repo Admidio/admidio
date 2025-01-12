@@ -554,4 +554,39 @@ class Organization extends TableAccess
     {
         return $this->dbColumns;
     }
+
+    /**
+     * Adjust the changelog entry for this db record: Add the parent fold as a related object
+     * 
+     * @param TableLogChanges $logEntry The log entry to adjust
+     * 
+     * @return void
+     */
+    protected function adjustLogEntry(TableLogChanges $logEntry) {
+        $orgParentId = (int) $this->getValue('org_org_id_parent');
+        if ($orgParentId > 0) {
+            $sql = 'SELECT org_id, org_longname, org_shortname
+                      FROM '.TBL_ORGANIZATIONS.'
+                     WHERE org_id = ?';
+            $pdoStatement = $this->db->queryPrepared($sql, [$orgParentId]);
+    
+            while ($row = $pdoStatement->fetch()) {
+                $logEntry->setLogRelated($row['org_id'], $row['org_longname']);
+            }
+        }
+    }
+    /**
+     * Return a human-readable representation of this record.
+     * For organizations, simply use the longname
+     * 
+     * @return string The readable representation of the record (can also be a translatable identifier)
+     */
+    public function readableName(): string
+    {
+        if (array_key_exists($this->columnPrefix.'_longname', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix.'_longname'];
+        } else {
+            return $this->dbColumns[$this->keyColumnName];
+        }
+    }
 }

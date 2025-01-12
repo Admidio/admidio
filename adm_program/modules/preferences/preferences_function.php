@@ -368,6 +368,9 @@ switch ($getMode) {
         $newOrganization->setValue('org_homepage', ADMIDIO_URL);
         $newOrganization->save();
 
+        // After setting up the base organization record, we don't want to add changelog entries for all the copying of the settings to the new org!
+        TableAccess::setLoggingEnabled(false);
+
         // write all preferences from preferences.php in table adm_preferences
         require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 

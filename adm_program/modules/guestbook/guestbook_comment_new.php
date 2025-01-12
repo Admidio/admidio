@@ -117,6 +117,16 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0) 
 // create html page object
 $page = new HtmlPage('admidio-guestbook-comment-new', $headline);
 
+if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+    // show link to view change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_guestbook_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'guestbook_comments', 'uuid' => $getGbcUuid)),
+        'fa-history'
+    );
+}
+
 // show form
 $form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'gbc_uuid' => $getGbcUuid, 'mode' => $mode)), $page);
 if ($gCurrentUserId > 0) {

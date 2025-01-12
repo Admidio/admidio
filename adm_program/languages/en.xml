@@ -13,6 +13,7 @@
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Interval</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Entries of unregistered users will be checked. Too many entries within the given time intervall are not allowed. This option allows to take control over unwanted entries. If interval is set to 0, no check will be done. (default: 60 seconds)</string>
   <string name="GBO_GUESTBOOK">Guestbook</string>
+  <string name="GBO_GUESTBOOK_COMMENTS">Guestbook comments</string>
   <string name="GBO_GUESTBOOK_DESC">Guests and users are able to leave greetings and comments, and can annotate other\'s entries.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation activated for</string>
   <string name="GBO_GUESTBOOK_MODERATION_DESC">Guestbook entries will be displayed after moderation. Define if moderation should be performed in case of guests or for logged in users only, or nobody\'s comments should be checked in advance. (default: Nobody)</string>

@@ -34,8 +34,12 @@ class TableLogChanges extends TableAccess
      * Static(global) list of tables, which should not be included in the changelog 
      * @var array
      */
-    public static array $noLogTables = ['auto_login', 'components', 'id', 'log_changes', 'registrations', 'sessions'];
-
+    public static array $noLogTables = [
+        'auto_login', 'components', 'id', 'log_changes', 
+        'messages', 'messages_attachments', 'messages_content', 'messages_recipients', 
+        'sessions'];
+    
+    
     /**
      * Static(global) list of edit pages (depending on the table)
      * @var array
@@ -283,13 +287,13 @@ class TableLogChanges extends TableAccess
      * Examples are group memberships, where the membership itself links to the user (via link ID), 
      * but we also want to record the group (and link to it in the changelog table).
      * 
-     * @param int $relatesID The ID of the related object
-     * @param string $relatesName The name of the related object
+     * @param string $relatedID The ID or UUID of the related object (given as string)
+     * @param string $relatedName The name of the related object
      * @return void
      */
-    public function setLogRelated(int $relatesID, string $relatesName) {
-        $this->setValue('log_related_id', $relatesID);
-        $this->setValue('log_related_name', $relatesName);
+    public function setLogRelated(string $relatedID, string $relatedName) {
+        $this->setValue('log_related_id', $relatedID);
+        $this->setValue('log_related_name', $relatedName);
     }
 
 
