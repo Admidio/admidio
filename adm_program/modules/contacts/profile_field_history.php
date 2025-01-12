@@ -57,6 +57,14 @@ $tableString = array(
     'files' => 'SYS_FILE',
     'organizations' => 'SYS_ORGANIZATION',
     'menu' => 'SYS_MENU_ITEM',
+
+    'user_relation_types' => 'SYS_USER_RELATION_TYPE',
+    'user_relations' => 'SYS_USER_RELATIONS',
+
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
     '' => '',
     '' => '',
 );
@@ -76,12 +84,12 @@ $fieldString = array(
     'usf_description_inline' =>    array('name' => 'SYS_DESCRIPTION_INLINE_DESC', 'type' => 'BOOL'),
     'usf_default_value' =>         'SYS_DEFAULT_VALUE',
     'usf_regex' =>                 'SYS_REGULAR_EXPRESSION',
-    'usf_disabled' =>              'SYS_DISABLED',
-    'usf_hidden' =>                'SYS_HIDDEN',
+    'usf_disabled' =>              array('name' => 'SYS_DISABLED', 'type' => 'BOOL'),
+    'usf_hidden' =>                array('name' => 'SYS_HIDDEN', 'type' => 'BOOL'),
     'usf_registration' =>          'ORG_FIELD_REGISTRATION',
     'usf_sequence' =>              'SYS_ORDER',
-    'usf_icon' =>                  'SYS_ICON',
-    'usf_url' =>                   'SYS_URL',
+    'usf_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
+    'usf_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
     'usf_disabled' =>              array('name' => 'SYS_DISABLED', 'type' => 'BOOL'),
     'usf_hidden' =>                array('name' => 'SYS_HIDDEN', 'type' => 'BOOL'),
     'usf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
@@ -197,6 +205,26 @@ $fieldString = array(
     'men_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
     'men_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
 
+    'urt_name' => 'SYS_NAME',
+    'urt_name_male' => 'SYS_MALE',
+    'urt_name_female' => 'SYS_FEMALE',
+    'urt_edit_user' =>  array('name' => 'SYS_EDIT_USER_IN_RELATION', 'type' => 'BOOL'),
+    'urt_id_inverse' =>  array('name' => 'SYS_OPPOSITE_RELATIONSHIP', 'type' => 'RELATION_TYPE'),
+
+    'ure_urt_id' => '',
+    'ure_usr_id1' => '',
+    'ure_usr_id2' => '',
+
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
     '' => '',
     '' => '',
     '' => '',
@@ -388,10 +416,10 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
         //     $url = SecurityUtils::encodeUrl(); break;
         case 'user_fields':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $uuid)); break;
-        // case 'user_relations':
-        //     $url = SecurityUtils::encodeUrl(); break;
-        // case 'user_relation_types':
-        //     $url = SecurityUtils::encodeUrl(); break;
+        case 'user_relations':
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $uuid)); break;
+        case 'user_relation_types':
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_uuid' => $uuid)); break;
     }
     if ($url != '') {
         return '<a href="'.$url.'">'.$text.'</a>';
@@ -401,7 +429,7 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
 }
 
 function formatValue($value, $type) {
-    global $gSettingsManager, $gCurrentUserUUID;
+    global $gSettingsManager, $gCurrentUserUUID, $gDb;
     // if value is empty or null, then do nothing
     if ($value != '') {
         // create html for each field type
@@ -463,6 +491,14 @@ function formatValue($value, $type) {
                 break;
             case 'ICON':
                 $htmlValue = '<div class="fas '.$value.'"> '. $value.'</div>';
+                break;
+            case 'ORG':
+                $org = new Organization($gDb, $value);
+                $htmlValue = createLink($org->getValue('org_longname'), 'organizations', $org->getValue('org_id'), $org->getValue('org_uuid'));
+                break;
+            case 'RELATION_TYPE':
+                $org = new TableUserRelationType($gDb, $value);
+                $htmlValue = createLink($org->getValue('urt_name'), 'user_relation_types', $org->getValue('urt_id'), $org->getValue('urt_uuid'));
                 break;
         }
     

@@ -34,6 +34,9 @@ class TableUserRelationType extends TableAccess
      */
     public function getInverse(): ?TableUserRelationType
     {
+        if (empty($this->getValue('urt_id_inverse'))) {
+            return null;
+        }
         $inverse = new self($this->db, $this->getValue('urt_id_inverse'));
 
         if ($inverse->isNewRecord()) {
@@ -82,5 +85,21 @@ class TableUserRelationType extends TableAccess
     public function isUnidirectional(): bool
     {
         return $this->getRelationTypeString() === self::USER_RELATION_TYPE_UNIDIRECTIONAL;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record.
+     *
+     * For user relation types, we want to show the inverse relation as related.
+     *
+     * @param TableLogChanges $logEntry The log entry to adjust
+     *
+     * @return void
+     */
+    protected function adjustLogEntry(TableLogChanges $logEntry) {
+        $inverse = $this->getInverse();
+        if ($inverse) {
+            $logEntry->setLogRelated($inverse->getValue('urt_uuid'), $inverse->getValue('urt_name'));
+        }
     }
 }

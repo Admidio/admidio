@@ -36,6 +36,16 @@ $page->addPageFunctionsMenuItem(
     'fa-plus-circle'
 );
 
+if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+    // show link to view change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_relationtypes_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'user_relation_types')),
+        'fa-history'
+    );
+}
+
 
 // Create table object
 $relationTypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
