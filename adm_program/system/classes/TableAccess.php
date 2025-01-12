@@ -943,6 +943,9 @@ class TableAccess
             }
         }
 
+        // TODO_RK: This erroneously detects boolean falses (old value null, new value 0) as change!
+        // TODO_RK: Also, unchanged dates are detected as changed, because one of the dates contains seconds and the other does not!
+        
         // only mark as "changed" if the value is different (DON'T use binary safe function!)
         if (strcmp((string) $this->dbColumns[$columnName], (string) $newValue) !== 0) {
             $this->columnsInfos[$columnName]['previousValue'] = $this->dbColumns[$columnName];

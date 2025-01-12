@@ -108,6 +108,16 @@ function subfolder(int $parentId, string $vorschub, int $currentAlbumPhoId)
 // create html page object
 $page = new HtmlPage('admidio-photo-album-edit', $headline);
 
+if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getPhotoUuid)) { // TODO_RK: More fine-grained logging settings
+    // show link to view change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_relationtypes_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'photos', 'uuid' => $getPhotoUuid)),
+        'fa-history'
+    );
+}
+
 // show form
 $form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => $getMode)), $page);
 $form->addInput(

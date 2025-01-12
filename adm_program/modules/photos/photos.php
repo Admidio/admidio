@@ -167,6 +167,16 @@ if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValu
     );
 }
 
+if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+    // show link to view change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_relationtypes_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'photos', 'uuid' => $getPhotoUuid)),
+        'fa-history'
+    );
+}
+
 if ($getPhotoUuid !== '') {
     // show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));

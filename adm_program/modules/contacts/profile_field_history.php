@@ -45,34 +45,35 @@ $tableString = array(
     'events' => 'SYS_EVENTS',
     'rooms' => 'SYS_ROOM',
     'roles' => 'SYS_ROLES',
-    // 'roles_rights_data' => '', // TODO_RK
-
+    
     'guestbook' => 'GBO_GUESTBOOK',
     'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
-
+    
     'links' => 'SYS_WEBLINKS',
-
+    
     'texts' => 'SYS_SETTINGS',
     'folders' => 'SYS_FOLDER',
     'files' => 'SYS_FILE',
     'organizations' => 'SYS_ORGANIZATION',
     'menu' => 'SYS_MENU_ITEM',
-
+    
     'user_relation_types' => 'SYS_USER_RELATION_TYPE',
     'user_relations' => 'SYS_USER_RELATIONS',
-
-    //'roles_rights' => '',
+    
+    'photos' => 'SYS_PHOTO_ALBUMS',
+    
     '' => '',
     '' => '',
     '' => '',
     '' => '',
-    '' => '',
+    // 'roles_rights' => '',
+    // 'roles_rights_data' => '', // TODO_RK
 );
 $fieldString = array(
     'mem_begin' =>                 'SYS_MEMBERSHIP_START',
     'mem_end' =>                   'SYS_MEMBERSHIP_END',
     'mem_leader' =>                array('name' => 'SYS_LEADER', 'type' => 'BOOL'),
-    //'mem_approved' =>            '', // TODO_RK
+    // 'mem_approved' =>            '', // TODO_RK
 
     'usr_password' =>              'SYS_PASSWORD',
     'usr_photo' =>                 'SYS_PROFILE_PHOTO',
@@ -154,7 +155,7 @@ $fieldString = array(
 
     'ror_name_intern' =>           'SYS_INTERNAL_NAME',
     'ror_table' =>                 'SYS_TABLE',
-    // 'ror_ror_id_parent' =>         'SYS_MEETING_POINT',
+    // 'ror_ror_id_parent' =>         '',
 
     'gbo_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
     'gbo_name' =>                  'SYS_NAME',
@@ -170,28 +171,38 @@ $fieldString = array(
     'gbc_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
 
     'lnk_name' =>                  'SYS_LINK_NAME',
+    'lnk_description' =>           'SYS_DESCRIPTION',
     'lnk_url' =>                   array('name' => 'SYS_LINK_ADDRESS', 'type' => 'IRL'),
     'lnk_cat_id' =>                'SYS_CATEGORY',
-    'lnk_description' =>           'SYS_DESCRIPTION',
     'lnk_counter' =>               'SYS_COUNTER',
 
     'txt_text' =>                  array('name' => 'SYS_TEXT', 'type' => 'TEXT_BIG'),
     'txt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
 
-    'fol_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
-    // 'fol_fol_id_parent' =>      '', // TODO_RK
     'fol_name' =>                  'SYS_NAME',
     'fol_description' =>           'SYS_DESCRIPTION',
+    'fol_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    // 'fol_fol_id_parent' =>      '', // TODO_RK
     //'fol_path' =>                '', // TODO_RK
     // 'fol_locked' =>                array('name' => '', 'type' => 'BOOL'),
     // 'fol_public' =>                array('name' => '', 'type' => 'BOOL'),
 
-    'fil_fol_id' =>                'SYS_FOLDER',
-    'fil_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
     'fil_name' =>                  'SYS_NAME',
     'fil_description' =>           'SYS_DESCRIPTION',
+    'fil_fol_id' =>                'SYS_FOLDER',
+    'fil_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
     // 'fil_locked' =>                array('name' => '', 'type' => 'BOOL'),
     // 'fil_counter' =>               '',
+
+    'pho_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    'pho_name'  =>                 'SYS_ALBUM',
+    'pho_description' =>           'SYS_DESCRIPTION',
+    'pho_pho_id_parent' =>         array('name' => 'SYS_PARENT_ALBUM', 'type' => 'ALBUM'),
+    'pho_quantity'  =>             'SYS_QUANTITY',
+    'pho_begin' =>                 'SYS_START',
+    'pho_end' =>                   'SYS_END',
+    'pho_photographers' =>         'SYS_PHOTOS_BY',
+    'pho_locked' =>                array('name' => 'SYS_LOCK_ALBUM', 'type' => 'BOOL'),
 
     'org_shortname' =>             'SYS_NAME_ABBREVIATION',
     'org_longname' =>              'SYS_NAME',
@@ -214,10 +225,6 @@ $fieldString = array(
     'urt_name_female' => 'SYS_FEMALE',
     'urt_edit_user' =>  array('name' => 'SYS_EDIT_USER_IN_RELATION', 'type' => 'BOOL'),
     'urt_id_inverse' =>  array('name' => 'SYS_OPPOSITE_RELATIONSHIP', 'type' => 'RELATION_TYPE'),
-
-    'ure_urt_id' => '',
-    'ure_usr_id1' => '',
-    'ure_usr_id2' => '',
 
     '' => '',
     '' => '',
@@ -400,8 +407,8 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('menu_uuid' => $uuid)); break;
         // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
         //     $url = SecurityUtils::encodeUrl(); break;
-        // case 'photos':
-        //     $url = SecurityUtils::encodeUrl(); break;
+        case 'photos':
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $uuid)); break;
         // case 'preferences': // There is just one preferences page, but no way to link to individual sections or preference items!
         //     $url = SecurityUtils::encodeUrl(); break;
         // case 'registrations':
@@ -504,6 +511,10 @@ function formatValue($value, $type) {
             case 'RELATION_TYPE':
                 $org = new TableUserRelationType($gDb, $value);
                 $htmlValue = createLink($org->getValue('urt_name'), 'user_relation_types', $org->getValue('urt_id'), $org->getValue('urt_uuid'));
+                break;
+            case 'ALBUM':
+                $album = new TablePhotos($gDb, $value);
+                $htmlValue = createLink($album->getValue('pho_name'), 'photos', $album->getValue('pho_id'), $album->getValue('pho_uuid'));
                 break;
         }
     
