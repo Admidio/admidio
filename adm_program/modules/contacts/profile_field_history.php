@@ -61,7 +61,7 @@ $tableString = array(
     'user_relation_types' => 'SYS_USER_RELATION_TYPE',
     'user_relations' => 'SYS_USER_RELATIONS',
 
-    '' => '',
+    //'roles_rights' => '',
     '' => '',
     '' => '',
     '' => '',
@@ -151,7 +151,11 @@ $fieldString = array(
     'rol_end_time' =>              'SYS_TIME_TO',
     'rol_weekday' =>               'SYS_WEEKDAY',
     'rol_location' =>              'SYS_MEETING_POINT',
-  
+
+    'ror_name_intern' =>           'SYS_INTERNAL_NAME',
+    'ror_table' =>                 'SYS_TABLE',
+    // 'ror_ror_id_parent' =>         'SYS_MEETING_POINT',
+
     'gbo_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
     'gbo_name' =>                  'SYS_NAME',
     'gbo_text' =>                  'SYS_MESSAGE',
@@ -416,8 +420,9 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
         //     $url = SecurityUtils::encodeUrl(); break;
         case 'user_fields':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $uuid)); break;
-        case 'user_relations':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $uuid)); break;
+        case 'user_relations': // For user relations, we don't link to the modification of the individual relation, but to the user1
+            // $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $uuid)); break;
+            $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $uuid)); break;
         case 'user_relation_types':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_uuid' => $uuid)); break;
     }

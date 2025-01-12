@@ -243,7 +243,7 @@ if ($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasR
     $page->addPageFunctionsMenuItem(
         'menu_item_profile_change_history',
         $gL10n->get('SYS_CHANGE_HISTORY'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('uuid' => $getUserUuid, 'table' => 'users,user_data,members')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('uuid' => $getUserUuid, 'table' => 'users,user_data,members,user_relations')),
         'fa-history'
     );
 }

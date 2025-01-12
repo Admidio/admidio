@@ -89,7 +89,7 @@ class TableAccess
      * @var bool If this flag is set (default), all changes will be logged to the database, if the corresponding preferences item is set.
      * Setting this to false will disable logging in all cases, even with the preference set.
      */
-    private static $loggingEnabled = true;
+    protected static $loggingEnabled = true;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
