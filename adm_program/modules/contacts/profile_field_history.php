@@ -240,13 +240,15 @@ $fieldString = array(
     'lst_name' =>                  'SYS_NAME',
     'lst_global' =>                array('name' => 'SYS_CONFIGURATION_ALL_USERS', 'type' => 'BOOL'),
 
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
+    'cat_name' =>                  'SYS_NAME',
+    'cat_name_intern' =>           'SYS_INTERNAL_NAME',
+    'cat_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    //'cat_type' =>                  '', // Holds indicators like USF, ROL, LNK, EVT, ANN, 
+    'cat_system' =>                array('name' => 'SYS_SSYSTEM', 'type' => 'BOOL'),
+    'cat_default' =>               array('name' => $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_CATEGORY'))), 'type' => 'BOOL'),
+    'cat_sequence' =>              'SYS_ORDER',
+
+
     '' => '',
     '' => '',
 );
