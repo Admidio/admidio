@@ -45,6 +45,8 @@ $tableString = array(
     'events' => 'SYS_EVENTS',
     'rooms' => 'SYS_ROOM',
     'roles' => 'SYS_ROLES',
+    'roles_rights' => 'SYS_ROLE_RIGHTS',
+    'roles_rights_data' => 'SYS_ROLE_RIGHTS',
     
     'guestbook' => 'GBO_GUESTBOOK',
     'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
@@ -66,8 +68,6 @@ $tableString = array(
     '' => '',
     '' => '',
     '' => '',
-    // 'roles_rights' => '',
-    // 'roles_rights_data' => '', // TODO_RK
 );
 $fieldString = array(
     'mem_begin' =>                 'SYS_MEMBERSHIP_START',
@@ -373,7 +373,7 @@ $queryParams = [
 ];
 
 
-function createLink(string $text, string $module, int $id, string $uuid = '') {
+function createLink(string $text, string $module, int|string $id, string $uuid = '') {
     $url = '';
     switch ($module) {
         case 'users': // Fall through
@@ -418,7 +418,14 @@ function createLink(string $text, string $module, int $id, string $uuid = '') {
         case 'roles_rights':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
         case 'roles_rights_data':
-            $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
+            // The log_record_linkid contains the table and the uuid encoded as 'table':'UUID' => split and call Create linke with the new table!
+            if (strpos($id, ':') !== false) {
+                // Split into table and UUID
+                [$table, $id] = explode(':', $id, 2);
+            } else {
+                $table = ''; // Table is empty
+            }
+            return createLink($text, $table, $id, $id); break;
         case 'role_dependencies':
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
         case 'rooms':
@@ -645,6 +652,9 @@ while ($row = $fieldHistoryStatement->fetch()) {
         }
         if ($row['table_name'] == 'files') {
             $relatedTable = 'folders';
+        }
+        if ($row['table_name'] == 'roles_rights_data') {
+            $relatedTable = 'roles';
         }
         $relatedName = $row['related_name'];
         if (!empty($relatedName)) {

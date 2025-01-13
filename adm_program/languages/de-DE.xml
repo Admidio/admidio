@@ -1179,6 +1179,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
   <string name="SYS_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
+  <string name="SYS_ROLE_RIGHTS">Rollenberechtigungen</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Sie Haben keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</string>
   <string name="SYS_ROLE_SELECTION">Rollenauswahl</string>
   <string name="SYS_ROLE_SELECTION_CONF_DESC">Die Rollenauswahl kann über eine Konfiguration auf die Mitglieder der ausgewählten Rollen eingeschränkt werden.\n\n Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer bleiben.</string>

@@ -1181,6 +1181,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Role memberships</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Change role memberships</string>
   <string name="SYS_ROLE_NAME_EXISTS">Role with same name already exists in this category.</string>
+  <string name="SYS_ROLE_RIGHTS">Role Rights</string>
   <string name="SYS_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
   <string name="SYS_ROLE_SELECTION">Role selection</string>
   <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be restricted a configuration to the members of the selected roles.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>

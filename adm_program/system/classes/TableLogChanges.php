@@ -278,7 +278,7 @@ class TableLogChanges extends TableAccess
      * @param int $linkID
      * @return void
      */
-    public function setLogLinkID(int $linkID) {
+    public function setLogLinkID(int|string $linkID) {
         $this->setValue('log_record_linkid', $linkID);
     }
 
