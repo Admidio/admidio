@@ -1040,6 +1040,7 @@
   <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
+  <string name="SYS_PATH">Path</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
   <string name="SYS_PERIOD">Time period</string>
   <string name="SYS_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2#</string>

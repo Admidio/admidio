@@ -115,7 +115,7 @@ if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fi
     $page->addPageFunctionsMenuItem(
         'menu_item_filefolder_change_history',
         $gL10n->get('SYS_CHANGE_HISTORY'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => $isFile?'files':'folders', 'uuid' => $isFile?$getFileUuid:$getFolderUuid)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => ($isFile?'files':'folders').',roles_rights_data', 'uuid' => $isFile?$getFileUuid:$getFolderUuid)),
         'fa-history'
     );
 }

@@ -92,7 +92,7 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_folder_change_history',
                 $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'folders,files', 'uuid' => $haveGetFolderUUID?$getFolderUUID:'')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'folders,files,roles_rights_data', 'uuid' => $haveGetFolderUUID?$getFolderUUID:'')),
                 'fa-history'
             );
         }

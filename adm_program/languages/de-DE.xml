@@ -1038,6 +1038,7 @@
   <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Sie haben ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfen Sie bitte Ihr Passwort und geben Sie dieses dann erneut ein.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
+  <string name="SYS_PATH">Pfad</string>
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
   <string name="SYS_PERIOD">Zeitraum</string>
   <string name="SYS_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>

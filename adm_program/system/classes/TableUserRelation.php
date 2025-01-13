@@ -75,11 +75,8 @@ class TableUserRelation extends TableAccess
 
     /**
      * Logs creation of the DB record
-     * @param integer $id the unique index of the new record in the database table
-     * @param string $record_name the human-readable representation of the record
      * 
      * @return true Returns **true** if no error occurred
-     * @throws Exception
      */
     public function logCreation(): bool
     {

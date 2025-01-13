@@ -269,13 +269,14 @@ class TableFile extends TableAccess
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns.
-     * The folder table also contains fol_usr_id and fol_timestamp.
+     * The folder table also contains fol_usr_id and fol_timestamp. We also don't want to log
+     * download counter increases...
      *
      * @return true Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(), ['fil_usr_id', 'fil_timestamp']);
+        return array_merge(parent::getIgnoredLogColumns(), ['fil_counter', 'fil_usr_id', 'fil_timestamp']);
     }
     /**
      * Adjust the changelog entry for this db record: Add the parent fold as a related object

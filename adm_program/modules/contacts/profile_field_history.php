@@ -182,17 +182,17 @@ $fieldString = array(
     'fol_name' =>                  'SYS_NAME',
     'fol_description' =>           'SYS_DESCRIPTION',
     'fol_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
-    // 'fol_fol_id_parent' =>      '', // TODO_RK
-    //'fol_path' =>                '', // TODO_RK
-    // 'fol_locked' =>                array('name' => '', 'type' => 'BOOL'),
-    // 'fol_public' =>                array('name' => '', 'type' => 'BOOL'),
+    'fol_fol_id_parent' =>         array('name' => 'SYS_FOLDER', 'type' => 'FOLDER'), // TODO_RK: Find a translatable string for parent folder (currenly just use "folder")
+    'fol_path' =>                  'SYS_PATH',
+    'fol_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
+    'fol_public' =>                array('name' => 'SYS_VISIBLE', 'type' => 'BOOL'),
 
     'fil_name' =>                  'SYS_NAME',
     'fil_description' =>           'SYS_DESCRIPTION',
-    'fil_fol_id' =>                'SYS_FOLDER',
+    'fil_fol_id' =>                array('name' => 'SYS_FOLDER', 'type' => 'FOLDER'),
     'fil_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
-    // 'fil_locked' =>                array('name' => '', 'type' => 'BOOL'),
-    // 'fil_counter' =>               '',
+    'fil_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
+    // 'fil_counter' =>               '', // not logged!
 
     'pho_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
     'pho_name'  =>                 'SYS_ALBUM',
@@ -522,6 +522,10 @@ function formatValue($value, $type) {
             case 'ALBUM':
                 $album = new TablePhotos($gDb, $value);
                 $htmlValue = createLink($album->getValue('pho_name'), 'photos', $album->getValue('pho_id'), $album->getValue('pho_uuid'));
+                break;
+            case 'FOLDER':
+                $folder = new TableFolder($gDb, $value);
+                $htmlValue = createLink($folder->getValue('fol_name'), 'folders', $folder->getValue('fol_id'), $folder->getValue('fol_uuid'));
                 break;
         }
     

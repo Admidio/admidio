@@ -69,6 +69,8 @@ class RolesRightsData extends TableAccess
             default:
                 $obj = new TableAccess($this->db, $objTable, $objID);
         }
+        $objUuid = $obj->getValue($obj->columnPrefix . '_uuid'); 
+        $objTableclean = str_replace(TABLE_PREFIX . '_', '', $objTable);
 
         // Log object: Object 'rrd_object_id' from table 'rrd_ror_id'->'ror_table'
         //      LinkTo is: ror_table:rrd_object_id->UUID
@@ -78,13 +80,12 @@ class RolesRightsData extends TableAccess
         $logEntry = new TableLogChanges($this->db);
         $logEntry->setLogModification($table, 
             $this->dbColumns[$this->keyColumnName],
-            null, $obj->readableName(),
+            $objUuid, $obj->readableName(),
             'rrd_ror_id', 'SYS_PERMISSIONS', 
             null, $roleRights->getValue('ror_name_intern')
         );
         // Since we have objects of various tables, we need to encode the table together with the uuid!
-        $logEntry->setLogLinkID(str_replace(TABLE_PREFIX . '_', '', $objTable) . ':' . 
-            $obj->getValue($obj->columnPrefix . '_uuid'));
+        $logEntry->setLogLinkID($objTableclean . ':' . $objUuid);
 
         $logEntry->setLogRelated($role->getValue('rol_uuid'), $role->readableName());
         
