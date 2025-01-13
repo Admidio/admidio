@@ -64,7 +64,7 @@ $tableString = array(
     
     'photos' => 'SYS_PHOTO_ALBUMS',
     
-    '' => '',
+    'category_report' => 'SYS_CATEGORY_REPORT',
     '' => '',
     '' => '',
     '' => '',
@@ -79,7 +79,7 @@ $fieldString = array(
     'usr_photo' =>                 'SYS_PROFILE_PHOTO',
     'usr_login_name' =>            'SYS_USERNAME',
 
-    'usf_cat_id' =>                'SYS_CATEGORY',
+    'usf_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
     'usf_type' =>                  'SYS_TYPE',
     'usf_description' =>           'SYS_DESCRIPTION',
     'usf_description_inline' =>    array('name' => 'SYS_DESCRIPTION_INLINE_DESC', 'type' => 'BOOL'),
@@ -95,7 +95,7 @@ $fieldString = array(
     'usf_hidden' =>                array('name' => 'SYS_HIDDEN', 'type' => 'BOOL'),
     'usf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
 
-    'ann_cat_id' =>                'SYS_CATEGORY',
+    'ann_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
     'ann_headline' =>              'SYS_HEADLINE',
     'ann_description' =>           'SYS_DESCRIPTION',
 
@@ -104,7 +104,7 @@ $fieldString = array(
     'room_capacity' =>             'SYS_CAPACITY',
     'room_overhang' =>             'SYS_OVERHANG',
    
-    'dat_cat_id' =>                'SYS_CATEGORY',
+    'dat_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
     'dat_rol_id'=>                 array('name' => 'SYS_ROLE', 'type' => 'ROLE'),
     'dat_room_id' =>               'SYS_ROOM',
     'dat_begin' =>                 'SYS_START',
@@ -122,7 +122,7 @@ $fieldString = array(
     
     'rol_name' =>                  'SYS_NAME',
     'rol_description' =>           'SYS_DESCRIPTION',
-    'rol_cat_id' =>                'SYS_CATEGORY',
+    'rol_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
     'rol_mail_this_role' =>        'SYS_SEND_MAILS',
     'rol_view_memberships' =>      'SYS_VIEW_ROLE_MEMBERSHIPS',
     'rol_view_members_profiles' => 'SYS_VIEW_PROFILES_OF_ROLE_MEMBERS', 
@@ -173,7 +173,7 @@ $fieldString = array(
     'lnk_name' =>                  'SYS_LINK_NAME',
     'lnk_description' =>           'SYS_DESCRIPTION',
     'lnk_url' =>                   array('name' => 'SYS_LINK_ADDRESS', 'type' => 'IRL'),
-    'lnk_cat_id' =>                'SYS_CATEGORY',
+    'lnk_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
     'lnk_counter' =>               'SYS_COUNTER',
 
     'txt_text' =>                  array('name' => 'SYS_TEXT', 'type' => 'TEXT_BIG'),
@@ -225,6 +225,13 @@ $fieldString = array(
     'urt_name_female' => 'SYS_FEMALE',
     'urt_edit_user' =>  array('name' => 'SYS_EDIT_USER_IN_RELATION', 'type' => 'BOOL'),
     'urt_id_inverse' =>  array('name' => 'SYS_OPPOSITE_RELATIONSHIP', 'type' => 'RELATION_TYPE'),
+
+    'crt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    'crt_name' =>                  'SYS_NAME',
+    'crt_col_fields' =>            'SYS_COLUMN_SELECTION',
+    'crt_selection_role' =>        array('name' => 'SYS_ROLE_SELECTION', 'type' => 'ROLE'),
+    'crt_selection_cat' =>         array('name' => 'SYS_CAT_SELECTION', 'type' => 'CATEGORY'),
+    'crt_number_col' =>            array('name' => $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', 'type' => 'BOOL'),
 
     '' => '',
     '' => '',
@@ -531,6 +538,9 @@ function formatValue($value, $type) {
                 $role = new TableRoles($gDb, $value);
                 $htmlValue = createLink($role->getValue('rol_name'), 'roles', $role->getValue('rol_id'), $role->getValue('rol_uuid'));
                 break;
+            case 'CATEGORY':
+                $cat = new TableCategory($gDb, $value);
+                $htmlValue = createLink($cat->getValue('cat_name'), 'categories', $cat->getValue('cat_id'), $cat->getValue('cat_uuid'));
         }
     
         $value = $htmlValue;

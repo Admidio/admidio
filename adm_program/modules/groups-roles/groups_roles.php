@@ -102,11 +102,17 @@ try {
         }
 
         if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+            $logShowTable = 'roles';
+            if ($getShow == 'card') {
+                $logShowTable = 'members';
+            } elseif ($getShow == 'permissions') {
+                $logShowTable = 'roles_rights_data';
+            }
             // show link to view profile field change history
             $groupsRoles->addPageFunctionsMenuItem(
                 'menu_item_members_change_history',
                 $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => ($getShow == 'card') ? 'members' : 'roles')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => $logShowTable)),
                 'fa-history'
             );
         }

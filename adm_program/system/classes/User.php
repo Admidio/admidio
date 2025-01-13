@@ -715,15 +715,15 @@ class User extends TableAccess
                             SET rld_usr_id = NULL
                           WHERE rld_usr_id = ' . $usrId;
 
-                          $sqlQueries[] = 'UPDATE ' . TBL_USER_LOG . '
+        $sqlQueries[] = 'UPDATE ' . TBL_USER_LOG . '
                           SET usl_usr_id_create = NULL
                           WHERE usl_usr_id_create = ' . $usrId;
                           
-                          $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
+        $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_create = NULL
                             WHERE usr_usr_id_create = ' . $usrId;
 
-                            $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
+        $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_change = NULL
                             WHERE usr_usr_id_change = ' . $usrId;
 
@@ -733,9 +733,9 @@ class User extends TableAccess
                                                 WHERE lst_usr_id = ' . $usrId . '
                                                 AND lst_global = false)';
                                                 
-                                                $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
-                                                WHERE lst_global = false
-                                                AND lst_usr_id = ' . $usrId;
+        $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
+                          WHERE lst_global = false
+                          AND lst_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_GUESTBOOK_COMMENTS . '
         WHERE gbc_usr_id_create = ' . $usrId;
@@ -792,15 +792,12 @@ class User extends TableAccess
         $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
                           WHERE ses_usr_id = ' . $usrId;
 
-        // TODO: Shall we delete all log-entries pertaining to the given user??? That's not audit-proof!
+        // TODO_RK: Shall we delete all log-entries pertaining to the given user??? That's not audit-proof!
         // $sqlQueries[] = 'DELETE FROM ' . TBL_LOG . '
         //                   WHERE usl_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
                           WHERE usd_usr_id = ' . $usrId;
-
-        //  $sqlQueries[] = 'DELETE FROM ' . TBL_USERS_PROFILE_LOG . '
-        //                   WHERE upl_usr_id = ' . $usrId;
 
         $this->db->startTransaction();
 

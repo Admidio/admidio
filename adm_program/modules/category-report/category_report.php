@@ -254,6 +254,16 @@ if ($getMode !== 'csv') {
             );
         }
 
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK
+            // show link to view profile field change history
+            $page->addPageFunctionsMenuItem(
+                'menu_item_categoryreport_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'category_report')),
+                'fa-history'
+            );
+        }
+    
         // process changes in the navbar form with javascript submit
         $page->addJavascript(
             '

@@ -836,6 +836,7 @@ class TableRoles extends TableAccess
 
         // system roles are always active and could therefore not be toggled
         if ((int)$this->getValue('rol_system') === 0) {
+            // TODO_RK: This should use the TableRoles::save function, otherwise the change won't be logged!
             $sql = 'UPDATE ' . TBL_ROLES . '
                        SET rol_valid = ? -- $status
                      WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
