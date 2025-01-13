@@ -103,6 +103,18 @@ if (isset($_SESSION['mylist_request'])) {
 // create html page object
 $page = new HtmlPage('admidio-mylist', $headline);
 
+if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK
+    // show link to view profile field change history
+    $page->addPageFunctionsMenuItem(
+        'menu_item_lists_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/contacts/profile_field_history.php', array('table' => 'lists,list_columns')),
+        'fa-history'
+    );
+}
+
+
+
 // within MySql it's only possible to join 61 tables therefore show a message if user
 // want's to join more than 57 columns
 if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {

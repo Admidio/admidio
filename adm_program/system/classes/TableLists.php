@@ -87,4 +87,17 @@ class TableLists extends TableAccess
 
         return parent::save($updateFingerPrint);
     }
+
+   /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * The Lists table also contains mem_rol_id and mem_usr_id, which cannot be changed,
+     * so their initial setting on creation should not be logged. Instead, they will be used
+     * when displaying the log entry.
+     *
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(), ['lst_timestamp']);
+    }
 }

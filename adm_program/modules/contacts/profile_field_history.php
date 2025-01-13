@@ -28,7 +28,7 @@ $filterDateFrom->modify('-'.$gSettingsManager->getInt('contacts_field_history_da
 
 // Initialize and check the parameters
 $getTable = admFuncVariableIsValid($_GET, 'table','string');
-$getTables = ($getTable !== null && $getTable != "") ? explode(",", $getTable) : [];
+$getTables = ($getTable !== null && $getTable != "") ? array_map('trim', explode(",", $getTable)) : [];
 $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'string');
 $getId = admFuncVariableIsValid($_GET, 'id', 'int');
 $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
@@ -48,6 +48,9 @@ $tableString = array(
     'roles_rights' => 'SYS_ROLE_RIGHTS',
     'roles_rights_data' => 'SYS_ROLE_RIGHTS',
     
+    'categories' => 'SYS_CATEGORIES',
+    'category_report' => 'SYS_CATEGORY_REPORT',
+
     'guestbook' => 'GBO_GUESTBOOK',
     'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
     
@@ -64,10 +67,9 @@ $tableString = array(
     
     'photos' => 'SYS_PHOTO_ALBUMS',
     
-    'category_report' => 'SYS_CATEGORY_REPORT',
-    '' => '',
-    '' => '',
-    '' => '',
+    'lists' => 'SYS_LIST',
+
+    // 'list_columns' => '', // TODO_RK
 );
 $fieldString = array(
     'mem_begin' =>                 'SYS_MEMBERSHIP_START',
@@ -233,10 +235,11 @@ $fieldString = array(
     'crt_selection_cat' =>         array('name' => 'SYS_CAT_SELECTION', 'type' => 'CATEGORY'),
     'crt_number_col' =>            array('name' => $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', 'type' => 'BOOL'),
 
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
+    'lst_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+    'lst_usr_id' =>                array('name' => 'SYS_USER', 'type' => 'USER'),
+    'lst_name' =>                  'SYS_NAME',
+    'lst_global' =>                array('name' => 'SYS_CONFIGURATION_ALL_USERS', 'type' => 'BOOL'),
+
     '' => '',
     '' => '',
     '' => '',
@@ -455,7 +458,7 @@ function createLink(string $text, string $module, int|string $id, string $uuid =
 }
 
 function formatValue($value, $type) {
-    global $gSettingsManager, $gCurrentUserUUID, $gDb;
+    global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields;
     // if value is empty or null, then do nothing
     if ($value != '') {
         // create html for each field type
@@ -520,27 +523,30 @@ function formatValue($value, $type) {
                 break;
             case 'ORG':
                 $org = new Organization($gDb, $value);
-                $htmlValue = createLink($org->getValue('org_longname'), 'organizations', $org->getValue('org_id'), $org->getValue('org_uuid'));
+                $htmlValue = createLink($org->readableName(), 'organizations', $org->getValue('org_id'), $org->getValue('org_uuid'));
                 break;
             case 'RELATION_TYPE':
                 $org = new TableUserRelationType($gDb, $value);
-                $htmlValue = createLink($org->getValue('urt_name'), 'user_relation_types', $org->getValue('urt_id'), $org->getValue('urt_uuid'));
+                $htmlValue = createLink($org->readableName(), 'user_relation_types', $org->getValue('urt_id'), $org->getValue('urt_uuid'));
                 break;
             case 'ALBUM':
                 $album = new TablePhotos($gDb, $value);
-                $htmlValue = createLink($album->getValue('pho_name'), 'photos', $album->getValue('pho_id'), $album->getValue('pho_uuid'));
+                $htmlValue = createLink($album->readableName(), 'photos', $album->getValue('pho_id'), $album->getValue('pho_uuid'));
                 break;
             case 'FOLDER':
                 $folder = new TableFolder($gDb, $value);
-                $htmlValue = createLink($folder->getValue('fol_name'), 'folders', $folder->getValue('fol_id'), $folder->getValue('fol_uuid'));
+                $htmlValue = createLink($folder->readableName(), 'folders', $folder->getValue('fol_id'), $folder->getValue('fol_uuid'));
                 break;
             case 'ROLE':
                 $role = new TableRoles($gDb, $value);
-                $htmlValue = createLink($role->getValue('rol_name'), 'roles', $role->getValue('rol_id'), $role->getValue('rol_uuid'));
+                $htmlValue = createLink($role->readableName(), 'roles', $role->getValue('rol_id'), $role->getValue('rol_uuid'));
                 break;
             case 'CATEGORY':
                 $cat = new TableCategory($gDb, $value);
-                $htmlValue = createLink($cat->getValue('cat_name'), 'categories', $cat->getValue('cat_id'), $cat->getValue('cat_uuid'));
+                $htmlValue = createLink($cat->readableName(), 'categories', $cat->getValue('cat_id'), $cat->getValue('cat_uuid'));
+            case 'USER':
+                $usr = new User($gDb, $gProfileFields, $value);
+                $htmlValue = createLink($usr->readableName(), 'users', $usr->getValue('usr_id'), $usr->getValue('usr_uuid'));
         }
     
         $value = $htmlValue;
