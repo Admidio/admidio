@@ -73,7 +73,7 @@ $fieldString = array(
     'mem_begin' =>                 'SYS_MEMBERSHIP_START',
     'mem_end' =>                   'SYS_MEMBERSHIP_END',
     'mem_leader' =>                array('name' => 'SYS_LEADER', 'type' => 'BOOL'),
-    // 'mem_approved' =>            '', // TODO_RK
+    'mem_approved' =>              array('name' => 'SYS_MEMBERSHIP_APPROVED', 'type' => 'BOOL'),
 
     'usr_password' =>              'SYS_PASSWORD',
     'usr_photo' =>                 'SYS_PROFILE_PHOTO',
@@ -105,7 +105,7 @@ $fieldString = array(
     'room_overhang' =>             'SYS_OVERHANG',
    
     'dat_cat_id' =>                'SYS_CATEGORY',
-    // 'dat_rol_id'=>              '', // TODO_RK
+    'dat_rol_id'=>                 array('name' => 'SYS_ROLE', 'type' => 'ROLE'),
     'dat_room_id' =>               'SYS_ROOM',
     'dat_begin' =>                 'SYS_START',
     'dat_end' =>                   'SYS_END',
@@ -128,7 +128,7 @@ $fieldString = array(
     'rol_view_members_profiles' => 'SYS_VIEW_PROFILES_OF_ROLE_MEMBERS', 
     'rol_leader_rights' =>         'SYS_LEADER',
     'rol_lst_id' =>                'SYS_DEFAULT_LIST',
-    'rol_default_registration' =>  array('name' => 'SYS_DEFAULT_ASSIGNMENT_REGISTRATION', 'type' => 'bool'),
+    'rol_default_registration' =>  array('name' => 'SYS_DEFAULT_ASSIGNMENT_REGISTRATION', 'type' => 'BOOL'),
     'rol_max_members' =>           'SYS_MAX_PARTICIPANTS',
     'rol_cost' =>                  'SYS_CONTRIBUTION',
     'rol_cost_period' =>           'SYS_CONTRIBUTION_PERIOD',
@@ -526,6 +526,10 @@ function formatValue($value, $type) {
             case 'FOLDER':
                 $folder = new TableFolder($gDb, $value);
                 $htmlValue = createLink($folder->getValue('fol_name'), 'folders', $folder->getValue('fol_id'), $folder->getValue('fol_uuid'));
+                break;
+            case 'ROLE':
+                $role = new TableRoles($gDb, $value);
+                $htmlValue = createLink($role->getValue('rol_name'), 'roles', $role->getValue('rol_id'), $role->getValue('rol_uuid'));
                 break;
         }
     

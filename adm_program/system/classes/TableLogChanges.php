@@ -37,6 +37,7 @@ class TableLogChanges extends TableAccess
     public static array $noLogTables = [
         'auto_login', 'components', 'id', 'log_changes', 
         'messages', 'messages_attachments', 'messages_content', 'messages_recipients', 
+        'registrations',
         'sessions'];
     
     
