@@ -775,8 +775,14 @@ class ProfileFields
                 }
             }
 
-            if($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') !== ''
-            && preg_match('/'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_regex').'/', $fieldValue) === 0) {
+            // RegEx handling. If the regex contains a forward slash /, it needs to be escaped!
+            $regex = $this->mProfileFields[$fieldNameIntern]->getValue('usf_regex');
+            if (str_contains($regex,'/')) {
+                str_replace('/','\/', $regex);
+            }
+
+            if($regex !== ''
+            && preg_match('/'.$regex.'/', $fieldValue) === 0) {
                 throw new AdmException('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
             }
         }
