@@ -786,7 +786,12 @@ class Database
             $this->pdoStatement = $this->pdo->prepare($sql);
 
             if ($this->pdoStatement !== false) {
-                $this->pdoStatement->execute($params);
+                $success = $this->pdoStatement->execute($params);
+
+                // When executing PostgreSQL statements, at least if there is a table missing, no exception is thrown. But the PDOStatement.execute() returns false.
+                if (!$success) {
+                    return false;
+                }
 
                 if (StringUtils::strStartsWith($sql, 'SELECT', false)) {
                     $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
