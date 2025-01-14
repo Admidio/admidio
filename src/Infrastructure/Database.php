@@ -786,10 +786,7 @@ class Database
             $this->pdoStatement = $this->pdo->prepare($sql);
 
             if ($this->pdoStatement !== false) {
-                $success = $this->pdoStatement->execute($params);
-
-                // When executing PostgreSQL statements, at least if there is a table missing, no exception is thrown. But the PDOStatement.execute() returns false.
-                if (!$success) {
+                if (!$this->pdoStatement->execute($params)) {
                     return false;
                 }
 
