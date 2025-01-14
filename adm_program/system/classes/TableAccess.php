@@ -937,7 +937,7 @@ class TableAccess
 
             // now mark all other columns with values of this object as changed
             foreach ($this->dbColumns as $column => $value) {
-                if (strlen((string) $value) > 0) {
+                if ((is_array($value) && count($value)>0) || (strlen((string) $value) > 0)) {
                     $this->columnsInfos[$column]['changed'] = true;
                 }
             }
