@@ -9,6 +9,8 @@
  ***********************************************************************************************
  */
 
+ require_once(__DIR__ . '/TableListColumns.php');
+
 /**
  * This class creates a list configuration object. With this object it's possible
  * to manage the configuration in the database. You can easily create new lists,
@@ -90,7 +92,7 @@ class ListConfiguration extends TableLists
 
         // If column doesn't exist create object
         if (!array_key_exists($number, $this->columns)) {
-            $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+            $this->columns[$number] = new TableListColumns($this->db);
             $this->columns[$number]->setValue('lsc_lst_id', (int)$this->getValue('lst_id'));
         }
 
@@ -895,7 +897,7 @@ class ListConfiguration extends TableLists
                     if (!in_array($lscRow['lsc_special_field'], array('usr_login_name', 'usr_usr_id_create', 'usr_timestamp_create', 'usr_usr_id_change', 'usr_timestamp_change', 'usr_login_name', 'usr_uuid'))
                         || $gCurrentUser->editUsers()) {
                         $lscNumber = (int)$lscRow['lsc_number'];
-                        $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+                        $this->columns[$lscNumber] = new TableListColumns($this->db);
                         $this->columns[$lscNumber]->setArray($lscRow);
                     }
                 }

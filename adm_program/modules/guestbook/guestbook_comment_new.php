@@ -117,7 +117,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0) 
 // create html page object
 $page = new HtmlPage('admidio-guestbook-comment-new', $headline);
 
-if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getGbcUuid)) { // TODO_RK: More fine-grained logging settings
     // show link to view change history
     $page->addPageFunctionsMenuItem(
         'menu_item_guestbook_change_history',

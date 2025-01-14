@@ -76,10 +76,23 @@ $fieldString = array(
     'mem_end' =>                   'SYS_MEMBERSHIP_END',
     'mem_leader' =>                array('name' => 'SYS_LEADER', 'type' => 'BOOL'),
     'mem_approved' =>              array('name' => 'SYS_MEMBERSHIP_APPROVED', 'type' => 'BOOL'),
+    'mem_count_guests' =>          'SYS_SEAT_AMOUNT',
+    'mem_timestamp_change' =>      'SYS_CHANGED_AT',
+    'mem_usr_id_change' =>         'SYS_CHANGED_BY',
+    'mem_usr_id_create' =>         'SYS_CREATED_AT',
+    'mem_timestamp_create' =>      'SYS_CREATED_BY',
+    'mem_comment' =>               'SYS_COMMENT',
+
 
     'usr_password' =>              'SYS_PASSWORD',
     'usr_photo' =>                 'SYS_PROFILE_PHOTO',
     'usr_login_name' =>            'SYS_USERNAME',
+    'usr_uuid' =>                  'SYS_UNIQUE_ID',
+    'usr_timestamp_change' =>      'SYS_CHANGED_AT',
+    'usr_usr_id_change' =>         'SYS_CHANGED_BY',
+    'usr_usr_id_create' =>         'SYS_CREATED_AT',
+    'usr_timestamp_create' =>      'SYS_CREATED_BY',
+    
 
     'usf_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
     'usf_type' =>                  'SYS_TYPE',
@@ -217,7 +230,7 @@ $fieldString = array(
     'men_men_id_parent' =>         'SYS_MENU_LEVEL',
     'men_com_id' =>                'SYS_MODULE_RIGHTS',
     //'men_node' =>                  '', // men_node cannot be set by the user (section headings in the frontend)!
-    'men_order' =>                 'SYS_ORDER',
+    'men_order' =>                 'SYS_ORDER', 
     'men_standard' =>              $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))),
     'men_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
     'men_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
@@ -239,6 +252,9 @@ $fieldString = array(
     'lst_usr_id' =>                array('name' => 'SYS_USER', 'type' => 'USER'),
     'lst_name' =>                  'SYS_NAME',
     'lst_global' =>                array('name' => 'SYS_CONFIGURATION_ALL_USERS', 'type' => 'BOOL'),
+    'lsc_number' =>                'SYS_NUMBER',
+    'lsc_filter' =>                'SYS_CONDITION',
+    'lsc_sort' =>                  'SYS_ORDER',
 
     'cat_name' =>                  'SYS_NAME',
     'cat_name_intern' =>           'SYS_INTERNAL_NAME',
@@ -247,10 +263,6 @@ $fieldString = array(
     'cat_system' =>                array('name' => 'SYS_SSYSTEM', 'type' => 'BOOL'),
     'cat_default' =>               array('name' => $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_CATEGORY'))), 'type' => 'BOOL'),
     'cat_sequence' =>              'SYS_ORDER',
-
-
-    '' => '',
-    '' => '',
 );
 
 
@@ -669,6 +681,7 @@ while ($row = $fieldHistoryStatement->fetch()) {
     // 3. Optional Related-To column, e.g. for group memberships, we show the user as main name and the group as related
     //    Similarly, files/folders, organizations, guestbook comments, etc. show their parent as related
     if ($showRelatedColumn) {
+        $relatedName = $row['related_name'];
         $relatedTable = $row['table_name'];
         if ($row['table_name'] == 'members') {
             $relatedTable = 'roles';
@@ -682,16 +695,31 @@ while ($row = $fieldHistoryStatement->fetch()) {
         if ($row['table_name'] == 'roles_rights_data') {
             $relatedTable = 'roles';
         }
-        $relatedName = $row['related_name'];
+        if ($row['table_name'] == 'list_columns') {
+            // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
+            if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {
+                $relatedName = $fieldString[$relatedName];
+                if (is_array($relatedName)) {
+                    $relatedName = $relatedName['name'];
+                }
+                $relatedName = Language::translateIfTranslationStrId($relatedName);
+            }
+            $relatedTable = 'user_fields';
+        }
         if (!empty($relatedName)) {
             $relID = 0;
             $relUUID = '';
-            if (ctype_digit($row['related_id'])) { // numeric related_ID -> Interpret it as ID
+            $rid = $row['related_id'];
+            if (empty($rid)) {
+                // do nothing
+                $columnValues[] = $relatedName;
+            } elseif (ctype_digit($rid)) { // numeric related_ID -> Interpret it as ID
                 $relID = (int)$row['related_id'];
+                $columnValues[] = createLink($relatedName, $relatedTable, $relID, $relUUID);
             } else { // non-numeric related_ID -> Interpret it as UUID
                 $relUUID = $row['related_id'];
+                $columnValues[] = createLink($relatedName, $relatedTable, $relID, $relUUID);
             }
-            $columnValues[] = createLink($relatedName, $relatedTable, $relID, $relUUID);
         } else {
             $columnValues[] = '';
         }

@@ -212,7 +212,7 @@ $page->addJavascript(
     true
 );
 
-if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getEventUuid)) { // TODO_RK: More fine-grained logging settings
     // show link to view change history
     $page->addPageFunctionsMenuItem(
         'menu_item_events_change_history',

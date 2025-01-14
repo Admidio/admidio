@@ -65,7 +65,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage('admidio-weblinks-edit', $headline);
 
-if ($gSettingsManager->getBool('profile_log_edit_fields') && $getLinkUuid !== '') { // TODO_RK: More fine-grained logging settings
+if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getLinkUuid)) { // TODO_RK: More fine-grained logging settings
     // show link to view change history
     $page->addPageFunctionsMenuItem(
         'menu_item_weblinks_change_history',

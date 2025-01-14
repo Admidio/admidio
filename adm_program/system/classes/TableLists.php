@@ -9,6 +9,8 @@
  ***********************************************************************************************
  */
 
+ require_once(__DIR__ . '/TableLists.php');
+
 class TableLists extends TableAccess
 {
     /**

@@ -51,7 +51,7 @@ if (isset($_SESSION['rooms_request'])) {
 $page = new HtmlPage('admidio-rooms-edit', $headline);
 
 // show link to view profile field change history
-if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getRoomUuid)) {
     $page->addPageFunctionsMenuItem(
         'menu_item_room_history',
         $gL10n->get('SYS_CHANGE_HISTORY'),

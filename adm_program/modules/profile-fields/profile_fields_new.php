@@ -90,7 +90,7 @@ $page->addJavascript(
 );
 
 
-if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getUsfUuid)) {
     // show link to view profile field change history
     $page->addPageFunctionsMenuItem(
         'menu_item_profilefiled_change_history',

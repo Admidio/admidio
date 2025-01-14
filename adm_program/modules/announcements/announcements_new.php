@@ -77,7 +77,7 @@ if (isset($_SESSION['announcements_request'])) {
 // create html page object
 $page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
 
-if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getAnnUuid)) { // TODO_RK: More fine-grained logging settings
     // show link to view change history
     $page->addPageFunctionsMenuItem(
         'menu_item_announcement_change_history',
