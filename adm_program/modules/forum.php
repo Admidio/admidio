@@ -49,7 +49,7 @@ try {
 
             // create html page object
             $page = new ForumPresenter('adm_forum_cards', $headline);
-            $page->createForumCards();
+            $page->createCards();
             $page->show();
             break;
 
@@ -59,7 +59,7 @@ try {
 
             // create html page object
             $page = new ForumPresenter('adm_forum_list', $headline);
-            $page->createForumList();
+            $page->createList();
             $page->show();
             break;
 

@@ -27,7 +27,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ForumPresenter extends PagePresenter
+class ForumTopicPresenter extends PagePresenter
 {
     /**
      * @var array Array with all read forum topics and their first post.
@@ -187,46 +187,38 @@ class ForumPresenter extends PagePresenter
 
     /**
      * Read the data of the forum in an array.
-     * @param string $categoryUUID UUID of the category for which the topics should be filtered.
+     * @param string $topicUUID UUID of the topic for which the posts should be filtered.
      * @throws Exception
      */
-    public function getData(string $categoryUUID = ''): array
+    public function getData(string $topicUUID = ''): array
     {
-        global $gDb, $gCurrentOrgId, $gProfileFields;
+        global $gDb, $gProfileFields;
 
-        $sqlConditions = '';
         $sqlQueryParameters = array();
 
-        if ($categoryUUID !== '') {
-            $sqlConditions .= ' AND cat_uuid = ?';
-            $sqlQueryParameters[] = $categoryUUID;
-        }
-
-        $sql = 'SELECT fot_uuid, fot_title, fot_views, fop_text, fot_timestamp_create, fot_usr_id_create,
+        $sql = 'SELECT fot_uuid, fot_title, fot_views, fop_uuid, fop_text, fop_timestamp_create, fop_usr_id_create,
                        cat_name, usr_uuid,
                        cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname
                   FROM ' . TBL_FORUM_TOPICS . '
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON fot_cat_id = cat_id
             INNER JOIN ' . TBL_FORUM_POSTS . '
-                    ON fop_id = fot_fop_id_first_post
+                    ON fop_fot_id = fot_id
             INNER JOIN ' . TBL_USERS . '
-                    ON usr_id = fot_usr_id_create
+                    ON usr_id = fop_usr_id_create
              LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
                     ON cre_surname.usd_usr_id = usr_id
                    AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
              LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
                     ON cre_firstname.usd_usr_id = usr_id
                    AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
-                 WHERE (  cat_org_id = ? -- $gCurrentOrgId
-                       OR cat_org_id IS NULL )
-                       ' . $sqlConditions . '
-                 ORDER BY fot_timestamp_create DESC';
+                 WHERE fot_uuid = ? -- $topicUUID
+                 ORDER BY fop_timestamp_create';
 
         $queryParameters = array_merge(array(
             (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'),
             (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-            $gCurrentOrgId
+            $topicUUID
         ), $sqlQueryParameters);
 
         return $gDb->getArrayFromSql($sql, $queryParameters);
@@ -245,40 +237,34 @@ class ForumPresenter extends PagePresenter
         $forum = new ForumService($gDb);
         $categories = $forum->getCategories();
 
-        foreach ($data as $forumTopic) {
-            $templateRow['uuid'] = $forumTopic['fot_uuid'];
-            $templateRow['title'] = $forumTopic['fot_title'];
-            $templateRow['views'] = $forumTopic['fot_views'];
-            if (strlen($forumTopic['fop_text']) > 200) {
-                $templateRow['text'] = substr(
-                        substr($forumTopic['fop_text'], 0, 200),
-                        0,
-                        strrpos(substr($forumTopic['fop_text'], 0, 200), ' ')
-                    ) . ' ...';
-            } else {
-                $templateRow['text'] = $forumTopic['fop_text'];
-            }
-            $templateRow['userUUID'] = $forumTopic['usr_uuid'];
-            $templateRow['userName'] = $forumTopic['firstname'] . ' ' . $forumTopic['surname'];
-            $datetime = new \DateTime($forumTopic['fot_timestamp_create']);
+        foreach ($data as $forumPost) {
+            $templateRow['topic_uuid'] = $forumPost['fot_uuid'];
+            $templateRow['post_uuid'] = $forumPost['fop_uuid'];
+            $templateRow['title'] = $forumPost['fot_title'];
+            $templateRow['views'] = $forumPost['fot_views'];
+            $templateRow['text'] = $forumPost['fop_text'];
+            $templateRow['userUUID'] = $forumPost['usr_uuid'];
+            $templateRow['userName'] = $forumPost['firstname'] . ' ' . $forumPost['surname'];
+            $datetime = new \DateTime($forumPost['fop_timestamp_create']);
             $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $forumPost['fot_uuid']));
             $templateRow['editable'] = false;
 
             if (count($categories) > 1) {
-                $templateRow['category'] = Language::translateIfTranslationStrId($forumTopic['cat_name']);
+                $templateRow['category'] = Language::translateIfTranslationStrId($forumPost['cat_name']);
             }
 
             if ($gCurrentUser->administrateForum()) {
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumTopic['fot_uuid'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumPost['fot_uuid'])),
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT_TOPIC')
                 );
                 $templateRow['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumTopic['fot_title'])),
+                    'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumPost['fot_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'topic_delete', 'topic_uuid' => $forumPost['fot_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumPost['fot_title'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_TOPIC')
                 );
