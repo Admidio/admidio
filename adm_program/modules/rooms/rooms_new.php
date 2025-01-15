@@ -59,7 +59,7 @@ try {
         'room_name',
         $gL10n->get('SYS_ROOM'),
         $room->getValue('room_name'),
-        array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
+        array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'room_capacity',

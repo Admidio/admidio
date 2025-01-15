@@ -786,7 +786,9 @@ class Database
             $this->pdoStatement = $this->pdo->prepare($sql);
 
             if ($this->pdoStatement !== false) {
-                $this->pdoStatement->execute($params);
+                if (!$this->pdoStatement->execute($params)) {
+                    return false;
+                }
 
                 if (StringUtils::strStartsWith($sql, 'SELECT', false)) {
                     $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());

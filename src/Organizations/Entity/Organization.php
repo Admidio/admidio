@@ -173,9 +173,9 @@ class Organization extends Entity
                      , (?, ?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', false, false, 2, ?, ?)
                      , (?, ?, \'FOT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
-                     , (?, ?, \'DAT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
-                     , (?, ?, \'DAT\', \'TRAINING\',  \'INS_TRAINING\',  false, false, 2, ?, ?)
-                     , (?, ?, \'DAT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)';
+                     , (?, ?, \'EVT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
+                     , (?, ?, \'EVT\', \'TRAINING\',  \'INS_TRAINING\',  false, false, 2, ?, ?)
+                     , (?, ?, \'EVT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)';
         $queryParams = array(
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
