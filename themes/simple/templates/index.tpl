@@ -75,11 +75,11 @@
         {if $validLogin}
             <span id="adm_dropdown_user_photo" class="dropdown ms-auto">
                 <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img id="adm_profile_photo" style="max-height: 40px; max-width: 40px;" class="rounded-circle" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+                    <img id="adm_profile_photo" style="max-height: 40px; max-width: 40px;" class="rounded-circle" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-center">
                     <li class="nav-item mb-2">
-                        <img id="adm_profile_photo" style="max-height: 200px; max-width: 200px;" class="rounded-circle" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+                        <img id="adm_profile_photo" style="max-height: 200px; max-width: 200px;" class="rounded-circle" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
                     </li>
                     <li class="nav-item mb-4">
                         {$currentUser->getValue('FIRST_NAME')} {$currentUser->getValue('LAST_NAME')}

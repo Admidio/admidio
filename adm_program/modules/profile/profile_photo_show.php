@@ -75,7 +75,13 @@ try {
         $image = new Image($picPath);
     }
 
+    // Caching-Header setzen
+    header("Last-Modified: " . $user->getValue('usr_timestamp_changed', 'D, d M Y H:i:s') . " GMT");
+    header("ETag: " . md5_file($picPath));
+
+    // Content-Type setzen
     header('Content-Type: ' . $image->getMimeType());
+
     $image->copyToBrowser();
     $image->delete();
 } catch (Exception $e) {

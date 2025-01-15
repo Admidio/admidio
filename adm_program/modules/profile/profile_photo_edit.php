@@ -176,7 +176,7 @@ try {
         $form->addCustomContent(
             'admCurrentProfilePhoto',
             $gL10n->get('SYS_CURRENT_PROFILE_PICTURE'),
-            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)) . '" alt="' . $gL10n->get('SYS_CURRENT_PROFILE_PICTURE') . '" />'
+            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'timestamp' => $user->getValue('usr_timestamp_change', 'Y-m-d-H-i-s'))) . '" alt="' . $gL10n->get('SYS_CURRENT_PROFILE_PICTURE') . '" />'
         );
         $form->addFileUpload(
             'admPhotoUploadFile',
@@ -263,7 +263,7 @@ try {
         // create html page object
         $page = new HtmlPage('admidio-profile-photo-edit', $headline);
         $page->addTemplateFile('modules/profile.new-photo.tpl');
-        $page->assignSmartyVariable('urlCurrentProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)) );
+        $page->assignSmartyVariable('urlCurrentProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'timestamp' => $user->getValue('usr_timestamp_change', 'Y-m-d-H-i-s'))));
         $page->assignSmartyVariable('urlNewProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)));
         $page->assignSmartyVariable('urlNextPage', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'save', 'user_uuid' => $getUserUuid)));
         $page->show();
