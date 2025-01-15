@@ -36,9 +36,9 @@ try {
     // Initialize local variables of the transfer variables
     $image = null;
     if ((int) $user->getValue('GENDER', 'database') === 2) {
-        $picPath = THEME_PATH . '/images/profile-photo-female.png';
+        $photoPath = THEME_PATH . '/images/profile-photo-female.png';
     } else {
-        $picPath = THEME_PATH . '/images/profile-photo-male.png';
+        $photoPath = THEME_PATH . '/images/profile-photo-male.png';
     }
 
     if ($gCurrentUser->hasRightViewProfile($user)) {
@@ -49,8 +49,8 @@ try {
                 $image->setImageFromData($gCurrentSession->getValue('ses_binary'));
             } // show temporary saved new photo from upload in filesystem
             else {
-                $picPath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
-                $image = new Image($picPath);
+                $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
+                $image = new Image($photoPath);
             }
         } else {
             // show photo from database
@@ -59,28 +59,26 @@ try {
                     $image = new Image();
                     $image->setImageFromData($user->getValue('usr_photo'));
                 } else {
-                    $image = new Image($picPath);
+                    $image = new Image($photoPath);
                 }
             } // show photo from folder adm_my_files
             else {
                 $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
                 if (is_file($file)) {
-                    $picPath = $file;
+                    $photoPath = $file;
                 }
-                $image = new Image($picPath);
+                $image = new Image($photoPath);
             }
         }
     } else {
         // if user has no right to view profile then show dummy photo
-        $image = new Image($picPath);
+        $image = new Image($photoPath);
     }
 
+    header('Content-Type: ' . $image->getMimeType());
     // Caching-Header setzen
     header("Last-Modified: " . $user->getValue('usr_timestamp_changed', 'D, d M Y H:i:s') . " GMT");
-    header("ETag: " . md5_file($picPath));
-
-    // Content-Type setzen
-    header('Content-Type: ' . $image->getMimeType());
+    header("ETag: " . md5_file($photoPath));
 
     $image->copyToBrowser();
     $image->delete();
