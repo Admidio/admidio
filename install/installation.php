@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Session\Entity\Session;
 use Admidio\UI\View\Installation;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  ***********************************************************************************************
@@ -98,6 +99,12 @@ try {
     $gL10n = new Language($language);
 
     $language = $gL10n->getLanguage();
+
+    /* Disable logging changes to the database. This will not be reverted,
+     *  i.e. during installation / setup no logs are written. The next user 
+     * call will use the default value of true and properly log changes...
+     */
+    Entity::setLoggingEnabled(false);
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
     \Admidio\InstallationUpdate\Service\Installation::checkFolderPermissions();

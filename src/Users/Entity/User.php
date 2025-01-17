@@ -12,6 +12,7 @@ use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class handle role rights, cards and other things of users
@@ -597,33 +598,33 @@ class User extends Entity
                           WHERE rld_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'UPDATE ' . TBL_USER_LOG . '
-                            SET usl_usr_id_create = NULL
+                          SET usl_usr_id_create = NULL
                           WHERE usl_usr_id_create = ' . $usrId;
-
+                          
         $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_create = NULL
-                          WHERE usr_usr_id_create = ' . $usrId;
+                            WHERE usr_usr_id_create = ' . $usrId;
 
         $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_change = NULL
-                          WHERE usr_usr_id_change = ' . $usrId;
+                            WHERE usr_usr_id_change = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
                           WHERE lsc_lst_id IN (SELECT lst_id
                                                  FROM ' . TBL_LISTS . '
                                                 WHERE lst_usr_id = ' . $usrId . '
-                                                  AND lst_global = false)';
-
+                                                AND lst_global = false)';
+                                                
         $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
                           WHERE lst_global = false
-                            AND lst_usr_id = ' . $usrId;
+                          AND lst_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_GUESTBOOK_COMMENTS . '
-                          WHERE gbc_usr_id_create = ' . $usrId;
+        WHERE gbc_usr_id_create = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MEMBERS . '
                           WHERE mem_usr_id = ' . $usrId;
-
+                          
         // MySQL couldn't create delete statement with same table in a sub query.
         // Therefore, we fill a temporary table with all ids that should be deleted and reference on this table
         $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
@@ -658,23 +659,24 @@ class User extends Entity
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                                            WHERE msr_msg_id = msc_msg_id)';
+                          WHERE msr_msg_id = msc_msg_id)';
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
+                          $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                                            WHERE msr_msg_id = msg_id)';
-
+                          WHERE msr_msg_id = msg_id)';
+                          
         $sqlQueries[] = 'DELETE FROM ' . TBL_REGISTRATIONS . '
                           WHERE reg_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_AUTO_LOGIN . '
-                          WHERE atl_usr_id = ' . $usrId;
+        WHERE atl_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
                           WHERE ses_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_USER_LOG . '
-                          WHERE usl_usr_id = ' . $usrId;
+        // TODO_RK: Shall we delete all log-entries pertaining to the given user??? That's not audit-proof!
+        // $sqlQueries[] = 'DELETE FROM ' . TBL_LOG . '
+        //                   WHERE usl_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
                           WHERE usd_usr_id = ' . $usrId;
@@ -1815,6 +1817,7 @@ class User extends Entity
                     'usr_password',
                     $this->getValue('usr_password'),
                     $newPassword,
+                    "MODIFIED",
                     $this
                 );
             }
@@ -1839,6 +1842,7 @@ class User extends Entity
                 'usr_password',
                 $this->getValue('usr_password'),
                 $newPasswordHash,
+                "MODIFIED",
                 $this
             );
         }
@@ -1918,6 +1922,7 @@ class User extends Entity
                     $columnName,
                     (string)$this->getValue($columnName),
                     (string)$newValue,
+                    "MODIFIED",
                     $this
                 );
             }
@@ -1978,6 +1983,7 @@ class User extends Entity
                 // Old and new values in raw database:
                 (string)$oldFieldValue_db,
                 (string)$newValue,
+                "MODIFIED",
                 $this
             );
         }
@@ -2124,5 +2130,52 @@ class User extends Entity
     public function getProfileFieldsData()
     {
         return $this->mProfileFieldsData;
+    }
+
+    /**
+     * Return the human-readable name of this record.
+     * 
+     * @return string The readable representation of the record ("Lastname, Firstname")
+     */
+    public function readableName(): string
+    {
+        return $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME');
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * For the users table, we also ignore usr_valid, usr_*_login, etc.
+     * 
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        $ignored = parent::getIgnoredLogColumns();
+        $ignored[] = 'usr_uuid';
+        $ignored[] = 'usr_pw_reset_id';
+        $ignored[] = 'usr_pw_reset_timestamp';
+        $ignored[] = 'usr_last_login';
+        $ignored[] = 'usr_actual_login';
+        $ignored[] = 'usr_number_login';
+        $ignored[] = 'usr_date_invalid';
+        $ignored[] = 'usr_number_invalid';
+        $ignored[] = 'usr_valid';
+        return $ignored;
+    }
+
+   /**
+     * Adjust the changelog entry for this db record: Don't store the actual password, just '[...]'. Also, the photo cannot be stores, so indicate this by '[...]', too.
+     * 
+     * @param LogChanges $logEntry The log entry to adjust
+     * 
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry) {
+        if ($logEntry->getValue('log_field') == 'usr_password' ||
+            $logEntry->getValue('log_field') == 'usr_photo') 
+        {
+            $logEntry->setValue('log_value_old', '[...]');
+            $logEntry->setValue('log_value_new', '[...]');
+        }
     }
 }

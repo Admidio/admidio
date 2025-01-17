@@ -7,6 +7,7 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_folders
@@ -791,5 +792,31 @@ class Folder extends Entity
         }
 
         return parent::save($updateFingerPrint);
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns.
+     * The folder table also contains fol_usr_id and fol_timestamp. Also, for now fol_type will always be DOCUMENTS.
+     *
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(), ['fol_type', 'fol_usr_id', 'fol_timestamp']);
+    }
+    /**
+     * Adjust the changelog entry for this db record: Add the parent folder as a related object
+     * 
+     * @param LogChanges $logEntry The log entry to adjust
+     * 
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry) {
+        if (!empty($this->getValue('fol_fol_id_parent'))) {
+            $folEntry = new Folder($this->db, $this->getValue('fol_fol_id_parent'));
+            $logEntry->setLogRelated($folEntry->getValue('fol_uuid'), $folEntry->getValue('fol_name'));
+        }
     }
 }

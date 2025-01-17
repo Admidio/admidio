@@ -113,6 +113,13 @@ try {
     $gCurrentOrganization = Organization::createDefaultOrganizationObject($gDb, $g_organization);
     $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 
+
+    /* Disable logging changes to the database. This will not be reverted,
+     *  i.e. during installation / setup no logs are written. The next user 
+     * call will use the default value of true and properly log changes...
+     */
+    Entity::setLoggingEnabled(false);
+
     // get system user id
     $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'System\' ';
     $pdoStatement = $gDb->queryPrepared($sql);

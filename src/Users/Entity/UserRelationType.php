@@ -4,6 +4,7 @@ namespace Admidio\Users\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_user_relation_types
@@ -93,5 +94,21 @@ class UserRelationType extends Entity
     public function isUnidirectional(): bool
     {
         return $this->getRelationTypeString() === self::USER_RELATION_TYPE_UNIDIRECTIONAL;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record.
+     *
+     * For user relation types, we want to show the inverse relation as related.
+     *
+     * @param LogChanges $logEntry The log entry to adjust
+     *
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry) {
+        $inverse = $this->getInverse();
+        if ($inverse) {
+            $logEntry->setLogRelated($inverse->getValue('urt_uuid'), $inverse->getValue('urt_name'));
+        }
     }
 }

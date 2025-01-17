@@ -10,6 +10,7 @@ use DateTime;
 use ModuleEvents;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Roles\Entity\ListColumns;
 
 /**
  * @brief Class manages the list configuration
@@ -97,7 +98,7 @@ class ListConfiguration extends Entity
 
         // If column doesn't exist create object
         if (!array_key_exists($number, $this->columns)) {
-            $this->columns[$number] = new Entity($this->db, TBL_LIST_COLUMNS, 'lsc');
+            $this->columns[$number] = new ListColumns($this->db);
             $this->columns[$number]->setValue('lsc_lst_id', (int)$this->getValue('lst_id'));
         }
 
@@ -938,7 +939,7 @@ class ListConfiguration extends Entity
                     if (!in_array($lscRow['lsc_special_field'], array('usr_login_name', 'usr_usr_id_create', 'usr_timestamp_create', 'usr_usr_id_change', 'usr_timestamp_change', 'usr_login_name', 'usr_uuid'))
                         || $gCurrentUser->editUsers()) {
                         $lscNumber = (int)$lscRow['lsc_number'];
-                        $this->columns[$lscNumber] = new Entity($this->db, TBL_LIST_COLUMNS, 'lsc');
+                        $this->columns[$lscNumber] = new ListColumns($this->db);
                         $this->columns[$lscNumber]->setArray($lscRow);
                     }
                 }
@@ -1070,5 +1071,17 @@ class ListConfiguration extends Entity
         if (count($this->columns) > 0) {
             $this->readColumns();
         }
+    }
+
+   /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * The Lists table also contains mem_rol_id and mem_usr_id, which cannot be changed,
+     * so their initial setting on creation should not be logged. Instead, they will be used
+     * when displaying the log entry.
+     *
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(), ['lst_timestamp']);
     }
 }
