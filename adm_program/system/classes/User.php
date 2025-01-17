@@ -93,6 +93,9 @@ class User extends TableAccess
 
         if ($userFields !== null) {
             $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
+        } else {
+            global $gProfileFields;
+            $this->mProfileFieldsData = clone $gProfileFields; // create explicit a copy of the object (param is in PHP5 a reference)
         }
 
         $this->organizationId = $GLOBALS['gCurrentOrgId'];

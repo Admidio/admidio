@@ -34,6 +34,9 @@ class TableUserRelationType extends TableAccess
      */
     public function getInverse(): ?TableUserRelationType
     {
+        if (empty($this->getValue('urt_id_inverse'))) {
+            return null;
+        }
         $inverse = new self($this->db, $this->getValue('urt_id_inverse'));
 
         if ($inverse->isNewRecord()) {
