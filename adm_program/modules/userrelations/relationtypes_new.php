@@ -84,6 +84,16 @@ try {
         true
     );
 
+    if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getUrtUuid)) { // TODO_RK: More fine-grained logging settings
+        // show link to view change history
+        $page->addPageFunctionsMenuItem(
+            'menu_item_relationtypes_change_history',
+            $gL10n->get('SYS_CHANGE_HISTORY'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'user_relation_types', 'uuid' => $getUrtUuid)),
+            'bi-clock-history'
+        );
+    }
+        
     // show form
     $form = new Form(
         'adm_user_relations_type_edit_form',

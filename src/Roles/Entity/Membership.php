@@ -396,6 +396,6 @@ class Membership extends Entity
         $rolId = $this->getValue('mem_rol_id');
         $role = new Role($this->db, $rolId);
 
-        $logEntry->setLogRelated((string)$rolId, $role->getValue('rol_name'));
+        $logEntry->setLogRelated($role->getValue('rol_uuid'), $role->getValue('rol_name'));
     }
 }

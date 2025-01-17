@@ -36,7 +36,7 @@ class Categories extends HtmlPage
      */
     public function createEditForm(string $type, string $categoryUUID = '')
     {
-        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gCurrentOrganization, $gDb;
+        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gCurrentOrganization, $gDb, $gSettingsManager;
 
         $roleViewSet = array(0);
         $roleEditSet = array(0);
@@ -172,6 +172,18 @@ class Categories extends HtmlPage
                 showHideViewRightControl();', true
             );
         }
+
+        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($categoryUUID)) { // TODO_RK: More generic logging settings!
+            // show link to view field definition change history
+            $this->addPageFunctionsMenuItem(
+                'menu_item_categories_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'categories', 'uuid' => $categoryUUID)),
+                'bi-clock-history'
+            );
+        }
+
+
 
         // show form
         $form = new Form(
@@ -354,7 +366,7 @@ class Categories extends HtmlPage
      */
     public function createList(string $type)
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentOrganization;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentOrganization, $gSettingsManager;
 
         // set module headline
         $headline = $gL10n->get('SYS_CATEGORIES');
@@ -453,6 +465,17 @@ class Categories extends HtmlPage
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('mode' => 'edit', 'type' => $type)),
             'bi-plus-circle-fill'
         );
+
+
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More generic logging settings!
+            // show link to view field definition change history
+            $this->addPageFunctionsMenuItem(
+                'menu_item_categories_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'categories')),
+                'bi-clock-history'
+            );
+        }
 
         $sql = 'SELECT *
           FROM ' . TBL_CATEGORIES . '

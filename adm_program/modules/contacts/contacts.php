@@ -67,11 +67,11 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_contacts_change_history',
                 $gL10n->get('SYS_CHANGE_HISTORY'),
-                ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php',
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'users,user_data,members')),
                 'bi-clock-history'
             );
         }
-
+    
         // show checkbox to select all users or only active members
         if ($gSettingsManager->getBool('contacts_show_all')) {
             // create filter menu with elements for category

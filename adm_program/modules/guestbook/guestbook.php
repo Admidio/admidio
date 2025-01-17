@@ -176,6 +176,16 @@ try {
         }
     }
 
+    if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+        // show link to view change history
+        $page->addPageFunctionsMenuItem(
+            'menu_item_guestbook_change_history',
+            $gL10n->get('SYS_CHANGE_HISTORY'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'guestbook,guestbook_comments')),
+            'bi-clock-history'
+        );
+    }
+
     $guestbook = new Topic($gDb);
 
     // Alle Gaestebucheintraege fuer die aktuelle Seite ermitteln

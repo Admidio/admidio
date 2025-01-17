@@ -47,6 +47,16 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-rooms-edit', $headline);
 
+    // show link to view profile field change history
+    if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getRoomUuid)) {
+        $page->addPageFunctionsMenuItem(
+            'menu_item_room_history',
+            $gL10n->get('SYS_CHANGE_HISTORY'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('uuid' => $getRoomUuid, 'table' => 'rooms')),
+            'bi-clock-history'
+        );
+    }
+
     // show form
     $form = new Form(
         'adm_rooms_edit_form',

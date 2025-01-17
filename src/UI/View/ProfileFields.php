@@ -33,7 +33,7 @@ class ProfileFields extends HtmlPage
      */
     public function createEditForm(string $profileFieldUUID = '')
     {
-        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb;
+        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb, $gSettingsManager;
 
         // Create user-defined field object
         $userField = new ProfileField($gDb);
@@ -73,6 +73,16 @@ class ProfileFields extends HtmlPage
             });
             $("#usf_type").trigger("change");', true
         );
+
+        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($profileFieldUUID)) { // TODO_RK: More generic logging settings!
+            // show link to view field definition change history
+            $this->addPageFunctionsMenuItem(
+                'menu_item_profilefields_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'user_fields', 'uuid' => $profileFieldUUID)),
+                'bi-clock-history'
+            );
+        }
 
         // show form
         $form = new Form(
@@ -260,7 +270,7 @@ class ProfileFields extends HtmlPage
      */
     public function createList()
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gSettingsManager;
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
@@ -301,6 +311,16 @@ class ProfileFields extends HtmlPage
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'USF')),
             'bi-hdd-stack-fill'
         );
+
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More generic logging settings!
+            // show link to view field definition change history
+            $this->addPageFunctionsMenuItem(
+                'menu_item_profilefields_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'user_fields')),
+                'bi-clock-history'
+            );
+        }
 
         $sql = 'SELECT *
                   FROM ' . TBL_USER_FIELDS . '

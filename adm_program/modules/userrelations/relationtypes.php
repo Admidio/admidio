@@ -40,6 +40,16 @@ try {
         'bi-plus-circle-fill'
     );
 
+    if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+        // show link to view change history
+        $page->addPageFunctionsMenuItem(
+            'menu_item_relationtypes_change_history',
+            $gL10n->get('SYS_CHANGE_HISTORY'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'user_relation_types')),
+            'bi-clock-history'
+        );
+    }
+
 
     // Create table object
     $relationTypesOverview = new HtmlTable('tbl_relationtypes', $page, true);

@@ -87,6 +87,17 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-documents-files-rename', $headline);
 
+    if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+        $isFile = ($getFileUuid !== '');
+        // show link to view change history
+        $page->addPageFunctionsMenuItem(
+            'menu_item_filefolder_change_history',
+            $gL10n->get('SYS_CHANGE_HISTORY'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => ($isFile?'files':'folders').',roles_rights_data', 'uuid' => $isFile?$getFileUuid:$getFolderUuid)),
+            'bi-clock-history'
+        );
+    }
+    
     // create html form
     $form = new Form(
         'adm_edit_download_form',

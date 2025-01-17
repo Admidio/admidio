@@ -43,12 +43,12 @@ try {
         $category->readDataByUuid($getCatUuid);
         $headline .= ' - ' . $category->getValue('cat_name');
     }
-
-    // Create Link object
-    $weblinks = new ModuleWeblinks();
-    $weblinks->setParameter('lnk_uuid', $getLinkUuid);
-    $weblinks->setParameter('cat_id', $category->getValue('cat_id'));
-    $weblinksCount = $weblinks->getDataSetCount();
+    
+        // Create Link object
+        $weblinks = new ModuleWeblinks();
+        $weblinks->setParameter('lnk_uuid', $getLinkUuid);
+        $weblinks->setParameter('cat_id', $category->getValue('cat_id'));
+        $weblinksCount = $weblinks->getDataSetCount();
 
     // number of weblinks per page
     if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
@@ -99,6 +99,16 @@ try {
             );
         }
 
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+            // show link to view change history
+            $page->addPageFunctionsMenuItem(
+                'menu_item_weblinks_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'links')),
+                'bi-clock-history'
+            );
+        }
+        
         $page->addJavascript(
             '
         $("#cat_uuid").change(function() {

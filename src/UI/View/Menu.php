@@ -193,7 +193,7 @@ class Menu extends HtmlPage
      */
     public function createList()
     {
-        global $gCurrentSession, $gL10n, $gDb;
+        global $gCurrentSession, $gL10n, $gDb, gSettingsManager;
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
@@ -215,6 +215,16 @@ class Menu extends HtmlPage
             ADMIDIO_URL . FOLDER_MODULES . '/menu.php?mode=edit',
             'bi-plus-circle-fill'
         );
+
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+            // show link to view change history
+            $this->addPageFunctionsMenuItem(
+                'menu_item_menu_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'menu')),
+                'bi-clock-history'
+            );
+        }
 
         $templateRowMenuParent = array();
 

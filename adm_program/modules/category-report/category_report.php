@@ -260,15 +260,25 @@ try {
                 );
             }
 
+            if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK
+                // show link to view profile field change history
+                $page->addPageFunctionsMenuItem(
+                    'menu_item_categoryreport_change_history',
+                    $gL10n->get('SYS_CHANGE_HISTORY'),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'category_report')),
+                    'bi-clock-history'
+                );
+            }
+    
             // process changes in the navbar form with javascript submit
             $page->addJavascript(
                 '
-            $("#export_and_filter").change(function() {
-                $("#adm_navbar_filter_form_category_report").submit();
-            });
-            $("#crt_id").change(function() {
-                $("#adm_navbar_filter_form_category_report").submit();
-            });',
+                $("#export_and_filter").change(function() {
+                    $("#adm_navbar_filter_form_category_report").submit();
+                });
+                $("#crt_id").change(function() {
+                    $("#adm_navbar_filter_form_category_report").submit();
+                });',
                 true
             );
 

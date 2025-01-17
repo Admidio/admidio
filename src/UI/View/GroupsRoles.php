@@ -67,7 +67,7 @@ class GroupsRoles extends HtmlPage
     {
         global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gL10n, $gDb;
 
-        $this->createSharedHeader($categoryUUID, $roleType, true);
+        $this->createSharedHeader($categoryUUID, $roleType, 'card');
 
         $categoryUUID = '';
         $categoryName = '';
@@ -345,6 +345,16 @@ class GroupsRoles extends HtmlPage
                 }
             }
         ');
+
+        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($roleUUID)) { // TODO_RK: More fine-grained logging settings
+            // show link to view change history
+            $this->addPageFunctionsMenuItem(
+                'menu_item_role_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'roles', 'uuid' => $roleUUID)),
+                'bi-clock-history'
+            );
+        }
 
         $form = new Form(
             'adm_roles_edit_form',
@@ -630,8 +640,7 @@ class GroupsRoles extends HtmlPage
     public function createPermissionsList(string $categoryUUID, string $roleType)
     {
         global $gSettingsManager, $gL10n, $gDb, $gCurrentSession;
-
-        $this->createSharedHeader($categoryUUID, $roleType);
+        $this->createSharedHeader($categoryUUID, $roleType, 'permissions');
 
         $templateData = array();
 
@@ -797,11 +806,12 @@ class GroupsRoles extends HtmlPage
      *                         0 - inactive roles
      *                         1 - active roles
      *                         2 - event participation roles
-     * @param bool $showCards Set to **true** if cards role list should be shown
+     * @param string $mode The purpose of the current page. One of: 'card', 'permissions', 'edit'
+     * 
      * @return void
      * @throws Exception
      */
-    protected function createSharedHeader(string $categoryUUID, string $roleType, bool $showCards = false)
+    protected function createSharedHeader(string $categoryUUID, string $roleType, string $mode = 'card')
     {
         global $gCurrentUser, $gSettingsManager, $gL10n, $gDb;
 
@@ -814,13 +824,29 @@ class GroupsRoles extends HtmlPage
                 'bi-plus-circle-fill'
             );
 
-            if ($showCards) {
+            if ($mode == 'card') {
                 // show permissions of all roles
                 $this->addPageFunctionsMenuItem(
                     'menu_item_groups_roles_show_permissions',
                     $gL10n->get('SYS_SHOW_PERMISSIONS'),
                     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'permissions', 'cat_uuid' => $categoryUUID, 'role_type' => $roleType)),
                     'bi-shield-lock-fill'
+                );
+            }
+
+            if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+                $logShowTable = 'roles';
+                if ($mode == 'card') {
+                    $logShowTable = 'members';
+                } elseif ($mode == 'permissions') {
+                    $logShowTable = 'roles_rights_data';
+                }
+                // show link to view profile field change history
+                $this->addPageFunctionsMenuItem(
+                    'menu_item_members_change_history',
+                    $gL10n->get('SYS_CHANGE_HISTORY'),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => $logShowTable)),
+                    'bi-clock-history'
                 );
             }
 
@@ -864,7 +890,7 @@ class GroupsRoles extends HtmlPage
             $this,
             array('type' => 'navbar', 'setFocus' => false)
         );
-        $form->addInput('mode', '', ($showCards ? 'card' : 'permissions'), array('property' => Form::FIELD_HIDDEN));
+        $form->addInput('mode', '', ($mode), array('property' => Form::FIELD_HIDDEN));
         $form->addSelectBoxForCategories(
             'cat_uuid',
             $gL10n->get('SYS_CATEGORY'),

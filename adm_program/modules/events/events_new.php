@@ -187,6 +187,16 @@ try {
         true
     );
 
+    if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getEventUuid)) { // TODO_RK: More fine-grained logging settings
+        // show link to view change history
+        $page->addPageFunctionsMenuItem(
+            'menu_item_events_change_history',
+            $gL10n->get('SYS_CHANGE_HISTORY'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'events', 'uuid' => $getEventUuid)),
+            'bi-clock-history'
+        );
+    }
+    
     // show form
     $form = new Form(
         'adm_events_edit_form',

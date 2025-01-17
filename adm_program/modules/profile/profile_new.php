@@ -100,6 +100,16 @@ try {
         // create html page object
         $page = new HtmlPage('admidio-profile-edit', $headline);
 
+        // show link to view profile field change history
+        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getUserUuid) && $gCurrentUser->hasRightEditProfile($user)) {
+            $page->addPageFunctionsMenuItem(
+                'menu_item_profile_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('uuid' => $getUserUuid)),
+                'bi-clock-history'
+            );
+        }
+
         // create html form
         $form = new Form(
             'adm_profile_edit_form',

@@ -36,8 +36,8 @@ use Admidio\Categories\Entity\Category;
 
 
 try {
-    require_once(__DIR__ . '/../../system/common.php');
-    require(__DIR__ . '/../../system/login_valid.php');
+    require_once(__DIR__ . '/../system/common.php');
+    require(__DIR__ . '/../system/login_valid.php');
 
     // calculate default date from which the profile fields history should be shown
     $filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
@@ -426,7 +426,7 @@ try {
             case 'announcements':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $uuid)); break;
             case 'categories' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_uuid' => $uuid, 'type' => '{TYPE}')); break; // TODO_RK: Implement type!
+                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/categories.php', array('mode' => 'edit', 'uuid' => $uuid)); break; // Note: the type is no longer needed (only recommended, but we don't have it in the changelog DB)
             case 'category_report' :
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php'); break;
             case 'events' :
@@ -446,7 +446,7 @@ try {
             case 'list_columns':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', array('active_role' => 1, 'list_uuid' => $uuid)); break;
             case 'members':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $id)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
             case 'menu':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('menu_uuid' => $uuid)); break;
             // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
@@ -458,7 +458,7 @@ try {
             // case 'registrations':
             //     $url = SecurityUtils::encodeUrl(); break;
             case 'roles':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $id)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
             case 'roles_rights':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
             case 'roles_rights_data':
@@ -477,7 +477,7 @@ try {
             // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
             //     $url = SecurityUtils::encodeUrl(); break;
             case 'user_fields':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             case 'user_relations': // For user relations, we don't link to the modification of the individual relation, but to the user1
                 // $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $uuid)); break;
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $uuid)); break;
@@ -578,9 +578,11 @@ try {
                 case 'CATEGORY':
                     $cat = new Category($gDb, $value);
                     $htmlValue = createLink($cat->readableName(), 'categories', $cat->getValue('cat_id'), $cat->getValue('cat_uuid'));
+                    break;
                 case 'USER':
                     $usr = new User($gDb, $gProfileFields, $value);
                     $htmlValue = createLink($usr->readableName(), 'users', $usr->getValue('usr_id'), $usr->getValue('usr_uuid'));
+                    break;
             }
         
             $value = $htmlValue;
@@ -630,7 +632,7 @@ try {
     $form = new Form(
         'adm_navbar_filter_form',
         'sys-template-parts/form.filter.tpl',
-        ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php',
+        ADMIDIO_URL . FOLDER_MODULES . '/changelog.php',
         $page,
         array('type' => 'navbar', 'setFocus' => false)
     );

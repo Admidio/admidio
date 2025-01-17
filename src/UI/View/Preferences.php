@@ -2061,6 +2061,8 @@ class Preferences extends HtmlPage
      */
     public function show()
     {
+        global $gSettingsManager, $gL10n;
+
         if ($this->preferencesPanelToShow !== '') {
             // open the modules tab if the options of a module should be shown
             if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
@@ -2137,6 +2139,17 @@ class Preferences extends HtmlPage
             true
         );
 
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+            // show link to view change history
+            $this->addPageFunctionsMenuItem(
+                'menu_item_events_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'organizations,preferences,texts')),
+                'bi-clock-history'
+            );
+        }
+        
+        
         $this->assignSmartyVariable('accordionCommonPanels', $this->accordionCommonPanels);
         $this->assignSmartyVariable('accordionModulePanels', $this->accordionModulePanels);
         $this->addTemplateFile('preferences/preferences.tpl');

@@ -119,6 +119,16 @@ try {
     $page = new HtmlPage('admidio-documents-files-config-folder', $headline);
     $page->assignSmartyVariable('folderName', $folder->getValue('fol_name'));
 
+    if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
+        // show link to view change history
+        $page->addPageFunctionsMenuItem(
+            'menu_item_folder_change_history',
+            $gL10n->get('SYS_CHANGE_HISTORY'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'folders,files,roles_rights_data', 'uuid' => $getFolderUuid)),
+            'bi-clock-history'
+        );
+    }
+    
     // show form
     $form = new Form(
         'adm_folder_permissions_form',
