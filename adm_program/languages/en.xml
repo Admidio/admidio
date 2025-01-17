@@ -13,6 +13,7 @@
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Interval</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Entries of unregistered users will be checked. Too many entries within the given time intervall are not allowed. This option allows to take control over unwanted entries. If interval is set to 0, no check will be done. (default: 60 seconds)</string>
   <string name="GBO_GUESTBOOK">Guestbook</string>
+  <string name="GBO_GUESTBOOK_COMMENTS">Guestbook comments</string>
   <string name="GBO_GUESTBOOK_DESC">Guests and users are able to leave greetings and comments, and can annotate other\'s entries.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation activated for</string>
   <string name="GBO_GUESTBOOK_MODERATION_DESC">Guestbook entries will be displayed after moderation. Define if moderation should be performed in case of guests or for logged in users only, or nobody\'s comments should be checked in advance. (default: Nobody)</string>
@@ -343,6 +344,7 @@
   <string name="SYS_CHANGE_DATE">Change date</string>
   <string name="SYS_CHANGE_HISTORY">Change history</string>
   <string name="SYS_CHANGE_HISTORY_OF">Change history of #VAR1#</string>
+  <string name="SYS_CHANGE_HISTORY_GENERIC">Change history: #VAR1#</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last modified</string>
   <string name="SYS_CHANGED_BY">Changed by</string>
@@ -421,6 +423,7 @@
   <string name="SYS_CREATE_ROLE">Create role</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATE_WEBLINK">Create web link</string>
+  <string name="SYS_CREATED">Created</string>
   <string name="SYS_CREATED_AT">Created at</string>
   <string name="SYS_CREATED_BY">Created by</string>
   <string name="SYS_CREATED_BY_AND_AT">Created by #VAR1# at #VAR2#</string>
@@ -497,6 +500,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
+  <string name="SYS_DELETED">Deleted</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Request delivery confirmation</string>
@@ -846,6 +850,7 @@
   <string name="SYS_MEMBERS_PER_PAGE">Members displayed per page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Found #VAR1# members with a similar name.</string>
+  <string name="SYS_MEMBERSHIP_APPROVED">Membership approved</string>
   <string name="SYS_MEMBERSHIP_END">End of membership</string>
   <string name="SYS_MEMBERSHIP_DELETE">Would you like to end membership in role #VAR1_BOLD#?</string>
   <string name="SYS_MEMBERSHIP_START">Start of membership</string>
@@ -999,6 +1004,7 @@
   <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
+  <string name="SYS_PATH">Path</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
   <string name="SYS_PERIOD">Time period</string>
   <string name="SYS_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2#</string>
@@ -1089,6 +1095,7 @@
   <string name="SYS_REGISTRATIONS">Registrations</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Any regular expression can be stored that will be applied to the user's entered content in this profile field. The content must match the conditions of the regular expression for the entered value to be stored in the field. The regular expression is checked in addition to the general conditions of the data type.</string>
+  <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>
@@ -1139,6 +1146,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Role memberships</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Change role memberships</string>
   <string name="SYS_ROLE_NAME_EXISTS">Role with same name already exists in this category.</string>
+  <string name="SYS_ROLE_RIGHTS">Role Rights</string>
   <string name="SYS_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
   <string name="SYS_ROLE_SELECTION">Role selection</string>
   <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be restricted a configuration to the members of the selected roles.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
@@ -1325,6 +1333,7 @@
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it. If you do not want to send any of these notifications, leave the text field empty.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime.</string>
   <string name="SYS_TAB">Tab</string>
+  <string name="SYS_TABLE">Table</string>
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Set the template that is preselected when creating the e-card. (Default: postcard)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>

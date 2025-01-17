@@ -13,6 +13,7 @@
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht angemeldete Benutzer:innen wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer:innen in zu kurzen Zeitabständen hintereinander unerwünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Voreinstellung: 60 Sekunden)</string>
   <string name="GBO_GUESTBOOK">Gästebuch</string>
+  <string name="GBO_GUESTBOOK_COMMENTS">Gästebuch-Kommentare</string>
   <string name="GBO_GUESTBOOK_DESC">Gäste und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation aktivieren für</string>
   <string name="GBO_GUESTBOOK_MODERATION_DESC">Gästebucheinträge werden erst nach einer Sichtprüfung einer Administratorin oder eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Gästen, auch bei angemeldeten Benutzer:innen oder bei niemandem durchgeführt werden soll.  (Voreinstellung: Niemand)</string>
@@ -450,6 +451,7 @@
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATE_WEBLINK">Weblink anlegen</string>
+  <string name="SYS_CREATED">Angelegt</string>
   <string name="SYS_CREATED_AT">Angelegt am</string>
   <string name="SYS_CREATED_BY">Angelegt von</string>
   <string name="SYS_CREATED_BY_AND_AT">Angelegt von #VAR1# am #VAR2#</string>
@@ -527,6 +529,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Du darfst keine Systemkategorien löschen.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">Du kannst die Systemrolle #VAR1_BOLD# nicht löschen.</string>
+  <string name="SYS_DELETED">Gelöscht</string>
   <string name="SYS_DELETED_ENTRY">Gelöschter Eintrag</string>
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
@@ -886,6 +889,7 @@
   <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmende pro Seite</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Es wurden #VAR1# Mitglieder mit einem ähnlichen Namen gefunden.</string>
+  <string name="SYS_MEMBERSHIP_APPROVED">Mitgliedschaft genehmigt</string>
   <string name="SYS_MEMBERSHIP_END">Mitgliedschaftsende</string>
   <string name="SYS_MEMBERSHIP_DELETE">Willst du die Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich beenden?</string>
   <string name="SYS_MEMBERSHIP_START">Mitgliedschaftsbeginn</string>
@@ -1038,6 +1042,7 @@
   <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
+  <string name="SYS_PATH">Pfad</string>
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
   <string name="SYS_PERIOD">Zeitraum</string>
   <string name="SYS_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
@@ -1130,6 +1135,7 @@
   <string name="SYS_REGISTRATIONS">Registrierungen</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulärer Ausdruck</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Es kann ein beliebiger regulärer Ausdruck hinterlegt werden, der auf den eingegebenen Inhalt des Benutzers in dieses Profilfeld angewendet wird. Der Inhalt muss den Bedingungen des regulären Ausdrucks entsprechen, damit der eingegebene Wert in dem Feld gespeichert werden kann. Der reguläre Ausdruck wird zusätzlich zu den allgemeinen Bedingungen des Datentyps geprüft.</string>
+  <string name="SYS_RELATED_TO">Verknüpft mit</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein:e Benutzer:in das Profil einer anderen Benutzerin oder eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer:innen das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur die Benutzer bzw. der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
@@ -1180,6 +1186,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
   <string name="SYS_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
+  <string name="SYS_ROLE_RIGHTS">Rollenberechtigungen</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Du hast keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wähle eine andere Rolle aus.</string>
   <string name="SYS_ROLE_SELECTION">Rollenauswahl</string>
   <string name="SYS_ROLE_SELECTION_CONF_DESC">Die Rollenauswahl kann über eine Konfiguration auf die Mitglieder der ausgewählten Rollen eingeschränkt werden.\n\n Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer bleiben.</string>
@@ -1361,6 +1368,7 @@
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst werden. Die Texte sind in zwei Teile unterteilt (Betreff und Inhalt) und werden durch #subject# und #content# gekennzeichnet. Der Inhalt für jeden Abschnitt folgt. Wenn du keine dieser Benachrichtigungen senden möchtest, lass das Textfeld leer.\n\nIn jeder Mail können die folgenden Platzhalter verwendet werden. Sie werden zur Laufzeit durch den entsprechenden Inhalt ersetzt.</string>
+  <string name="SYS_TABLE">Tabelle</string>
   <string name="SYS_TAB">Tabulator</string>
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Voreinstellung: Postcard)</string>
@@ -1402,6 +1410,7 @@
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER">Benutzer:in</string>
   <string name="SYS_USER_COULD_BE_CREATED">Die Person kann angelegt werden.</string>
+  <string name="SYS_USER_DELETE_DESC">Wollen Sie #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_DELETE_DESC">Willst du #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein:e Benutzer:in zu der übergebenen ID gefunden werden!</string>
   <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>

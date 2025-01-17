@@ -246,7 +246,7 @@ try {
         $page->addPageFunctionsMenuItem(
             'menu_item_profile_change_history',
             $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/profile_field_history.php', array('user_uuid' => $getUserUuid)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array('user_uuid' => $getUserUuid)),
             'bi-clock-history'
         );
     }
