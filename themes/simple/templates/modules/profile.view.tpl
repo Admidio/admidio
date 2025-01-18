@@ -68,6 +68,9 @@
                     {else}
                         <div class="admidio-form-group row mb-3">
                             <div class="col-sm-3">
+                                {if strlen($profileField.icon) > 0}
+                                    {$profileField.icon}
+                                {/if}
                                 {$profileField.label}
                             </div>
                             <div class="col-sm-9">
@@ -111,6 +114,9 @@
 
         <div class="admidio-form-group row mb-3">
             <div class="col-sm-3">
+                {if strlen($profileField.icon) > 0}
+                    {$profileField.icon}
+                {/if}
                 {$profileField.label}
             </div>
             <div class="col-sm-9">
