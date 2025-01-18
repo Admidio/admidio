@@ -189,8 +189,10 @@ $gCurrentOrganization->setValue('org_email_administrator', $_SESSION['orga_email
 $gCurrentOrganization->save();
 $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 
+$gProfileFields = new ProfileFields($db, $gCurrentOrgId);
+
 // create administrator and assign roles
-$administrator = new User($db);
+$administrator = new User($db, $gProfileFields);
 $administrator->setValue('usr_login_name', $_SESSION['user_login']);
 $administrator->setPassword($_SESSION['user_password']);
 $administrator->setValue('usr_usr_id_create', $gCurrentUserId);

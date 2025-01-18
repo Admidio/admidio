@@ -16,7 +16,7 @@ use Admidio\Users\Entity\User;
  * system notifications for profile field changes are enabled in the configuration of Admidio
  *
  * On startup, a global (singleton) object $gChangeNotifications is created
- * that is automatically used the User and Membership classes to log
+ * that is automatically used by the User and TableMembers classes to log
  * changes.
  *
  *
