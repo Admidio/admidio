@@ -86,8 +86,7 @@ try {
         'photos' => 'SYS_PHOTO_ALBUMS',
     
         'lists' => 'SYS_LIST',
-
-        // 'list_columns' => '', // TODO_RK
+        // 'list_columns' => '', // Changes to the list column are handled as changes to the list -> list_columns is never used as affected table
     );
     $fieldString = array(
         'mem_begin' =>                 'SYS_MEMBERSHIP_START',
@@ -177,6 +176,7 @@ try {
         'rol_guestbook' =>             array('name' => 'SYS_RIGHT_GUESTBOOK', 'type' => 'BOOL'),
         'rol_guestbook_comments' =>    array('name' => 'SYS_RIGHT_GUESTBOOK_COMMENTS', 'type' => 'BOOL'),
         'rol_weblinks' =>              array('name' => 'SYS_RIGHT_WEBLINKS', 'type' => 'BOOL'),
+        'rol_valid' =>                 array('name' => 'SYS_ACTIVATE_ROLE', 'type' => 'BOOL'),
 
         'rol_start_date' =>            'SYS_VALID_FROM',
         'rol_end_date' =>              'SYS_VALID_TO',
