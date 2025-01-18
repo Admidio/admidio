@@ -238,8 +238,10 @@ try {
 
         'org_shortname' =>             'SYS_NAME_ABBREVIATION',
         'org_longname' =>              'SYS_NAME',
-        'org_org_id_parent' =>         array('name' => 'ORG_PARENT_ORGANIZATION', 'type'=> 'ORG'),
+        'org_org_id_parent' =>         array('name' => 'SYS_PARENT_ORGANIZATION', 'type'=> 'ORG'),
         'org_homepage' =>              array('name' => 'SYS_HOMEPAGE', 'type'=> 'URL'),
+        'org_email_administrator' =>   array('name' => 'SYS_EMAIL_ADMINISTRATOR', 'type' => 'EMAIL'),
+        'org_show_org_select' =>       array('name' => 'SYS_SHOW_ORGANIZATION_SELECT', 'type' => 'BOOL'),
 
         'men_name' =>                  'SYS_NAME',
         'men_name_intern' =>           'SYS_INTERNAL_NAME',
