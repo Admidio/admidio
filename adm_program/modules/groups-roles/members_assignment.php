@@ -174,6 +174,16 @@ try {
             );
         }
 
+        // show link to view profile field change history
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+            $page->addPageFunctionsMenuItem(
+                'menu_item_membership_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'members', 'uuid' => $getUserUuid, 'related_id' => $getRoleUuid)),
+                'bi-clock-history'
+            );
+        }
+
         $allVisibleRoles = $gCurrentUser->getRolesViewMemberships();
         $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
                            FROM ' . TBL_ROLES . '

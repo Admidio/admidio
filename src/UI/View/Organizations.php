@@ -31,7 +31,7 @@ class Organizations extends HtmlPage
      */
     public function createEditForm()
     {
-        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession;
+        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession, $gSettingsManager;
         $this->addJavascript('
             $("#adm_button_save").hide();
 
@@ -42,6 +42,16 @@ class Organizations extends HtmlPage
                 $("#adm_button_save").show("slow");
             })
         ', true);
+
+        // show link to view profile field change history
+        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_organizations_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'organizations')),
+                'bi-clock-history'
+            );
+        }
 
         // show form
         $formOrganization = new Form(
