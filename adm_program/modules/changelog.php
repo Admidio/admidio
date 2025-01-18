@@ -502,15 +502,9 @@ try {
             switch ($type) {
                 case 'BOOL':
                     if ($value == 1) {
-                        $htmlValue = '<span class="fa-stack">
-                            <i class="fas fa-square-full fa-stack-1x"></i>
-                            <i class="fas fa-check-square fa-stack-1x fa-inverse"></i>
-                        </span>';
+                        $htmlValue = '<i class="bi bi-check-square"></i>';
                     } else {
-                        $htmlValue = '<span class="fa-stack">
-                            <i class="fas fa-square-full fa-stack-1x"></i>
-                            <i class="fas fa-square fa-stack-1x fa-inverse"></i>
-                        </span>';
+                        $htmlValue = '<i class="bi bi-square"></i>';
                     }
                     break;
                 case 'DATE':
@@ -590,11 +584,7 @@ try {
         // special case for type BOOL and no value is there, then show unchecked checkbox
         else {
             if ($type === 'BOOL') {
-                $value = '<span class="fa-stack">
-                    <i class="fas fa-square-full fa-stack-1x"></i>
-                    <i class="fas fa-square fa-stack-1x fa-inverse"></i>
-                </span>';
-            
+                $value = '<i class="bi bi-square"></i>';
             }    
         }
         return $value;
