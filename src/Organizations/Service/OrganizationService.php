@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  * @brief Class with methods to display the module pages.
