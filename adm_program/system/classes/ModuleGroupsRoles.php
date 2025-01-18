@@ -328,7 +328,7 @@ class ModuleGroupsRoles extends HtmlPage
                     $templateRow['viewMembersProfiles'] = $gL10n->get('ORG_REGISTERED_USERS');
                     break;
                 case 3:
-                    $templateRow['viewMembership'] = $gL10n->get('SYS_LEADERS');
+                    $templateRow['viewMembersProfiles'] = $gL10n->get('SYS_LEADERS');
                     break;
             }
 

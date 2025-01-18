@@ -158,11 +158,11 @@ class TableAccess
      *
      * **Code example**
      * ```
-     * // Constructor of adm_dates object where the category (calendar) is connected
+     * // Constructor of adm_events object where the category (calendar) is connected
      * public function __construct($database, $datId = 0)
      * {
      *     $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
-     *     parent::__construct($db, TBL_DATES, 'dat', $datId);
+     *     parent::__construct($db, TBL_EVENTS, 'dat', $datId);
      * }
      * ```
      */
@@ -485,7 +485,7 @@ class TableAccess
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For a new record if there is an uuid column a new uuid will be created and stored.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
-     *                                if table has columns like **usr_id_create** or **usr_id_changed**
+     *                                if table has columns like **usr_id_create** or **usr_id_change**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
      * @throws Exception
@@ -754,7 +754,7 @@ class TableAccess
 
             // now mark all other columns with values of this object as changed
             foreach ($this->dbColumns as $column => $value) {
-                if (strlen((string) $value) > 0) {
+                if ((is_array($value) && count($value)>0) || (strlen((string) $value) > 0)) {
                     $this->columnsInfos[$column]['changed'] = true;
                 }
             }
