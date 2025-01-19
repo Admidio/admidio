@@ -13,6 +13,12 @@
     <form {foreach $attributes as $attribute}
             {$attribute@key}="{$attribute}"
         {/foreach}>
+        <b>{$l10n->get('SYS_TFA_SETUP_INSTRUCTIONS')}</b>
+        <ol>
+            <li>{$l10n->get('SYS_TFA_SETUP_INSTRUCTIONS_STEP_1')}</li>
+            <li>{$l10n->get('SYS_TFA_SETUP_INSTRUCTIONS_STEP_2')}</li>
+            <li>{$l10n->get('SYS_TFA_SETUP_INSTRUCTIONS_STEP_3')}</li>
+        </ol>
         {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
         {include 'sys-template-parts/form.custom-content.tpl' data=$elements['qr_code']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['otp_code']}

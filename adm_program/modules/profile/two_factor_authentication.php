@@ -103,7 +103,8 @@ try {
             $form = new FormPresenter(
                 'adm_tfa_setup_form',
                 $template,
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid, 'mode' => 'setup'))
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid, 'mode' => 'setup')),
+                options: array('type' => 'vertical')
             );
 
             // Save secret in current session
@@ -114,7 +115,17 @@ try {
             $qrImageUri = $tfa->getQRCodeImageAsDataUri($orgName, $secret, 200);
             $html = '<img id="qr_code" src="' . $qrImageUri . '" alt="Secret: ' . $secret . '" />';
             $form->addCustomContent('qr_code', $gL10n->get('SYS_TFA_SETUP_SCAN_QR'), $html);
-            $form->addInput('otp_code', $gL10n->get('SYS_TFA_TOTP_CODE_ENTER'), '', array('type' => 'text', 'required' => true));
+            $form->addInput(
+                'otp_code', 
+                $gL10n->get('SYS_TFA_TOTP_CODE'), 
+                '', 
+                array(
+                    'type' => 'text', 
+                    'required' => true, 
+                    'maxLength' => 6,
+                    'class' => 'w-50'
+                    )
+            );
             $form->addSubmitButton(
                 'adm_button_save',
                 $gL10n->get('SYS_SAVE'),
