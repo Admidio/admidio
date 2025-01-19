@@ -152,7 +152,6 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'LINKEDIN\',              \'SYS_LINKEDIN\',    \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'linkedin\',  \'https://www.linkedin.com/in/#user_content#\',  false, 3, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'MASTODON\',              \'SYS_MASTODON\',    \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'mastodon\',  \'https://mastodon.social/#user_content#\',      false, 4, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'SKYPE\',                 \'SYS_SKYPE\',       \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_DESC').'\',     \'skype\',     NULL,                                            false, 5, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'TWITTER\',               \'SYS_TWITTER\',     \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'twitter\',   \'https://twitter.com/#user_content#\',          false, 6, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'XING\',                  \'SYS_XING\',        \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', null,          \'https://www.xing.com/profile/#user_content#\', false, 7, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
 
@@ -190,8 +189,10 @@ $gCurrentOrganization->setValue('org_email_administrator', $_SESSION['orga_email
 $gCurrentOrganization->save();
 $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 
+$gProfileFields = new ProfileFields($db, $gCurrentOrgId);
+
 // create administrator and assign roles
-$administrator = new User($db);
+$administrator = new User($db, $gProfileFields);
 $administrator->setValue('usr_login_name', $_SESSION['user_login']);
 $administrator->setPassword($_SESSION['user_password']);
 $administrator->setValue('usr_usr_id_create', $gCurrentUserId);

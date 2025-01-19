@@ -4,7 +4,7 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step, com_update_completed)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.3.10', 0, 1150, true)
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.3.13', 0, 1150, true)
                               , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.3.0', 0, 0, true)
                               , (30, 'MODULE', 'SYS_EVENTS', 'EVENTS', '4.3.0', 0, 0, true)
                               , (40, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.3.0', 0, 0, true)
@@ -613,7 +613,6 @@ fa-mars-stroke-v|SYS_DIVERSE', NULL, NULL, false, false, false, 0, true, 12, 1, 
 (27, '1b204527-bae3-4948-91fa-f0e669c48827', 2, 'TEXT', 'LINKEDIN', 'SYS_LINKEDIN', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-linkedin', 'https://www.linkedin.com/in/#user_content#', false, false, false, 0, false, 3, 1, '2012-01-08 11:11:40', NULL, NULL),
 (28, '1b204528-bae3-4948-91fa-f0e669c48828', 2, 'TEXT', 'MASTODON', 'SYS_MASTODON', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-mastodon', 'https://mastodon.social/#user_content#', false, false, false, 0, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
 (18, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 2, 'TEXT', 'SKYPE', 'SYS_SKYPE', 'SYS_SOCIAL_NETWORK_FIELD_DESC', false, NULL, 'fab fa-skype', NULL, false, false, false, 0, false, 5, 1, '2012-01-08 11:12:07', NULL, NULL),
-(23, '30d0f751-7b38-4704-b042-cf6fbe2f447d', 2, 'TEXT', 'TWITTER', 'SYS_TWITTER', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, 0, false, 6, 1, '2012-01-08 11:11:40', NULL, NULL),
 (24, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 2, 'TEXT', 'XING', 'SYS_XING', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', false, NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, 0, false, 7, 1, '2012-01-08 11:11:40', NULL, NULL),
 (20, '89b33bc0-913a-404c-9899-e53ad5080fec', 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DDT_PRO_MEMBERSHIP_NUMBER', NULL, false, NULL, NULL, NULL, false, true, false, 0, false, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
 (21, '15b324bc-29d8-4b79-bee9-10072b8d7489', 8, 'TEXT', 'FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR_CONTENT', false, NULL, NULL, NULL, false, false, false, 0, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
@@ -805,7 +804,6 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (41, 5, 2, 2, NULL, NULL, NULL),
 (43, 5, 4, 22, NULL, NULL, NULL),
 (46, 5, 6, 18, NULL, NULL, NULL),
-(47, 5, 7, 23, NULL, NULL, NULL),
 (49, 5, 8, 24, NULL, NULL, NULL),
 (60, 6, 1, 1, NULL, NULL, NULL),
 (61, 6, 2, 2, NULL, NULL, NULL),
@@ -1222,7 +1220,8 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (12, 1, 20, '001'),
 (13, 1, 21, 'blau'),
 (13000, 1, 22, 'Admidio'),
-(13001, 1, 23, 'Admidio'),
+(13001, 1, 26, 'AdmidioApp'),
+(13002, 1, 28, '@admidio'),
 (13003, 1, 25, '3'),
 (13004, 1, 14, '1'),
 (13100, 2, 1, 'System'),
@@ -2885,6 +2884,8 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (18131, 354, 22, 'Admidio'),
 (18132, 354, 25, '9'),
 (18133, 354, 14, '1'),
+(18134, 354, 26, 'AdmidioApp'),
+(18135, 354, 28, '@admidio'),
 (1814, 355, 1, 'Schmidt'),
 (1815, 355, 2, 'Jennifer'),
 (1816, 355, 3, 'Unter den Linden 45'),
@@ -2893,7 +2894,6 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1819, 355, 6, 'DEU'),
 (1820, 355, 11, '2'),
 (1821, 355, 12, 'SYS_MEMBER@example.com'),
-(1822, 355, 23, 'Admidio'),
 (1823, 355, 25, '12'),
 (1824, 355, 14, '1'),
 (1900, 356, 1, 'Schmidt'),

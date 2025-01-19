@@ -41,6 +41,20 @@ class CategoriesPresenter extends PagePresenter
         $roleEditSet = array(0);
         $addButtonText = $gL10n->get('SYS_CATEGORY');
 
+        // create category object
+        $category = new Category($gDb);
+
+        if ($categoryUUID !== '') {
+            $category->readDataByUuid($categoryUUID);
+        }
+        // If no type was passed as param, try to read it from the DB. If unsuccessfull, thrown an error.
+        if (empty($type)) {
+            $type = $category->getValue('cat_type');
+        }
+        if (empty($type)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
         // set headline of the script
         if ($categoryUUID !== '') {
             if ($type === 'EVT') {
@@ -121,11 +135,7 @@ class CategoriesPresenter extends PagePresenter
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
-        // create category object
-        $category = new Category($gDb);
-
         if ($categoryUUID !== '') {
-            $category->readDataByUuid($categoryUUID);
             $catId = (int)$category->getValue('cat_id');
 
             // get assigned roles of this category

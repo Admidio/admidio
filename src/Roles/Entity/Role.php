@@ -841,10 +841,8 @@ class Role extends Entity
 
         // system roles are always active and could therefore not be toggled
         if ((int)$this->getValue('rol_system') === 0) {
-            $sql = 'UPDATE ' . TBL_ROLES . '
-                       SET rol_valid = ? -- $status
-                     WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
-            $this->db->queryPrepared($sql, array($status, (int)$this->getValue('rol_id')));
+            $this->setValue('rol_valid', $status);
+            $this->save();
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they were members of this role

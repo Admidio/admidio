@@ -285,19 +285,12 @@ try {
         // Display only fields of the basic data
         if ($gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern'))) {
             if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
-                if ($field->getValue('usf_name_intern') === 'GENDER' || $field->getValue('usf_type') === 'CHECKBOX') {
-                    $masterData[$field->getValue('usf_name_intern')] = array(
-                        'id' => $field->getValue('usf_name_intern'),
-                        'label' => $field->getValue('usf_name'),
-                        'value' => $user->getValue($field->getValue('usf_name_intern'), 'html')
-                    );
-                } else {
-                    $masterData[$field->getValue('usf_name_intern')] = array(
-                        'id' => $field->getValue('usf_name_intern'),
-                        'label' => $field->getValue('usf_name'),
-                        'value' => $user->getValue($field->getValue('usf_name_intern'))
-                    );
-                }
+                $masterData[$field->getValue('usf_name_intern')] = array(
+                    'id' => $field->getValue('usf_name_intern'),
+                    'label' => $field->getValue('usf_name'),
+                    'icon' => $field->getValue('usf_icon'),
+                    'value' => $user->getValue($field->getValue('usf_name_intern'), 'html')
+                );
 
                 if ($field->getValue('usf_name_intern') === 'LAST_NAME') {
                     if ($user->getValue('usr_login_name') === '') {
@@ -316,21 +309,13 @@ try {
                 }
             }
             else {
-                if ($field->getValue('usf_name_intern') === 'GENDER' || $field->getValue('usf_type') === 'CHECKBOX') {
-                    $profileData[$field->getValue('usf_name_intern')] = array(
-                        'category' => $field->getValue('cat_name'),
-                        'id' => $field->getValue('usf_name_intern'),
-                        'label' => $field->getValue('usf_name'),
-                        'value' => $user->getValue($field->getValue('usf_name_intern'), 'html')
-                    );
-                } else {
-                    $profileData[$field->getValue('usf_name_intern')] = array(
-                        'category' => $field->getValue('cat_name'),
-                        'id' => $field->getValue('usf_name_intern'),
-                        'label' => $field->getValue('usf_name'),
-                        'value' => $user->getValue($field->getValue('usf_name_intern'))
-                    );
-                }
+                $profileData[$field->getValue('usf_name_intern')] = array(
+                    'category' => $field->getValue('cat_name'),
+                    'id' => $field->getValue('usf_name_intern'),
+                    'label' => $field->getValue('usf_name'),
+                    'icon' => $field->getValue('usf_icon'),
+                    'value' => $user->getValue($field->getValue('usf_name_intern'), 'html')
+                );
             }
         }
     }

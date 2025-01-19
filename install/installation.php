@@ -153,6 +153,8 @@ try {
         }
     }
 
+    $gDb = $db; // Make the database object globally available to all classes, just like after installation
+
     switch ($step) {
         case 'welcome': // (Default) Welcome to installation
             $gLogger->info('INSTALLATION: Welcome to installation');

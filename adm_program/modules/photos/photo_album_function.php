@@ -85,7 +85,7 @@ try {
         // set parent photo id
         $photoAlbumParent = new Album($gDb);
         $photoAlbumParent->readDataByUuid($_POST['parent_album_uuid']);
-        $_POST['pho_pho_id_parent'] = $photoAlbumParent->getValue('pho_id');
+        $formValues['pho_pho_id_parent'] = $photoAlbumParent->getValue('pho_id');
 
         // write form values in photos object
         foreach ($formValues as $key => $value) {
