@@ -267,27 +267,19 @@ class PagePresenter
     private function assignBasicSmartyVariables()
     {
         global $gDebug, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager,
-               $gSetCookieForDomain, $gNavigation, $gCurrentSession;
+               $gSetCookieForDomain, $gCurrentSession;
 
         $urlImprint = '';
         $urlDataProtection = '';
-        $hasPreviousUrl = false;
-
-        // if there is more than 1 url in the stack than show the back button
-        if ($this->showBackLink && $gNavigation->count() > 1) {
-            $hasPreviousUrl = true;
-        }
 
         $this->smarty->assign('languageIsoCode', $gL10n->getLanguageIsoCode());
         $this->smarty->assign('id', $this->id);
         $this->smarty->assign('title', $this->title);
         $this->smarty->assign('headline', $this->headline);
-        $this->smarty->assign('hasPreviousUrl', $hasPreviousUrl);
         $this->smarty->assign('currentOrganization', $gCurrentOrganization);
         $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
         $this->smarty->assign('urlTheme', THEME_URL);
-        $this->smarty->assign('navigationStack', $gNavigation->getStack());
         $this->smarty->assign('csrfToken', $gCurrentSession->getCsrfToken());
 
         $this->smarty->assign('currentUser', $gCurrentUser);
@@ -580,7 +572,14 @@ class PagePresenter
      */
     public function show()
     {
-        global $gSettingsManager, $gLayoutReduced, $gMenu;
+        global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation;
+
+        $hasPreviousUrl = false;
+
+        // if there is more than 1 url in the stack than show the back button
+        if ($this->showBackLink && $gNavigation->count() > 1) {
+            $hasPreviousUrl = true;
+        }
 
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
@@ -589,6 +588,8 @@ class PagePresenter
         $this->smarty->assign('javascriptContent', $this->javascriptContent);
         $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
 
+        $this->smarty->assign('navigationStack', $gNavigation->getStack());
+        $this->smarty->assign('hasPreviousUrl', $hasPreviousUrl);
         $this->smarty->assign('printView', $this->printView);
         $this->smarty->assign('menuNavigation', $gMenu->getAllMenuItems());
         $this->smarty->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());

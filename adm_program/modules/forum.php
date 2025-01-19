@@ -18,15 +18,18 @@
  *        post_edit    - Create new user and assign roles automatically without dialog
  *        post_save    - Registration does not need to be assigned, simply send login data
  *        post_delete  - Registration does not need to be assigned, simply send login data
- * topic_uuid     : UUID of the topic that should be shown.
+ * topic_uuid    : UUID of the topic that should be shown.
+ * post_uuid     : UUID of the post that should be shown.
  * category_uuid : Array of category UUIDs whose topics should be shown
  ***********************************************************************************************
  */
 
+use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\ForumPostPresenter;
 use Admidio\UI\Presenter\ForumPresenter;
 use Admidio\UI\Presenter\ForumTopicPresenter;
 
@@ -41,56 +44,45 @@ try {
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list', 'topic', 'topic_edit', 'topic_save', 'topic_delete', 'post_edit', 'post_save', 'post_delete')));
     $getTopicUUID = admFuncVariableIsValid($_GET, 'topic_uuid', 'uuid');
+    $getPostUUID = admFuncVariableIsValid($_GET, 'post_uuid', 'uuid');
     $getCategoryUUID = admFuncVariableIsValid($_GET, 'category_uuid', 'uuid');
 
     switch ($getMode) {
         case 'cards':
-            $headline = $gL10n->get('SYS_FORUM');
-            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-chat-dots-fill');
-
             // create html page object
-            $page = new ForumPresenter('adm_forum_cards', $headline);
+            $page = new ForumPresenter($getCategoryUUID);
             $page->createCards();
+            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
             $page->show();
             break;
 
         case 'list':
-            $headline = $gL10n->get('SYS_MENU');
-            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-chat-dots-fill');
-
             // create html page object
-            $page = new ForumPresenter('adm_forum_list', $headline);
+            $page = new ForumPresenter($getCategoryUUID);
             $page->createList();
+            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
             $page->show();
             break;
 
         case 'topic':
-            $headline = $gL10n->get('SYS_TOPIC');
-            $gNavigation->addUrl(CURRENT_URL, $headline);
-
             // create html page object
-            $page = new ForumTopicPresenter('adm_forum_topic', $headline);
+            $page = new ForumTopicPresenter($getTopicUUID);
             $page->createCards();
+            $gNavigation->addUrl(CURRENT_URL,  $page->getHeadline());
             $page->show();
             break;
 
         case 'topic_edit':
-            if ($getTopicUUID !== '') {
-                $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_TOPIC')));
-            } else {
-                $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_TOPIC')));
-            }
-            $gNavigation->addUrl(CURRENT_URL, $headline);
-
             // create html page object
-            $page = new ForumPresenter('adm_forum_topic_edit', $headline);
-            $page->createTopicEditForm($getTopicUUID);
+            $page = new ForumTopicPresenter($getTopicUUID);
+            $page->createEditForm();
+            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
             $page->show();
             break;
 
         case 'topic_save':
-            $menuModule = new ForumService($gDb);
-            $menuModule->saveTopic($getTopicUUID);
+            $forumModule = new ForumService($gDb);
+            $forumModule->saveTopic($getTopicUUID);
 
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
@@ -105,6 +97,34 @@ try {
             $topic = new Topic($gDb);
             $topic->readDataByUuid($getTopicUUID);
             $topic->delete();
+            echo json_encode(array('status' => 'success'));
+            break;
+
+        case 'post_edit':
+            // create html page object
+            $page = new ForumPostPresenter($getPostUUID);
+            $page->createEditForm($getTopicUUID);
+            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
+            $page->show();
+            break;
+
+        case 'post_save':
+            $forumModule = new ForumService($gDb);
+            $forumModule->savePost($getPostUUID, $getTopicUUID);
+
+            $gNavigation->deleteLastUrl();
+            echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+            break;
+
+        case 'post_delete':
+            // delete forum post
+
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $post = new Post($gDb);
+            $post->readDataByUuid($getPostUUID);
+            $post->delete();
             echo json_encode(array('status' => 'success'));
             break;
     }

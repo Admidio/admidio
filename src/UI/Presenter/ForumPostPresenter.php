@@ -27,12 +27,12 @@ use Admidio\UI\Presenter\FormPresenter;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ForumTopicPresenter extends PagePresenter
+class ForumPostPresenter extends PagePresenter
 {
     /**
      * @var string UUID of the topic.
      */
-    protected string $topicUUID = '';
+    protected string $postUUID = '';
     /**
      * @var array Array with all read forum topics and their first post.
      */
@@ -44,99 +44,50 @@ class ForumTopicPresenter extends PagePresenter
 
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $topicUUID UUID of the topic.
+     * @param string $postUUID UUID of the topic.
      * @throws Exception
      */
-    public function __construct(string $topicUUID = '')
+    public function __construct(string $postUUID = '')
     {
-        $this->topicUUID = $topicUUID;
-        parent::__construct($topicUUID);
+        $this->postUUID = $postUUID;
+        parent::__construct($postUUID);
     }
 
     /**
-     * Read all available registrations from the database and create the html content of this
-     * page with the Smarty template engine and write the html output to the internal
-     * parameter **$pageContent**. If no registration is found than show a message to the user.
-     * @throws Exception|\DateMalformedStringException
-     */
-    public function createCards()
-    {
-        global $gL10n;
-
-        $this->prepareData();
-        $this->setHeadline($this->templateData[0]['title']);
-
-        // show link to create new topic
-        $this->addPageFunctionsMenuItem(
-            'menu_item_forum_post_add',
-            $gL10n->get('SYS_CREATE_VAR', array('SYS_POST')),
-            ADMIDIO_URL . FOLDER_MODULES . '/forum.php?mode=post_edit&topic_uuid=' . $this->topicUUID,
-            'bi-plus-circle-fill'
-        );
-
-        $this->smarty->assign('cards', $this->templateData);
-        $this->smarty->assign('l10n', $gL10n);
-        try {
-            $this->pageContent .= $this->smarty->fetch('modules/forum.posts.cards.tpl');
-        } catch (\Smarty\Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    /**
-     * Create the data for the edit form of a forum topic.
+     * Create the data for the edit form of a forum post.
+     * @param string $topicUUID UUID of the topic that must be set if a new post is created.
      * @throws Exception
      */
-    public function createEditForm()
+    public function createEditForm(string $topicUUID = '')
     {
         global $gDb, $gL10n, $gCurrentSession;
 
-        // create menu object
-        $topic = new Topic($gDb);
+        // create post object
         $post = new Post($gDb);
-        $forumService = new ForumService($gDb);
-        $categories = $forumService->getCategories();
 
-        if ($this->topicUUID !== '') {
-            $topic->readDataByUuid($this->topicUUID);
-            $post->readDataById($topic->getValue('fot_fop_id_first_post'));
+        if ($this->postUUID !== '') {
+            $post->readDataByUuid($this->postUUID);
         }
 
-        $this->setHtmlID('adm_forum_topic_edit');
-        if ($this->topicUUID !== '') {
-            $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_TOPIC'))));
+        $this->setHtmlID('adm_forum_post_edit');
+        if ($this->postUUID !== '') {
+            $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_POST'))));
         } else {
-            $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_TOPIC'))));
+            $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_POST'))));
         }
 
         // show form
         $form = new FormPresenter(
-            'adm_forum_topic_edit_form',
-            'modules/forum.topic.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('topic_uuid' => $this->topicUUID, 'mode' => 'topic_save')),
+            'adm_forum_post_edit_form',
+            'modules/forum.posts.edit.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php',
+                array(
+                    'post_uuid' => $this->postUUID,
+                    'topic_uuid' => $topicUUID,
+                    'mode' => 'post_save'
+                )
+            ),
             $this
-        );
-        if (count($categories) > 1) {
-            $categoriesValues = array();
-            $categoryDefault = '';
-            foreach ($categories as $category) {
-                $categoriesValues[$category['cat_uuid']] = $category['cat_name'];
-                if ($category['cat_default'] == 1) {
-                    $categoryDefault = $category['cat_uuid'];
-                }
-            }
-            $form->addSelectBox(
-                'adm_category_uuid',
-                $gL10n->get('SYS_CATEGORY'),
-                $categoriesValues,
-                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $categoryDefault)
-            );
-        }
-        $form->addInput(
-            'fot_title',
-            $gL10n->get('SYS_TITLE'),
-            $topic->getValue('fot_title'),
-            array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addEditor(
             'fop_text',
@@ -150,8 +101,8 @@ class ForumTopicPresenter extends PagePresenter
             array('icon' => 'bi-check-lg')
         );
 
-        $this->smarty->assign('nameUserCreated', $topic->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $topic->getValue('fot_timestamp_create'));
+        $this->smarty->assign('nameUserCreated', $post->getNameOfCreatingUser());
+        $this->smarty->assign('timestampUserCreated', $post->getValue('fot_timestamp_create'));
         $this->smarty->assign('nameLastUserEdited', $post->getNameOfLastEditingUser());
         $this->smarty->assign('timestampLastUserEdited', $post->getValue('fop_timestamp_change'));
         $form->addToHtmlPage();
@@ -204,13 +155,12 @@ class ForumTopicPresenter extends PagePresenter
     {
         global $gDb, $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
 
+        $templateRow = array();
         $data = $this->getData();
         $forum = new ForumService($gDb);
         $categories = $forum->getCategories();
-        $firstPost = true;
 
         foreach ($data as $forumPost) {
-            $templateRow = array();
             $templateRow['topic_uuid'] = $forumPost['fot_uuid'];
             $templateRow['post_uuid'] = $forumPost['fop_uuid'];
             $templateRow['title'] = $forumPost['fot_title'];
@@ -230,26 +180,17 @@ class ForumTopicPresenter extends PagePresenter
             if ($gCurrentUser->administrateForum()) {
                 $templateRow['editable'] = true;
 
-                if ($firstPost) {
-                    $firstPost = false;
-                    $templateRow['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumPost['fot_uuid'])),
-                        'icon' => 'bi bi-pencil-square',
-                        'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPIC'))
-                    );
-                } else {
-                    $templateRow['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_edit', 'post_uuid' => $forumPost['fop_uuid'])),
-                        'icon' => 'bi bi-pencil-square',
-                        'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_POST'))
-                    );
-                    $templateRow['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'adm_post_' . $forumPost['fop_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'post_delete', 'post_uuid' => $forumPost['fop_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array('SYS_POST')),
-                        'icon' => 'bi bi-trash',
-                        'tooltip' => $gL10n->get('SYS_DELETE_VAR', array('SYS_POST'))
-                    );
-                }
+                $templateRow['actions'][] = array(
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_edit', 'post_uuid' => $forumPost['fop_uuid'])),
+                    'icon' => 'bi bi-pencil-square',
+                    'tooltip' => $gL10n->get('SYS_EDIT_TOPIC')
+                );
+                $templateRow['actions'][] = array(
+                    'dataHref' => 'callUrlHideElement(\'adm_post_' . $forumPost['fop_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'post_delete', 'post_uuid' => $forumPost['fop_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array('SYS_POST')),
+                    'icon' => 'bi bi-trash',
+                    'tooltip' => $gL10n->get('SYS_DELETE_VAR', array('SYS_POST'))
+                );
             }
 
             $this->templateData[] = $templateRow;

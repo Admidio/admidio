@@ -3,6 +3,7 @@
 namespace Admidio\Forum\Service;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
@@ -55,6 +56,37 @@ class ForumService
         }
 
         return $categories;
+    }
+
+    /**
+     * Save data from the post form into the database.
+     * @param string $postUUID UUID if the topic that should be saved.
+     * @param string $topicUUID UUID if the topic that must be set if a new post is created.
+     * @throws Exception
+     */
+    public function savePost(string $postUUID, string $topicUUID = '')
+    {
+        global $gCurrentSession, $gDb;
+
+        // check form field input and sanitized it from malicious content
+        $postEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+        $formValues = $postEditForm->validate($_POST);
+
+        $post = new Post($gDb);
+        if ($postUUID !== '') {
+            $post->readDataByUuid($postUUID);
+        } else {
+            $topic = new Topic($gDb);
+            $topic->readDataByUuid($topicUUID);
+            $post->setValue('fop_fot_id', $topic->getValue('fot_id'));
+        }
+
+        // write form values in post object
+        foreach ($formValues as $key => $value) {
+            $post->setValue($key, $value);
+        }
+
+        $post->save();
     }
 
     /**
