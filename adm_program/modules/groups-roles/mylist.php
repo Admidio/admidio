@@ -90,7 +90,7 @@ try {
         $page->addPageFunctionsMenuItem(
             'menu_item_lists_change_history',
             $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'lists,list_columns')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'lists,list_columns', 'uuid' => $getListUuid)),
             'bi-clock-history'
         );
     }
