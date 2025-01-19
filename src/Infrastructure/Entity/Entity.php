@@ -203,11 +203,11 @@ class Entity
     public function readableName(): string
     {
         if (array_key_exists($this->columnPrefix.'_name', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_name'];
+            return $this->dbColumns[$this->columnPrefix.'_name'] ?? '';
         } elseif (array_key_exists($this->columnPrefix.'_headline', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_headline'];
+            return $this->dbColumns[$this->columnPrefix.'_headline'] ?? '';
         } else {
-            return $this->dbColumns[$this->keyColumnName];
+            return $this->dbColumns[$this->keyColumnName] ?? '';
         }
     }
 
