@@ -37,7 +37,7 @@ try {
     }
 
     // set create or edit mode
-    if ($getGboUuid !== '') {
+    if ($getGbcUuid !== '') {
         $mode = 'edit_comment';
         $headline = $gL10n->get('GBO_CREATE_COMMENT');
     } else {
@@ -127,6 +127,12 @@ try {
             $gL10n->get('SYS_NAME'),
             $gbComment->getValue('gbc_name'),
             array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
+        );
+        $form->addInput(
+            'gbc_name',
+            $gL10n->get('SYS_NAME'),
+            $gbComment->getValue('gbc_name'),
+            array('maxLength' => 60, 'property' => HtmlForm::FIELD_HIDDEN)
         );
     } else {
         $form->addInput(

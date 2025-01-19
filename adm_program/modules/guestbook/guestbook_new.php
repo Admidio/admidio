@@ -116,6 +116,12 @@ try {
             $guestbook->getValue('gbo_name'),
             array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
         );
+        $form->addInput(
+            'gbo_name',
+            $gL10n->get('SYS_NAME'),
+            $guestbook->getValue('gbo_name'),
+            array('maxLength' => 60, 'property' => HtmlForm::FIELD_HIDDEN)
+        );    
     } else {
         $form->addInput(
             'gbo_name',
