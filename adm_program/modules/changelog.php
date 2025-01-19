@@ -450,7 +450,7 @@ try {
             case 'members':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
             case 'menu':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('menu_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
             //     $url = SecurityUtils::encodeUrl(); break;
             case 'photos':
