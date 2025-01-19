@@ -434,7 +434,7 @@ try {
             case 'events' :
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $uuid)); break;
             case 'files' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('file_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $uuid)); break;
             case 'folders' :
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $uuid)); break;
             case 'guestbook' :
@@ -549,7 +549,7 @@ try {
                     $htmlValue = nl2br($value);
                     break;
                 case 'ICON':
-                    $htmlValue = '<div class="fas '.$value.'"> '. $value.'</div>';
+                    $htmlValue = '<div class="bi bi-'.$value.'"> '. $value.'</div>';
                     break;
                 case 'ORG':
                     $org = new Organization($gDb, $value);
