@@ -19,18 +19,37 @@
  *                    if no date information is delivered
  ***********************************************************************************************
  */
+use Admidio\Announcements\Entity\Announcement;
+use Admidio\Events\Entity\Event;
+use Admidio\Events\Entity\Room;
+use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\ProfileFields\Entity\ProfileField;
+use Admidio\Roles\Entity\ListColumns;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Membership;
+use Admidio\Roles\Entity\RolesRights;
+use Admidio\Roles\Entity\RolesRightsData;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
+use Admidio\Users\Entity\UserRegistration;
+use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
 use Admidio\Roles\Entity\Role;
 use Admidio\Photos\Entity\Album;
 use Admidio\Documents\Entity\Folder;
+use Admidio\Documents\Entity\File;
 use Admidio\Categories\Entity\Category;
+use Admidio\Forum\Entity\Post;
+use Admidio\Forum\Entity\Topic;
+use Admidio\Weblinks\Entity\Weblink;
+
 
 
 
@@ -53,41 +72,47 @@ try {
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
+    
+    function getTableLabel($table) {
+        $tableString = array(
+            'user_data' => 'SYS_PROFILE_FIELD',
+            'users' =>  'SYS_PROFILE_FIELD',
+            'members' => 'SYS_ROLE_MEMBERSHIPS',
+            'user_fields' => 'ORG_PROFILE_FIELDS',
+            'announcements' => 'SYS_ANNOUNCEMENTS',
+            'events' => 'SYS_EVENTS',
+            'rooms' => 'SYS_ROOM',
+            'roles' => 'SYS_ROLES',
+            'roles_rights' => 'SYS_ROLE_RIGHTS',
+            'roles_rights_data' => 'SYS_ROLE_RIGHTS',
+            
+            'categories' => 'SYS_CATEGORIES',
+            'category_report' => 'SYS_CATEGORY_REPORT',
+            
+            'guestbook' => 'GBO_GUESTBOOK',
+            'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
+            
+            'links' => 'SYS_WEBLINKS',
+            
+            'texts' => 'SYS_SETTINGS',
+            'folders' => 'SYS_FOLDER',
+            'files' => 'SYS_FILE',
+            'organizations' => 'SYS_ORGANIZATION',
+            'menu' => 'SYS_MENU_ITEM',
+            
+            'user_relation_types' => 'SYS_USER_RELATION_TYPE',
+            'user_relations' => 'SYS_USER_RELATIONS',
+            
+            'photos' => 'SYS_PHOTO_ALBUMS',
+            
+            'lists' => 'SYS_LIST',
+            // 'list_columns' => '', // Changes to the list column are handled as changes to the list -> list_columns is never used as affected table
+        );
+        $table = array_key_exists($table, $tableString) ? $tableString[$table] : $table;
+        // TODO_RK: If possible, add link to listing page of the corresponding DB record type
+        return Language::translateIfTranslationStrId($table);
+    }
 
-    $tableString = array(
-        'user_data' => 'SYS_PROFILE_FIELD',
-        'users' =>  'SYS_PROFILE_FIELD',
-        'members' => 'SYS_ROLE_MEMBERSHIPS',
-        'user_fields' => 'ORG_PROFILE_FIELDS',
-        'announcements' => 'SYS_ANNOUNCEMENTS',
-        'events' => 'SYS_EVENTS',
-        'rooms' => 'SYS_ROOM',
-        'roles' => 'SYS_ROLES',
-        'roles_rights' => 'SYS_ROLE_RIGHTS',
-        'roles_rights_data' => 'SYS_ROLE_RIGHTS',
-        
-        'categories' => 'SYS_CATEGORIES',
-        'category_report' => 'SYS_CATEGORY_REPORT',
-
-        'guestbook' => 'GBO_GUESTBOOK',
-        'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
-    
-        'links' => 'SYS_WEBLINKS',
-    
-        'texts' => 'SYS_SETTINGS',
-        'folders' => 'SYS_FOLDER',
-        'files' => 'SYS_FILE',
-        'organizations' => 'SYS_ORGANIZATION',
-        'menu' => 'SYS_MENU_ITEM',
-    
-        'user_relation_types' => 'SYS_USER_RELATION_TYPE',
-        'user_relations' => 'SYS_USER_RELATIONS',
-    
-        'photos' => 'SYS_PHOTO_ALBUMS',
-    
-        'lists' => 'SYS_LIST',
-        // 'list_columns' => '', // Changes to the list column are handled as changes to the list -> list_columns is never used as affected table
-    );
     $fieldString = array(
         'mem_begin' =>                 'SYS_MEMBERSHIP_START',
         'mem_end' =>                   'SYS_MEMBERSHIP_END',
@@ -284,34 +309,126 @@ try {
         'cat_sequence' =>              'SYS_ORDER',
     );
 
+    function getObjectForTable(string $module) {
+        global $gDb, $gProfileFields;
+        switch ($module) {
+            case 'users': 
+            case 'user_data':
+                return new User($gDb, $gProfileFields);
+            case 'announcements':
+                return new Announcement($gDb);
+            case 'categories':
+                return new Category($gDb);
+            case 'category_report' :
+                return  new Entity($gDb, TBL_CATEGORY_REPORT, 'crt');
+            case 'events' :
+                return new Event($gDb);
+            case 'files':
+                return new File($gDb);
+            case 'folders' :
+                return new Folder($gDb);
+            case 'guestbook' :
+                return new Topic($gDb);
+            case 'guestbook_comments' :
+                return new Post($gDb);
+            case 'links' :
+                return new Weblink($gDb);
+            case 'lists' :
+                return new ListConfiguration($gDb);
+            case 'list_columns':
+                return new ListColumns($gDb);
+            case 'members':
+                return new Membership($gDb);
+            case 'menu':
+                return new MenuEntry($gDb);
+            case 'organizations':
+                return new Organization($gDb);
+            case 'photos':
+                return new Album($gDb);
+            case 'preferences':
+                return new Entity($gDb, TBL_PREFERENCES, 'prf');
+            case 'registrations':
+                return new UserRegistration($gDb, $gProfileFields);
+            case 'roles':
+                return new Role($gDb);
+            //case 'roles_rights':
+                //return new RolesRights($gDb, '', 0);
+            case 'roles_rights_data':
+                return new RolesRightsData($gDb);
+            //case 'role_dependencies':
+                // Does not use an Entity-derived class; so far, changes are NOT logged
+            case 'rooms':
+                return new Room($gDb);
+            case 'texts':
+                return new Text($gDb);
+            case 'user_fields':
+                return new ProfileField($gDb);
+            case 'user_relations':
+                return new UserRelation($gDb);
+            case 'user_relation_types':
+                return new UserRelationType($gDb);
+            default:
+                return null;
+        }
+    }
+
 
     // create a user object. Will fill it later if we encounter a user id
     $user = new User($gDb, $gProfileFields);
+    $isUserLog = ($getTables == ['users', 'user_data', 'members']);
+    $haveID = !empty($getId) || !empty($getUuid);
+    if (!empty($getUuid)) {
+        $user->readDataByUuid($getUuid);
+    } elseif (!empty($getId)) {
+        $user->readDataById($getId);
+    }
 
+    // Page Headline: Depending on the tables and ID/UUID/RelatedIDs, we have different cases:
+    //  * Userlog (tables users,user_data,members): Either "Change history of NAME" or "Change history of user data and memberships" (if no ID/UUID)
+    //  * No object ID/UUIDs given: "Change history: Table description 1[, Table description 2, ...]" or "Change history"  (if no tables given)
+    //  * Only one table (table column will be hidden): "Change history: OBJECTNAME (Table description)"
+    //  * 
+    $tableTitles = array_map('getTableLabel', $getTables);
     // set headline of the script
-    if (in_array("users", $getTables) && ($getId || $getUuid)) {
-        if ($getUuid) {
-            $user->readDataByUuid($getUuid);
-        } elseif ($getId) {
-            $user->readDataById($getId);
-        }
-        if ($getId || $getUuid) {
-            $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+    if ($isUserLog && $haveID) {
+        $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->readableName()));
+    } elseif ($isUserLog) {
+        $headline = $gL10n->get('SYS_CHANGE_HISTORY_USERDATA');
+    } elseif (empty($getUuid) && empty($getId) && empty($getRelatedId)) {
+        if (count($tableTitles) > 0) {
+            $headline = $gL10n->get('SYS_CHANGE_HISTORY_GENERIC', [implode(', ', $tableTitles)]);
         } else {
             $headline = $gL10n->get('SYS_CHANGE_HISTORY');
         }
-    //} elseif (in_array('members', $getTables)) {
-
-    //} elseif (in_array('user_fields', $getTables)) {
-
-
-    // } elseif ($getUuid !== '') {
-    //     $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
-    // } elseif ($getRoleId > 0) {
-    //     $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     } else {
-        // TODO_RK: Implement Titles for other types of history
-        $headline = $gL10n->get('SYS_CHANGE_HISTORY');  
+        $objName = '';
+        $useTable = $getTables[0]??'users';
+        $object = getObjectForTable($useTable);
+        if ($useTable == 'members') {
+            // Memberships are special-cased, as the membership Role UUID is stored as relatedID
+            $object = new Role($gDb);
+            $object->readDataByUuid($getRelatedId);
+        }
+        // We have an ID or UUID and/or a relatedID -> Object depends on the table(s)!
+        if (!empty($object)) {
+            if ($useTable == 'members') {
+                // already handled
+            } elseif (!empty($getUuid)) {
+                $object->readDataByUuid($getUuid);
+            } elseif (!empty($getId)) {
+                $object->readDataById($getId);
+            }
+            $objName = $object->readableName();
+        }
+        if (count($getTables) == 0) {
+            if (empty($objName)) {
+                $headline = $gL10n->get('SYS_CHANGE_HISTORY');
+            } else {
+                $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', [$objName]);
+            }
+        } else {
+            $headline = $gL10n->get('SYS_CHANGE_HISTORY_GENERIC2', [$objName, implode(', ', $tableTitles)]);
+        }
     }
 
     // if profile log is activated and current user is allowed to edit users
@@ -678,10 +795,7 @@ try {
 
         // 1. Column showing DB table name (only if more then one tables are shown; One table should be displayed in the headline!)
         if ($showTableColumn) {
-            $tblLabel = $row['table_name'];
-            $tblLabel = array_key_exists($tblLabel, $tableString) ? $tableString[$tblLabel] : $tblLabel;
-            // TODO_RK: If possible, add link to listing page of the corresponding DB record type
-            $columnValues[] = Language::translateIfTranslationStrId($tblLabel);
+            $columnValues[] = getTableLabel($row['table_name']);
         }
 
 

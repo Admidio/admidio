@@ -345,6 +345,8 @@
   <string name="SYS_CHANGE_HISTORY">Change history</string>
   <string name="SYS_CHANGE_HISTORY_OF">Change history of #VAR1#</string>
   <string name="SYS_CHANGE_HISTORY_GENERIC">Change history: #VAR1#</string>
+  <string name="SYS_CHANGE_HISTORY_GENERIC2">Change history: #VAR1# (#VAR2#)</string>
+  <string name="SYS_CHANGE_HISTORY_USERDATA">Change history of user data and memberships</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last modified</string>
   <string name="SYS_CHANGED_BY">Changed by</string>

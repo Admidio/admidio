@@ -373,6 +373,9 @@
   <string name="SYS_CHANGE_DATE">Datum ändern</string>
   <string name="SYS_CHANGE_HISTORY">Änderungshistorie</string>
   <string name="SYS_CHANGE_HISTORY_OF">Änderungshistorie von #VAR1#</string>
+  <string name="SYS_CHANGE_HISTORY_GENERIC">Änderungshistorie: #VAR1#</string>
+  <string name="SYS_CHANGE_HISTORY_GENERIC2">Änderungshistorie: #VAR1# (#VAR2#)</string>
+  <string name="SYS_CHANGE_HISTORY_USERDATA">Änderungshistorie der Benutzerdaten und Mitgliedschaften</string>
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>
   <string name="SYS_CHANGED_AT">Geändert am</string>
   <string name="SYS_CHANGED_BY">Geändert von</string>
