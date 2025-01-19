@@ -26,7 +26,7 @@
         </div>
         <div class="card-footer">
             {$l10n->get('SYS_CREATED_BY_AND_AT', array($forumTopic.userName, $forumTopic.timestamp))}
-            {if strlen($forumTopic.category) > 0}
+            {if {array_key_exists array=$forumTopic key="category"}}
                 <span class="float-end">{$l10n->get('SYS_CATEGORY')}: {$forumTopic.category}</span>
             {/if}
         </div>

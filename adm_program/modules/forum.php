@@ -28,6 +28,7 @@ use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\ForumPresenter;
+use Admidio\UI\Presenter\ForumTopicPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -60,6 +61,16 @@ try {
             // create html page object
             $page = new ForumPresenter('adm_forum_list', $headline);
             $page->createList();
+            $page->show();
+            break;
+
+        case 'topic':
+            $headline = $gL10n->get('SYS_TOPIC');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
+
+            // create html page object
+            $page = new ForumTopicPresenter('adm_forum_topic', $headline);
+            $page->createCards();
             $page->show();
             break;
 

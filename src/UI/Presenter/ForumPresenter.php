@@ -52,7 +52,7 @@ class ForumPresenter extends PagePresenter
         // show link to create new topic
         $this->addPageFunctionsMenuItem(
             'menu_item_forum_topic_add',
-            $gL10n->get('SYS_CREATE_TOPIC'),
+            $gL10n->get('SYS_CREATE_VAR', array('SYS_TOPIC')),
             ADMIDIO_URL . FOLDER_MODULES . '/forum.php?mode=topic_edit',
             'bi-plus-circle-fill'
         );
@@ -262,6 +262,8 @@ class ForumPresenter extends PagePresenter
             $templateRow['userName'] = $forumTopic['firstname'] . ' ' . $forumTopic['surname'];
             $datetime = new \DateTime($forumTopic['fot_timestamp_create']);
             $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $forumTopic['fot_uuid']));
+            $templateRow['category'] = '';
             $templateRow['editable'] = false;
 
             if (count($categories) > 1) {
@@ -280,11 +282,11 @@ class ForumPresenter extends PagePresenter
                     'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumTopic['fot_title'])),
                     'icon' => 'bi bi-trash',
-                    'tooltip' => $gL10n->get('SYS_DELETE_TOPIC')
+                    'tooltip' => $gL10n->get('SYS_DELETE_VAR', array('SYS_TOPIC'))
                 );
             }
 
-            $this->tenplateData[] = $templateRow;
+            $this->templateData[] = $templateRow;
         }
     }
 }

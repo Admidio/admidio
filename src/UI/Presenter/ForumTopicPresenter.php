@@ -7,8 +7,8 @@ use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\FormPresenter;
 
 /**
  * @brief Class with methods to display the module pages of the registration.
@@ -39,61 +39,6 @@ class ForumTopicPresenter extends PagePresenter
     protected array $templateData = array();
 
     /**
-     * Create content that is used on several pages and could be called in other methods. It will
-     * create a functions menu and a filter navbar.
-     * @param string $categoryUUID UUID of the category for which the topics should be filtered.
-     * @return void
-     * @throws Exception
-     */
-    protected function createSharedHeader(string $categoryUUID = '')
-    {
-        global $gCurrentUser, $gL10n, $gDb;
-
-        // show link to create new topic
-        $this->addPageFunctionsMenuItem(
-            'menu_item_forum_topic_add',
-            $gL10n->get('SYS_CREATE_TOPIC'),
-            ADMIDIO_URL . FOLDER_MODULES . '/forum.php?mode=topic_edit',
-            'bi-plus-circle-fill'
-        );
-
-        if ($gCurrentUser->administrateForum()) {
-            $this->addPageFunctionsMenuItem(
-                'menu_item_announcement_categories',
-                $gL10n->get('SYS_EDIT_CATEGORIES'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'FOT')),
-                'bi-hdd-stack-fill'
-            );
-        }
-
-        // add filter navbar
-        $this->addJavascript('
-            $("#role_type").change(function() {
-                $("#adm_navbar_filter_form").submit();
-            });',
-            true
-        );
-
-        // create filter menu with elements for category
-        $form = new FormPresenter(
-            'adm_navbar_forum_filter_form',
-            'sys-template-parts/form.filter.tpl',
-            ADMIDIO_URL . FOLDER_MODULES . '/forum.php',
-            $this,
-            array('type' => 'navbar', 'setFocus' => false)
-        );
-        $form->addSelectBoxForCategories(
-            'cat_uuid',
-            $gL10n->get('SYS_CATEGORY'),
-            $gDb,
-            'ROL',
-            FormPresenter::SELECT_BOX_MODUS_FILTER,
-            array('defaultValue' => $categoryUUID)
-        );
-        $form->addToHtmlPage();
-    }
-
-    /**
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
@@ -105,12 +50,19 @@ class ForumTopicPresenter extends PagePresenter
         global $gL10n;
 
         $this->prepareData($categoryUUID);
-        $this->createSharedHeader($categoryUUID);
+
+        // show link to create new topic
+        $this->addPageFunctionsMenuItem(
+            'menu_item_forum_post_add',
+            $gL10n->get('SYS_CREATE_VAR', array('SYS_POST')),
+            ADMIDIO_URL . FOLDER_MODULES . '/forum.php?mode=post_edit',
+            'bi-plus-circle-fill'
+        );
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
         try {
-            $this->pageContent .= $this->smarty->fetch('modules/forum.cards.tpl');
+            $this->pageContent .= $this->smarty->fetch('modules/forum.topic.posts.tpl');
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -247,7 +199,7 @@ class ForumTopicPresenter extends PagePresenter
             $templateRow['userName'] = $forumPost['firstname'] . ' ' . $forumPost['surname'];
             $datetime = new \DateTime($forumPost['fop_timestamp_create']);
             $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
-            $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $forumPost['fot_uuid']));
+            $templateRow['category'] = '';
             $templateRow['editable'] = false;
 
             if (count($categories) > 1) {
@@ -258,15 +210,15 @@ class ForumTopicPresenter extends PagePresenter
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumPost['fot_uuid'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_edit', 'post_uuid' => $forumPost['fop_uuid'])),
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT_TOPIC')
                 );
                 $templateRow['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumPost['fot_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'topic_delete', 'topic_uuid' => $forumPost['fot_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumPost['fot_title'])),
+                    'dataHref' => 'callUrlHideElement(\'adm_post_' . $forumPost['fop_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'post_delete', 'post_uuid' => $forumPost['fop_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array('SYS_POST')),
                     'icon' => 'bi bi-trash',
-                    'tooltip' => $gL10n->get('SYS_DELETE_TOPIC')
+                    'tooltip' => $gL10n->get('SYS_DELETE_VAR', array('SYS_POST'))
                 );
             }
 

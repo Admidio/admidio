@@ -43,6 +43,10 @@ class PagePresenter
      */
     protected string $title = '';
     /**
+     * @var string UUID of an object that represents the page. The data shown at the page will belong to this object.
+     */
+    protected string $objectUUID = '';
+    /**
      * @var string Additional header that could not be set with the other methods. This content will be added to head of html page without parsing.
      */
     protected string $header = '';
@@ -100,15 +104,18 @@ class PagePresenter
      * @param string $id ID of the page. This id will be set in the html <body> tag.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
+     * @param string $objectUUID UUID of an object that represents the page. The data shown at the page will belong
+     *                           to this object.
      * @throws Exception
      */
-    public function __construct(string $id, string $headline = '')
+    public function __construct(string $id, string $headline = '', string $objectUUID = '')
     {
         global $gSettingsManager;
 
         $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions', $headline);
 
         $this->id = $id;
+        $this->objectUUID = $objectUUID;
         $this->showBackLink = true;
 
         if ($headline !== '') {

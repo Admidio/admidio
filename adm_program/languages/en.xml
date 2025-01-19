@@ -411,7 +411,6 @@
   <string name="SYS_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
   <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
-  <string name="SYS_CREATE_TOPIC">Create topic</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATE_WEBLINK">Create web link</string>
   <string name="SYS_CREATED_AT">Created at</string>
@@ -488,9 +487,9 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
-  <string name="SYS_DELETE_TOPIC">Delete topic</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
+  <string name="SYS_DELETE_VAR">Delete #VAR1#</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Request delivery confirmation</string>
@@ -1033,6 +1032,7 @@
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
+  <string name="SYS_POST">Post</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
   <string name="SYS_PRESET_CONFIGURATION">Default configuration</string>
