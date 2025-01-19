@@ -128,7 +128,7 @@ try {
         <div class="modal-body">';
     } else {
         // create html page object
-        $page = new PagePresenter('admidio-profile-roles', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-roles', $headline);
         $page->addJavascript($javascript, true);
         $messageId = '';
 

@@ -142,7 +142,7 @@ class Message
 
         if (!isset($page) || !$this->inline) {
             // create html page object
-            $page = new PagePresenter('admidio-message', $headline);
+            $page = PagePresenter::withHtmlIDAndHeadline('admidio-message', $headline);
             $page->hideBackLink();
 
             if (!$this->includeThemeBody) {

@@ -115,7 +115,7 @@ try {
         } else {
             // show dialog to change password
 
-            $page = new PagePresenter('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
+            $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
 
             // show form
             $form = new FormPresenter(
@@ -269,7 +269,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new PagePresenter('admidio-password-reset', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-password-reset', $headline);
 
         $page->addHtml('<p class="lead">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION') . '</p>');
 

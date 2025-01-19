@@ -58,7 +58,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline, 'bi-envelope-fill');
 
     // create html page object
-    $page = new PagePresenter('admidio-messages', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-messages', $headline);
 
     // link to write new email
     if ($gSettingsManager->getBool('enable_mail_module')) {

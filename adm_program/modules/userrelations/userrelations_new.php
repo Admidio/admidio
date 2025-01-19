@@ -59,7 +59,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new PagePresenter('admidio-userrelations-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-userrelations-edit', $headline);
 
     // show form
     $form = new FormPresenter(

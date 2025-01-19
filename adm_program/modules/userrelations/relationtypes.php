@@ -31,7 +31,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new PagePresenter('admidio-relationtypes', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-relationtypes', $headline);
 
     // define link to create new category
     $page->addPageFunctionsMenuItem(

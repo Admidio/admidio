@@ -95,7 +95,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-guestbook-new', $gL10n->get('SYS_FORUM') . ' - ' . $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-guestbook-new', $gL10n->get('SYS_FORUM') . ' - ' . $headline);
 
     // Html des Modules ausgeben
     if ($getGboUuid !== '') {

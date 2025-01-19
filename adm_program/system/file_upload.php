@@ -116,7 +116,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new PagePresenter('admidio-file-upload', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-file-upload', $headline);
 
         $fileUpload = new FileUpload($page, $getModule, $getUuid);
         $fileUpload->setHeaderData();

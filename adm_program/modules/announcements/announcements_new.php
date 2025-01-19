@@ -67,7 +67,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
 
     // show form
     $form = new FormPresenter(

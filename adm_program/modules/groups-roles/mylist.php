@@ -84,7 +84,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-mylist', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-mylist', $headline);
 
     // within MySql it's only possible to join 61 tables therefore show a message if user
     // want's to join more than 57 columns

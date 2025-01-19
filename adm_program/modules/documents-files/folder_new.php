@@ -49,7 +49,7 @@ try {
     $parentFolderName = $folder->getValue('fol_name');
 
     // create html page object
-    $page = new PagePresenter('admidio-documents-files-new-folder', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-documents-files-new-folder', $headline);
     $page->assignSmartyVariable('parentFolderName', $parentFolderName);
 
     // show form

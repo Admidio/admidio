@@ -49,10 +49,12 @@ class MenuNode
      * @param string $nodeName The name of this menu node that should be displayed for the user
      * @throws Exception
      */
-    public function __construct(string $nodeTextId, string $nodeName)
+    public function __construct(string $nodeTextId, string $nodeName = '')
     {
         $this->textId = $nodeTextId;
-        $this->name   = Language::translateIfTranslationStrId($nodeName);
+        if ($nodeName !== '') {
+            $this->name = Language::translateIfTranslationStrId($nodeName);
+        }
     }
 
     /**

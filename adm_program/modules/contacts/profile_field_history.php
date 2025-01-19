@@ -149,7 +149,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-profile-fields-history', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-fields-history', $headline);
 
     // create filter menu with input elements for start date and end date
     $form = new FormPresenter(

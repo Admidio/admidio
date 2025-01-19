@@ -86,7 +86,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-documents-files-rename', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-documents-files-rename', $headline);
 
     // create html form
     $form = new FormPresenter(

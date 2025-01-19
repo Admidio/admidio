@@ -97,7 +97,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-events-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-events-edit', $headline);
 
     $page->addJavascript('
     /**

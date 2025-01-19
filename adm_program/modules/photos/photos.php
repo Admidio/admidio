@@ -68,7 +68,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-photos', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-photos', $headline);
 
     // add rss feed to photos
     if ($gSettingsManager->getBool('enable_rss')) {

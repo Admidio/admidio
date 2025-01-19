@@ -50,7 +50,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-guestbook');
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-guestbook');
 
     // add rss feed to guestbook
     if ($gSettingsManager->getBool('enable_rss') && (int)$gSettingsManager->get('forum_module_enabled') === 1) {

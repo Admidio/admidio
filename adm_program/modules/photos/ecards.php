@@ -91,7 +91,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('adm_ecards', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_ecards', $headline);
 
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/css/lightbox.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');

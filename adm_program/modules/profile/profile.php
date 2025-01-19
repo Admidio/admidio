@@ -92,7 +92,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-profile', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile', $headline);
     $page->addTemplateFile('modules/profile.view.tpl');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');

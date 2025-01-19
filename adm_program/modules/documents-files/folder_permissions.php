@@ -117,7 +117,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-documents-files-config-folder', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-documents-files-config-folder', $headline);
     $page->assignSmartyVariable('folderName', $folder->getValue('fol_name'));
 
     // show form

@@ -64,7 +64,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_CONFIGURATIONS'));
 
     // create html page object
-    $page = new PagePresenter('plg-category-report-preferences', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-preferences', $headline);
     $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
 
     // create an array with the necessary data

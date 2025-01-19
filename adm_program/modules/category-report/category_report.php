@@ -118,7 +118,7 @@ try {
         $hoverRows = false;
 
         if ($getMode === 'print') {
-            $page = new PagePresenter('plg-category-report-main-print');
+            $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-main-print');
             $page->setPrintMode();
             $page->setTitle($title);
             $page->setHeadline($headline);
@@ -177,7 +177,7 @@ try {
             $hoverRows = true;
 
             // create html page object
-            $page = new PagePresenter('plg-category-report-main-html');
+            $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-main-html');
             $page->setTitle($title);
             $page->setHeadline($headline);
 

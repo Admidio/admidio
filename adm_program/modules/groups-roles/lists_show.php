@@ -351,7 +351,7 @@ try {
 
     if ($getMode === 'print') {
         // create html page object without the custom theme files
-        $page = new PagePresenter('admidio-lists-show', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-lists-show', $headline);
         $page->setPrintMode();
         $page->setTitle($title);
         $page->addHtml('<h5 class="admidio-content-subheader">' . $htmlSubHeadline . '</h5>');
@@ -394,7 +394,7 @@ try {
         $hoverRows = true;
 
         // create html page object
-        $page = new PagePresenter('admidio-lists-show', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-lists-show', $headline);
         $page->setTitle($title);
 
         // create select box with all list configurations

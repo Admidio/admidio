@@ -70,7 +70,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-announcements', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-announcements', $headline);
 
     // add rss feed to announcements
     if ($gSettingsManager->getBool('enable_rss')) {

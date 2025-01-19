@@ -62,7 +62,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-photos-presenter', $photoAlbum->getValue('pho_name'));
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-photos-presenter', $photoAlbum->getValue('pho_name'));
 
     // show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));

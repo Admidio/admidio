@@ -164,7 +164,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new PagePresenter('admidio-profile-photo-edit', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-photo-edit', $headline);
 
         // show form
         $form = new FormPresenter(
@@ -262,7 +262,7 @@ try {
         }
 
         // create html page object
-        $page = new PagePresenter('admidio-profile-photo-edit', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-photo-edit', $headline);
         $page->addTemplateFile('modules/profile.new-photo.tpl');
         $page->assignSmartyVariable('urlCurrentProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'timestamp' => $user->getValue('usr_timestamp_change', 'Y-m-d-H-i-s'))));
         $page->assignSmartyVariable('urlNewProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)));

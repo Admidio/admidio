@@ -18,7 +18,7 @@ use Smarty\Smarty;
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = new PagePresenter('admidio-example');
+ * $page = PagePresenter::withHtmlIDAndHeadline('admidio-example');
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
@@ -100,27 +100,34 @@ class PagePresenter
     protected bool $showBackLink = false;
 
     /**
-     * Constructor creates the page object and initialized all parameters.
-     * @param string $id ID of the page. This id will be set in the html <body> tag.
+     * Static method which will return an instance of the PagePresenter. The HTML ID of the page will be set and
+     * optional the headline of the page.
+     * @param string $htmlID The HTML ID of the current page.
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
+     * @throws Exception
+     */
+    public static function withHtmlIDAndHeadline(string $htmlID, string $headline = '') {
+        $instance = new self();
+        $instance->setHtmlID($htmlID);
+        $instance->setHeadline($headline);
+        return $instance;
+    }
+
+    /**
+     * Constructor creates the page object and initialized all parameters.
      * @param string $objectUUID UUID of an object that represents the page. The data shown at the page will belong
      *                           to this object.
      * @throws Exception
      */
-    public function __construct(string $id, string $headline = '', string $objectUUID = '')
+    public function __construct(string $objectUUID = '')
     {
         global $gSettingsManager;
 
-        $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions', $headline);
+        $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions');
 
-        $this->id = $id;
         $this->objectUUID = $objectUUID;
         $this->showBackLink = true;
-
-        if ($headline !== '') {
-            $this->setHeadline($headline);
-        }
 
         $this->smarty = $this->createSmartyObject();
         $this->assignBasicSmartyVariables();
@@ -512,6 +519,17 @@ class PagePresenter
             $this->smarty->assign('title', $this->title);
             $this->smarty->assign('headline', $this->headline);
         }
+    }
+
+
+    /**
+     * Set the HTML ID of the current html page.
+     * @param string $htmlID The HTML ID of the current page.
+     * @return void
+     */
+    public function setHtmlID(string $htmlID)
+    {
+        $this->id = $htmlID;
     }
 
     /** If set to true then a page without header menu and sidebar menu will be created.

@@ -94,7 +94,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
 
     if ($getViewMode === 'html') {
         $datatable = true;

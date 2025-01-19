@@ -99,7 +99,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new PagePresenter('admidio-profile-edit', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-edit', $headline);
 
         // create html form
         $form = new FormPresenter(

@@ -96,7 +96,7 @@ try {
     }//function
 
     // create html page object
-    $page = new PagePresenter('admidio-photo-album-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-photo-album-edit', $headline);
 
     // show form
     $form = new FormPresenter(

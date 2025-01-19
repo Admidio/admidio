@@ -117,7 +117,7 @@ try {
     }
 
     // create html page object
-    $page = new PagePresenter('admidio-guestbook-comment-new', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-guestbook-comment-new', $headline);
 
     // show form
     $form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'gbc_uuid' => $getGbcUuid, 'mode' => $mode)), $page);
