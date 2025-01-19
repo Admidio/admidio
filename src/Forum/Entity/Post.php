@@ -179,7 +179,7 @@ class Post extends Entity
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(), ['gbc_ip_address']);
+        return array_merge(parent::getIgnoredLogColumns(), ['gbc_ip_address', 'gbc_gbo_id']);
     }
 
     /**
@@ -190,8 +190,7 @@ class Post extends Entity
      * @return void
      */
     protected function adjustLogEntry(LogChanges $logEntry) {
-        // TODO_RK: GuestBookComments was removed!!! -> REWRITE!!!
-        $gboEntry = new Post($this->db, $this->getValue('gbc_gbo_id'));
+        $gboEntry = new Topic($this->db, $this->getValue('gbc_gbo_id'));
         $logEntry->setLogRelated($gboEntry->getValue('gbo_uuid'), $gboEntry->getValue('gbo_name'));
     }
 }

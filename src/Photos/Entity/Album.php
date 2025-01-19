@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_photos
@@ -366,5 +367,18 @@ class Album extends Entity
         }
 
         return $shuffleImage;
+    }
+    /**
+     * Adjust the changelog entry for this db record: Add the parent Album as a related object
+     * 
+     * @param LogChanges $logEntry The log entry to adjust
+     * 
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry): void {
+        if (!empty($this->getValue('pho_pho_id_parent'))) {
+            $parEntry = new Album($this->db, $this->getValue('pho_pho_id_parent'));
+            $logEntry->setLogRelated($parEntry->getValue('pho_uuid'), $parEntry->getValue('pho_name'));
+        }
     }
 }
