@@ -48,7 +48,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    $orgName = $gCurrentOrganization->getValue('org_shortname');
+    $orgName = $gCurrentOrganization->getValue('org_longname');
     $tfa = new TwoFactorAuth(issuer: $orgName, qrcodeprovider: new QRServerProvider());
 
     if ($getMode === 'setup') {
