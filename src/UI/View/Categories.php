@@ -178,7 +178,7 @@ class Categories extends HtmlPage
             $this->addPageFunctionsMenuItem(
                 'menu_item_categories_change_history',
                 $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'categories', 'uuid' => $categoryUUID)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'categories,roles_rights_data', 'uuid' => $categoryUUID)),
                 'bi-clock-history'
             );
         }

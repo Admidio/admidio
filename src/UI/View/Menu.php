@@ -36,7 +36,7 @@ class Menu extends HtmlPage
      */
     public function createEditForm(string $menuUUID = '')
     {
-        global $gDb, $gL10n, $gCurrentSession;
+        global $gDb, $gL10n, $gCurrentSession, $gSettingsManager;
 
         // create menu object
         $menu = new MenuEntry($gDb);
@@ -72,6 +72,16 @@ class Menu extends HtmlPage
                 $rowViewRoles['rol_id'],
                 $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')',
                 $rowViewRoles['cat_name']
+            );
+        }
+
+        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($menuUUID)) { // TODO_RK: More fine-grained logging settings
+            // show link to view change history
+            $this->addPageFunctionsMenuItem(
+                'menu_item_menu_change_history',
+                $gL10n->get('SYS_CHANGE_HISTORY'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'menu', 'uuid' => $menuUUID)),
+                'bi-clock-history'
             );
         }
 
@@ -193,7 +203,7 @@ class Menu extends HtmlPage
      */
     public function createList()
     {
-        global $gCurrentSession, $gL10n, $gDb, gSettingsManager;
+        global $gCurrentSession, $gL10n, $gDb, $gSettingsManager;
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {

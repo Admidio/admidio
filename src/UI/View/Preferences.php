@@ -2144,7 +2144,7 @@ class Preferences extends HtmlPage
             $this->addPageFunctionsMenuItem(
                 'menu_item_events_change_history',
                 $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'organizations,preferences,texts')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'preferences,texts')),
                 'bi-clock-history'
             );
         }
