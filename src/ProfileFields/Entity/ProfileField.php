@@ -222,7 +222,7 @@ class ProfileField extends Entity
                                     $listValueText = Language::translateIfTranslationStrId($listValueText);
 
                                     if ($format === 'html') {
-                                        $listValue = Image::getIconHtml($listValueImage, $listValueText) . ' ProfileField.php' . $listValueText;
+                                        $listValue = Image::getIconHtml($listValueImage, $listValueText) . ' ' . $listValueText;
                                     } else {
                                         // if no image is wanted then return the text part or only the position of the entry
                                         if (str_contains($listValue, '|')) {
