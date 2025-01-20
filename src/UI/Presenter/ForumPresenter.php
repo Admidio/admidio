@@ -187,12 +187,12 @@ class ForumPresenter extends PagePresenter
     {
         global $gDb, $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
 
-        $templateRow = array();
         $data = $this->getData();
         $forum = new ForumService($gDb);
         $categories = $forum->getCategories();
 
         foreach ($data as $forumTopic) {
+            $templateRow = array();
             $templateRow['uuid'] = $forumTopic['fot_uuid'];
             $templateRow['title'] = $forumTopic['fot_title'];
             $templateRow['views'] = $forumTopic['fot_views'];
