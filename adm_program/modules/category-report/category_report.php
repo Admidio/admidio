@@ -118,6 +118,7 @@ try {
 
         if ($getMode === 'print') {
             $page = new HtmlPage('plg-category-report-main-print');
+            $page->setContentFullWidth();
             $page->setPrintMode();
             $page->setTitle($title);
             $page->setHeadline($headline);
@@ -177,6 +178,7 @@ try {
 
             // create html page object
             $page = new HtmlPage('plg-category-report-main-html');
+            $page->setContentFullWidth();
             $page->setTitle($title);
             $page->setHeadline($headline);
 

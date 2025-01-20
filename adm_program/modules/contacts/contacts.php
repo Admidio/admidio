@@ -42,6 +42,7 @@ try {
     // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
     $flagShowMembers = !$getMembers;// create html page object
     $page = new HtmlPage('admidio-contacts', $headline);
+    $page->setContentFullWidth();
 
     if ($gCurrentUser->editUsers()) {
         $page->addJavascript('

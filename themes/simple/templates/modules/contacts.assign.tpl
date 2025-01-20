@@ -1,4 +1,4 @@
-<p class="lead admidio-max-with">{$description}</p>
+<p class="lead">{$description}</p>
 <div class="card admidio-blog">
     <div class="card-header">{$l10n->get('SYS_SIMILAR_CONTACTS_FOUND')}</div>
     <div class="card-body">

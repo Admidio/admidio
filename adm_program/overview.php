@@ -25,6 +25,7 @@ try {
 
     // create html page object and load template file
     $page = new HtmlPage('admidio-overview', $headline);
+    $page->setContentFullWidth();
     $page->addTemplateFile('system/overview.tpl');
 
     $page->show();

@@ -351,6 +351,7 @@ try {
     if ($getMode === 'print') {
         // create html page object without the custom theme files
         $page = new HtmlPage('admidio-lists-show', $headline);
+        $page->setContentFullWidth();
         $page->setPrintMode();
         $page->setTitle($title);
         $page->addHtml('<h5 class="admidio-content-subheader">' . $htmlSubHeadline . '</h5>');
@@ -394,6 +395,7 @@ try {
 
         // create html page object
         $page = new HtmlPage('admidio-lists-show', $headline);
+        $page->setContentFullWidth();
         $page->setTitle($title);
 
         // create select box with all list configurations

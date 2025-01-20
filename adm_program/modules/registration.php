@@ -89,6 +89,7 @@ try {
 
         // create html page object
         $page = new Admidio\UI\View\Registration('adm_registration', $headline);
+        $page->setContentFullWidth();
         $page->createRegistrationList();
         $page->show();
     }

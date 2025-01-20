@@ -1,5 +1,5 @@
 
-<div class="message admidio-max-with">
+<div class="message">
     <p class="lead">{$message}</p>
 
     {if $url != ''}
