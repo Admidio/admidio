@@ -36,6 +36,8 @@ use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Roles\Entity\RolesRightsData;
+use Admidio\Components\Entity\Component;
+use Admidio\Roles\Service\RoleService;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
@@ -72,7 +74,26 @@ try {
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
-    
+
+    /*********************************************************
+     * Translate table and field names to human-readable texts
+     *    -> Most of these translations are duplicated from other code / files!
+     *********************************************************
+     */
+    $userFieldText = array(
+        'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
+        'DATE' => $gL10n->get('SYS_DATE'),
+        'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER'),
+        'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+        'EMAIL' => $gL10n->get('SYS_EMAIL'),
+        'NUMBER' => $gL10n->get('SYS_NUMBER'),
+        'PHONE' => $gL10n->get('SYS_PHONE'),
+        'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
+        'TEXT' => $gL10n->get('SYS_TEXT') . ' (100 ' . $gL10n->get('SYS_CHARACTERS') . ')',
+        'TEXT_BIG' => $gL10n->get('SYS_TEXT') . ' (4000 ' . $gL10n->get('SYS_CHARACTERS') . ')',
+        'URL' => $gL10n->get('SYS_URL')
+    );
+
     function getTableLabel($table) {
         $tableString = array(
             'user_data' => 'SYS_PROFILE_FIELD',
@@ -136,8 +157,11 @@ try {
         'usr_timestamp_create' =>      'SYS_CREATED_BY',
 
 
+        'usf_name' =>                  'SYS_NAME',
+        'usf_name_intern' =>           'SYS_INTERNAL_NAME',
         'usf_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
-        'usf_type' =>                  'SYS_TYPE',
+        'usf_type' =>                  array('name' => 'SYS_TYPE', 'type' => 'CUSTOM_LIST', 'entries' => $userFieldText),
+        'usf_value_list' =>            'SYS_VALUE_LIST',
         'usf_description' =>           'SYS_DESCRIPTION',
         'usf_description_inline' =>    array('name' => 'SYS_DESCRIPTION_INLINE_DESC', 'type' => 'BOOL'),
         'usf_default_value' =>         'SYS_DEFAULT_VALUE',
@@ -161,7 +185,7 @@ try {
     
         'dat_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
         'dat_rol_id'=>                 array('name' => 'SYS_ROLE', 'type' => 'ROLE'),
-        'dat_room_id' =>               'SYS_ROOM',
+        'dat_room_id' =>               array('name' => 'SYS_ROOM', 'type' => 'ROOM'),
         'dat_begin' =>                 'SYS_START',
         'dat_end' =>                   'SYS_END',
         'dat_all_day' =>               array('name' => 'SYS_ALL_DAY', 'type' => 'BOOL'),
@@ -169,7 +193,7 @@ try {
         'dat_description' =>           'SYS_DESCRIPTION',
         'dat_highlight' =>             array('name' => 'SYS_HIGHLIGHT_EVENT', 'type' => 'BOOL'),
         'dat_location' =>              'SYS_VENUE',
-        'dat_country' =>               'SYS_COUNTRY',
+        'dat_country' =>               array('name' => 'SYS_COUNTRY', 'type' => 'COUNTRY'),
         'dat_deadline' =>              'SYS_DEADLINE',
         'dat_max_members' =>           'SYS_MAX_PARTICIPANTS',
         'dat_allow_comments' =>        array('name' => 'SYS_ALLOW_USER_COMMENTS', 'type' => 'BOOL'),
@@ -178,16 +202,16 @@ try {
         'rol_name' =>                  'SYS_NAME',
         'rol_description' =>           'SYS_DESCRIPTION',
         'rol_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
-        'rol_mail_this_role' =>        array('name' => 'SYS_SEND_MAILS', 'type' => 'SELECT', 'entries' => array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'))),
+        'rol_mail_this_role' =>        array('name' => 'SYS_SEND_MAILS', 'type' => 'CUSTOM_LIST', 'entries' => array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'))),
 
-        'rol_view_memberships' =>      'SYS_VIEW_ROLE_MEMBERSHIPS',
-        'rol_view_members_profiles' => 'SYS_VIEW_PROFILES_OF_ROLE_MEMBERS', 
-        'rol_leader_rights' =>         'SYS_LEADER',
-        'rol_lst_id' =>                'SYS_DEFAULT_LIST',
+        'rol_view_memberships' =>      array('name' => 'SYS_VIEW_ROLE_MEMBERSHIPS', 'type' => 'CUSTOM_LIST', 'entries' => array(0 => $gL10n->get('SYS_NOBODY'), 3 => $gL10n->get('SYS_LEADERS'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'))),
+        'rol_view_members_profiles' => array('name' => 'SYS_VIEW_PROFILES_OF_ROLE_MEMBERS', 'type' => 'CUSTOM_LIST', 'entries' => array(0 => $gL10n->get('SYS_NOBODY'), 3 => $gL10n->get('SYS_LEADERS'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'))),
+        'rol_leader_rights' =>         array('name' => 'SYS_LEADER', 'type' => 'CUSTOM_LIST', 'entries' => array(0 => $gL10n->get('SYS_NO_ADDITIONAL_RIGHTS'), 1 => $gL10n->get('SYS_ASSIGN_MEMBERS'), 2 => $gL10n->get('SYS_EDIT_MEMBERS'), 3 => $gL10n->get('SYS_ASSIGN_EDIT_MEMBERS'))),
+        'rol_lst_id' =>                array('name' => 'SYS_DEFAULT_LIST', 'type' => 'LIST'),
         'rol_default_registration' =>  array('name' => 'SYS_DEFAULT_ASSIGNMENT_REGISTRATION', 'type' => 'BOOL'),
         'rol_max_members' =>           'SYS_MAX_PARTICIPANTS',
         'rol_cost' =>                  'SYS_CONTRIBUTION',
-        'rol_cost_period' =>           'SYS_CONTRIBUTION_PERIOD',
+        'rol_cost_period' =>           array('name' => 'SYS_CONTRIBUTION_PERIOD', 'type' => 'CUSTOM_LIST', 'entries' => Role::getCostPeriods()),
         'rol_assign_roles' =>          array('name' => 'SYS_RIGHT_ASSIGN_ROLES', 'type' => 'BOOL'),
         'rol_all_lists_view' =>        array('name' => 'SYS_RIGHT_ALL_LISTS_VIEW', 'type' => 'BOOL'),
         'rol_approve_users' =>         array('name' => 'SYS_RIGHT_APPROVE_USERS', 'type' => 'BOOL'),
@@ -207,7 +231,7 @@ try {
         'rol_end_date' =>              'SYS_VALID_TO',
         'rol_start_time' =>            'SYS_TIME_FROM',
         'rol_end_time' =>              'SYS_TIME_TO',
-        'rol_weekday' =>               'SYS_WEEKDAY',
+        'rol_weekday' =>               array('name' => 'SYS_WEEKDAY', 'type' => 'WEEKDAY'),
         'rol_location' =>              'SYS_MEETING_POINT',
 
         'ror_name_intern' =>           'SYS_INTERNAL_NAME',
@@ -271,19 +295,19 @@ try {
         'men_name' =>                  'SYS_NAME',
         'men_name_intern' =>           'SYS_INTERNAL_NAME',
         'men_description' =>           'SYS_DESCRIPTION',
-        'men_men_id_parent' =>         'SYS_MENU_LEVEL',
-        'men_com_id' =>                'SYS_MODULE_RIGHTS',
+        'men_men_id_parent' =>         array('name' => 'SYS_MENU_LEVEL', 'type' => 'MENU'), // Parents are hard-coded and have no modification page! -> No link possible!
+        'men_com_id' =>                array('name' => 'SYS_MODULE_RIGHTS', 'type' => 'COMPONENT'),
         //'men_node' =>                  '', // men_node cannot be set by the user (section headings in the frontend)!
         'men_order' =>                 'SYS_ORDER', 
         'men_standard' =>              $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))),
         'men_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
         'men_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
 
-        'urt_name' => 'SYS_NAME',
-        'urt_name_male' => 'SYS_MALE',
-        'urt_name_female' => 'SYS_FEMALE',
-        'urt_edit_user' =>  array('name' => 'SYS_EDIT_USER_IN_RELATION', 'type' => 'BOOL'),
-        'urt_id_inverse' =>  array('name' => 'SYS_OPPOSITE_RELATIONSHIP', 'type' => 'RELATION_TYPE'),
+        'urt_name' =>                  'SYS_NAME',
+        'urt_name_male' =>             'SYS_MALE',
+        'urt_name_female' =>           'SYS_FEMALE',
+        'urt_edit_user' =>             array('name' => 'SYS_EDIT_USER_IN_RELATION', 'type' => 'BOOL'),
+        'urt_id_inverse' =>            array('name' => 'SYS_OPPOSITE_RELATIONSHIP', 'type' => 'RELATION_TYPE'),
 
         'crt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
         'crt_name' =>                  'SYS_NAME',
@@ -610,8 +634,8 @@ try {
         }
     }
 
-    function formatValue($value, $type) {
-        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields;
+    function formatValue($value, $type, $entries = []) {
+        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n;
         // if value is empty or null, then do nothing
         if ($value != '') {
             // create html for each field type
@@ -669,33 +693,60 @@ try {
                     $htmlValue = '<div class="bi bi-'.$value.'"> '. $value.'</div>';
                     break;
                 case 'ORG':
-                    $org = new Organization($gDb, $value);
-                    $htmlValue = createLink($org->readableName(), 'organizations', $org->getValue('org_id'), $org->getValue('org_uuid'));
+                    $obj = new Organization($gDb, $value);
+                    $htmlValue = createLink($obj->readableName(), 'organizations', $obj->getValue('org_id'), $obj->getValue('org_uuid'));
                     break;
                 case 'RELATION_TYPE':
-                    $org = new UserRelationType($gDb, $value);
-                    $htmlValue = createLink($org->readableName(), 'user_relation_types', $org->getValue('urt_id'), $org->getValue('urt_uuid'));
+                    $obj = new UserRelationType($gDb, $value);
+                    $htmlValue = createLink($obj->readableName(), 'user_relation_types', $obj->getValue('urt_id'), $obj->getValue('urt_uuid'));
                     break;
                 case 'ALBUM':
-                    $album = new Album($gDb, $value);
-                    $htmlValue = createLink($album->readableName(), 'photos', $album->getValue('pho_id'), $album->getValue('pho_uuid'));
+                    $obj = new Album($gDb, $value);
+                    $htmlValue = createLink($obj->readableName(), 'photos', $obj->getValue('pho_id'), $obj->getValue('pho_uuid'));
                     break;
                 case 'FOLDER':
-                    $folder = new Folder($gDb, $value);
-                    $htmlValue = createLink($folder->readableName(), 'folders', $folder->getValue('fol_id'), $folder->getValue('fol_uuid'));
+                    $obj = new Folder($gDb, $value);
+                    $htmlValue = createLink($obj->readableName(), 'folders', $obj->getValue('fol_id'), $obj->getValue('fol_uuid'));
                     break;
                 case 'ROLE':
-                    $role = new Role($gDb, $value);
-                    $htmlValue = createLink($role->readableName(), 'roles', $role->getValue('rol_id'), $role->getValue('rol_uuid'));
+                    $obj = new Role($gDb, $value);
+                    $htmlValue = createLink($obj->readableName(), 'roles', $obj->getValue('rol_id'), $obj->getValue('rol_uuid'));
                     break;
                 case 'CATEGORY':
-                    $cat = new Category($gDb, $value);
-                    $htmlValue = createLink($cat->readableName(), 'categories', $cat->getValue('cat_id'), $cat->getValue('cat_uuid'));
+                    $obj = new Category($gDb, $value);
+                    $htmlValue = createLink($obj->readableName(), 'categories', $obj->getValue('cat_id'), $obj->getValue('cat_uuid'));
                     break;
                 case 'USER':
-                    $usr = new User($gDb, $gProfileFields, $value);
-                    $htmlValue = createLink($usr->readableName(), 'users', $usr->getValue('usr_id'), $usr->getValue('usr_uuid'));
+                    $obj = new User($gDb, $gProfileFields, $value);
+                    $htmlValue = createLink($obj->readableName(), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
                     break;
+                case 'ROOM':
+                    $obj = new Room($gDb, $value);
+                    $htmlValue = createLink($obj->readableName(), 'rooms', $obj->getValue('room_id'), $obj->getValue('room_uuid'));
+                    break;
+                case 'COUNTRY':
+                    $htmlValue = $gL10n->getCountryName($value);
+                    break;
+                case 'WEEKDAY':
+                    $htmlValue = RoleService::getWeekdays($value);
+                    break;
+                case 'LIST':
+                    $obj = new ListConfiguration($gDb, $value);
+                    $htmlValue = createLink($obj->readableName(), 'lists', $obj->getValue('lst_id'), $obj->getValue('lst_uuid'));
+                    break;
+                case 'MENU':
+                    $obj = new MenuEntry($gDb, $value);
+                    $htmlValue = $obj->readableName(); //createLink($obj->readableName(), 'lists', $obj->getValue('men_id'), $obj->getValue('men_uuid'));
+                    break;
+                case 'COMPONENT':
+                    $obj = new Component($gDb, $value);
+                    $htmlValue = $obj->readableName();
+                    break;
+                case 'CUSTOM_LIST':
+                    $htmlValue = $entries[$value]??$value;
+                    break;
+
+
             }
         
             $value = $htmlValue;
@@ -879,8 +930,8 @@ try {
             $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueNew);
             $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueOld);
         } elseif (is_array($fieldInfo) && isset($fieldInfo['type'])) {
-            $valueNew = formatValue($valueNew, $fieldInfo['type']);
-            $valueOld = formatValue($valueOld, $fieldInfo['type']);
+            $valueNew = formatValue($valueNew, $fieldInfo['type'], $fieldInfo['entries']??[]);
+            $valueOld = formatValue($valueOld, $fieldInfo['type'], $fieldInfo['entries']??[]);
         }
 
         $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';
