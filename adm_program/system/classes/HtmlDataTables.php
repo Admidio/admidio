@@ -172,11 +172,11 @@ class HtmlDataTables
             $javascriptGroupFunction = '
                 // Order by the grouping
                 $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function() {
-                    const currentOrder = admidioTable.order()[0];
+                    const currentOrder = admidioTable_'. $this->id . '.order()[0];
                     if (currentOrder[0] === ' . $this->groupedColumn . ' && currentOrder[1] === "asc") {
-                        admidioTable.order([' . $this->groupedColumn . ', "desc"]).draw();
+                        admidioTable_'. $this->id . '.order([' . $this->groupedColumn . ', "desc"]).draw();
                     } else {
-                        admidioTable.order([' . $this->groupedColumn . ', "asc"]).draw();
+                        admidioTable_'. $this->id . '.order([' . $this->groupedColumn . ', "asc"]).draw();
                     }
                 });';
         }
@@ -197,7 +197,7 @@ class HtmlDataTables
         }
         $this->htmlPage->addJavascript(
             '
-            const admidioTable = $("#' . $this->id . '").DataTable({' .
+            const admidioTable_'. $this->id . ' = $("#' . $this->id . '").DataTable({' .
             implode(',', $this->datatablesInitParameters) .
             $javascriptGroup . '
             });
