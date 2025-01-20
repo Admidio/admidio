@@ -44,6 +44,10 @@ $defaultOrgPreferences = array(
     'registration_manual_approval'         => '1',
     'registration_send_notification_email' => '1',
 
+    // Changelog settings
+    'changelog_tables'               => 'users,user_data,members',
+    'changelog_allow_deletion'       => '0',
+
     // E-mail dispatch
     'mail_send_method'               => 'phpmail',
     'mail_sending_mode'              => '0',

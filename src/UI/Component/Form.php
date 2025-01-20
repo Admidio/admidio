@@ -1532,6 +1532,7 @@ class Form
         $smarty->assign('formType', $this->type);
         $smarty->assign('attributes', $this->attributes);
         $smarty->assign('elements', $this->elements);
+        $smarty->assign('javascript', $this->javascript);
         $smarty->assign('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
     }
 

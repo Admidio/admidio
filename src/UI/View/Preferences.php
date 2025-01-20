@@ -83,6 +83,11 @@ class Preferences extends HtmlPage
                 'title' => $gL10n->get('ORG_REGIONAL_SETTINGS'),
                 'icon' => 'bi-globe2'
             ),
+            'changelog' => array(
+                'id' => 'changelog',
+                'title' => $gL10n->get('SYS_CHANGE_HISTORY'),
+                'icon' => 'bi-clock-history'
+            ),
             'registration' => array(
                 'id' => 'registration',
                 'title' => $gL10n->get('SYS_REGISTRATION'),
@@ -439,6 +444,52 @@ class Preferences extends HtmlPage
         $formCategoryReport->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formCategoryReport);
         return $smarty->fetch('preferences/preferences.category-report.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the changelog preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the changelog report preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createChangelogForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formChangelog = new Form(
+            'adm_preferences_form_changelog',
+            'preferences/preferences.changelog.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'CategoryReport')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formChangelog->addCheckbox(
+            'category_report_changelog',
+            $gL10n->get('SYS_ENABLE_CHANGELOG'),
+            (bool)$formValues['changelog_enable_module'],
+            array('helpTextId' => array('SYS_ENABLE_CHANGELOG_DESC'))
+        );
+
+        $formChangelog->addSelectBox(
+            'changelog_tables',
+            $gL10n->get('ORG_ADMIDIO_THEME'),
+            ['Test 1', 'test2key' =>'Test 2',  array(0 => 'id', 1 => 'value name', 2 => 'option group name')],
+            array('property' => Form::FIELD_DEFAULT, 'defaultValue' => '', 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC',
+                'multiselect' => true, 'icon' => 'airplane-fill'
+            )
+        );
+        $formChangelog->addSubmitButton(
+            'adm_button_save_changelog',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formChangelog->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formChangelog);
+        return $smarty->fetch('preferences/preferences.changelog.tpl');
     }
 
     /**
@@ -2096,7 +2147,7 @@ class Preferences extends HtmlPage
 
         $this->addJavascript(
             '
-            var panels = ["common", "security", "regional_settings", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
+            var panels = ["common", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
                 "announcements", "contacts", "documents_files", "photos", "guestbook", "groups_roles", "category_report", "messages", "profile", "events", "links"];
 
             for(var i = 0; i < panels.length; i++) {
@@ -2148,7 +2199,16 @@ class Preferences extends HtmlPage
                 'bi-clock-history'
             );
         }
-        
+
+        // Load the select2 in case any of the form uses a select box. Unfortunately, each section 
+        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading, 
+        // so we need to do it here, even when no selectbox will be used...
+        // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
+    
         
         $this->assignSmartyVariable('accordionCommonPanels', $this->accordionCommonPanels);
         $this->assignSmartyVariable('accordionModulePanels', $this->accordionModulePanels);
