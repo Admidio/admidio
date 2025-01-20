@@ -99,11 +99,15 @@
 </div>
 
 {$lastCategory = ''}
+{$fieldGroupOpened = false}
 
 {foreach $profileData as $key => $profileField}
     {if {array_key_exists array=$profileField key="category"}}
         {if $profileField.category != $lastCategory}
             {if $lastCategory != ''}
+                {if $fieldGroupOpened}
+                    </div>
+                {/if}
                 </div></div>
             {/if}
             {$lastCategory = {$profileField.category}}
@@ -112,19 +116,38 @@
                     <div class="card-body">
         {/if}
 
-        <div class="admidio-form-group row mb-3">
-            <div class="col-sm-3">
-                {if strlen($profileField.icon) > 0}
-                    {$profileField.icon}
-                {/if}
-                {$profileField.label}
+        {if $fieldGroupOpened eq false}
+            {$fieldGroupOpened = true}
+            <div class="admidio-form-group row mb-3">
+                <div class="col-sm-2">
+                    {if strlen($profileField.icon) > 0}
+                        {$profileField.icon}
+                    {/if}
+                    {$profileField.label}
+                </div>
+                <div class="col-sm-4">
+                    <strong>{$profileField.value}</strong>
+                </div>
+        {else}
+                <div class="col-sm-2">
+                    {if strlen($profileField.icon) > 0}
+                        {$profileField.icon}
+                    {/if}
+                    {$profileField.label}
+                </div>
+                <div class="col-sm-4">
+                    <strong>{$profileField.value}</strong>
+                </div>
             </div>
-            <div class="col-sm-9">
-                <strong>{$profileField.value}</strong>
-            </div>
-        </div>
+            {$fieldGroupOpened = false}
+        {/if}
     {/if}
 {/foreach}
+
+{if $fieldGroupOpened}
+    </div>
+{/if}
+
 </div></div>
 
 {if $showCurrentRoles}
