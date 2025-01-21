@@ -18,6 +18,9 @@ use Admidio\Infrastructure\Exception;
 
 try {
     require_once(__DIR__ . '/common.php');
+    if (!$gValidLogin) {
+        admRedirect(ADMIDIO_URL . FOLDER_SYSTEM . '/login.php');
+    }
 
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'check')));
 
