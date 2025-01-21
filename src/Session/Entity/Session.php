@@ -268,6 +268,27 @@ class Session extends Entity
     }
 
     /**
+     * Check if the user already authenticated with a second factor in the current session. 
+     * @return bool Returns **true** if two factor authentication is not set up for the current org
+     * or  the user already authenticated with a second factor **false**;
+     * @throws Exception
+     */
+    public function isValidTfa(): bool
+    {
+        global $gSettingsManager, $gCurrentUser;
+
+        if(!$gSettingsManager->getBool('enable_two_factor_authentication')){
+            return true;
+        }
+
+        if(!$gCurrentUser->hasSetupTfa()){
+            return true;
+        }
+
+        return $this->getValue('ses_tfa_checked');
+    }
+
+    /**
      * The current user should be removed from the session and auto login.
      * Also, the auto login cookie should be removed.
      * @throws Exception

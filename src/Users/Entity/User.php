@@ -417,11 +417,10 @@ class User extends Entity
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
      *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
-     *                                       SYS_TFA_TOTP_CODE_INCORRECT
      */
-    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, string $totpCode = null): bool
+    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false): bool
     {
-        if ($this->checkPassword($password) && $this->checkMembership($isAdministrator) && $this->checkTotp($totpCode)) {
+        if ($this->checkPassword($password) && $this->checkMembership($isAdministrator)) {
             $this->updateSession($setAutoLogin, $updateSessionCookies);
             if ($updateHash) {
                 $this->rehashIfNecessary($password);
@@ -466,31 +465,33 @@ class User extends Entity
         return true;
     }
 
-    private function checkTotp(string|null $totpCode): bool
+    /**
+     * Check the totp code of the current user. If the code is correct the session will be updated
+     * @param string $totpCode The current totp code for the current user.
+     * @return true Return true if totp code was correct
+     * @throws Exception SYS_TFA_TOTP_CODE_INCORRECT
+     */
+    public function checkTotp(string $totpCode): bool
     {
-        global $gSettingsManager;
-
-        if (!$gSettingsManager->getBool('enable_two_factor_authentication')) {
-            return true;
-        }
+        global $gCurrentSession;
 
         $secret = $this->getValue('usr_tfa_secret');
-        // return true if user did not set up two factor authentication
-        if (!$secret) {
-            return true;
-        }
-        // return false if no totp code entered
-        if (!$totpCode) {
-            throw new Exception('SYS_TFA_TOTP_CODE_MISSING');
-        }
 
         $tfa = new TwoFactorAuth(new QRServerProvider());
         if (!$tfa->verifyCode($secret, $totpCode)) {
-            $incorrectLoginMessage = $this->handleIncorrectLogin('totp');
-
-            throw new Exception($incorrectLoginMessage);
+            throw new Exception('SYS_TFA_TOTP_CODE_INCORRECT');
         }
+        $gCurrentSession->setValue('ses_tfa_checked', true);
+        $gCurrentSession->save();
         return true;
+    }
+
+    public function hasSetupTfa(): string
+    {
+        if ($this->getValue('usr_tfa_secret')) {
+            return true;
+        }
+        return false;
     }
 
     private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true): bool
@@ -1915,7 +1916,7 @@ class User extends Entity
      */
     public function setSecondFactorSecret(string|null $newSecret): bool
     {
-        global $gChangeNotification;
+        global $gChangeNotification, $gCurrentSession;
 
         if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
             $gChangeNotification->logUserChange(
@@ -1927,6 +1928,8 @@ class User extends Entity
             );
         }
         if (parent::setValue('usr_tfa_secret', $newSecret, false)) {
+            $gCurrentSession->setValue('ses_tfa_checked', true);
+            $gCurrentSession->save();
             // for security reasons remove all sessions and auto login of the user
             return $this->invalidateAllOtherLogins();
         }

@@ -226,6 +226,11 @@ if ($sesUsrId > 0) {
     }
 }
 
+// check if user entered second factor in session
+if ($sesUsrId > 0) {
+    $gValidTfa = $gCurrentSession->isValidTfa();
+}
+
 // update session recordset (i.a. refresh timestamp)
 $gCurrentSession->setValue('ses_reload', 0);
 $gCurrentSession->save();

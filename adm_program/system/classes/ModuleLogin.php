@@ -47,31 +47,12 @@ class ModuleLogin
             $organizationShortName = $gCurrentOrganization->getValue('org_shortname');
         }
 
-        // read id of administrator role
-        $sql = 'SELECT MIN(rol_id) as rol_id
-                  FROM '.TBL_ROLES.'
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE rol_administrator = true
-                   AND (  cat_org_id = (SELECT org_id
-                                          FROM '.TBL_ORGANIZATIONS.'
-                                         WHERE org_shortname = ? /* $gCurrentOrgId */)
-                       OR cat_org_id IS NULL )';
-        $pdoStatement = $gDb->queryPrepared($sql, array($organizationShortName));
-
-        // create role object for administrator
-        $roleAdministrator = new Role($gDb, (int) $pdoStatement->fetchColumn());
-
         // show link if user has login problems
         if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
             // request to reset the password
-            $forgotPasswordLink = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
-        } elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
-            // show link of message module to send mail to administrator role
-            $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+            $forgotPasswordLink = ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php';
         } else {
-            // show link to send mail with local mail-client to administrator
-            $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:' . $gCurrentOrganization->getValue('org_email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+            $forgotPasswordLink = $this->getLoginProblemsLink($organizationShortName);
         }
 
         // show form
@@ -99,12 +80,6 @@ class ModuleLogin
                 'helpTextId' => '<a href="' . $forgotPasswordLink . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'
             )
         );
-        $form->addInput(
-            'usr_totp_code',
-            $gL10n->get('SYS_TFA_TOTP_CODE'),
-            '',
-            array('maxLength' => 6)
-        );
 
         // show selectbox with all organizations of database
         $sql = 'SELECT org_shortname, org_longname
@@ -120,6 +95,47 @@ class ModuleLogin
 
         $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
         $form->addSubmitButton('adm_button_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right', 'class' => 'offset-sm-3'));
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
+    }
+
+
+    /**
+     * Create the html content of the page to enter the two factor authentication code and add it to the HtmlPage object.
+     * @param HtmlPage $page Html content will be added to this page.
+     * @throws Exception
+     */
+    public function addHtmlTfaCheck(HtmlPage $page)
+    {
+        global $gSettingsManager, $gL10n, $gCurrentOrganization, $gCurrentSession;
+
+        $organizationShortName = $gCurrentOrganization->getValue('org_shortname');
+
+        $lostTfaLink = $this->getLoginProblemsLink($organizationShortName);
+
+
+        // show form
+        $form = new Form(
+            'adm_tfa_form',
+            'system/login-tfa.tpl',
+            ADMIDIO_URL . '/adm_program/system/login_tfa.php?mode=check',
+            $page,
+            array('showRequiredFields' => false, 'type' => 'vertical')
+        );
+
+        $form->addInput(
+            'usr_totp_code',
+            $gL10n->get('SYS_TFA_TOTP_CODE'),
+            '',
+            array(
+                'property' => Form::FIELD_REQUIRED,
+                'helpTextId' => '<a href="' . $lostTfaLink . '">' . $gL10n->get('SYS_TFA_LOST') . '</a>',
+                'class' => 'w-50',
+                'maxLength' => 6
+            )
+        );
+
+        $form->addSubmitButton('adm_button_tfa', $gL10n->get('SYS_SEND'), array('icon' => 'bi-box-arrow-in-right'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -141,7 +157,6 @@ class ModuleLogin
 
         $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);
         $postPassword = ($formValues['usr_password'] ?? $formValues['plg_usr_password']);
-        $postTotpCode =($formValues['usr_totp_code'] ?? $formValues['plg_usr_totp_code'] ?? null);
         $postOrgShortName = ($formValues['org_shortname'] ?? ($formValues['plg_org_shortname'] ?? $gCurrentOrganization->getValue('org_shortname')));
         $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login']);
 
@@ -158,7 +173,7 @@ class ModuleLogin
             $sql = 'SELECT usd_usr_id
                    FROM ' . TBL_USER_DATA . '
                    WHERE usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
-                     AND UPPER(usd_value) = UPPER(?)';
+                   AND UPPER(usd_value) = UPPER(?)';
             $userStatement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('EMAIL', 'usf_id'), $postLoginName));
 
             if ($userStatement->rowCount() > 1) {
@@ -198,6 +213,57 @@ class ModuleLogin
         $gCurrentUserId = $gCurrentUser->getValue('usr_id');
         $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');
 
-        return $gCurrentUser->checkLogin(password: $postPassword, totpCode: $postTotpCode, setAutoLogin: $postAutoLogin);
+        return $gCurrentUser->checkLogin($postPassword, $postAutoLogin);
+    }
+
+    /**
+     * Check the time based one time password of the user. If the code is correct, the session will be updated.
+     * @return bool Returns **true** if the totp code is valid
+     * @throws Exception
+     */
+    public function checkTotp(): bool
+    {
+        global $gCurrentUser, $gCurrentSession;
+
+        // check form field input and sanitized it from malicious content
+        $loginForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+        $formValues = $loginForm->validate($_POST);
+
+        $postTotpCode = $formValues['usr_totp_code'];
+
+        return $gCurrentUser->checkTotp($postTotpCode);
+    }
+
+    /** 
+     * Get the link to send a mail to the administrator of the organization. Returns the link to the message module if active
+     * or a mailto link with the mail address of the administrator.
+     * @param string $organizationShortName select the organization to get the administrator mail address for
+     */
+    private function getLoginProblemsLink(string $organizationShortName): string
+    {
+        global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization, $gCurrentSession;
+
+        // read id of administrator role
+        $sql = 'SELECT MIN(rol_id) as rol_id
+                        FROM ' . TBL_ROLES . '
+                  INNER JOIN ' . TBL_CATEGORIES . '
+                          ON cat_id = rol_cat_id
+                       WHERE rol_administrator = true
+                         AND (  cat_org_id = (SELECT org_id
+                                                FROM ' . TBL_ORGANIZATIONS . '
+                                               WHERE org_shortname = ? /* $gCurrentOrgId */)
+                             OR cat_org_id IS NULL )';
+        $pdoStatement = $gDb->queryPrepared($sql, array($organizationShortName));
+
+        // create role object for administrator
+        $roleAdministrator = new Role($gDb, (int) $pdoStatement->fetchColumn());
+
+        if ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
+            // show link of message module to send mail to administrator role
+            return SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+        } else {
+            // show link to send mail with local mail-client to administrator
+            return SecurityUtils::encodeUrl('mailto:' . $gCurrentOrganization->getValue('org_email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+        }
     }
 }
