@@ -178,10 +178,6 @@ a {
 /* Forms */
 /***********************************/
 
-form, .admidio-blog, .admidio-max-with {
-    max-width: 1000px;
-}
-
 .form-control:focus, .form-select:focus, button:focus,
 .select2-container--bootstrap-5.select2-container--focus .select2-selection {
     border-color: var(--bs-link-hover-color);

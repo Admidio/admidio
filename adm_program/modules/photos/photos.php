@@ -69,6 +69,7 @@ try {
 
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-photos', $headline);
+    $page->setContentFullWidth();
 
     // add rss feed to photos
     if ($gSettingsManager->getBool('enable_rss')) {

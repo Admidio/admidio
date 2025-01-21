@@ -50,7 +50,7 @@
 
 {if count($unregisteredList) > 0}
     <h2>{$l10n->get('SYS_UNMANAGED_FILES')}</h2>
-    <p class="lead admidio-max-with">{$l10n->get('SYS_ADDITIONAL_FILES')}</p>
+    <p class="lead">{$l10n->get('SYS_ADDITIONAL_FILES')}</p>
     <div class="table-responsive">
         <table id="documents-files-unregistered-table" class="table table-hover" width="100%" style="width: 100%;">
             <thead>

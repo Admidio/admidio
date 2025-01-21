@@ -1,4 +1,4 @@
-<p class="lead admidio-max-with">{$description}</p>
+<p class="lead">{$description}</p>
 
 <form {foreach $attributes as $attribute}
         {$attribute@key}="{$attribute}"

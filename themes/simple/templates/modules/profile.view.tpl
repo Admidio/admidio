@@ -98,34 +98,38 @@
     </div>
 </div>
 
-{$lastCategory = ''}
-
-{foreach $profileData as $key => $profileField}
-    {if {array_key_exists array=$profileField key="category"}}
-        {if $profileField.category != $lastCategory}
-            {if $lastCategory != ''}
-                </div></div>
-            {/if}
-            {$lastCategory = {$profileField.category}}
-                <div class="card admidio-field-group">
-                    <div class="card-header">{$profileField.category}</div>
-                    <div class="card-body">
-        {/if}
-
-        <div class="admidio-form-group row mb-3">
-            <div class="col-sm-3">
-                {if strlen($profileField.icon) > 0}
-                    {$profileField.icon}
+{foreach $profileData as $categoryName => $category}
+    <div class="card admidio-field-group">
+        <div class="card-header">{$categoryName}</div>
+        <div class="card-body">
+            {$fieldGroupOpened = false}
+            {foreach $category as $profileField}
+                {if $fieldGroupOpened eq false}
+                    <div class="admidio-form-group row mb-3">
                 {/if}
-                {$profileField.label}
-            </div>
-            <div class="col-sm-9">
-                <strong>{$profileField.value}</strong>
-            </div>
+                <div class="col-sm-2">
+                    {if strlen($profileField.icon) > 0}
+                        {$profileField.icon}
+                    {/if}
+                    {$profileField.label}
+                </div>
+                <div class="col-sm-4">
+                    <strong>{$profileField.value}</strong>
+                </div>
+                {if $fieldGroupOpened eq false}
+                    {$fieldGroupOpened = true}
+                {else}
+                    {$fieldGroupOpened = false}
+                    </div>
+                {/if}
+
+            {/foreach}
+            {if $fieldGroupOpened}
+                </div>
+            {/if}
         </div>
-    {/if}
+    </div>
 {/foreach}
-</div></div>
 
 {if $showCurrentRoles}
     <div class="card admidio-field-group" id="adm_profile_authorizations_box">

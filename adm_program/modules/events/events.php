@@ -259,6 +259,7 @@ try {
     } else {
         // Output table header for compact view
         if ($getView !== 'detail') { // $getView = 'compact' or 'room' or 'participants' or 'description'
+            $page->setContentFullWidth();
             $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable, $classTable);
             $compactTable->setDatatablesRowsPerPage($gSettingsManager->getInt('events_per_page'));
 

@@ -1,4 +1,4 @@
-<p class="lead admidio-max-with">{$l10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', [$folderName])}</p>
+<p class="lead">{$l10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', [$folderName])}</p>
 
 <form {foreach $attributes as $attribute}
         {$attribute@key}="{$attribute}"

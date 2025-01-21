@@ -78,6 +78,11 @@
     order: 1;
     padding-left: 1rem;
     padding-right: 1rem;
+    max-width: 1000px;
+}
+
+.admidio-max-content {
+    max-width: none;
 }
 
 /***********************************/
@@ -267,10 +272,6 @@ a {
 /***********************************/
 /* Forms */
 /***********************************/
-
-form, .admidio-blog, .admidio-max-with {
-    max-width: 1000px;
-}
 
 .form-control:focus, .form-select:focus, button:focus,
 .select2-container--bootstrap-5.select2-container--focus .select2-selection {

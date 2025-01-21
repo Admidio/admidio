@@ -27,6 +27,7 @@ try {
 
     // create html page object and load template file
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-overview', $headline);
+    $page->setContentFullWidth();
     $page->addTemplateFile('system/overview.tpl');
 
     $page->show();

@@ -39,6 +39,10 @@ class HtmlPage
      */
     protected string $id = '';
     /**
+     * @var bool Per default the content of the page is limited to a width of 1000px. If you want to have a full width page than set this flag to true.
+     */
+    protected bool $fullWidth = false;
+    /**
      * @var string The title for the html page and the headline for the Admidio content.
      */
     protected string $title = '';
@@ -508,6 +512,17 @@ class HtmlPage
     }
 
     /**
+     * Per default the content of the page is limited to a width of 1000px. If you want to have a full width
+     * page than you can call this method.
+     * @return void
+     * @throws Exception
+     */
+    public function setContentFullWidth()
+    {
+        $this->fullWidth = true;
+    }
+
+    /**
      * Set the h1 headline of the current html page. If the title of the page
      * was not set until now than this will also be the title.
      * @param string $headline A string that contains the headline for the page.
@@ -597,6 +612,13 @@ class HtmlPage
         $this->smarty->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
+
+        if ($this->fullWidth) {
+            $this->smarty->assign('contentClass', 'admidio-max-content');
+        } else {
+            $this->smarty->assign('contentClass', '');
+        }
+
 
         try {
             if ($this->modeInline || $gLayoutReduced) {

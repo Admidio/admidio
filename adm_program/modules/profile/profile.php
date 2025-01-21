@@ -278,6 +278,8 @@ try {
     $bAddressOutput = false;    // Flag whether the address has already been displayed
     $masterData = array();
     $profileData = array();
+    $categoryData = array();
+    $category = '';
 
     // Loop over all fields of the master data
 
@@ -309,8 +311,14 @@ try {
                 }
             }
             else {
-                $profileData[$field->getValue('usf_name_intern')] = array(
-                    'category' => $field->getValue('cat_name'),
+                if ($category !== $field->getValue('cat_name')) {
+                    if ($category !== '') {
+                        $profileData[$category] = $categoryData;
+                    }
+                    $categoryData = array();
+                    $category = $field->getValue('cat_name');
+                }
+                $categoryData[$field->getValue('usf_name_intern')] = array(
                     'id' => $field->getValue('usf_name_intern'),
                     'label' => $field->getValue('usf_name'),
                     'icon' => $field->getValue('usf_icon'),
@@ -318,6 +326,10 @@ try {
                 );
             }
         }
+    }
+
+    if (count($categoryData) > 0) {
+        $profileData[$category] = $categoryData;
     }
 
     // add missing address fields to masterData so that there is less logic in template necessary

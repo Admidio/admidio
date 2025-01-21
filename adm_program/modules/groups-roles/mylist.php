@@ -428,29 +428,30 @@ try {
 
         switch (mode) {
             case "show":
-                $("#myListConfigurationForm").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 'save_temporary')) . '");
-                $("#myListConfigurationForm").submit();
+                $("#adm_mylist_configuration_form").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 'save_temporary')) . '");
+                $("#adm_mylist_configuration_form").submit();
                 break;
 
             case "save":
-                $("#myListConfigurationForm").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 'save')) . '");
-                $("#myListConfigurationForm").submit();
+                $("#adm_mylist_configuration_form").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 'save')) . '");
+                $("#adm_mylist_configuration_form").submit();
                 break;
 
             case "save_as":
                 var listName = "";
                 listName = prompt("' . $gL10n->get('SYS_CONFIGURATION_SAVE') . '");
+
                 if (listName !== null) {
-                    $("#myListConfigurationForm").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 'save_as')) . '&name=" + listName);
-                    $("#myListConfigurationForm").submit();
+                    $("#adm_mylist_configuration_form").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 'save_as')) . '&name=" + listName);
+                    $("#adm_mylist_configuration_form").submit();
                 }
                 break;
 
             case "delete":
                 var msg_result = confirm("' . $gL10n->get('SYS_CONFIGURATION_DELETE') . '");
                 if (msg_result) {
-                    $("#myListConfigurationForm").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 'delete')) . '");
-                    $("#myListConfigurationForm").submit();
+                    $("#adm_mylist_configuration_form").attr("action", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 'delete')) . '");
+                    $("#adm_mylist_configuration_form").submit();
                 }
                 break;
         }
