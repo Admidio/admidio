@@ -1,5 +1,6 @@
 <?php
 use Admidio\Infrastructure\Exception;
+use Admidio\UI\Presenter\PagePresenter;
 
 /**
  * @brief Creates an Admidio specific table with special methods
@@ -57,9 +58,9 @@ class HtmlTable extends HtmlTableBasic
      */
     protected string $messageNoRowsFound;
     /**
-     * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @var HtmlPage|PagePresenter A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
-    protected HtmlPage $htmlPage;
+    protected HtmlPage|PagePresenter $htmlPage;
     /**
      * @var bool A flag that set the server-side processing for datatables.
      */
@@ -81,7 +82,7 @@ class HtmlTable extends HtmlTableBasic
      *                         is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function __construct(string $id, HtmlPage $htmlPage = null, $hoverRows = true, bool $datatables = false, string $class = '')
+    public function __construct(string $id, HtmlPage|PagePresenter $htmlPage = null, $hoverRows = true, bool $datatables = false, string $class = '')
     {
         global $gL10n;
 
@@ -100,7 +101,7 @@ class HtmlTable extends HtmlTableBasic
         $this->useDatatables = $datatables;
         $this->messageNoRowsFound = $gL10n->get('SYS_NO_DATA_FOUND');
 
-        if ($htmlPage instanceof HtmlPage) {
+        if (isset($htmlPage)) {
             $this->htmlPage =& $htmlPage;
         }
 
