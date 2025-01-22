@@ -371,7 +371,7 @@ try {
             $fieldName = (is_array($fieldInfo) && isset($fieldInfo['name'])) ? $fieldInfo['name'] : $fieldInfo;
             $columnValues[] = Language::translateIfTranslationStrId($fieldName); // TODO_RK: Use field_id to link to the field -> Target depends on the table!!!!
         } else {
-            $table->setDatatablesOrderColumns(array(array(5, 'desc')));
+            $columnValues[] = '';
         }
 
 
