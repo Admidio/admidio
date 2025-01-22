@@ -11,6 +11,7 @@ use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Session\Entity\Session;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\UI\Component\Form;
 use Admidio\UI\View\Installation;
 
