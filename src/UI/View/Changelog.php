@@ -65,47 +65,53 @@ class Changelog extends HtmlPage
  *********************************************************
  */
 
+     /**
+      * Named list of all available table columns and their translation IDs.
+      * @var array
+      */
+     public static array $tableLabels = array(
+        'user_data' => 'SYS_PROFILE_FIELD',
+        'users' =>  'SYS_PROFILE_FIELD',
+        'members' => 'SYS_ROLE_MEMBERSHIPS',
+        'user_fields' => 'ORG_PROFILE_FIELDS',
+        'announcements' => 'SYS_ANNOUNCEMENTS',
+        'events' => 'SYS_EVENTS',
+        'rooms' => 'SYS_ROOM',
+        'roles' => 'SYS_ROLES',
+        'roles_rights' => 'SYS_ROLE_RIGHTS',
+        'roles_rights_data' => 'SYS_ROLE_RIGHTS',
+
+        'categories' => 'SYS_CATEGORIES',
+        'category_report' => 'SYS_CATEGORY_REPORT',
+
+        'guestbook' => 'GBO_GUESTBOOK',
+        'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
+
+        'links' => 'SYS_WEBLINKS',
+
+        'texts' => 'SYS_SETTINGS',
+        'folders' => 'SYS_FOLDER',
+        'files' => 'SYS_FILE',
+        'organizations' => 'SYS_ORGANIZATION',
+        'menu' => 'SYS_MENU_ITEM',
+
+        'user_relation_types' => 'SYS_USER_RELATION_TYPE',
+        'user_relations' => 'SYS_USER_RELATIONS',
+
+        'photos' => 'SYS_PHOTO_ALBUMS',
+
+        'lists' => 'SYS_LIST',
+        'list_columns' => 'SYS_LIST_COLUMNS', // Changes to the list column are handled as changes to the list -> list_columns is never displayed as affected table
+        'ALL_OTHER' => 'SYS_ALL_OTHERS',
+    );
+
     /**
      * Return a human-readable title for the given database table.
      * @param mixed $table The database table name (sans the table prefix)
      * @return string The human-readable title of the database table
      */
     static public function getTableLabel($table) {
-        $tableString = array(
-            'user_data' => 'SYS_PROFILE_FIELD',
-            'users' =>  'SYS_PROFILE_FIELD',
-            'members' => 'SYS_ROLE_MEMBERSHIPS',
-            'user_fields' => 'ORG_PROFILE_FIELDS',
-            'announcements' => 'SYS_ANNOUNCEMENTS',
-            'events' => 'SYS_EVENTS',
-            'rooms' => 'SYS_ROOM',
-            'roles' => 'SYS_ROLES',
-            'roles_rights' => 'SYS_ROLE_RIGHTS',
-            'roles_rights_data' => 'SYS_ROLE_RIGHTS',
-            
-            'categories' => 'SYS_CATEGORIES',
-            'category_report' => 'SYS_CATEGORY_REPORT',
-            
-            'guestbook' => 'GBO_GUESTBOOK',
-            'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
-            
-            'links' => 'SYS_WEBLINKS',
-            
-            'texts' => 'SYS_SETTINGS',
-            'folders' => 'SYS_FOLDER',
-            'files' => 'SYS_FILE',
-            'organizations' => 'SYS_ORGANIZATION',
-            'menu' => 'SYS_MENU_ITEM',
-            
-            'user_relation_types' => 'SYS_USER_RELATION_TYPE',
-            'user_relations' => 'SYS_USER_RELATIONS',
-            
-            'photos' => 'SYS_PHOTO_ALBUMS',
-            
-            'lists' => 'SYS_LIST',
-            // 'list_columns' => '', // Changes to the list column are handled as changes to the list -> list_columns is never used as affected table
-        );
-        $table = array_key_exists($table, $tableString) ? $tableString[$table] : $table;
+        $table = array_key_exists($table, self::$tableLabels) ? self::$tableLabels[$table] : $table;
         // TODO_RK: If possible, add link to listing page of the corresponding DB record type
         return Language::translateIfTranslationStrId($table);
     }
