@@ -3,6 +3,7 @@ namespace Admidio\UI\View;
 
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\UI\Component\Form;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -461,25 +462,29 @@ class Preferences extends HtmlPage
         $formChangelog = new Form(
             'adm_preferences_form_changelog',
             'preferences/preferences.changelog.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'CategoryReport')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Changelog')),
             null,
             array('class' => 'form-preferences')
         );
-        $formChangelog->addCheckbox(
-            'category_report_changelog',
-            $gL10n->get('SYS_ENABLE_CHANGELOG'),
-            (bool)$formValues['changelog_enable_module'],
-            array('helpTextId' => array('SYS_ENABLE_CHANGELOG_DESC'))
-        );
+
+        $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], Changelog::$tableLabels);
+        $selectedTables = explode(',', $formValues['changelog_tables']??'');
 
         $formChangelog->addSelectBox(
             'changelog_tables',
-            $gL10n->get('ORG_ADMIDIO_THEME'),
-            ['Test 1', 'test2key' =>'Test 2',  array(0 => 'id', 1 => 'value name', 2 => 'option group name')],
-            array('property' => Form::FIELD_DEFAULT, 'defaultValue' => '', 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC',
+            $gL10n->get('LOG_LOGGED_TABLES'),
+            $tablesMap,
+            array('property' => Form::FIELD_DEFAULT, 'defaultValue' => $selectedTables, 'arrayKeyIsNotValue' => false, 'helpTextId' => 'LOG_LOGGED_TABLES_DESC',
                 'multiselect' => true, 'icon' => 'airplane-fill'
             )
         );
+        $formChangelog->addCheckbox(
+            'changelog_allow_deletion',
+            $gL10n->get('LOG_ALLOW_DELETION'),
+            (bool)($formValues['changelog_allow_deletion']??false),
+            array('helpTextId' => 'LOG_ALLOW_DELETION_DESC')
+        );
+
         $formChangelog->addSubmitButton(
             'adm_button_save_changelog',
             $gL10n->get('SYS_SAVE'),

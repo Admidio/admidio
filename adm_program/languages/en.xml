@@ -116,6 +116,11 @@
   <string name="INS_SON">Son</string>
   <string name="INS_SPOUSE">Spouse</string>
   <string name="INS_WIFE">Wife</string>
+  <!--Phrases only in Changelog administration-->
+  <string name="LOG_LOGGED_TABLES">Logged tables</string>
+  <string name="LOG_LOGGED_TABLES_DESC">Select all types of objects for the changelog. For those objects, all individual modifications will be logged in the change history with old and new value, as well as modification time and user. If an object type is deselected, existing log entries are not deleted. This can be done in the changelog page.</string>
+  <string name="LOG_ALLOW_DELETION">Allow deletion of the change history</string>
+  <string name="LOG_ALLOW_DELETION_DESC">Enable a button on the changelog page to delete parts or all of the changelog history.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
@@ -262,6 +267,7 @@
   <string name="SYS_ALL_DAY">Full time</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, web link, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
+  <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">All members of this organization</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Participants can register anonymous guests</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Participants may add additional seats to their registration. These are then subtracted from the maximum number of participants and the remaining free seats are thereby reduced. This is e.g. useful if a participant can bring more visitors and thus requires a total number of free places.</string>
@@ -788,6 +794,7 @@
   <string name="SYS_LINK_TO">Link to #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">List</string>
+  <string name="SYS_LIST_COLUMNS">List columns</string>
   <string name="SYS_LOG">Log</string>
   <string name="SYS_MEETING_POINT">Meeting point</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>

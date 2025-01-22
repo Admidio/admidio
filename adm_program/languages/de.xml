@@ -128,6 +128,11 @@
   <string name="INS_SON">Sohn</string>
   <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
+  <!--Phrases only in Changelog administration-->
+  <string name="LOG_LOGGED_TABLES">Objekte mit Änderungshistorie</string>
+  <string name="LOG_LOGGED_TABLES_DESC">Wählen Sie alle Objekttypen aus, für die eine Änderungshistorie geführt werden soll. Jede Änderung an diesen Objekten wird mitgeloggt, inklusive dem Zeitpunkt und dem Benutzer der Änderung. Wenn ein Objekttyp hier entfernt wird, wird die zugehörige Änderungshistorie nicht gelöscht. Dies ist auf der Seite mit der Änderungshistorie möglich.</string>
+  <string name="LOG_ALLOW_DELETION">Löschen der Änderungshistorie zulassen</string>
+  <string name="LOG_ALLOW_DELETION_DESC">Auf der Seite mit der Änderungshistorie kann durch diese Einstellung eine Schaltfläche zur (teilweisen oder gesamten) Löschung der Änderungshistorie aktiviert werden.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
@@ -287,6 +292,7 @@
   <string name="SYS_ALL_DAY">Ganztägig</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Veranstaltung, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
+  <string name="SYS_ALL_OTHERS">Alle weiteren</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
@@ -828,6 +834,7 @@
   <string name="SYS_LINK_TO">Link auf #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
+  <string name="SYS_LIST_COLUMNS">Listenspalten</string>
   <string name="SYS_LOG">Protokoll</string>
   <string name="SYS_MEETING_POINT">Treffpunkt</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Speicherort der Profilbilder</string>
