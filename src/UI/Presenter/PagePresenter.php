@@ -264,7 +264,7 @@ class PagePresenter
     }
 
     /**
-     * Public method to assign new variables to the Smarty template of the HtmlPage.
+     * Public method to assign new variables to the Smarty template of the PagePresenter.
      * @return void
      * @throws Exception
      */
@@ -326,7 +326,7 @@ class PagePresenter
     }
 
     /**
-     * Public method to assign new variables to the Smarty template of the HtmlPage.
+     * Public method to assign new variables to the Smarty template of the PagePresenter.
      * @param string $variable Name of the variable within the Smarty template.
      * @param string|array $value Value of the variable.
      * @return void

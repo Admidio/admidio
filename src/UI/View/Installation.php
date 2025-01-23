@@ -12,7 +12,7 @@ use Throwable;
  * specific elements like css files, javascript files and javascript code. It
  * also provides some methods to easily add new html data to the page. The generated
  * page will automatically integrate the chosen theme. You can optional disable the
- * integration of the theme files. Additional to the basic class HtmlPage this class only assigns
+ * integration of the theme files. Additional to the basic class PagePresenter this class only assigns
  * variables that are in installation and update mode available. There is also a method that will
  * easily create a message page.
  *

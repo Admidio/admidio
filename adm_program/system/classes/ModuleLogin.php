@@ -4,6 +4,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 /**
@@ -35,11 +36,11 @@ class ModuleLogin
     /**
      * Create the html content of the login page and add it to the HtmlPage object. Beside the username and password an
      * organization select box could be shown and the flag if auto login should be activated.
-     * @param HtmlPage $page Html content will be added to this page.
+     * @param PagePresenter $page Html content will be added to this page.
      * @param string $organizationShortName Optional the organization that should be preselected in the dialog.
      * @throws Exception
      */
-    public function addHtmlLogin(HtmlPage $page, string $organizationShortName = '')
+    public function addHtmlLogin(PagePresenter $page, string $organizationShortName = '')
     {
         global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization, $gCurrentSession;
 

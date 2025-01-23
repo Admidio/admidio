@@ -21,7 +21,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  *
  * This class should be used to create a form based on a Smarty template. Therefore, a method for each
  * possible form field is available and could be customized through various parameters. If the form is fully
- * defined with all fields it could be added to a HtmlPage object. The form object should be stored in
+ * defined with all fields it could be added to a PagePresenter object. The form object should be stored in
  * session parameter so the input could later be validated against the form configuration.
  *
  * **Code examples**
@@ -32,7 +32,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  *    'announcements_edit_form',
  *    'modules/announcements.edit.tpl',
  *    ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php',
- *    $htmlPage
+ *    $page
  * );
  * $form->addInput('name', $gL10n->get('SYS_NAME'), $formName);
  * $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'),
@@ -74,7 +74,7 @@ class FormPresenter
      */
     protected bool $showRequiredFields;
     /**
-     * @var PagePresenter A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @var PagePresenter A PagePresenter object that will be used to add javascript code or files to the html output page.
      */
     protected PagePresenter $htmlPage;
     /**
@@ -110,7 +110,7 @@ class FormPresenter
      * Constructor creates the form element
      * @param string $id ID of the form
      * @param string|null $action Action attribute of the form
-     * @param PagePresenter|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @param PagePresenter|null $htmlPage (optional) A PagePresenter object that will be used to add javascript code or files to the html output page.
      * @param array $options (optional) An array with the following possible entries:
      *                           - **type** : Set the form type. Every type has some special features:
      *                             + **default**  : A form that can be used to edit and save data of a database table. The label
@@ -1468,9 +1468,9 @@ class FormPresenter
     }
 
     /**
-     * This method add the form attributes and all form elements to the HtmlPage object. Also, the
+     * This method add the form attributes and all form elements to the PagePresenter object. Also, the
      * template file of the form is set to the page. After this method is called the whole form
-     * could be rendered through the HtmlPage.
+     * could be rendered through the PagePresenter.
      * @param bool $ajaxSubmit If set to true the form will be submitted by an AJAX call and
      *                         the result will be presented inline. If set to false a default
      *                         form submit will be done and a new page will be called.
@@ -1501,9 +1501,9 @@ class FormPresenter
 
 
     /**
-     * This method add the form attributes and all form elements to the HtmlPage object. Also, the
+     * This method add the form attributes and all form elements to the PagePresenter object. Also, the
      * template file of the form is set to the page. After this method is called the whole form
-     * could be rendered through the HtmlPage.
+     * could be rendered through the PagePresenter.
      * @return void
      */
     public function addToSmarty(Smarty $smarty)
