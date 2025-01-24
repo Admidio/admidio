@@ -48,18 +48,83 @@ try {
     $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
+    
+    $haveID = !empty($getId) || !empty($getUuid);
 
+    // named array of permission flag (true/false/"user-specific" per table)
+    $accessAll = $gCurrentUser->isAdministrator();
+    $tablesPermitted = array();
+    if (!$accessAll) {
+        if ($gCurrentUser->editAnnouncements()) 
+            $tablesPermitted[] = 'announcements';
+        if ($gCurrentUser->manageRoles())
+            $tablesPermitted = array_merge($tablesPermitted, ['roles', 'roles_rights', 'roles_rights_data', 'members']);
+        if ($gCurrentUser->editEvents())
+            $tablesPermitted[] = 'events';
+        if ($gCurrentUser->adminDocumentsFiles())
+            $tablesPermitted = array_merge($tablesPermitted, ['files', 'folders']);
+        if ($gCurrentUser->editUsers()) {
+            $tablesPermitted = array_merge($tablesPermitted, ['users', 'user_data', 'user_relations', 'members']);
+            $accessUser = true;
+        }
+        if ($gCurrentUser->editGuestbookRight())
+            $tablesPermitted[] = 'guestbook';
+        if ($gCurrentUser->commentGuestbookRight())
+            $tablesPermitted[] = 'guestbook_comments';
+        if ($gCurrentUser->editPhotoRight())
+            $tablesPermitted[] = 'photos';
+        if ($gCurrentUser->editWeblinksRight())
+            $tablesPermitted[] = 'links';
 
+        // If the tables filter is a subset of the permitted tables, we can just as well set accessAll for simplicity
+        if (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) {
+            $accessAll = true;
+        }
+        // Tables only permitted for Admin:
+        //$tablesAdminOnly = ['user_fields', 'rooms', 'categories', 'category_report', 'texts', 'organizations','menu','user_relation_types','user_relations','lists','list_columns'];
+    }
 
     // create a user object. Will fill it later if we encounter a user id
     $user = new User($gDb, $gProfileFields);
-    $isUserLog = ($getTables == ['users', 'user_data', 'members']);
-    $haveID = !empty($getId) || !empty($getUuid);
-    if (!empty($getUuid)) {
-        $user->readDataByUuid($getUuid);
-    } elseif (!empty($getId)) {
-        $user->readDataById($getId);
+    $userUUID = null;
+    // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
+    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ['users', 'user_data', 'user_relations', 'members'])));
+    if ($isUserLog) {
+        if (!empty($getUuid)) {
+            $user->readDataByUuid($getUuid);
+        } elseif (!empty($getId)) {
+            $user->readDataById($getId);
+        }
+        if (!$user->isNewRecord()) {
+            $userUUID = $user->uuid;
+        }
     }
+
+    // Access permissions: 
+    // * For user history (tables: users, user_data, user_relations, members) fine-grained access is allowed, so leave these checks for later
+    // * All other tables need module-wide or administrator permissions
+    if ($accessAll) {
+        // NOOP, no restrictions, no need to prevent access to page!
+    } elseif (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) {
+        // None of the requested tables is permitted -> NO_RIGHTS exception!
+        //throw new Exception('SYS_NO_RIGHTS');
+    } elseif ($isUserLog) {
+        // If a user UUID is given, we need access to that particular user
+        // if no UUID is given, editUsers permissions are required
+        if (($userUuid === '' && !$gCurrentUser->editUsers())
+            || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
+//                throw new Exception('SYS_NO_RIGHTS');
+                $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+
+        }
+    } else {
+        // Some tables are allowed, some might be not.
+        // NO global, overall access decision can be made. Need to evaluate each record on its own,
+        // based on the permitted tables and potentially field-specific permissions for user/profile
+        // fields. That will be done inside the loop through all changelog entries.
+    }
+
+
 
     // Page Headline: Depending on the tables and ID/UUID/RelatedIDs, we have different cases:
     //  * Userlog (tables users,user_data,members): Either "Change history of NAME" or "Change history of user data and memberships" (if no ID/UUID)
@@ -112,13 +177,13 @@ try {
     // if profile log is activated and current user is allowed to edit users
     // then the profile field history will be shown otherwise show error
     // TODO_RK: Which user shall be allowed to view the history (probably depending on the type the table)
-    if (!$gSettingsManager->getBool('profile_log_edit_fields')
+/*    if (!$gSettingsManager->getBool('profile_log_edit_fields')
         || ($getUuid === '' && !$gCurrentUser->editUsers())
         || ($getUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-
+*/
 
 
     // add page to navigation history
@@ -288,10 +353,49 @@ try {
 
     $table->addRowHeadingByArray($columnHeading);
 
-    $fieldString = Changelog::getFieldTranslations();
+    $fieldStrings = Changelog::getFieldTranslations();
+    $recordHidden = false;
     while ($row = $fieldHistoryStatement->fetch()) {
+        $rowTable = $row['table_name'];
+
+        $allowRecordAccess = false;
+        // First step: Check view permissions to that particular log entry:
+        if ($accessAll) {
+            $allowRecordAccess = true;
+        } elseif (in_array($rowTable, $tablesPermitted)) {
+            $allowRecordAccess = true;
+        } else {
+            // no global access permissions to that particular data/table
+            // Some objects have more fine-grained permissions (e.g. each group can have access permissions
+            // based on the user's role -> the calling user might have access to one particular role, but not in general)
+            if (in_array($rowTable, ['users', 'user_data', 'user_relations', 'members'])) {
+                // user UUID is available as uuid; current user has no general access to profile data, but might have permissions to this specific user (due to fole permissions)
+                $rowUser = new User($gDb, $gProfileFields);
+                $rowUser->readDataByUuid($row['uuid']);
+                if ($gCurrentUser->hasRightEditProfile($rowUser)) {
+                    $allowRecordAccess = true;
+                }
+            }
+/*  // We don't want members with pure viewing permissions to have access to the full history! Unfortunately, this also excludes some legitimate uses...
+            if (in_array($rowTable, ['members'])) {
+                $role = new Role($gDb);
+                $role->readDataByUuid($row['related_id']);
+                $roleId = $role->getValue('rol_id');
+                if ($roleId > 0 &&$gCurrentUser->hasRightViewProfiles($roleId)) {
+                        $allowRecordAccess = true;
+                }
+            }
+  */          
+            // NO access to this record allowed -> Set flag to show warning about records being 
+            // hidden due to insufficient permissions
+            if (!$allowRecordAccess) {
+                $recordHidden = true;
+                continue;
+            }
+        }
+
         $fieldInfo = $row['field_name'];
-        $fieldInfo = array_key_exists($fieldInfo, $fieldString) ? $fieldString[$fieldInfo] : $fieldInfo;
+        $fieldInfo = array_key_exists($fieldInfo, $fieldStrings) ? $fieldStrings[$fieldInfo] : $fieldInfo;
 
 
         $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
@@ -338,7 +442,9 @@ try {
                     if (is_array($relatedName)) {
                         $relatedName = $relatedName['name'];
                     }
-                    $relatedName = Language::translateIfTranslationStrId($relatedName);
+                    if (!empty($relatedName)) {
+                        $relatedName = Language::translateIfTranslationStrId($relatedName);
+                    }
                 }
                 $relatedTable = 'user_fields';
             }
@@ -397,6 +503,12 @@ try {
         $table->addRowByArray($columnValues);
     }
 
+    
+    // If any of the records was hidden due to insufficient permissions, add a warning notice>
+    if ($recordHidden) {
+        $page->addHtml('<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
+            $gL10n->get('LOG_RECORDS_HIDDEN') . '</div>');
+    }
     $page->addHtml($table->show());
     $page->show();
 } catch (Exception $e) {

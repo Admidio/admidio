@@ -127,6 +127,12 @@
   <string name="INS_SON">Sohn</string>
   <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
+  <!--Phrases only in Changelog administration-->
+  <string name="LOG_LOGGED_TABLES">Objekte mit Änderungshistorie</string>
+  <string name="LOG_LOGGED_TABLES_DESC">Wählen Sie alle Objekttypen aus, für die eine Änderungshistorie geführt werden soll. Jede Änderung an diesen Objekten wird mitgeloggt, inklusive dem Zeitpunkt und dem Benutzer der Änderung. Wenn ein Objekttyp hier entfernt wird, wird die zugehörige Änderungshistorie nicht gelöscht. Dies ist auf der Seite mit der Änderungshistorie möglich.</string>
+  <string name="LOG_ALLOW_DELETION">Löschen der Änderungshistorie zulassen</string>
+  <string name="LOG_ALLOW_DELETION_DESC">Auf der Seite mit der Änderungshistorie kann durch diese Einstellung eine Schaltfläche zur (teilweisen oder gesamten) Löschung der Änderungshistorie aktiviert werden.</string>
+  <string name="LOG_RECORDS_HIDDEN">Einige oder alle Einträge der Änderungshistorie wurden ausgeblendet, da du nicht die Berechtigungen für den Zugriff besitzt.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>

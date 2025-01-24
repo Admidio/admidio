@@ -121,6 +121,7 @@
   <string name="LOG_LOGGED_TABLES_DESC">Select all types of objects for the changelog. For those objects, all individual modifications will be logged in the change history with old and new value, as well as modification time and user. If an object type is deselected, existing log entries are not deleted. This can be done in the changelog page.</string>
   <string name="LOG_ALLOW_DELETION">Allow deletion of the change history</string>
   <string name="LOG_ALLOW_DELETION_DESC">Enable a button on the changelog page to delete parts or all of the changelog history.</string>
+  <string name="LOG_RECORDS_HIDDEN">Some or all changelog entries have been hidden due to insufficient user permissions to access them.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
