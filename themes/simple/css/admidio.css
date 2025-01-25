@@ -570,6 +570,10 @@ tr.admidio-event-highlight {
     height: auto;
 }
 
+.admidio-forum-entry-info {
+    font-size: 80%;
+}
+
 #adm_password_strength {
     margin-top: 0.5rem;
 }

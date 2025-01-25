@@ -414,6 +414,7 @@
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATE_WEBLINK">Create web link</string>
   <string name="SYS_CREATED_AT">Created at</string>
+  <string name="SYS_CREATED_AT_VAR">Created at #VAR1#</string>
   <string name="SYS_CREATED_BY">Created by</string>
   <string name="SYS_CREATED_BY_AND_AT">Created by #VAR1# at #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
@@ -758,6 +759,7 @@
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Is your language missing or do you want to translate more texts or improve existing translations? Then have a look at #VAR1#Wiki page of Admidio#VAR2# to see how you can help with the translation.</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# on #VAR2#</string>
   <string name="SYS_LAST_LOGIN_ON">Last login on #VAR1# at #VAR2#</string>
+  <string name="SYS_LAST_REPLY_BY_AT">Last reply by #VAR1# at #VAR2#</string>
   <string name="SYS_LASTNAME">Surname</string>
   <string name="SYS_LATER">Later</string>
   <string name="SYS_LAYOUT">Layout</string>
@@ -1100,6 +1102,7 @@
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPLACE">Replace</string>
+  <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>
@@ -1397,6 +1400,7 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">View profiles of role members</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">This setting can be used to define who can see the profiles of the members of this role. The user can call the profile of the respective person and see all stored columns in lists for the role. The role right #VAR1_BOLD# overrides this setting.</string>
+  <string name="SYS_VIEWS_VAR">#VAR1# views</string>
   <string name="SYS_VISIBILITY">Visibility</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>

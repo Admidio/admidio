@@ -149,28 +149,43 @@ class ForumPresenter extends PagePresenter
             $sqlQueryParameters[] = $this->categoryUUID;
         }
 
-        $sql = 'SELECT fot_uuid, fot_title, fot_views, fop_text, fot_timestamp_create, fot_usr_id_create,
-                       cat_name, usr_uuid,
-                       cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname
+        $sql = 'SELECT fot_uuid, fot_title, fot_views, first_post.fop_text, fot_timestamp_create, fot_usr_id_create,
+                       cat_name, usr.usr_uuid, usr.usr_login_name, usr.usr_timestamp_change,
+                       cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname,
+                       (SELECT COUNT(*) - 1 FROM ' . TBL_FORUM_POSTS . ' WHERE fop_fot_id = fot_id) AS replies_count,
+                       last_reply.fop_timestamp_create AS last_reply_timestamp, last_reply_usr.usr_login_name AS last_reply_login_name,
+                       last_reply_surname.usd_value AS last_reply_surname, last_reply_firstname.usd_value AS last_reply_firstname
                   FROM ' . TBL_FORUM_TOPICS . '
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON fot_cat_id = cat_id
-            INNER JOIN ' . TBL_FORUM_POSTS . '
-                    ON fop_id = fot_fop_id_first_post
-            INNER JOIN ' . TBL_USERS . '
-                    ON usr_id = fot_usr_id_create
+            INNER JOIN ' . TBL_FORUM_POSTS . ' as first_post
+                    ON first_post.fop_id = fot_fop_id_first_post
+            INNER JOIN ' . TBL_USERS . ' AS usr
+                    ON usr.usr_id = fot_usr_id_create
              LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
-                    ON cre_surname.usd_usr_id = usr_id
+                    ON cre_surname.usd_usr_id = usr.usr_id
                    AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
              LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
-                    ON cre_firstname.usd_usr_id = usr_id
+                    ON cre_firstname.usd_usr_id = usr.usr_id
                    AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
+             LEFT JOIN ' . TBL_FORUM_POSTS . ' AS last_reply
+                    ON last_reply.fop_id = (SELECT MAX(fop_id) FROM ' . TBL_FORUM_POSTS . ' WHERE fop_fot_id = fot_id)
+             LEFT JOIN ' . TBL_USERS . ' AS last_reply_usr
+                    ON last_reply_usr.usr_id = last_reply.fop_usr_id_create
+             LEFT JOIN ' . TBL_USER_DATA . ' AS last_reply_surname
+                    ON last_reply_surname.usd_usr_id = last_reply_usr.usr_id
+                   AND last_reply_surname.usd_usf_id = ? -- $lastNameUsfId
+             LEFT JOIN ' . TBL_USER_DATA . ' AS last_reply_firstname
+                    ON last_reply_firstname.usd_usr_id = last_reply_usr.usr_id
+                   AND last_reply_firstname.usd_usf_id = ? -- $firstNameUsfId
                  WHERE (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )
                        ' . $sqlConditions . '
                  ORDER BY fot_timestamp_create DESC';
 
         $queryParameters = array_merge(array(
+            (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
             (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'),
             (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
             $gCurrentOrgId
@@ -196,6 +211,16 @@ class ForumPresenter extends PagePresenter
             $templateRow['uuid'] = $forumTopic['fot_uuid'];
             $templateRow['title'] = $forumTopic['fot_title'];
             $templateRow['views'] = $forumTopic['fot_views'];
+
+            $templateRow['repliesCount'] = $forumTopic['replies_count'];
+            $lastReplyTimestamp = new \DateTime($forumTopic['last_reply_timestamp']);
+            $templateRow['lastReplyTimestamp'] = $lastReplyTimestamp->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            if ($gSettingsManager->getInt('system_show_create_edit') === 2) {
+                $templateRow['lastReplyUserName'] = $forumTopic['last_reply_login_name'];
+            } else {
+                $templateRow['lastReplyUserName'] = $forumTopic['last_reply_firstname'] . ' ' . $forumTopic['last_reply_surname'];
+            }
+
             if (strlen($forumTopic['fop_text']) > 200) {
                 $templateRow['text'] = substr(
                         substr($forumTopic['fop_text'], 0, 200),
@@ -206,7 +231,12 @@ class ForumPresenter extends PagePresenter
                 $templateRow['text'] = $forumTopic['fop_text'];
             }
             $templateRow['userUUID'] = $forumTopic['usr_uuid'];
-            $templateRow['userName'] = $forumTopic['firstname'] . ' ' . $forumTopic['surname'];
+            if ($gSettingsManager->getInt('system_show_create_edit') === 2) {
+                $templateRow['userName'] = $forumTopic['usr_login_name'];
+            } else {
+                $templateRow['userName'] = $forumTopic['firstname'] . ' ' . $forumTopic['surname'];
+            }
+            $templateRow['userProfilePhotoUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $forumTopic['usr_uuid'], 'timestamp' => $forumTopic['usr_timestamp_change']));
             $datetime = new \DateTime($forumTopic['fot_timestamp_create']);
             $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
             $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $forumTopic['fot_uuid']));
@@ -223,7 +253,7 @@ class ForumPresenter extends PagePresenter
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumTopic['fot_uuid'])),
                     'icon' => 'bi bi-pencil-square',
-                    'tooltip' => $gL10n->get('SYS_EDIT_TOPIC')
+                    'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPIC'))
                 );
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
