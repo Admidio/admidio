@@ -1090,9 +1090,9 @@ $formAnnouncements->addSelectBox(
 );
 $formAnnouncements->addInput(
     'announcements_per_page',
-    $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
+    $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
     $formValues['announcements_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
@@ -1239,7 +1239,7 @@ $formPhotos->addInput(
     'photo_albums_per_page',
     $gL10n->get('SYS_NUMBER_OF_ALBUMS_PER_PAGE'),
     $formValues['photo_albums_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formPhotos->addInput(
     'photo_thumbs_page',
@@ -1349,9 +1349,9 @@ $formGuestbook->addSelectBox(
 );
 $formGuestbook->addInput(
     'guestbook_entries_per_page',
-    $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
+    $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
     $formValues['guestbook_entries_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formGuestbook->addCheckbox(
     'enable_guestbook_captcha',
@@ -1719,7 +1719,7 @@ $formEvents->addSelectBox(
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formEvents->addSelectBox(
     'events_per_page',
-    $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
+    $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
     $selectBoxEntries,
     array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
@@ -1815,9 +1815,9 @@ $formWeblinks->addSelectBox(
 );
 $formWeblinks->addInput(
     'weblinks_per_page',
-    $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
+    $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
     $formValues['weblinks_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
 );
 $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
 $formWeblinks->addSelectBox(
