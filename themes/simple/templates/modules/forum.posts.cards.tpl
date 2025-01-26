@@ -1,5 +1,5 @@
 {foreach $cards as $post}
-    <div class="card admidio-blog" id="adm_post_{$post.post_uuid}">
+    <div class="card container admidio-blog admidio-forum-post" id="adm_post_{$post.post_uuid}">
         <div class="row">
             <div class="col d-flex flex-column">
                 <div class="card-body">

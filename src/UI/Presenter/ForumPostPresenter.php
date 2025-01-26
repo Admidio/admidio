@@ -183,7 +183,7 @@ class ForumPostPresenter extends PagePresenter
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_edit', 'post_uuid' => $forumPost['fop_uuid'])),
                     'icon' => 'bi bi-pencil-square',
-                    'tooltip' => $gL10n->get('SYS_EDIT_TOPIC')
+                    'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPIC'))
                 );
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_post_' . $forumPost['fop_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'post_delete', 'post_uuid' => $forumPost['fop_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',

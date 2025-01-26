@@ -100,7 +100,7 @@ class CategoriesPresenter extends PagePresenter
             case 'FOT':
                 $component = 'FORUM';
                 $headline = $gL10n->get('SYS_FORUM') . ' - ' . $headlineSuffix;
-                $rolesRightEditName = 'SYS_EDIT_TOPICS';
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPICS'));
                 $rolesRightsColumn = 'rol_forum_admin';
                 $rolesRightsName = 'SYS_RIGHT_FORUM';
                 break;
@@ -267,7 +267,7 @@ class CategoriesPresenter extends PagePresenter
             if ($type !== 'USF') {
                 $form->addSelectBoxFromSql(
                     'adm_categories_edit_right',
-                    $gL10n->get($rolesRightEditName),
+                    $rolesRightEditName,
                     $gDb,
                     $sqlDataView,
                     array(
@@ -399,7 +399,7 @@ class CategoriesPresenter extends PagePresenter
                 $component = 'FORUM';
                 $rolesRightsColumn = 'rol_forum_admin';
                 $headline = $gL10n->get('SYS_FORUM') . ' - ' . $gL10n->get('SYS_CATEGORIES');
-                $editableHeadline = $gL10n->get('SYS_EDIT_TOPICS');
+                $editableHeadline = $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPICS'));
                 break;
 
             case 'LNK':

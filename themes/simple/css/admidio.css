@@ -574,6 +574,10 @@ tr.admidio-event-highlight {
     font-size: 80%;
 }
 
+.admidio-forum-topic p {
+    margin: 0 !important;
+}
+
 #adm_password_strength {
     margin-top: 0.5rem;
 }

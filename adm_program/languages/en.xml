@@ -1343,6 +1343,7 @@
   <string name="SYS_TITLE">Title</string>
   <string name="SYS_TO" description="E-Mail">To</string>
   <string name="SYS_TOPIC">Topic</string>
+  <string name="SYS_TOPICS">Topics</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>

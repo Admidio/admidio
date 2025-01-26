@@ -1,5 +1,5 @@
 {foreach $cards as $forumTopic}
-    <div class="card admidio-blog container" id="adm_topic_{$forumTopic.uuid}">
+    <div class="card container admidio-blog admidio-forum-topic" id="adm_topic_{$forumTopic.uuid}">
         <div class="row">
             <div class="col d-flex flex-column">
                 <div class="card-header">
@@ -27,11 +27,12 @@
                 </div>
                 <div class="card-footer container">
                     <div class="row">
-                        {if strlen($forumTopic.category) > 0}
-                            <div class="col">
-                                <span class="d-block">{$l10n->get('SYS_CATEGORY')} {$forumTopic.category}</span>
-                            </div>
-                        {/if}
+                        <div class="col">
+                            <span class="d-block">{$l10n->get('SYS_VIEWS_VAR', array($forumTopic.views))}</span>
+                            {if strlen($forumTopic.category) > 0}
+                                    <span class="d-block">{$l10n->get('SYS_CATEGORY')} {$forumTopic.category}</span>
+                            {/if}
+                        </div>
                         {if $forumTopic.repliesCount > 0}
                             <div class="col-lg-6 col-12 text-bg-secondary bg-opacity-25 text-dark rounded">
                                 <span class="d-block">{$l10n->get('SYS_REPLIES_VAR', array($forumTopic.repliesCount))}</span>
@@ -45,8 +46,7 @@
                 <div class="card-body admidio-forum-entry-info">
                     <img class="rounded-circle d-block pb-1" src="{$forumTopic.userProfilePhotoUrl}" />
                     <a class="d-block pb-1" href="{$urlAdmidio}/adm_program/modules/profile/profile.php?user_uuid={$forumTopic.userUUID}">{$forumTopic.userName}</a>
-                    <span class="d-block pb-1">{$l10n->get('SYS_CREATED_AT_VAR', array($forumTopic.timestamp))}</span>
-                    <span class="d-block">{$l10n->get('SYS_VIEWS_VAR', array($forumTopic.views))}</span>
+                    <span class="d-block">{$l10n->get('SYS_CREATED_AT_VAR', array($forumTopic.timestamp))}</span>
                 </div>
             </div>
         </div>

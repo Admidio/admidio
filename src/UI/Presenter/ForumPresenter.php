@@ -35,6 +35,10 @@ class ForumPresenter extends PagePresenter
      */
     protected string $categoryUUID = '';
     /**
+     * @var array A list of all categories for the forum.
+     */
+    protected array $categoryList = array();
+    /**
      * @var array Array with all read forum topics and their first post.
      */
     protected array $data = array();
@@ -50,7 +54,12 @@ class ForumPresenter extends PagePresenter
      */
     public function __construct(string $categoryUUID = '')
     {
+        global $gDb;
+
         $this->categoryUUID = $categoryUUID;
+        $forum = new ForumService($gDb);
+        $this->categoryList = $forum->getCategories();
+
         parent::__construct($categoryUUID);
     }
 
@@ -76,7 +85,7 @@ class ForumPresenter extends PagePresenter
 
         if ($gCurrentUser->administrateForum()) {
             $this->addPageFunctionsMenuItem(
-                'menu_item_announcement_categories',
+                'menu_item_forum_categories',
                 $gL10n->get('SYS_EDIT_CATEGORIES'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'FOT')),
                 'bi-hdd-stack-fill'
@@ -85,8 +94,8 @@ class ForumPresenter extends PagePresenter
 
         // add filter navbar
         $this->addJavascript('
-            $("#role_type").change(function() {
-                $("#adm_navbar_filter_form").submit();
+            $("#category_uuid").change(function() {
+                $("#adm_navbar_forum_filter_form").submit();
             });',
             true
         );
@@ -99,14 +108,16 @@ class ForumPresenter extends PagePresenter
             $this,
             array('type' => 'navbar', 'setFocus' => false)
         );
-        $form->addSelectBoxForCategories(
-            'cat_uuid',
-            $gL10n->get('SYS_CATEGORY'),
-            $gDb,
-            'ROL',
-            FormPresenter::SELECT_BOX_MODUS_FILTER,
-            array('defaultValue' => $this->categoryUUID)
-        );
+        if (count($this->categoryList) > 1) {
+            $form->addSelectBoxForCategories(
+                'category_uuid',
+                $gL10n->get('SYS_CATEGORY'),
+                $gDb,
+                'FOT',
+                FormPresenter::SELECT_BOX_MODUS_FILTER,
+                array('defaultValue' => $this->categoryUUID)
+            );
+        }
         $form->addToHtmlPage();
     }
 
@@ -200,11 +211,9 @@ class ForumPresenter extends PagePresenter
      */
     public function prepareData()
     {
-        global $gDb, $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
+        global $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
 
         $data = $this->getData();
-        $forum = new ForumService($gDb);
-        $categories = $forum->getCategories();
 
         foreach ($data as $forumTopic) {
             $templateRow = array();
@@ -221,11 +230,11 @@ class ForumPresenter extends PagePresenter
                 $templateRow['lastReplyUserName'] = $forumTopic['last_reply_firstname'] . ' ' . $forumTopic['last_reply_surname'];
             }
 
-            if (strlen($forumTopic['fop_text']) > 200) {
+            if (strlen($forumTopic['fop_text']) > 250) {
                 $templateRow['text'] = substr(
-                        substr($forumTopic['fop_text'], 0, 200),
+                        substr($forumTopic['fop_text'], 0, 250),
                         0,
-                        strrpos(substr($forumTopic['fop_text'], 0, 200), ' ')
+                        strrpos(substr($forumTopic['fop_text'], 0, 250), ' ')
                     ) . ' ...';
             } else {
                 $templateRow['text'] = $forumTopic['fop_text'];
@@ -243,7 +252,7 @@ class ForumPresenter extends PagePresenter
             $templateRow['category'] = '';
             $templateRow['editable'] = false;
 
-            if (count($categories) > 1) {
+            if (count($this->categoryList) > 1) {
                 $templateRow['category'] = Language::translateIfTranslationStrId($forumTopic['cat_name']);
             }
 
