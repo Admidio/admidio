@@ -220,7 +220,7 @@ class Entity
                 $userCreated = new User($gDb, $gProfileFields, $this->getValue($this->columnPrefix . '_usr_id_create'));
 
                 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
-                    $nameOfCreatingUser = $userCreated->getValue('FIRST_NAME') . ' Entity.php' . $userCreated->getValue('LAST_NAME');
+                    $nameOfCreatingUser = $userCreated->getValue('FIRST_NAME') . ' ' . $userCreated->getValue('LAST_NAME');
                 } else {
                     $nameOfCreatingUser = $userCreated->getValue('usr_login_name');
                 }
@@ -256,7 +256,7 @@ class Entity
                 $userLastEdited = new User($gDb, $gProfileFields, $this->getValue($this->columnPrefix . '_usr_id_change'));
 
                 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
-                    $nameOfLastEditingUser = $userLastEdited->getValue('FIRST_NAME') . ' Entity.php' . $userLastEdited->getValue('LAST_NAME');
+                    $nameOfLastEditingUser = $userLastEdited->getValue('FIRST_NAME') . ' ' . $userLastEdited->getValue('LAST_NAME');
                 } else {
                     $nameOfLastEditingUser = $userLastEdited->getValue('usr_login_name');
                 }

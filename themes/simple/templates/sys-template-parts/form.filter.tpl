@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-filter">
+<nav class="navbar navbar-expand-lg navbar-filter rounded">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">{$l10n->get('SYS_FILTER')}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#{$navbarID}" aria-controls="{$navbarID}" aria-expanded="false" aria-label="Toggle navigation">

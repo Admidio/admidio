@@ -169,7 +169,7 @@ class ForumTopicPresenter extends PagePresenter
         $sqlQueryParameters = array();
 
         $sql = 'SELECT fot_uuid, fot_title, fot_views, fop_uuid, fop_text, fop_timestamp_create, fop_usr_id_create,
-                       cat_name, usr_uuid,
+                       fop_timestamp_change, cat_name, usr_uuid, usr_timestamp_change,
                        cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname
                   FROM ' . TBL_FORUM_TOPICS . '
             INNER JOIN ' . TBL_CATEGORIES . '
@@ -218,8 +218,13 @@ class ForumTopicPresenter extends PagePresenter
             $templateRow['text'] = $forumPost['fop_text'];
             $templateRow['userUUID'] = $forumPost['usr_uuid'];
             $templateRow['userName'] = $forumPost['firstname'] . ' ' . $forumPost['surname'];
-            $datetime = new \DateTime($forumPost['fop_timestamp_create']);
-            $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            $templateRow['userProfilePhotoUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $forumPost['usr_uuid'], 'timestamp' => $forumPost['usr_timestamp_change']));
+            $datetimeCreated = new \DateTime($forumPost['fop_timestamp_create']);
+            $templateRow['timestampCreated'] = $datetimeCreated->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            if (!empty($forumPost['fop_timestamp_change'])) {
+                $datetimeChanged = new \DateTime($forumPost['fop_timestamp_change']);
+                $templateRow['timestampChanged'] = $datetimeChanged->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            }
             $templateRow['category'] = '';
             $templateRow['editable'] = false;
 

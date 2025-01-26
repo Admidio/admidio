@@ -1,29 +1,33 @@
 {foreach $cards as $post}
     <div class="card admidio-blog" id="adm_post_{$post.post_uuid}">
-        <div class="card-header">
-            {if $post.editable}
-                <div class="dropdown float-end">
-                    <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
-                    {if {array_key_exists array=$post key="actions"} && count($post.actions) > 0}
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            {foreach $post.actions as $actionItem}
-                                <a {if isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
-                                    data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
-                                        {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
-                                    <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
-                            {/foreach}
-                        </ul>
-                    {/if}
+        <div class="row">
+            <div class="col d-flex flex-column">
+                <div class="card-body">
+                    {$post.text}
                 </div>
-            {/if}
-        </div>
-
-        <div class="card-body">
-            {$post.text}
-        </div>
-        <div class="card-footer">
-            {$l10n->get('SYS_CREATED_BY_AND_AT', array($post.userName, $post.timestamp))}
+                {if {array_key_exists array=$post key='timestampChanged'} || $post.editable}
+                    <div class="card-footer">
+                        {if {array_key_exists array=$post key='timestampChanged'}}
+                            {$l10n->get('SYS_LAST_EDITED_AT', array($post.timestampChanged))}
+                        {/if}
+                        {if {array_key_exists array=$post key="actions"} && count($post.actions) > 0}
+                            {foreach $post.actions as $actionItem}
+                                <a {if isset($actionItem.dataHref)} class="admidio-icon-link" href="javascript:void(0);"
+                                    data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
+                                        {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
+                                    <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
+                            {/foreach}
+                        {/if}
+                    </div>
+                {/if}
+            </div>
+            <div class="col-lg-2 col-sm-3 col-4">
+                <div class="card-body admidio-forum-entry-info">
+                    <img class="rounded-circle d-block pb-1" src="{$post.userProfilePhotoUrl}" />
+                    <a class="d-block pb-1" href="{$urlAdmidio}/adm_program/modules/profile/profile.php?user_uuid={$post.userUUID}">{$post.userName}</a>
+                    <span class="d-block">{$l10n->get('SYS_CREATED_AT_VAR', array($post.timestampCreated))}</span>
+                </div>
+            </div>
         </div>
     </div>
 {/foreach}
