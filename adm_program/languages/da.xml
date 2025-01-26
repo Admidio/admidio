@@ -199,12 +199,12 @@
   <string name="ORG_LAST_UPDATE_STEP">Sidste trin af opdateringen</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Automatisk Login</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Brugere kan definere at login information og sessions data skal gemmes på deres computere. På den måde bliver de automatisk logget på næste gang de besøger hjemmesiden. Dette kan give anledning til ulovlig adgang og misbrug af uauthoriserede brugere. (Standard: Ja)</string>
+  <string name="SYS_LOGIN_WITH_EMAIL">Tillad e-mailadresse i stedet for brugernavn til login</string>
+  <string name="SYS_LOGIN_WITH_EMAIL_DESC">Hvis en bruger har en e-mailadresse gemt i sit profilfelt, og adressen er unik, kan den bruges som brugernavn til at logge ind (standard: nej)</string>
   <string name="ORG_NEW_ORGANIZATION">Ny organisation</string>
   <string name="ORG_NEW_ORGANIZATION_DESC">Indtast en forkortelse, det officiellle navn samt en e-mail adresse til organisationen du til tilføje. E-mail adressen skal være en generel e-mail adresse. Den vil blive brugt som afsender e-mail adresse når der sendes automatiske system e-mails og notifikationer.</string>
   <string name="ORG_NO_FIELD_CREATED">Intet organisations specifikt felt er oprettet endnu!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ved ændringer i visningen vil alle ikke gemte ændringer være tabt.</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definer et antal emner som vises på en side. Sideskift sker hvis antallet af emner overskrider den definerede værdi. Print Preview og eksport funktionalitet er ikke påvirket. Hvis værdien er 0, vil alle emner blive vist og sideskift bliver deaktiveret. (Standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Kun for brugere der er logget ind</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Administrer generelle organisations indstillinger og modul indstillinger.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisation #VAR1_BOLD# er tilføjet med succes. Det kan nu vælges, når du logger ind.\n\nHvis du har en separat hjemmeside til denne organisation skal du tilføje den inden for config.php på den separate hjemmeside.</string>
@@ -988,7 +988,8 @@
   <string name="SYS_NUMBER">Nummer</string>
   <string name="SYS_NUMBER_COL_DESC">Det respektive afkrydsningsfelt skal aktiveres, hvis du vil have vist en linje med antallet af medlemskaber i slutningen af rapporten.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antal albums pr. side</string>
-  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster vist på en side. Hvis der er flere poster, vises navigationselementer for at rulle mellem siderne. (Standard: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster, der vises på en side. Hvis der er flere poster, tilføjes en paginering på siden. Hvis værdien er 0, vises alle poster på en side, og pagineringen deaktiveres. (Standardindstilling: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Antal modtagere</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Nummeret i dette felt angiver det maksimale antal modtagere i en e-mail. Dette antal kan begrænses af udbydere. Hvis en e-mail skal sendes til flere modtagere end det antal, der er angivet her, vil der blive genereret flere e-mails. Antallet af mulige e-mails, der skal sendes inden for en periode, kan også begrænses af udbydere. (Standard: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">‎ODF-regneark (*.ods)‎</string>

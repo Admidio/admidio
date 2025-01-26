@@ -205,8 +205,6 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Ange förkortningen, det officiella namnet och e-postadressen för den organisation du vill lägga till. E-postadressen ska vara en allmän adress. Den kommer att användas som avsändaradress när du skickar automatiska systemaviseringar.</string>
   <string name="ORG_NO_FIELD_CREATED">Inget organisationsspecifikt fält har skapats än!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">När du ändrar vyn kommer alla osparade ändringar att gå förlorade.</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster per sida</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definiera antalet objekt som visas på en sida. Pagination tillhandahålls om antalet objekt överstiger det definierade värdet. Utskriftsförhandsgranskning och exportfunktioner påverkas inte. Om värdet är 0 kommer alla objekt att listas och paginering inaktiveras. (standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">För inloggade användare endast</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hantera allmänna organisationspreferenser eller modulpreferenser här.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisation #VAR1_BOLD# har lagts till. Det går nu att välja när du loggar in. \n\nOm du har en separat hemsida för denna organisation, lägg till den i config.php på den separata hemsidan.</string>
@@ -990,7 +988,8 @@
   <string name="SYS_NUMBER">Nummer</string>
   <string name="SYS_NUMBER_COL_DESC">Respektive kryssruta behöver aktiveras för att visa antal medlemmar i slutet av rapporten.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antal album per sida</string>
-  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster som visas på en sida. Om det finns fler poster visas navigeringsfunktioner för att växla mellan sidor. (Standard: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Poster per sida</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster som visas per sida. Om det finns fler poster kommer en sidväljare visas. Om värdet är 0 visas alla poster på en sida och sidväljaren visas inte. (Standardinställning: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Antal mottagare</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Siffran i det här fältet anger det maximala antalet mottagare i ett e-postmeddelande. Detta antal kan begränsas av leverantörer. Om ett e-postmeddelande ska skickas till fler mottagare än det antal som anges här, kommer flera e-postmeddelanden att genereras. Antalet möjliga e-postmeddelanden som ska skickas inom en period kan också begränsas av leverantörer. (Standard: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF -kalkylblad (*.ods)</string>
