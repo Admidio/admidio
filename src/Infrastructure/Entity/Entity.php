@@ -828,8 +828,8 @@ class Entity
             }
         }
 
-        // only mark as "changed" if the value is different (DON'T use binary safe function!)
-        if (strcmp((string) $this->dbColumns[$columnName], (string) $newValue) !== 0) {
+        if ($this->valueChanged($columnName, $newValue)) {
+            $this->columnsInfos[$columnName]['previousValue'] = $this->dbColumns[$columnName];
             $this->dbColumns[$columnName] = $newValue;
             $this->columnsValueChanged = true;
             $this->columnsInfos[$columnName]['changed'] = true;
@@ -837,4 +837,53 @@ class Entity
 
         return true;
     }
+
+    /**
+     * Check if the given column has changed, considering the DB column type.
+     * Since loading from the database converts to the actual data types, but setting 
+     * uses strings, some datatypes need special-casing. Boolean false are read as null, 
+     * but set as 0 -> null and 0 must be considered as false. Similarily, loading a 
+     * (date)time will include seconds, but setting will not include seconds in the string
+     * value.
+     * 
+     * @param string $columnName the database column name to check
+     * @param string $newValue the new value to set
+     * @return bool Whether the $newValue can be considered differnt from the current value
+     */
+    protected function valueChanged(string $columnName, ?string $newValue) : bool
+    {
+        global $gSettingsManager;
+        $oldValue = $this->dbColumns[$columnName];
+
+        // certain data types need special handling to detect changes
+        //   * bool: unset/null and 0 mean false
+        //   * date/time: Make sure seconds are handled consistently, no need to convert to string
+        //   * all other types can be compared by converting to string and comparing strings
+        switch ($this->columnsInfos[$columnName]['type']) {
+            case 'boolean': // fallthrough
+            case 'tinyint':
+                if (empty($oldValue)) $oldValue = 0;
+                if (empty($newValue)) $newValue = 0;
+                return $oldValue != $newValue;
+            case 'timestamp': // fallthrough
+            case 'date': // fallthrough
+            case 'time':
+                // if both are empty, no need to go through DateTime
+                if (empty($oldValue) && empty($newValue)) 
+                    return false;
+                try {
+                    // Convert old and new to a DateTime and compare that directly
+                    $oldDate = new \DateTime($oldValue);
+                    $newDate = new \DateTime($newValue);
+                    return ($oldDate != $newDate) ? true : false;
+                } catch (\Exception $e) {
+                    // if DateTime-conversion did not work, compare the strings
+                    return $oldValue != $newValue;
+                }
+            default:
+                // only mark as "changed" if the value is different (DON'T use binary safe function!)
+                return strcmp((string) $oldValue, (string) $newValue) !== 0;
+        }
+    }
+
 }

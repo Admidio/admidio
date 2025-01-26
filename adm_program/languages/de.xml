@@ -989,7 +989,8 @@
   <string name="SYS_NUMBER">Zahl</string>
   <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Anzahl Alben pro Seite</string>
-  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge, so werden Navigationselemente angezeigt, um zwischen den Seiten zu blättern. (Voreinstellung: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert 0 ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Anzahl der Empfänger:innen</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängerinnen oder Empfängern in einer E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Soll eine E-Mail an mehr Empfänger gesendet werden als die hier eingestellte Anzahl, so werden mehrere E-Mails erzeugt. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Voreinstellung: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF-Tabellendokument (*.ods)</string>
