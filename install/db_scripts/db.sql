@@ -707,6 +707,7 @@ CREATE TABLE %PREFIX%_sessions
     ses_ip_address              varchar(39)         NOT NULL,
     ses_binary                  blob,
     ses_reload                  boolean             NOT NULL    DEFAULT false,
+    ses_tfa_checked             boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (ses_id)
 )
 ENGINE = InnoDB

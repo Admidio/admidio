@@ -66,8 +66,9 @@ try {
         // Handle form input
 
         if ($tfa->verifyCode($secret, $otpCode)) {
-            $user->setSecondFactorSecret($secret);
-            $user->save();
+            $gCurrentUser->setSecondFactorSecret($secret);
+            $gCurrentUser->save();
+            $gCurrentSession->setValue('ses_tfa_checked', true);
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_TFA_SETUP_SUCCESSFUL')));
             exit();
@@ -88,12 +89,16 @@ try {
         $user->setSecondFactorSecret(null);
         $user->save();
 
+        if($gCurrentUserId === $userId){
+            $gCurrentUser->setValue('usr_tfa_secret', null);
+        }
+
         echo json_encode(array('status' => 'success', $gL10n->get('SYS_TFA_RESET_SUCCESSFUL')));
         exit();
 
     } elseif ($getMode === 'html') {
         // Show two factor authentication setup form if user does not have two factor authentication enabled
-        if (!$user->getValue('usr_tfa_secret')) {
+        if (!$user->hasSetupTfa()) {
 
             // Admins can only set up two factor authentication for themselves
             if ($gCurrentUserId !== $userId) {
