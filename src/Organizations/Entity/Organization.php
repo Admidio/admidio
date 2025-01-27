@@ -275,9 +275,14 @@ class Organization extends Entity
         $roleManagement->save();
 
         // set edit role rights to forum categories for role member
-        $forumService = new ForumService($this->db);
-        $categories = $forumService->getCategories($orgId);
-        $rightCategoryView = new RolesRights($this->db, 'category_edit', (int)$categories[0]['cat_id']);
+        $sql = 'SELECT cat_id
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type = \'FOT\'
+                   AND cat_org_id = ? -- $orgId';
+        $pdoStatement = $this->db->queryPrepared($sql, array($orgId));
+        $row = $pdoStatement->fetch();
+
+        $rightCategoryView = new RolesRights($this->db, 'category_edit', (int)$row['cat_id']);
         $rightCategoryView->saveRoles(array($roleMember->getValue('rol_id')));
 
         // Create membership for user in role 'Administrator' and 'Members'

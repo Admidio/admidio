@@ -3,12 +3,8 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Forum\Entity\Post;
-use Admidio\Forum\Entity\Topic;
-use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Presenter\FormPresenter;
 
 /**
  * @brief Class with methods to display the module pages of the registration.
@@ -37,10 +33,6 @@ class ForumPostPresenter extends PagePresenter
      * @var array Array with all read forum topics and their first post.
      */
     protected array $data = array();
-    /**
-     * @var array Array with all read groups and roles
-     */
-    protected array $templateData = array();
 
     /**
      * Constructor creates the page object and initialized all parameters.
@@ -58,7 +50,7 @@ class ForumPostPresenter extends PagePresenter
      * @param string $topicUUID UUID of the topic that must be set if a new post is created.
      * @throws Exception
      */
-    public function createEditForm(string $topicUUID = '')
+    public function createEditForm(string $topicUUID = ''): void
     {
         global $gDb, $gL10n, $gCurrentSession;
 
@@ -107,93 +99,5 @@ class ForumPostPresenter extends PagePresenter
         $this->smarty->assign('timestampLastUserEdited', $post->getValue('fop_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
-    }
-
-    /**
-     * Read the data of the forum in an array.
-     * @throws Exception
-     */
-    public function getData(): array
-    {
-        global $gDb, $gProfileFields;
-
-        $sqlQueryParameters = array();
-
-        $sql = 'SELECT fot_uuid, fot_title, fot_views, fop_uuid, fop_text, fop_timestamp_create, fop_usr_id_create,
-                       cat_name, usr_uuid,
-                       cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname
-                  FROM ' . TBL_FORUM_TOPICS . '
-            INNER JOIN ' . TBL_CATEGORIES . '
-                    ON fot_cat_id = cat_id
-            INNER JOIN ' . TBL_FORUM_POSTS . '
-                    ON fop_fot_id = fot_id
-            INNER JOIN ' . TBL_USERS . '
-                    ON usr_id = fop_usr_id_create
-             LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
-                    ON cre_surname.usd_usr_id = usr_id
-                   AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
-             LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
-                    ON cre_firstname.usd_usr_id = usr_id
-                   AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
-                 WHERE fot_uuid = ? -- $topicUUID
-                 ORDER BY fop_timestamp_create';
-
-        $queryParameters = array_merge(array(
-            (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-            (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-            $this->topicUUID
-        ), $sqlQueryParameters);
-
-        return $gDb->getArrayFromSql($sql, $queryParameters);
-    }
-
-    /**
-     * @throws \DateMalformedStringException
-     * @throws Exception
-     */
-    public function prepareData()
-    {
-        global $gDb, $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
-
-        $templateRow = array();
-        $data = $this->getData();
-        $forum = new ForumService($gDb);
-        $categories = $forum->getCategories();
-
-        foreach ($data as $forumPost) {
-            $templateRow['topic_uuid'] = $forumPost['fot_uuid'];
-            $templateRow['post_uuid'] = $forumPost['fop_uuid'];
-            $templateRow['title'] = $forumPost['fot_title'];
-            $templateRow['views'] = $forumPost['fot_views'];
-            $templateRow['text'] = $forumPost['fop_text'];
-            $templateRow['userUUID'] = $forumPost['usr_uuid'];
-            $templateRow['userName'] = $forumPost['firstname'] . ' ' . $forumPost['surname'];
-            $datetime = new \DateTime($forumPost['fop_timestamp_create']);
-            $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
-            $templateRow['category'] = '';
-            $templateRow['editable'] = false;
-
-            if (count($categories) > 1) {
-                $templateRow['category'] = Language::translateIfTranslationStrId($forumPost['cat_name']);
-            }
-
-            if ($gCurrentUser->administrateForum()) {
-                $templateRow['editable'] = true;
-
-                $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_edit', 'post_uuid' => $forumPost['fop_uuid'])),
-                    'icon' => 'bi bi-pencil-square',
-                    'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPIC'))
-                );
-                $templateRow['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'adm_post_' . $forumPost['fop_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'post_delete', 'post_uuid' => $forumPost['fop_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array('SYS_POST')),
-                    'icon' => 'bi bi-trash',
-                    'tooltip' => $gL10n->get('SYS_DELETE_VAR', array('SYS_POST'))
-                );
-            }
-
-            $this->templateData[] = $templateRow;
-        }
     }
 }

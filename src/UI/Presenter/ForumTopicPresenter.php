@@ -2,13 +2,12 @@
 
 namespace Admidio\UI\Presenter;
 
+use Admidio\Categories\Service\CategoryService;
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
-use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Presenter\FormPresenter;
 
 /**
  * @brief Class with methods to display the module pages of the registration.
@@ -59,10 +58,17 @@ class ForumTopicPresenter extends PagePresenter
      * parameter **$pageContent**. If no registration is found than show a message to the user.
      * @throws Exception|\DateMalformedStringException
      */
-    public function createCards()
+    public function createCards(): void
     {
-        global $gL10n;
+        global $gL10n, $gDb;
 
+        // update views counter
+        $topic = new Topic($gDb);
+        $topic->readDataByUuid($this->topicUUID);
+        $topic->setValue('fot_views', $topic->getValue('fot_views') + 1);
+        $topic->save();
+
+        // read topics and posts from database
         $this->prepareData();
         $this->setHeadline($this->templateData[0]['title']);
 
@@ -87,19 +93,28 @@ class ForumTopicPresenter extends PagePresenter
      * Create the data for the edit form of a forum topic.
      * @throws Exception
      */
-    public function createEditForm()
+    public function createEditForm(): void
     {
-        global $gDb, $gL10n, $gCurrentSession;
+        global $gDb, $gL10n, $gCurrentSession, $gCurrentUser;
 
         // create menu object
         $topic = new Topic($gDb);
         $post = new Post($gDb);
-        $forumService = new ForumService($gDb);
-        $categories = $forumService->getCategories();
+        $categoryService = new CategoryService($gDb, 'FOT');
 
-        if ($this->topicUUID !== '') {
+        if ($this->topicUUID === '') {
+            if (!$gCurrentUser->administrateForum()
+                && count($gCurrentUser->getAllEditableCategories('FOT')) === 0) {
+                throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
+            }
+        } else {
             $topic->readDataByUuid($this->topicUUID);
             $post->readDataById($topic->getValue('fot_fop_id_first_post'));
+
+            if (!$gCurrentUser->administrateForum()
+                && $gCurrentUser->getValue('usr_id') !== $post->getValue('fop_usr_id_create')) {
+                throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
+            }
         }
 
         $this->setHtmlID('adm_forum_topic_edit');
@@ -116,20 +131,14 @@ class ForumTopicPresenter extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('topic_uuid' => $this->topicUUID, 'mode' => 'topic_save')),
             $this
         );
-        if (count($categories) > 1) {
-            $categoriesValues = array();
-            $categoryDefault = '';
-            foreach ($categories as $category) {
-                $categoriesValues[$category['cat_uuid']] = $category['cat_name'];
-                if ($category['cat_default'] == 1) {
-                    $categoryDefault = $category['cat_uuid'];
-                }
-            }
-            $form->addSelectBox(
+        if ($categoryService->count() > 1) {
+            $form->addSelectBoxForCategories(
                 'adm_category_uuid',
                 $gL10n->get('SYS_CATEGORY'),
-                $categoriesValues,
-                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $categoryDefault)
+                $gDb,
+                'FOT',
+                FormPresenter::SELECT_BOX_MODUS_EDIT,
+                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $topic->getValue('cat_uuid'))
             );
         }
         $form->addInput(
@@ -200,13 +209,12 @@ class ForumTopicPresenter extends PagePresenter
      * @throws \DateMalformedStringException
      * @throws Exception
      */
-    public function prepareData()
+    public function prepareData(): void
     {
         global $gDb, $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
 
         $data = $this->getData();
-        $forum = new ForumService($gDb);
-        $categories = $forum->getCategories();
+        $categoryService = new CategoryService($gDb, 'FOT');
         $firstPost = true;
 
         foreach ($data as $forumPost) {
@@ -228,15 +236,15 @@ class ForumTopicPresenter extends PagePresenter
             $templateRow['category'] = '';
             $templateRow['editable'] = false;
 
-            if (count($categories) > 1) {
+            if ($categoryService->count() > 1) {
                 $templateRow['category'] = Language::translateIfTranslationStrId($forumPost['cat_name']);
             }
 
-            if ($gCurrentUser->administrateForum()) {
+            if ($gCurrentUser->administrateForum()
+                || $gCurrentUser->getValue('usr_uuid') === $forumPost['usr_uuid']) {
                 $templateRow['editable'] = true;
 
                 if ($firstPost) {
-                    $firstPost = false;
                     $templateRow['actions'][] = array(
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumPost['fot_uuid'])),
                         'icon' => 'bi bi-pencil-square',
@@ -257,6 +265,7 @@ class ForumTopicPresenter extends PagePresenter
                 }
             }
 
+            $firstPost = false;
             $this->templateData[] = $templateRow;
         }
     }

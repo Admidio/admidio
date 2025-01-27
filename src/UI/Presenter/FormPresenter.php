@@ -5,7 +5,6 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
-use Admidio\UI\Presenter\PagePresenter;
 use DateTime;
 use PDO;
 use Securimage;
@@ -109,7 +108,7 @@ class FormPresenter
     /**
      * Constructor creates the form element
      * @param string $id ID of the form
-     * @param string|null $action Action attribute of the form
+     * @param string $action Action attribute of the form
      * @param PagePresenter|null $htmlPage (optional) A PagePresenter object that will be used to add javascript code or files to the html output page.
      * @param array $options (optional) An array with the following possible entries:
      *                           - **type** : Set the form type. Every type has some special features:
@@ -227,7 +226,7 @@ class FormPresenter
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
      */
-    public function addButton(string $id, string $text, array $options = array())
+    public function addButton(string $id, string $text, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type'     => 'button',
@@ -245,7 +244,7 @@ class FormPresenter
         if (!isset($options['link'])) {
             $optionsAll['link'] = '';
         }
-        if(strstr($optionsAll['class'], 'btn-') === false) {
+        if(!str_contains($optionsAll['class'], 'btn-')) {
             $optionsAll['class'] .= " btn-secondary";
 
             if ($this->type !== 'navbar') {
@@ -263,7 +262,7 @@ class FormPresenter
      * @param string $id ID of the captcha field. This will also be the name of the captcha field.
      * @throws Exception
      */
-    public function addCaptcha(string $id)
+    public function addCaptcha(string $id): void
     {
         global $gL10n;
 
@@ -307,7 +306,7 @@ class FormPresenter
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
+    public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type'     => 'checkbox',
@@ -357,7 +356,7 @@ class FormPresenter
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addCustomContent(string $id, string $label, string $content, array $options = array())
+    public function addCustomContent(string $id, string $label, string $content, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type'     => 'custom-content',
@@ -391,7 +390,7 @@ class FormPresenter
      *                          is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function addEditor(string $id, string $label, string $value, array $options = array())
+    public function addEditor(string $id, string $label, string $value, array $options = array()): void
     {
         global $gSettingsManager, $gL10n;
 
@@ -490,7 +489,7 @@ class FormPresenter
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addFileUpload(string $id, string $label, array $options = array())
+    public function addFileUpload(string $id, string $label, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type'               => 'file',
@@ -579,7 +578,7 @@ class FormPresenter
      *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
      * @throws Exception
      */
-    public function addInput(string $id, string $label, string $value, array $options = array())
+    public function addInput(string $id, string $label, string $value, array $options = array()): void
     {
         global $gSettingsManager, $gLogger, $gL10n;
 
@@ -751,7 +750,7 @@ class FormPresenter
      * @param bool $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
      *                                     the page is fully loaded.
      */
-    protected function addJavascriptCode(string $javascriptCode, bool $executeAfterPageLoad = false)
+    protected function addJavascriptCode(string $javascriptCode, bool $executeAfterPageLoad = false): void
     {
         if (isset($this->htmlPage)) {
             $this->htmlPage->addJavascript($javascriptCode, $executeAfterPageLoad);
@@ -785,7 +784,7 @@ class FormPresenter
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
+    public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type'             => 'multiline',
@@ -873,7 +872,7 @@ class FormPresenter
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addRadioButton(string $id, string $label, array $values, array $options = array())
+    public function addRadioButton(string $id, string $label, array $values, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type'             => 'radio',
@@ -952,7 +951,7 @@ class FormPresenter
      *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
      * @throws Exception
      */
-    public function addSelectBox(string $id, string $label, array $values, array $options = array())
+    public function addSelectBox(string $id, string $label, array $values, array $options = array()): void
     {
         global $gL10n;
 
@@ -1043,7 +1042,12 @@ class FormPresenter
             }
         } elseif ($optionsAll['showContextDependentFirstEntry']) {
             if ($optionsAll['property'] === self::FIELD_REQUIRED) {
-                array_unshift($valuesArray, array('id' => '', 'value' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -'));
+                // if there is only one entry and a required field than select this entry
+                if (count($values) === 1) {
+                    $optionsAll['defaultValue'] = array_key_first($values);
+                } else {
+                    array_unshift($valuesArray, array('id' => '', 'value' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -'));
+                }
             } else {
                 array_unshift($valuesArray, array('id' => '', 'value' => ''));
             }
@@ -1158,7 +1162,7 @@ class FormPresenter
      * ```
      * @throws Exception
      */
-    public function addSelectBoxFromSql(string $id, string $label, Database $database, $sql, array $options = array())
+    public function addSelectBoxFromSql(string $id, string $label, Database $database, array|string $sql, array $options = array()): void
     {
         $selectBoxEntries = array();
 
@@ -1228,7 +1232,7 @@ class FormPresenter
      *                          is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function addSelectBoxFromXml(string $id, string $label, string $xmlFile, string $xmlValueTag, string $xmlViewTag, array $options = array())
+    public function addSelectBoxFromXml(string $id, string $label, string $xmlFile, string $xmlValueTag, string $xmlViewTag, array $options = array()): void
     {
         $selectBoxEntries = array();
 
@@ -1269,7 +1273,7 @@ class FormPresenter
      * You must define the category type (roles, events, links ...). All categories of this type will be shown.
      * @param string $id ID of the selectbox. This will also be the name of the selectbox.
      * @param string $label The label of the selectbox.
-     * @param Database $database A Admidio database object that contains a valid connection to a database
+     * @param Database $database An Admidio database object that contains a valid connection to a database
      * @param string $categoryType Type of category ('EVT', 'LNK', 'ROL', 'USF') that should be shown.
      *                                 The type 'ROL' will ot list event role categories. Therefore, you need to set
      *                                 the type 'ROL_EVENT'. It's not possible to show role categories together with
@@ -1297,7 +1301,7 @@ class FormPresenter
      *                                   is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function addSelectBoxForCategories(string $id, string $label, Database $database, string $categoryType, string $selectBoxModus, array $options = array())
+    public function addSelectBoxForCategories(string $id, string $label, Database $database, string $categoryType, string $selectBoxModus, array $options = array()): void
     {
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
@@ -1448,7 +1452,7 @@ class FormPresenter
      *                        - **type** : If set to true this button get the type **submit**. This will
      *                          be the default.
      */
-    public function addSubmitButton(string $id, string $text, array $options = array())
+    public function addSubmitButton(string $id, string $text, array $options = array()): void
     {
         $options['type'] = 'submit';
 
@@ -1477,7 +1481,7 @@ class FormPresenter
      * @return void
      * @throws Exception
      */
-    public function addToHtmlPage(bool $ajaxSubmit = true)
+    public function addToHtmlPage(bool $ajaxSubmit = true): void
     {
         try {
             if (isset($this->htmlPage)) {
@@ -1504,9 +1508,10 @@ class FormPresenter
      * This method add the form attributes and all form elements to the PagePresenter object. Also, the
      * template file of the form is set to the page. After this method is called the whole form
      * could be rendered through the PagePresenter.
+     * @param Smarty $smarty
      * @return void
      */
-    public function addToSmarty(Smarty $smarty)
+    public function addToSmarty(Smarty $smarty): void
     {
         global $gL10n, $gSettingsManager;
 
@@ -1593,12 +1598,12 @@ class FormPresenter
 
     /**
      * Returns a CSRF token from the session. If no CSRF token exists a new one will be
-     * generated and stored within the session. The next call of the method will than
+     * generated and stored within the session. The next call of the method will then
      * return the existing token. The CSRF token has 30 characters. A new token could
      * be forced by the parameter **$newToken**
      * @param bool $newToken If set to true, always a new token will be generated.
      * @return string Returns the CSRF token
-     * @throws Exception
+     * @throws \Exception
      */
     public function getCsrfToken(bool $newToken = false): string
     {

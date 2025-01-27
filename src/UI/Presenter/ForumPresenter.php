@@ -2,13 +2,10 @@
 
 namespace Admidio\UI\Presenter;
 
-use Admidio\Forum\Entity\Post;
-use Admidio\Forum\Entity\Topic;
-use Admidio\Forum\Service\ForumService;
+use Admidio\Categories\Service\CategoryService;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\Menu\ValueObject\MenuNode;
-use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
@@ -57,8 +54,8 @@ class ForumPresenter extends PagePresenter
         global $gDb;
 
         $this->categoryUUID = $categoryUUID;
-        $forum = new ForumService($gDb);
-        $this->categoryList = $forum->getCategories();
+        $categories = new CategoryService($gDb, 'FOT');
+        $this->categoryList = $categories->getVisibleCategories();
 
         parent::__construct($categoryUUID);
     }
@@ -69,7 +66,7 @@ class ForumPresenter extends PagePresenter
      * @return void
      * @throws Exception
      */
-    protected function createSharedHeader()
+    protected function createSharedHeader(): void
     {
         global $gCurrentUser, $gL10n, $gDb;
 
@@ -126,12 +123,14 @@ class ForumPresenter extends PagePresenter
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
      * @throws Exception
+     * @throws \DateMalformedStringException
      */
-    public function createCards()
+    public function createCards(): void
     {
         global $gL10n;
 
-        $this->prepareData($this->categoryUUID);
+        $this->prepareData();
+
         $this->setHtmlID('adm_forum_cards');
         $this->createSharedHeader();
 
@@ -150,10 +149,11 @@ class ForumPresenter extends PagePresenter
      */
     public function getData(): array
     {
-        global $gDb, $gCurrentOrgId, $gProfileFields;
+        global $gDb, $gProfileFields, $gCurrentUser;
 
         $sqlConditions = '';
         $sqlQueryParameters = array();
+        $visibleCategoryIDs = $gCurrentUser->getAllVisibleCategories('FOT');
 
         if ($this->categoryUUID !== '') {
             $sqlConditions .= ' AND cat_uuid = ?';
@@ -161,7 +161,7 @@ class ForumPresenter extends PagePresenter
         }
 
         $sql = 'SELECT fot_uuid, fot_title, fot_views, first_post.fop_text, fot_timestamp_create, fot_usr_id_create,
-                       cat_name, usr.usr_uuid, usr.usr_login_name, usr.usr_timestamp_change,
+                       cat_id, cat_name, usr.usr_uuid, usr.usr_login_name, usr.usr_timestamp_change,
                        cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname,
                        (SELECT COUNT(*) - 1 FROM ' . TBL_FORUM_POSTS . ' WHERE fop_fot_id = fot_id) AS replies_count,
                        last_reply.fop_timestamp_create AS last_reply_timestamp, last_reply_usr.usr_login_name AS last_reply_login_name,
@@ -189,8 +189,7 @@ class ForumPresenter extends PagePresenter
              LEFT JOIN ' . TBL_USER_DATA . ' AS last_reply_firstname
                     ON last_reply_firstname.usd_usr_id = last_reply_usr.usr_id
                    AND last_reply_firstname.usd_usf_id = ? -- $firstNameUsfId
-                 WHERE (  cat_org_id = ? -- $gCurrentOrgId
-                       OR cat_org_id IS NULL )
+                 WHERE  cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ')
                        ' . $sqlConditions . '
                  ORDER BY fot_timestamp_create DESC';
 
@@ -198,9 +197,8 @@ class ForumPresenter extends PagePresenter
             (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'),
             (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
             (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-            (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-            $gCurrentOrgId
-        ), $sqlQueryParameters);
+            (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+        ), $visibleCategoryIDs, $sqlQueryParameters);
 
         return $gDb->getArrayFromSql($sql, $queryParameters);
     }
@@ -209,7 +207,7 @@ class ForumPresenter extends PagePresenter
      * @throws \DateMalformedStringException
      * @throws Exception
      */
-    public function prepareData()
+    public function prepareData(): void
     {
         global $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
 
@@ -256,7 +254,8 @@ class ForumPresenter extends PagePresenter
                 $templateRow['category'] = Language::translateIfTranslationStrId($forumTopic['cat_name']);
             }
 
-            if ($gCurrentUser->administrateForum()) {
+            if ($gCurrentUser->administrateForum()
+                || $gCurrentUser->getValue('usr_uuid') === $forumTopic['usr_uuid']) {
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(

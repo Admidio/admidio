@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Forum\Entity;
 
+use Admidio\Categories\Service\CategoryService;
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
@@ -39,6 +40,7 @@ class Topic extends Entity
     {
         // read also data of assigned first post
         $this->connectAdditionalTable(TBL_FORUM_POSTS, 'fop_id', 'fot_fop_id_first_post');
+        $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'fot_cat_id');
 
         parent::__construct($database, TBL_FORUM_TOPICS, 'fot', $fotID);
 
@@ -187,8 +189,8 @@ class Topic extends Entity
     {
         if ($this->newRecord) {
             // if only one category is available, then set this category as default
-            $forumServices = new ForumService($this->db);
-            $categories = $forumServices->getCategories();
+            $categoryServices = new CategoryService($this->db, 'FOT');
+            $categories = $categoryServices->getVisibleCategories();
             if (count($categories) === 1) {
                 $this->setValue('fot_cat_id', $categories[0]['cat_id']);
             }

@@ -12,7 +12,7 @@
                         {/if}
                         {if {array_key_exists array=$post key="actions"} && count($post.actions) > 0}
                             {foreach $post.actions as $actionItem}
-                                <a {if isset($actionItem.dataHref)} class="admidio-icon-link" href="javascript:void(0);"
+                                <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
                                     data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
                                         {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
                                     <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>

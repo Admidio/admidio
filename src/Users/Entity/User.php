@@ -725,6 +725,7 @@ class User extends Entity
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
             || ($categoryType === 'EVT' && $this->administrateEvents())
+            || ($categoryType === 'FOT' && $this->administrateForum())
             || ($categoryType === 'LNK' && $this->editWeblinksRight())
             || ($categoryType === 'USF' && $this->editUsers())
             || ($categoryType === 'ROL' && $this->manageRoles())) {
@@ -771,6 +772,7 @@ class User extends Entity
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
             || ($categoryType === 'EVT' && $this->administrateEvents())
+            || ($categoryType === 'FOT' && $this->administrateForum())
             || ($categoryType === 'LNK' && $this->editWeblinksRight())
             || ($categoryType === 'USF' && $this->editUsers())
             || ($categoryType === 'ROL' && $this->assignRoles())) {

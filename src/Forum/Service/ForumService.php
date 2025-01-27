@@ -3,6 +3,7 @@
 namespace Admidio\Forum\Service;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Categories\Service\CategoryService;
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
@@ -30,33 +31,7 @@ class ForumService
         $this->db = $database;
     }
 
-    /**
-     * Get an array with all categories from the forum of this organization.
-     * @param int $organizationID ID of the organization for which the categories should be loaded. Default is the current organization.
-     * @return array<int,array> Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name', 'cat_default'
-     * @throws Exception
-     */
-    public function getCategories(int $organizationID = 0): array
-    {
-        global $gCurrentOrgId;
 
-        $categories = array();
-        if ($organizationID === 0) {
-            $organizationID = $gCurrentOrgId;
-        }
-
-        $sql = 'SELECT cat_id, cat_uuid, cat_name, cat_default
-                  FROM ' . TBL_CATEGORIES . '
-                 WHERE cat_org_id = ? -- $gCurrentOrgId
-                   AND cat_type = \'FOT\' ';
-        $pdoStatement = $this->db->queryPrepared($sql, array($organizationID));
-
-        while ($row = $pdoStatement->fetch()) {
-            $categories[] = $row;
-        }
-
-        return $categories;
-    }
 
     /**
      * Save data from the post form into the database.
@@ -64,9 +39,9 @@ class ForumService
      * @param string $topicUUID UUID if the topic that must be set if a new post is created.
      * @throws Exception
      */
-    public function savePost(string $postUUID, string $topicUUID = '')
+    public function savePost(string $postUUID, string $topicUUID = ''): void
     {
-        global $gCurrentSession, $gDb;
+        global $gCurrentSession, $gDb, $gCurrentUser;
 
         // check form field input and sanitized it from malicious content
         $postEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
@@ -75,10 +50,19 @@ class ForumService
         $post = new Post($gDb);
         if ($postUUID !== '') {
             $post->readDataByUuid($postUUID);
+
+            if (!$gCurrentUser->administrateForum() && $post->getValue('fop_usr_id_create') !== $gCurrentUser->getValue('usr_id')) {
+                throw new Exception('You are not allowed to edit this post.');
+            }
         } else {
             $topic = new Topic($gDb);
             $topic->readDataByUuid($topicUUID);
             $post->setValue('fop_fot_id', $topic->getValue('fot_id'));
+
+            $categoryService = new CategoryService($gDb, 'FOT');
+            if (!in_array($topic->getValue('cat_uuid'), $categoryService->getEditableCategoryUUIDs())) {
+                throw new Exception('You are not allowed to create a post in this category.');
+            }
         }
 
         // write form values in post object
@@ -94,13 +78,18 @@ class ForumService
      * @param string $topicUUID UUID if the topic that should be stored within this class
      * @throws Exception
      */
-    public function saveTopic(string $topicUUID = '')
+    public function saveTopic(string $topicUUID = ''): void
     {
         global $gCurrentSession, $gDb;
 
         // check form field input and sanitized it from malicious content
         $topicEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $topicEditForm->validate($_POST);
+
+        $categoryService = new CategoryService($gDb, 'FOT');
+        if (!in_array($formValues['adm_category_uuid'], $categoryService->getEditableCategoryUUIDs())) {
+            throw new Exception('You are not allowed to edit this category.');
+        }
 
         $topic = new Topic($gDb);
         if ($topicUUID !== '') {
