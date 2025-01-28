@@ -760,9 +760,9 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</string>
   <string name="SYS_HTML_TABLE">HTML table</string>
   <string name="SYS_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
-  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Number of days in the future, to be included in an iCal download or abo. If the iCal download is started within the event module, then this setting is ignored and the filtered appointments are exported. (Default: 365)</string>
+  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Number of days in the future, to be included in an iCal download or subscription. If the iCal download is started within the event module, this setting is ignored and the filtered appointments are exported. (Default: 365)</string>
   <string name="SYS_ICAL_DAYS_PAST">Number of iCal days in the past</string>
-  <string name="SYS_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or subscription. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
+  <string name="SYS_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or subscription. If the iCal download is started within the event module, this setting is ignored and the filtered appointments are exported. (Default: 30)</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_ICQ">ICQ</string>
@@ -1408,7 +1408,7 @@
   <string name="SYS_USER_RELATION_TYPE">Relationship type</string>
   <string name="SYS_USER_VALID_LOGIN">User already has valid login information.</string>
   <string name="SYS_USERNAME">Username</string>
-  <string name="SYS_USERNAME_DESCRIPTION">You will be able to login with this username.\n\nThis name must be well-defined. If selected name is not available anymore, please try to use combinations like Andi78 or SteveT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">You can log in to the system with this name.\nThe name must be unique in the system. If your desired name is already taken, try combinations such as Andi78 or SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Number of contacts per page</string>
