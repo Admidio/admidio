@@ -706,27 +706,6 @@ class HtmlForm extends Smarty
                 break;
         }
 
-        // set field properties
-        switch ($optionsAll['property']) {
-            case self::FIELD_DISABLED:
-                $attributes['disabled'] = 'disabled';
-                break;
-
-            case self::FIELD_READONLY:
-                $attributes['readonly'] = 'readonly';
-                break;
-
-            case self::FIELD_REQUIRED:
-                $attributes['required'] = 'required';
-                $this->flagRequiredFields = true;
-                break;
-
-            case self::FIELD_HIDDEN:
-                $attributes['hidden'] = 'hidden';
-                $attributes['class'] .= ' invisible';
-                break;
-        }
-
         // set specific css class for this field
         if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' '.$optionsAll['class'];
@@ -768,6 +747,49 @@ class HtmlForm extends Smarty
                 $value = $datetime->format('H:i');
         }
 
+        // set field properties
+        switch ($optionsAll['property']) {
+            case self::FIELD_DISABLED:
+                if ($optionsAll['type'] === 'datetime') {
+                    $attributes['dateValueAttributes']['disabled'] = 'disabled';
+                    $attributes['timeValueAttributes']['disabled'] = 'disabled';
+                } else {
+                    $attributes['disabled'] = 'disabled';
+                }
+                break;
+
+            case self::FIELD_READONLY:
+                if ($optionsAll['type'] === 'datetime') {
+                    $attributes['dateValueAttributes']['readonly'] = 'readonly';
+                    $attributes['timeValueAttributes']['readonly'] = 'readonly';
+                } else {
+                    $attributes['readonly'] = 'readonly';
+                }
+                break;
+
+            case self::FIELD_REQUIRED:
+                if ($optionsAll['type'] === 'datetime') {
+                    $attributes['dateValueAttributes']['required'] = 'required';
+                    $attributes['timeValueAttributes']['required'] = 'required';
+                } else {
+                    $attributes['required'] = 'required';
+                }
+                $this->flagRequiredFields = true;
+                break;
+
+            case self::FIELD_HIDDEN:
+                if ($optionsAll['type'] === 'datetime') {
+                    $attributes['dateValueAttributes']['hidden'] = 'hidden';
+                    $attributes['dateValueAttributes']['class'] .= ' invisible';
+                    $attributes['timeValueAttributes']['hidden'] = 'hidden';
+                    $attributes['timeValueAttributes']['class'] .= ' invisible';
+                } else {
+                    $attributes['hidden'] = 'hidden';
+                    $attributes['class'] .= ' invisible';
+                }
+                break;
+        }
+        
         if ($optionsAll['passwordStrength']) {
             $passwordStrengthLevel = 1;
             if ($gSettingsManager instanceof SettingsManager && $gSettingsManager->getInt('password_min_strength')) {
