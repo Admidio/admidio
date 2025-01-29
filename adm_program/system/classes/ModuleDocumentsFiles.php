@@ -153,7 +153,7 @@ class ModuleDocumentsFiles extends HtmlPage
         }
 
         // initialize and set the parameter for DataTables
-        $dataTables = new HtmlDataTables($this, 'documents-files-table');
+        $dataTables = new HtmlDataTables($this, 'adm_documents_files_table');
         $dataTables->disableDatatablesColumnsSort(array(1, 6));
         $dataTables->setDatatablesColumnsNotHideResponsive(array(6));
         $dataTables->createJavascript(count($this->data), 6);
