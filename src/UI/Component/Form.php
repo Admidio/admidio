@@ -713,15 +713,8 @@ class Form
                 break;
 
             case self::FIELD_HIDDEN:
-                if ($optionsAll['type'] === 'datetime') {
-                    $attributes['dateValueAttributes']['hidden'] = 'hidden';
-                    $attributes['dateValueAttributes']['class'] .= ' invisible';
-                    $attributes['timeValueAttributes']['hidden'] = 'hidden';
-                    $attributes['timeValueAttributes']['class'] .= ' invisible';
-                } else {
-                    $attributes['hidden'] = 'hidden';
-                    $attributes['class'] .= ' invisible';
-                }
+                $attributes['hidden'] = 'hidden';
+                $optionsAll['class'] .= ' invisible';
                 break;
         }
         
