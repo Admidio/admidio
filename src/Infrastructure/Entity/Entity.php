@@ -840,12 +840,12 @@ class Entity
 
     /**
      * Check if the given column has changed, considering the DB column type.
-     * Since loading from the database converts to the actual data types, but setting 
-     * uses strings, some datatypes need special-casing. Boolean false are read as null, 
-     * but set as 0 -> null and 0 must be considered as false. Similarily, loading a 
+     * Since loading from the database converts to the actual data types, but setting
+     * uses strings, some datatypes need special-casing. Boolean false are read as null,
+     * but set as 0 -> null and 0 must be considered as false. Similarily, loading a
      * (date)time will include seconds, but setting will not include seconds in the string
      * value.
-     * 
+     *
      * @param string $columnName the database column name to check
      * @param string $newValue the new value to set
      * @return bool Whether the $newValue can be considered differnt from the current value
@@ -869,8 +869,11 @@ class Entity
             case 'date': // fallthrough
             case 'time':
                 // if both are empty, no need to go through DateTime
-                if (empty($oldValue) && empty($newValue)) 
+                if (empty($oldValue) && empty($newValue)) {
                     return false;
+                } elseif (empty($oldValue) || empty($newValue)) {
+                    return true;
+                }
                 try {
                     // Convert old and new to a DateTime and compare that directly
                     $oldDate = new \DateTime($oldValue);
