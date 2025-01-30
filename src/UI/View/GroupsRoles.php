@@ -766,7 +766,7 @@ class GroupsRoles extends PagePresenter
         }
 
         // initialize and set the parameter for DataTables
-        $dataTables = new HtmlDataTables($this, 'role-permissions-table');
+        $dataTables = new HtmlDataTables($this, 'adm_role_permissions_table');
         $dataTables->setGroupColumn(1);
         $dataTables->disableColumnsSort(array(3, 8));
         $dataTables->setColumnsNotHideResponsive(array(8));

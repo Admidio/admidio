@@ -1374,7 +1374,7 @@
   <string name="SYS_USER_RELATION_TYPE">Relationship type</string>
   <string name="SYS_USER_VALID_LOGIN">User already has valid login information.</string>
   <string name="SYS_USERNAME">Username</string>
-  <string name="SYS_USERNAME_DESCRIPTION">You will be able to login with this username.\nThis name must be well-defined. If selected name is not available anymore, please try to use combinations like Andi78 or SteveT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">You can log in to the system with this name.\nThe name must be unique in the system. If your desired name is already taken, try combinations such as Andi78 or SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Number of contacts per page</string>

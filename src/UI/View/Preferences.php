@@ -1788,7 +1788,7 @@ class Preferences extends PagePresenter
      */
     public function createSystemInformationForm(): string
     {
-        global $gL10n, $gDb, $gLogger;
+        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData;
 
         $this->assignSmartyVariable('operatingSystemName', SystemInfoUtils::getOS());
         $this->assignSmartyVariable('operatingSystemUserName', SystemInfoUtils::getUname());
