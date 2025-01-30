@@ -1666,12 +1666,6 @@ class Preferences extends HtmlPage
             array('helpTextId' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
         );
         $formProfile->addCheckbox(
-            'profile_log_edit_fields',
-            $gL10n->get('SYS_LOG_ALL_CHANGES'),
-            (bool)$formValues['profile_log_edit_fields'],
-            array('helpTextId' => 'SYS_LOG_ALL_CHANGES_DESC')
-        );
-        $formProfile->addCheckbox(
             'profile_show_map_link',
             $gL10n->get('SYS_SHOW_MAP_LINK'),
             (bool)$formValues['profile_show_map_link'],

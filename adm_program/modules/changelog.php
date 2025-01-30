@@ -20,7 +20,7 @@
  ***********************************************************************************************
  */
 
- use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
@@ -53,9 +53,15 @@ try {
 
     // named array of permission flag (true/false/"user-specific" per table)
     $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
+    if ($gSettingsManager->getInt('changelog_enable_module') == 0) {
+        throw new Exception('SYS_MODULE_DISABLED');
+    }
+    if ($gSettingsManager->getInt('changelog_enable_module') == 2 && !$gCurrentUser->isAdministrator()) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
     $accessAll = $gCurrentUser->isAdministrator() || 
         (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted)));
-
+        
     // create a user object. Will fill it later if we encounter a user id
     $user = new User($gDb, $gProfileFields);
     $userUUID = null;

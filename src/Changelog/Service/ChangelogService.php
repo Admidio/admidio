@@ -720,7 +720,7 @@ class ChangelogService {
     public static function isTableLogged(string|array $table) : bool {
         global $gSettingsManager;
 
-        if ($gSettingsManager->getBool('changelog_enable_module')) { // Changelog enabled at all
+        if ($gSettingsManager->getInt('changelog_enable_module') > 0) { // Changelog enabled at all
             // show link to view profile field change history if change history is enabled for at least one of the tables.
             // Unknown tables are handled by the changelog_table_others preferences key!
             if (is_array($table)) {
@@ -757,7 +757,10 @@ class ChangelogService {
             $user = $gCurrentUser;
         }
 
-        if ($gSettingsManager->getBool('changelog_enable_module')) { // Changelog enabled at all
+        if ($gSettingsManager->getInt('changelog_enable_module') == 1 ||
+            ($gSettingsManager->getInt('changelog_enable_module') == 2 && $gCurrentUser->isAdministrator())) {
+
+            // Changelog enabled at all
             // show link to view profile field change history if change history is enabled for at least one of the tables.
             // Unknown tables are handled by the changelog_table_others preferences key!
             if (is_array($table)) {
@@ -793,19 +796,31 @@ class ChangelogService {
      * @return void
      */
     public static function displayHistoryButton(HTMLPage $page, string $area, string|array $table, bool $condition = true, array $params = array()) : void {
-        global $gCurrentUser, $gL10n, $gProfileFields, $gDb;
+        global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
         
-        // Show change history button only if the table(s) is logged at all, and the user has access to the history
+        // Changelog disabled globally
+        if ($gSettingsManager->getInt('changelog_enable_module') == 0) {
+            return;
+        }
+        // Changelog only enabled for admins
+        if ($gSettingsManager->getInt('changelog_enable_module') == 2 && !$gCurrentUser->isAdministrator()) {
+            return;
+        }
+    
+        // Required tables is/are not logged at all
         if (!self::isTableLogged($table))
             return;
+
+        
         if (!is_array($table))
             $table = explode(',', $table);
 
         $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
+        // Admin always has acces. Other users can have permissions per table.
         $hasAccess = $gCurrentUser->isAdministrator() || 
             (!empty($table) && empty(array_diff($table, $tablesPermitted)));
     
-        // User profile data can also have user-specific permissions (based on role memberships!). If we have a user uuid, we can check this, otherwise decline access.
+        // No explicit table permissions. But user data can be accessed on a per-user permission level.
         $isUserLog = (!empty($table) && empty(array_diff($table, ['users', 'user_data', 'user_relations', 'members'])));
         if (!$hasAccess && $isUserLog && !empty($params['uuid'])) {
             $user = new User($gDb, $gProfileFields);

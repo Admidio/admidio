@@ -846,8 +846,6 @@
   <string name="SYS_LOCK_ALBUM">Album sperren</string>
   <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</string>
   <string name="SYS_LOCKED">Gesperrt</string>
-  <string name="SYS_LOG_ALL_CHANGES">Änderungen protokollieren</string>
-  <string name="SYS_LOG_ALL_CHANGES_DESC">Änderungen in Profilfeldern werden für jede:n Benutzer:in und jedes Feld mitgeschrieben. Dabei wird der bisherige und der neue Wert, sowie die Benutzerin oder der Benutzer, der die Änderung durchgeführt hat, mit Zeitstempel gespeichert. (Voreinstellung: ja)</string>
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Sie haben mehrmals innerhalb kurzer Zeit versucht, sich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist Ihr Zugang für 15 Minuten gesperrt.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Der gewählte Anmeldename existiert schon.\n\nWähle bitte einen anderen Namen.</string>

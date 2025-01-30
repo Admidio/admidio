@@ -813,8 +813,6 @@
   <string name="SYS_LOCK_ALBUM">Lock album</string>
   <string name="SYS_LOCK_ALBUM_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
   <string name="SYS_LOCKED">Locked</string>
-  <string name="SYS_LOG_ALL_CHANGES">Log all changes</string>
-  <string name="SYS_LOG_ALL_CHANGES_DESC">Changes in profil fields are recorded for each user and each field. The previous and the new value will be logged as well as the user who performed the change and the time stamp. (Default: yes)</string>
   <string name="SYS_LOGIN">Sign in</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">You have tried to login too many times recently using a wrong password.\nFor security reasons your account has been locked for 15 minutes.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Selected username already exists.\n\nPlease select another name.</string>

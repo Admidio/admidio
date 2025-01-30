@@ -240,10 +240,6 @@ class PreferencesService
                 }
                 break;
 
-            // case 'Changelog':
-            //     // log tables need to be joined to one string
-            //     $formValues['changelog_tables'] = implode(',', $formData['changelog_tables']);
-            //     break;
         }
 
         // then update the database with the new values

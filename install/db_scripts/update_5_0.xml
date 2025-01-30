@@ -128,5 +128,19 @@ LEFT JOIN %PREFIX%_user_fields usf_ln
 WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_NAME'
     </step>
     <step id="580">DROP TABLE %PREFIX%_user_log</step>
+    <step id="590">UPDATE %PREFIX%_preferences SET prf_name = 'changelog_enable_module' WHERE prf_name = 'profile_log_edit_fields'</step>
+    <step id="600">INSERT INTO %PREFIX%_preferences (`prf_org_id`, `prf_name`, `prf_value`) 
+SELECT prf_org_id, new_prf_name, prf_value
+FROM %PREFIX%_preferences
+JOIN (
+    SELECT 'changelog_table_users' AS new_prf_name
+    UNION ALL
+    SELECT 'changelog_table_user_data'
+    UNION ALL
+    SELECT 'changelog_table_user_relations'
+    UNION ALL
+    SELECT 'changelog_table_members'
+) AS new_names
+WHERE prf_name = 'changelog_enable_module';</step>
     <step>stop</step>
 </update>
