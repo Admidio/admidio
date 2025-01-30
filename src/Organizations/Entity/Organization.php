@@ -457,6 +457,29 @@ class Organization extends Entity
             $event->delete();
         }
 
+        // delete all forum posts
+        $sql = 'DELETE FROM ' . TBL_FORUM_POSTS . '
+                 WHERE fop_fot_id IN (
+                       SELECT fot.fot_id
+                         FROM (SELECT fot_id
+                                 FROM ' . TBL_FORUM_TOPICS . '
+                                INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = fot_cat_id
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) fot
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all forum topics
+        $sql = 'DELETE FROM ' . TBL_FORUM_TOPICS . '
+                 WHERE fot_cat_id IN (
+                       SELECT cat.cat_id
+                         FROM (SELECT cat_id
+                                 FROM ' . TBL_CATEGORIES . '
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) cat
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
         // delete all photos
         $sql = 'SELECT pho.*
                   FROM ' . TBL_PHOTOS . ' pho

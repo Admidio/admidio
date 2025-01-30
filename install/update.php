@@ -1,6 +1,5 @@
 <?php
 
-
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
@@ -38,7 +37,7 @@ try {
      * @param bool $reloadPage If set to **true** than the user could reload the update page.
      * @return void
      */
-    function showErrorMessage(string $message, bool $reloadPage = false)
+    function showErrorMessage(string $message, bool $reloadPage = false): void
     {
         global $gL10n;
 

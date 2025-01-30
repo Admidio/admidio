@@ -119,5 +119,17 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="760">UPDATE %PREFIX%_roles SET rol_forum_admin = true WHERE rol_administrator = true</step>
     <step id="770">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_guestbook</step>
     <step id="780">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_guestbook_comments</step>
+    <step id="790" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_org</step>
+    <step id="800" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_org</step>
+    <step id="810" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_usr_create</step>
+    <step id="820" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_usr_create</step>
+    <step id="830" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_usr_change</step>
+    <step id="840" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_usr_change</step>
+    <step id="850" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_gbo</step>
+    <step id="860" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_gbo</step>
+    <step id="870" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_usr_create</step>
+    <step id="880" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_usr_create</step>
+    <step id="890" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_usr_change</step>
+    <step id="900" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_usr_change</step>
     <step>stop</step>
 </update>
