@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\UI\Component\Form;
 use HtmlPage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -44,14 +45,7 @@ class Organizations extends HtmlPage
         ', true);
 
         // show link to view profile field change history
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
-            $this->addPageFunctionsMenuItem(
-                'menu_item_organizations_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'organizations')),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($this, 'organizations', 'organizations');
 
         // show form
         $formOrganization = new Form(

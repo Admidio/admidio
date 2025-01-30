@@ -18,6 +18,7 @@ use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -68,15 +69,7 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
 
-    if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getAnnUuid)) { // TODO_RK: More fine-grained logging settings
-        // show link to view change history
-        $page->addPageFunctionsMenuItem(
-            'menu_item_announcement_change_history',
-            $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'announcements', 'uuid' => $getAnnUuid)),
-            'bi-clock-history'
-        );
-    }
+    ChangelogService::displayHistoryButton($page, 'announcements', 'announcements', !empty($getAnnUuid), array('uuid' => $getAnnUuid));
 
     // show form
     $form = new Form(

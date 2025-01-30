@@ -25,6 +25,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -85,15 +86,7 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-mylist', $headline);
 
-    if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK
-        // show link to view profile field change history
-        $page->addPageFunctionsMenuItem(
-            'menu_item_lists_change_history',
-            $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'lists,list_columns', 'uuid' => $getListUuid)),
-            'bi-clock-history'
-        );
-    }
+    ChangelogService::displayHistoryButton($page, 'lists', 'lists,list_columns', true, array('uuid' => $getListUuid));
 
     // within MySql it's only possible to join 61 tables therefore show a message if user
     // want's to join more than 57 columns

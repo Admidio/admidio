@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\UserRelationType;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -40,16 +41,7 @@ try {
         'bi-plus-circle-fill'
     );
 
-    if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
-        // show link to view change history
-        $page->addPageFunctionsMenuItem(
-            'menu_item_relationtypes_change_history',
-            $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'user_relation_types')),
-            'bi-clock-history'
-        );
-    }
-
+    ChangelogService::displayHistoryButton($page, 'user_relation_types', 'user_relation_types');
 
     // Create table object
     $relationTypesOverview = new HtmlTable('tbl_relationtypes', $page, true);

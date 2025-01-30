@@ -21,6 +21,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -187,15 +188,7 @@ try {
         true
     );
 
-    if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getEventUuid)) { // TODO_RK: More fine-grained logging settings
-        // show link to view change history
-        $page->addPageFunctionsMenuItem(
-            'menu_item_events_change_history',
-            $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'events', 'uuid' => $getEventUuid)),
-            'bi-clock-history'
-        );
-    }
+    ChangelogService::displayHistoryButton($page, 'events', 'events', !empty($getEventUuid), array('uuid' => $getEventUuid));
     
     // show form
     $form = new Form(

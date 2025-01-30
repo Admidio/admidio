@@ -17,6 +17,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\Changelog\Service\ChangelogService;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -165,15 +166,7 @@ try {
         );
     }
 
-    if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
-        // show link to view change history
-        $page->addPageFunctionsMenuItem(
-            'menu_item_relationtypes_change_history',
-            $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'photos', 'uuid' => $getPhotoUuid)),
-            'bi-clock-history'
-        );
-    }
+    ChangelogService::displayHistoryButton($page, 'photos', 'photos', !empty($getPhotoUuid), array('uuid' => $getPhotoUuid));
     
     if ($getPhotoUuid !== '') {
         // show additional album information

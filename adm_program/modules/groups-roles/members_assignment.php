@@ -24,6 +24,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -174,15 +175,7 @@ try {
             );
         }
 
-        // show link to view profile field change history
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
-            $page->addPageFunctionsMenuItem(
-                'menu_item_membership_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'members', 'uuid' => $getUserUuid, 'related_id' => $getRoleUuid)),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($page, 'membership', 'members', true, array('uuid' => $getUserUuid, 'related_id' => $getRoleUuid));
 
         $allVisibleRoles = $gCurrentUser->getRolesViewMemberships();
         $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name

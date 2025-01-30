@@ -34,6 +34,7 @@ use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -152,15 +153,7 @@ try {
             );
         }
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
-            // show link to view change history
-            $page->addPageFunctionsMenuItem(
-                'menu_item_events_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'events')),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($page, 'events', 'events');
 
         if ($getEventUuid === '') {
             // show print button

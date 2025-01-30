@@ -9,6 +9,7 @@ use Admidio\UI\Component\Form;
 use HtmlPage;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -75,15 +76,7 @@ class Menu extends HtmlPage
             );
         }
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($menuUUID)) { // TODO_RK: More fine-grained logging settings
-            // show link to view change history
-            $this->addPageFunctionsMenuItem(
-                'menu_item_menu_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'menu', 'uuid' => $menuUUID)),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($this, 'menu', 'menu', !empty($menuUUID), array('uuid' => $menuUUID));
 
         // show form
         $form = new Form(
@@ -226,15 +219,7 @@ class Menu extends HtmlPage
             'bi-plus-circle-fill'
         );
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
-            // show link to view change history
-            $this->addPageFunctionsMenuItem(
-                'menu_item_menu_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'menu')),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($this, 'menu', 'menu');
 
         $templateRowMenuParent = array();
 

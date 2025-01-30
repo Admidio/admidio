@@ -20,6 +20,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -87,16 +88,8 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-documents-files-rename', $headline);
 
-    if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
-        $isFile = ($getFileUuid !== '');
-        // show link to view change history
-        $page->addPageFunctionsMenuItem(
-            'menu_item_filefolder_change_history',
-            $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => ($isFile?'files':'folders').',roles_rights_data', 'uuid' => $isFile?$getFileUuid:$getFolderUuid)),
-            'bi-clock-history'
-        );
-    }
+    $isFile = ($getFileUuid !== '');
+    ChangelogService::displayHistoryButton($page, 'filefolder', ($isFile?'files':'folders').',roles_rights_data', true, array('uuid' => $isFile?$getFileUuid:$getFolderUuid));
     
     // create html form
     $form = new Form(

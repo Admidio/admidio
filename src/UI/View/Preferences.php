@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Utils\PhpIniUtils;
 use RuntimeException;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -467,23 +468,65 @@ class Preferences extends HtmlPage
             array('class' => 'form-preferences')
         );
 
-        $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], Changelog::$tableLabels);
-        $selectedTables = explode(',', $formValues['changelog_tables']??'');
-
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_ADMINISTRATOR')
+        );
         $formChangelog->addSelectBox(
+            'changelog_enable_module',
+            $gL10n->get('SYS_ENABLE_CHANGELOG'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['changelog_enable_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_ENABLE_CHANGELOG_DESC')
+        );
+
+        $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], ChangelogService::getTableLabel());
+        // $selectedTables = explode(',', $formValues['changelog_tables']??'');
+        $formChangelog->addCustomContent(
             'changelog_tables',
             $gL10n->get('LOG_LOGGED_TABLES'),
-            $tablesMap,
-            array('property' => Form::FIELD_DEFAULT, 'defaultValue' => $selectedTables, 'arrayKeyIsNotValue' => false, 'helpTextId' => 'LOG_LOGGED_TABLES_DESC',
-                'multiselect' => true, 'icon' => 'airplane-fill'
+            $gL10n->get('LOG_LOGGED_TABLES_DESC'),
+            array(
+                'tables' => array(
+                    array(
+                        'title' => $gL10n->get('LOG_HEADER_USER_ROLE_DATA'),
+                        'id' => 'user_role_data',
+                        'tables' => array('users', 'user_data', 'members', 'user_relations', 'roles', 'role_dependencies', 'category_report')
+                    ),
+                    array(
+                        'title' => $gL10n->get('LOG_HEADER_USER_ROLE_SETTINGS'),
+                        'id' => 'user_role_settings',
+                        'tables' => array('user_fields', 'user_relation_types', 'roles_rights', 'roles_rights_data')
+                    ),
+                    array(
+                        'title' => $gL10n->get('LOG_HEADER_CONTENT_MODULES'),
+                        'id' => 'content_modules',
+                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'guestbook', 'guestbook_comments', 'links', 'others')
+                    ),
+                    array(
+                        'title' => $gL10n->get('LOG_HEADER_PREFERENCES'),
+                        'id' => 'preferences',
+                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories')
+                    )
+                )
             )
         );
-        $formChangelog->addCheckbox(
-            'changelog_allow_deletion',
-            $gL10n->get('LOG_ALLOW_DELETION'),
-            (bool)($formValues['changelog_allow_deletion']??false),
-            array('helpTextId' => 'LOG_ALLOW_DELETION_DESC')
-        );
+
+        foreach ($tablesMap as $tableName => $tableLabel) {
+            $formChangelog->addCheckbox(
+                'changelog_table_'.$tableName, 
+                "$tableLabel ($tableName)",
+                $formValues['changelog_table_'.$tableName]??false,
+                array()
+            );
+        }
+
+        // $formChangelog->addCheckbox(
+        //     'changelog_allow_deletion',
+        //     $gL10n->get('LOG_ALLOW_DELETION'),
+        //     (bool)($formValues['changelog_allow_deletion']??false),
+        //     array('helpTextId' => 'LOG_ALLOW_DELETION_DESC')
+        // );
 
         $formChangelog->addSubmitButton(
             'adm_button_save_changelog',
@@ -2195,15 +2238,7 @@ class Preferences extends HtmlPage
             true
         );
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
-            // show link to view change history
-            $this->addPageFunctionsMenuItem(
-                'menu_item_events_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'preferences,texts')),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($this, 'preferences', 'preferences,texts');
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section 
         // is loaded on-demand, when there is no html page any more to insert the css/JS file loading, 

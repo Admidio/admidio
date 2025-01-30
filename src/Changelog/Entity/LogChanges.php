@@ -4,6 +4,7 @@ namespace Admidio\Changelog\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\Changelog\Service\ChangelogService;
 
 
 /**
@@ -20,9 +21,6 @@ use Admidio\Infrastructure\Exception;
  * adm_log_changes
  *
  */
-
-
-// TODO_RK: Use $gSettingsManager->getBool('profile_log_edit_fields')
 class LogChanges extends Entity
 {
     /**
@@ -304,7 +302,8 @@ class LogChanges extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if (in_array($this->objectTableName, static::$noLogTables)) {
+        if (in_array($this->objectTableName, static::$noLogTables) ||
+            !ChangelogService::isTableLogged($this->objectTableName)) {
             return false;
         }
         global $gCurrentSession, $gChangeNotification, $gCurrentUser;

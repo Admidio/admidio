@@ -74,15 +74,7 @@ class ProfileFields extends HtmlPage
             $("#usf_type").trigger("change");', true
         );
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($profileFieldUUID)) { // TODO_RK: More generic logging settings!
-            // show link to view field definition change history
-            $this->addPageFunctionsMenuItem(
-                'menu_item_profilefields_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'user_fields', 'uuid' => $profileFieldUUID)),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields', !empty($profileFieldUUID), array('uuid' => $profileFieldUUID));
 
         // show form
         $form = new Form(
@@ -312,15 +304,7 @@ class ProfileFields extends HtmlPage
             'bi-hdd-stack-fill'
         );
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More generic logging settings!
-            // show link to view field definition change history
-            $this->addPageFunctionsMenuItem(
-                'menu_item_profilefields_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'user_fields')),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields');
 
         $sql = 'SELECT *
                   FROM ' . TBL_USER_FIELDS . '

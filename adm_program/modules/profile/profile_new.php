@@ -27,6 +27,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -101,14 +102,7 @@ try {
         $page = new HtmlPage('admidio-profile-edit', $headline);
 
         // show link to view profile field change history
-        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getUserUuid) && $gCurrentUser->hasRightEditProfile($user)) {
-            $page->addPageFunctionsMenuItem(
-                'menu_item_profile_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('uuid' => $getUserUuid)),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($page, 'profile', 'users,user_data,user_relations,members', !empty($getUserUuid) && $gCurrentUser->hasRightEditProfile($user), array('uuid' => $getUserUuid));
 
         // create html form
         $form = new Form(

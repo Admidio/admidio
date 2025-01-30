@@ -16,6 +16,7 @@
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -106,15 +107,7 @@ try {
         $mode = 'create_entry';
     }
 
-    if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($getGboUuid)) { // TODO_RK: More fine-grained logging settings
-        // show link to view change history
-        $page->addPageFunctionsMenuItem(
-            'menu_item_guestbook_change_history',
-            $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'guestbook', 'uuid' => $getGboUuid)),
-            'bi-clock-history'
-        );
-    }
+    ChangelogService::displayHistoryButton($page, 'guestbook', 'guestbook', !empty($getGboUuid), array('uuid' => $getGboUuid));
     
     // show form
     $form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'mode' => $mode)), $page);

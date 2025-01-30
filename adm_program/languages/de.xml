@@ -129,10 +129,15 @@
   <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
   <!--Phrases only in Changelog administration-->
-  <string name="LOG_LOGGED_TABLES">Objekte mit Änderungshistorie</string>
-  <string name="LOG_LOGGED_TABLES_DESC">Wählen Sie alle Objekttypen aus, für die eine Änderungshistorie geführt werden soll. Jede Änderung an diesen Objekten wird mitgeloggt, inklusive dem Zeitpunkt und dem Benutzer der Änderung. Wenn ein Objekttyp hier entfernt wird, wird die zugehörige Änderungshistorie nicht gelöscht. Dies ist auf der Seite mit der Änderungshistorie möglich.</string>
   <string name="LOG_ALLOW_DELETION">Löschen der Änderungshistorie zulassen</string>
   <string name="LOG_ALLOW_DELETION_DESC">Auf der Seite mit der Änderungshistorie kann durch diese Einstellung eine Schaltfläche zur (teilweisen oder gesamten) Löschung der Änderungshistorie aktiviert werden.</string>
+  <string name="LOG_HEADER_USER_ROLE_DATA">Benutzer-Profildaten und Gruppen</string>
+  <string name="LOG_HEADER_USER_ROLE_SETTINGS">Einstellungen zu Benutzern und Gruppen/Rollen</string>
+  <string name="LOG_HEADER_CONTENT_MODULES">Inhalts-Module (Dokumente, Veranstaltungen, Ankündigunten, etc.)</string>
+  <string name="LOG_HEADER_PREFERENCES">Allgemeine Einstellungen</string>
+  <string name="LOG_LOGGED_TABLES">Objekte mit Änderungshistorie</string>
+  <string name="LOG_LOGGED_TABLES_DESC">Wählen Sie alle Objekttypen aus, für die eine Änderungshistorie geführt werden soll. Jede Änderung an diesen Objekten wird mitgeloggt, inklusive dem Zeitpunkt und dem Benutzer der Änderung. Wenn ein Objekttyp hier entfernt wird, wird die zugehörige Änderungshistorie nicht gelöscht. Dies ist auf der Seite mit der Änderungshistorie möglich.</string>
+  <string name="LOG_OTHER_TABLES">Andere Tabellen (Drittanbieter, nur für Administrator sichtbar)</string>
   <string name="LOG_RECORDS_HIDDEN">Einige oder alle Einträge der Änderungshistorie wurden ausgeblendet, da du nicht die Berechtigungen für den Zugriff besitzt.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
@@ -212,6 +217,7 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Voreinstellung: #VAR1#)</string>
+  <string name="ORG_ONLY_FOR_ADMINISTRATOR">Nur für Administratoren sichtbar</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</string>
@@ -631,6 +637,8 @@
   <string name="SYS_ENABLED">Aktiviert</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Kategoriereport aktivieren</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Der Kategoriereport erstellt eine Liste aller Rollen und Kategorien, der ein Mitglied zugeordnet ist. Die Berechtigung #VAR1_BOLD# ist für den Zugriff auf den Kategoriereport erforderlich. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_CHANGELOG">Aktiviere Änderungshistorie</string>
+  <string name="SYS_ENABLE_CHANGELOG_DESC">Die Änderungshistorie schreibt für jede Änderung an einem der ausgewählten Objekttypen einen Eintrag in die Log-Datenbank, inklusive des alten und neuen Wertes. Die Änderungshistorie kann nur von Administratoren oder Benutzern eingesehen werden, die Bearbeitungsrechte für das jeweilige Modul besitzen. Jede:r Benutzer:in kann auch die ihn/sie betreffenden Änderungen der Profildaten einsehen. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiviere Dokumente &amp; Dateien</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Modul Dokumente &amp; Dateien kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Download aktivieren</string>

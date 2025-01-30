@@ -9,6 +9,7 @@ use Admidio\Roles\Service\RoleService;
 use Admidio\UI\Component\Form;
 use HtmlDataTables;
 use HtmlPage;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -346,15 +347,7 @@ class GroupsRoles extends HtmlPage
             }
         ');
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($roleUUID)) { // TODO_RK: More fine-grained logging settings
-            // show link to view change history
-            $this->addPageFunctionsMenuItem(
-                'menu_item_role_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'roles', 'uuid' => $roleUUID)),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($this, 'roles', 'roles', !empty($getAnnroleUUIDUuid), array('uuid' => $roleUUID));
 
         $form = new Form(
             'adm_roles_edit_form',
@@ -834,21 +827,13 @@ class GroupsRoles extends HtmlPage
                 );
             }
 
-            if ($gSettingsManager->getBool('profile_log_edit_fields')) {
-                $logShowTable = 'roles';
-                if ($mode == 'card') {
-                    $logShowTable = 'members';
-                } elseif ($mode == 'permissions') {
-                    $logShowTable = 'roles_rights_data';
-                }
-                // show link to view profile field change history
-                $this->addPageFunctionsMenuItem(
-                    'menu_item_members_change_history',
-                    $gL10n->get('SYS_CHANGE_HISTORY'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => $logShowTable)),
-                    'bi-clock-history'
-                );
+            $logShowTable = 'roles';
+            if ($mode == 'card') {
+                $logShowTable = 'members';
+            } elseif ($mode == 'permissions') {
+                $logShowTable = 'roles_rights_data';
             }
+            ChangelogService::displayHistoryButton($this, 'members', $logShowTable);
 
             // show link to maintain categories
             $this->addPageFunctionsMenuItem(

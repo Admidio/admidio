@@ -8,6 +8,7 @@ use HtmlPage;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Categories\Entity\Category;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -173,16 +174,7 @@ class Categories extends HtmlPage
             );
         }
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields') && !empty($categoryUUID)) { // TODO_RK: More generic logging settings!
-            // show link to view field definition change history
-            $this->addPageFunctionsMenuItem(
-                'menu_item_categories_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'categories,roles_rights_data', 'uuid' => $categoryUUID)),
-                'bi-clock-history'
-            );
-        }
-
+        ChangelogService::displayHistoryButton($this, 'categories', 'categories,roles_rights_data', !empty($categoryUUID), array('uuid' => $categoryUUID));
 
 
         // show form
@@ -467,15 +459,7 @@ class Categories extends HtmlPage
         );
 
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More generic logging settings!
-            // show link to view field definition change history
-            $this->addPageFunctionsMenuItem(
-                'menu_item_categories_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'categories')),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($this, 'categories', 'categories');
 
         $sql = 'SELECT *
           FROM ' . TBL_CATEGORIES . '

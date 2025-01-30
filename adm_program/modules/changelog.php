@@ -24,7 +24,7 @@
 use Admidio\Infrastructure\Language;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
-use Admidio\UI\View\Changelog;
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Roles\Entity\Role;
 
 
@@ -52,37 +52,9 @@ try {
     $haveID = !empty($getId) || !empty($getUuid);
 
     // named array of permission flag (true/false/"user-specific" per table)
-    $accessAll = $gCurrentUser->isAdministrator();
-    $tablesPermitted = array();
-    if (!$accessAll) {
-        if ($gCurrentUser->editAnnouncements()) 
-            $tablesPermitted[] = 'announcements';
-        if ($gCurrentUser->manageRoles())
-            $tablesPermitted = array_merge($tablesPermitted, ['roles', 'roles_rights', 'roles_rights_data', 'members']);
-        if ($gCurrentUser->editEvents())
-            $tablesPermitted[] = 'events';
-        if ($gCurrentUser->adminDocumentsFiles())
-            $tablesPermitted = array_merge($tablesPermitted, ['files', 'folders']);
-        if ($gCurrentUser->editUsers()) {
-            $tablesPermitted = array_merge($tablesPermitted, ['users', 'user_data', 'user_relations', 'members']);
-            $accessUser = true;
-        }
-        if ($gCurrentUser->editGuestbookRight())
-            $tablesPermitted[] = 'guestbook';
-        if ($gCurrentUser->commentGuestbookRight())
-            $tablesPermitted[] = 'guestbook_comments';
-        if ($gCurrentUser->editPhotoRight())
-            $tablesPermitted[] = 'photos';
-        if ($gCurrentUser->editWeblinksRight())
-            $tablesPermitted[] = 'links';
-
-        // If the tables filter is a subset of the permitted tables, we can just as well set accessAll for simplicity
-        if (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) {
-            $accessAll = true;
-        }
-        // Tables only permitted for Admin:
-        //$tablesAdminOnly = ['user_fields', 'rooms', 'categories', 'category_report', 'texts', 'organizations','menu','user_relation_types','user_relations','lists','list_columns'];
-    }
+    $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
+    $accessAll = $gCurrentUser->isAdministrator() || 
+        (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted)));
 
     // create a user object. Will fill it later if we encounter a user id
     $user = new User($gDb, $gProfileFields);
@@ -96,32 +68,22 @@ try {
             $user->readDataById($getId);
         }
         if (!$user->isNewRecord()) {
-            $userUUID = $user->uuid;
+            $userUUID = $user->getValue('usr_uuid');
         }
     }
 
-    // Access permissions: 
-    // * For user history (tables: users, user_data, user_relations, members) fine-grained access is allowed, so leave these checks for later
-    // * All other tables need module-wide or administrator permissions
-    if ($accessAll) {
-        // NOOP, no restrictions, no need to prevent access to page!
-    } elseif (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) {
-        // None of the requested tables is permitted -> NO_RIGHTS exception!
-        //throw new Exception('SYS_NO_RIGHTS');
-    } elseif ($isUserLog) {
+    // Access permissions:
+    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user: 
+    if (!$accessAll &&
+            !(!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) &&
+            $isUserLog) {
         // If a user UUID is given, we need access to that particular user
         // if no UUID is given, editUsers permissions are required
         if (($userUuid === '' && !$gCurrentUser->editUsers())
             || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
 //                throw new Exception('SYS_NO_RIGHTS');
                 $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-
-        }
-    } else {
-        // Some tables are allowed, some might be not.
-        // NO global, overall access decision can be made. Need to evaluate each record on its own,
-        // based on the permitted tables and potentially field-specific permissions for user/profile
-        // fields. That will be done inside the loop through all changelog entries.
+       }
     }
 
 
@@ -131,7 +93,7 @@ try {
     //  * No object ID/UUIDs given: "Change history: Table description 1[, Table description 2, ...]" or "Change history"  (if no tables given)
     //  * Only one table (table column will be hidden): "Change history: OBJECTNAME (Table description)"
     //  * 
-    $tableTitles = array_map([ChangeLog::class, 'getTableLabel'], $getTables);
+    $tableTitles = array_map([ChangelogService::class, 'getTableLabel'], $getTables);
     // set headline of the script
     if ($isUserLog && $haveID) {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->readableName()));
@@ -146,7 +108,7 @@ try {
     } else {
         $objName = '';
         $useTable = $getTables[0]??'users';
-        $object = Changelog::getObjectForTable($useTable);
+        $object = ChangelogService::getObjectForTable($useTable);
         if ($useTable == 'members') {
             // Memberships are special-cased, as the membership Role UUID is stored as relatedID
             $object = new Role($gDb);
@@ -173,18 +135,6 @@ try {
             $headline = $gL10n->get('SYS_CHANGE_HISTORY_GENERIC2', [$objName, implode(', ', $tableTitles)]);
         }
     }
-
-    // if profile log is activated and current user is allowed to edit users
-    // then the profile field history will be shown otherwise show error
-    // TODO_RK: Which user shall be allowed to view the history (probably depending on the type the table)
-/*    if (!$gSettingsManager->getBool('profile_log_edit_fields')
-        || ($getUuid === '' && !$gCurrentUser->editUsers())
-        || ($getUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-*/
-
 
     // add page to navigation history
     $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -293,7 +243,8 @@ try {
 
     // create html page object
     $page = new HtmlPage('admidio-history', $headline);
-
+    $page->setContentFullWidth();
+    
     // Logic for hiding certain columns:
     // If we have only one table name given, hide the table column
     // If we view the user profile field changes page, hide the column, too
@@ -353,16 +304,14 @@ try {
 
     $table->addRowHeadingByArray($columnHeading);
 
-    $fieldStrings = Changelog::getFieldTranslations();
+    $fieldStrings = ChangelogService::getFieldTranslations();
     $recordHidden = false;
     while ($row = $fieldHistoryStatement->fetch()) {
         $rowTable = $row['table_name'];
 
         $allowRecordAccess = false;
         // First step: Check view permissions to that particular log entry:
-        if ($accessAll) {
-            $allowRecordAccess = true;
-        } elseif (in_array($rowTable, $tablesPermitted)) {
+        if ($accessAll || in_array($rowTable, $tablesPermitted)) {
             $allowRecordAccess = true;
         } else {
             // no global access permissions to that particular data/table
@@ -376,16 +325,6 @@ try {
                     $allowRecordAccess = true;
                 }
             }
-/*  // We don't want members with pure viewing permissions to have access to the full history! Unfortunately, this also excludes some legitimate uses...
-            if (in_array($rowTable, ['members'])) {
-                $role = new Role($gDb);
-                $role->readDataByUuid($row['related_id']);
-                $roleId = $role->getValue('rol_id');
-                if ($roleId > 0 &&$gCurrentUser->hasRightViewProfiles($roleId)) {
-                        $allowRecordAccess = true;
-                }
-            }
-  */          
             // NO access to this record allowed -> Set flag to show warning about records being 
             // hidden due to insufficient permissions
             if (!$allowRecordAccess) {
@@ -403,7 +342,7 @@ try {
 
         // 1. Column showing DB table name (only if more then one tables are shown; One table should be displayed in the headline!)
         if ($showTableColumn) {
-            $columnValues[] = Changelog::getTableLabel($row['table_name']);
+            $columnValues[] = ChangelogService::getTableLabel($row['table_name']);
         }
 
 
@@ -413,9 +352,9 @@ try {
         $rowName = $row['name'] ?? '';
         $rowName = Language::translateIfTranslationStrId($rowName);
         if ($row['table_name'] == 'members') {
-            $columnValues[] = Changelog::createLink($rowName, 'users', $rowLinkId, $row['uuid'] ?? '');
+            $columnValues[] = ChangelogService::createLink($rowName, 'users', $rowLinkId, $row['uuid'] ?? '');
         } else {
-            $columnValues[] = Changelog::createLink($rowName, $row['table_name'], $rowLinkId, $row['uuid'] ?? '');
+            $columnValues[] = ChangelogService::createLink($rowName, $row['table_name'], $rowLinkId, $row['uuid'] ?? '');
         }
 
         // 3. Optional Related-To column, e.g. for group memberships, we show the user as main name and the group as related
@@ -457,10 +396,10 @@ try {
                     $columnValues[] = $relatedName;
                 } elseif (ctype_digit($rid)) { // numeric related_ID -> Interpret it as ID
                     $relID = (int)$row['related_id'];
-                    $columnValues[] = Changelog::createLink($relatedName, $relatedTable, $relID, $relUUID);
+                    $columnValues[] = ChangelogService::createLink($relatedName, $relatedTable, $relID, $relUUID);
                 } else { // non-numeric related_ID -> Interpret it as UUID
                     $relUUID = $row['related_id'];
-                    $columnValues[] = Changelog::createLink($relatedName, $relatedTable, $relID, $relUUID);
+                    $columnValues[] = ChangelogService::createLink($relatedName, $relatedTable, $relID, $relUUID);
                 }
             } else {
                 $columnValues[] = '';
@@ -489,15 +428,15 @@ try {
             $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueNew);
             $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueOld);
         } elseif (is_array($fieldInfo) && isset($fieldInfo['type'])) {
-            $valueNew = Changelog::formatValue($valueNew, $fieldInfo['type'], $fieldInfo['entries']??[]);
-            $valueOld = Changelog::formatValue($valueOld, $fieldInfo['type'], $fieldInfo['entries']??[]);
+            $valueNew = ChangelogService::formatValue($valueNew, $fieldInfo['type'], $fieldInfo['entries']??[]);
+            $valueOld = ChangelogService::formatValue($valueOld, $fieldInfo['type'], $fieldInfo['entries']??[]);
         }
 
         $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';
         $columnValues[] = (!empty($valueOld)) ? $valueOld : '&nbsp;';
 
         // 6. User and date of the change
-        $columnValues[] = Changelog::createLink($row['create_last_name'].', '.$row['create_first_name'], 'users', 0, $row['uuid_usr_create']);
+        $columnValues[] = ChangelogService::createLink($row['create_last_name'].', '.$row['create_first_name'], 'users', 0, $row['uuid_usr_create']);
         // $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'..'</a>';
         $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
         $table->addRowByArray($columnValues);

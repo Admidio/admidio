@@ -34,6 +34,7 @@ use Admidio\Roles\ValueObject\ListData;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -546,15 +547,7 @@ try {
             );
         }
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) { // TODO_RK: More fine-grained logging settings
-            // show link to view change history
-            $page->addPageFunctionsMenuItem(
-                'menu_item_role_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array('table' => 'members', 'related_id' => $getRoleList)),
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($page, 'roles', 'members', true, array('related_id' => $getRoleList));
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
         $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));

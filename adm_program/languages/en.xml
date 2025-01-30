@@ -117,10 +117,16 @@
   <string name="INS_SPOUSE">Spouse</string>
   <string name="INS_WIFE">Wife</string>
   <!--Phrases only in Changelog administration-->
-  <string name="LOG_LOGGED_TABLES">Logged tables</string>
-  <string name="LOG_LOGGED_TABLES_DESC">Select all types of objects for the changelog. For those objects, all individual modifications will be logged in the change history with old and new value, as well as modification time and user. If an object type is deselected, existing log entries are not deleted. This can be done in the changelog page.</string>
+  <!--Phrases only in Changelog administration-->
   <string name="LOG_ALLOW_DELETION">Allow deletion of the change history</string>
   <string name="LOG_ALLOW_DELETION_DESC">Enable a button on the changelog page to delete parts or all of the changelog history.</string>
+  <string name="LOG_HEADER_USER_ROLE_DATA">User profile data and roles</string>
+  <string name="LOG_HEADER_USER_ROLE_SETTINGS">Settings for users and groups/roles</string>
+  <string name="LOG_HEADER_CONTENT_MODULES">Content modules (documents, events, announcements, etc.)</string>
+  <string name="LOG_HEADER_PREFERENCES">General Preferences</string>
+  <string name="LOG_LOGGED_TABLES">Logged tables</string>
+  <string name="LOG_LOGGED_TABLES_DESC">Select all types of objects for the changelog. For those objects, all individual modifications will be logged in the change history with old and new value, as well as modification time and user. If an object type is deselected, existing log entries are not deleted. This can be done in the changelog page.</string>
+  <string name="LOG_OTHER_TABLES">Other tables (third-partz modules; only visible to administrators)</string>
   <string name="LOG_RECORDS_HIDDEN">Some or all changelog entries have been hidden due to insufficient user permissions to access them.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
@@ -191,6 +197,7 @@
   <string name="ORG_LOGIN_AUTOMATICALLY">Login automatically</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at their visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
+  <string name="ORG_ONLY_FOR_ADMINISTRATOR">Enabled, but only visible to administrators</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged in users only</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Manage general organization preferences or module preferences here.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a separate homepage for this organization please add it within the config.php of the separate homepage.</string>
@@ -600,6 +607,8 @@
   <string name="SYS_ENABLED">Enabled</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Enable category report</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">The category report creates a list of all roles and categories to which a member is assigned. The permission #VAR1_BOLD# is required for access to the category report. (Default: yes)</string>
+  <string name="SYS_ENABLE_CHANGELOG">Enable changelog</string>
+  <string name="SYS_ENABLE_CHANGELOG_DESC">The changelog logs all changes (including the old and new value) to the selected objects (corresponding to database tables) in the database. The changelog can only be viewed by administrators or users that have edit access to the corresponding module. Each user can also view his/her profile data changes. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Enable documents &amp; files</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Enable download</string>
