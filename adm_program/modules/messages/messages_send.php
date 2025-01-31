@@ -272,7 +272,7 @@ try {
         }
 
         // load mail template and replace text
-        $email->setTemplateText($formValues['msg_body'], $formValues['namefrom'], $gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('usr_uuid'), $receiverName);
+        $email->setTemplateText($formValues['msg_body'], $formValues['namefrom'], $formValues['mailfrom'], $gCurrentUser->getValue('usr_uuid'), $receiverName);
 
         // finally send the mail
         $sendResult = $email->sendEmail();
