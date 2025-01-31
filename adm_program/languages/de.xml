@@ -133,7 +133,7 @@
   <string name="LOG_ALLOW_DELETION_DESC">Auf der Seite mit der Änderungshistorie kann durch diese Einstellung eine Schaltfläche zur (teilweisen oder gesamten) Löschung der Änderungshistorie aktiviert werden.</string>
   <string name="LOG_HEADER_USER_ROLE_DATA">Benutzer-Profildaten und Gruppen</string>
   <string name="LOG_HEADER_USER_ROLE_SETTINGS">Einstellungen zu Benutzern und Gruppen/Rollen</string>
-  <string name="LOG_HEADER_CONTENT_MODULES">Inhalts-Module (Dokumente, Veranstaltungen, Ankündigunten, etc.)</string>
+  <string name="LOG_HEADER_CONTENT_MODULES">Inhalts-Module (Dokumente, Veranstaltungen, Ankündigungen, etc.)</string>
   <string name="LOG_HEADER_PREFERENCES">Allgemeine Einstellungen</string>
   <string name="LOG_LOGGED_TABLES">Objekte mit Änderungshistorie</string>
   <string name="LOG_LOGGED_TABLES_DESC">Wählen Sie alle Objekttypen aus, für die eine Änderungshistorie geführt werden soll. Jede Änderung an diesen Objekten wird mitgeloggt, inklusive dem Zeitpunkt und dem Benutzer der Änderung. Wenn ein Objekttyp hier entfernt wird, wird die zugehörige Änderungshistorie nicht gelöscht. Dies ist auf der Seite mit der Änderungshistorie möglich.</string>
