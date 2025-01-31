@@ -934,11 +934,11 @@ class Database
      * The error must be read by the child method. This method will call a backtrace, so
      * you see the script and specific line in which the error occurred.
      * @param string $errorMessage Optional an error message could be set and integrated in the output of the sql error.
-     * @param int $code Optional a code for the error be set and integrated in the output of the sql error.
+     * @param string $code Optional a code for the error be set and integrated in the output of the sql error.
      * @return void Will exit the script and returns a html output with the error information.
      * @throws Exception
      */
-    public function showError(string $errorMessage = '', int $code = 0)
+    public function showError(string $errorMessage = '', string $code = '')
     {
         global $gLogger, $gSettingsManager, $gL10n;
 
