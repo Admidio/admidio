@@ -27,18 +27,18 @@
                 </div>
                 <div class="card-footer container">
                     <div class="row">
-                        <div class="col">
-                            <span class="d-block">{$l10n->get('SYS_VIEWS_VAR', array($forumTopic.views))}</span>
-                            {if strlen($forumTopic.category) > 0}
-                                    <span class="d-block">{$l10n->get('SYS_CATEGORY')} {$forumTopic.category}</span>
-                            {/if}
-                        </div>
                         {if $forumTopic.repliesCount > 0}
                             <div class="col-lg-6 col-12 text-bg-secondary bg-opacity-25 text-dark rounded">
                                 <span class="d-block">{$l10n->get('SYS_REPLIES_VAR', array($forumTopic.repliesCount))}</span>
                                 {$l10n->get('SYS_LAST_REPLY_BY_AT', array($forumTopic.lastReplyUserName, $forumTopic.lastReplyTimestamp))}
                             </div>
                         {/if}
+                        <div class="col">
+                            <span class="d-block">{$l10n->get('SYS_VIEWS_VAR', array($forumTopic.views))}</span>
+                            {if strlen($forumTopic.category) > 0}
+                                    <span class="d-block">{$l10n->get('SYS_CATEGORY')} {$forumTopic.category}</span>
+                            {/if}
+                        </div>
                     </div>
                 </div>
             </div>
