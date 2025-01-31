@@ -349,7 +349,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
     }
 
     // load mail template and replace text
-    $email->setTemplateText($postBody, $postName, $gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('usr_uuid'), $receiverName);
+    $email->setTemplateText($postBody, $postName, $postFrom, $gCurrentUser->getValue('usr_uuid'), $receiverName);
 
     // finally send the mail
     $sendResult = $email->sendEmail();

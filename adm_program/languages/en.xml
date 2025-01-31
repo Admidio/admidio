@@ -1266,7 +1266,7 @@
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Using an unknown mail address as a sender address is not allowed by some providers. In this case you can add an email address which will be used as sender address within the mail module (e.g. noreply@#VAR1#).\nIf the field remains empty the sender\'s mail address will be used (default: empty).</string>
   <string name="SYS_SENDER_NAME">Sender name</string>
   <string name="SYS_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty (default: empty).</string>
-  <string name="SYS_SENDER_NOT_LOGGED_IN">(Sender was logged out. Due to that sender\'s information might be incorrect.)</string>
+  <string name="SYS_SENDER_NOT_LOGGED_IN">Sender was logged out. Due to that sender\'s information might be incorrect.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Separator for CSV-file</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
