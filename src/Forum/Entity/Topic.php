@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Forum\Entity;
 
 use Admidio\Categories\Entity\Category;
@@ -60,15 +61,35 @@ class Topic extends Entity
         $this->save();
 
         // Delete all available posts to this forum entry
-        $sql = 'DELETE FROM '.TBL_FORUM_POSTS.'
+        $sql = 'DELETE FROM ' . TBL_FORUM_POSTS . '
                       WHERE fop_fot_id = ? -- $this->getValue(\'fot_id\')';
-        $this->db->queryPrepared($sql, array((int) $this->getValue('fot_id')));
+        $this->db->queryPrepared($sql, array((int)$this->getValue('fot_id')));
 
         $return = parent::delete();
 
         $this->db->endTransaction();
 
         return $return;
+    }
+
+    /**
+     * Get number of available posts of this topic in the database.
+     * @Return int Returns the total count of posts of this topic.
+     * @throws Exception
+     */
+    public function getPostCount(): int
+    {
+        global $gDb;
+
+        $sql = 'SELECT COUNT(*) AS count
+                  FROM ' . TBL_FORUM_TOPICS . '
+            INNER JOIN ' . TBL_FORUM_POSTS . '
+                    ON fop_fot_id = fot_id
+                 WHERE fot_uuid = ? -- $this->getValue(\'fot_uuid\') ';
+
+        $pdoStatement = $gDb->queryPrepared($sql, array($this->getValue('fot_uuid')));
+
+        return (int)$pdoStatement->fetchColumn();
     }
 
     /**
@@ -81,13 +102,57 @@ class Topic extends Entity
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): bool|int|string
     {
         if (str_starts_with($columnName, 'fop_')) {
             return $this->firstPost->getValue($columnName, $format);
         }
 
         return parent::getValue($columnName, $format);
+    }
+
+    /**
+     * This method checks if the current user is allowed to edit this topic. Therefore,
+     * the topic must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that have the right to manage topic.
+     * Global topic could be only edited by the parent organization.
+     * @return bool Return true if the current user is allowed to edit this topic
+     * @throws Exception
+     */
+    public function isEditable(): bool
+    {
+        global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
+
+        // check if the current user could edit the category of the topic
+        if ($gCurrentUser->administrateForum()
+            || in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('FOT'), true)) {
+            // if category belongs to current organization than topic are editable
+            if ($this->getValue('cat_org_id') > 0
+                && (int)$this->getValue('cat_org_id') === $gCurrentOrgId) {
+                return true;
+            }
+
+            // if category belongs to all organizations, child organization couldn't edit it
+            if ((int)$this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * This method checks if the current user is allowed to view this topic. Therefore,
+     * the visibility of the category is checked.
+     * @return bool Return true if the current user is allowed to view this topic
+     * @throws Exception
+     */
+    public function isVisible(): bool
+    {
+        global $gCurrentUser;
+
+        // check if the current user could view the category of the topic
+        return in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('FOT'), true);
     }
 
     /**
@@ -226,12 +291,12 @@ class Topic extends Entity
         if (str_starts_with($columnName, 'fop_')) {
             return $this->firstPost->setValue($columnName, $newValue, $checkValue);
         } elseif ($columnName === 'fot_cat_id') {
-            if(is_int($newValue)) {
-                if(in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT'))) {
+            if (is_int($newValue)) {
+                if (in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT'))) {
                     throw new Exception('You are not allowed to create a post in this category.');
                 }
             } else {
-                if(in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT', 'uuid'))) {
+                if (in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT', 'uuid'))) {
                     throw new Exception('You are not allowed to create a post in this category.');
                 }
                 $category = new Category($this->db);

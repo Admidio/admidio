@@ -28,6 +28,7 @@
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
+use Admidio\Forum\Service\ForumTopicService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\ForumPostPresenter;
@@ -69,8 +70,8 @@ try {
         case 'topic':
             // create html page object
             $page = new ForumTopicPresenter($getTopicUUID);
-            $page->createCards();
-            $gNavigation->addUrl(CURRENT_URL,  $page->getHeadline());
+            $page->createCards($getOffset);
+            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
             $page->show();
             break;
 
@@ -111,7 +112,7 @@ try {
             break;
 
         case 'post_save':
-            $forumModule = new ForumService($gDb);
+            $forumModule = new ForumTopicService($gDb);
             $forumModule->savePost($getPostUUID, $getTopicUUID);
 
             $gNavigation->deleteLastUrl();

@@ -31,3 +31,5 @@
         </div>
     </div>
 {/foreach}
+
+{$pagination}

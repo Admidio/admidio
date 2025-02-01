@@ -139,7 +139,7 @@ class ForumPresenter extends PagePresenter
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
-        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->getTopicCount(), $gSettingsManager->getInt('forum_entries_per_page'), $offset, true, 'offset'));
+        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->getTopicCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
         try {
             $this->pageContent .= $this->smarty->fetch('modules/forum.cards.tpl');
         } catch (\Smarty\Exception $e) {
@@ -156,8 +156,8 @@ class ForumPresenter extends PagePresenter
     {
         global $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager, $gDb;
 
-        $categoryService = new ForumService($gDb, $this->categoryUUID);
-        $data = $categoryService->getData($offset, $gSettingsManager->getInt('forum_entries_per_page'));
+        $forumService = new ForumService($gDb, $this->categoryUUID);
+        $data = $forumService->getData($offset, $gSettingsManager->getInt('forum_topics_per_page'));
 
         foreach ($data as $forumTopic) {
             $templateRow = array();

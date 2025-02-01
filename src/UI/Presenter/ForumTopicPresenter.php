@@ -5,6 +5,7 @@ namespace Admidio\UI\Presenter;
 use Admidio\Categories\Service\CategoryService;
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
+use Admidio\Forum\Service\ForumTopicService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -53,14 +54,17 @@ class ForumTopicPresenter extends PagePresenter
     }
 
     /**
-     * Read all available registrations from the database and create the html content of this
+     * Read all available posts of a topic from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
-     * parameter **$pageContent**. If no registration is found than show a message to the user.
+     * parameter **$pageContent**.
+     * @param int $offset Offset of the first record that should be returned.
      * @throws Exception|\DateMalformedStringException
      */
-    public function createCards(): void
+    public function createCards(int $offset = 0): void
     {
-        global $gL10n, $gDb;
+        global $gL10n, $gDb, $gSettingsManager;
+
+        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $this->topicUUID));
 
         // update views counter
         $topic = new Topic($gDb);
@@ -69,7 +73,7 @@ class ForumTopicPresenter extends PagePresenter
         $topic->save();
 
         // read topics and posts from database
-        $this->prepareData();
+        $this->prepareData($offset);
         $this->setHeadline($this->templateData[0]['title']);
 
         // show link to create new topic
@@ -82,6 +86,7 @@ class ForumTopicPresenter extends PagePresenter
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
+        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $topic->getPostCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
         try {
             $this->pageContent .= $this->smarty->fetch('modules/forum.posts.cards.tpl');
         } catch (\Smarty\Exception $e) {
@@ -168,54 +173,19 @@ class ForumTopicPresenter extends PagePresenter
     }
 
     /**
-     * Read the data of the forum in an array.
-     * @throws Exception
-     */
-    public function getData(): array
-    {
-        global $gDb, $gProfileFields;
-
-        $sqlQueryParameters = array();
-
-        $sql = 'SELECT fot_uuid, fot_title, fot_views, fop_uuid, fop_text, fop_timestamp_create, fop_usr_id_create,
-                       fop_timestamp_change, cat_name, usr_uuid, usr_timestamp_change,
-                       cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname
-                  FROM ' . TBL_FORUM_TOPICS . '
-            INNER JOIN ' . TBL_CATEGORIES . '
-                    ON fot_cat_id = cat_id
-            INNER JOIN ' . TBL_FORUM_POSTS . '
-                    ON fop_fot_id = fot_id
-            INNER JOIN ' . TBL_USERS . '
-                    ON usr_id = fop_usr_id_create
-             LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
-                    ON cre_surname.usd_usr_id = usr_id
-                   AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
-             LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
-                    ON cre_firstname.usd_usr_id = usr_id
-                   AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
-                 WHERE fot_uuid = ? -- $topicUUID
-                 ORDER BY fop_timestamp_create';
-
-        $queryParameters = array_merge(array(
-            (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-            (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-            $this->topicUUID
-        ), $sqlQueryParameters);
-
-        return $gDb->getArrayFromSql($sql, $queryParameters);
-    }
-
-    /**
+     * @param int $offset Offset of the first record that should be returned.
      * @throws \DateMalformedStringException
      * @throws Exception
      */
-    public function prepareData(): void
+    public function prepareData(int $offset = 0): void
     {
         global $gDb, $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager;
 
-        $data = $this->getData();
         $categoryService = new CategoryService($gDb, 'FOT');
         $firstPost = true;
+
+        $topicService = new ForumTopicService($gDb, $this->topicUUID);
+        $data = $topicService->getData($offset, $gSettingsManager->getInt('forum_posts_per_page'));
 
         foreach ($data as $forumPost) {
             $templateRow = array();

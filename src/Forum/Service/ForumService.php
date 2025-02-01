@@ -2,8 +2,6 @@
 
 namespace Admidio\Forum\Service;
 
-use Admidio\Categories\Service\CategoryService;
-use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
@@ -64,10 +62,10 @@ class ForumService
 
         // Check if limit was set
         if ($limit > 0) {
-            $sqlLimitOffset .= ' LIMIT '.$limit;
+            $sqlLimitOffset .= ' LIMIT ' . $limit;
         }
         if ($offset > 0) {
-            $sqlLimitOffset .= ' OFFSET '.$offset;
+            $sqlLimitOffset .= ' OFFSET ' . $offset;
         }
 
         $sql = 'SELECT fot_uuid, fot_title, fot_views, first_post.fop_text, fot_timestamp_create, fot_usr_id_create,
@@ -126,54 +124,14 @@ class ForumService
         $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('FOT'));
 
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_FORUM_TOPICS.'
-            INNER JOIN '.TBL_CATEGORIES.'
+                  FROM ' . TBL_FORUM_TOPICS . '
+            INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = fot_cat_id
                  WHERE cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ') ';
 
         $pdoStatement = $gDb->queryPrepared($sql, $visibleCategoryIDs);
 
-        return (int) $pdoStatement->fetchColumn();
-    }
-
-    /**
-     * Save data from the post form into the database.
-     * @param string $postUUID UUID if the topic that should be saved.
-     * @param string $topicUUID UUID if the topic that must be set if a new post is created.
-     * @throws Exception
-     */
-    public function savePost(string $postUUID, string $topicUUID = ''): void
-    {
-        global $gCurrentSession, $gDb, $gCurrentUser;
-
-        // check form field input and sanitized it from malicious content
-        $postEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        $formValues = $postEditForm->validate($_POST);
-
-        $post = new Post($gDb);
-        if ($postUUID !== '') {
-            $post->readDataByUuid($postUUID);
-
-            if (!$gCurrentUser->administrateForum() && $post->getValue('fop_usr_id_create') !== $gCurrentUser->getValue('usr_id')) {
-                throw new Exception('You are not allowed to edit this post.');
-            }
-        } else {
-            $topic = new Topic($gDb);
-            $topic->readDataByUuid($topicUUID);
-            $post->setValue('fop_fot_id', $topic->getValue('fot_id'));
-
-            $categoryService = new CategoryService($gDb, 'FOT');
-            if (!in_array($topic->getValue('cat_uuid'), $gCurrentUser->getAllEditableCategories('FOT', 'uuid'))) {
-                throw new Exception('You are not allowed to create a post in this category.');
-            }
-        }
-
-        // write form values in post object
-        foreach ($formValues as $key => $value) {
-            $post->setValue($key, $value);
-        }
-
-        $post->save();
+        return (int)$pdoStatement->fetchColumn();
     }
 
     /**

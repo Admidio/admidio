@@ -117,8 +117,9 @@ $defaultOrgPreferences = array(
     'groups_roles_show_former_members'   => '2',
 
     // Forum
-    'forum_module_enabled'           => '1',
-    'forum_entries_per_page'     => '10',
+    'forum_module_enabled'        => '1',
+    'forum_posts_per_page'        => '15',
+    'forum_topics_per_page'       => '10',
 
     // Messages
     'enable_mail_module'          => '1',

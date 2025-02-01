@@ -107,8 +107,8 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="640" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_guestbook_module' SET pr1.prf_value = 0 WHERE pr1.prf_name = 'forum_module_enabled'</step>
     <step id="650" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_guestbook_module' AND pr1.prf_name = 'forum_module_enabled'</step>
     <step id="660">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_module'</step>
-    <step id="670" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'guestbook_entries_per_page' SET pr1.prf_value = 25 WHERE pr1.prf_name = 'forum_entries_per_page'</step>
-    <step id="680" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 25 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'guestbook_entries_per_page' AND pr1.prf_name = 'forum_entries_per_page'</step>
+    <step id="670" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'guestbook_entries_per_page' SET pr1.prf_value = 25 WHERE pr1.prf_name = 'forum_topics_per_page'</step>
+    <step id="680" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 25 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'guestbook_entries_per_page' AND pr1.prf_name = 'forum_topics_per_page'</step>
     <step id="690">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'guestbook_entries_per_page'</step>
     <step id="700">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_captcha'</step>
     <step id="710">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'flooding_protection_time'</step>

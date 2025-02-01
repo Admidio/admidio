@@ -1093,10 +1093,16 @@ class Preferences extends PagePresenter
             array('helpTextId' => 'SYS_FORUM_MODULE_ENABLED_DESC')
         );
         $formGuestbook->addInput(
-            'forum_entries_per_page',
-            $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
-            $formValues['forum_entries_per_page'],
+            'forum_topics_per_page',
+            $gL10n->get('SYS_NUMBER_OF_TOPICS_PER_PAGE'),
+            $formValues['forum_topics_per_page'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+        );
+        $formGuestbook->addInput(
+            'forum_posts_per_page',
+            $gL10n->get('SYS_NUMBER_OF_POSTS_PER_PAGE'),
+            $formValues['forum_posts_per_page'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(15)))
         );
         $formGuestbook->addSubmitButton(
             'adm_button_save_forum',

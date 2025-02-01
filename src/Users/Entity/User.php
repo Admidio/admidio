@@ -756,9 +756,9 @@ class User extends Entity
         $arrEditableCategories = array();
         while ($row = $pdoStatement->fetch()) {
             if ($idType === 'uuid') {
-                $arrVisibleCategories[] = $row['cat_uuid'];
+                $arrEditableCategories[] = $row['cat_uuid'];
             } else {
-                $arrVisibleCategories[] = (int)$row['cat_id'];
+                $arrEditableCategories[] = (int)$row['cat_id'];
             }
         }
 

@@ -128,8 +128,8 @@ try {
     $guestbookEntries = (int)$pdoStatement->fetchColumn();
 
     // Anzahl Gaestebucheintraege pro Seite
-    if ($gSettingsManager->getInt('forum_entries_per_page') > 0) {
-        $guestbookEntriesPerPage = $gSettingsManager->getInt('forum_entries_per_page');
+    if ($gSettingsManager->getInt('forum_topics_per_page') > 0) {
+        $guestbookEntriesPerPage = $gSettingsManager->getInt('forum_topics_per_page');
     } else {
         $guestbookEntriesPerPage = $guestbookEntries;
     }
