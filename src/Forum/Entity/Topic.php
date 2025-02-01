@@ -1,14 +1,12 @@
 <?php
 namespace Admidio\Forum\Entity;
 
+use Admidio\Categories\Entity\Category;
 use Admidio\Categories\Service\CategoryService;
-use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Email;
-use Admidio\Forum\Entity\Post;
-use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
  * @brief Class manages access to database table adm_guestbook
@@ -223,8 +221,23 @@ class Topic extends Entity
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
+        global $gCurrentUser;
+
         if (str_starts_with($columnName, 'fop_')) {
             return $this->firstPost->setValue($columnName, $newValue, $checkValue);
+        } elseif ($columnName === 'fot_cat_id') {
+            if(is_int($newValue)) {
+                if(in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT'))) {
+                    throw new Exception('You are not allowed to create a post in this category.');
+                }
+            } else {
+                if(in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT', 'uuid'))) {
+                    throw new Exception('You are not allowed to create a post in this category.');
+                }
+                $category = new Category($this->db);
+                $category->readDataByUuid($newValue);
+                $newValue = $category->getValue('cat_id');
+            }
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);

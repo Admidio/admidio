@@ -716,10 +716,11 @@ class User extends Entity
     /**
      * Creates an array with all categories of one type where the user has the right to edit them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @param string $idType The type of the id that should be returned e.g. id or uuid
      * @return array<int,int> Array with categories ids where user has the right to edit them
      * @throws Exception
      */
-    public function getAllEditableCategories(string $categoryType): array
+    public function getAllEditableCategories(string $categoryType, string $idType = 'id'): array
     {
         $queryParams = array($categoryType, $this->organizationId);
 
@@ -744,7 +745,7 @@ class User extends Entity
                     )';
         }
 
-        $sql = 'SELECT cat_id
+        $sql = 'SELECT cat_id, cat_uuid
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
@@ -753,8 +754,12 @@ class User extends Entity
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $arrEditableCategories = array();
-        while ($catId = $pdoStatement->fetchColumn()) {
-            $arrEditableCategories[] = (int)$catId;
+        while ($row = $pdoStatement->fetch()) {
+            if ($idType === 'uuid') {
+                $arrVisibleCategories[] = $row['cat_uuid'];
+            } else {
+                $arrVisibleCategories[] = (int)$row['cat_id'];
+            }
         }
 
         return $arrEditableCategories;
@@ -763,10 +768,11 @@ class User extends Entity
     /**
      * Creates an array with all categories of one type where the user has the right to view them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @param string $idType The type of the id that should be returned e.g. id or uuid
      * @return array<int,int> Array with categories ids where user has the right to view them
      * @throws Exception
      */
-    public function getAllVisibleCategories(string $categoryType): array
+    public function getAllVisibleCategories(string $categoryType, string $idType = 'id'): array
     {
         $queryParams = array($categoryType, $this->organizationId);
 
@@ -797,7 +803,7 @@ class User extends Entity
                     )';
         }
 
-        $sql = 'SELECT cat_id
+        $sql = 'SELECT cat_id, cat_uuid
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
@@ -806,8 +812,12 @@ class User extends Entity
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $arrVisibleCategories = array();
-        while ($catId = $pdoStatement->fetchColumn()) {
-            $arrVisibleCategories[] = (int)$catId;
+        while ($row = $pdoStatement->fetch()) {
+            if ($idType === 'uuid') {
+                $arrVisibleCategories[] = $row['cat_uuid'];
+            } else {
+                $arrVisibleCategories[] = (int)$row['cat_id'];
+            }
         }
 
         return $arrVisibleCategories;

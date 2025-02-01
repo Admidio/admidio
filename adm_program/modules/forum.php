@@ -21,6 +21,7 @@
  * topic_uuid    : UUID of the topic that should be shown.
  * post_uuid     : UUID of the post that should be shown.
  * category_uuid : Array of category UUIDs whose topics should be shown
+ * offset        : Position of query recordset where the visual output should start
  ***********************************************************************************************
  */
 
@@ -46,12 +47,13 @@ try {
     $getTopicUUID = admFuncVariableIsValid($_GET, 'topic_uuid', 'uuid');
     $getPostUUID = admFuncVariableIsValid($_GET, 'post_uuid', 'uuid');
     $getCategoryUUID = admFuncVariableIsValid($_GET, 'category_uuid', 'uuid');
+    $getOffset = admFuncVariableIsValid($_GET, 'offset', 'int');
 
     switch ($getMode) {
         case 'cards':
             // create html page object
             $page = new ForumPresenter($getCategoryUUID);
-            $page->createCards();
+            $page->createCards($getOffset);
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
             $page->show();
             break;

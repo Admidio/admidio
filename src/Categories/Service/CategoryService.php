@@ -69,7 +69,7 @@ class CategoryService
 
     /**
      * Get an array with all categories of this organization from the set type which the current user is allowed to edit.
-     * @return array<int,array> Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name', 'cat_default'
+     * @return array Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name', 'cat_default'
      * @throws Exception
      */
     public function getEditableCategories(): array
@@ -90,7 +90,6 @@ class CategoryService
         }
         return $this->editableCategories;
     }
-
 
     /**
      * Get an array with UUIDs of all categories of this organization from the set type which the current user is allowed to edit.
@@ -113,7 +112,7 @@ class CategoryService
 
     /**
      * Get an array with all categories of this organization from the set type which the current user is allowed to view.
-     * @return array<int,array> Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name', 'cat_default'
+     * @return array Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name', 'cat_default'
      * @throws Exception
      */
     public function getVisibleCategories(): array
