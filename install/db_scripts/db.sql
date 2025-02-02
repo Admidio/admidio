@@ -245,7 +245,7 @@ CREATE TABLE %PREFIX%_forum_topics
     fot_cat_id                  integer unsigned    NOT NULL,
     fot_fop_id_first_post       integer unsigned,
     fot_title                   varchar(255)        NOT NULL,
-    fot_views                   integer             NOT NULL,
+    fot_views                   integer unsigned    NOT NULL    DEFAULT 0,
     fot_usr_id_create           integer unsigned,
     fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (fot_id)

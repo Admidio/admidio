@@ -113,10 +113,10 @@ try {
 
         case 'post_save':
             $forumModule = new ForumTopicService($gDb);
-            $forumModule->savePost($getPostUUID, $getTopicUUID);
+            $postUUID = $forumModule->savePost($getPostUUID, $getTopicUUID);
 
             $gNavigation->deleteLastUrl();
-            echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+            echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl() . '#adm_post_' . $postUUID));
             break;
 
         case 'post_delete':

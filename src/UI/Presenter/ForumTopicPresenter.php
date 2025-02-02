@@ -34,6 +34,10 @@ class ForumTopicPresenter extends PagePresenter
      */
     protected string $topicUUID = '';
     /**
+     * @var Topic Topic object that will be handled in this class.
+     */
+    protected Topic $topic;
+    /**
      * @var array Array with all read forum topics and their first post.
      */
     protected array $data = array();
@@ -49,7 +53,15 @@ class ForumTopicPresenter extends PagePresenter
      */
     public function __construct(string $topicUUID = '')
     {
-        $this->topicUUID = $topicUUID;
+        global $gDb;
+
+        $this->topic = new Topic($gDb);
+
+        if ($topicUUID !== '') {
+            $this->topicUUID = $topicUUID;
+            $this->topic->readDataByUuid($this->topicUUID);
+        }
+
         parent::__construct($topicUUID);
     }
 
@@ -62,19 +74,17 @@ class ForumTopicPresenter extends PagePresenter
      */
     public function createCards(int $offset = 0): void
     {
-        global $gL10n, $gDb, $gSettingsManager;
+        global $gL10n, $gSettingsManager;
 
         $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $this->topicUUID));
 
         // update views counter
-        $topic = new Topic($gDb);
-        $topic->readDataByUuid($this->topicUUID);
-        $topic->setValue('fot_views', $topic->getValue('fot_views') + 1);
-        $topic->save();
+        $this->topic->setValue('fot_views', $this->topic->getValue('fot_views') + 1);
+        $this->topic->save();
 
         // read topics and posts from database
         $this->prepareData($offset);
-        $this->setHeadline($this->templateData[0]['title']);
+        $this->setHeadline($this->topic->getValue('fot_title'));
 
         // show link to create new topic
         $this->addPageFunctionsMenuItem(
@@ -86,7 +96,7 @@ class ForumTopicPresenter extends PagePresenter
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
-        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $topic->getPostCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
+        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $this->topic->getPostCount(), $gSettingsManager->getInt('forum_posts_per_page'), $offset, true, 'offset'));
         try {
             $this->pageContent .= $this->smarty->fetch('modules/forum.posts.cards.tpl');
         } catch (\Smarty\Exception $e) {
@@ -103,7 +113,6 @@ class ForumTopicPresenter extends PagePresenter
         global $gDb, $gL10n, $gCurrentSession, $gCurrentUser;
 
         // create menu object
-        $topic = new Topic($gDb);
         $post = new Post($gDb);
         $categoryService = new CategoryService($gDb, 'FOT');
 
@@ -113,8 +122,7 @@ class ForumTopicPresenter extends PagePresenter
                 throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
             }
         } else {
-            $topic->readDataByUuid($this->topicUUID);
-            $post->readDataById($topic->getValue('fot_fop_id_first_post'));
+            $post->readDataById($this->topic->getValue('fot_fop_id_first_post'));
 
             if (!$gCurrentUser->administrateForum()
                 && $gCurrentUser->getValue('usr_id') !== $post->getValue('fop_usr_id_create')) {
@@ -143,13 +151,13 @@ class ForumTopicPresenter extends PagePresenter
                 $gDb,
                 'FOT',
                 FormPresenter::SELECT_BOX_MODUS_EDIT,
-                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $topic->getValue('cat_uuid'))
+                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $this->topic->getValue('cat_uuid'))
             );
         }
         $form->addInput(
             'fot_title',
             $gL10n->get('SYS_TITLE'),
-            $topic->getValue('fot_title'),
+            $this->topic->getValue('fot_title'),
             array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addEditor(
@@ -164,8 +172,8 @@ class ForumTopicPresenter extends PagePresenter
             array('icon' => 'bi-check-lg')
         );
 
-        $this->smarty->assign('nameUserCreated', $topic->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $topic->getValue('fot_timestamp_create'));
+        $this->smarty->assign('nameUserCreated', $this->topic->getNameOfCreatingUser());
+        $this->smarty->assign('timestampUserCreated', $this->topic->getValue('fot_timestamp_create'));
         $this->smarty->assign('nameLastUserEdited', $post->getNameOfLastEditingUser());
         $this->smarty->assign('timestampLastUserEdited', $post->getValue('fop_timestamp_change'));
         $form->addToHtmlPage();
@@ -201,7 +209,7 @@ class ForumTopicPresenter extends PagePresenter
             $templateRow['timestampCreated'] = $datetimeCreated->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
             if (!empty($forumPost['fop_timestamp_change'])) {
                 $datetimeChanged = new \DateTime($forumPost['fop_timestamp_change']);
-                $templateRow['timestampChanged'] = $datetimeChanged->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+                $templateRow['timestampLastChanged'] = $datetimeChanged->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
             }
             $templateRow['category'] = '';
             $templateRow['editable'] = false;

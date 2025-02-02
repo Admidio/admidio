@@ -101,9 +101,10 @@ class ForumTopicService
      * Save data from the post form into the database.
      * @param string $postUUID UUID if the topic that should be saved.
      * @param string $topicUUID UUID if the topic that must be set if a new post is created.
+     * @return string UUID of the saved post.
      * @throws Exception
      */
-    public function savePost(string $postUUID, string $topicUUID = ''): void
+    public function savePost(string $postUUID, string $topicUUID = ''): string
     {
         global $gCurrentSession, $gDb, $gCurrentUser;
 
@@ -134,5 +135,6 @@ class ForumTopicService
         }
 
         $post->save();
+        return $post->getValue('fop_uuid');
     }
 }

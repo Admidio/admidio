@@ -39,8 +39,8 @@ class ForumService
     /**
      * Read the data of the forum in an array. The returned array contains the following information
      * fot_uuid, fot_title, fot_views, fop_text, fot_timestamp_create, fot_usr_id_create,
-     * cat_id, cat_name, usr_uuid, usr_login_name, usr_timestamp_change, surname, firstname,
-     * replies_count, last_reply_timestamp, last_reply_login_name, last_reply_surname, last_reply_firstname
+     * cat_id, cat_name, usr_uuid, usr_login_name, usr_timestamp_change, surname, firstname, replies_count,
+     * last_reply_uuid, last_reply_timestamp, last_reply_login_name, last_reply_surname, last_reply_firstname
      * @param int $offset Offset of the first record that should be returned.
      * @param int $limit Number of records that should be returned.
      * @return array Returns an array with all forum topics and their first post.
@@ -72,6 +72,7 @@ class ForumService
                        cat_id, cat_name, usr.usr_uuid, usr.usr_login_name, usr.usr_timestamp_change,
                        cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname,
                        (SELECT COUNT(*) - 1 FROM ' . TBL_FORUM_POSTS . ' WHERE fop_fot_id = fot_id) AS replies_count,
+                       last_reply.fop_uuid as last_reply_uuid,
                        last_reply.fop_timestamp_create AS last_reply_timestamp, last_reply_usr.usr_login_name AS last_reply_login_name,
                        last_reply_surname.usd_value AS last_reply_surname, last_reply_firstname.usd_value AS last_reply_firstname
                   FROM ' . TBL_FORUM_TOPICS . '
@@ -137,9 +138,10 @@ class ForumService
     /**
      * Save data from the topic form into the database.
      * @param string $topicUUID UUID if the topic that should be stored within this class
+     * @return string UUID of the saved topic.
      * @throws Exception
      */
-    public function saveTopic(string $topicUUID = ''): void
+    public function saveTopic(string $topicUUID = ''): string
     {
         global $gCurrentSession, $gDb;
 
@@ -160,5 +162,6 @@ class ForumService
         }
 
         $topic->save();
+        return $topic->getValue('fot_uuid');
     }
 }

@@ -73,6 +73,26 @@ class Topic extends Entity
     }
 
     /**
+     * Get the last offset of the topic. The last offset is first post of the last post of the topic.
+     * @Return int Returns the last offset of the topic.
+     * @throws Exception
+     */
+    public function getLastOffset(): int
+    {
+        global $gSettingsManager;
+
+        (float) $lastPage = ($this->getPostCount() + 1) / $gSettingsManager->getInt('forum_posts_per_page');
+
+        if (fmod($lastPage, 1) == 0) {
+            $lastPage = $lastPage - 1;
+        } else {
+            $lastPage = (int) $lastPage;
+        }
+
+        return ($lastPage * $gSettingsManager->getInt('forum_posts_per_page'));
+    }
+
+    /**
      * Get number of available posts of this topic in the database.
      * @Return int Returns the total count of posts of this topic.
      * @throws Exception

@@ -154,7 +154,7 @@ class ForumPresenter extends PagePresenter
      */
     public function prepareData(int $offset = 0): void
     {
-        global $gL10n, $gCurrentUser, $gCurrentSession, $gSettingsManager, $gDb;
+        global $gSettingsManager, $gDb, $gCurrentUser, $gL10n, $gCurrentSession;
 
         $forumService = new ForumService($gDb, $this->categoryUUID);
         $data = $forumService->getData($offset, $gSettingsManager->getInt('forum_topics_per_page'));
@@ -174,6 +174,21 @@ class ForumPresenter extends PagePresenter
                 $templateRow['lastReplyUserName'] = $forumTopic['last_reply_firstname'] . ' ' . $forumTopic['last_reply_surname'];
             }
 
+            // calculate offset of last reply
+            (float) $lastPage = ($forumTopic['replies_count'] + 1) / $gSettingsManager->getInt('forum_posts_per_page');
+            if (fmod($lastPage, 1) == 0) {
+                $lastPage = $lastPage - 1;
+            } else {
+                $lastPage = (int) $lastPage;
+            }
+            $lastOffset = ($lastPage * $gSettingsManager->getInt('forum_posts_per_page'));
+
+            $templateRow['lastReplyUrl'] = SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/forum.php',
+                array('mode' => 'topic', 'topic_uuid' => $forumTopic['fot_uuid'], 'offset' => $lastOffset),
+                'adm_post_' . $forumTopic['last_reply_uuid']
+            );
+
             if (strlen($forumTopic['fop_text']) > 250) {
                 $templateRow['text'] = substr(
                         substr(strip_tags($forumTopic['fop_text']), 0, 250),
@@ -189,7 +204,10 @@ class ForumPresenter extends PagePresenter
             } else {
                 $templateRow['userName'] = $forumTopic['firstname'] . ' ' . $forumTopic['surname'];
             }
-            $templateRow['userProfilePhotoUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $forumTopic['usr_uuid'], 'timestamp' => $forumTopic['usr_timestamp_change']));
+            $templateRow['userProfilePhotoUrl'] = SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php',
+                array('user_uuid' => $forumTopic['usr_uuid'], 'timestamp' => $forumTopic['usr_timestamp_change'])
+            );
             $datetime = new \DateTime($forumTopic['fot_timestamp_create']);
             $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
             $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $forumTopic['fot_uuid']));
@@ -210,7 +228,11 @@ class ForumPresenter extends PagePresenter
                     'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPIC'))
                 );
                 $templateRow['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' .
+                        SecurityUtils::encodeUrl(
+                            ADMIDIO_URL . '/adm_program/modules/forum.php',
+                            array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])
+                        ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumTopic['fot_title'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_VAR', array('SYS_TOPIC'))
