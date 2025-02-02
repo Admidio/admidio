@@ -1371,6 +1371,9 @@
   <string name="SYS_TFA">Zwei-Faktor-Authentifizierung</string>
   <string name="SYS_TFA_ENABLE">Zwei-Faktor-Authentifizierung (2FA) aktivieren</string>
   <string name="SYS_TFA_ENABLE_DESC">Aktiviere die Zwei-Faktor-Authentifizierung (2FA) für alle Benutzer, um einen zusätzlichen Verifizierungsschritt zu erfordern, der die Kontosicherheit erhöht und vor unbefugtem Zugriff schützt.</string>
+  <string name="SYS_TFA_ENTER">Bitte gib den Sicherheits Code aus deiner OTP App ein.</string>
+  <string name="SYS_TFA_LOST">Ich habe keinen Zugang zu meinem 2. Faktor</string>
+  <string name="SYS_TFA_PROTECTED_CONTENT">Dieser Inhalt ist durch Zwei Faktor Authentifizierung (2FA) geschützt.</string>
   <string name="SYS_TFA_RESET">Zwei-Faktor-Authentifizierung zurücksetzen</string>
   <string name="SYS_TFA_RESET_DESC">Entferne den konfigurierten zweiten Faktor.</string>
   <string name="SYS_TFA_RESET_SUCCESSFUL">Zwei-Faktor-Authentifizierung erfolgreich zurückgesetzt.</string>
