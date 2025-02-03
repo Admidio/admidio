@@ -205,8 +205,6 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Gib in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die du hinzufügen möchtest. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</string>
   <string name="ORG_NO_FIELD_CREATED">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Voreinstellung: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</string>
@@ -1268,7 +1266,7 @@
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mail-Adressen als Absender:in nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse der Absenderin bzw. des Absenders genutzt. (Voreinstellung: leer)</string>
   <string name="SYS_SENDER_NAME">Absendername</string>
   <string name="SYS_SENDER_NAME_DESC">Name der Absenderin bzw. des Absenders zur verwendeten E-Mail-Adresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender:in E-Mail-Adresse gepflegt ist. (Voreinstellung: leer)</string>
-  <string name="SYS_SENDER_NOT_LOGGED_IN">(Die absendende Person war nicht eingeloggt. Deshalb könnten die Angaben fehlerhaft sein.)</string>
+  <string name="SYS_SENDER_NOT_LOGGED_IN">Die absendende Person war nicht angemeldet. Daher sind die Absenderinformationen möglicherweise falsch.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Trennzeichen für CSV-Datei</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
@@ -1410,7 +1408,7 @@
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
   <string name="SYS_USER_VALID_LOGIN">Diese Benutzerin bzw. dieser Benutzer besitzt schon ein gültiges Login.</string>
   <string name="SYS_USERNAME">Anmeldename</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Mit diesem Namen kannst du dich anschließend im System anmelden.\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Anzahl der Kontakte pro Seite</string>

@@ -177,7 +177,7 @@
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Aktivera registrering</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Registrering av besökare på hemsidan kan aktiveras eller inaktiveras med denna inställning. Profilfälten som visas under registreringsprocessen kan konfigureras i profilfältinställningarna för varje fält. (Standard: ja)</string>
   <string name="ORG_ENABLE_RSS_FEEDS">Aktivera webbflöden</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan tillhandahålla webbflöden för flera moduler (meddelanden, evenemang, gästbok, fotogalleri och webblänkar) på översiktssidan för varje modul. Prenumeration är möjlig av webbläsare eller flödesläsare. (standard: ja)</string>
+  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan tillhandahålla webbflöden för flera moduler (meddelanden, evenemang, gästbok, fotogalleri och webblänkar) på översiktssidan för varje modul. Prenumeration är möjlig av webbläsare eller RSS-läsare. (standard: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definiera obegränsade ytterligare fält. Fält visas och kan redigeras i användarens profil. Dessa fält kommer också att finnas i egen lista.</string>
   <string name="ORG_FIELD_DISABLED">Fält redigerbart endast för användare med behörighet #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Ett låst profilfält kan inte längre redigeras av användaren i sin egen profil. Det kan endast redigeras av användare som har behörighet att redigera alla användare. Ledarna för en roll med behörighet att redigera profiler för rollmedlemmarna kan också redigera detta profilfält.</string>
@@ -760,9 +760,9 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Skapa och skicka HTML-baserade e-postmeddelanden kan aktiveras för registrerade användare. En JavaScript-redigerare visas för bekväm redigering i stället för det vanliga textfältet. Det nuvarande alternativet är av gäster av säkerhetsskäl inte tillgängliga.</string>
   <string name="SYS_HTML_TABLE">HTML -tabell</string>
   <string name="SYS_ICAL_DAYS_FUTURE">Antal iCal-dagar i framtiden</string>
-  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Antal dagar i framtiden som ska inkluderas i en iCal-nedladdning eller abo. Om nedladdningen av iCal startas i Evenemang-modulen ignoreras denna inställning och de möten som filtrerats fram exporteras. (Standard: 365)</string>
+  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Antal dagar i framtiden som ska inkluderas i en iCal-nedladdning eller prenumeration. Om nedladdningen av iCal startas i Evenemang-modulen ignoreras denna inställning och de möten som filtrerats fram kommer exporteras. (Standard: 365)</string>
   <string name="SYS_ICAL_DAYS_PAST">Antal iCal-dagar tidigare</string>
-  <string name="SYS_ICAL_DAYS_PAST_DESC">Antal tidigare dagar som ska inkluderas i en iCal-nedladdning eller prenumeration. Om nedladdningen av iCal startade i Evenemang-modulen ignoreras denna inställning och de möten som filtrerats fram exporteras. (Standard: 30)</string>
+  <string name="SYS_ICAL_DAYS_PAST_DESC">Antal föregående dagar som ska inkluderas i en iCal-nedladdning eller prenumeration. Om nedladdningen av iCal startade i Evenemang-modulen ignoreras denna inställning och de möten som filtrerats fram kommer exporteras. (Standard: 30)</string>
   <string name="SYS_ICAL_DISABLED">iCal har inaktiverats av systemadministratören.</string>
   <string name="SYS_ICON">Ikon</string>
   <string name="SYS_ICQ">ICQ</string>
@@ -956,7 +956,7 @@
   <string name="SYS_NO_MORE_COLUMN">Av tekniska skäl kan inga fler kolumner läggas till.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">Inga nya registreringar tillgängliga.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Inga behörigheter har tilldelats.</string>
-  <string name="SYS_NO_PICTURE_SELECTED">Ingen lektion vald</string>
+  <string name="SYS_NO_PICTURE_SELECTED">Ingen bildfil vald</string>
   <string name="SYS_NO_QUOTATION">Ingen offert</string>
   <string name="SYS_NO_RIGHTS">Du har inte behörighet att utföra denna åtgärd.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">Du får inte visa en lista med definierade roller.</string>
@@ -977,9 +977,9 @@
   <string name="SYS_NOT_VALID_DATE_FORMAT">Använd ett giltigt datum som villkor för fält #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Information</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notifiering efter en ny registrering</string>
-  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Meddelande till administratören om nya registreringar</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Notifiering till administratören om nya registreringar</string>
   <string name="SYS_NOTIFICATION_REGISTRATION_CONFIRMATION">Notifiering för att bekräfta registreringen</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Meddelande om nya poster</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notifiering om nya eller ändrade poster</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Medlemmar med rollen avisering kommer få en notifiering i systemet för nya eller ändrade poster i modulerna Meddelanden, Evenemang, Dokument &amp; filer, Foton, Webblänkar och Gästbok. (Standard: nej)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Meddelande om ändrade profilfält</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Medlemmar med notifieringsrollen kommer få systemnotifieringar om medlemsprofiler skapas, ändras eller raderas av användare. (Standard: nej).</string>
@@ -991,7 +991,7 @@
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Poster per sida</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster som visas per sida. Om det finns fler poster kommer en sidväljare visas. Om värdet är 0 visas alla poster på en sida och sidväljaren visas inte. (Standardinställning: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Antal mottagare</string>
-  <string name="SYS_NUMBER_RECIPIENTS_DESC">Siffran i det här fältet anger det maximala antalet mottagare i ett e-postmeddelande. Detta antal kan begränsas av leverantörer. Om ett e-postmeddelande ska skickas till fler mottagare än det antal som anges här, kommer flera e-postmeddelanden att genereras. Antalet möjliga e-postmeddelanden som ska skickas inom en period kan också begränsas av leverantörer. (Standard: 50)</string>
+  <string name="SYS_NUMBER_RECIPIENTS_DESC">Siffran i det här fältet anger det maximala antalet mottagare i ett e-postmeddelande. Detta antal kan begränsas av e-postleverantören. Om ett e-postmeddelande ska skickas till fler mottagare än det antal som anges här, kommer flera e-postmeddelanden att genereras. Antalet möjliga e-postmeddelanden som ska skickas inom en period kan också begränsas av leverantörer. (Standard: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF -kalkylblad (*.ods)</string>
   <string name="SYS_OFF">Av</string>
   <string name="SYS_OK">OK</string>
@@ -1011,7 +1011,7 @@
   <string name="SYS_PAGE_PREVIOUS">Föregående</string>
   <string name="SYS_PAGE_NEXT">Nästa</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# och #VAR2#</string>
-  <string name="SYS_PARENT_ALBUM">Föräldraalbum:</string>
+  <string name="SYS_PARENT_ALBUM">Föräldraalbum</string>
   <string name="SYS_PARENT_ALBUM_DESC">Ett album kan vara en del av ett annat album. Välj ett överordnat album från urvalslistan. Om du vill visa albumet på den högsta nivån väljer du #VAR1_BOLD#.</string>
   <string name="SYS_PARTICIPANTS">Medlemmar</string>
   <string name="SYS_PARTICIPANTS_LIMIT">Begränsat antal deltagare</string>
@@ -1094,7 +1094,7 @@
   <string name="SYS_PROFILE_FIELD">Profilfält</string>
   <string name="SYS_PROFILE_FROM">Profil för #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformation</string>
-  <string name="SYS_PROFILE_PHOTO">Bild</string>
+  <string name="SYS_PROFILE_PHOTO">Profilbild</string>
   <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du bör vara med på bilden. Bilden får ha en upplösning på max #VAR1# MegaPixel. Filen får inte vara större än #VAR1# MB och måste vara i formatet JPG eller PNG.</string>
   <string name="SYS_PROPERTIES">Egenskaper</string>
   <string name="SYS_QUANTITY">Antal</string>
@@ -1190,7 +1190,7 @@
   <string name="SYS_ROOM_RESERVED">Valt rum är redan i bruk just nu.</string>
   <string name="SYS_ROOM_SELECTABLE">Tilldela rum</string>
   <string name="SYS_ROOM_SELECTABLE_DESC">Visa en listruta med tillgängliga lokaler för att kunna välja en lokal för evenemanget. (Standard: nej)</string>
-  <string name="SYS_ROTATE_PHOTO_LEFT">Rotera foto</string>
+  <string name="SYS_ROTATE_PHOTO_LEFT">Rotera foto åt vänster</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotera fotot åt höger</string>
   <string name="SYS_ROW">Rad</string>
   <string name="SYS_RSS_DISABLED">Webflödet har inaktiverats.</string>
@@ -1218,8 +1218,8 @@
   <string name="SYS_SEARCH_GENDER_DESC">Söker efter alla manliga användare</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_DESC">Söker efter alla användare med namn som börjar med \ &amp;#39;Mei \&amp;#39;</string>
-  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">HÄGG</string>
-  <string name="SYS_SEARCH_LASTNAME_DESC">Söker efter användare med efternamnet \'Smith\'</string>
+  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Svensson</string>
+  <string name="SYS_SEARCH_LASTNAME_DESC">Söker efter användare med efternamnet \'Svensson\'</string>
   <string name="SYS_SEARCH_LOCATION_EXAMPLE">Köln eller Berlin</string>
   <string name="SYS_SEARCH_LOCATION_DESC">Leta efter alla användare som kommer från Köln eller Berlin</string>
   <string name="SYS_SEARCH_NOT_EMPTY_EXAMPLE_DESC">Hitta alla användare som har ett värde i fältet Väg</string>
@@ -1238,7 +1238,7 @@
   <string name="SYS_SELECT_FROM_LIST">Välj från lista</string>
   <string name="SYS_SELECT_MEMBERS">Välj Medlemmar</string>
   <string name="SYS_SELECT_PHOTO">Välj bild</string>
-  <string name="SYS_SELECT_PHOTOS">Välj bild</string>
+  <string name="SYS_SELECT_PHOTOS">Välj bilder</string>
   <string name="SYS_SEMICOLON">Semikolon (;)</string>
   <string name="SYS_SEND">Skicka</string>
   <string name="SYS_SEND_COPY">Skicka kopia av e-post till min adress</string>
@@ -1264,15 +1264,15 @@
   <string name="SYS_SENDER">Avsändare</string>
   <string name="SYS_SENDER_EMAIL">Avsändarens e-postadress</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Att använda en okänd e-postadress som avsändaradress är inte tillåtet av vissa leverantörer. I detta fall kan du lägga till en e-postadress som kommer att användas som avsändaradress i e-postmodulen (t.ex. noreply@#VAR1#). \nOm fältet är tomt kommer avsändarens e-postadress att användas (standard: tomt) .</string>
-  <string name="SYS_SENDER_NAME">namn på avsändaren</string>
+  <string name="SYS_SENDER_NAME">Namn på avsändaren</string>
   <string name="SYS_SENDER_NAME_DESC">Namnet på avsändarens e-postadress. Detta fält måste upprätthållas om fältet för avsändarens e-postadress inte är tomt (standard: tomt).</string>
-  <string name="SYS_SENDER_NOT_LOGGED_IN">(Avsändaren loggades ut. På grund av att avsändarens information kan vara felaktig.)</string>
+  <string name="SYS_SENDER_NOT_LOGGED_IN">Avsändaren var inte inloggad. Information om avsändaren kan vara felaktig.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Separator för CSV-fil</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Serverinställningar tillåter inte uppladdning av filer.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ange mappbehörigheter</string>
   <string name="SYS_SETTINGS">Inställningar</string>
-  <string name="SYS_SHOW_ALL">Visa alla användare</string>
+  <string name="SYS_SHOW_ALL">Visa alla</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Valfritt visa alla kontakter</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Om aktiverat kan tidigare kontakter och kontakter i andra organisationer visas i medlemsadministrationen utöver den aktuella organisationens aktiva kontakter. I annat fall visas endast aktiva kontakter i den aktuella organisationen. Vid skapande av nya kontakter eller tilldelning av registreringar söks dock fortfarande hela databasen för alla organisationer efter befintliga kontakter. (Standard: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Endast aktiva medlemmar i denna organisation kommer att listas om detta alternativ inte är inställt. Annars listas alla användare av databasen.</string>
@@ -1300,7 +1300,7 @@
   <string name="SYS_SHOW_ROUTE">Rutt</string>
   <string name="SYS_SHOW_WATERMARK">Visa vattenstämpel</string>
   <string name="SYS_SHOW_WATERMARK_DESC">Den angivna texten kommer visas i alla bilder, med början i en skala på 200 pixels längs långsidan. Om en fotograf är angiven i albumet kommer fotografens namn med copyright visas istället för texten. Om fältet lämnas tomt kommer ingen text visas. (Standard: #VAR1#)</string>
-  <string name="SYS_SIMILAR_CONTACTS_FOUND">Liknande kontakt funnen</string>
+  <string name="SYS_SIMILAR_CONTACTS_FOUND">Liknande kontakter hittade</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med liknande namn som #VAR1_BOLD# hittades.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med liknande namn hittades vid registrering av #VAR1_BOLD# med e-postadressen #VAR2_BOLD#. Kontrollera informationen och koppla till en befintlig kontakt eller skapa en ny kontakt.</string>
   <string name="SYS_SINCE">sedan #VAR1#</string>
@@ -1340,13 +1340,13 @@
   <string name="SYS_SUBJECT">Ämne</string>
   <string name="SYS_SUNDAY">Söndag</string>
   <string name="SYS_SUPPORT_ADMIDIO">Stöd Admidio</string>
-  <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Byt till kalenderhantering</string>
+  <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Växla till kalenderhantering</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Byt till kategoriadministration</string>
-  <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Växla till att konfigurera profilens fält</string>
+  <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Växla till att konfigurera profil-fält</string>
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Växla till relationskonfiguration</string>
-  <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Öppet rumadministration</string>
+  <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Växla till rumsadministration</string>
   <string name="SYS_SYMMETRICAL">Symmetri</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Inloggningsuppgifter för #organization_long_name# \n#content# Hej #user_first_name#,\n\nHär kommer inloggningsuppgifter för webbplatsen #organization_homepage#.\nAnvändarnamn: #user_login_name# \nLösenord: #variable1# \n\nLösenordet har genereras automatiskt,\nDu bör ändra det efter att du har loggat in på #organization_homepage#.\n\nLycka till, \nAdministratören</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Inloggningsuppgifter för #organization_long_name# \n#content# Hej #user_first_name#,\n\nHär kommer inloggningsuppgifter för webbplatsen #organization_homepage#.\nAnvändarnamn: #user_login_name# \nLösenord: #variable1# \n\nLösenordet har genereras automatiskt,\nDu bör ändra det efter att du har loggat in på #organization_homepage#.\n\nLycka till, \nTeamet på #organization_long_name#</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Återställ lösenord för #organization_long_name#\n#content# Hej #user_first_name#, \n \nVi har fått en begäran om att återställa ditt lösenord på #organization_homepage#. \n\nOm begäran kom från dig kan du använda följande länk för att återställa ditt lösenord och ställa in ett nytt: \n#variable1#\n\nHälsningar \nAdministratörerna</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# vid registrering på #organization_long_name# avvisad.\n#content#Hej #user_first_name#,\n\ndin registrering på #organization_homepage# avvisades.\n\nRegistreringar accepteras i allmänhet av våra användare. Om du är medlem och din registrering fortfarande avvisades kan det bero på att du inte identifierades som medlem. \nFör att klargöra orsakerna till avslaget vänligen kontakta administratören #administrator_email# från #organization_homepage#.\n\nHälsningar,\n Teamet hos #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#ämne# Registrering på #organization_long_name# bekräftad \n #content# Hej #user_first_name#, \n\ny registrering på #organization_homepage# har bekräftats. \n\nDu kan nu logga in på hemsidan med ditt användarnamn # användare_login_namn # och ditt lösenord. \n\nOm du har några frågor, skriv ett e-postmeddelande till #administrator_email #. \n\nCheers, \n Administratörerna</string>
@@ -1391,9 +1391,9 @@
   <string name="SYS_UPLOAD_MAX_FILESIZE">Maximal storlek för uppladdning</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Filnamnet kan inte namnges \ &amp;quot;Skicka \&amp;quot;.</string>
   <string name="SYS_UPLOAD_PHOTOS">Ladda upp foton</string>
-  <string name="SYS_UPLOAD_PROFILE_PICTURE">LADDA UPP DIN PROFILBILD</string>
+  <string name="SYS_UPLOAD_PROFILE_PICTURE">Ladda upp profilbild</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Uppdateringen lyckades</string>
-  <string name="SYS_URL">Internetadress</string>
+  <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">URL: en i fältet #VAR1_BOLD# innehåller ogiltiga tecken. \n\n Bara alfabetiska tecken, umlauts, siffror 0-9 och specialtecken.-+_:/#?= är tillåtna. </string>
   <string name="SYS_USER">Användare</string>
   <string name="SYS_USER_COULD_BE_CREATED">Användaren kan skapas.</string>
@@ -1408,7 +1408,7 @@
   <string name="SYS_USER_RELATION_TYPE">Relationstyp</string>
   <string name="SYS_USER_VALID_LOGIN">Användaren har redan giltig inloggningsinformation.</string>
   <string name="SYS_USERNAME">Användarnamn</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Du kommer använda användarnamnet vid inloggning.\nNamnet måste vara väl definierat. Om det önskade namnet redan används, försök att använda kombinationer som Arne78 eller StefanT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Du kommer använda användarnamnet vid inloggning.\nNamnet behöver vara unikt i systemet, så om det önskade namnet redan används, försök att använda kombinationer som Anna78 eller StefanT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">E-postadress</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# vid #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Antal kontakter per sida</string>

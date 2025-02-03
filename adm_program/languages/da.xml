@@ -760,9 +760,9 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Oprettelse og afsendelse af HTML formaterede e-mails kan tillades for registrerede brugere. En JavaScript editor vil blive vist, istedet for standard tekstfeltet. Af sikkerheds årsager er dette ikke tilladt for gæster.</string>
   <string name="SYS_HTML_TABLE">‎HTML-tabel‎</string>
   <string name="SYS_ICAL_DAYS_FUTURE">Antal iCal dage i ud i fremtiden</string>
-  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Antal dage i fremtiden, der skal inkluderes i en iCal-download eller -abo. Hvis iCal-downloadet startes i begivenhedsmodulet, ignoreres denne indstilling, og de filtrerede aftaler eksporteres. (Standard: 365)</string>
+  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Antal dage i fremtiden, der skal inkluderes i en iCal-overførsel eller et iCal-abonnement. Hvis iCal-overførslen startes i hændelsesmodulet, ignoreres denne indstilling, og de filtrerede aftaler eksporteres. (Standard: 365)</string>
   <string name="SYS_ICAL_DAYS_PAST">Antal iCal dage tilbage i tiden</string>
-  <string name="SYS_ICAL_DAYS_PAST_DESC">Antal dage i fortiden, der skal inkluderes i en iCal-download eller -Abo. Hvis iCal-downloaden startede i begivenhedsmodulet, ignoreres denne indstilling og eksporterer de filtrerede aftaler. (Standard: 30)</string>
+  <string name="SYS_ICAL_DAYS_PAST_DESC">Antal dage i fortiden, der skal inkluderes i en iCal-overførsel eller et iCal-abonnement. Hvis iCal-overførslen startes i hændelsesmodulet, ignoreres denne indstilling, og de filtrerede aftaler eksporteres. (Standard: 30)</string>
   <string name="SYS_ICAL_DISABLED">iCal-funktionen er deaktiveret.</string>
   <string name="SYS_ICON">Ikon</string>
   <string name="SYS_ICQ">ICQ</string>
@@ -1266,7 +1266,7 @@
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Brug af en ukendt mail-adresse som afsenderadresse er ikke tilladt af nogle udbydere. I dette tilfælde kan du tilføje en e-mail-adresse, der vil blive brugt som afsenderadresse i postmodulet (f.eks. Noreply@#VAR1#).\nHvis feltet forbliver tomt, vil afsenderens e-mail-adresse blive brugt (standard: Tom).</string>
   <string name="SYS_SENDER_NAME">Afsender navn</string>
   <string name="SYS_SENDER_NAME_DESC">Navn på afsenderens mail-adresse. Dette felt skal vedligeholdes, hvis feltet for afsenders mail-adresse ikke er tomt (standard: tomt).</string>
-  <string name="SYS_SENDER_NOT_LOGGED_IN">(Afsender var logget af. Derfor kan afsenders information være forkert.)</string>
+  <string name="SYS_SENDER_NOT_LOGGED_IN">Afsenderen var ikke logget ind. Afsenderoplysningerne kan derfor være forkerte.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">‎Separator til CSV-fil‎</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server indstillinger tillader ikke fil overførsler.</string>
@@ -1408,7 +1408,7 @@
   <string name="SYS_USER_RELATION_TYPE">Relations typer</string>
   <string name="SYS_USER_VALID_LOGIN">Brugeren har allerede gyldig login information.</string>
   <string name="SYS_USERNAME">Bruger navn</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Du vil være i stand til at logge ind med dette brugernavn.\n\nDette navn skal være veldefineret. Hvis det valgte navn ikke længere er tilgængeligt, så prøv at bruge kombinationer som Andi78 eller SteveT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Du kan logge ind på systemet med dette navn.\nNavnet skal være unikt i systemet. Hvis dit ønskede navn allerede er taget, så prøv kombinationer som Andi78 eller SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# den #VAR3#</string>
   <string name="SYS_CONTACTS_PER_PAGE">Antal kontakter pr. side</string>
