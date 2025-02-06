@@ -95,12 +95,12 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;</step>
    <step id="570">INSERT INTO %PREFIX%_log_changes (
-    `log_id`, `log_table`, `log_record_id`, `log_record_uuid`, `log_record_name`, `log_record_linkid`, 
+    `log_table`, `log_record_id`, `log_record_uuid`, `log_record_name`, `log_record_linkid`, 
     `log_field`, `log_field_name`, 
     `log_action`, `log_value_old`, `log_value_new`, 
     `log_usr_id_create`, `log_timestamp_create`, `log_comment`)
 SELECT 
-    usl_id as log_id, 'user_data' as log_table, 
+    'user_data' as log_table, 
     usl_usf_id as log_record_id, u.usr_uuid as log_record_uuid,
     CONCAT(usd_ln.usd_value, ', ', usd_fn.usd_value) as log_record_name,
     usl_usr_id as log_record_linkid,
@@ -129,7 +129,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     </step>
     <step id="580">DROP TABLE %PREFIX%_user_log</step>
     <step id="590">UPDATE %PREFIX%_preferences SET prf_name = 'changelog_enable_module' WHERE prf_name = 'profile_log_edit_fields'</step>
-    <step id="600">INSERT INTO %PREFIX%_preferences (`prf_org_id`, `prf_name`, `prf_value`) 
+    <step id="600">REPLACE INTO %PREFIX%_preferences (`prf_org_id`, `prf_name`, `prf_value`) 
 SELECT prf_org_id, new_prf_name, prf_value
 FROM %PREFIX%_preferences
 JOIN (
