@@ -112,6 +112,9 @@ try {
     // if config file exists then connect to database
     if (is_file($configPath) && $step !== 'installation_successful') {
         $db = Database::createDatabaseInstance();
+        global $gDb;
+        $gDb = $db; // Make the database object globally available to all classes, just like after installation
+
         if (!is_object($db)) {
             $page = new Installation('adm_installation_message', $gL10n->get('INS_INSTALLATION'));
             $page->showMessage(
@@ -159,8 +162,6 @@ try {
             // => EXIT
         }
     }
-
-    $gDb = $db; // Make the database object globally available to all classes, just like after installation
 
     switch ($step) {
         case 'welcome': // (Default) Welcome to installation
