@@ -1,10 +1,12 @@
 <?php
+
 namespace Admidio\Forum\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Email;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
@@ -97,26 +99,28 @@ class Post extends Entity
      */
     public function sendNotification(): bool
     {
-        global $gCurrentOrganization, $gSettingsManager, $gL10n;
+        global $gCurrentOrganization, $gSettingsManager, $gL10n, $gCurrentUser;
 
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();
 
             if ($this->isNewRecord()) {
-                $messageTitleText = 'SYS_GUESTBOOK_COMMENT_CREATED_TITLE';
+                $messageTitleText = 'SYS_FORUM_POST_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
             } else {
-                $messageTitleText = 'SYS_GUESTBOOK_COMMENT_CHANGED_TITLE';
+                $messageTitleText = 'SYS_FORUM_POST_CHANGED_TITLE';
                 $messageUserText = 'SYS_CHANGED_BY';
                 $messageDateText = 'SYS_CHANGED_AT';
             }
 
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
-                . $gL10n->get('SYS_TEXT') . ': ' . $this->getValue('gbc_text') . '<br />'
-                . $gL10n->get($messageUserText) . ': ' . $this->getValue('gbc_name') . '<br />'
+                . $gL10n->get('SYS_TEXT') . ': ' . $this->getValue('fop_text') . '<br />'
+                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php?gbo_uuid=' . $this->getValue('gbo_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array(
+                    'topic_uuid' => $this->getValue('fot_uuid'),
+                    'offset' => 0), 'adm_post_' . $this->getValue('fop_uuid')) . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message

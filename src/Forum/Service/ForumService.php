@@ -161,7 +161,11 @@ class ForumService
             }
         }
 
-        $topic->save();
+        if ($topic->save()) {
+            // Notification email for new or changed entries to all members of the notification role
+            $topic->sendNotification();
+        }
+
         return $topic->getValue('fot_uuid');
     }
 }

@@ -134,7 +134,10 @@ class ForumTopicService
             $post->setValue($key, $value);
         }
 
-        $post->save();
+        if ($post->save()) {
+            // Notification email for new or changed entries to all members of the notification role
+            $post->sendNotification();
+        }
         return $post->getValue('fop_uuid');
     }
 }

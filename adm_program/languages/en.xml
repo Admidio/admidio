@@ -1,21 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in guestbook module-->
-  <string name="GBO_BACK_TO_GUESTBOOK">Back to guestbook</string>
-  <string name="GBO_COMMENT_BY">Comment of #VAR1#</string>
-  <string name="GBO_CREATE_COMMENT">Leave comment</string>
-  <string name="GBO_EDIT_COMMENT">Edit comment</string>
-  <string name="GBO_ENTRY_QUEUED">Entry saved. It will be displayed after moderation.</string>
-  <string name="GBO_FLOODING_PROTECTION">Your last entry was created less than #VAR1# seconds ago.</string>
-  <string name="GBO_GUESTBOOK">Guestbook</string>
-  <string name="GBO_GUESTBOOK_DESC">Guests and users are able to leave greetings and comments, and can annotate other\'s entries.</string>
-  <string name="GBO_HIDE_COMMENTS">Hide comments</string>
-  <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Latest guestbook entries of organization #VAR1#</string>
-  <string name="GBO_MODERATE_ENTRIES">Moderate posts</string>
-  <string name="GBO_MODERATE_VAR">Moderate #VAR1#</string>
-  <string name="GBO_SHOW_COMMENTS">Display comments</string>
-  <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Display #VAR1# comment(s) of this guest book entry</string>
-  <string name="GBO_WRITE_COMMENT">Leave comment</string>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
@@ -153,7 +137,7 @@
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Enable registration</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">The registration by visitors of the homepage can be activated or deactivated by this setting. The profile fields that are displayed during the registration process can be configured in the profile field settings for each field. (Default: yes)</string>
   <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, events, guestbook, photos and web links) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
+  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, events, forum, photos and web links) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field only editable for members with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by a member in its own profile. It can be edited only by members who have the permission to edit all members. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
@@ -685,6 +669,10 @@
   <string name="SYS_FORUM">Forum</string>
   <string name="SYS_FORUM_DESC">A simple forum for discussions within an organization. Various topics can be published and discussed.</string>
   <string name="SYS_FORUM_MODULE_ENABLED_DESC">The forum can be activated via this setting. All registered members then have the opportunity to post or comment on topics in the forum.</string>
+  <string name="SYS_FORUM_POST_CHANGED_TITLE">A forum post was changed at #VAR1#</string>
+  <string name="SYS_FORUM_POST_CREATED_TITLE">New forum post was created at #VAR1#</string>
+  <string name="SYS_FORUM_TOPIC_CHANGED_TITLE">A forum topic was changed at #VAR1#</string>
+  <string name="SYS_FORUM_TOPIC_CREATED_TITLE">New forum topic was created at #VAR1#</string>
   <string name="SYS_FORWARD">Forward</string>
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FROM">from #VAR1#</string>
@@ -700,10 +688,6 @@
   <string name="SYS_GREETING_CARD">Greeting card</string>
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.</string>
-  <string name="SYS_GUESTBOOK_COMMENT_CHANGED_TITLE">A guestbook comment was changed at #VAR1#</string>
-  <string name="SYS_GUESTBOOK_COMMENT_CREATED_TITLE">New guestbook comment was created at #VAR1#</string>
-  <string name="SYS_GUESTBOOK_ENTRY_CHANGED_TITLE">A guestbook entry was changed at #VAR1#</string>
-  <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">New guestbook entry was created at #VAR1#</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
   <string name="SYS_HEADLINE">Headline</string>
@@ -938,7 +922,7 @@
   <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Notification to approve a registration</string>
   <string name="SYS_NOTIFICATION_REGISTRATION_CONFIRMATION">Notification to confirm the registration</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new or changed entries</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Members of the stored notification role will get a system notification for new or changed entries in the modules Announcements, Events, Documents &amp; Files, Photos, Web Links and Guestbook. (Default: no)</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Members of the stored notification role will get a system notification for new or changed entries in the modules Announcements, Events, Documents &amp; Files, Photos, Web Links and forum. (Default: no)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notification for changed profile fields</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Members of the stored notification role will get a system notification if members profile data is created, changed or deleted by a user. (Default: no)</string>
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>

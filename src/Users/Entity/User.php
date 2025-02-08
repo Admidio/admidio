@@ -554,13 +554,17 @@ class User extends Entity
                             SET fil_usr_id = NULL
                           WHERE fil_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_GUESTBOOK . '
-                            SET gbo_usr_id_create = NULL
-                          WHERE gbo_usr_id_create = ' . $usrId;
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_TOPICS . '
+                            SET fot_usr_id_create = NULL
+                          WHERE fot_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_GUESTBOOK . '
-                            SET gbo_usr_id_change = NULL
-                          WHERE gbo_usr_id_change = ' . $usrId;
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_POSTS . '
+                            SET fop_usr_id_create = NULL
+                          WHERE fop_usr_id_create = ' . $usrId;
+
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_POSTS . '
+                            SET fop_usr_id_change = NULL
+                          WHERE fop_usr_id_change = ' . $usrId;
 
         $sqlQueries[] = 'UPDATE ' . TBL_LINKS . '
                             SET lnk_usr_id_create = NULL

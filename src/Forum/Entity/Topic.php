@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Email;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class manages access to database table adm_guestbook
@@ -186,26 +187,27 @@ class Topic extends Entity
      */
     public function sendNotification(): bool
     {
-        global $gCurrentOrganization, $gSettingsManager, $gL10n;
+        global $gCurrentOrganization, $gSettingsManager, $gL10n, $gCurrentUser;
 
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();
 
             if ($this->isNewRecord()) {
-                $messageTitleText = 'SYS_GUESTBOOK_ENTRY_CREATED_TITLE';
+                $messageTitleText = 'SYS_FORUM_TOPIC_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
             } else {
-                $messageTitleText = 'SYS_GUESTBOOK_ENTRY_CHANGED_TITLE';
+                $messageTitleText = 'SYS_FORUM_TOPIC_CHANGED_TITLE';
                 $messageUserText = 'SYS_CHANGED_BY';
                 $messageDateText = 'SYS_CHANGED_AT';
             }
 
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
-                . $gL10n->get('SYS_TEXT') . ': ' . $this->getValue('gbo_text') . '<br />'
-                . $gL10n->get($messageUserText) . ': ' . $this->getValue('gbo_name') . '<br />'
+                . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('fot_title') . '<br />'
+                . $gL10n->get('SYS_TEXT') . ': ' . $this->getValue('fop_text') . '<br />'
+                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php?gbo_uuid=' . $this->getValue('gbo_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' .  SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('topic_uuid' => $this->getValue('fot_uuid'))) . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message
@@ -312,7 +314,7 @@ class Topic extends Entity
             return $this->firstPost->setValue($columnName, $newValue, $checkValue);
         } elseif ($columnName === 'fot_cat_id') {
             if (is_int($newValue)) {
-                if (in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT'))) {
+                if (!in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT'))) {
                     throw new Exception('You are not allowed to create a post in this category.');
                 }
             } else {
