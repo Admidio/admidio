@@ -474,37 +474,37 @@ class Preferences extends HtmlPage
             '2' => $gL10n->get('ORG_ONLY_FOR_ADMINISTRATOR')
         );
         $formChangelog->addSelectBox(
-            'changelog_enable_module',
+            'changelog_module_enabled',
             $gL10n->get('SYS_ENABLE_CHANGELOG'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['changelog_enable_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_ENABLE_CHANGELOG_DESC')
+            array('defaultValue' => $formValues['changelog_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_ENABLE_CHANGELOG_DESC')
         );
 
         $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], ChangelogService::getTableLabel());
         // $selectedTables = explode(',', $formValues['changelog_tables']??'');
         $formChangelog->addCustomContent(
             'changelog_tables',
-            $gL10n->get('LOG_LOGGED_TABLES'),
-            $gL10n->get('LOG_LOGGED_TABLES_DESC'),
+            $gL10n->get('SYS_LOGGED_TABLES'),
+            $gL10n->get('SYS_LOGGED_TABLES_DESC'),
             array(
                 'tables' => array(
                     array(
-                        'title' => $gL10n->get('LOG_HEADER_USER_ROLE_DATA'),
+                        'title' => $gL10n->get('SYS_HEADER_USER_ROLE_DATA'),
                         'id' => 'user_role_data',
                         'tables' => array('users', 'user_data', 'members', 'user_relations', 'roles', 'role_dependencies', 'category_report')
                     ),
                     array(
-                        'title' => $gL10n->get('LOG_HEADER_USER_ROLE_SETTINGS'),
+                        'title' => $gL10n->get('SYS_HEADER_USER_ROLE_SETTINGS'),
                         'id' => 'user_role_settings',
                         'tables' => array('user_fields', 'user_relation_types', 'roles_rights', 'roles_rights_data')
                     ),
                     array(
-                        'title' => $gL10n->get('LOG_HEADER_CONTENT_MODULES'),
+                        'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
                         'id' => 'content_modules',
                         'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'guestbook', 'guestbook_comments', 'links', 'others')
                     ),
                     array(
-                        'title' => $gL10n->get('LOG_HEADER_PREFERENCES'),
+                        'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
                         'id' => 'preferences',
                         'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories')
                     )
@@ -523,9 +523,9 @@ class Preferences extends HtmlPage
 
         // $formChangelog->addCheckbox(
         //     'changelog_allow_deletion',
-        //     $gL10n->get('LOG_ALLOW_DELETION'),
+        //     $gL10n->get('SYS_LOG_ALLOW_DELETION'),
         //     (bool)($formValues['changelog_allow_deletion']??false),
-        //     array('helpTextId' => 'LOG_ALLOW_DELETION_DESC')
+        //     array('helpTextId' => 'SYS_LOG_ALLOW_DELETION_DESC')
         // );
 
         $formChangelog->addSubmitButton(

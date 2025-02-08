@@ -128,17 +128,6 @@
   <string name="INS_SON">Sohn</string>
   <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
-  <!--Phrases only in Changelog administration-->
-  <string name="LOG_ALLOW_DELETION">Löschen der Änderungshistorie zulassen</string>
-  <string name="LOG_ALLOW_DELETION_DESC">Auf der Seite mit der Änderungshistorie kann durch diese Einstellung eine Schaltfläche zur (teilweisen oder gesamten) Löschung der Änderungshistorie aktiviert werden.</string>
-  <string name="LOG_HEADER_USER_ROLE_DATA">Benutzer-Profildaten und Gruppen</string>
-  <string name="LOG_HEADER_USER_ROLE_SETTINGS">Einstellungen zu Benutzern und Gruppen/Rollen</string>
-  <string name="LOG_HEADER_CONTENT_MODULES">Inhalts-Module (Dokumente, Veranstaltungen, Ankündigungen, etc.)</string>
-  <string name="LOG_HEADER_PREFERENCES">Allgemeine Einstellungen</string>
-  <string name="LOG_LOGGED_TABLES">Objekte mit Änderungshistorie</string>
-  <string name="LOG_LOGGED_TABLES_DESC">Wählen Sie alle Objekttypen aus, für die eine Änderungshistorie geführt werden soll. Jede Änderung an diesen Objekten wird mitgeloggt, inklusive dem Zeitpunkt und dem Benutzer der Änderung. Wenn ein Objekttyp hier entfernt wird, wird die zugehörige Änderungshistorie nicht gelöscht. Dies ist auf der Seite mit der Änderungshistorie möglich.</string>
-  <string name="LOG_OTHER_TABLES">Andere Tabellen (Drittanbieter, nur für Administrator sichtbar)</string>
-  <string name="LOG_RECORDS_HIDDEN">Einige oder alle Einträge der Änderungshistorie wurden ausgeblendet, da du nicht die Berechtigungen für den Zugriff besitzt.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
@@ -768,6 +757,10 @@
   <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">Ein neuer Gästebucheintrag wurde angelegt auf #VAR1#</string>
   <string name="SYS_HALF_YEARLY">Halbjährlich</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
+  <string name="SYS_HEADER_CONTENT_MODULES">Inhalts-Module (Dokumente, Veranstaltungen, Ankündigungen, etc.)</string>
+  <string name="SYS_HEADER_PREFERENCES">Allgemeine Einstellungen</string>
+  <string name="SYS_HEADER_USER_ROLE_DATA">Benutzer-Profildaten und Gruppen</string>
+  <string name="SYS_HEADER_USER_ROLE_SETTINGS">Einstellungen zu Benutzern und Gruppen/Rollen</string>
   <string name="SYS_HEADLINE">Überschrift</string>
   <string name="SYS_HELP">Hilfe</string>
   <string name="SYS_HIDE">Ausblenden</string>
@@ -844,14 +837,18 @@
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
   <string name="SYS_LIST_COLUMNS">Listenspalten</string>
-  <string name="SYS_LOG">Protokoll</string>
-  <string name="SYS_MEETING_POINT">Treffpunkt</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Speicherort der Profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
   <string name="SYS_LOCK">Sperren</string>
   <string name="SYS_LOCK_ALBUM">Album sperren</string>
   <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel ein Album vorübergehen sperren, während du gerade alle Bilder des Albums hochlädst.</string>
   <string name="SYS_LOCKED">Gesperrt</string>
+  <string name="SYS_LOG">Protokoll</string>
+  <string name="SYS_LOG_ALLOW_DELETION">Löschen der Änderungshistorie zulassen</string>
+  <string name="SYS_LOG_ALLOW_DELETION_DESC">Auf der Seite mit der Änderungshistorie kann durch diese Einstellung eine Schaltfläche zur (teilweisen oder gesamten) Löschung der Änderungshistorie aktiviert werden.</string>
+  <string name="SYS_LOG_RECORDS_HIDDEN">Einige oder alle Einträge der Änderungshistorie wurden ausgeblendet, da du nicht die Berechtigungen für den Zugriff besitzt.</string>
+  <string name="SYS_LOGGED_TABLES">Objekte mit Änderungshistorie</string>
+  <string name="SYS_LOGGED_TABLES_DESC">Wählen Sie alle Objekttypen aus, für die eine Änderungshistorie geführt werden soll. Jede Änderung an diesen Objekten wird mitgeloggt, inklusive dem Zeitpunkt und dem Benutzer der Änderung. Wenn ein Objekttyp hier entfernt wird, wird die zugehörige Änderungshistorie nicht gelöscht. Dies ist auf der Seite mit der Änderungshistorie möglich.</string>
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Der gewählte Anmeldename existiert schon.\n\nWähle bitte einen anderen Namen.</string>
@@ -895,6 +892,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Benutzer:innen können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Voreinstellung: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Wenn diese Option aktiviert ist, ist bei der Anmeldung zu einer Veranstaltung eine dritte Option #VAR3_BOLD# zusätzlich zu #VAR1_BOLD# und #VAR2_BOLD# verfügbar. (Standard: deaktiviert)</string>
+  <string name="SYS_MEETING_POINT">Treffpunkt</string>
   <string name="SYS_MEETINGS">Treffen</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Mitglied</string>
@@ -1027,6 +1025,7 @@
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
+  <string name="SYS_OTHER_TABLES">Andere Tabellen (Drittanbieter, nur für Administrator sichtbar)</string>
   <string name="SYS_OVERHANG">Überhang</string>
   <string name="SYS_OVERVIEW">Übersicht</string>
   <string name="SYS_PAGE">Seite</string>

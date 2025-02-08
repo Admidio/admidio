@@ -116,18 +116,6 @@
   <string name="INS_SON">Son</string>
   <string name="INS_SPOUSE">Spouse</string>
   <string name="INS_WIFE">Wife</string>
-  <!--Phrases only in Changelog administration-->
-  <!--Phrases only in Changelog administration-->
-  <string name="LOG_ALLOW_DELETION">Allow deletion of the change history</string>
-  <string name="LOG_ALLOW_DELETION_DESC">Enable a button on the changelog page to delete parts or all of the changelog history.</string>
-  <string name="LOG_HEADER_USER_ROLE_DATA">User profile data and roles</string>
-  <string name="LOG_HEADER_USER_ROLE_SETTINGS">Settings for users and groups/roles</string>
-  <string name="LOG_HEADER_CONTENT_MODULES">Content modules (documents, events, announcements, etc.)</string>
-  <string name="LOG_HEADER_PREFERENCES">General Preferences</string>
-  <string name="LOG_LOGGED_TABLES">Logged tables</string>
-  <string name="LOG_LOGGED_TABLES_DESC">Select all types of objects for the changelog. For those objects, all individual modifications will be logged in the change history with old and new value, as well as modification time and user. If an object type is deselected, existing log entries are not deleted. This can be done in the changelog page.</string>
-  <string name="LOG_OTHER_TABLES">Other tables (third-partz modules; only visible to administrators)</string>
-  <string name="LOG_RECORDS_HIDDEN">Some or all changelog entries have been hidden due to insufficient user permissions to access them.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
@@ -733,6 +721,10 @@
   <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">New guestbook entry was created at #VAR1#</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
+  <string name="SYS_HEADER_CONTENT_MODULES">Content modules (documents, events, announcements, etc.)</string>
+  <string name="SYS_HEADER_PREFERENCES">General Preferences</string>
+  <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
+  <string name="SYS_HEADER_USER_ROLE_SETTINGS">Settings for users and groups/roles</string>
   <string name="SYS_HEADLINE">Headline</string>
   <string name="SYS_HELP">Help</string>
   <string name="SYS_HIDE">Hide</string>
@@ -805,14 +797,18 @@
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">List</string>
   <string name="SYS_LIST_COLUMNS">List columns</string>
-  <string name="SYS_LOG">Log</string>
-  <string name="SYS_MEETING_POINT">Meeting point</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Please define where to store profile picture (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. (default: database)</string>
   <string name="SYS_LOCK">Lock</string>
   <string name="SYS_LOCK_ALBUM">Lock album</string>
   <string name="SYS_LOCK_ALBUM_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
   <string name="SYS_LOCKED">Locked</string>
+  <string name="SYS_LOG">Log</string>
+  <string name="SYS_LOG_ALLOW_DELETION">Allow deletion of the change history</string>
+  <string name="SYS_LOG_ALLOW_DELETION_DESC">Enable a button on the changelog page to delete parts or all of the changelog history.</string>
+  <string name="SYS_LOG_RECORDS_HIDDEN">Some or all changelog entries have been hidden due to insufficient user permissions to access them.</string>
+  <string name="SYS_LOGGED_TABLES">Logged tables</string>
+  <string name="SYS_LOGGED_TABLES_DESC">Select all types of objects for the changelog. For those objects, all individual modifications will be logged in the change history with old and new value, as well as modification time and user. If an object type is deselected, existing log entries are not deleted. This can be done in the changelog page.</string>
   <string name="SYS_LOGIN">Sign in</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">You have tried to login too many times recently using a wrong password.\nFor security reasons your account has been locked for 15 minutes.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Selected username already exists.\n\nPlease select another name.</string>
@@ -856,6 +852,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Participate with reservation</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">If this option is activated, a third option #VAR3_BOLD# is available in addition to #VAR1_BOLD# and #VAR2_BOLD# when registering for an event. (Default: disabled)</string>
+  <string name="SYS_MEETING_POINT">Meeting point</string>
   <string name="SYS_MEETINGS">Meetings</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Member</string>
@@ -989,6 +986,7 @@
   <string name="SYS_ORDER">Order</string>
   <string name="SYS_ORGANIZATION">Organization</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_OTHER_TABLES">Other tables (third-party modules; only visible to administrators)</string>
   <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overview</string>
   <string name="SYS_PAGE">Page</string>

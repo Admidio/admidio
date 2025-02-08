@@ -615,12 +615,6 @@ tr.admidio-event-highlight {
 /* Changelog configuration  */
 /***********************************/
 
-div.changelog-tableselect-header {
-    font-weight: bold;
-}
 ul.changelog-tableselect-list {
     list-style-type: none;
-}
-ul.changelog-tableselect-list li label.changelog-tableselect-label {
-    font-weight: normal;
 }

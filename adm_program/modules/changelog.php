@@ -53,10 +53,10 @@ try {
 
     // named array of permission flag (true/false/"user-specific" per table)
     $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-    if ($gSettingsManager->getInt('changelog_enable_module') == 0) {
+    if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
-    if ($gSettingsManager->getInt('changelog_enable_module') == 2 && !$gCurrentUser->isAdministrator()) {
+    if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
     $accessAll = $gCurrentUser->isAdministrator() || 
@@ -452,7 +452,7 @@ try {
     // If any of the records was hidden due to insufficient permissions, add a warning notice>
     if ($recordHidden) {
         $page->addHtml('<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
-            $gL10n->get('LOG_RECORDS_HIDDEN') . '</div>');
+            $gL10n->get('SYS_LOG_RECORDS_HIDDEN') . '</div>');
     }
     $page->addHtml($table->show());
     $page->show();

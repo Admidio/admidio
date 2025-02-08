@@ -4,7 +4,7 @@
     {/foreach}>
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['changelog_enable_module']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['changelog_module_enabled']}
 
 <div class="admidio-form-group admidio-form-changelog-tables
     {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
@@ -15,7 +15,7 @@
     {if $formType neq "vertical" and $formType neq "navbar"}<div class="col-sm-9">{/if}
     <div id="{$elements.changelog_tables.id}"{if $elements.changelog_tables.class neq ""} class="{$elements.changelog_tables.class}"{/if}>{$elements.changelog_tables.content}</div>
 {foreach $elements.changelog_tables.tables as $tablegroup}
-        <div id="{$tablegroup.id}" class="col-sm-9 changelog-tableselect-header">{$tablegroup.title}</div>
+        <div id="{$tablegroup.id}" class="col-sm-9 fw-bold">{$tablegroup.title}</div>
         <div class="col-sm-9">
         <ul class="changelog-tableselect-list">
             {foreach $tablegroup.tables as $table}
@@ -24,7 +24,7 @@
                     {$itemvar@key}="{$itemvar}"
                 {/foreach}
             >
-            <label class="changelog-tableselect-label" for="changelog_table_{$table}">
+            <label class="fw-normal" for="changelog_table_{$table}">
                 {$elements['changelog_table_'|cat:$table].label}
             </label>
             </li>

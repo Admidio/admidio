@@ -720,7 +720,7 @@ class ChangelogService {
     public static function isTableLogged(string|array $table) : bool {
         global $gSettingsManager;
 
-        if ($gSettingsManager->getInt('changelog_enable_module') > 0) { // Changelog enabled at all
+        if ($gSettingsManager->getInt('changelog_module_enabled') > 0) { // Changelog enabled at all
             // show link to view profile field change history if change history is enabled for at least one of the tables.
             // Unknown tables are handled by the changelog_table_others preferences key!
             if (is_array($table)) {
@@ -757,8 +757,8 @@ class ChangelogService {
             $user = $gCurrentUser;
         }
 
-        if ($gSettingsManager->getInt('changelog_enable_module') == 1 ||
-            ($gSettingsManager->getInt('changelog_enable_module') == 2 && $gCurrentUser->isAdministrator())) {
+        if ($gSettingsManager->getInt('changelog_module_enabled') == 1 ||
+            ($gSettingsManager->getInt('changelog_module_enabled') == 2 && $gCurrentUser->isAdministrator())) {
 
             // Changelog enabled at all
             // show link to view profile field change history if change history is enabled for at least one of the tables.
@@ -786,8 +786,10 @@ class ChangelogService {
 
 
     /**
-     * Display a "Change History" button in the current module's HTMLPage, if changelog functionality
-     * is enabled at all and the 7
+     * Display a "Change History" button in the current module's HTMLPage if changelog functionality
+     * is enabled at all, the table has logging enabled and the current user is allowed to view
+     * those objects. If these conditions are not satisfied, no button is displayed.
+     * 
      * @param \HtmlPage $page The HtmlPage of the module, where the change history button should be added
      * @param string $area Identifier for the module, used for the menu item ID
      * @param string $table The database table(s) of the changelog (comma-separated list for multiple())
@@ -799,11 +801,11 @@ class ChangelogService {
         global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
         
         // Changelog disabled globally
-        if ($gSettingsManager->getInt('changelog_enable_module') == 0) {
+        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
             return;
         }
         // Changelog only enabled for admins
-        if ($gSettingsManager->getInt('changelog_enable_module') == 2 && !$gCurrentUser->isAdministrator()) {
+        if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
             return;
         }
     

@@ -128,9 +128,9 @@ LEFT JOIN %PREFIX%_user_fields usf_ln
 WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_NAME'
     </step>
     <step id="580">DROP TABLE %PREFIX%_user_log</step>
-       <!-- rename preference 'profile_log_edit_fields' to 'changelog_enable_module' -->
-    <step id="590" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'profile_log_edit_fields' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_enable_module'</step>
-    <step id="600" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'profile_log_edit_fields' AND pr1.prf_name = 'changelog_enable_module'</step>
+       <!-- rename preference 'profile_log_edit_fields' to 'changelog_module_enabled' -->
+    <step id="590" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'profile_log_edit_fields' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_module_enabled'</step>
+    <step id="600" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'profile_log_edit_fields' AND pr1.prf_name = 'changelog_module_enabled'</step>
     <step id="610">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'profile_log_edit_fields'</step>
     <step>stop</step>
 </update>

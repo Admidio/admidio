@@ -45,7 +45,7 @@ $defaultOrgPreferences = array(
     'registration_send_notification_email' => '1',
 
     // Changelog settings
-    'changelog_enable_module'              => '1',
+    'changelog_module_enabled'             => '1',
     'changelog_table_user_data'            => '1',
     'changelog_table_users'                => '1',
     'changelog_table_members'              => '1',
