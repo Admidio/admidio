@@ -53,7 +53,11 @@ try {
 
 // check for empty db and redirect to installation wizard
 try {
-    $gDb->getTableColumns(TBL_SESSIONS);
+    if (empty($gDb->getTableColumns(TBL_SESSIONS))) {
+        // Postgres does not throw an error, but returns an empty array if the sesssions table does not yet exist.
+        header('Location: ' . ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
+        exit();
+    };
 } catch (Throwable $t) {
     header('Location: ' . ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
     exit();
