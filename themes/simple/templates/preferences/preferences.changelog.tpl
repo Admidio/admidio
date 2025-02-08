@@ -13,7 +13,7 @@
         {$elements['changelog_tables'].label}
     </label>
     {if $formType neq "vertical" and $formType neq "navbar"}<div class="col-sm-9">{/if}
-    <div id="{$data.id}"{if $data.class neq ""} class="{$elements.changelog_tables.class}"{/if}>{$elements.changelog_tables.content}</div>
+    <div id="{$elements.changelog_tables.id}"{if $elements.changelog_tables.class neq ""} class="{$elements.changelog_tables.class}"{/if}>{$elements.changelog_tables.content}</div>
 {foreach $elements.changelog_tables.tables as $tablegroup}
         <div id="{$tablegroup.id}" class="col-sm-9 changelog-tableselect-header">{$tablegroup.title}</div>
         <div class="col-sm-9">
@@ -25,7 +25,6 @@
                 {/foreach}
             >
             <label class="changelog-tableselect-label" for="changelog_table_{$table}">
-                {include file="sys-template-parts/parts/form.part.icon.tpl"}
                 {$elements['changelog_table_'|cat:$table].label}
             </label>
             </li>

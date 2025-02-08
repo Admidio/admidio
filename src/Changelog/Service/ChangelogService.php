@@ -560,7 +560,7 @@ class ChangelogService {
         
             switch ($type) {
                 case 'BOOL':
-                    if ($value == 1) {
+                    if ($value == 1 || $value == "true") {
                         $htmlValue = '<i class="bi bi-check-square"></i>';
                     } else {
                         $htmlValue = '<i class="bi bi-square"></i>';

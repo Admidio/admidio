@@ -185,20 +185,20 @@ try {
 
     if (!is_null($getTables) && count($getTables) > 0) {
         // Add each table as a separate condition, joined by OR:
-        $sqlConditions .= ' AND ( ' .  implode(' OR ', array_map(fn($tbl) => '`log_table` = ?', $getTables)) . ' ) ';
+        $sqlConditions .= ' AND ( ' .  implode(' OR ', array_map(fn($tbl) => 'log_table = ?', $getTables)) . ' ) ';
         $queryParamsConditions = array_merge($queryParamsConditions, $getTables);
     }
 
     if (!is_null($getId) && $getId > 0) {
-        $sqlConditions .= ' AND (`log_record_id` = ? )';
+        $sqlConditions .= ' AND (log_record_id = ? )';
         $queryParamsConditions[] = $getId;
     }
     if (!is_null($getUuid) && $getUuid) {
-        $sqlConditions .= ' AND (`log_record_uuid` = ? )';
+        $sqlConditions .= ' AND (log_record_uuid = ? )';
         $queryParamsConditions[] = $getUuid;
     }
     if (!is_null($getRelatedId) && $getRelatedId > 0) {
-        $sqlConditions .= ' AND (`log_related_id` = ? )';
+        $sqlConditions .= ' AND (log_related_id = ? )';
         $queryParamsConditions[] = $getRelatedId;
     }
 
@@ -223,9 +223,9 @@ try {
                 ON create_first_name.usd_usr_id = log_usr_id_create
                AND create_first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
         WHERE
-               `log_timestamp_create` BETWEEN ? AND ? -- $dateFromIntern and $dateToIntern
+               log_timestamp_create BETWEEN ? AND ? -- $dateFromIntern and $dateToIntern
         ' . $sqlConditions . '
-        ORDER BY `log_id` DESC';
+        ORDER BY log_id DESC';
 
     $queryParams = [
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),

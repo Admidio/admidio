@@ -95,23 +95,23 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;</step>
    <step id="570">INSERT INTO %PREFIX%_log_changes (
-    `log_table`, `log_record_id`, `log_record_uuid`, `log_record_name`, `log_record_linkid`, 
-    `log_field`, `log_field_name`, 
-    `log_action`, `log_value_old`, `log_value_new`, 
-    `log_usr_id_create`, `log_timestamp_create`, `log_comment`)
+    log_table, log_record_id, log_record_uuid, log_record_name, log_record_linkid, 
+    log_field, log_field_name, 
+    log_action, log_value_old, log_value_new, 
+    log_usr_id_create, log_timestamp_create, log_comment)
 SELECT 
-    'user_data' as log_table, 
-    usl_usf_id as log_record_id, u.usr_uuid as log_record_uuid,
-    CONCAT(usd_ln.usd_value, ', ', usd_fn.usd_value) as log_record_name,
-    usl_usr_id as log_record_linkid,
+    'user_data' log_table, 
+    usl_usf_id log_record_id, u.usr_uuid log_record_uuid,
+    CONCAT(usd_ln.usd_value, ', ', usd_fn.usd_value) log_record_name,
+    usl_usr_id log_record_linkid,
 
-    usf.usf_id as log_field,
-    usf.usf_name as log_field_name,
+    usf.usf_id log_field,
+    usf.usf_name log_field_name,
 
-    'MODIFY' as log_action,
-    usl_value_old as log_value_old, usl_value_new as log_value_new, 
-    usl_usr_id_create as log_usr_id_create, usl_timestamp_create as log_timestamp_create, 
-    usl_comment as log_comment
+    'MODIFY' log_action,
+    usl_value_old log_value_old, usl_value_new log_value_new, 
+    usl_usr_id_create log_usr_id_create, usl_timestamp_create log_timestamp_create, 
+    usl_comment log_comment
 FROM %PREFIX%_user_log usl
 LEFT JOIN %PREFIX%_users u
   ON usl.usl_usr_id = u.usr_id
@@ -128,19 +128,9 @@ LEFT JOIN %PREFIX%_user_fields usf_ln
 WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_NAME'
     </step>
     <step id="580">DROP TABLE %PREFIX%_user_log</step>
-    <step id="590">UPDATE %PREFIX%_preferences SET prf_name = 'changelog_enable_module' WHERE prf_name = 'profile_log_edit_fields'</step>
-    <step id="600">REPLACE INTO %PREFIX%_preferences (`prf_org_id`, `prf_name`, `prf_value`) 
-SELECT prf_org_id, new_prf_name, prf_value
-FROM %PREFIX%_preferences
-JOIN (
-    SELECT 'changelog_table_users' AS new_prf_name
-    UNION ALL
-    SELECT 'changelog_table_user_data'
-    UNION ALL
-    SELECT 'changelog_table_user_relations'
-    UNION ALL
-    SELECT 'changelog_table_members'
-) AS new_names
-WHERE prf_name = 'changelog_enable_module';</step>
+       <!-- rename preference 'profile_log_edit_fields' to 'changelog_enable_module' -->
+    <step id="590" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'profile_log_edit_fields' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_enable_module'</step>
+    <step id="600" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'profile_log_edit_fields' AND pr1.prf_name = 'changelog_enable_module'</step>
+    <step id="610">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'profile_log_edit_fields'</step>
     <step>stop</step>
 </update>
