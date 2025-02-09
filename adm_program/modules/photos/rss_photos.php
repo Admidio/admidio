@@ -35,7 +35,7 @@ if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
 
 if ($getOrganizationShortName !== '') {
     $organization = new Organization($gDb, $getOrganizationShortName);
-    $organizationName = $organization->getValue('org_long_name');
+    $organizationName = $organization->getValue('org_longname');
     $organizationID = $organization->getValue('org_id');
 } else {
     $organizationName = $gCurrentOrganization->getValue('org_longname');

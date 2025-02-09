@@ -32,7 +32,7 @@ if ((int) $gSettingsManager->get('events_module_enabled') !== 1) {
 
 if ($getOrganizationShortName !== '') {
     $organization = new Organization($gDb, $getOrganizationShortName);
-    $organizationName = $organization->getValue('org_long_name');
+    $organizationName = $organization->getValue('org_longname');
     $gCurrentUser->setOrganization($organization->getValue('org_id'));
 } else {
     $organizationName = $gCurrentOrganization->getValue('org_longname');
