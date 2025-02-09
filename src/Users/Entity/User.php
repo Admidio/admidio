@@ -597,10 +597,6 @@ class User extends Entity
                             SET rld_usr_id = NULL
                           WHERE rld_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_USER_LOG . '
-                          SET usl_usr_id_create = NULL
-                          WHERE usl_usr_id_create = ' . $usrId;
-                          
         $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_create = NULL
                             WHERE usr_usr_id_create = ' . $usrId;
@@ -661,7 +657,7 @@ class User extends Entity
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
                           WHERE msr_msg_id = msc_msg_id)';
 
-                          $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
                           WHERE msr_msg_id = msg_id)';
                           
@@ -673,10 +669,6 @@ class User extends Entity
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
                           WHERE ses_usr_id = ' . $usrId;
-
-        // TODO_RK: Shall we delete all log-entries pertaining to the given user??? That's not audit-proof!
-        // $sqlQueries[] = 'DELETE FROM ' . TBL_LOG . '
-        //                   WHERE usl_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
                           WHERE usd_usr_id = ' . $usrId;
