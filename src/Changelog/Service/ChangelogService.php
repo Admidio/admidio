@@ -34,6 +34,7 @@ use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
 use Admidio\Weblinks\Entity\Weblink;
+use ModuleEvents;
 
 use Admidio\Roles\Service\RoleService;
 
@@ -236,11 +237,30 @@ class ChangelogService {
             'URL' => $gL10n->get('SYS_URL')
         );
 
+        $memApprovedValues = array(
+            ModuleEvents::MEMBER_APPROVAL_STATE_INVITED => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_INVITED',
+                'icon' => 'calendar2-check-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_ATTEND',
+                'icon' => 'check-circle-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_TENTATIVE',
+                'icon' => 'question-circle-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_CANCELED',
+                'icon' => 'x-circle-fill'
+            )
+        );
+
         return array(
             'mem_begin' =>                 'SYS_MEMBERSHIP_START',
             'mem_end' =>                   'SYS_MEMBERSHIP_END',
             'mem_leader' =>                array('name' => 'SYS_LEADER', 'type' => 'BOOL'),
-            'mem_approved' =>              array('name' => 'SYS_MEMBERSHIP_APPROVED', 'type' => 'BOOL'),
+            'mem_approved' =>              array('name' => 'SYS_MEMBERSHIP_APPROVED', 'type' => 'CUSTOM_LIST', 'entries' => $memApprovedValues),
             'mem_count_guests' =>          'SYS_SEAT_AMOUNT',
             'mem_timestamp_change' =>      'SYS_CHANGED_AT',
             'mem_usr_id_change' =>         'SYS_CHANGED_BY',
@@ -663,7 +683,21 @@ class ChangelogService {
                     $htmlValue = $obj->readableName();
                     break;
                 case 'CUSTOM_LIST':
-                    $htmlValue = $entries[$value]??$value;
+                    $value = $entries[$value]??$value;
+                    $htmlValue = '';
+                    if (is_array($value)) {
+                        if (isset($value['icon'])) {
+                            $htmlValue .= '<div class="bi bi-'.$value['icon'].'"> ';
+                        }
+                        if (isset($value['text'])) {
+                            $htmlValue .=  $gL10n-> get($value['text']);
+                        }
+                        if (isset($value['icon'])) {
+                            $htmlValue .= '</div>';
+                        }
+                    } else {
+                        $htmlValue = $value;
+                    }
                     break;
 
 
