@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Show registration dialog or the list with new registrations
+ * Show forum pages and handle user input
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -38,17 +38,25 @@ use Admidio\UI\Presenter\ForumTopicPresenter;
 try {
     require_once(__DIR__ . '/../system/common.php');
 
-    // check if module is active
-    if (!$gSettingsManager->getBool('forum_module_enabled')) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    }
-
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list', 'topic', 'topic_edit', 'topic_save', 'topic_delete', 'post_edit', 'post_save', 'post_delete')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
+        array(
+            'defaultValue' => 'cards',
+            'validValues' => array('cards', 'list', 'topic', 'topic_edit', 'topic_save', 'topic_delete', 'post_edit', 'post_save', 'post_delete')
+        )
+    );
     $getTopicUUID = admFuncVariableIsValid($_GET, 'topic_uuid', 'uuid');
     $getPostUUID = admFuncVariableIsValid($_GET, 'post_uuid', 'uuid');
     $getCategoryUUID = admFuncVariableIsValid($_GET, 'category_uuid', 'uuid');
     $getOffset = admFuncVariableIsValid($_GET, 'offset', 'int');
+
+    // check if module is active
+    if ($gSettingsManager->getInt('forum_module_enabled') === 0) {
+        throw new Exception('SYS_MODULE_DISABLED');
+    } elseif ($gSettingsManager->getInt('forum_module_enabled') === 1
+        && !in_array($getMode, array('cards', 'list', 'topic')) && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
 
     switch ($getMode) {
         case 'cards':
@@ -84,8 +92,8 @@ try {
             break;
 
         case 'topic_save':
-            $forumModule = new ForumService($gDb);
-            $forumModule->saveTopic($getTopicUUID);
+            $forumService = new ForumService($gDb);
+            $forumService->saveTopic($getTopicUUID);
 
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
@@ -112,8 +120,8 @@ try {
             break;
 
         case 'post_save':
-            $forumModule = new ForumTopicService($gDb);
-            $postUUID = $forumModule->savePost($getPostUUID, $getTopicUUID);
+            $forumService = new ForumTopicService($gDb);
+            $postUUID = $forumService->savePost($getPostUUID, $getTopicUUID);
 
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl() . '#adm_post_' . $postUUID));

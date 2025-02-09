@@ -177,8 +177,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Ativar CAPTCHA</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Ativar registro</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">O registro por visitantes da página pode ser ativado ou desativado nesta configuração. Os campos de perfil que são mostrados durante o processo de registro podem ser configurados nas configurações de campo de perfil para cada campo. (Padrão: sim)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Ativar feed web</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio pode fornecer feeds web para vários módulos (anúncios, compromissos, livros de visita, galeria de fotos e links web) na página de visão geral de cada módulo. A inscrição é feita pelo navegador ou leitor de feed. (padrão: sim)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Ativar feed web</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio pode fornecer feeds web para vários módulos (anúncios, compromissos, livros de visita, galeria de fotos e links web) na página de visão geral de cada módulo. A inscrição é feita pelo navegador ou leitor de feed. (padrão: sim)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definir ilimitados campos adicionais. Os campos serão exibidos no perfil e podem ser editados. Estes campos estarão disponíveis nas listas personalizadas também.</string>
   <string name="ORG_FIELD_DISABLED">Campo editável apenas para usuários com permissão #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Um campo de perfil bloqueado não pode mais ser editado pelo usuário em seu próprio perfil. Poderá apenas ser editado por usuários com permissão adequada. Os líderes de um cargo com permissões para editar os perfis dos membros também podem alterar este campo.</string>

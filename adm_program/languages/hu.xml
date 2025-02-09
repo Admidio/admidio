@@ -178,8 +178,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktiválás</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Regisztráció engedélyezése</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">A honlap látogatóinak regisztrációja ezzel a beállítással aktiválható vagy deaktiválható. A regisztráció során megjelenő profilmezők az egyes mezőkhöz tartozó profilmező-beállításokban konfigurálhatók. (Alapértelmezett: igen)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Webes feedek engedélyezése</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Az Admidio képes több modul (bejelentések, események, vendégkönyv, fényképek és webes linkek) webes feedjét biztosítani az egyes modulok áttekintő oldalán. A feliratkozás böngészővel vagy feedolvasóval lehetséges. (alapértelmezett: igen)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Webes feedek engedélyezése</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Az Admidio képes több modul (bejelentések, események, vendégkönyv, fényképek és webes linkek) webes feedjét biztosítani az egyes modulok áttekintő oldalán. A feliratkozás böngészővel vagy feedolvasóval lehetséges. (alapértelmezett: igen)</string>
   <string name="ORG_FIELD_DESCRIPTION">Korlátlan számú további mező meghatározása. A mezők megjelennek és szerkeszthetők a felhasználó profiljában. Ezek a mezők a saját listában is elérhetőek lesznek.</string>
   <string name="ORG_FIELD_EXIST">Ugyanilyen nevű mező már létezik ebben a kategóriában.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">A regisztráció során a mező nem jelenik meg</string>

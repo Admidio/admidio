@@ -499,7 +499,7 @@ try {
                     'icon' => 'bi-file-earmark-arrow-down-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_forum_admin') && $gSettingsManager->getBool('forum_module_enabled')) {
+            if ($user->checkRolesRight('rol_forum_admin') && $gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_forum_admin'],
                     'right' => $gL10n->get('SYS_RIGHT_FORUM'),

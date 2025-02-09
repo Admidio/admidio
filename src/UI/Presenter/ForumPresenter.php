@@ -67,9 +67,17 @@ class ForumPresenter extends PagePresenter
      */
     protected function createSharedHeader(): void
     {
-        global $gCurrentUser, $gL10n, $gDb;
+        global $gCurrentUser, $gL10n, $gDb, $gSettingsManager, $gCurrentOrganization;
 
         $this->setHeadline($gL10n->get('SYS_FORUM'));
+
+        // add rss feed to forum
+        if ($gSettingsManager->getBool('enable_rss') && $gSettingsManager->getInt('forum_module_enabled') === 1) {
+            $this->addRssFile(
+                ADMIDIO_URL . '/rss/forum.php?organization=' .$gCurrentOrganization->getValue('org_shortname'),
+                $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_FORUM')))
+            );
+        }
 
         // show link to create new topic
         $this->addPageFunctionsMenuItem(

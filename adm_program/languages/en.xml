@@ -136,8 +136,6 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha activation</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Enable registration</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">The registration by visitors of the homepage can be activated or deactivated by this setting. The profile fields that are displayed during the registration process can be configured in the profile field settings for each field. (Default: yes)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, events, forum, photos and web links) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field only editable for members with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by a member in its own profile. It can be edited only by members who have the permission to edit all members. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
@@ -580,6 +578,8 @@
   <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Here you can enable or disable the system notifications of Admidio. They can be sent, if for example a new user has registered. Registration confirmations will also be sent as system notifications. In general, this feature should not be disabled unless the server does not support e-mail delivery. The e-mail module is not affected by the deactivation. (Default: yes)</string>
   <string name="SYS_ENABLE_PM_MODULE">Enable private messages</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Private messages can be enabled or disabled using this setting. (Default: enabled)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Enable RSS feeds</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio can provide RSS feeds for various modules (announcements, events, forum, photo galleries and web links) on the respective overview pages. However, the RSS feed only contains data that is released for visitors to the website. Data that may only be seen by certain roles is not included in the feed. (Default: #VAR1#)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Maintain and show relationships</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">If set active, relationships between contacts can be maintained and displayed. (Default: yes)</string>
   <string name="SYS_ENCODING_GUESS">Try to detect the encoding</string>
@@ -745,6 +745,7 @@
   <string name="SYS_LAST_REPLY_BY_AT">Last reply by #VAR1# at #VAR2#</string>
   <string name="SYS_LASTNAME">Surname</string>
   <string name="SYS_LATER">Later</string>
+  <string name="SYS_LATEST_FORUM_TOPICS_OF_ORGANIZATION">Latest forum topics from organization #VAR1#</string>
   <string name="SYS_LAYOUT">Layout</string>
   <string name="SYS_LEADER">Leader</string>
   <string name="SYS_LEADER_NO_ADDITIONAL_RIGHTS">Head of this role have no special rights. They will be highlighted in list views only.</string>

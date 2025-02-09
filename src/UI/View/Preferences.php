@@ -486,9 +486,9 @@ class Preferences extends PagePresenter
         );
         $formCommon->addCheckbox(
             'enable_rss',
-            $gL10n->get('ORG_ENABLE_RSS_FEEDS'),
+            $gL10n->get('SYS_ENABLE_RSS_FEEDS'),
             (bool)$formValues['enable_rss'],
-            array('helpTextId' => 'ORG_ENABLE_RSS_FEEDS_DESC')
+            array('helpTextId' => array('SYS_ENABLE_RSS_FEEDS_DESC', array('SYS_YES')))
         );
         $formCommon->addCheckbox(
             'system_cookie_note',
@@ -1074,7 +1074,7 @@ class Preferences extends PagePresenter
 
         $formValues = $gSettingsManager->getAll();
 
-        $formGuestbook = new FormPresenter(
+        $formForum = new FormPresenter(
             'adm_preferences_form_forum',
             'preferences/preferences.forum.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Forum')),
@@ -1086,33 +1086,34 @@ class Preferences extends PagePresenter
             '1' => $gL10n->get('SYS_ENABLED'),
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
         );
-        $formGuestbook->addCheckBox(
+        $formForum->addSelectBox(
             'forum_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
-            $formValues['forum_module_enabled'],
-            array('helpTextId' => 'SYS_FORUM_MODULE_ENABLED_DESC')
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['forum_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
-        $formGuestbook->addInput(
+
+        $formForum->addInput(
             'forum_topics_per_page',
             $gL10n->get('SYS_NUMBER_OF_TOPICS_PER_PAGE'),
             $formValues['forum_topics_per_page'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
         );
-        $formGuestbook->addInput(
+        $formForum->addInput(
             'forum_posts_per_page',
             $gL10n->get('SYS_NUMBER_OF_POSTS_PER_PAGE'),
             $formValues['forum_posts_per_page'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(15)))
         );
-        $formGuestbook->addSubmitButton(
+        $formForum->addSubmitButton(
             'adm_button_save_forum',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
         $smarty = $this->getSmartyTemplate();
-        $formGuestbook->addToSmarty($smarty);
-        $gCurrentSession->addFormObject($formGuestbook);
+        $formForum->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formForum);
         return $smarty->fetch('preferences/preferences.forum.tpl');
     }
 

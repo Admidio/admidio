@@ -512,7 +512,7 @@ class GroupsRoles extends PagePresenter
                 (bool)$role->getValue('rol_profile'),
                 array('icon' => 'bi-person-fill')
             );
-            if ((int)$gSettingsManager->get('announcements_module_enabled') > 0) {
+            if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_announcements',
                     $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
@@ -520,7 +520,7 @@ class GroupsRoles extends PagePresenter
                     array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'bi-newspaper')
                 );
             }
-            if ((int)$gSettingsManager->get('events_module_enabled') > 0) {
+            if ($gSettingsManager->getInt('events_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_events',
                     $gL10n->get('SYS_RIGHT_DATES'),
@@ -528,7 +528,7 @@ class GroupsRoles extends PagePresenter
                     array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'bi-calendar-week-fill')
                 );
             }
-            if ((int)$gSettingsManager->get('photo_module_enabled') > 0) {
+            if ($gSettingsManager->getInt('photo_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_photo',
                     $gL10n->get('SYS_RIGHT_PHOTOS'),
@@ -544,7 +544,7 @@ class GroupsRoles extends PagePresenter
                     array('helpTextId' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'bi-file-earmark-arrow-down-fill')
                 );
             }
-            if ($gSettingsManager->getBool('forum_module_enabled')) {
+            if ($gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_forum_admin',
                     $gL10n->get('SYS_RIGHT_FORUM'),
@@ -552,7 +552,7 @@ class GroupsRoles extends PagePresenter
                     array('helpTextId' => 'SYS_RIGHT_FORUM_DESC', 'icon' => 'bi-chat-dots-fill')
                 );
             }
-            if ((int)$gSettingsManager->get('enable_weblinks_module') > 0) {
+            if ($gSettingsManager->getInt('enable_weblinks_module') > 0) {
                 $form->addCheckbox(
                     'rol_weblinks',
                     $gL10n->get('SYS_RIGHT_WEBLINKS'),
@@ -655,22 +655,22 @@ class GroupsRoles extends PagePresenter
             if ($role->getValue('rol_profile') == 1) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-person-fill', 'title' => $gL10n->get('SYS_RIGHT_PROFILE'));
             }
-            if ($role->getValue('rol_announcements') == 1 && (int)$gSettingsManager->get('announcements_module_enabled') > 0) {
+            if ($role->getValue('rol_announcements') == 1 && $gSettingsManager->getInt('announcements_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-newspaper', 'title' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'));
             }
-            if ($role->getValue('rol_events') == 1 && (int)$gSettingsManager->get('events_module_enabled') > 0) {
+            if ($role->getValue('rol_events') == 1 && $gSettingsManager->getInt('events_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-calendar-week-fill', 'title' => $gL10n->get('SYS_RIGHT_DATES'));
             }
-            if ($role->getValue('rol_photo') == 1 && (int)$gSettingsManager->get('photo_module_enabled') > 0) {
+            if ($role->getValue('rol_photo') == 1 && $gSettingsManager->getInt('photo_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-image-fill', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
             }
             if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getBool('documents_files_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
-            if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getBool('forum_module_enabled')) {
+            if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_FORUM'));
             }
-            if ($role->getValue('rol_weblinks') == 1 && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {
+            if ($role->getValue('rol_weblinks') == 1 && $gSettingsManager->getInt('enable_weblinks_module') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-link-45deg', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));
             }
 

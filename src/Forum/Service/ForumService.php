@@ -5,6 +5,10 @@ namespace Admidio\Forum\Service;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Organizations\Entity\Organization;
+use DateTime;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -133,6 +137,59 @@ class ForumService
         $pdoStatement = $gDb->queryPrepared($sql, $visibleCategoryIDs);
 
         return (int)$pdoStatement->fetchColumn();
+    }
+
+    /**
+     * Send a valid RSS feed of the forum to the browser. This feed will contain the latest 50 topics of all categories, that are
+     * visible for guests. The feed will be generated in the format of an RSS feed.
+     * @param string $organizationShortName The short name of the organization whose topics should be shown in the RSS feed.
+     * @return void
+     * @throws Exception
+     */
+    public function showRssFeed(string $organizationShortName): void
+    {
+        global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gDb, $gL10n, $gCurrentOrgId;
+
+        // Check if RSS is active...
+        if (!$gSettingsManager->getBool('enable_rss')) {
+            throw new Exception('SYS_RSS_DISABLED');
+        }
+
+        if ($organizationShortName !== '') {
+            $organization = new Organization($gDb, $organizationShortName);
+            $organizationName = $organization->getValue('org_longname');
+            $gCurrentUser->setOrganization($organization->getValue('org_id'));
+        } else {
+            $organizationName = $gCurrentOrganization->getValue('org_longname');
+        }
+
+        // create RSS feed object with channel information
+        $rss = new RssFeed(
+            $organizationName . ' - ' . $gL10n->get('SYS_ANNOUNCEMENTS'),
+            $gCurrentOrganization->getValue('org_homepage'),
+            $gL10n->get('SYS_LATEST_FORUM_TOPICS_OF_ORGANIZATION', array($organizationName)),
+            $organizationName
+        );
+
+        $forumTopics = $this->getData(0, 50);
+
+        if (count($forumTopics) > 0) {
+            foreach ($forumTopics as $topic) {
+                // add entry to RSS feed
+                $rss->addItem(
+                    $topic['fot_title'],
+                    $topic['fop_text'],
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $topic['fot_uuid'],)),
+                    $topic['firstname'] . ' ' . $topic['surname'],
+                    DateTime::createFromFormat('Y-m-d H:i:s', $topic['fot_timestamp_create'])->format('r'),
+                    $topic['cat_name'],
+                    $topic['fot_uuid']
+                );
+            }
+        }
+
+        $gCurrentUser->setOrganization($gCurrentOrgId);
+        $rss->getRssFeed();
     }
 
     /**

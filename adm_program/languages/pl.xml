@@ -178,8 +178,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Włącz captcha</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Włącz rejestrację</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Rejestracja odwiedzających stronę główną może zostać włączona lub wyłączona za pomocą tego ustawienia. Pola profilu, które są wyświetlane podczas rejestracji mogą zostać skonfigurowane w ustawieniach każdego pola. (domyślnie: tak) </string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Włącz kanały internetowe</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio ma możliwość wyświetlania aktualności dla poszczególnych modułów (ogłoszeń, wydarzeń, książki gości, zdjęć oraz linków) na stronie przeglądu każdego modułu. Subskrypcja jest dostępna przez przeglądarkę lub czytnik aktualności. (domyślnie: tak) </string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Włącz kanały internetowe</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio ma możliwość wyświetlania aktualności dla poszczególnych modułów (ogłoszeń, wydarzeń, książki gości, zdjęć oraz linków) na stronie przeglądu każdego modułu. Subskrypcja jest dostępna przez przeglądarkę lub czytnik aktualności. (domyślnie: tak) </string>
   <string name="ORG_FIELD_DESCRIPTION">Zdefiniuj nieograniczoną liczbę dodatkowych pól. Pola zostaną wyświetlone i będzie można je edytować w profilu użytkownika. Pola będą również dostępne we własnej liście.</string>
   <string name="ORG_FIELD_DISABLED">Edycja tego pola jest mozliwa tylko dla członków z uprawnieniem #VAR1_BOLD#.</string>
   <string name="ORG_FIELD_DISABLED_DESC">Zablokowane pole profilu nie może być edytowane przez członka we własnym profilu. Może być edytowane tylko przez członków, którzy mają uprawnienia do edytowania wszystkich członków. Liderzy roli z uprawnieniami do edycji profili członków roli mogą również edytować to pole profilu.</string>

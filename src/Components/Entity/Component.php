@@ -222,8 +222,8 @@ class Component extends Entity
                 break;
 
             case 'ANNOUNCEMENTS':
-                if ((int) $gSettingsManager->get('announcements_module_enabled') === 1
-                || ((int) $gSettingsManager->get('announcements_module_enabled') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('announcements_module_enabled') === 1
+                || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
@@ -235,8 +235,8 @@ class Component extends Entity
                 break;
 
             case 'EVENTS':
-                if ((int) $gSettingsManager->get('events_module_enabled') === 1
-                || ((int) $gSettingsManager->get('events_module_enabled') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('events_module_enabled') === 1
+                || ($gSettingsManager->getInt('events_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
@@ -254,14 +254,15 @@ class Component extends Entity
                 break;
 
             case 'FORUM':
-                if ($gSettingsManager->getBool('forum_module_enabled') && $gValidLogin) {
+                if ($gSettingsManager->getInt('forum_module_enabled') === 1
+                || ($gSettingsManager->getInt('forum_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
 
             case 'LINKS':
-                if ((int) $gSettingsManager->get('enable_weblinks_module') === 1
-                || ((int) $gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('enable_weblinks_module') === 1
+                || ($gSettingsManager->getInt('enable_weblinks_module') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
@@ -280,8 +281,8 @@ class Component extends Entity
                 break;
 
             case 'PHOTOS':
-                if ((int) $gSettingsManager->get('photo_module_enabled') === 1
-                || ((int) $gSettingsManager->get('photo_module_enabled') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('photo_module_enabled') === 1
+                || ($gSettingsManager->getInt('photo_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
