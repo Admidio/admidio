@@ -247,7 +247,9 @@ class Entity
             $this->columnPrefix . '_usr_id_create',
             $this->columnPrefix . '_timestamp_create',
             $this->columnPrefix . '_usr_id_change', 
-            $this->columnPrefix . '_timestamp_change'
+            $this->columnPrefix . '_timestamp_change',
+            $this->columnPrefix . '_usr_id', 
+            $this->columnPrefix . '_timestamp'
         ];
         return $ignored;
     }
@@ -284,7 +286,7 @@ class Entity
         }
 
         $logEntry = new LogChanges($this->db);
-        $logEntry->setLogCreation($table, $this->dbColumns[$this->keyColumnName], $uuid, $record_name);
+        $logEntry->setLogCreation($table, $this->dbColumns[$this->keyColumnName]??0, $uuid, $record_name);
         $this->adjustLogEntry($logEntry);
         return $logEntry->save();
     }
@@ -308,7 +310,7 @@ class Entity
 
 
         $logEntry = new LogChanges($this->db);
-        $logEntry->setLogDeletion($table, $this->dbColumns[$this->keyColumnName], $uuid, $record_name);
+        $logEntry->setLogDeletion($table, $this->dbColumns[$this->keyColumnName]??0, $uuid, $record_name);
         $this->adjustLogEntry($logEntry);
         return $logEntry->save();
     }
@@ -812,9 +814,9 @@ class Entity
                 $returnCode = true;
                 if ($this->keyColumnName !== '') {
                     $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
-                    $this->logCreation();
-                    $this->logModifications($logChanges);
                 }
+                $this->logCreation();
+                $this->logModifications($logChanges);
                 $this->insertRecord = false;
             }
         } else {
@@ -911,7 +913,10 @@ class Entity
                 if (str_starts_with($columnName, $this->columnPrefix . '_')) {
                     $this->dbColumns[$columnName] = '';
 
-                    if ($property['serial']) {
+                    // Set the first column as key column automatically as fall-back. A later 
+                    // auto-increment column will override anyway, but tables without an auto-
+                    // increment column also need some value for the keyColumName.
+                    if ($property['serial'] || !isset($this->keyColumnName)) {
                         $this->keyColumnName = $columnName;
                     }
                 }

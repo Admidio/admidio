@@ -263,6 +263,7 @@ class Role extends Entity
 
         $this->db->startTransaction();
 
+        // TODO_RK
         $sql = 'DELETE FROM ' . TBL_ROLE_DEPENDENCIES . '
                  WHERE rld_rol_id_parent = ? -- $rolId
                     OR rld_rol_id_child  = ? -- $rolId';

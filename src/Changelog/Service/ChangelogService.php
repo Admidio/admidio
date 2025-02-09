@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Changelog\Service;
 
+use Admidio\Roles\Entity\RolesDependencies;
 use HtmlPage;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
@@ -183,8 +184,8 @@ class ChangelogService {
                 //return new RolesRights($gDb, '', 0);
             case 'roles_rights_data':
                 return new RolesRightsData($gDb);
-            //case 'role_dependencies':
-                // Does not use an Entity-derived class; so far, changes are NOT logged
+            case 'role_dependencies':
+                return new RolesDependencies($gDb);
             case 'rooms':
                 return new Room($gDb);
             case 'texts':
@@ -520,7 +521,7 @@ class ChangelogService {
             case 'roles':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
             case 'roles_rights':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
             case 'roles_rights_data':
                 // The log_record_linkid contains the table and the uuid encoded as 'table':'UUID' => split and call Create linke with the new table!
                 if (strpos($id, ':') !== false) {
@@ -531,7 +532,7 @@ class ChangelogService {
                 }
                 return self::createLink($text, $table, $id, $id); 
             case 'role_dependencies':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
             case 'rooms':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
             // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
