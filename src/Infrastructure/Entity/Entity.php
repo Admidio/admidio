@@ -810,12 +810,12 @@ class Entity
                     VALUES ('.Database::getQmForValues($sqlFieldArray).')';
             if ($this->db->queryPrepared($sql, $queryParams) !== false) {
                 $returnCode = true;
-                $this->insertRecord = false;
                 if ($this->keyColumnName !== '') {
                     $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
                     $this->logCreation();
                     $this->logModifications($logChanges);
                 }
+                $this->insertRecord = false;
             }
         } else {
             $sql = 'UPDATE '.$this->tableName.'
