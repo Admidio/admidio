@@ -782,7 +782,7 @@ class HtmlForm extends Smarty
                 $attributes['class'] .= ' invisible';
                 break;
         }
-        
+
         if ($optionsAll['passwordStrength']) {
             $passwordStrengthLevel = 1;
             if ($gSettingsManager instanceof SettingsManager && $gSettingsManager->getInt('password_min_strength')) {
@@ -1150,6 +1150,17 @@ class HtmlForm extends Smarty
                 }
             } else {
                 $valuesArray[] = array('id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue : $arrayKey), 'value' => Language::translateIfTranslationStrId($arrayValue));
+            }
+        }
+
+        // if special value attributes are set then add them to the values array
+        if(count($optionsAll['valueAttributes']) > 0) {
+            foreach($valuesArray as &$valueArray) {
+                if (isset($optionsAll['valueAttributes'][$valueArray['id']])) {
+                    foreach($optionsAll['valueAttributes'][$valueArray['id']] as $key => $value) {
+                        $valueArray[$key] = $value;
+                    }
+                }
             }
         }
 
