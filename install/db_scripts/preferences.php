@@ -23,6 +23,7 @@ $defaultOrgPreferences = array(
     'homepage_login'                 => 'adm_program/overview.php',
     'theme'                          => 'simple',
     'enable_password_recovery'       => '1',
+    'enable_two_factor_authentication' => '0',
     'system_browser_update_check'    => '0',
     'system_cookie_note'             => '1',
     'system_currency'                => '€',

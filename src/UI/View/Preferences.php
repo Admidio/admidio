@@ -1803,6 +1803,12 @@ class Preferences extends HtmlPage
             (bool) $formValues['security_login_email_address_enabled'],
             array('helpTextId' => 'SYS_LOGIN_WITH_EMAIL_DESC')
         );
+        $formSecurity->addCheckbox(
+            'enable_two_factor_authentication',
+            $gL10n->get('SYS_TFA_ENABLE'),
+            (bool) $formValues['enable_two_factor_authentication'],
+            array('helpTextId' => 'SYS_TFA_ENABLE_DESC')
+        );
         $formSecurity->addSubmitButton(
             'adm_button_save_security',
             $gL10n->get('SYS_SAVE'),

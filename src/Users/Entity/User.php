@@ -12,6 +12,8 @@ use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use RobThree\Auth\TwoFactorAuth;
+use RobThree\Auth\Providers\Qr\QRServerProvider;
 
 /**
  * @brief Class handle role rights, cards and other things of users
@@ -418,17 +420,33 @@ class User extends Entity
      */
     public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false): bool
     {
-        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
+        if ($this->checkPassword($password) && $this->checkMembership($isAdministrator)) {
+            $this->updateSession($setAutoLogin, $updateSessionCookies);
+            if ($updateHash) {
+                $this->rehashIfNecessary($password);
+            }
+            return true;
+        }
+        return false;
+    }
 
+    private function checkPassword(string $password): bool
+    {
         if ($this->hasMaxInvalidLogins()) {
             throw new Exception('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
 
         if (!PasswordUtils::verify($password, $this->getValue('usr_password'))) {
-            $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
+            $incorrectLoginMessage = $this->handleIncorrectLogin('password');
 
             throw new Exception($incorrectLoginMessage);
         }
+        return true;
+        }
+
+    public function checkMembership(bool $isAdministrator = false): bool
+    {
+        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if (!$this->getValue('usr_valid')) {
             throw new Exception('SYS_LOGIN_NOT_ACTIVATED');
@@ -444,9 +462,41 @@ class User extends Entity
             throw new Exception('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName));
         }
 
-        if ($updateHash) {
-            $this->rehashIfNecessary($password);
+        return true;
+    }
+
+    /**
+     * Check the totp code of the current user. If the code is correct the session will be updated
+     * @param string $totpCode The current totp code for the current user.
+     * @return true Return true if totp code was correct
+     * @throws Exception SYS_TFA_TOTP_CODE_INCORRECT
+     */
+    public function checkTotp(string $totpCode): bool
+    {
+        global $gCurrentSession;
+
+        $secret = $this->getValue('usr_tfa_secret');
+
+        $tfa = new TwoFactorAuth(new QRServerProvider());
+        if (!$tfa->verifyCode($secret, $totpCode)) {
+            throw new Exception('SYS_TFA_TOTP_CODE_INCORRECT');
         }
+        $gCurrentSession->setValue('ses_tfa_checked', true);
+        $gCurrentSession->save();
+        return true;
+    }
+
+    public function hasSetupTfa(): string
+    {
+        if ($this->getValue('usr_tfa_secret')) {
+            return true;
+        }
+        return false;
+    }
+
+    private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true): bool
+    {
+        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($updateSessionCookies) {
             $gCurrentSession->setValue('ses_usr_id', (int)$this->getValue('usr_id'));
@@ -1325,11 +1375,12 @@ class User extends Entity
     }
 
     /**
-     * Handles the incorrect given login password.
+     * Handles the incorrect given login password or totp code.
+     * @param string $mode Mode to differentiate if password or totp code (2FA) is incorrect. Allowed values: 'password', 'totp'
      * @return string Return string with the reason why the login failed.
      * @throws Exception
      */
-    private function handleIncorrectPasswordLogin(): string
+    private function handleIncorrectLogin(string $mode): string
     {
         // log invalid logins
         if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS) {
@@ -1350,7 +1401,13 @@ class User extends Entity
 
         $this->clear();
 
+        switch ($mode) {
+            case 'password':
         return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
+            case 'totp':
+                return 'SYS_TFA_TOTP_CODE_INCORRECT';
+        }
+        throw new Exception('Unreachable Case');
     }
 
     /**
@@ -1843,6 +1900,36 @@ class User extends Entity
             );
         }
         if (parent::setValue('usr_password', $newPasswordHash, false)) {
+            // for security reasons remove all sessions and auto login of the user
+            return $this->invalidateAllOtherLogins();
+        }
+
+        return false;
+    }
+
+    /**
+     * Set a new value for a second factor secret column of the database table.
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
+     * @param string|null $newSecret The new value that should be stored in the database field
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws Exception
+     */
+    public function setSecondFactorSecret(string|null $newSecret): bool
+    {
+        global $gChangeNotification, $gCurrentSession;
+
+        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
+            $gChangeNotification->logUserChange(
+                (int) $this->getValue('usr_id'),
+                'usr_tfa_secret',
+                $this->getValue('usr_tfa_secret'),
+                $newSecret || 'null',
+                $this
+            );
+        }
+        if (parent::setValue('usr_tfa_secret', $newSecret, false)) {
+            $gCurrentSession->setValue('ses_tfa_checked', true);
+            $gCurrentSession->save();
             // for security reasons remove all sessions and auto login of the user
             return $this->invalidateAllOtherLogins();
         }

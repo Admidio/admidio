@@ -26,6 +26,10 @@ try {
         admRedirect(ADMIDIO_URL . FOLDER_SYSTEM . '/login.php');
         // => EXIT
     }
+    if (!$gValidTfa) {
+        $_SESSION['login_forward_url'] = CURRENT_URL;
+        admRedirect(ADMIDIO_URL . FOLDER_SYSTEM . '/login_tfa.php');
+    }
 } catch (Throwable $e) {
     echo $e->getMessage();
 }

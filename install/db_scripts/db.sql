@@ -707,6 +707,7 @@ CREATE TABLE %PREFIX%_sessions
     ses_ip_address              varchar(39)         NOT NULL,
     ses_binary                  blob,
     ses_reload                  boolean             NOT NULL    DEFAULT false,
+    ses_tfa_checked             boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (ses_id)
 )
 ENGINE = InnoDB
@@ -811,6 +812,7 @@ CREATE TABLE %PREFIX%_users
     usr_uuid                    varchar(36)         NOT NULL,
     usr_login_name              varchar(254),
     usr_password                varchar(255),
+    usr_tfa_secret              varchar(255),
     usr_photo                   blob,
     usr_text                    text,
     usr_pw_reset_id             varchar(50),
