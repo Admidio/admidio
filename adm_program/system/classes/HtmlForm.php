@@ -1075,6 +1075,17 @@ class HtmlForm
             }
         }
 
+        // if special value attributes are set then add them to the values array
+        if(is_array($optionsAll['valueAttributes']) && count($optionsAll['valueAttributes']) > 0) {
+            foreach($valuesArray as &$valueArray) {
+                if (isset($optionsAll['valueAttributes'][$valueArray['id']])) {
+                    foreach($optionsAll['valueAttributes'][$valueArray['id']] as $key => $value) {
+                        $valueArray[$key] = $value;
+                    }
+                }
+            }
+        }
+
         if ($optionsAll['multiselect']) {
             $attributes['multiple'] = 'multiple';
             $attributes['name'] = $id . '[]';

@@ -114,7 +114,7 @@ $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
         VALUES (\'folder_view\',   \'adm_folders\')
              , (\'folder_upload\', \'adm_folders\')
              , (\'category_view\', \'adm_categories\')
-             , (\'event_participation\', \'adm_dates\')
+             , (\'event_participation\', \'adm_events\')
              , (\'menu_view\',     \'adm_menu\')';
 $db->queryPrepared($sql);
 

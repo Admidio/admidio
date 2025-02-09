@@ -715,7 +715,7 @@ class FormPresenter
                 $optionsAll['class'] .= ' invisible';
                 break;
         }
-        
+
         if ($optionsAll['passwordStrength']) {
             $passwordStrengthLevel = 1;
             if (isset($gSettingsManager) && $gSettingsManager->getInt('password_min_strength')) {
@@ -1028,6 +1028,17 @@ class FormPresenter
                 $valuesArray[] = array(
                     'id' => ($optionsAll['arrayKeyIsNotValue'] ? $arrayValue : $arrayKey),
                     'value' => Language::translateIfTranslationStrId($arrayValue));
+            }
+        }
+
+        // if special value attributes are set then add them to the values array
+        if(is_array($optionsAll['valueAttributes']) && count($optionsAll['valueAttributes']) > 0) {
+            foreach($valuesArray as &$valueArray) {
+                if (isset($optionsAll['valueAttributes'][$valueArray['id']])) {
+                    foreach($optionsAll['valueAttributes'][$valueArray['id']] as $key => $value) {
+                        $valueArray[$key] = $value;
+                    }
+                }
             }
         }
 
