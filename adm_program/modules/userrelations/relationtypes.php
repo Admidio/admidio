@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\UserRelationType;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -40,6 +41,7 @@ try {
         'bi-plus-circle-fill'
     );
 
+    ChangelogService::displayHistoryButton($page, 'user_relation_types', 'user_relation_types');
 
     // Create table object
     $relationTypesOverview = new HtmlTable('tbl_relationtypes', $page, true);

@@ -16,12 +16,14 @@
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
     $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
+    $haveGetFolderUUID = ($getFolderUUID !== ''); // When no folder UUID is given, history should be for the whole folder structure. The UUID will be set to default below!
 
     // Check if module is activated
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
@@ -88,6 +90,8 @@ try {
                 'bi-shield-lock-fill'
             );
         }
+        ChangelogService::displayHistoryButton($page, 'folder', 'folders,files,roles_rights_data', !empty($getAnnUuid), array('uuid' => $haveGetFolderUUID?$getFolderUUID:''));
+        
     }
 
     $page->readData($getFolderUUID);

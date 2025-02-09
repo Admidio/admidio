@@ -18,6 +18,7 @@ use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -67,6 +68,8 @@ try {
 
     // create html page object
     $page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
+
+    ChangelogService::displayHistoryButton($page, 'announcements', 'announcements', !empty($getAnnUuid), array('uuid' => $getAnnUuid));
 
     // show form
     $form = new Form(

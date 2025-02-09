@@ -124,6 +124,7 @@ const TBL_IDS = TABLE_PREFIX . '_ids';
 const TBL_LINKS = TABLE_PREFIX . '_links';
 const TBL_LIST_COLUMNS = TABLE_PREFIX . '_list_columns';
 const TBL_LISTS = TABLE_PREFIX . '_lists';
+const TBL_LOG = TABLE_PREFIX . '_log_changes';
 const TBL_MEMBERS = TABLE_PREFIX . '_members';
 const TBL_MENU = TABLE_PREFIX . '_menu';
 const TBL_MESSAGES = TABLE_PREFIX . '_messages';
@@ -144,7 +145,6 @@ const TBL_TEXTS = TABLE_PREFIX . '_texts';
 const TBL_USERS = TABLE_PREFIX . '_users';
 const TBL_USER_DATA = TABLE_PREFIX . '_user_data';
 const TBL_USER_FIELDS = TABLE_PREFIX . '_user_fields';
-const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
 const TBL_USER_RELATIONS = TABLE_PREFIX . '_user_relations';
 const TBL_USER_RELATION_TYPES = TABLE_PREFIX . '_user_relation_types';
 

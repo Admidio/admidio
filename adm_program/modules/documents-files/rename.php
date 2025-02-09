@@ -20,6 +20,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -87,6 +88,9 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-documents-files-rename', $headline);
 
+    $isFile = ($getFileUuid !== '');
+    ChangelogService::displayHistoryButton($page, 'filefolder', ($isFile?'files':'folders').',roles_rights_data', true, array('uuid' => $isFile?$getFileUuid:$getFolderUuid));
+    
     // create html form
     $form = new Form(
         'adm_edit_download_form',

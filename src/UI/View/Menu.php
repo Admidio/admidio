@@ -9,6 +9,7 @@ use Admidio\UI\Component\Form;
 use HtmlPage;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -36,7 +37,7 @@ class Menu extends HtmlPage
      */
     public function createEditForm(string $menuUUID = '')
     {
-        global $gDb, $gL10n, $gCurrentSession;
+        global $gDb, $gL10n, $gCurrentSession, $gSettingsManager;
 
         // create menu object
         $menu = new MenuEntry($gDb);
@@ -74,6 +75,8 @@ class Menu extends HtmlPage
                 $rowViewRoles['cat_name']
             );
         }
+
+        ChangelogService::displayHistoryButton($this, 'menu', 'menu', !empty($menuUUID), array('uuid' => $menuUUID));
 
         // show form
         $form = new Form(
@@ -193,7 +196,7 @@ class Menu extends HtmlPage
      */
     public function createList()
     {
-        global $gCurrentSession, $gL10n, $gDb;
+        global $gCurrentSession, $gL10n, $gDb, $gSettingsManager;
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
@@ -215,6 +218,8 @@ class Menu extends HtmlPage
             ADMIDIO_URL . FOLDER_MODULES . '/menu.php?mode=edit',
             'bi-plus-circle-fill'
         );
+
+        ChangelogService::displayHistoryButton($this, 'menu', 'menu');
 
         $templateRowMenuParent = array();
 

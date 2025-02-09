@@ -16,6 +16,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -97,6 +98,8 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-photo-album-edit', $headline);
 
+    ChangelogService::displayHistoryButton($page, 'photos', 'photos', !empty($getPhotoUuid), array('uuid' => $getPhotoUuid));
+    
     // show form
     $form = new Form(
         'adm_photos_edit_form',

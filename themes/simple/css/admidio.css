@@ -609,3 +609,12 @@ tr.admidio-event-highlight {
 #plugin-login-form .btn {
     margin-bottom: 1rem;
 }
+
+
+/***********************************/
+/* Changelog configuration  */
+/***********************************/
+
+ul.changelog-tableselect-list {
+    list-style-type: none;
+}

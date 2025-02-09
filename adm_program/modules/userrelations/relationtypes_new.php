@@ -16,6 +16,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\UserRelationType;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -84,6 +85,8 @@ try {
         true
     );
 
+    ChangelogService::displayHistoryButton($page, 'user_relation_types', 'user_relation_types', !empty($getUrtUuid), array('uuid' => $getUrtUuid));
+        
     // show form
     $form = new Form(
         'adm_user_relations_type_edit_form',

@@ -8,6 +8,7 @@ use HtmlPage;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Categories\Entity\Category;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -36,7 +37,7 @@ class Categories extends HtmlPage
      */
     public function createEditForm(string $type, string $categoryUUID = '')
     {
-        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gCurrentOrganization, $gDb;
+        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gCurrentOrganization, $gDb, $gSettingsManager;
 
         $roleViewSet = array(0);
         $roleEditSet = array(0);
@@ -172,6 +173,9 @@ class Categories extends HtmlPage
                 showHideViewRightControl();', true
             );
         }
+
+        ChangelogService::displayHistoryButton($this, 'categories', 'categories,roles_rights_data', !empty($categoryUUID), array('uuid' => $categoryUUID));
+
 
         // show form
         $form = new Form(
@@ -354,7 +358,7 @@ class Categories extends HtmlPage
      */
     public function createList(string $type)
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentOrganization;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentOrganization, $gSettingsManager;
 
         // set module headline
         $headline = $gL10n->get('SYS_CATEGORIES');
@@ -453,6 +457,9 @@ class Categories extends HtmlPage
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('mode' => 'edit', 'type' => $type)),
             'bi-plus-circle-fill'
         );
+
+
+        ChangelogService::displayHistoryButton($this, 'categories', 'categories');
 
         $sql = 'SELECT *
           FROM ' . TBL_CATEGORIES . '

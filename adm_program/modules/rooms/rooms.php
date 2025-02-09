@@ -13,6 +13,7 @@
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -39,7 +40,10 @@ try {
         'bi-plus-circle-fill'
     );
 
-    if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
+    // show link to view profile field change history
+    ChangelogService::displayHistoryButton($page, 'rooms', 'rooms');
+
+    if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
         // show firstname and lastname of create and last change user
         $additionalFields = '
         cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,

@@ -24,6 +24,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -173,6 +174,8 @@ try {
                 'bi-plus-circle-fill'
             );
         }
+
+        ChangelogService::displayHistoryButton($page, 'membership', 'members', true, array('uuid' => $getUserUuid, 'related_id' => $getRoleUuid));
 
         $allVisibleRoles = $gCurrentUser->getRolesViewMemberships();
         $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name

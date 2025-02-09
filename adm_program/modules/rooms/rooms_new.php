@@ -17,6 +17,7 @@ use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -46,6 +47,8 @@ try {
 
     // create html page object
     $page = new HtmlPage('admidio-rooms-edit', $headline);
+
+    ChangelogService::displayHistoryButton($page, 'rooms', 'rooms', !empty($getRoomUuid), array('uuid' => $getRoomUuid));
 
     // show form
     $form = new Form(

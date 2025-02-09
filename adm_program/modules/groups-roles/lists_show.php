@@ -34,6 +34,7 @@ use Admidio\Roles\ValueObject\ListData;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -545,6 +546,8 @@ try {
                 'bi-envelope-fill'
             );
         }
+
+        ChangelogService::displayHistoryButton($page, 'roles', 'members', true, array('related_id' => $getRoleList));
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
         $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));

@@ -16,6 +16,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Weblinks\Entity\Weblink;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -57,6 +58,8 @@ try {
 
     // create html page object
     $page = new HtmlPage('admidio-weblinks-edit', $headline);
+
+    ChangelogService::displayHistoryButton($page, 'weblinks', 'links', !empty($getLinkUuid), array('uuid' => $getLinkUuid));
 
     // show form
     $form = new Form(
