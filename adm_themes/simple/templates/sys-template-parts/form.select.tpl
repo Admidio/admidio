@@ -16,7 +16,7 @@
                     {assign "group" "{$optionvar["group"]}"}
                 {/if}
                 <option value="{$optionvar["id"]}" {if $defaultValue eq $optionvar["id"]}selected="selected"{/if}
-{                   {if array_key_exists("data-global", $optionvar)} data-global="{$optionvar["data-global"]}"{/if}>{$optionvar["value"]}</option>
+                    {if array_key_exists("data-global", $optionvar)} data-global="{$optionvar["data-global"]}"{/if}>{$optionvar["value"]}</option>
             {/foreach}
             {if $group neq ""}</optgroup>{/if}
         </select>
