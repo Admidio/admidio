@@ -216,6 +216,28 @@ class Organization extends Entity
         $queryParams = array($orgId, Uuid::uuid4(), Folder::getRootFolderName('documents', $this->getValue('org_shortname')), FOLDER_DATA, $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
 
+        // insert inventory fields TODO MH: SYS_STRINGS for description
+        $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELDS . '
+                       (inf_org_id, inf_type, inf_name_intern, inf_name, inf_description, inf_value_list, inf_system, inf_required_input, inf_sequence, inf_usr_id_create, inf_timestamp_create, inf_usr_id_change, inf_timestamp_change)
+                VALUES (?, \'TEXT\', \'ITEMNAME\', \'SYS_ITEMNAME\', \'Der Name des Gegenstandes\', NULL, 1, 1, 0, ?, ?, NULL, NULL),
+                       (?, \'DROPDOWN\', \'CATEGORY\', \'SYS_CATEGORY\', \'Die Kategorie des Gegenstandes\', \'Allgemein\', 1, 1, 1, ?, ?, NULL, NULL),
+                       (?, \'TEXT\', \'KEEPER\', \'SYS_KEEPER\', \'Der Verwalter des Gegenstandes\', NULL, 1, 0, 2, ?, ?, NULL, NULL),
+                       (?, \'CHECKBOX\', \'IN_INVENTORY\', \'SYS_IN_INVENTORY\', \'Gegenstand befindet sich im Inventar\', NULL, 1, 0, 3, ?, ?, NULL, NULL),
+                       (?, \'TEXT\', \'LAST_RECEIVER\', \'SYS_LAST_RECEIVER\', \'Der letzte Empfänger des Gegenstandes\', NULL, 1, 0, 4, ?, ?, NULL, NULL),
+                       (?, \'DATE\', \'RECEIVED_ON\', \'SYS_RECEIVED_ON\', \'Das Verleihdatum des Gegenstandes an den letzten Empfänger\', NULL, 1, 0, 5, ?, ?, NULL, NULL),
+                       (?, \'DATE\', \'RECEIVED_BACK_ON\', \'SYS_RECEIVED_BACK_ON\', \'Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde\', NULL, 1, 0, 6, ?, ?, NULL, NULL);
+                ';
+        $queryParams = array(
+            $orgId, $systemUserId, DATETIME_NOW,
+            $orgId, $systemUserId, DATETIME_NOW,
+            $orgId, $systemUserId, DATETIME_NOW,
+            $orgId, $systemUserId, DATETIME_NOW,
+            $orgId, $systemUserId, DATETIME_NOW,
+            $orgId, $systemUserId, DATETIME_NOW,
+            $orgId, $systemUserId, DATETIME_NOW
+        );
+        $this->db->queryPrepared($sql, $queryParams);
+
         // now create default roles
 
         // Create role administrator
@@ -233,6 +255,7 @@ class Organization extends Entity
         $roleAdministrator->setValue('rol_guestbook_comments', 1);
         $roleAdministrator->setValue('rol_photo', 1);
         $roleAdministrator->setValue('rol_weblinks', 1);
+        $roleAdministrator->setValue('rol_edit_inventory', 1);
         $roleAdministrator->setValue('rol_edit_user', 1);
         $roleAdministrator->setValue('rol_mail_to_all', 1);
         $roleAdministrator->setValue('rol_mail_this_role', 3);
@@ -263,6 +286,7 @@ class Organization extends Entity
         $roleManagement->setValue('rol_announcements', 1);
         $roleManagement->setValue('rol_events', 1);
         $roleManagement->setValue('rol_weblinks', 1);
+        $roleManagement->setValue('rol_edit_inventory', 1);
         $roleManagement->setValue('rol_edit_user', 1);
         $roleManagement->setValue('rol_mail_to_all', 1);
         $roleManagement->setValue('rol_mail_this_role', 2);
