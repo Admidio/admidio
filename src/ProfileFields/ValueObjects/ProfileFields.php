@@ -782,7 +782,7 @@ class ProfileFields
 
             if($regex !== ''
             && preg_match($delimiter.$regex.$delimiter, $fieldValue) === 0) {
-                throw new AdmException('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                throw new Exception('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
             }
         }
 
