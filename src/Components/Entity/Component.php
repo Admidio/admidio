@@ -142,6 +142,12 @@ class Component extends Entity
                     }
                     break;
 
+                case 'INVENTORY':
+                        if ($gCurrentUser->editInventory()) {
+                            return true;
+                        }
+                        break;
+    
                 case 'GUESTBOOK':
                     if ($gCurrentUser->editGuestbookRight()) {
                         return true;
@@ -253,6 +259,13 @@ class Component extends Entity
                 }
                 break;
 
+            case 'INVENTORY':
+                if ((int) $gSettingsManager->get('inventory_module_enabled') === 1
+                || ((int) $gSettingsManager->get('inventory_module_enabled') === 2 && $gValidLogin)) {
+                    return true;
+                }
+                break;
+    
             case 'GUESTBOOK':
                 if ((int) $gSettingsManager->get('enable_guestbook_module') === 1
                 || ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin)) {
