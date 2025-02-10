@@ -13,6 +13,7 @@
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Interval</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Entries of unregistered users will be checked. Too many entries within the given time intervall are not allowed. This option allows to take control over unwanted entries. If interval is set to 0, no check will be done. (default: 60 seconds)</string>
   <string name="GBO_GUESTBOOK">Guestbook</string>
+  <string name="GBO_GUESTBOOK_COMMENTS">Guestbook comments</string>
   <string name="GBO_GUESTBOOK_DESC">Guests and users are able to leave greetings and comments, and can annotate other\'s entries.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation activated for</string>
   <string name="GBO_GUESTBOOK_MODERATION_DESC">Guestbook entries will be displayed after moderation. Define if moderation should be performed in case of guests or for logged in users only, or nobody\'s comments should be checked in advance. (default: Nobody)</string>
@@ -184,6 +185,7 @@
   <string name="ORG_LOGIN_AUTOMATICALLY">Login automatically</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at their visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
+  <string name="ORG_ONLY_FOR_ADMINISTRATOR">Enabled, but only visible to administrators</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged in users only</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Manage general organization preferences or module preferences here.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a separate homepage for this organization please add it within the config.php of the separate homepage.</string>
@@ -261,6 +263,7 @@
   <string name="SYS_ALL_DAY">Full time</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, web link, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
+  <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">All members of this organization</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Participants can register anonymous guests</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Participants may add additional seats to their registration. These are then subtracted from the maximum number of participants and the remaining free seats are thereby reduced. This is e.g. useful if a participant can bring more visitors and thus requires a total number of free places.</string>
@@ -343,6 +346,9 @@
   <string name="SYS_CHANGE_DATE">Change date</string>
   <string name="SYS_CHANGE_HISTORY">Change history</string>
   <string name="SYS_CHANGE_HISTORY_OF">Change history of #VAR1#</string>
+  <string name="SYS_CHANGE_HISTORY_GENERIC">Change history: #VAR1#</string>
+  <string name="SYS_CHANGE_HISTORY_GENERIC2">Change history: #VAR1# (#VAR2#)</string>
+  <string name="SYS_CHANGE_HISTORY_USERDATA">Change history of user data and memberships</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last modified</string>
   <string name="SYS_CHANGED_BY">Changed by</string>
@@ -421,6 +427,7 @@
   <string name="SYS_CREATE_ROLE">Create role</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATE_WEBLINK">Create web link</string>
+  <string name="SYS_CREATED">Created</string>
   <string name="SYS_CREATED_AT">Created at</string>
   <string name="SYS_CREATED_BY">Created by</string>
   <string name="SYS_CREATED_BY_AND_AT">Created by #VAR1# at #VAR2#</string>
@@ -497,6 +504,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
+  <string name="SYS_DELETED">Deleted</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Request delivery confirmation</string>
@@ -587,6 +595,8 @@
   <string name="SYS_ENABLED">Enabled</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Enable category report</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">The category report creates a list of all roles and categories to which a member is assigned. The permission #VAR1_BOLD# is required for access to the category report. (Default: yes)</string>
+  <string name="SYS_ENABLE_CHANGELOG">Enable changelog</string>
+  <string name="SYS_ENABLE_CHANGELOG_DESC">The changelog logs all changes (including the old and new value) to the selected objects (corresponding to database tables) in the database. The changelog can only be viewed by administrators or users that have edit access to the corresponding module. Each user can also view his/her profile data changes. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Enable documents &amp; files</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Enable download</string>
@@ -711,6 +721,10 @@
   <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">New guestbook entry was created at #VAR1#</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
+  <string name="SYS_HEADER_CONTENT_MODULES">Content modules (documents, events, announcements, etc.)</string>
+  <string name="SYS_HEADER_PREFERENCES">General Preferences</string>
+  <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
+  <string name="SYS_HEADER_USER_ROLE_SETTINGS">Settings for users and groups/roles</string>
   <string name="SYS_HEADLINE">Headline</string>
   <string name="SYS_HELP">Help</string>
   <string name="SYS_HIDE">Hide</string>
@@ -782,16 +796,19 @@
   <string name="SYS_LINK_TO">Link to #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">List</string>
-  <string name="SYS_LOG">Log</string>
-  <string name="SYS_MEETING_POINT">Meeting point</string>
+  <string name="SYS_LIST_COLUMNS">List columns</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Please define where to store profile picture (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. (default: database)</string>
   <string name="SYS_LOCK">Lock</string>
   <string name="SYS_LOCK_ALBUM">Lock album</string>
   <string name="SYS_LOCK_ALBUM_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
   <string name="SYS_LOCKED">Locked</string>
-  <string name="SYS_LOG_ALL_CHANGES">Log all changes</string>
-  <string name="SYS_LOG_ALL_CHANGES_DESC">Changes in profil fields are recorded for each user and each field. The previous and the new value will be logged as well as the user who performed the change and the time stamp. (Default: yes)</string>
+  <string name="SYS_LOG">Log</string>
+  <string name="SYS_LOG_ALLOW_DELETION">Allow deletion of the change history</string>
+  <string name="SYS_LOG_ALLOW_DELETION_DESC">Enable a button on the changelog page to delete parts or all of the changelog history.</string>
+  <string name="SYS_LOG_RECORDS_HIDDEN">Some or all changelog entries have been hidden due to insufficient user permissions to access them.</string>
+  <string name="SYS_LOGGED_TABLES">Logged tables</string>
+  <string name="SYS_LOGGED_TABLES_DESC">Select all types of objects for the changelog. For those objects, all individual modifications will be logged in the change history with old and new value, as well as modification time and user. If an object type is deselected, existing log entries are not deleted. This can be done in the changelog page.</string>
   <string name="SYS_LOGIN">Sign in</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">You have tried to login too many times recently using a wrong password.\nFor security reasons your account has been locked for 15 minutes.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Selected username already exists.\n\nPlease select another name.</string>
@@ -835,6 +852,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Participate with reservation</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">If this option is activated, a third option #VAR3_BOLD# is available in addition to #VAR1_BOLD# and #VAR2_BOLD# when registering for an event. (Default: disabled)</string>
+  <string name="SYS_MEETING_POINT">Meeting point</string>
   <string name="SYS_MEETINGS">Meetings</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Member</string>
@@ -846,6 +864,7 @@
   <string name="SYS_MEMBERS_PER_PAGE">Members displayed per page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Found #VAR1# members with a similar name.</string>
+  <string name="SYS_MEMBERSHIP_APPROVED">Membership approved</string>
   <string name="SYS_MEMBERSHIP_END">End of membership</string>
   <string name="SYS_MEMBERSHIP_DELETE">Would you like to end membership in role #VAR1_BOLD#?</string>
   <string name="SYS_MEMBERSHIP_START">Start of membership</string>
@@ -967,6 +986,7 @@
   <string name="SYS_ORDER">Order</string>
   <string name="SYS_ORGANIZATION">Organization</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_OTHER_TABLES">Other tables (third-party modules; only visible to administrators)</string>
   <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overview</string>
   <string name="SYS_PAGE">Page</string>
@@ -999,6 +1019,7 @@
   <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
+  <string name="SYS_PATH">Path</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
   <string name="SYS_PERIOD">Time period</string>
   <string name="SYS_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2#</string>
@@ -1089,6 +1110,7 @@
   <string name="SYS_REGISTRATIONS">Registrations</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Any regular expression can be stored that will be applied to the user's entered content in this profile field. The content must match the conditions of the regular expression for the entered value to be stored in the field. The regular expression is checked in addition to the general conditions of the data type.</string>
+  <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>
@@ -1139,6 +1161,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Role memberships</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Change role memberships</string>
   <string name="SYS_ROLE_NAME_EXISTS">Role with same name already exists in this category.</string>
+  <string name="SYS_ROLE_RIGHTS">Role Rights</string>
   <string name="SYS_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
   <string name="SYS_ROLE_SELECTION">Role selection</string>
   <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be restricted a configuration to the members of the selected roles.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
@@ -1325,6 +1348,7 @@
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it. If you do not want to send any of these notifications, leave the text field empty.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime.</string>
   <string name="SYS_TAB">Tab</string>
+  <string name="SYS_TABLE">Table</string>
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Set the template that is preselected when creating the e-card. (Default: postcard)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>

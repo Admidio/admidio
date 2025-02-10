@@ -19,6 +19,7 @@
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -175,6 +176,8 @@ try {
             );
         }
     }
+
+    ChangelogService::displayHistoryButton($page, 'guestbook', 'guestbook,guestbook_comments');
 
     $guestbook = new Topic($gDb);
 

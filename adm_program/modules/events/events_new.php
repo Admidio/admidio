@@ -21,6 +21,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -187,6 +188,8 @@ try {
         true
     );
 
+    ChangelogService::displayHistoryButton($page, 'events', 'events', !empty($getEventUuid), array('uuid' => $getEventUuid));
+    
     // show form
     $form = new Form(
         'adm_events_edit_form',

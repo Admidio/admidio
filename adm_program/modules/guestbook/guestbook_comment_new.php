@@ -18,6 +18,7 @@ use Admidio\Forum\Entity\Post;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -118,6 +119,8 @@ try {
     // create html page object
     $page = new HtmlPage('admidio-guestbook-comment-new', $headline);
 
+    ChangelogService::displayHistoryButton($page, 'guestbook_comments', 'guestbook_comments', !empty($getGbcUuid), array('uuid' => $getGbcUuid));
+    
     // show form
     $form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'gbc_uuid' => $getGbcUuid, 'mode' => $mode)), $page);
     if ($gCurrentUserId > 0) {

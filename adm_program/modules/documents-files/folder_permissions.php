@@ -18,6 +18,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -119,6 +120,8 @@ try {
     $page = new HtmlPage('admidio-documents-files-config-folder', $headline);
     $page->assignSmartyVariable('folderName', $folder->getValue('fol_name'));
 
+    ChangelogService::displayHistoryButton($page, 'folder ', 'folders,files,roles_rights_data', !empty($getAnnUuid), array('uuid' => $getFolderUuid));
+    
     // show form
     $form = new Form(
         'adm_folder_permissions_form',

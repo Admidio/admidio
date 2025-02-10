@@ -11,6 +11,7 @@ use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Session\Entity\Session;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\UI\Component\Form;
 use Admidio\UI\View\Installation;
 
@@ -112,6 +113,13 @@ try {
     // create an organization object of the current organization
     $gCurrentOrganization = Organization::createDefaultOrganizationObject($gDb, $g_organization);
     $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
+
+
+    /* Disable logging changes to the database. This will not be reverted,
+     *  i.e. during installation / setup no logs are written. The next user 
+     * call will use the default value of true and properly log changes...
+     */
+    Entity::setLoggingEnabled(false);
 
     // get system user id
     $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'System\' ';

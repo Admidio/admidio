@@ -22,6 +22,7 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\Form;
 use Admidio\Users\Entity\User;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -260,15 +261,17 @@ try {
                 );
             }
 
+            ChangelogService::displayHistoryButton($page, 'categoryreport', 'category_report');
+    
             // process changes in the navbar form with javascript submit
             $page->addJavascript(
                 '
-            $("#export_and_filter").change(function() {
-                $("#adm_navbar_filter_form_category_report").submit();
-            });
-            $("#crt_id").change(function() {
-                $("#adm_navbar_filter_form_category_report").submit();
-            });',
+                $("#export_and_filter").change(function() {
+                    $("#adm_navbar_filter_form_category_report").submit();
+                });
+                $("#crt_id").change(function() {
+                    $("#adm_navbar_filter_form_category_report").submit();
+                });',
                 true
             );
 

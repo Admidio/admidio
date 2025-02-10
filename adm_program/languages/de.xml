@@ -13,6 +13,7 @@
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht angemeldete Benutzer:innen wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer:innen in zu kurzen Zeitabständen hintereinander unerwünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Voreinstellung: 60 Sekunden)</string>
   <string name="GBO_GUESTBOOK">Gästebuch</string>
+  <string name="GBO_GUESTBOOK_COMMENTS">Gästebuch-Kommentare</string>
   <string name="GBO_GUESTBOOK_DESC">Gäste und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation aktivieren für</string>
   <string name="GBO_GUESTBOOK_MODERATION_DESC">Gästebucheinträge werden erst nach einer Sichtprüfung einer Administratorin oder eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Gästen, auch bei angemeldeten Benutzer:innen oder bei niemandem durchgeführt werden soll.  (Voreinstellung: Niemand)</string>
@@ -205,6 +206,7 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Voreinstellung: #VAR1#)</string>
+  <string name="ORG_ONLY_FOR_ADMINISTRATOR">Nur für Administratoren sichtbar</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</string>
@@ -286,6 +288,7 @@
   <string name="SYS_ALL_DAY">Ganztägig</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Veranstaltung, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
+  <string name="SYS_ALL_OTHERS">Alle weiteren</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
@@ -372,6 +375,9 @@
   <string name="SYS_CHANGE_DATE">Datum ändern</string>
   <string name="SYS_CHANGE_HISTORY">Änderungshistorie</string>
   <string name="SYS_CHANGE_HISTORY_OF">Änderungshistorie von #VAR1#</string>
+  <string name="SYS_CHANGE_HISTORY_GENERIC">Änderungshistorie: #VAR1#</string>
+  <string name="SYS_CHANGE_HISTORY_GENERIC2">Änderungshistorie: #VAR1# (#VAR2#)</string>
+  <string name="SYS_CHANGE_HISTORY_USERDATA">Änderungshistorie der Benutzerdaten und Mitgliedschaften</string>
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>
   <string name="SYS_CHANGED_AT">Geändert am</string>
   <string name="SYS_CHANGED_BY">Geändert von</string>
@@ -450,6 +456,7 @@
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATE_WEBLINK">Weblink anlegen</string>
+  <string name="SYS_CREATED">Angelegt</string>
   <string name="SYS_CREATED_AT">Angelegt am</string>
   <string name="SYS_CREATED_BY">Angelegt von</string>
   <string name="SYS_CREATED_BY_AND_AT">Angelegt von #VAR1# am #VAR2#</string>
@@ -527,6 +534,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Du darfst keine Systemkategorien löschen.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">Du kannst die Systemrolle #VAR1_BOLD# nicht löschen.</string>
+  <string name="SYS_DELETED">Gelöscht</string>
   <string name="SYS_DELETED_ENTRY">Gelöschter Eintrag</string>
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
@@ -618,6 +626,8 @@
   <string name="SYS_ENABLED">Aktiviert</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Kategoriereport aktivieren</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Der Kategoriereport erstellt eine Liste aller Rollen und Kategorien, der ein Mitglied zugeordnet ist. Die Berechtigung #VAR1_BOLD# ist für den Zugriff auf den Kategoriereport erforderlich. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_CHANGELOG">Aktiviere Änderungshistorie</string>
+  <string name="SYS_ENABLE_CHANGELOG_DESC">Die Änderungshistorie schreibt für jede Änderung an einem der ausgewählten Objekttypen einen Eintrag in die Log-Datenbank, inklusive des alten und neuen Wertes. Die Änderungshistorie kann nur von Administratoren oder Benutzern eingesehen werden, die Bearbeitungsrechte für das jeweilige Modul besitzen. Jede:r Benutzer:in kann auch die ihn/sie betreffenden Änderungen der Profildaten einsehen. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiviere Dokumente &amp; Dateien</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Modul Dokumente &amp; Dateien kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Download aktivieren</string>
@@ -747,6 +757,10 @@
   <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">Ein neuer Gästebucheintrag wurde angelegt auf #VAR1#</string>
   <string name="SYS_HALF_YEARLY">Halbjährlich</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
+  <string name="SYS_HEADER_CONTENT_MODULES">Inhalts-Module (Dokumente, Veranstaltungen, Ankündigungen, etc.)</string>
+  <string name="SYS_HEADER_PREFERENCES">Allgemeine Einstellungen</string>
+  <string name="SYS_HEADER_USER_ROLE_DATA">Benutzer-Profildaten und Gruppen</string>
+  <string name="SYS_HEADER_USER_ROLE_SETTINGS">Einstellungen zu Benutzern und Gruppen/Rollen</string>
   <string name="SYS_HEADLINE">Überschrift</string>
   <string name="SYS_HELP">Hilfe</string>
   <string name="SYS_HIDE">Ausblenden</string>
@@ -822,16 +836,19 @@
   <string name="SYS_LINK_TO">Link auf #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">Liste</string>
-  <string name="SYS_LOG">Protokoll</string>
-  <string name="SYS_MEETING_POINT">Treffpunkt</string>
+  <string name="SYS_LIST_COLUMNS">Listenspalten</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Speicherort der Profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
   <string name="SYS_LOCK">Sperren</string>
   <string name="SYS_LOCK_ALBUM">Album sperren</string>
   <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel ein Album vorübergehen sperren, während du gerade alle Bilder des Albums hochlädst.</string>
   <string name="SYS_LOCKED">Gesperrt</string>
-  <string name="SYS_LOG_ALL_CHANGES">Änderungen protokollieren</string>
-  <string name="SYS_LOG_ALL_CHANGES_DESC">Änderungen in Profilfeldern werden für jede:n Benutzer:in und jedes Feld mitgeschrieben. Dabei wird der bisherige und der neue Wert, sowie die Benutzerin bzw. der Benutzer, der die Änderung durchgeführt hat, mit Zeitstempel gespeichert. (Voreinstellung: ja)</string>
+  <string name="SYS_LOG">Protokoll</string>
+  <string name="SYS_LOG_ALLOW_DELETION">Löschen der Änderungshistorie zulassen</string>
+  <string name="SYS_LOG_ALLOW_DELETION_DESC">Auf der Seite mit der Änderungshistorie kann durch diese Einstellung eine Schaltfläche zur (teilweisen oder gesamten) Löschung der Änderungshistorie aktiviert werden.</string>
+  <string name="SYS_LOG_RECORDS_HIDDEN">Einige oder alle Einträge der Änderungshistorie wurden ausgeblendet, da du nicht die Berechtigungen für den Zugriff besitzt.</string>
+  <string name="SYS_LOGGED_TABLES">Objekte mit Änderungshistorie</string>
+  <string name="SYS_LOGGED_TABLES_DESC">Wählen Sie alle Objekttypen aus, für die eine Änderungshistorie geführt werden soll. Jede Änderung an diesen Objekten wird mitgeloggt, inklusive dem Zeitpunkt und dem Benutzer der Änderung. Wenn ein Objekttyp hier entfernt wird, wird die zugehörige Änderungshistorie nicht gelöscht. Dies ist auf der Seite mit der Änderungshistorie möglich.</string>
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Der gewählte Anmeldename existiert schon.\n\nWähle bitte einen anderen Namen.</string>
@@ -875,6 +892,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Benutzer:innen können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Voreinstellung: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Wenn diese Option aktiviert ist, ist bei der Anmeldung zu einer Veranstaltung eine dritte Option #VAR3_BOLD# zusätzlich zu #VAR1_BOLD# und #VAR2_BOLD# verfügbar. (Standard: deaktiviert)</string>
+  <string name="SYS_MEETING_POINT">Treffpunkt</string>
   <string name="SYS_MEETINGS">Treffen</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Mitglied</string>
@@ -886,6 +904,7 @@
   <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmende pro Seite</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Es wurden #VAR1# Mitglieder mit einem ähnlichen Namen gefunden.</string>
+  <string name="SYS_MEMBERSHIP_APPROVED">Mitgliedschaft genehmigt</string>
   <string name="SYS_MEMBERSHIP_END">Mitgliedschaftsende</string>
   <string name="SYS_MEMBERSHIP_DELETE">Willst du die Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich beenden?</string>
   <string name="SYS_MEMBERSHIP_START">Mitgliedschaftsbeginn</string>
@@ -1006,6 +1025,7 @@
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
+  <string name="SYS_OTHER_TABLES">Andere Tabellen (Drittanbieter, nur für Administrator sichtbar)</string>
   <string name="SYS_OVERHANG">Überhang</string>
   <string name="SYS_OVERVIEW">Übersicht</string>
   <string name="SYS_PAGE">Seite</string>
@@ -1038,6 +1058,7 @@
   <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
+  <string name="SYS_PATH">Pfad</string>
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
   <string name="SYS_PERIOD">Zeitraum</string>
   <string name="SYS_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
@@ -1130,6 +1151,7 @@
   <string name="SYS_REGISTRATIONS">Registrierungen</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulärer Ausdruck</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Es kann ein beliebiger regulärer Ausdruck hinterlegt werden, der auf den eingegebenen Inhalt des Benutzers in dieses Profilfeld angewendet wird. Der Inhalt muss den Bedingungen des regulären Ausdrucks entsprechen, damit der eingegebene Wert in dem Feld gespeichert werden kann. Der reguläre Ausdruck wird zusätzlich zu den allgemeinen Bedingungen des Datentyps geprüft.</string>
+  <string name="SYS_RELATED_TO">Verknüpft mit</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein:e Benutzer:in das Profil einer anderen Benutzerin oder eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer:innen das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur die Benutzer bzw. der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
@@ -1180,6 +1202,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
   <string name="SYS_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
+  <string name="SYS_ROLE_RIGHTS">Rollenberechtigungen</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Du hast keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wähle eine andere Rolle aus.</string>
   <string name="SYS_ROLE_SELECTION">Rollenauswahl</string>
   <string name="SYS_ROLE_SELECTION_CONF_DESC">Die Rollenauswahl kann über eine Konfiguration auf die Mitglieder der ausgewählten Rollen eingeschränkt werden.\n\n Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer bleiben.</string>
@@ -1361,6 +1384,7 @@
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst werden. Die Texte sind in zwei Teile unterteilt (Betreff und Inhalt) und werden durch #subject# und #content# gekennzeichnet. Der Inhalt für jeden Abschnitt folgt. Wenn du keine dieser Benachrichtigungen senden möchtest, lass das Textfeld leer.\n\nIn jeder Mail können die folgenden Platzhalter verwendet werden. Sie werden zur Laufzeit durch den entsprechenden Inhalt ersetzt.</string>
+  <string name="SYS_TABLE">Tabelle</string>
   <string name="SYS_TAB">Tabulator</string>
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Voreinstellung: Postcard)</string>
@@ -1402,6 +1426,7 @@
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER">Benutzer:in</string>
   <string name="SYS_USER_COULD_BE_CREATED">Die Person kann angelegt werden.</string>
+  <string name="SYS_USER_DELETE_DESC">Wollen Sie #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_DELETE_DESC">Willst du #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein:e Benutzer:in zu der übergebenen ID gefunden werden!</string>
   <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>

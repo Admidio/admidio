@@ -16,6 +16,7 @@
 use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -106,6 +107,8 @@ try {
         $mode = 'create_entry';
     }
 
+    ChangelogService::displayHistoryButton($page, 'guestbook', 'guestbook', !empty($getGboUuid), array('uuid' => $getGboUuid));
+    
     // show form
     $form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'mode' => $mode)), $page);
     if ($gCurrentUserId > 0) {

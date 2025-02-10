@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_menu
@@ -259,5 +260,18 @@ class MenuEntry extends Entity
             return parent::setValue($columnName, $newValue, $checkValue);
         }
         return false;
+    }
+    /**
+     * Adjust the changelog entry for this db record: Add the parent Menu / section as a related object
+     * 
+     * @param LogChanges $logEntry The log entry to adjust
+     * 
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry) {
+        if (!empty($this->getValue('men_men_id_parent'))) {
+            $folEntry = new MenuEntry($this->db, $this->getValue('men_men_id_parent'));
+            $logEntry->setLogRelated($folEntry->getValue('men_uuid'), $folEntry->getValue('men_name'));
+        }
     }
 }

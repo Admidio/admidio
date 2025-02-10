@@ -3,6 +3,7 @@ namespace Admidio\UI\View;
 
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\UI\Component\Form;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -11,6 +12,7 @@ use Admidio\Infrastructure\Utils\PhpIniUtils;
 use RuntimeException;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -82,6 +84,11 @@ class Preferences extends HtmlPage
                 'id' => 'regional_settings',
                 'title' => $gL10n->get('ORG_REGIONAL_SETTINGS'),
                 'icon' => 'bi-globe2'
+            ),
+            'changelog' => array(
+                'id' => 'changelog',
+                'title' => $gL10n->get('SYS_CHANGE_HISTORY'),
+                'icon' => 'bi-clock-history'
             ),
             'registration' => array(
                 'id' => 'registration',
@@ -439,6 +446,98 @@ class Preferences extends HtmlPage
         $formCategoryReport->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formCategoryReport);
         return $smarty->fetch('preferences/preferences.category-report.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the changelog preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the changelog report preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createChangelogForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formChangelog = new Form(
+            'adm_preferences_form_changelog',
+            'preferences/preferences.changelog.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Changelog')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_ADMINISTRATOR')
+        );
+        $formChangelog->addSelectBox(
+            'changelog_module_enabled',
+            $gL10n->get('SYS_ENABLE_CHANGELOG'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['changelog_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_ENABLE_CHANGELOG_DESC')
+        );
+
+        $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], ChangelogService::getTableLabel());
+        // $selectedTables = explode(',', $formValues['changelog_tables']??'');
+        $formChangelog->addCustomContent(
+            'changelog_tables',
+            $gL10n->get('SYS_LOGGED_TABLES'),
+            $gL10n->get('SYS_LOGGED_TABLES_DESC'),
+            array(
+                'tables' => array(
+                    array(
+                        'title' => $gL10n->get('SYS_HEADER_USER_ROLE_DATA'),
+                        'id' => 'user_role_data',
+                        'tables' => array('users', 'user_data', 'members', 'user_relations', 'roles', 'role_dependencies', 'category_report')
+                    ),
+                    array(
+                        'title' => $gL10n->get('SYS_HEADER_USER_ROLE_SETTINGS'),
+                        'id' => 'user_role_settings',
+                        'tables' => array('user_fields', 'user_relation_types', 'roles_rights', 'roles_rights_data')
+                    ),
+                    array(
+                        'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
+                        'id' => 'content_modules',
+                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'guestbook', 'guestbook_comments', 'links', 'others')
+                    ),
+                    array(
+                        'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
+                        'id' => 'preferences',
+                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories')
+                    )
+                )
+            )
+        );
+
+        foreach ($tablesMap as $tableName => $tableLabel) {
+            $formChangelog->addCheckbox(
+                'changelog_table_'.$tableName, 
+                "$tableLabel ($tableName)",
+                $formValues['changelog_table_'.$tableName]??false,
+                array()
+            );
+        }
+
+        // $formChangelog->addCheckbox(
+        //     'changelog_allow_deletion',
+        //     $gL10n->get('SYS_LOG_ALLOW_DELETION'),
+        //     (bool)($formValues['changelog_allow_deletion']??false),
+        //     array('helpTextId' => 'SYS_LOG_ALLOW_DELETION_DESC')
+        // );
+
+        $formChangelog->addSubmitButton(
+            'adm_button_save_changelog',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formChangelog->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formChangelog);
+        return $smarty->fetch('preferences/preferences.changelog.tpl');
     }
 
     /**
@@ -1567,12 +1666,6 @@ class Preferences extends HtmlPage
             array('helpTextId' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
         );
         $formProfile->addCheckbox(
-            'profile_log_edit_fields',
-            $gL10n->get('SYS_LOG_ALL_CHANGES'),
-            (bool)$formValues['profile_log_edit_fields'],
-            array('helpTextId' => 'SYS_LOG_ALL_CHANGES_DESC')
-        );
-        $formProfile->addCheckbox(
             'profile_show_map_link',
             $gL10n->get('SYS_SHOW_MAP_LINK'),
             (bool)$formValues['profile_show_map_link'],
@@ -2061,6 +2154,8 @@ class Preferences extends HtmlPage
      */
     public function show()
     {
+        global $gSettingsManager, $gL10n;
+
         if ($this->preferencesPanelToShow !== '') {
             // open the modules tab if the options of a module should be shown
             if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
@@ -2094,7 +2189,7 @@ class Preferences extends HtmlPage
 
         $this->addJavascript(
             '
-            var panels = ["common", "security", "regional_settings", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
+            var panels = ["common", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
                 "announcements", "contacts", "documents_files", "photos", "guestbook", "groups_roles", "category_report", "messages", "profile", "events", "links"];
 
             for(var i = 0; i < panels.length; i++) {
@@ -2137,6 +2232,18 @@ class Preferences extends HtmlPage
             true
         );
 
+        ChangelogService::displayHistoryButton($this, 'preferences', 'preferences,texts');
+
+        // Load the select2 in case any of the form uses a select box. Unfortunately, each section 
+        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading, 
+        // so we need to do it here, even when no selectbox will be used...
+        // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
+    
+        
         $this->assignSmartyVariable('accordionCommonPanels', $this->accordionCommonPanels);
         $this->assignSmartyVariable('accordionModulePanels', $this->accordionModulePanels);
         $this->addTemplateFile('preferences/preferences.tpl');

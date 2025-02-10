@@ -33,7 +33,7 @@ class ProfileFields extends HtmlPage
      */
     public function createEditForm(string $profileFieldUUID = '')
     {
-        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb;
+        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb, $gSettingsManager;
 
         // Create user-defined field object
         $userField = new ProfileField($gDb);
@@ -73,6 +73,8 @@ class ProfileFields extends HtmlPage
             });
             $("#usf_type").trigger("change");', true
         );
+
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields', !empty($profileFieldUUID), array('uuid' => $profileFieldUUID));
 
         // show form
         $form = new Form(
@@ -260,7 +262,7 @@ class ProfileFields extends HtmlPage
      */
     public function createList()
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gSettingsManager;
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
@@ -301,6 +303,8 @@ class ProfileFields extends HtmlPage
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'USF')),
             'bi-hdd-stack-fill'
         );
+
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields');
 
         $sql = 'SELECT *
                   FROM ' . TBL_USER_FIELDS . '
