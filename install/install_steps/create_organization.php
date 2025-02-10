@@ -101,12 +101,12 @@ if ($mode === 'html') {
     $_SESSION['orga_timezone']  = $formValues['adm_organization_timezone'];
 
     if (!in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true)) {
-        throw new Exception($gL10n->get('SYS_FIELD_INVALID_INPUT', array('ORG_TIMEZONE')));
+        throw new Exception('SYS_FIELD_INVALID_INPUT', array('ORG_TIMEZONE'));
     }
 
     // allow only letters, numbers and special characters like .-_+@
     if (!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar')) {
-        throw new Exception($gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')));
+        throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
     }
 
     echo json_encode(array(
