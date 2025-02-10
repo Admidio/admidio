@@ -781,7 +781,7 @@ class Folder extends Entity
     }
 
     /**
-    * Adjust the changelog entry for this db record: Add the parent folder as a related object
+     * Adjust the changelog entry for this db record: Add the parent folder as a related object
      * 
      * @param LogChanges $logEntry The log entry to adjust
      * 

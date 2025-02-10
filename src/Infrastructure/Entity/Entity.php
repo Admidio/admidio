@@ -52,7 +52,7 @@ class Entity
     /**
      * @var string Name of the unique autoincrement index column of the database table
      */
-    protected string $keyColumnName;
+    protected string $keyColumnName = '';
     /**
      * @var Database An object of the class Database for communication with the database
      */
@@ -913,10 +913,7 @@ class Entity
                 if (str_starts_with($columnName, $this->columnPrefix . '_')) {
                     $this->dbColumns[$columnName] = '';
 
-                    // Set the first column as key column automatically as fall-back. A later 
-                    // auto-increment column will override anyway, but tables without an auto-
-                    // increment column also need some value for the keyColumName.
-                    if ($property['serial'] || !isset($this->keyColumnName)) {
+                    if ($property['serial']) {
                         $this->keyColumnName = $columnName;
                     }
                 }

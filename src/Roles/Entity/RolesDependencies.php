@@ -18,21 +18,6 @@ use Admidio\Changelog\Entity\LogChanges;
 class RolesDependencies extends Entity
 {
     /**
-     * Constructor that will create an object of a recordset of the table adm_roles_dependencies.
-     * If the id is set than the specific category will be loaded.
-     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int $objectId ID of the object of which the roles should be loaded.
-     * @throws Exception
-     */
-    public function __construct(Database $database)
-    {
-        parent::__construct($database, TBL_ROLE_DEPENDENCIES, 'rld');
-        // The DB table does not have an auto-increment key, so use the first column instead (most things won't
-        // work, but dependencies should never be loaded individually by ID anyway)
-        $this->keyColumnName = '';
-    }
-
-    /**
      * Deletes the selected record of the table and initializes the class
      * Since the role_dependencies table does not have a single auto-increment 
      * key, but two columne (parent-child), we have to override the parent't 
@@ -59,7 +44,7 @@ class RolesDependencies extends Entity
     }
 
     /**
-     * Retrieve the list of database fields that are ignored for the changelog.
+     * List of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns. Subclasses can also add further fields 
      * (e.g. the users table stores and auto-increments the login count, which 
