@@ -112,7 +112,7 @@ if ($mode === 'html') {
 
     // username should only have valid chars
     if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar')) {
-        throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_USERNAME'));
+        throw new Exception($gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_USERNAME')));
     }
 
     // Password min length is 8 chars

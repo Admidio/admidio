@@ -153,12 +153,12 @@ if ($mode === 'html') {
 
     // Check database
     if (strlen($_SESSION['db_name']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_name']) !== 1) {
-        throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_DATABASE'));
+        throw new Exception($gL10n->get('SYS_FIELD_INVALID_INPUT', array('SYS_DATABASE')));
     }
 
     // Check user
     if (strlen($_SESSION['db_username']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_username']) !== 1) {
-        throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_USERNAME'));
+        throw new Exception($gL10n->get('SYS_FIELD_INVALID_INPUT', array('SYS_USERNAME')));
     }
 
     // Check password
@@ -169,7 +169,7 @@ if ($mode === 'html') {
 
     // Check prefix
     if (strlen($_SESSION['table_prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_SESSION['table_prefix']) !== 1) {
-        throw new Exception('SYS_FIELD_INVALID_INPUT', array('INS_TABLE_PREFIX'));
+        throw new Exception($gL10n->get('SYS_FIELD_INVALID_INPUT', array('INS_TABLE_PREFIX')));
     }
 
     // for security reasons only check database connection if no config file exists
@@ -181,7 +181,7 @@ if ($mode === 'html') {
             $db->checkWriteAccess();
             $gDebug = false;
         } catch (Exception $e) {
-            throw new Exception('SYS_DATABASE_NO_LOGIN', array($e->getMessage()));
+            throw new Exception($gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getMessage())));
         }
 
         // check database version
