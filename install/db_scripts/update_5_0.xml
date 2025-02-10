@@ -9,6 +9,7 @@
     <step id="70">UPDATE %PREFIX%_menu SET men_icon = 'newspaper' WHERE men_icon = 'fa-newspaper'</step>
     <step id="80">UPDATE %PREFIX%_menu SET men_icon = 'calendar-week-fill' WHERE men_icon = 'fa-calendar-alt'</step>
     <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'file-earmark-arrow-down-fill' WHERE men_icon = 'fa-file-download'</step>
+    <step id="95">UPDATE %PREFIX%_menu SET men_icon = 'box-seam-fill' WHERE men_icon = 'fa-warehouse'</step>
     <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'envelope-fill' WHERE men_icon = 'fa-comments'</step>
     <step id="110">UPDATE %PREFIX%_menu SET men_icon = 'image-fill' WHERE men_icon = 'fa-image'</step>
     <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'link-45deg' WHERE men_icon = 'fa-link'</step>

@@ -128,6 +128,21 @@ $defaultOrgPreferences = array(
     'documents_files_module_enabled'  => '1',
     'documents_files_max_upload_size' => '3',
 
+    // Inventory
+    'inventory_module_enabled'              => '2',
+    'inventory_items_per_page'              => '25',
+    'inventory_field_history_days'          => '365',
+    'inventory_system_field_names_editable' => '0',
+    'inventory_allow_keeper_edit'           => '0',
+    'inventory_allowed_keeper_edit_fields'  => '((IN_INVENTORY#_#LAST_RECEIVER#_#RECEIVED_ON#_#RECEIVED_BACK_ON))',
+    'inventory_current_user_default_keeper' => '0',
+    'inventory_allow_negative_numbers'      => '1',
+    'inventory_decimal_places'              => '1',
+    'inventory_field_date_time_format'      => 'date',
+    'inventory_profile_view'                => '((0))',
+    'inventory_export_filename'            => 'Inventory',
+    'inventory_add_date'                    => '0',
+
     // Events
     'events_list_configuration'   => '',
     'events_ical_export_enabled'  => '1',
