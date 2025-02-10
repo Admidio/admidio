@@ -142,6 +142,11 @@ class Preferences extends HtmlPage
                 'title' => $gL10n->get('SYS_DOCUMENTS_FILES'),
                 'icon' => 'bi-file-earmark-arrow-down-fill'
             ),
+            'inventory' => array(
+                'id' => 'inventory',
+                'title' => $gL10n->get('SYS_INVENTORY'),
+                'icon' => 'bi-box-seam-fill'
+            ),
             'photos' => array(
                 'id' => 'photos',
                 'title' => $gL10n->get('SYS_PHOTOS'),
@@ -770,6 +775,166 @@ class Preferences extends HtmlPage
         $formDocumentsFiles->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formDocumentsFiles);
         return $smarty->fetch('preferences/preferences.documents-files.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the inventory preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the inventory preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createInventoryForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
+        static $inventoryArrayDbToken = '#_#';
+        $formValues = $gSettingsManager->getAll();
+
+        $formInventory = new Form(
+            'adm_preferences_form_inventory',
+            'preferences/preferences.inventory.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Inventory')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        // standard module settings
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formInventory->addSelectBox(
+            'inventory_module_enabled',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+        );
+
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $formInventory->addSelectBox(
+            'inventory_items_per_page',
+            $gL10n->get('SYS_INVENTORY_ITEMS_PER_PAGE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_items_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
+        );
+
+        $formInventory->addInput(
+            'inventory_field_history_days',
+            $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
+            $formValues['inventory_field_history_days'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
+        );
+
+        // general settings
+        $formInventory->addSeperator(
+            'inventory_seperator_general_settings',
+            $gL10n->get('SYS_COMMON')
+        );
+        
+        $formInventory->addCheckbox(
+            'inventory_system_field_names_editable',
+            $gL10n->get('SYS_INVENTORY_SYSTEM_FIELD_NAME_EDIT'),
+            $formValues['inventory_system_field_names_editable'],
+            array('helpTextIdInline' => 'SYS_INVENTORY_SYSTEM_FIELD_NAME_EDIT_DESC')
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_allow_keeper_edit',
+            $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
+            $formValues['inventory_allow_keeper_edit'],
+            array('helpTextIdInline' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
+        );
+        
+        $selectBoxEntries = array();
+/*         foreach ($items->mItemFields as $itemField) {
+            $selectBoxEntries[$itemField->getValue('imf_name_intern')] = $itemField->getValue('imf_name');
+        } */
+        $formInventory->addSelectBox(
+            'inventory_allowed_keeper_edit_fields',
+            $gL10n->get('SYS_INVENTORY_ACCESS_EDIT_FIELDS'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_allowed_keeper_edit_fields'], 'helpTextIdInline' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true)
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_current_user_default_keeper',
+            $gL10n->get('SYS_INVENTORY_USE_CURRENT_USER'),
+            (bool)$formValues['inventory_current_user_default_keeper'],
+            array('helpTextIdInline' => 'SYS_INVENTORY_USE_CURRENT_USER_DESC')
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_allow_negative_numbers',
+            $gL10n->get('SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS'),
+            (bool)$formValues['inventory_allow_negative_numbers'],
+            array('helpTextIdInline' => 'SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC')
+        );
+
+        $formInventory->addInput(
+            'inventory_decimal_places',
+            $gL10n->get('SYS_INVENTORY_DECIMAL_PLACES'),
+            $formValues['inventory_decimal_places'],
+            array('type' => 'number','minNumber' => 0, 'property' => Form::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC')
+        );
+
+        $selectBoxEntries = array('date' => $gL10n->get('SYS_DATE'), 'datetime' => $gL10n->get('SYS_DATE') .' & ' .$gL10n->get('SYS_TIME'));
+        $formInventory->addSelectBox(
+            'inventory_field_date_time_format',
+            $gL10n->get('SYS_INVENTORY_DATETIME_FORMAT'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_field_date_time_format'], 'showContextDependentFirstEntry' => false)
+        );
+
+        // profile view settings
+        $formInventory->addSeperator(
+            'inventory_seperator_profile_view_settings',
+            $gL10n->get('SYS_INVENTORY_PROFILE_VIEW')
+        );
+
+        $selectBoxEntries = array();
+/*         foreach ($items->mItemFields as $itemField) {
+            if ($itemField->getValue('imf_name_intern') == 'ITEMNAME') {
+                continue;
+            }
+            $selectBoxEntries[$itemField->getValue('imf_name_intern')] = $itemField->getValue('imf_name');
+        } */
+        $formInventory->addSelectBox(
+            'inventory_profile_view',
+            $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_profile_view'], 'helpTextIdInline' => 'SYS_INVENTORY_PROFILE_VIEW_DESC', 'multiselect' => true, 'helpTextIdLabel' => $gL10n->get('SYS_INVENTORY_PROFILE_VIEW_DESC2'))
+        );
+
+        // export settings
+        $formInventory->addSeperator(
+            'inventory_seperator_export_settings',
+            $gL10n->get('SYS_INVENTORY_EXPORT')
+        );
+        
+        $formInventory->addInput(
+            'inventory_export_filename',
+            $gL10n->get('SYS_INVENTORY_FILENAME'),
+            $formValues['inventory_export_filename'],
+            array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_INVENTORY_FILENAME_DESC')
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_add_date',
+            $gL10n->get('SYS_INVENTORY_ADD_DATE'),
+            (bool)$formValues['inventory_add_date'],
+            array('helpTextIdInline' => 'SYS_INVENTORY_ADD_DATE_DESC')
+        );
+        
+        $formInventory->addSubmitButton(
+            'adm_button_save_inventory',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formInventory->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formInventory);
+        return $smarty->fetch('preferences/preferences.inventory.tpl');
     }
 
     /**
@@ -2190,7 +2355,7 @@ class Preferences extends HtmlPage
         $this->addJavascript(
             '
             var panels = ["common", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
-                "announcements", "contacts", "documents_files", "photos", "guestbook", "groups_roles", "category_report", "messages", "profile", "events", "links"];
+                "announcements", "contacts", "documents_files", "inventory", "photos", "guestbook", "groups_roles", "category_report", "messages", "profile", "events", "links"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#adm_panel_preferences_" + panels[i] + " .accordion-header").click(function (e) {
