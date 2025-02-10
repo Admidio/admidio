@@ -547,6 +547,14 @@ class GroupsRoles extends HtmlPage
                     array('helpTextId' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'bi-file-earmark-arrow-down-fill')
                 );
             }
+            if ($gSettingsManager->get('inventory_module_enabled') > 0) {
+                $form->addCheckbox(
+                    'rol_edit_inventory',
+                    $gL10n->get('SYS_RIGHT_INVENTORY'),
+                    (bool)$role->getValue('rol_edit_inventory'),
+                    array('helpTextId' => 'SYS_RIGHT_INVENTORY_DESC', 'icon' => 'bi-box-seam-fill')
+                );
+            }
             if ((int)$gSettingsManager->get('enable_guestbook_module') > 0) {
                 $form->addCheckbox(
                     'rol_guestbook',
@@ -677,6 +685,9 @@ class GroupsRoles extends HtmlPage
             }
             if ($role->getValue('rol_documents_files') == 1 && (int)$gSettingsManager->getBool('documents_files_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
+            }
+            if ($role->getValue('rol_edit_inventory') == 1 && (int)$gSettingsManager->get('inventory_module_enabled') > 0) {
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-box-seam-fill', 'title' => $gL10n->get('SYS_RIGHT_INVENTORY'));
             }
             if ($role->getValue('rol_guestbook') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-book-half', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK'));

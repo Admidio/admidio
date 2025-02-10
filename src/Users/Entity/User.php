@@ -257,6 +257,7 @@ class User extends Entity
                 'rol_assign_roles' => false,
                 'rol_events' => false,
                 'rol_documents_files' => false,
+                'rol_edit_inventory' => false,
                 'rol_edit_user' => false,
                 'rol_guestbook' => false,
                 'rol_guestbook_comments' => false,
@@ -2070,6 +2071,16 @@ class User extends Entity
     public function adminDocumentsFiles(): bool
     {
         return $this->checkRolesRight('rol_documents_files');
+    }
+
+        /**
+     * Method checks if the current user is allowed to administrate the inventory module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function editInventory(): bool
+    {
+        return $this->checkRolesRight('rol_edit_inventory');
     }
 
     /**
