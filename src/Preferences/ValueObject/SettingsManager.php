@@ -2,6 +2,7 @@
 namespace Admidio\Preferences\ValueObject;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 
 /**
@@ -313,10 +314,11 @@ class SettingsManager
      */
     private function insert(string $name, string $value)
     {
-        $sql = 'INSERT INTO '.TBL_PREFERENCES.'
-                       (prf_org_id, prf_name, prf_value)
-                VALUES (?, ?, ?) -- $orgId, $name, $value';
-        $this->db->queryPrepared($sql, array($this->orgId, $name, $value));
+        $prf = new Entity($this->db, TBL_PREFERENCES, 'prf');
+        $prf->setValue('prf_org_id', $this->orgId);
+        $prf->setValue('prf_name', $name);
+        $prf->setValue('prf_value', $value);
+        $prf->save();
     }
 
     /**
@@ -393,11 +395,13 @@ class SettingsManager
      */
     private function update(string $name, string $value)
     {
-        $sql = 'UPDATE '.TBL_PREFERENCES.'
-                   SET prf_value  = ? -- $value
-                 WHERE prf_org_id = ? -- $orgId
-                   AND prf_name   = ? -- $name';
-        $this->db->queryPrepared($sql, array($value, $this->orgId, $name));
+        $prf = new Entity($this->db, TBL_PREFERENCES, 'prf');
+        $found = $prf->readDataByColumns(array('prf_org_id' => $this->orgId, 'prf_name' => $name));
+
+        if ($found) {
+            $prf->setValue('prf_value', $value);
+            $prf->save();
+        }
     }
 
     /**

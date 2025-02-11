@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Changelog\Service;
 
+use Admidio\Roles\Entity\RolesDependencies;
 use HtmlPage;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
@@ -34,6 +35,7 @@ use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
 use Admidio\Weblinks\Entity\Weblink;
+use ModuleEvents;
 
 use Admidio\Roles\Service\RoleService;
 
@@ -182,8 +184,8 @@ class ChangelogService {
                 //return new RolesRights($gDb, '', 0);
             case 'roles_rights_data':
                 return new RolesRightsData($gDb);
-            //case 'role_dependencies':
-                // Does not use an Entity-derived class; so far, changes are NOT logged
+            case 'role_dependencies':
+                return new RolesDependencies($gDb);
             case 'rooms':
                 return new Room($gDb);
             case 'texts':
@@ -236,11 +238,30 @@ class ChangelogService {
             'URL' => $gL10n->get('SYS_URL')
         );
 
+        $memApprovedValues = array(
+            ModuleEvents::MEMBER_APPROVAL_STATE_INVITED => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_INVITED',
+                'icon' => 'calendar2-check-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_ATTEND',
+                'icon' => 'check-circle-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_TENTATIVE',
+                'icon' => 'question-circle-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_CANCELED',
+                'icon' => 'x-circle-fill'
+            )
+        );
+
         return array(
             'mem_begin' =>                 'SYS_MEMBERSHIP_START',
             'mem_end' =>                   'SYS_MEMBERSHIP_END',
             'mem_leader' =>                array('name' => 'SYS_LEADER', 'type' => 'BOOL'),
-            'mem_approved' =>              array('name' => 'SYS_MEMBERSHIP_APPROVED', 'type' => 'BOOL'),
+            'mem_approved' =>              array('name' => 'SYS_MEMBERSHIP_APPROVED', 'type' => 'CUSTOM_LIST', 'entries' => $memApprovedValues),
             'mem_count_guests' =>          'SYS_SEAT_AMOUNT',
             'mem_timestamp_change' =>      'SYS_CHANGED_AT',
             'mem_usr_id_change' =>         'SYS_CHANGED_BY',
@@ -500,7 +521,7 @@ class ChangelogService {
             case 'roles':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
             case 'roles_rights':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
             case 'roles_rights_data':
                 // The log_record_linkid contains the table and the uuid encoded as 'table':'UUID' => split and call Create linke with the new table!
                 if (strpos($id, ':') !== false) {
@@ -511,7 +532,7 @@ class ChangelogService {
                 }
                 return self::createLink($text, $table, $id, $id); 
             case 'role_dependencies':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
             case 'rooms':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
             // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
@@ -663,7 +684,21 @@ class ChangelogService {
                     $htmlValue = $obj->readableName();
                     break;
                 case 'CUSTOM_LIST':
-                    $htmlValue = $entries[$value]??$value;
+                    $value = $entries[$value]??$value;
+                    $htmlValue = '';
+                    if (is_array($value)) {
+                        if (isset($value['icon'])) {
+                            $htmlValue .= '<div class="bi bi-'.$value['icon'].'"> ';
+                        }
+                        if (isset($value['text'])) {
+                            $htmlValue .=  $gL10n-> get($value['text']);
+                        }
+                        if (isset($value['icon'])) {
+                            $htmlValue .= '</div>';
+                        }
+                    } else {
+                        $htmlValue = $value;
+                    }
                     break;
 
 

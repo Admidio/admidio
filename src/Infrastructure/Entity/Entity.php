@@ -52,7 +52,7 @@ class Entity
     /**
      * @var string Name of the unique autoincrement index column of the database table
      */
-    protected string $keyColumnName;
+    protected string $keyColumnName = '';
     /**
      * @var Database An object of the class Database for communication with the database
      */
@@ -247,7 +247,9 @@ class Entity
             $this->columnPrefix . '_usr_id_create',
             $this->columnPrefix . '_timestamp_create',
             $this->columnPrefix . '_usr_id_change', 
-            $this->columnPrefix . '_timestamp_change'
+            $this->columnPrefix . '_timestamp_change',
+            $this->columnPrefix . '_usr_id', 
+            $this->columnPrefix . '_timestamp'
         ];
         return $ignored;
     }
@@ -284,7 +286,7 @@ class Entity
         }
 
         $logEntry = new LogChanges($this->db);
-        $logEntry->setLogCreation($table, $this->dbColumns[$this->keyColumnName], $uuid, $record_name);
+        $logEntry->setLogCreation($table, $this->dbColumns[$this->keyColumnName]??0, $uuid, $record_name);
         $this->adjustLogEntry($logEntry);
         return $logEntry->save();
     }
@@ -308,7 +310,7 @@ class Entity
 
 
         $logEntry = new LogChanges($this->db);
-        $logEntry->setLogDeletion($table, $this->dbColumns[$this->keyColumnName], $uuid, $record_name);
+        $logEntry->setLogDeletion($table, $this->dbColumns[$this->keyColumnName]??0, $uuid, $record_name);
         $this->adjustLogEntry($logEntry);
         return $logEntry->save();
     }
@@ -810,12 +812,12 @@ class Entity
                     VALUES ('.Database::getQmForValues($sqlFieldArray).')';
             if ($this->db->queryPrepared($sql, $queryParams) !== false) {
                 $returnCode = true;
-                $this->insertRecord = false;
                 if ($this->keyColumnName !== '') {
                     $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
-                    $this->logCreation();
-                    $this->logModifications($logChanges);
                 }
+                $this->logCreation();
+                $this->logModifications($logChanges);
+                $this->insertRecord = false;
             }
         } else {
             $sql = 'UPDATE '.$this->tableName.'

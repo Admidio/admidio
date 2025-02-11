@@ -6,6 +6,7 @@ use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\UI\Component\Form;
 use HtmlPage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
