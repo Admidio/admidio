@@ -22,6 +22,7 @@ use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -187,6 +188,8 @@ try {
     });',
         true
     );
+
+    ChangelogService::displayHistoryButton($page, 'events', 'events', !empty($getEventUuid), array('uuid' => $getEventUuid));
 
     // show form
     $form = new FormPresenter(

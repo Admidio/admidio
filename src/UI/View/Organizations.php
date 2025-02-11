@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -31,7 +32,7 @@ class Organizations extends PagePresenter
      */
     public function createEditForm()
     {
-        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession;
+        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession, $gSettingsManager;
         $this->addJavascript('
             $("#adm_button_save").hide();
 
@@ -42,6 +43,9 @@ class Organizations extends PagePresenter
                 $("#adm_button_save").show("slow");
             })
         ', true);
+
+        // show link to view profile field change history
+        ChangelogService::displayHistoryButton($this, 'organizations', 'organizations');
 
         // show form
         $formOrganization = new FormPresenter(

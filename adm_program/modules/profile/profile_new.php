@@ -28,6 +28,7 @@ use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -100,6 +101,9 @@ try {
 
         // create html page object
         $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-edit', $headline);
+
+        // show link to view profile field change history
+        ChangelogService::displayHistoryButton($page, 'profile', 'users,user_data,user_relations,members', !empty($getUserUuid) && $gCurrentUser->hasRightEditProfile($user), array('uuid' => $getUserUuid));
 
         // create html form
         $form = new FormPresenter(

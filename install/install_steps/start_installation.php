@@ -15,6 +15,7 @@ use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 

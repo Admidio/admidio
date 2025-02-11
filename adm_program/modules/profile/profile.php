@@ -20,6 +20,7 @@ use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -243,14 +244,7 @@ try {
     }
 
     // show link to view profile field change history
-    if ($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasRightEditProfile($user)) {
-        $page->addPageFunctionsMenuItem(
-            'menu_item_profile_change_history',
-            $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/profile_field_history.php', array('user_uuid' => $getUserUuid)),
-            'bi-clock-history'
-        );
-    }
+    ChangelogService::displayHistoryButton($page, 'profile', 'users,user_data,user_relations,members', $gCurrentUser->hasRightEditProfile($user), array('uuid' => $getUserUuid));
 
     // show link to export the profile as vCard
     $page->addPageFunctionsMenuItem(

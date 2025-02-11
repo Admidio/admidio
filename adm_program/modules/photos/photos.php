@@ -18,6 +18,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -165,6 +166,8 @@ try {
             'bi-download'
         );
     }
+
+    ChangelogService::displayHistoryButton($page, 'photos', 'photos', !empty($getPhotoUuid), array('uuid' => $getPhotoUuid));
 
     if ($getPhotoUuid !== '') {
         // show additional album information

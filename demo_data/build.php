@@ -44,6 +44,7 @@ require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 
 // this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
 const TBL_DATES = TABLE_PREFIX . '_dates';
+const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
 
 /**
  * Deletes all files and folder within adm_my_files except the config.php . After that all

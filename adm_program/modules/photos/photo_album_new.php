@@ -17,6 +17,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -97,6 +98,8 @@ try {
 
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-photo-album-edit', $headline);
+
+    ChangelogService::displayHistoryButton($page, 'photos', 'photos', !empty($getPhotoUuid), array('uuid' => $getPhotoUuid));
 
     // show form
     $form = new FormPresenter(

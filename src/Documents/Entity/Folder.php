@@ -7,6 +7,7 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_folders
@@ -205,25 +206,19 @@ class Folder extends Entity
      * Deletes the selected record of the table and all references in other tables.
      * Also, all files, subfolders and the selected folder will be deleted in the file system.
      * After that the class will be initialized.
-     * @param int $folderId
      * @return bool **true** if no error occurred
      * @throws Exception
      */
-    public function delete(int $folderId = 0): bool
+    public function delete(): bool
     {
         global $gLogger;
 
-        $folId = (int)$this->getValue('fol_id');
-        $folderPath = '';
-
-        if ($folderId === 0) {
-            if ($this->getValue('fol_name') === '') {
-                return false;
-            }
-
-            $folderId = (int)$this->getValue('fol_id');
-            $folderPath = $this->getFullFolderPath();
+        if ($this->getValue('fol_name') === '') {
+            return false;
         }
+
+        $folderId = (int)$this->getValue('fol_id');
+        $folderPath = $this->getFullFolderPath();
 
         $this->db->startTransaction();
 
@@ -231,29 +226,19 @@ class Folder extends Entity
 
         while ($rowFolId = (int)$subfoldersStatement->fetchColumn()) {
             // rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->delete($rowFolId);
+            $subfol = new Folder($this->db, $rowFolId);
+            $subfol->delete();
         }
 
-        // In the database delete the files of the current folder_id
-        $sqlDeleteFiles = 'DELETE FROM ' . TBL_FILES . '
-                            WHERE fil_fol_id = ? -- $folderId';
-        $this->db->queryPrepared($sqlDeleteFiles, array($folderId));
+        $files = $this->getFilesWithProperties();
+        foreach ($files as $f) {
+            $fl = new File($this->db, $f['fil_id']);
+            $fl->delete();
+        }
 
         // delete all roles assignments that have the right to view this folder
-        if ($folderId === $folId) {
-            $this->folderViewRolesObject->delete();
-            $this->folderUploadRolesObject->delete();
-        } else {
-            $folderViewRoles = new RolesRights($this->db, 'folder_view', $folderId);
-            $folderViewRoles->delete();
-            $folderUploadRoles = new RolesRights($this->db, 'folder_upload', $folderId);
-            $folderUploadRoles->delete();
-        }
-
-        // Delete the entry of the folder itself in the database
-        $sqlDeleteFolder = 'DELETE FROM ' . TBL_FOLDERS . '
-                             WHERE fol_id = ? -- $folderId';
-        $this->db->queryPrepared($sqlDeleteFolder, array($folderId));
+        $this->folderViewRolesObject->delete();
+        $this->folderUploadRolesObject->delete();
 
         // physically delete the directory from the disk
         if ($folderPath !== '') {
@@ -265,12 +250,8 @@ class Folder extends Entity
             }
         }
 
-        $returnCode = true;
-
         // Even if the physical deletion fails, everything is deleted in the DB...
-        if ($folderId === $folId) {
-            $returnCode = parent::delete();
-        }
+        $returnCode = parent::delete();
 
         $this->db->endTransaction();
 
@@ -322,27 +303,20 @@ class Folder extends Entity
     /**
      * Set the public flag to a folder and all sub-folders.
      * @param bool $publicFlag If set to **1** then all users could see this folder.
-     * @param int $folderId The id of the folder where the public flag should be set.
      * @throws Exception
      */
-    public function editPublicFlagOnFolder(bool $publicFlag, int $folderId = 0)
+    public function editPublicFlagOnFolder(bool $publicFlag)
     {
-        if ($folderId === 0) {
-            $folderId = (int)$this->getValue('fol_id');
-            $this->setValue('fol_public', (int)$publicFlag);
-        }
+        $folderId = (int)$this->getValue('fol_id');
+        $this->setValue('fol_public', (int)$publicFlag);
 
         $subfoldersStatement = $this->getSubfolderStatement($folderId);
 
         while ($folId = (int)$subfoldersStatement->fetchColumn()) {
-            // recursive call with every single subfolder
-            $this->editPublicFlagOnFolder($publicFlag, $folId);
+            $subfol = new Folder($this->db, $folId);
+            $subfol->editPublicFlagOnFolder($publicFlag);
+            $subfol->save();
         }
-
-        $sqlUpdate = 'UPDATE ' . TBL_FOLDERS . '
-                         SET fol_public = ? -- $publicFlag
-                       WHERE fol_id = ? -- $folderId';
-        $this->db->queryPrepared($sqlUpdate, array((int)$publicFlag, $folderId));
     }
 
     /**
@@ -743,30 +717,23 @@ class Folder extends Entity
      * Benennt eine Ordnerinstanz um und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
      * @param string $newName
      * @param string $newPath
-     * @param int $folderId
      * @throws Exception
      */
-    public function rename(string $newName, string $newPath, int $folderId = 0)
+    public function rename(string $newName, string $newPath)
     {
-        if ($folderId === 0) {
-            $folderId = (int)$this->getValue('fol_id');
-            $this->setValue('fol_name', $newName);
-            $this->save();
-        }
+        $folderId = (int)$this->getValue('fol_id');
+        $this->setValue('fol_name', $newName);
+        $this->setValue('fol_path', newValue: $newPath);
+        $this->save();
 
         $this->db->startTransaction();
-
-        // Set new path in database for folderId
-        $sqlUpdate = 'UPDATE ' . TBL_FOLDERS . '
-                         SET fol_path = ? -- $newPath
-                       WHERE fol_id = ? -- $folderId';
-        $this->db->queryPrepared($sqlUpdate, array($newPath, $folderId));
 
         $subfoldersStatement = $this->getSubfolderStatement($folderId, array('fol_id', 'fol_name'));
 
         while ($rowSubfolders = $subfoldersStatement->fetch()) {
             // recursive call with every subfolder
-            $this->rename($rowSubfolders['fol_name'], $newPath . '/' . $newName, $rowSubfolders['fol_id']);
+            $subfol = new Folder($this->db, $rowSubfolders['fol_id']);
+            $subfol->rename($rowSubfolders['fol_name'], $newPath . '/' . $newName);
         }
 
         $this->db->endTransaction();
@@ -791,5 +758,39 @@ class Folder extends Entity
         }
 
         return parent::save($updateFingerPrint);
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns.
+     * The folder table also contains fol_usr_id and fol_timestamp. Also, for now fol_type will always be DOCUMENTS.
+     * When a folder is created, we also don't need to log some columns, because they are already 
+     * in the creation log record.
+     *
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        $ignored = parent::getIgnoredLogColumns();
+        $ignored = array_merge($ignored, ['fol_type', 'fol_usr_id', 'fol_timestamp']);
+        if ($this->insertRecord) {
+            $ignored = array_merge($ignored, ['fol_org_id', 'fol_fol_id_parent', 'fol_name', 'fol_public']);
+        }
+        return $ignored;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record: Add the parent folder as a related object
+     * 
+     * @param LogChanges $logEntry The log entry to adjust
+     * 
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry) {
+        if (!empty($this->getValue('fol_fol_id_parent'))) {
+            $folEntry = new Folder($this->db, $this->getValue('fol_fol_id_parent'));
+            $logEntry->setLogRelated($folEntry->getValue('fol_uuid'), $folEntry->getValue('fol_name'));
+        }
     }
 }

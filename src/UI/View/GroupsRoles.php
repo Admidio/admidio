@@ -9,6 +9,7 @@ use Admidio\Roles\Service\RoleService;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use HtmlDataTables;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -67,7 +68,7 @@ class GroupsRoles extends PagePresenter
     {
         global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gL10n, $gDb;
 
-        $this->createSharedHeader($categoryUUID, $roleType, true);
+        $this->createSharedHeader($categoryUUID, $roleType, 'card');
 
         $categoryUUID = '';
         $categoryName = '';
@@ -346,6 +347,8 @@ class GroupsRoles extends PagePresenter
             }
         ');
 
+        ChangelogService::displayHistoryButton($this, 'roles', 'roles', !empty($getAnnroleUUIDUuid), array('uuid' => $roleUUID));
+
         $form = new FormPresenter(
             'adm_roles_edit_form',
             'modules/groups-roles.edit.tpl',
@@ -621,8 +624,7 @@ class GroupsRoles extends PagePresenter
     public function createPermissionsList(string $categoryUUID, string $roleType)
     {
         global $gSettingsManager, $gL10n, $gDb, $gCurrentSession;
-
-        $this->createSharedHeader($categoryUUID, $roleType);
+        $this->createSharedHeader($categoryUUID, $roleType, 'permissions');
 
         $templateData = array();
 
@@ -785,11 +787,12 @@ class GroupsRoles extends PagePresenter
      *                         0 - inactive roles
      *                         1 - active roles
      *                         2 - event participation roles
-     * @param bool $showCards Set to **true** if cards role list should be shown
+     * @param string $mode The purpose of the current page. One of: 'card', 'permissions', 'edit'
+     *
      * @return void
      * @throws Exception
      */
-    protected function createSharedHeader(string $categoryUUID, string $roleType, bool $showCards = false)
+    protected function createSharedHeader(string $categoryUUID, string $roleType, string $mode = 'card')
     {
         global $gCurrentUser, $gSettingsManager, $gL10n, $gDb;
 
@@ -802,7 +805,7 @@ class GroupsRoles extends PagePresenter
                 'bi-plus-circle-fill'
             );
 
-            if ($showCards) {
+            if ($mode == 'card') {
                 // show permissions of all roles
                 $this->addPageFunctionsMenuItem(
                     'menu_item_groups_roles_show_permissions',
@@ -811,6 +814,14 @@ class GroupsRoles extends PagePresenter
                     'bi-shield-lock-fill'
                 );
             }
+
+            $logShowTable = 'roles';
+            if ($mode == 'card') {
+                $logShowTable = 'members';
+            } elseif ($mode == 'permissions') {
+                $logShowTable = 'roles_rights_data';
+            }
+            ChangelogService::displayHistoryButton($this, 'members', $logShowTable);
 
             // show link to maintain categories
             $this->addPageFunctionsMenuItem(
@@ -852,7 +863,7 @@ class GroupsRoles extends PagePresenter
             $this,
             array('type' => 'navbar', 'setFocus' => false)
         );
-        $form->addInput('mode', '', ($showCards ? 'card' : 'permissions'), array('property' => FormPresenter::FIELD_HIDDEN));
+        $form->addInput('mode', '', ($mode), array('property' => FormPresenter::FIELD_HIDDEN));
         $form->addSelectBoxForCategories(
             'cat_uuid',
             $gL10n->get('SYS_CATEGORY'),

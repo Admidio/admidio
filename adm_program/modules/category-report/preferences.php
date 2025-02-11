@@ -19,6 +19,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -66,6 +67,8 @@ try {
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-preferences', $headline);
     $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
+
+    ChangelogService::displayHistoryButton($page, 'categoryreport', 'category_report');
 
     // create an array with the necessary data
     foreach ($config as $key => $value) {

@@ -17,6 +17,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\UserRelationType;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -85,6 +86,8 @@ try {
         true
     );
 
+    ChangelogService::displayHistoryButton($page, 'user_relation_types', 'user_relation_types', !empty($getUrtUuid), array('uuid' => $getUrtUuid));
+        
     // show form
     $form = new FormPresenter(
         'adm_user_relations_type_edit_form',

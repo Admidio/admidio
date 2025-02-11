@@ -61,7 +61,78 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="530">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/preferences.php' WHERE men_name_intern = 'orgprop'</step>
     <step id="540">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/menu.php' WHERE men_name_intern = 'menu'</step>
     <step id="550">UPDATE %PREFIX%_menu SET men_name_intern = 'extensions', men_name = 'SYS_EXTENSIONS' WHERE men_id = 3</step>
-    <step id="560">CREATE TABLE %PREFIX%_forum_topics
+    <step id="560">CREATE TABLE IF NOT EXISTS %PREFIX%_log_changes
+(
+    log_id                      integer             NOT NULL    AUTO_INCREMENT,
+    log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
+
+    log_record_id               integer unsigned    NOT NULL, -- The record id in the original table
+    log_record_uuid             varchar(36)         NULL, -- The record uuid in the original table
+    log_record_name             text                NULL,     -- Textual representation in case the original record
+                                                              -- no longer exists (e.g. group membership was deleted)
+    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id
+                                                              -- is mem_id, but the link should point to the group
+                                                              -- (since the membership does not have its own page in admidio!)
+
+    log_related_id              text                NULL,     -- Optional Secondary object linked to the record id (ID or UUID)
+    log_related_name            text                NULL,     -- Textual representation in case the original record
+                                                              -- no longer exists (e.g. group membership was deleted)
+
+    log_field                   varchar(255)        NULL,     -- Optional Secondary object linked to the record id
+    log_field_name              text                NULL,     -- Textual representation in case the original record
+                                                              -- no longer exists (e.g. group membership was deleted)
+
+    log_action                  varchar(32)         NOT NULL, -- enum of "MODIFY", "CREATED", "DELETED"
+    log_value_old               text                NULL,
+    log_value_new               text                NULL,
+
+    log_usr_id_create           integer unsigned    NULL,
+    log_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    log_comment                 text                NULL,
+    PRIMARY KEY (log_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;</step>
+   <step id="570">INSERT INTO %PREFIX%_log_changes (
+    log_table, log_record_id, log_record_uuid, log_record_name, log_record_linkid,
+    log_field, log_field_name,
+    log_action, log_value_old, log_value_new,
+    log_usr_id_create, log_timestamp_create, log_comment)
+SELECT
+    'user_data' log_table,
+    usl_usf_id log_record_id, u.usr_uuid log_record_uuid,
+    CONCAT(usd_ln.usd_value, ', ', usd_fn.usd_value) log_record_name,
+    usl_usr_id log_record_linkid,
+
+    usf.usf_id log_field,
+    usf.usf_name log_field_name,
+
+    'MODIFY' log_action,
+    usl_value_old log_value_old, usl_value_new log_value_new,
+    usl_usr_id_create log_usr_id_create, usl_timestamp_create log_timestamp_create,
+    usl_comment log_comment
+FROM %PREFIX%_user_log usl
+LEFT JOIN %PREFIX%_users u
+  ON usl.usl_usr_id = u.usr_id
+LEFT JOIN %PREFIX%_user_fields usf
+  ON usl.usl_usf_id = usf.usf_id
+LEFT JOIN %PREFIX%_user_data usd_fn
+  ON usl.usl_usr_id = usd_fn.usd_usr_id
+LEFT JOIN %PREFIX%_user_fields usf_fn
+  ON usd_fn.usd_usf_id = usf_fn.usf_id
+LEFT JOIN %PREFIX%_user_data usd_ln
+  ON usl.usl_usr_id = usd_ln.usd_usr_id
+LEFT JOIN %PREFIX%_user_fields usf_ln
+  ON usd_ln.usd_usf_id = usf_ln.usf_id
+WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_NAME'
+    </step>
+    <step id="580">DROP TABLE %PREFIX%_user_log</step>
+       <!-- rename preference 'profile_log_edit_fields' to 'changelog_module_enabled' -->
+    <step id="590" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'profile_log_edit_fields' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_module_enabled'</step>
+    <step id="600" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'profile_log_edit_fields' AND pr1.prf_name = 'changelog_module_enabled'</step>
+    <step id="610">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'profile_log_edit_fields'</step>
+    <step id="620">CREATE TABLE %PREFIX%_forum_topics
         (
         fot_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
         fot_uuid                    varchar(36)         NOT NULL,
@@ -76,8 +147,8 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci</step>
-    <step id="570">CREATE UNIQUE INDEX %PREFIX%_idx_fot_uuid ON %PREFIX%_forum_topics (fot_uuid)</step>
-    <step id="580">CREATE TABLE %PREFIX%_forum_posts
+    <step id="630">CREATE UNIQUE INDEX %PREFIX%_idx_fot_uuid ON %PREFIX%_forum_topics (fot_uuid)</step>
+    <step id="640">CREATE TABLE %PREFIX%_forum_posts
         (
         fop_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
         fop_fot_id                  integer unsigned    NOT NULL,
@@ -92,44 +163,44 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci</step>
-    <step id="590">CREATE UNIQUE INDEX %PREFIX%_idx_fop_uuid ON %PREFIX%_forum_posts (fop_uuid)</step>
-    <step id="600">ALTER TABLE %PREFIX%_forum_topics
+    <step id="650">CREATE UNIQUE INDEX %PREFIX%_idx_fop_uuid ON %PREFIX%_forum_posts (fop_uuid)</step>
+    <step id="660">ALTER TABLE %PREFIX%_forum_topics
         ADD CONSTRAINT %PREFIX%_fk_fot_cat         FOREIGN KEY (fot_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_fop_id_first_post)   REFERENCES %PREFIX%_forum_posts (fop_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
-    <step id="610">ALTER TABLE %PREFIX%_forum_posts
+    <step id="670">ALTER TABLE %PREFIX%_forum_posts
         ADD CONSTRAINT %PREFIX%_fk_fop_fot         FOREIGN KEY (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)        ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_fop_usr_create  FOREIGN KEY (fop_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_fop_usr_change  FOREIGN KEY (fop_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
-    <step id="615">UpdateStepsCode::updateStep50ForumCategories</step>
-    <step id="620">UPDATE %PREFIX%_components SET com_name = 'SYS_FORUM', com_name_intern = 'FORUM' WHERE com_name_intern = 'GUESTBOOK'</step>
-    <step id="630">UPDATE %PREFIX%_menu SET men_name = 'SYS_FORUM', men_name_intern = 'forum', men_icon='chat-dots-fill', men_url='/adm_program/modules/forum.php', men_description='SYS_FORUM_DESC', men_men_id_parent = 1 WHERE men_name_intern = 'guestbook'</step>
-    <step id="640" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_guestbook_module' SET pr1.prf_value = 0 WHERE pr1.prf_name = 'forum_module_enabled'</step>
-    <step id="650" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_guestbook_module' AND pr1.prf_name = 'forum_module_enabled'</step>
-    <step id="660">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_module'</step>
-    <step id="670" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'guestbook_entries_per_page' SET pr1.prf_value = 25 WHERE pr1.prf_name = 'forum_topics_per_page'</step>
-    <step id="680" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 25 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'guestbook_entries_per_page' AND pr1.prf_name = 'forum_topics_per_page'</step>
-    <step id="690">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'guestbook_entries_per_page'</step>
-    <step id="700">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_captcha'</step>
-    <step id="710">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'flooding_protection_time'</step>
-    <step id="720">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_gbook_comments4all'</step>
-    <step id="730">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_intial_comments_loading'</step>
-    <step id="740">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_moderation'</step>
-    <step id="750">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_forum_admin boolean not null default false</step>
-    <step id="760">UPDATE %PREFIX%_roles SET rol_forum_admin = true WHERE rol_administrator = true</step>
-    <step id="770">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_guestbook</step>
-    <step id="780">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_guestbook_comments</step>
-    <step id="790" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_org</step>
-    <step id="800" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_org</step>
-    <step id="810" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_usr_create</step>
-    <step id="820" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_usr_create</step>
-    <step id="830" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_usr_change</step>
-    <step id="840" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_usr_change</step>
-    <step id="850" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_gbo</step>
-    <step id="860" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_gbo</step>
-    <step id="870" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_usr_create</step>
-    <step id="880" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_usr_create</step>
-    <step id="890" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_usr_change</step>
-    <step id="900" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_usr_change</step>
+    <step id="680">UpdateStepsCode::updateStep50ForumCategories</step>
+    <step id="690">UPDATE %PREFIX%_components SET com_name = 'SYS_FORUM', com_name_intern = 'FORUM' WHERE com_name_intern = 'GUESTBOOK'</step>
+    <step id="700">UPDATE %PREFIX%_menu SET men_name = 'SYS_FORUM', men_name_intern = 'forum', men_icon='chat-dots-fill', men_url='/adm_program/modules/forum.php', men_description='SYS_FORUM_DESC', men_men_id_parent = 1 WHERE men_name_intern = 'guestbook'</step>
+    <step id="710" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_guestbook_module' SET pr1.prf_value = 0 WHERE pr1.prf_name = 'forum_module_enabled'</step>
+    <step id="720" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_guestbook_module' AND pr1.prf_name = 'forum_module_enabled'</step>
+    <step id="730">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_module'</step>
+    <step id="740" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'guestbook_entries_per_page' SET pr1.prf_value = 25 WHERE pr1.prf_name = 'forum_topics_per_page'</step>
+    <step id="750" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 25 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'guestbook_entries_per_page' AND pr1.prf_name = 'forum_topics_per_page'</step>
+    <step id="760">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'guestbook_entries_per_page'</step>
+    <step id="770">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_captcha'</step>
+    <step id="780">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'flooding_protection_time'</step>
+    <step id="790">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_gbook_comments4all'</step>
+    <step id="800">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_intial_comments_loading'</step>
+    <step id="810">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_moderation'</step>
+    <step id="820">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_forum_admin boolean not null default false</step>
+    <step id="830">UPDATE %PREFIX%_roles SET rol_forum_admin = true WHERE rol_administrator = true</step>
+    <step id="840">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_guestbook</step>
+    <step id="850">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_guestbook_comments</step>
+    <step id="860" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_org</step>
+    <step id="870" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_org</step>
+    <step id="880" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_usr_create</step>
+    <step id="890" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_usr_create</step>
+    <step id="900" database="mysql">ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_fk_gbo_usr_change</step>
+    <step id="910" database="pgsql">ALTER TABLE %PREFIX%_guestbook DROP CONSTRAINT %PREFIX%_fk_gbo_usr_change</step>
+    <step id="920" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_gbo</step>
+    <step id="930" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_gbo</step>
+    <step id="940" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_usr_create</step>
+    <step id="950" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_usr_create</step>
+    <step id="960" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_usr_change</step>
+    <step id="970" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_usr_change</step>
     <step>stop</step>
 </update>

@@ -19,6 +19,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Weblinks\Entity\Weblink;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -44,12 +45,12 @@ try {
         $category->readDataByUuid($getCatUuid);
         $headline .= ' - ' . $category->getValue('cat_name');
     }
-
-    // Create Link object
-    $weblinks = new ModuleWeblinks();
-    $weblinks->setParameter('lnk_uuid', $getLinkUuid);
-    $weblinks->setParameter('cat_id', $category->getValue('cat_id'));
-    $weblinksCount = $weblinks->getDataSetCount();
+    
+        // Create Link object
+        $weblinks = new ModuleWeblinks();
+        $weblinks->setParameter('lnk_uuid', $getLinkUuid);
+        $weblinks->setParameter('cat_id', $category->getValue('cat_id'));
+        $weblinksCount = $weblinks->getDataSetCount();
 
     // number of weblinks per page
     if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
@@ -100,6 +101,8 @@ try {
             );
         }
 
+        ChangelogService::displayHistoryButton($page, 'weblinks', 'links');
+        
         $page->addJavascript(
             '
         $("#cat_uuid").change(function() {

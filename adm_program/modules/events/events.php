@@ -35,6 +35,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -152,6 +153,8 @@ try {
                 'bi-plus-circle-fill'
             );
         }
+
+        ChangelogService::displayHistoryButton($page, 'events', 'events');
 
         if ($getEventUuid === '') {
             // show print button

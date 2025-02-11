@@ -239,6 +239,7 @@ class PreferencesService
                     $formValues['photo_ecard_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $formData['photo_ecard_template']);
                 }
                 break;
+
         }
 
         // then update the database with the new values

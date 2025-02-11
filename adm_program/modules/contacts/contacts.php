@@ -18,6 +18,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -63,15 +64,7 @@ try {
             'bi-plus-circle-fill'
         );
 
-        if ($gSettingsManager->getBool('profile_log_edit_fields')) {
-            // show link to view profile field change history
-            $page->addPageFunctionsMenuItem(
-                'menu_item_contacts_change_history',
-                $gL10n->get('SYS_CHANGE_HISTORY'),
-                ADMIDIO_URL . FOLDER_MODULES . '/contacts/profile_field_history.php',
-                'bi-clock-history'
-            );
-        }
+        ChangelogService::displayHistoryButton($page, 'contacts', 'users,user_data,members');
 
         // show checkbox to select all users or only active members
         if ($gSettingsManager->getBool('contacts_show_all')) {

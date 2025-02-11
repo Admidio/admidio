@@ -6,6 +6,7 @@ use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -33,7 +34,7 @@ class ProfileFields extends PagePresenter
      */
     public function createEditForm(string $profileFieldUUID = '')
     {
-        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb;
+        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb, $gSettingsManager;
 
         // Create user-defined field object
         $userField = new ProfileField($gDb);
@@ -73,6 +74,8 @@ class ProfileFields extends PagePresenter
             });
             $("#usf_type").trigger("change");', true
         );
+
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields', !empty($profileFieldUUID), array('uuid' => $profileFieldUUID));
 
         // show form
         $form = new FormPresenter(
@@ -260,7 +263,7 @@ class ProfileFields extends PagePresenter
      */
     public function createList()
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gSettingsManager;
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
@@ -301,6 +304,8 @@ class ProfileFields extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'USF')),
             'bi-hdd-stack-fill'
         );
+
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields');
 
         $sql = 'SELECT *
                   FROM ' . TBL_USER_FIELDS . '

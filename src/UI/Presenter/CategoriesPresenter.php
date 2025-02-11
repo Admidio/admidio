@@ -7,6 +7,7 @@ use Admidio\Components\Entity\Component;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Categories\Entity\Category;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -35,7 +36,7 @@ class CategoriesPresenter extends PagePresenter
      */
     public function createEditForm(string $type, string $categoryUUID = '')
     {
-        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gCurrentOrganization, $gDb;
+        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gCurrentOrganization, $gDb, $gSettingsManager;
 
         $roleViewSet = array(0);
         $roleEditSet = array(0);
@@ -179,6 +180,9 @@ class CategoriesPresenter extends PagePresenter
                 showHideViewRightControl();', true
             );
         }
+
+        ChangelogService::displayHistoryButton($this, 'categories', 'categories,roles_rights_data', !empty($categoryUUID), array('uuid' => $categoryUUID));
+
 
         // show form
         $form = new FormPresenter(
@@ -361,7 +365,7 @@ class CategoriesPresenter extends PagePresenter
      */
     public function createList(string $type)
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentOrganization;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentOrganization, $gSettingsManager;
 
         // set module headline
         $headline = $gL10n->get('SYS_CATEGORIES');
@@ -467,6 +471,9 @@ class CategoriesPresenter extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('mode' => 'edit', 'type' => $type)),
             'bi-plus-circle-fill'
         );
+
+
+        ChangelogService::displayHistoryButton($this, 'categories', 'categories');
 
         $sql = 'SELECT *
           FROM ' . TBL_CATEGORIES . '

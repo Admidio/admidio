@@ -17,6 +17,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Weblinks\Entity\Weblink;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -58,6 +59,8 @@ try {
 
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-weblinks-edit', $headline);
+
+    ChangelogService::displayHistoryButton($page, 'weblinks', 'links', !empty($getLinkUuid), array('uuid' => $getLinkUuid));
 
     // show form
     $form = new FormPresenter(

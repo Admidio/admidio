@@ -26,6 +26,7 @@ use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -85,6 +86,8 @@ try {
 
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-mylist', $headline);
+
+    ChangelogService::displayHistoryButton($page, 'lists', 'lists,list_columns', true, array('uuid' => $getListUuid));
 
     // within MySql it's only possible to join 61 tables therefore show a message if user
     // want's to join more than 57 columns

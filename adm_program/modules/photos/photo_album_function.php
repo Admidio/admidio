@@ -19,6 +19,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');

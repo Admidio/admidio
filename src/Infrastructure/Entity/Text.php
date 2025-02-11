@@ -83,4 +83,46 @@ class Text extends Entity
 
         return parent::setValue($columnName, $newValue, $checkValue);
     }
+
+    /**
+     * Return a human-readable representation of this record.
+     * If a column [prefix]_name exists, it is returned, otherwise the id.
+     * This method can be overridden in child classes for custom behavior.
+     * 
+     * @return string The readable representation of the record (can also be a translatable identifier)
+     */
+    public function readableName(): string
+    {
+        $textLabels = array(
+            'SYSMAIL_REGISTRATION_CONFIRMATION' => 'SYS_NOTIFICATION_REGISTRATION_CONFIRMATION',
+            'SYSMAIL_REGISTRATION_NEW' => 'SYS_NOTIFICATION_NEW_REGISTRATION',
+            'SYSMAIL_REGISTRATION_APPROVED' => 'SYS_NOTIFICATION_REGISTRATION_APPROVAL',
+            'SYSMAIL_REGISTRATION_REFUSED' => 'ORG_REFUSE_REGISTRATION',
+            'SYSMAIL_NEW_PASSWORD' => 'ORG_SEND_NEW_PASSWORD',
+            'SYSMAIL_PASSWORD_RESET' => 'SYS_PASSWORD_FORGOTTEN',
+        );
+//        $textLabel = Language::translateIfTranslationStrId($textLabels[$row['name']]);
+        if (array_key_exists($this->columnPrefix.'_name', $this->dbColumns)) {
+            $textLabel = $this->dbColumns[$this->columnPrefix.'_name'];
+            if (array_key_exists($textLabel, $textLabels)) {
+                return $textLabels[$textLabel];
+            } else {
+                return $textLabel;
+            }
+        } else {
+            return $this->dbColumns[$this->keyColumnName];
+        }
+    }
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns.
+     * The textx table also contains txt_org_id and txt_name, which we don't want to log.
+     *
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(), ['txt_name']);
+    }
 }

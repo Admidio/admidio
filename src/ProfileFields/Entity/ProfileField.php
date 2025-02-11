@@ -102,11 +102,7 @@ class ProfileField extends Entity
             $this->db->queryPrepared($sql, array($rowLst['lsc_lst_id'], $rowLst['lsc_number']));
         }
 
-        // delete all dependencies in other tables
-        $sql = 'DELETE FROM ' . TBL_USER_LOG . '
-                 WHERE usl_usf_id = ? -- $usfId';
-        $this->db->queryPrepared($sql, array($usfId));
-
+        // delete all dependencies in other tables, except for the changelog (which needs to be audit proof)
         $sql = 'DELETE FROM ' . TBL_USER_DATA . '
                  WHERE usd_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
