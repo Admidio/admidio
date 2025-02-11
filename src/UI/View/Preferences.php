@@ -460,7 +460,7 @@ class Preferences extends PagePresenter
 
         $formValues = $gSettingsManager->getAll();
 
-        $formChangelog = new Form(
+        $formChangelog = new FormPresenter(
             'adm_preferences_form_changelog',
             'preferences/preferences.changelog.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Changelog')),
