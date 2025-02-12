@@ -386,7 +386,7 @@ try {
             if ($row['table_name'] == 'list_columns') {
                 // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
                 if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {
-                    $relatedName = $fieldString[$relatedName]??$relatedName;
+                    $relatedName = $fieldStrings[$relatedName]??$relatedName;
                     if (is_array($relatedName)) {
                         $relatedName = $relatedName['name']??'-';
                     }
