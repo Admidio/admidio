@@ -321,7 +321,7 @@ try {
                     // User is not member of any organization -> ask if delete completely
                     $userAdministration .= '
                         <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                            data-message="' . $gL10n->get('SYS_USER_DELETE_DESC', array($row['first_name'] . ' ' . $row['last_name'])) . '"
+                            data-message="' . $gL10n->get('SYS_USER_DELETE_DESC', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'])) . '"
                             data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                         </a>';
@@ -330,7 +330,7 @@ try {
                 // User could only be removed from this organization -> ask so
                 $userAdministration .= '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . $gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($row['first_name'] . ' ' . $row['last_name'], $gCurrentOrganization->getValue('org_longname'))) . '"
+                        data-message="' . $gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'], $gCurrentOrganization->getValue('org_longname'))) . '"
                         data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                     </a>';
