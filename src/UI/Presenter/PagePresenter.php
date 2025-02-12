@@ -415,7 +415,7 @@ class PagePresenter
      */
     public function getHtmlAdditionalHeader(): string
     {
-        $this->header .= $this->getHtmlCssFiles() . $this->getHtmlJsFiles() . $this->getHtmlRssFiles();
+        $this->header .= $this->getHtmlCssFiles() . $this->getHtmlJsFiles();
         return $this->header;
     }
 
@@ -444,25 +444,6 @@ class PagePresenter
 
         foreach ($this->jsFiles as $jsFile) {
             $html .= '<script type="text/javascript" src="' . $jsFile . '"></script>'."\n";
-        }
-
-        return $html;
-    }
-
-    /**
-     * Get the html code with the link implementation of all assigned RSS files.
-     * @return string Returns the html code with the link implementation of all assigned RSS files.
-     */
-    public function getHtmlRssFiles(): string
-    {
-        $html = '';
-
-        foreach ($this->rssFiles as $title => $rssFile) {
-            if (!is_numeric($title)) {
-                $html .= '<link rel="alternate" type="application/rss+xml" title="' . $title . '" href="' . $rssFile . '" />'."\n";
-            } else {
-                $html .= '<link rel="alternate" type="application/rss+xml" href="' . $rssFile . '" />'."\n";
-            }
         }
 
         return $html;
@@ -610,6 +591,7 @@ class PagePresenter
         $this->smarty->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
+        $this->smarty->assign('rssFeeds', $this->rssFiles);
 
         if ($this->fullWidth) {
             $this->smarty->assign('contentClass', 'admidio-max-content');
