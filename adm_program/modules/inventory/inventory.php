@@ -25,7 +25,8 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Service\ChangelogService;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -93,7 +94,7 @@ try {
     
         case 'print':
             // create html page object without the custom theme files
-            $page = new HtmlPage('admidio-inventory-print');
+            $page = new PagePresenter('admidio-inventory-print');
             $page->setPrintMode();
             $page->setTitle($headline);
             $page->setHeadline($headline);
@@ -143,7 +144,7 @@ try {
             $hoverRows = true;
     
             // create html page object
-            $page = new HtmlPage('admidio-inventory', $headline);
+            $page = new PagePresenter('admidio-inventory', $headline);
             $page->setContentFullWidth();
 
 #region Navigation and page functions
@@ -343,7 +344,7 @@ try {
                     true
                 );
 
-                $form = new Form(
+                $form = new FormPresenter(
                     'adm_navbar_filter_form',
                     'sys-template-parts/form.filter.tpl',
                     '',

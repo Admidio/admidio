@@ -3,8 +3,8 @@ namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Entity\ItemField;
-use Admidio\UI\Component\Form;
-use HtmlPage;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 
@@ -25,7 +25,7 @@ use Admidio\Inventory\ValueObjects\ItemsData;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ItemFields extends HtmlPage
+class ItemFields extends PagePresenter
 {
     /**
      * Create the data for the edit form of a item field.
@@ -63,7 +63,7 @@ class ItemFields extends HtmlPage
         );
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_item_fields_edit_form',
             'modules/item-fields.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/item-fields.php', array('uuid' => $itemFieldID, 'mode' => 'save')),
@@ -75,14 +75,14 @@ class ItemFields extends HtmlPage
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
                 htmlentities($itemField->getValue('inf_name', 'database'), ENT_QUOTES),
-                array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
                 htmlentities($itemField->getValue('inf_name', 'database'), ENT_QUOTES),
-                array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         }
 
@@ -93,7 +93,7 @@ class ItemFields extends HtmlPage
                 'inf_name_intern',
                 $gL10n->get('SYS_INTERNAL_NAME'),
                 $infNameIntern,
-                array('maxLength' => 100, 'property' => Form::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
             );
         }
 
@@ -118,7 +118,7 @@ class ItemFields extends HtmlPage
                 'inf_type',
                 $gL10n->get('ORG_DATATYPE'),
                 $itemFieldText[$itemField->getValue('inf_type')],
-                array('maxLength' => 30, 'property' => Form::FIELD_DISABLED)
+                array('maxLength' => 30, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             // if it's not a system field the user must select the data type
@@ -126,7 +126,7 @@ class ItemFields extends HtmlPage
                 'inf_type',
                 $gL10n->get('ORG_DATATYPE'),
                 $itemFieldText,
-                array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('inf_type'))
+                array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('inf_type'))
             );
         }
         $form->addMultilineTextInput(
@@ -141,7 +141,7 @@ class ItemFields extends HtmlPage
             'inf_required_input',
             $gL10n->get('SYS_REQUIRED_INPUT'),
             $mandatoryFieldValues,
-            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('inf_required_input'))
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('inf_required_input'))
         );
 
         $form->addEditor(

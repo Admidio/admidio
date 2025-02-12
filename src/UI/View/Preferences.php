@@ -789,7 +789,7 @@ class Preferences extends PagePresenter
         static $inventoryArrayDbToken = '#_#';
         $formValues = $gSettingsManager->getAll();
 
-        $formInventory = new Form(
+        $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',
             'preferences/preferences.inventory.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Inventory')),
@@ -874,7 +874,7 @@ class Preferences extends PagePresenter
             'inventory_decimal_places',
             $gL10n->get('SYS_INVENTORY_DECIMAL_PLACES'),
             $formValues['inventory_decimal_places'],
-            array('type' => 'number','minNumber' => 0, 'property' => Form::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC')
+            array('type' => 'number','minNumber' => 0, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC')
         );
 
         $selectBoxEntries = array('date' => $gL10n->get('SYS_DATE'), 'datetime' => $gL10n->get('SYS_DATE') .' & ' .$gL10n->get('SYS_TIME'));
@@ -915,7 +915,7 @@ class Preferences extends PagePresenter
             'inventory_export_filename',
             $gL10n->get('SYS_INVENTORY_FILENAME'),
             $formValues['inventory_export_filename'],
-            array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_INVENTORY_FILENAME_DESC')
+            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_INVENTORY_FILENAME_DESC')
         );
 
         $formInventory->addCheckbox(

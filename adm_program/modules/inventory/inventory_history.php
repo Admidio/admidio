@@ -18,6 +18,8 @@
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 use Admidio\Inventory\ValueObjects\ItemsData;
 
@@ -93,17 +95,26 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('plg-inventory-manager-items-history', $headline);
+    $page = new PagePresenter('plg-inventory-manager-items-history', $headline);
 
     // create filter menu with input elements for Startdate and Enddate
-    $FilterNavbar = new HtmlNavbar('menu_profile_field_history_filter', '', null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory_history.php', $page, array('type' => 'navbar', 'setFocus' => false));
+    //$FilterNavbar = new HtmlNavbar('menu_profile_field_history_filter', '', null, 'filter');
+    $form = new FormPresenter(
+        'adm_navbar_filter_form',
+        'sys-template-parts/form.filter.tpl',
+        '',
+        $page,
+        array('type' => 'navbar', 'setFocus' => false)
+    );
+
+    //$form = new FormPresenter('navbar_filter_form', ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory_history.php', $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
-    $form->addInput('item_id', '', $getItemId, array('property' => HtmlForm::FIELD_HIDDEN));
+    $form->addInput('item_id', '', $getItemId, array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-    $FilterNavbar->addForm($form->show());
-    $page->addHtml($FilterNavbar->show());
+    //$FilterNavbar->addForm($form->show());
+    //$page->addHtml($FilterNavbar->show());
+    $form->addToHtmlPage();
 
     $table = new HtmlTable('profile_field_history_table', $page, true, true);
 
