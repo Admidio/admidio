@@ -121,7 +121,7 @@ class File extends Entity
         }
 
         // If current user has download-admin-rights => allow
-        if ($gCurrentUser->adminDocumentsFiles()) {
+        if ($gCurrentUser->administrateDocumentsFiles()) {
             return true;
         }
 
@@ -285,13 +285,21 @@ class File extends Entity
      * to log changes to these columns.
      * The folder table also contains fol_usr_id and fol_timestamp. We also don't want to log
      * download counter increases...
+     * When a file is created, we also don't need to log some columns, because they are already 
+     * in the creation log record.
      *
      * @return true Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(), ['fil_counter', 'fil_usr_id', 'fil_timestamp']);
+        $ignored = parent::getIgnoredLogColumns();
+        $ignored = array_merge($ignored, ['fil_counter', 'fil_usr_id', 'fil_timestamp']);
+        if ($this->insertRecord) {
+            $ignored = array_merge($ignored, ['fil_fol_id', 'fil_name']);
+        }
+        return $ignored;
     }
+    
     /**
      * Adjust the changelog entry for this db record: Add the parent fold as a related object
      * 

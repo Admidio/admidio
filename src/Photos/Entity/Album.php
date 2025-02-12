@@ -109,49 +109,35 @@ class Album extends Entity
      */
     public function delete(): bool
     {
-        if ($this->deleteInDatabase((int) $this->getValue('pho_id'))) {
-            return parent::delete();
-        }
-
-        return false;
-    }
-
-    /**
-     * Recursive function that deletes the given photo album and all subordinate photo albums.
-     * @param int $photoId
-     * @return bool
-     * @throws Exception
-     */
-    public function deleteInDatabase(int $photoId): bool
-    {
         $returnValue = true;
+        $albumId = $this->getValue('pho_id');
 
         $this->db->startTransaction();
 
-        // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
+        // First, delete all sub-albums (recursively)
         $sql = 'SELECT pho_id
                   FROM '.TBL_PHOTOS.'
-                 WHERE pho_pho_id_parent = ? -- $photoId';
-        $childAlbumStatement = $this->db->queryPrepared($sql, array($photoId));
+                 WHERE pho_pho_id_parent = ? -- $albumId';
+        $childAlbumStatement = $this->db->queryPrepared($sql, array($albumId));
 
         while ($phoId = $childAlbumStatement->fetchColumn()) {
             if ($returnValue) {
-                $returnValue = $this->deleteInDatabase((int) $phoId);
+                $subAlbum = new Album($this->db, $phoId);
+                $returnValue = $returnValue && 
+                    $subAlbum->delete();
             }
         }
 
-        // delete folder and database entry
+        // delete folder and then the database entry
         if ($returnValue) {
-            $folder = ADMIDIO_PATH . FOLDER_DATA. '/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
+            $folder = ADMIDIO_PATH . FOLDER_DATA. '/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$albumId;
 
             // delete current folder including sub folders and files if it exists.
             try {
                 $dirDeleted = FileSystemUtils::deleteDirectoryIfExists($folder, true);
 
                 if ($dirDeleted) {
-                    $sql = 'DELETE FROM '.TBL_PHOTOS.'
-                             WHERE pho_id = ? -- $photoId';
-                    $this->db->queryPrepared($sql, array($photoId));
+                    parent::delete();
                 }
             } catch (\RuntimeException $exception) {
             }

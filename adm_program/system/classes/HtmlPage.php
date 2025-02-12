@@ -17,7 +17,7 @@ use Smarty\Smarty;
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = new HtmlPage('admidio-example');
+ * $page = PagePresenter::withHtmlIDAndHeadline('admidio-example');
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
@@ -26,6 +26,7 @@ use Smarty\Smarty;
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
  */
 class HtmlPage
 {
@@ -104,6 +105,7 @@ class HtmlPage
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function __construct(string $id, string $headline = '')
     {
@@ -130,6 +132,7 @@ class HtmlPage
     /**
      * Adds a cascading style sheets file to the html page.
      * @param string $cssFile The url with filename or the relative path starting with **adm_program** of the css file.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addCssFile(string $cssFile)
     {
@@ -146,6 +149,7 @@ class HtmlPage
      * Adds an RSS file to the html page.
      * @param string $rssFile The url with filename of the rss file.
      * @param string $title   (optional) Set a title. This is the name of the feed and will be shown when adding the rss feed.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addRssFile(string $rssFile, string $title = '')
     {
@@ -159,6 +163,7 @@ class HtmlPage
     /**
      * Adds a javascript file to the html page.
      * @param string $jsFile The url with filename or the relative path starting with **adm_program** of the javascript file.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addJavascriptFile(string $jsFile)
     {
@@ -176,6 +181,7 @@ class HtmlPage
      * @param string $javascriptCode       A valid javascript code that will be added to the header of the page.
      * @param bool $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
      *                                     the page is fully loaded.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addJavascript(string $javascriptCode, bool $executeAfterPageLoad = false)
     {
@@ -189,6 +195,7 @@ class HtmlPage
     /**
      * Add content to the header segment of a html page.
      * @param string $header Content for the html header segment.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addHeader(string $header)
     {
@@ -200,6 +207,7 @@ class HtmlPage
      * you call this method. The first call will place the content at the top of
      * the page. The second call below the first etc.
      * @param string $html A valid html code that will be added to the page.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addHtml(string $html)
     {
@@ -212,6 +220,7 @@ class HtmlPage
      * the html content will be added to the page content.
      * @param string $template Template name with relative template path that should be fetched.
      * @throws \Smarty\Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addHtmlByTemplate(string $template)
     {
@@ -231,6 +240,7 @@ class HtmlPage
      * @param int $badgeCount If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description An optional description of the menu node that could be shown in some output cases
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addPageFunctionsMenuItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = '')
     {
@@ -242,6 +252,7 @@ class HtmlPage
      * template will be loaded and this file will be included after the main page content.
      * @param string $templateFile The name of the template file in the templates folder of
      *                             the current theme that should be loaded within the current page.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function addTemplateFile(string $templateFile)
     {
@@ -252,6 +263,7 @@ class HtmlPage
      * Public method to assign new variables to the Smarty template of the HtmlPage.
      * @return void
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     private function assignBasicSmartyVariables()
     {
@@ -323,6 +335,7 @@ class HtmlPage
      * @param string $variable Name of the variable within the Smarty template.
      * @param string|array $value Value of the variable.
      * @return void
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function assignSmartyVariable(string $variable, $value)
     {
@@ -335,6 +348,7 @@ class HtmlPage
      * of **adm_my_files**.
      * @return Smarty Returns the initialized Smarty object.
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public static function createSmartyObject(): Smarty
     {
@@ -364,6 +378,7 @@ class HtmlPage
      * and one version without the **min**.
      * @param string $filepath Filename of the NOT minified file.
      * @return string Returns the filename in dependence of the debug mode.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     private function getDebugOrMinFilepath(string $filepath): string
     {
@@ -386,6 +401,7 @@ class HtmlPage
      * Returns the content of the page. Menu, page header and page footer will not be returned.
      * Just the specific content of the page.
      * @return string Returns the html of the page content.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function getPageContent(): string
     {
@@ -395,6 +411,7 @@ class HtmlPage
     /**
      * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
      * @return string Returns the headline of the current Admidio page.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function getHeadline(): string
     {
@@ -405,6 +422,7 @@ class HtmlPage
      * Add page specific javascript files, css files or rss files to the header. Also, specific header
      * information will also be added
      * @return string Html string with all additional header information
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function getHtmlAdditionalHeader(): string
     {
@@ -415,6 +433,7 @@ class HtmlPage
     /**
      * Get the html code with the script implementation of all assigned CSS files.
      * @return string Returns the html code with the script implementation of all assigned CSS files.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function getHtmlCssFiles(): string
     {
@@ -430,6 +449,7 @@ class HtmlPage
     /**
      * Get the html code with the script implementation of all assigned javascript files.
      * @return string Returns the html code with the script implementation of all assigned javascript files.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function getHtmlJsFiles(): string
     {
@@ -445,6 +465,7 @@ class HtmlPage
     /**
      * Get the html code with the link implementation of all assigned RSS files.
      * @return string Returns the html code with the link implementation of all assigned RSS files.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function getHtmlRssFiles(): string
     {
@@ -464,6 +485,7 @@ class HtmlPage
     /**
      * Returns the Smarty template object.
      * @return Smarty Returns the Smarty template object.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function getSmartyTemplate(): Smarty
     {
@@ -473,6 +495,7 @@ class HtmlPage
     /**
      * Returns the title of the html page.
      * @return string Returns the title of the html page.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function getTitle(): string
     {
@@ -481,6 +504,7 @@ class HtmlPage
 
     /**
      * If this method is called than the back link to the previous page will not be shown.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function hideBackLink()
     {
@@ -504,6 +528,7 @@ class HtmlPage
      * @param string $headline A string that contains the headline for the page.
      * @return void
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function setHeadline(string $headline)
     {
@@ -523,6 +548,7 @@ class HtmlPage
 
     /** If set to true then a page without header menu and sidebar menu will be created.
      *  The main template file will be **index_reduced.tpl** instead of index.tpl.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function setInlineMode()
     {
@@ -534,6 +560,7 @@ class HtmlPage
      * @param string $title A string that contains the title for the page.
      * @return void
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function setTitle(string $title)
     {
@@ -555,6 +582,7 @@ class HtmlPage
      * a print specific css file **print.css**. All styles will be more print compatible and are
      * only black, grey and white.
      * @return void
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function setPrintMode()
     {
@@ -566,6 +594,7 @@ class HtmlPage
      * This method will set all variables for the Smarty engine and then send the whole html
      * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlPage" is deprecated, use class "PagePresenter" instead.
      */
     public function show()
     {

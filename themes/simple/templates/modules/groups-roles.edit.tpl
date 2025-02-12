@@ -58,11 +58,8 @@
                 {if {array_key_exists array=$elements key='rol_edit_inventory'}}
                     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['rol_edit_inventory']}
                 {/if}
-                {if {array_key_exists array=$elements key='rol_guestbook'}}
-                    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['rol_guestbook']}
-                {/if}
-                {if {array_key_exists array=$elements key='rol_guestbook_comments'}}
-                    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['rol_guestbook_comments']}
+                {if {array_key_exists array=$elements key='rol_forum_admin'}}
+                    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['rol_forum_admin']}
                 {/if}
                 {if {array_key_exists array=$elements key='rol_weblinks'}}
                     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['rol_weblinks']}

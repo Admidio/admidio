@@ -17,7 +17,8 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -58,10 +59,10 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-userrelations-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-userrelations-edit', $headline);
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_user_relations_edit_form',
         'modules/user-relations.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => 'create')),
@@ -160,7 +161,7 @@ try {
         $gL10n->get('SYS_MEMBER'),
         $gDb,
         $sqlData,
-        array('property' => Form::FIELD_REQUIRED, 'search' => true, 'placeholder' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -')
+        array('property' => FormPresenter::FIELD_REQUIRED, 'search' => true, 'placeholder' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -')
     );
     // select box showing all relation types
     $sql = 'SELECT urt_uuid, REPLACE(\'' . $gL10n->get('SYS_IS_VAR_FROM') . '\', \'#VAR1#\', urt_name)
@@ -171,14 +172,14 @@ try {
         $gL10n->get('SYS_USER_RELATION'),
         $gDb,
         $sql,
-        array('property' => Form::FIELD_REQUIRED)
+        array('property' => FormPresenter::FIELD_REQUIRED)
     );
 
     $form->addInput(
         'selectedUser',
         $gL10n->get('SYS_CURRENT_MEMBER'),
         $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'),
-        array('maxLength' => 100, 'property' => Form::FIELD_DISABLED)
+        array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
     );
 
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));

@@ -3,6 +3,7 @@
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -21,7 +22,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ModuleDocumentsFiles extends HtmlPage
+class ModuleDocumentsFiles extends PagePresenter
 {
     /**
      * @var array Array with all read folders and files
@@ -51,7 +52,7 @@ class ModuleDocumentsFiles extends HtmlPage
         $templateData = array();
         $infoAlert = '';
 
-        if ($gCurrentUser->adminDocumentsFiles()) {
+        if ($gCurrentUser->administrateDocumentsFiles()) {
             $infoAlert = $gL10n->get('SYS_DOCUMENTS_FILES_ROLES_VIEW', array(implode(', ', $this->folder->getViewRolesNames())));
         }
 
@@ -64,7 +65,7 @@ class ModuleDocumentsFiles extends HtmlPage
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
 
                 if ($this->folder->hasUploadRight()) {
-                    if ($gCurrentUser->adminDocumentsFiles()) {
+                    if ($gCurrentUser->administrateDocumentsFiles()) {
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/folder_permissions.php', array('folder_uuid' => $row['uuid'])),
                             'icon' => 'bi bi-shield-lock',

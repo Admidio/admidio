@@ -13,6 +13,7 @@
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
 try {
@@ -30,7 +31,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-rooms', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-rooms', $headline);
 
     // show link to create new room
     $page->addPageFunctionsMenuItem(

@@ -16,6 +16,7 @@
  * **********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/common.php');
@@ -30,7 +31,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new HtmlPage('admidio-login', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-login', $headline);
         $loginModule = new ModuleLogin();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();

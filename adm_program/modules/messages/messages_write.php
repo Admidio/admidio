@@ -24,6 +24,7 @@
  *****************************************************************************/
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -31,7 +32,8 @@ use Admidio\Messages\Entity\Message;
 use Admidio\Messages\Entity\MessageContent;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Role;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -191,11 +193,11 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-messages-write', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-messages-write', $headline);
 
     if ($getMsgType === Message::MESSAGE_TYPE_PM) {
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_pm_send_form',
             'modules/messages.pm.send.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUuid)),
@@ -209,7 +211,7 @@ try {
                 $gL10n->get('SYS_TO'),
                 $list,
                 array(
-                    'property' => Form::FIELD_REQUIRED,
+                    'property' => FormPresenter::FIELD_REQUIRED,
                     'multiselect' => true,
                     'maximumSelectionNumber' => $maxNumberRecipients,
                     'helpTextId' => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
@@ -221,7 +223,7 @@ try {
                 'msg_to',
                 '',
                 $user->getValue('usr_id'),
-                array('property' => Form::FIELD_HIDDEN)
+                array('property' => FormPresenter::FIELD_HIDDEN)
             );
             $sendTo = ' ' . $gL10n->get('SYS_TO') . ' ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' (' . $user->getValue('usr_login_name') . ')';
         }
@@ -231,14 +233,14 @@ try {
                 'msg_subject',
                 $gL10n->get('SYS_SUBJECT'),
                 $message->getValue('msg_subject'),
-                array('maxLength' => 77, 'property' => Form::FIELD_REQUIRED)
+                array('maxLength' => 77, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         } else {
             $form->addInput(
                 'msg_subject',
                 '',
                 $message->getValue('msg_subject'),
-                array('property' => Form::FIELD_HIDDEN)
+                array('property' => FormPresenter::FIELD_HIDDEN)
             );
         }
 
@@ -247,7 +249,7 @@ try {
             $gL10n->get('SYS_MESSAGE'),
             $message->getContent('database'),
             10,
-            array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
+            array('maxLength' => 254, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addSubmitButton(
             'adm_button_send',
@@ -283,7 +285,7 @@ try {
         }
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_email_send_form',
             'modules/messages.email.send.tpl',
             ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php',
@@ -438,8 +440,8 @@ try {
             $showList = new ListConfiguration($gDb);
             $showList->readDataByUuid($postListUuid);
             $list = array('dummy' => $gL10n->get('SYS_LIST') . (strlen($showList->getValue('lst_name')) > 0 ? ' - ' . $showList->getValue('lst_name') : ''));
-            $form->addInput('userUuidList', '', $postUserUuidList, array('property' => Form::FIELD_HIDDEN));
-            $form->addInput('list_uuid', '', $postListUuid, array('property' => Form::FIELD_HIDDEN));
+            $form->addInput('userUuidList', '', $postUserUuidList, array('property' => FormPresenter::FIELD_HIDDEN));
+            $form->addInput('list_uuid', '', $postListUuid, array('property' => FormPresenter::FIELD_HIDDEN));
         }
 
         // no roles or users found then show message
@@ -452,7 +454,7 @@ try {
             $gL10n->get('SYS_TO'),
             $list,
             array(
-                'property' => Form::FIELD_REQUIRED,
+                'property' => FormPresenter::FIELD_REQUIRED,
                 'multiselect' => true,
                 'maximumSelectionNumber' => $maxNumberRecipients,
                 'helpTextId' => ($gValidLogin ? '' : 'SYS_SEND_MAIL_TO_ROLE'),
@@ -476,7 +478,7 @@ try {
                 'namefrom',
                 $gL10n->get('SYS_YOUR_NAME'),
                 $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
-                array('maxLength' => 50, 'property' => Form::FIELD_DISABLED)
+                array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
             );
 
             if ($possibleEmails > 1) {
@@ -506,7 +508,7 @@ try {
                     'mailfrom',
                     $gL10n->get('SYS_YOUR_EMAIL'),
                     $gCurrentUser->getValue('EMAIL'),
-                    array('type' => 'email', 'maxLength' => 100, 'property' => Form::FIELD_DISABLED)
+                    array('type' => 'email', 'maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
                 );
             }
         } else {
@@ -514,13 +516,13 @@ try {
                 'namefrom',
                 $gL10n->get('SYS_YOUR_NAME'),
                 '',
-                array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+                array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)
             );
             $form->addInput(
                 'mailfrom',
                 $gL10n->get('SYS_YOUR_EMAIL'),
                 '',
-                array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+                array('type' => 'email', 'maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         }
 
@@ -538,7 +540,7 @@ try {
             'msg_subject',
             $gL10n->get('SYS_SUBJECT'),
             $message->getValue('msg_subject'),
-            array('maxLength' => 77, 'property' => Form::FIELD_REQUIRED)
+            array('maxLength' => 77, 'property' => FormPresenter::FIELD_REQUIRED)
         );
 
         // add multiline text element or ckeditor to form
@@ -548,7 +550,7 @@ try {
                 $gL10n->get('SYS_TEXT'),
                 $message->getContent(),
                 array(
-                    'property' => Form::FIELD_REQUIRED,
+                    'property' => FormPresenter::FIELD_REQUIRED,
                     'helpTextId' => ($gValidLogin && $gSettingsManager->getInt('mail_sending_mode') === Email::SENDINGMODE_SINGLE) ? array('SYS_EMAIL_PARAMETERS_DESC', array('#recipient_firstname#', '#recipient_lastname#', '#recipient_name#', '#recipient_email#')) : null
                 )
             );
@@ -558,7 +560,7 @@ try {
                 $gL10n->get('SYS_TEXT'),
                 $message->getContent('database'),
                 10,
-                array('property' => Form::FIELD_REQUIRED)
+                array('property' => FormPresenter::FIELD_REQUIRED)
             );
         }
 

@@ -19,7 +19,7 @@ define('SCRIPT_START_TIME', microtime(true));
 // ##################
 
 // !!! Please do not edit these version numbers !!!
-const MIN_PHP_VERSION = '7.4.0';
+const MIN_PHP_VERSION = '8.2.0';
 
 const ADMIDIO_VERSION_MAIN = 5;
 const ADMIDIO_VERSION_MINOR = 0;
@@ -118,6 +118,8 @@ const TBL_COMPONENTS = TABLE_PREFIX . '_components';
 const TBL_EVENTS = TABLE_PREFIX . '_events';
 const TBL_FILES = TABLE_PREFIX . '_files';
 const TBL_FOLDERS = TABLE_PREFIX . '_folders';
+const TBL_FORUM_TOPICS = TABLE_PREFIX . '_forum_topics';
+const TBL_FORUM_POSTS = TABLE_PREFIX . '_forum_posts';
 const TBL_GUESTBOOK = TABLE_PREFIX . '_guestbook';
 const TBL_GUESTBOOK_COMMENTS = TABLE_PREFIX . '_guestbook_comments';
 const TBL_IDS = TABLE_PREFIX . '_ids';

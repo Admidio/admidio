@@ -2,7 +2,7 @@
 namespace Admidio\UI\View;
 
 use Admidio\Infrastructure\Exception;
-use HtmlPage;
+use Admidio\UI\Presenter\PagePresenter;
 use Throwable;
 
 /**
@@ -12,7 +12,7 @@ use Throwable;
  * specific elements like css files, javascript files and javascript code. It
  * also provides some methods to easily add new html data to the page. The generated
  * page will automatically integrate the chosen theme. You can optional disable the
- * integration of the theme files. Additional to the basic class HtmlPage this class only assigns
+ * integration of the theme files. Additional to the basic class PagePresenter this class only assigns
  * variables that are in installation and update mode available. There is also a method that will
  * easily create a message page.
  *
@@ -34,7 +34,7 @@ use Throwable;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Installation extends HtmlPage
+class Installation extends PagePresenter
 {
     /**
      * Constructor creates the page object and initialized all parameters.

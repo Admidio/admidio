@@ -243,7 +243,7 @@ class LogChanges extends Entity
      * @param int $id The record ID of the inserted record
      * @param string $objectname Human readable representation of the record (used in the log view)
      */
-    public function setLogDeletion(string $table, int $id, string $uuid = null, string $objectname = null) 
+    public function setLogDeletion(string $table, int $id = 0, string $uuid = null, string $objectname = null) 
     {
         $this->setLogBasevalues($table, $id, $uuid, $objectname, 'DELETED');
     }

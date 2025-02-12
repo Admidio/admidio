@@ -319,9 +319,15 @@ class ListConfiguration extends Entity
         $this->db->startTransaction();
 
         // Delete all columns of the list
-        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
-                      WHERE lsc_lst_id = ? -- $lstId';
-        $this->db->queryPrepared($sql, array($lstId));
+        $sql = 'SELECT lsc_id
+                  FROM '.TBL_LIST_COLUMNS.'
+                 WHERE lsc_lst_id = ? -- $lstId';
+        $listColumnsStatement = $this->db->queryPrepared($sql, array($lstId));
+
+        while ($lscId = $listColumnsStatement->fetchColumn()) {
+            $listColumn = new ListColumns($this->db, $lscId);
+            $listColumn->delete();
+        }
 
         $return = parent::delete();
 

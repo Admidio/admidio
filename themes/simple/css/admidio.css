@@ -189,6 +189,17 @@ a {
     border-color: var(--bs-primary);
 }
 
+.btn-outline-primary, .btn-outline-primary:hover {
+    color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+.btn-check:checked + .btn {
+    color: var(--bs-body-bg) !important;
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary) !important;
+}
+
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
@@ -451,12 +462,23 @@ label {
 }
 
 /***********************************/
-/* Various settings */
+/* Tables */
 /***********************************/
 
 .table td, .table th {
     color: var(--bs-secondary);
 }
+
+.table-hover tbody tr td a.admidio-function-link {
+    visibility: hidden;
+}
+
+.table-hover tbody tr:hover td a.admidio-function-link {
+    visibility: visible;
+}
+/***********************************/
+/* Various settings */
+/***********************************/
 
 .admidio-opacity-reduced {
     opacity: 0.4;
@@ -568,6 +590,14 @@ tr.admidio-event-highlight {
 .admidio-img-presenter img {
     max-width: 100%;
     height: auto;
+}
+
+.admidio-forum-entry-info {
+    font-size: 80%;
+}
+
+.admidio-forum-topic p {
+    margin: 0 !important;
 }
 
 #adm_password_strength {

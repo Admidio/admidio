@@ -323,7 +323,7 @@ function formSubmit(event) {
                 }
                 // no expected JSON response
                 returnStatus = "error";
-                returnMessage = "Something went wrong while processing your request.";
+                returnMessage = "Something went wrong while processing your request.<p>" + data + "</p>";
             }
 
             if (returnStatus === "success") {

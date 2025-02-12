@@ -10,7 +10,8 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\UserRelationType;
 use Admidio\Changelog\Service\ChangelogService;
 
@@ -31,7 +32,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-relationtypes', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-relationtypes', $headline);
 
     // define link to create new category
     $page->addPageFunctionsMenuItem(
@@ -55,7 +56,7 @@ try {
     // create array with all column heading values
     $columnHeading = array(
         $gL10n->get('SYS_USER_RELATION'),
-        $gL10n->get('SYS_USER_RELATION_TYPE') . Form::getHelpTextIcon('SYS_RELATIONSHIP_TYPE_DESC'),
+        $gL10n->get('SYS_USER_RELATION_TYPE') . FormPresenter::getHelpTextIcon('SYS_RELATIONSHIP_TYPE_DESC'),
         '&nbsp;'
     );
     $relationTypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));

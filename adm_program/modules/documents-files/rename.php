@@ -18,7 +18,8 @@ use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
 
@@ -86,13 +87,13 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-documents-files-rename', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-documents-files-rename', $headline);
 
     $isFile = ($getFileUuid !== '');
     ChangelogService::displayHistoryButton($page, 'filefolder', ($isFile?'files':'folders').',roles_rights_data', true, array('uuid' => $isFile?$getFileUuid:$getFolderUuid));
     
     // create html form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_edit_download_form',
         'modules/documents-files.rename.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'rename', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)),
@@ -103,20 +104,20 @@ try {
             'file_type',
             $gL10n->get('SYS_FILE_TYPE'),
             $fileType,
-            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small')
+            array('property' => FormPresenter::FIELD_DISABLED, 'class' => 'form-control-small')
         );
     }
     $form->addInput(
         'previous_name',
         $gL10n->get('SYS_PREVIOUS_NAME'),
         $originalName,
-        array('property' => Form::FIELD_DISABLED)
+        array('property' => FormPresenter::FIELD_DISABLED)
     );
     $form->addInput(
         'new_name',
         $gL10n->get('SYS_NEW_NAME'),
         $formValues['new_name'],
-        array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'SYS_FILE_NAME_RULES')
+        array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_FILE_NAME_RULES')
     );
     $form->addMultilineTextInput(
         'new_description',

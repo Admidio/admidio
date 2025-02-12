@@ -18,7 +18,8 @@ use Admidio\Infrastructure\SystemMail;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -114,10 +115,10 @@ try {
         } else {
             // show dialog to change password
 
-            $page = new HtmlPage('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
+            $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
 
             // show form
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_password_reset_set_password_form',
                 'system/password-reset.set-password.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php', array('user_uuid' => $getUserUuid, 'id' => $getResetId)),
@@ -129,7 +130,7 @@ try {
                 '',
                 array(
                     'type' => 'password',
-                    'property' => Form::FIELD_REQUIRED,
+                    'property' => FormPresenter::FIELD_REQUIRED,
                     'minLength' => PASSWORD_MIN_LENGTH,
                     'passwordStrength' => true,
                     'passwordUserData' => $user->getPasswordUserData(),
@@ -140,7 +141,7 @@ try {
                 'new_password_confirm',
                 $gL10n->get('SYS_REPEAT'),
                 '',
-                array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+                array('type' => 'password', 'property' => FormPresenter::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
             );
             $form->addSubmitButton(
                 'adm_button_save',
@@ -268,12 +269,12 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new HtmlPage('admidio-password-reset', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-password-reset', $headline);
 
         $page->addHtml('<p class="lead">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION') . '</p>');
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_password_reset_form',
             'system/password-reset.tpl',
             ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php',
@@ -283,7 +284,7 @@ try {
             'recipient_email',
             $gL10n->get('SYS_USERNAME_OR_EMAIL'),
             '',
-            array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
+            array('maxLength' => 254, 'property' => FormPresenter::FIELD_REQUIRED)
         );
 
         // if captchas are enabled then visitors of the website must resolve this

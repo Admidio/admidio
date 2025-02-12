@@ -253,7 +253,7 @@ try {
         }
 
         // only users with download administration rights should set new roles rights
-        if (!$gCurrentUser->adminDocumentsFiles()) {
+        if (!$gCurrentUser->administrateDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -283,7 +283,7 @@ try {
         }
 
         // only users with documents & files administration rights should set new roles rights
-        if (!$gCurrentUser->adminDocumentsFiles()) {
+        if (!$gCurrentUser->administrateDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 

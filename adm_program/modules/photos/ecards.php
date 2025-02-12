@@ -22,7 +22,8 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Photos\Entity\Album;
 use Admidio\Photos\ValueObject\ECard;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -90,7 +91,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('adm_ecards', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_ecards', $headline);
 
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/css/lightbox.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');
@@ -118,15 +119,15 @@ try {
     );
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_ecard_send_form',
         'modules/photos.ecard.send.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/photos/ecard_send.php',
         $page
     );
-    $form->addInput('submit_action', '', '', array('property' => Form::FIELD_HIDDEN));
-    $form->addInput('photo_uuid', '', $getPhotoUuid, array('property' => Form::FIELD_HIDDEN));
-    $form->addInput('photo_nr', '', $getPhotoNr, array('property' => Form::FIELD_HIDDEN));
+    $form->addInput('submit_action', '', '', array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('photo_uuid', '', $getPhotoUuid, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('photo_nr', '', $getPhotoNr, array('property' => FormPresenter::FIELD_HIDDEN));
 
     $templates = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 
@@ -145,7 +146,7 @@ try {
         $newTemplateArray,
         array(
             'defaultValue' => $gSettingsManager->getString('photo_ecard_template'),
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'showContextDependentFirstEntry' => false
         )
     );
@@ -208,25 +209,25 @@ try {
         'ecard_recipients',
         $gL10n->get('SYS_TO'),
         $list,
-        array('property' => Form::FIELD_REQUIRED, 'multiselect' => true)
+        array('property' => FormPresenter::FIELD_REQUIRED, 'multiselect' => true)
     );
     $form->addInput(
         'name_from',
         $gL10n->get('SYS_YOUR_NAME'),
         $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
-        array('maxLength' => 50, 'property' => Form::FIELD_DISABLED)
+        array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
     );
     $form->addInput(
         'mail_from',
         $gL10n->get('SYS_YOUR_EMAIL'),
         $gCurrentUser->getValue('EMAIL'),
-        array('type' => 'email', 'maxLength' => 50, 'property' => Form::FIELD_DISABLED)
+        array('type' => 'email', 'maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
     );
     $form->addEditor(
         'ecard_message',
         '',
         '',
-        array('property' => Form::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
+        array('property' => FormPresenter::FIELD_REQUIRED, 'toolbar' => 'AdmidioComments')
     );
     $form->addButton('adm_button_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'bi-eye-fill'));
     $form->addSubmitButton('adm_button_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'bi-envelope-fill'));

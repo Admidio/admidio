@@ -176,8 +176,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha-aktivering</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Aktivera registrering</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Registrering av besökare på hemsidan kan aktiveras eller inaktiveras med denna inställning. Profilfälten som visas under registreringsprocessen kan konfigureras i profilfältinställningarna för varje fält. (Standard: ja)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Aktivera webbflöden</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan tillhandahålla webbflöden för flera moduler (meddelanden, evenemang, gästbok, fotogalleri och webblänkar) på översiktssidan för varje modul. Prenumeration är möjlig av webbläsare eller flödesläsare. (standard: ja)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Aktivera webbflöden</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio kan tillhandahålla webbflöden för flera moduler (meddelanden, evenemang, gästbok, fotogalleri och webblänkar) på översiktssidan för varje modul. Prenumeration är möjlig av webbläsare eller flödesläsare. (standard: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definiera obegränsade ytterligare fält. Fält visas och kan redigeras i användarens profil. Dessa fält kommer också att finnas i egen lista.</string>
   <string name="ORG_FIELD_DISABLED">Fält redigerbart endast för användare med behörighet #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Ett låst profilfält kan inte längre redigeras av användaren i sin egen profil. Det kan endast redigeras av användare som har behörighet att redigera alla användare. Ledarna för en roll med behörighet att redigera profiler för rollmedlemmarna kan också redigera detta profilfält.</string>

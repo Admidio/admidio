@@ -20,7 +20,8 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
 
@@ -118,7 +119,7 @@ try {
         $hoverRows = false;
 
         if ($getMode === 'print') {
-            $page = new HtmlPage('plg-category-report-main-print');
+            $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-main-print');
             $page->setContentFullWidth();
             $page->setPrintMode();
             $page->setTitle($title);
@@ -178,7 +179,7 @@ try {
             $hoverRows = true;
 
             // create html page object
-            $page = new HtmlPage('plg-category-report-main-html');
+            $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-main-html');
             $page->setContentFullWidth();
             $page->setTitle($title);
             $page->setHeadline($headline);
@@ -280,7 +281,7 @@ try {
             }
 
             // create filter menu with elements for role
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_navbar_filter_form_category_report',
                 'sys-template-parts/form.filter.tpl',
                 '',

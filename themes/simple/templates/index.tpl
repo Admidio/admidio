@@ -16,6 +16,12 @@
     {* Additional header informations that will be displayed if the header was set through $page->addHeader() *}
     {$additionalHeaderData}
 
+    {if count($rssFeeds) > 0}
+        {foreach $rssFeeds as $title => $url}
+            <link rel="alternate" type="application/rss+xml" title="{$title}" href="{$url}" />
+        {/foreach}
+    {/if}
+
     <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/admidio.css" />
 
     <script type="text/javascript">
@@ -155,6 +161,12 @@
                         {/if}
                         {if $urlDataProtection != ''}
                             &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlDataProtection}">{$l10n->get('SYS_DATA_PROTECTION')}</a>
+                        {/if}
+                        {if count($rssFeeds) > 0}
+                            &nbsp;&nbsp;-&nbsp;&nbsp;
+                            {foreach $rssFeeds as $title => $url}
+                                <a href="{$url}" title="{$title}"><i class="bi bi-rss-fill"></i></a>
+                            {/foreach}
                         {/if}
                     </div>
                 </div>

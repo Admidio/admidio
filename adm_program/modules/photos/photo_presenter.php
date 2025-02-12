@@ -16,6 +16,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -61,7 +62,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-photos-presenter', $photoAlbum->getValue('pho_name'));
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-photos-presenter', $photoAlbum->getValue('pho_name'));
 
     // show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));

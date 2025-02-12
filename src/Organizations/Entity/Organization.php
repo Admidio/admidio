@@ -1,9 +1,11 @@
 <?php
+
 namespace Admidio\Organizations\Entity;
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Events\Entity\Event;
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Database;
 use Admidio\Photos\Entity\Album;
 use Admidio\Preferences\ValueObject\SettingsManager;
@@ -13,6 +15,7 @@ use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Roles\Entity\RolesRights;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
 use Admidio\Changelog\Entity\LogChanges;
@@ -170,10 +173,12 @@ class Organization extends Entity
                      , (?, ?, \'LNK\', \'INTERN\',    \'INS_INTERN\',    false, false, 2, ?, ?)
                      , (?, ?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', false, false, 2, ?, ?)
+                     , (?, ?, \'FOT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'EVT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'EVT\', \'TRAINING\',  \'INS_TRAINING\',  false, false, 2, ?, ?)
                      , (?, ?, \'EVT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)';
         $queryParams = array(
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
@@ -251,8 +256,7 @@ class Organization extends Entity
         $roleAdministrator->setValue('rol_announcements', 1);
         $roleAdministrator->setValue('rol_events', 1);
         $roleAdministrator->setValue('rol_documents_files', 1);
-        $roleAdministrator->setValue('rol_guestbook', 1);
-        $roleAdministrator->setValue('rol_guestbook_comments', 1);
+        $roleAdministrator->setValue('rol_forum_admin', 1);
         $roleAdministrator->setValue('rol_photo', 1);
         $roleAdministrator->setValue('rol_weblinks', 1);
         $roleAdministrator->setValue('rol_edit_inventory', 1);
@@ -294,6 +298,17 @@ class Organization extends Entity
         $roleManagement->setValue('rol_all_lists_view', 1);
         $roleManagement->setValue('rol_view_memberships', Role::VIEW_LOGIN_USERS);
         $roleManagement->save();
+
+        // set edit role rights to forum categories for role member
+        $sql = 'SELECT cat_id
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type = \'FOT\'
+                   AND cat_org_id = ? -- $orgId';
+        $pdoStatement = $this->db->queryPrepared($sql, array($orgId));
+        $row = $pdoStatement->fetch();
+
+        $rightCategoryView = new RolesRights($this->db, 'category_edit', (int)$row['cat_id']);
+        $rightCategoryView->saveRoles(array($roleMember->getValue('rol_id')));
 
         // Create membership for user in role 'Administrator' and 'Members'
         $membershipAdministrator = new Membership($this->db);
@@ -466,6 +481,29 @@ class Organization extends Entity
             $event->setArray($eventRow);
             $event->delete();
         }
+
+        // delete all forum posts
+        $sql = 'DELETE FROM ' . TBL_FORUM_POSTS . '
+                 WHERE fop_fot_id IN (
+                       SELECT fot.fot_id
+                         FROM (SELECT fot_id
+                                 FROM ' . TBL_FORUM_TOPICS . '
+                                INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = fot_cat_id
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) fot
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all forum topics
+        $sql = 'DELETE FROM ' . TBL_FORUM_TOPICS . '
+                 WHERE fot_cat_id IN (
+                       SELECT cat.cat_id
+                         FROM (SELECT cat_id
+                                 FROM ' . TBL_CATEGORIES . '
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) cat
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
 
         // delete all photos
         $sql = 'SELECT pho.*

@@ -17,7 +17,8 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
 try {
@@ -35,7 +36,7 @@ try {
     }
 
     // first check whether the user also has the appropriate rights
-    if (!$gCurrentUser->adminDocumentsFiles()) {
+    if (!$gCurrentUser->administrateDocumentsFiles()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
@@ -117,13 +118,13 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-documents-files-config-folder', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-documents-files-config-folder', $headline);
     $page->assignSmartyVariable('folderName', $folder->getValue('fol_name'));
 
     ChangelogService::displayHistoryButton($page, 'folder ', 'folders,files,roles_rights_data', !empty($getAnnUuid), array('uuid' => $getFolderUuid));
-    
+
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_folder_permissions_form',
         'modules/documents-files.folder.permissions.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'permissions', 'folder_uuid' => $getFolderUuid)),
@@ -135,7 +136,7 @@ try {
         $gDb,
         $sqlDataView,
         array(
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,
             'multiselect' => true,
             'firstEntry' => $firstEntryViewRoles
@@ -147,7 +148,7 @@ try {
         $gDb,
         $sqlDataView,
         array(
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'defaultValue' => $roleUploadSet,
             'multiselect' => true,
             'placeholder' => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
@@ -157,7 +158,7 @@ try {
         'adm_administrators',
         $gL10n->get('SYS_ADMINISTRATORS'),
         implode(', ', $adminRoles),
-        array('property' => Form::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
+        array('property' => FormPresenter::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
     );
     $form->addSubmitButton(
         'adm_button_save',

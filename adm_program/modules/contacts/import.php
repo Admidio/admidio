@@ -10,7 +10,8 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -32,10 +33,10 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-members-import', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-members-import', $headline);
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_contacts_import_form',
         'modules/contacts.import.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_read_file.php',
@@ -57,7 +58,7 @@ try {
         array(
             'showContextDependentFirstEntry' => false,
             'defaultValue' => 'AUTO',
-            'property' => Form::FIELD_REQUIRED
+            'property' => FormPresenter::FIELD_REQUIRED
         )
     );
     $page->addJavascript(
@@ -74,7 +75,7 @@ try {
     $form->addFileUpload(
         'userfile',
         $gL10n->get('SYS_CHOOSE_FILE'),
-        array('property' => Form::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
+        array('property' => FormPresenter::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
             'text/html',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'application/vnd.ms-excel',
@@ -183,7 +184,7 @@ try {
         $gL10n->get('SYS_ASSIGN_ROLE'),
         $roles,
         array(
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'defaultValue' => 0,
             'helpTextId' => 'SYS_ASSIGN_ROLE_FOR_IMPORT'
         )
@@ -200,7 +201,7 @@ try {
         $gL10n->get('SYS_EXISTING_CONTACTS'),
         $selectBoxEntries,
         array(
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'defaultValue' => 1,
             'showContextDependentFirstEntry' => false,
             'helpTextId' => 'SYS_IDENTIFY_USERS'

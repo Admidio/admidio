@@ -2,7 +2,7 @@
 use Admidio\Infrastructure\Plugins\Overview;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 /**
  ***********************************************************************************************
@@ -123,7 +123,7 @@ try {
             $forgotPasswordLink = '';
         }
 
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_plugin_login_form',
             'plugin.login-form.edit.tpl',
             ADMIDIO_URL . '/adm_program/system/login.php?mode=check',
@@ -134,7 +134,7 @@ try {
             'plg_usr_login_name',
             $gL10n->get('SYS_USERNAME'),
             '',
-            array('property' => Form::FIELD_REQUIRED, 'maxLength' => 254)
+            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 254)
         );
         $form->addInput(
             'plg_usr_password',
@@ -142,7 +142,7 @@ try {
             '',
             array(
                 'type' => 'password',
-                'property' => Form::FIELD_REQUIRED,
+                'property' => FormPresenter::FIELD_REQUIRED,
                 'helpTextId' => $forgotPasswordLink
             )
         );

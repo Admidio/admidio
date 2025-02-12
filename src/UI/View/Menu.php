@@ -5,8 +5,8 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Menu\Service\MenuService;
-use Admidio\UI\Component\Form;
-use HtmlPage;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
@@ -28,7 +28,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Menu extends HtmlPage
+class Menu extends PagePresenter
 {
     /**
      * Create the data for the edit form of a menu entry.
@@ -79,19 +79,19 @@ class Menu extends HtmlPage
         ChangelogService::displayHistoryButton($this, 'menu', 'menu', !empty($menuUUID), array('uuid' => $menuUUID));
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_menu_edit_form',
             'modules/menu.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('uuid' => $menuUUID, 'mode' => 'save')),
             $this
         );
 
-        $fieldRequired = Form::FIELD_REQUIRED;
-        $fieldDefault = Form::FIELD_DEFAULT;
+        $fieldRequired = FormPresenter::FIELD_REQUIRED;
+        $fieldDefault = FormPresenter::FIELD_DEFAULT;
 
         if ($menu->getValue('men_standard')) {
-            $fieldRequired = Form::FIELD_DISABLED;
-            $fieldDefault = Form::FIELD_DISABLED;
+            $fieldRequired = FormPresenter::FIELD_DISABLED;
+            $fieldDefault = FormPresenter::FIELD_DISABLED;
         }
 
         $subMenu = MenuService::subMenu(1, (int)$menu->getValue('men_id'));
@@ -100,7 +100,7 @@ class Menu extends HtmlPage
             'men_name',
             $gL10n->get('SYS_NAME'),
             htmlentities($menu->getValue('men_name', 'database'), ENT_QUOTES),
-            array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'SYS_MENU_NAME_DESC')
+            array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_MENU_NAME_DESC')
         );
 
         if ($menuUUID !== '') {
@@ -108,7 +108,7 @@ class Menu extends HtmlPage
                 'men_name_intern',
                 $gL10n->get('SYS_INTERNAL_NAME'),
                 $menu->getValue('men_name_intern'),
-                array('maxLength' => 100, 'property' => Form::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED, 'helpTextId' => 'SYS_INTERNAL_NAME_DESC')
             );
         }
 
@@ -124,7 +124,7 @@ class Menu extends HtmlPage
             $gL10n->get('SYS_MENU_LEVEL'),
             $subMenu,
             array(
-                'property' => Form::FIELD_REQUIRED,
+                'property' => FormPresenter::FIELD_REQUIRED,
                 'defaultValue' => (int)$menu->getValue('men_men_id_parent')
             )
         );

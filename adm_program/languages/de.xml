@@ -177,8 +177,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Registrierung aktivieren</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Die Registrierung durch Besucher:innen der Homepage kann über diese Einstellung aktiviert oder deaktiviert werden. Welche Profilfelder bei der Registrierung angezeigt werden, kann in den Profilfeld-Einstellungen je Feld konfiguriert werden. (Voreinstellung: ja)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Web-Feeds aktivieren</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Veranstaltungen, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Web-Feeds aktivieren</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Veranstaltungen, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Voreinstellung: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer:innen angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
   <string name="ORG_FIELD_DISABLED">Feld nur für Mitglieder mit dem Recht #VAR1_BOLD# editierbar</string>
   <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann von dem Mitglied im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Mitgliedern bearbeitet werden, die das Rollenrecht besitzen alle Mitglieder zu bearbeiten. Leiter:innen einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>

@@ -31,7 +31,8 @@ use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Service\RoleService;
 use Admidio\Roles\ValueObject\ListData;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 use Admidio\Changelog\Service\ChangelogService;
@@ -351,7 +352,7 @@ try {
 
     if ($getMode === 'print') {
         // create html page object without the custom theme files
-        $page = new HtmlPage('admidio-lists-show', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-lists-show', $headline);
         $page->setContentFullWidth();
         $page->setPrintMode();
         $page->setTitle($title);
@@ -395,7 +396,7 @@ try {
         $hoverRows = true;
 
         // create html page object
-        $page = new HtmlPage('admidio-lists-show', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-lists-show', $headline);
         $page->setContentFullWidth();
         $page->setTitle($title);
 
@@ -427,7 +428,7 @@ try {
         $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('SYS_CONFIGURATION'));
 
         // add navbar with filter elements and the select box with all lists configurations
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_navbar_filter_form',
             'sys-template-parts/form.filter.tpl',
             ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php',
@@ -447,9 +448,9 @@ try {
             // create filter menu with elements for start-/end date
             $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('list_uuid', '', $getListUuid, array('property' => Form::FIELD_HIDDEN));
-            $form->addInput('role_list', '', $getRoleList, array('property' => Form::FIELD_HIDDEN));
-            $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => Form::FIELD_HIDDEN));
+            $form->addInput('list_uuid', '', $getListUuid, array('property' => FormPresenter::FIELD_HIDDEN));
+            $form->addInput('role_list', '', $getRoleList, array('property' => FormPresenter::FIELD_HIDDEN));
+            $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
         }

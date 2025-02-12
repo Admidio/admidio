@@ -176,8 +176,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktivering</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Aktiver registrering</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Registrering af besøgende på hjemmesiden kan aktiveres eller deaktiveres ved denne indstilling. Profilfelterne, der vises under registreringsprocessen, kan konfigureres i profilfeltindstillingerne for hvert felt. (Standard: ja)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Aktiver web-feeds</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio er i stand til at levere webfeeds til flere moduler (annonceringer, arrangementer, gæstebog, billeder og weblinks) på oversigtssiden for hvert modul. Abonnement er muligt via browser eller feed-læser. (standard: ja)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Aktiver web-feeds</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio er i stand til at levere webfeeds til flere moduler (annonceringer, arrangementer, gæstebog, billeder og weblinks) på oversigtssiden for hvert modul. Abonnement er muligt via browser eller feed-læser. (standard: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definér antal eller ubegrænset yderligere felter. Felterne vil blive vist og kan redigeres i brugerens profil. Disse felter vil også være tilgængelige i egne lister.</string>
   <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres af medlemmer med tilladelse #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Et låst profilfelt kan ikke længere redigeres af et medlem i sin egen profil. Den kan kun redigeres af medlemmer, der har tilladelse til at redigere alle medlemmer. Ledere af en rolle med tilladelse til at redigere profiler for rollemedlemmer kan også redigere dette profilfelt.</string>

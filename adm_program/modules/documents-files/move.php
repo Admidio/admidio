@@ -18,7 +18,7 @@ use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -62,7 +62,7 @@ try {
     $folders = $documentsFiles->getUploadableFolderStructure();
 
     // create html form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_documents_files_move_file',
         'modules/documents-files.move.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 'move', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)),
@@ -73,7 +73,7 @@ try {
         $gL10n->get('SYS_MOVE_TO'),
         $folders,
         array(
-            'property' => Form::FIELD_REQUIRED,
+            'property' => FormPresenter::FIELD_REQUIRED,
             'defaultValue' => $getFolderUuid,
             'showContextDependentFirstEntry' => false
         )

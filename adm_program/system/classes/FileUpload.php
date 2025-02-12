@@ -1,6 +1,7 @@
 <?php
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 
 /**
  * @brief Class to create a file upload page for document & files or photos module
@@ -12,9 +13,9 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 class FileUpload
 {
     /**
-     * @var HtmlPage Object of HtmlPage that represents the current page where the upload should be integrated
+     * @var PagePresenter Object of PagePresenter that represents the current page where the upload should be integrated
      */
-    protected HtmlPage $page;
+    protected PagePresenter $page;
     /**
      * @var string Name module for which the upload should be done. Preferred modules are 'photos' and 'documents_files'
      */
@@ -26,11 +27,11 @@ class FileUpload
 
     /**
      * Constructor that will create an object of FileUpload.
-     * @param HtmlPage $page            Object that represents the current page where the upload should be integrated
+     * @param PagePresenter $page       Object that represents the current page where the upload should be integrated
      * @param string   $module          Name module for which the upload should be done. Preferred modules are 'photos' and 'documents_files'
      * @param string   $destinationUuid UUID of the destination object that could be the folder or the album
      */
-    public function __construct(HtmlPage $page, string $module, string $destinationUuid)
+    public function __construct(PagePresenter $page, string $module, string $destinationUuid)
     {
         $this->page = $page;
         $this->module = $module;
@@ -77,7 +78,7 @@ class FileUpload
 
     /**
      * Adds the necessary css and javascript files of the jquery-file-upload library to the page header of the
-     * HtmlPage object that was set in the constructor.
+     * PagePresenter object that was set in the constructor.
      */
     public function setHeaderData()
     {

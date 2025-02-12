@@ -12,7 +12,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\View\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_organization.php') {
@@ -21,7 +21,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_organization.php') {
 
 if ($mode === 'html') {
     // initialize form data
-    $shortnameProperty = Form::FIELD_REQUIRED;
+    $shortnameProperty = FormPresenter::FIELD_REQUIRED;
 
     if (isset($_SESSION['orga_shortname'])) {
         $orgaShortName = $_SESSION['orga_shortname'];
@@ -46,7 +46,7 @@ if ($mode === 'html') {
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
     $page->assignSmartyVariable('text', $gL10n->get('SYS_NEW_ORGANIZATION_DESC'));
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_installation_create_organization_form',
         'installation.create-organization.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization', 'mode' => 'check')),
@@ -62,19 +62,19 @@ if ($mode === 'html') {
         'adm_organization_longname',
         $gL10n->get('SYS_NAME'),
         $orgaLongName,
-        array('maxLength' => 255, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'adm_organization_email',
         $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
         $orgaEmail,
-        array('type' => 'email', 'maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
+        array('type' => 'email', 'maxLength' => 254, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addSelectBox(
         'adm_organization_timezone',
         $gL10n->get('ORG_TIMEZONE'),
         $timezones,
-        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get())
+        array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get())
     );
     $form->addButton(
         'adm_previous_page',

@@ -177,8 +177,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Attivazione captcha</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Abilita la registrazione</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">La registrazione da parte dei visitatori della homepage può essere attivata o disattivata da questa impostazione. I campi del profilo che vengono visualizzati durante il processo di registrazione possono essere configurati nelle impostazioni del campo del profilo per ogni campo. (Predefinito: sì)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Abilitare i feed web</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio è in grado di fornire i feed web per diversi moduli (annunci, appuntamenti, guestbook, galleria fotografica e weblinks) sulla pagina panoramica di ogni modulo. La sottoscrizione è possibile tramite browser o lettore di feed. (predefinito: sì)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Abilitare i feed web</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio è in grado di fornire i feed web per diversi moduli (annunci, appuntamenti, guestbook, galleria fotografica e weblinks) sulla pagina panoramica di ogni modulo. La sottoscrizione è possibile tramite browser o lettore di feed. (predefinito: sì)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definisci campi aggiuntivi illimitati. I campi saranno visualizzati e possono essere modificati nel profilo dell\'utente. Questi campi saranno disponibili anche in un proprio elenco.</string>
   <string name="ORG_FIELD_DISABLED">Il campo è modificabile solo per l\'utente con il permesso #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Un campo del profilo bloccato non può più essere modificato dall\'utente nel proprio profilo. Può essere modificato solo dagli utenti che hanno il permesso di modificare tutti gli utenti. I leader di un ruolo con il permesso di modificare i profili dei membri del ruolo possono anche modificare questo campo del profilo.</string>

@@ -11,11 +11,11 @@
     "homepage": "https://www.admidio.org/",
     "config": {
         "platform": {
-            "php": "7.4.0"
+            "php": "8.2.0"
         }
     },
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.2",
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-json": "*",

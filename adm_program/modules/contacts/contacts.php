@@ -16,7 +16,8 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\ListConfiguration;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
 try {
@@ -42,7 +43,7 @@ try {
 
     // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
     $flagShowMembers = !$getMembers;// create html page object
-    $page = new HtmlPage('admidio-contacts', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-contacts', $headline);
     $page->setContentFullWidth();
 
     if ($gCurrentUser->editUsers()) {
@@ -64,11 +65,11 @@ try {
         );
 
         ChangelogService::displayHistoryButton($page, 'contacts', 'users,user_data,members');
-    
+
         // show checkbox to select all users or only active members
         if ($gSettingsManager->getBool('contacts_show_all')) {
             // create filter menu with elements for category
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_navbar_filter_form',
                 'sys-template-parts/form.filter.tpl',
                 '',

@@ -224,7 +224,7 @@ class Category extends Entity
         || ($categoryType === 'LNK' && !$gCurrentUser->editWeblinksRight())
         || ($categoryType === 'ANN' && !$gCurrentUser->editAnnouncements())
         || ($categoryType === 'USF' && !$gCurrentUser->editUsers())
-        || ($categoryType === 'EVT' && !$gCurrentUser->editEvents())
+        || ($categoryType === 'EVT' && !$gCurrentUser->administrateEvents())
         || ($categoryType === 'AWA' && !$gCurrentUser->editUsers())) {
             return false;
         }
@@ -458,22 +458,6 @@ class Category extends Entity
     private function setTableAndColumnByCatType()
     {
         switch ($this->getValue('cat_type')) {
-            case 'ROL':
-                $this->elementTable = TBL_ROLES;
-                $this->elementColumn = 'rol_cat_id';
-                break;
-            case 'LNK':
-                $this->elementTable = TBL_LINKS;
-                $this->elementColumn = 'lnk_cat_id';
-                break;
-            case 'USF':
-                $this->elementTable = TBL_USER_FIELDS;
-                $this->elementColumn = 'usf_cat_id';
-                break;
-            case 'EVT':
-                $this->elementTable = TBL_EVENTS;
-                $this->elementColumn = 'dat_cat_id';
-                break;
             case 'ANN':
                 $this->elementTable = TBL_ANNOUNCEMENTS;
                 $this->elementColumn = 'ann_cat_id';
@@ -481,6 +465,26 @@ class Category extends Entity
             case 'AWA':
                 $this->elementTable = TABLE_PREFIX . '_user_awards';
                 $this->elementColumn = 'awa_cat_id';
+                break;
+            case 'EVT':
+                $this->elementTable = TBL_EVENTS;
+                $this->elementColumn = 'dat_cat_id';
+                break;
+            case 'FOT':
+                $this->elementTable = TBL_FORUM_TOPICS;
+                $this->elementColumn = 'fot_cat_id';
+                break;
+            case 'LNK':
+                $this->elementTable = TBL_LINKS;
+                $this->elementColumn = 'lnk_cat_id';
+                break;
+            case 'ROL':
+                $this->elementTable = TBL_ROLES;
+                $this->elementColumn = 'rol_cat_id';
+                break;
+            case 'USF':
+                $this->elementTable = TBL_USER_FIELDS;
+                $this->elementColumn = 'usf_cat_id';
                 break;
         }
     }

@@ -11,6 +11,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -57,7 +58,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline, 'bi-envelope-fill');
 
     // create html page object
-    $page = new HtmlPage('admidio-messages', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-messages', $headline);
     $page->setContentFullWidth();
 
     // link to write new email

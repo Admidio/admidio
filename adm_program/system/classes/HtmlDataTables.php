@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\UI\Presenter\PagePresenter;
+
 /**
  * @brief Creates the Javascript output for the jQuery DataTables plugin
  *
@@ -53,9 +56,9 @@ class HtmlDataTables
      */
     protected array $datatablesColumnDefs = array();
     /**
-     * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @var HtmlPage|PagePresenter A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
-    protected HtmlPage $htmlPage;
+    protected HtmlPage|PagePresenter $htmlPage;
     /**
      * @var bool A flag that set the server-side processing for datatables.
      */
@@ -67,10 +70,10 @@ class HtmlDataTables
 
     /**
      * Constructor creates the table element
-     * @param HtmlPage $htmlPage An object of the current HtmlPage where the HTML table is integrated.
+     * @param HtmlPage|PagePresenter $htmlPage An object of the current HtmlPage where the HTML table is integrated.
      * @param string $tableID The HTML ID of the table which should be converted in a DataTables.
      */
-    public function __construct(HtmlPage $htmlPage, string $tableID)
+    public function __construct(HtmlPage|PagePresenter $htmlPage, string $tableID)
     {
         $this->htmlPage = $htmlPage;
         $this->id = $tableID;

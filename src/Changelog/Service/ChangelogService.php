@@ -1,14 +1,10 @@
 <?php
 namespace Admidio\Changelog\Service;
 
-use HtmlPage;
-use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-
 use Admidio\Infrastructure\Entity\Entity;
-
 use Admidio\Photos\Entity\Album;
 use Admidio\Announcements\Entity\Announcement;
 use Admidio\Categories\Entity\Category;
@@ -19,13 +15,13 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
+use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Entity\RolesDependencies;
+use Admidio\Roles\Entity\RolesRightsData;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Forum\Entity\Post;
 use Admidio\ProfileFields\Entity\ProfileField;
-use Admidio\Roles\Entity\Role;
-use Admidio\Roles\Entity\RolesRights;
-use Admidio\Roles\Entity\RolesRightsData;
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Forum\Entity\Topic;
@@ -34,6 +30,9 @@ use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
 use Admidio\Weblinks\Entity\Weblink;
+use Admidio\UI\Presenter\PagePresenter;
+use DateTime;
+use ModuleEvents;
 
 use Admidio\Roles\Service\RoleService;
 
@@ -48,7 +47,7 @@ use Admidio\Roles\Service\RoleService;
  * ```
  * $allLogTables = ChangelogService::getTableLabel();
  * $readableTableName = ChangelogService::getTableLabel('users');
- * 
+ *
  * $permittedTables = ChangelogService::getPermittedTables($gCurrentUser);
  * ```
  * @copyright The Admidio Team
@@ -63,7 +62,7 @@ class ChangelogService {
  *********************************************************
  */
 
- 
+
     /**
      * Return a human-readable title for the given database table. If table is
      * null, a full named array of all titles is returned.
@@ -100,7 +99,7 @@ class ChangelogService {
             'files' => 'SYS_FILE',
             'organizations' => 'SYS_ORGANIZATION',
             'menu' => 'SYS_MENU_ITEM',
-            
+
             'user_relation_types' => 'SYS_USER_RELATION_TYPE',
             'user_relations' => 'SYS_USER_RELATIONS',
 
@@ -125,11 +124,11 @@ class ChangelogService {
 
 
     /**
-     * Return an Entity-derived object for the given module. No ID or UUID is set by default, 
-     * but 
+     * Return an Entity-derived object for the given module. No ID or UUID is set by default,
+     * but
      * @param string $module The module name (database table without prefix)
      * @return Entity|null An empty object for the given table.
-     * 
+     *
      * **Code example**
      * ```
      * $usr = ChangelogService::getObjectForTable('users');
@@ -139,7 +138,7 @@ class ChangelogService {
     public static function getObjectForTable(string $module): Entity | null {
         global $gDb, $gProfileFields;
         switch ($module) {
-            case 'users': 
+            case 'users':
             case 'user_data':
                 return new User($gDb, $gProfileFields);
             case 'announcements':
@@ -182,8 +181,8 @@ class ChangelogService {
                 //return new RolesRights($gDb, '', 0);
             case 'roles_rights_data':
                 return new RolesRightsData($gDb);
-            //case 'role_dependencies':
-                // Does not use an Entity-derived class; so far, changes are NOT logged
+            case 'role_dependencies':
+                return new RolesDependencies($gDb);
             case 'rooms':
                 return new Room($gDb);
             case 'texts':
@@ -204,14 +203,14 @@ class ChangelogService {
      * The array values can either be a simple (translatable) string or an array of the form
      *    array('name' => 'SYS_LEADER', 'type' => 'BOOL')
      * Possible types are BOOL, CATEGORY, ICON, URL, ROLE, ROOM, EMAIL, ORG, FOLDER, ICON, etc.
-     * If type is CUSTOM_LIST, an additional key 'entries' can be used to provide explicit value 
+     * If type is CUSTOM_LIST, an additional key 'entries' can be used to provide explicit value
      * transformations / translations.
-     * 
+     *
      * The type can later be fed to the ChangelogService::formatValue function for proper HTML formatting
      * of a field value.
-     * 
+     *
      * @return array
-     * 
+     *
      * **Code example**
      * ```
      * $fieldNames = ChangelogService::getFieldTranslations();
@@ -236,11 +235,30 @@ class ChangelogService {
             'URL' => $gL10n->get('SYS_URL')
         );
 
+        $memApprovedValues = array(
+            ModuleEvents::MEMBER_APPROVAL_STATE_INVITED => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_INVITED',
+                'icon' => 'calendar2-check-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_ATTEND',
+                'icon' => 'check-circle-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_TENTATIVE',
+                'icon' => 'question-circle-fill'
+            ),
+            ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED => array(
+                'text' => 'SYS_EVENT_PARTICIPATION_CANCELED',
+                'icon' => 'x-circle-fill'
+            )
+        );
+
         return array(
             'mem_begin' =>                 'SYS_MEMBERSHIP_START',
             'mem_end' =>                   'SYS_MEMBERSHIP_END',
             'mem_leader' =>                array('name' => 'SYS_LEADER', 'type' => 'BOOL'),
-            'mem_approved' =>              array('name' => 'SYS_MEMBERSHIP_APPROVED', 'type' => 'BOOL'),
+            'mem_approved' =>              array('name' => 'SYS_MEMBERSHIP_APPROVED', 'type' => 'CUSTOM_LIST', 'entries' => $memApprovedValues),
             'mem_count_guests' =>          'SYS_SEAT_AMOUNT',
             'mem_timestamp_change' =>      'SYS_CHANGED_AT',
             'mem_usr_id_change' =>         'SYS_CHANGED_BY',
@@ -284,7 +302,7 @@ class ChangelogService {
             'room_description' =>          'SYS_DESCRIPTION',
             'room_capacity' =>             'SYS_CAPACITY',
             'room_overhang' =>             'SYS_OVERHANG',
-            
+
             'dat_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'dat_rol_id'=>                 array('name' => 'SYS_ROLE', 'type' => 'ROLE'),
             'dat_room_id' =>               array('name' => 'SYS_ROOM', 'type' => 'ROOM'),
@@ -376,7 +394,7 @@ class ChangelogService {
             'fil_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'fil_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
             // 'fil_counter' =>               '', // not logged!
-              
+
             'pho_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'pho_name'  =>                 'SYS_ALBUM',
             'pho_description' =>           'SYS_DESCRIPTION',
@@ -386,31 +404,31 @@ class ChangelogService {
             'pho_end' =>                   'SYS_END',
             'pho_photographers' =>         'SYS_PHOTOS_BY',
             'pho_locked' =>                array('name' => 'SYS_LOCK_ALBUM', 'type' => 'BOOL'),
-              
+
             'org_shortname' =>             'SYS_NAME_ABBREVIATION',
             'org_longname' =>              'SYS_NAME',
             'org_org_id_parent' =>         array('name' => 'SYS_PARENT_ORGANIZATION', 'type'=> 'ORG'),
             'org_homepage' =>              array('name' => 'SYS_HOMEPAGE', 'type'=> 'URL'),
             'org_email_administrator' =>   array('name' => 'SYS_EMAIL_ADMINISTRATOR', 'type' => 'EMAIL'),
             'org_show_org_select' =>       array('name' => 'SYS_SHOW_ORGANIZATION_SELECT', 'type' => 'BOOL'),
-              
+
             'men_name' =>                  'SYS_NAME',
             'men_name_intern' =>           'SYS_INTERNAL_NAME',
             'men_description' =>           'SYS_DESCRIPTION',
             'men_men_id_parent' =>         array('name' => 'SYS_MENU_LEVEL', 'type' => 'MENU'), // Parents are hard-coded and have no modification page! -> No link possible!
             'men_com_id' =>                array('name' => 'SYS_MODULE_RIGHTS', 'type' => 'COMPONENT'),
             //'men_node' =>                  '', // men_node cannot be set by the user (section headings in the frontend)!
-            'men_order' =>                 'SYS_ORDER', 
+            'men_order' =>                 'SYS_ORDER',
             'men_standard' =>              $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))),
             'men_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
             'men_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
-              
+
             'urt_name' =>                  'SYS_NAME',
             'urt_name_male' =>             'SYS_MALE',
             'urt_name_female' =>           'SYS_FEMALE',
             'urt_edit_user' =>             array('name' => 'SYS_EDIT_USER_IN_RELATION', 'type' => 'BOOL'),
             'urt_id_inverse' =>            array('name' => 'SYS_OPPOSITE_RELATIONSHIP', 'type' => 'RELATION_TYPE'),
-              
+
             'crt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'crt_name' =>                  'SYS_NAME',
             'crt_col_fields' =>            'SYS_COLUMN_SELECTION',
@@ -429,7 +447,7 @@ class ChangelogService {
             'cat_name' =>                  'SYS_NAME',
             'cat_name_intern' =>           'SYS_INTERNAL_NAME',
             'cat_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
-            //'cat_type' =>                  '', // Holds indicators like USF, ROL, LNK, EVT, ANN, 
+            //'cat_type' =>                  '', // Holds indicators like USF, ROL, LNK, EVT, ANN,
             'cat_system' =>                array('name' => 'SYS_SSYSTEM', 'type' => 'BOOL'),
             'cat_default' =>               array('name' => $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_CATEGORY'))), 'type' => 'BOOL'),
             'cat_sequence' =>              'SYS_ORDER',
@@ -439,18 +457,18 @@ class ChangelogService {
 
 
     /**
-     * Create a HTML link to the admidio page corresponding to the given module (DB table without prefix). Optional object ID 
+     * Create a HTML link to the admidio page corresponding to the given module (DB table without prefix). Optional object ID
      * and/or UUID can be passed and will be used in the HREF, if supported.
      * If the module / table does not provide a page, the text without link will be returned.
-     * 
+     *
      * Most modules have switched to the UUID-approach, so in most cases the id will be ignored and only the $uuid will be used.
-     * 
+     *
      * @param string $text The display text of the link
      * @param string $module The admidio module / database table without prefix
      * @param int|string $id The object ID
      * @param string $uuid The object UUID
      * @return mixed HTML Link to the module's view or edit page for the given object, if such a page is provided at all. If not, the text is returned without adding a link.
-     * 
+     *
      * **Code example**
      * ```
      * $user = new User($gDb, 1);
@@ -500,7 +518,7 @@ class ChangelogService {
             case 'roles':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
             case 'roles_rights':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
             case 'roles_rights_data':
                 // The log_record_linkid contains the table and the uuid encoded as 'table':'UUID' => split and call Create linke with the new table!
                 if (strpos($id, ':') !== false) {
@@ -509,9 +527,9 @@ class ChangelogService {
                 } else {
                     $table = ''; // Table is empty
                 }
-                return self::createLink($text, $table, $id, $id); 
+                return self::createLink($text, $table, $id, $id);
             case 'role_dependencies':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $uuid)); break;
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
             case 'rooms':
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
             // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
@@ -532,18 +550,18 @@ class ChangelogService {
     }
 
     /**
-     * Format the given value for the given type. E.g. BOOL variables are displayed as a checked/unchecked checkbox, 
-     * ICON displays the icon graphics next to the icon name, an ORG will show the organisation name rather than the ID, 
-     * etc. For basic types, this function is more or less the same as the profile fields formatting. However, this method 
-     * provides many more data types, like ROOM, EVENT, CATEGORY, FOLDER, LIST, ... 
+     * Format the given value for the given type. E.g. BOOL variables are displayed as a checked/unchecked checkbox,
+     * ICON displays the icon graphics next to the icon name, an ORG will show the organisation name rather than the ID,
+     * etc. For basic types, this function is more or less the same as the profile fields formatting. However, this method
+     * provides many more data types, like ROOM, EVENT, CATEGORY, FOLDER, LIST, ...
      * Wherever possible (e.g. for USER, ROOM, FOLDER, ALBUM, ...), the value is also linked with the corresponding Admidio page.
      * A type CUSTOM_LIST is also implemented, which uses the named array $entries to transform the value before displaying.
-     * 
+     *
      * @param mixed $value The value to be formatted
      * @param mixed $type The type of the variable (e.g. 'BOOL', 'DATE', 'EMAIL', 'URL', 'USER', 'ROOM', 'EVENT', ...., 'CUSTOM_LIST')
      * @param mixed $entries if $type is 'CUSTOM_LIST', a named array of value transformations.
      * @return mixed The formatted value, if possible including a link to the corresponding Admidio page.
-     * 
+     *
      * **Code example**
      * ```
      * $output = ChangelogService::formatValue("http://www.admidio.org/", "URL"); // Returns a link to the URL
@@ -557,7 +575,7 @@ class ChangelogService {
             // create html for each field type
             $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
             $htmlValue = $value;
-        
+
             switch ($type) {
                 case 'BOOL':
                     if ($value == 1 || $value == "true") {
@@ -569,7 +587,7 @@ class ChangelogService {
                 case 'DATE':
                     if ($value !== '') {
                         // date must be formatted
-                        $date =\DateTime::createFromFormat('Y-m-d', $value);
+                        $date = DateTime::createFromFormat('Y-m-d', $value);
                         if ($date instanceof DateTime) {
                             $htmlValue = $date->format($gSettingsManager->getString('system_date'));
                         }
@@ -590,7 +608,7 @@ class ChangelogService {
                 case 'URL':
                     if ($value !== '') {
                         $displayValue = $value;
-                    
+
                         // trim "http://", "https://", "//"
                         if (str_contains($displayValue, '//')) {
                             $displayValue = substr($displayValue, strpos($displayValue, '//') + 2);
@@ -663,19 +681,33 @@ class ChangelogService {
                     $htmlValue = $obj->readableName();
                     break;
                 case 'CUSTOM_LIST':
-                    $htmlValue = $entries[$value]??$value;
+                    $value = $entries[$value]??$value;
+                    $htmlValue = '';
+                    if (is_array($value)) {
+                        if (isset($value['icon'])) {
+                            $htmlValue .= '<div class="bi bi-'.$value['icon'].'"> ';
+                        }
+                        if (isset($value['text'])) {
+                            $htmlValue .=  $gL10n-> get($value['text']);
+                        }
+                        if (isset($value['icon'])) {
+                            $htmlValue .= '</div>';
+                        }
+                    } else {
+                        $htmlValue = $value;
+                    }
                     break;
 
 
             }
-        
+
             $value = $htmlValue;
         }
         // special case for type BOOL and no value is there, then show unchecked checkbox
         else {
             if ($type === 'BOOL') {
                 $value = '<i class="bi bi-square"></i>';
-            }    
+            }
         }
         return $value;
     }
@@ -683,12 +715,12 @@ class ChangelogService {
 
     /**
      * Return a list of all db tables where the current user has admin / edit rights
-     * @param \Admidio\Users\Entity\User $user The user
+     * @param User $user The user
      * @return string[] List of all accessible tables
      */
     public static function getPermittedTables(User $user) : array {
         $tablesPermitted = [];
-        if ($user->editAnnouncements()) 
+        if ($user->editAnnouncements())
             $tablesPermitted[] = 'announcements';
         if ($user->manageRoles())
             $tablesPermitted = array_merge($tablesPermitted, ['roles', 'roles_rights', 'roles_rights_data', 'members']);
@@ -786,20 +818,20 @@ class ChangelogService {
 
 
     /**
-     * Display a "Change History" button in the current module's HTMLPage if changelog functionality
+     * Display a "Change History" button in the current module's PagePresenter if changelog functionality
      * is enabled at all, the table has logging enabled and the current user is allowed to view
      * those objects. If these conditions are not satisfied, no button is displayed.
-     * 
-     * @param \HtmlPage $page The HtmlPage of the module, where the change history button should be added
+     *
+     * @param PagePresenter $page The PagePresenter of the module, where the change history button should be added
      * @param string $area Identifier for the module, used for the menu item ID
      * @param string $table The database table(s) of the changelog (comma-separated list for multiple())
      * @param bool $condition Additional condition to display/hide
      * @param array $params
      * @return void
      */
-    public static function displayHistoryButton(HTMLPage $page, string $area, string|array $table, bool $condition = true, array $params = array()) : void {
+    public static function displayHistoryButton(PagePresenter $page, string $area, string|array $table, bool $condition = true, array $params = array()) : void {
         global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
-        
+
         // Changelog disabled globally
         if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
             return;
@@ -808,20 +840,20 @@ class ChangelogService {
         if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
             return;
         }
-    
+
         // Required tables is/are not logged at all
         if (!self::isTableLogged($table))
             return;
 
-        
+
         if (!is_array($table))
             $table = explode(',', $table);
 
         $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
         // Admin always has acces. Other users can have permissions per table.
-        $hasAccess = $gCurrentUser->isAdministrator() || 
+        $hasAccess = $gCurrentUser->isAdministrator() ||
             (!empty($table) && empty(array_diff($table, $tablesPermitted)));
-    
+
         // No explicit table permissions. But user data can be accessed on a per-user permission level.
         $isUserLog = (!empty($table) && empty(array_diff($table, ['users', 'user_data', 'user_relations', 'members'])));
         if (!$hasAccess && $isUserLog && !empty($params['uuid'])) {

@@ -178,8 +178,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha-activatie</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Registratie activeren</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">De registratie door bezoekers van de homepagina kan via deze instelling worden geactiveerd of gedeactiveerd. Welke profielvelden tijdens de registratie worden weergegeven, kan worden ingesteld via de profielveld instellingen per veld. (Standaard: ja)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Activeer Web-Feeds</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan een webfeed voor meerdere modules (mededelingen, evenementen, gastenboek, fotogalerijen en links) op de overzichtspagina van elke module plaatsen. Inschrijven is mogelijk via browser of feed reader. (Standaard: ja)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Activeer Web-Feeds</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio kan een webfeed voor meerdere modules (mededelingen, evenementen, gastenboek, fotogalerijen en links) op de overzichtspagina van elke module plaatsen. Inschrijven is mogelijk via browser of feed reader. (Standaard: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Maak onbeperkt aantal extra velden. Velden worden getoond en kunnen worden bewerkt in profiel van gebruiker. Deze velden zijn ook beschikbaar in eigen lijst.</string>
   <string name="ORG_FIELD_DISABLED">Veld is alleen te bewerken door gebruiker met recht #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Een geblokkeerd veld kan niet langer door de gebruiker in zijn eigen profiel worden bewerkt. Het kan alleen worden bewerkt door gebruikers die het recht hebben om alle gebruikers te bewerken. Leiders van een rol met het recht om profielen van rolleden te bewerken, kunnen dit veld ook bewerken.</string>

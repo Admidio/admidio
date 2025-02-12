@@ -20,7 +20,8 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
 try {
@@ -97,7 +98,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-events-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-events-edit', $headline);
 
     $page->addJavascript('
     /**
@@ -189,9 +190,9 @@ try {
     );
 
     ChangelogService::displayHistoryButton($page, 'events', 'events', !empty($getEventUuid), array('uuid' => $getEventUuid));
-    
+
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_events_edit_form',
         'modules/events.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 'edit', 'copy' => $getCopy)),
@@ -201,7 +202,7 @@ try {
         'dat_headline',
         $gL10n->get('SYS_TITLE'),
         $event->getValue('dat_headline'),
-        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
     );
 
     // if a map link should be shown in the event then show help text and a field where the user could choose the country
@@ -256,21 +257,21 @@ try {
         'event_from',
         $gL10n->get('SYS_START'),
         $event->getValue('dat_begin', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
-        array('type' => 'datetime', 'property' => Form::FIELD_REQUIRED)
+        array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'event_to',
         $gL10n->get('SYS_END'),
         $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
-        array('type' => 'datetime', 'property' => Form::FIELD_REQUIRED)
+        array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addSelectBoxForCategories(
         'cat_uuid',
         $gL10n->get('SYS_CALENDAR'),
         $gDb,
         'EVT',
-        Form::SELECT_BOX_MODUS_EDIT,
-        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid'))
+        FormPresenter::SELECT_BOX_MODUS_EDIT,
+        array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid'))
     );
 
     $form->addCheckbox('dat_highlight', $gL10n->get('SYS_HIGHLIGHT_EVENT'), (bool)$event->getValue('dat_highlight'));

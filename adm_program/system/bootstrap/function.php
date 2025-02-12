@@ -249,7 +249,7 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  * @param array<string,mixed> $array The array with the element that should be checked
  * @param string $variableName Name of the array element that should be checked
  * @param string $datatype The datatype like **string**, **uuid**, **numeric**, **int**, **float**, **bool**, **boolean**, **html**,
- *                                          **url**, **date**, **file** or **folder** that is expected and which will be checked.
+ *                                          **url**, **date**, **file**, **folder** or **array** that is expected and which will be checked.
  *                                          Datatype **date** expects a date that has the Admidio default format from the
  *                                          preferences or the english date format **Y-m-d**
  * @param array<string,mixed> $options (optional) An array with the following possible entries:

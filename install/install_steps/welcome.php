@@ -10,7 +10,7 @@
  */
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\View\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
@@ -31,7 +31,7 @@ if ($mode === 'html') {
         )
     ));
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_installation_welcome_form',
         'installation.welcome.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome', 'mode' => 'check')),
