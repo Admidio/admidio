@@ -17,7 +17,7 @@ use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -29,8 +29,8 @@ try {
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
     // Initialize local variables
-    $disableAdditionalGuests = Form::FIELD_HIDDEN;
-    $disableComments = Form::FIELD_HIDDEN;
+    $disableAdditionalGuests = FormPresenter::FIELD_HIDDEN;
+    $disableComments = FormPresenter::FIELD_HIDDEN;
 
     // Get the date object
     $event = new Event($gDb);
@@ -54,10 +54,10 @@ try {
     // If extended options for participation are allowed then show in form
     if ((int)$event->getValue('dat_allow_comments') === 1 || (int)$event->getValue('dat_additional_guests') === 1) {
         if ((int)$event->getValue('dat_allow_comments') === 1) {
-            $disableComments = Form::FIELD_DEFAULT;
+            $disableComments = FormPresenter::FIELD_DEFAULT;
         }
         if ((int)$event->getValue('dat_additional_guests') === 1) {
-            $disableAdditionalGuests = Form::FIELD_DEFAULT;
+            $disableAdditionalGuests = FormPresenter::FIELD_DEFAULT;
         }
     }
 
@@ -71,7 +71,7 @@ try {
     header('Content-type: text/html; charset=utf-8');
 
     // Define form
-    $participationForm = new Form(
+    $participationForm = new FormPresenter(
         'adm_events_participation_edit_form',
         'modules/events.participation.edit.tpl',
         '#'

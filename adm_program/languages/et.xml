@@ -178,8 +178,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktiveerimine</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Luba registreerimine</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Selle seadistuse abil saab avalehe külastajate registreerimise aktiveerida või deaktiveerida. Registreerimisprotsessi ajal kuvatavaid profiilivälju saab konfigureerida iga välja profiilivälja sätetes. (Vaikimisi: jah)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Luba veebikanalid</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio suudab iga mooduli ülevaatelehel pakkuda mitme mooduli jaoks veebivooge (teated, sündmused, külalisteraamat, fotod ja veebilingid). Tellimine on võimalik brauseri või kanalilugeja kaudu. (vaikimisi: jah)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Luba veebikanalid</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio suudab iga mooduli ülevaatelehel pakkuda mitme mooduli jaoks veebivooge (teated, sündmused, külalisteraamat, fotod ja veebilingid). Tellimine on võimalik brauseri või kanalilugeja kaudu. (vaikimisi: jah)</string>
   <string name="ORG_FIELD_DESCRIPTION">Määratlege piiramatu arv lisavälju. Väljad kuvatakse ja neid saab muuta kasutaja profiilis. Need väljad on saadaval ka oma loendis.</string>
   <string name="ORG_FIELD_DISABLED">Välja saaavad muuta ainult liikmed, kellel on selleks luba #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Liige ei saa enam lukustatud profiilivälja oma profiilis muuta. Seda saavad muuta ainult liikmed, kellel on kõigi liikmete muutmise luba. Seda profiilivälja saavad redigeerida ka rollijuhid, kellel on õigus muuta rolliliikmete profiile.</string>

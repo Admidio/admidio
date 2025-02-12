@@ -17,7 +17,8 @@
 use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
 try {
@@ -67,12 +68,12 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-announcements-edit', $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headline);
 
     ChangelogService::displayHistoryButton($page, 'announcements', 'announcements', !empty($getAnnUuid), array('uuid' => $getAnnUuid));
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_announcements_edit_form',
         'modules/announcements.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'mode' => 'edit')),
@@ -82,21 +83,21 @@ try {
         'ann_headline',
         $gL10n->get('SYS_TITLE'),
         $announcement->getValue('ann_headline'),
-        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addSelectBoxForCategories(
         'ann_cat_id',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         'ANN',
-        Form::SELECT_BOX_MODUS_EDIT,
-        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('cat_uuid'))
+        FormPresenter::SELECT_BOX_MODUS_EDIT,
+        array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('cat_uuid'))
     );
     $form->addEditor(
         'ann_description',
         $gL10n->get('SYS_TEXT'),
         $announcement->getValue('ann_description'),
-        array('property' => Form::FIELD_REQUIRED)
+        array('property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 

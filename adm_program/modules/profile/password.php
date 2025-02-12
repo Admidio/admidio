@@ -17,7 +17,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -102,7 +102,7 @@ try {
         }
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_password_edit_form',
             'modules/profile.password.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid, 'mode' => 'change'))
@@ -115,7 +115,7 @@ try {
                 '',
                 array(
                     'type' => 'password',
-                    'property' => Form::FIELD_REQUIRED,
+                    'property' => FormPresenter::FIELD_REQUIRED,
                     'autocomplete' => 'current-password'
                 )
             );
@@ -126,7 +126,7 @@ try {
             '',
             array(
                 'type' => 'password',
-                'property' => Form::FIELD_REQUIRED,
+                'property' => FormPresenter::FIELD_REQUIRED,
                 'minLength' => PASSWORD_MIN_LENGTH,
                 'passwordStrength' => true,
                 'passwordUserData' => $user->getPasswordUserData(),
@@ -140,7 +140,7 @@ try {
             '',
             array(
                 'type' => 'password',
-                'property' => Form::FIELD_REQUIRED,
+                'property' => FormPresenter::FIELD_REQUIRED,
                 'minLength' => PASSWORD_MIN_LENGTH,
                 'autocomplete' => 'new-password'
             )

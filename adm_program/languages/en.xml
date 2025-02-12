@@ -1,32 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in guestbook module-->
-  <string name="GBO_BACK_TO_GUESTBOOK">Back to guestbook</string>
-  <string name="GBO_CAPTCHA_DESC">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It\'s necessary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (default: yes)</string>
-  <string name="GBO_COMMENT_BY">Comment of #VAR1#</string>
-  <string name="GBO_COMMENTS4ALL">Allow anonyme comments</string>
-  <string name="GBO_COMMENTS4ALL_DESC">Users who are not logged in can comment on the entries in the guestbook after activating this option. The rights assignment for this function via role management is then ignored. (Default: no)</string>
-  <string name="GBO_CREATE_COMMENT">Leave comment</string>
-  <string name="GBO_EDIT_COMMENT">Edit comment</string>
-  <string name="GBO_ENTRY_QUEUED">Entry saved. It will be displayed after moderation.</string>
-  <string name="GBO_FLOODING_PROTECTION">Your last entry was created less than #VAR1# seconds ago.</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Interval</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Entries of unregistered users will be checked. Too many entries within the given time intervall are not allowed. This option allows to take control over unwanted entries. If interval is set to 0, no check will be done. (default: 60 seconds)</string>
-  <string name="GBO_GUESTBOOK">Guestbook</string>
-  <string name="GBO_GUESTBOOK_COMMENTS">Guestbook comments</string>
-  <string name="GBO_GUESTBOOK_DESC">Guests and users are able to leave greetings and comments, and can annotate other\'s entries.</string>
-  <string name="GBO_GUESTBOOK_MODERATION">Moderation activated for</string>
-  <string name="GBO_GUESTBOOK_MODERATION_DESC">Guestbook entries will be displayed after moderation. Define if moderation should be performed in case of guests or for logged in users only, or nobody\'s comments should be checked in advance. (default: Nobody)</string>
-  <string name="GBO_HIDE_COMMENTS">Hide comments</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING">Display comments right away</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">If this option is active and a guestbook page is being loaded, comments on this page will be loaded right away. Otherwise user has to click a hyperlink in order to reveal comments. (default: no)</string>
-  <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Latest guestbook entries of organization #VAR1#</string>
-  <string name="GBO_MODERATE_ENTRIES">Moderate posts</string>
-  <string name="GBO_MODERATE_VAR">Moderate #VAR1#</string>
-  <string name="GBO_ONLY_VISITORS">Visitors only</string>
-  <string name="GBO_SHOW_COMMENTS">Display comments</string>
-  <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Display #VAR1# comment(s) of this guest book entry</string>
-  <string name="GBO_WRITE_COMMENT">Leave comment</string>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
@@ -163,8 +136,6 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha activation</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Enable registration</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">The registration by visitors of the homepage can be activated or deactivated by this setting. The profile fields that are displayed during the registration process can be configured in the profile field settings for each field. (Default: yes)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, events, guestbook, photos and web links) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field only editable for members with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by a member in its own profile. It can be edited only by members who have the permission to edit all members. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
@@ -429,6 +400,7 @@
   <string name="SYS_CREATE_WEBLINK">Create web link</string>
   <string name="SYS_CREATED">Created</string>
   <string name="SYS_CREATED_AT">Created at</string>
+  <string name="SYS_CREATED_AT_VAR">Created at #VAR1#</string>
   <string name="SYS_CREATED_BY">Created by</string>
   <string name="SYS_CREATED_BY_AND_AT">Created by #VAR1# at #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
@@ -488,6 +460,7 @@
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Default view</string>
   <string name="SYS_DEFAULT_VIEW_DESC">A display mode of the events can be preselected. In #VAR1_BOLD# mode, all the information about an event is displayed in a box. In the #VAR2_BOLD# display mode, the most important event information is shown in a compact list. (Default setting: #VAR1#)</string>
+  <string name="SYS_DEFAULT_VIEW_FORUM_DESC">A display mode of the forum topics can be preselected. Within mode #VAR1_BOLD#, each topic is presented in a card with a preview of the topic text. Within mode #VAR2_BOLD#, the topics are presented in a list to show the information in a compact list. (Default setting: #VAR1#)</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
@@ -504,6 +477,7 @@
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
+  <string name="SYS_DELETE_VAR">Delete #VAR1#</string>
   <string name="SYS_DELETED">Deleted</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
@@ -614,6 +588,8 @@
   <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Here you can enable or disable the system notifications of Admidio. They can be sent, if for example a new user has registered. Registration confirmations will also be sent as system notifications. In general, this feature should not be disabled unless the server does not support e-mail delivery. The e-mail module is not affected by the deactivation. (Default: yes)</string>
   <string name="SYS_ENABLE_PM_MODULE">Enable private messages</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Private messages can be enabled or disabled using this setting. (Default: enabled)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Enable RSS feeds</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio can provide RSS feeds for various modules (announcements, events, forum, photo galleries and web links) on the respective overview pages. However, the RSS feed only contains data that is released for visitors to the website. Data that may only be seen by certain roles is not included in the feed. (Default: #VAR1#)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Maintain and show relationships</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">If set active, relationships between contacts can be maintained and displayed. (Default: yes)</string>
   <string name="SYS_ENCODING_GUESS">Try to detect the encoding</string>
@@ -700,6 +676,13 @@
   <string name="SYS_FORMER_MEMBERS">Former members</string>
   <string name="SYS_FORMER_PL">Former</string>
   <string name="SYS_FORMER_ROLE_MEMBERSHIP">Former role memberships</string>
+  <string name="SYS_FORUM">Forum</string>
+  <string name="SYS_FORUM_DESC">A simple forum for discussions within an organization. Various topics can be published and discussed.</string>
+  <string name="SYS_FORUM_MODULE_ENABLED_DESC">The forum can be activated via this setting. All registered members then have the opportunity to post or comment on topics in the forum.</string>
+  <string name="SYS_FORUM_POST_CHANGED_TITLE">A forum post was changed at #VAR1#</string>
+  <string name="SYS_FORUM_POST_CREATED_TITLE">New forum post was created at #VAR1#</string>
+  <string name="SYS_FORUM_TOPIC_CHANGED_TITLE">A forum topic was changed at #VAR1#</string>
+  <string name="SYS_FORUM_TOPIC_CREATED_TITLE">New forum topic was created at #VAR1#</string>
   <string name="SYS_FORWARD">Forward</string>
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FROM">from #VAR1#</string>
@@ -715,10 +698,6 @@
   <string name="SYS_GREETING_CARD">Greeting card</string>
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.</string>
-  <string name="SYS_GUESTBOOK_COMMENT_CHANGED_TITLE">A guestbook comment was changed at #VAR1#</string>
-  <string name="SYS_GUESTBOOK_COMMENT_CREATED_TITLE">New guestbook comment was created at #VAR1#</string>
-  <string name="SYS_GUESTBOOK_ENTRY_CHANGED_TITLE">A guestbook entry was changed at #VAR1#</string>
-  <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">New guestbook entry was created at #VAR1#</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules (documents, events, announcements, etc.)</string>
@@ -774,10 +753,14 @@
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
   <string name="SYS_LANGUAGE">Language</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Is your language missing or do you want to translate more texts or improve existing translations? Then have a look at #VAR1#Wiki page of Admidio#VAR2# to see how you can help with the translation.</string>
-  <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# on #VAR2#</string>
+  <string name="SYS_LAST_EDITED_AT">Last edited at #VAR1#</string>
+  <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# at #VAR2#</string>
   <string name="SYS_LAST_LOGIN_ON">Last login on #VAR1# at #VAR2#</string>
+  <string name="SYS_LAST_POST">Last post</string>
+  <string name="SYS_LAST_REPLY_BY_AT">#VAR1#Last reply#VAR2# by #VAR3# at #VAR4#</string>
   <string name="SYS_LASTNAME">Surname</string>
   <string name="SYS_LATER">Later</string>
+  <string name="SYS_LATEST_FORUM_TOPICS_OF_ORGANIZATION">Latest forum topics from organization #VAR1#</string>
   <string name="SYS_LAYOUT">Layout</string>
   <string name="SYS_LEADER">Leader</string>
   <string name="SYS_LEADER_NO_ADDITIONAL_RIGHTS">Head of this role have no special rights. They will be highlighted in list views only.</string>
@@ -960,7 +943,7 @@
   <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Notification to approve a registration</string>
   <string name="SYS_NOTIFICATION_REGISTRATION_CONFIRMATION">Notification to confirm the registration</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new or changed entries</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Members of the stored notification role will get a system notification for new or changed entries in the modules Announcements, Events, Documents &amp; Files, Photos, Web Links and Guestbook. (Default: no)</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Members of the stored notification role will get a system notification for new or changed entries in the modules Announcements, Events, Documents &amp; Files, Photos, Web Links and forum. (Default: no)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notification for changed profile fields</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Members of the stored notification role will get a system notification if members profile data is created, changed or deleted by a user. (Default: no)</string>
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
@@ -970,6 +953,8 @@
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Number of albums per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is 0, all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Number of posts per page</string>
+  <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Number of topics per page</string>
   <string name="SYS_NUMBER_RECIPIENTS">Number of recipients</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">The number in this field indicates the maximum number of recipients in an email. This number can be limited by providers. If an e-mail should be sent to more recipients than the number set here, multiple e-mails will be generated. The number of possible e-mails to be sent within a period can also be limited by providers. (Default: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
@@ -1056,6 +1041,8 @@
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
+  <string name="SYS_POST">Post</string>
+  <string name="SYS_POSTS">Posts</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
   <string name="SYS_PRESET_CONFIGURATION">Default configuration</string>
@@ -1126,6 +1113,7 @@
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPLACE">Replace</string>
+  <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>
@@ -1139,8 +1127,8 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roles having this permission can manage the rights for the documents and files module. This includes who can see folders and can upload files.</string>
   <string name="SYS_RIGHT_EDIT_USER">Edit profile of all contacts</string>
   <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other contacts (except passwords). In addition they can add or delete contacts.</string>
-  <string name="SYS_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
-  <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
+  <string name="SYS_RIGHT_FORUM">Manage forum</string>
+  <string name="SYS_RIGHT_FORUM_DESC">Roles having this permission can manage the forum module. They can view all forum and topics and can edit and delete them.</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Participants can send emails to all participants</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send emails to this role via the message module. The role right #VAR1_BOLD# is still above this setting.</string>
   <string name="SYS_RIGHT_MAIL_TO_ALL">Send e-mails to all roles</string>
@@ -1366,6 +1354,8 @@
   <string name="SYS_TIME_TO">Time to</string>
   <string name="SYS_TITLE">Title</string>
   <string name="SYS_TO" description="E-Mail">To</string>
+  <string name="SYS_TOPIC">Topic</string>
+  <string name="SYS_TOPICS">Topics</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
@@ -1424,6 +1414,8 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">View profiles of role members</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">This setting can be used to define who can see the profiles of the members of this role. The user can call the profile of the respective person and see all stored columns in lists for the role. The role right #VAR1_BOLD# overrides this setting.</string>
+  <string name="SYS_VIEWS_VAR">#VAR1# views</string>
+  <string name="SYS_VIEWS">Views</string>
   <string name="SYS_VISIBILITY">Visibility</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>

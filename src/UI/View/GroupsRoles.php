@@ -6,9 +6,9 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Roles\Service\RoleService;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use HtmlDataTables;
-use HtmlPage;
 use Admidio\Changelog\Service\ChangelogService;
 
 /**
@@ -28,7 +28,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class GroupsRoles extends HtmlPage
+class GroupsRoles extends PagePresenter
 {
     /**
      * @var array Array with all read groups and roles
@@ -349,7 +349,7 @@ class GroupsRoles extends HtmlPage
 
         ChangelogService::displayHistoryButton($this, 'roles', 'roles', !empty($getAnnroleUUIDUuid), array('uuid' => $roleUUID));
 
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_roles_edit_form',
             'modules/groups-roles.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('role_uuid' => $roleUUID, 'mode' => 'save')),
@@ -357,9 +357,9 @@ class GroupsRoles extends HtmlPage
         );
 
         if ($role->getValue('rol_administrator') === 1 || $eventRole) {
-            $fieldProperty = Form::FIELD_READONLY;
+            $fieldProperty = FormPresenter::FIELD_READONLY;
         } else {
-            $fieldProperty = Form::FIELD_REQUIRED;
+            $fieldProperty = FormPresenter::FIELD_REQUIRED;
         }
         $form->addInput(
             'rol_name',
@@ -372,15 +372,15 @@ class GroupsRoles extends HtmlPage
             $gL10n->get('SYS_DESCRIPTION'),
             $role->getValue('rol_description'),
             3,
-            array('property' => ($eventRole ? Form::FIELD_READONLY : Form::FIELD_DEFAULT), 'maxLength' => 4000)
+            array('property' => ($eventRole ? FormPresenter::FIELD_READONLY : FormPresenter::FIELD_DEFAULT), 'maxLength' => 4000)
         );
         $form->addSelectBoxForCategories(
             'rol_cat_id',
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             ($eventRole ? 'ROL_EVENT' : 'ROL'),
-            Form::SELECT_BOX_MODUS_EDIT,
-            array('property' => ($eventRole ? Form::FIELD_READONLY : Form::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
+            FormPresenter::SELECT_BOX_MODUS_EDIT,
+            array('property' => ($eventRole ? FormPresenter::FIELD_READONLY : FormPresenter::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
         );
         if ($gSettingsManager->getBool('enable_mail_module')) {
             $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'));
@@ -515,7 +515,7 @@ class GroupsRoles extends HtmlPage
                 (bool)$role->getValue('rol_profile'),
                 array('icon' => 'bi-person-fill')
             );
-            if ((int)$gSettingsManager->get('announcements_module_enabled') > 0) {
+            if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_announcements',
                     $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
@@ -523,7 +523,7 @@ class GroupsRoles extends HtmlPage
                     array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'bi-newspaper')
                 );
             }
-            if ((int)$gSettingsManager->get('events_module_enabled') > 0) {
+            if ($gSettingsManager->getInt('events_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_events',
                     $gL10n->get('SYS_RIGHT_DATES'),
@@ -531,7 +531,7 @@ class GroupsRoles extends HtmlPage
                     array('helpTextId' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'bi-calendar-week-fill')
                 );
             }
-            if ((int)$gSettingsManager->get('photo_module_enabled') > 0) {
+            if ($gSettingsManager->getInt('photo_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_photo',
                     $gL10n->get('SYS_RIGHT_PHOTOS'),
@@ -547,24 +547,15 @@ class GroupsRoles extends HtmlPage
                     array('helpTextId' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'bi-file-earmark-arrow-down-fill')
                 );
             }
-            if ((int)$gSettingsManager->get('enable_guestbook_module') > 0) {
+            if ($gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $form->addCheckbox(
-                    'rol_guestbook',
-                    $gL10n->get('SYS_RIGHT_GUESTBOOK'),
-                    (bool)$role->getValue('rol_guestbook'),
-                    array('icon' => 'bi-book-half')
+                    'rol_forum_admin',
+                    $gL10n->get('SYS_RIGHT_FORUM'),
+                    (bool)$role->getValue('rol_forum_admin'),
+                    array('helpTextId' => 'SYS_RIGHT_FORUM_DESC', 'icon' => 'bi-chat-dots-fill')
                 );
-                // if not registered users can set comments than there is no need to set a role dependent right
-                if (!$gSettingsManager->getBool('enable_gbook_comments4all')) {
-                    $form->addCheckbox(
-                        'rol_guestbook_comments',
-                        $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),
-                        (bool)$role->getValue('rol_guestbook_comments'),
-                        array('icon' => 'bi-chat-fill')
-                    );
-                }
             }
-            if ((int)$gSettingsManager->get('enable_weblinks_module') > 0) {
+            if ($gSettingsManager->getInt('enable_weblinks_module') > 0) {
                 $form->addCheckbox(
                     'rol_weblinks',
                     $gL10n->get('SYS_RIGHT_WEBLINKS'),
@@ -666,25 +657,22 @@ class GroupsRoles extends HtmlPage
             if ($role->getValue('rol_profile') == 1) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-person-fill', 'title' => $gL10n->get('SYS_RIGHT_PROFILE'));
             }
-            if ($role->getValue('rol_announcements') == 1 && (int)$gSettingsManager->get('announcements_module_enabled') > 0) {
+            if ($role->getValue('rol_announcements') == 1 && $gSettingsManager->getInt('announcements_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-newspaper', 'title' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'));
             }
-            if ($role->getValue('rol_events') == 1 && (int)$gSettingsManager->get('events_module_enabled') > 0) {
+            if ($role->getValue('rol_events') == 1 && $gSettingsManager->getInt('events_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-calendar-week-fill', 'title' => $gL10n->get('SYS_RIGHT_DATES'));
             }
-            if ($role->getValue('rol_photo') == 1 && (int)$gSettingsManager->get('photo_module_enabled') > 0) {
+            if ($role->getValue('rol_photo') == 1 && $gSettingsManager->getInt('photo_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-image-fill', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
             }
-            if ($role->getValue('rol_documents_files') == 1 && (int)$gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getBool('documents_files_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
-            if ($role->getValue('rol_guestbook') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
-                $templateRow['roleRights'][] = array('icon' => 'bi bi-book-half', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK'));
+            if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getInt('forum_module_enabled') > 0) {
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_FORUM'));
             }
-            if ($role->getValue('rol_guestbook_comments') == 1 && (int)$gSettingsManager->get('enable_guestbook_module') > 0 && !$gSettingsManager->getBool('enable_gbook_comments4all')) {
-                $templateRow['roleRights'][] = array('icon' => 'bi bi-chat-fill', 'title' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'));
-            }
-            if ($role->getValue('rol_weblinks') == 1 && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {
+            if ($role->getValue('rol_weblinks') == 1 && $gSettingsManager->getInt('enable_weblinks_module') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-link-45deg', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));
             }
 
@@ -800,7 +788,7 @@ class GroupsRoles extends HtmlPage
      *                         1 - active roles
      *                         2 - event participation roles
      * @param string $mode The purpose of the current page. One of: 'card', 'permissions', 'edit'
-     * 
+     *
      * @return void
      * @throws Exception
      */
@@ -868,20 +856,20 @@ class GroupsRoles extends HtmlPage
         );
 
         // create filter menu with elements for category
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_navbar_filter_form',
             'sys-template-parts/form.filter.tpl',
             ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php',
             $this,
             array('type' => 'navbar', 'setFocus' => false)
         );
-        $form->addInput('mode', '', ($mode), array('property' => Form::FIELD_HIDDEN));
+        $form->addInput('mode', '', ($mode), array('property' => FormPresenter::FIELD_HIDDEN));
         $form->addSelectBoxForCategories(
             'cat_uuid',
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             'ROL',
-            Form::SELECT_BOX_MODUS_FILTER,
+            FormPresenter::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $categoryUUID)
         );
         if ($gCurrentUser->manageRoles()) {

@@ -1,7 +1,9 @@
 <?php
+namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
@@ -10,8 +12,10 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Text;
+use DateTime;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
+use RuntimeException;
 
 // this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
 const TBL_DATES = TABLE_PREFIX . '_dates';
@@ -21,7 +25,7 @@ const TBL_DATES = TABLE_PREFIX . '_dates';
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-final class ComponentUpdateSteps
+final class UpdateStepsCode
 {
     /**
      * @var Database
@@ -35,6 +39,43 @@ final class ComponentUpdateSteps
     public static function setDatabase(Database $database)
     {
         self::$db = $database;
+    }
+
+    /**
+     * Create categories for the forum and each organization.
+     * @throws Exception
+     */
+    public static function updateStep50ForumCategories()
+    {
+        global $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $organizationStatement->fetch()) {
+            // create organization depending on category for events
+            $category = new Category(self::$db);
+            $category->setValue('cat_org_id', (int)$row['org_id']);
+            $category->setValue('cat_type', 'FOT');
+            $category->setValue('cat_name_intern', 'COMMON');
+            $category->setValue('cat_name', $gL10n->get('SYS_COMMON'));
+            $category->setValue('cat_default', '1');
+            $category->save();
+
+            $sql = 'SELECT rol_id
+                      FROM ' . TBL_ROLES . '
+                     INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                       AND cat_org_id = ? -- $row[\'org_id\']
+                       AND cat_type = \'ROL\'
+                     WHERE rol_name = ? -- $gL10n->get(\'SYS_MEMBER\') ';
+            $pdoStatement = self::$db->queryPrepared($sql, array($row['org_id'], $gL10n->get('SYS_MEMBER')));
+
+            if (($row = $pdoStatement->fetch()) !== false) {
+                // set edit role rights to forum categories for role member
+                $rightCategoryView = new RolesRights(self::$db, 'category_edit', $category->getValue('cat_id'));
+                $rightCategoryView->saveRoles(array($row['rol_id']));
+            }
+        }
     }
 
     /**

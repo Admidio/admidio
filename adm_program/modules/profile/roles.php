@@ -21,6 +21,7 @@
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\Role;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -127,7 +128,7 @@ try {
         <div class="modal-body">';
     } else {
         // create html page object
-        $page = new HtmlPage('admidio-profile-roles', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-roles', $headline);
         $page->addJavascript($javascript, true);
         $messageId = '';
 

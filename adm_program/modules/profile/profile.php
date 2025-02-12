@@ -16,6 +16,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
@@ -92,7 +93,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-profile', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile', $headline);
     $page->addTemplateFile('modules/profile.view.tpl');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
@@ -387,8 +388,7 @@ try {
             'rol_events',
             'rol_documents_files',
             'rol_edit_user',
-            'rol_guestbook',
-            'rol_guestbook_comments',
+            'rol_forum_admin',
             'rol_mail_to_all',
             'rol_photo',
             'rol_profile',
@@ -493,18 +493,11 @@ try {
                     'icon' => 'bi-file-earmark-arrow-down-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_guestbook') && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
+            if ($user->checkRolesRight('rol_forum_admin') && $gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $userRightsArray[] = array(
-                    'roles' => $rightsOrigin['rol_guestbook'],
-                    'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK'),
-                    'icon' => 'bi-book-half'
-                );
-            }
-            if ($user->checkRolesRight('rol_guestbook_comments') && (int)$gSettingsManager->get('enable_guestbook_module') > 0) {
-                $userRightsArray[] = array(
-                    'roles' => $rightsOrigin['rol_guestbook_comments'],
-                    'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),
-                    'icon' => 'bi-chat-fill'
+                    'roles' => $rightsOrigin['rol_forum_admin'],
+                    'right' => $gL10n->get('SYS_RIGHT_FORUM'),
+                    'icon' => 'bi-chat-dots-fill'
                 );
             }
             if ($user->checkRolesRight('rol_weblinks') && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {

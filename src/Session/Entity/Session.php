@@ -4,7 +4,7 @@ namespace Admidio\Session\Entity;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Database;
 
 /**
@@ -102,11 +102,11 @@ class Session extends Entity
      * Adds a form object to the form object array of this class. Objects in this array
      * will be stored in the session and could be read with the method **getFormObject**.
      * The key of the array will be the csrf-token of the form.
-     * @param Form $form The form that should be stored in this class.
+     * @param FormPresenter $form The form that should be stored in this class.
      * @return bool Return false if object isn't type object or objectName already exists
      * @throws Exception
      */
-    public function addFormObject(Form &$form): bool
+    public function addFormObject(FormPresenter &$form): bool
     {
         if (!array_key_exists($form->getCsrfToken(), $this->mFormObjects)) {
             $this->mFormObjects[$form->getCsrfToken()] = &$form;
@@ -166,10 +166,10 @@ class Session extends Entity
     /**
      * Returns a reference of a form object that is stored in the session.
      * @param string $csrfToken The unique csrf token of the form to identify the correct form object.
-     * @return Form Returns the reference to the form object.
+     * @return FormPresenter Returns the reference to the form object.
      * @throws Exception Requested form not found in session.
      */
-    public function &getFormObject(string $csrfToken): Form
+    public function &getFormObject(string $csrfToken): FormPresenter
     {
         if (!array_key_exists($csrfToken, $this->mFormObjects)) {
             throw new Exception('Requested form not found in session.');

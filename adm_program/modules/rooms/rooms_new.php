@@ -16,7 +16,8 @@
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
 try {
@@ -46,12 +47,12 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-rooms-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-rooms-edit', $headline);
 
     ChangelogService::displayHistoryButton($page, 'rooms', 'rooms', !empty($getRoomUuid), array('uuid' => $getRoomUuid));
 
     // show form
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_rooms_edit_form',
         'modules/rooms.edit.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('room_uuid' => $getRoomUuid, 'mode' => 'edit')),
@@ -61,13 +62,13 @@ try {
         'room_name',
         $gL10n->get('SYS_ROOM'),
         $room->getValue('room_name'),
-        array('maxLength' => 50, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'room_capacity',
         $gL10n->get('SYS_CAPACITY') . ' (' . $gL10n->get('SYS_SEATING') . ')',
         (int)$room->getValue('room_capacity'),
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => Form::FIELD_REQUIRED)
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'room_overhang',

@@ -5,12 +5,12 @@
     <step id="30">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_STREET' WHERE usf_name_intern = 'STREET' AND usf_name = 'Adresse'</step>
     <step id="40">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_STREET' WHERE usf_name_intern = 'STREET' AND usf_name = 'Address'</step>
     <step id="45">UPDATE %PREFIX%_preferences SET prf_name = 'dates_default_list_configuration' WHERE prf_name = 'dates_default_list_configurati'</step>
-    <step id="50">ComponentUpdateSteps::updateStep33AddDefaultParticipantList</step>
+    <step id="50">UpdateStepsCode::updateStep33AddDefaultParticipantList</step>
     <step id="60">UPDATE %PREFIX%_roles SET rol_this_list_view = 1 WHERE rol_visible = 0 AND rol_this_list_view = 2</step>
     <step id="70">UPDATE %PREFIX%_roles SET rol_mail_this_role = 1 WHERE rol_visible = 0 AND rol_mail_this_role > 1</step>
     <step id="80">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_visible</step>
-    <step id="90">ComponentUpdateSteps::updateStep33EventCategory</step>
-    <step id="100">ComponentUpdateSteps::updateStep33SetParticipantsApprovalStates</step>
+    <step id="90">UpdateStepsCode::updateStep33EventCategory</step>
+    <step id="100">UpdateStepsCode::updateStep33SetParticipantsApprovalStates</step>
     <step id="110">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_allow_comments integer not null default 0</step>
     <step id="120">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_additional_guests integer not null default 0</step>
     <step id="130">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_edit_user boolean not null default '0'</step>
@@ -25,11 +25,11 @@
                    VALUES ('category_view', 'adm_categories'),
                           ('event_participation', 'adm_dates')
     </step>
-    <step id="220">ComponentUpdateSteps::updateStep33VisibleCategories</step>
+    <step id="220">UpdateStepsCode::updateStep33VisibleCategories</step>
     <step id="230">ALTER TABLE %PREFIX%_categories DROP COLUMN cat_hidden</step>
-    <step id="240">ComponentUpdateSteps::updateStep33MigrateDatesRightsToFolderRights</step>
+    <step id="240">UpdateStepsCode::updateStep33MigrateDatesRightsToFolderRights</step>
     <step id="250">DROP TABLE %PREFIX%_date_role</step>
-    <step id="260">ComponentUpdateSteps::updateStep33AddGlobalCategories</step>
+    <step id="260">UpdateStepsCode::updateStep33AddGlobalCategories</step>
     <step id="270">UPDATE %PREFIX%_announcements SET ann_cat_id = (SELECT cat_id FROM %PREFIX%_categories WHERE cat_name_intern = 'ANN_ALL_ORGANIZATIONS') WHERE ann_global = 1</step>
     <step id="280">UPDATE %PREFIX%_dates SET dat_cat_id = (SELECT cat_id FROM %PREFIX%_categories WHERE cat_name_intern = 'DAT_ALL_ORGANIZATIONS') WHERE dat_global = 1</step>
     <step id="290">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_global</step>
@@ -103,8 +103,8 @@
     <step id="630">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                    VALUES ('menu_view', 'adm_menu')</step>
     <step id="640">UPDATE %PREFIX%_components SET com_name_intern = 'ANNOUNCEMENTS' WHERE com_name_intern = 'ANNOUCEMENTS'</step>
-    <step id="650">ComponentUpdateSteps::updateStep33MigrateToStandardMenu</step>
-    <step id="660">ComponentUpdateSteps::updateStep33DownloadOrgFolderName</step>
+    <step id="650">UpdateStepsCode::updateStep33MigrateToStandardMenu</step>
+    <step id="660">UpdateStepsCode::updateStep33DownloadOrgFolderName</step>
     <step id="670">UPDATE %PREFIX%_user_fields SET usf_registration = 1 WHERE usf_name_intern IN ('LAST_NAME', 'FIRST_NAME', 'EMAIL')</step>
     <step id="680">UPDATE %PREFIX%_members SET mem_begin = '2018-04-01' WHERE mem_begin = '0000-00-00'</step>
     <step id="690">ALTER TABLE %PREFIX%_auto_login DROP COLUMN atl_ip_address</step>
@@ -112,6 +112,6 @@
     <step id="710">UPDATE %PREFIX%_menu SET men_description = 'SYS_MENU_DESC' WHERE men_name_intern = 'menu'</step>
     <step id="720">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'dates_may_take_part'</step>
     <step id="730" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_cost float</step>
-    <step id="740">ComponentUpdateSteps::updateStep33RemoveExpiredMessengers</step>
+    <step id="740">UpdateStepsCode::updateStep33RemoveExpiredMessengers</step>
     <step>stop</step>
 </update>

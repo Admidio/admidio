@@ -176,8 +176,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Activer Captcha</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Activer l\'inscription</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">L\'inscription des visiteurs sur la page d\'accueil peut être activé ou désactivé à l\'aide de ce paramètre. Les champs de profil affichés lors de l\'inscription peuvent être configurés dans les paramètres des champs de profil pour chaque champ. (Par défaut : oui)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Activer les flux Web</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio est capable de fournir des flux web pour plusieurs modules (annonces, événements, livre d\'or, photos et liens web) sur la page de présentation de chaque module. L\'abonnement est possible via un navigateur ou un lecteur de flux. (par défaut : oui)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Activer les flux Web</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio est capable de fournir des flux web pour plusieurs modules (annonces, événements, livre d\'or, photos et liens web) sur la page de présentation de chaque module. L\'abonnement est possible via un navigateur ou un lecteur de flux. (par défaut : oui)</string>
   <string name="ORG_FIELD_DESCRIPTION">Il est possible de définir un nombre illimité de champs supplémentaires. Ceux-ci sont affichés dans le profil de chaque utilisateurs et peuvent également y être édités. Ces champs sont également disponibles dans \"Mes listes\".</string>
   <string name="ORG_FIELD_DISABLED">Le champ ne peut être éditer que par un utilisateur qui en a la permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">L\'utilisateur ne peut pas modifier un champ verrouillé dans son propre profil. Le champ ne peut être édité que par les utilisateurs qui ont le droit de modifier tous les utilisateurs. Les responsables d\'un rôle ayant le droit de modifier les profils des membres du rôle peuvent également modifier ce champ.</string>

@@ -174,8 +174,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Ativação de CAPTCHA</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Ativar registo</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">O registo por visitantes da página pode ser ativado ou desativado nesta definição. Os campos de perfil que são exibidos durante o processo de registo podem ser configurados nas definições de campo de perfil para cada campo. (Predefinição: sim)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Ativar \'\'feeds\'\' da Web</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio pode fornecer feeds web para vários módulos (anúncios, compromissos, livros de visita, galeria de fotos e links web) na página de visão geral de cada módulo. A inscrição é feita pelo navegador ou leitor de feed. (padrão: sim)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Ativar \'\'feeds\'\' da Web</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio pode fornecer feeds web para vários módulos (anúncios, compromissos, livros de visita, galeria de fotos e links web) na página de visão geral de cada módulo. A inscrição é feita pelo navegador ou leitor de feed. (padrão: sim)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definir ilimitados campos adicionais. Os campos serão exibidos no perfil e podem ser editados. Estes campos estarão disponíveis nas listas personalizadas também.</string>
   <string name="ORG_FIELD_DISABLED">Campo editável apenas para os utilizadores com permissão #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Um campo de perfil bloqueado já não pode ser editado por um membro no seu próprio perfil. Este pode ser editado apenas pelos membros com a permissão adequada. Os \'Líderes\' de uma função com permissão para editar os perfis dos membros da função também podem alterar este campo de perfil.</string>

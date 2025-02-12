@@ -1,6 +1,5 @@
 <?php
 
-
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
@@ -11,8 +10,8 @@ use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Session\Entity\Session;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Entity\Entity;
-use Admidio\UI\Component\Form;
 use Admidio\UI\View\Installation;
 
 /**
@@ -39,7 +38,7 @@ try {
      * @param bool $reloadPage If set to **true** than the user could reload the update page.
      * @return void
      */
-    function showErrorMessage(string $message, bool $reloadPage = false)
+    function showErrorMessage(string $message, bool $reloadPage = false): void
     {
         global $gL10n;
 
@@ -116,7 +115,7 @@ try {
 
 
     /* Disable logging changes to the database. This will not be reverted,
-     *  i.e. during installation / setup no logs are written. The next user 
+     *  i.e. during installation / setup no logs are written. The next user
      * call will use the default value of true and properly log changes...
      */
     Entity::setLoggingEnabled(false);
@@ -221,7 +220,7 @@ try {
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
 
             // create form with login and update button
-            $form = new Form(
+            $form = new FormPresenter(
                 'adm_update_login_form',
                 'update.tpl',
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'update')),
@@ -232,13 +231,13 @@ try {
                     'adm_login_name',
                     $gL10n->get('SYS_USERNAME'),
                     '',
-                    array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+                    array('maxLength' => 254, 'property' => FormPresenter::FIELD_REQUIRED, 'class' => 'form-control-small')
                 );
                 $form->addInput(
                     'adm_password',
                     $gL10n->get('SYS_PASSWORD'),
                     '',
-                    array('type' => 'password', 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+                    array('type' => 'password', 'property' => FormPresenter::FIELD_REQUIRED, 'class' => 'form-control-small')
                 );
             }
             $form->addSubmitButton(

@@ -178,8 +178,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha -aktivointi</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Ota rekisteröinti käyttöön</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Tällä asetuksella voidaan aktivoida tai deaktivoida kotisivun kävijöiden rekisteröinti. Rekisteröintiprosessin aikana näkyvät profiilikentät voidaan määrittää kunkin kentän profiilikentän asetuksissa. (Oletus: kyllä)</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Ota verkkosyötteet käyttöön</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio pystyy tarjoamaan verkkosyötteitä useille moduuleille (ilmoitukset, tapaamiset, vieraskirja, valokuvagalleria ja verkkolinkit) kunkin moduulin yleiskatsaussivulla. Tilaaminen on mahdollista selaimella tai syötteenlukijalla. (oletus: kyllä)</string>
+  <string name="SYS_ENABLE_RSS_FEEDS">Ota verkkosyötteet käyttöön</string>
+  <string name="SYS_ENABLE_RSS_FEEDS_DESC">Admidio pystyy tarjoamaan verkkosyötteitä useille moduuleille (ilmoitukset, tapaamiset, vieraskirja, valokuvagalleria ja verkkolinkit) kunkin moduulin yleiskatsaussivulla. Tilaaminen on mahdollista selaimella tai syötteenlukijalla. (oletus: kyllä)</string>
   <string name="ORG_FIELD_DESCRIPTION">Määritä rajoittamattomat lisäkentät. Kentät näytetään ja niitä voidaan muokata käyttäjän profiilissa. Nämä kentät ovat käytettävissä myös omassa luettelossa.</string>
   <string name="ORG_FIELD_DISABLED">Kenttä muokattavissa vain käyttäjille, joilla on lupa #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Käyttäjä ei voi enää muokata lukittua profiilikenttää omassa profiilissaan. Sitä voivat muokata vain käyttäjät, joilla on oikeus muokata kaikkia käyttäjiä. Roolin johtajat, joilla on lupa muokata roolien jäsenten profiileja, voivat myös muokata tätä profiilikenttää.</string>

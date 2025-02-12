@@ -15,11 +15,12 @@
  *         delete   - Delete a category
  *         sequence - Change sequence of a category
  * type  : Type of categories that could be maintained
- *         ROL = Categories for roles
- *         LNK = Categories for weblinks
  *         ANN = Categories for announcements
- *         USF = Categories for profile fields
  *         EVT = Calendars for events
+ *         FOT = Categories for forum topics
+ *         LNK = Categories for weblinks
+ *         ROL = Categories for roles
+ *         USF = Categories for profile fields
  * uuid  : UUID of the category that should be edited
  * direction : Direction to change the sequence of the category
  ****************************************************************************/
@@ -29,7 +30,7 @@ use Admidio\Categories\Service\CategoryService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
-use Admidio\UI\View\Categories;
+use Admidio\UI\Presenter\CategoriesPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -37,16 +38,17 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit', 'save', 'delete', 'sequence')));
-    $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'EVT', 'AWA')));
+    $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('validValues' => array('ANN', 'AWA', 'EVT', 'FOT', 'LNK', 'ROL', 'USF')));
     $getCategoryUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
 
     // check rights of the type
-    if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
+    if (($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
+        || ($getType === 'AWA' && !$gCurrentUser->editUsers())
+        || ($getType === 'EVT' && !$gCurrentUser->administrateEvents())
+        || ($getType === 'FOT' && !$gCurrentUser->administrateForum())
         || ($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-        || ($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
-        || ($getType === 'USF' && !$gCurrentUser->editUsers())
-        || ($getType === 'EVT' && !$gCurrentUser->editEvents())
-        || ($getType === 'AWA' && !$gCurrentUser->editUsers())) {
+        || ($getType === 'ROL' && !$gCurrentUser->manageRoles())
+        || ($getType === 'USF' && !$gCurrentUser->editUsers())) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
@@ -60,7 +62,7 @@ try {
     switch ($getMode) {
         case 'list':
             $gNavigation->addUrl(CURRENT_URL, ($getType === 'EVT' ? $gL10n->get('SYS_CALENDARS') : $gL10n->get('SYS_CATEGORIES') ));
-            $page = new Categories('adm_categories_list');
+            $page = new CategoriesPresenter('adm_categories_list');
             $page->createList($getType);
             $page->show();
             break;
@@ -81,7 +83,7 @@ try {
                 }
             }
             $gNavigation->addUrl(CURRENT_URL, $headlineSuffix);
-            $page = new Categories('adm_categories_edit');
+            $page = new CategoriesPresenter('adm_categories_edit');
             $page->createEditForm($getType, $getCategoryUUID);
             $page->show();
             break;

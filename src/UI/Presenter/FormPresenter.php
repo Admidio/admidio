@@ -1,16 +1,15 @@
 <?php
-namespace Admidio\UI\Component;
+
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use DateTime;
-use HtmlPage;
 use PDO;
 use Securimage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use SettingsManager;
 use SimpleXMLElement;
 use Smarty\Smarty;
 use HTMLPurifier;
@@ -22,18 +21,18 @@ use Admidio\Infrastructure\Utils\StringUtils;
  *
  * This class should be used to create a form based on a Smarty template. Therefore, a method for each
  * possible form field is available and could be customized through various parameters. If the form is fully
- * defined with all fields it could be added to a HtmlPage object. The form object should be stored in
+ * defined with all fields it could be added to a PagePresenter object. The form object should be stored in
  * session parameter so the input could later be validated against the form configuration.
  *
  * **Code examples**
  * ```
  * script_a.php
  * // create a simple form with one input field and a button
- * $form = $form = new Form(
+ * $form = $form = new FormPresenter(
  *    'announcements_edit_form',
  *    'modules/announcements.edit.tpl',
  *    ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php',
- *    $htmlPage
+ *    $page
  * );
  * $form->addInput('name', $gL10n->get('SYS_NAME'), $formName);
  * $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'),
@@ -55,13 +54,13 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Form
+class FormPresenter
 {
-    public const FIELD_DEFAULT  = 0;
+    public const FIELD_DEFAULT = 0;
     public const FIELD_REQUIRED = 1;
     public const FIELD_DISABLED = 2;
     public const FIELD_READONLY = 3;
-    public const FIELD_HIDDEN   = 4;
+    public const FIELD_HIDDEN = 4;
 
     public const SELECT_BOX_MODUS_EDIT = 'EDIT_CATEGORIES';
     public const SELECT_BOX_MODUS_FILTER = 'FILTER_CATEGORIES';
@@ -75,9 +74,9 @@ class Form
      */
     protected bool $showRequiredFields;
     /**
-     * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @var PagePresenter A PagePresenter object that will be used to add javascript code or files to the html output page.
      */
-    protected HtmlPage $htmlPage;
+    protected PagePresenter $htmlPage;
     /**
      * @var string Javascript of this form that must be integrated in the html page.
      */
@@ -110,8 +109,8 @@ class Form
     /**
      * Constructor creates the form element
      * @param string $id ID of the form
-     * @param string|null $action Action attribute of the form
-     * @param HtmlPage|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @param string $action Action attribute of the form
+     * @param PagePresenter|null $htmlPage (optional) A PagePresenter object that will be used to add javascript code or files to the html output page.
      * @param array $options (optional) An array with the following possible entries:
      *                           - **type** : Set the form type. Every type has some special features:
      *                             + **default**  : A form that can be used to edit and save data of a database table. The label
@@ -132,16 +131,16 @@ class Form
      *                             is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function __construct(string $id, string $template, string $action = '', HtmlPage $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $template, string $action = '', PagePresenter $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
-            'type'               => 'default',
-            'enableFileUpload'   => false,
+            'type' => 'default',
+            'enableFileUpload' => false,
             'showRequiredFields' => true,
-            'setFocus'           => true,
-            'class'              => '',
-            'method'             => 'post'
+            'setFocus' => true,
+            'class' => '',
+            'method' => 'post'
         );
 
         // navbar form should send the data as GET if it's not explicit set
@@ -151,8 +150,8 @@ class Form
 
         $optionsAll = array_replace($optionsDefault, $options);
         $this->showRequiredFields = $optionsAll['showRequiredFields'];
-        $this->type   = $optionsAll['type'];
-        $this->id     = $id;
+        $this->type = $optionsAll['type'];
+        $this->id = $id;
         $this->template = $template;
 
         // set specific Admidio css form class
@@ -188,7 +187,7 @@ class Form
             );
         }
 
-        if ($htmlPage instanceof HtmlPage) {
+        if ($htmlPage instanceof PagePresenter) {
             $this->htmlPage =& $htmlPage;
         }
 
@@ -228,12 +227,12 @@ class Form
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
      */
-    public function addButton(string $id, string $text, array $options = array())
+    public function addButton(string $id, string $text, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'button',
-            'id'       => $id,
-            'value'    => $text
+            'type' => 'button',
+            'id' => $id,
+            'value' => $text
         ), $options));
         $attributes = array();
         $attributes['type'] = $optionsAll['type'];
@@ -246,7 +245,7 @@ class Form
         if (!isset($options['link'])) {
             $optionsAll['link'] = '';
         }
-        if(strstr($optionsAll['class'], 'btn-') === false) {
+        if (!str_contains($optionsAll['class'], 'btn-')) {
             $optionsAll['class'] .= " btn-secondary";
 
             if ($this->type !== 'navbar') {
@@ -259,12 +258,80 @@ class Form
     }
 
     /**
+     * Add a new selectbox with a label to the form. The selectbox
+     * could have different values and a default value could be set.
+     * @param string $id ID of the selectbox. This will also be the name of the selectbox.
+     * @param array $values Array with all entries of the radio button group.
+     *                      Each entry is an array with the following structure:
+     *                      array(0 => id, 1 => value name, 2 => destination url)
+     *                      The destination url is optional and contains the url where the user will be redirected
+     *                      if the button is selected.
+     * @param array $options (optional) An array with the following possible entries:
+     *                        - **defaultValue** : This is the value the selectbox shows when loaded. If **multiselect** is activated than
+     *                          an array with all default values could be set.
+     *                        - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as
+     *                          option value and not the key of the array
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alert box
+     *                        - **icon** : An icon can be set. This will be placed in front of the label.
+     *                        - **class** : An additional css classname. The class **admSelectbox**
+     *                          is set as default and need not set with this parameter.
+     *                        - **autocomplete** : Set the html attribute autocomplete to support this feature
+     *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
+     * @throws Exception
+     */
+    public function addButtonGroupRadio(string $id, array $values, array $options = array()): void
+    {
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'type' => 'button-group.radio',
+            'id' => $id,
+            'label' => '',
+            'defaultValue' => '',
+            'valueAttributes' => ''
+        ), $options));
+        $attributes = array('name' => $id);
+
+        // reorganize the values
+        $javascriptCode = '';
+        $valuesArray = array();
+
+        foreach ($values as $value) {
+            if (is_array($value)) {
+                $valuesArray[] = array(
+                    'id' => $value[0],
+                    'value' => Language::translateIfTranslationStrId($value[1]),
+                    'default' => $optionsAll['defaultValue'] === $value[0],
+                    'url' => ($value[2] ?? '')
+                );
+
+                if (isset($value[2])) {
+                    $javascriptCode .= '
+                        $("#' . $value[0] . '").click(function() {
+                            window.location.href = "' . $value[2] . '";
+                        });';
+                }
+            }
+        }
+
+        $this->addJavascriptCode($javascriptCode, true);
+
+        $optionsAll["values"] = $valuesArray;
+        $optionsAll["attributes"] = $attributes;
+
+        $this->elements[$id] = $optionsAll;
+    }
+
+    /**
      * Add a captcha with an input field to the form. The captcha could be a picture with a character code
      * or a simple mathematical calculation that must be solved.
      * @param string $id ID of the captcha field. This will also be the name of the captcha field.
      * @throws Exception
      */
-    public function addCaptcha(string $id)
+    public function addCaptcha(string $id): void
     {
         global $gL10n;
 
@@ -278,10 +345,10 @@ class Form
             $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'),
             '',
             array(
-                'type'       => 'captcha',
-                'property'   => self::FIELD_REQUIRED,
+                'type' => 'captcha',
+                'property' => self::FIELD_REQUIRED,
                 'helpTextId' => 'SYS_CAPTCHA_DESCRIPTION',
-                'class'      => 'form-control-small'
+                'class' => 'form-control-small'
             )
         );
 
@@ -308,12 +375,12 @@ class Form
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array())
+    public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'checkbox',
-            'id'       => $id,
-            'label'    => $label
+            'type' => 'checkbox',
+            'id' => $id,
+            'label' => $label
         ), $options));
         $attributes = array();
 
@@ -358,13 +425,13 @@ class Form
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addCustomContent(string $id, string $label, string $content, array $options = array())
+    public function addCustomContent(string $id, string $label, string $content, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'custom-content',
-            'id'       => $id,
-            'label'    => $label,
-            'content'  => $content
+            'type' => 'custom-content',
+            'id' => $id,
+            'label' => $label,
+            'content' => $content
         ), $options));
 
         $this->elements[$id] = $optionsAll;
@@ -392,19 +459,19 @@ class Form
      *                          is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function addEditor(string $id, string $label, string $value, array $options = array())
+    public function addEditor(string $id, string $label, string $value, array $options = array()): void
     {
         global $gSettingsManager, $gL10n;
 
         $flagLabelVertical = $this->type;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'          => 'editor',
-            'id'            => $id,
-            'label'         => $label,
-            'toolbar'       => 'AdmidioDefault',
+            'type' => 'editor',
+            'id' => $id,
+            'label' => $label,
+            'toolbar' => 'AdmidioDefault',
             'labelVertical' => true,
-            'value'         => $value
+            'value' => $value
         ), $options));
 
         $attributes = array();
@@ -491,17 +558,17 @@ class Form
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addFileUpload(string $id, string $label, array $options = array())
+    public function addFileUpload(string $id, string $label, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'               => 'file',
-            'id'                 => $id,
-            'label'              => $label,
-            'maxUploadSize'      => PhpIniUtils::getFileUploadMaxFileSize(),
-            'allowedMimeTypes'   => array(),
+            'type' => 'file',
+            'id' => $id,
+            'label' => $label,
+            'maxUploadSize' => PhpIniUtils::getFileUploadMaxFileSize(),
+            'allowedMimeTypes' => array(),
             'enableMultiUploads' => false,
-            'hideUploadField'    => false,
-            'multiUploadLabel'   => ''
+            'hideUploadField' => false,
+            'multiUploadLabel' => ''
         ), $options));
 
         $attributes = array();
@@ -580,22 +647,22 @@ class Form
      *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
      * @throws Exception
      */
-    public function addInput(string $id, string $label, string $value, array $options = array())
+    public function addInput(string $id, string $label, string $value, array $options = array()): void
     {
         global $gSettingsManager, $gLogger, $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'             => 'text',
-            'id'               => $id,
-            'label'            => $label,
-            'value'            => $value,
-            'placeholder'      => '',
-            'pattern'          => '',
-            'minLength'        => null,
-            'maxLength'        => null,
-            'minNumber'        => null,
-            'maxNumber'        => null,
-            'step'             => null,
+            'type' => 'text',
+            'id' => $id,
+            'label' => $label,
+            'value' => $value,
+            'placeholder' => '',
+            'pattern' => '',
+            'minLength' => null,
+            'maxLength' => null,
+            'minNumber' => null,
+            'maxNumber' => null,
+            'step' => null,
             'passwordStrength' => false,
             'passwordUserData' => array()
         ), $options));
@@ -727,7 +794,7 @@ class Form
             if (isset($this->htmlPage)) {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
-                    $("#adm_password_strength_minimum").css("margin-left", "calc(" + $("#adm_password_strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
+                    $("#adm_password_strength_minimum").css("margin-left", "calc(" + $("#adm_password_strength").css("width") + " / 4 * ' . $passwordStrengthLevel . ')");
 
                     $("#' . $id . '").keyup(function(e) {
                         const result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
@@ -763,11 +830,11 @@ class Form
 
     /**
      * Adds any javascript content to the page. The javascript will be added to the page header or as inline script.
-     * @param string $javascriptCode     A valid javascript code that will be added to the header of the page or as inline script.
+     * @param string $javascriptCode A valid javascript code that will be added to the header of the page or as inline script.
      * @param bool $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
      *                                     the page is fully loaded.
      */
-    protected function addJavascriptCode(string $javascriptCode, bool $executeAfterPageLoad = false)
+    protected function addJavascriptCode(string $javascriptCode, bool $executeAfterPageLoad = false): void
     {
         if (isset($this->htmlPage)) {
             $this->htmlPage->addJavascript($javascriptCode, $executeAfterPageLoad);
@@ -801,14 +868,14 @@ class Form
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array())
+    public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'             => 'multiline',
-            'id'               => $id,
-            'label'            => $label,
-            'maxLength'        => 0,
-            'value'            => $value
+            'type' => 'multiline',
+            'id' => $id,
+            'label' => $label,
+            'maxLength' => 0,
+            'value' => $value
         ), $options));
         $attributes = array();
 
@@ -889,15 +956,15 @@ class Form
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
      */
-    public function addRadioButton(string $id, string $label, array $values, array $options = array())
+    public function addRadioButton(string $id, string $label, array $values, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'             => 'radio',
-            'id'               => $id,
-            'label'            => $label,
-            'defaultValue'      => '',
+            'type' => 'radio',
+            'id' => $id,
+            'label' => $label,
+            'defaultValue' => '',
             'showNoValueButton' => false,
-            'values'            => $values
+            'values' => $values
         ), $options));
         $attributes = array();
 
@@ -968,23 +1035,23 @@ class Form
      *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
      * @throws Exception
      */
-    public function addSelectBox(string $id, string $label, array $values, array $options = array())
+    public function addSelectBox(string $id, string $label, array $values, array $options = array()): void
     {
         global $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'                           => 'select',
-            'id'                             => $id,
-            'label'                          => $label,
-            'defaultValue'                   => '',
+            'type' => 'select',
+            'id' => $id,
+            'label' => $label,
+            'defaultValue' => '',
             'showContextDependentFirstEntry' => true,
-            'firstEntry'                     => '',
-            'arrayKeyIsNotValue'             => false,
-            'multiselect'                    => false,
-            'search'                         => false,
-            'placeholder'                    => '',
-            'maximumSelectionNumber'         => 0,
-            'valueAttributes'                => ''
+            'firstEntry' => '',
+            'arrayKeyIsNotValue' => false,
+            'multiselect' => false,
+            'search' => false,
+            'placeholder' => '',
+            'maximumSelectionNumber' => 0,
+            'valueAttributes' => ''
         ), $options));
         $attributes = array('name' => $id);
 
@@ -1012,7 +1079,7 @@ class Form
         // reorganize the values. Each value item should be an array with the following structure:
         // array(0 => id, 1 => value name, 2 => option group name)
         $valuesArray = array();
-        foreach($values as $arrayKey => $arrayValue) {
+        foreach ($values as $arrayKey => $arrayValue) {
             if (is_array($arrayValue)) {
                 if (array_key_exists(2, $arrayValue)) {
                     $valuesArray[] = array(
@@ -1034,10 +1101,10 @@ class Form
         }
 
         // if special value attributes are set then add them to the values array
-        if(is_array($optionsAll['valueAttributes']) && count($optionsAll['valueAttributes']) > 0) {
-            foreach($valuesArray as &$valueArray) {
+        if (is_array($optionsAll['valueAttributes']) && count($optionsAll['valueAttributes']) > 0) {
+            foreach ($valuesArray as &$valueArray) {
                 if (isset($optionsAll['valueAttributes'][$valueArray['id']])) {
-                    foreach($optionsAll['valueAttributes'][$valueArray['id']] as $key => $value) {
+                    foreach ($optionsAll['valueAttributes'][$valueArray['id']] as $key => $value) {
                         $valueArray[$key] = $value;
                     }
                 }
@@ -1070,7 +1137,12 @@ class Form
             }
         } elseif ($optionsAll['showContextDependentFirstEntry']) {
             if ($optionsAll['property'] === self::FIELD_REQUIRED) {
-                array_unshift($valuesArray, array('id' => '', 'value' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -'));
+                // if there is only one entry and a required field than select this entry
+                if (count($values) === 1) {
+                    $optionsAll['defaultValue'] = array_key_first($values);
+                } else {
+                    array_unshift($valuesArray, array('id' => '', 'value' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -'));
+                }
             } else {
                 array_unshift($valuesArray, array('id' => '', 'value' => ''));
             }
@@ -1103,7 +1175,7 @@ class Form
                 $javascriptCode .= ' $("#' . $id . '").val([' . $htmlDefaultValues . ']).trigger("change.select2");';
             } elseif (count($values) === 1 && $optionsAll['property'] === self::FIELD_REQUIRED) {
                 // if there is only one entry and a required field than select this entry
-                $javascriptCode .= ' $("#' . $id . '").val("'.$values[0][0].'").trigger("change.select2");';
+                $javascriptCode .= ' $("#' . $id . '").val("' . $values[0][0] . '").trigger("change.select2");';
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
@@ -1179,13 +1251,13 @@ class Form
      * ```
      * // create a selectbox with all profile fields of a specific category
      * $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'
-     * $form = new Form('simple-form', 'adm_next_page.php');
+     * $form = new FormPresenter('simple-form', 'adm_next_page.php');
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      * $form->show();
      * ```
      * @throws Exception
      */
-    public function addSelectBoxFromSql(string $id, string $label, Database $database, $sql, array $options = array())
+    public function addSelectBoxFromSql(string $id, string $label, Database $database, array|string $sql, array $options = array()): void
     {
         $selectBoxEntries = array();
 
@@ -1202,11 +1274,11 @@ class Form
             // if result has 3 columns then create an array in array
             if (array_key_exists(2, $row)) {
                 // translate category name
-                $row[2] = Language::translateIfTranslationStrId((string) $row[2]);
+                $row[2] = Language::translateIfTranslationStrId((string)$row[2]);
 
-                $selectBoxEntries[] = array($row[0], (string) $row[1], $row[2]);
+                $selectBoxEntries[] = array($row[0], (string)$row[1], $row[2]);
             } else {
-                $selectBoxEntries[$row[0]] = (string) $row[1];
+                $selectBoxEntries[$row[0]] = (string)$row[1];
             }
         }
 
@@ -1255,7 +1327,7 @@ class Form
      *                          is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function addSelectBoxFromXml(string $id, string $label, string $xmlFile, string $xmlValueTag, string $xmlViewTag, array $options = array())
+    public function addSelectBoxFromXml(string $id, string $label, string $xmlFile, string $xmlValueTag, string $xmlViewTag, array $options = array()): void
     {
         $selectBoxEntries = array();
 
@@ -1269,7 +1341,7 @@ class Form
          * @var SimpleXMLElement $xmlChildNode
          */
         foreach ($xmlRootNode->children() as $xmlChildNode) {
-            $key   = '';
+            $key = '';
             $value = '';
 
             /**
@@ -1277,10 +1349,10 @@ class Form
              */
             foreach ($xmlChildNode->children() as $xmlChildChildNode) {
                 if ($xmlChildChildNode->getName() === $xmlValueTag) {
-                    $key = (string) $xmlChildChildNode;
+                    $key = (string)$xmlChildChildNode;
                 }
                 if ($xmlChildChildNode->getName() === $xmlViewTag) {
-                    $value = (string) $xmlChildChildNode;
+                    $value = (string)$xmlChildChildNode;
                 }
             }
 
@@ -1296,7 +1368,7 @@ class Form
      * You must define the category type (roles, events, links ...). All categories of this type will be shown.
      * @param string $id ID of the selectbox. This will also be the name of the selectbox.
      * @param string $label The label of the selectbox.
-     * @param Database $database A Admidio database object that contains a valid connection to a database
+     * @param Database $database An Admidio database object that contains a valid connection to a database
      * @param string $categoryType Type of category ('EVT', 'LNK', 'ROL', 'USF') that should be shown.
      *                                 The type 'ROL' will ot list event role categories. Therefore, you need to set
      *                                 the type 'ROL_EVENT'. It's not possible to show role categories together with
@@ -1324,19 +1396,19 @@ class Form
      *                                   is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function addSelectBoxForCategories(string $id, string $label, Database $database, string $categoryType, string $selectBoxModus, array $options = array())
+    public function addSelectBoxForCategories(string $id, string $label, Database $database, string $categoryType, string $selectBoxModus, array $options = array()): void
     {
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'                           => 'select',
-            'id'                             => $id,
-            'label'                          => $label,
-            'defaultValue'                   => '',
-            'arrayKeyIsNotValue'             => false,
+            'type' => 'select',
+            'id' => $id,
+            'label' => $label,
+            'defaultValue' => '',
+            'arrayKeyIsNotValue' => false,
             'showContextDependentFirstEntry' => true,
-            'multiselect'                    => false,
-            'showSystemCategory'             => true
+            'multiselect' => false,
+            'showSystemCategory' => true
         ), $options));
 
         if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->countAllRecords() > 1) {
@@ -1344,19 +1416,19 @@ class Form
 
             $this->addJavascriptCode(
                 '
-                $("#'.$id.'").change(function() {
+                $("#' . $id . '").change(function() {
                     if($("option:selected", this).attr("data-global") == 1) {
-                        $("#'.$id.'_alert").show("slow");
+                        $("#' . $id . '_alert").show("slow");
                     } else {
-                        $("#'.$id.'_alert").hide();
+                        $("#' . $id . '_alert").hide();
                     }
                 });
-                $("#'.$id.'").trigger("change");',
+                $("#' . $id . '").trigger("change");',
                 true
             );
         }
 
-        $sqlTables     = '';
+        $sqlTables = '';
         $sqlConditions = '';
 
         // create sql conditions if category must have child elements
@@ -1437,14 +1509,14 @@ class Form
         while ($row = $pdoStatement->fetch()) {
             // if several categories exist than select default category
             if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === ''
-            && ($countCategories === 1 || $row['cat_default'] === 1)) {
+                && ($countCategories === 1 || $row['cat_default'] === 1)) {
                 $optionsAll['defaultValue'] = $row['cat_uuid'];
             }
 
             // add label that this category is visible to all organizations
             if ($row['cat_org_id'] === null) {
                 if ($row['cat_name'] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
-                    $row['cat_name'] .=  ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
+                    $row['cat_name'] .= ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
                 }
                 $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 1);
             } else {
@@ -1475,7 +1547,7 @@ class Form
      *                        - **type** : If set to true this button get the type **submit**. This will
      *                          be the default.
      */
-    public function addSubmitButton(string $id, string $text, array $options = array())
+    public function addSubmitButton(string $id, string $text, array $options = array()): void
     {
         $options['type'] = 'submit';
 
@@ -1495,16 +1567,16 @@ class Form
     }
 
     /**
-     * This method add the form attributes and all form elements to the HtmlPage object. Also, the
+     * This method add the form attributes and all form elements to the PagePresenter object. Also, the
      * template file of the form is set to the page. After this method is called the whole form
-     * could be rendered through the HtmlPage.
+     * could be rendered through the PagePresenter.
      * @param bool $ajaxSubmit If set to true the form will be submitted by an AJAX call and
      *                         the result will be presented inline. If set to false a default
      *                         form submit will be done and a new page will be called.
      * @return void
      * @throws Exception
      */
-    public function addToHtmlPage(bool $ajaxSubmit = true)
+    public function addToHtmlPage(bool $ajaxSubmit = true): void
     {
         try {
             if (isset($this->htmlPage)) {
@@ -1528,12 +1600,13 @@ class Form
 
 
     /**
-     * This method add the form attributes and all form elements to the HtmlPage object. Also, the
+     * This method add the form attributes and all form elements to the PagePresenter object. Also, the
      * template file of the form is set to the page. After this method is called the whole form
-     * could be rendered through the HtmlPage.
+     * could be rendered through the PagePresenter.
+     * @param Smarty $smarty
      * @return void
      */
-    public function addToSmarty(Smarty $smarty)
+    public function addToSmarty(Smarty $smarty): void
     {
         global $gL10n, $gSettingsManager;
 
@@ -1575,15 +1648,15 @@ class Form
     protected function buildOptionsArray(array $options): array
     {
         $optionsDefault = array(
-            'property'     => self::FIELD_DEFAULT,
-            'type'         => '',
+            'property' => self::FIELD_DEFAULT,
+            'type' => '',
             'data-admidio' => '',
-            'id'           => 'admidio_form_field_' . (count($this->elements) + 1),
-            'label'        => '',
-            'value'        => '',
-            'helpTextId'   => '',
-            'icon'         => '',
-            'class'        => '',
+            'id' => 'admidio_form_field_' . (count($this->elements) + 1),
+            'label' => '',
+            'value' => '',
+            'helpTextId' => '',
+            'icon' => '',
+            'class' => '',
             'alertWarning' => '',
         );
         return array_replace($optionsDefault, $options);
@@ -1605,11 +1678,11 @@ class Form
 
         $html = '';
 
-        if(strlen($string) > 0) {
+        if (strlen($string) > 0) {
             if (Language::isTranslationStringId($string)) {
-                $text  = $gL10n->get($string, $parameter);
+                $text = $gL10n->get($string, $parameter);
             } else {
-                $text  = $string;
+                $text = $string;
             }
 
             $html = '<i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
@@ -1621,12 +1694,12 @@ class Form
 
     /**
      * Returns a CSRF token from the session. If no CSRF token exists a new one will be
-     * generated and stored within the session. The next call of the method will than
+     * generated and stored within the session. The next call of the method will then
      * return the existing token. The CSRF token has 30 characters. A new token could
      * be forced by the parameter **$newToken**
      * @param bool $newToken If set to true, always a new token will be generated.
      * @return string Returns the CSRF token
-     * @throws Exception
+     * @throws \Exception
      */
     public function getCsrfToken(bool $newToken = false): string
     {
@@ -1668,7 +1741,7 @@ class Form
             }
         }
 
-        foreach($this->elements as $element) {
+        foreach ($this->elements as $element) {
             // check if element is required and given value in array $fieldValues is empty
             if (isset($element['property']) && $element['property'] === $this::FIELD_REQUIRED) {
                 if (isset($fieldValues[$element['id']])) {
@@ -1743,7 +1816,7 @@ class Form
      * @param string $value Value of the captcha input field.
      * @return true Returns **true** if the value matches the captcha image.
      *              Otherwise, throw an exception SYS_CAPTCHA_CODE_INVALID.
-     *@throws Exception SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
+     * @throws Exception SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
      */
     public function validateCaptcha(string $value): bool
     {

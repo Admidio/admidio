@@ -2,6 +2,7 @@
 namespace Admidio\UI\Component;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\UI\Presenter\PagePresenter;
 use HtmlPage;
 
 /**
@@ -141,7 +142,7 @@ class Message
 
         if (!isset($page) || !$this->inline) {
             // create html page object
-            $page = new HtmlPage('admidio-message', $headline);
+            $page = PagePresenter::withHtmlIDAndHeadline('admidio-message', $headline);
             $page->hideBackLink();
 
             if (!$this->includeThemeBody) {

@@ -11,7 +11,7 @@
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\View\Installation;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_config.php') {
@@ -67,7 +67,7 @@ if ($configFileHandle) {
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));
     $page->assignSmartyVariable('urlInstallation', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')));
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_installation_install_admidio_form',
         'installation.install-admidio.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')),
@@ -83,7 +83,7 @@ if ($configFileHandle) {
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files')));
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_installation_install_admidio_form',
         'installation.download-config.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION. '/installation.php', array('step' => 'start_installation')),

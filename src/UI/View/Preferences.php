@@ -5,9 +5,9 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Text;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
-use HtmlPage;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use RuntimeException;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -31,7 +31,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Preferences extends HtmlPage
+class Preferences extends PagePresenter
 {
     /**
      * @var array Array with all possible accordion entries for the system preferences.
@@ -147,10 +147,10 @@ class Preferences extends HtmlPage
                 'title' => $gL10n->get('SYS_PHOTOS'),
                 'icon' => 'bi-image-fill'
             ),
-            'guestbook' => array(
-                'id' => 'guestbook',
-                'title' => $gL10n->get('GBO_GUESTBOOK'),
-                'icon' => 'bi-book-half'
+            'forum' => array(
+                'id' => 'forum',
+                'title' => $gL10n->get('SYS_FORUM'),
+                'icon' => 'bi-chat-dots-fill'
             ),
             'groups_roles' => array(
                 'id' => 'groups_roles',
@@ -230,7 +230,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formAnnouncements = new Form(
+        $formAnnouncements = new FormPresenter(
             'adm_preferences_form_announcements',
             'preferences/preferences.announcements.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Announcements')),
@@ -286,7 +286,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formCaptcha = new Form(
+        $formCaptcha = new FormPresenter(
             'adm_preferences_form_captcha',
             'preferences/preferences.captcha.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Captcha')),
@@ -408,7 +408,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formCategoryReport = new Form(
+        $formCategoryReport = new FormPresenter(
             'adm_preferences_form_category_report',
             'preferences/preferences.category-report.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'CategoryReport')),
@@ -460,7 +460,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formChangelog = new Form(
+        $formChangelog = new FormPresenter(
             'adm_preferences_form_changelog',
             'preferences/preferences.changelog.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Changelog')),
@@ -514,7 +514,7 @@ class Preferences extends HtmlPage
 
         foreach ($tablesMap as $tableName => $tableLabel) {
             $formChangelog->addCheckbox(
-                'changelog_table_'.$tableName, 
+                'changelog_table_'.$tableName,
                 "$tableLabel ($tableName)",
                 $formValues['changelog_table_'.$tableName]??false,
                 array()
@@ -552,7 +552,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formCommon = new Form(
+        $formCommon = new FormPresenter(
             'adm_preferences_form_common',
             'preferences/preferences.common.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Common')),
@@ -569,25 +569,25 @@ class Preferences extends HtmlPage
             'theme',
             $gL10n->get('ORG_ADMIDIO_THEME'),
             $themes,
-            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
         );
         $formCommon->addInput(
             'homepage_logout',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('SYS_VISITORS') . ')',
             $formValues['homepage_logout'],
-            array('maxLength' => 250, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_VISITORS')
+            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_VISITORS')
         );
         $formCommon->addInput(
             'homepage_login',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('ORG_REGISTERED_USERS') . ')',
             $formValues['homepage_login'],
-            array('maxLength' => 250, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS')
+            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS')
         );
         $formCommon->addCheckbox(
             'enable_rss',
-            $gL10n->get('ORG_ENABLE_RSS_FEEDS'),
+            $gL10n->get('SYS_ENABLE_RSS_FEEDS'),
             (bool)$formValues['enable_rss'],
-            array('helpTextId' => 'ORG_ENABLE_RSS_FEEDS_DESC')
+            array('helpTextId' => array('SYS_ENABLE_RSS_FEEDS_DESC', array('SYS_YES')))
         );
         $formCommon->addCheckbox(
             'system_cookie_note',
@@ -656,7 +656,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formContacts = new Form(
+        $formContacts = new FormPresenter(
             'adm_preferences_form_contacts',
             'preferences/preferences.contacts.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Contacts')),
@@ -741,7 +741,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formDocumentsFiles = new Form(
+        $formDocumentsFiles = new FormPresenter(
             'adm_preferences_form_documents_files',
             'preferences/preferences.documents-files.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'DocumentsFiles')),
@@ -784,7 +784,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formEmailDispatch = new Form(
+        $formEmailDispatch = new FormPresenter(
             'adm_preferences_form_email_dispatch',
             'preferences/preferences.email-dispatch.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'EmailDispatch')),
@@ -943,7 +943,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formEvents = new Form(
+        $formEvents = new FormPresenter(
             'adm_preferences_form_events',
             'preferences/preferences.events.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Events')),
@@ -1074,7 +1074,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formGroupsRoles = new Form(
+        $formGroupsRoles = new FormPresenter(
             'adm_preferences_form_groups_roles',
             'preferences/preferences.groups-roles.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'GroupsRoles')),
@@ -1162,21 +1162,21 @@ class Preferences extends HtmlPage
     }
 
     /**
-     * Generates the html of the form from the guestbook preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the guestbook preferences.
+     * Generates the html of the form from the forum preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the forum preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
-    public function createGuestbookForm(): string
+    public function createForumForm(): string
     {
         global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
-        $formGuestbook = new Form(
-            'adm_preferences_form_guestbook',
-            'preferences/preferences.guestbook.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Guestbook')),
+        $formForum = new FormPresenter(
+            'adm_preferences_form_forum',
+            'preferences/preferences.forum.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Forum')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1185,63 +1185,44 @@ class Preferences extends HtmlPage
             '1' => $gL10n->get('SYS_ENABLED'),
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
         );
-        $formGuestbook->addSelectBox(
-            'enable_guestbook_module',
+        $formForum->addSelectBox(
+            'forum_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['enable_guestbook_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
-        );
-        $formGuestbook->addInput(
-            'guestbook_entries_per_page',
-            $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
-            $formValues['guestbook_entries_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
-        );
-        $formGuestbook->addCheckbox(
-            'enable_guestbook_captcha',
-            $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool)$formValues['enable_guestbook_captcha'],
-            array('helpTextId' => 'GBO_CAPTCHA_DESC')
+            array('defaultValue' => $formValues['forum_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
         $selectBoxEntries = array(
-            '0' => $gL10n->get('SYS_NOBODY'),
-            '1' => $gL10n->get('GBO_ONLY_VISITORS'),
-            '2' => $gL10n->get('SYS_ALL')
+            'cards' => $gL10n->get('SYS_DETAILED'),
+            'list' => $gL10n->get('SYS_LIST')
         );
-        $formGuestbook->addSelectBox(
-            'enable_guestbook_moderation',
-            $gL10n->get('GBO_GUESTBOOK_MODERATION'),
+        $formForum->addSelectBox(
+            'forum_view',
+            $gL10n->get('SYS_DEFAULT_VIEW'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['enable_guestbook_moderation'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'GBO_GUESTBOOK_MODERATION_DESC')
+            array('defaultValue' => $formValues['forum_view'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_DEFAULT_VIEW_FORUM_DESC', array('SYS_DETAILED', 'SYS_LIST')))
         );
-        $formGuestbook->addCheckbox(
-            'enable_gbook_comments4all',
-            $gL10n->get('GBO_COMMENTS4ALL'),
-            (bool)$formValues['enable_gbook_comments4all'],
-            array('helpTextId' => 'GBO_COMMENTS4ALL_DESC')
+        $formForum->addInput(
+            'forum_topics_per_page',
+            $gL10n->get('SYS_NUMBER_OF_TOPICS_PER_PAGE'),
+            $formValues['forum_topics_per_page'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
         );
-        $formGuestbook->addCheckbox(
-            'enable_intial_comments_loading',
-            $gL10n->get('GBO_INITIAL_COMMENTS_LOADING'),
-            (bool)$formValues['enable_intial_comments_loading'],
-            array('helpTextId' => 'GBO_INITIAL_COMMENTS_LOADING_DESC')
+        $formForum->addInput(
+            'forum_posts_per_page',
+            $gL10n->get('SYS_NUMBER_OF_POSTS_PER_PAGE'),
+            $formValues['forum_posts_per_page'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(15)))
         );
-        $formGuestbook->addInput(
-            'flooding_protection_time',
-            $gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL'),
-            $formValues['flooding_protection_time'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'GBO_FLOODING_PROTECTION_INTERVALL_DESC')
-        );
-        $formGuestbook->addSubmitButton(
-            'adm_button_save_guestbook',
+        $formForum->addSubmitButton(
+            'adm_button_save_forum',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
         $smarty = $this->getSmartyTemplate();
-        $formGuestbook->addToSmarty($smarty);
-        $gCurrentSession->addFormObject($formGuestbook);
-        return $smarty->fetch('preferences/preferences.guestbook.tpl');
+        $formForum->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formForum);
+        return $smarty->fetch('preferences/preferences.forum.tpl');
     }
 
     /**
@@ -1256,7 +1237,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formWeblinks = new Form(
+        $formWeblinks = new FormPresenter(
             'adm_preferences_form_links',
             'preferences/preferences.links.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Links')),
@@ -1325,7 +1306,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formMessages = new Form(
+        $formMessages = new FormPresenter(
             'adm_preferences_form_messages',
             'preferences/preferences.messages.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Messages')),
@@ -1433,7 +1414,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formPhotos = new Form(
+        $formPhotos = new FormPresenter(
             'adm_preferences_form_photos',
             'preferences/preferences.photos.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Photos')),
@@ -1650,7 +1631,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formProfile = new Form(
+        $formProfile = new FormPresenter(
             'adm_preferences_form_profile',
             'preferences/preferences.profile.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Profile')),
@@ -1724,7 +1705,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formRegionalSettings = new Form(
+        $formRegionalSettings = new FormPresenter(
             'adm_preferences_form_regional_settings',
             'preferences/preferences.regional-settings.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'RegionalSettings')),
@@ -1735,13 +1716,13 @@ class Preferences extends HtmlPage
             'system_timezone',
             $gL10n->get('ORG_TIMEZONE'),
             $gTimezone,
-            array('property' => Form::FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextId' => 'ORG_TIMEZONE_DESC')
+            array('property' => FormPresenter::FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextId' => 'ORG_TIMEZONE_DESC')
         );
         $formRegionalSettings->addSelectBox(
             'system_language',
             $gL10n->get('SYS_LANGUAGE'),
             $gL10n->getAvailableLanguages(),
-            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
         );
         $formRegionalSettings->addSelectBox(
             'default_country',
@@ -1753,13 +1734,13 @@ class Preferences extends HtmlPage
             'system_date',
             $gL10n->get('ORG_DATE_FORMAT'),
             $formValues['system_date'],
-            array('property' => Form::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
         );
         $formRegionalSettings->addInput(
             'system_time',
             $gL10n->get('ORG_TIME_FORMAT'),
             $formValues['system_time'],
-            array('property' => Form::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
         );
         $formRegionalSettings->addInput(
             'system_currency',
@@ -1791,7 +1772,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formRegistration = new Form(
+        $formRegistration = new FormPresenter(
             'adm_preferences_form_registration',
             'preferences/preferences.registration.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Registration')),
@@ -1852,7 +1833,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formSecurity = new Form(
+        $formSecurity = new FormPresenter(
             'adm_preferences_form_security',
             'preferences/preferences.security.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Security')),
@@ -2030,7 +2011,7 @@ class Preferences extends HtmlPage
 
         $formValues = $gSettingsManager->getAll();
 
-        $formSystemNotifications = new Form(
+        $formSystemNotifications = new FormPresenter(
             'adm_preferences_form_system_notifications',
             'preferences/preferences.system-notifications.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'SystemNotifications')),
@@ -2190,7 +2171,7 @@ class Preferences extends HtmlPage
         $this->addJavascript(
             '
             var panels = ["common", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
-                "announcements", "contacts", "documents_files", "photos", "guestbook", "groups_roles", "category_report", "messages", "profile", "events", "links"];
+                "announcements", "contacts", "documents_files", "photos", "forum", "groups_roles", "category_report", "messages", "profile", "events", "links"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#adm_panel_preferences_" + panels[i] + " .accordion-header").click(function (e) {
@@ -2234,16 +2215,16 @@ class Preferences extends HtmlPage
 
         ChangelogService::displayHistoryButton($this, 'preferences', 'preferences,texts');
 
-        // Load the select2 in case any of the form uses a select box. Unfortunately, each section 
-        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading, 
+        // Load the select2 in case any of the form uses a select box. Unfortunately, each section
+        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
         // so we need to do it here, even when no selectbox will be used...
         // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
-    
-        
+
+
         $this->assignSmartyVariable('accordionCommonPanels', $this->accordionCommonPanels);
         $this->assignSmartyVariable('accordionModulePanels', $this->accordionModulePanels);
         $this->addTemplateFile('preferences/preferences.tpl');

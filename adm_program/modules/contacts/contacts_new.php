@@ -9,7 +9,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -20,7 +20,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_contacts_new_form',
         'modules/contacts.new.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_assign.php',
@@ -31,13 +31,13 @@ try {
         'lastname',
         $gL10n->get('SYS_LASTNAME'),
         '',
-        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'firstname',
         $gL10n->get('SYS_FIRSTNAME'),
         '',
-        array('maxLength' => 100, 'property' => Form::FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addSubmitButton(
         'btn_add',

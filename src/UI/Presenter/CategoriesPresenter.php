@@ -1,10 +1,9 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Components\Entity\Component;
-use HtmlPage;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Categories\Entity\Category;
@@ -27,7 +26,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Categories extends HtmlPage
+class CategoriesPresenter extends PagePresenter
 {
     /**
      * Create the data for the edit form of a menu entry.
@@ -82,6 +81,14 @@ class Categories extends HtmlPage
                 $rolesRightsName = 'SYS_RIGHT_ANNOUNCEMENTS';
                 break;
 
+            case 'AWA':
+                $component = 'CORE';
+                $headline = $gL10n->get('Awards') . ' - ' . $headlineSuffix;
+                $rolesRightEditName = 'Not used, leave empty';
+                $rolesRightsColumn = 'rol_edit_user';
+                $rolesRightsName = 'SYS_RIGHT_EDIT_USER';
+                break;
+
             case 'EVT':
                 $component = 'EVENTS';
                 $headline = $gL10n->get('SYS_EVENTS') . ' - ' . $headlineSuffix;
@@ -89,6 +96,14 @@ class Categories extends HtmlPage
                 $rolesRightsColumn = 'rol_events';
                 $rolesRightsName = 'SYS_RIGHT_DATES';
                 $addButtonText = $gL10n->get('SYS_CALENDAR');
+                break;
+
+            case 'FOT':
+                $component = 'FORUM';
+                $headline = $gL10n->get('SYS_FORUM') . ' - ' . $headlineSuffix;
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPICS'));
+                $rolesRightsColumn = 'rol_forum_admin';
+                $rolesRightsName = 'SYS_RIGHT_FORUM';
                 break;
 
             case 'LNK':
@@ -108,14 +123,6 @@ class Categories extends HtmlPage
                 $component = 'CORE';
                 $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $headlineSuffix;
                 $rolesRightEditName = 'SYS_EDIT_PROFILE_FIELDS_PREF';
-                $rolesRightsColumn = 'rol_edit_user';
-                $rolesRightsName = 'SYS_RIGHT_EDIT_USER';
-                break;
-
-            case 'AWA':
-                $component = 'CORE';
-                $headline = $gL10n->get('Awards') . ' - ' . $headlineSuffix;
-                $rolesRightEditName = 'Not used, leave empty';
                 $rolesRightsColumn = 'rol_edit_user';
                 $rolesRightsName = 'SYS_RIGHT_EDIT_USER';
                 break;
@@ -178,7 +185,7 @@ class Categories extends HtmlPage
 
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_categories_edit_form',
             'modules/categories.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('uuid' => $categoryUUID, 'mode' => 'save', 'type' => $type)),
@@ -186,9 +193,9 @@ class Categories extends HtmlPage
         );
 
         // system categories should not be renamed
-        $fieldPropertyCatName = Form::FIELD_REQUIRED;
+        $fieldPropertyCatName = FormPresenter::FIELD_REQUIRED;
         if ($category->getValue('cat_system') == 1) {
-            $fieldPropertyCatName = Form::FIELD_DISABLED;
+            $fieldPropertyCatName = FormPresenter::FIELD_DISABLED;
         }
 
         $form->addInput(
@@ -252,7 +259,7 @@ class Categories extends HtmlPage
                 $gDb,
                 $sqlDataView,
                 array(
-                    'property' => Form::FIELD_REQUIRED,
+                    'property' => FormPresenter::FIELD_REQUIRED,
                     'defaultValue' => $roleViewSet,
                     'multiselect' => true,
                     'firstEntry' => array('0', $firstEntryName, null),
@@ -264,7 +271,7 @@ class Categories extends HtmlPage
             if ($type !== 'USF') {
                 $form->addSelectBoxFromSql(
                     'adm_categories_edit_right',
-                    $gL10n->get($rolesRightEditName),
+                    $rolesRightEditName,
                     $gDb,
                     $sqlDataView,
                     array(
@@ -279,13 +286,13 @@ class Categories extends HtmlPage
         // if current organization has a parent organization or is child organizations then show option to set this category to global
         if ($type !== 'ROL' && (bool)$category->getValue('cat_system') === false && $gCurrentOrganization->countAllRecords() > 1) {
             if ($gCurrentOrganization->isChildOrganization()) {
-                $fieldProperty = Form::FIELD_DISABLED;
+                $fieldProperty = FormPresenter::FIELD_DISABLED;
                 $helpTextId = 'SYS_ONLY_SET_BY_MOTHER_ORGANIZATION';
             } else {
                 // show all organizations where this organization is mother or child organization
                 $organizations = implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-                $fieldProperty = Form::FIELD_DEFAULT;
+                $fieldProperty = FormPresenter::FIELD_DEFAULT;
                 if ($type === 'USF') {
                     $helpTextId = $gL10n->get('SYS_CATEGORY_VISIBLE_ALL_ORGA', array($organizations));
                 } else {
@@ -314,7 +321,7 @@ class Categories extends HtmlPage
                 'adm_administrators',
                 $gL10n->get('SYS_ADMINISTRATORS'),
                 implode(', ', $adminRoles),
-                array('property' => Form::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
+                array('property' => FormPresenter::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
             );
 
             $checked = false;
@@ -369,18 +376,17 @@ class Categories extends HtmlPage
         $editableHeadline = '';
 
         switch ($type) {
-            case 'ROL':
-                $component = 'GROUPS-ROLES';
-                $rolesRightsColumn = 'rol_assign_roles';
-                $headline = $gL10n->get('SYS_ROLES') . ' - ' . $gL10n->get('SYS_CATEGORIES');
-                $visibleHeadline = '';
-                break;
-
             case 'ANN':
                 $component = 'ANNOUNCEMENTS';
                 $rolesRightsColumn = 'rol_announcements';
                 $headline = $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
                 $editableHeadline = $gL10n->get('SYS_EDIT_ANNOUNCEMENTS');
+                break;
+
+            case 'AWA':
+                $component = 'CORE';
+                $rolesRightsColumn = 'rol_edit_user';
+                $headline = $gL10n->get('Awards') . ' - ' . $gL10n->get('SYS_CATEGORIES');
                 break;
 
             case 'EVT':
@@ -393,6 +399,13 @@ class Categories extends HtmlPage
                 $deleteMessage = 'SYS_DELETE_ENTRY';
                 break;
 
+            case 'FOT':
+                $component = 'FORUM';
+                $rolesRightsColumn = 'rol_forum_admin';
+                $headline = $gL10n->get('SYS_FORUM') . ' - ' . $gL10n->get('SYS_CATEGORIES');
+                $editableHeadline = $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPICS'));
+                break;
+
             case 'LNK':
                 $component = 'LINKS';
                 $rolesRightsColumn = 'rol_weblinks';
@@ -400,17 +413,18 @@ class Categories extends HtmlPage
                 $editableHeadline = $gL10n->get('SYS_EDIT_WEBLINKS');
                 break;
 
+            case 'ROL':
+                $component = 'GROUPS-ROLES';
+                $rolesRightsColumn = 'rol_assign_roles';
+                $headline = $gL10n->get('SYS_ROLES') . ' - ' . $gL10n->get('SYS_CATEGORIES');
+                $visibleHeadline = '';
+                break;
+
             case 'USF':
                 $component = 'CORE';
                 $rolesRightsColumn = 'rol_edit_user';
                 $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
                 $editableHeadline = $gL10n->get('SYS_EDIT_PROFILE_FIELDS_PREF');
-                break;
-
-            case 'AWA':
-                $component = 'CORE';
-                $rolesRightsColumn = 'rol_edit_user';
-                $headline = $gL10n->get('Awards') . ' - ' . $gL10n->get('SYS_CATEGORIES');
                 break;
 
             default:

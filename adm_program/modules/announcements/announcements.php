@@ -23,7 +23,8 @@ use Admidio\Announcements\Entity\Announcement;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
 try {
@@ -70,7 +71,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-announcements', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-announcements', $headline);
 
     // add rss feed to announcements
     if ($gSettingsManager->getBool('enable_rss')) {
@@ -120,7 +121,7 @@ try {
 
     if ($getAnnUuid === '') {
         // create filter menu with elements for category
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_navbar_filter_form',
             'sys-template-parts/form.filter.tpl',
             ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
@@ -132,7 +133,7 @@ try {
             $gL10n->get('SYS_CATEGORY'),
             $gDb,
             'ANN',
-            Form::SELECT_BOX_MODUS_FILTER,
+            FormPresenter::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $getCatUuid)
         );
         $form->addToHtmlPage();

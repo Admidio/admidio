@@ -23,6 +23,9 @@ class CategoryService
     protected Database $db;
     protected string $UUID;
     protected string $type;
+    protected array|null $editableCategories = null;
+    protected array|null $visibleCategories = null;
+    protected int $count = 0;
 
     /**
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -43,12 +46,101 @@ class CategoryService
     }
 
     /**
+     * Returns the number of categories of this organization from the set type.
+     * @return int Returns the number of categories of this organization from the set type.
+     * @throws Exception
+     */
+    public function count(): int
+    {
+        global $gCurrentOrgId;
+
+        if ($this->count === 0) {
+            $sql = 'SELECT count(*) as count
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type = ? -- $this->type
+                   AND (cat_org_id IS NULL OR cat_org_id = ?) -- $gCurrentOrgId';
+            $pdoStatement = $this->db->queryPrepared($sql, array($this->type, $gCurrentOrgId));
+
+            $row = $pdoStatement->fetch();
+            $this->count = $row['count'];
+        }
+        return $this->count;
+    }
+
+    /**
+     * Get an array with all categories of this organization from the set type which the current user is allowed to edit.
+     * @return array Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name', 'cat_default'
+     * @throws Exception
+     */
+    public function getEditableCategories(): array
+    {
+        global $gCurrentUser;
+
+        if ($this->editableCategories === null) {
+            $editableCategoryIDs = $gCurrentUser->getAllEditableCategories($this->type);
+
+            $sql = 'SELECT cat_id, cat_uuid, cat_name, cat_default
+                      FROM ' . TBL_CATEGORIES . '
+                     WHERE cat_id IN (' . Database::getQmForValues($editableCategoryIDs) . ')';
+            $pdoStatement = $this->db->queryPrepared($sql, $editableCategoryIDs);
+
+            while ($row = $pdoStatement->fetch()) {
+                $this->editableCategories[] = $row;
+            }
+        }
+        return $this->editableCategories;
+    }
+
+    /**
+     * Get an array with UUIDs of all categories of this organization from the set type which the current user is allowed to edit.
+     * @return array<int,string> Array with UUIDs of all editable categories.
+     * @throws Exception
+     */
+    public function getEditableCategoryUUIDs(): array
+    {
+        $editableCategoryUUIDs = array();
+
+        if ($this->editableCategories === null) {
+            $this->getEditableCategories();
+        }
+
+        foreach ($this->editableCategories as $category) {
+            $editableCategoryUUIDs[] = $category['cat_uuid'];
+        }
+        return $editableCategoryUUIDs;
+    }
+
+    /**
+     * Get an array with all categories of this organization from the set type which the current user is allowed to view.
+     * @return array Array with all categories. Each category is an array with the keys 'cat_id', 'cat_uuid', 'cat_name', 'cat_default'
+     * @throws Exception
+     */
+    public function getVisibleCategories(): array
+    {
+        global $gCurrentUser;
+
+        if ($this->visibleCategories === null) {
+            $visibleCategoryIDs = $gCurrentUser->getAllVisibleCategories($this->type);
+
+            $sql = 'SELECT cat_id, cat_uuid, cat_name, cat_default
+                      FROM ' . TBL_CATEGORIES . '
+                     WHERE cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ')';
+            $pdoStatement = $this->db->queryPrepared($sql, $visibleCategoryIDs);
+
+            while ($row = $pdoStatement->fetch()) {
+                $this->visibleCategories[] = $row;
+            }
+        }
+        return $this->visibleCategories;
+    }
+
+    /**
      * Save data from the category form into the database.
      * @throws Exception
      */
-    public function save()
+    public function save(): void
     {
-        global $gCurrentOrganization, $gCurrentSession, $gCurrentOrgId, $gDb;
+        global $gCurrentOrganization, $gCurrentSession, $gCurrentOrgId, $gDb, $gProfileFields;
 
         // check form field input and sanitized it from malicious content
         $categoryEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);

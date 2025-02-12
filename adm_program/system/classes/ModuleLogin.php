@@ -3,7 +3,8 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Roles\Entity\Role;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 /**
@@ -35,11 +36,11 @@ class ModuleLogin
     /**
      * Create the html content of the login page and add it to the HtmlPage object. Beside the username and password an
      * organization select box could be shown and the flag if auto login should be activated.
-     * @param HtmlPage $page Html content will be added to this page.
+     * @param PagePresenter $page Html content will be added to this page.
      * @param string $organizationShortName Optional the organization that should be preselected in the dialog.
      * @throws Exception
      */
-    public function addHtmlLogin(HtmlPage $page, string $organizationShortName = '')
+    public function addHtmlLogin(PagePresenter $page, string $organizationShortName = '')
     {
         global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization, $gCurrentSession;
 
@@ -75,7 +76,7 @@ class ModuleLogin
         }
 
         // show form
-        $form = new Form(
+        $form = new FormPresenter(
             'adm_login_form',
             'system/login.tpl',
             ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
@@ -87,7 +88,7 @@ class ModuleLogin
             'usr_login_name',
             $gL10n->get('SYS_USERNAME'),
             '',
-            array('maxLength' => 254, 'property' => Form::FIELD_REQUIRED)
+            array('maxLength' => 254, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addInput(
             'usr_password',
@@ -95,7 +96,7 @@ class ModuleLogin
             '',
             array(
                 'type' => 'password',
-                'property' => Form::FIELD_REQUIRED,
+                'property' => FormPresenter::FIELD_REQUIRED,
                 'helpTextId' => '<a href="' . $forgotPasswordLink . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>'
             )
         );
@@ -109,7 +110,7 @@ class ModuleLogin
             $gL10n->get('SYS_ORGANIZATION'),
             $gDb,
             $sql,
-            array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $organizationShortName)
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $organizationShortName)
         );
 
         $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));

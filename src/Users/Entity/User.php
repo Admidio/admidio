@@ -255,11 +255,10 @@ class User extends Entity
                 'rol_announcements' => false,
                 'rol_approve_users' => false,
                 'rol_assign_roles' => false,
-                'rol_events' => false,
                 'rol_documents_files' => false,
+                'rol_events' => false,
                 'rol_edit_user' => false,
-                'rol_guestbook' => false,
-                'rol_guestbook_comments' => false,
+                'rol_forum_admin' => false,
                 'rol_mail_to_all' => false,
                 'rol_photo' => false,
                 'rol_profile' => false,
@@ -556,13 +555,17 @@ class User extends Entity
                             SET fil_usr_id = NULL
                           WHERE fil_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_GUESTBOOK . '
-                            SET gbo_usr_id_create = NULL
-                          WHERE gbo_usr_id_create = ' . $usrId;
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_TOPICS . '
+                            SET fot_usr_id_create = NULL
+                          WHERE fot_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_GUESTBOOK . '
-                            SET gbo_usr_id_change = NULL
-                          WHERE gbo_usr_id_change = ' . $usrId;
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_POSTS . '
+                            SET fop_usr_id_create = NULL
+                          WHERE fop_usr_id_create = ' . $usrId;
+
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_POSTS . '
+                            SET fop_usr_id_change = NULL
+                          WHERE fop_usr_id_change = ' . $usrId;
 
         $sqlQueries[] = 'UPDATE ' . TBL_LINKS . '
                             SET lnk_usr_id_create = NULL
@@ -711,15 +714,17 @@ class User extends Entity
     /**
      * Creates an array with all categories of one type where the user has the right to edit them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @param string $idType The type of the id that should be returned e.g. id or uuid
      * @return array<int,int> Array with categories ids where user has the right to edit them
      * @throws Exception
      */
-    public function getAllEditableCategories(string $categoryType): array
+    public function getAllEditableCategories(string $categoryType, string $idType = 'id'): array
     {
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-            || ($categoryType === 'EVT' && $this->editEvents())
+            || ($categoryType === 'EVT' && $this->administrateEvents())
+            || ($categoryType === 'FOT' && $this->administrateForum())
             || ($categoryType === 'LNK' && $this->editWeblinksRight())
             || ($categoryType === 'USF' && $this->editUsers())
             || ($categoryType === 'ROL' && $this->manageRoles())) {
@@ -738,7 +743,7 @@ class User extends Entity
                     )';
         }
 
-        $sql = 'SELECT cat_id
+        $sql = 'SELECT cat_id, cat_uuid
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
@@ -747,8 +752,12 @@ class User extends Entity
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $arrEditableCategories = array();
-        while ($catId = $pdoStatement->fetchColumn()) {
-            $arrEditableCategories[] = (int)$catId;
+        while ($row = $pdoStatement->fetch()) {
+            if ($idType === 'uuid') {
+                $arrEditableCategories[] = $row['cat_uuid'];
+            } else {
+                $arrEditableCategories[] = (int)$row['cat_id'];
+            }
         }
 
         return $arrEditableCategories;
@@ -757,15 +766,17 @@ class User extends Entity
     /**
      * Creates an array with all categories of one type where the user has the right to view them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @param string $idType The type of the id that should be returned e.g. id or uuid
      * @return array<int,int> Array with categories ids where user has the right to view them
      * @throws Exception
      */
-    public function getAllVisibleCategories(string $categoryType): array
+    public function getAllVisibleCategories(string $categoryType, string $idType = 'id'): array
     {
         $queryParams = array($categoryType, $this->organizationId);
 
         if (($categoryType === 'ANN' && $this->editAnnouncements())
-            || ($categoryType === 'EVT' && $this->editEvents())
+            || ($categoryType === 'EVT' && $this->administrateEvents())
+            || ($categoryType === 'FOT' && $this->administrateForum())
             || ($categoryType === 'LNK' && $this->editWeblinksRight())
             || ($categoryType === 'USF' && $this->editUsers())
             || ($categoryType === 'ROL' && $this->assignRoles())) {
@@ -790,7 +801,7 @@ class User extends Entity
                     )';
         }
 
-        $sql = 'SELECT cat_id
+        $sql = 'SELECT cat_id, cat_uuid
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
@@ -799,8 +810,12 @@ class User extends Entity
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $arrVisibleCategories = array();
-        while ($catId = $pdoStatement->fetchColumn()) {
-            $arrVisibleCategories[] = (int)$catId;
+        while ($row = $pdoStatement->fetch()) {
+            if ($idType === 'uuid') {
+                $arrVisibleCategories[] = $row['cat_uuid'];
+            } else {
+                $arrVisibleCategories[] = (int)$row['cat_id'];
+            }
         }
 
         return $arrVisibleCategories;
@@ -2049,7 +2064,7 @@ class User extends Entity
      * @return bool Return true if the user is admin of the module otherwise false
      * @throws Exception
      */
-    public function editEvents(): bool
+    public function administrateEvents(): bool
     {
         return $this->checkRolesRight('rol_events');
     }
@@ -2059,9 +2074,19 @@ class User extends Entity
      * @return bool Return true if the user is admin of the module otherwise false
      * @throws Exception
      */
-    public function adminDocumentsFiles(): bool
+    public function administrateDocumentsFiles(): bool
     {
         return $this->checkRolesRight('rol_documents_files');
+    }
+
+    /**
+     * Method checks if the current user is allowed to administrate the forum module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function administrateForum(): bool
+    {
+        return $this->checkRolesRight('rol_forum_admin');
     }
 
     /**
@@ -2073,26 +2098,6 @@ class User extends Entity
     public function editUsers(): bool
     {
         return $this->checkRolesRight('rol_edit_user');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the guestbook module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editGuestbookRight(): bool
-    {
-        return $this->checkRolesRight('rol_guestbook');
-    }
-
-    /**
-     * Method checks if the current user is allowed to comment guestbook entries.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function commentGuestbookRight(): bool
-    {
-        return $this->checkRolesRight('rol_guestbook_comments');
     }
 
     /**
