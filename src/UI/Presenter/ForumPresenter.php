@@ -62,10 +62,11 @@ class ForumPresenter extends PagePresenter
     /**
      * Create content that is used on several pages and could be called in other methods. It will
      * create a functions menu and a filter navbar.
+     * @param string $view Name of the view that should be created. This could be 'cards' or 'list'.
      * @return void
      * @throws Exception
      */
-    protected function createSharedHeader(): void
+    protected function createSharedHeader(string $view): void
     {
         global $gCurrentUser, $gL10n, $gDb, $gSettingsManager, $gCurrentOrganization;
 
@@ -74,7 +75,7 @@ class ForumPresenter extends PagePresenter
         // add rss feed to forum
         if ($gSettingsManager->getBool('enable_rss') && $gSettingsManager->getInt('forum_module_enabled') === 1) {
             $this->addRssFile(
-                ADMIDIO_URL . '/rss/forum.php?organization=' .$gCurrentOrganization->getValue('org_shortname'),
+                ADMIDIO_URL . '/rss/forum.php?organization=' . $gCurrentOrganization->getValue('org_shortname'),
                 $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_FORUM')))
             );
         }
@@ -112,9 +113,16 @@ class ForumPresenter extends PagePresenter
             $this,
             array('type' => 'navbar', 'setFocus' => false)
         );
+        $form->addButtonGroupRadio(
+            'adm_forum_view',
+            array(array('adm_forum_view_cards', $gL10n->get('SYS_DETAILED'), SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'cards'))),
+                array('adm_forum_view_list', $gL10n->get('SYS_LIST'), SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'list')))
+            ),
+            array('defaultValue' => 'adm_forum_view_' . $view)
+        );
         if (count($this->categories->getVisibleCategories()) > 1) {
             $form->addSelectBoxForCategories(
-                'fot_cat_id',
+                'category_uuid',
                 $gL10n->get('SYS_CATEGORY'),
                 $gDb,
                 'FOT',
@@ -126,9 +134,7 @@ class ForumPresenter extends PagePresenter
     }
 
     /**
-     * Read all available forum topics from the database and create the html content of this
-     * page with the Smarty template engine and write the html output to the internal
-     * parameter **$pageContent**.
+     * Read all available forum topics from the database and create a Bootstrap card for each topic.
      * @param int $offset Offset of the first record that should be returned.
      * @throws Exception
      * @throws \DateMalformedStringException
@@ -143,13 +149,41 @@ class ForumPresenter extends PagePresenter
         $categoryService = new ForumService($gDb, $this->categoryUUID);
 
         $this->setHtmlID('adm_forum_cards');
-        $this->createSharedHeader();
+        $this->createSharedHeader('cards');
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
         $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->getTopicCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
         try {
             $this->pageContent .= $this->smarty->fetch('modules/forum.cards.tpl');
+        } catch (\Smarty\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * Read all available forum topics from the database and an HTML list with all topics.
+     * @param int $offset Offset of the first record that should be returned.
+     * @throws Exception
+     * @throws \DateMalformedStringException
+     */
+    public function createList(int $offset = 0): void
+    {
+        global $gL10n, $gSettingsManager, $gDb;
+
+        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'cards', 'cat_uuid' => $this->categoryUUID));
+
+        $this->prepareData($offset);
+        $categoryService = new ForumService($gDb, $this->categoryUUID);
+
+        $this->setHtmlID('adm_forum_cards');
+        $this->createSharedHeader('list');
+
+        $this->smarty->assign('list', $this->templateData);
+        $this->smarty->assign('l10n', $gL10n);
+        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->getTopicCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
+        try {
+            $this->pageContent .= $this->smarty->fetch('modules/forum.list.tpl');
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -181,13 +215,16 @@ class ForumPresenter extends PagePresenter
             } else {
                 $templateRow['lastReplyUserName'] = $forumTopic['last_reply_firstname'] . ' ' . $forumTopic['last_reply_surname'];
             }
+            $templateRow['lastReplyUserNameWithLink'] = '<a href="' . SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $forumTopic['last_reply_usr_uuid'])) .
+                '" title="' . $gL10n->get('SYS_PROFILE') . '">' . $templateRow['lastReplyUserName'] . '</a>';
 
             // calculate offset of last reply
-            (float) $lastPage = ($forumTopic['replies_count'] + 1) / $gSettingsManager->getInt('forum_posts_per_page');
+            (float)$lastPage = ($forumTopic['replies_count'] + 1) / $gSettingsManager->getInt('forum_posts_per_page');
             if (fmod($lastPage, 1) == 0) {
                 $lastPage = $lastPage - 1;
             } else {
-                $lastPage = (int) $lastPage;
+                $lastPage = (int)$lastPage;
             }
             $lastOffset = ($lastPage * $gSettingsManager->getInt('forum_posts_per_page'));
 
@@ -196,6 +233,11 @@ class ForumPresenter extends PagePresenter
                 array('mode' => 'topic', 'topic_uuid' => $forumTopic['fot_uuid'], 'offset' => $lastOffset),
                 'adm_post_' . $forumTopic['last_reply_uuid']
             );
+            $templateRow['lastReplyInfo'] = $gL10n->get('SYS_LAST_REPLY_BY_AT', array(
+                '<a href="' . $templateRow['lastReplyUrl'] . '">',
+                '</a>',
+                $templateRow['lastReplyUserNameWithLink'],
+                $templateRow['lastReplyTimestamp']));
 
             if (strlen($forumTopic['fop_text']) > 250) {
                 $templateRow['text'] = substr(
@@ -212,6 +254,9 @@ class ForumPresenter extends PagePresenter
             } else {
                 $templateRow['userName'] = $forumTopic['firstname'] . ' ' . $forumTopic['surname'];
             }
+            $templateRow['userNameWithLink'] = '<a href="' . SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $forumTopic['usr_uuid'])) .
+                '" title="' . $gL10n->get('SYS_PROFILE') . '">' . $templateRow['userName'] . '</a>';
             $templateRow['userProfilePhotoUrl'] = SecurityUtils::encodeUrl(
                 ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php',
                 array('user_uuid' => $forumTopic['usr_uuid'], 'timestamp' => $forumTopic['usr_timestamp_change'])

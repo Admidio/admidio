@@ -1191,7 +1191,16 @@ class Preferences extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['forum_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
-
+        $selectBoxEntries = array(
+            'cards' => $gL10n->get('SYS_DETAILED'),
+            'list' => $gL10n->get('SYS_LIST')
+        );
+        $formForum->addSelectBox(
+            'forum_view',
+            $gL10n->get('SYS_DEFAULT_VIEW'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['forum_view'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_DEFAULT_VIEW_FORUM_DESC', array('SYS_DETAILED', 'SYS_LIST')))
+        );
         $formForum->addInput(
             'forum_topics_per_page',
             $gL10n->get('SYS_NUMBER_OF_TOPICS_PER_PAGE'),

@@ -272,7 +272,7 @@ class Topic extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if ($this->newRecord) {
+        if ($this->newRecord && empty($this->getVAlue('fot_cat_id'))) {
             // if only one category is available, then set this category as default
             $categoryServices = new CategoryService($this->db, 'FOT');
             $categories = $categoryServices->getVisibleCategories();
@@ -318,7 +318,7 @@ class Topic extends Entity
                     throw new Exception('You are not allowed to create a post in this category.');
                 }
             } else {
-                if (in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT', 'uuid'))) {
+                if (!in_array($newValue, $gCurrentUser->getAllEditableCategories('FOT', 'uuid'))) {
                     throw new Exception('You are not allowed to create a post in this category.');
                 }
                 $category = new Category($this->db);
@@ -328,20 +328,5 @@ class Topic extends Entity
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
-    }
-
-
-    /**
-     * Retrieve the list of database fields that are ignored for the changelog.
-     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
-     * to log changes to these columns.
-     * The guestbook table also contains gbo_org_id and gbo_ip_address columns, 
-     * which we don't want to log.
-     *
-     * @return true Returns the list of database columns to be ignored for logging.
-     */
-    public function getIgnoredLogColumns(): array
-    {
-        return array_merge(parent::getIgnoredLogColumns(), ['gbo_ip_address']);
     }
 }

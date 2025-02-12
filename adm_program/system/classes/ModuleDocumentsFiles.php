@@ -3,6 +3,7 @@
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -21,7 +22,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ModuleDocumentsFiles extends HtmlPage
+class ModuleDocumentsFiles extends PagePresenter
 {
     /**
      * @var array Array with all read folders and files

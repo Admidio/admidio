@@ -1,6 +1,7 @@
 <?php
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 /**
@@ -20,7 +21,7 @@ use Admidio\Users\Entity\User;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ModuleContacts extends HtmlPage
+class ModuleContacts extends PagePresenter
 {
     /**
      * Constructor that initialize the class member parameters

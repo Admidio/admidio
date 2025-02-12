@@ -49,7 +49,7 @@ class Post extends Entity
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): bool|int|string
     {
         if ($columnName === 'fop_text') {
             if (!isset($this->dbColumns['fop_text'])) {
@@ -155,25 +155,24 @@ class Post extends Entity
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns.
-     * The guestbook table also contains gbc_org_id and gbc_ip_address columns, 
+     * The guestbook table also contains gbc_org_id and gbc_ip_address columns,
      * which we don't want to log.
-     *
-     * @return true Returns the list of database columns to be ignored for logging.
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(), ['gbc_ip_address', 'gbc_gbo_id']);
+        return array_merge(parent::getIgnoredLogColumns(), ['fop_fot_id']);
     }
 
     /**
-     * Adjust the changelog entry for this db record: Add the parent guestbook entry as a related object
-     * 
+     * Adjust the changelog entry for this db record: Add the parent forum topic as a related object
      * @param LogChanges $logEntry The log entry to adjust
-     * 
      * @return void
+     * @throws Exception
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
-        $gboEntry = new Topic($this->db, $this->getValue('gbc_gbo_id'));
-        $logEntry->setLogRelated($gboEntry->getValue('gbo_uuid'), $gboEntry->getValue('gbo_name'));
+    protected function adjustLogEntry(LogChanges $logEntry): void
+    {
+        $fotEntry = new Topic($this->db, $this->getValue('fop_fot_id'));
+        $logEntry->setLogRelated($fotEntry->getValue('fot_uuid'), $fotEntry->getValue('fot_title'));
     }
 }

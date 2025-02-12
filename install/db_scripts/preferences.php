@@ -139,6 +139,12 @@ $defaultOrgPreferences = array(
     'events_show_map_link'        => '1',
     'events_view'                 => 'detail',
 
+    // Forum
+    'forum_module_enabled'        => '1',
+    'forum_posts_per_page'        => '15',
+    'forum_topics_per_page'       => '10',
+    'forum_view'                  => 'cards',
+
     // Groups and roles
     'groups_roles_default_configuration' => '',
     'groups_roles_enable_module'         => '1',
@@ -146,11 +152,6 @@ $defaultOrgPreferences = array(
     'groups_roles_edit_lists'            => '1',
     'groups_roles_members_per_page'      => '25',
     'groups_roles_show_former_members'   => '2',
-
-    // Forum
-    'forum_module_enabled'        => '1',
-    'forum_posts_per_page'        => '15',
-    'forum_topics_per_page'       => '10',
 
     // Messages
     'enable_mail_module'          => '1',

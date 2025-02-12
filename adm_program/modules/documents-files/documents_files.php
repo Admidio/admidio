@@ -52,7 +52,8 @@ try {
     $getFolderUUID = $currentFolder->getValue('fol_uuid');
 
     // create html page object
-    $page = new ModuleDocumentsFiles('admidio-documents-files', $headline);
+    $page = new ModuleDocumentsFiles('admidio-documents-files');
+    $page->setHeadline($headline);
 
     if ($currentFolder->hasUploadRight()) {
         // upload only possible if upload filesize > 0
@@ -91,13 +92,13 @@ try {
             );
         }
         ChangelogService::displayHistoryButton($page, 'folder', 'folders,files,roles_rights_data', !empty($getAnnUuid), array('uuid' => $haveGetFolderUUID?$getFolderUUID:''));
-        
+
     }
 
     $page->readData($getFolderUUID);
     $page->createContentList();
     $page->show();
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if ($e->getMessage() === 'LOGIN') {
         require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
     } else {

@@ -460,6 +460,7 @@
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Default view</string>
   <string name="SYS_DEFAULT_VIEW_DESC">A display mode of the events can be preselected. In #VAR1_BOLD# mode, all the information about an event is displayed in a box. In the #VAR2_BOLD# display mode, the most important event information is shown in a compact list. (Default setting: #VAR1#)</string>
+  <string name="SYS_DEFAULT_VIEW_FORUM_DESC">A display mode of the forum topics can be preselected. Within mode #VAR1_BOLD#, each topic is presented in a card with a preview of the topic text. Within mode #VAR2_BOLD#, the topics are presented in a list to show the information in a compact list. (Default setting: #VAR1#)</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
@@ -755,7 +756,8 @@
   <string name="SYS_LAST_EDITED_AT">Last edited at #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# at #VAR2#</string>
   <string name="SYS_LAST_LOGIN_ON">Last login on #VAR1# at #VAR2#</string>
-  <string name="SYS_LAST_REPLY_BY_AT">Last reply by #VAR1# at #VAR2#</string>
+  <string name="SYS_LAST_POST">Last post</string>
+  <string name="SYS_LAST_REPLY_BY_AT">#VAR1#Last reply#VAR2# by #VAR3# at #VAR4#</string>
   <string name="SYS_LASTNAME">Surname</string>
   <string name="SYS_LATER">Later</string>
   <string name="SYS_LATEST_FORUM_TOPICS_OF_ORGANIZATION">Latest forum topics from organization #VAR1#</string>
@@ -1040,6 +1042,7 @@
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
   <string name="SYS_POST">Post</string>
+  <string name="SYS_POSTS">Posts</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
   <string name="SYS_PRESET_CONFIGURATION">Default configuration</string>
@@ -1412,6 +1415,7 @@
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">View profiles of role members</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">This setting can be used to define who can see the profiles of the members of this role. The user can call the profile of the respective person and see all stored columns in lists for the role. The role right #VAR1_BOLD# overrides this setting.</string>
   <string name="SYS_VIEWS_VAR">#VAR1# views</string>
+  <string name="SYS_VIEWS">Views</string>
   <string name="SYS_VISIBILITY">Visibility</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>

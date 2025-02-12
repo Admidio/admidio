@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
@@ -55,11 +56,11 @@ use Admidio\Infrastructure\Utils\StringUtils;
  */
 class FormPresenter
 {
-    public const FIELD_DEFAULT  = 0;
+    public const FIELD_DEFAULT = 0;
     public const FIELD_REQUIRED = 1;
     public const FIELD_DISABLED = 2;
     public const FIELD_READONLY = 3;
-    public const FIELD_HIDDEN   = 4;
+    public const FIELD_HIDDEN = 4;
 
     public const SELECT_BOX_MODUS_EDIT = 'EDIT_CATEGORIES';
     public const SELECT_BOX_MODUS_FILTER = 'FILTER_CATEGORIES';
@@ -134,12 +135,12 @@ class FormPresenter
     {
         // create array with all options
         $optionsDefault = array(
-            'type'               => 'default',
-            'enableFileUpload'   => false,
+            'type' => 'default',
+            'enableFileUpload' => false,
             'showRequiredFields' => true,
-            'setFocus'           => true,
-            'class'              => '',
-            'method'             => 'post'
+            'setFocus' => true,
+            'class' => '',
+            'method' => 'post'
         );
 
         // navbar form should send the data as GET if it's not explicit set
@@ -149,8 +150,8 @@ class FormPresenter
 
         $optionsAll = array_replace($optionsDefault, $options);
         $this->showRequiredFields = $optionsAll['showRequiredFields'];
-        $this->type   = $optionsAll['type'];
-        $this->id     = $id;
+        $this->type = $optionsAll['type'];
+        $this->id = $id;
         $this->template = $template;
 
         // set specific Admidio css form class
@@ -229,9 +230,9 @@ class FormPresenter
     public function addButton(string $id, string $text, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'button',
-            'id'       => $id,
-            'value'    => $text
+            'type' => 'button',
+            'id' => $id,
+            'value' => $text
         ), $options));
         $attributes = array();
         $attributes['type'] = $optionsAll['type'];
@@ -244,7 +245,7 @@ class FormPresenter
         if (!isset($options['link'])) {
             $optionsAll['link'] = '';
         }
-        if(!str_contains($optionsAll['class'], 'btn-')) {
+        if (!str_contains($optionsAll['class'], 'btn-')) {
             $optionsAll['class'] .= " btn-secondary";
 
             if ($this->type !== 'navbar') {
@@ -253,6 +254,74 @@ class FormPresenter
         }
 
         $optionsAll['attributes'] = $attributes;
+        $this->elements[$id] = $optionsAll;
+    }
+
+    /**
+     * Add a new selectbox with a label to the form. The selectbox
+     * could have different values and a default value could be set.
+     * @param string $id ID of the selectbox. This will also be the name of the selectbox.
+     * @param array $values Array with all entries of the radio button group.
+     *                      Each entry is an array with the following structure:
+     *                      array(0 => id, 1 => value name, 2 => destination url)
+     *                      The destination url is optional and contains the url where the user will be redirected
+     *                      if the button is selected.
+     * @param array $options (optional) An array with the following possible entries:
+     *                        - **defaultValue** : This is the value the selectbox shows when loaded. If **multiselect** is activated than
+     *                          an array with all default values could be set.
+     *                        - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as
+     *                          option value and not the key of the array
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                          If you need an additional parameter for the text you can add an array. The first entry
+     *                          must be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alert box
+     *                        - **icon** : An icon can be set. This will be placed in front of the label.
+     *                        - **class** : An additional css classname. The class **admSelectbox**
+     *                          is set as default and need not set with this parameter.
+     *                        - **autocomplete** : Set the html attribute autocomplete to support this feature
+     *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
+     * @throws Exception
+     */
+    public function addButtonGroupRadio(string $id, array $values, array $options = array()): void
+    {
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'type' => 'button-group.radio',
+            'id' => $id,
+            'label' => '',
+            'defaultValue' => '',
+            'valueAttributes' => ''
+        ), $options));
+        $attributes = array('name' => $id);
+
+        // reorganize the values
+        $javascriptCode = '';
+        $valuesArray = array();
+
+        foreach ($values as $value) {
+            if (is_array($value)) {
+                $valuesArray[] = array(
+                    'id' => $value[0],
+                    'value' => Language::translateIfTranslationStrId($value[1]),
+                    'default' => $optionsAll['defaultValue'] === $value[0],
+                    'url' => ($value[2] ?? '')
+                );
+
+                if (isset($value[2])) {
+                    $javascriptCode .= '
+                        $("#' . $value[0] . '").click(function() {
+                            window.location.href = "' . $value[2] . '";
+                        });';
+                }
+            }
+        }
+
+        $this->addJavascriptCode($javascriptCode, true);
+
+        $optionsAll["values"] = $valuesArray;
+        $optionsAll["attributes"] = $attributes;
+
         $this->elements[$id] = $optionsAll;
     }
 
@@ -276,10 +345,10 @@ class FormPresenter
             $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'),
             '',
             array(
-                'type'       => 'captcha',
-                'property'   => self::FIELD_REQUIRED,
+                'type' => 'captcha',
+                'property' => self::FIELD_REQUIRED,
                 'helpTextId' => 'SYS_CAPTCHA_DESCRIPTION',
-                'class'      => 'form-control-small'
+                'class' => 'form-control-small'
             )
         );
 
@@ -309,9 +378,9 @@ class FormPresenter
     public function addCheckbox(string $id, string $label, bool $checked = false, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'checkbox',
-            'id'       => $id,
-            'label'    => $label
+            'type' => 'checkbox',
+            'id' => $id,
+            'label' => $label
         ), $options));
         $attributes = array();
 
@@ -359,10 +428,10 @@ class FormPresenter
     public function addCustomContent(string $id, string $label, string $content, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'custom-content',
-            'id'       => $id,
-            'label'    => $label,
-            'content'  => $content
+            'type' => 'custom-content',
+            'id' => $id,
+            'label' => $label,
+            'content' => $content
         ), $options));
 
         $this->elements[$id] = $optionsAll;
@@ -397,12 +466,12 @@ class FormPresenter
         $flagLabelVertical = $this->type;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'          => 'editor',
-            'id'            => $id,
-            'label'         => $label,
-            'toolbar'       => 'AdmidioDefault',
+            'type' => 'editor',
+            'id' => $id,
+            'label' => $label,
+            'toolbar' => 'AdmidioDefault',
             'labelVertical' => true,
-            'value'         => $value
+            'value' => $value
         ), $options));
 
         $attributes = array();
@@ -492,14 +561,14 @@ class FormPresenter
     public function addFileUpload(string $id, string $label, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'               => 'file',
-            'id'                 => $id,
-            'label'              => $label,
-            'maxUploadSize'      => PhpIniUtils::getFileUploadMaxFileSize(),
-            'allowedMimeTypes'   => array(),
+            'type' => 'file',
+            'id' => $id,
+            'label' => $label,
+            'maxUploadSize' => PhpIniUtils::getFileUploadMaxFileSize(),
+            'allowedMimeTypes' => array(),
             'enableMultiUploads' => false,
-            'hideUploadField'    => false,
-            'multiUploadLabel'   => ''
+            'hideUploadField' => false,
+            'multiUploadLabel' => ''
         ), $options));
 
         $attributes = array();
@@ -583,17 +652,17 @@ class FormPresenter
         global $gSettingsManager, $gLogger, $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'             => 'text',
-            'id'               => $id,
-            'label'            => $label,
-            'value'            => $value,
-            'placeholder'      => '',
-            'pattern'          => '',
-            'minLength'        => null,
-            'maxLength'        => null,
-            'minNumber'        => null,
-            'maxNumber'        => null,
-            'step'             => null,
+            'type' => 'text',
+            'id' => $id,
+            'label' => $label,
+            'value' => $value,
+            'placeholder' => '',
+            'pattern' => '',
+            'minLength' => null,
+            'maxLength' => null,
+            'minNumber' => null,
+            'maxNumber' => null,
+            'step' => null,
             'passwordStrength' => false,
             'passwordUserData' => array()
         ), $options));
@@ -725,7 +794,7 @@ class FormPresenter
             if (isset($this->htmlPage)) {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
-                    $("#adm_password_strength_minimum").css("margin-left", "calc(" + $("#adm_password_strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
+                    $("#adm_password_strength_minimum").css("margin-left", "calc(" + $("#adm_password_strength").css("width") + " / 4 * ' . $passwordStrengthLevel . ')");
 
                     $("#' . $id . '").keyup(function(e) {
                         const result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
@@ -761,7 +830,7 @@ class FormPresenter
 
     /**
      * Adds any javascript content to the page. The javascript will be added to the page header or as inline script.
-     * @param string $javascriptCode     A valid javascript code that will be added to the header of the page or as inline script.
+     * @param string $javascriptCode A valid javascript code that will be added to the header of the page or as inline script.
      * @param bool $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
      *                                     the page is fully loaded.
      */
@@ -802,11 +871,11 @@ class FormPresenter
     public function addMultilineTextInput(string $id, string $label, string $value, int $rows, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'             => 'multiline',
-            'id'               => $id,
-            'label'            => $label,
-            'maxLength'        => 0,
-            'value'            => $value
+            'type' => 'multiline',
+            'id' => $id,
+            'label' => $label,
+            'maxLength' => 0,
+            'value' => $value
         ), $options));
         $attributes = array();
 
@@ -890,12 +959,12 @@ class FormPresenter
     public function addRadioButton(string $id, string $label, array $values, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'             => 'radio',
-            'id'               => $id,
-            'label'            => $label,
-            'defaultValue'      => '',
+            'type' => 'radio',
+            'id' => $id,
+            'label' => $label,
+            'defaultValue' => '',
             'showNoValueButton' => false,
-            'values'            => $values
+            'values' => $values
         ), $options));
         $attributes = array();
 
@@ -971,18 +1040,18 @@ class FormPresenter
         global $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'                           => 'select',
-            'id'                             => $id,
-            'label'                          => $label,
-            'defaultValue'                   => '',
+            'type' => 'select',
+            'id' => $id,
+            'label' => $label,
+            'defaultValue' => '',
             'showContextDependentFirstEntry' => true,
-            'firstEntry'                     => '',
-            'arrayKeyIsNotValue'             => false,
-            'multiselect'                    => false,
-            'search'                         => false,
-            'placeholder'                    => '',
-            'maximumSelectionNumber'         => 0,
-            'valueAttributes'                => ''
+            'firstEntry' => '',
+            'arrayKeyIsNotValue' => false,
+            'multiselect' => false,
+            'search' => false,
+            'placeholder' => '',
+            'maximumSelectionNumber' => 0,
+            'valueAttributes' => ''
         ), $options));
         $attributes = array('name' => $id);
 
@@ -1010,7 +1079,7 @@ class FormPresenter
         // reorganize the values. Each value item should be an array with the following structure:
         // array(0 => id, 1 => value name, 2 => option group name)
         $valuesArray = array();
-        foreach($values as $arrayKey => $arrayValue) {
+        foreach ($values as $arrayKey => $arrayValue) {
             if (is_array($arrayValue)) {
                 if (array_key_exists(2, $arrayValue)) {
                     $valuesArray[] = array(
@@ -1032,10 +1101,10 @@ class FormPresenter
         }
 
         // if special value attributes are set then add them to the values array
-        if(is_array($optionsAll['valueAttributes']) && count($optionsAll['valueAttributes']) > 0) {
-            foreach($valuesArray as &$valueArray) {
+        if (is_array($optionsAll['valueAttributes']) && count($optionsAll['valueAttributes']) > 0) {
+            foreach ($valuesArray as &$valueArray) {
                 if (isset($optionsAll['valueAttributes'][$valueArray['id']])) {
-                    foreach($optionsAll['valueAttributes'][$valueArray['id']] as $key => $value) {
+                    foreach ($optionsAll['valueAttributes'][$valueArray['id']] as $key => $value) {
                         $valueArray[$key] = $value;
                     }
                 }
@@ -1106,7 +1175,7 @@ class FormPresenter
                 $javascriptCode .= ' $("#' . $id . '").val([' . $htmlDefaultValues . ']).trigger("change.select2");';
             } elseif (count($values) === 1 && $optionsAll['property'] === self::FIELD_REQUIRED) {
                 // if there is only one entry and a required field than select this entry
-                $javascriptCode .= ' $("#' . $id . '").val("'.$values[0][0].'").trigger("change.select2");';
+                $javascriptCode .= ' $("#' . $id . '").val("' . $values[0][0] . '").trigger("change.select2");';
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
@@ -1205,11 +1274,11 @@ class FormPresenter
             // if result has 3 columns then create an array in array
             if (array_key_exists(2, $row)) {
                 // translate category name
-                $row[2] = Language::translateIfTranslationStrId((string) $row[2]);
+                $row[2] = Language::translateIfTranslationStrId((string)$row[2]);
 
-                $selectBoxEntries[] = array($row[0], (string) $row[1], $row[2]);
+                $selectBoxEntries[] = array($row[0], (string)$row[1], $row[2]);
             } else {
-                $selectBoxEntries[$row[0]] = (string) $row[1];
+                $selectBoxEntries[$row[0]] = (string)$row[1];
             }
         }
 
@@ -1272,7 +1341,7 @@ class FormPresenter
          * @var SimpleXMLElement $xmlChildNode
          */
         foreach ($xmlRootNode->children() as $xmlChildNode) {
-            $key   = '';
+            $key = '';
             $value = '';
 
             /**
@@ -1280,10 +1349,10 @@ class FormPresenter
              */
             foreach ($xmlChildNode->children() as $xmlChildChildNode) {
                 if ($xmlChildChildNode->getName() === $xmlValueTag) {
-                    $key = (string) $xmlChildChildNode;
+                    $key = (string)$xmlChildChildNode;
                 }
                 if ($xmlChildChildNode->getName() === $xmlViewTag) {
-                    $value = (string) $xmlChildChildNode;
+                    $value = (string)$xmlChildChildNode;
                 }
             }
 
@@ -1332,14 +1401,14 @@ class FormPresenter
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'                           => 'select',
-            'id'                             => $id,
-            'label'                          => $label,
-            'defaultValue'                   => '',
-            'arrayKeyIsNotValue'             => false,
+            'type' => 'select',
+            'id' => $id,
+            'label' => $label,
+            'defaultValue' => '',
+            'arrayKeyIsNotValue' => false,
             'showContextDependentFirstEntry' => true,
-            'multiselect'                    => false,
-            'showSystemCategory'             => true
+            'multiselect' => false,
+            'showSystemCategory' => true
         ), $options));
 
         if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->countAllRecords() > 1) {
@@ -1347,19 +1416,19 @@ class FormPresenter
 
             $this->addJavascriptCode(
                 '
-                $("#'.$id.'").change(function() {
+                $("#' . $id . '").change(function() {
                     if($("option:selected", this).attr("data-global") == 1) {
-                        $("#'.$id.'_alert").show("slow");
+                        $("#' . $id . '_alert").show("slow");
                     } else {
-                        $("#'.$id.'_alert").hide();
+                        $("#' . $id . '_alert").hide();
                     }
                 });
-                $("#'.$id.'").trigger("change");',
+                $("#' . $id . '").trigger("change");',
                 true
             );
         }
 
-        $sqlTables     = '';
+        $sqlTables = '';
         $sqlConditions = '';
 
         // create sql conditions if category must have child elements
@@ -1440,14 +1509,14 @@ class FormPresenter
         while ($row = $pdoStatement->fetch()) {
             // if several categories exist than select default category
             if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === ''
-            && ($countCategories === 1 || $row['cat_default'] === 1)) {
+                && ($countCategories === 1 || $row['cat_default'] === 1)) {
                 $optionsAll['defaultValue'] = $row['cat_uuid'];
             }
 
             // add label that this category is visible to all organizations
             if ($row['cat_org_id'] === null) {
                 if ($row['cat_name'] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
-                    $row['cat_name'] .=  ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
+                    $row['cat_name'] .= ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
                 }
                 $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 1);
             } else {
@@ -1579,15 +1648,15 @@ class FormPresenter
     protected function buildOptionsArray(array $options): array
     {
         $optionsDefault = array(
-            'property'     => self::FIELD_DEFAULT,
-            'type'         => '',
+            'property' => self::FIELD_DEFAULT,
+            'type' => '',
             'data-admidio' => '',
-            'id'           => 'admidio_form_field_' . (count($this->elements) + 1),
-            'label'        => '',
-            'value'        => '',
-            'helpTextId'   => '',
-            'icon'         => '',
-            'class'        => '',
+            'id' => 'admidio_form_field_' . (count($this->elements) + 1),
+            'label' => '',
+            'value' => '',
+            'helpTextId' => '',
+            'icon' => '',
+            'class' => '',
             'alertWarning' => '',
         );
         return array_replace($optionsDefault, $options);
@@ -1609,11 +1678,11 @@ class FormPresenter
 
         $html = '';
 
-        if(strlen($string) > 0) {
+        if (strlen($string) > 0) {
             if (Language::isTranslationStringId($string)) {
-                $text  = $gL10n->get($string, $parameter);
+                $text = $gL10n->get($string, $parameter);
             } else {
-                $text  = $string;
+                $text = $string;
             }
 
             $html = '<i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
@@ -1672,7 +1741,7 @@ class FormPresenter
             }
         }
 
-        foreach($this->elements as $element) {
+        foreach ($this->elements as $element) {
             // check if element is required and given value in array $fieldValues is empty
             if (isset($element['property']) && $element['property'] === $this::FIELD_REQUIRED) {
                 if (isset($fieldValues[$element['id']])) {
@@ -1747,7 +1816,7 @@ class FormPresenter
      * @param string $value Value of the captcha input field.
      * @return true Returns **true** if the value matches the captcha image.
      *              Otherwise, throw an exception SYS_CAPTCHA_CODE_INVALID.
-     *@throws Exception SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
+     * @throws Exception SYS_CAPTCHA_CALC_CODE_INVALID, SYS_CAPTCHA_CODE_INVALID
      */
     public function validateCaptcha(string $value): bool
     {

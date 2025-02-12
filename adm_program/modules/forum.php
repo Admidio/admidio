@@ -41,7 +41,7 @@ try {
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
-            'defaultValue' => 'cards',
+            'defaultValue' => $gSettingsManager->getString('forum_view'),
             'validValues' => array('cards', 'list', 'topic', 'topic_edit', 'topic_save', 'topic_delete', 'post_edit', 'post_save', 'post_delete')
         )
     );

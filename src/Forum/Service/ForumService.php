@@ -76,7 +76,7 @@ class ForumService
                        cat_id, cat_name, usr.usr_uuid, usr.usr_login_name, usr.usr_timestamp_change,
                        cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname,
                        (SELECT COUNT(*) - 1 FROM ' . TBL_FORUM_POSTS . ' WHERE fop_fot_id = fot_id) AS replies_count,
-                       last_reply.fop_uuid as last_reply_uuid,
+                       last_reply.fop_uuid as last_reply_uuid, last_reply_usr.usr_uuid AS last_reply_usr_uuid,
                        last_reply.fop_timestamp_create AS last_reply_timestamp, last_reply_usr.usr_login_name AS last_reply_login_name,
                        last_reply_surname.usd_value AS last_reply_surname, last_reply_firstname.usd_value AS last_reply_firstname
                   FROM ' . TBL_FORUM_TOPICS . '

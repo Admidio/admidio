@@ -146,7 +146,7 @@ class ForumTopicPresenter extends PagePresenter
         );
         if ($categoryService->count() > 1) {
             $form->addSelectBoxForCategories(
-                'adm_category_uuid',
+                'fot_cat_id',
                 $gL10n->get('SYS_CATEGORY'),
                 $gDb,
                 'FOT',
