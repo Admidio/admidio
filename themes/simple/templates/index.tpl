@@ -16,6 +16,16 @@
     {* Additional header informations that will be displayed if the header was set through $page->addHeader() *}
     {$additionalHeaderData}
 
+    {if count($cssFiles) > 0}
+        {foreach $cssFiles as $key => $file}
+            <link rel="stylesheet" type="text/css" href="{$file}" />
+        {/foreach}
+    {/if}
+    {if count($javascriptFiles) > 0}
+        {foreach $javascriptFiles as $key => $file}
+            <script type="text/javascript" src="{$file}"></script>
+        {/foreach}
+    {/if}
     {if count($rssFeeds) > 0}
         {foreach $rssFeeds as $title => $url}
             <link rel="alternate" type="application/rss+xml" title="{$title}" href="{$url}" />
