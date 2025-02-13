@@ -724,16 +724,12 @@ class ChangelogService {
             $tablesPermitted[] = 'announcements';
         if ($user->manageRoles())
             $tablesPermitted = array_merge($tablesPermitted, ['roles', 'roles_rights', 'roles_rights_data', 'members']);
-        if ($user->editEvents())
+        if ($user->administrateEvents())
             $tablesPermitted[] = 'events';
-        if ($user->adminDocumentsFiles())
+        if ($user->administrateDocumentsFiles())
             $tablesPermitted = array_merge($tablesPermitted, ['files', 'folders']);
         if ($user->editUsers())
             $tablesPermitted = array_merge($tablesPermitted, ['users', 'user_data', 'user_relations', 'members']);
-        if ($user->editGuestbookRight())
-            $tablesPermitted[] = 'guestbook';
-        if ($user->commentGuestbookRight())
-            $tablesPermitted[] = 'guestbook_comments';
         if ($user->editPhotoRight())
             $tablesPermitted[] = 'photos';
         if ($user->editWeblinksRight())
