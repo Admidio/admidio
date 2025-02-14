@@ -22,7 +22,8 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Roles\Entity\Role;
@@ -248,7 +249,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-history', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-history', $headline);
     $page->setContentFullWidth();
     
     // Logic for hiding certain columns:
@@ -263,7 +264,7 @@ try {
     $noShowRelatedTables = ['user_fields', 'users', 'user_data'];
 
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_navbar_filter_form',
         'sys-template-parts/form.filter.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/changelog.php',
@@ -272,10 +273,10 @@ try {
     );
 
     // create filter menu with input elements for start date and end date
-    $form->addInput('table', '', $getTable, array('property' => Form::FIELD_HIDDEN));
-    $form->addInput('uuid', '', $getUuid, array('property' => Form::FIELD_HIDDEN));
-    $form->addInput('id', '', $getId, array('property' => Form::FIELD_HIDDEN));
-    $form->addInput('related_id', '', $getRelatedId, array('property' => Form::FIELD_HIDDEN));
+    $form->addInput('table', '', $getTable, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('uuid', '', $getUuid, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('id', '', $getId, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('related_id', '', $getRelatedId, array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
