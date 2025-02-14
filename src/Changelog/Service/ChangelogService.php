@@ -15,6 +15,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
+use Admidio\Preferences\Entity\Preferences;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesDependencies;
 use Admidio\Roles\Entity\RolesRightsData;
@@ -172,7 +173,7 @@ class ChangelogService {
             case 'photos':
                 return new Album($gDb);
             case 'preferences':
-                return new Entity($gDb, TBL_PREFERENCES, 'prf');
+                return new Preferences($gDb);
             case 'registrations':
                 return new UserRegistration($gDb, $gProfileFields);
             case 'roles':
@@ -293,6 +294,9 @@ class ChangelogService {
             'usf_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
             'usf_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
             'usf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
+
+            'prf_value' =>                 'SYS_VALUE',
+            'prf_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
 
             'ann_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'ann_headline' =>              'SYS_HEADLINE',

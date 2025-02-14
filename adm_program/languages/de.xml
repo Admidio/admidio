@@ -1450,6 +1450,7 @@
   <string name="SYS_UTF32LE">UTF-32LE</string>
   <string name="SYS_VALID_FROM" description="Date valid from">Gültig von</string>
   <string name="SYS_VALID_TO" description="Date valid to">Gültig bis</string>
+  <string name="SYS_VALUE">Wert</string>
   <string name="SYS_VARIOUS_ROLES">Verschiedene Rollen</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
   <string name="SYS_VENUE">Veranstaltungsort</string>

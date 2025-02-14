@@ -208,6 +208,8 @@ class Entity
             return $this->dbColumns[$this->columnPrefix.'_title'] ?? '';
         } elseif (array_key_exists($this->columnPrefix.'_headline', $this->dbColumns)) {
             return $this->dbColumns[$this->columnPrefix.'_headline'] ?? '';
+        } elseif (array_key_exists($this->columnPrefix.'_text', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix.'_text'] ?? '';
         } else {
             return $this->dbColumns[$this->keyColumnName] ?? '';
         }
