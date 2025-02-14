@@ -26,17 +26,13 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 class ForumPostPresenter extends PagePresenter
 {
     /**
-     * @var string UUID of the topic.
+     * @var string UUID of the post.
      */
     protected string $postUUID = '';
-    /**
-     * @var array Array with all read forum topics and their first post.
-     */
-    protected array $data = array();
 
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $postUUID UUID of the topic.
+     * @param string $postUUID UUID of the post.
      * @throws Exception
      */
     public function __construct(string $postUUID = '')

@@ -1,12 +1,9 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Language;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Menu\Service\MenuService;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
@@ -20,7 +17,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * **Code example**
  * ```
  * // generate html output with available registrations
- * $page = new Menu('adm_menu', $headline);
+ * $page = new MenuPresenter('adm_menu', $headline);
  * $page->createEditForm();
  * $page->show();
  * ```
@@ -28,25 +25,47 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Menu extends PagePresenter
+class MenuEntryPresenter extends PagePresenter
 {
     /**
-     * Create the data for the edit form of a menu entry.
-     * @param string $menuUUID UUID of the menu entry that should be edited.
+     * @var string UUID of the menu entry.
+     */
+    protected string $menuEntryUUID = '';
+
+    /**
+     * Constructor creates the page object and initialized all parameters.
+     * @param string $menuEntryUUID UUID of the menu entry.
      * @throws Exception
      */
-    public function createEditForm(string $menuUUID = '')
+    public function __construct(string $menuEntryUUID = '')
     {
-        global $gDb, $gL10n, $gCurrentSession, $gSettingsManager;
+        $this->menuEntryUUID = $menuEntryUUID;
+        parent::__construct($menuEntryUUID);
+    }
+
+    /**
+     * Create the data for the edit form of a menu entry.
+     * @throws Exception
+     */
+    public function createEditForm(): void
+    {
+        global $gDb, $gL10n, $gCurrentSession;
 
         // create menu object
         $menu = new MenuEntry($gDb);
 
+        $this->setHtmlID('adm_menu_configuration_edit');
+        if ($this->menuEntryUUID !== '') {
+            $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_MENU'))));
+        } else {
+            $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU'))));
+        }
+
         // system categories should not be renamed
         $roleViewSet[] = 0;
 
-        if ($menuUUID !== '') {
-            $menu->readDataByUuid($menuUUID);
+        if ($this->menuEntryUUID !== '') {
+            $menu->readDataByUuid($this->menuEntryUUID);
 
             // Read current roles rights of the menu
             $display = new RolesRights($gDb, 'menu_view', $menu->getValue('men_id'));
@@ -76,13 +95,13 @@ class Menu extends PagePresenter
             );
         }
 
-        ChangelogService::displayHistoryButton($this, 'menu', 'menu', !empty($menuUUID), array('uuid' => $menuUUID));
+        ChangelogService::displayHistoryButton($this, 'menu', 'menu', !empty($menuUUID), array('uuid' => $this->menuEntryUUID));
 
         // show form
         $form = new FormPresenter(
             'adm_menu_edit_form',
             'modules/menu.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('uuid' => $menuUUID, 'mode' => 'save')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('uuid' => $this->menuEntryUUID, 'mode' => 'save')),
             $this
         );
 
@@ -103,7 +122,7 @@ class Menu extends PagePresenter
             array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_MENU_NAME_DESC')
         );
 
-        if ($menuUUID !== '') {
+        if ($this->menuEntryUUID !== '') {
             $form->addInput(
                 'men_name_intern',
                 $gL10n->get('SYS_INTERNAL_NAME'),
@@ -188,104 +207,5 @@ class Menu extends PagePresenter
         $this->smarty->assign('timestampLastUserEdited', $menu->getValue('men_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
-    }
-
-    /**
-     * Create the data for a form to add a new sub-organization to the current organization.
-     * @throws Exception|\Smarty\Exception
-     */
-    public function createList()
-    {
-        global $gCurrentSession, $gL10n, $gDb, $gSettingsManager;
-
-        $this->addJavascript('
-            $(".admidio-open-close-caret").click(function() {
-                showHideBlock($(this));
-            });
-            $(".admidio-menu-move").click(function() {
-                moveTableRow(
-                    $(this),
-                    "' . ADMIDIO_URL . FOLDER_MODULES . '/menu.php",
-                    "' . $gCurrentSession->getCsrfToken() . '"
-                );
-            });', true
-        );
-
-        // define link to create new menu
-        $this->addPageFunctionsMenuItem(
-            'menu_item_menu_new',
-            $gL10n->get('SYS_CREATE_ENTRY'),
-            ADMIDIO_URL . FOLDER_MODULES . '/menu.php?mode=edit',
-            'bi-plus-circle-fill'
-        );
-
-        ChangelogService::displayHistoryButton($this, 'menu', 'menu');
-
-        $templateRowMenuParent = array();
-
-        $sql = 'SELECT men_id, men_uuid, men_name
-                  FROM ' . TBL_MENU . '
-                 WHERE men_men_id_parent IS NULL
-              ORDER BY men_order';
-        $mainMenStatement = $gDb->queryPrepared($sql);
-
-        while ($mainMen = $mainMenStatement->fetch()) {
-            $sql = 'SELECT men_id, men_uuid, men_men_id_parent, men_name, men_description, men_standard, men_url, men_icon
-                      FROM ' . TBL_MENU . '
-                     WHERE men_men_id_parent = ? -- $mainMen[\'men_id\']
-                  ORDER BY men_men_id_parent DESC, men_order';
-            $menuStatement = $gDb->queryPrepared($sql, array($mainMen['men_id']));
-
-            $templateEntries = array();
-
-            // Get data
-            while ($menuRow = $menuStatement->fetch()) {
-                $templateRowMenu = array(
-                    'uuid' => $menuRow['men_uuid'],
-                    'name' => Language::translateIfTranslationStrId((string)$menuRow['men_name']),
-                    'description' => Language::translateIfTranslationStrId((string)$menuRow['men_description']),
-                    'standard' => $menuRow['men_standard'],
-                    'icon' => $menuRow['men_icon'],
-                    'url' => $menuRow['men_url']
-                );
-
-                // add root path to link unless the full URL is given
-                if (preg_match('/^http(s?):\/\//', $menuRow['men_url']) === 0) {
-                    $templateRowMenu['urlLink'] = ADMIDIO_URL . $menuRow['men_url'];
-                } else {
-                    $templateRowMenu['urlLink'] = $menuRow['men_url'];
-                }
-
-                $templateRowMenu['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('mode' => 'edit', 'uuid' => $menuRow['men_uuid'])),
-                    'icon' => 'bi bi-pencil-square',
-                    'tooltip' => $gL10n->get('SYS_EDIT')
-                );
-
-                // don't allow delete for standard menus
-                if (!$menuRow['men_standard']) {
-                    $templateRowMenu['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'adm_menu_entry_' . $menuRow['men_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('mode' => 'delete', 'uuid' => $menuRow['men_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($templateRowMenu['name'])),
-                        'icon' => 'bi bi-trash',
-                        'tooltip' => $gL10n->get('SYS_DELETE')
-                    );
-                }
-
-                $templateEntries[] = $templateRowMenu;
-            }
-
-            if(count($templateEntries) >0) {
-                $templateRowMenuParent[] = array(
-                    'uuid' => $mainMen['men_uuid'],
-                    'name' => Language::translateIfTranslationStrId((string)$mainMen['men_name']),
-                    'entries' => $templateEntries
-                );
-            }
-        }
-
-        $this->smarty->assign('list', $templateRowMenuParent);
-        $this->smarty->assign('l10n', $gL10n);
-        $this->pageContent .= $this->smarty->fetch('modules/menu.list.tpl');
     }
 }

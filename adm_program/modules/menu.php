@@ -22,7 +22,8 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Menu\Service\MenuService;
-use Admidio\UI\View\Menu;
+use Admidio\UI\Presenter\MenuEntryPresenter;
+use Admidio\UI\Presenter\MenuPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -38,26 +39,18 @@ try {
 
     switch ($getMode) {
         case 'list':
-            $headline = $gL10n->get('SYS_MENU');
-            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-menu-button-wide-fill');
-
             // create html page object
-            $page = new Menu('adm_menu_configuration', $headline);
+            $page = new MenuPresenter();
             $page->createList();
+            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-menu-button-wide-fill');
             $page->show();
             break;
 
         case 'edit':
-            if ($getMenuUUID !== '') {
-                $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_MENU')));
-            } else {
-                $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
-            }
-            $gNavigation->addUrl(CURRENT_URL, $headline);
-
             // create html page object
-            $page = new Menu('adm_menu_configuration_edit', $headline);
-            $page->createEditForm($getMenuUUID);
+            $page = new MenuEntryPresenter($getMenuUUID);
+            $page->createEditForm();
+            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
             $page->show();
             break;
 
