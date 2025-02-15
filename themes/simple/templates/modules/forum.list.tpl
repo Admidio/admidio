@@ -7,6 +7,9 @@
         <thead>
             <tr>
                 <th>{$l10n->get('SYS_TOPIC')}</th>
+                {if $showCategories}
+                    <th>{$l10n->get('SYS_CATEGORY')}</th>
+                {/if}
                 <th class="text-center">{$l10n->get('SYS_POSTS')}</th>
                 <th class="text-center">{$l10n->get('SYS_VIEWS')}</th>
                 <th>{$l10n->get('SYS_LAST_POST')}</th>
@@ -23,6 +26,9 @@
                         </div>
                         <div class="col-auto"><img class="rounded-circle" style="max-height: 40px; max-width: 40px;" src="{$row.userProfilePhotoUrl}" /></div>
                     </td>
+                    {if $showCategories}
+                        <td>{$row.category}</td>
+                    {/if}
                     <td class="text-center">{$row.repliesCount}</td>
                     <td class="text-center">{$row.views}</td>
                     <td>

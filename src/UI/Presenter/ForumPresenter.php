@@ -115,8 +115,8 @@ class ForumPresenter extends PagePresenter
         );
         $form->addButtonGroupRadio(
             'adm_forum_view',
-            array(array('adm_forum_view_cards', $gL10n->get('SYS_DETAILED'), SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'cards'))),
-                array('adm_forum_view_list', $gL10n->get('SYS_LIST'), SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'list')))
+            array(array('adm_forum_view_cards', $gL10n->get('SYS_DETAILED'), SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'cards', 'category_uuid' => $this->categoryUUID))),
+                array('adm_forum_view_list', $gL10n->get('SYS_LIST'), SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'list', 'category_uuid' => $this->categoryUUID)))
             ),
             array('defaultValue' => 'adm_forum_view_' . $view)
         );
@@ -129,6 +129,7 @@ class ForumPresenter extends PagePresenter
                 FormPresenter::SELECT_BOX_MODUS_FILTER,
                 array('defaultValue' => $this->categoryUUID)
             );
+            $form->addInput('mode', '', $view, array('property' => FormPresenter::FIELD_HIDDEN));
         }
         $form->addToHtmlPage();
     }
@@ -150,6 +151,12 @@ class ForumPresenter extends PagePresenter
 
         $this->setHtmlID('adm_forum_cards');
         $this->createSharedHeader('cards');
+
+        if (count($this->categories->getVisibleCategories()) > 1) {
+            $this->smarty->assign('showCategories', true);
+        } else {
+            $this->smarty->assign('showCategories', false);
+        }
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
@@ -178,6 +185,12 @@ class ForumPresenter extends PagePresenter
 
         $this->setHtmlID('adm_forum_cards');
         $this->createSharedHeader('list');
+
+        if (count($this->categories->getVisibleCategories()) > 1) {
+            $this->smarty->assign('showCategories', true);
+        } else {
+            $this->smarty->assign('showCategories', false);
+        }
 
         $this->smarty->assign('list', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
@@ -264,12 +277,8 @@ class ForumPresenter extends PagePresenter
             $datetime = new \DateTime($forumTopic['fot_timestamp_create']);
             $templateRow['timestamp'] = $datetime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
             $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $forumTopic['fot_uuid']));
-            $templateRow['category'] = '';
+            $templateRow['category'] = Language::translateIfTranslationStrId($forumTopic['cat_name']);
             $templateRow['editable'] = false;
-
-            if (count($this->categories->getVisibleCategories()) > 1) {
-                $templateRow['category'] = Language::translateIfTranslationStrId($forumTopic['cat_name']);
-            }
 
             if ($gCurrentUser->administrateForum()
                 || $gCurrentUser->getValue('usr_uuid') === $forumTopic['usr_uuid']) {

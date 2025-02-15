@@ -35,8 +35,8 @@
                         {/if}
                         <div class="col">
                             <span class="d-block">{$l10n->get('SYS_VIEWS_VAR', array($forumTopic.views))}</span>
-                            {if strlen($forumTopic.category) > 0}
-                                    <span class="d-block">{$l10n->get('SYS_CATEGORY')} {$forumTopic.category}</span>
+                            {if $showCategories}
+                                <span class="d-block">{$l10n->get('SYS_CATEGORY')} <span class="fw-bold">{$forumTopic.category}</span></span>
                             {/if}
                         </div>
                     </div>
