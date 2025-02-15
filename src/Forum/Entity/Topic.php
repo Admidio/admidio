@@ -38,13 +38,13 @@ class Topic extends Entity
      */
     public function __construct(Database $database, int $fotID = 0)
     {
+        $this->firstPost = new Post($database);
+
         // read also data of assigned first post
         $this->connectAdditionalTable(TBL_FORUM_POSTS, 'fop_id', 'fot_fop_id_first_post');
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'fot_cat_id');
 
         parent::__construct($database, TBL_FORUM_TOPICS, 'fot', $fotID);
-
-        $this->firstPost = new Post($this->db);
     }
 
     /**
