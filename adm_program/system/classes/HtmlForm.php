@@ -1154,7 +1154,7 @@ class HtmlForm extends Smarty
         }
 
         // if special value attributes are set then add them to the values array
-        if(count($optionsAll['valueAttributes']) > 0) {
+        if(is_array($optionsAll['valueAttributes']) && count($optionsAll['valueAttributes']) > 0) {
             foreach($valuesArray as &$valueArray) {
                 if (isset($optionsAll['valueAttributes'][$valueArray['id']])) {
                     foreach($optionsAll['valueAttributes'][$valueArray['id']] as $key => $value) {
