@@ -23,6 +23,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\ProfileFields\Service\ProfileFieldService;
+use Admidio\UI\Presenter\ProfileFieldsPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -39,10 +40,9 @@ try {
 
     switch ($getMode) {
         case 'list':
-            $headline = $gL10n->get('ORG_PROFILE_FIELDS');
-            $gNavigation->addUrl(CURRENT_URL, $headline);
-            $profileFields = new \Admidio\UI\View\ProfileFields('adm_profile_fields', $headline);
+            $profileFields = new ProfileFieldsPresenter();
             $profileFields->createList();
+            $gNavigation->addUrl(CURRENT_URL, $profileFields->getHeadline());
             $profileFields->show();
             break;
 
@@ -55,7 +55,7 @@ try {
             }
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
-            $profileFields = new \Admidio\UI\View\ProfileFields('adm_profile_fields_edit');
+            $profileFields = new ProfileFieldsPresenter('adm_profile_fields_edit');
             $profileFields->createEditForm($getProfileFieldUUID);
             $profileFields->show();
             break;

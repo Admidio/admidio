@@ -1,5 +1,5 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\ProfileFields\Entity\ProfileField;
@@ -25,7 +25,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ProfileFields extends PagePresenter
+class ProfileFieldsPresenter extends PagePresenter
 {
     /**
      * Create the data for the edit form of a profile field.
@@ -263,7 +263,10 @@ class ProfileFields extends PagePresenter
      */
     public function createList()
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gSettingsManager;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession;
+
+        $this->setHtmlID('adm_profile_fields');
+        $this->setHeadline($gL10n->get('ORG_PROFILE_FIELDS'));
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
