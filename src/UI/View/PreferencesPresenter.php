@@ -5,6 +5,7 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Preferences\Service\PreferencesService;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\UI\Presenter\PagePresenter;
@@ -31,7 +32,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Preferences extends PagePresenter
+class PreferencesPresenter extends PagePresenter
 {
     /**
      * @var array Array with all possible accordion entries for the system preferences.
@@ -55,11 +56,12 @@ class Preferences extends PagePresenter
      * Constructor that initialize the class member parameters
      * @throws Exception
      */
-    public function __construct(string $id, string $headline = '')
+    public function __construct(string $panel = '')
     {
         $this->initialize();
+        $this->setPanelToShow($panel);
 
-        parent::__construct($id, $headline);
+        parent::__construct();
     }
 
     /**
@@ -1335,7 +1337,7 @@ class Preferences extends PagePresenter
         $formMessages->addSelectBox(
             'mail_template',
             $gL10n->get('SYS_EMAIL_TEMPLATE'),
-            $this->getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
+            PreferencesService::getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
             array(
                 'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.html', '', $formValues['mail_template']))),
                 'showContextDependentFirstEntry' => true,
@@ -1511,7 +1513,7 @@ class Preferences extends PagePresenter
         $formPhotos->addSelectBox(
             'photo_ecard_template',
             $gL10n->get('SYS_TEMPLATE'),
-            $this->getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
+            PreferencesService::getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
             array(
                 'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $formValues['photo_ecard_template']))),
                 'showContextDependentFirstEntry' => false,
@@ -2100,25 +2102,6 @@ class Preferences extends PagePresenter
     }
 
     /**
-     * Read all file names of a folder and return an array where the file names are the keys and a readable
-     * version of the file names are the values.
-     * @param string $folder Server path with folder name of whom the files should be read.
-     * @return array<int,string> Array with all file names of the given folder.
-     */
-    private function getArrayFileNames(string $folder): array
-    {
-        // get all files from the folder
-        $files = array_keys(FileSystemUtils::getDirectoryContent($folder, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-
-        foreach ($files as &$templateName) {
-            $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace(array('.tpl', '.html', '.txt'), '', $templateName)));
-        }
-        unset($templateName);
-
-        return $files;
-    }
-
-    /**
      * Set a panel name that should be opened at page load.
      * @param string $panelName Name of the panel that should be opened at page load.
      * @return void
@@ -2135,34 +2118,39 @@ class Preferences extends PagePresenter
      */
     public function show()
     {
-        global $gSettingsManager, $gL10n;
+        global $gL10n;
+
+        $this->setHtmlID('adm_preferences');
+        $this->setHeadline($gL10n->get('SYS_SETTINGS'));
 
         if ($this->preferencesPanelToShow !== '') {
             // open the modules tab if the options of a module should be shown
             if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
                 $this->addJavascript(
                     '
-                $("#tabsNavModules").attr("class", "nav-link active");
-                $("#tabsModules").attr("class", "tab-pane fade show active");
-                $("#tabsNavCommon").attr("class", "nav-link");
-                $("#tabsCommon").attr("class", "tab-pane fade");
-                $("#collapsePreferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
+                $("#adm_tabs_nav_modules").attr("class", "nav-link active");
+                $("#adm_tabs_modules").attr("class", "tab-pane fade show active");
+                $("#adm_tabs_nav_common").attr("class", "nav-link");
+                $("#adm_tabs_common").attr("class", "tab-pane fade");
+                $("#adm_collapse_preferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
                 $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
-                        $("#admidioPanelPreferences' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
+                        $("#adm_panel_preferences_' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
+                        $("#adm_collapse_preferences_' . $this->preferencesPanelToShow . '").addClass("show");
                     });
-                location.hash = "#admidioPanelPreferences' . $this->preferencesPanelToShow . '";
+                location.hash = "#adm_panel_preferences_' . $this->preferencesPanelToShow . '";
                     ',true
                 );
             } else {
                 $this->addJavascript(
                     '
-                $("#tabsNavCommon").attr("class", "nav-link active");
-                $("#tabsCommon").attr("class", "tab-pane fade show active");
-                $("#collapsePreferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
+                $("#adm_tabs_nav_common").attr("class", "nav-link active");
+                $("#adm_tabs_common").attr("class", "tab-pane fade show active");
+                $("#adm_collapse_preferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
                 $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
-                        $("#admidioPanelPreferences' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
+                        $("#adm_panel_preferences_' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
+                        $("#adm_collapse_preferences_' . $this->preferencesPanelToShow . '").addClass("show");
                     });
-                location.hash = "#admidioPanelPreferences' . $this->preferencesPanelToShow . '";
+                location.hash = "#adm_panel_preferences_' . $this->preferencesPanelToShow . '";
                     ',true
                 );
             }

@@ -22,7 +22,6 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Menu\Service\MenuService;
-use Admidio\UI\Presenter\MenuEntryPresenter;
 use Admidio\UI\Presenter\MenuPresenter;
 
 try {
@@ -48,7 +47,7 @@ try {
 
         case 'edit':
             // create html page object
-            $page = new MenuEntryPresenter($getMenuUUID);
+            $page = new MenuPresenter($getMenuUUID);
             $page->createEditForm();
             $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
             $page->show();

@@ -25,7 +25,7 @@ use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\Service\PreferencesService;
-use Admidio\UI\View\Preferences;
+use Admidio\UI\View\PreferencesPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -46,18 +46,13 @@ try {
 
     switch ($getMode) {
         case 'html':
-            $headline = $gL10n->get('SYS_SETTINGS');
+            // create html page object
+            $page = new PreferencesPresenter($getPanel);
 
             if ($getPanel === '') {
-                $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-gear-fill');
-            }
-            // create html page object
-            $page = new Preferences('adm_preferences', $headline);
-
-            if ($getPanel !== '') {
-                $page->setPanelToShow($getPanel);
-                // add current url to navigation stack
-                $gNavigation->addUrl(CURRENT_URL, $headline);
+                $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-gear-fill');
+            } else {
+                $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
             }
 
             $page->show();
@@ -71,7 +66,7 @@ try {
 
         // Returns the html of the requested form
         case 'html_form':
-            $preferencesUI = new Preferences('adm_preferences_form');
+            $preferencesUI = new PreferencesPresenter('adm_preferences_form');
             $methodName = 'create' . str_replace('_', '', ucwords($getPanel, '_')) . 'Form';
             echo $preferencesUI->{$methodName}();
             break;
