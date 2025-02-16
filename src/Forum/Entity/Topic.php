@@ -272,7 +272,7 @@ class Topic extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if ($this->newRecord && empty($this->getVAlue('fot_cat_id'))) {
+        if ($this->newRecord && empty($this->getValue('fot_cat_id'))) {
             // if only one category is available, then set this category as default
             $categoryServices = new CategoryService($this->db, 'FOT');
             $categories = $categoryServices->getVisibleCategories();

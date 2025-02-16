@@ -21,11 +21,9 @@ use Admidio\Roles\Entity\RolesDependencies;
 use Admidio\Roles\Entity\RolesRightsData;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Organizations\Entity\Organization;
-use Admidio\Forum\Entity\Post;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Entity\Text;
-use Admidio\Forum\Entity\Topic;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -91,8 +89,6 @@ class ChangelogService {
             'categories' => 'SYS_CATEGORIES',
             'category_report' => 'SYS_CATEGORY_REPORT',
 
-            'guestbook' => 'GBO_GUESTBOOK',
-            'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
 
             'links' => 'SYS_WEBLINKS',
 
@@ -154,10 +150,6 @@ class ChangelogService {
                 return new File($gDb);
             case 'folders' :
                 return new Folder($gDb);
-            case 'guestbook' :
-                return new Topic($gDb);
-            case 'guestbook_comments' :
-                return new Post($gDb);
             case 'links' :
                 return new Weblink($gDb);
             case 'lists' :
@@ -346,8 +338,6 @@ class ChangelogService {
             'rol_events' =>                array('name' => 'SYS_RIGHT_DATES', 'type' => 'BOOL'),
             'rol_photo' =>                 array('name' => 'SYS_RIGHT_PHOTOS', 'type' => 'BOOL'),
             'rol_documents_files' =>       array('name' => 'SYS_RIGHT_DOCUMENTS_FILES', 'type' => 'BOOL'),
-            'rol_guestbook' =>             array('name' => 'SYS_RIGHT_GUESTBOOK', 'type' => 'BOOL'),
-            'rol_guestbook_comments' =>    array('name' => 'SYS_RIGHT_GUESTBOOK_COMMENTS', 'type' => 'BOOL'),
             'rol_weblinks' =>              array('name' => 'SYS_RIGHT_WEBLINKS', 'type' => 'BOOL'),
             'rol_valid' =>                 array('name' => 'SYS_ACTIVATE_ROLE', 'type' => 'BOOL'),
 
@@ -497,10 +487,6 @@ class ChangelogService {
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $uuid)); break;
             case 'folders' :
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $uuid)); break;
-            case 'guestbook' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $uuid)); break;
-            case 'guestbook_comments' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbc_uuid' => $uuid)); break;
             case 'links' :
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
             case 'lists' :

@@ -372,8 +372,6 @@ try {
             if ($row['table_name'] == 'members') {
                 $relatedTable = 'roles';
             }
-            if ($row['table_name'] == 'guestbook_comments') {
-                $relatedTable = 'guestbook';
             }
             if ($row['table_name'] == 'files') {
                 $relatedTable = 'folders';

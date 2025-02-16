@@ -92,12 +92,6 @@ class LogChanges extends Entity
             case 'folders':
                 $this->connectAdditionalTable(TBL_FOLDERS, 'fol_id', 'log_record_id');
                 break;
-            case 'guestbook':
-                $this->connectAdditionalTable(TBL_GUESTBOOK, 'gbo_id', 'log_record_id');
-                break;
-            case 'guestbook_comments':
-                $this->connectAdditionalTable(TBL_GUESTBOOK_COMMENTS, 'gbc_id', 'log_record_id');
-                break;
             case 'links':
                 $this->connectAdditionalTable(TBL_LINKS, 'lnk_id', 'log_record_id');
                 break;
