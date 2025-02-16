@@ -199,7 +199,7 @@ class ForumPresenter extends PagePresenter
         global $gSettingsManager, $gDb, $gCurrentUser, $gL10n, $gCurrentSession;
 
         $forumService = new ForumService($gDb, $this->categoryUUID);
-        $data = $forumService->getData($offset, $gSettingsManager->getInt('forum_topics_per_page'));
+        $data = $forumService->findAll($offset, $gSettingsManager->getInt('forum_topics_per_page'));
 
         foreach ($data as $forumTopic) {
             $templateRow = array();

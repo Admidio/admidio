@@ -50,7 +50,7 @@ class ForumService
      * @return array Returns an array with all forum topics and their first post.
      * @throws Exception
      */
-    public function getData(int $offset = 0, int $limit = 0): array
+    public function findAll(int $offset = 0, int $limit = 0): array
     {
         global $gDb, $gProfileFields, $gCurrentUser;
 
@@ -171,7 +171,7 @@ class ForumService
             $organizationName
         );
 
-        $forumTopics = $this->getData(0, 50);
+        $forumTopics = $this->findAll(0, 50);
 
         if (count($forumTopics) > 0) {
             foreach ($forumTopics as $topic) {

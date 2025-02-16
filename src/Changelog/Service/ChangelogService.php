@@ -25,6 +25,7 @@ use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Forum\Entity\Topic;
+use Admidio\Roles\Service\RolesService;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -33,9 +34,6 @@ use Admidio\Weblinks\Entity\Weblink;
 use Admidio\UI\Presenter\PagePresenter;
 use DateTime;
 use ModuleEvents;
-
-use Admidio\Roles\Service\RoleService;
-
 
 /**
  * @brief Class with methods to help with the changelog.
@@ -663,7 +661,7 @@ class ChangelogService {
                     break;
                 case 'WEEKDAY':
                     if ($value > 0) {
-                        $htmlValue = RoleService::getWeekdays($value);
+                        $htmlValue = RolesService::getWeekdays($value);
                     } else {
                         $htmlValue = $value;
                     }

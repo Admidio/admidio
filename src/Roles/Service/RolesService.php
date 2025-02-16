@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\ValueObject\RoleDependency;
+use Admidio\UI\Presenter\GroupsRolesPresenter;
 use Admidio\Users\Entity\User;
 use DateTime;
 
@@ -19,12 +20,19 @@ use DateTime;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class RoleService
+class RolesService
 {
     protected Role $roleRessource;
     protected Database $db;
     protected string $UUID;
     protected bool $eventRole = false;
+    /**
+     * @var int $roleType The type of roles that should be shown within this page.
+     *                    0 - inactive roles
+     *                    1 - active roles
+     *                    2 - event participation roles
+     */
+    protected int $roleType;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_lists.
@@ -49,7 +57,7 @@ class RoleService
      * Export every member of a role into one vCard file.
      * @throws Exception
      */
-    public function export()
+    public function export(): void
     {
         global $gCurrentUser, $gCurrentOrganization, $gProfileFields;
 
@@ -84,6 +92,102 @@ class RoleService
             // create vcard and check if user is allowed to edit profile, so he can see more data
             echo $user->getVCard();
         }
+    }
+
+    /**
+     * Creates an array with all available groups and roles.
+     * @param int $roleType The type of groups and roles that should be read. This could be active, inactive
+     *                             or event roles.
+     * @param string $categoryUUID The UUID of the category whose groups and roles should be read.
+     * @return array Returns an array with all roles.
+     * @throws Exception
+     */
+    public function findAll(int $roleType = GroupsRolesPresenter::ROLE_TYPE_ACTIVE, string $categoryUUID = ''): array
+    {
+        global $gDb, $gCurrentOrgId, $gCurrentUser;
+
+        $this->roleType = $roleType;
+
+        $sql = 'SELECT rol.*, cat.*,
+                       COALESCE((SELECT COUNT(*) + SUM(mem_count_guests) AS count
+                          FROM ' . TBL_MEMBERS . ' AS mem
+                         WHERE mem.mem_rol_id = rol.rol_id
+                           AND mem.mem_begin  <= ? -- DATE_NOW
+                           AND mem.mem_end     > ? -- DATE_NOW
+                           AND (mem.mem_approved IS NULL
+                            OR mem.mem_approved < 3)
+                           AND mem.mem_leader = false), 0) AS num_members,
+                       COALESCE((SELECT COUNT(*) AS count
+                          FROM ' . TBL_MEMBERS . ' AS mem
+                         WHERE mem.mem_rol_id = rol.rol_id
+                           AND mem.mem_begin  <= ? -- DATE_NOW
+                           AND mem.mem_end     > ? -- DATE_NOW
+                           AND mem.mem_leader = true), 0) AS num_leader,
+                       COALESCE((SELECT COUNT(*) AS count
+                          FROM ' . TBL_MEMBERS . ' AS mem
+                         WHERE mem.mem_rol_id = rol.rol_id
+                           AND mem_end < ?  -- DATE_NOW
+                           AND NOT EXISTS (
+                               SELECT 1
+                                 FROM ' . TBL_MEMBERS . ' AS act
+                                WHERE act.mem_rol_id = mem.mem_rol_id
+                                  AND act.mem_usr_id = mem.mem_usr_id
+                                  AND ? BETWEEN act.mem_begin AND act.mem_end -- DATE_NOW
+                           )), 0) AS num_former -- DATE_NOW
+                  FROM ' . TBL_ROLES . ' AS rol
+            INNER JOIN ' . TBL_CATEGORIES . ' AS cat
+                    ON cat_id = rol_cat_id
+                       ' . (strlen($categoryUUID) > 1 ? ' AND cat_uuid = \'' . $categoryUUID . '\'' : '') . '
+             LEFT JOIN ' . TBL_EVENTS . ' ON dat_rol_id = rol_id
+                 WHERE (  cat_org_id = ? -- $gCurrentOrgId
+                       OR cat_org_id IS NULL )';
+
+        switch ($this->roleType) {
+            case GroupsRolesPresenter::ROLE_TYPE_INACTIVE:
+                $sql .= ' AND rol_valid   = false
+                         AND cat_name_intern <> \'EVENTS\' ';
+                break;
+
+            case GroupsRolesPresenter::ROLE_TYPE_ACTIVE:
+                $sql .= ' AND rol_valid   = true
+                         AND cat_name_intern <> \'EVENTS\' ';
+                break;
+
+            case GroupsRolesPresenter::ROLE_TYPE_EVENT_PARTICIPATION:
+                $sql .= ' AND cat_name_intern = \'EVENTS\' ';
+                break;
+        }
+
+        if ($this->roleType == GroupsRolesPresenter::ROLE_TYPE_INACTIVE && $gCurrentUser->isAdministrator()) {
+            // if inactive roles should be shown, then show all of them to administrator
+            $sql .= '';
+        } else {
+            // create a list with all role IDs that the user is allowed to view
+            $visibleRoles = '\'' . implode('\', \'', $gCurrentUser->getRolesViewMemberships()) . '\'';
+            if ($visibleRoles !== '') {
+                $sql .= ' AND rol_uuid IN (' . $visibleRoles . ')';
+            } else {
+                $sql .= ' AND rol_uuid IS NULL ';
+            }
+        }
+
+        if ($this->roleType === GroupsRolesPresenter::ROLE_TYPE_EVENT_PARTICIPATION) {
+            $sql .= ' ORDER BY cat_sequence, dat_begin DESC, rol_name ';
+        } else {
+            $sql .= ' ORDER BY cat_sequence, rol_name ';
+        }
+
+        $queryParameters = array(
+            DATE_NOW,
+            DATE_NOW,
+            DATE_NOW,
+            DATE_NOW,
+            DATE_NOW,
+            DATE_NOW,
+            $gCurrentOrgId
+        );
+
+        return $gDb->getArrayFromSql($sql, $queryParameters);
     }
 
     /**

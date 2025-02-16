@@ -29,7 +29,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Role;
-use Admidio\Roles\Service\RoleService;
+use Admidio\Roles\Service\RolesService;
 use Admidio\Roles\ValueObject\ListData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
@@ -743,7 +743,7 @@ try {
                 // Appointment
                 $value = '';
                 if ($role->getValue('rol_weekday') > 0) {
-                    $value = RoleService::getWeekdays($role->getValue('rol_weekday')) . ' ';
+                    $value = RolesService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                 }
                 if ((string)$role->getValue('rol_start_time') !== '') {
                     $value = $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));

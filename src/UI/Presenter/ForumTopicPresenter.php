@@ -193,7 +193,7 @@ class ForumTopicPresenter extends PagePresenter
         $firstPost = true;
 
         $topicService = new ForumTopicService($gDb, $this->topicUUID);
-        $data = $topicService->getData($offset, $gSettingsManager->getInt('forum_posts_per_page'));
+        $data = $topicService->findAll($offset, $gSettingsManager->getInt('forum_posts_per_page'));
 
         foreach ($data as $forumPost) {
             $templateRow = array();
