@@ -501,7 +501,7 @@ class Preferences extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
                         'id' => 'content_modules',
-                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'links', 'others')
+                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'links', 'others')
                     ),
                     array(
                         'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),

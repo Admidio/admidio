@@ -12,6 +12,9 @@ use Admidio\Components\Entity\Component;
 use Admidio\Events\Entity\Event;
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
+use Admidio\Forum\Entity\Topic;
+use Admidio\Forum\Entity\Post;
+
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
@@ -89,6 +92,8 @@ class ChangelogService {
             'categories' => 'SYS_CATEGORIES',
             'category_report' => 'SYS_CATEGORY_REPORT',
 
+            'forum_topics' => 'SYS_FORUM_TOPIC',
+            'forum_posts' => 'SYS_FORUM_POST',
 
             'links' => 'SYS_WEBLINKS',
 
@@ -186,6 +191,10 @@ class ChangelogService {
                 return new UserRelation($gDb);
             case 'user_relation_types':
                 return new UserRelationType($gDb);
+            case 'forum_topic':
+                return new Topic($gDb);
+            case 'forum_post':
+                return new Post($gDb);
             default:
                 return null;
         }
@@ -338,6 +347,7 @@ class ChangelogService {
             'rol_events' =>                array('name' => 'SYS_RIGHT_DATES', 'type' => 'BOOL'),
             'rol_photo' =>                 array('name' => 'SYS_RIGHT_PHOTOS', 'type' => 'BOOL'),
             'rol_documents_files' =>       array('name' => 'SYS_RIGHT_DOCUMENTS_FILES', 'type' => 'BOOL'),
+            'rol_forum_admin' =>           array('name' => 'SYS_RIGHT_FORUM', 'type' => 'BOOL'),
             'rol_weblinks' =>              array('name' => 'SYS_RIGHT_WEBLINKS', 'type' => 'BOOL'),
             'rol_valid' =>                 array('name' => 'SYS_ACTIVATE_ROLE', 'type' => 'BOOL'),
 
@@ -364,6 +374,12 @@ class ChangelogService {
             'gbc_text' =>                  'SYS_MESSAGE',
             'gbc_email' =>                 array('name' => 'SYS_EMAIL', 'type' => 'EMAIL'),
             'gbc_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
+
+            'fot_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
+            'fot_fop_id_first_post' =>     array('name' => 'SYS_FORUM_POST', 'type' => 'POST'),
+            'fot_title' =>                 'SYS_TITLE',
+            'fop_text' =>                  'SYS_TEXT',
+            'fop_fot_id' =>                array('name' => 'SYS_FORUM_TOPIC', 'type' => 'TOPIC'),
 
             'lnk_name' =>                  'SYS_LINK_NAME',
             'lnk_description' =>           'SYS_DESCRIPTION',
@@ -487,6 +503,10 @@ class ChangelogService {
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $uuid)); break;
             case 'folders' :
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $uuid)); break;
+            case 'forum_topics' :
+                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'topic', 'topic_uuid' => $uuid)); break;
+            case 'forum_posts' :
+                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'post_edit', 'post_uuid' => $uuid)); break;
             case 'links' :
                 $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
             case 'lists' :
@@ -670,6 +690,14 @@ class ChangelogService {
                     $obj = new Component($gDb, $value);
                     $htmlValue = $obj->readableName();
                     break;
+                case 'TOPIC':
+                    $obj = new Topic($gDb, $value);
+                    $htmlValue = self::createLink($obj->readableName(), 'forum_topics', $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
+                    break;
+                case 'POST':
+                    $obj = new POST($gDb, $value);
+                    $htmlValue = self::createLink($obj->readableName(), 'forum_posts', $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
+                    break;
                 case 'CUSTOM_LIST':
                     $value = $entries[$value]??$value;
                     $htmlValue = '';
@@ -700,6 +728,47 @@ class ChangelogService {
             }
         }
         return $value;
+    }
+
+    /**
+     * For a given database table and potentially a related object ID, return the type of table for the related object.
+     * In many cases, the related object will have the same type (e.g. menu or folder hierarchy), but for other objects,
+     * the related object has a different type (e.g. a file has the folder as related object, a membership record has the
+     * corresponding role as related, ...)
+     * @param string $table The table of the object
+     * @param string $relatedName The id of the related object. Passed by reference, so this method can adjust the displayed name of the related object!
+     * @return string The table for the related object
+     */
+    public static function getRelatedTable(string $table, string &$relatedName = '') : string {
+        switch ($table) {
+            case 'members':
+                return 'roles';
+            case 'roles_rights_data':
+                return 'roles';
+            case 'roles_dependencies':
+                return 'roles';
+            case 'files':
+                return 'folders';
+            case 'forum_posts':
+                return 'forum_topics';
+            case 'forum_topics':
+                return 'forum_posts';
+            case 'list_columns':
+                // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
+                if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {
+                    $relatedName = $fieldStrings[$relatedName]??$relatedName;
+                    if (is_array($relatedName)) {
+                        $relatedName = $relatedName['name']??'-';
+                    }
+                    if (!empty($relatedName)) {
+                        $relatedName = Language::translateIfTranslationStrId($relatedName);
+                    }
+                }
+                return 'user_fields';
+            default:
+                return $table;
+        }
+        return $table;
     }
 
 

@@ -71,6 +71,8 @@ $defaultOrgPreferences = array(
     'changelog_table_list_columns'         => '0',
     'changelog_table_preferences'          => '0',
     'changelog_table_texts'                => '0',
+    'changelog_table_forum_topics'         => '0',
+    'changelog_table_forum_posts'          => '0',
     'changelog_table_others'               => '0',
 
     // E-mail dispatch

@@ -368,33 +368,7 @@ try {
         //    Similarly, files/folders, organizations, guestbook comments, etc. show their parent as related
         if ($showRelatedColumn) {
             $relatedName = $row['related_name'];
-            $relatedTable = $row['table_name'];
-            if ($row['table_name'] == 'members') {
-                $relatedTable = 'roles';
-            }
-            }
-            if ($row['table_name'] == 'files') {
-                $relatedTable = 'folders';
-            }
-            if ($row['table_name'] == 'roles_rights_data') {
-                $relatedTable = 'roles';
-            }
-            if ($row['table_name'] == 'roles_dependencies') {
-                $relatedTable = 'roles';
-            }
-            if ($row['table_name'] == 'list_columns') {
-                // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
-                if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {
-                    $relatedName = $fieldStrings[$relatedName]??$relatedName;
-                    if (is_array($relatedName)) {
-                        $relatedName = $relatedName['name']??'-';
-                    }
-                    if (!empty($relatedName)) {
-                        $relatedName = Language::translateIfTranslationStrId($relatedName);
-                    }
-                }
-                $relatedTable = 'user_fields';
-            }
+            $relatedTable = ChangelogService::getRelatedTable($row['table_name'], $relatedName);
             if (!empty($relatedName)) {
                 $relID = 0;
                 $relUUID = '';

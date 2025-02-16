@@ -679,8 +679,10 @@
   <string name="SYS_FORUM">Forum</string>
   <string name="SYS_FORUM_DESC">A simple forum for discussions within an organization. Various topics can be published and discussed.</string>
   <string name="SYS_FORUM_MODULE_ENABLED_DESC">The forum can be activated via this setting. All registered members then have the opportunity to post or comment on topics in the forum.</string>
+  <string name="SYS_FORUM_POST">Forum post</string>
   <string name="SYS_FORUM_POST_CHANGED_TITLE">A forum post was changed at #VAR1#</string>
   <string name="SYS_FORUM_POST_CREATED_TITLE">New forum post was created at #VAR1#</string>
+  <string name="SYS_FORUM_TOPIC">Forum topic</string>
   <string name="SYS_FORUM_TOPIC_CHANGED_TITLE">A forum topic was changed at #VAR1#</string>
   <string name="SYS_FORUM_TOPIC_CREATED_TITLE">New forum topic was created at #VAR1#</string>
   <string name="SYS_FORWARD">Forward</string>

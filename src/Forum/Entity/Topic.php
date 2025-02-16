@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_guestbook
@@ -328,5 +329,29 @@ class Topic extends Entity
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * In addition to the default ignored columns, don't log fot_views
+     *
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(),
+        [$this->columnPrefix . '_views'],
+        ($this->newRecord)?[$this->columnPrefix.'_title']:[]);
+    }
+    /**
+     * Adjust the changelog entry for this db record: Add the first forum post as a related object
+     * @param LogChanges $logEntry The log entry to adjust
+     * @return void
+     * @throws Exception
+     */
+    protected function adjustLogEntry(LogChanges $logEntry): void
+    {
+        $fotEntry = new Post($this->db, (int)$this->getValue('fot_fop_id_first_post'));
+        $logEntry->setLogRelated($fotEntry->getValue('fop_uuid'), $fotEntry->getValue('fop_text'));
     }
 }

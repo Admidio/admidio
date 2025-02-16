@@ -3,6 +3,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Categories\Service\CategoryService;
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
@@ -96,6 +97,8 @@ class ForumPresenter extends PagePresenter
                 'bi-hdd-stack-fill'
             );
         }
+
+        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $gCurrentUser->administrateForum());
 
         // add filter navbar
         $this->addJavascript('
