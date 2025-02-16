@@ -368,8 +368,8 @@ try {
         //    Similarly, files/folders, organizations, guestbook comments, etc. show their parent as related
         if ($showRelatedColumn) {
             $relatedName = $row['related_name'];
-            $relatedTable = ChangelogService::getRelatedTable($row['table_name'], $relatedName);
             if (!empty($relatedName)) {
+                $relatedTable = ChangelogService::getRelatedTable($row['table_name'], $relatedName);
                 $relID = 0;
                 $relUUID = '';
                 $rid = $row['related_id'];
