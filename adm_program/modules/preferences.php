@@ -25,7 +25,7 @@ use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\Service\PreferencesService;
-use Admidio\UI\View\PreferencesPresenter;
+use Admidio\UI\Presenter\PreferencesPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');

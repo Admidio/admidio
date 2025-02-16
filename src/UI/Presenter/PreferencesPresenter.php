@@ -1,5 +1,5 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
