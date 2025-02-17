@@ -14,7 +14,7 @@ use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\View\Installation;
+use Admidio\UI\View\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_administrator.php') {
     exit('This page may not be called directly!');
@@ -37,7 +37,7 @@ if ($mode === 'html') {
     $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
     // create a page to enter all necessary data to create a administrator user
-    $page = new Installation('adm_installation_create_administrator', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_create_administrator', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'));

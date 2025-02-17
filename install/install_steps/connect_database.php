@@ -14,7 +14,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\View\Installation;
+use Admidio\UI\View\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'connect_database.php') {
     exit('This page may not be called directly!');
@@ -46,7 +46,7 @@ if ($mode === 'html') {
     }
 
     // create a page to enter all necessary database connection information
-    $page = new Installation('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
