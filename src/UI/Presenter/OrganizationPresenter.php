@@ -1,5 +1,5 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\FormPresenter;
@@ -16,7 +16,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * **Code example**
  * ```
  * // generate html output with available registrations
- * $page = new Organizations('adm_organization', $headline);
+ * $page = new OrganizationPresenter('adm_organization', $headline);
  * $page->createEditForm();
  * $page->show();
  * ```
@@ -24,7 +24,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Organizations extends PagePresenter
+class OrganizationPresenter extends PagePresenter
 {
     /**
      * Create the data for the edit form of an organization.
@@ -32,7 +32,11 @@ class Organizations extends PagePresenter
      */
     public function createEditForm()
     {
-        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession, $gSettingsManager;
+        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession;
+
+        $this->setHtmlID('adm_organization_edit');
+        $this->setHeadline($gL10n->get('SYS_ORGANIZATION'));
+
         $this->addJavascript('
             $("#adm_button_save").hide();
 

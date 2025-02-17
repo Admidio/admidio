@@ -1,8 +1,7 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
-use Admidio\UI\Presenter\PagePresenter;
 use Throwable;
 
 /**
@@ -19,7 +18,7 @@ use Throwable;
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = new Installation('admidio-example');
+ * $page = new InstallationPresenter('admidio-example');
  * $page->addTemplateFile('update.tpl');
  * $page->setUpdateModus();
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
@@ -34,7 +33,7 @@ use Throwable;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Installation extends PagePresenter
+class InstallationPresenter extends PagePresenter
 {
     /**
      * Constructor creates the page object and initialized all parameters.
@@ -67,7 +66,7 @@ class Installation extends PagePresenter
      * These variables are available in all installation and update template files.
      * @throws Exception
      */
-    private function assignBasicSmartyVariables()
+    private function assignBasicSmartyVariables(): void
     {
         global $gDebug, $gSettingsManager, $gValidLogin, $gL10n;
 
@@ -106,7 +105,7 @@ class Installation extends PagePresenter
      * This is the default modus and will be set automatically if not modus is set in the calling code.
      * @throws Exception
      */
-    public function setInstallationModus()
+    public function setInstallationModus(): void
     {
         global $gL10n;
 
@@ -118,7 +117,7 @@ class Installation extends PagePresenter
      * Set the form in the update modus. Therefore, headline and title will be changed.
      * @throws Exception
      */
-    public function setUpdateModus()
+    public function setUpdateModus(): void
     {
         global $gL10n;
 
@@ -132,7 +131,7 @@ class Installation extends PagePresenter
      * Call this method if you have finished your page layout.
      * @throws Exception
      */
-    public function show()
+    public function show(): void
     {
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
@@ -165,7 +164,7 @@ class Installation extends PagePresenter
      * @param string $destinationUrl An url to which the user should navigate if he clicks on the button.
      * @throws Exception
      */
-    public function showMessage(string $outputMode, string $headline, string $text, string $buttonText, string $buttonIcon, string $destinationUrl)
+    public function showMessage(string $outputMode, string $headline, string $text, string $buttonText, string $buttonIcon, string $destinationUrl): void
     {
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');

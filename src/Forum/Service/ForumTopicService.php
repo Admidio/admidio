@@ -47,7 +47,7 @@ class ForumTopicService
      * @return array Returns an array with all posts of a topic.
      * @throws Exception
      */
-    public function getData(int $offset = 0, int $limit = 0): array
+    public function findAll(int $offset = 0, int $limit = 0): array
     {
         global $gDb, $gProfileFields;
 

@@ -9,14 +9,14 @@
  ***********************************************************************************************
  */
 
-use Admidio\UI\View\Installation;
+use Admidio\UI\View\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
     exit('This page may not be called directly!');
 }
 
 // show dialog with success notification
-$page = new Installation('adm_installation_successful', $gL10n->get('INS_INSTALLATION'));
+$page = new InstallationPresenter('adm_installation_successful', $gL10n->get('INS_INSTALLATION'));
 $page->addTemplateFile('installation.successful.tpl');
 $page->addJavascript('$("#adm_next_page").focus();', true);
 $page->show();

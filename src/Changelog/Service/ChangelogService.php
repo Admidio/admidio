@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Changelog\Service;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -27,6 +28,7 @@ use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Roles\Service\RolesService;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -35,9 +37,6 @@ use Admidio\Weblinks\Entity\Weblink;
 use Admidio\UI\Presenter\PagePresenter;
 use DateTime;
 use ModuleEvents;
-
-use Admidio\Roles\Service\RoleService;
-
 
 /**
  * @brief Class with methods to help with the changelog.
@@ -65,21 +64,21 @@ class ChangelogService {
  */
 
     /**
-     * Static(global) list of tables, which should not be included in the changelog 
+     * Static(global) list of tables, which should not be included in the changelog
      * @var array
      */
     public static array $noLogTables = [
-        'auto_login', 'components', 'id', 'log_changes', 
-        'messages', 'messages_attachments', 'messages_content', 'messages_recipients', 
+        'auto_login', 'components', 'id', 'log_changes',
+        'messages', 'messages_attachments', 'messages_content', 'messages_recipients',
         'registrations',
         'sessions'];
 
 
     /**
-     * array holding all customizations by third-party extensions. 
+     * array holding all customizations by third-party extensions.
      * @var array
      */
-    protected static $customCallbacks = array(
+    protected static array $customCallbacks = array(
         'getTableLabel' => ['' => []],
         'getTableLabelArray' => [],
         'getObjectForTable' => ['' => []],
@@ -91,21 +90,21 @@ class ChangelogService {
     );
 
     /**
-     * Register a callback function or value for the changelog functionality. 
+     * Register a callback function or value for the changelog functionality.
      * If the callback is a value (string, array, etc.), it will be returned. If
-     * the callback is a function, it will be executed and if the return value is 
-     * not empty, it will be returned. If the function returns a null or empty 
+     * the callback is a function, it will be executed and if the return value is
+     * not empty, it will be returned. If the function returns a null or empty
      * value, the next callback or the default processing of the ChangelogService
      * method will proceed.
-     * @param string $function The method of the ChangelogService class that should be customized. One of 
+     * @param string $function The method of the ChangelogService class that should be customized. One of
      *     'getTableLabel', 'getObjectForTable', 'getFieldTranslations', 'createLink', 'formatValue', 'getRelatedTable', 'getPermittedTables'
-     * @param string $moduleOrKey The module or type that should be customized. If 
-     *     empty, the callback will be executed for all values and it will be used 
+     * @param string $moduleOrKey The module or type that should be customized. If
+     *     empty, the callback will be executed for all values, and it will be used
      *     if it evaluates to a non-empty value.
      * @param mixed $callback The callback function or value. A value will be returned
-     *      unchanged, a function will be executed (arguments should be identical to 
+     *      unchanged, a function will be executed (arguments should be identical to
      *      the methods of the ChangelogService class)
-     * @return void 
+     * @return void
      */
     public static function registerCallback(string $function, string $moduleOrKey, mixed $callback) : void {
         if (empty($moduleOrKey)) {
@@ -132,10 +131,11 @@ class ChangelogService {
     /**
      * Return a human-readable title for the given database table. If table is
      * null, a full named array of all titles is returned.
-     * @param mixed $table The database table name (sans the table prefix)
+     * @param mixed|null $table The database table name (sans the table prefix)
      * @return array|string The human-readable title of the database table
+     * @throws Exception
      */
-    public static function getTableLabel($table = null): array|string  {
+    public static function getTableLabel(mixed $table = null): array|string  {
         // First process callbacks defined for the given table:
         if (!empty($table) && array_key_exists($table, self::$customCallbacks['getTableLabel'])) {
             $callback = self::$customCallbacks['getTableLabel'][$table];
@@ -154,7 +154,7 @@ class ChangelogService {
 
         /**
          * Named list of all available table columns and their translation IDs.
-         * @var array
+         * @var array $tableLabels
          */
         $tableLabels = array(
             'user_data' => 'SYS_PROFILE_FIELD',
@@ -217,6 +217,7 @@ class ChangelogService {
      * $usr = ChangelogService::getObjectForTable('users');
      * $usr->readDataById(500);
      * ```
+     * @throws Exception
      */
     public static function getObjectForTable(string $module): Entity | null {
         global $gDb, $gProfileFields;
@@ -315,8 +316,10 @@ class ChangelogService {
      * $membershipStartTitle = Language::translateIfTranslationStrId($fieldNames['mem_begin']);  // returns 'SYS_MEMBERSHIP_START'
      * $leaderInfo = $fieldNames['mem_leader'];   // returns ['name' => 'SYS_LEADER, 'type' => 'BOOL']
      * ```
+     * @throws Exception
      */
-    public static function getFieldTranslations() {
+    public static function getFieldTranslations(): array
+    {
         global $gL10n;
 
         $userFieldText = array(
@@ -558,14 +561,13 @@ class ChangelogService {
             'cat_default' =>               array('name' => $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_CATEGORY'))), 'type' => 'BOOL'),
             'cat_sequence' =>              'SYS_ORDER',
         );
-        $translations = array_merge($translations, self::$customCallbacks['getFieldTranslations']);
-        return $translations;
+        return array_merge($translations, self::$customCallbacks['getFieldTranslations']);
     }
 
 
 
     /**
-     * Create a HTML link to the admidio page corresponding to the given module (DB table without prefix). Optional object ID
+     * Create an HTML link to the admidio page corresponding to the given module (DB table without prefix). Optional object ID
      * and/or UUID can be passed and will be used in the HREF, if supported.
      * If the module / table does not provide a page, the text without link will be returned.
      *
@@ -575,7 +577,7 @@ class ChangelogService {
      * @param string $module The admidio module / database table without prefix
      * @param int|string $id The object ID
      * @param string $uuid The object UUID
-     * @return mixed HTML Link to the module's view or edit page for the given object, if such a page is provided at all. If not, the text is returned without adding a link.
+     * @return string HTML Link to the module's view or edit page for the given object, if such a page is provided at all. If not, the text is returned without adding a link.
      *
      * **Code example**
      * ```
@@ -583,7 +585,8 @@ class ChangelogService {
      * $link = self::createLink($user->readableName(), 'users', 0, $user->getValue('usr_uuid'));
      * ```
      */
-    public static function createLink(string $text, string $module, int|string $id, string $uuid = '') {
+    public static function createLink(string $text, string $module, int|string $id, string $uuid = ''): string
+    {
         $url = '';
         // HANDLE REGISTERED CALLBACKS, THEN DEFAULT PROCESSING
         // First process callbacks defined for the given module:
@@ -692,6 +695,7 @@ class ChangelogService {
      * $output = ChangelogService::formatValue("http://www.admidio.org/", "URL"); // Returns a link to the URL
      * $output = ChangelogService::formatValue(1, 'USER');  // Returns a link to the administrator, text is the administrator's name
      * ```
+     * @throws Exception
      */
     public static function formatValue($value, $type, $entries = []) {
         global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n;
@@ -807,7 +811,7 @@ class ChangelogService {
                     break;
                 case 'WEEKDAY':
                     if ($value > 0) {
-                        $htmlValue = RoleService::getWeekdays($value);
+                        $htmlValue = RolesService::getWeekdays($value);
                     } else {
                         $htmlValue = $value;
                     }
@@ -870,6 +874,7 @@ class ChangelogService {
      * @param string $table The table of the object
      * @param string $relatedName The id of the related object. Passed by reference, so this method can adjust the displayed name of the related object!
      * @return string The table for the related object
+     * @throws Exception
      */
     public static function getRelatedTable(string $table, string &$relatedName = '') : string {
         // HANDLE REGISTERED CALLBACKS, THEN DEFAULT PROCESSING
@@ -923,6 +928,7 @@ class ChangelogService {
      * Return a list of all db tables where the current user has admin / edit rights
      * @param User $user The user
      * @return string[] List of all accessible tables
+     * @throws Exception
      */
     public static function getPermittedTables(User $user) : array {
         $tablesPermitted = [];
@@ -966,6 +972,7 @@ class ChangelogService {
      * If multiple tables are given (as a comma-separated string), at least one of them needs to be logged.
      * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple())
      * @return bool Returns true if the database table (or at least one, of multiple are given) is logged
+     * @throws Exception
      */
     public static function isTableLogged(string|array $table) : bool {
         global $gSettingsManager;
@@ -1001,6 +1008,7 @@ class ChangelogService {
      * If multiple tables are given (as a comma-separated string), at least one of them needs to be logged.
      * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple())
      * @return bool Returns true if the database table (or at least one, of multiple are given) is logged
+     * @throws Exception
      */
     public static function hasLogViewPermission(string|array $table, User $user = null) : bool {
         global $gSettingsManager, $gCurrentUser;
@@ -1024,10 +1032,11 @@ class ChangelogService {
      *
      * @param PagePresenter $page The PagePresenter of the module, where the change history button should be added
      * @param string $area Identifier for the module, used for the menu item ID
-     * @param string $table The database table(s) of the changelog (comma-separated list for multiple())
+     * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple())
      * @param bool $condition Additional condition to display/hide
      * @param array $params
      * @return void
+     * @throws Exception
      */
     public static function displayHistoryButton(PagePresenter $page, string $area, string|array $table, bool $condition = true, array $params = array()) : void {
         global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
@@ -1081,9 +1090,9 @@ class ChangelogService {
 
 
 /*******************************************************
- * EXAMPLE CODE for the callback mechanism: 
- *    The forum changelog can also be implemented by the following code, which can be called by a third party extension somewhere in its 
- *    initialization code (must be executed at least before a changelog page is displayed and before the third-party extension writes 
+ * EXAMPLE CODE for the callback mechanism:
+ *    The forum changelog can also be implemented by the following code, which can be called by a third party extension somewhere in its
+ *    initialization code (must be executed at least before a changelog page is displayed and before the third-party extension writes
  *    data to the database!)
  *******************************************************
 
@@ -1118,11 +1127,11 @@ ChangelogService::registerCallback('formatValue', 'POST', function($value, $type
 
 ## Create HTML links to the object's list view and edit pages
 ChangelogService::registerCallback('createLink', 'forum_topics', function(string $text, string $module, int|string $id, string $uuid = '') {
-    return SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', 
+    return SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php',
                 array('mode' => 'topic', 'topic_uuid' => $uuid));
 });
 ChangelogService::registerCallback('createLink', 'forum_posts', function(string $text, string $module, int|string $id, string $uuid = '') {
-    return SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', 
+    return SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php',
                 array('mode' => 'post_edit', 'post_uuid' => $uuid));
 });
 

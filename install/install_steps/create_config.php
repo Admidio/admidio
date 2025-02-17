@@ -12,7 +12,7 @@
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\View\Installation;
+use Admidio\UI\View\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_config.php') {
     exit('This page may not be called directly!');
@@ -51,7 +51,7 @@ $configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces)
 
 $_SESSION['config_file_content'] = $configFileContent;
 
-$page = new Installation('adm_installation_create_config', $gL10n->get('INS_INSTALLATION'));
+$page = new InstallationPresenter('adm_installation_create_config', $gL10n->get('INS_INSTALLATION'));
 $page->addTemplateFile('installation.tpl');
 
 // now save new configuration file in Admidio folder if user has write access to this folder
