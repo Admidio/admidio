@@ -59,8 +59,6 @@ $defaultOrgPreferences = array(
     'changelog_table_roles_rights_data'    => '0',
     'changelog_table_categories'           => '0',
     'changelog_table_category_report'      => '0',
-    'changelog_table_guestbook'            => '0',
-    'changelog_table_guestbook_comments'   => '0',
     'changelog_table_links'                => '0',
     'changelog_table_folders'              => '0',
     'changelog_table_files'                => '0',
@@ -73,6 +71,8 @@ $defaultOrgPreferences = array(
     'changelog_table_list_columns'         => '0',
     'changelog_table_preferences'          => '0',
     'changelog_table_texts'                => '0',
+    'changelog_table_forum_topics'         => '0',
+    'changelog_table_forum_posts'          => '0',
     'changelog_table_others'               => '0',
 
     // E-mail dispatch

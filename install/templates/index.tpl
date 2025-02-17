@@ -19,6 +19,17 @@
 
     {$additionalHeaderData}
 
+    {if count($cssFiles) > 0}
+        {foreach $cssFiles as $key => $file}
+            <link rel="stylesheet" type="text/css" href="{$file}" />
+        {/foreach}
+    {/if}
+    {if count($javascriptFiles) > 0}
+        {foreach $javascriptFiles as $key => $file}
+            <script type="text/javascript" src="{$file}"></script>
+        {/foreach}
+    {/if}
+
     <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/install/templates/installation.css" />
 
     <script type="text/javascript">

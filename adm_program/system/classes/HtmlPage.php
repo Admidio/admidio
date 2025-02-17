@@ -612,6 +612,9 @@ class HtmlPage
         $this->smarty->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
+        $this->smarty->assign('rssFeeds', $this->rssFiles);
+        $this->smarty->assign('cssFiles', $this->cssFiles);
+        $this->smarty->assign('javascriptFiles', $this->jsFiles);
 
         if ($this->fullWidth) {
             $this->smarty->assign('contentClass', 'admidio-max-content');

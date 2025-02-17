@@ -142,6 +142,9 @@ class Installation extends PagePresenter
         $this->smarty->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
+        $this->smarty->assign('rssFeeds', $this->rssFiles);
+        $this->smarty->assign('cssFiles', $this->cssFiles);
+        $this->smarty->assign('javascriptFiles', $this->jsFiles);
         try {
             $this->smarty->display('index.tpl');
         } catch (Throwable $exception) {

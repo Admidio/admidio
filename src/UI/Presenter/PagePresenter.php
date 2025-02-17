@@ -415,38 +415,7 @@ class PagePresenter
      */
     public function getHtmlAdditionalHeader(): string
     {
-        $this->header .= $this->getHtmlCssFiles() . $this->getHtmlJsFiles();
         return $this->header;
-    }
-
-    /**
-     * Get the html code with the script implementation of all assigned CSS files.
-     * @return string Returns the html code with the script implementation of all assigned CSS files.
-     */
-    public function getHtmlCssFiles(): string
-    {
-        $html = '';
-
-        foreach ($this->cssFiles as $cssFile) {
-            $html .= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />'."\n";
-        }
-
-        return $html;
-    }
-
-    /**
-     * Get the html code with the script implementation of all assigned javascript files.
-     * @return string Returns the html code with the script implementation of all assigned javascript files.
-     */
-    public function getHtmlJsFiles(): string
-    {
-        $html = '';
-
-        foreach ($this->jsFiles as $jsFile) {
-            $html .= '<script type="text/javascript" src="' . $jsFile . '"></script>'."\n";
-        }
-
-        return $html;
     }
 
     /**
@@ -592,6 +561,8 @@ class PagePresenter
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
         $this->smarty->assign('rssFeeds', $this->rssFiles);
+        $this->smarty->assign('cssFiles', $this->cssFiles);
+        $this->smarty->assign('javascriptFiles', $this->jsFiles);
 
         if ($this->fullWidth) {
             $this->smarty->assign('contentClass', 'admidio-max-content');

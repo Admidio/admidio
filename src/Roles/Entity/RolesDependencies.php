@@ -18,6 +18,16 @@ use Admidio\Changelog\Entity\LogChanges;
 class RolesDependencies extends Entity
 {
     /**
+     * Constructor that will create an object of a recordset of the table adm_role_dependencies.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @throws Exception
+     */
+    public function __construct(Database $database)
+    {
+        parent::__construct($database, TBL_ROLE_DEPENDENCIES, 'rld');
+    }
+   
+    /**
      * Deletes the selected record of the table and initializes the class
      * Since the role_dependencies table does not have a single auto-increment 
      * key, but two columne (parent-child), we have to override the parent't 

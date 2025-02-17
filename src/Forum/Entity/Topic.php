@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_guestbook
@@ -38,13 +39,13 @@ class Topic extends Entity
      */
     public function __construct(Database $database, int $fotID = 0)
     {
+        $this->firstPost = new Post($database);
+
         // read also data of assigned first post
         $this->connectAdditionalTable(TBL_FORUM_POSTS, 'fop_id', 'fot_fop_id_first_post');
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'fot_cat_id');
 
         parent::__construct($database, TBL_FORUM_TOPICS, 'fot', $fotID);
-
-        $this->firstPost = new Post($this->db);
     }
 
     /**
@@ -272,7 +273,7 @@ class Topic extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if ($this->newRecord && empty($this->getVAlue('fot_cat_id'))) {
+        if ($this->newRecord && empty($this->getValue('fot_cat_id'))) {
             // if only one category is available, then set this category as default
             $categoryServices = new CategoryService($this->db, 'FOT');
             $categories = $categoryServices->getVisibleCategories();
@@ -328,5 +329,29 @@ class Topic extends Entity
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * In addition to the default ignored columns, don't log fot_views
+     *
+     * @return true Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(),
+        [$this->columnPrefix . '_views'],
+        ($this->newRecord)?[$this->columnPrefix.'_title']:[]);
+    }
+    /**
+     * Adjust the changelog entry for this db record: Add the first forum post as a related object
+     * @param LogChanges $logEntry The log entry to adjust
+     * @return void
+     * @throws Exception
+     */
+    protected function adjustLogEntry(LogChanges $logEntry): void
+    {
+        $fotEntry = new Post($this->db, (int)$this->getValue('fot_fop_id_first_post'));
+        $logEntry->setLogRelated($fotEntry->getValue('fop_uuid'), $fotEntry->getValue('fop_text'));
     }
 }
