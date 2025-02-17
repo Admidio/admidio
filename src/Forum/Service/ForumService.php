@@ -33,6 +33,7 @@ class ForumService
 
     /**
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param string $categoryUUID UUID of the category for which the topics should be filtered.
      */
     public function __construct(Database $database, string $categoryUUID = '')
     {
