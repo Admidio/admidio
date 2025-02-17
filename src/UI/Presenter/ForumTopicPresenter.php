@@ -9,6 +9,7 @@ use Admidio\Forum\Service\ForumTopicService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages of the registration.
@@ -93,6 +94,8 @@ class ForumTopicPresenter extends PagePresenter
             ADMIDIO_URL . FOLDER_MODULES . '/forum.php?mode=post_edit&topic_uuid=' . $this->topicUUID,
             'bi-plus-circle-fill'
         );
+        global $gCurrentUser;
+        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $gCurrentUser->administrateForum(), ['uuid' => $this->topicUUID]);
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
@@ -144,6 +147,8 @@ class ForumTopicPresenter extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('topic_uuid' => $this->topicUUID, 'mode' => 'topic_save')),
             $this
         );
+        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $this->topicUUID !== '' && $gCurrentUser->administrateForum(), ['uuid' => $this->topicUUID]);
+
         if ($categoryService->count() > 1) {
             $form->addSelectBoxForCategories(
                 'fot_cat_id',

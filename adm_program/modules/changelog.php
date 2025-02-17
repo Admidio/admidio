@@ -22,7 +22,8 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\UI\Component\Form;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Roles\Entity\Role;
@@ -248,7 +249,7 @@ try {
     }
 
     // create html page object
-    $page = new HtmlPage('admidio-history', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-history', $headline);
     $page->setContentFullWidth();
     
     // Logic for hiding certain columns:
@@ -263,7 +264,7 @@ try {
     $noShowRelatedTables = ['user_fields', 'users', 'user_data'];
 
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_navbar_filter_form',
         'sys-template-parts/form.filter.tpl',
         ADMIDIO_URL . FOLDER_MODULES . '/changelog.php',
@@ -272,10 +273,10 @@ try {
     );
 
     // create filter menu with input elements for start date and end date
-    $form->addInput('table', '', $getTable, array('property' => Form::FIELD_HIDDEN));
-    $form->addInput('uuid', '', $getUuid, array('property' => Form::FIELD_HIDDEN));
-    $form->addInput('id', '', $getId, array('property' => Form::FIELD_HIDDEN));
-    $form->addInput('related_id', '', $getRelatedId, array('property' => Form::FIELD_HIDDEN));
+    $form->addInput('table', '', $getTable, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('uuid', '', $getUuid, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('id', '', $getId, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('related_id', '', $getRelatedId, array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
@@ -367,36 +368,8 @@ try {
         //    Similarly, files/folders, organizations, guestbook comments, etc. show their parent as related
         if ($showRelatedColumn) {
             $relatedName = $row['related_name'];
-            $relatedTable = $row['table_name'];
-            if ($row['table_name'] == 'members') {
-                $relatedTable = 'roles';
-            }
-            if ($row['table_name'] == 'guestbook_comments') {
-                $relatedTable = 'guestbook';
-            }
-            if ($row['table_name'] == 'files') {
-                $relatedTable = 'folders';
-            }
-            if ($row['table_name'] == 'roles_rights_data') {
-                $relatedTable = 'roles';
-            }
-            if ($row['table_name'] == 'roles_dependencies') {
-                $relatedTable = 'roles';
-            }
-            if ($row['table_name'] == 'list_columns') {
-                // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
-                if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {
-                    $relatedName = $fieldStrings[$relatedName]??$relatedName;
-                    if (is_array($relatedName)) {
-                        $relatedName = $relatedName['name']??'-';
-                    }
-                    if (!empty($relatedName)) {
-                        $relatedName = Language::translateIfTranslationStrId($relatedName);
-                    }
-                }
-                $relatedTable = 'user_fields';
-            }
             if (!empty($relatedName)) {
+                $relatedTable = ChangelogService::getRelatedTable($row['table_name'], $relatedName);
                 $relID = 0;
                 $relUUID = '';
                 $rid = $row['related_id'];

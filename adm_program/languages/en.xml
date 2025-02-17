@@ -679,8 +679,10 @@
   <string name="SYS_FORUM">Forum</string>
   <string name="SYS_FORUM_DESC">A simple forum for discussions within an organization. Various topics can be published and discussed.</string>
   <string name="SYS_FORUM_MODULE_ENABLED_DESC">The forum can be activated via this setting. All registered members then have the opportunity to post or comment on topics in the forum.</string>
+  <string name="SYS_FORUM_POST">Forum post</string>
   <string name="SYS_FORUM_POST_CHANGED_TITLE">A forum post was changed at #VAR1#</string>
   <string name="SYS_FORUM_POST_CREATED_TITLE">New forum post was created at #VAR1#</string>
+  <string name="SYS_FORUM_TOPIC">Forum topic</string>
   <string name="SYS_FORUM_TOPIC_CHANGED_TITLE">A forum topic was changed at #VAR1#</string>
   <string name="SYS_FORUM_TOPIC_CREATED_TITLE">New forum topic was created at #VAR1#</string>
   <string name="SYS_FORWARD">Forward</string>
@@ -1399,6 +1401,7 @@
   <string name="SYS_UTF32LE">UTF-32LE</string>
   <string name="SYS_VALID_FROM" description="Date valid from">Valid from</string>
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
+  <string name="SYS_VALUE">Value</string>
   <string name="SYS_VALUE_LIST">Value list</string>
   <string name="SYS_VALUE_LIST_DESC">In this field, you can enter the entries for the drop-down list box or the option field. For each line, an entry of the drop-down list field or the option field can be entered here.\nThe profile is not stored as text later, but the selected position from the list. If you change the text in a line, all users already assigned will immediately see the new text in their profile. However, if you move an entry into another line, users may see a different entry.\nAn value of an option field can be displayed as icon instead of a text. The icon must be of the web font \"Bootstrap Icons\". Go to #VAR1#https://icons.getbootstrap.com#VAR2# and select an icon from the collection. A tooltip for the icon (e.g. gender-female|This is a female icon) can optionally be set via a vertical divider.</string>
   <string name="SYS_VARIOUS_ROLES">Various roles</string>

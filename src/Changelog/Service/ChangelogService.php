@@ -12,20 +12,21 @@ use Admidio\Components\Entity\Component;
 use Admidio\Events\Entity\Event;
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
+use Admidio\Forum\Entity\Topic;
+use Admidio\Forum\Entity\Post;
+
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
+use Admidio\Preferences\Entity\Preferences;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesDependencies;
 use Admidio\Roles\Entity\RolesRightsData;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Organizations\Entity\Organization;
-use Admidio\Forum\Entity\Post;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Entity\Text;
-use Admidio\Forum\Entity\Topic;
-use Admidio\Roles\Service\RolesService;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -60,6 +61,70 @@ class ChangelogService {
  *********************************************************
  */
 
+    /**
+     * Static(global) list of tables, which should not be included in the changelog
+     * @var array
+     */
+    public static array $noLogTables = [
+        'auto_login', 'components', 'id', 'log_changes',
+        'messages', 'messages_attachments', 'messages_content', 'messages_recipients',
+        'registrations',
+        'sessions'];
+
+
+    /**
+     * array holding all customizations by third-party extensions.
+     * @var array
+     */
+    protected static $customCallbacks = array(
+        'getTableLabel' => ['' => []],
+        'getTableLabelArray' => [],
+        'getObjectForTable' => ['' => []],
+        'getFieldTranslations' => [],
+        'createLink' => ['' => []],
+        'formatValue' => ['' => []],
+        'getRelatedTable' => ['' => []],
+        'getPermittedTables' => ['' => []],
+    );
+
+    /**
+     * Register a callback function or value for the changelog functionality.
+     * If the callback is a value (string, array, etc.), it will be returned. If
+     * the callback is a function, it will be executed and if the return value is
+     * not empty, it will be returned. If the function returns a null or empty
+     * value, the next callback or the default processing of the ChangelogService
+     * method will proceed.
+     * @param string $function The method of the ChangelogService class that should be customized. One of
+     *     'getTableLabel', 'getObjectForTable', 'getFieldTranslations', 'createLink', 'formatValue', 'getRelatedTable', 'getPermittedTables'
+     * @param string $moduleOrKey The module or type that should be customized. If
+     *     empty, the callback will be executed for all values and it will be used
+     *     if it evaluates to a non-empty value.
+     * @param mixed $callback The callback function or value. A value will be returned
+     *      unchanged, a function will be executed (arguments should be identical to
+     *      the methods of the ChangelogService class)
+     * @return void
+     */
+    public static function registerCallback(string $function, string $moduleOrKey, mixed $callback) : void {
+        if (empty($moduleOrKey)) {
+            if ($function == 'getTableLabelArray' || $function == 'getFieldTranslations') {
+                self::$customCallbacks[$function] = array_merge(self::$customCallbacks[$function], $callback);
+            } else {
+                // append callback to list of callbacks for all values
+                self::$customCallbacks[$function][''][] = $callback;
+            }
+        } else {
+            self::$customCallbacks[$function][$moduleOrKey] = $callback;
+        }
+    }
+
+    static protected function evaluateCallback(mixed $callback, ...$args) : mixed {
+        if (is_callable($callback)) {
+            return $callback(...$args);
+        } else {
+            return $callback;
+        }
+    }
+
 
     /**
      * Return a human-readable title for the given database table. If table is
@@ -68,6 +133,22 @@ class ChangelogService {
      * @return array|string The human-readable title of the database table
      */
     public static function getTableLabel($table = null): array|string  {
+        // First process callbacks defined for the given table:
+        if (!empty($table) && array_key_exists($table, self::$customCallbacks['getTableLabel'])) {
+            $callback = self::$customCallbacks['getTableLabel'][$table];
+            $val = self::evaluateCallback($callback, $table);
+            if (!empty($val)) return $val;
+        }
+        // second (if first step does not yield a match) process callbacks defined for ALL values:
+        if (!empty($table) && array_key_exists('', self::$customCallbacks['getTableLabel'])) {
+            foreach (self::$customCallbacks['getTableLabel'][''] as $callback) {
+                $val = self::evaluateCallback($callback, $table);
+                if (!empty($val)) return $val;
+            }
+        }
+        // If none of the callbacks matches, proceed with the default processing...
+
+
         /**
          * Named list of all available table columns and their translation IDs.
          * @var array
@@ -88,8 +169,8 @@ class ChangelogService {
             'categories' => 'SYS_CATEGORIES',
             'category_report' => 'SYS_CATEGORY_REPORT',
 
-            'guestbook' => 'GBO_GUESTBOOK',
-            'guestbook_comments' => 'GBO_GUESTBOOK_COMMENTS',
+            'forum_topics' => 'SYS_FORUM_TOPIC',
+            'forum_posts' => 'SYS_FORUM_POST',
 
             'links' => 'SYS_WEBLINKS',
 
@@ -110,6 +191,7 @@ class ChangelogService {
             'texts' => 'SYS_SETTINGS',
             'others' => 'SYS_ALL_OTHERS',
         );
+        $tableLabels = array_merge($tableLabels, self::$customCallbacks['getTableLabelArray']);
 
         if ($table == null) {
             return $tableLabels;
@@ -135,6 +217,21 @@ class ChangelogService {
      */
     public static function getObjectForTable(string $module): Entity | null {
         global $gDb, $gProfileFields;
+        // HANDLE REGISTERED CALLBACKS, THEN DEFAULT PROCESSING
+        // First process callbacks defined for the given module:
+        if (!empty($module) && array_key_exists($module, self::$customCallbacks['getObjectForTable'])) {
+            $callback = self::$customCallbacks['getObjectForTable'][$module];
+            $val = self::evaluateCallback($callback, $module);
+            if (!empty($val)) return $val;
+        }
+        // second (if first step does not yield a match) process callbacks defined for ALL values:
+        if (!empty($module) && array_key_exists('', self::$customCallbacks['getObjectForTable'])) {
+            foreach (self::$customCallbacks['getObjectForTable'][''] as $callback) {
+                $val = self::evaluateCallback($callback, $module);
+                if (!empty($val)) return $val;
+            }
+        }
+        // If none of the callbacks matches, proceed with the default processing...
         switch ($module) {
             case 'users':
             case 'user_data':
@@ -151,10 +248,6 @@ class ChangelogService {
                 return new File($gDb);
             case 'folders' :
                 return new Folder($gDb);
-            case 'guestbook' :
-                return new Topic($gDb);
-            case 'guestbook_comments' :
-                return new Post($gDb);
             case 'links' :
                 return new Weblink($gDb);
             case 'lists' :
@@ -170,7 +263,7 @@ class ChangelogService {
             case 'photos':
                 return new Album($gDb);
             case 'preferences':
-                return new Entity($gDb, TBL_PREFERENCES, 'prf');
+                return new Preferences($gDb);
             case 'registrations':
                 return new UserRegistration($gDb, $gProfileFields);
             case 'roles':
@@ -191,6 +284,10 @@ class ChangelogService {
                 return new UserRelation($gDb);
             case 'user_relation_types':
                 return new UserRelationType($gDb);
+            case 'forum_topic':
+                return new Topic($gDb);
+            case 'forum_post':
+                return new Post($gDb);
             default:
                 return null;
         }
@@ -252,7 +349,7 @@ class ChangelogService {
             )
         );
 
-        return array(
+        $translations = array(
             'mem_begin' =>                 'SYS_MEMBERSHIP_START',
             'mem_end' =>                   'SYS_MEMBERSHIP_END',
             'mem_leader' =>                array('name' => 'SYS_LEADER', 'type' => 'BOOL'),
@@ -291,6 +388,9 @@ class ChangelogService {
             'usf_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
             'usf_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
             'usf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
+
+            'prf_value' =>                 'SYS_VALUE',
+            'prf_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
 
             'ann_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'ann_headline' =>              'SYS_HEADLINE',
@@ -340,8 +440,7 @@ class ChangelogService {
             'rol_events' =>                array('name' => 'SYS_RIGHT_DATES', 'type' => 'BOOL'),
             'rol_photo' =>                 array('name' => 'SYS_RIGHT_PHOTOS', 'type' => 'BOOL'),
             'rol_documents_files' =>       array('name' => 'SYS_RIGHT_DOCUMENTS_FILES', 'type' => 'BOOL'),
-            'rol_guestbook' =>             array('name' => 'SYS_RIGHT_GUESTBOOK', 'type' => 'BOOL'),
-            'rol_guestbook_comments' =>    array('name' => 'SYS_RIGHT_GUESTBOOK_COMMENTS', 'type' => 'BOOL'),
+            'rol_forum_admin' =>           array('name' => 'SYS_RIGHT_FORUM', 'type' => 'BOOL'),
             'rol_weblinks' =>              array('name' => 'SYS_RIGHT_WEBLINKS', 'type' => 'BOOL'),
             'rol_valid' =>                 array('name' => 'SYS_ACTIVATE_ROLE', 'type' => 'BOOL'),
 
@@ -368,6 +467,12 @@ class ChangelogService {
             'gbc_text' =>                  'SYS_MESSAGE',
             'gbc_email' =>                 array('name' => 'SYS_EMAIL', 'type' => 'EMAIL'),
             'gbc_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
+
+            'fot_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
+            'fot_fop_id_first_post' =>     array('name' => 'SYS_FORUM_POST', 'type' => 'POST'),
+            'fot_title' =>                 'SYS_TITLE',
+            'fop_text' =>                  'SYS_TEXT',
+            'fop_fot_id' =>                array('name' => 'SYS_FORUM_TOPIC', 'type' => 'TOPIC'),
 
             'lnk_name' =>                  'SYS_LINK_NAME',
             'lnk_description' =>           'SYS_DESCRIPTION',
@@ -450,6 +555,8 @@ class ChangelogService {
             'cat_default' =>               array('name' => $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_CATEGORY'))), 'type' => 'BOOL'),
             'cat_sequence' =>              'SYS_ORDER',
         );
+        $translations = array_merge($translations, self::$customCallbacks['getFieldTranslations']);
+        return $translations;
     }
 
 
@@ -475,70 +582,87 @@ class ChangelogService {
      */
     public static function createLink(string $text, string $module, int|string $id, string $uuid = '') {
         $url = '';
-        switch ($module) {
-            case 'users': // Fall through
-            case 'user_data':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $uuid)); break;
-            case 'announcements':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $uuid)); break;
-            case 'categories' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/categories.php', array('mode' => 'edit', 'uuid' => $uuid)); break; // Note: the type is no longer needed (only recommended, but we don't have it in the changelog DB)
-            case 'category_report' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php'); break;
-            case 'events' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $uuid)); break;
-            case 'files' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $uuid)); break;
-            case 'folders' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $uuid)); break;
-            case 'guestbook' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('gbo_uuid' => $uuid)); break;
-            case 'guestbook_comments' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbc_uuid' => $uuid)); break;
-            case 'links' :
-                $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
-            case 'lists' :
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', array('active_role' => 1, 'list_uuid' => $uuid)); break;
-            case 'list_columns':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', array('active_role' => 1, 'list_uuid' => $uuid)); break;
-            case 'members':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
-            case 'menu':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
-            // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
-            //     $url = SecurityUtils::encodeUrl(); break;
-            case 'photos':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $uuid)); break;
-            // case 'preferences': // There is just one preferences page, but no way to link to individual sections or preference items!
-            //     $url = SecurityUtils::encodeUrl(); break;
-            // case 'registrations':
-            //     $url = SecurityUtils::encodeUrl(); break;
-            case 'roles':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
-            case 'roles_rights':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
-            case 'roles_rights_data':
-                // The log_record_linkid contains the table and the uuid encoded as 'table':'UUID' => split and call Create linke with the new table!
-                if (strpos($id, ':') !== false) {
-                    // Split into table and UUID
-                    [$table, $id] = explode(':', $id, 2);
-                } else {
-                    $table = ''; // Table is empty
+        // HANDLE REGISTERED CALLBACKS, THEN DEFAULT PROCESSING
+        // First process callbacks defined for the given module:
+        if (!empty($module) && empty($url) && array_key_exists($module, self::$customCallbacks['createLink'])) {
+            $callback = self::$customCallbacks['createLink'][$module];
+            $url = self::evaluateCallback($callback, $text, $module, $id, $uuid);
+        }
+        // second (if first step does not yield a match) process callbacks defined for ALL values:
+        if (!empty($module) && empty($url) && array_key_exists('', self::$customCallbacks['createLink'])) {
+            foreach (self::$customCallbacks['createLink'][''] as $callback) {
+                if (empty($url)) {
+                    $url = self::evaluateCallback($callback, $text, $module, $id, $uuid);
                 }
-                return self::createLink($text, $table, $id, $id);
-            case 'role_dependencies':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
-            case 'rooms':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
-            // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
-            //     $url = SecurityUtils::encodeUrl(); break;
-            case 'user_fields':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
-            case 'user_relations': // For user relations, we don't link to the modification of the individual relation, but to the user1
-                // $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $uuid)); break;
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $uuid)); break;
-            case 'user_relation_types':
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_uuid' => $uuid)); break;
+            }
+        }
+        // If none of the callbacks matches, proceed with the default processing...
+        if (empty($url)) {
+            switch ($module) {
+                case 'users': // Fall through
+                case 'user_data':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $uuid)); break;
+                case 'announcements':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $uuid)); break;
+                case 'categories' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/categories.php', array('mode' => 'edit', 'uuid' => $uuid)); break; // Note: the type is no longer needed (only recommended, but we don't have it in the changelog DB)
+                case 'category_report' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php'); break;
+                case 'events' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $uuid)); break;
+                case 'files' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $uuid)); break;
+                case 'folders' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $uuid)); break;
+                case 'forum_topics' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'topic', 'topic_uuid' => $uuid)); break;
+                case 'forum_posts' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'post_edit', 'post_uuid' => $uuid)); break;
+                case 'links' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
+                case 'lists' :
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', array('active_role' => 1, 'list_uuid' => $uuid)); break;
+                case 'list_columns':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', array('active_role' => 1, 'list_uuid' => $uuid)); break;
+                case 'members':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
+                case 'menu':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
+                // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
+                //     $url = SecurityUtils::encodeUrl(); break;
+                case 'photos':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $uuid)); break;
+                // case 'preferences': // There is just one preferences page, but no way to link to individual sections or preference items!
+                //     $url = SecurityUtils::encodeUrl(); break;
+                // case 'registrations':
+                //     $url = SecurityUtils::encodeUrl(); break;
+                case 'roles':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('role_list' => $uuid)); break;
+                case 'roles_rights':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
+                case 'roles_rights_data':
+                    // The log_record_linkid contains the table and the uuid encoded as 'table':'UUID' => split and call Create linke with the new table!
+                    if (strpos($id, ':') !== false) {
+                        // Split into table and UUID
+                        [$table, $id] = explode(':', $id, 2);
+                    } else {
+                        $table = ''; // Table is empty
+                    }
+                    return self::createLink($text, $table, $id, $id);
+                case 'role_dependencies':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
+                case 'rooms':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
+                // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
+                //     $url = SecurityUtils::encodeUrl(); break;
+                case 'user_fields':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
+                case 'user_relations': // For user relations, we don't link to the modification of the individual relation, but to the user1
+                    // $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $uuid)); break;
+                case 'user_relation_types':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_uuid' => $uuid)); break;
+            }
         }
         if ($url != '') {
             return '<a href="'.$url.'">'.$text.'</a>';
@@ -568,10 +692,29 @@ class ChangelogService {
      */
     public static function formatValue($value, $type, $entries = []) {
         global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n;
+        if ($value != '') {
+            $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
+        }
+
+        // HANDLE REGISTERED CALLBACKS, THEN DEFAULT PROCESSING
+        // First process callbacks defined for the given module:
+        if (!empty($type) && array_key_exists($type, self::$customCallbacks['formatValue'])) {
+            $callback = self::$customCallbacks['formatValue'][$type];
+            $val = self::evaluateCallback($callback, $value, $type, $entries);
+            if (!empty($val)) return $val;
+        }
+        // second (if first step does not yield a match) process callbacks defined for ALL values:
+        if (!empty($type) && array_key_exists('', self::$customCallbacks['formatValue'])) {
+            foreach (self::$customCallbacks['formatValue'][''] as $callback) {
+                $val = self::evaluateCallback($callback, $value, $type, $entries);
+                if (!empty($val)) return $val;
+            }
+        }
+        // If none of the callbacks matches, proceed with the default processing...
+
         // if value is empty or null, then do nothing
         if ($value != '') {
             // create html for each field type
-            $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
             $htmlValue = $value;
 
             switch ($type) {
@@ -678,6 +821,14 @@ class ChangelogService {
                     $obj = new Component($gDb, $value);
                     $htmlValue = $obj->readableName();
                     break;
+                case 'TOPIC':
+                    $obj = new Topic($gDb, $value);
+                    $htmlValue = self::createLink($obj->readableName(), 'forum_topics', $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
+                    break;
+                case 'POST':
+                    $obj = new POST($gDb, $value);
+                    $htmlValue = self::createLink($obj->readableName(), 'forum_posts', $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
+                    break;
                 case 'CUSTOM_LIST':
                     $value = $entries[$value]??$value;
                     $htmlValue = '';
@@ -696,9 +847,7 @@ class ChangelogService {
                     }
                     break;
 
-
             }
-
             $value = $htmlValue;
         }
         // special case for type BOOL and no value is there, then show unchecked checkbox
@@ -708,6 +857,62 @@ class ChangelogService {
             }
         }
         return $value;
+    }
+
+    /**
+     * For a given database table and potentially a related object ID, return the type of table for the related object.
+     * In many cases, the related object will have the same type (e.g. menu or folder hierarchy), but for other objects,
+     * the related object has a different type (e.g. a file has the folder as related object, a membership record has the
+     * corresponding role as related, ...)
+     * @param string $table The table of the object
+     * @param string $relatedName The id of the related object. Passed by reference, so this method can adjust the displayed name of the related object!
+     * @return string The table for the related object
+     */
+    public static function getRelatedTable(string $table, string &$relatedName = '') : string {
+        // HANDLE REGISTERED CALLBACKS, THEN DEFAULT PROCESSING
+        // First process callbacks defined for the given module:
+        if (!empty($table) && array_key_exists($table, self::$customCallbacks['getRelatedTable'])) {
+            $callback = self::$customCallbacks['getRelatedTable'][$table];
+            $val = self::evaluateCallback($callback, $table, $relatedName);
+            if (!empty($val)) return $val;
+        }
+        // second (if first step does not yield a match) process callbacks defined for ALL values:
+        if (!empty($table) && array_key_exists('', self::$customCallbacks['getRelatedTable'])) {
+            foreach (self::$customCallbacks['getRelatedTable'][''] as $callback) {
+                $val = self::evaluateCallback($callback, $table, $relatedName);
+                if (!empty($val)) return $val;
+            }
+        }
+        // If none of the callbacks matches, proceed with the default processing...
+
+        switch ($table) {
+            case 'members':
+                return 'roles';
+            case 'roles_rights_data':
+                return 'roles';
+            case 'roles_dependencies':
+                return 'roles';
+            case 'files':
+                return 'folders';
+            case 'forum_posts':
+                return 'forum_topics';
+            case 'forum_topics':
+                return 'forum_posts';
+            case 'list_columns':
+                // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
+                if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {
+                    $relatedName = $fieldStrings[$relatedName]??$relatedName;
+                    if (is_array($relatedName)) {
+                        $relatedName = $relatedName['name']??'-';
+                    }
+                    if (!empty($relatedName)) {
+                        $relatedName = Language::translateIfTranslationStrId($relatedName);
+                    }
+                }
+                return 'user_fields';
+            default:
+        }
+        return $table;
     }
 
 
@@ -733,6 +938,22 @@ class ChangelogService {
         if ($user->editWeblinksRight())
             $tablesPermitted[] = 'links';
 
+        // HANDLE REGISTERED CALLBACKS to add additional tables
+        // First process callbacks defined for the given module:
+        $callbacks = self::$customCallbacks['getPermittedTables'];
+        if (array_key_exists('', $callbacks)) {
+            $callbacks = array_merge($callbacks, $callbacks['']);
+            unset($callbacks['']);
+        }
+        foreach ($callbacks as $callback) {
+            $val = self::evaluateCallback($callback, $user);
+            if (is_array($val)) {
+                $tablesPermitted = array_merge($tablesPermitted, $val);
+            } elseif (!empty($val)) {
+                $tablesPermitted[] = $val;
+            }
+        }
+
         return $tablesPermitted;
     }
 
@@ -755,10 +976,11 @@ class ChangelogService {
                 $tables = explode(',', $table);
             }
 
-            $allTables = array_keys(self::getTableLabel());
-            $isLogged = array_map(function($t) use ($allTables) {
+            $isLogged = array_map(function($t) {
                 global $gSettingsManager;
-                if (in_array($t,$allTables)) {
+                if (in_array($t, ChangelogService::$noLogTables)) {
+                    return false;
+                } elseif (!empty(ChangelogService::getTableLabel($t))) {
                     return $gSettingsManager->getBool('changelog_table_'.$t);
                 } else {
                     return $gSettingsManager->getBool('changelog_table_others');
@@ -784,27 +1006,8 @@ class ChangelogService {
         }
 
         if ($gSettingsManager->getInt('changelog_module_enabled') == 1 ||
-            ($gSettingsManager->getInt('changelog_module_enabled') == 2 && $gCurrentUser->isAdministrator())) {
-
-            // Changelog enabled at all
-            // show link to view profile field change history if change history is enabled for at least one of the tables.
-            // Unknown tables are handled by the changelog_table_others preferences key!
-            if (is_array($table)) {
-                $tables = $table;
-            } else {
-                $tables = explode(',', $table);
-            }
-
-            $allTables = array_keys(self::getTableLabel());
-            $isLogged = array_map(function($t) use ($allTables) {
-                global $gSettingsManager;
-                if (in_array($t,$allTables)) {
-                    return $gSettingsManager->getBool('changelog_table_'.$t);
-                } else {
-                    return $gSettingsManager->getBool('changelog_table_others');
-                }
-            }, $tables);
-            return in_array(true, $isLogged);
+            ($gSettingsManager->getInt('changelog_module_enabled') == 2 && $user->isAdministrator())) {
+            return self::isTableLogged($table);
         } else {
             return false;
         }
@@ -872,3 +1075,64 @@ class ChangelogService {
 
 
 }
+
+
+/*******************************************************
+ * EXAMPLE CODE for the callback mechanism:
+ *    The forum changelog can also be implemented by the following code, which can be called by a third party extension somewhere in its
+ *    initialization code (must be executed at least before a changelog page is displayed and before the third-party extension writes
+ *    data to the database!)
+ *******************************************************
+
+## Translation of database tables
+ChangelogService::registerCallback('getTableLabelArray', 'forum_topics', 'SYS_FORUM_TOPIC');
+ChangelogService::registerCallback('getTableLabelArray', 'forum_posts', 'SYS_FORUM_POST');
+
+## Translations and type definitions of database columns
+ChangelogService::registerCallback('getFieldTranslations', '', [
+    'fot_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
+    'fot_fop_id_first_post' =>     array('name' => 'SYS_FORUM_POST', 'type' => 'POST'),
+    'fot_title' =>                 'SYS_TITLE',
+    'fop_text' =>                  'SYS_TEXT',
+    'fop_fot_id' =>                array('name' => 'SYS_FORUM_TOPIC', 'type' => 'TOPIC')
+]);
+
+## Formatting of new database column types (in many cases not needed)
+ChangelogService::registerCallback('formatValue', 'TOPIC', function($value, $type, $entries = []) {
+    global $gDb;
+    if (empty($value)) return '';
+    $obj = new Topic($gDb, $value??0);
+    return ChangelogService::createLink($obj->readableName(), 'forum_topics',
+            $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
+});
+ChangelogService::registerCallback('formatValue', 'POST', function($value, $type, $entries = []) {
+    global $gDb;
+    if (empty($value)) return '';
+    $obj = new POST($gDb, $value??0);
+    return ChangelogService::createLink($obj->readableName(), 'forum_posts',
+            $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
+});
+
+## Create HTML links to the object's list view and edit pages
+ChangelogService::registerCallback('createLink', 'forum_topics', function(string $text, string $module, int|string $id, string $uuid = '') {
+    return SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php',
+                array('mode' => 'topic', 'topic_uuid' => $uuid));
+});
+ChangelogService::registerCallback('createLink', 'forum_posts', function(string $text, string $module, int|string $id, string $uuid = '') {
+    return SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php',
+                array('mode' => 'post_edit', 'post_uuid' => $uuid));
+});
+
+## Object types of related objects (if object relations are used at all!)
+ChangelogService::registerCallback('getRelatedTable', 'forum_topics', 'forum_posts');
+ChangelogService::registerCallback('getRelatedTable', 'forum_posts', 'forum_topics');
+
+
+## Create Entity-derived objects to create headlines with proper object names
+ChangelogService::registerCallback('getObjectForTable', 'forum_topics', function() {global $gDb; return new Topic($gDb);});
+ChangelogService::registerCallback('getObjectForTable', 'forum_posts', function() {global $gDb; return new Post($gDb);});
+
+## Enable per-user detection of access permissions to the tables (based on user's role permission); Admin is always allowed
+ChangelogService::registerCallback('getPermittedTables', '', function(User $user) { if ($user->administrateForum()) return ['forum_topics', 'forum_posts']; });
+
+*/

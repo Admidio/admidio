@@ -161,8 +161,11 @@ class Post extends Entity
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(), ['fop_fot_id']);
-    }
+        return array_merge(parent::getIgnoredLogColumns(),
+            ['fop_fot_id'],
+            ($this->newRecord)?[$this->columnPrefix.'_text']:[]
+        );
+     }
 
     /**
      * Adjust the changelog entry for this db record: Add the parent forum topic as a related object

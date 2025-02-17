@@ -5,6 +5,7 @@ namespace Admidio\UI\Presenter;
 use Admidio\Forum\Entity\Post;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages of the registration.
@@ -77,6 +78,9 @@ class ForumPostPresenter extends PagePresenter
             ),
             $this
         );
+        global $gCurrentUser;
+        ChangelogService::displayHistoryButton($this, 'forum', 'forum_posts',
+                $this->postUUID !== '' && $gCurrentUser->administrateForum(), ['uuid' => $this->postUUID]);
         $form->addEditor(
             'fop_text',
             $gL10n->get('SYS_TEXT'),

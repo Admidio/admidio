@@ -23,23 +23,8 @@ use Admidio\Changelog\Service\ChangelogService;
  */
 class LogChanges extends Entity
 {
-    /**
-     * Static(global) list of tables, which should not be included in the changelog 
-     * @var array
-     */
-    public static array $noLogTables = [
-        'auto_login', 'components', 'id', 'log_changes', 
-        'messages', 'messages_attachments', 'messages_content', 'messages_recipients', 
-        'registrations',
-        'sessions'];
     
     
-    /**
-     * Static(global) list of edit pages (depending on the table)
-     * @var array
-     */
-    public static array $editURLs = [];
-
     /**
      *  The DB table this record refers to. A lot of functionality depends on the underlying table (e.g. links to the original object, display strings, etc.)
      * @var string
@@ -91,12 +76,6 @@ class LogChanges extends Entity
                 break;
             case 'folders':
                 $this->connectAdditionalTable(TBL_FOLDERS, 'fol_id', 'log_record_id');
-                break;
-            case 'guestbook':
-                $this->connectAdditionalTable(TBL_GUESTBOOK, 'gbo_id', 'log_record_id');
-                break;
-            case 'guestbook_comments':
-                $this->connectAdditionalTable(TBL_GUESTBOOK_COMMENTS, 'gbc_id', 'log_record_id');
                 break;
             case 'links':
                 $this->connectAdditionalTable(TBL_LINKS, 'lnk_id', 'log_record_id');
@@ -302,7 +281,7 @@ class LogChanges extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if (in_array($this->objectTableName, static::$noLogTables) ||
+        if (in_array($this->objectTableName, ChangelogService::$noLogTables) ||
             !ChangelogService::isTableLogged($this->objectTableName)) {
             return false;
         }
