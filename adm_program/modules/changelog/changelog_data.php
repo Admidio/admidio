@@ -116,7 +116,7 @@ try {
         
     // create a user object. Will fill it later if we encounter a user id
     $user = new User($gDb, $gProfileFields);
-    $userUUID = null;
+    $userUuid = null;
     // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
     $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ['users', 'user_data', 'user_relations', 'members'])));
     if ($isUserLog) {
@@ -126,7 +126,7 @@ try {
             $user->readDataById($getId);
         }
         if (!$user->isNewRecord()) {
-            $userUUID = $user->getValue('usr_uuid');
+            $userUuid = $user->getValue('usr_uuid');
         }
     }
 
@@ -352,7 +352,7 @@ try {
             // NO access to this record allowed -> Set flag to show warning about records being 
             // hidden due to insufficient permissions
             if (!$allowRecordAccess) {
-                ++$recordHidden;
+                ++$recordsHidden;
                 continue;
             }
         }
@@ -460,8 +460,11 @@ try {
     }
 
     if ($recordsHidden > 0) {
-        $jsonArray['notice'] = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
-            $gL10n->get('SYS_LOG_RECORDS_HIDDEN') . '</div>';
+        $jsonArray['notice']['DT_notice'] = '<i class="bi bi-exclamation-circle-fill"></i>' . 
+            $gL10n->get('SYS_LOG_RECORDS_HIDDEN', [$recordsHidden]);
+    } else {
+        // Make sure the notice is hidden!
+        $jsonArray['notice']['DT_notice'] = '';
     }
 
     echo json_encode($jsonArray);
