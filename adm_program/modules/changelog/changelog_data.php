@@ -1,11 +1,40 @@
 <?php
 /**
  ***********************************************************************************************
- * Show history of generic database record changes
+ * Server side script for Datatables to return the requested the list of change history records
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ *
+ ***********************************************************************************************
+ * 
+ * 
+ * This script will read all requested change history fecords from the database. It is optimized to
+ * work with the javascript DataTables and will return the data in json format.
+ *
+ * **Code example**
+ * ```
+ * // the returned json data string
+ * {
+ *    "draw":1,
+ *    "recordsTotal":"547",
+ *    "data": [  [ 1,
+ *                 "tablename",
+ *                 "1",
+ *                 "Lastname, Firstname",
+ *                 "fd3e1942-1285-4fe0-b3c0-eb3c5cebfad0",
+ *                 "",
+ *                 "",
+ *                 "field_id",
+ *                 "field_name",
+ *                 "value_old",
+ *                 "value_new",
+ *                [ ... ],
+ *             ],
+ *    "recordsFiltered":"147"
+ * }
+ * ```
  *
  * Parameters:
  *
@@ -17,24 +46,32 @@
  *                    if no date information is delivered
  * filter_date_to   : is set to 31.12.9999,
  *                    if no date information is delivered
+ * draw    - Number to validate the right inquiry from DataTables.
+ * start   - Paging first record indicator. This is the start point in the current data set
+ *           (0 index based - i.e. 0 is the first record).
+ * length  - Number of records that the table can display in the current draw. It is expected that
+ *           the number of records returned will be equal to this number, unless the server has
+ *           fewer records to return. Note that this can be -1 to indicate that all records should
+ *           be returned (although that negates any benefits of server-side processing!)
+ * search[value] - Global search value.
+ * 
+ *
  ***********************************************************************************************
  */
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Infrastructure\Database;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
-use Admidio\Roles\Entity\Role;
 
 
 
 
 
 try {
-    require_once(__DIR__ . '/../system/common.php');
-    require(__DIR__ . '/../system/login_valid.php');
+    require_once(__DIR__ . '/../../system/common.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 
     // calculate default date from which the profile fields history should be shown
     $filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
@@ -49,7 +86,21 @@ try {
     $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
+
+    # Datatables parameters
+    $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
+    $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
+    $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
+    $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
     
+
+    $jsonArray = array('draw' => (int)$getDraw);
+
+    header('Content-Type: application/json');
+
+
+
+
     $haveID = !empty($getId) || !empty($getUuid);
 
     // named array of permission flag (true/false/"user-specific" per table)
@@ -89,65 +140,11 @@ try {
         if (($userUuid === '' && !$gCurrentUser->editUsers())
             || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
 //                throw new Exception('SYS_NO_RIGHTS');
-                $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+                $gMessage->show(content: $gL10n->get('SYS_NO_RIGHTS'));
        }
     }
 
 
-
-    // Page Headline: Depending on the tables and ID/UUID/RelatedIDs, we have different cases:
-    //  * Userlog (tables users,user_data,members): Either "Change history of NAME" or "Change history of user data and memberships" (if no ID/UUID)
-    //  * No object ID/UUIDs given: "Change history: Table description 1[, Table description 2, ...]" or "Change history"  (if no tables given)
-    //  * Only one table (table column will be hidden): "Change history: OBJECTNAME (Table description)"
-    //  * 
-    $tableTitles = array_map([ChangelogService::class, 'getTableLabel'], $getTables);
-    // set headline of the script
-    if ($isUserLog && $haveID) {
-        $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->readableName()));
-    } elseif ($isUserLog) {
-        $headline = $gL10n->get('SYS_CHANGE_HISTORY_USERDATA');
-    } elseif (empty($getUuid) && empty($getId) && empty($getRelatedId)) {
-        if (count($tableTitles) > 0) {
-            $headline = $gL10n->get('SYS_CHANGE_HISTORY_GENERIC', [implode(', ', $tableTitles)]);
-        } else {
-            $headline = $gL10n->get('SYS_CHANGE_HISTORY');
-        }
-    } else {
-        $objName = '';
-        $useTable = $getTables[0]??'users';
-        $object = ChangelogService::getObjectForTable($useTable);
-        if ($useTable == 'members') {
-            // Memberships are special-cased, as the membership Role UUID is stored as relatedID
-            $object = new Role($gDb);
-            $object->readDataByUuid($getRelatedId);
-        }
-        // We have an ID or UUID and/or a relatedID -> Object depends on the table(s)!
-        if (!empty($object)) {
-            if ($useTable == 'members') {
-                // already handled
-            } elseif (!empty($getUuid)) {
-                $object->readDataByUuid($getUuid);
-            } elseif (!empty($getId)) {
-                $object->readDataById($getId);
-            }
-            $objName = $object->readableName();
-        }
-        if (count($getTables) == 0) {
-            if (empty($objName)) {
-                $headline = $gL10n->get('SYS_CHANGE_HISTORY');
-            } else {
-                $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', [$objName]);
-            }
-        } else {
-            $headline = $gL10n->get('SYS_CHANGE_HISTORY_GENERIC2', [$objName, implode(', ', $tableTitles)]);
-        }
-    }
-
-    // add page to navigation history
-    $gNavigation->addUrl(CURRENT_URL, $headline);
-
-    // add page to navigation history
-    $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // filter_date_from and filter_date_to can have different formats
     // now we try to get a default format for intern use and html output
@@ -180,6 +177,55 @@ try {
     $dateToHtml = $objDateTo->format($gSettingsManager->getString('system_date'));
 
 
+    // create order statement
+    $orderCondition = '';
+    // $orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
+
+    // if (array_key_exists('order', $_GET)) {
+    //     foreach ($_GET['order'] as $order) {
+    //         if (is_numeric($order['column'])) {
+    //             if ($orderCondition === '') {
+    //                 $orderCondition = ' ORDER BY ';
+    //             } else {
+    //                 $orderCondition .= ', ';
+    //             }
+
+    //             if (strtoupper($order['dir']) === 'ASC') {
+    //                 $orderCondition .= $orderColumns[$order['column']] . ' ASC ';
+    //             } else {
+    //                 $orderCondition .= $orderColumns[$order['column']] . ' DESC ';
+    //             }
+    //         }
+    //     }
+    // } else {
+    // }
+
+    // create search conditions
+    $searchCondition = '';
+    $queryParamsSearch = array();
+    // $searchColumns = array('log_table', 'log_record_name', 'log_related_name', 'log_field', 'log_field_name', 'log_action', 'log_value_old', 'log_value_new', 'create_first_name', 'create_last_name');
+    $searchColumns = array('table_name', 'name', 'related_name', 'field', 'field_name', 'action', 'value_old', 'value_new', 'create_first_name', 'create_last_name');
+
+    if ($getSearch !== '' && count($searchColumns) > 0) {
+        $searchString = explode(' ', $getSearch);
+
+        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+            $searchValue = ' ?::text ';
+        } else {
+            // mysql
+            $searchValue = ' ? ';
+        }
+
+        foreach ($searchString as $searchWord) {
+            $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', array_map(fn($col) => "COALESCE($col, '')", $searchColumns)) . ') LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
+            $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
+        }
+
+        $searchCondition = ' WHERE ' . substr($searchCondition, 4);
+    }
+
+
+
     // create sql conditions
     $sqlConditions = '';
     $queryParamsConditions = array();
@@ -205,7 +251,7 @@ try {
 
 
 
-    $sql = 'SELECT log_id as id, log_table as table_name, 
+    $mainSql = 'SELECT log_id as id, log_table as table_name, 
         log_record_id as record_id, log_record_uuid as uuid, log_record_name as name, log_record_linkid as link_id,
         log_related_id as related_id, log_related_name as related_name,
         log_field as field, log_field_name as field_name, 
@@ -228,30 +274,46 @@ try {
         ' . $sqlConditions . '
         ORDER BY log_id DESC';
 
-    $queryParams = [
+    $queryParams = array_merge([
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
         $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
         $dateFromIntern . ' 00:00:00',
         $dateToIntern . ' 23:59:59',
-    ];
+    ], $queryParamsConditions);
 
-
-
-
-    $fieldHistoryStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $queryParamsConditions));
-
-    if ($fieldHistoryStatement->rowCount() === 0) {
-        // message is shown, so delete this page from navigation stack
-        $gNavigation->deleteLastUrl();
-
-        // show message if there were no changes
-        $gMessage->show($gL10n->get('SYS_NO_CHANGES_LOGGED'));
+    $limitCondition = '';
+    if ($getLength > 0) {
+        $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
     }
 
-    // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-history', $headline);
-    $page->setContentFullWidth();
-    
+    if ($getSearch === '') {
+        // no search condition entered then return all records in dependence of order, limit and offset
+        $sql = $mainSql . $orderCondition . $limitCondition;
+    } else {
+        $sql = 'SELECT *
+              FROM (' . $mainSql . ') AS entries
+               ' . $searchCondition
+            . $orderCondition
+            . $limitCondition;
+    }
+    $queryParamsMain = array_merge($queryParams, $queryParamsSearch);
+    $logStatement = $gDb->queryPrepared($sql, $queryParamsMain); // TODO add more params
+
+    $rowNumber = $getStart; // count for every row
+
+    // get count of all members and store into json
+    $countSql = 'SELECT COUNT(*) AS count_total FROM (' . $mainSql . ') as entries ';
+    $countTotalStatement = $gDb->queryPrepared($countSql, $queryParams); // TODO add more params
+    $jsonArray['recordsTotal'] = (int)$countTotalStatement->fetchColumn();
+
+    $jsonArray['data'] = array();
+
+
+
+
+
+    $fieldHistoryStatement = $gDb->queryPrepared($sql, $queryParamsMain);
+
     // Logic for hiding certain columns:
     // If we have only one table name given, hide the table column
     // If we view the user profile field changes page, hide the column, too
@@ -264,56 +326,11 @@ try {
     $noShowRelatedTables = ['user_fields', 'users', 'user_data'];
 
 
-    $form = new FormPresenter(
-        'adm_navbar_filter_form',
-        'sys-template-parts/form.filter.tpl',
-        ADMIDIO_URL . FOLDER_MODULES . '/changelog.php',
-        $page,
-        array('type' => 'navbar', 'setFocus' => false)
-    );
-
-    // create filter menu with input elements for start date and end date
-    $form->addInput('table', '', $getTable, array('property' => FormPresenter::FIELD_HIDDEN));
-    $form->addInput('uuid', '', $getUuid, array('property' => FormPresenter::FIELD_HIDDEN));
-    $form->addInput('id', '', $getId, array('property' => FormPresenter::FIELD_HIDDEN));
-    $form->addInput('related_id', '', $getRelatedId, array('property' => FormPresenter::FIELD_HIDDEN));
-    $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
-    $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
-    $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
-    $form->addToHtmlPage();
-
-    $table = new HtmlTable('history_table', $page, true, true);
-
-
-    /* For now, simply show all column of the changelog table. As time permits, we can improve this by hiding unneccessary columns and by better naming columns depending on the table.
-     * 
-     * Columns to be displayed / hidden:
-     *   0. If there is only one value in the table column, hide it and display it in the title of the page.
-     *   1. If there is a single ID or UUID, the record name is not displayed. It should be shown in the title of the page.
-     *   2. If there is a single related-to ID, and the table is memberships, the role name should already be displayed in the title, so don't show it again.
-     *   3. If none of the entries have a related ID, hide the related ID column.
-     */
-    $columnHeading = array();
-
-    $table->setDatatablesOrderColumns(array(array(8, 'desc')));
-    if ($showTableColumn) {
-        $columnHeading[] = $gL10n->get('SYS_TABLE');
-    }
-    $columnHeading[] = $gL10n->get('SYS_NAME');
-    if ($showRelatedColumn) {
-        $columnHeading[] = $gL10n->get('SYS_RELATED_TO');
-    }
-    $columnHeading[] = $gL10n->get('SYS_FIELD');
-    $columnHeading[] = $gL10n->get('SYS_NEW_VALUE');
-    $columnHeading[] = $gL10n->get('SYS_PREVIOUS_VALUE');
-    $columnHeading[] = $gL10n->get('SYS_EDITED_BY');
-    $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
-
-    $table->addRowHeadingByArray($columnHeading);
-
     $fieldStrings = ChangelogService::getFieldTranslations();
-    $recordHidden = false;
-    while ($row = $fieldHistoryStatement->fetch()) {
+    $recordsHidden = 0;
+
+    while ($row = $fieldHistoryStatement->fetch(PDO::FETCH_BOTH)) {
+        ++$rowNumber;
         $rowTable = $row['table_name'];
 
         $allowRecordAccess = false;
@@ -335,7 +352,7 @@ try {
             // NO access to this record allowed -> Set flag to show warning about records being 
             // hidden due to insufficient permissions
             if (!$allowRecordAccess) {
-                $recordHidden = true;
+                ++$recordHidden;
                 continue;
             }
         }
@@ -345,7 +362,8 @@ try {
 
 
         $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
-        $columnValues    = array();
+        $columnValues    = array('DT_RowId' => 'row_log_' . $row['id'], '0' => $rowNumber);
+        $columnNumber    = 1;
 
         // 1. Column showing DB table name (only if more then one tables are shown; One table should be displayed in the headline!)
         if ($showTableColumn) {
@@ -421,17 +439,34 @@ try {
         $columnValues[] = ChangelogService::createLink($row['create_last_name'].', '.$row['create_first_name'], 'users', 0, $row['uuid_usr_create']);
         // $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'..'</a>';
         $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
-        $table->addRowByArray($columnValues);
+        $jsonArray['data'][] = $columnValues;
     }
 
-    
-    // If any of the records was hidden due to insufficient permissions, add a warning notice>
-    if ($recordHidden) {
-        $page->addHtml('<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
-            $gL10n->get('SYS_LOG_RECORDS_HIDDEN') . '</div>');
+    // set count of filtered records
+    if ($getSearch !== '') {
+        if ($rowNumber < $getStart + $getLength) {
+            $jsonArray['recordsFiltered'] = $rowNumber;
+        } else {
+            // read count of all filtered records without limit and offset
+            $sql = 'SELECT COUNT(*) AS count
+                  FROM (' . $mainSql . ') AS members
+                       ' . $searchCondition;
+            $countFilteredStatement = $gDb->queryPrepared($sql, $queryParams);
+
+            $jsonArray['recordsFiltered'] = (int)$countFilteredStatement->fetchColumn();
+        }
+    } else {
+        $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
     }
-    $page->addHtml($table->show());
-    $page->show();
+
+    if ($recordsHidden > 0) {
+        $jsonArray['notice'] = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
+            $gL10n->get('SYS_LOG_RECORDS_HIDDEN') . '</div>';
+    }
+
+    echo json_encode($jsonArray);
 } catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+    $jsonArray['error'] = $e->getMessage();
+    echo json_encode($jsonArray);
+    exit();
 }
