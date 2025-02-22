@@ -21,6 +21,7 @@
  */
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Language;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
@@ -30,11 +31,11 @@ use Admidio\Roles\Entity\Role;
 
 
 
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 
 try {
-    require_once(__DIR__ . '/../system/common.php');
-    require(__DIR__ . '/../system/login_valid.php');
 
     // calculate default date from which the profile fields history should be shown
     $filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
@@ -65,7 +66,7 @@ try {
         
     // create a user object. Will fill it later if we encounter a user id
     $user = new User($gDb, $gProfileFields);
-    $userUUID = null;
+    $userUuid = null;
     // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
     $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ['users', 'user_data', 'user_relations', 'members'])));
     if ($isUserLog) {
@@ -75,7 +76,7 @@ try {
             $user->readDataById($getId);
         }
         if (!$user->isNewRecord()) {
-            $userUUID = $user->getValue('usr_uuid');
+            $userUuid = $user->getValue('usr_uuid');
         }
     }
 
@@ -180,74 +181,6 @@ try {
     $dateToHtml = $objDateTo->format($gSettingsManager->getString('system_date'));
 
 
-    // create sql conditions
-    $sqlConditions = '';
-    $queryParamsConditions = array();
-
-    if (!is_null($getTables) && count($getTables) > 0) {
-        // Add each table as a separate condition, joined by OR:
-        $sqlConditions .= ' AND ( ' .  implode(' OR ', array_map(fn($tbl) => 'log_table = ?', $getTables)) . ' ) ';
-        $queryParamsConditions = array_merge($queryParamsConditions, $getTables);
-    }
-
-    if (!is_null($getId) && $getId > 0) {
-        $sqlConditions .= ' AND (log_record_id = ? )';
-        $queryParamsConditions[] = $getId;
-    }
-    if (!is_null($getUuid) && $getUuid) {
-        $sqlConditions .= ' AND (log_record_uuid = ? )';
-        $queryParamsConditions[] = $getUuid;
-    }
-    if (!is_null($getRelatedId) && $getRelatedId > 0) {
-        $sqlConditions .= ' AND (log_related_id = ? )';
-        $queryParamsConditions[] = $getRelatedId;
-    }
-
-
-
-    $sql = 'SELECT log_id as id, log_table as table_name, 
-        log_record_id as record_id, log_record_uuid as uuid, log_record_name as name, log_record_linkid as link_id,
-        log_related_id as related_id, log_related_name as related_name,
-        log_field as field, log_field_name as field_name, 
-        log_action as action,
-        log_value_new as value_new, log_value_old as value_old, 
-        log_usr_id_create as usr_id_create, usr_create.usr_uuid as uuid_usr_create, create_last_name.usd_value AS create_last_name, create_first_name.usd_value AS create_first_name, 
-        log_timestamp_create as timestamp
-        FROM ' . TBL_LOG . ' 
-        -- Extract data of the creating user...
-        INNER JOIN '.TBL_USERS.' usr_create 
-                ON usr_create.usr_id = log_usr_id_create
-        INNER JOIN '.TBL_USER_DATA.' AS create_last_name
-                ON create_last_name.usd_usr_id = log_usr_id_create
-               AND create_last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-        INNER JOIN '.TBL_USER_DATA.' AS create_first_name
-                ON create_first_name.usd_usr_id = log_usr_id_create
-               AND create_first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-        WHERE
-               log_timestamp_create BETWEEN ? AND ? -- $dateFromIntern and $dateToIntern
-        ' . $sqlConditions . '
-        ORDER BY log_id DESC';
-
-    $queryParams = [
-        $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-        $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-        $dateFromIntern . ' 00:00:00',
-        $dateToIntern . ' 23:59:59',
-    ];
-
-
-
-
-    $fieldHistoryStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $queryParamsConditions));
-
-    if ($fieldHistoryStatement->rowCount() === 0) {
-        // message is shown, so delete this page from navigation stack
-        $gNavigation->deleteLastUrl();
-
-        // show message if there were no changes
-        $gMessage->show($gL10n->get('SYS_NO_CHANGES_LOGGED'));
-    }
-
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-history', $headline);
     $page->setContentFullWidth();
@@ -267,7 +200,7 @@ try {
     $form = new FormPresenter(
         'adm_navbar_filter_form',
         'sys-template-parts/form.filter.tpl',
-        ADMIDIO_URL . FOLDER_MODULES . '/changelog.php',
+        ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php',
         $page,
         array('type' => 'navbar', 'setFocus' => false)
     );
@@ -282,7 +215,7 @@ try {
     $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
     $form->addToHtmlPage();
 
-    $table = new HtmlTable('history_table', $page, true, true);
+    $table = new HtmlTable('history_table', $page, true, true, 'table table-condensed');
 
 
     /* For now, simply show all column of the changelog table. As time permits, we can improve this by hiding unneccessary columns and by better naming columns depending on the table.
@@ -294,8 +227,9 @@ try {
      *   3. If none of the entries have a related ID, hide the related ID column.
      */
     $columnHeading = array();
+    $columnHeading[] = $gL10n->get('SYS_ABR_NO');
 
-    $table->setDatatablesOrderColumns(array(array(8, 'desc')));
+    // $table->setDatatablesOrderColumns(array(array(8, 'desc')));
     if ($showTableColumn) {
         $columnHeading[] = $gL10n->get('SYS_TABLE');
     }
@@ -311,125 +245,27 @@ try {
 
     $table->addRowHeadingByArray($columnHeading);
 
-    $fieldStrings = ChangelogService::getFieldTranslations();
-    $recordHidden = false;
-    while ($row = $fieldHistoryStatement->fetch()) {
-        $rowTable = $row['table_name'];
+    $filterFields = array(
+        'table' => $getTable,
+        'uuid' => $getUuid,
+        'id' => $getId,
+        'related_id' => $getRelatedId,
+        'filter_date_from' => $getDateFrom,
+        'filter_date_to' => $getDateTo
+    );
 
-        $allowRecordAccess = false;
-        // First step: Check view permissions to that particular log entry:
-        if ($accessAll || in_array($rowTable, $tablesPermitted)) {
-            $allowRecordAccess = true;
-        } else {
-            // no global access permissions to that particular data/table
-            // Some objects have more fine-grained permissions (e.g. each group can have access permissions
-            // based on the user's role -> the calling user might have access to one particular role, but not in general)
-            if (in_array($rowTable, ['users', 'user_data', 'user_relations', 'members'])) {
-                // user UUID is available as uuid; current user has no general access to profile data, but might have permissions to this specific user (due to fole permissions)
-                $rowUser = new User($gDb, $gProfileFields);
-                $rowUser->readDataByUuid($row['uuid']);
-                if ($gCurrentUser->hasRightEditProfile($rowUser)) {
-                    $allowRecordAccess = true;
-                }
-            }
-            // NO access to this record allowed -> Set flag to show warning about records being 
-            // hidden due to insufficient permissions
-            if (!$allowRecordAccess) {
-                $recordHidden = true;
-                continue;
-            }
-        }
-
-        $fieldInfo = $row['field_name'];
-        $fieldInfo = array_key_exists($fieldInfo, $fieldStrings) ? $fieldStrings[$fieldInfo] : $fieldInfo;
+    $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog_data.php', $filterFields));
+//    $table->setColumnAlignByArray($columnAlignment);
+    $table->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+    $table->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
+    // $table->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
+    $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
 
-        $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
-        $columnValues    = array();
-
-        // 1. Column showing DB table name (only if more then one tables are shown; One table should be displayed in the headline!)
-        if ($showTableColumn) {
-            $columnValues[] = ChangelogService::getTableLabel($row['table_name']);
-        }
 
 
-        // 2. Name column: display name and optionally link it with the linkID or the recordID 
-        //    Some tables need special-casing, though
-        $rowLinkId = ($row['link_id']>0) ? $row['link_id'] : $row['record_id'];
-        $rowName = $row['name'] ?? '';
-        $rowName = Language::translateIfTranslationStrId($rowName);
-        if ($row['table_name'] == 'members') {
-            $columnValues[] = ChangelogService::createLink($rowName, 'users', $rowLinkId, $row['uuid'] ?? '');
-        } else {
-            $columnValues[] = ChangelogService::createLink($rowName, $row['table_name'], $rowLinkId, $row['uuid'] ?? '');
-        }
 
-        // 3. Optional Related-To column, e.g. for group memberships, we show the user as main name and the group as related
-        //    Similarly, files/folders, organizations, guestbook comments, etc. show their parent as related
-        if ($showRelatedColumn) {
-            $relatedName = $row['related_name'];
-            if (!empty($relatedName)) {
-                $relatedTable = ChangelogService::getRelatedTable($row['table_name'], $relatedName);
-                $relID = 0;
-                $relUUID = '';
-                $rid = $row['related_id'];
-                if (empty($rid)) {
-                    // do nothing
-                    $columnValues[] = $relatedName;
-                } elseif (ctype_digit($rid)) { // numeric related_ID -> Interpret it as ID
-                    $relID = (int)$row['related_id'];
-                    $columnValues[] = ChangelogService::createLink($relatedName, $relatedTable, $relID, $relUUID);
-                } else { // non-numeric related_ID -> Interpret it as UUID
-                    $relUUID = $row['related_id'];
-                    $columnValues[] = ChangelogService::createLink($relatedName, $relatedTable, $relID, $relUUID);
-                }
-            } else {
-                $columnValues[] = '';
-            }
-        }
-
-        // 4. The field that was changed. For record creation/deletion, show an indicator, too.
-        if ($row['action'] == "DELETED") {
-            $columnValues[] = '<em>['.$gL10n->get('SYS_DELETED').']</em>';
-        } elseif ($row['action'] == 'CREATED') {
-            $columnValues[] = '<em>['.$gL10n->get('SYS_CREATED').']</em>';
-        } elseif (!empty($fieldInfo)) {
-            // Note: Even for user fields, we don't want to use the current user field name from the database, but the name stored in the log table from the time the change was done!.
-            $fieldName = (is_array($fieldInfo) && isset($fieldInfo['name'])) ? $fieldInfo['name'] : $fieldInfo;
-            $columnValues[] = Language::translateIfTranslationStrId($fieldName); // TODO_RK: Use field_id to link to the field -> Target depends on the table!!!!
-        } else {
-            $columnValues[] = '';
-        }
-
-
-        // 5. Show new and old values; For some tables we know further details about formatting
-        $valueNew = $row['value_new'];
-        $valueOld = $row['value_old'];
-        if ($row['table_name'] == 'user_data') {
-            // Format the values depending on the user field type:
-            $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueNew);
-            $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueOld);
-        } elseif (is_array($fieldInfo) && isset($fieldInfo['type'])) {
-            $valueNew = ChangelogService::formatValue($valueNew, $fieldInfo['type'], $fieldInfo['entries']??[]);
-            $valueOld = ChangelogService::formatValue($valueOld, $fieldInfo['type'], $fieldInfo['entries']??[]);
-        }
-
-        $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';
-        $columnValues[] = (!empty($valueOld)) ? $valueOld : '&nbsp;';
-
-        // 6. User and date of the change
-        $columnValues[] = ChangelogService::createLink($row['create_last_name'].', '.$row['create_first_name'], 'users', 0, $row['uuid_usr_create']);
-        // $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'..'</a>';
-        $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
-        $table->addRowByArray($columnValues);
-    }
-
-    
-    // If any of the records was hidden due to insufficient permissions, add a warning notice>
-    if ($recordHidden) {
-        $page->addHtml('<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
-            $gL10n->get('SYS_LOG_RECORDS_HIDDEN') . '</div>');
-    }
+    $page->addHtml('<div class="alert alert-danger form-alert" id="DT_notice" style="display: none;"></div>');
     $page->addHtml($table->show());
     $page->show();
 } catch (Exception $e) {

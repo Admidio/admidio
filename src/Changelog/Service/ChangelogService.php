@@ -1080,7 +1080,7 @@ class ChangelogService {
         $page->addPageFunctionsMenuItem(
             "menu_item_{$area}_change_history",
             $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog.php', array_merge(array('table' => implode(',',$table)), $params)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)),
             'bi-clock-history'
         );
     }

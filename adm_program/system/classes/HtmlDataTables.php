@@ -154,6 +154,16 @@ class HtmlDataTables
                             last = group;
                         }
                     });
+
+                    if (settings.json && settings.json.notice) {
+                        $.each(settings.json.notice, function (key, value) {
+                            if (value.trim() !== \'\') {
+                                $(\'#\' + key).text(value).show();
+                            } else {
+                                $(\'#\' + key).hide();
+                            }
+                        });
+                    }
                 }';
             $javascriptGroupFunction = '
                 // Order by the grouping
@@ -165,6 +175,20 @@ class HtmlDataTables
                         admidioTable_' . $this->id . '.order([' . $this->groupedColumn . ', "asc"]).draw();
                     }
                 });';
+        } else {
+            $this->datatablesInitParameters[] = '"drawCallback": function(settings) {
+                    if (settings.json && settings.json.notice) {
+                        // Iterate through the notice object
+                        $.each(settings.json.notice, function (key, value) {
+                            if (value.trim() !== \'\') {
+                                $(\'#\' + key).html(value).show();
+                            } else {
+                                $(\'#\' + key).hide();
+                            }
+                        });
+                    }
+                }';
+
         }
 
         // if columnDefs were defined then create a comma separated string with all elements of the array
