@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             {foreach $list as $row}
-                <tr id="row_{$row.id}">
+                <tr id="row_{$row.uuid}">
                     <td><i class="{$row.icon}" data-bs-toggle="tooltip" title="{$row.title}"></i></td>
                     <td style="word-break: break-word;"><a href="{$row.url}">{$row.name}</a>
                         {if strlen($row.description) > 0}
@@ -39,9 +39,9 @@
                                 {/foreach}
                             </span>
                             <div class="dropdown d-lg-none">
-                                <a id="adm_dropdown_menu_button_{$row.id}" class="admidio-icon-link" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                <a id="adm_dropdown_menu_button_{$row.uuid}" class="admidio-icon-link" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
                                     <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adm_dropdown_menu_button_{$row.id}">
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adm_dropdown_menu_button_{$row.uuid}">
                                     {foreach $row.actions as $actionItem}
                                         <li>
                                             <a {if isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"

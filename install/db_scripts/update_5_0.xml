@@ -60,7 +60,7 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="520">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/registration.php' WHERE men_name_intern = 'registration'</step>
     <step id="530">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/preferences.php' WHERE men_name_intern = 'orgprop'</step>
     <step id="540">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/menu.php' WHERE men_name_intern = 'menu'</step>
-    <step id="520">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/documents-files.php' WHERE men_name_intern = 'documents-files'</step>
+    <step id="545">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/documents-files.php' WHERE men_name_intern = 'documents-files'</step>
     <step id="550">UPDATE %PREFIX%_menu SET men_name_intern = 'extensions', men_name = 'SYS_EXTENSIONS' WHERE men_id = 3</step>
     <step id="560">CREATE TABLE IF NOT EXISTS %PREFIX%_log_changes
 (

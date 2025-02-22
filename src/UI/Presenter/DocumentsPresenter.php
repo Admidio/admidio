@@ -195,7 +195,7 @@ class DocumentsPresenter extends PagePresenter
 
             }
 
-            $templateRow['id'] = $row['uuid'];
+            $templateRow['uuid'] = $row['uuid'];
             $templateRow['folder'] = $row['folder'];
             $templateRow['name'] = $row['name'];
             $templateRow['description'] = $row['description'];
