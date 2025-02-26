@@ -27,6 +27,32 @@ function showHideBlock(element) {
 }
 
 /**
+ * This function checks if a tbody element is empty (i.e., has no visible tr elements).
+ * @param   {HTMLElement} tbodyElement  The tbody element to check.
+ * @returns {boolean}                   True if the tbody element is empty, false otherwise.
+ */
+function isTbodyEmpty(tbodyElement) {
+    rows = tbodyElement.querySelectorAll("tr");
+    count = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+        if (rows[i].style.display === "none") {
+            continue;
+        }
+        else {
+            count++;
+        }
+    }
+
+    if (count === 1) {
+        return true;   // the tbody element only holds the last visible element
+    }
+    else {
+        return false;
+    }
+}
+
+/**
  * This function can be used to call a specific url and hide an html element
  * in dependence from the returned data. If the data received is "done" then
  * the element will be hidden otherwise the data will be shown in an error block.
@@ -97,6 +123,16 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                 } else {
                     $(entryDeleted).fadeOut("slow");
                 }
+            }
+
+            var tbodyElement = entryDeleted.closest("tbody");
+            if (isTbodyEmpty(tbodyElement)) {
+                $(tbodyElement).fadeOut("slow");
+                var tbodyElement2 = tbodyElement.previousElementSibling;
+                $(tbodyElement2).fadeOut("slow");
+            }
+            else {
+                console.log("tbody is not empty");
             }
         } else {
             // entry could not be deleted, then show content of data or a common error message
