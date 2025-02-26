@@ -221,6 +221,7 @@ class ForumPresenter extends PagePresenter
             $templateRow = array();
             $templateRow['uuid'] = $forumTopic['fot_uuid'];
             $templateRow['title'] = $forumTopic['fot_title'];
+            $templateRow['name'] = $forumTopic['fot_title'];
             $templateRow['views'] = $forumTopic['fot_views'];
 
             $templateRow['repliesCount'] = $forumTopic['replies_count'];

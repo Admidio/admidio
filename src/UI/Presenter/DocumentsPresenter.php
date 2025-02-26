@@ -579,6 +579,12 @@ class DocumentsPresenter extends PagePresenter
                 $templateRow['icon'] = 'bi '.FileSystemUtils::getFileIcon($row['name']);
                 $templateRow['title'] = $gL10n->get('SYS_FILE');
 
+                $templateRow['actions'][] = array(
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'download', 'file_uuid' => $row['uuid'])),
+                    'icon' => 'bi bi-download',
+                    'tooltip' => $gL10n->get('SYS_DOWNLOAD_FILE')
+                );
+
                 if ($this->folder->hasUploadRight()) {
                     if ($row['existsInFileSystem']) {
                         $templateRow['actions'][] = array(

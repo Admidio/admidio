@@ -29,30 +29,8 @@
                     <td class="text-end">{$row.size}</td>
                     <td class="text-end">{$row.counter}</td>
                     <td class="text-end">
-                        {if {array_key_exists array=$row key='actions'}}
-                            <span class="d-none d-lg-inline admidio-functions">
-                                {foreach $row.actions as $actionItem}
-                                    <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
-                                        data-buttons="yes-no" data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$row.name}))}" data-href="{$actionItem.dataHref}"
-                                            {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
-                                        <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
-                                {/foreach}
-                            </span>
-                            <div class="dropdown d-lg-none">
-                                <a id="adm_dropdown_menu_button_{$row.uuid}" class="admidio-icon-link" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adm_dropdown_menu_button_{$row.uuid}">
-                                    {foreach $row.actions as $actionItem}
-                                        <li>
-                                            <a {if isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
-                                                data-buttons="yes-no" data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$row.name}))}" data-href="{$actionItem.dataHref}"
-                                                    {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
-                                                <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
-                                        </li>
-                                    {/foreach}
-                                </ul>
-                            </div>
-                        {/if}
+                        {include 'sys-template-parts/list.functions.tpl' data=$row}
+
                         {if $row.existsInFileSystem == false}
                             <i class="bi bi-exclamation-triangle-fill" style="color:red;" data-bs-toggle="popover" data-bs-trigger="hover click" data-bs-placement="left"
                                title="{$l10n->get('SYS_WARNING')}" data-bs-content="{if $row.folder}{$l10n->get('SYS_FOLDER_NOT_EXISTS')}{else}{$l10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB')}{/if}"></i>

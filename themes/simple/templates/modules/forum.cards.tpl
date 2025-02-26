@@ -30,7 +30,7 @@
                         {if $forumTopic.repliesCount > 0}
                             <div class="col-lg-6 col-12 text-bg-secondary bg-opacity-25 text-dark rounded">
                                 <span class="d-block">{$l10n->get('SYS_REPLIES_VAR', array($forumTopic.repliesCount))}</span>
-                                <a href="{$forumTopic.lastReplyUrl}">{$l10n->get('SYS_LAST_REPLY_BY_AT', array($forumTopic.lastReplyUserName, $forumTopic.lastReplyTimestamp))}</a>
+                                {$forumTopic.lastReplyInfo}
                             </div>
                         {/if}
                         <div class="col">
