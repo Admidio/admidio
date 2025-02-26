@@ -3,7 +3,7 @@
     {if count($data.actions) eq 1}
         {foreach $data.actions as $actionItem}
             <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
-                data-buttons="yes-no" data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$data.name}))}" data-href="{$actionItem.dataHref}"
+                data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
                     {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
                 <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
         {/foreach}
@@ -11,7 +11,7 @@
         <div class="d-none d-lg-inline admidio-functions">
             {foreach $data.actions as $actionItem}
                 <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
-                    data-buttons="yes-no" data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$data.name}))}" data-href="{$actionItem.dataHref}"
+                    data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
                         {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
                     <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
             {/foreach}
@@ -23,7 +23,7 @@
                 {foreach $data.actions as $actionItem}
                     <li>
                         <a {if isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
-                            data-buttons="yes-no" data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$data.name}))}" data-href="{$actionItem.dataHref}"
+                            data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
                                 {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
                             <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
                     </li>
