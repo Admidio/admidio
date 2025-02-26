@@ -13,16 +13,21 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_PROPERTIES')}</div>
         <div class="card-body">
-            {if {array_key_exists array=$elements key='dummy'}}
-                {include 'sys-template-parts/form.input.tpl' data=$elements['dummy']}  {* Dummy *}
-            {/if}
-            {include 'sys-template-parts/form.select.tpl' data=$elements['inf-2']}  {* Kategorie *}
-            {include 'sys-template-parts/form.select.tpl' data=$elements['inf-3']}  {* Verwalter *}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inf-4']}  {* Im Inventar *}
-            {include 'sys-template-parts/form.select.tpl' data=$elements['inf-5']}  {* letzter Empfänger *}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['inf-5-hidden']}  {* letzter Empfänger versteckt *}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['inf-6']}  {* Ausgeliehen am *}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['inf-7']}  {* zurückerhalten am *}
+            {foreach $elements as $key => $itemField}
+                {if {string_contains haystack=$key needle="inf-"} && $key != "inf-1"}
+                    {if $itemField.type == 'checkbox'}
+                        {include 'sys-template-parts/form.checkbox.tpl' data=$itemField}
+                    {elseif $itemField.type == 'multiline'}
+                        {include 'sys-template-parts/form.multiline.tpl' data=$itemField}
+                    {elseif $itemField.type == 'radio'}
+                        {include 'sys-template-parts/form.radio.tpl' data=$itemField}
+                    {elseif $itemField.type == 'select'}
+                        {include 'sys-template-parts/form.select.tpl' data=$itemField}
+                    {else}
+                        {include 'sys-template-parts/form.input.tpl' data=$itemField}
+                    {/if}
+                {/if}
+            {/foreach}
         </div>
     </div>
     {if {array_key_exists array=$elements key='item_copy_number'}}
