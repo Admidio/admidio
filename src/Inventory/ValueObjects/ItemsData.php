@@ -85,7 +85,7 @@ class ItemsData
     {
         $this->mDb =& $database;
         $this->organizationId = $organizationId;
-        $this->readItemFields($organizationId);
+        $this->readItemFields();
     }
 
     /**
@@ -118,12 +118,10 @@ class ItemsData
      * Reads the item fields structure out of database table @b adm_inventory_fields
      * and adds an object for each field structure to the @b mItemFields array.
      * 
-     * @param int $organizationId       The id of the organization for which the item fields
-     *                                  structure should be read.
      * @param string $orderBy           The field by which the item fields should be sorted
      * @return void
      */
-    public function readItemFields($organizationId, $orderBy = 'inf_id') : void
+    public function readItemFields($orderBy = 'inf_id') : void
     {
         // first initialize existing data
         $this->mItemFields = array();
@@ -132,7 +130,7 @@ class ItemsData
         $sql = 'SELECT * FROM '.TBL_INVENTORY_FIELDS.'
                 WHERE (inf_org_id IS NULL OR inf_org_id = ?)
                 ORDER BY '. $orderBy .';';
-        $statement = $this->mDb->queryPrepared($sql, array($organizationId));
+        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
         while ($row = $statement->fetch()) {
             if (!array_key_exists($row['inf_name_intern'], $this->mItemFields)) {
@@ -151,14 +149,12 @@ class ItemsData
      * If profile fields structure wasn't read, this will be done before.
      * 
      * @param int $itemId               The id of the item for which the item data should be read.
-     * @param int $organizationId       The id of the organization for which the item fields
-     *                                  structure should be read if necessary.
      * @return void
      */
-    public function readItemData($itemId, $organizationId) : void
+    public function readItemData($itemId) : void
     {                                    
         if (count($this->mItemFields) === 0) {
-            $this->readItemFields($organizationId);
+            $this->readItemFields();
         }
 
         $this->mItemData = array();
@@ -190,10 +186,9 @@ class ItemsData
      * Reads the items out of database table @b adm_inventory_manager_items
      * and stores the values to the @b items array.
      * 
-     * @param int $organizationId       The id of the organization for which the items should be read.
      * @return void
      */
-    public function readItems($organizationId) : void
+    public function readItems() : void
     {
         // first initialize existing data
         $this->mItems = array();
@@ -209,7 +204,7 @@ class ItemsData
                 WHERE ini_org_id IS NULL
                 OR ini_org_id = ?
                 '.$sqlWhereCondition.';';
-        $statement = $this->mDb->queryPrepared($sql, array($organizationId));
+        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
         while ($row = $statement->fetch()) {
             $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_former' => $row['ini_former']);
@@ -220,12 +215,11 @@ class ItemsData
      * Reads the items for a user out of database table @b adm_inventory_manager_items
      * and stores the values to the @b items array.
      * 
-     * @param int $organizationId       The id of the organization for which the items should be read.
      * @param int $userId               The id of the user for which the items should be read.
      * @param array $fieldNames         The internal unique profile field names for which the items should be read
      * @return void
      */
-    public function readItemsByUser($organizationId, $userId, $fieldNames = array('KEEPER')) : void
+    public function readItemsByUser($userId, $fieldNames = array('KEEPER')) : void
     {
         // first initialize existing data
         $this->mItems = array();
@@ -253,7 +247,7 @@ class ItemsData
                     OR ini_org_id = ?)
                 AND ind_value = ?
                 '.$sqlWhereCondition.';';
-        $statement = $this->mDb->queryPrepared($sql, array($organizationId, $userId));
+        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
 
         while ($row = $statement->fetch()) {
             $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_former' => $row['ini_former']);
@@ -263,6 +257,7 @@ class ItemsData
     /**
      * Returns an array with all profile fields represented by a user fields objects.
      * The key is the usf_name_intern and the value is an object of class ProfileField
+     * 
      * @return array<string,ProfileField> $mProfileFields = [
      *      'LAST_NAME' => {ProfileField}
      *      'FIRST_NAME' => {ProfileField}
@@ -277,6 +272,7 @@ class ItemsData
     /**
      * Returns an array with all profile fields represented by a user fields objects.
      * The key is the usf_name_intern and the value is an object of class ProfileField
+     * 
      * @return array<string,ProfileField> $mProfileFields = [
      *      'LAST_NAME' => {ProfileField}
      *      'FIRST_NAME' => {ProfileField}
@@ -618,7 +614,7 @@ class ItemsData
         $this->itemImported = true;
     }
 
-        /**
+    /**
      * This method reads or stores the variable for showing former items.
      * The values will be stored in database without any inspections!
      * 
@@ -654,8 +650,6 @@ class ItemsData
         return $this->itemDeleted;
     }
 
-
-
     /**
      * Set a new value for the item field of the table adm_inventory_manager_data.
      * If the user log is activated then the change of the value will be logged in @b adm_inventory_manager_log.
@@ -678,8 +672,8 @@ class ItemsData
             $oldFieldValue = $this->mItemData[$infId]->getValue('ind_value');
         }
 
-        // item data from adm_inventory_manager_fields table
-        $newValue = (string) $newValue;
+        // check if new value only contains spaces
+        $newValue = (trim((string)$newValue) !== '') ? (string)$newValue : '';
 
         // save old and new data for notification
         if (array_key_exists($infId, $this->mItemData)) {
@@ -723,14 +717,14 @@ class ItemsData
         $returnCode = false;
 
         if (!array_key_exists($infId, $this->mItemData)) {
-            $this->mItemData[$infId] = new Entity($this->mDb, TBL_INVENTORY_DATA, 'imd');
+            $this->mItemData[$infId] = new Entity($this->mDb, TBL_INVENTORY_DATA, 'ind');
             $this->mItemData[$infId]->setValue('ind_inf_id', $infId);
             $this->mItemData[$infId]->setValue('ind_ini_id', $this->mItemId);
         }
 
         $returnCode = $this->mItemData[$infId]->setValue('ind_value', $newValue);
 
-        if ($returnCode && $gSettingsManager->getBool('profile_log_edit_fields')) {
+        if ($returnCode && $gSettingsManager->getBool('changelog_module_enabled')) {
             $logEntry = new Entity($this->mDb, TBL_INVENTORY_LOG, 'iml');
             $logEntry->setValue('iml_ini_id', $this->mItemId);
             $logEntry->setValue('iml_inf_id', $infId);
@@ -746,10 +740,9 @@ class ItemsData
     /**
      * Generates a new ItemId. The new value will be stored in mItemId.
      * 
-     * @param int $organizationId       The id of the organization for which the items should be read.
      * @return int mItemId
      */
-    public function getNewItemId($organizationId) : int
+    public function getNewItemId() : int
     {
         // If an error occurred while generating an item, there is an ItemId but no data for that item.
         // the following routine deletes these unused ItemIds
@@ -760,21 +753,21 @@ class ItemsData
         $statement = $this->mDb->queryPrepared($sql);
 
         while ($row = $statement->fetch()) {
-            $delItem = new Entity($this->mDb, TBL_INVENTORY_ITEMS, 'imi', $row['ini_id']);
+            $delItem = new Entity($this->mDb, TBL_INVENTORY_ITEMS, 'ini', $row['ini_id']);
             $delItem->delete();
         }
 
         // generate a new ItemId
         if ($this->itemCreated) {
-            $newItem = new Entity($this->mDb, TBL_INVENTORY_ITEMS, 'imi');
-            $newItem->setValue('ini_org_id', $organizationId);
+            $newItem = new Entity($this->mDb, TBL_INVENTORY_ITEMS, 'ini');
+            $newItem->setValue('ini_org_id', $this->organizationId);
             $newItem->setValue('ini_former', 0);
             $newItem->save();
 
             $this->mItemId = $newItem->getValue('ini_id');
 
             // update item table
-            $this->readItems($organizationId);
+            $this->readItems();
 
             return $this->mItemId;
         }
@@ -784,19 +777,22 @@ class ItemsData
      * delete an item
      * 
      * @param int $itemId               The id of the item that should be deleted
-     * @param int $organizationId       The id of the organization from which the items should be deleted
      * @return void
      */
-    public function deleteItem($itemId, $organizationId) : void
+    public function deleteItem($itemId) : void
     {
-        $sql = 'DELETE FROM '.TBL_INVENTORY_LOG.' WHERE iml_ini_id = ?;';
-        $this->mDb->queryPrepared($sql, array($itemId));
+        global $gSettingsManager;
+
+/*         if ($gSettingsManager->getBool('changelog_module_enabled')) {
+            $sql = 'DELETE FROM '.TBL_INVENTORY_LOG.' WHERE iml_ini_id = ?;';
+            $this->mDb->queryPrepared($sql, array($itemId));
+        }
     
-        $sql = 'DELETE FROM '.TBL_INVENTORY_DATA.' WHERE ind_ini_id = ?;';
+ */        $sql = 'DELETE FROM '.TBL_INVENTORY_DATA.' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($itemId));
     
         $sql = 'DELETE FROM '.TBL_INVENTORY_ITEMS.' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-        $this->mDb->queryPrepared($sql, array($itemId, $organizationId));
+        $this->mDb->queryPrepared($sql, array($itemId, $this->organizationId));
         
         $this->itemDeleted = true;
     }
@@ -805,13 +801,12 @@ class ItemsData
      * Marks an item as former
      * 
      * @param int $itemId 		    The ID of the item to be marked as former.
-     * @param int $organizationId   The id of the organization from which the items should be marked as former
      * @return void
      */
-    public function makeItemFormer($itemId, $organizationId) : void
+    public function makeItemFormer($itemId) : void
     {
     	$sql = 'UPDATE '.TBL_INVENTORY_ITEMS.' SET ini_former = 1 WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-        $this->mDb->queryPrepared($sql, array($itemId, $organizationId));
+        $this->mDb->queryPrepared($sql, array($itemId, $this->organizationId));
 
         $this->itemMadeFormer = true;
     }
@@ -820,18 +815,15 @@ class ItemsData
      * Marks an item as no longer former
      * 
      * @param int $itemId               The ID of the item to be marked as no longer former.
-     * @param int $organizationId       The id of the organization from which the items should be marked as no longer former.
      * @return void
      */
-    public function undoItemFormer($itemId, $organizationId) : void
+    public function undoItemFormer($itemId) : void
     {
     	$sql = 'UPDATE '.TBL_INVENTORY_ITEMS.' SET ini_former = 0 WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-        $this->mDb->queryPrepared($sql, array($itemId, $organizationId));
+        $this->mDb->queryPrepared($sql, array($itemId, $this->organizationId));
 
         $this->itemMadeFormer = false;
     }
-
-
 
     /**
      * Save data of every item field
@@ -866,8 +858,7 @@ class ItemsData
         }
    
         $this->columnsValueChanged = false;
-        $this->readItemData($this->mItemId, $this->organizationId);
+        $this->readItemData($this->mItemId);
         $this->mDb->endTransaction();
     }
-
 }
