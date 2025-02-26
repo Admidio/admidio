@@ -16,11 +16,7 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_PROPERTIES')}</div>
         <div class="card-body">
-            {if $systemField == 1}
-                {include 'sys-template-parts/form.input.tpl' data=$elements['inf_type']}
-            {else}
-                {include 'sys-template-parts/form.select.tpl' data=$elements['inf_type']}
-            {/if}
+            {include 'sys-template-parts/form.select.tpl' data=$elements['inf_type']}
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['inf_value_list']}
             {include 'sys-template-parts/form.select.tpl' data=$elements['inf_required_input']}
         </div>

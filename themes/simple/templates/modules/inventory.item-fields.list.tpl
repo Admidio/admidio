@@ -44,7 +44,7 @@
                         <td>{$itemField.dataType}</td>
                         <td>{$itemField.mandatory}</td>
                         <td class="text-end">
-                            {foreach $itemField.actions as $actionItem}
+                           {foreach $itemField.actions as $actionItem}
                                 <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
                                     data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
                                         {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
