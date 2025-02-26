@@ -10,7 +10,7 @@
                 </li>
             {/foreach}
             <li class="list-group-item">
-                <a href="{$urlAdmidio}/adm_program/modules/documents-files/documents_files.php">{$l10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS')}</a>
+                <a href="{$urlAdmidio}/adm_program/modules/documents-files.php">{$l10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS')}</a>
             </li>
         </ul>
     {else}

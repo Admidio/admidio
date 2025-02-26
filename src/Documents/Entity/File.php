@@ -270,7 +270,7 @@ class File extends Entity
                 . $gL10n->get('SYS_FOLDER') . ': ' . $this->getValue('fol_name') . '<br />'
                 . $gL10n->get('SYS_CREATED_BY') . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get('SYS_CREATED_AT') . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php?folder_uuid=' . $this->getValue('fol_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php?folder_uuid=' . $this->getValue('fol_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))),
                 $message
@@ -285,7 +285,7 @@ class File extends Entity
      * to log changes to these columns.
      * The folder table also contains fol_usr_id and fol_timestamp. We also don't want to log
      * download counter increases...
-     * When a file is created, we also don't need to log some columns, because they are already 
+     * When a file is created, we also don't need to log some columns, because they are already
      * in the creation log record.
      *
      * @return true Returns the list of database columns to be ignored for logging.
@@ -299,12 +299,12 @@ class File extends Entity
         }
         return $ignored;
     }
-    
+
     /**
      * Adjust the changelog entry for this db record: Add the parent fold as a related object
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
     protected function adjustLogEntry(LogChanges $logEntry) {
