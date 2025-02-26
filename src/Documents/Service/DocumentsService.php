@@ -57,29 +57,65 @@ class DocumentsService
     }
 
     /**
-     * Reads recursively all folders where the current user has the right to upload files. The method will start at the
-     * top documents and files folder of the current organization. The returned array will represent the
-     * nested structure of the folder with an indentation in the folder name.
-     * @return array<string,string> Returns an array with the folder UUID as key and the folder name as value.
+     * Send the file to the user for download. Optional the parameter inline could be set and then the file will
+     * be shown in the browser.
+     * @param string $fileUUID The UUID of the file that should be downloaded.
+     * @param bool $inline If set to **true** than the output will be sent inline otherwise as attachment.
+     * @return void
      * @throws Exception
      */
-    public function getUploadableFolderStructure(): array
+    public function downloadFile(string $fileUUID, bool $inline = false): void
     {
-        global $gCurrentOrgId, $gDb, $gL10n;
+        // get recordset of current file from database
+        $file = new File($this->db);
+        $file->getFileForDownload($fileUUID);
 
-        // read main documents folder
-        $sqlFiles = 'SELECT fol_uuid, fol_id
-                       FROM ' . TBL_FOLDERS . '
-                      WHERE fol_fol_id_parent IS NULL
-                        AND fol_org_id = ? -- $gCurrentOrgId
-                        AND fol_type   = \'DOCUMENTS\' ';
-        $filesStatement = $gDb->queryPrepared($sqlFiles, array($gCurrentOrgId));
+        // get complete path with filename of the file
+        $completePath = $file->getFullFilePath();
 
-        $row = $filesStatement->fetch();
+        // check if the file already exists
+        if (!is_file($completePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
 
-        $arrAllUploadableFolders = array($row['fol_uuid'] => $gL10n->get('SYS_DOCUMENTS_FILES'));
+        // Increment download counter
+        $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
+        $file->save();
 
-        return $this->findFoldersWithUploadRights($row['fol_id'], $arrAllUploadableFolders);
+        // determine filesize
+        $fileSize = filesize($completePath);
+
+        if ($inline) {
+            $content = 'inline';
+        } else {
+            $content = 'attachment';
+        }
+
+        // Create appropriate header information of the file
+        header('Content-Type: ' . $file->getMimeType());
+        header('Content-Length: ' . $fileSize);
+        header('Content-Disposition: ' . $content . '; filename="' . $file->getValue('fil_name') . '"');
+
+        // necessary for IE, because without it the download with SSL has problems
+        header('Cache-Control: private');
+        header('Pragma: public');
+
+        // file output
+        if ($fileSize > 10 * 1024 * 1024) {
+            // file output for large files (> 10MB)
+            $chunkSize = 1024 * 1024;
+            $handle = fopen($completePath, 'rb');
+            while (!feof($handle)) {
+                $buffer = fread($handle, $chunkSize);
+                echo $buffer;
+                ob_flush();
+                flush();
+            }
+            fclose($handle);
+        } else {
+            // file output for small files (< 10MB)
+            readfile($completePath);
+        }
     }
 
     /**
@@ -200,6 +236,32 @@ class DocumentsService
             }
         }
         return $arrAllUploadableFolders;
+    }
+
+    /**
+     * Reads recursively all folders where the current user has the right to upload files. The method will start at the
+     * top documents and files folder of the current organization. The returned array will represent the
+     * nested structure of the folder with an indentation in the folder name.
+     * @return array<string,string> Returns an array with the folder UUID as key and the folder name as value.
+     * @throws Exception
+     */
+    public function getUploadableFolderStructure(): array
+    {
+        global $gCurrentOrgId, $gDb, $gL10n;
+
+        // read main documents folder
+        $sqlFiles = 'SELECT fol_uuid, fol_id
+                       FROM ' . TBL_FOLDERS . '
+                      WHERE fol_fol_id_parent IS NULL
+                        AND fol_org_id = ? -- $gCurrentOrgId
+                        AND fol_type   = \'DOCUMENTS\' ';
+        $filesStatement = $gDb->queryPrepared($sqlFiles, array($gCurrentOrgId));
+
+        $row = $filesStatement->fetch();
+
+        $arrAllUploadableFolders = array($row['fol_uuid'] => $gL10n->get('SYS_DOCUMENTS_FILES'));
+
+        return $this->findFoldersWithUploadRights($row['fol_id'], $arrAllUploadableFolders);
     }
 
     /**

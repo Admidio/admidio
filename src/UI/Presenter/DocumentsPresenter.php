@@ -575,7 +575,7 @@ class DocumentsPresenter extends PagePresenter
                     );
                 }
             } else {
-                $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $row['uuid'], 'view' => 1));
+                $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files.php', array('mode' => 'download', 'file_uuid' => $row['uuid'], 'view' => 1));
                 $templateRow['icon'] = 'bi '.FileSystemUtils::getFileIcon($row['name']);
                 $templateRow['title'] = $gL10n->get('SYS_FILE');
 

@@ -22,9 +22,11 @@
  *     permissions      - Show form to set the permissions of the current folder
  *     permissions_save - Save the data of the permissions form
  *     add              - Add unmanaged file or folder to database
+ *     download         - Download a file
  * folder_uuid        : UUID of the folder that should be shown, edited or saved
  * file_uuid          : UUID of the file that should be edited
- * name               : Name of un unmanaged file or folder that should be added to the database.
+ * name               : Name of un unmanaged file or folder that should be added to the database
+ * view               : Could be set in **download+* mode. If set to true than the file output will directly be shown in the browser.
  ***********************************************************************************************
  */
 
@@ -55,12 +57,13 @@ try {
                 'move_save',
                 'permissions',
                 'permissions_save',
-                'add')
+                'add',
+                'download')
         )
     );
     $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid',
         array(
-            'requireValue' => !in_array($getMode, array('list', 'file_delete'))
+            'requireValue' => !in_array($getMode, array('list', 'file_delete', 'download'))
         )
     );
     $getFileUUID = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
@@ -213,6 +216,13 @@ try {
             $gNavigation->addUrl(CURRENT_URL);
             admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
             // => EXIT
+            break;
+
+        case 'download':
+            $getView = admFuncVariableIsValid($_GET, 'view', 'bool', array('defaultValue' => false));
+
+            $documentsService = new DocumentsService($gDb);
+            $documentsService->downloadFile($getFileUUID, $getView);
             break;
     }
 } catch (Throwable $e) {
