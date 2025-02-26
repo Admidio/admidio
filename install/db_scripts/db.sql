@@ -51,7 +51,6 @@ DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_data       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items      CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_log        CASCADE;
 
 /*==============================================================*/
 /* Table: adm_announcements                                     */
@@ -920,26 +919,6 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
-/* Table: adm_inventory_log                                     */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_log
-(
-    inl_id                      integer             NOT NULL    AUTO_INCREMENT,
-    inl_org_id                  integer unsigned    NOT NULL,
-    inl_ini_id                  integer unsigned    NOT NULL,
-    inl_inf_id                  integer unsigned    NOT NULL,
-    inl_value_old               varchar(4000)       NULL,
-    inl_value_new               varchar(4000)       NULL,
-    inl_usr_id_create           integer unsigned    NULL,
-    inl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    inl_comment                 varchar(255)        NULL,
-    PRIMARY KEY (inl_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-/*==============================================================*/
 /* Table: adm_log_changes                                       */
 /*    Generic table for logging changes to various other tables */
 /*    The meaning of the subsequent columns depend heavily on   */
@@ -1141,11 +1120,6 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr2        FOREIGN KEY (ure_usr_id2)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_inventory_log
-    ADD CONSTRAINT %PREFIX%_fk_inl_ini         FOREIGN KEY (inl_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_inl_inf         FOREIGN KEY (inl_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_inl_usr_create  FOREIGN KEY (inl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_inventory_data
     ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
