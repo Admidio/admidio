@@ -4,8 +4,8 @@ namespace Admidio\Menu\ValueObject;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Roles\Entity\RolesRights;
-use Admidio\UI\View\Registration;
 
 /**
  * @brief Create a menu node from database and serve several output formats
@@ -160,8 +160,8 @@ class MenuNode
                         $message = new \Admidio\Messages\Entity\Message($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
                     } elseif ($node['men_name_intern'] === 'registration') {
-                        $registration = new Registration('registration');
-                        $badgeCount = count($registration->getRegistrationsArray());
+                        $registration = new RegistrationService($gDb);
+                        $badgeCount = count($registration->findAll());
                     }
 
                     $this->addItem($node['men_name_intern'], $node['men_name'], $node['men_url'], (string) $node['men_icon'], '', $badgeCount, (string) $node['men_description']);

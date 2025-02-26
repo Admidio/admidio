@@ -18,7 +18,7 @@ use Admidio\Changelog\Service\ChangelogService;
  * **Code example**
  * ```
  * // generate html output with available registrations
- * $page = new Menu('adm_menu', $headline);
+ * $page = new MenuPresenter('adm_menu', $headline);
  * $page->createEditForm();
  * $page->show();
  * ```

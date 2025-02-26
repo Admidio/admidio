@@ -1,7 +1,8 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -15,7 +16,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * **Code example**
  * ```
  * // generate html output with available registrations
- * $page = new ModuleRegistration('admidio-registration', $headline);
+ * $page = new RegistrationPresenter();
  * $page->createRegistrationList();
  * $page->show();
  * ```
@@ -23,41 +24,23 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Registration extends PagePresenter
+class RegistrationPresenter extends PagePresenter
 {
-    /**
-     * Creates an array with all available registrations. The array contains the following entries:
-     * array(userID, userUUID, loginName, registrationTimestamp, lastName, firstName, email, validationID)
-     * @return array Returns an array with information about every available registration
-     * @throws Exception
-     */
-    public function getRegistrationsArray(): array
-    {
-        global $gDb, $gCurrentOrgId;
-
-        // Select new Members of the group
-        $sql = 'SELECT usr_id, usr_uuid, usr_login_name, reg_timestamp, reg_validation_id
-                  FROM '.TBL_REGISTRATIONS.'
-            INNER JOIN '.TBL_USERS.'
-                    ON usr_id = reg_usr_id
-                 WHERE usr_valid = false
-                   AND reg_org_id = ? -- $gCurrentOrgId
-              ORDER BY reg_validation_id DESC, reg_timestamp DESC';
-        $queryParameters = array($gCurrentOrgId);
-        return $gDb->getArrayFromSql($sql, $queryParameters);
-    }
-
     /**
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
      * @throws Exception
      */
-    public function createRegistrationList()
+    public function createRegistrationList(): void
     {
         global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields, $gCurrentUser, $gCurrentSession;
 
-        $registrations = $this->getRegistrationsArray();
+        $this->setHtmlID('adm_registration');
+        $this->setHeadline($gL10n->get('SYS_REGISTRATIONS'));
+
+        $registrationService = new RegistrationService($gDb);
+        $registrations = $registrationService->findAll();
         $templateData = array();
 
         if (count($registrations) === 0) {
@@ -96,7 +79,7 @@ class Registration extends PagePresenter
             );
             $templateRow['actions'][] = array(
                 'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/registration.php', array('mode' => 'delete_user', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME'))),
+                'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($user->getValue('FIRST_NAME', 'database') . ' ' .$user->getValue('LAST_NAME'))),
                 'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );

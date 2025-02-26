@@ -29,7 +29,8 @@ class ModuleContacts extends PagePresenter
      */
     public function __construct(string $id, string $headline = '')
     {
-        parent::__construct($id, $headline);
+        $this->setHeadline($headline);
+        parent::__construct($id);
     }
 
     /**

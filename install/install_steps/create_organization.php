@@ -13,7 +13,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\View\Installation;
+use Admidio\UI\View\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_organization.php') {
     exit('This page may not be called directly!');
@@ -41,7 +41,7 @@ if ($mode === 'html') {
     }
 
     // create a page to enter the organization names
-    $page = new Installation('adm_installation_create_organization', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_create_organization', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
     $page->assignSmartyVariable('text', $gL10n->get('SYS_NEW_ORGANIZATION_DESC'));

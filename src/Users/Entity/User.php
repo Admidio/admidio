@@ -2172,16 +2172,17 @@ class User extends Entity
     }
 
    /**
-     * Adjust the changelog entry for this db record: Don't store the actual password, just '[...]'. Also, the photo cannot be stores, so indicate this by '[...]', too.
+     * Adjust the changelog entry for this db record: Don't store the actual password, just '********'. Also, the photo cannot be stores, so indicate this by '[...]', too.
      * 
      * @param LogChanges $logEntry The log entry to adjust
      * 
      * @return void
      */
     protected function adjustLogEntry(LogChanges $logEntry) {
-        if ($logEntry->getValue('log_field') == 'usr_password' ||
-            $logEntry->getValue('log_field') == 'usr_photo') 
-        {
+        if ($logEntry->getValue('log_field') == 'usr_password') {
+            $logEntry->setValue('log_value_old', '********');
+            $logEntry->setValue('log_value_new', '********');
+        } elseif ($logEntry->getValue('log_field') == 'usr_photo') {
             $logEntry->setValue('log_value_old', '[...]');
             $logEntry->setValue('log_value_new', '[...]');
         }

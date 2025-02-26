@@ -22,7 +22,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Organizations\Service\OrganizationService;
-use Admidio\UI\View\Organizations;
+use Admidio\UI\Presenter\OrganizationPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -39,12 +39,9 @@ try {
 
     if ($getMode === 'edit') {
         // Edit current organization and show sub-organizations.
-        $headline = $gL10n->get('SYS_ORGANIZATION');
-        $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-diagram-3-fill');
-
-        // create html page object
-        $page = new Organizations('adm_organization_edit', $headline);
+        $page = new OrganizationPresenter();
         $page->createEditForm();
+        $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-diagram-3-fill');
         $page->show();
     } elseif ($getMode === 'new_sub') {
         // Create a new sub-organization for the current organization
@@ -52,7 +49,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new Organizations('adm_new_sub_organization', $headline);
+        $page = new OrganizationPresenter('adm_new_sub_organization', $headline);
         $page->createSubOrganizationForm();
         $page->show();
     } elseif ($getMode === 'save') {

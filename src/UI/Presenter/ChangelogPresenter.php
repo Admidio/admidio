@@ -1,7 +1,6 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
-use HtmlPage;
 use Admidio\Infrastructure\Exception;
 
 //use Admidio\Changelog\Service\ChangelogService;
@@ -24,7 +23,7 @@ use Admidio\Infrastructure\Exception;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Changelog extends HtmlPage
+class ChangelogPresenter extends PagePresenter
 {
 
 

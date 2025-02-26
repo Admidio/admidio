@@ -1,13 +1,11 @@
 <?php
-namespace Admidio\UI\View;
+namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\ValueObject\RoleDependency;
-use Admidio\Roles\Service\RoleService;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Roles\Service\RolesService;
 use HtmlDataTables;
 use Admidio\Changelog\Service\ChangelogService;
 
@@ -28,54 +26,41 @@ use Admidio\Changelog\Service\ChangelogService;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class GroupsRoles extends PagePresenter
+class GroupsRolesPresenter extends PagePresenter
 {
-    /**
-     * @var array Array with all read groups and roles
-     */
-    protected array $data = array();
     /**
      * @var int Type of the role e.g. ROLE_TYPE_INACTIVE, ROLE_TYPE_ACTIVE, ROLE_TYPE_EVENT_PARTICIPATION
      */
     public const ROLE_TYPE_INACTIVE = 0;
     public const ROLE_TYPE_ACTIVE = 1;
     public const ROLE_TYPE_EVENT_PARTICIPATION = 2;
-    protected int $roleType;
-
-    /**
-     * Returns the number of roles that where read in this class.
-     * @return int Returns the number of roles
-     */
-    public function countRoles(): int
-    {
-        return count($this->data);
-    }
-
     /**
      * Show all roles of the organization in card view. The roles must be read before with the method readData.
      * The cards will show various functions like activate, deactivate, vcard export, edit or delete. Also, the
      * role information e.g. description, start and end date, number of active and former members. A button with
      * the link to the default list will be shown.
      * @param string $categoryUUID UUID of the category for which the roles should be shown.
-     * @param string $roleType The type of roles that should be shown within this page.
+     * @param int $roleType The type of roles that should be shown within this page.
      *                         0 - inactive roles
      *                         1 - active roles
      *                         2 - event participation roles
      * @throws \Smarty\Exception|Exception
      * @throws Exception
      */
-    public function createCards(string $categoryUUID, string $roleType)
+    public function createCards(string $categoryUUID, int $roleType): void
     {
         global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gL10n, $gDb;
 
         $this->createSharedHeader($categoryUUID, $roleType, 'card');
+        $rolesService = new RolesService($gDb);
+        $data = $rolesService->findAll($roleType, $categoryUUID);
 
         $categoryUUID = '';
         $categoryName = '';
         $templateDataCategory = array();
         $templateDataRoles = array();
 
-        foreach ($this->data as $row) {
+        foreach ($data as $row) {
             $role = new Role($gDb);
             $role->setArray($row);
 
@@ -127,14 +112,14 @@ class GroupsRoles extends PagePresenter
 
             if ($gCurrentUser->manageRoles()) {
                 // set role active or inactive
-                if ($this->roleType === GroupsRoles::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
+                if ($roleType === GroupsRolesPresenter::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($row['rol_name'])),
                         'icon' => 'bi bi-eye',
                         'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                     );
-                } elseif ($this->roleType === GroupsRoles::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
+                } elseif ($roleType === GroupsRolesPresenter::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($row['rol_name'])),
@@ -184,7 +169,7 @@ class GroupsRoles extends PagePresenter
 
                 if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
                     if ($role->getValue('rol_weekday') > 0) {
-                        $html .= RoleService::getWeekdays($role->getValue('rol_weekday')) . ' ';
+                        $html .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' GroupsRolesPresenter.php';
                     }
                     if (!empty($role->getValue('rol_start_time'))) {
                         $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
@@ -226,7 +211,7 @@ class GroupsRoles extends PagePresenter
                 $html .= $row['num_members'] . ' ' . $gL10n->get('SYS_PARTICIPANTS');
             }
 
-            if ($gCurrentUser->hasRightViewFormerRolesMembers($row['rol_id']) && $this->roleType === $this::ROLE_TYPE_ACTIVE && $row['num_former'] > 0) {
+            if ($gCurrentUser->hasRightViewFormerRolesMembers($row['rol_id']) && $roleType === $this::ROLE_TYPE_ACTIVE && $row['num_former'] > 0) {
                 // show former members
                 if ($row['num_former'] == 1) {
                     $textFormerMembers = $gL10n->get('SYS_FORMER');
@@ -264,12 +249,11 @@ class GroupsRoles extends PagePresenter
      * @param string $roleUUID UUID of the role that should be edited.
      * @throws Exception
      */
-    public function createEditForm(string $roleUUID = '')
+    public function createEditForm(string $roleUUID = ''): void
     {
         global $gCurrentOrgId, $gCurrentUser, $gCurrentSession, $gDb, $gL10n, $gSettingsManager;
 
         // Initialize local parameters
-        $showSystemCategory = false;
         $eventRole = false;
 
         // create role object
@@ -288,17 +272,10 @@ class GroupsRoles extends PagePresenter
             if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
-
-            // hidden roles can also see hidden categories
-            if ($role->getValue('cat_system') == 1) {
-                $showSystemCategory = true;
-            }
         }
 
         // get all dependent roles of this role
         $childRoles = RoleDependency::getChildRoles($gDb, $role->getValue('rol_id'));
-
-        $childRoleObjects = array();
 
         $this->addJavascript('
             checkMaxMemberCount();
@@ -463,7 +440,7 @@ class GroupsRoles extends PagePresenter
             );
             $form->addInput(
                 'rol_cost',
-                $gL10n->get('SYS_CONTRIBUTION') . ' ' . $gSettingsManager->getString('system_currency'),
+                $gL10n->get('SYS_CONTRIBUTION') . ' GroupsRolesPresenter.php' . $gSettingsManager->getString('system_currency'),
                 (string)$role->getValue('rol_cost'),
                 array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => '0.01')
             );
@@ -575,7 +552,7 @@ class GroupsRoles extends PagePresenter
             $form->addInput('rol_end_date', $gL10n->get('SYS_VALID_TO'), $role->getValue('rol_end_date'), array('type' => 'date'));
             $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));
             $form->addInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), array('type' => 'time'));
-            $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), RoleService::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
+            $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), RolesService::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
             $form->addInput('rol_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'), array('maxLength' => 100));
 
             $roleName = $gL10n->get('SYS_NEW_ROLE');
@@ -629,14 +606,17 @@ class GroupsRoles extends PagePresenter
      * @throws \Smarty\Exception|Exception
      * @throws Exception
      */
-    public function createPermissionsList(string $categoryUUID, string $roleType)
+    public function createPermissionsList(string $categoryUUID, string $roleType): void
     {
         global $gSettingsManager, $gL10n, $gDb, $gCurrentSession;
-        $this->createSharedHeader($categoryUUID, $roleType, 'permissions');
 
         $templateData = array();
+        $this->createSharedHeader($categoryUUID, $roleType, 'permissions');
 
-        foreach ($this->data as $row) {
+        $rolesService = new RolesService($gDb);
+        $data = $rolesService->findAll($roleType, $categoryUUID);
+
+        foreach ($data as $row) {
             $role = new Role($gDb);
             $role->setArray($row);
 
@@ -752,14 +732,14 @@ class GroupsRoles extends PagePresenter
                 'icon' => 'bi bi-card-list',
                 'tooltip' => $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP')
             );
-            if ($this->roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
+            if ($roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($row['rol_name'])),
                     'icon' => 'bi bi-eye',
                     'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                 );
-            } elseif ($this->roleType === $this::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
+            } elseif ($roleType === $this::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($row['rol_name'])),
@@ -783,7 +763,7 @@ class GroupsRoles extends PagePresenter
         $dataTables->setGroupColumn(1);
         $dataTables->disableColumnsSort(array(3, 8));
         $dataTables->setColumnsNotHideResponsive(array(8));
-        $dataTables->createJavascript(count($this->data), 7);
+        $dataTables->createJavascript(count($data), 7);
 
         $this->smarty->assign('list', $templateData);
         $this->smarty->assign('l10n', $gL10n);
@@ -803,7 +783,7 @@ class GroupsRoles extends PagePresenter
      * @return void
      * @throws Exception
      */
-    protected function createSharedHeader(string $categoryUUID, string $roleType, string $mode = 'card')
+    protected function createSharedHeader(string $categoryUUID, string $roleType, string $mode = 'card'): void
     {
         global $gCurrentUser, $gSettingsManager, $gL10n, $gDb;
 
@@ -892,100 +872,5 @@ class GroupsRoles extends PagePresenter
             );
         }
         $form->addToHtmlPage();
-    }
-
-    /**
-     * Creates an array with all available groups and roles.
-     * @param int $roleType The type of groups and roles that should be read. This could be active, inactive
-     *                             or event roles.
-     * @param string $categoryUUID The UUID of the category whose groups and roles should be read.
-     * @throws Exception
-     */
-    public function readData(int $roleType = GroupsRoles::ROLE_TYPE_ACTIVE, string $categoryUUID = '')
-    {
-        global $gDb, $gCurrentOrgId, $gCurrentUser;
-
-        $this->roleType = $roleType;
-
-        $sql = 'SELECT rol.*, cat.*,
-                       COALESCE((SELECT COUNT(*) + SUM(mem_count_guests) AS count
-                          FROM ' . TBL_MEMBERS . ' AS mem
-                         WHERE mem.mem_rol_id = rol.rol_id
-                           AND mem.mem_begin  <= ? -- DATE_NOW
-                           AND mem.mem_end     > ? -- DATE_NOW
-                           AND (mem.mem_approved IS NULL
-                            OR mem.mem_approved < 3)
-                           AND mem.mem_leader = false), 0) AS num_members,
-                       COALESCE((SELECT COUNT(*) AS count
-                          FROM ' . TBL_MEMBERS . ' AS mem
-                         WHERE mem.mem_rol_id = rol.rol_id
-                           AND mem.mem_begin  <= ? -- DATE_NOW
-                           AND mem.mem_end     > ? -- DATE_NOW
-                           AND mem.mem_leader = true), 0) AS num_leader,
-                       COALESCE((SELECT COUNT(*) AS count
-                          FROM ' . TBL_MEMBERS . ' AS mem
-                         WHERE mem.mem_rol_id = rol.rol_id
-                           AND mem_end < ?  -- DATE_NOW
-                           AND NOT EXISTS (
-                               SELECT 1
-                                 FROM ' . TBL_MEMBERS . ' AS act
-                                WHERE act.mem_rol_id = mem.mem_rol_id
-                                  AND act.mem_usr_id = mem.mem_usr_id
-                                  AND ? BETWEEN act.mem_begin AND act.mem_end -- DATE_NOW
-                           )), 0) AS num_former -- DATE_NOW
-                  FROM ' . TBL_ROLES . ' AS rol
-            INNER JOIN ' . TBL_CATEGORIES . ' AS cat
-                    ON cat_id = rol_cat_id
-                       ' . (strlen($categoryUUID) > 1 ? ' AND cat_uuid = \'' . $categoryUUID . '\'' : '') . '
-             LEFT JOIN ' . TBL_EVENTS . ' ON dat_rol_id = rol_id
-                 WHERE (  cat_org_id = ? -- $gCurrentOrgId
-                       OR cat_org_id IS NULL )';
-
-        switch ($this->roleType) {
-            case GroupsRoles::ROLE_TYPE_INACTIVE:
-                $sql .= ' AND rol_valid   = false
-                         AND cat_name_intern <> \'EVENTS\' ';
-                break;
-
-            case GroupsRoles::ROLE_TYPE_ACTIVE:
-                $sql .= ' AND rol_valid   = true
-                         AND cat_name_intern <> \'EVENTS\' ';
-                break;
-
-            case GroupsRoles::ROLE_TYPE_EVENT_PARTICIPATION:
-                $sql .= ' AND cat_name_intern = \'EVENTS\' ';
-                break;
-        }
-
-        if ($this->roleType == GroupsRoles::ROLE_TYPE_INACTIVE && $gCurrentUser->isAdministrator()) {
-            // if inactive roles should be shown, then show all of them to administrator
-            $sql .= '';
-        } else {
-            // create a list with all role IDs that the user is allowed to view
-            $visibleRoles = '\'' . implode('\', \'', $gCurrentUser->getRolesViewMemberships()) . '\'';
-            if ($visibleRoles !== '') {
-                $sql .= ' AND rol_uuid IN (' . $visibleRoles . ')';
-            } else {
-                $sql .= ' AND rol_uuid IS NULL ';
-            }
-        }
-
-        if ($this->roleType === GroupsRoles::ROLE_TYPE_EVENT_PARTICIPATION) {
-            $sql .= ' ORDER BY cat_sequence, dat_begin DESC, rol_name ';
-        } else {
-            $sql .= ' ORDER BY cat_sequence, rol_name ';
-        }
-
-        $queryParameters = array(
-            DATE_NOW,
-            DATE_NOW,
-            DATE_NOW,
-            DATE_NOW,
-            DATE_NOW,
-            DATE_NOW,
-            $gCurrentOrgId
-        );
-
-        $this->data = $gDb->getArrayFromSql($sql, $queryParameters);
     }
 }

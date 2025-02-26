@@ -54,6 +54,25 @@ class PreferencesService
     }
 
     /**
+     * Read all file names of a folder and return an array where the file names are the keys and a readable
+     * version of the file names are the values.
+     * @param string $folder Server path with folder name of whom the files should be read.
+     * @return array<int,string> Array with all file names of the given folder.
+     */
+    static function getArrayFileNames(string $folder): array
+    {
+        // get all files from the folder
+        $files = array_keys(FileSystemUtils::getDirectoryContent($folder, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+
+        foreach ($files as &$templateName) {
+            $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace(array('.tpl', '.html', '.txt'), '', $templateName)));
+        }
+        unset($templateName);
+
+        return $files;
+    }
+
+    /**
      * @param string $folder
      * @param string $templateName
      * @return string

@@ -29,8 +29,8 @@
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\Role;
-use Admidio\Roles\Service\RoleService;
-use Admidio\UI\View\GroupsRoles;
+use Admidio\Roles\Service\RolesService;
+use Admidio\UI\Presenter\GroupsRolesPresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -56,15 +56,15 @@ try {
     if (in_array($getMode, array('card', 'permissions'))) {
         // set headline
         switch ($getRoleType) {
-            case GroupsRoles::ROLE_TYPE_INACTIVE:
+            case GroupsRolesPresenter::ROLE_TYPE_INACTIVE:
                 $headline = $gL10n->get('SYS_INACTIVE_GROUPS_ROLES');
                 break;
 
-            case GroupsRoles::ROLE_TYPE_ACTIVE:
+            case GroupsRolesPresenter::ROLE_TYPE_ACTIVE:
                 $headline = $gL10n->get('SYS_GROUPS_ROLES');
                 break;
 
-            case GroupsRoles::ROLE_TYPE_EVENT_PARTICIPATION:
+            case GroupsRolesPresenter::ROLE_TYPE_EVENT_PARTICIPATION:
                 $headline = $gL10n->get('SYS_ROLES_CONFIRMATION_OF_PARTICIPATION');
                 break;
         }
@@ -75,7 +75,7 @@ try {
 
         // only users with the right to assign roles can view inactive roles
         if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
-            $getRoleType = GroupsRoles::ROLE_TYPE_ACTIVE;
+            $getRoleType = GroupsRolesPresenter::ROLE_TYPE_ACTIVE;
         }
 
         $category = new Category($gDb);
@@ -94,15 +94,15 @@ try {
         }
 
         // create html page object
-        $groupsRoles = new GroupsRoles('adm_groups_roles', $headline);
+        $groupsRoles = new GroupsRolesPresenter('adm_groups_roles', $headline);
 
+        $rolesService = new RolesService($gDb);
+        $data = $rolesService->findAll($getRoleType, $getCategoryUUID);
 
-        $groupsRoles->readData($getRoleType, $getCategoryUUID);
-
-        if ($groupsRoles->countRoles() === 0) {
+        if (count($data) === 0) {
             if ($gValidLogin) {
                 // If login valid, then show message for not available roles
-                if ($getRoleType === GroupsRoles::ROLE_TYPE_ACTIVE) {
+                if ($getRoleType === GroupsRolesPresenter::ROLE_TYPE_ACTIVE) {
                     $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
                     // => EXIT
                 } else {
@@ -135,13 +135,13 @@ try {
             }
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
-            $groupsRoles = new GroupsRoles('adm_groups_roles_edit', $headline);
+            $groupsRoles = new GroupsRolesPresenter('adm_groups_roles_edit', $headline);
             $groupsRoles->createEditForm($getRoleUUID);
             $groupsRoles->show();
             break;
 
         case 'save':
-            $groupsRoles = new RoleService($gDb, $getRoleUUID);
+            $groupsRoles = new RolesService($gDb, $getRoleUUID);
             $groupsRoles->save();
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
@@ -174,7 +174,7 @@ try {
 
         case 'export':
             // Export every member of a role into one vCard file
-            $groupsRoles = new RoleService($gDb, $getRoleUUID);
+            $groupsRoles = new RolesService($gDb, $getRoleUUID);
             $groupsRoles->export();
             break;
     }
