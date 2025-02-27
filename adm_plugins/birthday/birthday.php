@@ -342,7 +342,11 @@ try {
         }
     }
 
-    echo $birthdayPlugin->html('plugin.birthday.tpl');
+    if (isset($page)) {
+        echo $birthdayPlugin->html('plugin.birthday.tpl');
+    } else {
+        $birthdayPlugin->showHtmlPage('plugin.birthday.tpl');
+    }
 } catch (Throwable $e) {
     echo $e->getMessage();
 }

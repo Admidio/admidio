@@ -80,7 +80,12 @@ try {
         $loginFormPlugin->assignTemplateVariable('lastLogin', $lastLogin);
         $loginFormPlugin->assignTemplateVariable('numberOfLogins', $gCurrentUser->getValue('usr_number_login') . $htmlUserRank);
         $loginFormPlugin->assignTemplateVariable('showLogoutLink', $plg_show_logout_link);
-        echo $loginFormPlugin->html('plugin.login-form.view.tpl');
+
+        if (isset($page)) {
+            echo $loginFormPlugin->html('plugin.login-form.view.tpl');
+        } else {
+            $loginFormPlugin->showHtmlPage('plugin.login-form.view.tpl');
+        }
     } else {
         // create and show the login form
 

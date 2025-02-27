@@ -490,7 +490,7 @@ class PagePresenter
     }
 
     /** If set to true then a page without header menu and sidebar menu will be created.
-     *  The main template file will be **index_reduced.tpl** instead of index.tpl.
+     *  The main template file will be **index.reduced.tpl** instead of index.tpl.
      */
     public function setInlineMode()
     {
@@ -519,7 +519,7 @@ class PagePresenter
     }
 
     /**
-     * If print mode is set then the reduced template file **index_reduced.tpl** will be loaded with
+     * If print mode is set then the reduced template file **index.reduced.tpl** will be loaded with
      * a print specific css file **print.css**. All styles will be more print compatible and are
      * only black, grey and white.
      * @return void
@@ -572,7 +572,7 @@ class PagePresenter
 
         try {
             if ($this->modeInline || $gLayoutReduced) {
-                $this->smarty->display('index_reduced.tpl');
+                $this->smarty->display('index.reduced.tpl');
             } else {
                 $this->smarty->display('index.tpl');
             }

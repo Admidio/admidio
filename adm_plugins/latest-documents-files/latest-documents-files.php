@@ -123,7 +123,12 @@ try {
             $latestDocumentsFilesPlugin->assignTemplateVariable('message',$gL10n->get('SYS_FOLDER_NO_FILES_VISITOR'));
         }
     }
-    echo $latestDocumentsFilesPlugin->html('plugin.latest-documents-files.tpl');
+
+    if (isset($page)) {
+        echo $latestDocumentsFilesPlugin->html('plugin.latest-documents-files.tpl');
+    } else {
+        $latestDocumentsFilesPlugin->showHtmlPage('plugin.latest-documents-files.tpl');
+    }
 } catch (Throwable $e) {
     echo $e->getMessage();
 }

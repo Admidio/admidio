@@ -116,7 +116,11 @@ try {
             $randomPhotoPlugin->assignTemplateVariable('message',$gL10n->get('PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS'));
         }
 
-        echo $randomPhotoPlugin->html('plugin.random-photo.tpl');
+        if (isset($page)) {
+            echo $randomPhotoPlugin->html('plugin.random-photo.tpl');
+        } else {
+            $randomPhotoPlugin->showHtmlPage('plugin.random-photo.tpl');
+        }
     }
 } catch (Throwable $e) {
     echo $e->getMessage();

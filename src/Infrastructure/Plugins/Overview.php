@@ -15,6 +15,7 @@
  */
 namespace Admidio\Infrastructure\Plugins;
 
+use Admidio\UI\Presenter\PagePresenter;
 use Smarty\Smarty;
 use Admidio\Infrastructure\Exception;
 
@@ -28,6 +29,10 @@ class Overview
      * @var Smarty An object ot the Smarty template engine.
      */
     protected Smarty $smarty;
+    /**
+     * @var array An array with all the variables that should be assigned to the template.
+     */
+    protected array $smartyVariables = array();
 
     /**
      * Constructor for the overview plugin.
@@ -39,18 +44,14 @@ class Overview
     }
 
     /**
-     * Method assigns a Smarty
+     * Method assigns a variable to the template that should be used. The variable could be an array or a string.
      * @param string $name Name of the variable within the template
-     * @param string|array $value Content of the variable.
+     * @param array|string $value Content of the variable.
      * @return void
-     * @throws Exception
      */
-    public function assignTemplateVariable(string $name, $value)
+    public function assignTemplateVariable(string $name, array|string $value): void
     {
-        if (!isset($this->smarty)) {
-            $this->createSmartyObject();
-        }
-        $this->smarty->assign($name, $value);
+        $this->smartyVariables[$name] = $value;
     }
 
     /**
@@ -58,7 +59,7 @@ class Overview
      * @return Smarty Returns the initialized Smarty object.
      * @throws Exception
      */
-    public function createSmartyObject(): Smarty
+    protected function createSmartyObject(): Smarty
     {
         global $gL10n, $gCurrentOrganization;
 
@@ -84,8 +85,28 @@ class Overview
         }
     }
 
+
+    /**
+     * Creates the html page of the given template. In addition to the html method, this method
+     * also includes the html header with javascript and css files.
+     * @param string $template Name of the template file that should be used.
+     */
+    public function showHtmlPage(string $template): void
+    {
+        $overviewPage = new PagePresenter('adm_overview_plugin');
+        $overviewPage->setInlineMode();
+        $overviewPage->addTemplateFile(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/' . $template);
+
+        foreach($this->smartyVariables as $name => $value) {
+            $overviewPage->assignSmartyVariable($name, $value);
+        }
+
+        $overviewPage->show();
+    }
+
     /**
      * Creates the html of the given template and return the complete html code.
+     * @param string $template Name of the template file that should be used.
      * @return string Returns the html of the template
      * @throws Exception
      */
@@ -94,6 +115,10 @@ class Overview
         try {
             if (!isset($this->smarty)) {
                 $this->createSmartyObject();
+            }
+
+            foreach($this->smartyVariables as $name => $value) {
+                $this->smarty->assign($name, $value);
             }
 
             return $this->smarty->fetch($template);

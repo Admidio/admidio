@@ -136,7 +136,12 @@ try {
         } else {
             $eventListPlugin->assignTemplateVariable('message',$gL10n->get('PLG_EVENT_LIST_NO_ENTRIES_VISITORS'));
         }
-        echo $eventListPlugin->html('plugin.event-list.tpl');
+
+        if (isset($page)) {
+            echo $eventListPlugin->html('plugin.event-list.tpl');
+        } else {
+            $eventListPlugin->showHtmlPage('plugin.event-list.tpl');
+        }
     }
 } catch (Throwable $e) {
     echo $e->getMessage();
