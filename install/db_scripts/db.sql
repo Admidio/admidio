@@ -20,6 +20,8 @@ DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_topics         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_posts          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_links                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_members              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages             CASCADE;
