@@ -1050,8 +1050,8 @@ class ChangelogService {
             return;
         }
 
-        // Required tables is/are not logged at all
-        if (!self::isTableLogged($table))
+        // Required tables is/are not logged at all, or condition for history button not met
+        if (!self::isTableLogged($table) || !$condition)
             return;
 
 
