@@ -199,9 +199,11 @@ class ChangelogService {
         if ($table == null) {
             return $tableLabels;
         } else {
-            $table = array_key_exists($table, $tableLabels) ? $tableLabels[$table] : $table;
-            // TODO_RK: If possible, add link to listing page of the corresponding DB record type
-            return Language::translateIfTranslationStrId($table);
+            if (array_key_exists($table, $tableLabels)) {
+                return Language::translateIfTranslationStrId($tableLabels[$table]); 
+            } else {
+                return '';
+            }
         }
     }
 
@@ -990,7 +992,7 @@ class ChangelogService {
                 global $gSettingsManager;
                 if (in_array($t, ChangelogService::$noLogTables)) {
                     return false;
-                } elseif (!empty(ChangelogService::getTableLabel($t))) {
+                } elseif (!empty(ChangelogService::getTableLabel($t) && $gSettingsManager->has('changelog_table_'.$t))) {
                     return $gSettingsManager->getBool('changelog_table_'.$t);
                 } else {
                     return $gSettingsManager->getBool('changelog_table_others');
