@@ -621,10 +621,6 @@ tr.admidio-event-highlight {
     padding-left: 0;
 }
 
-#plgCalendarTable {
-    width: 100%;
-}
-
 #plgCalendarTable td.plgCalendarToday {
     background-color: var(--bs-body-color);
     border-radius: 5px;
