@@ -375,11 +375,6 @@ label {
     margin-top: 0;
 }
 
-.card-body .list-group-item {
-    padding-left: 0;
-    background-color: var(--bs-tertiary);
-}
-
 .card-footer .admidio-info-created-edited {
     font-size: 100% !important;
 }
@@ -623,8 +618,8 @@ tr.admidio-event-highlight {
 /* Overview page */
 /***********************************/
 
-#plgCalendarTable {
-    width: 100%;
+.admidio-plugin-content .list-group-item {
+    padding-left: 0;
 }
 
 #plgCalendarTable td.plgCalendarToday {

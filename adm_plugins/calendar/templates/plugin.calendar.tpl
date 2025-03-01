@@ -1,7 +1,7 @@
 <div id="plgCalendarContent" class="admidio-plugin-content">
     <h3>{$l10n->get('SYS_CALENDAR')}</h3>
 
-    <table id="plgCalendarTable">
+    <table id="plgCalendarTable" class="w-100">
         <tr>
             <th style="text-align: center;" class="plgCalendarHeader">
                 <a id="previousMonth" href="#" >&laquo;</a>
