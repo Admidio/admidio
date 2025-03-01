@@ -469,13 +469,14 @@ label {
     color: var(--bs-secondary);
 }
 
-.table-hover tbody tr td a.admidio-function-link {
+.table-hover tbody tr td .admidio-functions {
     visibility: hidden;
 }
 
-.table-hover tbody tr:hover td a.admidio-function-link {
+.table-hover tbody tr:hover td .admidio-functions {
     visibility: visible;
 }
+
 /***********************************/
 /* Various settings */
 /***********************************/
