@@ -466,6 +466,13 @@ class User extends Entity
         return true;
     }
 
+    /**
+     * Check the totp code of the current user. If the code is correct the session will be updated
+     * @param string|null $totpCode The current totp code for the current user.
+     * @return true Return true if totp code was correct
+     * @throws Exception SYS_TFA_TOTP_CODE_MISSING
+     * @throws Exception SYS_TFA_TOTP_CODE_INCORRECT
+     */
     private function checkTotp(string|null $totpCode): bool
     {
         global $gSettingsManager;
@@ -491,6 +498,14 @@ class User extends Entity
             throw new Exception($incorrectLoginMessage);
         }
         return true;
+    }
+
+    public function hasSetupTfa(): string
+    {
+        if ($this->getValue('usr_tfa_secret')) {
+            return true;
+        }
+        return false;
     }
 
     private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true): bool

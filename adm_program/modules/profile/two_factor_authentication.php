@@ -97,7 +97,7 @@ try {
 
     } elseif ($getMode === 'html') {
         // Show two factor authentication setup form if user does not have two factor authentication enabled
-        if (!$user->getValue('usr_tfa_secret')) {
+        if (!$user->hasSetupTfa()) {
 
             // Admins can only set up two factor authentication for themselves
             if ($gCurrentUserId !== $userId) {
