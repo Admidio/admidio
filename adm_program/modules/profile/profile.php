@@ -47,7 +47,7 @@ try {
      */
     function getFieldCode(string $fieldNameIntern, User $user)
     {
-        global $gCurrentUser, $gProfileFields, $gL10n;
+        global $gCurrentUser, $gProfileFields, $gL10n, $gSettingsManager;
 
         if (!$gCurrentUser->allowedViewProfileField($user, $fieldNameIntern)) {
             return false;
@@ -187,6 +187,10 @@ try {
         $("#menu_item_profile_password").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '");
         $("#menu_item_profile_password").attr("class", "nav-link btn btn-primary openPopup");
 
+        $("#menu_item_profile_tfa").attr("href", "javascript:void(0);");
+        $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
+        $("#menu_item_profile_tfa").attr("class", "nav-link btn btn-primary openPopup");
+
         $("#menu_item_profile_send_password").attr("href", "javascript:void(0);");
         $("#menu_item_profile_send_password").attr("data-buttons", "yes-no");
         $("#menu_item_profile_send_password").attr("data-message", "' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '");
@@ -200,7 +204,8 @@ try {
             profileJS.reloadFutureRoleMemberships();
         });
 
-        formSubmitEvent();',true
+        formSubmitEvent();',
+        true
     );
 
     // if user has right then show link to edit profile
@@ -241,6 +246,22 @@ try {
                 'bi-key-fill'
             );
         }
+    }
+
+    // show link to TFA settings if Two Factor authentication activated in global settings AND
+    // - user is current user OR
+    // - user is administrator and user is member of current organization and user has a login name
+    if (
+        $gSettingsManager->getBool('two_factor_authentication_enabled') &&
+        ($userId === $gCurrentUserId
+            || ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0))
+    ) {
+        $page->addPageFunctionsMenuItem(
+            'menu_item_profile_tfa',
+            $gL10n->get('SYS_TFA'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)),
+            'bi-shield-lock-fill'
+        );
     }
 
     // show link to view profile field change history
@@ -298,13 +319,14 @@ try {
                         $value = $user->getValue('usr_login_name');
                     }
                     $masterData['usr_login_name'] = array('id' => 'usr_login_name', 'label' => $gL10n->get('SYS_USERNAME'), 'value' => $value);
-                    if (!empty($user->getValue('usr_actual_login'))
-                        && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())) {
+                    if (
+                        !empty($user->getValue('usr_actual_login'))
+                        && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())
+                    ) {
                         $masterData['usr_actual_login'] = array('id' => 'usr_actual_login', 'label' => '', 'value' => $user->getValue('usr_actual_login'));
                     }
                 }
-            }
-            else {
+            } else {
                 if ($category !== $field->getValue('cat_name')) {
                     if ($category !== '') {
                         $profileData[$category] = $categoryData;
@@ -343,12 +365,16 @@ try {
 
         // set urls for map and route
         $destination = array_filter(array(
-            $masterData['STREET']['value'], $masterData['POSTCODE']['value'],
-            $masterData['CITY']['value'], $masterData['COUNTRY']['value']
+            $masterData['STREET']['value'],
+            $masterData['POSTCODE']['value'],
+            $masterData['CITY']['value'],
+            $masterData['COUNTRY']['value']
         ));
         $origin = array_filter(array(
-            $gCurrentUser->getValue('STREET'), $gCurrentUser->getValue('POSTCODE'),
-            $gCurrentUser->getValue('CITY'), $gCurrentUser->getValue('COUNTRY')
+            $gCurrentUser->getValue('STREET'),
+            $gCurrentUser->getValue('POSTCODE'),
+            $gCurrentUser->getValue('CITY'),
+            $gCurrentUser->getValue('COUNTRY')
         ));
 
         $page->assignSmartyVariable('urlMapAddress', SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => implode(',', $destination))));
@@ -368,8 +394,10 @@ try {
     if ($gCurrentUser->hasRightEditProfile($user)) {
         $page->assignSmartyVariable('urlProfilePhotoUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)));
         // the image can only be deleted if corresponding rights exist
-        if (((string)$user->getValue('usr_photo') !== '' && (int)$gSettingsManager->get('profile_photo_storage') === 0)
-            || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $userId . '.jpg') && (int)$gSettingsManager->get('profile_photo_storage') === 1) {
+        if (
+            ((string) $user->getValue('usr_photo') !== '' && (int) $gSettingsManager->get('profile_photo_storage') === 0)
+            || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $userId . '.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1
+        ) {
             $page->assignSmartyVariable('urlProfilePhotoDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackProfilePhoto\')');
         }
     }
@@ -465,28 +493,28 @@ try {
                     'icon' => 'bi-person-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_announcements') && (int)$gSettingsManager->get('announcements_module_enabled') > 0) {
+            if ($user->checkRolesRight('rol_announcements') && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_announcements'],
                     'right' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
                     'icon' => 'bi-newspaper'
                 );
             }
-            if ($user->checkRolesRight('rol_events') && (int)$gSettingsManager->get('events_module_enabled') > 0) {
+            if ($user->checkRolesRight('rol_events') && (int) $gSettingsManager->get('events_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_events'],
                     'right' => $gL10n->get('SYS_RIGHT_DATES'),
                     'icon' => 'bi-calendar-week-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_photo') && (int)$gSettingsManager->get('photo_module_enabled') > 0) {
+            if ($user->checkRolesRight('rol_photo') && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_photo'],
                     'right' => $gL10n->get('SYS_RIGHT_PHOTOS'),
                     'icon' => 'bi-image-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_documents_files') && (int)$gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($user->checkRolesRight('rol_documents_files') && (int) $gSettingsManager->getBool('documents_files_module_enabled')) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_documents_files'],
                     'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
@@ -500,7 +528,7 @@ try {
                     'icon' => 'bi-chat-dots-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_weblinks') && (int)$gSettingsManager->get('enable_weblinks_module') > 0) {
+            if ($user->checkRolesRight('rol_weblinks') && (int) $gSettingsManager->get('enable_weblinks_module') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_weblinks'],
                     'right' => $gL10n->get('SYS_RIGHT_WEBLINKS'),
@@ -520,8 +548,10 @@ try {
     }
 
 
-    if ($gSettingsManager->getBool('profile_show_extern_roles')
-        && ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization())) {
+    if (
+        $gSettingsManager->getBool('profile_show_extern_roles')
+        && ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization())
+    ) {
         // *******************************************************************************
         // Block with roles from other organizations
         // *******************************************************************************
@@ -552,7 +582,7 @@ try {
             $role = new Role($gDb);
 
             while ($row = $roleStatement->fetch()) {
-                $orgId = (int)$row['org_id'];
+                $orgId = (int) $row['org_id'];
 
                 // if roles of new organization than read the rights of this organization
                 if ($actualOrganization !== $orgId) {
@@ -601,7 +631,7 @@ try {
                AND urt_name_male   <> \'\'
                AND urt_name_female <> \'\'';
         $statement = $gDb->queryPrepared($sql, array($userId));
-        $count = (int)$statement->fetchColumn();
+        $count = (int) $statement->fetchColumn();
 
         if ($count > 0) {
             $page->assignSmartyVariable('showUserRelations', true);
@@ -656,7 +686,7 @@ try {
                 }
 
                 // only show info if system setting is activated
-                if ((int)$gSettingsManager->get('system_show_create_edit') > 0) {
+                if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
                     $userRelation['nameUserCreated'] = $relation->getNameOfCreatingUser();
                     $userRelation['timestampUserCreated'] = $relation->getValue('ure_timestamp_create');
                     $userRelation['nameLastUserEdited'] = $relation->getNameOfLastEditingUser();

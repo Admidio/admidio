@@ -203,5 +203,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="950" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_usr_create</step>
     <step id="960" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_fk_gbc_usr_change</step>
     <step id="970" database="pgsql">ALTER TABLE %PREFIX%_guestbook_comments DROP CONSTRAINT %PREFIX%_fk_gbc_usr_change</step>
+    <step id="980">ALTER TABLE %PREFIX%_users ADD COLUMN usr_tfa_secret varchar(255)</step>
     <step>stop</step>
 </update>

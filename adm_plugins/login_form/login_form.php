@@ -107,7 +107,7 @@ try {
             $administratorStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
             // create role object for administrator
-            $roleAdministrator = new Role($gDb, (int)$administratorStatement->fetchColumn());
+            $roleAdministrator = new Role($gDb, (int) $administratorStatement->fetchColumn());
 
             $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
@@ -151,6 +151,15 @@ try {
                 'helpTextId' => $forgotPasswordLink
             )
         );
+
+        if ($gSettingsManager->getBool('two_factor_authentication_enabled')) {
+            $form->addInput(
+                'usr_totp_code',
+                $gL10n->get('SYS_SECURITY_CODE'),
+                '',
+                array('maxLength' => 6)
+            );
+        }
 
         // show selectbox with all organizations of database
         if ($gCurrentOrganization->getValue('org_show_org_select')) {
