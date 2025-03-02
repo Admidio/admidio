@@ -29,7 +29,7 @@
         "ifsnop/mysqldump-php": "^2.12",
         "monolog/monolog": "^3.0",
         "phpmailer/phpmailer": "^6.4",
-        "phpoffice/phpspreadsheet": "^1.29.6",
+        "phpoffice/phpspreadsheet": "^4.0",
         "ramsey/uuid": "^4.1",
         "robthree/twofactorauth": "^3.0",
         "smarty/smarty": "^5.0",
