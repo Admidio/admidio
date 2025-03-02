@@ -409,7 +409,7 @@ class Message extends Entity
                 $recipientsString = $recipients[0]['name'];
             } else {
                 $user = new User($this->db, $gProfileFields, $this->getValue('msg_usr_id_sender'));
-                $recipientsString = $user->getValue('FIRST_NAME') . ' Message.php' . $user->getValue('LAST_NAME');
+                $recipientsString = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
             }
         } else {
             // email receivers are all stored in the recipients array
