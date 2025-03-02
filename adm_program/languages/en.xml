@@ -1358,7 +1358,7 @@
   <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_3">Confirm: Submit the code to complete the setup.</string>
   <string name="SYS_QR_CODE">QR Code</string>
   <string name="SYS_TFA_SETUP_SUCCESSFUL">Two Factor Authentication setup successfully.</string>
-  <string name="SYS_TFA_TOTP_CODE">Authentication Code</string>
+  <string name="SYS_SECURITY_CODE">Authentication Code</string>
   <string name="SYS_TFA_TOTP_CODE_INCORRECT">The entered authentication code is incorrect.</string>
   <string name="SYS_TFA_TOTP_CODE_MISSING">You have activated two factor authentication for your account. Please enter the authentication code from your authenticator app.</string>
   <string name="SYS_THUMBNAIL_SCALING">Thumbnail scaling</string>

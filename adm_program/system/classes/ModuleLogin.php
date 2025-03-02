@@ -50,12 +50,12 @@ class ModuleLogin
 
         // read id of administrator role
         $sql = 'SELECT MIN(rol_id) as rol_id
-                  FROM '.TBL_ROLES.'
-            INNER JOIN '.TBL_CATEGORIES.'
+                  FROM ' . TBL_ROLES . '
+            INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
                  WHERE rol_administrator = true
                    AND (  cat_org_id = (SELECT org_id
-                                          FROM '.TBL_ORGANIZATIONS.'
+                                          FROM ' . TBL_ORGANIZATIONS . '
                                          WHERE org_shortname = ? /* $gCurrentOrgId */)
                        OR cat_org_id IS NULL )';
         $pdoStatement = $gDb->queryPrepared($sql, array($organizationShortName));
@@ -66,10 +66,10 @@ class ModuleLogin
         // show link if user has login problems
         if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
             // request to reset the password
-            $forgotPasswordLink = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
+            $forgotPasswordLink = ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php';
         } elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
             // show link of message module to send mail to administrator role
-            $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+            $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         } else {
             // show link to send mail with local mail-client to administrator
             $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:' . $gCurrentOrganization->getValue('org_email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
@@ -79,7 +79,7 @@ class ModuleLogin
         $form = new FormPresenter(
             'adm_login_form',
             'system/login.tpl',
-            ADMIDIO_URL.'/adm_program/system/login.php?mode=check',
+            ADMIDIO_URL . '/adm_program/system/login.php?mode=check',
             $page,
             array('showRequiredFields' => false)
         );
@@ -102,14 +102,14 @@ class ModuleLogin
         );
         $form->addInput(
             'usr_totp_code',
-            $gL10n->get('SYS_TFA_TOTP_CODE'),
+            $gL10n->get('SYS_SECURITY_CODE'),
             '',
             array('maxLength' => 6)
         );
 
         // show selectbox with all organizations of database
         $sql = 'SELECT org_shortname, org_longname
-                  FROM '.TBL_ORGANIZATIONS.'
+                  FROM ' . TBL_ORGANIZATIONS . '
               ORDER BY org_longname, org_shortname';
         $form->addSelectBoxFromSql(
             'org_shortname',
@@ -142,7 +142,7 @@ class ModuleLogin
 
         $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);
         $postPassword = ($formValues['usr_password'] ?? $formValues['plg_usr_password']);
-        $postTotpCode =($formValues['usr_totp_code'] ?? $formValues['plg_usr_totp_code'] ?? null);
+        $postTotpCode = ($formValues['usr_totp_code'] ?? $formValues['plg_usr_totp_code'] ?? null);
         $postOrgShortName = ($formValues['org_shortname'] ?? ($formValues['plg_org_shortname'] ?? $gCurrentOrganization->getValue('org_shortname')));
         $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login']);
 
@@ -153,9 +153,10 @@ class ModuleLogin
         $userStatement = $gDb->queryPrepared($sql, array($postLoginName));
 
         // Alternatively, allow email addresses instead of username (if configured).
-        if ($gSettingsManager->getBool('security_login_email_address_enabled') &&
-            $userStatement->rowCount() === 0)
-        {
+        if (
+            $gSettingsManager->getBool('security_login_email_address_enabled') &&
+            $userStatement->rowCount() === 0
+        ) {
             $sql = 'SELECT usd_usr_id
                    FROM ' . TBL_USER_DATA . '
                    WHERE usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')

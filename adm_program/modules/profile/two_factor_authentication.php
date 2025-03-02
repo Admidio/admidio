@@ -121,7 +121,7 @@ try {
             $form->addCustomContent('qr_code', $gL10n->get('SYS_QR_CODE'), $html);
             $form->addInput(
                 'otp_code',
-                $gL10n->get('SYS_TFA_TOTP_CODE'),
+                $gL10n->get('SYS_SECURITY_CODE'),
                 '',
                 array(
                     'type' => 'text',

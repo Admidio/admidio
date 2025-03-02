@@ -1405,7 +1405,7 @@
   <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_3">Bestätigen: Sende den Sicherheitscode, um die Einrichtung abzuschließen.</string>
   <string name="SYS_QR_CODE">QR-Code</string>
   <string name="SYS_TFA_SETUP_SUCCESSFUL"> Zwei-Faktor-Authentifizierung erfolgreich eingerichtet.</string>
-  <string name="SYS_TFA_TOTP_CODE">Sicherheitscode</string>
+  <string name="SYS_SECURITY_CODE">Sicherheitscode</string>
   <string name="SYS_TFA_TOTP_CODE_INCORRECT">Der eingegebene Sicherheitscode ist falsch.</string>
   <string name="SYS_TFA_TOTP_CODE_MISSING">Sie haben die Zwei-Faktor-Authentifizierung für Ihr Konto aktiviert. Bitte geben Sie den Sicherheitscode aus Ihrer Authentifizierungs-App ein.</string>
   <string name="SYS_THUMBNAIL_SCALING">Skalierung Vorschaubild</string>

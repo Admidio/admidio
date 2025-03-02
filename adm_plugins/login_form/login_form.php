@@ -107,7 +107,7 @@ try {
             $administratorStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
             // create role object for administrator
-            $roleAdministrator = new Role($gDb, (int)$administratorStatement->fetchColumn());
+            $roleAdministrator = new Role($gDb, (int) $administratorStatement->fetchColumn());
 
             $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
@@ -152,10 +152,10 @@ try {
             )
         );
 
-        if($gSettingsManager->getBool('enable_two_factor_authentication')) {
+        if ($gSettingsManager->getBool('enable_two_factor_authentication')) {
             $form->addInput(
                 'usr_totp_code',
-                $gL10n->get('SYS_TFA_TOTP_CODE'),
+                $gL10n->get('SYS_SECURITY_CODE'),
                 '',
                 array('maxLength' => 6)
             );
