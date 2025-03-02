@@ -1403,7 +1403,7 @@
   <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_1">Scanne den QR-Code: Verwende eine Authentifizierungs-App (z.B. Google Authenticator, Authy), um den angezeigten QR-Code zu scannen.</string>
   <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_2">Gib den Sicherheitscode ein: Öffne die Authentifizierungs-App, suchen den für unseren Dienst generierten Authentifizierungscode und gib ihn in das Eingabefeld ein.</string>
   <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_3">Bestätigen: Sende den Sicherheitscode, um die Einrichtung abzuschließen.</string>
-  <string name="SYS_TFA_SETUP_SCAN_QR">QR-Code</string>
+  <string name="SYS_QR_CODE">QR-Code</string>
   <string name="SYS_TFA_SETUP_SUCCESSFUL"> Zwei-Faktor-Authentifizierung erfolgreich eingerichtet.</string>
   <string name="SYS_TFA_TOTP_CODE">Sicherheitscode</string>
   <string name="SYS_TFA_TOTP_CODE_INCORRECT">Der eingegebene Sicherheitscode ist falsch.</string>

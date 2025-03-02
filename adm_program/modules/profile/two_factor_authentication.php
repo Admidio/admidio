@@ -88,7 +88,7 @@ try {
         $user->setSecondFactorSecret(null);
         $user->save();
 
-        if($gCurrentUserId === $userId){
+        if ($gCurrentUserId === $userId) {
             $gCurrentUser->setSecondFactorSecret(null);
         }
 
@@ -118,17 +118,17 @@ try {
             // Prepare setup form
             $qrImageUri = $tfa->getQRCodeImageAsDataUri($orgName, $secret, 200);
             $html = '<img id="qr_code" src="' . $qrImageUri . '" alt="Secret: ' . $secret . '" />';
-            $form->addCustomContent('qr_code', $gL10n->get('SYS_TFA_SETUP_SCAN_QR'), $html);
+            $form->addCustomContent('qr_code', $gL10n->get('SYS_QR_CODE'), $html);
             $form->addInput(
-                'otp_code', 
-                $gL10n->get('SYS_TFA_TOTP_CODE'), 
-                '', 
+                'otp_code',
+                $gL10n->get('SYS_TFA_TOTP_CODE'),
+                '',
                 array(
-                    'type' => 'text', 
-                    'required' => true, 
+                    'type' => 'text',
+                    'required' => true,
                     'maxLength' => 6,
                     'class' => 'w-50'
-                    )
+                )
             );
             $form->addSubmitButton(
                 'adm_button_save',
