@@ -27,15 +27,15 @@
         "eluceo/ical": "^2.0",
         "ezyang/htmlpurifier": "^4.14",
         "ifsnop/mysqldump-php": "^2.12",
-        "monolog/monolog": "^2.0",
+        "monolog/monolog": "^3.0",
         "phpmailer/phpmailer": "^6.4",
         "phpoffice/phpspreadsheet": "^1.29.6",
         "ramsey/uuid": "^4.1",
+        "robthree/twofactorauth": "^3.0",
         "smarty/smarty": "^5.0",
         "tecnickcom/tcpdf": "^6.2",
         "twbs/bootstrap": "5.3.*",
-        "twbs/bootstrap-icons": "^1.11",
-        "robthree/twofactorauth": "^3.0"
+        "twbs/bootstrap-icons": "^1.11"
     },
     "suggest": {
         "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes",
