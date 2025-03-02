@@ -420,7 +420,7 @@ class PreferencesPresenter extends PagePresenter
         $formCategoryReport->addCheckbox(
             'category_report_enable_module',
             $gL10n->get('SYS_ENABLE_CATEGORY_REPORT'),
-            (bool)$formValues['category_report_enable_module'],
+            (bool) $formValues['category_report_enable_module'],
             array('helpTextId' => array('SYS_ENABLE_CATEGORY_REPORT_DESC', array($gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'))))
         );
         // read all global lists
@@ -516,9 +516,9 @@ class PreferencesPresenter extends PagePresenter
 
         foreach ($tablesMap as $tableName => $tableLabel) {
             $formChangelog->addCheckbox(
-                'changelog_table_'.$tableName,
+                'changelog_table_' . $tableName,
                 "$tableLabel ($tableName)",
-                $formValues['changelog_table_'.$tableName]??false,
+                $formValues['changelog_table_' . $tableName] ?? false,
                 array()
             );
         }
@@ -588,19 +588,19 @@ class PreferencesPresenter extends PagePresenter
         $formCommon->addCheckbox(
             'enable_rss',
             $gL10n->get('SYS_ENABLE_RSS_FEEDS'),
-            (bool)$formValues['enable_rss'],
+            (bool) $formValues['enable_rss'],
             array('helpTextId' => array('SYS_ENABLE_RSS_FEEDS_DESC', array('SYS_YES')))
         );
         $formCommon->addCheckbox(
             'system_cookie_note',
             $gL10n->get('SYS_COOKIE_NOTE'),
-            (bool)$formValues['system_cookie_note'],
+            (bool) $formValues['system_cookie_note'],
             array('helpTextId' => 'SYS_COOKIE_NOTE_DESC')
         );
         $formCommon->addCheckbox(
             'system_search_similar',
             $gL10n->get('ORG_SEARCH_SIMILAR_NAMES'),
-            (bool)$formValues['system_search_similar'],
+            (bool) $formValues['system_search_similar'],
             array('helpTextId' => 'ORG_SEARCH_SIMILAR_NAMES_DESC')
         );
         $selectBoxEntries = array(0 => $gL10n->get('SYS_DONT_SHOW'), 1 => $gL10n->get('SYS_FIRSTNAME_LASTNAME'), 2 => $gL10n->get('SYS_USERNAME'));
@@ -625,13 +625,13 @@ class PreferencesPresenter extends PagePresenter
         $formCommon->addCheckbox(
             'system_js_editor_enabled',
             $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'),
-            (bool)$formValues['system_js_editor_enabled'],
+            (bool) $formValues['system_js_editor_enabled'],
             array('helpTextId' => 'ORG_JAVASCRIPT_EDITOR_ENABLE_DESC')
         );
         $formCommon->addCheckbox(
             'system_browser_update_check',
             $gL10n->get('ORG_BROWSER_UPDATE_CHECK'),
-            (bool)$formValues['system_browser_update_check'],
+            (bool) $formValues['system_browser_update_check'],
             array('helpTextId' => 'ORG_BROWSER_UPDATE_CHECK_DESC')
         );
         $formCommon->addSubmitButton(
@@ -701,13 +701,13 @@ class PreferencesPresenter extends PagePresenter
         $formContacts->addCheckbox(
             'contacts_show_all',
             $gL10n->get('SYS_SHOW_ALL_CONTACTS'),
-            (bool)$formValues['contacts_show_all'],
+            (bool) $formValues['contacts_show_all'],
             array('helpTextId' => 'SYS_SHOW_ALL_CONTACTS_DESC')
         );
         $formContacts->addCheckbox(
             'contacts_user_relations_enabled',
             $gL10n->get('SYS_ENABLE_USER_RELATIONS'),
-            (bool)$formValues['contacts_user_relations_enabled'],
+            (bool) $formValues['contacts_user_relations_enabled'],
             array('helpTextId' => 'SYS_ENABLE_USER_RELATIONS_DESC')
         );
 
@@ -717,7 +717,8 @@ class PreferencesPresenter extends PagePresenter
             'userRelations',
             $gL10n->get('SYS_USER_RELATIONS'),
             $html,
-            array('helpTextId' => 'SYS_MAINTAIN_USER_RELATION_TYPES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+            array('helpTextId' => 'SYS_MAINTAIN_USER_RELATION_TYPES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+        );
 
         $formContacts->addSubmitButton(
             'adm_button_save_contacts',
@@ -753,7 +754,7 @@ class PreferencesPresenter extends PagePresenter
         $formDocumentsFiles->addCheckbox(
             'documents_files_module_enabled',
             $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'),
-            (bool)$formValues['documents_files_module_enabled'],
+            (bool) $formValues['documents_files_module_enabled'],
             array('helpTextId' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
         );
         $formDocumentsFiles->addInput(
@@ -848,7 +849,7 @@ class PreferencesPresenter extends PagePresenter
         $formEmailDispatch->addCheckbox(
             'mail_into_to',
             $gL10n->get('SYS_INTO_TO'),
-            (bool)$formValues['mail_into_to'],
+            (bool) $formValues['mail_into_to'],
             array('helpTextId' => 'SYS_INTO_TO_DESC')
         );
         $formEmailDispatch->addInput(
@@ -874,7 +875,7 @@ class PreferencesPresenter extends PagePresenter
         $formEmailDispatch->addCheckbox(
             'mail_smtp_auth',
             $gL10n->get('SYS_SMTP_AUTH'),
-            (bool)$formValues['mail_smtp_auth'],
+            (bool) $formValues['mail_smtp_auth'],
             array('helpTextId' => 'SYS_SMTP_AUTH_DESC')
         );
         $formEmailDispatch->addInput(
@@ -995,13 +996,13 @@ class PreferencesPresenter extends PagePresenter
         $formEvents->addCheckbox(
             'events_ical_export_enabled',
             $gL10n->get('SYS_ENABLE_ICAL_EXPORT'),
-            (bool)$formValues['events_ical_export_enabled'],
+            (bool) $formValues['events_ical_export_enabled'],
             array('helpTextId' => 'SYS_ENABLE_ICAL_EXPORT_DESC')
         );
         $formEvents->addCheckbox(
             'events_show_map_link',
             $gL10n->get('SYS_SHOW_MAP_LINK'),
-            (bool)$formValues['events_show_map_link'],
+            (bool) $formValues['events_show_map_link'],
             array('helpTextId' => 'SYS_SHOW_MAP_LINK_DESC')
         );
         $sqlData = array();
@@ -1021,13 +1022,13 @@ class PreferencesPresenter extends PagePresenter
         $formEvents->addCheckbox(
             'events_save_cancellations',
             $gL10n->get('SYS_SAVE_ALL_CANCELLATIONS'),
-            (bool)$formValues['events_save_cancellations'],
+            (bool) $formValues['events_save_cancellations'],
             array('helpTextId' => 'SYS_SAVE_ALL_CANCELLATIONS_DESC')
         );
         $formEvents->addCheckbox(
             'events_may_take_part',
             $gL10n->get('SYS_MAYBE_PARTICIPATE'),
-            (bool)$formValues['events_may_take_part'],
+            (bool) $formValues['events_may_take_part'],
             array('helpTextId' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'SYS_CANCEL', 'SYS_EVENT_PARTICIPATION_TENTATIVE')))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'EVT')) . '">
@@ -1041,7 +1042,7 @@ class PreferencesPresenter extends PagePresenter
         $formEvents->addCheckbox(
             'events_rooms_enabled',
             $gL10n->get('SYS_ROOM_SELECTABLE'),
-            (bool)$formValues['events_rooms_enabled'],
+            (bool) $formValues['events_rooms_enabled'],
             array('helpTextId' => 'SYS_ROOM_SELECTABLE_DESC')
         );
         $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms.php">
@@ -1086,7 +1087,7 @@ class PreferencesPresenter extends PagePresenter
         $formGroupsRoles->addCheckbox(
             'groups_roles_enable_module',
             $gL10n->get('SYS_ENABLE_GROUPS_ROLES'),
-            (bool)$formValues['groups_roles_enable_module'],
+            (bool) $formValues['groups_roles_enable_module'],
             array('helpTextId' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
         );
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
@@ -1150,7 +1151,8 @@ class PreferencesPresenter extends PagePresenter
             'editCategories',
             $gL10n->get('SYS_EDIT_CATEGORIES'),
             $html,
-            array('helpTextId' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+            array('helpTextId' => 'SYS_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+        );
         $formGroupsRoles->addSubmitButton(
             'adm_button_save_lists',
             $gL10n->get('SYS_SAVE'),
@@ -1318,19 +1320,19 @@ class PreferencesPresenter extends PagePresenter
         $formMessages->addCheckbox(
             'enable_mail_module',
             $gL10n->get('SYS_ENABLE_EMAILS'),
-            (bool)$formValues['enable_mail_module'],
+            (bool) $formValues['enable_mail_module'],
             array('helpTextId' => 'SYS_ENABLE_EMAILS_DESC')
         );
         $formMessages->addCheckbox(
             'enable_pm_module',
             $gL10n->get('SYS_ENABLE_PM_MODULE'),
-            (bool)$formValues['enable_pm_module'],
+            (bool) $formValues['enable_pm_module'],
             array('helpTextId' => 'SYS_ENABLE_PM_MODULE_DESC')
         );
         $formMessages->addCheckbox(
             'enable_mail_captcha',
             $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool)$formValues['enable_mail_captcha'],
+            (bool) $formValues['enable_mail_captcha'],
             array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
         );
 
@@ -1343,7 +1345,8 @@ class PreferencesPresenter extends PagePresenter
                 'showContextDependentFirstEntry' => true,
                 'arrayKeyIsNotValue' => true,
                 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'),
-                'helpTextId' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
+                'helpTextId' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>'))
+            )
         );
         $formMessages->addInput(
             'mail_max_receiver',
@@ -1354,13 +1357,13 @@ class PreferencesPresenter extends PagePresenter
         $formMessages->addCheckbox(
             'mail_send_to_all_addresses',
             $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'),
-            (bool)$formValues['mail_send_to_all_addresses'],
+            (bool) $formValues['mail_send_to_all_addresses'],
             array('helpTextId' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
         );
         $formMessages->addCheckbox(
             'mail_show_former',
             $gL10n->get('SYS_SEND_EMAIL_FORMER'),
-            (bool)$formValues['mail_show_former'],
+            (bool) $formValues['mail_show_former'],
             array('helpTextId' => 'SYS_SEND_EMAIL_FORMER_DESC')
         );
         $formMessages->addInput(
@@ -1372,13 +1375,13 @@ class PreferencesPresenter extends PagePresenter
         $formMessages->addCheckbox(
             'mail_save_attachments',
             $gL10n->get('SYS_SAVE_ATTACHMENTS'),
-            (bool)$formValues['mail_save_attachments'],
+            (bool) $formValues['mail_save_attachments'],
             array('helpTextId' => 'SYS_SAVE_ATTACHMENTS_DESC')
         );
         $formMessages->addCheckbox(
             'mail_html_registered_users',
             $gL10n->get('SYS_HTML_MAILS_REGISTERED_USERS'),
-            (bool)$formValues['mail_html_registered_users'],
+            (bool) $formValues['mail_html_registered_users'],
             array('helpTextId' => 'SYS_HTML_MAILS_REGISTERED_USERS_DESC')
         );
         $selectBoxEntries = array(
@@ -1489,19 +1492,19 @@ class PreferencesPresenter extends PagePresenter
         $formPhotos->addCheckbox(
             'photo_download_enabled',
             $gL10n->get('SYS_ENABLE_DOWNLOAD'),
-            (bool)$formValues['photo_download_enabled'],
+            (bool) $formValues['photo_download_enabled'],
             array('helpTextId' => array('SYS_ENABLE_DOWNLOAD_DESC', array('SYS_KEEP_ORIGINAL')))
         );
         $formPhotos->addCheckbox(
             'photo_keep_original',
             $gL10n->get('SYS_KEEP_ORIGINAL'),
-            (bool)$formValues['photo_keep_original'],
+            (bool) $formValues['photo_keep_original'],
             array('helpTextId' => array('SYS_KEEP_ORIGINAL_DESC', array('SYS_ENABLE_DOWNLOAD')))
         );
         $formPhotos->addCheckbox(
             'photo_ecard_enabled',
             $gL10n->get('SYS_ENABLE_GREETING_CARDS'),
-            (bool)$formValues['photo_ecard_enabled'],
+            (bool) $formValues['photo_ecard_enabled'],
             array('helpTextId' => 'SYS_ENABLE_GREETING_CARDS_DESC')
         );
         $formPhotos->addInput(
@@ -1609,7 +1612,7 @@ class PreferencesPresenter extends PagePresenter
         } catch (Exception $e) {
             $prnGeneratorColorClass = 'text-danger';
             $prnGeneratorText = $gL10n->get('SYS_PRNG_INSECURE');
-            $prnGeneratorInfo =  '<br />' . $e->getMessage();
+            $prnGeneratorInfo = '<br />' . $e->getMessage();
         }
         $this->assignSmartyVariable('prnGeneratorColorClass', $prnGeneratorColorClass);
         $this->assignSmartyVariable('prnGeneratorText', $prnGeneratorText);
@@ -1651,19 +1654,19 @@ class PreferencesPresenter extends PagePresenter
         $formProfile->addCheckbox(
             'profile_show_map_link',
             $gL10n->get('SYS_SHOW_MAP_LINK'),
-            (bool)$formValues['profile_show_map_link'],
+            (bool) $formValues['profile_show_map_link'],
             array('helpTextId' => 'SYS_SHOW_MAP_LINK_PROFILE_DESC')
         );
         $formProfile->addCheckbox(
             'profile_show_roles',
             $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP'),
-            (bool)$formValues['profile_show_roles'],
+            (bool) $formValues['profile_show_roles'],
             array('helpTextId' => 'SYS_SHOW_ROLE_MEMBERSHIP_DESC')
         );
         $formProfile->addCheckbox(
             'profile_show_former_roles',
             $gL10n->get('SYS_SHOW_FORMER_ROLE_MEMBERSHIP'),
-            (bool)$formValues['profile_show_former_roles'],
+            (bool) $formValues['profile_show_former_roles'],
             array('helpTextId' => 'SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
         );
 
@@ -1671,7 +1674,7 @@ class PreferencesPresenter extends PagePresenter
             $formProfile->addCheckbox(
                 'profile_show_extern_roles',
                 $gL10n->get('SYS_SHOW_ROLES_OTHER_ORGANIZATIONS'),
-                (bool)$formValues['profile_show_extern_roles'],
+                (bool) $formValues['profile_show_extern_roles'],
                 array('helpTextId' => 'SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC')
             );
         }
@@ -1784,31 +1787,31 @@ class PreferencesPresenter extends PagePresenter
         $formRegistration->addCheckbox(
             'registration_enable_module',
             $gL10n->get('ORG_ENABLE_REGISTRATION_MODULE'),
-            (bool)$formValues['registration_enable_module'],
+            (bool) $formValues['registration_enable_module'],
             array('helpTextId' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC')
         );
         $formRegistration->addCheckbox(
             'registration_manual_approval',
             $gL10n->get('SYS_MANUAL_APPROVAL'),
-            (bool)$formValues['registration_manual_approval'],
+            (bool) $formValues['registration_manual_approval'],
             array('helpTextId' => array('SYS_MANUAL_APPROVAL_DESC', array('SYS_RIGHT_APPROVE_USERS')))
         );
         $formRegistration->addCheckbox(
             'registration_enable_captcha',
             $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool)$formValues['registration_enable_captcha'],
+            (bool) $formValues['registration_enable_captcha'],
             array('helpTextId' => 'ORG_CAPTCHA_REGISTRATION')
         );
         $formRegistration->addCheckbox(
             'registration_adopt_all_data',
             $gL10n->get('SYS_REGISTRATION_ADOPT_ALL_DATA'),
-            (bool)$formValues['registration_adopt_all_data'],
+            (bool) $formValues['registration_adopt_all_data'],
             array('helpTextId' => 'SYS_REGISTRATION_ADOPT_ALL_DATA_DESC')
         );
         $formRegistration->addCheckbox(
             'registration_send_notification_email',
             $gL10n->get('ORG_EMAIL_ALERTS'),
-            (bool)$formValues['registration_send_notification_email'],
+            (bool) $formValues['registration_send_notification_email'],
             array('helpTextId' => array('ORG_EMAIL_ALERTS_DESC', array('SYS_RIGHT_APPROVE_USERS')))
         );
         $formRegistration->addSubmitButton(
@@ -1864,13 +1867,13 @@ class PreferencesPresenter extends PagePresenter
         $formSecurity->addCheckbox(
             'enable_auto_login',
             $gL10n->get('ORG_LOGIN_AUTOMATICALLY'),
-            (bool)$formValues['enable_auto_login'],
+            (bool) $formValues['enable_auto_login'],
             array('helpTextId' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
         );
         $formSecurity->addCheckbox(
             'enable_password_recovery',
             $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
-            (bool)$formValues['enable_password_recovery'],
+            (bool) $formValues['enable_password_recovery'],
             array('helpTextId' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('SYS_ENABLE_NOTIFICATIONS')))
         );
         $formSecurity->addCheckbox(
@@ -1880,9 +1883,9 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_LOGIN_WITH_EMAIL_DESC')
         );
         $formSecurity->addCheckbox(
-            'enable_two_factor_authentication',
+            'two_factor_authentication_enabled',
             $gL10n->get('SYS_TFA_ENABLE'),
-            (bool) $formValues['enable_two_factor_authentication'],
+            (bool) $formValues['two_factor_authentication_enabled'],
             array('helpTextId' => 'SYS_TFA_ENABLE_DESC')
         );
         $formSecurity->addSubmitButton(
@@ -2029,19 +2032,19 @@ class PreferencesPresenter extends PagePresenter
         $formSystemNotifications->addCheckbox(
             'system_notifications_enabled',
             $gL10n->get('SYS_ENABLE_NOTIFICATIONS'),
-            (bool)$formValues['system_notifications_enabled'],
+            (bool) $formValues['system_notifications_enabled'],
             array('helpTextId' => 'SYS_ENABLE_NOTIFICATIONS_DESC')
         );
         $formSystemNotifications->addCheckbox(
             'system_notifications_new_entries',
             $gL10n->get('SYS_NOTIFICATION_NEW_ENTRIES'),
-            (bool)$formValues['system_notifications_new_entries'],
+            (bool) $formValues['system_notifications_new_entries'],
             array('helpTextId' => 'SYS_NOTIFICATION_NEW_ENTRIES_DESC')
         );
         $formSystemNotifications->addCheckbox(
             'system_notifications_profile_changes',
             $gL10n->get('SYS_NOTIFICATION_PROFILE_CHANGES'),
-            (bool)$formValues['system_notifications_profile_changes'],
+            (bool) $formValues['system_notifications_profile_changes'],
             array('helpTextId' => 'SYS_NOTIFICATION_PROFILE_CHANGES_DESC')
         );
 
@@ -2144,7 +2147,8 @@ class PreferencesPresenter extends PagePresenter
                         $("#adm_collapse_preferences_' . $this->preferencesPanelToShow . '").addClass("show");
                     });
                 location.hash = "#adm_panel_preferences_' . $this->preferencesPanelToShow . '";
-                    ',true
+                    ',
+                    true
                 );
             } else {
                 $this->addJavascript(
@@ -2157,7 +2161,8 @@ class PreferencesPresenter extends PagePresenter
                         $("#adm_collapse_preferences_' . $this->preferencesPanelToShow . '").addClass("show");
                     });
                 location.hash = "#adm_panel_preferences_' . $this->preferencesPanelToShow . '";
-                    ',true
+                    ',
+                    true
                 );
             }
         }

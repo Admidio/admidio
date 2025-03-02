@@ -6,7 +6,7 @@
         {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['usr_login_name']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['usr_password']}
-        {if $settings->getBool('enable_two_factor_authentication')}
+        {if $settings->getBool('two_factor_authentication_enabled')}
             {include 'sys-template-parts/form.input.tpl' data=$elements['usr_totp_code']}
         {/if}
         {if $currentOrganization->getValue('org_show_org_select')}

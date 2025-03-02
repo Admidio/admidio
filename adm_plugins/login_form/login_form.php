@@ -152,7 +152,7 @@ try {
             )
         );
 
-        if ($gSettingsManager->getBool('enable_two_factor_authentication')) {
+        if ($gSettingsManager->getBool('two_factor_authentication_enabled')) {
             $form->addInput(
                 'usr_totp_code',
                 $gL10n->get('SYS_SECURITY_CODE'),

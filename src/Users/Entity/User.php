@@ -479,7 +479,7 @@ class User extends Entity
     {
         global $gSettingsManager;
 
-        if (!$gSettingsManager->getBool('enable_two_factor_authentication')) {
+        if (!$gSettingsManager->getBool('two_factor_authentication_enabled')) {
             return true;
         }
 
