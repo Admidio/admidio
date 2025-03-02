@@ -66,8 +66,8 @@ try {
         // Handle form input
 
         if ($tfa->verifyCode($secret, $otpCode)) {
-            $user->setSecondFactorSecret($secret);
-            $user->save();
+            $gCurrentUser->setSecondFactorSecret($secret);
+            $gCurrentUser->save();
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_TFA_SETUP_SUCCESSFUL')));
             exit();
@@ -87,6 +87,10 @@ try {
         // Reset two factor authentication settings
         $user->setSecondFactorSecret(null);
         $user->save();
+
+        if($gCurrentUserId === $userId){
+            $gCurrentUser->setSecondFactorSecret(null);
+        }
 
         echo json_encode(array('status' => 'success', $gL10n->get('SYS_TFA_RESET_SUCCESSFUL')));
         exit();
