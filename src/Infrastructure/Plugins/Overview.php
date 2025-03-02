@@ -59,7 +59,7 @@ class Overview
      * @return Smarty Returns the initialized Smarty object.
      * @throws Exception
      */
-    protected function createSmartyObject(): Smarty
+    public function createSmartyObject(): Smarty
     {
         global $gL10n, $gCurrentOrganization;
 
