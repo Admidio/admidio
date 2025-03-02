@@ -72,7 +72,7 @@ try {
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_TFA_SETUP_SUCCESSFUL')));
             exit();
         } else {
-            throw new Exception('SYS_TFA_TOTP_CODE_INCORRECT');
+            throw new Exception('SYS_SECURITY_CODE_INVALID');
         }
 
     } elseif ($getMode === 'reset') {
