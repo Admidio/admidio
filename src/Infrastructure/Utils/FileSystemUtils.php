@@ -852,8 +852,8 @@ final class FileSystemUtils
 
     /**
      * Gets info about the php-process owner
+     * @return array|bool Returns info about the php-process owner array<string,string|int>
      * @throws \RuntimeException Throws if system does not support POSIX
-     * @return array<string,string|int> Returns info about the php-process owner
      * @see https://www.php.net/manual/en/function.posix-geteuid.php
      * @see https://www.php.net/manual/en/function.posix-getpwuid.php
      * @example
@@ -862,7 +862,7 @@ final class FileSystemUtils
      *     "gecos" => "max,,,", "dir" => "/home/max", "shell" => "/bin/bash"
      * )
      */
-    public static function getProcessOwnerInfo(): array
+    public static function getProcessOwnerInfo(): array|bool
     {
         if (!self::isUnix()) {
             throw new \RuntimeException('"FileSystemUtils::getProcessOwnerInfo()" is only available on systems with POSIX support!');
@@ -873,13 +873,13 @@ final class FileSystemUtils
 
     /**
      * Gets info about the php-process group
+     * @return array|bool Returns info about the php-process group array<string,string|int>
      * @throws \RuntimeException Throws if system does not support POSIX
-     * @return array<string,string|int|array> Returns info about the php-process group
      * @see https://www.php.net/manual/en/function.posix-getegid.php
      * @see https://www.php.net/manual/en/function.posix-getgrgid.php
      * @example array("name" => "max", "passwd" => "x", "members" => array(), "gid" => 1000)
      */
-    public static function getProcessGroupInfo(): array
+    public static function getProcessGroupInfo(): array|bool
     {
         if (!self::isUnix()) {
             throw new \RuntimeException('"FileSystemUtils::getProcessGroupInfo()" is only available on systems with POSIX support!');
@@ -891,12 +891,12 @@ final class FileSystemUtils
     /**
      * Gets info about the path owner
      * @param string $path The path from which to get the information
-     * @return array<string,string|int> Returns info about the path owner
+     * @return array|bool info about the path owner array<string,string|int>
      * @throws \RuntimeException         Throws if the fileowner determination fails or system does not support POSIX
      * @throws \UnexpectedValueException Throws if path does not exist
      * @see https://www.php.net/manual/en/function.fileowner.php
      */
-    public static function getPathOwnerInfo(string $path): array
+    public static function getPathOwnerInfo(string $path): array|bool
     {
         if (!self::isUnixWithPosix()) {
             throw new \RuntimeException('"FileSystemUtils::getPathOwnerInfo()" is only available on systems with POSIX support!');
@@ -917,12 +917,12 @@ final class FileSystemUtils
     /**
      * Gets info about the path group
      * @param string $path The path from which to get the information
-     * @return array<string,string|int|array> Returns info about the path group
+     * @return array|bool Returns info about the path group array<string,string|int>
      * @throws \RuntimeException         Throws if the groupowner determination fails or system does not support POSIX
      * @throws \UnexpectedValueException Throws if path does not exist
      * @see https://www.php.net/manual/en/function.filegroup.php
      */
-    public static function getPathGroupInfo(string $path): array
+    public static function getPathGroupInfo(string $path): array|bool
     {
         if (!self::isUnix()) {
             throw new \RuntimeException('"FileSystemUtils::getPathGroupInfo()" is only available on systems with POSIX support!');
