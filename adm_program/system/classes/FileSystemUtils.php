@@ -864,7 +864,7 @@ final class FileSystemUtils
      *     "gecos" => "max,,,", "dir" => "/home/max", "shell" => "/bin/bash"
      * )
      */
-    public static function getProcessOwnerInfo(): array
+    public static function getProcessOwnerInfo()
     {
         if (!self::isUnix()) {
             throw new RuntimeException('"FileSystemUtils::getProcessOwnerInfo()" is only available on systems with POSIX support!');
@@ -881,7 +881,7 @@ final class FileSystemUtils
      * @see https://www.php.net/manual/en/function.posix-getgrgid.php
      * @example array("name" => "max", "passwd" => "x", "members" => array(), "gid" => 1000)
      */
-    public static function getProcessGroupInfo(): array
+    public static function getProcessGroupInfo()
     {
         if (!self::isUnix()) {
             throw new RuntimeException('"FileSystemUtils::getProcessGroupInfo()" is only available on systems with POSIX support!');
@@ -898,7 +898,7 @@ final class FileSystemUtils
      * @throws UnexpectedValueException Throws if path does not exist
      * @see https://www.php.net/manual/en/function.fileowner.php
      */
-    public static function getPathOwnerInfo(string $path): array
+    public static function getPathOwnerInfo(string $path)
     {
         if (!self::isUnixWithPosix()) {
             throw new RuntimeException('"FileSystemUtils::getPathOwnerInfo()" is only available on systems with POSIX support!');
@@ -924,7 +924,7 @@ final class FileSystemUtils
      * @throws UnexpectedValueException Throws if path does not exist
      * @see https://www.php.net/manual/en/function.filegroup.php
      */
-    public static function getPathGroupInfo(string $path): array
+    public static function getPathGroupInfo(string $path)
     {
         if (!self::isUnix()) {
             throw new RuntimeException('"FileSystemUtils::getPathGroupInfo()" is only available on systems with POSIX support!');
