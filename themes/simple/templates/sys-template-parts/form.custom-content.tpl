@@ -1,3 +1,5 @@
+{if $data.property eq 4}
+{else}
 <div class="admidio-form-group admidio-form-custom-content
     {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
     {if $formType neq "navbar"} mb-3{/if}">
@@ -15,3 +17,4 @@
     {include file="sys-template-parts/parts/form.part.warning.tpl"}
     {if $formType neq "vertical" and $formType neq "navbar"}</div>{/if}
 </div>
+{/if}
