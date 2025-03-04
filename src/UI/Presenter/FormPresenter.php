@@ -898,7 +898,7 @@ class FormPresenter
 
             case self::FIELD_HIDDEN:
                 $attributes['hidden'] = 'hidden';
-                $attributes['class'] .= ' invisible';
+                $attributes['class'] = ' invisible';
                 break;
         }
 
