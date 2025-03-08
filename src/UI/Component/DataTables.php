@@ -1,4 +1,5 @@
 <?php
+namespace Admidio\UI\Component;
 
 use Admidio\UI\Presenter\PagePresenter;
 
@@ -11,7 +12,7 @@ use Admidio\UI\Presenter\PagePresenter;
  * **Code example**
  * ```
  * // create a simple DataTables javascript
- * $dataTables = new HtmlDataTables($htmlPage, 'my-table-id');
+ * $dataTables = new DataTables($htmlPage, 'my-table-id');
  * $dataTables->createJavascript(145, 7);
  * ```
  *
@@ -19,7 +20,7 @@ use Admidio\UI\Presenter\PagePresenter;
  * ```
  * // create a DataTables javascript and set some preferences like a group column or disable sorting for
  * // some columns or not hide a column in responsive mode.
- * $dataTables = new HtmlDataTables($htmlPage, 'my-table-id');
+ * $dataTables = new DataTables($htmlPage, 'my-table-id');
  * $dataTables->setDatatablesGroupColumn(1);
  * $dataTables->disableDatatablesColumnsSort(array(3, 8));
  * $dataTables->setDatatablesColumnsNotHideResponsive(array(8));
@@ -29,7 +30,7 @@ use Admidio\UI\Presenter\PagePresenter;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class HtmlDataTables
+class DataTables
 {
     /**
      * @var string Html id attribute of the table.
@@ -318,7 +319,7 @@ class HtmlDataTables
      *
      * **Code examples**
      * ```
-     * $table = new HtmlTable('simple-table');
+     * $table = new HtmlDataTable('simple-table');
      *
      * // sort all rows after first and third column ascending
      * $table->setDatatablesOrderColumns(array(1, 3));

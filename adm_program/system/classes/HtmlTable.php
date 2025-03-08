@@ -1,5 +1,6 @@
 <?php
 use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\PagePresenter;
 
 /**
@@ -50,9 +51,9 @@ class HtmlTable extends HtmlTableBasic
      */
     protected bool $useDatatables;
     /**
-     * @var HtmlDataTables An object of the HtmlDataTables class to handle the Javascript output of the jQuery plugin DataTables.
+     * @var DataTables An object of the DataTables class to handle the Javascript output of the jQuery plugin DataTables.
      */
-    protected HtmlDataTables $datatables;
+    protected DataTables $datatables;
     /**
      * @var string The text that should be shown if no row was added to the table
      */
@@ -108,7 +109,7 @@ class HtmlTable extends HtmlTableBasic
         // when using DataTables we must set the width attribute so that all columns will change
         // dynamic their width if the browser window size change.
         if ($this->useDatatables) {
-            $this->datatables = new HtmlDataTables($this->htmlPage, $this->id);
+            $this->datatables = new DataTables($this->htmlPage, $this->id);
             $this->addAttribute('width', '100%');
         }
     }

@@ -10,7 +10,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use HtmlDataTables;
+use Admidio\UI\Component\DataTables;
 
 /**
  * @brief Class with methods to display the module pages of the registration.
@@ -652,7 +652,7 @@ class DocumentsPresenter extends PagePresenter
         }
 
         // initialize and set the parameter for DataTables
-        $dataTables = new HtmlDataTables($this, 'adm_documents_files_table');
+        $dataTables = new DataTables($this, 'adm_documents_files_table');
         $dataTables->disableColumnsSort(array(1, 6));
         $dataTables->setColumnsNotHideResponsive(array(6));
         $dataTables->createJavascript(count($this->data), 6);
