@@ -24,6 +24,7 @@ use Admidio\Infrastructure\Plugins\UploadHandlerPhoto;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\UI\Component\FileUpload;
 use Admidio\UI\Presenter\PagePresenter;
 
 try {
