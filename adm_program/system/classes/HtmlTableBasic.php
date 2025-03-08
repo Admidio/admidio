@@ -103,6 +103,7 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
  */
 class HtmlTableBasic extends HtmlElement
 {
@@ -144,6 +145,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string $id     ID of the table
      * @param string $class  Class name of the table
      * @param int $border Set the table border width
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function __construct(string $id = '', string $class = '', int $border = 0)
     {
@@ -173,6 +175,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string|array         $data          Content for the column as string, or array
      * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
      * @param string $columnType    Column element 'td' or 'th' (Default: 'td')
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function addColumn($data = '', array $arrAttributes = null, string $columnType = 'td')
     {
@@ -194,6 +197,7 @@ class HtmlTableBasic extends HtmlElement
     /**
      * @param string|array $data Content for the table row as string, or array
      * @param string $col  Column element 'td' or 'th' (Default: 'td')
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     private function addColumnsData($data = '', string $col = 'td')
     {
@@ -220,6 +224,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string|array         $data          Content for the table row as string, or array
      * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
      * @param string $columnType    Column element 'td' or 'th' (Default: 'td')
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function addRow($data = '', array $arrAttributes = null, string $columnType = 'td')
     {
@@ -269,6 +274,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string $value     Value of the attribute
      * @param string|array $data      Content for the element as string, or array
      * @param string $col
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     private function addTableSection(string $element, string $attribute = '', string $value = '', $data = '', string $col = 'td')
     {
@@ -292,6 +298,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string $value     Value of the attribute
      * @param string|array $data      Content for the element as string, or array
      * @param string $col
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function addTableBody(string $attribute = '', string $value = '', $data = '', string $col = 'td')
     {
@@ -317,6 +324,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string|array $data      Content for the element as string, or array
      * @param string $col
      * @return bool Returns **false** if tfoot element is already set
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function addTableFooter(string $attribute = '', string $value = '', $data = '', string $col = 'td'): bool
     {
@@ -344,6 +352,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string|array $data      Content for the element as string, or array
      * @param string $col
      * @return bool Returns **false** if thead element is already set
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function addTableHeader(string $attribute = '', string $value = '', $data = '', string $col = 'td'): bool
     {
@@ -360,6 +369,7 @@ class HtmlTableBasic extends HtmlElement
     /**
      * Get the parsed html table
      * @return string Returns the validated html table as string
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function getHtmlTable(): string
     {
@@ -372,6 +382,7 @@ class HtmlTableBasic extends HtmlElement
     /**
      * In body elements you can use this option. You have to define class names.
      * @param array<int,string> $rowClasses Name of the standard class used for lineChange mode
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function setRowClasses(array $rowClasses)
     {
@@ -383,6 +394,7 @@ class HtmlTableBasic extends HtmlElement
      * that will be set by the browser doesn't fit your needs.
      * @param array<int,string> $columnsWidth Array with all width values of each column.
      *                                        Here you can set all valid CSS values e.g. '100%' or '300px'
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function setColumnsWidth(array $columnsWidth)
     {
@@ -394,6 +406,7 @@ class HtmlTableBasic extends HtmlElement
      * that will not get a useful width automatically by the browser.
      * @param int $column The column number where you want to set the width. The columns of the table starts with 1 (not 0).
      * @param string $width  The new width of the column. Here you can set all valid CSS values e.g. '100%' or '300px'
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
     public function setColumnWidth(int $column, string $width)
     {
