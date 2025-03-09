@@ -32,7 +32,7 @@
     </div>
     {if {array_key_exists array=$elements key='item_copy_number'}}
         <div class="card admidio-field-group">
-        <div class="card-header">{$l10n->get('PLG_INVENTORY_MANAGER_COPY_PREFERENCES')}</div>
+        <div class="card-header">{$l10n->get('SYS_INVENTORY_COPY_PREFERENCES')}</div>
             <div class="card-body">
                 {include 'sys-template-parts/form.input.tpl' data=$elements['item_copy_number']}
                 {include 'sys-template-parts/form.select.tpl' data=$elements['item_copy_field']}
