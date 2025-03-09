@@ -1,10 +1,11 @@
 <?php
+
 namespace Admidio\Inventory\Entity;
 
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Inventory\ValueObjects\ItemsData;
+
 /**
  * @brief Class manages access to database table adm_files
  *
@@ -36,22 +37,22 @@ class Item extends Entity
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param ItemFields|null $itemFields An object of the ItemFields class with the profile field structure
+     * @param ItemsData|null $itemFields An object of the ItemsData class with the profile field structure
      *                                  of the current organization.
      * @param int $itemId The id of the item which should be loaded. If id isn't set than an empty
      *                                  object with no specific item is created.
      * @throws Exception
      */
-    public function __construct(Database $database, ItemsData $itemsData = null, int $itemId = 0)
+    public function __construct(Database $database, ?ItemsData $itemsData = null, int $itemId = 0)
     {
-            $this->changeNotificationEnabled = true;
-    
-            if ($itemsData !== null) {
-                $this->mItemsData = clone $itemsData; // create explicit a copy of the object (param is in PHP5 a reference)
-            } else {
-                $this->mItemsData = new ItemsData($database, $GLOBALS['gCurrentOrgId']);
-            }
-    
+        $this->changeNotificationEnabled = true;
+
+        if ($itemsData !== null) {
+            $this->mItemsData = clone $itemsData; // create explicit a copy of the object (param is in PHP5 a reference)
+        } else {
+            $this->mItemsData = new ItemsData($database, $GLOBALS['gCurrentOrgId']);
+        }
+
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
         // read also data of assigned item data
         $this->connectAdditionalTable(TBL_INVENTORY_DATA, 'ini_id', 'ind_ini_id');

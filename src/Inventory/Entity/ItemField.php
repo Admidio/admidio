@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Inventory\Entity;
 
 use Admidio\Infrastructure\Exception;
@@ -120,9 +121,9 @@ class ItemField extends Entity
      * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
      * @param string $format            Returns the field value in a special format @b text, @b html, @b database
      *                                  or datetime (detailed description in method description)
-     * @return string|int|bool          Returns the value for the column
+     * @return mixed                    Returns the value for the column
      */
-    public function getValue($fieldNameIntern, $format = '')
+    public function getValue($fieldNameIntern, $format = ''): mixed
     {
         if ($fieldNameIntern === 'inf_description') {
             if (!isset($this->dbColumns['inf_description'])) {
@@ -167,7 +168,7 @@ class ItemField extends Entity
                                         list($listValueImage, $listValueText) = explode('|', $listValue);
                                     } else {
                                         $listValueImage = $listValue;
-                                        $listValueText = $this->getValue('inf_name');
+                                        $listValueText = '';
                                     }
 
                                     // if text is a translation-id then translate it
@@ -196,11 +197,6 @@ class ItemField extends Entity
                         $value = $arrListValuesWithKeys;
                     }
                     break;
-/*                 case 'f_icon':
-                    // if value is bootstrap icon then show image
-                    $value = '<i class="bi bi-' . $value . '"></i>';
-
-                    break; */
                 default:
                     // do nothing
             }
@@ -209,7 +205,7 @@ class ItemField extends Entity
         return $value;
     }
 
-        /**
+    /**
      * Profile field will change the sequence one step up or one step down.
      * @param string $mode mode if the item field move up or down, values are ProfileField::MOVE_UP, ProfileField::MOVE_DOWN
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
@@ -290,7 +286,7 @@ class ItemField extends Entity
 
         // only administrators can edit item fields
         if (!$gCurrentUser->isAdministrator() && !$this->saveChangesWithoutRights) {
-            throw new Exception('Profile field could not be saved because only administrators are allowed to edit item fields.');
+            throw new Exception('Item field could not be saved because only administrators are allowed to edit item fields.');
             // => EXIT
         }
 
@@ -303,15 +299,13 @@ class ItemField extends Entity
 
         // if new field than generate new sequence, otherwise no change will be made
         if ($this->newRecord && $this->getValue('inf_sequence') === '') {
-            //$this->setValue('inf_sequence', $this->getNewNameIntern($this->getValue('inf_name', 'database'), 1));
             $sql = 'SELECT COUNT(*) AS count
                 FROM ' . TBL_INVENTORY_FIELDS . '
                 WHERE inf_org_id = ? -- $newValue';
             $pdoStatement = $this->db->queryPrepared($sql, array($gCurrentOrgId));
 
             $this->setValue('inf_sequence', $pdoStatement->fetchColumn());
-
-        }        
+        }
 
         return parent::save($updateFingerPrint);
     }

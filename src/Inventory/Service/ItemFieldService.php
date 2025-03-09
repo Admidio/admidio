@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Inventory\Service;
 
 use Admidio\Infrastructure\Exception;
@@ -37,7 +38,7 @@ class ItemFieldService
      * Delete the current profile field form into the database.
      * @throws Exception
      */
-    public function delete()
+    public function delete(): void
     {
         $this->itemFieldRessource->delete();
     }
@@ -46,7 +47,7 @@ class ItemFieldService
      * Save data from the profile field form into the database.
      * @throws Exception
      */
-    public function save()
+    public function save(): void
     {
         global $gCurrentSession, $gCurrentOrgId, $gDb;
 
