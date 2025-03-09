@@ -97,7 +97,7 @@ class InventoryItemPresenter extends PagePresenter
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
         
-            if ($items->getProperty($infNameIntern, 'inf_mandatory') == 1) {
+            if ($items->getProperty($infNameIntern, 'inf_required_input') == 1) {
                 $fieldProperty = FormPresenter::FIELD_REQUIRED;
             }
             else {
@@ -243,11 +243,11 @@ class InventoryItemPresenter extends PagePresenter
                 case 'CHECKBOX':
                     $form->addCheckbox(
                         'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
-                        $gL10n->get($items->getProperty($infNameIntern, 'inf_name')),
+                        $items->getProperty($infNameIntern, 'inf_name'),
                         ($itemID === 0) ? true : (bool) $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
-                            'helpTextIdLabel' => $helpId,
+                            'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
                         )
                     );
@@ -256,12 +256,12 @@ class InventoryItemPresenter extends PagePresenter
                 case 'DROPDOWN':
                     $form->addSelectBox(
                         'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
-                        $gL10n->get($items->getProperty($infNameIntern, 'inf_name')),
+                        $items->getProperty($infNameIntern, 'inf_name'),
                         $items->getProperty($infNameIntern, 'inf_value_list'),
                         array(
                             'property' => $fieldProperty,
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),
-                            'helpTextIdLabel' => $helpId,
+                            'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
                         )
                     );
@@ -270,13 +270,13 @@ class InventoryItemPresenter extends PagePresenter
                 case 'RADIO_BUTTON':
                     $form->addRadioButton(
                         'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
-                        $gL10n->get($items->getProperty($infNameIntern, 'inf_name')),
-                        $items->getProperty($infNameIntern, 'inf_value_list'),
+                        $items->getProperty($infNameIntern, 'inf_name'),
+                        $items->getProperty($infNameIntern, 'inf_value_list', 'html'),
                         array(
                             'property' => $fieldProperty,
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),
-                            'showNoValueButton' => $items->getProperty($infNameIntern, 'inf_mandatory') == 0,
-                            'helpTextIdLabel' => $helpId,
+                            'showNoValueButton' => $items->getProperty($infNameIntern, 'inf_required_input') == 0,
+                            'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
                         )
                     );
@@ -285,13 +285,13 @@ class InventoryItemPresenter extends PagePresenter
                 case 'TEXT_BIG':
                     $form->addMultilineTextInput(
                         'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
-                        $gL10n->get($items->getProperty($infNameIntern, 'inf_name')),
+                        $items->getProperty($infNameIntern, 'inf_name'),
                         $items->getValue($infNameIntern),
                         3,
                         array(
                             'maxLength' => 4000,
                             'property' => $fieldProperty,
-                            'helpTextIdLabel' => $helpId,
+                            'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
                         )
                     );
@@ -310,12 +310,12 @@ class InventoryItemPresenter extends PagePresenter
                         
                                 $form->addSelectBoxFromSql(
                             'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
-                            $gL10n->get($items->getProperty($infNameIntern, 'inf_name')),
+                            $items->getProperty($infNameIntern, 'inf_name'),
                             $gDb,
                             $sql,
                             array(
                                 'property' => $fieldProperty,
-                                'helpTextIdLabel' => $helpId,
+                                'helpTextId' => $helpId,
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
                                 'defaultValue' => ($gSettingsManager->getBool('inventory_current_user_default_keeper') === true) ? $user->getValue('usr_id') : $items->getValue($infNameIntern),
                                 'multiselect' => false
@@ -327,12 +327,12 @@ class InventoryItemPresenter extends PagePresenter
         
                         $form->addSelectBoxFromSql(
                             'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
-                            $gL10n->get($items->getProperty($infNameIntern, 'inf_name')),
+                            $items->getProperty($infNameIntern, 'inf_name'),
                             $gDb,
                             $sql,
                             array(
                                 'property' => $fieldProperty,
-                                'helpTextIdLabel' => $helpId,
+                                'helpTextId' => $helpId,
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
                                 'defaultValue' => $items->getValue($infNameIntern),
                                 'multiselect' => false
@@ -404,7 +404,7 @@ class InventoryItemPresenter extends PagePresenter
                         }
                         $form->addInput(
                             'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
-                            $gL10n->get($items->getProperty($infNameIntern, 'inf_name')),
+                            $items->getProperty($infNameIntern, 'inf_name'),
                             $items->getValue($infNameIntern),
                             array(
                                 'type' => $fieldType,
@@ -412,7 +412,7 @@ class InventoryItemPresenter extends PagePresenter
                                 'minNumber' => isset($minNumber) ? $minNumber : null,
                                 'step' => isset($step) ? $step : null,
                                 'property' => $fieldProperty,
-                                'helpTextIdLabel' => $helpId,
+                                'helpTextId' => $helpId,
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
                             )
                         );
@@ -422,10 +422,10 @@ class InventoryItemPresenter extends PagePresenter
         }
         
         if ($getCopy) {     
-            //$form->addDescription($gL10n->get('PLG_INVENTORY_MANAGER_COPY_PREFERENCES') . '<br/>');
-            $form->addInput('item_copy_number', $gL10n->get('PLG_INVENTORY_MANAGER_NUMBER'), 1, array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PLG_INVENTORY_MANAGER_NUMBER_DESC'));
+            //$form->addDescription($gL10n->get('SYS_INVENTORY_COPY_PREFERENCES') . '<br/>');
+            $form->addInput('item_copy_number', $gL10n->get('SYS_INVENTORY_NUMBER'), 1, array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_INVENTORY_NUMBER_DESC'));
             $sql = 'SELECT inf_id, inf_name FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_type = \'NUMBER\' AND (inf_org_id = ' . $gCurrentOrgId . ' OR inf_org_id IS NULL);';
-            $form->addSelectBoxFromSql('item_copy_field', $gL10n->get('PLG_INVENTORY_MANAGER_FIELD'), $gDb, $sql, array('multiselect' => false, 'helpTextIdInline' => 'PLG_INVENTORY_MANAGER_FIELD_DESC'));        
+            $form->addSelectBoxFromSql('item_copy_field', $gL10n->get('SYS_INVENTORY_FIELD'), $gDb, $sql, array('multiselect' => false, 'helpTextId' => 'SYS_INVENTORY_FIELD_DESC'));        
         }
         $form->addSubmitButton(
             'adm_button_save',
@@ -528,7 +528,7 @@ class InventoryItemPresenter extends PagePresenter
 
             $templateRowItemField = array(
                 'categoryID' => ((bool)$itemField->getValue('inf_system')) ? 1 : 2,
-                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED')  /* $itemField->getValue('cat_name') */,
+                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS')  /* $itemField->getValue('cat_name') */,
                 'id' => $itemField->getValue('inf_id'),
                 'name' => $itemField->getValue('inf_name'),
                 'description' => $itemField->getValue('inf_description'),
