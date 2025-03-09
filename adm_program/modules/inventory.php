@@ -24,7 +24,7 @@ use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\UI\Presenter\InventoryPresenter;
-use Admidio\UI\Presenter\InventoryFieldPresenter;
+use Admidio\UI\Presenter\InventoryFieldsPresenter;
 use Admidio\UI\Presenter\InventoryItemPresenter;
 
 try {
@@ -32,7 +32,7 @@ try {
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'show_html', 'validValues' => array('show_html', 'print_preview', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit', 'item_save', 'item_delete_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'show_html', 'validValues' => array('show_html', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit', 'item_save', 'item_delete_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfId = admFuncVariableIsValid($_GET, 'uuid', 'int', array('defaultValue' => 0));
     $getiniId = admFuncVariableIsValid($_GET, 'item_id', 'int', array('defaultValue' => 0));
     $postCopyNumber = admFuncVariableIsValid($_POST, 'item_copy_number', 'numeric', array('defaultValue' => 1));
@@ -57,23 +57,23 @@ try {
             break;
 #region fields
         case 'field_list':
-            $headline = $gL10n->get('SYS_INVENTORY_ITEM_FIELDS');
+            $headline = $gL10n->get('SYS_INVENTORY_ITEMFIELDS');
             $gNavigation->addUrl(CURRENT_URL, $headline);
-            $itemFields = new InventoryFieldPresenter('adm_inventory_item_fields', $headline);
+            $itemFields = new InventoryFieldsPresenter('adm_inventory_item_fields', $headline);
             $itemFields->createList();
             $itemFields->show();
             break;
 
         case 'field_edit':
             // set headline of the script
-            if ($getinfId !== '') {
-                $headline = $gL10n->get('SYS_INVENTORY_EDIT_ITEM_FIELD');
+            if ($getinfId !== 0) {
+                $headline = $gL10n->get('SYS_INVENTORY_ITEMFIELD_EDIT');
             } else {
-                $headline = $gL10n->get('SYS_INVENTORY_CREATE_ITEM_FIELD');
+                $headline = $gL10n->get('SYS_INVENTORY_ITEMFIELD_CREATE');
             }
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
-            $itemFields = new InventoryFieldPresenter('adm_item_fields_edit');
+            $itemFields = new InventoryFieldsPresenter('adm_item_fields_edit');
             $itemFields->createEditForm($getinfId);
             $itemFields->show();
             break;
@@ -119,13 +119,13 @@ try {
         case 'item_edit':
             // set headline of the script
             if ($getiniId !== 0 && $getCopy) {
-                $headline = $gL10n->get('SYS_INVENTORY_COPY_ITEM');
+                $headline = $gL10n->get('SYS_INVENTORY_ITEM_COPY');
             }
             elseif ($getiniId !== 0) {
-                $headline = $gL10n->get('SYS_INVENTORY_EDIT_ITEM');
+                $headline = $gL10n->get('SYS_INVENTORY_ITEM_EDIT');
             }
             else {
-                $headline = $gL10n->get('SYS_INVENTORY_CREATE_ITEM');
+                $headline = $gL10n->get('SYS_INVENTORY_ITEM_CREATE');
             }
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -148,16 +148,16 @@ try {
         case 'item_delete_explain_msg':
             echo '
                 <div class="modal-header">
-                    <h3 class="modal-title">' . $gL10n->get('SYS_REMOVE_CONTACT') . '</h3>
+                    <h3 class="modal-title">' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE') . '</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><i class="bi bi-person-fill-dash"></i>&nbsp;' . $gL10n->get('SYS_MAKE_FORMER') . '</p>
-                    <p><i class="bi bi-trash"></i>&nbsp;' . $gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE'))) . '</p>
+                    <p><i class="bi bi-person-fill-dash"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_FORMER_DESC', array($gL10n->get('SYS_INVENTORY_FORMER'))) . '</p>
+                    <p><i class="bi bi-trash"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE_DESC', array($gL10n->get('SYS_DELETE'))) . '</p>
                 </div>
                 <div class="modal-footer">
                     <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                        <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_FORMER') . '</button>
+                        <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_INVENTORY_FORMER') . '</button>
                     <button id="adm_button_delete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'adm_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE') . '</button>
                     <div id="adm_status_message" class="mt-4 w-100"></div>
@@ -171,7 +171,7 @@ try {
             $itemModule = new ItemService($gDb, $getiniId);
             $itemModule->makeItemFormer();
 
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_MADE_FORMER')));
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_MADE_FORMER')));
             break;
 
         case 'item_undo_former':
@@ -181,7 +181,7 @@ try {
             $itemModule = new ItemService($gDb, $getiniId);
             $itemModule->undoItemFormer();
 
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_UNDO_FORMER')));
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER')));
             break;
     
         case 'item_delete':
@@ -196,10 +196,22 @@ try {
 
         case 'print_preview':
             $page = new InventoryPresenter('adm-inventory-print-preview');
-            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
+            $page->setPrintMode();
             $page->createPrintPreview();
             $page->show();
             break;
+
+        case 'print_xlsx':
+        case 'print_ods':
+        case 'print_csv-ms':
+        case 'print_csv-oo':
+        case 'print_pdf':
+        case 'print_pdfl':
+            $page = new InventoryPresenter('adm-inventory-print');
+            $exportMode = str_replace('print_', '', $getMode);
+            $page->createExport($exportMode);
+            break;
+
         default:
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
             break;
