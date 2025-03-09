@@ -16,10 +16,10 @@
   <string name="INS_DATABASE_HOST_INFO">Enter the name of the database server here. This can be a URL or localhost if the database is running on the same machine as the webpage.</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
-  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here.</string>
+  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MariaDB/MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here.</string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
-  <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MySQL and PostgreSQL.</string>
+  <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MariaDB, MySQL and PostgreSQL.</string>
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurations file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
@@ -64,7 +64,7 @@
   <string name="INS_WELCOME_TO_UPDATE">Welcome to the Admidio update</string>
   <string name="INS_WELCOME_TEXT">This assistant helps you to set up the Admidio member management. All necessary data will be requested so that the system can be fully set up and you can log in as an administrator.\n\nIf you have questions or problems with the installation, please check #VAR1#our installation instructions#VAR2# or contact us at #VAR3#our support forum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">You have already updated the directories of Admidio with a new version. Now the database has to be updated from the current version #VAR2# to the version #VAR1#, so that Admidio can run with the new version.\n\nIf you have questions or problems with the update, please check #VAR3#our update instruction#VAR4# or contact #VAR5#our support forum#VAR6#.</string>
-  <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires at least MySQL version #VAR2#. Please try to update your MySQL database or use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
+  <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires at least MariaDB or MySQL version #VAR2#. Please try to update your MariaDB or MySQL database or use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="INS_BROTHER">Brother</string>
   <string name="INS_CHILD">Child</string>
