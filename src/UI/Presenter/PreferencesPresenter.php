@@ -836,48 +836,50 @@ class PreferencesPresenter extends PagePresenter
         
         $formInventory->addCheckbox(
             'inventory_system_field_names_editable',
-            $gL10n->get('SYS_INVENTORY_SYSTEM_FIELD_NAME_EDIT'),
+            $gL10n->get('SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT'),
             $formValues['inventory_system_field_names_editable'],
-            array('helpTextIdInline' => 'SYS_INVENTORY_SYSTEM_FIELD_NAME_EDIT_DESC')
+            array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
         );
 
         $formInventory->addCheckbox(
             'inventory_allow_keeper_edit',
             $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
             $formValues['inventory_allow_keeper_edit'],
-            array('helpTextIdInline' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
+            array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
         );
         
-        $selectBoxEntries = array();
-/*         foreach ($items->mItemFields as $itemField) {
-            $selectBoxEntries[$itemField->getValue('imf_name_intern')] = $itemField->getValue('imf_name');
-        } */
-        $formInventory->addSelectBox(
+        $sql = 'SELECT inf_id, inf_name_intern, inf_name
+                  FROM '. TBL_INVENTORY_FIELDS .'
+                 WHERE inf_org_id = '. $gCurrentOrgId .'
+              ORDER BY inf_id';
+
+        $formInventory->addSelectBoxFromSql(
             'inventory_allowed_keeper_edit_fields',
-            $gL10n->get('SYS_INVENTORY_ACCESS_EDIT_FIELDS'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['inventory_allowed_keeper_edit_fields'], 'helpTextIdInline' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true)
+            $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
+            $gDb,
+            $sql,
+            array('defaultValue' => $formValues['inventory_allowed_keeper_edit_fields'], 'helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true)
         );
 
         $formInventory->addCheckbox(
             'inventory_current_user_default_keeper',
             $gL10n->get('SYS_INVENTORY_USE_CURRENT_USER'),
             (bool)$formValues['inventory_current_user_default_keeper'],
-            array('helpTextIdInline' => 'SYS_INVENTORY_USE_CURRENT_USER_DESC')
+            array('helpTextId' => 'SYS_INVENTORY_USE_CURRENT_USER_DESC')
         );
 
         $formInventory->addCheckbox(
             'inventory_allow_negative_numbers',
             $gL10n->get('SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS'),
             (bool)$formValues['inventory_allow_negative_numbers'],
-            array('helpTextIdInline' => 'SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC')
+            array('helpTextId' => 'SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC')
         );
 
         $formInventory->addInput(
             'inventory_decimal_places',
             $gL10n->get('SYS_INVENTORY_DECIMAL_PLACES'),
             $formValues['inventory_decimal_places'],
-            array('type' => 'number','minNumber' => 0, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC')
+            array('type' => 'number','minNumber' => 0, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC')
         );
 
         $selectBoxEntries = array('date' => $gL10n->get('SYS_DATE'), 'datetime' => $gL10n->get('SYS_DATE') .' & ' .$gL10n->get('SYS_TIME'));
@@ -885,7 +887,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_field_date_time_format',
             $gL10n->get('SYS_INVENTORY_DATETIME_FORMAT'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['inventory_field_date_time_format'], 'showContextDependentFirstEntry' => false)
+            array('defaultValue' => $formValues['inventory_field_date_time_format'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_DATETIME_FORMAT_DESC')
         );
 
         // profile view settings
@@ -894,20 +896,20 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_INVENTORY_PROFILE_VIEW')
         );
 
-        $selectBoxEntries = array();
-/*         foreach ($items->mItemFields as $itemField) {
-            if ($itemField->getValue('imf_name_intern') == 'ITEMNAME') {
-                continue;
-            }
-            $selectBoxEntries[$itemField->getValue('imf_name_intern')] = $itemField->getValue('imf_name');
-        } */
-        $formInventory->addSelectBox(
+        $sql = 'SELECT inf_id, inf_name_intern, inf_name
+                  FROM '. TBL_INVENTORY_FIELDS .'
+                 WHERE inf_org_id = '. $gCurrentOrgId .'
+                   AND inf_name_intern != \'ITEMNAME\'
+              ORDER BY inf_id';
+
+        $formInventory->addSelectBoxFromSql(
             'inventory_profile_view',
             $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['inventory_profile_view'], 'helpTextIdInline' => 'SYS_INVENTORY_PROFILE_VIEW_DESC', 'multiselect' => true, 'helpTextIdLabel' => $gL10n->get('SYS_INVENTORY_PROFILE_VIEW_DESC2'))
+            $gDb,
+            $sql,
+            array('defaultValue' => $formValues['inventory_profile_view'], 'helpTextId' => 'SYS_INVENTORY_PROFILE_VIEW_DESC', 'multiselect' => true)
         );
-
+        
         // export settings
         $formInventory->addSeperator(
             'inventory_seperator_export_settings',
@@ -918,14 +920,14 @@ class PreferencesPresenter extends PagePresenter
             'inventory_export_filename',
             $gL10n->get('SYS_INVENTORY_FILENAME'),
             $formValues['inventory_export_filename'],
-            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_INVENTORY_FILENAME_DESC')
+            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_FILENAME_DESC')
         );
 
         $formInventory->addCheckbox(
             'inventory_add_date',
             $gL10n->get('SYS_INVENTORY_ADD_DATE'),
             (bool)$formValues['inventory_add_date'],
-            array('helpTextIdInline' => 'SYS_INVENTORY_ADD_DATE_DESC')
+            array('helpTextId' => 'SYS_INVENTORY_ADD_DATE_DESC')
         );
         
         $formInventory->addSubmitButton(
