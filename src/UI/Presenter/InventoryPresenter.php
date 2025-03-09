@@ -8,6 +8,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+// TCPDF namespace
+use TCPDF;
+
 // Admidio namespaces
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -19,7 +22,7 @@ use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 use HtmlTable;
-use PhpOffice\PhpSpreadsheet\Helper\Html;
+use InvalidArgumentException;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -57,7 +60,11 @@ class InventoryPresenter extends PagePresenter
     protected string $classTable = '';
     protected string $orientation = '';
     protected string $filename = '';
-    protected array $modeSettings = array();
+
+    protected array  $exportHeader = array();
+    protected array  $exportRows = array();
+    protected array  $exportStrikethroughs = array();
+    protected array  $modeSettings = array();
     /**
      * Constructor creates the page object and initialized all parameters.
      * @param string $categoryUUID UUID of the category for which the topics should be filtered.
@@ -109,40 +116,9 @@ class InventoryPresenter extends PagePresenter
     }
 
     /**
-     * Get all users with their id, name, and address
-     * 
-     * @return string 					SQL query to get all users with their ID and name
+     * Set the mode of the table.
+     * @param string $mode Mode of the table (html, pdf, csv, ods, xlsx)
      */
-    private function getSqlOrganizationsUsersCompletePIM() : string
-    {
-        global $gProfileFields, $gCurrentOrgId;
-
-        return 'SELECT usr_id, CONCAT(last_name.usd_value, \', \', first_name.usd_value, IFNULL(CONCAT(\', \', postcode.usd_value),\'\'), IFNULL(CONCAT(\' \', city.usd_value),\'\'), IFNULL(CONCAT(\', \', street.usd_value),\'\') ) as name
-                FROM ' . TBL_USERS . '
-                JOIN ' . TBL_USER_DATA . ' as last_name ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                JOIN ' . TBL_USER_DATA . ' as first_name ON first_name.usd_usr_id = usr_id AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                LEFT JOIN ' . TBL_USER_DATA . ' as postcode ON postcode.usd_usr_id = usr_id AND postcode.usd_usf_id = ' . $gProfileFields->getProperty('POSTCODE', 'usf_id') . '
-                LEFT JOIN ' . TBL_USER_DATA . ' as city ON city.usd_usr_id = usr_id AND city.usd_usf_id = ' . $gProfileFields->getProperty('CITY', 'usf_id') . '
-                LEFT JOIN ' . TBL_USER_DATA . ' as street ON street.usd_usr_id = usr_id AND street.usd_usf_id = ' . $gProfileFields->getProperty('ADDRESS', 'usf_id') . '
-                WHERE usr_valid = 1 AND EXISTS (SELECT 1 FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . ' WHERE mem_usr_id = usr_id AND mem_rol_id = rol_id AND mem_begin <= \'' . DATE_NOW . '\' AND mem_end > \'' . DATE_NOW . '\' AND rol_valid = 1 AND rol_cat_id = cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)) ORDER BY last_name.usd_value, first_name.usd_value;';
-    }
-
-    /**
-     * Get all users with their id and name
-     * 
-     * @return string 					SQL query to get all users with their ID and name
-     */
-    private function getSqlOrganizationsUsersShortPIM() : string
-    {
-        global $gProfileFields, $gCurrentOrgId;
-
-        return 'SELECT usr_id, CONCAT(last_name.usd_value, \', \', first_name.usd_value) as name
-                FROM ' . TBL_USERS . '
-                JOIN ' . TBL_USER_DATA . ' as last_name ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                JOIN ' . TBL_USER_DATA . ' as first_name ON first_name.usd_usr_id = usr_id AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                WHERE usr_valid = 1 AND EXISTS (SELECT 1 FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . ' WHERE mem_usr_id = usr_id AND mem_rol_id = rol_id AND mem_begin <= \'' . DATE_NOW . '\' AND mem_end > \'' . DATE_NOW . '\' AND rol_valid = 1 AND rol_cat_id = cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)) ORDER BY last_name.usd_value, first_name.usd_value;';
-    }
-
     private function SetMode(string $mode = 'html')
     {
         if (isset($this->modeSettings[$mode])) {
@@ -304,7 +280,7 @@ class InventoryPresenter extends PagePresenter
             // show link to create new item
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_create_item',
-                $gL10n->get('SYS_INVENTORY_CREATE_ITEM'),
+                $gL10n->get('SYS_INVENTORY_ITEM_CREATE'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'item_edit')),
                 'bi-plus-circle-fill'
             );
@@ -322,7 +298,7 @@ class InventoryPresenter extends PagePresenter
             // show link to maintain fields
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_item_fields',
-                $gL10n->get('SYS_INVENTORY_EDIT_ITEM_FIELDS'),
+                $gL10n->get('SYS_INVENTORY_ITEMFIELDS_EDIT'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'field_list')),
                 'bi-ui-radios'
             );
@@ -467,7 +443,7 @@ class InventoryPresenter extends PagePresenter
      * Create the data for the print preview of the inventory.
      * @throws Exception
      */
-    public function createPrintPreview()
+    public function createPrintPreview(): void
     {
         $this->SetMode('print');
 
@@ -475,6 +451,148 @@ class InventoryPresenter extends PagePresenter
 
         $this->FillTable();
         $this->addHtml($this->inventoryTable->show());
+    }
+
+
+    public function createExport(string $mode = 'pdf'): void
+    {
+        global  $gLogger, $gCurrentUser, $gL10n, $gCurrentOrganization;
+        $this->SetMode($mode);
+
+        switch ($this->mode) {
+            case 'pdf':
+                $pdf = new TCPDF($this->orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+                // set document information
+                $pdf->SetCreator(PDF_CREATOR);
+                $pdf->SetAuthor('Admidio');
+                $pdf->SetTitle($this->headline);
+        
+                // remove default header/footer
+                $pdf->setPrintHeader(true);
+                $pdf->setPrintFooter(false);
+        
+                // set header and footer fonts
+                $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+                $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        
+                // set auto page breaks
+                $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+                $pdf->SetMargins(10, 20, 10);
+                $pdf->setHeaderMargin(10);
+                $pdf->setFooterMargin(0);
+        
+                // headline for PDF
+                $pdf->setHeaderData('', 0, $this->headline, '');
+        
+                // set font
+                $pdf->SetFont('times', '', 10);
+        
+                // add a page
+                $pdf->AddPage();
+        
+                // Create table object for display
+                $this->inventoryTable = new HtmlTable('adm_inventory_table', $this, false, false, $this->classTable);
+
+                $this->inventoryTable->addAttribute('border', '1');
+                $this->inventoryTable->addAttribute('cellpadding', '1');
+        
+                $this->FillTable();
+
+                $pdf->writeHTML($this->inventoryTable->getHtmlTable(), true, false, true);
+                $file = ADMIDIO_PATH . FOLDER_DATA . '/temp/' . $this->filename;
+                $pdf->Output($file, 'F');
+                header('Content-Type: application/pdf');
+                header('Content-Disposition: attachment; filename="' . $this->filename . '"');
+
+                // necessary for IE6 to 8, because without it the download with SSL has problems
+                header('Cache-Control: private');
+                header('Pragma: public');
+                readfile($file);
+                ignore_user_abort(true);
+                try {
+                    FileSystemUtils::deleteFileIfExists($file);
+                }
+                catch (\RuntimeException $exception) {
+                    $gLogger->error('Could not delete file!', array('filePath' => $file));
+                }
+                break;
+        
+            case 'csv':
+            case 'ods':
+            case 'xlsx':
+                $this->FillTable();
+
+                $contentType = match ($this->mode) {
+                    'csv' => 'text/csv; charset=' . $this->charset,
+                    'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+                    default => throw new InvalidArgumentException('Invalid mode'),
+                };
+        
+                $writerClass = match ($this->mode) {
+                    'csv' => Csv::class,
+                    'xlsx' => Xlsx::class,
+                    'ods' => Ods::class,
+                    default => throw new InvalidArgumentException('Invalid mode'),
+                };
+        
+                header('Content-disposition: attachment; filename="' . $this->filename . '"');
+                header("Content-Type: $contentType");
+                header('Content-Transfer-Encoding: binary');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+        
+                $spreadsheet = new Spreadsheet();
+                $spreadsheet->getProperties()
+                    ->setCreator($gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'))
+                    ->setTitle($this->filename)
+                    ->setSubject($gL10n->get('PLG_INVENTORY_MANAGER_ITEMLIST'))
+                    ->setCompany($gCurrentOrganization->getValue('org_longname'))
+                    ->setKeywords($gL10n->get('PLG_INVENTORY_MANAGER_NAME_OF_PLUGIN') . ', ' . $gL10n->get('PLG_INVENTORY_MANAGER_ITEM'))
+                    ->setDescription($gL10n->get('PLG_INVENTORY_MANAGER_CREATED_WITH'));
+        
+                $sheet = $spreadsheet->getActiveSheet();
+                $sheet->fromArray(array_keys($this->exportHeader), NULL, 'A1');
+                $sheet->fromArray($this->exportRows, NULL, 'A2');
+        
+                if (!$this->mode == 'csv') {
+                    foreach ($this->exportStrikethroughs as $index => $strikethrough) {
+                        if ($strikethrough) {
+                            $sheet->getStyle('A' . ($index + 2) . ':' . $sheet->getHighestColumn() . ($index + 2))
+                                ->getFont()->setStrikethrough(true);
+                        }
+                    }
+        
+                    $this->formatSpreadsheet($spreadsheet, $this->exportRows, true);
+                }
+        
+                $writer = new $writerClass($spreadsheet);
+                $writer->save('php://output');
+                break;
+
+            default:
+                throw new InvalidArgumentException('Invalid mode');
+        }
+    }
+
+    /**
+     * Check if the keeper is authorized to edit spezific item data
+     * 
+     * @param int|null $keeper 			The user ID of the keeper
+     * @return bool 					true if the keeper is authorized
+     */
+    private function isKeeperAuthorizedToEdit(?int $keeper = null): bool
+    {
+        global $gSettingsManager, $gCurrentUser;
+
+        if ($gSettingsManager->get('inventory_allow_keeper_edit') === 1) {
+            if (isset($keeper) && $keeper === $gCurrentUser->getValue('usr_id')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -518,14 +636,14 @@ class InventoryPresenter extends PagePresenter
             }
 
             if ($this->mode == 'csv' || $this->mode == "ods" || $this->mode == 'xlsx' && $columnNumber === 1) {
-                $header[$gL10n->get('SYS_ABR_NO')] = 'string';
+                $this->exportHeader[$gL10n->get('SYS_ABR_NO')] = 'string';
             }
 
             switch ($this->mode) {
                 case 'csv':
                 case "ods":
                 case 'xlsx':
-                    $header[$columnHeader] = 'string';
+                    $this->exportHeader[$columnHeader] = 'string';
                     break;
 
                 case 'pdf':
@@ -542,7 +660,7 @@ class InventoryPresenter extends PagePresenter
         }
 
         if ($this->mode == 'html') {
-            $columnAlign[]  = 'center';
+            $columnAlign[]  = 'right';
             $columnValues[] = '&nbsp;';
             $this->inventoryTable->disableDatatablesColumnsSort(array(count($columnValues)));
             $this->inventoryTable->setDatatablesColumnsNotHideResponsive(array(count($columnValues)));
@@ -597,7 +715,7 @@ class InventoryPresenter extends PagePresenter
                             $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
                         }
                         else {
-                            $sql = $this->getSqlOrganizationsUsersCompletePIM();
+                            $sql = $this->itemsData->getSqlOrganizationsUsersComplete();
                             
                             $result = $gDb->queryPrepared($sql);
 
@@ -620,7 +738,7 @@ class InventoryPresenter extends PagePresenter
                                 $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
                             }
                             else {
-                                $sql = $this->getSqlOrganizationsUsersCompletePIM();
+                                $sql = $this->itemsData->getSqlOrganizationsUsersComplete();
                                 $result = $gDb->queryPrepared($sql);
             
                                 while ($row = $result->fetch()) {
@@ -643,8 +761,13 @@ class InventoryPresenter extends PagePresenter
                 elseif ($this->itemsData->getProperty($infNameIntern, 'inf_type') == 'DATE') {
                     $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
                 }
-                elseif (in_array($this->itemsData->getProperty($infNameIntern, 'inf_type'), array('DROPDOWN', 'RADIO_BUTTON'))) {
+                elseif ($this->itemsData->getProperty($infNameIntern, 'inf_type') == 'DROPDOWN') {
                     $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
+                }
+                elseif ($this->itemsData->getProperty($infNameIntern, 'inf_type') == 'RADIO_BUTTON') {
+                    $content = ($this->mode == 'html') ?
+                        $this->itemsData->getHtmlValue($infNameIntern, $content) :
+                        $this->itemsData->getValue($infNameIntern, 'database');
                 }
 
                 $columnValues[] = ($strikethrough && $this->mode != 'csv' && $this->mode != 'ods' && $this->mode != 'xlsx') ? '<s>' . $content . '</s>' : $content;
@@ -662,8 +785,8 @@ class InventoryPresenter extends PagePresenter
                 } */
 
                 // show link to edit, make former or undo former and delete item (if authorized)
-                if ($gCurrentUser->isAdministrator() || isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                    if ($gCurrentUser->isAdministrator() || (isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
+                if ($gCurrentUser->isAdministrator() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
+                    if ($gCurrentUser->isAdministrator() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
                         $tempValue .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'item_edit', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])) . '">
                                         <i class="bi bi-pencil-square" title="' . $gL10n->get('SYS_INVENTORY_ITEM_EDIT') . '"></i>
                                     </a>';
@@ -683,7 +806,7 @@ class InventoryPresenter extends PagePresenter
                                     </a>';
                     }
 
-                    if ($gCurrentUser->isAdministrator() || (isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
+                    if ($gCurrentUser->isAdministrator() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
                         $tempValue .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                             data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])) .'">
                                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i>
@@ -720,8 +843,8 @@ class InventoryPresenter extends PagePresenter
                     case 'csv':
                     case 'ods':
                     case 'xlsx':
-                        $rows[] = $columnValues;
-                        $strikethroughs[] = $strikethrough;
+                        $this->exportRows[] = $columnValues;
+                        $this->exportStrikethroughs[] = $strikethrough;
                         break;
 
                     default:
@@ -732,5 +855,38 @@ class InventoryPresenter extends PagePresenter
 
             ++$listRowNumber;
         }
+    }
+
+    /**
+     * Formats the spreadsheet
+     *
+     * @param PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet
+     * @param array $data
+     * @param bool $containsHeadline
+     */
+    function formatSpreadsheet($spreadsheet, $data, $containsHeadline) : void
+    {
+        $alphabet = range('A', 'Z');
+        $column = $alphabet[count($data[0])-1];
+
+        if ($containsHeadline) {
+            $spreadsheet
+                ->getActiveSheet()
+                ->getStyle('A1:'.$column.'1')
+                ->getFill()
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setARGB('ffdddddd');
+            $spreadsheet
+                ->getActiveSheet()
+                ->getStyle('A1:'.$column.'1')
+                ->getFont()
+                ->setBold(true);
+        }
+
+        for($number = 0; $number < count($data[0]); $number++) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($alphabet[$number])->setAutoSize(true);
+        }
+        $spreadsheet->getDefaultStyle()->getAlignment()->setWrapText(true);
     }
 }
