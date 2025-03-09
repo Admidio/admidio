@@ -199,9 +199,11 @@ class ChangelogService {
         if ($table == null) {
             return $tableLabels;
         } else {
-            $table = array_key_exists($table, $tableLabels) ? $tableLabels[$table] : $table;
-            // TODO_RK: If possible, add link to listing page of the corresponding DB record type
-            return Language::translateIfTranslationStrId($table);
+            if (array_key_exists($table, $tableLabels)) {
+                return Language::translateIfTranslationStrId($tableLabels[$table]); 
+            } else {
+                return '';
+            }
         }
     }
 
@@ -617,9 +619,9 @@ class ChangelogService {
                 case 'events' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $uuid)); break;
                 case 'files' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files.php', array('mode' => 'download', 'file_uuid' => $uuid)); break;
                 case 'folders' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files.php', array('folder_uuid' => $uuid)); break;
                 case 'forum_topics' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'topic', 'topic_uuid' => $uuid)); break;
                 case 'forum_posts' :
@@ -990,7 +992,7 @@ class ChangelogService {
                 global $gSettingsManager;
                 if (in_array($t, ChangelogService::$noLogTables)) {
                     return false;
-                } elseif (!empty(ChangelogService::getTableLabel($t))) {
+                } elseif (!empty(ChangelogService::getTableLabel($t) && $gSettingsManager->has('changelog_table_'.$t))) {
                     return $gSettingsManager->getBool('changelog_table_'.$t);
                 } else {
                     return $gSettingsManager->getBool('changelog_table_others');
@@ -1050,8 +1052,8 @@ class ChangelogService {
             return;
         }
 
-        // Required tables is/are not logged at all
-        if (!self::isTableLogged($table))
+        // Required tables is/are not logged at all, or condition for history button not met
+        if (!self::isTableLogged($table) || !$condition)
             return;
 
 

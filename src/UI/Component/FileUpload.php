@@ -1,5 +1,7 @@
 <?php
+namespace Admidio\UI\Component;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\PagePresenter;
 

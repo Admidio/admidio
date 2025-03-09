@@ -6,7 +6,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Roles\Service\RolesService;
-use HtmlDataTables;
+use Admidio\UI\Component\DataTables;
 use Admidio\Changelog\Service\ChangelogService;
 
 /**
@@ -759,7 +759,7 @@ class GroupsRolesPresenter extends PagePresenter
         }
 
         // initialize and set the parameter for DataTables
-        $dataTables = new HtmlDataTables($this, 'adm_role_permissions_table');
+        $dataTables = new DataTables($this, 'adm_role_permissions_table');
         $dataTables->setGroupColumn(1);
         $dataTables->disableColumnsSort(array(3, 8));
         $dataTables->setColumnsNotHideResponsive(array(8));

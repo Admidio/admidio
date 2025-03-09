@@ -121,7 +121,11 @@ try {
         $whoIsOnlinePlugin->assignTemplateVariable('message', $gL10n->get('PLG_ONLINE_NO_VISITORS_ON_WEBSITE'));
     }
 
-    echo $whoIsOnlinePlugin->html('plugin.who-is-online.tpl');
+    if (isset($page)) {
+        echo $whoIsOnlinePlugin->html('plugin.who-is-online.tpl');
+    } else {
+        $whoIsOnlinePlugin->showHtmlPage('plugin.who-is-online.tpl');
+    }
 } catch (Throwable $e) {
     echo $e->getMessage();
 }

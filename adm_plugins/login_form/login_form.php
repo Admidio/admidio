@@ -80,7 +80,12 @@ try {
         $loginFormPlugin->assignTemplateVariable('lastLogin', $lastLogin);
         $loginFormPlugin->assignTemplateVariable('numberOfLogins', $gCurrentUser->getValue('usr_number_login') . $htmlUserRank);
         $loginFormPlugin->assignTemplateVariable('showLogoutLink', $plg_show_logout_link);
-        echo $loginFormPlugin->html('plugin.login-form.view.tpl');
+
+        if (isset($page)) {
+            echo $loginFormPlugin->html('plugin.login-form.view.tpl');
+        } else {
+            $loginFormPlugin->showHtmlPage('plugin.login-form.view.tpl');
+        }
     } else {
         // create and show the login form
 
@@ -102,7 +107,7 @@ try {
             $administratorStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
             // create role object for administrator
-            $roleAdministrator = new Role($gDb, (int)$administratorStatement->fetchColumn());
+            $roleAdministrator = new Role($gDb, (int) $administratorStatement->fetchColumn());
 
             $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
@@ -146,6 +151,15 @@ try {
                 'helpTextId' => $forgotPasswordLink
             )
         );
+
+        if ($gSettingsManager->getBool('two_factor_authentication_enabled')) {
+            $form->addInput(
+                'usr_totp_code',
+                $gL10n->get('SYS_SECURITY_CODE'),
+                '',
+                array('maxLength' => 6)
+            );
+        }
 
         // show selectbox with all organizations of database
         if ($gCurrentOrganization->getValue('org_show_org_select')) {

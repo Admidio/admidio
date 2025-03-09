@@ -11,7 +11,7 @@
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\View\InstallationPresenter;
+use Admidio\UI\Presenter\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
     exit('This page may not be called directly!');

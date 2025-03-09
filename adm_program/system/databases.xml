@@ -2,7 +2,7 @@
 <databases>
     <database id="mysql">
         <identifier>mysql</identifier>
-        <name>MySQL / MariaDB</name>
+        <name>MariaDB / MySQL</name>
         <minversion>5.0.3</minversion>
     </database>
     <database id="pgsql">

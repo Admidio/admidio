@@ -20,6 +20,8 @@ DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_topics         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_posts          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_links                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_members              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages             CASCADE;
@@ -785,6 +787,7 @@ CREATE TABLE %PREFIX%_users
     usr_uuid                    varchar(36)         NOT NULL,
     usr_login_name              varchar(254),
     usr_password                varchar(255),
+    usr_tfa_secret              varchar(255),
     usr_photo                   blob,
     usr_text                    text,
     usr_pw_reset_id             varchar(50),

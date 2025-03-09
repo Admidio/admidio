@@ -36,14 +36,16 @@
 </head>
 <body id="{$id}" class="admidio admidio-reduced">
     <div id="adm_content" class="admidio-content {$contentClass}" role="main">
-        <div class="admidio-content-header">
-            <h1 class="admidio-module-headline">{$headline}</h1>
+        {if strlen($headline) > 0}
+            <div class="admidio-content-header">
+                <h1 class="admidio-module-headline">{$headline}</h1>
 
-            {if $hasPreviousUrl}
-                <!-- Add link to previous page -->
-                <a id="adm_back_link" class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="bi bi-arrow-left-circle-fill"></i> {$l10n->get('SYS_BACK')}</a>
-            {/if}
-        </div>
+                {if $hasPreviousUrl}
+                    <!-- Add link to previous page -->
+                    <a id="adm_back_link" class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="bi bi-arrow-left-circle-fill"></i> {$l10n->get('SYS_BACK')}</a>
+                {/if}
+            </div>
+        {/if}
 
         {* The main content of the page that will be generated through the Admidio scripts *}
         {$content}

@@ -12,7 +12,7 @@
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\View\InstallationPresenter;
+use Admidio\UI\Presenter\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_config.php') {
     exit('This page may not be called directly!');

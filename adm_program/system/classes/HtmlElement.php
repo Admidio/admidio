@@ -127,6 +127,7 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
  */
 
 abstract class HtmlElement
@@ -177,6 +178,7 @@ abstract class HtmlElement
      *
      * @param string $element The html element to be defined
      * @param bool $nesting Enables nesting of main elements ( Default: true )
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function __construct(string $element, bool $nesting = true)
     {
@@ -192,6 +194,7 @@ abstract class HtmlElement
      * @param string $attrValue Value of the attribute
      * @param string|null $element   Optional the element for which the attribute should be set,
      *                          if this is not the current element
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function addAttribute(string $attrKey, string $attrValue, string $element = '')
     {
@@ -218,6 +221,7 @@ abstract class HtmlElement
      * Set attributes from associative array.
      * @param array<string,mixed> $arrAttributes An array that contains all attribute names as array key
      *                                           and all attribute content as array value
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     protected function setAttributesFromArray(array $arrAttributes)
     {
@@ -230,6 +234,7 @@ abstract class HtmlElement
      * Add data to current element
      * @param string|string[] $data        Content for the element as string, or array
      * @param bool $selfClosing Element has self closing tag ( default: false)
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function addData($data, bool $selfClosing = false)
     {
@@ -270,6 +275,7 @@ abstract class HtmlElement
      * @param string $attrValue    Value for the attribute
      * @param string $data         content values can be passed as string, array, bidimensional Array and assoc. Array. ( Default: no data )
      * @param bool $selfClosing  Element has self closing tag ( default: false)
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function addElement(string $childElement, string $attrKey = '', string $attrValue = '', string $data = '', bool $selfClosing = false)
     {
@@ -329,6 +335,7 @@ abstract class HtmlElement
      * Add any string to the html output. If the main element wasn't written to the
      * html string than this will be done before your string will be added.
      * @param string $string Text as string in current string position
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function addHtml(string $string = '')
     {
@@ -352,6 +359,7 @@ abstract class HtmlElement
      * @param string $parentElement Parent element to be set
      * @param string $attrKey       Attribute name
      * @param string $attrValue     Value for the attribute
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function addParentElement(string $parentElement, string $attrKey = '', string $attrValue = '')
     {
@@ -405,6 +413,7 @@ abstract class HtmlElement
      * All end tags to position are closed automatically starting with last set element tag.
      * @param string $parentElement Parent element to be closed
      * @return bool
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function closeParentElement(string $parentElement): bool
     {
@@ -445,6 +454,7 @@ abstract class HtmlElement
      * Create a valid html compatible string with all attributes and their values of the given element.
      * @param array<string,string> $elementAttributes
      * @return string Returns a string with all attributes and values.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     private function getElementAttributesString(array $elementAttributes): string
     {
@@ -463,6 +473,7 @@ abstract class HtmlElement
     /**
      * Create a valid html compatible string with all attributes and their values of the last added element.
      * @return string Returns a string with all attributes and values.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     private function getCurrentElementAttributesString(): string
     {
@@ -472,6 +483,7 @@ abstract class HtmlElement
     /**
      * Create a valid html compatible string with all attributes and their values of the main element.
      * @return string Returns a string with all attributes and values.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     private function getMainElementAttributesString(): string
     {
@@ -481,6 +493,7 @@ abstract class HtmlElement
     /**
      * Return the element as string
      * @return string Returns the parsed html as string
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function getHtmlElement(): string
     {
@@ -494,6 +507,7 @@ abstract class HtmlElement
      * @param string $templateName Name of the Smarty template that should be rendered.
      * @param array $assigns An array with all variables that should be rendered within the Smarty template.
      * @throws Smarty\Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlElement" is deprecated, use native Smarty template integration instead.
      */
     public function render(string $templateName, array $assigns): string
     {

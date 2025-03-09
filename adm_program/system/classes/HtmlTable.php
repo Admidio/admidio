@@ -1,5 +1,6 @@
 <?php
 use Admidio\Infrastructure\Exception;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\PagePresenter;
 
 /**
@@ -33,6 +34,7 @@ use Admidio\UI\Presenter\PagePresenter;
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
  */
 class HtmlTable extends HtmlTableBasic
 {
@@ -50,9 +52,9 @@ class HtmlTable extends HtmlTableBasic
      */
     protected bool $useDatatables;
     /**
-     * @var HtmlDataTables An object of the HtmlDataTables class to handle the Javascript output of the jQuery plugin DataTables.
+     * @var DataTables An object of the DataTables class to handle the Javascript output of the jQuery plugin DataTables.
      */
-    protected HtmlDataTables $datatables;
+    protected DataTables $datatables;
     /**
      * @var string The text that should be shown if no row was added to the table
      */
@@ -81,6 +83,7 @@ class HtmlTable extends HtmlTableBasic
      * @param string $class (optional) An additional css classname. The class **table**
      *                         is set as default and need not set with this parameter.
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function __construct(string $id, HtmlPage|PagePresenter $htmlPage = null, $hoverRows = true, bool $datatables = false, string $class = '')
     {
@@ -108,7 +111,7 @@ class HtmlTable extends HtmlTableBasic
         // when using DataTables we must set the width attribute so that all columns will change
         // dynamic their width if the browser window size change.
         if ($this->useDatatables) {
-            $this->datatables = new HtmlDataTables($this->htmlPage, $this->id);
+            $this->datatables = new DataTables($this->htmlPage, $this->id);
             $this->addAttribute('width', '100%');
         }
     }
@@ -125,6 +128,7 @@ class HtmlTable extends HtmlTableBasic
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of column where the colspan should start.
      *                                              The first column of a table will be 1.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     private function addRowTypeByArray(string $type, array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
@@ -151,6 +155,7 @@ class HtmlTable extends HtmlTableBasic
      * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function addRowFooterByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
@@ -166,6 +171,7 @@ class HtmlTable extends HtmlTableBasic
      * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function addRowHeadingByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
@@ -184,6 +190,7 @@ class HtmlTable extends HtmlTableBasic
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start.
      *                                              The first column of a table will be 1.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function addRowByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
@@ -200,6 +207,7 @@ class HtmlTable extends HtmlTableBasic
      * because it only shows function icons or something equal.
      * @param array<int,int> $columnsSort An array which contain the columns where the sort should be disabled.
      *                                    The columns of the table starts with 1 (not 0).
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function disableDatatablesColumnsSort(array $columnsSort)
     {
@@ -216,6 +224,7 @@ class HtmlTable extends HtmlTableBasic
      * @param int $colspan           (optional) Number of columns that should be joined together.
      * @param int $colspanOffset     (optional) Number of the column where the colspan should start.
      *                               The first column of a table will be 1.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     private function prepareAndAddColumn(string $type, int $key, $value, int $colspan = 1, int $colspanOffset = 1)
     {
@@ -253,6 +262,7 @@ class HtmlTable extends HtmlTableBasic
      * before a row is added to the table. Each entry of the array represents a column.
      * @param array<int,string> $columnsAlign An array which contains the align for each column of the table.
      *                                        E.g. array('center', 'left', 'left', 'right') for a table with 4 columns.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function setColumnAlignByArray(array $columnsAlign)
     {
@@ -270,6 +280,7 @@ class HtmlTable extends HtmlTableBasic
      * @param int $selectedColumn    This is the column the user clicked to be sorted. (started with 1)
      * @param int|int[] $arrayOrderColumns These are the columns the table will internal be sorted. If you have more
      *                                     then 1 column this must be an array. The columns of the table starts with 1 (not 0).
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function setDatatablesAlternativeOrderColumns(int $selectedColumn, $arrayOrderColumns)
     {
@@ -300,6 +311,7 @@ class HtmlTable extends HtmlTableBasic
      *                                                 The columns of the table starts with 1 (not 0).
      * @param int $priority                            Optional set a priority so datatable will first hide columns with
      *                                                 low priority and after that with higher priority
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, int $priority = 1)
     {
@@ -313,6 +325,7 @@ class HtmlTable extends HtmlTableBasic
      * changed then a new subheader row will be created with the name of the new value.
      * @param int $columnNumber Number of the column that should be grouped. The first column starts with 1.
      *                          The columns were set with the method **addRowByArray**.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function setDatatablesGroupColumn(int $columnNumber)
     {
@@ -339,6 +352,7 @@ class HtmlTable extends HtmlTableBasic
      * // sort all rows after first column descending and third column ascending
      * $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc')));
      * ```
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function setDatatablesOrderColumns(array $arrayOrderColumns)
     {
@@ -350,6 +364,7 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Set the number of rows that should be displayed on one page if the jQuery plugin DataTables is used.
      * @param int $numberRows Number of rows that should be displayed on one page.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function setDatatablesRowsPerPage(int $numberRows)
     {
@@ -364,6 +379,7 @@ class HtmlTable extends HtmlTableBasic
      * @param string $messageType (optional) As **default** the text will be shown. If **warning** or **error**
      *                            is set then a box in yellow or red with the message will be shown.
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function setMessageIfNoRowsFound(string $messageId, string $messageType = 'default')
     {
@@ -389,6 +405,7 @@ class HtmlTable extends HtmlTableBasic
      * set. As such, each draw of the table will result in a new Ajax request being made to get the required data.
      * @param string $file The url with the filename that should be called by Datatables to get the data. The
      *                     called script must return a json string.
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function setServerSideProcessing(string $file)
     {
@@ -403,6 +420,7 @@ class HtmlTable extends HtmlTableBasic
      * have finished your form layout. If table has no rows then a message will be shown.
      * @return string Return the html code of the table.
      * @throws Exception
+     * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
     public function show(): string
     {

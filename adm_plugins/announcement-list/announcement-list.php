@@ -131,7 +131,11 @@ try {
         } else {
             $announcementListPlugin->assignTemplateVariable('message',$gL10n->get('PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS'));
         }
-        echo $announcementListPlugin->html('plugin.announcement-list.tpl');
+        if (isset($page)) {
+            echo $announcementListPlugin->html('plugin.announcement-list.tpl');
+        } else {
+            $announcementListPlugin->showHtmlPage('plugin.announcement-list.tpl');
+        }
     }
 } catch (Throwable $e) {
     echo $e->getMessage();

@@ -455,7 +455,12 @@ try {
     $calendarPlugin->assignTemplateVariable('dateIdLastMonth', date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)));
     $calendarPlugin->assignTemplateVariable('dateIdNextMonth', date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)));
     $calendarPlugin->assignTemplateVariable('tableContent', $tableContent);
-    echo $calendarPlugin->html('plugin.calendar.tpl');
+
+    if (isset($page)) {
+        echo $calendarPlugin->html('plugin.calendar.tpl');
+    } else {
+        $calendarPlugin->showHtmlPage('plugin.calendar.tpl');
+    }
 } catch (Throwable $e) {
     echo $e->getMessage();
 }
