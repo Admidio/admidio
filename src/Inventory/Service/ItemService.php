@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Inventory\Service;
 
 use Admidio\Infrastructure\Exception;
@@ -49,7 +50,7 @@ class ItemService
      *
      * @throws Exception
      */
-    public function makeItemFormer()
+    public function makeItemFormer(): void
     {
         $this->itemRessource->makeItemFormer($this->ID);
     }
@@ -58,7 +59,7 @@ class ItemService
      * Reverts the item to its previous state.
      * @throws Exception
      */
-    public function undoItemFormer()
+    public function undoItemFormer(): void
     {
         $this->itemRessource->undoItemFormer($this->ID);
     }
@@ -68,7 +69,7 @@ class ItemService
      * 
      * @throws Exception
      */
-    public function delete()
+    public function delete(): void
     {
         $this->itemRessource->deleteItem($this->ID);
     }
@@ -78,55 +79,53 @@ class ItemService
      * 
      * @throws Exception
      */
-    public function save()
+    public function save(): void
     {
         global $gCurrentSession, $gL10n, $gSettingsManager;
 
         // check form field input and sanitized it from malicious content
         $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $itemFieldsEditForm->validate($_POST);
-        
+
         $startIdx = 1;
         if ($this->postCopyField > 0 && isset($formValues['inf-' . $this->postCopyField])) {
             $startIdx = (int)$formValues['inf-' . $this->postCopyField] + 1;
         }
         $stopIdx = $startIdx + $this->postCopyNumber;
-        
+
         for ($i = $startIdx; $i < $stopIdx; ++$i) {
             $formValues['inf-' . $this->postCopyField] = $i;
-        
+
             $this->itemRessource->readItemData($this->ID);
-        
+
             if ($this->ID == 0) {
                 $this->itemRessource->getNewItemId();
             }
-        
+
             // check all item fields
             foreach ($this->itemRessource->getItemFields() as $itemField) {
                 $postId = 'inf-' . $itemField->getValue('inf_id');
-        
+
                 if (isset($formValues[$postId])) {
-                    if (strlen($formValues[$postId]) === 0 && $itemField->getValue('inf_mandatory') == 1) {
-                        throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array(convlanguagePIM($itemField->getValue('inf_name')))));
+                    if (strlen($formValues[$postId]) === 0 && $itemField->getValue('inf_required_input') == 1) {
+                        throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name'))));
                     }
-        
+
                     if ($itemField->getValue('inf_type') === 'DATE' && $gSettingsManager->get('inventory_field_date_time_format') == 'datetime') {
                         // Check if time is set separately
-                        isset($formValues[$postId . '_time'])? $dateValue= $formValues[$postId] . ' ' . $formValues[$postId . '_time'] : $dateValue = $formValues[$postId];
-        
+                        isset($formValues[$postId . '_time']) ? $dateValue = $formValues[$postId] . ' ' . $formValues[$postId . '_time'] : $dateValue = $formValues[$postId];
+
                         // Write value from field to the item class object with time
                         if (!$this->itemRessource->setValue($itemField->getValue('inf_name_intern'), $dateValue)) {
                             throw new Exception($gL10n->get('SYS_DATABASE_ERROR'), $gL10n->get('SYS_ERROR'));
                         }
-                    }
-                    else {
+                    } else {
                         // Write value from field to the item class object
                         if (!$this->itemRessource->setValue($itemField->getValue('inf_name_intern'), $formValues[$postId])) {
                             throw new Exception($gL10n->get('SYS_DATABASE_ERROR'), $gL10n->get('SYS_ERROR'));
                         }
                     }
-                }
-                elseif ($itemField->getValue('inf_type') === 'CHECKBOX') {
+                } elseif ($itemField->getValue('inf_type') === 'CHECKBOX') {
                     // Set value to '0' for unchecked checkboxes
                     $this->itemRessource->setValue($itemField->getValue('inf_name_intern'), '0');
                 }
@@ -135,14 +134,13 @@ class ItemService
             // save item data
             $this->itemRessource->saveItemData();
         }
-        
+
         //mark item as imported to prevent notification
         if ($this->postImported == 1) {
             $this->itemRessource->setImportedItem();
         }
 
         // Send notification to all users
-        //$this->itemRessource->sendNotification();
-
+        $this->itemRessource->sendNotification();
     }
 }
