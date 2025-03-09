@@ -26,7 +26,7 @@ use Admidio\Inventory\ValueObjects\ItemsData;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class InventoryFieldPresenter extends PagePresenter
+class InventoryFieldsPresenter extends PagePresenter
 {
     /**
      * Create the data for the edit form of a item field.
@@ -136,7 +136,7 @@ class InventoryFieldPresenter extends PagePresenter
             $gL10n->get('SYS_VALUE_LIST'),
             htmlentities($itemField->getValue('inf_value_list', 'database'), ENT_QUOTES),
             6,
-            array('helpTextId' => 'SYS_VALUE_LIST_DESC')
+            array('helpTextId' => $gL10n->get('SYS_INVENTORY_VALUE_LIST_DESC', array('<a href="https://icons.getbootstrap.com/" target="_blank">', '</a>')))
         );
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES');
         $form->addSelectBox(
@@ -205,7 +205,7 @@ class InventoryFieldPresenter extends PagePresenter
         // define link to create new item field
         $this->addPageFunctionsMenuItem(
             'menu_item_new_field',
-            $gL10n->get('ORG_CREATE_PROFILE_FIELD'),
+            $gL10n->get('SYS_INVENTORY_ITEMFIELD_CREATE'),
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit')),
             'bi-plus-circle-fill'
         );
@@ -247,7 +247,7 @@ class InventoryFieldPresenter extends PagePresenter
 
             $templateRowItemField = array(
                 'categoryID' => ((bool)$itemField->getValue('inf_system')) ? 1 : 2,
-                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED')  /* $itemField->getValue('cat_name') */,
+                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS')  /* $itemField->getValue('cat_name') */,
                 'id' => $itemField->getValue('inf_id'),
                 'name' => $itemField->getValue('inf_name'),
                 'description' => $itemField->getValue('inf_description'),
