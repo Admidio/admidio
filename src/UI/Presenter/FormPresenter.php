@@ -232,12 +232,18 @@ class FormPresenter
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type' => 'button',
             'id' => $id,
+            'name' => $id,
             'value' => $text
         ), $options));
         $attributes = array();
         $attributes['type'] = $optionsAll['type'];
+        if (array_key_exists('btn-value', $optionsAll)) {
+            $attributes['value'] = $optionsAll['btn-value'];
+        }
         $attributes['data-admidio'] = $optionsAll['data-admidio'];
-
+        if (array_key_exists('style', $optionsAll)) {
+            $attributes['style'] = $optionsAll['style'];
+        }
         // disable field
         if ($optionsAll['property'] === self::FIELD_DISABLED) {
             $attributes['disabled'] = 'disabled';
@@ -896,7 +902,7 @@ class FormPresenter
 
             case self::FIELD_HIDDEN:
                 $attributes['hidden'] = 'hidden';
-                $attributes['class'] .= ' invisible';
+                $attributes['class'] = ' invisible';
                 break;
         }
 

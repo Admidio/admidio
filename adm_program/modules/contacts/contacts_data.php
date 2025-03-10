@@ -251,7 +251,7 @@ try {
         }
 
         $columnValues['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
-        <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>';
+        <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
 
         // add all columns of the list configuration to the json array
         // start columnNumber with 4 because the first 2 columns are not of the list configuration
