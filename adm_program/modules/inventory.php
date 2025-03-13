@@ -138,7 +138,8 @@ try {
             if ($getiniId !== 0 && $getCopy) {
                 $getiniId = 0;
             }
-            $itemModule = new ItemService($gDb, $getiniId);
+
+            $itemModule = new ItemService($gDb, $getiniId, $postCopyField, $postCopyNumber, $postImported);
             $itemModule->save();
 
             $gNavigation->deleteLastUrl();
