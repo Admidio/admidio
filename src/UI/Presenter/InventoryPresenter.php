@@ -45,7 +45,7 @@ class InventoryPresenter extends PagePresenter
 {
     protected ItemsData $itemsData;
     private HtmlTable $inventoryTable;
-    //protected string $getPrintMode = '';//admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'xlsx', 'ods', 'html', 'print', 'pdf', 'pdfl')));
+
     protected string $getFilterString = ''; //admFuncVariableIsValid($_GET, 'items_filter_string', 'string', array('defaultValue' => '')); // search string
     protected string $getFilterCategory = ''; // admFuncVariableIsValid($_GET, 'items_filter_category', 'string', array('defaultValue' => '')); // category selection
     protected int $getFilterKeeper = 0; // admFuncVariableIsValid($_GET, 'items_filter_keeper', 'int', array('defaultValue' => 0)); // keeper selection

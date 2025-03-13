@@ -52,7 +52,7 @@ try {
         case 'show_html':    
             $page = new InventoryPresenter('admidio-inventory');
             $page->createHTMLPage();
-            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
+            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-box-seam-fill');
             $page->show();
             break;
 #region fields
