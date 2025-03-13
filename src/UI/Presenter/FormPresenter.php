@@ -438,6 +438,23 @@ class FormPresenter
     }
 
     /**
+     * Add custom html content to the form within the default field structure.
+     * The Label will be set but instead of a form control you can define any html.
+     * If you don't need the field structure and want to add html then use the method addHtml()
+     * @param string $label The label of the custom content.
+     */
+    public function addSeperator(string $id, string $label = '', array $options = array()): void
+    {
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'type'     => 'seperator',
+            'id'       => $id,
+            'label'    => $label
+        ), $options));
+
+        $this->elements[$id] = $optionsAll;
+    }
+
+    /**
      * Add a new CKEditor element to the form.
      * @param string $id ID of the password field. This will also be the name of the password field.
      * @param string $label The label of the password field.

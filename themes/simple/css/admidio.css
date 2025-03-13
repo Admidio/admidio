@@ -318,6 +318,15 @@ label {
     font-weight: bold;
 }
 
+.form-separator-line {
+    border-top: 2px solid;
+    margin-bottom: 0;
+}
+
+.form-separator-line + label {
+    font-size: 1.25em;
+}
+
 @media (min-width: 768px) {
     .form-control-small {
         width: 50%;
