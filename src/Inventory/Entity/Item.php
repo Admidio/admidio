@@ -2,6 +2,7 @@
 
 namespace Admidio\Inventory\Entity;
 
+// Admidio namespaces
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Inventory\ValueObjects\ItemsData;

@@ -2,11 +2,12 @@
 
 namespace Admidio\Inventory\Entity;
 
-use Admidio\Infrastructure\Exception;
+// Admidio namespaces
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\StringUtils;
 
 /**

@@ -1,4 +1,19 @@
 <?php
+
+// Admidio namespaces
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Menu\Entity\MenuEntry;
+use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Service\ImportService;
+use Admidio\Inventory\Service\ItemFieldService;
+use Admidio\Inventory\Service\ItemService;
+use Admidio\UI\Presenter\InventoryFieldsPresenter;
+use Admidio\UI\Presenter\InventoryImportPresenter;
+use Admidio\UI\Presenter\InventoryItemPresenter;
+use Admidio\UI\Presenter\InventoryPresenter;
+
 /**
  ***********************************************************************************************
  * Overview and maintenance of all item fields
@@ -17,23 +32,15 @@
  * direction : Direction to change the sequence of the item field
  ***********************************************************************************************
  */
-use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Menu\Entity\MenuEntry;
-use Admidio\Inventory\Entity\ItemField;
-use Admidio\Inventory\Service\ItemService;
-use Admidio\Inventory\Service\ItemFieldService;
-use Admidio\UI\Presenter\InventoryPresenter;
-use Admidio\UI\Presenter\InventoryFieldsPresenter;
-use Admidio\UI\Presenter\InventoryItemPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'show_html', 'validValues' => array('show_html', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit', 'item_save', 'item_delete_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'show_html', 'validValues' => array('show_html', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit', 'item_save', 'item_delete_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfId = admFuncVariableIsValid($_GET, 'uuid', 'int', array('defaultValue' => 0));
+    $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
     $getiniId = admFuncVariableIsValid($_GET, 'item_id', 'int', array('defaultValue' => 0));
     $postCopyNumber = admFuncVariableIsValid($_POST, 'item_copy_number', 'numeric', array('defaultValue' => 1));
     $postCopyField = admFuncVariableIsValid($_POST, 'item_copy_field', 'int', array('defaultValue' => 0));
@@ -74,7 +81,7 @@ try {
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $itemFields = new InventoryFieldsPresenter('adm_item_fields_edit');
-            $itemFields->createEditForm($getinfId);
+            $itemFields->createEditForm($getinfId, $getFieldName);
             $itemFields->show();
             break;
 
@@ -143,7 +150,7 @@ try {
             $itemModule->save();
 
             $gNavigation->deleteLastUrl();
-            echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_CREATED'),'url' => $gNavigation->getUrl()));
             break;
 
         case 'item_delete_explain_msg':
@@ -194,7 +201,59 @@ try {
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_DELETE_DATA')));
             break;
 #endregion
+#region import
+        case 'import_file_selection':
+            // check if file_uploads is set to ON in the current server settings...
+            if (!PhpIniUtils::isFileUploadEnabled()) {
+                $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
+                 // => EXIT
+                 break;
+            }
 
+            $import = new InventoryImportPresenter('adm_inventory_import', $gL10n->get('SYS_IMPORT'));
+
+            $gNavigation->addUrl(CURRENT_URL, $import->getHeadline());
+            $import->createImportFileSelectionForm();
+            $import->show();
+            break;
+
+         case 'import_read_file':
+            $import = new ImportService();
+            $import->readImportFile();
+            echo json_encode(array(
+                'status' => 'success',
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'import_assign_fields'))
+            ));
+            break;
+
+        case 'import_assign_fields':
+            $import = new InventoryImportPresenter('adm_inventory_import_assign_fields', $gL10n->get('SYS_ASSIGN_FIELDS'));
+            $gNavigation->addUrl(CURRENT_URL, $import->getHeadline());
+
+            $import->createAssignFieldsForm();
+            $import->show();
+            break;
+
+        case 'import_items':
+            $import = new ImportService();
+            $retStr = $import->importItems();
+
+            $gNavigation->deleteLastUrl();
+        
+            // Go back to item view
+            if ($gNavigation->count() > 1) {
+                $gNavigation->deleteLastUrl();
+            }
+            
+            // Unset the import request session
+            if (isset($_SESSION['import_csv_request'])) {
+                unset($_SESSION['import_csv_request']);
+            }
+
+            echo json_encode(array('status' => $retStr['success'], 'message' => $retStr['message'], 'url' => $gNavigation->getUrl()));
+            break;
+#endregion
+#region print
         case 'print_preview':
             $page = new InventoryPresenter('adm-inventory-print-preview');
             $page->setPrintMode();
@@ -212,16 +271,16 @@ try {
             $exportMode = str_replace('print_', '', $getMode);
             $page->createExport($exportMode);
             break;
-
+#endregion
         default:
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
             break;
     }
 } catch (Throwable $e) {
     if (in_array($getMode, array('field_save', 'field_delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        echo// PHP namespaces
+        json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());
     }
 }
-

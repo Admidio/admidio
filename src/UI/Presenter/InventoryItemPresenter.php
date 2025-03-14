@@ -2,12 +2,12 @@
 
 namespace Admidio\UI\Presenter;
 
+// Admidio namespaces
 use Admidio\Infrastructure\Exception;
-use Admidio\Inventory\Entity\ItemField;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 /**

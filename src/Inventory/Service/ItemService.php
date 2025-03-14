@@ -4,7 +4,6 @@ namespace Admidio\Inventory\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-
 use Admidio\Inventory\ValueObjects\ItemsData;
 
 /**
@@ -84,8 +83,15 @@ class ItemService
         global $gCurrentSession, $gL10n, $gSettingsManager;
 
         // check form field input and sanitized it from malicious content
-        $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        $formValues = $itemFieldsEditForm->validate($_POST);
+        if (!$this->postImported)
+        {
+            $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $formValues = $itemFieldsEditForm->validate($_POST);
+        }
+        else
+        {
+            $formValues = $_POST;
+        }
 
         $startIdx = 1;
         if ($this->postCopyField > 0 && isset($formValues['inf-' . $this->postCopyField])) {

@@ -2,8 +2,9 @@
 
 namespace Admidio\Inventory\Service;
 
-use Admidio\Infrastructure\Exception;
+// Admidio namespaces
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Entity\ItemField;
 
 /**

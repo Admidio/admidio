@@ -2,15 +2,19 @@
 
 namespace Admidio\Inventory\ValueObjects;
 
+// Admidio namespaces
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Email;
-use Admidio\Inventory\Entity\Item;
-use Admidio\Inventory\Entity\ItemField;
-use Admidio\Infrastructure\Entity\Entity;
-use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\Entity\ItemField;
+
+// PHP namespaces
+use DateTime;
 
 /**
  * @brief Reads the user fields structure out of database and give access to it
@@ -296,6 +300,16 @@ class ItemsData
     }
 
     /**
+     * Returns the item data of all item fields
+     * 
+     * @return array<int,Entity> Array with all item data objects
+     */
+    public function getItemData(): array
+    {
+        return $this->mItemData;
+    }
+
+    /**
      * Returns the value of a column from the table adm_inventory_fields for a given internal field name
      * 
      * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
@@ -477,8 +491,8 @@ class ItemsData
                             if (strpos($value, ' ') === false) {
                                 $value .=  ' 00:00';
                             }
-                            $date = \DateTime::createFromFormat('Y-m-d H:i', $value);
-                            if ($date instanceof \DateTime) {
+                            $date = DateTime::createFromFormat('Y-m-d H:i', $value);
+                            if ($date instanceof DateTime) {
                                 $htmlValue = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                             }
                         } else {
@@ -486,8 +500,8 @@ class ItemsData
                             if (strpos($value, ' ') !== false) {
                                 $value = substr($value, 0, 10);
                             }
-                            $date = \DateTime::createFromFormat('Y-m-d', $value);
-                            if ($date instanceof \DateTime) {
+                            $date = DateTime::createFromFormat('Y-m-d', $value);
+                            if ($date instanceof DateTime) {
                                 $htmlValue = $date->format($gSettingsManager->getString('system_date'));
                             }
                         }
@@ -611,13 +625,13 @@ class ItemsData
                             if (strpos($value, ' ') === false) {
                                 $value .= ' 00:00';
                             }
-                            $date = \DateTime::createFromFormat('Y-m-d H:i', $value);
+                            $date = DateTime::createFromFormat('Y-m-d H:i', $value);
                         } else {
                             // check if date is date or datetime
                             if (strpos($value, ' ') !== false) {
                                 $value = substr($value, 0, 10);
                             }
-                            $date = \DateTime::createFromFormat('Y-m-d', $value);
+                            $date = DateTime::createFromFormat('Y-m-d', $value);
                         }
 
                         if ($date === false) {
@@ -742,7 +756,7 @@ class ItemsData
                     if (strpos($newValue, ' ') === false) {
                         $newValue .=  ' 00:00';
                     }
-                    $date = \DateTime::createFromFormat('Y-m-d H:i', $newValue);
+                    $date = DateTime::createFromFormat('Y-m-d H:i', $newValue);
                     if ($date !== false) {
                         $newValue = $date->format('Y-m-d H:i');
                     }
@@ -751,7 +765,7 @@ class ItemsData
                     if (strpos($newValue, ' ') !== false) {
                         $newValue = substr($newValue, 0, 10);
                     }
-                    $date = \DateTime::createFromFormat('Y-m-d', $newValue);
+                    $date = DateTime::createFromFormat('Y-m-d', $newValue);
                     if ($date !== false) {
                         $newValue = $date->format('Y-m-d');
                     }

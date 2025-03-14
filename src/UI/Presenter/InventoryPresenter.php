@@ -13,14 +13,15 @@ use TCPDF;
 
 // Admidio namespaces
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
+// PHP namespaces
 use HtmlTable;
 use InvalidArgumentException;
 
@@ -67,10 +68,11 @@ class InventoryPresenter extends PagePresenter
     protected array  $modeSettings = array();
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $categoryUUID UUID of the category for which the topics should be filtered.
+     * @param string $objectUUID UUID of an object that represents the page. The data shown at the page will belong
+     *                           to this object.
      * @throws Exception
      */
-    public function __construct(string $id = 'admidio-inventory')
+    public function __construct(string $objectUUID = 'admidio-inventory')
     {
         global $gDb, $gL10n, $gSettingsManager, $gCurrentOrgId;
 
@@ -104,7 +106,6 @@ class InventoryPresenter extends PagePresenter
         );
 #endregion
 
-        //$this->categoryUUID = $categoryUUID;
         $this->itemsData = new ItemsData($gDb, $gCurrentOrgId);
         $this->itemsData->showFormerItems($this->getAllItems);
         $this->itemsData->readItems();
@@ -112,7 +113,7 @@ class InventoryPresenter extends PagePresenter
         $this->setHeadline($gL10n->get('SYS_INVENTORY'));
         $this->setContentFullWidth();
 
-        parent::__construct($id);
+        parent::__construct($objectUUID);
     }
 
     /**
@@ -289,7 +290,7 @@ class InventoryPresenter extends PagePresenter
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_import_items',
                 $gL10n->get('SYS_INVENTORY_IMPORT_ITEMS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'items_import')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'import_file_selection')),
                 'bi-upload'
             );
         }
@@ -821,15 +822,23 @@ class InventoryPresenter extends PagePresenter
             if ($this->getFilterString !== '') {
                 $showRowException = false;
                 $filterArray = explode(',', $this->getFilterString);
+
+                $filterColumnValues = $columnValues;
+                foreach ($filterColumnValues as $key => $value) {
+                    $parts = explode(',', $value);
+                    if (count($parts) > 1) {
+                        $filterColumnValues[$key] = implode(',', array_slice($parts, 0, 2));
+                    }
+                }
                 foreach ($filterArray as $filterString) {
                     $filterString = trim($filterString);
                     if (substr($filterString, 0, 1) == '-') {
                         $filterString = substr($filterString, 1);
-                        if (stristr(implode('', $columnValues), $filterString)) {
+                        if (stristr(implode('', $filterColumnValues), $filterString)) {
                             $showRowException = true;
                         }
                     }
-                    if (stristr(implode('', $columnValues), $filterString)) {
+                    if (stristr(implode('', $filterColumnValues), $filterString)) {
                         $showRow = true;
                     }
                 }

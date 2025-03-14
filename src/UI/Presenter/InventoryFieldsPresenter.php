@@ -2,12 +2,13 @@
 
 namespace Admidio\UI\Presenter;
 
+// Admidio namespaces
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
-use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Inventory\ValueObjects\ItemsData;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -33,13 +34,16 @@ class InventoryFieldsPresenter extends PagePresenter
      * @param string $itemFieldID ID of the item field that should be edited.
      * @throws Exception
      */
-    public function createEditForm(string $itemFieldID = '')
+    public function createEditForm(string $itemFieldID = '', string $itemFieldName = '')
     {
         global $gCurrentSession, $gSettingsManager, $gL10n, $gCurrentOrgId, $gDb;
 
         // Create user-defined field object
         $itemField = new ItemField($gDb, intval($itemFieldID));
 
+        if ($itemFieldID === "0" && !empty($itemFieldName)) {
+            $itemField->setValue('inf_name', $itemFieldName);
+        }
         if ($itemFieldID !== '') {
             // Check whether the field belongs to the current organization
             if ($itemField->getValue('inf_org_id') > 0
@@ -226,7 +230,6 @@ class InventoryFieldsPresenter extends PagePresenter
                     'name' => $templateItemFields[0]['categoryName'],
                     'entries' => $templateItemFields
                 );
-                //$prevItemFieldCategoryID = $itemFieldCategoryID; // = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;
                 $templateItemFields = array();
             }
 
