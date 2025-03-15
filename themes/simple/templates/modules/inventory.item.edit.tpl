@@ -24,7 +24,9 @@
                     {elseif $itemField.type == 'select'}
                         {include 'sys-template-parts/form.select.tpl' data=$itemField}
                     {else}
-                        {include 'sys-template-parts/form.input.tpl' data=$itemField}
+                        {if !{string_contains haystack=$key needle="_time"}}
+                            {include 'sys-template-parts/form.input.tpl' data=$itemField}
+                        {/if}
                     {/if}
                 {/if}
             {/foreach}
