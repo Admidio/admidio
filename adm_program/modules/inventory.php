@@ -218,6 +218,12 @@ try {
             break;
 
          case 'import_read_file':
+            // check the CSRF token of the form against the session token
+            $inventoryImportForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            if ($_POST['adm_csrf_token'] !== $inventoryImportForm->getCsrfToken()) {
+                throw new Exception('Invalid or missing CSRF token!');
+            }
+
             $import = new ImportService();
             $import->readImportFile();
             echo json_encode(array(
@@ -235,6 +241,12 @@ try {
             break;
 
         case 'import_items':
+            // check the CSRF token of the form against the session token
+            $inventoryImportForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            if ($_POST['adm_csrf_token'] !== $inventoryImportForm->getCsrfToken()) {
+                throw new Exception('Invalid or missing CSRF token!');
+            }
+            
             $import = new ImportService();
             $retStr = $import->importItems();
 
@@ -250,6 +262,11 @@ try {
                 unset($_SESSION['import_csv_request']);
             }
 
+            // Unset the import data session
+            if (isset($_SESSION['import_data'])) {
+                unset($_SESSION['import_data']);
+            }
+            
             echo json_encode(array('status' => $retStr['success'], 'message' => $retStr['message'], 'url' => $gNavigation->getUrl()));
             break;
 #endregion
