@@ -20,7 +20,7 @@
     </form>
 
     {if $settings->getBool('registration_enable_module')}
-        <div class="card admidio-field-group mt-5">
+        <div class="card admidio-field-group mt-5" id="registration_card">
             <div class="card-body">
                 <p>{$l10n->get('SYS_NO_LOGIN_DATA')}</p>
                 <a class="btn btn-secondary" href="{$urlAdmidio}/adm_program/modules/registration.php">{$l10n->get("SYS_REGISTER")}</a>
