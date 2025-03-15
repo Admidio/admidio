@@ -15,6 +15,8 @@ use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Entity\Post;
+use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Entity\Item;
 
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -179,6 +181,10 @@ class ChangelogService {
 
             'folders' => 'SYS_FOLDER',
             'files' => 'SYS_FILE',
+
+            'inventory_fields' => 'SYS_INVENTORY_ITEMFIELD',
+            'inventory_items' => 'SYS_INVENTORY_ITEM',
+
             'organizations' => 'SYS_ORGANIZATION',
             'menu' => 'SYS_MENU_ITEM',
 
@@ -294,7 +300,11 @@ class ChangelogService {
                 return new Topic($gDb);
             case 'forum_post':
                 return new Post($gDb);
-            default:
+            case 'inventory_fields':
+                return new ItemField($gDb);
+            case 'inventory_items':
+                return new Item($gDb);
+                default:
                 return null;
         }
     }
@@ -482,6 +492,15 @@ class ChangelogService {
             'fop_text' =>                  'SYS_TEXT',
             'fop_fot_id' =>                array('name' => 'SYS_FORUM_TOPIC', 'type' => 'TOPIC'),
 
+            'inf_type' =>                  array('name' => 'SYS_TYPE', 'type' => 'CUSTOM_LIST', 'entries' => $userFieldText),
+            'inf_name' =>                  'SYS_INVENTORY_ITEMFIELDS',
+            'inf_description' =>           'SYS_DESCRIPTION',
+            'inf_value_list' =>            'SYS_VALUE_LIST',
+            'inf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
+            'inf_sequence' =>              'SYS_ORDER',
+            'ini_former' =>                array('name' => 'SYS_INVENTORY_ITEM_MADE_FORMER', 'type' => 'BOOL'),
+            'ind_value' =>                 'SYS_VALUE',
+
             'lnk_name' =>                  'SYS_LINK_NAME',
             'lnk_description' =>           'SYS_DESCRIPTION',
             'lnk_url' =>                   array('name' => 'SYS_LINK_ADDRESS', 'type' => 'URL'),
@@ -626,6 +645,10 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'topic', 'topic_uuid' => $uuid)); break;
                 case 'forum_posts' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'post_edit', 'post_uuid' => $uuid)); break;
+                case 'inventory_fields' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'field_edit', 'uuid' => $id)); break;
+                case 'inventory_items' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_id' => $id)); break;
                 case 'links' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
                 case 'lists' :
@@ -838,7 +861,15 @@ class ChangelogService {
                     $obj = new POST($gDb, $value);
                     $htmlValue = self::createLink($obj->readableName(), 'forum_posts', $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
                     break;
-                case 'CUSTOM_LIST':
+                case 'ITEM':
+                    $obj = new Item($gDb, $value);
+                    $htmlValue = self::createLink($obj->readableName(), 'inventory_items', $obj->getValue('ini_id'), $obj->getValue('ini_id'));
+                    break;
+                case 'ITEMFIELD':
+                    $obj = new ItemField($gDb, $value);
+                    $htmlValue = self::createLink($obj->readableName(), 'inventory_fields', $obj->getValue('inf_id'), $obj->getValue('inf_id'));
+                    break;
+                   case 'CUSTOM_LIST':
                     $value = $entries[$value]??$value;
                     $htmlValue = '';
                     if (is_array($value)) {
@@ -908,6 +939,10 @@ class ChangelogService {
                 return 'forum_topics';
             case 'forum_topics':
                 return 'forum_posts';
+            case 'inventory_fields':
+                return 'inventory_items';
+            case 'inventory_items':
+                return 'inventory_fields';
             case 'list_columns':
                 // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
                 if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {

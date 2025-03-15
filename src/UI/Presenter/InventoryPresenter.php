@@ -267,17 +267,17 @@ class InventoryPresenter extends PagePresenter
         }
 
         if ($gCurrentUser->editInventory()) {
-            if ($gSettingsManager->getBool('changelog_module_enabled')) {
-                // show link to view profile field change history
-                //ChangelogService::displayHistoryButton($page, 'inventory', 'inventory');
+/*             if ($gSettingsManager->getBool('changelog_module_enabled')) {
                 $this->addPageFunctionsMenuItem(
                     'menu_item_inventory_change_history',
                     $gL10n->get('SYS_CHANGE_HISTORY'),
                     ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory_history.php',
                     'bi-clock-history'
                 );
-            }
-            
+            } */
+            // show link to view profile field change history
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items');
+           
             // show link to create new item
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_create_item',

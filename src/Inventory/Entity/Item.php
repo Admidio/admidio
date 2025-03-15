@@ -6,6 +6,7 @@ namespace Admidio\Inventory\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -60,4 +61,32 @@ class Item extends Entity
 
         parent::__construct($database, TBL_INVENTORY_ITEMS, 'ini', $itemId);
     }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns.
+     * The guestbook table also contains gbc_org_id and gbc_ip_address columns,
+     * which we don't want to log.
+     * @return array Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(),
+            ['ini_id', 'ini_org_id', 'ind_id', 'ind_inf_id', 'ind_ini_id']/* ,
+            ($this->newRecord)?[$this->columnPrefix.'_text']:[] */
+        );
+    }
+
+    /**
+     * Adjust the changelog entry for this db record: Add the first forum post as a related object
+     * @param LogChanges $logEntry The log entry to adjust
+     * @return void
+     * @throws Exception
+     */
+    protected function adjustLogEntry(LogChanges $logEntry): void
+    {
+/*         $fotEntry = new ItemField($this->db, (int)$this->getValue('fot_fop_id_first_post'));
+        $logEntry->setLogRelated($fotEntry->getValue('fop_uuid'), $fotEntry->getValue('fop_text'));
+ */    }
 }
