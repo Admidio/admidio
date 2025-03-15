@@ -361,14 +361,14 @@ class ItemsData
     {
         global $gProfileFields, $gCurrentOrgId;
 
-        return 'SELECT usr_id, CONCAT(last_name.usd_value, \', \', first_name.usd_value, IFNULL(CONCAT(\', \', postcode.usd_value),\'\'), IFNULL(CONCAT(\' \', city.usd_value),\'\'), IFNULL(CONCAT(\', \', street.usd_value),\'\') ) as name
+        return 'SELECT usr_id, CONCAT(last_name.usd_value, \', \', first_name.usd_value, COALESCE(CONCAT(\', \', postcode.usd_value),\'\'), COALESCE(CONCAT(\' \', city.usd_value),\'\'), COALESCE(CONCAT(\', \', street.usd_value),\'\') ) as name
                 FROM ' . TBL_USERS . '
                 JOIN ' . TBL_USER_DATA . ' as last_name ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
                 JOIN ' . TBL_USER_DATA . ' as first_name ON first_name.usd_usr_id = usr_id AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
                 LEFT JOIN ' . TBL_USER_DATA . ' as postcode ON postcode.usd_usr_id = usr_id AND postcode.usd_usf_id = ' . $gProfileFields->getProperty('POSTCODE', 'usf_id') . '
                 LEFT JOIN ' . TBL_USER_DATA . ' as city ON city.usd_usr_id = usr_id AND city.usd_usf_id = ' . $gProfileFields->getProperty('CITY', 'usf_id') . '
                 LEFT JOIN ' . TBL_USER_DATA . ' as street ON street.usd_usr_id = usr_id AND street.usd_usf_id = ' . $gProfileFields->getProperty('ADDRESS', 'usf_id') . '
-                WHERE usr_valid = 1 AND EXISTS (SELECT 1 FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . ' WHERE mem_usr_id = usr_id AND mem_rol_id = rol_id AND mem_begin <= \'' . DATE_NOW . '\' AND mem_end > \'' . DATE_NOW . '\' AND rol_valid = 1 AND rol_cat_id = cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)) ORDER BY last_name.usd_value, first_name.usd_value;';
+                WHERE usr_valid = true AND EXISTS (SELECT 1 FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . ' WHERE mem_usr_id = usr_id AND mem_rol_id = rol_id AND mem_begin <= \'' . DATE_NOW . '\' AND mem_end > \'' . DATE_NOW . '\' AND rol_valid = true AND rol_cat_id = cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)) ORDER BY last_name.usd_value, first_name.usd_value;';
     }
 
     /**
@@ -384,8 +384,8 @@ class ItemsData
                 FROM ' . TBL_USERS . '
                 JOIN ' . TBL_USER_DATA . ' as last_name ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
                 JOIN ' . TBL_USER_DATA . ' as first_name ON first_name.usd_usr_id = usr_id AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                WHERE usr_valid = 1 AND EXISTS (SELECT 1 FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . ' WHERE mem_usr_id = usr_id AND mem_rol_id = rol_id AND mem_begin <= \'' . DATE_NOW . '\' AND mem_end > \'' . DATE_NOW . '\' AND rol_valid = 1 AND rol_cat_id = cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)) ORDER BY last_name.usd_value, first_name.usd_value;';
-    }
+                WHERE usr_valid = true AND EXISTS (SELECT 1 FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . ' WHERE mem_usr_id = usr_id AND mem_rol_id = rol_id AND mem_begin <= \'' . DATE_NOW . '\' AND mem_end > \'' . DATE_NOW . '\' AND rol_valid = true AND rol_cat_id = cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)) ORDER BY last_name.usd_value, first_name.usd_value;';
+        }
 
 
     /**
@@ -778,27 +778,13 @@ class ItemsData
             return true;
         }
 
-        $returnCode = false;
-
         if (!array_key_exists($infId, $this->mItemData)) {
             $this->mItemData[$infId] = new Entity($this->mDb, TBL_INVENTORY_DATA, 'ind');
             $this->mItemData[$infId]->setValue('ind_inf_id', $infId);
             $this->mItemData[$infId]->setValue('ind_ini_id', $this->mItemId);
         }
 
-        $returnCode = $this->mItemData[$infId]->setValue('ind_value', $newValue);
-
-        if ($returnCode && $gSettingsManager->getBool('changelog_module_enabled')) {
-            $logEntry = new Entity($this->mDb, TBL_INVENTORY_LOG, 'iml');
-            $logEntry->setValue('iml_ini_id', $this->mItemId);
-            $logEntry->setValue('iml_inf_id', $infId);
-            $logEntry->setValue('iml_value_old', $oldFieldValue);
-            $logEntry->setValue('iml_value_new', $newValue);
-            $logEntry->setValue('iml_comment', '');
-            $logEntry->save();
-        }
-
-        return $returnCode;
+        return $this->mItemData[$infId]->setValue('ind_value', $newValue);
     }
 
     /**
@@ -844,14 +830,6 @@ class ItemsData
      */
     public function deleteItem($itemId): void
     {
-        global $gSettingsManager;
-
-        /*         if ($gSettingsManager->getBool('changelog_module_enabled')) {
-            $sql = 'DELETE FROM '.TBL_INVENTORY_LOG.' WHERE iml_ini_id = ?;';
-            $this->mDb->queryPrepared($sql, array($itemId));
-        }
-    
- */
         $sql = 'DELETE FROM ' . TBL_INVENTORY_DATA . ' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($itemId));
 
