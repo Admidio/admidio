@@ -856,14 +856,15 @@
   <string name="SYS_INVENTORY_GENERAL">Allgemeiner Filter - Mehrere Filterbegriffe sind durch Kommas zu trennen. Um Wörter auszuschließen muss ein - davorgesetzt werden. Beispiel: Meier, Huber, -Notenschrank</string>           
   <string name="SYS_INVENTORY_IMPORT">Import</string>
   <string name="SYS_INVENTORY_IMPORT_DESC">Hier kannst du Gegenstände aus einer vorherigen Exportdatei oder einer eigenen Datei importieren.</string>
-  <string name="SYS_INVENTORY_IMPORT_ASSIGN_FIELDS">In der linken Spalte der nachfolgenden Tabelle werden alle Eigenschaftsfelder angezeigt. In der rechten Spalte werden in einer Auswahlliste die Spalten aus der zu importierenden Datei angezeigt. Alle Spalten aus der Datei, die du importieren möchtest, solltest du nun einem Eigenschaftsfeld zuordnen.</string>
+  <string name="SYS_INVENTORY_IMPORT_ASSIGN_FIELDS_DESC">In der linken Spalte der nachfolgenden Tabelle werden alle Eigenschaftsfelder angezeigt. In der rechten Spalte werden in einer Auswahlliste die Spalten aus der zu importierenden Datei angezeigt. Alle Spalten aus der Datei, die du importieren möchtest, solltest du nun einem Eigenschaftsfeld zuordnen.</string>
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Gegenstände importieren</string>
   <string name="SYS_INVENTORY_IMPORT_PROGRESS">Der Gegenstand #VAR1_BOLD# wurde #VAR2_BOLD# importiert.</string>
-  <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">Folgenden Spalten der Importdatei sind keine Felder im InventoryManager zugeordnet:</string>
+  <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">Folgenden Spalten der Importdatei sind keine Felder in der Inventarverwaltung zugeordnet:</string>
   <string name="SYS_INVENTORY">Inventarverwaltung</string>
   <string name="SYS_INVENTORY_ITEM">Gegenstand</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Gegenstand kopieren</string>
   <string name="SYS_INVENTORY_ITEM_CREATE">Neuen Gegenstand anlegen</string>
+  <string name="SYS_INVENTORY_ITEM_CREATED">Neuer Gegenstand angelegt</string>
   <string name="SYS_INVENTORY_ITEM_CREATE_DESC">Hier kannst du einzelne Gegenstände dem Inventar hinzufügen.\n\nHinweis: In der Ansicht "Gegenstand ändern" ist es über den Menüpunkt "Gegenstand kopieren" möglich, einen vorhandenen Gegenstand einfach oder mehrfach zu kopieren.</string>
   <string name="SYS_INVENTORY_ITEM_DELETE">Gegenstand löschen</string>
   <string name="SYS_INVENTORY_ITEM_DELETE_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten dieses Gegenstandes gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
