@@ -2217,7 +2217,6 @@ class PreferencesPresenter extends PagePresenter
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
         // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
         // so we need to do it here, even when no selectbox will be used...
-        // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');

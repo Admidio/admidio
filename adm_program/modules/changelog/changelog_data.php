@@ -414,7 +414,7 @@ try {
         } elseif (!empty($fieldInfo)) {
             // Note: Even for user fields, we don't want to use the current user field name from the database, but the name stored in the log table from the time the change was done!.
             $fieldName = (is_array($fieldInfo) && isset($fieldInfo['name'])) ? $fieldInfo['name'] : $fieldInfo;
-            $columnValues[] = Language::translateIfTranslationStrId($fieldName); // TODO_RK: Use field_id to link to the field -> Target depends on the table!!!!
+            $columnValues[] = Language::translateIfTranslationStrId($fieldName);
         } else {
             $columnValues[] = '';
         }

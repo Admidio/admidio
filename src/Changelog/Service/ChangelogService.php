@@ -494,7 +494,7 @@ class ChangelogService {
             'fol_name' =>                  'SYS_NAME',
             'fol_description' =>           'SYS_DESCRIPTION',
             'fol_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
-            'fol_fol_id_parent' =>         array('name' => 'SYS_FOLDER', 'type' => 'FOLDER'), // TODO_RK: Find a translatable string for parent folder (currenly just use "folder")
+            'fol_fol_id_parent' =>         array('name' => 'SYS_FOLDER', 'type' => 'FOLDER'),
             'fol_path' =>                  'SYS_PATH',
             'fol_locked' =>                array('name' => 'SYS_LOCKED', 'type' => 'BOOL'),
             'fol_public' =>                array('name' => 'SYS_VISIBLE', 'type' => 'BOOL'),
