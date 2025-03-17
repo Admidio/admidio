@@ -85,6 +85,7 @@ try {
                         if ($newPassword === $newPasswordConfirm) {
                             $user->saveChangesWithoutRights();
                             $user->setPassword($newPassword);
+                            $user->setValue('usr_tfa_secret', '');
                             $user->setValue('usr_pw_reset_id', '');
                             $user->setValue('usr_pw_reset_timestamp', '');
                             $user->save();
