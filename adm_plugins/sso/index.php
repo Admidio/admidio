@@ -36,12 +36,7 @@ try {
         $type = 'oidc';
     }
 
-    if ((($type == 'saml') && strpos($requestUri, '/saml/metadata') !== false) ||
-        (($type == 'saml') && strpos($requestUri, '/saml/slo') !== false) ) {
-        // no login required for saml metadata and SLO
-    } else {
-        require_once($rootPath . '/adm_program/system/login_valid.php');
-    }
+    // Login checks will be done in the individual endpoint handler functions!
 
     if ($type === 'oidc') {
 /*        $oidcService = new OIDCService($gDb, $gCurrentUser);
