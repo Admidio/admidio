@@ -76,7 +76,7 @@ class CategoriesPresenter extends PagePresenter
             case 'ANN':
                 $component = 'ANNOUNCEMENTS';
                 $headline = $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headlineSuffix;
-                $rolesRightEditName = 'SYS_EDIT_ANNOUNCEMENTS';
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_ANNOUNCEMENTS');
                 $rolesRightsColumn = 'rol_announcements';
                 $rolesRightsName = 'SYS_RIGHT_ANNOUNCEMENTS';
                 break;
@@ -92,7 +92,7 @@ class CategoriesPresenter extends PagePresenter
             case 'EVT':
                 $component = 'EVENTS';
                 $headline = $gL10n->get('SYS_EVENTS') . ' - ' . $headlineSuffix;
-                $rolesRightEditName = 'SYS_EDIT_EVENTS';
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_EVENTS');
                 $rolesRightsColumn = 'rol_events';
                 $rolesRightsName = 'SYS_RIGHT_DATES';
                 $addButtonText = $gL10n->get('SYS_CALENDAR');
@@ -109,7 +109,7 @@ class CategoriesPresenter extends PagePresenter
             case 'LNK':
                 $component = 'LINKS';
                 $headline = $gL10n->get('SYS_WEBLINKS') . ' - ' . $headlineSuffix;
-                $rolesRightEditName = 'SYS_EDIT_WEBLINKS';
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_WEBLINKS');
                 $rolesRightsColumn = 'rol_weblinks';
                 $rolesRightsName = 'SYS_RIGHT_WEBLINKS';
                 break;
@@ -122,7 +122,7 @@ class CategoriesPresenter extends PagePresenter
             case 'USF':
                 $component = 'CORE';
                 $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $headlineSuffix;
-                $rolesRightEditName = 'SYS_EDIT_PROFILE_FIELDS_PREF';
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_PROFILE_FIELDS_PREF');
                 $rolesRightsColumn = 'rol_edit_user';
                 $rolesRightsName = 'SYS_RIGHT_EDIT_USER';
                 break;
