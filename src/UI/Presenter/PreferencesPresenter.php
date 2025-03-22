@@ -113,6 +113,11 @@ class PreferencesPresenter extends PagePresenter
                 'title' => $gL10n->get('SYS_CAPTCHA'),
                 'icon' => 'bi-fonts'
             ),
+            'sso' => array(
+                'id' => 'sso',
+                'title' => $gL10n->get('SYS_SSO'),
+                'icon' => 'bi-key'
+            ),
             'admidio_update' => array(
                 'id' => 'admidio_update',
                 'title' => $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'),
@@ -179,11 +184,6 @@ class PreferencesPresenter extends PagePresenter
                 'id' => 'events',
                 'title' => $gL10n->get('SYS_EVENTS'),
                 'icon' => 'bi-calendar-week-fill'
-            ),
-            'sso' => array(
-                'id' => 'sso',
-                'title' => $gL10n->get('SYS_SSO'),
-                'icon' => 'bi-key'
             ),
             'links' => array(
                 'id' => 'links',
