@@ -179,7 +179,7 @@ class SSOClientPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_saml_client_edit_form',
             'modules/saml_client.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_saml')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_saml')),
             $this
         );
 
@@ -503,7 +503,7 @@ class SSOClientPresenter extends PagePresenter
         $this->addPageFunctionsMenuItem(
             'menu_item_sso_new_client_saml',
             $gL10n->get('SYS_SSO_CLIENT_ADD_SAML'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/clients.php', array('mode' => 'edit_saml')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_saml')),
             'bi-plus-circle-fill'
         );
 
@@ -511,7 +511,7 @@ class SSOClientPresenter extends PagePresenter
 /*        $this->addPageFunctionsMenuItem(
             'menu_item_sso_new_client_oidc',
             $gL10n->get('SYS_SSO_CLIENT_ADD_OIDC'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/clients.php', array('mode' => 'edit_oidc')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_oidc')),
             'bi-plus-circle-fill'
         );
 */
@@ -547,7 +547,7 @@ class SSOClientPresenter extends PagePresenter
         $SAMLService = new SAMLService($gDb, $gCurrentUser);
         $templateClientNodes = array();
         foreach ($SAMLService->getUUIDs() as $clientUUID) {
-            $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $clientUUID));
+            $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $clientUUID));
             $client = new SAMLClient($gDb);
             $client->readDataByUuid($clientUUID);
             $templateClient = array();
@@ -565,7 +565,7 @@ class SSOClientPresenter extends PagePresenter
             // add link to delete SAML client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                     data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($client->readableName())) . '"
-                    data-href="callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    data-href="callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
                 </a>';
             $templateClient[] = $actions;

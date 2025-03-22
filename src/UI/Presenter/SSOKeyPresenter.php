@@ -140,7 +140,7 @@ class SSOKeyPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_ssh_key_edit_form',
             'modules/sso_key.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/keys.php', array('uuid' => $this->keyUUID, 'mode' => 'save')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array('uuid' => $this->keyUUID, 'mode' => 'save')),
             $this
         );
 
@@ -294,7 +294,7 @@ class SSOKeyPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_password_form',
             'modules/sso_key.password.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/keys.php', array('uuid' => $this->keyUUID, 'mode' => 'export')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array('uuid' => $this->keyUUID, 'mode' => 'export')),
             null,
             array('showRequiredFields' => false)
         );
@@ -347,7 +347,7 @@ class SSOKeyPresenter extends PagePresenter
         $this->addPageFunctionsMenuItem(
             'menu_item_sso_new_client_saml',
             $gL10n->get('SYS_SSO_KEY_ADD'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/keys.php', array('mode' => 'edit')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array('mode' => 'edit')),
             'bi-plus-circle-fill'
         );
 
@@ -374,7 +374,7 @@ class SSOKeyPresenter extends PagePresenter
         $keyService = new KeyService($gDb);
         foreach ($keyService->getKeysData() as $keyData) {
             $templateKey = array();
-            $urlEdit = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/keys.php', array('mode' => 'edit', 'uuid' => $keyData['key_uuid']));
+            $urlEdit = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array('mode' => 'edit', 'uuid' => $keyData['key_uuid']));
             $templateKey[] = '<a href="' . $urlEdit . '">' . $keyData['key_name'] . '</a>';
             $templateKey[] = $keyData['key_algorithm'];
             $templateKey[] = $keyData['key_expires_at'];
@@ -391,7 +391,7 @@ class SSOKeyPresenter extends PagePresenter
 
             $actions = array_map(function($action) use ($keyData) {
                 global $gCurrentSession, $gCurrentUser;
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/keys.php', array('mode' => $action['mode'], 'uuid' => $keyData['key_uuid']));
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array('mode' => $action['mode'], 'uuid' => $keyData['key_uuid']));
                 $classes = '';
                 $href = $url;
                 $attributes = '';

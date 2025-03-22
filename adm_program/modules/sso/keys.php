@@ -15,7 +15,7 @@ use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Service\KeyService;
 use Admidio\UI\Presenter\SSOKeyPresenter;
 
-require_once(__DIR__ . '/../../adm_program/system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 $validModes = array('list', 'edit', 'save', 'delete', 'import', 'export', 'export_password', 'certificate', 'regenerate');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => $validModes));
 

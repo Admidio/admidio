@@ -704,9 +704,9 @@ class ChangelogService {
                 case 'user_relation_types':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_uuid' => $uuid)); break;
                 case 'saml_clients':
-                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS.'/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $uuid)); break;
                 case 'sso_keys':
-                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS.'/sso/keys.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/keys.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             }
         }
         if ($url != '') {

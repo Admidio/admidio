@@ -1,7 +1,7 @@
 <?php
 
 try {
-    require_once(__DIR__ . '/../../adm_program/system/common.php');
+    require_once(__DIR__ . '/../../system/common.php');
     if (!$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }

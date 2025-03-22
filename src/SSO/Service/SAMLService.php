@@ -61,9 +61,9 @@ class SAMLService {
         // $this->spRepository = new ServiceProviderRepository($db);
 
         $this->idpEntityId = $gSettingsManager->get('sso_saml_entity_id');
-        $this->ssoUrl      = ADMIDIO_URL . "/adm_plugins/sso/index.php/saml/sso";
-        $this->sloUrl      = ADMIDIO_URL . "/adm_plugins/sso/index.php/saml/slo";
-        $this->metadataUrl = ADMIDIO_URL . "/adm_plugins/sso/index.php/saml/metadata";
+        $this->ssoUrl      = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/sso";
+        $this->sloUrl      = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/slo";
+        $this->metadataUrl = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/metadata";
     }
 
     /**
@@ -814,7 +814,7 @@ class SAMLService {
     }
 /*
     public function handleAttributeQuery() {
-        // TODO: This should work like the Response to an AuthnRequest, but with the requested attributes
+        // TODO: This should work like the Response to an AuthnRequest, just with the requested attributes
         // Unfortunately, the lightsaml library does not provide a way to extract the requested attributes from the AttributeQuery
         // So the code would be quite different, as the request object does not provide nice accessor functions like AuthnRequest!
         

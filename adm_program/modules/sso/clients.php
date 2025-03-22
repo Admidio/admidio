@@ -17,7 +17,7 @@ use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Service\OIDCService;
 use Admidio\UI\Presenter\SSOClientPresenter;
 
-require_once(__DIR__ . '/../../adm_program/system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit_saml', 'save_saml', 'delete_saml', 'edit_oidc', 'save_oidc', 'delete_oidc', 'sequence')));
 
 try {

@@ -1928,7 +1928,7 @@ class PreferencesPresenter extends PagePresenter
 
 
         // Link to Key administration
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/keys.php', array());
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array());
         $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" 
             data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
             $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
@@ -2016,7 +2016,7 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // Link to SAML Client administration
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . '/sso/clients.php', array());
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
         $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" 
             data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
             $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
