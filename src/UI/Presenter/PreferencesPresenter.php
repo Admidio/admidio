@@ -14,6 +14,7 @@ use RuntimeException;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Inventory\ValueObjects\ItemsData;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -58,9 +59,14 @@ class PreferencesPresenter extends PagePresenter
      */
     public function __construct(string $panel = '')
     {
+        global $gL10n;
+
         $this->initialize();
         $this->setPanelToShow($panel);
 
+        $this->setHtmlID('adm_preferences');
+        $this->setHeadline($gL10n->get('SYS_SETTINGS'));
+        
         parent::__construct();
     }
 
@@ -848,17 +854,18 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
         );
         
-        $sql = 'SELECT inf_id, inf_name_intern, inf_name
-                  FROM '. TBL_INVENTORY_FIELDS .'
-                 WHERE inf_org_id = '. $gCurrentOrgId .'
-              ORDER BY inf_id';
-
-        $formInventory->addSelectBoxFromSql(
+        // create array of possible fields for keeper edit
+        $items = new ItemsData($gDb, $gCurrentOrgId);
+        $selectBoxEntries = array();
+        foreach ($items->getItemFields() as $itemField) {
+            $selectBoxEntries[$itemField->getValue('inf_name_intern')] = $itemField->getValue('inf_name');
+        }
+               
+        $formInventory->addSelectBox(
             'inventory_allowed_keeper_edit_fields',
             $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
-            $gDb,
-            $sql,
-            array('defaultValue' => $formValues['inventory_allowed_keeper_edit_fields'], 'helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true)
+            $selectBoxEntries,
+            array('defaultValue' => explode(',', $formValues['inventory_allowed_keeper_edit_fields']), 'helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
         );
 
         $formInventory->addCheckbox(
@@ -887,7 +894,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_field_date_time_format',
             $gL10n->get('SYS_INVENTORY_DATETIME_FORMAT'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['inventory_field_date_time_format'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_DATETIME_FORMAT_DESC')
+            array('defaultValue' => explode(',', $formValues['inventory_field_date_time_format']), 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_DATETIME_FORMAT_DESC')
         );
 
         // profile view settings
@@ -896,18 +903,20 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_INVENTORY_PROFILE_VIEW')
         );
 
-        $sql = 'SELECT inf_id, inf_name_intern, inf_name
-                  FROM '. TBL_INVENTORY_FIELDS .'
-                 WHERE inf_org_id = '. $gCurrentOrgId .'
-                   AND inf_name_intern != \'ITEMNAME\'
-              ORDER BY inf_id';
-
-        $formInventory->addSelectBoxFromSql(
+        // create array of possible fields for profile view
+        $selectBoxEntries = array();
+        foreach ($items->getItemFields() as $itemField) {
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME') {
+                continue;
+            }
+            $selectBoxEntries[$itemField->getValue('inf_name_intern')] = $itemField->getValue('inf_name');
+        }
+               
+        $formInventory->addSelectBox(
             'inventory_profile_view',
             $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
-            $gDb,
-            $sql,
-            array('defaultValue' => $formValues['inventory_profile_view'], 'helpTextId' => 'SYS_INVENTORY_PROFILE_VIEW_DESC', 'multiselect' => true)
+            $selectBoxEntries,
+            array('defaultValue' => explode(',', $formValues['inventory_profile_view']), 'helpTextId' => 'SYS_INVENTORY_PROFILE_VIEW_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
         );
         
         // export settings
@@ -2295,9 +2304,6 @@ class PreferencesPresenter extends PagePresenter
     public function show()
     {
         global $gL10n;
-
-        $this->setHtmlID('adm_preferences');
-        $this->setHeadline($gL10n->get('SYS_SETTINGS'));
 
         if ($this->preferencesPanelToShow !== '') {
             // open the modules tab if the options of a module should be shown
