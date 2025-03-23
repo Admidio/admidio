@@ -92,7 +92,7 @@ class InventoryItemPresenter extends PagePresenter
             if (isset($pimInInventoryId, $pimLastReceiverId, $pimReceivedOnId, $pimReceivedBackOnId) && $infNameIntern === 'IN_INVENTORY') {
                 $gSettingsManager->get('inventory_field_date_time_format') === 'datetime' ? $datetime = 'true' : $datetime = 'false';
         
-                // Add JavaScript to check the PIM_LAST_RECEIVER field and set the required attribute for pimReceivedOnId and pimReceivedBackOnId
+                // Add JavaScript to check the LAST_RECEIVER field and set the required attribute for pimReceivedOnId and pimReceivedBackOnId
                 $this->addJavascript('
                     document.addEventListener("DOMContentLoaded", function() {
                         if (document.querySelector("[id=\'inf-' . $pimReceivedOnId . '_time\']")) {

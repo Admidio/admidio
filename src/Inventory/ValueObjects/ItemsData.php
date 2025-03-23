@@ -35,6 +35,7 @@ class ItemsData
     private bool $mItemChanged = false;                   ///< flag if a new item was changed
     private bool $mItemDeleted = false;                   ///< flag if a item was deleted
     private bool $mItemMadeFormer = false;                ///< flag if a item was made to former item
+    private bool $mItemUndoMadeFormer = false;             ///< flag if a item was made to normal again
     private bool $mItemImported = false;                   ///< flag if a item was imported
     private bool $showFormerItems = true;               ///< if true, than former items will be showed
     private int $organizationId = -1;                ///< ID of the organization for which the item field structure should be read
@@ -851,6 +852,7 @@ class ItemsData
         $this->mDb->queryPrepared($sql, array($itemId, $this->organizationId));
 
         $this->mItemMadeFormer = true;
+        $this->mItemUndoMadeFormer = false;
     }
 
     /**
@@ -865,6 +867,7 @@ class ItemsData
         $this->mDb->queryPrepared($sql, array($itemId, $this->organizationId));
 
         $this->mItemMadeFormer = false;
+        $this->mItemUndoMadeFormer = true;
     }
 
     /**
@@ -937,6 +940,9 @@ class ItemsData
             } elseif ($this->mItemMadeFormer) {
                 $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_MADE_FORMER';
                 $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_MADE_FORMER';
+            } elseif ($this->mItemUndoMadeFormer) {
+                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_UNDO_FORMER';
+                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_UNDO_FORMER';
             } elseif ($this->mItemChanged) {
                 $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_CHANGED';
                 $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CHANGED';
@@ -1049,10 +1055,11 @@ class ItemsData
                 }
             } else {
                 $messageUserText = 'SYS_CHANGED_BY';
-                //$messageDateText = 'SYS_CHANGED_AT';
+                $messageDateText = 'SYS_CHANGED_AT';
+                $fieldName = $this->getProperty('ITEMNAME', 'inf_name');
 
                 $message = $gL10n->get($messageHead) . '<br/><br/>'
-                    . '<b>' . $gL10n->get('PIM_ITEMNAME') . ':</b> ' . $this->getValue('ITEMNAME', 'html') . '<br/>'
+                    . '<b>' . ((substr($fieldName, 3, 1) === '_') ? $gL10n->get($fieldName) : $fieldName)  . ':</b> ' . $this->getValue('ITEMNAME', 'html') . '<br/>'
                     . '<b>' . $gL10n->get($messageUserText) . ':</b> ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br/>'
                     . '<b>' . $gL10n->get($messageDateText) . ':</b> ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br/>';
             }

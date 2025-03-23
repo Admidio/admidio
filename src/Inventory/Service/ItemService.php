@@ -52,6 +52,9 @@ class ItemService
     public function makeItemFormer(): void
     {
         $this->itemRessource->makeItemFormer($this->ID);
+
+        // Send notification to all users
+        $this->itemRessource->sendNotification();
     }
 
     /**
@@ -61,7 +64,10 @@ class ItemService
     public function undoItemFormer(): void
     {
         $this->itemRessource->undoItemFormer($this->ID);
-    }
+
+        // Send notification to all users
+         $this->itemRessource->sendNotification();
+        }
 
     /**
      * Delete the current profile field form into the database.
@@ -71,6 +77,9 @@ class ItemService
     public function delete(): void
     {
         $this->itemRessource->deleteItem($this->ID);
+
+        // Send notification to all users
+        $this->itemRessource->sendNotification();
     }
 
     /**
