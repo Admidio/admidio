@@ -373,6 +373,12 @@ class SettingsManager
         if (!self::isValidName($name)) {
             throw new Exception('Settings name "' . $name . '" is an invalid string!');
         }
+
+        // if array is given, convert to string
+        if (is_array($value)) {
+            $value = implode(',', $value);
+        }
+        
         if (!self::isValidValue($value)) {
             throw new Exception('Settings value "' . $value . '" is an invalid value!');
         }
