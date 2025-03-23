@@ -22,3 +22,4 @@
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_inventory']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>
+{$javascript}
