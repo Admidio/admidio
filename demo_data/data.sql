@@ -573,12 +573,12 @@ INSERT INTO %PREFIX%_roles (rol_id, rol_uuid, rol_cat_id, rol_name, rol_descript
 --
 
 INSERT INTO %PREFIX%_roles_rights (ror_id, ror_name_intern, ror_table, ror_ror_id_parent) VALUES
-(1, 'folder_view', 'adm_folders', null),
-(2, 'folder_upload', 'adm_folders', null),
-(3, 'category_view', 'adm_categories', null),
-(4, 'category_edit', 'adm_categories', 3),
-(5, 'event_participation', 'adm_dates', null),
-(6, 'menu_view', 'adm_menu', null);
+(1, 'folder_view', '%PREFIX%_folders', null),
+(2, 'folder_upload', '%PREFIX%_folders', null),
+(3, 'category_view', '%PREFIX%_categories', null),
+(4, 'category_edit', '%PREFIX%_categories', 3),
+(5, 'event_participation', '%PREFIX%_dates', null),
+(6, 'menu_view', '%PREFIX%_menu', null);
 
 --
 -- Data for table adm_roles_rights_data

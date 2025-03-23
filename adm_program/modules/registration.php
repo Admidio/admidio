@@ -54,7 +54,7 @@ try {
     } else {
         // user has clicked the link in his registration email, and now we must check if it's a valid request
         // and then confirm his registration
-        $registrationService = new RegistrationService($gDb);
+        $registrationService = new RegistrationService($gDb, $getUserUUID);
         $message = $registrationService->confirmRegistration($getRegistrationId);
 
         $gMessage->setForwardUrl($message['forwardUrl']);
