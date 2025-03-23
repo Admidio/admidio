@@ -58,9 +58,14 @@ class PreferencesPresenter extends PagePresenter
      */
     public function __construct(string $panel = '')
     {
+        global $gL10n;
+
         $this->initialize();
         $this->setPanelToShow($panel);
 
+        $this->setHtmlID('adm_preferences');
+        $this->setHeadline($gL10n->get('SYS_SETTINGS'));
+        
         parent::__construct();
     }
 
@@ -2128,9 +2133,6 @@ class PreferencesPresenter extends PagePresenter
     public function show()
     {
         global $gL10n;
-
-        $this->setHtmlID('adm_preferences');
-        $this->setHeadline($gL10n->get('SYS_SETTINGS'));
 
         if ($this->preferencesPanelToShow !== '') {
             // open the modules tab if the options of a module should be shown
