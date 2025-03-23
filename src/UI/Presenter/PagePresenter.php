@@ -264,6 +264,16 @@ class PagePresenter
     }
 
     /**
+     * This method add a specific template folder to the current page. The default
+     * template will be loaded and this file will be included after the main page content.
+     * @param string $templateFolder The name of the template folder that should be added to the template folder list.
+     */
+    public function addTemplateFolder(string $templateFolder)
+    {
+        $this->smarty->addTemplateDir($templateFolder);
+    }
+
+    /**
      * Public method to assign new variables to the Smarty template of the PagePresenter.
      * @return void
      * @throws Exception
