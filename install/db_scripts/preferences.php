@@ -199,6 +199,10 @@ $defaultOrgPreferences = array(
     'sso_saml_want_requests_signed' => '1',
     'sso_saml_signing_key' => '0',
     'sso_saml_encryption_key' => '0',
+    'sso_oidc_enabled' => '0',
+    'sso_oidc_issuer_url' => ADMIDIO_URL . '/adm_program/modules/sso/index.php',
+    'sso_oidc_signing_key' => '0',
+    'sso_oidc_encryption_key' => '0',
 
     // Weblinks
     'enable_weblinks_module' => '1',

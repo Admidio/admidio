@@ -2033,6 +2033,100 @@ class PreferencesPresenter extends PagePresenter
         );
 
 
+
+
+        /* *******************************************************************************
+         * OIDC Settings
+         */
+        $oidcService = new \Admidio\SSO\Service\OIDCService($gDb, $gCurrentUser);
+
+        $formSSO->addCustomContent(
+            'sso_oidc_settings',
+            '',
+            '<h5>' . $gL10n->get('SYS_SSO_OIDC') . '</h5>',
+            array()
+        );
+        $formSSO->addCheckbox(
+            'sso_oidc_enabled',
+            $gL10n->get('SYS_SSO_OIDC_ENABLED'),
+            (bool)$formValues['sso_oidc_enabled'],
+            array('helpTextId' => 'SYS_SSO_OIDC_ENABLED_DESC')
+        );
+        $formSSO->addInput(
+            'sso_oidc_issuer_url',
+            $gL10n->get('SYS_SSO_OIDC_ISSUER_URL'),
+            (string)$formValues['sso_oidc_issuer_url'],
+            array('class' => 'copy-container if-oidc-enabled', 'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
+        );
+
+        $keyService = new KeyService($gDb);
+        $keyArray = $keyService->getKeysData(true);
+        // $keys = array('0' => $gL10n->get('SYS_NONE'));
+        $keys = array();
+        $valueAttributes = array();
+        foreach ($keyArray as $key) {
+            // OIDC supports only RSA keys!
+            if (str_starts_with($key['key_algorithm'], 'RSA')) {
+                $keys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
+                // We can add the certificates as additional value attributes to the select entries
+                $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
+            }
+        }
+        
+        $formSSO->addSelectBox(
+            'sso_oidc_signing_key',
+            $gL10n->get('SYS_SSO_SIGNING_KEY'),
+            $keys,
+            array('defaultValue' => $formValues['sso_oidc_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'), 
+                'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
+        );
+        $formSSO->addSelectBox(
+            'sso_oidc_encryption_key',
+            $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
+            $keys,
+            array('defaultValue' => $formValues['sso_oidc_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
+                'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
+        );
+
+        $discoveryURL = $oidcService->getDiscoveryURL();
+        $staticSettings = array(
+            'SYS_SSO_OIDC_DISCOVERY_URL' => ['value' => '<a href="' . $discoveryURL . '">' . $discoveryURL . '</a>', 'id' => 'discovery_URL'],
+            'SYS_SSO_OIDC_AUTH_ENDPOINT' => ['value' => $oidcService->getAuthorizationEndpoint(), 'id' => 'auth_endpoint'],
+            'SYS_SSO_OIDC_TOKEN_ENDPOINT' => ['value' => $oidcService->getTokenEndpoint(),'id' => 'token_endpoint'],
+            'SYS_SSO_OIDC_USERINFO_ENDPOINT' => ['value' => $oidcService->getUserinfoEndpoint(),'id' => 'userinfo_endpoint'],
+            // 'SYS_SSO_KEY_CERTIFICATE'   => ['value' => '',  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa; 
+            //         border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
+            //         max-height: 150px; overflow: auto; border-radius: 0.375rem; font-size: smaller;']
+        );
+
+        $formSSO->addCustomContent(
+            'sso_oidc_sso_staticsettings',
+            $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
+            '<table id="sso_oidc_sso_staticsettings" style="width: 100%" class="if-oidc-enabled">' . implode('', 
+                array_map(function ($key, $value) use ($gL10n) {
+                    return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' . 
+                        (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
+            }, array_keys($staticSettings), $staticSettings)) . '</table>',
+            array()
+        );
+
+        // Link to OIDC Client administration
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
+        $html = '<a class="btn btn-secondary admidio-messagebox if-oidc-enabled" href="javascript:void(0);" data-buttons="yes-no" 
+            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
+            $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
+            data-href="window.location.href=\'' . $url . '\'">
+            <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';
+        $formSSO->addCustomContent(
+            'sso_oidc_clients',
+            $gL10n->get('SYS_SSO_CLIENTS_OIDC'),
+            $html,
+            array()
+        );
+
+
+
+
         $formSSO->addSubmitButton(
             'adm_button_save_sso',
             $gL10n->get('SYS_SAVE'),

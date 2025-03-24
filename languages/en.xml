@@ -1436,6 +1436,15 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are logged in successful, but the user account does not have access permissions to the Service Provider (#VAR1#). Please either try logging in with a different account below, or return to the Service Provider.</string>
   <string name="SYS_SSO_LOGIN_RETURN">Return to #VAR1_BOLD# without logging in</string>
   <string name="SYS_LOGIN_TO">Sign in to #VAR1_BOLD#</string>
+
+  <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer</string>
+  <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">The unique identifier for OIDC of this Admidio instance. Typically this is the base URL of your Admidio installation. The client needs to be set up with the exact same entity ID, otherwise login will not work.</string>
+  <string name="SYS_SSO_OIDC_STATIC_SETTINGS">IdP metadata for client setup</string>
+  <string name="SYS_SSO_OIDC_DISCOVERY_URL">Discovery URL</string>
+  <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentication Endpoint</string>
+  <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token Endpoint</string>
+  <string name="SYS_SSO_OIDC_USERINFO_ENDPOINT">Userinfo Endpoint</string>
+
   <string name="SYS_SSO_NAME_PROPERTIES">Client (Service Provider) name and properties</string>
   <string name="SYS_SSO_USERDATA_ACCESS">User data and access permissions</string>
   <string name="SYS_SSO_USERID_FIELD">User ID field</string>

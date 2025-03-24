@@ -483,6 +483,118 @@ COLLATE = utf8_unicode_ci;
 
 
 /*==============================================================*/
+/* Tables: adm_oidc_clients, adm_oidc_access_tokens,          */
+/*         adm_oidc_refresh_tokens, adm_oidc_auth_codes,      */
+/*         adm_oidc_jwks                                       */
+/* Data storage for oidc (client settings and tokens)          */
+/*==============================================================*/
+
+CREATE TABLE %PREFIX%_oidc_clients (
+    ocl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ocl_client_id               varchar(64)         NOT NULL,
+    ocl_client_name             varchar(255)        NOT NULL,
+    ocl_client_secret           varchar(255)        NOT NULL,
+    ocl_redirect_uri            text                NOT NULL,
+--    ocl_post_logout_redirect_uri TEXT               NOT NULL,
+    ocl_grant_types             varchar(255)        NOT NULL,
+    ocl_scope                   varchar(255)        DEFAULT NULL,
+    ocl_field_mapping           text                NULL,
+    ocl_require_pkce            boolean             DEFAULT TRUE,           -- Whether PKCE is required
+    ocl_allow_refresh_token     boolean             DEFAULT TRUE,    -- Whether refresh tokens are allowed
+    ocl_owner_usr_id            integer unsigned    NOT NULL,                  -- User ID of the client owner
+    ocl_usr_id_create           integer unsigned,
+    ocl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    ocl_usr_id_change           integer unsigned,
+    ocl_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (ocl_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE TABLE %PREFIX%_oidc_access_tokens (
+    oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    oat_usr_id                  integer unsigned    NOT NULL,
+    oat_ocl_id                  integer unsigned    NOT NULL,
+    oat_token                VARCHAR(255),
+    oat_scope                  TEXT,
+    oat_expires_at              TIMESTAMP           NOT NULL,
+    oat_revoked                 boolean             DEFAULT FALSE,
+    oat_usr_id_create           integer unsigned,
+    oat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (oat_id)
+    FOREIGN KEY (oat_client_id) REFERENCES adm_oidc_clients (ocl_id) ON DELETE CASCADE,
+    FOREIGN KEY (oat_user_id) REFERENCES adm_users (usr_id) ON DELETE CASCADE
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+
+CREATE TABLE %PREFIX%_oidc_refresh_tokens (
+    ort_id                  integer unsigned AUTO_INCREMENT PRIMARY KEY,       -- Unique token ID
+    ort_ocl_id              integer unsigned NOT NULL,                  -- Client the token belongs to
+    ort_usr_id              integer unsigned NULL,                        -- User ID (NULL for client_credentials flow)
+    ort_refresh_token           text,
+    ort_expires_at              TIMESTAMP           NOT NULL,
+    ort_revoked                 boolean             DEFAULT FALSE,
+    oat_usr_id_create           integer unsigned,
+    oat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (ort_refresh_token)
+    -- FOREIGN KEY (ort_client_id) REFERENCES adm_oidc_clients (ocl_id) ON DELETE CASCADE,
+    -- FOREIGN KEY (ort_user_id) REFERENCES adm_users (usr_id) ON DELETE CASCADE
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE TABLE %PREFIX%_oidc_auth_codes (
+    oac_id                      integer unsigned    AUTO_INCREMENT,
+    oac_code                    varchar(64),
+    oac_usr_id                  integer unsigned    NOT NULL,
+    oac_ocl_id                  integer unsigned    NOT NULL,
+    oac_redirect_uri            text                NOT NULL,                 -- Redirect URI for the client
+    oac_scope                   text                NOT NULL,                        -- JSON array of granted scopes
+    oac_expires_at              TIMESTAMP           NOT NULL,
+    oac_used                    BOOLEAN             DEFAULT FALSE,                 -- Whether the code has been used
+    oac_revoked                 boolean             DEFAULT FALSE,
+    oac_usr_id_create           integer unsigned,
+    oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (oac_id)
+--     FOREIGN KEY (oac_client_id) REFERENCES adm_oidc_clients (ocl_id) ON DELETE CASCADE,
+--     FOREIGN KEY (oac_user_id) REFERENCES adm_users (usr_id) ON DELETE CASCADE
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+CREATE TABLE %PREFIX%_oidc_scopes (
+    osc_scope_id                VARCHAR(100),
+    osc_description             TEXT                NOT NULL,
+    PRIMARY KEY (osc_scope_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- 6️⃣ Table: OIDC User Consents (Tracks user consent for OIDC clients)
+CREATE TABLE %PREFIX%_oidc_user_consents (
+    ouc_id                      integer unsigned AUTO_INCREMENT PRIMARY KEY,       -- Unique record ID
+    ouc_usr_id                  INT NOT NULL,                    -- User who gave consent
+    ouc_ocl_id                  INT NOT NULL,                  -- Client to which consent was given
+    ouc_scope                   TEXT NOT NULL,                     -- JSON array of granted scopes
+    oac_usr_id_create           integer unsigned,
+    oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (osc_user_id) REFERENCES adm_users (usr_id) ON DELETE CASCADE,
+    FOREIGN KEY (osc_client_id) REFERENCES adm_oidc_clients (ocl_id) ON DELETE CASCADE
+);
+
+
+
+/*==============================================================*/
 /* Tables: adm_saml_clients                                     */
 /* Data storage for saml  (client settings and tokens)          */
 /*==============================================================*/

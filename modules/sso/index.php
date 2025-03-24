@@ -34,29 +34,29 @@ try {
     // Login checks will be done in the individual endpoint handler functions!
 
     if ($type === 'oidc') {
-/*        $oidcService = new OIDCService($gDb, $gCurrentUser);
+        $oidcService = new OIDCService($gDb, $gCurrentUser);
 
-        if (strpos($requestUri, '/authorize') !== false && $method === 'GET') {
+        if (strpos($requestUri, '/oidc/authorize') !== false && $method === 'GET') {
             $oidcService->handleAuthorizationRequest();
-        } elseif (strpos($requestUri, '/token') !== false && $method === 'POST') {
+        } elseif (strpos($requestUri, '/oidc/token') !== false && $method === 'POST') {
             $oidcService->handleTokenRequest();
-        } elseif (strpos($requestUri, '/userinfo') !== false && $method === 'GET') {
+        } elseif (strpos($requestUri, '/oidc/userinfo') !== false && $method === 'GET') {
             $oidcService->handleUserInfoRequest();
-        } elseif (strpos($requestUri, '/.well-known/jwks.json') !== false && $method === 'GET') {
+        } elseif (strpos($requestUri, '/oidc/.well-known/jwks.json') !== false && $method === 'GET') {
             $oidcService->handleJWKSRequest();
-        } elseif (strpos($requestUri, '/.well-known/openid-configuration') !== false && $method === 'GET') {
+        } elseif (strpos($requestUri, '/oidc/.well-known/openid-configuration') !== false && $method === 'GET') {
             $oidcService->handleDiscoveryRequest();
-        } elseif (strpos($requestUri, '/introspect') !== false && $method === 'POST') {
+        } elseif (strpos($requestUri, '/oidc/introspect') !== false && $method === 'POST') {
             $oidcService->handleIntrospectionRequest();
-        } elseif (strpos($requestUri, '/revoke') !== false && $method === 'POST') {
+        } elseif (strpos($requestUri, '/oidc/revoke') !== false && $method === 'POST') {
             $oidcService->handleRevocationRequest();
-        } elseif (strpos($requestUri, '/logout') !== false && $method === 'GET') {
+        } elseif (strpos($requestUri, '/oidc/logout') !== false && $method === 'GET') {
             $oidcService->handleLogoutRequest();
         } else {
             header('HTTP/1.1 404 Not Found');
             echo json_encode(['error' => 'Endpoint not found']);
         }
-*/     
+     
     } elseif ($type === 'saml') {
 
         $samlService = new SAMLService($gDb, $gCurrentUser);
