@@ -90,7 +90,7 @@ class ForumTopicPresenter extends PagePresenter
         // show link to create new topic
         $this->addPageFunctionsMenuItem(
             'menu_item_forum_post_add',
-            $gL10n->get('SYS_CREATE_VAR', array('SYS_POST')),
+            $gL10n->get('SYS_CREATE_POST'),
             ADMIDIO_URL . FOLDER_MODULES . '/forum.php?mode=post_edit&topic_uuid=' . $this->topicUUID,
             'bi-plus-circle-fill'
         );
@@ -135,9 +135,9 @@ class ForumTopicPresenter extends PagePresenter
 
         $this->setHtmlID('adm_forum_topic_edit');
         if ($this->topicUUID !== '') {
-            $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_TOPIC'))));
+            $this->setHeadline($gL10n->get('SYS_EDIT_TOPIC'));
         } else {
-            $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_TOPIC'))));
+            $this->setHeadline($gL10n->get('SYS_CREATE_TOPIC'));
         }
 
         // show form
@@ -177,10 +177,10 @@ class ForumTopicPresenter extends PagePresenter
             array('icon' => 'bi-check-lg')
         );
 
-        $this->smarty->assign('nameUserCreated', $this->topic->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $this->topic->getValue('fot_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $post->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $post->getValue('fop_timestamp_change'));
+        $this->smarty->assign('userCreatedName', $this->topic->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $this->topic->getValue('fot_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $post->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $post->getValue('fop_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -231,19 +231,19 @@ class ForumTopicPresenter extends PagePresenter
                     $templateRow['actions'][] = array(
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumPost['fot_uuid'])),
                         'icon' => 'bi bi-pencil-square',
-                        'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPIC'))
+                        'tooltip' => $gL10n->get('SYS_EDIT')
                     );
                 } else {
                     $templateRow['actions'][] = array(
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_edit', 'post_uuid' => $forumPost['fop_uuid'])),
                         'icon' => 'bi bi-pencil-square',
-                        'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_POST'))
+                        'tooltip' => $gL10n->get('SYS_EDIT')
                     );
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'adm_post_' . $forumPost['fop_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/forum.php', array('mode' => 'post_delete', 'post_uuid' => $forumPost['fop_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array('SYS_POST')),
                         'icon' => 'bi bi-trash',
-                        'tooltip' => $gL10n->get('SYS_DELETE_VAR', array('SYS_POST'))
+                        'tooltip' => $gL10n->get('SYS_DELETE')
                     );
                 }
             }

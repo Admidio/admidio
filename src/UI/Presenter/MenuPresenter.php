@@ -202,10 +202,10 @@ class MenuPresenter extends PagePresenter
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
-        $this->smarty->assign('nameUserCreated', $menu->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $menu->getValue('men_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $menu->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $menu->getValue('men_timestamp_change'));
+        $this->smarty->assign('userCreatedName', $menu->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $menu->getValue('men_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $menu->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $menu->getValue('men_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }

@@ -687,10 +687,10 @@ try {
 
                 // only show info if system setting is activated
                 if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
-                    $userRelation['nameUserCreated'] = $relation->getNameOfCreatingUser();
-                    $userRelation['timestampUserCreated'] = $relation->getValue('ure_timestamp_create');
-                    $userRelation['nameLastUserEdited'] = $relation->getNameOfLastEditingUser();
-                    $userRelation['timestampLastUserEdited'] = $relation->getValue('ure_timestamp_change');
+                    $userRelation['userCreatedName'] = $relation->getNameOfCreatingUser();
+                    $userRelation['userCreatedTimestamp'] = $relation->getValue('ure_timestamp_create');
+                    $userRelation['lastUserEditedName'] = $relation->getNameOfLastEditingUser();
+                    $userRelation['lastUserEditedTimestamp'] = $relation->getValue('ure_timestamp_change');
                 }
                 $userRelations[] = $userRelation;
             }
@@ -703,10 +703,10 @@ try {
     }
 
     // show information about user who creates the recordset and changed it
-    $page->assignSmartyVariable('nameUserCreated', $user->getNameOfCreatingUser());
-    $page->assignSmartyVariable('timestampUserCreated', $user->getValue('usr_timestamp_create'));
-    $page->assignSmartyVariable('nameLastUserEdited', $user->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('timestampLastUserEdited', $user->getValue('usr_timestamp_change'));
+    $page->assignSmartyVariable('userCreatedName', $user->getNameOfCreatingUser());
+    $page->assignSmartyVariable('userCreatedTimestamp', $user->getValue('usr_timestamp_create'));
+    $page->assignSmartyVariable('lastUserEditedName', $user->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $user->getValue('usr_timestamp_change'));
 
     $page->show();
 } catch (Exception $e) {

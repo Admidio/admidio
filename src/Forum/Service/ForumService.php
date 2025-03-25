@@ -119,11 +119,11 @@ class ForumService
     }
 
     /**
-     * Get number of available forum topics in the database.
+     * Get number of available forum topics from visible categories of the current organization.
      * @Return int Returns the total count of forum topics.
      * @throws Exception
      */
-    public function getTopicCount(): int
+    public function countTopics(): int
     {
         global $gCurrentUser, $gDb;
 

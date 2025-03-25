@@ -96,10 +96,10 @@ try {
     );
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
-    $page->assignSmartyVariable('nameUserCreated', $link->getNameOfCreatingUser());
-    $page->assignSmartyVariable('timestampUserCreated', $link->getValue('lnk_timestamp_create'));
-    $page->assignSmartyVariable('nameLastUserEdited', $link->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('timestampLastUserEdited', $link->getValue('lnk_timestamp_change'));
+    $page->assignSmartyVariable('userCreatedName', $link->getNameOfCreatingUser());
+    $page->assignSmartyVariable('userCreatedTimestamp', $link->getValue('lnk_timestamp_create'));
+    $page->assignSmartyVariable('lastUserEditedName', $link->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $link->getValue('lnk_timestamp_change'));
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
 

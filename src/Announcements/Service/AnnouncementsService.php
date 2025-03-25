@@ -41,8 +41,32 @@ class AnnouncementsService
     }
 
     /**
+     * Get number of available announcements from visible categories of the current organization.
+     * @Return int Returns the total count of announcements.
+     * @throws Exception
+     */
+    public function count(): int
+    {
+        global $gCurrentUser, $gDb;
+
+        $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
+
+        $sql = 'SELECT COUNT(*) AS count
+                  FROM ' . TBL_ANNOUNCEMENTS . '
+            INNER JOIN ' . TBL_CATEGORIES . '
+                    ON cat_id = ann_cat_id
+                 WHERE cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ') ';
+
+        $pdoStatement = $gDb->queryPrepared($sql, $visibleCategoryIDs);
+
+        return (int)$pdoStatement->fetchColumn();
+    }
+
+    /**
      * Read the data of the announcements in an array. The returned array contains the following information
-     * cat.*, ann.*, surname, firstname, create_name, change_name, create_uuid, change_uuid
+     * cat.*, ann.*, create_surname, create_firstname, change_surname, change_firstname,
+     * create_uuid, change_uuid, create_login_name, change_login_name,
+     * create_timestamp_change, change_timestamp_change
      * @param int $offset Offset of the first record that should be returned.
      * @param int $limit Number of records that should be returned.
      * @return array Returns an array with all announcements
@@ -71,10 +95,11 @@ class AnnouncementsService
         }
 
         $sql = 'SELECT cat.*, ann.*,
-                       cre_surname.usd_value AS surname, cre_firstname.usd_value AS firstname,
-                       cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
-                       cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name,
-                       cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid
+                       cre_surname.usd_value AS create_surname, cre_firstname.usd_value AS create_firstname,
+                       cha_surname.usd_value AS change_surname, cha_firstname.usd_value AS change_firstname,
+                       cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid,
+                       cre_user.usr_login_name AS create_login_name, cha_user.usr_login_name AS change_login_name,
+                       cre_user.usr_timestamp_change AS create_timestamp_change, cha_user.usr_timestamp_change AS change_timestamp_change
                   FROM '.TBL_ANNOUNCEMENTS.' AS ann
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = ann_cat_id
@@ -149,7 +174,7 @@ class AnnouncementsService
                 $rss->addItem(
                     $announcement['ann_headline'],
                     $announcement['ann_description'],
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'detail', 'ann_uuid' => $announcement['ann_uuid'],)),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'cards', 'announcement_uuid' => $announcement['ann_uuid'],)),
                     $announcement['firstname'] . ' ' . $announcement['surname'],
                     DateTime::createFromFormat('Y-m-d H:i:s', $announcement['ann_timestamp_create'])->format('r'),
                     $announcement['cat_name'],

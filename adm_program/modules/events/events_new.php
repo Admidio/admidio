@@ -344,10 +344,10 @@ try {
     $form->addEditor('dat_description', '', $event->getValue('dat_description'));
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
-    $page->assignSmartyVariable('nameUserCreated', $event->getNameOfCreatingUser());
-    $page->assignSmartyVariable('timestampUserCreated', $event->getValue('dat_timestamp_create'));
-    $page->assignSmartyVariable('nameLastUserEdited', $event->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('timestampLastUserEdited', $event->getValue('dat_timestamp_change'));
+    $page->assignSmartyVariable('userCreatedName', $event->getNameOfCreatingUser());
+    $page->assignSmartyVariable('userCreatedTimestamp', $event->getValue('dat_timestamp_create'));
+    $page->assignSmartyVariable('lastUserEditedName', $event->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $event->getValue('dat_timestamp_change'));
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
 

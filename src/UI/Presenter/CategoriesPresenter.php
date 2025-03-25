@@ -101,7 +101,7 @@ class CategoriesPresenter extends PagePresenter
             case 'FOT':
                 $component = 'FORUM';
                 $headline = $gL10n->get('SYS_FORUM') . ' - ' . $headlineSuffix;
-                $rolesRightEditName = $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPICS'));
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_TOPICS');
                 $rolesRightsColumn = 'rol_forum_admin';
                 $rolesRightsName = 'SYS_RIGHT_FORUM';
                 break;
@@ -349,10 +349,10 @@ class CategoriesPresenter extends PagePresenter
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
-        $this->assignSmartyVariable('nameUserCreated', $category->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $category->getValue('cat_timestamp_create'));
-        $this->assignSmartyVariable('nameLastUserEdited', $category->getNameOfLastEditingUser());
-        $this->assignSmartyVariable('timestampLastUserEdited', $category->getValue('cat_timestamp_change'));
+        $this->assignSmartyVariable('userCreatedName', $category->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $category->getValue('cat_timestamp_create'));
+        $this->assignSmartyVariable('lastUserEditedName', $category->getNameOfLastEditingUser());
+        $this->assignSmartyVariable('lastUserEditedTimestamp', $category->getValue('cat_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -403,7 +403,7 @@ class CategoriesPresenter extends PagePresenter
                 $component = 'FORUM';
                 $rolesRightsColumn = 'rol_forum_admin';
                 $headline = $gL10n->get('SYS_FORUM') . ' - ' . $gL10n->get('SYS_CATEGORIES');
-                $editableHeadline = $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPICS'));
+                $editableHeadline = $gL10n->get('SYS_EDIT_TOPICS');
                 break;
 
             case 'LNK':

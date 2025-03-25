@@ -577,10 +577,10 @@ class GroupsRolesPresenter extends PagePresenter
 
         $this->assignSmartyVariable('eventRole', $eventRole);
         $this->assignSmartyVariable('roleName', $roleName);
-        $this->assignSmartyVariable('nameUserCreated', $role->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $role->getValue('rol_timestamp_create'));
-        $this->assignSmartyVariable('nameLastUserEdited', $role->getNameOfLastEditingUser());
-        $this->assignSmartyVariable('timestampLastUserEdited', $role->getValue('rol_timestamp_change'));
+        $this->assignSmartyVariable('userCreatedName', $role->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $role->getValue('rol_timestamp_create'));
+        $this->assignSmartyVariable('lastUserEditedName', $role->getNameOfLastEditingUser());
+        $this->assignSmartyVariable('lastUserEditedTimestamp', $role->getValue('rol_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }

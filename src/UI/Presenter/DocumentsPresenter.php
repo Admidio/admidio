@@ -126,8 +126,8 @@ class DocumentsPresenter extends PagePresenter
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
-        $this->assignSmartyVariable('nameUserCreated', $file->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $file->getValue('fil_timestamp'));
+        $this->assignSmartyVariable('userCreatedName', $file->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $file->getValue('fil_timestamp'));
 
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
@@ -450,8 +450,8 @@ class DocumentsPresenter extends PagePresenter
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
-        $this->assignSmartyVariable('nameUserCreated', $this->folder->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $this->folder->getValue('fol_timestamp'));
+        $this->assignSmartyVariable('userCreatedName', $this->folder->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $this->folder->getValue('fol_timestamp'));
 
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
