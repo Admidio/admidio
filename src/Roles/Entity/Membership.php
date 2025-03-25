@@ -235,7 +235,7 @@ class Membership extends Entity
      * @return bool Return **true** if the assignment was successful.
      * @throws Exception
      */
-    public function startMembership(int $roleId = 0, int $userId = 0, bool $leader = null, int $approvalState = null): bool
+    public function startMembership(int $roleId = 0, int $userId = 0, bool|null $leader = null, int|null $approvalState = null): bool
     {
         global $gCurrentUser, $gCurrentUserId;
 
