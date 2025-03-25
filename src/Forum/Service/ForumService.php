@@ -147,7 +147,7 @@ class ForumService
      * @return void
      * @throws Exception
      */
-    public function showRssFeed(string $organizationShortName): void
+    public function rssFeed(string $organizationShortName): void
     {
         global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gDb, $gL10n, $gCurrentOrgId;
 

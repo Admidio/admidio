@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * RSS feed of the latest 50 forum topics
+ * RSS feed of announcements. Lists the newest 50 announcements.
  * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
@@ -14,7 +14,7 @@
  ***********************************************************************************************
  */
 
-use Admidio\Forum\Service\ForumService;
+use Admidio\Announcements\Service\AnnouncementsService;
 use Admidio\Infrastructure\Exception;
 
 try {
@@ -24,13 +24,13 @@ try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
     // check if module is active
-    if ($gSettingsManager->getInt('forum_module_enabled') === 0) {
+    if ($gSettingsManager->getInt('announcements_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Show the RSS feed of the forum topics
-    $forumService = new ForumService($gDb);
-    $forumService->rssFeed($getOrganization);
+    $announcementsService = new AnnouncementsService($gDb);
+    $announcementsService->rssFeed($getOrganization);
 } catch (Throwable $e) {
     echo $e->getMessage();
 }
