@@ -63,7 +63,7 @@ try {
     } else {
         if ($getUserUuid === '') {
             // checks if the user has the necessary rights to create new users
-            if (!$gCurrentUser->editUsers()) {
+            if (!$gCurrentUser->isAdministratorUsers()) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
 

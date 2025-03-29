@@ -282,7 +282,7 @@ class Event extends Entity
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if ($gCurrentUser->administrateEvents()
+        if ($gCurrentUser->isAdministratorEvents()
         || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)) {
             // if category belongs to current organization than events are editable
             if ($this->getValue('cat_org_id') > 0

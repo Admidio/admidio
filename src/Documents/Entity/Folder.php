@@ -48,8 +48,8 @@ class Folder extends Entity
     {
         global $gCurrentUser;
 
-        // If user hasn't administrateDocumentsFiles, don't add more data
-        if (!$gCurrentUser->administrateDocumentsFiles()) {
+        // If user hasn't isAdministratorDocumentsFiles, don't add more data
+        if (!$gCurrentUser->isAdministratorDocumentsFiles()) {
             return $completeFolder;
         }
 
@@ -59,7 +59,7 @@ class Folder extends Entity
             return $completeFolder;
         }
 
-        // User has administrateDocumentsFiles and folder exists, so lookup the physical directory for items that aren't in the DB
+        // User has isAdministratorDocumentsFiles and folder exists, so lookup the physical directory for items that aren't in the DB
         $dirHandle = @opendir($folderPath);
         if ($dirHandle) {
             while (($entry = readdir($dirHandle)) !== false) {
@@ -369,8 +369,8 @@ class Folder extends Entity
 
             $addToArray = false;
 
-            // If file exists and file isn't locked or user has administrateDocumentsFiles, show it
-            if (($fileExists && !$rowFiles['fil_locked']) || $gCurrentUser->administrateDocumentsFiles()) {
+            // If file exists and file isn't locked or user has isAdministratorDocumentsFiles, show it
+            if (($fileExists && !$rowFiles['fil_locked']) || $gCurrentUser->isAdministratorDocumentsFiles()) {
                 $addToArray = true;
             }
 
@@ -428,7 +428,7 @@ class Folder extends Entity
         }
 
         // If current user has download-admin-rights => allow
-        if ($gCurrentUser->administrateDocumentsFiles()) {
+        if ($gCurrentUser->isAdministratorDocumentsFiles()) {
             return true;
         }
 
@@ -555,10 +555,10 @@ class Folder extends Entity
 
             $addToArray = false;
 
-            // If user has administrateDocumentsFiles, show it
-            if ($gCurrentUser->administrateDocumentsFiles()) {
+            // If user has isAdministratorDocumentsFiles, show it
+            if ($gCurrentUser->isAdministratorDocumentsFiles()) {
                 $addToArray = true;
-            } // If user hasn't administrateDocumentsFiles, only show if folder exists
+            } // If user hasn't isAdministratorDocumentsFiles, only show if folder exists
             elseif ($folderExists) {
                 // If folder is public and not locked, show it
                 if ($rowFolders['fol_public'] && !$rowFolders['fol_locked']) {
@@ -622,7 +622,7 @@ class Folder extends Entity
     {
         global $gCurrentUser;
 
-        return $this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->administrateDocumentsFiles();
+        return $this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->isAdministratorDocumentsFiles();
     }
 
     /**
@@ -634,7 +634,7 @@ class Folder extends Entity
     {
         global $gCurrentUser;
 
-        return $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->administrateDocumentsFiles();
+        return $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->isAdministratorDocumentsFiles();
     }
 
     /**
@@ -765,7 +765,7 @@ class Folder extends Entity
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns.
      * The folder table also contains fol_usr_id and fol_timestamp. Also, for now fol_type will always be DOCUMENTS.
-     * When a folder is created, we also don't need to log some columns, because they are already 
+     * When a folder is created, we also don't need to log some columns, because they are already
      * in the creation log record.
      *
      * @return true Returns the list of database columns to be ignored for logging.
@@ -782,9 +782,9 @@ class Folder extends Entity
 
     /**
      * Adjust the changelog entry for this db record: Add the parent folder as a related object
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
     protected function adjustLogEntry(LogChanges $logEntry) {

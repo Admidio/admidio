@@ -80,7 +80,7 @@ try {
         $user->readDataByUuid($getUserUuid);
 
         // check if the current user has the right communicate with that member
-        if ((!$gCurrentUser->editUsers() && !isMember((int)$user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0) {
+        if ((!$gCurrentUser->isAdministratorUsers() && !isMember((int)$user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0) {
             throw new Exception('SYS_USER_ID_NOT_FOUND');
         }
 

@@ -276,7 +276,7 @@ try {
     );
 
     // show link to create relations
-    if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->editUsers()) {
+    if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->isAdministratorUsers()) {
         $page->addPageFunctionsMenuItem(
             'menu_item_profile_user_relation_types',
             $gL10n->get('SYS_CREATE_RELATIONSHIP'),
@@ -385,7 +385,7 @@ try {
 
     $page->assignSmartyVariable('showCurrentRoles', $gSettingsManager->getBool('profile_show_roles'));
     $page->assignSmartyVariable('userRightAssignRoles', $gCurrentUser->assignRoles());
-    $page->assignSmartyVariable('userRightEditUser', $gCurrentUser->editUsers());
+    $page->assignSmartyVariable('userRightEditUser', $gCurrentUser->isAdministratorUsers());
     $page->assignSmartyVariable('masterData', $masterData);
     $page->assignSmartyVariable('profileData', $profileData);
     $page->assignSmartyVariable('lastLoginInfo', $gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
@@ -681,7 +681,7 @@ try {
                     $userRelation['urlUserEdit'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid')));
                 }
 
-                if ($gCurrentUser->editUsers()) {
+                if ($gCurrentUser->isAdministratorUsers()) {
                     $userRelation['urlRelationDelete'] = 'callUrlHideElement(\'row_ure_' . $relation->getValue('ure_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/userrelations/userrelations_function.php', array('mode' => 'delete', 'ure_uuid' => $relation->getValue('ure_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 }
 

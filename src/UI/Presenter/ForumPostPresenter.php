@@ -80,7 +80,7 @@ class ForumPostPresenter extends PagePresenter
         );
         global $gCurrentUser;
         ChangelogService::displayHistoryButton($this, 'forum', 'forum_posts',
-                $this->postUUID !== '' && $gCurrentUser->administrateForum(), ['uuid' => $this->postUUID]);
+                $this->postUUID !== '' && $gCurrentUser->isAdministratorForum(), ['uuid' => $this->postUUID]);
         $form->addEditor(
             'fop_text',
             $gL10n->get('SYS_TEXT'),

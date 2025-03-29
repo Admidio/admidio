@@ -200,7 +200,7 @@ class ChangelogService {
             return $tableLabels;
         } else {
             if (array_key_exists($table, $tableLabels)) {
-                return Language::translateIfTranslationStrId($tableLabels[$table]); 
+                return Language::translateIfTranslationStrId($tableLabels[$table]);
             } else {
                 return '';
             }
@@ -934,19 +934,19 @@ class ChangelogService {
      */
     public static function getPermittedTables(User $user) : array {
         $tablesPermitted = [];
-        if ($user->editAnnouncements())
+        if ($user->isAdministratorAnnouncements())
             $tablesPermitted[] = 'announcements';
-        if ($user->manageRoles())
+        if ($user->isAdministratorRoles())
             $tablesPermitted = array_merge($tablesPermitted, ['roles', 'roles_rights', 'roles_rights_data', 'members']);
-        if ($user->administrateEvents())
+        if ($user->isAdministratorEvents())
             $tablesPermitted[] = 'events';
-        if ($user->administrateDocumentsFiles())
+        if ($user->isAdministratorDocumentsFiles())
             $tablesPermitted = array_merge($tablesPermitted, ['files', 'folders']);
-        if ($user->editUsers())
+        if ($user->isAdministratorUsers())
             $tablesPermitted = array_merge($tablesPermitted, ['users', 'user_data', 'user_relations', 'members']);
-        if ($user->editPhotoRight())
+        if ($user->isAdministratorPhotos())
             $tablesPermitted[] = 'photos';
-        if ($user->editWeblinksRight())
+        if ($user->isAdministratorWeblinks())
             $tablesPermitted[] = 'links';
 
         // HANDLE REGISTERED CALLBACKS to add additional tables
@@ -1147,6 +1147,6 @@ ChangelogService::registerCallback('getObjectForTable', 'forum_topics', function
 ChangelogService::registerCallback('getObjectForTable', 'forum_posts', function() {global $gDb; return new Post($gDb);});
 
 ## Enable per-user detection of access permissions to the tables (based on user's role permission); Admin is always allowed
-ChangelogService::registerCallback('getPermittedTables', '', function(User $user) { if ($user->administrateForum()) return ['forum_topics', 'forum_posts']; });
+ChangelogService::registerCallback('getPermittedTables', '', function(User $user) { if ($user->isAdministratorForum()) return ['forum_topics', 'forum_posts']; });
 
 */

@@ -45,7 +45,7 @@ try {
         $category->readDataByUuid($getCatUuid);
         $headline .= ' - ' . $category->getValue('cat_name');
     }
-    
+
         // Create Link object
         $weblinks = new ModuleWeblinks();
         $weblinks->setParameter('lnk_uuid', $getLinkUuid);
@@ -91,7 +91,7 @@ try {
             );
         }
 
-        if ($gCurrentUser->editWeblinksRight()) {
+        if ($gCurrentUser->isAdministratorWeblinks()) {
             // show link to maintain categories
             $page->addPageFunctionsMenuItem(
                 'menu_item_links_maintain_categories',
@@ -102,7 +102,7 @@ try {
         }
 
         ChangelogService::displayHistoryButton($page, 'weblinks', 'links');
-        
+
         $page->addJavascript(
             '
         $("#cat_uuid").change(function() {

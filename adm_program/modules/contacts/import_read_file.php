@@ -46,7 +46,7 @@ try {
     $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', array('requireValue' => true));
 
     // only authorized users should import users
-    if (!$gCurrentUser->editUsers()) {
+    if (!$gCurrentUser->isAdministratorUsers()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
@@ -73,7 +73,7 @@ try {
     $role->readDataByUuid($postRoleUUID);
 
     if (!$gCurrentUser->hasRightViewRole((int)$role->getValue('rol_id'))
-        || (!$gCurrentUser->manageRoles() && !$role->getValue('rol_default_registration'))) {
+        || (!$gCurrentUser->isAdministratorRoles() && !$role->getValue('rol_default_registration'))) {
         throw new Exception('SYS_ROLE_SELECT_RIGHT', array($role->getValue('rol_name')));
     }
 

@@ -89,7 +89,7 @@ class ForumPresenter extends PagePresenter
             'bi-plus-circle-fill'
         );
 
-        if ($gCurrentUser->administrateForum()) {
+        if ($gCurrentUser->isAdministratorForum()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_forum_categories',
                 $gL10n->get('SYS_EDIT_CATEGORIES'),
@@ -98,7 +98,7 @@ class ForumPresenter extends PagePresenter
             );
         }
 
-        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $gCurrentUser->administrateForum());
+        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $gCurrentUser->isAdministratorForum());
 
         // add filter navbar
         $this->addJavascript('
@@ -283,7 +283,7 @@ class ForumPresenter extends PagePresenter
             $templateRow['category'] = Language::translateIfTranslationStrId($forumTopic['cat_name']);
             $templateRow['editable'] = false;
 
-            if ($gCurrentUser->administrateForum()
+            if ($gCurrentUser->isAdministratorForum()
                 || $gCurrentUser->getValue('usr_uuid') === $forumTopic['usr_uuid']) {
                 $templateRow['editable'] = true;
 

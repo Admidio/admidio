@@ -95,7 +95,7 @@ class ForumTopicPresenter extends PagePresenter
             'bi-plus-circle-fill'
         );
         global $gCurrentUser;
-        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $gCurrentUser->administrateForum(), ['uuid' => $this->topicUUID]);
+        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $gCurrentUser->isAdministratorForum(), ['uuid' => $this->topicUUID]);
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
@@ -120,14 +120,14 @@ class ForumTopicPresenter extends PagePresenter
         $categoryService = new CategoryService($gDb, 'FOT');
 
         if ($this->topicUUID === '') {
-            if (!$gCurrentUser->administrateForum()
+            if (!$gCurrentUser->isAdministratorForum()
                 && count($gCurrentUser->getAllEditableCategories('FOT')) === 0) {
                 throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
             }
         } else {
             $post->readDataById($this->topic->getValue('fot_fop_id_first_post'));
 
-            if (!$gCurrentUser->administrateForum()
+            if (!$gCurrentUser->isAdministratorForum()
                 && $gCurrentUser->getValue('usr_id') !== $post->getValue('fop_usr_id_create')) {
                 throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
             }
@@ -147,7 +147,7 @@ class ForumTopicPresenter extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('topic_uuid' => $this->topicUUID, 'mode' => 'topic_save')),
             $this
         );
-        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $this->topicUUID !== '' && $gCurrentUser->administrateForum(), ['uuid' => $this->topicUUID]);
+        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $this->topicUUID !== '' && $gCurrentUser->isAdministratorForum(), ['uuid' => $this->topicUUID]);
 
         if ($categoryService->count() > 1) {
             $form->addSelectBoxForCategories(
@@ -223,7 +223,7 @@ class ForumTopicPresenter extends PagePresenter
                 $templateRow['category'] = Language::translateIfTranslationStrId($forumPost['cat_name']);
             }
 
-            if ($gCurrentUser->administrateForum()
+            if ($gCurrentUser->isAdministratorForum()
                 || $gCurrentUser->getValue('usr_uuid') === $forumPost['usr_uuid']) {
                 $templateRow['editable'] = true;
 

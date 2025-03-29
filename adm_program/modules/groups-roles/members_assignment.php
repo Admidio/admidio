@@ -167,7 +167,7 @@ try {
 
         $page->addJavascript($javascriptCode, true);
 
-        if ($gCurrentUser->editUsers()) {
+        if ($gCurrentUser->isAdministratorUsers()) {
             $page->addPageFunctionsMenuItem(
                 'menu_item_members_assign_create_user',
                 $gL10n->get('SYS_CREATE_MEMBER'),
@@ -237,22 +237,22 @@ try {
             $gL10n->get('SYS_MEMBER'));
         $columnAlignment = array('left', 'left');
 
-        if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->isAdministratorUsers())) {
             $columnHeading[] = $gL10n->get('SYS_LASTNAME');
             $columnAlignment[] = 'left';
         }
-        if ($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->isAdministratorUsers())) {
             $columnHeading[] = $gL10n->get('SYS_FIRSTNAME');
             $columnAlignment[] = 'left';
         }
-        if ($gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())
-            || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
-            || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
-            || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible('STREET', $gCurrentUser->isAdministratorUsers())
+            || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->isAdministratorUsers())
+            || $gProfileFields->isVisible('CITY', $gCurrentUser->isAdministratorUsers())
+            || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->isAdministratorUsers())) {
             $columnHeading[] = $gL10n->get('SYS_ADDRESS');
             $columnAlignment[] = 'left';
         }
-        if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->isAdministratorUsers())) {
             $columnHeading[] = $gL10n->get('SYS_BIRTHDAY');
             $columnAlignment[] = 'left';
         }

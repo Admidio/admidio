@@ -38,7 +38,7 @@ try {
     }
 
     // only users who can edit all users are allowed to create user relations
-    if (!$gCurrentUser->editUsers()) {
+    if (!$gCurrentUser->isAdministratorUsers()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

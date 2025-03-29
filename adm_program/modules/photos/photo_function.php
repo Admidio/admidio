@@ -38,7 +38,7 @@ try {
     }
 
     // check if current user has right to upload photos
-    if (!$gCurrentUser->editPhotoRight()) {
+    if (!$gCurrentUser->isAdministratorPhotos()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

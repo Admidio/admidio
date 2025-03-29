@@ -101,7 +101,7 @@ try {
 
     ChangelogService::displayHistoryButton($page, 'announcements', 'announcements');
 
-    if ($gCurrentUser->editAnnouncements()) {
+    if ($gCurrentUser->isAdministratorAnnouncements()) {
         $page->addPageFunctionsMenuItem(
             'menu_item_announcement_categories',
             $gL10n->get('SYS_EDIT_CATEGORIES'),

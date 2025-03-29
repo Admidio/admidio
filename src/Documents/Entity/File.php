@@ -121,7 +121,7 @@ class File extends Entity
         }
 
         // If current user has download-admin-rights => allow
-        if ($gCurrentUser->administrateDocumentsFiles()) {
+        if ($gCurrentUser->isAdministratorDocumentsFiles()) {
             return true;
         }
 

@@ -96,7 +96,7 @@ class AnnouncementsPresenter extends PagePresenter
 
         ChangelogService::displayHistoryButton($this, 'announcements', 'announcements');
 
-        if ($gCurrentUser->editAnnouncements()) {
+        if ($gCurrentUser->isAdministratorAnnouncements()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_announcement_categories',
                 $gL10n->get('SYS_EDIT_CATEGORIES'),
@@ -243,8 +243,7 @@ class AnnouncementsPresenter extends PagePresenter
             $templateRow['category'] = Language::translateIfTranslationStrId($announcementData['cat_name']);
             $templateRow['editable'] = false;
 
-            if ($gCurrentUser->editAnnouncements()
-                || $gCurrentUser->getValue('usr_uuid') === $announcementData['usr_uuid']) {
+            if ($announcement->isEditable()) {
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(

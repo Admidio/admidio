@@ -8,8 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  ***********************************************************************************************
- * 
- * 
+ *
+ *
  * This script will read all requested change history fecords from the database. It is optimized to
  * work with the javascript DataTables and will return the data in json format.
  *
@@ -54,7 +54,7 @@
  *           fewer records to return. Note that this can be -1 to indicate that all records should
  *           be returned (although that negates any benefits of server-side processing!)
  * search[value] - Global search value.
- * 
+ *
  *
  ***********************************************************************************************
  */
@@ -92,7 +92,7 @@ try {
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
     $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
-    
+
 
     $jsonArray = array('draw' => (int)$getDraw);
 
@@ -111,9 +111,9 @@ try {
     if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
-    $accessAll = $gCurrentUser->isAdministrator() || 
+    $accessAll = $gCurrentUser->isAdministrator() ||
         (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted)));
-        
+
     // create a user object. Will fill it later if we encounter a user id
     $user = new User($gDb, $gProfileFields);
     $userUuid = null;
@@ -131,13 +131,13 @@ try {
     }
 
     // Access permissions:
-    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user: 
+    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user:
     if (!$accessAll &&
             !(!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) &&
             $isUserLog) {
         // If a user UUID is given, we need access to that particular user
-        // if no UUID is given, editUsers permissions are required
-        if (($userUuid === '' && !$gCurrentUser->editUsers())
+        // if no UUID is given, isAdministratorUsers permissions are required
+        if (($userUuid === '' && !$gCurrentUser->isAdministratorUsers())
             || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
 //                throw new Exception('SYS_NO_RIGHTS');
                 $gMessage->show(content: $gL10n->get('SYS_NO_RIGHTS'));
@@ -251,17 +251,17 @@ try {
 
 
 
-    $mainSql = 'SELECT log_id as id, log_table as table_name, 
+    $mainSql = 'SELECT log_id as id, log_table as table_name,
         log_record_id as record_id, log_record_uuid as uuid, log_record_name as name, log_record_linkid as link_id,
         log_related_id as related_id, log_related_name as related_name,
-        log_field as field, log_field_name as field_name, 
+        log_field as field, log_field_name as field_name,
         log_action as action,
-        log_value_new as value_new, log_value_old as value_old, 
-        log_usr_id_create as usr_id_create, usr_create.usr_uuid as uuid_usr_create, create_last_name.usd_value AS create_last_name, create_first_name.usd_value AS create_first_name, 
+        log_value_new as value_new, log_value_old as value_old,
+        log_usr_id_create as usr_id_create, usr_create.usr_uuid as uuid_usr_create, create_last_name.usd_value AS create_last_name, create_first_name.usd_value AS create_first_name,
         log_timestamp_create as timestamp
-        FROM ' . TBL_LOG . ' 
+        FROM ' . TBL_LOG . '
         -- Extract data of the creating user...
-        INNER JOIN '.TBL_USERS.' usr_create 
+        INNER JOIN '.TBL_USERS.' usr_create
                 ON usr_create.usr_id = log_usr_id_create
         INNER JOIN '.TBL_USER_DATA.' AS create_last_name
                 ON create_last_name.usd_usr_id = log_usr_id_create
@@ -349,7 +349,7 @@ try {
                     $allowRecordAccess = true;
                 }
             }
-            // NO access to this record allowed -> Set flag to show warning about records being 
+            // NO access to this record allowed -> Set flag to show warning about records being
             // hidden due to insufficient permissions
             if (!$allowRecordAccess) {
                 ++$recordsHidden;
@@ -371,7 +371,7 @@ try {
         }
 
 
-        // 2. Name column: display name and optionally link it with the linkID or the recordID 
+        // 2. Name column: display name and optionally link it with the linkID or the recordID
         //    Some tables need special-casing, though
         $rowLinkId = ($row['link_id']>0) ? $row['link_id'] : $row['record_id'];
         $rowName = $row['name'] ?? '';
@@ -460,7 +460,7 @@ try {
     }
 
     if ($recordsHidden > 0) {
-        $jsonArray['notice']['DT_notice'] = '<i class="bi bi-exclamation-circle-fill"></i>' . 
+        $jsonArray['notice']['DT_notice'] = '<i class="bi bi-exclamation-circle-fill"></i>' .
             $gL10n->get('SYS_LOG_RECORDS_HIDDEN', [$recordsHidden]);
     } else {
         // Make sure the notice is hidden!

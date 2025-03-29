@@ -116,7 +116,7 @@ class ForumTopicService
         if ($postUUID !== '') {
             $post->readDataByUuid($postUUID);
 
-            if (!$gCurrentUser->administrateForum() && $post->getValue('fop_usr_id_create') !== $gCurrentUser->getValue('usr_id')) {
+            if (!$gCurrentUser->isAdministratorForum() && $post->getValue('fop_usr_id_create') !== $gCurrentUser->getValue('usr_id')) {
                 throw new Exception('You are not allowed to edit this post.');
             }
         } else {

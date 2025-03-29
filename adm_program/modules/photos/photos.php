@@ -128,7 +128,7 @@ try {
         $page->addJavascript('$("#img_' . $getPhotoNr . '").trigger("click");', true);
     }
 
-    if ($gCurrentUser->editPhotoRight()) {
+    if ($gCurrentUser->isAdministratorPhotos()) {
         // show link to create new album
         $page->addPageFunctionsMenuItem(
             'menu_item_photos_new_album',
@@ -228,7 +228,7 @@ try {
                         </a>';
                 }
 
-                if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
+                if ($gCurrentUser->isAdministratorPhotos() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
                     $photoThumbnailTable .= '<div id="image_preferences_' . $actThumbnail . '" class="text-center">';
                 }
 
@@ -247,7 +247,7 @@ try {
                 }
 
                 // buttons for moderation
-                if ($gCurrentUser->editPhotoRight()) {
+                if ($gCurrentUser->isAdministratorPhotos()) {
                     $photoThumbnailTable .= '
                         <a class="admidio-icon-link admidio-image-rotate" href="javascript:void(0)" data-image="' . $actThumbnail . '" data-direction="right">
                             <i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ROTATE_PHOTO_RIGHT') . '"></i></a>
@@ -259,7 +259,7 @@ try {
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
                 }
 
-                if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
+                if ($gCurrentUser->isAdministratorPhotos() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
                     $photoThumbnailTable .= '</div>';
                 }
                 $photoThumbnailTable .= '</div>';
@@ -325,7 +325,7 @@ try {
         AND (pho_pho_id_parent IS NULL) ';
     }
 
-    if (!$gCurrentUser->editPhotoRight()) {
+    if (!$gCurrentUser->isAdministratorPhotos()) {
         $sql .= '
         AND pho_locked = false ';
     }
@@ -382,7 +382,7 @@ try {
                         <div class="card-body">
                             <h5 class="card-title">' . $albumTitle);
                 // if user has admin rights for photo module then show some functions
-                if ($gCurrentUser->editPhotoRight()) {
+                if ($gCurrentUser->isAdministratorPhotos()) {
                     if ((bool)$childPhotoAlbum->getValue('pho_locked') === false) {
                         $htmlLock = '<li><a class="dropdown-item admidio-album-lock" href="javascript:void(0)" data-id="' . $childPhotoAlbum->getValue('pho_uuid') . '" data-mode="lock">
                                             <i class="bi bi-lock" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_LOCK_ALBUM') . '</a>
@@ -428,7 +428,7 @@ try {
                 $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($childPhotoAlbum->getPhotographer())) . '</p>');
 
                 // Notice for users with foto edit rights that the folder of the album doesn't exist
-                if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight()) {
+                if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->isAdministratorPhotos()) {
                     $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('SYS_ALBUM_FOLDER_NOT_FOUND') . '</div></p>');
                 }
 
@@ -437,7 +437,7 @@ try {
                     $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('SYS_ALBUM_NOT_APPROVED') . '</div></p>');
                 }
 
-                if ($gCurrentUser->editPhotoRight() && $childPhotoAlbum->getValue('pho_locked') == 1) {
+                if ($gCurrentUser->isAdministratorPhotos() && $childPhotoAlbum->getValue('pho_locked') == 1) {
                     $page->addHtml('<button class="btn btn-primary admidio-album-lock" data-id="' . $childPhotoAlbum->getValue('pho_uuid') . '" data-mode="unlock">' . $gL10n->get('SYS_UNLOCK_ALBUM') . '</button>');
                 }
 

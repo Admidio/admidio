@@ -119,7 +119,7 @@ class Component extends Entity
         if (self::isVisible($componentName)) {
             switch ($componentName) {
                 case 'ANNOUNCEMENTS':
-                    if ($gCurrentUser->editAnnouncements()) {
+                    if ($gCurrentUser->isAdministratorAnnouncements()) {
                         return true;
                     }
                     break;
@@ -131,43 +131,43 @@ class Component extends Entity
                     break;
 
                 case 'EVENTS':
-                    if ($gCurrentUser->administrateEvents()) {
+                    if ($gCurrentUser->isAdministratorEvents()) {
                         return true;
                     }
                     break;
 
                 case 'DOCUMENTS-FILES':
-                    if ($gCurrentUser->administrateDocumentsFiles()) {
+                    if ($gCurrentUser->isAdministratorDocumentsFiles()) {
                         return true;
                     }
                     break;
 
                 case 'FORUM':
-                    if ($gCurrentUser->administrateForum()) {
+                    if ($gCurrentUser->isAdministratorForum()) {
                         return true;
                     }
                     break;
 
                 case 'LINKS':
-                    if ($gCurrentUser->editWeblinksRight()) {
+                    if ($gCurrentUser->isAdministratorWeblinks()) {
                         return true;
                     }
                     break;
 
                 case 'GROUPS-ROLES':
-                    if ($gCurrentUser->manageRoles()) {
+                    if ($gCurrentUser->isAdministratorRoles()) {
                         return true;
                     }
                     break;
 
                 case 'CONTACTS':
-                    if ($gCurrentUser->editUsers()) {
+                    if ($gCurrentUser->isAdministratorUsers()) {
                         return true;
                     }
                     break;
 
                 case 'PHOTOS':
-                    if ($gCurrentUser->editPhotoRight()) {
+                    if ($gCurrentUser->isAdministratorPhotos()) {
                         return true;
                     }
                     break;

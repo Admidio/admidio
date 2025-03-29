@@ -79,7 +79,7 @@ class Weblink extends Entity
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if ($gCurrentUser->editWeblinksRight()
+        if ($gCurrentUser->isAdministratorWeblinks()
         || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)) {
             // if category belongs to current organization than weblinks are editable
             if ($this->getValue('cat_org_id') > 0
