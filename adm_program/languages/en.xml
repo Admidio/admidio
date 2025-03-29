@@ -308,6 +308,7 @@
   <string name="SYS_CATEGORIES">Categories</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
+  <string name="SYS_CATEGORIES_EDIT_DESC">Members of these roles can create new entries in this category and edit or delete their own entries.</string>
   <string name="SYS_CATEGORY">Category</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Category name already exists in selected organization.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
@@ -1318,7 +1319,6 @@
   <string name="SYS_SOCIAL_NETWORKS">Social networks</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Here you can enter your username that you use in this social network. Other members will then be able to find you in this network.</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Would you like to set a link to your #VAR1# profile? Your #VAR1# login name is required. Log in to your #VAR1# account and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your #VAR1# profile directly.</string>
-
   <string name="SYS_SSO_KEY">SSO Key</string>
   <string name="SYS_SSO_KEYS">SSO Keys</string>
   <string name="SYS_SSO_KEY_ADMIN">SSO Cryptographic Keys Administration</string>
@@ -1354,13 +1354,10 @@
   <string name="SYS_SSO_KEY_FAILURE">Creating a cryptographic key failed: #VAR1#</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">The exported private key and certificate can and shall be encrypted with a password for security reasons. This password is required to open or import the downloaded file. Without this password, the key is not recoverable from the file. Using an empty password is possible, but strongly discouraged!</string>
-
-
   <string name="SYS_SSO_CERT_STATE">State or province</string>
   <string name="SYS_SSO_CERT_ORGUNIT">Organizational unit</string>
   <string name="SYS_SSO_CERT_COMMON_NAME">Common name</string>
   <string name="SYS_SSO_CERT_ORGANIZATION_UNIT">Organization unit</string>
-
   <string name="SYS_SSO_CLIENTS_SAML">SAML 2.0 clients</string>
   <string name="SYS_SSO_CLIENT_SAML">SAML 2.0 client</string>
   <string name="SYS_SSO_CLIENTS_OIDC">OpenID Connect (OIDC) clients</string>
@@ -1438,11 +1435,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are logged in successful, but the user account does not have access permissions to the Service Provider (#VAR1#). Please either try logging in with a different account below, or return to the Service Provider.</string>
   <string name="SYS_SSO_LOGIN_RETURN">Return to #VAR1_BOLD# without logging in</string>
   <string name="SYS_LOGIN_TO">Sign in to #VAR1_BOLD#</string>
-
-
   <string name="SYS_SSO_NAME_PROPERTIES">Client (Service Provider) name and properties</string>
   <string name="SYS_SSO_USERDATA_ACCESS">User data and access permissions</string>
-
   <string name="SYS_SSO_USERID_FIELD">User ID field</string>
   <string name="SYS_SSO_USERID_FIELD_DESC">Select the admidio field that should uniquely identify the user in the client system (Service Provider). Some systems expect a login name (string), some systems work with numeric IDs, etc. Please consult the manual of the Service Provider app.</string>
   <string name="SYS_SSO_USERID_FIELDS">User ID fields</string>
@@ -1450,12 +1444,9 @@
   <string name="SYS_SSO_USERID_UUID">User UUID (random 32-character string)</string>
   <string name="SYS_SSO_USERID_LOGIN">Login name</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID missing</string>
-
   <string name="SYS_SSO_OIDC">Single-Sign-On with OpenId Connect (OIDC)</string>
   <string name="SYS_SSO_OIDC_ENABLED">Enable Single-Sign-On via OpenId Connect (OIDC)</string>
   <string name="SYS_SSO_OIDC_ENABLED_DESC">This setting turns Admidio into a OIDC identity provider (idP) for single-sign-on, which allows other web applications to authenticate users agains the admidio user list.</string>
-  
-
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# characters</string>
