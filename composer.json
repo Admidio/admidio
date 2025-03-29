@@ -35,7 +35,10 @@
         "smarty/smarty": "^5.0",
         "tecnickcom/tcpdf": "^6.2",
         "twbs/bootstrap": "5.3.*",
-        "twbs/bootstrap-icons": "^1.11"
+        "twbs/bootstrap-icons": "^1.11",
+        "paragonie/sodium_compat_ext_sodium": "^1.0",
+        "league/oauth2-server": "^9.2.0",
+        "litesaml/lightsaml": "^4.2"
     },
     "suggest": {
         "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes",

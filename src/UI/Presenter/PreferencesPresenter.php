@@ -14,6 +14,7 @@ use RuntimeException;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\SSO\Service\KeyService;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -116,6 +117,11 @@ class PreferencesPresenter extends PagePresenter
                 'id' => 'captcha',
                 'title' => $gL10n->get('SYS_CAPTCHA'),
                 'icon' => 'bi-fonts'
+            ),
+            'sso' => array(
+                'id' => 'sso',
+                'title' => $gL10n->get('SYS_SSO'),
+                'icon' => 'bi-key'
             ),
             'admidio_update' => array(
                 'id' => 'admidio_update',
@@ -513,7 +519,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
                         'id' => 'preferences',
-                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories')
+                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories', 'saml_clients', 'sso_keys')
                     )
                 )
             )
@@ -1906,6 +1912,142 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
+     * Generates the html of the form from the sso preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the sso preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createSsoForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gCurrentSession, $gDb, $gCurrentUser;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formSSO = new FormPresenter(
+            'adm_preferences_form_sso',
+            'preferences/preferences.sso.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Sso')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+
+        // Link to Key administration
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array());
+        $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" 
+            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
+            $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
+            data-href="window.location.href=\'' . $url . '\'">
+            <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_KEY_ADMIN') . '</a>';
+        $formSSO->addCustomContent(
+            'sso_keys',
+            $gL10n->get('SYS_SSO_KEYS'),
+            $html,
+            array()
+        );
+
+        $samlService = new \Admidio\SSO\Service\SAMLService($gDb, $gCurrentUser);
+
+        $formSSO->addCustomContent(
+            'sso_saml_settings',
+            '',
+            '<h5>' . $gL10n->get('SYS_SSO_SAML') . '</h5>',
+            array()
+        );
+        $formSSO->addCheckbox(
+            'sso_saml_enabled',
+            $gL10n->get('SYS_SSO_SAML_ENABLED'),
+            (bool)$formValues['sso_saml_enabled'],
+            array('helpTextId' => 'SYS_SSO_SAML_ENABLED_DESC')
+        );
+        $formSSO->addInput(
+            'sso_saml_entity_id',
+            $gL10n->get('SYS_SSO_SAML_ENTITY_ID'),
+            (string)$formValues['sso_saml_entity_id'],
+            array('class' => 'copy-container', 'helpTextId' => 'SYS_SSO_SAML_ENTITY_ID_DESC')
+        );
+
+        $keyService = new KeyService($gDb);
+        $keyArray = $keyService->getKeysData(true);
+        // $keys = array('0' => $gL10n->get('SYS_NONE'));
+        $keys = array();
+        $valueAttributes = array();
+        foreach ($keyArray as $key) {
+            $keys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
+            // We can add the certificates as additional value attributes to the select entries
+            $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
+        }
+        
+        $formSSO->addSelectBox(
+            'sso_saml_signing_key',
+            $gL10n->get('SYS_SSO_SAML_SIGNING_KEY'),
+            $keys,
+            array('defaultValue' => $formValues['sso_saml_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE')/*, 'helpTextId' => 'SYS_SSO_SAML_SIGNING_KEY_DESC'*/, 'valueAttributes' => $valueAttributes)
+        );
+        $formSSO->addSelectBox(
+            'sso_saml_encryption_key',
+            $gL10n->get('SYS_SSO_SAML_ENCRYPTION_KEY'),
+            $keys,
+            array('defaultValue' => $formValues['sso_saml_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE')/*, 'helpTextId' => 'SYS_SSO_SAML_ENCRYPTION_KEY_DESC'*/, 'valueAttributes' => $valueAttributes)
+        );
+
+        $formSSO->addCheckbox(
+            'sso_saml_want_requests_signed',
+            $gL10n->get('SYS_SSO_SAML_WANT_REQUESTS_SIGNED'),
+            (bool)$formValues['sso_saml_want_requests_signed'],
+            array()
+        );
+
+
+        $metaURL = $samlService->getMetadataUrl();
+        $staticSettings = array(
+            'SYS_SSO_SAML_METADATA_URL' => ['value' => '<a href="' . $metaURL . '">' . $metaURL . '</a>', 'id' => 'metadata_URL'],
+            'SYS_SSO_SAML_SSO_ENDPOINT' => ['value' => $samlService->getSsoEndpoint(), 'id' => 'SSO_endpoint'],
+            'SYS_SSO_SAML_SLO_ENDPOINT' => ['value' => $samlService->getSloEndpoint(),'id' => 'SLO_endpoint'],
+            'SYS_SSO_KEY_CERTIFICATE'   => ['value' => '',  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa; 
+                    border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
+                    max-height: 150px; overflow: auto; border-radius: 0.375rem; font-size: smaller;']
+        );
+
+        $formSSO->addCustomContent(
+            'sso_saml_sso_staticsettings',
+            $gL10n->get('SYS_SSO_SAML_STATIC_SETTINGS'),
+            '<table id="sso_saml_sso_staticsettings" style="width: 100%">' . implode('', 
+                array_map(function ($key, $value) use ($gL10n) {
+                    return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' . 
+                        (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
+            }, array_keys($staticSettings), $staticSettings)) . '</table>',
+            array()
+        );
+
+        // Link to SAML Client administration
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
+        $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" 
+            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
+            $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
+            data-href="window.location.href=\'' . $url . '\'">
+            <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';
+        $formSSO->addCustomContent(
+            'sso_saml_clients',
+            $gL10n->get('SYS_SSO_CLIENTS_SAML'),
+            $html,
+            array()
+        );
+
+
+        $formSSO->addSubmitButton(
+            'adm_button_save_sso',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formSSO->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formSSO);
+        return $smarty->fetch('preferences/preferences.sso.tpl');
+    }
+
+    /**
      * Generates the html of the form from the system information preferences and will return the complete html.
      * @return string Returns the complete html of the form from the system information preferences.
      * @throws Exception
@@ -2172,7 +2314,7 @@ class PreferencesPresenter extends PagePresenter
         $this->addJavascript(
             '
             var panels = ["common", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
-                "announcements", "contacts", "documents_files", "photos", "forum", "groups_roles", "category_report", "messages", "profile", "events", "links"];
+                "announcements", "contacts", "documents_files", "photos", "forum", "groups_roles", "category_report", "messages", "profile", "sso", "events", "links"];
 
             for(var i = 0; i < panels.length; i++) {
                 $("#adm_panel_preferences_" + panels[i] + " .accordion-header").click(function (e) {
