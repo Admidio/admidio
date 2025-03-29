@@ -29,6 +29,8 @@ use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Events\Entity\Room;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Roles\Service\RolesService;
+use Admidio\SSO\Entity\Key;
+use Admidio\SSO\Entity\SAMLClient;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -192,6 +194,8 @@ class ChangelogService {
 
             'preferences' => 'SYS_SETTINGS',
             'texts' => 'SYS_SETTINGS',
+            'saml_clients' => 'SYS_SSO_CLIENTS_SAML',
+            'sso_keys' => 'SYS_SSO_KEYS',
             'others' => 'SYS_ALL_OTHERS',
         );
         $tableLabels = array_merge($tableLabels, self::$customCallbacks['getTableLabelArray']);
@@ -292,8 +296,10 @@ class ChangelogService {
                 return new UserRelationType($gDb);
             case 'forum_topic':
                 return new Topic($gDb);
-            case 'forum_post':
-                return new Post($gDb);
+            case 'saml_clients':
+                return new SAMLClient($gDb);
+            case 'ssos_keys':
+                return new Key($gDb);
             default:
                 return null;
         }
@@ -562,6 +568,33 @@ class ChangelogService {
             'cat_system' =>                array('name' => 'SYS_SSYSTEM', 'type' => 'BOOL'),
             'cat_default' =>               array('name' => $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_CATEGORY'))), 'type' => 'BOOL'),
             'cat_sequence' =>              'SYS_ORDER',
+
+            'smc_client_id' =>              'SYS_SSO_CLIENT_ID',
+            'smc_client_name' =>            'SYS_SSO_CLIENT_NAME',
+            'smc_metadata_url' =>           'SYS_SSO_METADATA_URL',
+            'smc_acs_url' =>                'SYS_SSO_ACS_URL',
+            'smc_slo_url' =>                'SYS_SSO_SLO_URL',
+            'smc_x509_certificate' =>       'SYS_SSO_X509_CERTIFICATE',
+            'smc_userid_field' =>           'SYS_SSO_USERID_FIELD',
+            'smc_field_mapping' =>          array('name' => 'SYS_SSO_SAML_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
+            'smc_role_mapping' =>           array('name' => 'SYS_SSO_SAML_ROLES', 'type' => 'SAML_roles_mapping'),
+            'smc_validate_signatures' =>    array('name' => 'SYS_SSO_VALIDATE_SIGNATURES', 'type' => 'BOOL'),
+            'smc_require_auth_signed' =>    array('name' => 'SYS_SSO_REQUIRE_AUTHN_SIGNED', 'type' => 'BOOL'),
+            'smc_sign_assertions' =>        array('name' => 'SYS_SSO_SIGN_ASSERTIONS', 'type' => 'BOOL'),
+            'smc_encrypt_assertions' =>     array('name' => 'SYS_SSO_ENCRYPT_ASSERTIONS', 'type' => 'BOOL'),
+            'smc_assertion_lifetime' =>     'SYS_SSO_SAML_ASSERTION_LIFETIME',
+            'smc_allowed_clock_skew' =>     'SYS_SSO_SAML_ALLOWED_CLOCK_SKEW',
+
+
+            'key_org_id' =>                 array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
+            'key_name' =>                   'SYS_NAME',
+            'key_algorithm' =>              'SYS_SSO_KEY_ALGORITHM',
+            'key_private' =>                'SYS_SSO_KEY_PRIVATE',
+            'key_public' =>                 'SYS_SSO_KEY_PUBLIC',
+            'key_certificate' =>            'SYS_SSO_KEY_CERTIFICATE',
+            'key_expires_at' =>             array('name' => 'SYS_SSO_KEY_EXPIRES', 'type' => 'DATETIME'),
+            'key_is_active' =>              array('name' => 'SYS_SSO_KEY_ACTIVE', 'type' => 'BOOL'),
+
         );
         return array_merge($translations, self::$customCallbacks['getFieldTranslations']);
     }
@@ -670,6 +703,10 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $uuid)); break;
                 case 'user_relation_types':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_uuid' => $uuid)); break;
+                case 'saml_clients':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $uuid)); break;
+                case 'sso_keys':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/keys.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             }
         }
         if ($url != '') {
@@ -701,7 +738,7 @@ class ChangelogService {
      */
     public static function formatValue($value, $type, $entries = []) {
         global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n;
-        if ($value != '') {
+        if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping']) ) {
             $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
         }
 
@@ -855,6 +892,12 @@ class ChangelogService {
                         $htmlValue = $value;
                     }
                     break;
+                case 'SAML_field_mapping':
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_SAML_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ATTRIBUTES_ALLOTHER')]);
+                    break;
+                case 'SAML_roles_mapping':
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_SAML_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ROLES_ALLOTHER')]);
+                    break;
 
             }
             $value = $htmlValue;
@@ -866,6 +909,35 @@ class ChangelogService {
             }
         }
         return $value;
+    }
+
+
+    public static function createMappingTable(string $value, string $admidioField, string $targetField, Entity $object, array $messages = []) {
+        $mapping = json_decode($value, true);
+        // If value is not a json array, don't transform it
+        if (empty($mapping)) {
+            return $value;
+        }
+
+        // Header
+        $table = '<table border="1"><tr style="background: darkgray"><th>' . $admidioField . '</th><th>' . $targetField . "</th></tr>\n";
+        // Loop through all mappings:
+        foreach ($mapping as $samlVal => $admVal) {
+            if (array_key_exists($samlVal, $messages)) {
+                if (!empty($admVal)) {
+                    $msg = $messages[$samlVal];
+                    $table .= '<tr><td colspan="2" style="border: solid 1pt gray; background: lightgray;">' . $msg . "</td></tr>\n";
+                }
+            } else {
+                if (is_numeric($admVal)) {
+                    $object->readDataById($admVal);
+                    $admVal = $object->readableName();
+                }
+                $table .= '<tr><td>' . $admVal . '</td><td>' . $samlVal . "</td></tr>\n";
+            }
+        }
+        $table .= '</table>';
+        return $table;
     }
 
     /**
