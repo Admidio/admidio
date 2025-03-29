@@ -75,7 +75,7 @@ try {
     // add rss feed to photos
     if ($gSettingsManager->getBool('enable_rss')) {
         $page->addRssFile(
-            ADMIDIO_URL . FOLDER_MODULES . '/photos/rss_photos.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
+            ADMIDIO_URL . '/rss/photos.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
             $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_PHOTO_ALBUMS')))
         );
     }

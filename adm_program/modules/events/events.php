@@ -104,7 +104,7 @@ try {
 
         if ($gSettingsManager->getBool('enable_rss') && (int)$gSettingsManager->get('events_module_enabled') === 1) {
             $page->addRssFile(
-                ADMIDIO_URL . FOLDER_MODULES . '/events/events_rss.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
+                ADMIDIO_URL . '/rss/events.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
                 $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_EVENTS')))
             );
         }
