@@ -263,6 +263,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_key_org         FOREIGN KEY (key_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_key_usr_change  FOREIGN KEY (key_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_key_usr_create  FOREIGN KEY (key_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
-
+    <step id="1040">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/announcements.php' WHERE men_name_intern = 'announcements'</step>
     <step>stop</step>
 </update>

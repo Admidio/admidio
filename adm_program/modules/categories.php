@@ -42,13 +42,13 @@ try {
     $getCategoryUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
 
     // check rights of the type
-    if (($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
-        || ($getType === 'AWA' && !$gCurrentUser->editUsers())
-        || ($getType === 'EVT' && !$gCurrentUser->administrateEvents())
-        || ($getType === 'FOT' && !$gCurrentUser->administrateForum())
-        || ($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-        || ($getType === 'ROL' && !$gCurrentUser->manageRoles())
-        || ($getType === 'USF' && !$gCurrentUser->editUsers())) {
+    if (($getType === 'ANN' && !$gCurrentUser->isAdministratorAnnouncements())
+        || ($getType === 'AWA' && !$gCurrentUser->isAdministratorUsers())
+        || ($getType === 'EVT' && !$gCurrentUser->isAdministratorEvents())
+        || ($getType === 'FOT' && !$gCurrentUser->isAdministratorForum())
+        || ($getType === 'LNK' && !$gCurrentUser->isAdministratorWeblinks())
+        || ($getType === 'ROL' && !$gCurrentUser->isAdministratorRoles())
+        || ($getType === 'USF' && !$gCurrentUser->isAdministratorUsers())) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

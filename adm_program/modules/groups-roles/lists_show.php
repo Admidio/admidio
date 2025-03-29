@@ -43,7 +43,7 @@ try {
     unset($list);
 
     // Initialize and check the parameters
-    $editUserStatus = false;
+    $isAdministratorUserstatus = false;
     $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
     $getDateTo = admFuncVariableIsValid($_GET, 'date_to', 'date', array('defaultValue' => DATE_NOW));
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'ods', 'csv', 'html', 'print', 'pdf', 'pdfl')));
@@ -133,7 +133,7 @@ try {
             $showCountGuests = $event->getValue('dat_additional_guests');
 
             if ($getMode === 'html' && ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleID))) {
-                $editUserStatus = true;
+                $isAdministratorUserstatus = true;
             }
         }
     }
@@ -573,7 +573,7 @@ try {
         array_unshift($arrColumnNames, $gL10n->get('INS_GROUPS'));
         array_unshift($arrColumnAlign, 'left');
 
-        if ($editUserStatus) {
+        if ($isAdministratorUserstatus) {
             // add column for edit link
             $arrColumnNames[] = '&nbsp;';
         }
@@ -649,7 +649,7 @@ try {
             array_unshift($columnValues, $listRowNumber);
         }
 
-        if ($editUserStatus) {
+        if ($isAdministratorUserstatus) {
             // Get the matching event
             $sql = 'SELECT dat_uuid
                   FROM ' . TBL_EVENTS . '

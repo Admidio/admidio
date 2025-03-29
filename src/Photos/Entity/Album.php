@@ -123,7 +123,7 @@ class Album extends Entity
         while ($phoId = $childAlbumStatement->fetchColumn()) {
             if ($returnValue) {
                 $subAlbum = new Album($this->db, $phoId);
-                $returnValue = $returnValue && 
+                $returnValue = $returnValue &&
                     $subAlbum->delete();
             }
         }
@@ -221,7 +221,7 @@ class Album extends Entity
     {
         global $gCurrentUser;
 
-        return $gCurrentUser->editPhotoRight() && ($this->isVisible() || (int) $this->getValue('pho_id') === 0);
+        return $gCurrentUser->isAdministratorPhotos() && ($this->isVisible() || (int) $this->getValue('pho_id') === 0);
     }
 
     /**
@@ -238,7 +238,7 @@ class Album extends Entity
             return false;
         }
         // locked photo album could only be viewed by module administrators
-        elseif ($this->getValue('pho_locked') && !$GLOBALS['gCurrentUser']->editPhotoRight()) {
+        elseif ($this->getValue('pho_locked') && !$GLOBALS['gCurrentUser']->isAdministratorPhotos()) {
             return false;
         }
 
@@ -356,9 +356,9 @@ class Album extends Entity
     }
     /**
      * Adjust the changelog entry for this db record: Add the parent Album as a related object
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
     protected function adjustLogEntry(LogChanges $logEntry): void {

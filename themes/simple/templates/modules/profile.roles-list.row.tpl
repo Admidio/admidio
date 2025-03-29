@@ -35,7 +35,7 @@
                 </li>
                 {if $membership.showRelationsCreateEdit}
                     <li class="list-group-item" id="member_info_{$membership.memberUUID}_Content" style="display: none;">
-                        {include file="sys-template-parts/system.info-create-edit.tpl" nameUserCreated=$membership.nameUserCreated timestampUserCreated=$membership.timestampUserCreated nameLastUserEdited=$membership.nameLastUserEdited timestampLastUserEdited=$membership.timestampLastUserEdited}
+                        {include file="sys-template-parts/system.info-create-edit.tpl" userCreatedName=$membership.userCreatedName userCreatedTimestamp=$membership.userCreatedTimestamp lastUserEditedName=$membership.lastUserEditedName lastUserEditedTimestamp=$membership.lastUserEditedTimestamp}
                     </li>
                 {/if}
             </ul>

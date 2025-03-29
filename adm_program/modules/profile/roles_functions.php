@@ -232,10 +232,10 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
 
             // only show info if system setting is activated
             if ((int)$gSettingsManager->get('system_show_create_edit') > 0) {
-                $membership['nameUserCreated'] = $member->getNameOfCreatingUser();
-                $membership['timestampUserCreated'] = $member->getValue('ure_timestamp_create');
-                $membership['nameLastUserEdited'] = $member->getNameOfLastEditingUser();
-                $membership['timestampLastUserEdited'] = $member->getValue('ure_timestamp_change');
+                $membership['userCreatedName'] = $member->getNameOfCreatingUser();
+                $membership['userCreatedTimestamp'] = $member->getValue('ure_timestamp_create');
+                $membership['lastUserEditedName'] = $member->getNameOfLastEditingUser();
+                $membership['lastUserEditedTimestamp'] = $member->getValue('ure_timestamp_change');
             }
 
             ++$countShowRoles;

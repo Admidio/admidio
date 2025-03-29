@@ -397,8 +397,10 @@
   <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
   <string name="SYS_CREATE_MEMBER">Create member</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
+  <string name="SYS_CREATE_POST">Create post</string>
   <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
+  <string name="SYS_CREATE_TOPIC">Create topic</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATE_WEBLINK">Create web link</string>
   <string name="SYS_CREATED">Created</string>
@@ -536,6 +538,7 @@
   <string name="SYS_EDIT_MY_PROFILE">Edit my profile</string>
   <string name="SYS_EDIT_MY_PROFILE_PICTURE">Edit my profile picture</string>
   <string name="SYS_EDIT_PASSWORD">Edit password</string>
+  <string name="SYS_EDIT_POST">Edit post</string>
   <string name="SYS_EDIT_PROFILE">Edit profile</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Edit profile fields</string>
   <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Edit profile fields in the profile</string>
@@ -543,6 +546,8 @@
   <string name="SYS_EDIT_ROLE">Edit role</string>
   <string name="SYS_EDIT_ROOMS">Edit rooms</string>
   <string name="SYS_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
+  <string name="SYS_EDIT_TOPIC">Edit topic</string>
+  <string name="SYS_EDIT_TOPICS">Edit topics</string>
   <string name="SYS_EDIT_USER">Edit user</string>
   <string name="SYS_EDIT_USER_IN_RELATION">User profile of this relationship can be edited</string>
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>

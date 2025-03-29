@@ -50,7 +50,7 @@ try {
     $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
-    
+
     $haveID = !empty($getId) || !empty($getUuid);
 
     // named array of permission flag (true/false/"user-specific" per table)
@@ -61,9 +61,9 @@ try {
     if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
-    $accessAll = $gCurrentUser->isAdministrator() || 
+    $accessAll = $gCurrentUser->isAdministrator() ||
         (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted)));
-        
+
     // create a user object. Will fill it later if we encounter a user id
     $user = new User($gDb, $gProfileFields);
     $userUuid = null;
@@ -81,13 +81,13 @@ try {
     }
 
     // Access permissions:
-    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user: 
+    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user:
     if (!$accessAll &&
             !(!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) &&
             $isUserLog) {
         // If a user UUID is given, we need access to that particular user
-        // if no UUID is given, editUsers permissions are required
-        if (($userUuid === '' && !$gCurrentUser->editUsers())
+        // if no UUID is given, isAdministratorUsers permissions are required
+        if (($userUuid === '' && !$gCurrentUser->isAdministratorUsers())
             || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
 //                throw new Exception('SYS_NO_RIGHTS');
                 $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -100,7 +100,7 @@ try {
     //  * Userlog (tables users,user_data,members): Either "Change history of NAME" or "Change history of user data and memberships" (if no ID/UUID)
     //  * No object ID/UUIDs given: "Change history: Table description 1[, Table description 2, ...]" or "Change history"  (if no tables given)
     //  * Only one table (table column will be hidden): "Change history: OBJECTNAME (Table description)"
-    //  * 
+    //  *
     $tableTitles = array_map([ChangelogService::class, 'getTableLabel'], $getTables);
     // set headline of the script
     if ($isUserLog && $haveID) {
@@ -184,7 +184,7 @@ try {
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-history', $headline);
     $page->setContentFullWidth();
-    
+
     // Logic for hiding certain columns:
     // If we have only one table name given, hide the table column
     // If we view the user profile field changes page, hide the column, too
@@ -219,7 +219,7 @@ try {
 
 
     /* For now, simply show all column of the changelog table. As time permits, we can improve this by hiding unneccessary columns and by better naming columns depending on the table.
-     * 
+     *
      * Columns to be displayed / hidden:
      *   0. If there is only one value in the table column, hide it and display it in the title of the page.
      *   1. If there is a single ID or UUID, the record name is not displayed. It should be shown in the title of the page.

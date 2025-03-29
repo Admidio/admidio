@@ -20,7 +20,7 @@ use Admidio\Infrastructure\RssFeed;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 
-require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../adm_program/system/common.php');
 
 try {
     $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');

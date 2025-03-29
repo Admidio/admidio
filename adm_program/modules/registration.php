@@ -108,7 +108,7 @@ try {
 
         // if current user has the right to assign roles then show roles dialog
         // otherwise go to previous url (default roles are assigned automatically)
-        if ($gCurrentUser->manageRoles()) {
+        if ($gCurrentUser->isAdministratorRoles()) {
             admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('accept_registration' => true, 'user_uuid' => $getUserUUID)));
             // => EXIT
         } else {

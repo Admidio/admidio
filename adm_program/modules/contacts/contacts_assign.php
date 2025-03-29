@@ -19,7 +19,7 @@ try {
     $postFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string');
 
     // only legitimate users are allowed to call the user management
-    if (!$gCurrentUser->editUsers()) {
+    if (!$gCurrentUser->isAdministratorUsers()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

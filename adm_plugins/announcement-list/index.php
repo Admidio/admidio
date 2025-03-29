@@ -111,8 +111,8 @@ try {
                         $plgNewDescription = substr($plgNewDescription, 0, strrpos($plgNewDescription, ' ')) . '
                             <a class="admidio-icon-link" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MORE') . '"
                                 href="' . SecurityUtils::encodeUrl(
-                                    ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
-                                    array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'))
+                                    ADMIDIO_URL . FOLDER_MODULES . '/announcements.php',
+                                    array('announcement_uuid' => $plgAnnouncement->getValue('ann_uuid'))
                                 ) . '">»</a>';
                     }
 

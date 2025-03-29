@@ -16,7 +16,7 @@ try {
     require(__DIR__ . '/../../system/login_valid.php');
 
     // only legitimate users are allowed to call the user management
-    if (!$gCurrentUser->editUsers()) {
+    if (!$gCurrentUser->isAdministratorUsers()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

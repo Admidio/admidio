@@ -13,7 +13,7 @@
                 </li>
             {/foreach}
             <li class="list-group-item">
-                <a href="{$urlAdmidio}/adm_program/modules/announcements/announcements.php">{$l10n->get('PLG_EVENT_LIST_ALL_EVENTS')}</a>
+                <a href="{$urlAdmidio}/adm_program/modules/events/events.php">{$l10n->get('PLG_EVENT_LIST_ALL_EVENTS')}</a>
             </li>
         </ul>
     {else}

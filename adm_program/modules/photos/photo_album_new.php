@@ -163,10 +163,10 @@ try {
         array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
     );
 
-    $page->assignSmartyVariable('nameUserCreated', $photoAlbum->getNameOfCreatingUser());
-    $page->assignSmartyVariable('timestampUserCreated', $photoAlbum->getValue('ann_timestamp_create'));
-    $page->assignSmartyVariable('nameLastUserEdited', $photoAlbum->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('timestampLastUserEdited', $photoAlbum->getValue('ann_timestamp_change'));
+    $page->assignSmartyVariable('userCreatedName', $photoAlbum->getNameOfCreatingUser());
+    $page->assignSmartyVariable('userCreatedTimestamp', $photoAlbum->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('lastUserEditedName', $photoAlbum->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $photoAlbum->getValue('ann_timestamp_change'));
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
 

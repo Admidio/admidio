@@ -439,7 +439,7 @@ class DocumentsService
         global $gCurrentSession, $gCurrentUser;
 
         // only users with documents & files administration rights should set new roles rights
-        if (!$gCurrentUser->administrateDocumentsFiles()) {
+        if (!$gCurrentUser->isAdministratorDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 

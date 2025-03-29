@@ -60,9 +60,9 @@ class ForumPostPresenter extends PagePresenter
 
         $this->setHtmlID('adm_forum_post_edit');
         if ($this->postUUID !== '') {
-            $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_POST'))));
+            $this->setHeadline($gL10n->get('SYS_EDIT_POST'));
         } else {
-            $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_POST'))));
+            $this->setHeadline($gL10n->get('SYS_CREATE_POST'));
         }
 
         // show form
@@ -80,7 +80,7 @@ class ForumPostPresenter extends PagePresenter
         );
         global $gCurrentUser;
         ChangelogService::displayHistoryButton($this, 'forum', 'forum_posts',
-                $this->postUUID !== '' && $gCurrentUser->administrateForum(), ['uuid' => $this->postUUID]);
+                $this->postUUID !== '' && $gCurrentUser->isAdministratorForum(), ['uuid' => $this->postUUID]);
         $form->addEditor(
             'fop_text',
             $gL10n->get('SYS_TEXT'),
@@ -93,10 +93,10 @@ class ForumPostPresenter extends PagePresenter
             array('icon' => 'bi-check-lg')
         );
 
-        $this->smarty->assign('nameUserCreated', $post->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $post->getValue('fot_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $post->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $post->getValue('fop_timestamp_change'));
+        $this->smarty->assign('userCreatedName', $post->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $post->getValue('fot_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $post->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $post->getValue('fop_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }

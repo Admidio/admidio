@@ -48,7 +48,7 @@ try {
 
     if ($getMode !== 'card') {
         // only users with the special right are allowed to manage roles
-        if (!$gCurrentUser->manageRoles()) {
+        if (!$gCurrentUser->isAdministratorRoles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
     }

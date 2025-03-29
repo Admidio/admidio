@@ -288,20 +288,20 @@ try {
             $arrContent[] = '<input type="checkbox" id="member-' . $user['usr_uuid'] . '" name="member-' . $user['usr_uuid'] . '" data-user="' . $user['usr_uuid'] . '" data-type="member" />';
         }
 
-        if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->isAdministratorUsers())) {
             $arrContent[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user['usr_uuid'])) . '">' . $user['last_name'] . '</a>';
         }
 
-        if ($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->isAdministratorUsers())) {
             $arrContent[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user['usr_uuid'])) . '">' . $user['first_name'] . '</a>';
         }
 
         // create string with user address
-        if ((string)$user['country'] !== '' && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
+        if ((string)$user['country'] !== '' && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->isAdministratorUsers())) {
             $addressText .= $gL10n->getCountryName($user['country']);
         }
-        if (((string)$user['zip_code'] !== '' && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers()))
-            || ((string)$user['city'] !== '' && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers()))) {
+        if (((string)$user['zip_code'] !== '' && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->isAdministratorUsers()))
+            || ((string)$user['city'] !== '' && $gProfileFields->isVisible('CITY', $gCurrentUser->isAdministratorUsers()))) {
             // some countries have the order postcode city others have city postcode
             if ((int)$gProfileFields->getProperty('CITY', 'usf_sequence') > (int)$gProfileFields->getProperty('POSTCODE', 'usf_sequence')) {
                 $addressText .= ' - ' . $user['zip_code'] . ' ' . $user['city'];
@@ -309,14 +309,14 @@ try {
                 $addressText .= ' - ' . $user['city'] . ' ' . $user['zip_code'];
             }
         }
-        if ((string)$user['street'] !== '' && $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
+        if ((string)$user['street'] !== '' && $gProfileFields->isVisible('STREET', $gCurrentUser->isAdministratorUsers())) {
             $addressText .= ' - ' . $user['street'];
         }
 
-        if ($gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())
-            || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
-            || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
-            || $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible('COUNTRY', $gCurrentUser->isAdministratorUsers())
+            || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->isAdministratorUsers())
+            || $gProfileFields->isVisible('CITY', $gCurrentUser->isAdministratorUsers())
+            || $gProfileFields->isVisible('STREET', $gCurrentUser->isAdministratorUsers())) {
             if ($addressText !== '') {
                 $arrContent[] = '<i class="bi bi-geo-fill" data-bs-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
             } else {
@@ -324,7 +324,7 @@ try {
             }
         }
 
-        if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->isAdministratorUsers())) {
             // show birthday if it's known
             if ((string)$user['birthday'] !== '') {
                 $birthdayDate = DateTime::createFromFormat('Y-m-d', $user['birthday']);

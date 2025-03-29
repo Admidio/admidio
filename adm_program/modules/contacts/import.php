@@ -18,7 +18,7 @@ try {
     require(__DIR__ . '/../../system/login_valid.php');
 
     // only authorized users can import users
-    if (!$gCurrentUser->editUsers()) {
+    if (!$gCurrentUser->isAdministratorUsers()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
@@ -154,7 +154,7 @@ try {
     // first read all relevant roles from database and create an array with them
     $condition = '';
 
-    if (!$gCurrentUser->manageRoles()) {
+    if (!$gCurrentUser->isAdministratorRoles()) {
         // keine Rollen mit Rollenzuordnungsrecht anzeigen
         $condition .= ' AND rol_assign_roles = false ';
     }

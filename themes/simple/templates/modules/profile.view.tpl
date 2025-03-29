@@ -232,7 +232,7 @@
                     </div>
                     {if $showRelationsCreateEdit}
                         <div id="relation_info_{$userRelation.uuid}_Content" style="display: none;">
-                            {include file="sys-template-parts/system.info-create-edit.tpl" nameUserCreated=$userRelation.nameUserCreated timestampUserCreated=$userRelation.timestampUserCreated nameLastUserEdited=$userRelation.nameLastUserEdited timestampLastUserEdited=$userRelation.timestampLastUserEdited}
+                            {include file="sys-template-parts/system.info-create-edit.tpl" userCreatedName=$userRelation.userCreatedName userCreatedTimestamp=$userRelation.userCreatedTimestamp lastUserEditedName=$userRelation.lastUserEditedName lastUserEditedTimestamp=$userRelation.lastUserEditedTimestamp}
                         </div>
                     {/if}
                 </li>
