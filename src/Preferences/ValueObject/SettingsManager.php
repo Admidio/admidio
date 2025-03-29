@@ -289,10 +289,10 @@ class SettingsManager
     /**
      * Loads a specific setting from the database
      * @param string $name The setting name from the wanted value
-     * @return string Returns the setting value
+     * @return string|null Returns the setting value
      * @throws \UnexpectedValueException|Exception Throws if there is no setting to the given name found
      */
-    private function load(string $name): string
+    private function load(string $name): string|null
     {
         $sql = 'SELECT prf_value
                   FROM '.TBL_PREFERENCES.'
@@ -373,6 +373,12 @@ class SettingsManager
         if (!self::isValidName($name)) {
             throw new Exception('Settings name "' . $name . '" is an invalid string!');
         }
+
+        // if array is given, convert to string
+        if (is_array($value)) {
+            $value = implode(',', $value);
+        }
+        
         if (!self::isValidValue($value)) {
             throw new Exception('Settings value "' . $value . '" is an invalid value!');
         }
