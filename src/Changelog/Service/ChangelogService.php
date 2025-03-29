@@ -31,6 +31,7 @@ use Admidio\Infrastructure\Entity\Text;
 use Admidio\Roles\Service\RolesService;
 use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\SAMLClient;
+use Admidio\SSO\Entity\OIDCClient;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -72,7 +73,7 @@ class ChangelogService {
     public static array $noLogTables = [
         'auto_login', 'components', 'id', 'log_changes',
         'messages', 'messages_attachments', 'messages_content', 'messages_recipients',
-        'registrations',
+        'oidc_access_tokens', 'oidc_refresh_tokens', 'oidc_auth_codes', 'registrations',
         'sessions'];
 
 
@@ -195,6 +196,7 @@ class ChangelogService {
             'preferences' => 'SYS_SETTINGS',
             'texts' => 'SYS_SETTINGS',
             'saml_clients' => 'SYS_SSO_CLIENTS_SAML',
+            'oidc_clients' => 'SYS_SSO_CLIENTS_OIDC',
             'sso_keys' => 'SYS_SSO_KEYS',
             'others' => 'SYS_ALL_OTHERS',
         );
@@ -302,6 +304,8 @@ class ChangelogService {
                 return new Topic($gDb);
             case 'saml_clients':
                 return new SAMLClient($gDb);
+            case 'oidc_clients':
+                return new OIDCClient($gDb);
             case 'sso_keys':
                 return new Key($gDb);
             default:
@@ -589,6 +593,17 @@ class ChangelogService {
             'smc_assertion_lifetime' =>     'SYS_SSO_SAML_ASSERTION_LIFETIME',
             'smc_allowed_clock_skew' =>     'SYS_SSO_SAML_ALLOWED_CLOCK_SKEW',
 
+            'ocl_client_id' =>              'SYS_SSO_CLIENT_ID',
+            'ocl_client_name' =>            'SYS_SSO_CLIENT_NAME',
+            'ocl_client_secret' =>          'SYS_SSO_CLIENT_SECRET',
+            'ocl_redirect_uri' =>           'SYS_SSO_REDIRECT_URI',
+            'ocl_userid_field' =>           'SYS_SSO_USERID_FIELD',
+            'ocl_field_mapping' =>          array('name' => 'SYS_SSO_SAML_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
+            'ocl_role_mapping' =>           array('name' => 'SYS_SSO_SAML_ROLES', 'type' => 'SAML_roles_mapping'),
+            'ocl_require_pkce' =>           array('name' => 'SYS_SSO_OIDC_REQUIRE_PKCE', 'type' => 'BOOL'),
+            'ocl_allow_refresh_token' =>    array('name' => 'SYS_SSO_OIDC_ALLOW_REFRESH_TOKEN', 'type' => 'BOOL'),
+            // 'ocl_grant_types' =>            'TODO',
+            // 'ocl_scope' =>                  'TODO',        
 
             'key_org_id' =>                 array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'key_name' =>                   'SYS_NAME',
@@ -709,6 +724,8 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_uuid' => $uuid)); break;
                 case 'saml_clients':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $uuid)); break;
+                case 'oidc_clients':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $uuid)); break;
                 case 'sso_keys':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/keys.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             }

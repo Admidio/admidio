@@ -2,15 +2,12 @@
 
 namespace Admidio\SSO\Entity;
 
-use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use League\OAuth2\Server\Entities\UserEntityInterface;
-use League\OAuth2\Server\Entities\Traits\EntityTrait;
-use League\OAuth2\Server\Entities\Traits\SerializableTrait;
-use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 
 use Admidio\Infrastructure\Database;
-use Admidio\Users\Entity\User; // Use Admidio's User class
+use Admidio\Users\Entity\User;
 use Admidio\Roles\Entity\Role;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 
 class UserEntity extends User implements UserEntityInterface 
 {

@@ -69,6 +69,31 @@ try {
             echo json_encode(array('status' => 'success'));
             break;
 
+        case 'edit_oidc':
+            // create html page object
+            $page = new SSOClientPresenter($getClientUUID);
+            $page->createOIDCEditForm();
+            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
+            $page->show();
+            break;
+
+        case 'save_oidc':
+            $oidcService = new OIDCService($gDb, $gCurrentUser);
+            $oidcService->save($getClientUUID);
+
+            $gNavigation->deleteLastUrl();
+            echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+            break;
+
+        case 'delete_oidc':
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $oidcService = new OIDCService($gDb, $gCurrentUser);
+            $client = $oidcService->getClientFromID($getClientUUID);
+            $client->delete();
+            echo json_encode(array('status' => 'success'));
+            break;
     }
 } catch (Throwable $e) {
     if (in_array($getMode, array('save', 'delete', 'save_saml', 'delete_saml', 'save_oidc', 'delete_oidc'))) {

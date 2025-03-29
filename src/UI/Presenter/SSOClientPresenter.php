@@ -4,7 +4,9 @@ namespace Admidio\UI\Presenter;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\SSO\Entity\SAMLClient;
+use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Service\SAMLService;
+use Admidio\SSO\Service\OIDCService;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Roles\Entity\RolesRights;
@@ -486,6 +488,203 @@ class SSOClientPresenter extends PagePresenter
 
 
     /**
+     * Create the data for the edit form of an OIDC client.
+     * @throws Exception
+     */
+    public function createOIDCEditForm(): void
+    {
+        global $gDb, $gL10n, $gCurrentSession, $gProfileFields;
+
+        // create OIDC client object
+        $client = new OIDCClient($gDb);
+        if ($this->objectUUID !== '') {
+            $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_SSO_CLIENT_OIDC'))));
+        } else {
+            $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_CLIENT_OIDC'))));
+        }
+        $this->setHtmlID('admidio-oidc-client-edit');
+        
+        $allRolesSet = $this->getAvailableRoles();
+        if ($this->objectUUID !== '') {
+            $client->readDataByUUID($this->objectUUID);
+        }
+
+        ChangelogService::displayHistoryButton($this, 'oidc-client', 'oidc_clients', !empty($this->objectUUID), array('uuid' => $this->objectUUID));
+
+        // show form
+        $form = new FormPresenter(
+            'adm_oidc_client_edit_form',
+            'modules/oidc_client.edit.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_oidc')),
+            $this
+        );
+
+        $form->addInput(
+            'ocl_client_name',
+            $gL10n->get('SYS_SSO_CLIENT_NAME'),
+            $client->getValue('ocl_client_name'),
+            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_CLIENT_NAME_DESC'))
+        );
+        $form->addInput(
+            'ocl_client_id',
+            $gL10n->get('SYS_SSO_CLIENT_ID'),
+            $client->getValue('ocl_client_id'),
+            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_CLIENT_ID_DESC'))
+        );
+        // TODO: Hide client secret from user -> Only allow changing, but not copying!
+        $form->addInput(
+            'ocl_client_secret',
+            $gL10n->get('SYS_SSO_CLIENT_SECRET'),
+            $client->getValue('ocl_client_secret'),
+            array('maxLength' => 250, 'helpTextId' => $gL10n->get('SYS_SSO_CLIENT_SECRET_DESC'))
+        );
+        $form->addInput(
+            'ocl_redirect_uri',
+            $gL10n->get('SYS_SSO_REDIRECT_URI'),
+            $client->getValue('ocl_redirect_uri'),
+            array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_REDIRECT_URI_DESC'))
+        );
+        // TODO: Grant Types, Scopes
+
+
+
+        // TAB: Signatures and Encryption
+
+        $form->addCheckbox(
+            'ocl_require_pkce',
+            $gL10n->get('SYS_SSO_OIDC_REQUIRE_PKCE'),
+            $client->getValue('ocl_require_pkce'),
+            array('helpTextId' => $gL10n->get('SYS_SSO_OIDC_REQUIRE_PKCE_DESC'))
+        );
+        $form->addCheckbox(
+            'ocl_allow_refresh_token',
+            $gL10n->get('SYS_SSO_OIDC_ALLOW_REFRESH_TOKEN'),
+            $client->getValue('ocl_allow_refresh_token'),
+            array('helpTextId' => $gL10n->get('SYS_SSO_OIDC_ALLOW_REFRESH_TOKEN_DESC'))
+        );
+        
+
+
+        $useridFields = [
+            ['usr_id', $gL10n->get('SYS_SSO_USERID_ID') . ' - usr_id', $gL10n->get('SYS_SSO_USERID_FIELDS')],
+            ['usr_uuid',  $gL10n->get('SYS_SSO_USERID_UUID') . ' - usr_uuid', $gL10n->get('SYS_SSO_USERID_FIELDS')],
+            ['usr_login_name', $gL10n->get('SYS_SSO_USERID_LOGIN') . ' - usr_login_name', $gL10n->get('SYS_SSO_USERID_FIELDS')],
+        ];
+        $form->addSelectBox(
+            'ocl_userid_field',
+            $gL10n->get('SYS_SSO_USERID_FIELD'),
+            $useridFields,
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'defaultValue' => $client->getValue('ocl_userid_field'),
+                'multiselect' => false,
+                'helpTextId' => 'SYS_SSO_USERID_FIELD_DESC'
+                )
+            );
+
+
+        $userFields = $useridFields;
+        $userFields[] = ['fullname', $gL10n->get('SYS_NAME') . ' - fullname', $gL10n->get('SYS_BASIC_DATA')];
+        foreach ($gProfileFields->getProfileFields() as $field) {
+            if ($field->getValue('usf_hidden') == 0) {
+                $fieldId = $field->getValue('usf_name_intern');
+                $fieldValue = addslashes($field->getValue('usf_name')) . ' - ' . strtolower($fieldId);
+                $fieldCat = $gL10n->translateIfTranslationStrId($field->getValue('cat_name'));
+                $userFields[] =  [$fieldId, $fieldValue, $fieldCat];
+            }
+        }
+        $userFields[] = ['roles', $gL10n->get('SYS_ROLES') . ' - roles', $gL10n->get('SYS_ROLES')];
+
+        $js = $this->createSSOEditFormJS( $userFields, $client->getFieldMapping(), "oidc_fields");
+        $this->addJavascript($js['jsInit'], false);
+        $this->addJavascript($js['js'], true);
+        $this->addJavascript('$("#oidc_fields_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
+
+        // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
+        $form->addCustomContent("Admidio_oidc_fields", '', '');
+        $form->addCustomContent("sso_oidc_fields", '', '');
+
+        $form->addCheckbox(
+            'oidc_fields_all_other',
+            $gL10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER'),
+            $client->getFieldMappingCatchall(),
+            array('helpTextId' => '')
+        );
+
+        
+        // $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "oidc_roles");
+        // $this->addJavascript($js['jsInit'], false);
+        // $this->addJavascript($js['js'], true);
+        // $this->addJavascript('$("#oidc_roles_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
+
+        // // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
+        // $form->addCustomContent("Admidio_oidc_roles", '', '');
+        // $form->addCustomContent("oidc_oidc_roles", '', '');
+
+        // $form->addCheckbox(
+        //     'oidc_roles_all_other',
+        //     $gL10n->get('SYS_SSO_OIDC_ROLES_ALLOTHER'),
+        //     $client->getRoleMappingCatchall(),
+        //     array('helpTextId' => '')
+        // );
+
+        // Add JS code for the move UP/DOWN "buttons":
+        $this->addJavascript('
+                $(document).on("click", ".admidio-move-row-up", function(){
+                    let row = $(this).closest("tr");
+                    let prevRow = row.prev("tr");
+                    if (prevRow.length) {
+                        row.insertBefore(prevRow);
+                    }
+                });
+                $(document).on("click", ".admidio-move-row-down", function(){
+                    let row = $(this).closest("tr");
+                    let nextRow = row.next();
+                    if (nextRow.length) {
+                        row.insertAfter(nextRow);
+                    }
+                });
+                $(document).on("click", ".admidio-delete", function(){
+                    let row = $(this).closest("tr").fadeOut(300, function() {
+                        $(this).remove();
+                    });
+                });
+                ', true);
+
+        // Add JS code to set the oidc field input to the Admidio field name if no name was set yet
+
+
+        $form->addSelectBox(
+            'oidc_roles_access',
+            $gL10n->get('SYS_SSO_ROLES'),
+            $allRolesSet,
+            array(
+                'property' => FormPresenter::FIELD_DEFAULT,
+                'defaultValue' => $client->getAccessRolesIds(),
+                'multiselect' => true,
+                'helpTextId' => 'SYS_SSO_ROLES_DESC'
+            )
+        );
+    
+        
+        $form->addSubmitButton(
+            'adm_button_save', 
+            $gL10n->get('SYS_SAVE'), 
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3'));
+
+
+
+        $this->smarty->assign('nameUserCreated', $client->getNameOfCreatingUser());
+        $this->smarty->assign('timestampUserCreated', $client->getValue('ocl_timestamp_create'));
+        $this->smarty->assign('nameLastUserEdited', $client->getNameOfLastEditingUser());
+        $this->smarty->assign('timestampLastUserEdited', $client->getValue('ocl_timestamp_change'));
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
+    }
+
+
+
+    /**
      * Create the list of SAML and OIDC clients to show to the user.
      * @throws Exception|\Smarty\Exception
      */
@@ -514,13 +713,13 @@ class SSOClientPresenter extends PagePresenter
         );
 
         // link to add new client (SAML 2.0 or OIDC is selectable)
-/*        $this->addPageFunctionsMenuItem(
+        $this->addPageFunctionsMenuItem(
             'menu_item_sso_new_client_oidc',
             $gL10n->get('SYS_SSO_CLIENT_ADD_OIDC'),
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_oidc')),
             'bi-plus-circle-fill'
         );
-*/
+
         ChangelogService::displayHistoryButton($this, 'sso-clients', array('saml_clients', 'oauth_clients'));
 
 
@@ -570,6 +769,63 @@ class SSOClientPresenter extends PagePresenter
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                     data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($client->readableName())) . '"
                     data-href="callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
+                </a>';
+            $templateClient[] = $actions;
+
+            $table->addRowByArray($templateClient, 'adm_saml_client_' . $clientUUID, array('nobr' => 'true'));
+        }
+    
+        // add table to the form
+        $this->addHtml(html: $table->show());
+
+        
+
+
+        /* ****************************************************/  
+        // OIDC clients
+        /* ****************************************************/
+        $this->addHtml('<h3 class="admidio-content-subheader">' . $gL10n->get('SYS_SSO_CLIENTS_OIDC') . '</h3>');
+    
+        $table = new \HtmlTable('adm_oidc_clients_table', $this, true, false);
+    
+        $table->addRowHeadingByArray(array(
+            $gL10n->get('SYS_SSO_CLIENT_NAME'),
+            $gL10n->get('SYS_SSO_CLIENT_ID'),
+            $gL10n->get('SYS_SSO_REDIRECT_URI'),
+            $gL10n->get('SYS_SSO_ROLES'),
+            ''
+        ));
+    
+        $table->setMessageIfNoRowsFound('SYS_SSO_NO_OIDC_CLIENTS_FOUND');
+    
+        $table->disableDatatablesColumnsSort(array(3, 6));
+        $table->setDatatablesColumnsNotHideResponsive(array(6));
+        // special settings for the table
+    
+    
+        $OIDCService = new OIDCService($gDb, $gCurrentUser);
+        $templateClientNodes = array();
+        foreach ($OIDCService->getUUIDs() as $clientUUID) {
+            $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $clientUUID));
+            $client = $OIDCService->createClientObject($clientUUID);
+            $client->readDataByUuid($clientUUID);
+            $templateClient = array();
+            $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('ocl_client_name') . '</a>';
+            $templateClient[] = $client->getValue('ocl_client_id');
+            $templateClient[] = $client->getValue('ocl_redirect_uri');
+            $templateClient[] = implode(', ', $client->getAccessRolesNames());
+            //$templateClient[] = $client->getValue('create_name');
+
+            $actions = '';
+            // add link to edit SAML client
+            $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
+                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT') . '"></i></a>';
+            
+            // add link to delete SAML client
+            $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                    data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($client->readableName())) . '"
+                    data-href="callUrlHideElement(\'adm_oicd_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
                 </a>';
             $templateClient[] = $actions;

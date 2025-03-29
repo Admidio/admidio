@@ -1372,6 +1372,15 @@
   <string name="SYS_SSO_CLIENT_NAME_DESC">The human-readable name of the client. This is a purely descriptive attribute and will not be used to identify clients.</string>
   <string name="SYS_SSO_CLIENT_ID">Client ID</string>
   <string name="SYS_SSO_CLIENT_ID_DESC">The unique identifier of the client, typically provided by the client. Typically, this is either a unique URL or a reandomly generated string provided by the client. It is important that the value here matches exactly the value used in the client's configuration, otherwise the client will not work.</string>
+  <string name="SYS_SSO_CLIENT_SECRET">Client Secret</string>
+  <string name="SYS_SSO_CLIENT_SECRET_DESC">The (secret) passphrase to authenticate the client as legitimate. This is typically a random string that is exchanged once and never changed (or visible).</string>
+  <string name="SYS_SSO_REDIRECT_URI">Redirect URI</string>
+  <string name="SYS_SSO_REDIRECT_URI_DESC">The redirect URI, where the browser is redirected after successful login.</string>
+  <string name="SYS_SSO_OIDC_REQUIRE_PKCE">Require PKCE</string>
+  <string name="SYS_SSO_OIDC_REQUIRE_PKCE_DESC">PKCE (Proof key for code exchange) is a security measure to prevent certain types of attacks. It ensures that the application that initiates the login process is also the same application that finishes it. PKCE is supported by most (but not all) OIDC clients.</string>
+  <string name="SYS_SSO_OIDC_ALLOW_REFRESH_TOKEN">Allow refresh tokens</string>
+  <string name="SYS_SSO_OIDC_ALLOW_REFRESH_TOKEN_DESC">Refresh tokens are long-lived password substitutes to allow re-login without having to authenticate again (i.e. without password entry or manual intervention).</string>
+
   <string name="SYS_SSO_EDIT_SAML_CLIENT">Edit SAML Client (Service Provider)</string>
   <string name="SYS_SSO_EDIT_OIDC_CLIENT">Edit OIDC Client (Service Provider)</string>
   <string name="SYS_SSO_ADD_SAML_CLIENT">Add SAML Client (Service Provider)</string>

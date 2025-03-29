@@ -2,18 +2,21 @@
 
 namespace Admidio\SSO\Entity;
 
-
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
-use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
-use League\OAuth2\Server\Entities\Traits\EntityTrait;
-use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 
-class RefreshTokenEntity implements RefreshTokenEntityInterface
+use Admidio\Infrastructure\Database;
+
+
+class RefreshTokenEntity extends TokenEntity implements RefreshTokenEntityInterface
 {
-    use EntityTrait, TokenEntityTrait, AccessTokenTrait;
+    // use RefreshTokenTrait;
     
     protected AccessTokenEntity $accessToken; 
+
+    public function __construct(Database $database, string $tokenId = '') {
+        parent::__construct($database, TBL_OIDC_REFRESH_TOKENS, 'ort', $tokenId);
+    }
 
     /**
      * Get the access token that is linked to this refresh token.

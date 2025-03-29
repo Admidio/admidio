@@ -2,33 +2,26 @@
 namespace Admidio\SSO\Entity;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\Traits\EntityTrait;
-use League\OAuth2\Server\Entities\Traits\ClientTrait;
-
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Entity\Entity;
 
-
-class ClientEntity extends Entity implements ClientEntityInterface {
-
-    public function __construct(Database $database, string $client_id = '') {
-        parent::__construct($database, TBL_OIDC_CLIENTS, 'ocl');
-        if (!empty($client_id)) {
-            $this->readDataByColumns([$this->columnPrefix . '_client_id' => $client_id]);
-        }
+class OIDCClient extends SSOClient implements ClientEntityInterface
+{
+    public function __construct(Database $database, $client_id = null) {
+        parent::__construct($database, TBL_OIDC_CLIENTS, 'ocl', $client_id);
+        $this->ssoType = 'oidc';
     }
+
     public function getIdentifier(): string {
-        return $this->getValue('ocl_client_id')??'';
+        return $this->getValue($this->columnPrefix . '_client_id')??'';
     }
 
     public function getName(): string {
-        return $this->getValue('ocl_client_name')??'';
+        return $this->getValue($this->columnPrefix . '_client_name')??'';
     }
 
     public function getRedirectUri(): string
     {
-        return $this->getValue('ocl_redirect_uri')??'';
+        return $this->getValue($this->columnPrefix . '_redirect_uri')??'';
     }
 
     public function isConfidential(): bool
