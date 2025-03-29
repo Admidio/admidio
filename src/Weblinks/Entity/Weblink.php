@@ -77,13 +77,15 @@ class Weblink extends Entity
      */
     public function isEditable(): bool
     {
-        global $gCurrentOrganization, $gCurrentUser;
+        global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
 
         if ($gCurrentUser->isAdministratorWeblinks()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)) {
+            || (in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)
+                && $gCurrentUser->getValue('usr_id') === $this->getValue('lnk_usr_id_create'))
+        ) {
             // if category belongs to current organization than weblinks are editable
             if ($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
+            && (int) $this->getValue('cat_org_id') === $gCurrentOrgId) {
                 return true;
             }
 

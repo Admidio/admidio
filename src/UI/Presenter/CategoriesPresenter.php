@@ -277,7 +277,8 @@ class CategoriesPresenter extends PagePresenter
                     array(
                         'defaultValue' => $roleEditSet,
                         'multiselect' => true,
-                        'placeholder' => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
+                        'placeholder' => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET'),
+                        'helpTextId' => 'SYS_CATEGORIES_EDIT_DESC'
                     )
                 );
             }
