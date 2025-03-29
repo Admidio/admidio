@@ -2,6 +2,7 @@
 
 namespace Admidio\Announcements\Service;
 
+use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\RssFeed;
@@ -47,7 +48,7 @@ class AnnouncementsService
      */
     public function count(): int
     {
-        global $gCurrentUser, $gDb;
+        global $gCurrentUser;
 
         $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
 
@@ -57,9 +58,31 @@ class AnnouncementsService
                     ON cat_id = ann_cat_id
                  WHERE cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ') ';
 
-        $pdoStatement = $gDb->queryPrepared($sql, $visibleCategoryIDs);
+        $pdoStatement = $this->db->queryPrepared($sql, $visibleCategoryIDs);
 
         return (int)$pdoStatement->fetchColumn();
+    }
+
+    /**
+     * Delete an announcement from the database.
+     * @param string $announcementUUID UUID of the announcement that should be deleted.
+     * @throws Exception
+     */
+    public function delete(string $announcementUUID): void
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+        $announcement = new Announcement($this->db);
+        $announcement->readDataByUuid($announcementUUID);
+
+        // check if the user has the right to edit this announcement
+        if (!$announcement->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        // delete current announcements, right checks were done before
+        $announcement->delete();
     }
 
     /**
@@ -74,7 +97,7 @@ class AnnouncementsService
      */
     public function findAll(int $offset = 0, int $limit = 0): array
     {
-        global $gDb, $gProfileFields, $gCurrentUser;
+        global $gProfileFields, $gCurrentUser;
 
         $sqlConditions = '';
         $sqlLimitOffset = '';
@@ -131,7 +154,7 @@ class AnnouncementsService
             (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id')
         ), $visibleCategoryIDs, $sqlQueryParameters);
 
-        return $gDb->getArrayFromSql($sql, $queryParameters);
+        return $this->db->getArrayFromSql($sql, $queryParameters);
     }
 
     /**
@@ -143,7 +166,7 @@ class AnnouncementsService
      */
     public function rssFeed(string $organizationShortName): void
     {
-        global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gDb, $gL10n, $gCurrentOrgId;
+        global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gL10n, $gCurrentOrgId;
 
         // Check if RSS is active...
         if (!$gSettingsManager->getBool('enable_rss')) {
@@ -151,7 +174,7 @@ class AnnouncementsService
         }
 
         if ($organizationShortName !== '') {
-            $organization = new Organization($gDb, $organizationShortName);
+            $organization = new Organization($this->db, $organizationShortName);
             $organizationName = $organization->getValue('org_longname');
             $gCurrentUser->setOrganization($organization->getValue('org_id'));
         } else {
@@ -185,5 +208,39 @@ class AnnouncementsService
 
         $gCurrentUser->setOrganization($gCurrentOrgId);
         $rss->getRssFeed();
+    }
+
+    /**
+     * Save data from the category form into the database.
+     * @param string $announcementUUID UUID of the announcement that should be saved.
+     * @throws Exception
+     */
+    public function save(string $announcementUUID): void
+    {
+        global $gCurrentSession;
+
+        $announcement = new Announcement($this->db);
+        $announcement->readDataByUuid($announcementUUID);
+
+        // check if the user has the right to edit this announcement
+        if (!$announcement->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        // check form field input and sanitized it from malicious content
+        $announcementEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+        $formValues = $announcementEditForm->validate($_POST);
+
+        // write form values in announcement object
+        foreach ($formValues as $key => $value) {
+            if (str_starts_with($key, 'ann_')) {
+                $announcement->setValue($key, $value);
+            }
+        }
+
+        if ($announcement->save()) {
+            // Notification email for new or changed entries to all members of the notification role
+            $announcement->sendNotification();
+        }
     }
 }

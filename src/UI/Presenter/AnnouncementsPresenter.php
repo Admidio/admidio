@@ -89,7 +89,7 @@ class AnnouncementsPresenter extends PagePresenter
             $this->addPageFunctionsMenuItem(
                 'menu_item_announcement_add',
                 $gL10n->get('SYS_CREATE_ENTRY'),
-                ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_new.php',
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'edit')),
                 'bi-plus-circle-fill'
             );
         }
@@ -165,6 +165,87 @@ class AnnouncementsPresenter extends PagePresenter
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    /**
+     * Create the data for the edit form of an announcement.
+     * @param string $announcementUUID UUID of the announcement that should be edited.
+     * @param bool $copy Flag if the announcement should be copied.
+     * @return void
+     * @throws Exception
+     */
+    public function createEditForm(string $announcementUUID, bool $copy): void
+    {
+        global $gL10n, $gCurrentUser, $gDb, $gCurrentSession;
+
+        $this->setHtmlID('adm_announcements_edit');
+
+        if ($copy) {
+            $this->setHeadline($gL10n->get('SYS_COPY_ENTRY'));
+        } elseif ($announcementUUID !== '') {
+            $this->setHeadline($gL10n->get('SYS_EDIT_ENTRY'));
+        } else {
+            $this->setHeadline($gL10n->get('SYS_CREATE_ENTRY'));
+        }
+
+        // Create announcements object
+        $announcement = new Announcement($gDb);
+
+        if ($announcementUUID !== '') {
+            $announcement->readDataByUuid($announcementUUID);
+
+            if ($copy === true) {
+                $announcementUUID = '';
+            }
+
+            // check if the current user could edit this announcement
+            if (!$announcement->isEditable()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+        } else {
+            // check if the user has the right to edit at least one category
+            if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+        }
+
+        ChangelogService::displayHistoryButton($this, 'announcements', 'announcements', !empty($getAnnUuid), array('uuid' => $announcementUUID));
+
+        // show form
+        $form = new FormPresenter(
+            'adm_announcements_edit_form',
+            'modules/announcements.edit.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'edit', 'announcement_uuid' => $announcementUUID)),
+            $this
+        );
+        $form->addInput(
+            'ann_headline',
+            $gL10n->get('SYS_TITLE'),
+            $announcement->getValue('ann_headline'),
+            array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
+        );
+        $form->addSelectBoxForCategories(
+            'ann_cat_id',
+            $gL10n->get('SYS_CATEGORY'),
+            $gDb,
+            'ANN',
+            FormPresenter::SELECT_BOX_MODUS_EDIT,
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('cat_uuid'))
+        );
+        $form->addEditor(
+            'ann_description',
+            $gL10n->get('SYS_TEXT'),
+            $announcement->getValue('ann_description'),
+            array('property' => FormPresenter::FIELD_REQUIRED)
+        );
+        $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
+
+        $this->assignSmartyVariable('userCreatedName', $announcement->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $announcement->getValue('ann_timestamp_create'));
+        $this->assignSmartyVariable('lastUserEditedName', $announcement->getNameOfLastEditingUser());
+        $this->assignSmartyVariable('lastUserEditedTimestamp', $announcement->getValue('ann_timestamp_change'));
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
     }
 
     /**
@@ -247,7 +328,7 @@ class AnnouncementsPresenter extends PagePresenter
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'copy', 'announcement_uuid' => $announcementData['ann_uuid'])),
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'edit', 'copy' => true, 'announcement_uuid' => $announcementData['ann_uuid'])),
                     'icon' => 'bi bi-copy',
                     'tooltip' => $gL10n->get('SYS_COPY')
                 );
