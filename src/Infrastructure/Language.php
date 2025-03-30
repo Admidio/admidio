@@ -73,14 +73,18 @@ class Language
      * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
      *                         If no language is set than the browser language will be determined.
      */
-    public function __construct(string $language)
+    public function __construct(string $language, bool $useBrowserLanguageIfAvailable = false)
     {
-        if ($language === '') {
+        if ($useBrowserLanguageIfAvailable) {
             // get browser language and set this language as default
-            $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
+            if(!$this->setLanguage(static::determineBrowserLanguage($language))) {
+                // if the browser language is not available then set the default language
+                $this->setLanguage($language);
+            }
+        } else {
+            $this->setLanguage($language);
         }
 
-        $this->setLanguage($language);
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
 
         $this->addPluginLanguageFolderPaths();
@@ -173,9 +177,16 @@ class Language
             }
 
             if ($prioritySelected < $priority && $langCodes[0] !== '*') {
-                $languageSelected = $langCodes[0];
+                $languageSelected = $matches[1]; //$langCodes[0];
                 $prioritySelected = $priority;
             }
+        }
+
+        // special case for the german language code
+        if ($languageSelected === 'de' && $defaultLanguage === 'de-DE') {
+            $languageSelected = 'de-DE';
+        } elseif ($languageSelected === 'de-DE' && $defaultLanguage === 'de') {
+            $languageSelected = 'de';
         }
 
         return $languageSelected;
@@ -555,25 +566,27 @@ class Language
     /**
      * Set a language to this object. If there was a language before than initialize the cache
      * @param string $language ISO code of the language that should be set to this object.
-     * @return bool Returns true if language changed.
+     * @return bool Returns true if language exists and could be set.
      */
     public function setLanguage(string $language): bool
     {
         require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
 
-        if ($language === $this->language) {
+        if (!array_key_exists($language, $gSupportedLanguages)) {
             return false;
         }
 
-        // initialize data
-        $this->xmlLanguageObjects    = array();
-        $this->xmlRefLanguageObjects = array();
-        $this->countries = array();
-        $this->textCache = array();
+        if ($language <> $this->language) {
+            // initialize data
+            $this->xmlLanguageObjects    = array();
+            $this->xmlRefLanguageObjects = array();
+            $this->countries = array();
+            $this->textCache = array();
 
-        $this->language = $language;
-        $this->languageLibs = $gSupportedLanguages[$language]['libs'];
-        $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
+            $this->language = $language;
+            $this->languageLibs = $gSupportedLanguages[$language]['libs'];
+            $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
+        }
 
         return true;
     }

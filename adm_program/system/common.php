@@ -147,7 +147,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)
     $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
 
     // create a language data object and assign it to the language object
-    $gL10n = new Language($gSettingsManager->getString('system_language'));
+    $gL10n = new Language($gSettingsManager->getString('system_language'), true);
     $gCurrentSession->addObject('gL10n', $gL10n);
 
     // delete old entries in session table

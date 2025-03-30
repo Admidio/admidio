@@ -763,7 +763,7 @@
   <string name="SYS_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
   <string name="SYS_LANGUAGE">Language</string>
-  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Is your language missing or do you want to translate more texts or improve existing translations? Then have a look at #VAR1#Wiki page of Admidio#VAR2# to see how you can help with the translation.</string>
+  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio is displayed in the language set in the browser for websites. If the language stored there is not available, the language set here will be used.\nIs your language missing or would you like to translate more texts or improve existing translations? Then take a look at the #VAR1#Admidio wiki page#VAR2# to find out how you can help with the translation.</string>
   <string name="SYS_LAST_EDITED_AT">Last edited at #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# at #VAR2#</string>
   <string name="SYS_LAST_LOGIN_ON">Last login on #VAR1# at #VAR2#</string>

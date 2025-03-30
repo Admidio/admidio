@@ -140,7 +140,7 @@ try {
     if (!$gSettingsManager->has('system_language')) {
         $gSettingsManager->set('system_language', 'de');
     }
-    $gL10n = new Language($gSettingsManager->getString('system_language'));
+    $gL10n = new Language($gSettingsManager->getString('system_language'), true);
     $gChangeNotification = new ChangeNotification();
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
