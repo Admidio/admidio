@@ -39,7 +39,7 @@ try {
 
     // Initialize local parameters
     $eventParticipationPossible = false;
-    $eventCurrentUserAssigned = false;
+    $eventCurrentUserAssigned = true;
     $roleViewSet = array();
     $flagDateRightListView = false;
     $flagDateRightSendMail = false;
