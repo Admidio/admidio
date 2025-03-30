@@ -10,7 +10,7 @@
  *
  * Parameters:
  *
- * organization_short_name : short name of the organization whose events should be shown
+ * organization : Short name of the organization whose topics should be shown in the RSS feed
  * *********************************************************************************************
  */
 
@@ -23,7 +23,7 @@ use Admidio\Organizations\Entity\Organization;
 require_once(__DIR__ . '/../adm_program/system/common.php');
 
 try {
-    $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
+    $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
     // Check if RSS is active...
     if (!$gSettingsManager->getBool('enable_rss')) {
@@ -35,8 +35,8 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    if ($getOrganizationShortName !== '') {
-        $organization = new Organization($gDb, $getOrganizationShortName);
+    if ($getOrganization !== '') {
+        $organization = new Organization($gDb, $getOrganization);
         $organizationName = $organization->getValue('org_longname');
         $gCurrentUser->setOrganization($organization->getValue('org_id'));
     } else {

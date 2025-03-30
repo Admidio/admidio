@@ -10,7 +10,7 @@
  *
  * Parameters:
  *
- * organization_short_name : short name of the organization whose photos should be shown
+ * organization : Short name of the organization whose topics should be shown in the RSS feed
  * *********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
@@ -22,7 +22,7 @@ use Admidio\Photos\Entity\Album;
 require_once(__DIR__ . '/../adm_program/system/common.php');
 
 try {
-    $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
+    $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
     // check if module is active
     if (!$gSettingsManager->getBool('enable_rss')) {
@@ -37,8 +37,8 @@ try {
         require(__DIR__ . '/../../system/login_valid.php');
     }
 
-    if ($getOrganizationShortName !== '') {
-        $organization = new Organization($gDb, $getOrganizationShortName);
+    if ($getOrganization !== '') {
+        $organization = new Organization($gDb, $getOrganization);
         $organizationName = $organization->getValue('org_longname');
         $organizationID = $organization->getValue('org_id');
     } else {
