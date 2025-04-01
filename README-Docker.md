@@ -264,8 +264,8 @@ services:
       - admidio-test-db
     volumes:
       - ./admidio-test/files:/opt/app-root/src/adm_my_files
+      - ./admidio-test/themes:/opt/app-root/src/adm_themes
       - ./admidio-test/plugins:/opt/app-root/src/adm_plugins
-      - ./admidio-test/themes:/opt/app-root/src/themes
     ports:
       - 3100:8080
     environment:
