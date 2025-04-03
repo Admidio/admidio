@@ -125,7 +125,7 @@ class Component extends Entity
                     break;
 
                 case 'CATEGORY-REPORT':
-                    if ($gCurrentUser->checkRolesRight('rol_assign_roles')) {
+                    if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                         return true;
                     }
                     break;
@@ -229,7 +229,7 @@ class Component extends Entity
                 break;
 
             case 'CATEGORY-REPORT':
-                if ($gCurrentUser->checkRolesRight('rol_assign_roles')) {
+                if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                     return true;
                 }
                 break;

@@ -33,8 +33,8 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    // user must have the permission "rol_assign_roles"
-    if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
+    // user must have the permission "rol_all_lists_view"
+    if (!$gCurrentUser->checkRolesRight('rol_all_lists_view')) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
@@ -263,7 +263,7 @@ try {
             }
 
             ChangelogService::displayHistoryButton($page, 'categoryreport', 'category_report');
-    
+
             // process changes in the navbar form with javascript submit
             $page->addJavascript(
                 '
