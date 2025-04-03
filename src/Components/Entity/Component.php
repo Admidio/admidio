@@ -179,7 +179,7 @@ class Component extends Entity
                     break;
 
                 case 'REGISTRATION':
-                    if ($gCurrentUser->approveUsers()) {
+                    if ($gCurrentUser->isAdministratorRegistration()) {
                         return true;
                     }
                     break;
@@ -294,7 +294,7 @@ class Component extends Entity
                 break;
 
             case 'REGISTRATION':
-                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->approveUsers()) {
+                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->isAdministratorRegistration()) {
                     return true;
                 }
                 break;
