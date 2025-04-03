@@ -38,7 +38,7 @@ try {
     $setRoleId = 0;
 
     // if user is allowed to assign at least one role then allow access
-    if (!$gCurrentUser->assignRoles()) {
+    if (!$gCurrentUser->isAdministratorRoles()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

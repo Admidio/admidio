@@ -848,7 +848,7 @@ class User extends Entity
             || ($categoryType === 'FOT' && $this->isAdministratorForum())
             || ($categoryType === 'LNK' && $this->isAdministratorWeblinks())
             || ($categoryType === 'USF' && $this->isAdministratorUsers())
-            || ($categoryType === 'ROL' && $this->assignRoles())
+            || ($categoryType === 'ROL' && $this->isAdministratorRoles())
         ) {
             $condition = '';
         } else {
@@ -2231,19 +2231,6 @@ class User extends Entity
     public function approveUsers(): bool
     {
         return $this->checkRolesRight('rol_approve_users');
-    }
-
-    /**
-     * Checks if the user has the right to assign members to at least one role. This method also returns
-     * true if the user is a leader of the role and could assign other members to that role.
-     * @return bool Return **true** if the user can assign members to at least one role.
-     * @throws Exception
-     */
-    public function assignRoles(): bool
-    {
-        $this->checkRolesRight();
-
-        return $this->assignRoles;
     }
 
     /**
