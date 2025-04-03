@@ -25,8 +25,8 @@ if (!$gSettingsManager->getBool('category_report_enable_module')) {
     // => EXIT
 }
 
-// user must have the permission "rol_assign_roles"
-if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
+// user must have the permission "rol_all_lists_view"
+if (!$gCurrentUser->checkRolesRight('rol_all_lists_view')) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
