@@ -500,8 +500,6 @@ CREATE TABLE %PREFIX%_oidc_clients (
     ocl_scope                   varchar(255)        DEFAULT NULL,
     ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
     ocl_field_mapping           text                NULL,
-    ocl_require_pkce            boolean             DEFAULT TRUE,
-    ocl_allow_refresh_token     boolean             DEFAULT TRUE,
     ocl_usr_id_create           integer unsigned,
     ocl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ocl_usr_id_change           integer unsigned,
@@ -516,7 +514,7 @@ CREATE TABLE %PREFIX%_oidc_access_tokens (
     oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     oat_usr_id                  integer unsigned    NOT NULL,
     oat_ocl_id                  integer unsigned    NOT NULL,
-    oat_token                   varchar(255),
+    oat_token                   text,
     oat_scope                   text,
     oat_expires_at              timestamp           NOT NULL,
     oat_revoked                 boolean             DEFAULT FALSE,
@@ -533,6 +531,7 @@ CREATE TABLE %PREFIX%_oidc_refresh_tokens (
     ort_ocl_id                  integer unsigned    NOT NULL,
     ort_usr_id                  integer unsigned    NULL,
     ort_token                   text,
+    ort_scope                   text,
     ort_expires_at              timestamp           NOT NULL,
     ort_revoked                 boolean             DEFAULT FALSE,
     ort_usr_id_create           integer unsigned,
@@ -545,14 +544,14 @@ COLLATE = utf8_unicode_ci;
 
 CREATE TABLE %PREFIX%_oidc_auth_codes (
     oac_id                      integer unsigned    AUTO_INCREMENT,
-    oac_token                   varchar(64),
     oac_usr_id                  integer unsigned    NOT NULL,
     oac_ocl_id                  integer unsigned    NOT NULL,
-    oac_redirect_uri            text                NOT NULL,
-    oac_scope                   text                NOT NULL,
+    oac_token                   text,
+    oac_scope                   text,
     oac_expires_at              timestamp           NOT NULL,
-    oac_used                    boolean             DEFAULT FALSE,
     oac_revoked                 boolean             DEFAULT FALSE,
+    oac_redirect_uri            text                NOT NULL,
+    oac_used                    boolean             DEFAULT FALSE,
     oac_usr_id_create           integer unsigned,
     oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (oac_id)
@@ -562,15 +561,15 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 
-CREATE TABLE %PREFIX%_oidc_scopes (
-    osc_id                      integer unsigned    AUTO_INCREMENT,
-    osc_scope                   varchar(100),
-    osc_description             text                NOT NULL,
-    PRIMARY KEY (osc_scope_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+-- CREATE TABLE %PREFIX%_oidc_scopes (
+--     osc_id                      integer unsigned    AUTO_INCREMENT,
+--     osc_scope                   varchar(100),
+--     osc_description             text                NOT NULL,
+--     PRIMARY KEY (osc_id)
+-- )
+-- ENGINE = InnoDB
+-- DEFAULT character SET = utf8
+-- COLLATE = utf8_unicode_ci;
 
 
 -- -- 6️⃣ Table: OIDC User Consents (Tracks user consent for OIDC clients)

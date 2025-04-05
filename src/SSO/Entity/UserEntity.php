@@ -11,19 +11,21 @@ use Admidio\ProfileFields\ValueObjects\ProfileFields;
 
 class UserEntity extends User implements UserEntityInterface 
 {
+    protected string $idField = 'usr_id'; // The field that identifies the user in the database
+
     /**
      * Create a UserEntity from an Admidio user ID.
      */
-    public function __construct(Database $database, ProfileFields $profileFields = null, int $userId = 0)
+    public function __construct(Database $database, ProfileFields $profileFields = null, ?string $useridField = 'usr_id', int $userId = 0)
     {
         parent::__construct($database, $profileFields, $userId);
-        // Set the identifier for theetValue('usr_id'));
+        $this->idField = $useridField;
     }
 
     public function getIdentifier(): string
     {
         if (!$this->isNewRecord()) {
-            return $this->getValue('usr_login_name');
+            return $this->getValue($this->idField);
         } else {
             return '';
         }

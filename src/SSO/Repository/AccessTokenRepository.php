@@ -25,6 +25,13 @@ use Admidio\Infrastructure\Database;
  class AccessTokenRepository extends TokenRepository implements AccessTokenRepositoryInterface {
     private $inactivityTimeout = 1800;
 
+    /**
+     *  Dummy implementation since the TokenRepository class declares the method abstract, so we MUST implement it, even though we don't need it...
+     * @return TokenEntity
+     */
+    public function newToken(): TokenEntity {
+        return new TokenEntity($this->db);
+    }
 
     public function getToken(string $tokenId) : TokenEntity {
         return new AccessTokenEntity($this->db,  $tokenId);
@@ -36,6 +43,7 @@ use Admidio\Infrastructure\Database;
             $token->addScope($sc);
         }
         $token->setUserIdentifier($userIdentifier);
+        $token->setClient($clientEntity);
         return $token;
     }
 
@@ -58,10 +66,10 @@ use Admidio\Infrastructure\Database;
         return $user instanceof UserEntity ? $user->getClaims() : [];
     }
 
-    public function getUserIdByAccessToken(string $accessToken): ?int {
+    public function getUserIdByAccessToken(string $accessToken): ?string {
         $token = $this->getToken($accessToken);
         $now = new \DateTime();
-        if (!$token->isNewRecord() && ($token->getValue($token->getColumnPrefix() . '_expires_at') > $now)) {
+        if (!$token->isNewRecord() && ($token->getExpiryDateTime() > $now)) {
             return $token->getUserIdentifier();
         } else {
             return null;

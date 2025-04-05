@@ -32,5 +32,10 @@ class RefreshTokenEntity extends TokenEntity implements RefreshTokenEntityInterf
     public function setAccessToken($accessToken): void
     {
         $this->accessToken = $accessToken;
+        $this->setClient($accessToken->getClient());
+        $this->setUserIdentifier($accessToken->getUserIdentifier());
+        foreach ($accessToken->getScopes() as $scope) {
+            $this->addScope($scope);
+        }
     }
 }

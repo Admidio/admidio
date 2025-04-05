@@ -282,8 +282,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ocl_scope                   varchar(255)        DEFAULT NULL,
             ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
             ocl_field_mapping           text                NULL,
-            ocl_require_pkce            boolean             DEFAULT TRUE,
-            ocl_allow_refresh_token     boolean             DEFAULT TRUE,
             ocl_usr_id_create           integer unsigned,
             ocl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
             ocl_usr_id_change           integer unsigned,
@@ -300,7 +298,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
             oat_usr_id                  integer unsigned    NOT NULL,
             oat_ocl_id                  integer unsigned    NOT NULL,
-            oat_token                   VARCHAR(255),
+            oat_token                   text,
             oat_scope                   text,
             oat_expires_at              timestamp           NOT NULL,
             oat_revoked                 boolean             DEFAULT FALSE,
@@ -317,9 +315,10 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_oat_usr_create  FOREIGN KEY (oat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
     <step id="1150">CREATE TABLE %PREFIX%_oidc_refresh_tokens (
             ort_id                      integer unsigned    AUTO_INCREMENT,
+            ort_usr_id                  integer unsigned    NOT NULL,
             ort_ocl_id                  integer unsigned    NOT NULL,
-            ort_usr_id                  integer unsigned    NULL,
-            ort_refresh_token           text,
+            ort_token                   text,
+            ort_scope                   text,
             ort_expires_at              timestamp           NOT NULL,
             ort_revoked                 boolean             DEFAULT FALSE,
             ort_usr_id_create           integer unsigned,
@@ -335,14 +334,14 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_ort_usr_create  FOREIGN KEY (ort_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
     <step id="1170">CREATE TABLE %PREFIX%_oidc_auth_codes (
             oac_id                      integer unsigned    AUTO_INCREMENT,
-            oac_code                    varchar(64),
             oac_usr_id                  integer unsigned    NOT NULL,
             oac_ocl_id                  integer unsigned    NOT NULL,
-            oac_redirect_uri            text                NOT NULL,
-            oac_scope                   text                NOT NULL,
+            oac_token                   text,
+            oac_scope                   text,
             oac_expires_at              timestamp           NOT NULL,
-            oac_used                    boolean             DEFAULT FALSE,
             oac_revoked                 boolean             DEFAULT FALSE,
+            oac_redirect_uri            text                NOT NULL,
+            oac_used                    boolean             DEFAULT FALSE,
             oac_usr_id_create           integer unsigned,
             oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (oac_id)
@@ -354,6 +353,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_oac_usr_id      FOREIGN KEY (oac_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_oac_ocl_id      FOREIGN KEY (oac_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_oac_usr_create  FOREIGN KEY (oac_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+
 
     <step>stop</step>
 </update>

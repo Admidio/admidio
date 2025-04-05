@@ -19,7 +19,7 @@ class AuthCodeRepository extends TokenRepository implements AuthCodeRepositoryIn
         return new AuthCodeEntity($this->db);
     }
 
-    public function getNewToken() : TokenEntity {
+    public function newToken() : TokenEntity {
         return $this->getNewAuthCode();
     }
 

@@ -22,14 +22,27 @@ class ScopeRepository implements ScopeRepositoryInterface
      */
     public function getScopeEntityByIdentifier($identifier): ?ScopeEntity
     {
-        $scope = new ScopeEntity($this->db, $identifier);
-        return (!$scope->isNewRecord()) ? $scope : null;
+        switch ($identifier) {
+            case 'openid':
+            case 'profile':
+            case 'email':
+            case 'address':
+            case 'phone':
+            // case 'offline_access':
+            // case 'groups':
+            // default: 
+                return new ScopeEntity($identifier);
+            default: return null;
+
+        }
+        // $scope = new ScopeEntity($this->db, $identifier);
+        // return (!$scope->isNewRecord()) ? $scope : null;
     }
 
     /**
      * Validates requested scopes against allowed scopes.
      */
-    public function finalizeScopes(array $scopes, string $grantType, ClientEntityInterface $client, string $userId = null, ?string $authCodeId = null): array
+    public function finalizeScopes(array $scopes, string $grantType, ClientEntityInterface $client, ?string $userId = null, ?string $authCodeId = null): array
     {
         $validScopes = [];
 

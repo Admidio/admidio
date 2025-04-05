@@ -600,8 +600,6 @@ class ChangelogService {
             'ocl_userid_field' =>           'SYS_SSO_USERID_FIELD',
             'ocl_field_mapping' =>          array('name' => 'SYS_SSO_SAML_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
             'ocl_role_mapping' =>           array('name' => 'SYS_SSO_SAML_ROLES', 'type' => 'SAML_roles_mapping'),
-            'ocl_require_pkce' =>           array('name' => 'SYS_SSO_OIDC_REQUIRE_PKCE', 'type' => 'BOOL'),
-            'ocl_allow_refresh_token' =>    array('name' => 'SYS_SSO_OIDC_ALLOW_REFRESH_TOKEN', 'type' => 'BOOL'),
             // 'ocl_grant_types' =>            'TODO',
             // 'ocl_scope' =>                  'TODO',        
 

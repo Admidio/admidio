@@ -19,7 +19,7 @@ class RefreshTokenRepository extends TokenRepository implements RefreshTokenRepo
         return new RefreshTokenEntity($this->db);
     }
 
-    public function getNewToken() : TokenEntity {
+    public function newToken() : TokenEntity {
         return $this->getNewRefreshToken();
     }
 

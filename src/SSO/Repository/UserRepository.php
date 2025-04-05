@@ -15,7 +15,7 @@ class UserRepository implements UserRepositoryInterface
     protected array $allowedRoles; // Roles that are permitted to use OIDC
     protected string $uid_field;
 
-    public function __construct($database, string $uid_field = 'usr_id', array $allowedRoles)
+    public function __construct($database, string $uid_field = 'usr_id', array $allowedRoles = [])
     {
         $this->db = $database; // Using Admidio's $gDb instance
         $this->allowedRoles = $allowedRoles;
@@ -33,10 +33,10 @@ class UserRepository implements UserRepositoryInterface
 
         // 1️⃣ Check if the user is already logged in => Since we are in the password 
         // grant, we don't want to authenticate the current user without a password, 
-        // but rather explicitlz check the passed user/password combination!
+        // but rather explicitly check the passed user/password combination!
         
         // 2️⃣ If no user is logged in, verify credentials
-        $user = new UserEntity($this->db, profileFields: $gProfileFields);
+        $user = new UserEntity($this->db, $gProfileFields, $this->uid_field);
         $user->readDataByColumns([($this->uid_field) => $username]);
         if (!$user->checkLogin($password, false, false, false)) {
             return null;

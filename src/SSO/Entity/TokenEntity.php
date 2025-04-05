@@ -21,16 +21,15 @@ class TokenEntity extends Entity implements TokenInterface
 
     protected OIDCClient $client;
     protected User $user;
-    protected string $userIDfield;
 
     public function __construct(Database $database, string $tableName = '', string $columnPrefix = '', string $tokenId = '') {
         global $gProfileFields;
         parent::__construct($database, $tableName, $columnPrefix);
+        $this->client = new OIDCClient($this->db);
+        $this->user = new User($this->db, $gProfileFields);
         if (!empty($tokenId)) {
             $this->readDataByColumns([$this->columnPrefix . '_token' => $tokenId]);
         }
-        $this->user = new User($this->db, $gProfileFields);
-        $this->client = new OIDCClient($this->db);
     }
 
     public function deleteExpiredTokens() {
@@ -46,7 +45,8 @@ class TokenEntity extends Entity implements TokenInterface
         $scopes = array_map(
             fn($scope) => $scope->getIdentifier(),
             $this->getScopes());
-        $this->setValue($this->columnPrefix . '_scopes', implode(',',$scopes));
+        $this->setValue($this->columnPrefix . '_scope', implode(' ',$scopes));
+
 
         return parent::save($updateFingerPrint);
     }
@@ -58,16 +58,26 @@ class TokenEntity extends Entity implements TokenInterface
 
         // Read scopes from DB
         $this->scopes = [];
-        foreach (explode(',', $this->getValue($this->columnPrefix . '_scopes')??'') as $scope) {
-            $scopeObject = new ScopeEntity($this->db);
-            $scopeObject->readDataByColumns([$scopeObject->columnPrefix . '_scope' => $scope]);
-            $this->addScope($scopeObject);
+        foreach (explode(' ', $this->getValue($this->columnPrefix . '_scope')??'') as $scope) {
+            if (!empty($scope)) {
+                $scopeObject = new ScopeEntity($scope);
+                $this->addScope($scopeObject);
+            }
         }
 
         // read client and user from DB
-        $this->client->readDataById($this->getValue($this->columnPrefix . '_ocl_id'));
-        $this->userIDfield = $this->client->getValue($this->client->getColumnPrefix() . '_userid_field');
-        $this->user->readDataById($this->getValue($this->columnPrefix . '_usr_id'));
+        $ocl_id = $this->getValue($this->columnPrefix . '_ocl_id');
+        if (!empty($ocl_id)) {
+            $this->client = new OIDCClient($this->db, $ocl_id);
+        } else {
+            $this->client = new OIDCClient($this->db);
+        }
+        $usr_id = $this->getValue($this->columnPrefix . '_usr_id');
+        if (!empty($usr_id)) {
+            $this->user = new User($this->db, $gProfileFields, $usr_id);
+        } else {
+            $this->user = new User($this->db, $gProfileFields);
+        }
 
         return $retVal;
     }
@@ -131,7 +141,7 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function getExpiryDateTime(): \DateTimeImmutable
     {
-        return $this->getValue($this->columnPrefix . '_expires_at');
+        return new \DateTimeImmutable($this->getValue($this->columnPrefix . '_expires_at', 'Y-m-d H:i:s'));
     }
 
     /**
@@ -139,7 +149,8 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function setExpiryDateTime(\DateTimeImmutable $dateTime): void
     {
-        $this->setValue($this->columnPrefix . '_expires_at', $dateTime);
+        $expiryDate = $dateTime->format('Y-m-d H:i:s');
+        $this->setValue($this->columnPrefix . '_expires_at', $expiryDate);
     }
 
     /**
@@ -149,12 +160,14 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function setUserIdentifier(string $identifier): void
     {
-        $this->user->readDataByColumns([$this->userIDfield => $identifier]);
+        $userIDfield = $this->client->getValue($this->client->getColumnPrefix() . '_userid_field');
+        $this->user->readDataByColumns([$userIDfield => $identifier]);
 
         // If no user with that identifier can be found -> thow exception
         if ($this->user->isNewRecord()) { // user with given identifier couldn't be loaded
             throw new OAuthServerException('User not found', 6, 'invalid_user');
         }
+        $this->setValue($this->columnPrefix . '_usr_id', $this->user->getValue($this->user->getKeyColumnName()));
     }
 
     /**
@@ -164,7 +177,16 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function getUserIdentifier(): string|null
     {
-        return $this->user->getValue($this->userIDfield);
+        $userIDfield = $this->client->getValue($this->client->getColumnPrefix() . '_userid_field');
+        return $this->user->getValue($userIDfield);
+    }
+
+    /**
+     * Get the user that the token was issued to.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
     /**
@@ -182,7 +204,7 @@ class TokenEntity extends Entity implements TokenInterface
     {
         // We cannot be sure that $client is an OIDCClient object, so we create a copy of type OIDCClient with the same identifier
         $this->client = new OIDCClient($this->db, $client->getIdentifier());
-        $this->setValue($this->columnPrefix . '_ocl_id', $this->client->keyColumnName);
+        $this->setValue($this->columnPrefix . '_ocl_id', $this->client->getValue($this->client->keyColumnName));
     }
 
 }

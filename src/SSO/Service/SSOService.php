@@ -40,9 +40,6 @@ class SSOService {
     }
 
     public function getClientFromID($clientID) {
-        // $entityIdClient = $request->getIssuer()->getValue();
-
-        // Load the client data (entityID is in $request->issuer->getValue())
         $client = $this->createClientObject(null, $clientID);
         if ($client->isNewRecord()) {
             throw new Exception("SSO client '$clientID' not found in database. Please check the SSO client settings and configure the client in Admidio.");

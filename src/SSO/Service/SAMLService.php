@@ -672,7 +672,6 @@ class SAMLService extends SSOService {
         curl_close($ch);
 
         print $responseContent;
-
     }
 
 /*

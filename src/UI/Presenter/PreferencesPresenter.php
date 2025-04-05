@@ -516,7 +516,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
                         'id' => 'preferences',
-                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories', 'saml_clients', 'sso_keys')
+                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories', 'saml_clients', 'oidc_clients', 'sso_keys')
                     )
                 )
             )

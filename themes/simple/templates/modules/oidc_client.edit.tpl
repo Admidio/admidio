@@ -9,16 +9,8 @@
         <div class="card-body">
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_name']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_id']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_secret']}
+            {include 'sys-template-parts/form.custom-content.tpl' data=$elements['ocl_client_secret']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_redirect_uri']}
-        </div>
-    </div>
-    <div class="card admidio-field-group">
-        <div class="card-header">{$l10n->get('SYS_SECURITY')}</div>
-        <div class="card-body">
-
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_require_pkce']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_allow_refresh_token']}
         </div>
     </div>
     <div class="card admidio-field-group">
@@ -32,7 +24,7 @@
                 </label>
                 <div class="col-sm-9">
                     <div class="table-responsive">
-                        <table class="table table-condensed" id="oidc_fields_table">
+                        <table class="table table-condensed" id="fieldsmap_table">
                             <thead>
                             <tr class="nosort">
                                 <th style="width: 50%;">{$l10n->get('SYS_PROFILE_FIELD')}</th>
@@ -40,21 +32,21 @@
                                 <th></th>
                             </tr>
                             </thead>
-                            <tbody id="oidc_fields_tbody"></tbody>
+                            <tbody id="fieldsmap_tbody"></tbody>
                             <tfoot>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <input id="{$elements['oidc_fields_all_other'].id}" name="{$elements['oidc_fields_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
-                                    {foreach $elements['oidc_fields_all_other'].attributes as $itemvar}
+                                    <input id="{$elements['sso_fields_all_other'].id}" name="{$elements['sso_fields_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
+                                    {foreach $elements['sso_fields_all_other'].attributes as $itemvar}
                                         {$itemvar@key}="{$itemvar}"
                                     {/foreach} >
-                                    <label class="form-check-label fw-normal" for="oidc_fields_all_other"> {$l10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER')}</label>
+                                    <label class="form-check-label fw-normal" for="sso_fields_all_other"> {$l10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER')}</label>
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <a class="icon-text-link" href="javascript:addColumn_oidc_fields()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_FIELD')}</a>
-                                    <!--a class="icon-text-link" href="javascript:addAll_oidc_fields()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_FIELDS')}</a-->
+                                    <a class="icon-text-link" href="javascript:addColumn_fieldsmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_FIELD')}</a>
+                                    <!--a class="icon-text-link" href="javascript:addAll_fieldsmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_FIELDS')}</a-->
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
@@ -73,7 +65,7 @@
                 </label>
                 <div class="col-sm-9">
                     <div class="table-responsive">
-                        <table class="table table-condensed" id="oidc_roles_table">
+                        <table class="table table-condensed" id="rolesmap_table">
                             <thead>
                             <tr class="nosort">
                                 <th style="width: 50%;">{$l10n->get('SYS_ROLE')}</th>
@@ -81,21 +73,21 @@
                                 <th></th>
                             </tr>
                             </thead>
-                            <tbody id="oidc_roles_tbody"></tbody>
+                            <tbody id="rolesmap_tbody"></tbody>
                             <tfoot>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <input id="{$elements['oidc_roles_all_other'].id}" name="{$elements['oidc_roles_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
-                                    {foreach $elements['oidc_roles_all_other'].attributes as $itemvar}
+                                    <input id="{$elements['sso_roles_all_other'].id}" name="{$elements['sso_roles_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
+                                    {foreach $elements['sso_roles_all_other'].attributes as $itemvar}
                                         {$itemvar@key}="{$itemvar}"
                                     {/foreach} >
-                                    <label class="form-check-label fw-normal" for="oidc_roles_all_other"> {$l10n->get('SYS_SSO_OIDC_ROLES_ALLOTHER')}</label>
+                                    <label class="form-check-label fw-normal" for="sso_roles_all_other"> {$l10n->get('SYS_SSO_OIDC_ROLES_ALLOTHER')}</label>
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <a class="icon-text-link" href="javascript:addColumn_oidc_roles()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ROLE')}</a>
-                                    <!--a class="icon-text-link" href="javascript:addAll_oidc_roles()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_ROLES')}</a-->
+                                    <a class="icon-text-link" href="javascript:addColumn_rolesmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ROLE')}</a>
+                                    <!--a class="icon-text-link" href="javascript:addAll_rolesmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_ROLES')}</a-->
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
@@ -109,7 +101,7 @@
                 </div>
             </div>
 *}
-            {include 'sys-template-parts/form.select.tpl' data=$elements['oidc_roles_access']}
+            {include 'sys-template-parts/form.select.tpl' data=$elements['sso_roles_access']}
         </div>
     </div>
     <div class="form-alert" style="display: none;">&nbsp;</div>

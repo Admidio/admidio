@@ -15,7 +15,7 @@ abstract class TokenRepository
     /**
      * Creates a Token entity.
      */
-    abstract public function getNewToken(): TokenEntity;
+    abstract public function newToken(): TokenEntity;
     abstract public function getToken(string $tokenId) : TokenEntity;
 
     /**
@@ -48,7 +48,7 @@ abstract class TokenRepository
      * Deletes expired tokens to clean up storage.
      */
     public function removeExpiredTokens(): void {
-        $token = $this->getNewToken();
+        $token = $this->newToken();
         $token->deleteExpiredTokens();
     }
 }

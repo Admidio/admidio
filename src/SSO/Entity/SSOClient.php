@@ -111,6 +111,15 @@ class SSOClient extends Entity
     }
 
     /**
+     * Returns the User/Profile field that is used by the particular client to identify users.
+     * @return string
+     */
+    public function getUserIdField(): string
+    {
+        return $this->getValue($this->columnPrefix . '_userid_field')??'';
+    }
+
+    /**
      * Returns an associative array with all selected user fields (internal names) to be submitted to the client / Service Provider upon successful login.
      * The keys are the SAML field names, the values are the Admidio fields. This means, that the same Admidio field can be used for multiple SAML attributes.
      * @return array<string,string> Returns an array with all selected user field names that are sent to the SAML client. The keys are the SAML field names, the values are the Admidio fields.

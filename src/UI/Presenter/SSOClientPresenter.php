@@ -531,11 +531,58 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('ocl_client_id'),
             array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_CLIENT_ID_DESC'))
         );
+
         // TODO: Hide client secret from user -> Only allow changing, but not copying!
-        $form->addInput(
+        $noClientSecretYet = ($client->isNewRecord() || empty($client->getValue('ocl_client_secret')));
+        $cancelRecreateButton = '<button id="cancel_recreate_client_secret" name="cancel_recreate_client_secret" type="button" class="btn focus-ring btn-secondary" style="padding: 0px 4px; flex-shrink: 0;">' . 
+                '<i class="bi bi-x-circle" data-bs-toggle="tooltip" title=""></i>' . 
+                $gL10n->get('SYS_CANCEL') . 
+            '</button>';
+        $clientSecretContent = '<div style="display: flex; align-items: center; gap: 8px;" id="client_secret_not_shown">' . 
+                '<span style="flex: 1" id="client_passwd_label"><em>' . 
+                    $gL10n->get('SYS_SSO_CLIENT_SECRET_HIDDE') . 
+                    '</em></span>' . 
+                '<button id="recreate_client_secret" name="recreate_client_secret" type="button" class="btn focus-ring btn-secondary" style="padding: 0px 4px; flex-shrink: 0;">' . 
+                    '<i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title=""></i>' . 
+                    $gL10n->get('SYS_SSO_CLIENT_SECRET_RECREATE') . 
+                '</button>' . 
+            '</div>' . 
+            '<div style="display:flex; align-itens: center; gap: 8px;" id="client_secret_shown">' . 
+            '<input id="new_ocl_client_secret" name="new_ocl_client_secret" class="form-control focus-ring hidden copy-container" type="text" value="" maxlength="250" style="flex: 1" >' .
+                ($noClientSecretYet ? '' : $cancelRecreateButton) . 
+            '</div>';
+        $this->addJavascript('
+            function generateClientSecret(length = 32) {
+                const array = new Uint8Array(length);
+                window.crypto.getRandomValues(array);
+                return btoa(String.fromCharCode(...array)).slice(0, length);
+            }
+            $("#recreate_client_secret").on("click", function (e) {
+                e.preventDefault();
+                $("#new_ocl_client_secret").prop("disabled", false).val(generateClientSecret(32));
+                $("#client_secret_shown").show();
+                $("#client_secret_not_shown").hide();
+            });
+
+            $("#cancel_recreate_client_secret").on("click", function (e) {
+                e.preventDefault();
+                $("#new_ocl_client_secret").val("").prop("disabled", true);
+                $("#client_secret_shown").hide();
+                $("#client_secret_not_shown").show();
+            });
+            ' . ($noClientSecretYet ? '$("#recreate_client_secret").click();' : '$("#cancel_recreate_client_secret").click();') . '
+            ', true);
+
+        $form->addCustomContent(
             'ocl_client_secret',
             $gL10n->get('SYS_SSO_CLIENT_SECRET'),
-            $client->getValue('ocl_client_secret'),
+            $clientSecretContent,
+            array('helpTextId' => $gL10n->get('SYS_SSO_CLIENT_SECRET_DESC'), 'class'=> '')
+        );
+        $form->addInput(
+            'new_ocl_client_secret',
+            $gL10n->get('SYS_SSO_CLIENT_SECRET'),
+            '',
             array('maxLength' => 250, 'helpTextId' => $gL10n->get('SYS_SSO_CLIENT_SECRET_DESC'))
         );
         $form->addInput(
@@ -548,27 +595,13 @@ class SSOClientPresenter extends PagePresenter
 
 
 
-        // TAB: Signatures and Encryption
-
-        $form->addCheckbox(
-            'ocl_require_pkce',
-            $gL10n->get('SYS_SSO_OIDC_REQUIRE_PKCE'),
-            $client->getValue('ocl_require_pkce'),
-            array('helpTextId' => $gL10n->get('SYS_SSO_OIDC_REQUIRE_PKCE_DESC'))
-        );
-        $form->addCheckbox(
-            'ocl_allow_refresh_token',
-            $gL10n->get('SYS_SSO_OIDC_ALLOW_REFRESH_TOKEN'),
-            $client->getValue('ocl_allow_refresh_token'),
-            array('helpTextId' => $gL10n->get('SYS_SSO_OIDC_ALLOW_REFRESH_TOKEN_DESC'))
-        );
-        
-
+        // TAB: 
 
         $useridFields = [
             ['usr_id', $gL10n->get('SYS_SSO_USERID_ID') . ' - usr_id', $gL10n->get('SYS_SSO_USERID_FIELDS')],
             ['usr_uuid',  $gL10n->get('SYS_SSO_USERID_UUID') . ' - usr_uuid', $gL10n->get('SYS_SSO_USERID_FIELDS')],
             ['usr_login_name', $gL10n->get('SYS_SSO_USERID_LOGIN') . ' - usr_login_name', $gL10n->get('SYS_SSO_USERID_FIELDS')],
+            ['EMAIL', $gL10n->get('SYS_EMAIL') . ' - EMAIL', $gL10n->get('SYS_SSO_USERID_FIELDS')],
         ];
         $form->addSelectBox(
             'ocl_userid_field',
@@ -595,34 +628,34 @@ class SSOClientPresenter extends PagePresenter
         }
         $userFields[] = ['roles', $gL10n->get('SYS_ROLES') . ' - roles', $gL10n->get('SYS_ROLES')];
 
-        $js = $this->createSSOEditFormJS( $userFields, $client->getFieldMapping(), "oidc_fields");
+        $js = $this->createSSOEditFormJS( $userFields, $client->getFieldMapping(), "fieldsmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
-        $this->addJavascript('$("#oidc_fields_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
+        $this->addJavascript('$("#fieldsmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
 
         // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
-        $form->addCustomContent("Admidio_oidc_fields", '', '');
-        $form->addCustomContent("sso_oidc_fields", '', '');
+        $form->addCustomContent("fieldsmap_Admidio", '', '');
+        $form->addCustomContent("fieldsmap_sso", '', '');
 
         $form->addCheckbox(
-            'oidc_fields_all_other',
+            'sso_fields_all_other',
             $gL10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER'),
             $client->getFieldMappingCatchall(),
             array('helpTextId' => '')
         );
 
         
-        // $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "oidc_roles");
+        // $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
         // $this->addJavascript($js['jsInit'], false);
         // $this->addJavascript($js['js'], true);
         // $this->addJavascript('$("#oidc_roles_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
 
         // // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
-        // $form->addCustomContent("Admidio_oidc_roles", '', '');
-        // $form->addCustomContent("oidc_oidc_roles", '', '');
+        // $form->addCustomContent("rolesmap_Admidio", '', '');
+        // $form->addCustomContent("rolesmap_oidc", '', '');
 
         // $form->addCheckbox(
-        //     'oidc_roles_all_other',
+        //     'sso_roles_all_other',
         //     $gL10n->get('SYS_SSO_OIDC_ROLES_ALLOTHER'),
         //     $client->getRoleMappingCatchall(),
         //     array('helpTextId' => '')
@@ -655,7 +688,7 @@ class SSOClientPresenter extends PagePresenter
 
 
         $form->addSelectBox(
-            'oidc_roles_access',
+            'sso_roles_access',
             $gL10n->get('SYS_SSO_ROLES'),
             $allRolesSet,
             array(
