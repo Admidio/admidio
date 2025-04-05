@@ -34,6 +34,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2 \
         ca-certificates \
+        cron \
         curl \
         imagemagick \
         libapache2-mod-php8.3 \
