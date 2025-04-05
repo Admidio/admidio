@@ -1088,7 +1088,7 @@ class ChangelogService {
      * @return bool Returns true if the database table (or at least one, of multiple are given) is logged
      * @throws Exception
      */
-    public static function hasLogViewPermission(string|array $table, User $user = null) : bool {
+    public static function hasLogViewPermission(string|array $table, ?User $user = null) : bool {
         global $gSettingsManager, $gCurrentUser;
         if (empty($user)) {
             $user = $gCurrentUser;

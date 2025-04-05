@@ -823,7 +823,7 @@ class Entity
                             $queryParams[] = $value;
                         }
                     }
-                    // Ignore the usr_id_create and timestamp_crearte (and *_change) columns in the change log...
+                    // Ignore the usr_id_create and timestamp_create (and *_change) columns in the change log...
                     if (!in_array($key, $this->getIgnoredLogColumns())) {
                         $logChanges[$key] = array('oldValue' => $this->columnsInfos[$key]['previousValue'], 'newValue' => $value); 
                     }
