@@ -8,6 +8,8 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 # set -x
 
 
+echo "[INFO ] run cron service for php session cleanup (service cron start)"
+service cron start
 
 
 # check for existing admidio directories in docker volumes
