@@ -1964,7 +1964,7 @@ class PreferencesPresenter extends PagePresenter
             'sso_saml_entity_id',
             $gL10n->get('SYS_SSO_SAML_ENTITY_ID'),
             (string)$formValues['sso_saml_entity_id'],
-            array('class' => 'copy-container', 'helpTextId' => 'SYS_SSO_SAML_ENTITY_ID_DESC')
+            array('class' => 'copy-container if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_ENTITY_ID_DESC')
         );
 
         $keyService = new KeyService($gDb);
@@ -1980,22 +1980,24 @@ class PreferencesPresenter extends PagePresenter
         
         $formSSO->addSelectBox(
             'sso_saml_signing_key',
-            $gL10n->get('SYS_SSO_SAML_SIGNING_KEY'),
+            $gL10n->get('SYS_SSO_SIGNING_KEY'),
             $keys,
-            array('defaultValue' => $formValues['sso_saml_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE')/*, 'helpTextId' => 'SYS_SSO_SAML_SIGNING_KEY_DESC'*/, 'valueAttributes' => $valueAttributes)
+            array('defaultValue' => $formValues['sso_saml_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'), 
+                'valueAttributes' => $valueAttributes, 'class' => 'if-saml-enabled')
         );
         $formSSO->addSelectBox(
             'sso_saml_encryption_key',
-            $gL10n->get('SYS_SSO_SAML_ENCRYPTION_KEY'),
+            $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
             $keys,
-            array('defaultValue' => $formValues['sso_saml_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE')/*, 'helpTextId' => 'SYS_SSO_SAML_ENCRYPTION_KEY_DESC'*/, 'valueAttributes' => $valueAttributes)
+            array('defaultValue' => $formValues['sso_saml_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
+                'valueAttributes' => $valueAttributes, 'class' => 'if-saml-enabled')
         );
 
         $formSSO->addCheckbox(
             'sso_saml_want_requests_signed',
             $gL10n->get('SYS_SSO_SAML_WANT_REQUESTS_SIGNED'),
             (bool)$formValues['sso_saml_want_requests_signed'],
-            array()
+            array('class' => 'if-saml-enabled')
         );
 
 
@@ -2011,8 +2013,8 @@ class PreferencesPresenter extends PagePresenter
 
         $formSSO->addCustomContent(
             'sso_saml_sso_staticsettings',
-            $gL10n->get('SYS_SSO_SAML_STATIC_SETTINGS'),
-            '<table id="sso_saml_sso_staticsettings" style="width: 100%">' . implode('', 
+            $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
+            '<table id="sso_saml_sso_staticsettings" style="width: 100%" class="if-saml-enabled">' . implode('', 
                 array_map(function ($key, $value) use ($gL10n) {
                     return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' . 
                         (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
@@ -2022,7 +2024,7 @@ class PreferencesPresenter extends PagePresenter
 
         // Link to SAML Client administration
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
-        $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" 
+        $html = '<a class="btn btn-secondary admidio-messagebox if-saml-enabled" href="javascript:void(0);" data-buttons="yes-no" 
             data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
             $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
             data-href="window.location.href=\'' . $url . '\'">

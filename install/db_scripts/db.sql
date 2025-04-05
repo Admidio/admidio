@@ -527,6 +527,7 @@ CREATE TABLE %PREFIX%_sso_keys (
     key_uuid                    varchar(36)         NOT NULL,
     key_org_id                  integer unsigned    NOT NULL,
     key_name                    text                NOT NULL,
+-- TODO: Add key_type ENUM ('RSA', 'EC') or key_algorithm varchar(16) for signing algorithm e.g. RS256, ES256, etc.    
     key_algorithm               varchar(50)         NOT NULL    DEFAULT 'RSA',
     key_private                 text                NOT NULL,
     key_public                  text                NOT NULL,

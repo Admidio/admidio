@@ -227,6 +227,10 @@ class ChangelogService {
      */
     public static function getObjectForTable(string $module): Entity | null {
         global $gDb, $gProfileFields;
+
+        if (str_starts_with($module, TABLE_PREFIX . '_')) {
+            $module = substr($module, strlen(TABLE_PREFIX) + 1);
+        }
         // HANDLE REGISTERED CALLBACKS, THEN DEFAULT PROCESSING
         // First process callbacks defined for the given module:
         if (!empty($module) && array_key_exists($module, self::$customCallbacks['getObjectForTable'])) {
@@ -298,7 +302,7 @@ class ChangelogService {
                 return new Topic($gDb);
             case 'saml_clients':
                 return new SAMLClient($gDb);
-            case 'ssos_keys':
+            case 'sso_keys':
                 return new Key($gDb);
             default:
                 return null;
@@ -893,7 +897,7 @@ class ChangelogService {
                     }
                     break;
                 case 'SAML_field_mapping':
-                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_SAML_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ATTRIBUTES_ALLOTHER')]);
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ATTRIBUTES_ALLOTHER')]);
                     break;
                 case 'SAML_roles_mapping':
                     $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_SAML_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ROLES_ALLOTHER')]);
@@ -922,10 +926,10 @@ class ChangelogService {
         // Header
         $table = '<table border="1"><tr style="background: darkgray"><th>' . $admidioField . '</th><th>' . $targetField . "</th></tr>\n";
         // Loop through all mappings:
-        foreach ($mapping as $samlVal => $admVal) {
-            if (array_key_exists($samlVal, $messages)) {
+        foreach ($mapping as $ssoVal => $admVal) {
+            if (array_key_exists($ssoVal, $messages)) {
                 if (!empty($admVal)) {
-                    $msg = $messages[$samlVal];
+                    $msg = $messages[$ssoVal];
                     $table .= '<tr><td colspan="2" style="border: solid 1pt gray; background: lightgray;">' . $msg . "</td></tr>\n";
                 }
             } else {
@@ -933,7 +937,7 @@ class ChangelogService {
                     $object->readDataById($admVal);
                     $admVal = $object->readableName();
                 }
-                $table .= '<tr><td>' . $admVal . '</td><td>' . $samlVal . "</td></tr>\n";
+                $table .= '<tr><td>' . $admVal . '</td><td>' . $ssoVal . "</td></tr>\n";
             }
         }
         $table .= '</table>';

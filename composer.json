@@ -37,7 +37,6 @@
         "twbs/bootstrap": "5.3.*",
         "twbs/bootstrap-icons": "^1.11",
         "paragonie/sodium_compat_ext_sodium": "^1.0",
-        "league/oauth2-server": "^9.2.0",
         "litesaml/lightsaml": "^4.2"
     },
     "suggest": {

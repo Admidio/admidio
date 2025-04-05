@@ -1,9 +1,5 @@
 <?php
 
-use Admidio\Events\Entity\Event;
-use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\SAMLService;
@@ -24,15 +20,14 @@ try {
     $rootPath = dirname(__DIR__, 2);
     $pluginFolder = basename(__DIR__);
 
-    require_once($rootPath . '/adm_program/system/common.php');
-    
+    require_once($rootPath . '/system/common.php');
     $requestUri = $_SERVER['REQUEST_URI'];
     $method = $_SERVER['REQUEST_METHOD'];
 
-    $type = 'oidc';
+    $type = '';
     if (strpos($requestUri, '/saml/') !== false) {
         $type = 'saml';
-    } else {
+    } elseif (strpos($requestUri, '/oidc/') !== false) {
         $type = 'oidc';
     }
 

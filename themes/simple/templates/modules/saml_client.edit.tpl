@@ -41,38 +41,38 @@
 
             <div class="admidio-form-group admidio-form-custom-content row mb-3">
                 <label class="col-sm-3 col-form-label">
-                    {$l10n->get('SYS_SSO_SAML_ATTRIBUTES')}
+                    {$l10n->get('SYS_SSO_ATTRIBUTES')}
                 </label>
                 <div class="col-sm-9">
                     <div class="table-responsive">
-                        <table class="table table-condensed" id="saml_fields_table">
+                        <table class="table table-condensed" id="fieldsmap_table">
                             <thead>
                             <tr class="nosort">
                                 <th style="width: 50%;">{$l10n->get('SYS_PROFILE_FIELD')}</th>
-                                <th style="width: 43%;">{$l10n->get('SYS_SSO_SAML_ATTRIBUTE')}</th>
+                                <th style="width: 43%;">{$l10n->get('SYS_SSO_ATTRIBUTE')}</th>
                                 <th></th>
                             </tr>
                             </thead>
-                            <tbody id="saml_fields_tbody"></tbody>
+                            <tbody id="fieldsmap_tbody"></tbody>
                             <tfoot>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <input id="{$elements['saml_fields_all_other'].id}" name="{$elements['saml_fields_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
-                                    {foreach $elements['saml_fields_all_other'].attributes as $itemvar}
+                                    <input id="{$elements['sso_fields_all_other'].id}" name="{$elements['sso_fields_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
+                                    {foreach $elements['sso_fields_all_other'].attributes as $itemvar}
                                         {$itemvar@key}="{$itemvar}"
                                     {/foreach} >
-                                    <label class="form-check-label fw-normal" for="saml_fields_all_other"> {$l10n->get('SYS_SSO_SAML_ATTRIBUTES_ALLOTHER')}</label>
+                                    <label class="form-check-label fw-normal" for="sso_fields_all_other"> {$l10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER')}</label>
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <a class="icon-text-link" href="javascript:addColumn_saml_fields()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_FIELD')}</a>
-                                    <!--a class="icon-text-link" href="javascript:addAll_saml_fields()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_FIELDS')}</a-->
+                                    <a class="icon-text-link" href="javascript:addColumn_fieldsmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_FIELD')}</a>
+                                    <!--a class="icon-text-link" href="javascript:addAll_fieldsmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_FIELDS')}</a-->
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <div class="form-text">{$l10n->get('SYS_SSO_SAML_ATTRIBUTES_DESC')}</div>
+                                    <div class="form-text">{$l10n->get('SYS_SSO_ATTRIBUTES_DESC')}</div>
                                 </td>
                             </tr>
                             </tfoot>
@@ -86,7 +86,7 @@
                 </label>
                 <div class="col-sm-9">
                     <div class="table-responsive">
-                        <table class="table table-condensed" id="saml_roles_table">
+                        <table class="table table-condensed" id="rolesmap_table">
                             <thead>
                             <tr class="nosort">
                                 <th style="width: 50%;">{$l10n->get('SYS_ROLE')}</th>
@@ -94,21 +94,21 @@
                                 <th></th>
                             </tr>
                             </thead>
-                            <tbody id="saml_roles_tbody"></tbody>
+                            <tbody id="rolesmap_tbody"></tbody>
                             <tfoot>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <input id="{$elements['saml_roles_all_other'].id}" name="{$elements['saml_roles_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
-                                    {foreach $elements['saml_roles_all_other'].attributes as $itemvar}
+                                    <input id="{$elements['sso_roles_all_other'].id}" name="{$elements['sso_roles_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
+                                    {foreach $elements['sso_roles_all_other'].attributes as $itemvar}
                                         {$itemvar@key}="{$itemvar}"
                                     {/foreach} >
-                                    <label class="form-check-label fw-normal" for="saml_roles_all_other"> {$l10n->get('SYS_SSO_SAML_ROLES_ALLOTHER')}</label>
+                                    <label class="form-check-label fw-normal" for="sso_roles_all_other"> {$l10n->get('SYS_SSO_SAML_ROLES_ALLOTHER')}</label>
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <a class="icon-text-link" href="javascript:addColumn_saml_roles()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ROLE')}</a>
-                                    <!--a class="icon-text-link" href="javascript:addAll_saml_roles()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_ROLES')}</a-->
+                                    <a class="icon-text-link" href="javascript:addColumn_rolesmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ROLE')}</a>
+                                    <!--a class="icon-text-link" href="javascript:addAll_rolesmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_ROLES')}</a-->
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
@@ -122,7 +122,7 @@
                 </div>
             </div>
 
-            {include 'sys-template-parts/form.select.tpl' data=$elements['saml_roles_access']}
+            {include 'sys-template-parts/form.select.tpl' data=$elements['sso_roles_access']}
         </div>
     </div>
     <div class="form-alert" style="display: none;">&nbsp;</div>
