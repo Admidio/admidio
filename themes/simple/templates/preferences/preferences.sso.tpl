@@ -67,6 +67,17 @@
 
     // Trigger change event on page load to set initial value
     $('#sso_saml_signing_key').trigger('change');
+
+
+    // Show/hide saml and oidc controls depending on the saml/oidc enabled checkboxes
+    $('#sso_saml_enabled').on('change', function() {
+        if ($('#sso_saml_enabled').is(':checked')) {
+            $('.admidio-form-group:has(.if-saml-enabled)').show();
+        } else {
+            $('.admidio-form-group:has(.if-saml-enabled)').hide();
+        }
+    });
+    $('#sso_saml_enabled').trigger('change');
 </script>
 
 <form {foreach $attributes as $attribute}
@@ -75,6 +86,10 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
 
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_keys']}
+
+{* ********************************************************************************** 
+ * SAML settings 
+ * **********************************************************************************}
 
     {$elements['sso_saml_settings'].content}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_saml_enabled']}

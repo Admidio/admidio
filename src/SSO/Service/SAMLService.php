@@ -2,6 +2,7 @@
 namespace Admidio\SSO\Service;
 
 use Admidio\Preferences\Entity\Preferences;
+use Admidio\SSO\Entity\SSOClient;
 use LightSaml\Builder\Profile\Metadata\MetadataProfileBuilder;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use LightSaml\Model\Protocol\AuthnRequest;
@@ -35,6 +36,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use Exception;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Users\Entity\User;
 use Admidio\Roles\Entity\Role;
@@ -45,10 +47,7 @@ use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Entity\Key;
 
 
-class SAMLService {
-    private Database $db;
-    private User $currentUser;
-    private $spRepository;
+class SAMLService extends SSOService {
     private $idpEntityId;
     private $ssoUrl;
     private $sloUrl;
@@ -56,14 +55,19 @@ class SAMLService {
 
     public function __construct(Database $db, User $currentUser) {
         global $gSettingsManager;
-        $this->db           = $db;
-        $this->currentUser  = $currentUser;
-        // $this->spRepository = new ServiceProviderRepository($db);
+
+        parent::__construct($db, $currentUser);
+        $this->columnPrefix = 'smc';
+        $this->table = TBL_SAML_CLIENTS;
 
         $this->idpEntityId = $gSettingsManager->get('sso_saml_entity_id');
         $this->ssoUrl      = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/sso";
         $this->sloUrl      = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/slo";
         $this->metadataUrl = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/metadata";
+    }
+
+    protected function getRolesRightName(): string {
+        return 'sso_saml_access';
     }
 
     /**
@@ -92,120 +96,11 @@ class SAMLService {
         return $this->idpEntityId;
     }
 
-    
-    /**
-     * Save data from the SAML client edit form into the database.
-     * @throws Exception
-     */
-    public function save($getClientUUID)
-    {
-        global $gCurrentSession;
-
-        // check form field input and sanitized it from malicious content
-        $clientEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        $formValues = $clientEditForm->validate($_POST);
-
-        $client = new SAMLClient($this->db);
-        $client->readDataByUUID($getClientUUID);
-
-        $this->db->startTransaction();
-
-        // Collect all field mappings and the catch-all checkbox
-        // If a SAML field is left empty, use the admidio name!
-        $samlFields = $formValues['SAML_saml_fields']??[];
-        $admFields = $formValues['Admidio_saml_fields']??[];
-        $samlFields = array_map(function ($a, $b) { return (!empty($a)) ? $a : $b;}, $samlFields, $admFields);
-        $client->setFieldMapping(array_combine($samlFields, $admFields), $formValues['saml_fields_all_other']??false);
-
-        // Collect all role mappings and the catch-all checkbox
-        $samlRoles = $formValues['SAML_saml_roles']??[];
-        $admRoles = $formValues['Admidio_saml_roles']??[];
-        $samlRoles = array_map( function($s, $a) { 
-                if (empty($s)) {
-                    $role = new Role($this->db, $a);
-                    return $role->readableName();
-                } else { 
-                    return $s; 
-                }
-            }, $samlRoles, $admRoles);
-        $client->setRoleMapping(array_combine($samlRoles, $admRoles), $formValues['saml_roles_all_other']??false);
-
-        // write all other form values
-        foreach ($formValues as $key => $value) {
-            if (str_starts_with($key, 'smc_')) {
-                $client->setValue($key, $value);
-            }
-        }
-
-        $client->save();
-
-        // save changed roles rights of the menu
-        if (isset($_POST['saml_roles_access'])) {
-            $accessRoles = array_map('intval', $_POST['saml_roles_access']);
-        } else {
-            $accessRoles = array();
-        }
-
-        $accessRolesRights = new RolesRights($this->db, 'sso_saml_access', $client->getValue('smc_id'));
-        $accessRolesRights->saveRoles($accessRoles);
-
-        $this->db->endTransaction();
+    public function initializeClientObject($database): ?SSOClient {
+        return new SAMLClient($database);
     }
-
 
     
-    /**
-     * Return all SAML client Ids stored in the database. For each client ID, the full SAML client can be 
-     * retrieved by new SAMLClient($db, $clientId).
-     * @return array Returns an array with all client Ids
-     * @throws Exception
-     */
-    public function getClientIds(): array
-    {
-        $sql = 'SELECT smc_client_id
-          FROM ' . TBL_SAML_CLIENTS . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row['smc_client_id'];
-        }
-        return $clients;
-    }
-    
-    /**
-     * Return all numeric Ids of  SAML clients stored in the database.
-     * @return array Returns an array with all numeric  Ids
-     * @throws Exception
-     */
-    public function getIds(): array
-    {
-        $sql = 'SELECT smc_id
-          FROM ' . TBL_SAML_CLIENTS . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row['smc_id'];
-        }
-        return $clients;
-    }
-
-    /**
-     * Return all UUIDs of  SAML clients stored in the database.
-     * @return array Returns an array with all UUIDs
-     * @throws Exception
-     */
-    public function getUUIDs(): array
-    {
-        $sql = 'SELECT smc_uuid
-          FROM ' . TBL_SAML_CLIENTS . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row['smc_uuid'];
-        }
-        return $clients;
-    }
-
     public function getSignatureWriter(string $privkeyPEM, X509Certificate $cert) {
         $privateKeyResource = KeyHelper::createPrivateKey($privkeyPEM, '', false, XMLSecurityKey::RSA_SHA256);
         $signatureWriter = new SignatureWriter($cert, $privateKeyResource, XmlSecurityDSig::SHA256);
@@ -365,18 +260,6 @@ class SAMLService {
         echo $context->getDocument()->saveXML();
     }
 
-    public function getSPfromID($clientID) {
-        // $entityIdClient = $request->getIssuer()->getValue();
-
-        // Load the SAML client data (entityID is in $request->issuer->getValue())
-        $client = new SAMLClient($this->db);
-        $client->readDataByEntityId($clientID);
-        if ($client->isNewRecord()) {
-            throw new Exception("SAML 2.0 client '$clientID' not found in database. Please check the SAML 2.0 client settings and configure the client in Admidio.");
-        }
-        return $client;
-    }
-
     public function errorResponse(string|array $status, $message, $request, $client) {
         if (!is_array($status)) $status = [$status];
         $statusCode = new \LightSaml\Model\Protocol\StatusCode($status[0]);
@@ -460,32 +343,6 @@ class SAMLService {
     }
 
 
-    public function showSAMLLoginForm(SAMLClient $client, ?string $message = null) {
-        global $gNavigation, $gL10n;
-
-        if (!isset($_SESSION['login_forward_url'])) {
-            $_SESSION['login_forward_url'] = CURRENT_URL;
-        }
-        $headline = $gL10n->get('SYS_LOGIN_TO', array($client->readableName()));
-
-        // remember url (will be removed in login_check)
-        $gNavigation->addUrl(CURRENT_URL, $headline);
-
-        // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-login', $headline);
-        if (!empty($message)) {
-            $page->addHtml($message);
-        }
-        // Use javascript to hide the menu bar on the left and the registration 
-        $page->addJavascript('$("#adm_sidebar").hide()', true);
-
-        // TODO_RK: Add "Cancel / Return to SP without logging in" button with JS!
-        $loginModule = new \ModuleLogin();
-        $loginModule->addHtmlLogin($page, '');
-        $page->show();
-        exit;
-    }
-
     public function handleSSORequest() {
         global $gCurrentUser, $gCurrentUserId, $rootPath, $gSettingsManager, $gL10n, $gProfileFields, $gValidLogin, $gLogger;
         global $gNavigation;
@@ -500,7 +357,7 @@ class SAMLService {
         }
         // Load the SAML client data (entityID is in $request->issuer->getValue())
         $entityIdClient = $request->getIssuer()->getValue();
-        $client = $this->getSPfromID($entityIdClient);
+        $client = $this->getClientFromID($entityIdClient);
 
         try {
             // Validate signatures. Will throw an exception
@@ -509,7 +366,7 @@ class SAMLService {
             }
 
             if (!$gValidLogin) {
-                $this->showSAMLLoginForm($client);
+                $this->showSSOLoginForm($client);
                 // exit;
             }
 
@@ -518,7 +375,7 @@ class SAMLService {
                 $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
                     $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName())) . 
                     '</div>';
-                $this->showSAMLLoginForm($client, $message);
+                $this->showSSOLoginForm($client, $message);
                 // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
 
                 exit;
@@ -597,7 +454,7 @@ class SAMLService {
             $fieldsDone = [];
             foreach ($fields as $samlField => $admidioField) {
                 $att = $this->getUserAttribute($client, $gCurrentUser, $admidioField, $samlField);
-                if ($att->getFirstAttributeValue() !== null) {
+                if ($att->getAllAttributeValues() !== null) {
                     $attributeStatement->addAttribute($att);
                 }
                 $fieldsDone[] = $admidioField;
@@ -692,7 +549,7 @@ class SAMLService {
         
         $sessionId = session_id();
         $entityIdClient = $request->getIssuer()->getValue();
-        $client = $this->getSPfromID($entityIdClient);
+        $client = $this->getClientFromID($entityIdClient);
 
         try {
             // Validate signatures. Will throw an exception
@@ -701,7 +558,7 @@ class SAMLService {
             }
 
 
-            if ($gCurrentUserId) {
+            if ($gValidLogin) {
                 // Logout will only work if you are logged in...
 
 
@@ -731,9 +588,6 @@ class SAMLService {
                     $gSettingsManager = new SettingsManager($gDb, $gCurrentOrgId);
                 }
             
-                // clear data from global objects
-                $gCurrentUser->clear();
-                $gMenu->initialize();
             
 
                 /**  2. NOTIFY ALL REGISTERED CLIENTS OF THE LOGOUT */
@@ -741,32 +595,37 @@ class SAMLService {
                 
                 // Notify all registered SPs for logout
                 foreach ($this->getIds() as $spId) {
-                    $sp = new SAMLClient($this->db, $spId);
-                    $this->sendLogoutRequest($sp, $gCurrentUser);
+                    // Don't send a logout request to the client that initiated the logout request
+                    if ($spId != $entityIdClient) {
+                        $sp = new SAMLClient($this->db, $spId);
+                        $this->sendLogoutRequest($sp, $gCurrentUser);
+                    }
                 }
 
-                $logoutResponse = new LogoutResponse();
-                $logoutResponse->setIssuer(new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId()));
-                $logoutResponse->setInResponseTo($request->getID());
-                $statusSuccess = new \LightSaml\Model\Protocol\Status(
-                    new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));
-                $logoutResponse->setStatus($statusSuccess);
+                /**  3. clear data from global objects */
 
-                // Sign the whole response!
-                $keys = $this->getKeysCertificates();
-                $signAssertions = $client->getValue('smc_sign_assertions');
-
-                if ($signAssertions) {
-                    $logoutResponse->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
-                }
-
-                $messageContext = new \LightSaml\Context\Profile\MessageContext();
-                $messageContext->setMessage($logoutResponse);
-
-                $binding = new HttpPostBinding();
-                $httpResponse = $binding->send($messageContext, $client->getValue('smc_slo_url'));
-                print $httpResponse->getContent();
+                $gCurrentUser->clear();
+                $gMenu->initialize();
+                
             }
+
+            $logoutResponse = new LogoutResponse();
+            $logoutResponse->setIssuer(new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId()));
+            $logoutResponse->setInResponseTo($request->getID());
+            $statusSuccess = new \LightSaml\Model\Protocol\Status(
+                new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));
+            $logoutResponse->setStatus($statusSuccess);
+            // Sign the whole response!
+            $keys = $this->getKeysCertificates();
+            $signAssertions = $client->getValue('smc_sign_assertions');
+            if ($signAssertions) {
+                $logoutResponse->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
+            }
+            $messageContext = new \LightSaml\Context\Profile\MessageContext();
+            $messageContext->setMessage($logoutResponse);
+            $binding = new HttpRedirectBinding();
+            $httpResponse = $binding->send($messageContext, $client->getValue('smc_slo_url'));
+            print $httpResponse->getContent();
         } catch (Exception $e) {
             $gLogger->error($e->getMessage());
             $this->errorResponse(SamlConstants::STATUS_RESPONDER, $e->getMessage(), $request, $client);
@@ -787,7 +646,7 @@ class SAMLService {
         $logoutRequest->setNameID(new NameID($login, SamlConstants::NAME_ID_FORMAT_UNSPECIFIED));
         $logoutRequest->setDestination($sloUrl);
         
-        // Sign the response!
+        // Sign the request
         $keys = $this->getKeysCertificates();
         $signAssertions = $client->getValue('smc_sign_assertions');
         if ($signAssertions) {
@@ -797,21 +656,25 @@ class SAMLService {
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($logoutRequest);
         
-        // $binding = new HttpRedirectBinding();
-        $binding = new HttpPostBinding();
-        $httpResponse = $binding->send($messageContext, $sloUrl);
+        $binding = new HttpRedirectBinding();
+        // $httpResponse = $binding->send($messageContext, $sloUrl);
 
+        // Instead of sending it to the browser, capture the URL
+        $request = \Symfony\Component\HttpFoundation\Request::create('/', 'GET');
+        $response = $binding->send($messageContext, $sloUrl, $request);
+        $redirectUrl = $response->headers->get('Location');
+
+        // Send backchannel request via GET (NOT POST!)
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $sloUrl);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(['SMALRequest' => $httpResponse->getContent()]));
+        curl_setopt($ch, CURLOPT_URL, $redirectUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch); // Send the request and save the response to $response
+        $responseContent = curl_exec($ch);
+        curl_close($ch);
 
-        curl_close($ch); // Close cURL session
+        print $responseContent;
 
-        print $response;
     }
+   
 /*
     public function handleAttributeQuery() {
         // TODO: This should work like the Response to an AuthnRequest, just with the requested attributes
@@ -832,7 +695,7 @@ class SAMLService {
         // Load the SAML client data (entityID is in $request->issuer->getValue())
         $clientACS = $request->getAssertionConsumerServiceURL();
         $entityIdClient = $request->getIssuer()->getValue();
-        $client = $this->getSPfromID($entityIdClient);
+        $client = $this->getClientFromID($entityIdClient);
         
         try{
             if (!$gCurrentUserId) {
@@ -867,7 +730,7 @@ class SAMLService {
         }
     }
 */
-    private function getUserAttribute(SAMLClient $client, User $user, string $admidioField, string $samlAttribute, string $friendlyName = null) {
+    private function getUserAttribute(SAMLClient $client, User $user, string $admidioField, string $samlAttribute, ?string $friendlyName = null) {
         global $gL10n, $gProfileFields;
 
         // recode $attributeName to admidio field names, but use original $attributeName in response

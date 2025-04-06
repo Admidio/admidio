@@ -38,11 +38,11 @@ class SSOClientPresenter extends PagePresenter
         parent::__construct($objectUUID);
     }
 
-    protected function createSAMLEditFormJS(array $available, array $config = [], $type = "saml_fields") {
+    protected function createSSOEditFormJS(array $available, array $config = [], $type = "fieldsmap") {
         global $gL10n;
 
         $jsInit = '';
-        $js = '$("#saml_fields_tbody").sortable();';
+        $js = '$("#' . $type . '_tbody").sortable();';
         
         $jsInit .= '
             function createArray_' . $type . '() {
@@ -67,7 +67,7 @@ class SSOClientPresenter extends PagePresenter
             var fieldNumberIntern_' . $type . '  = 0;
         
             // Function adds a new row for assigning columns to the list
-            function addColumn_' . $type . '(samlField = "", admidioField = "")
+            function addColumn_' . $type . '(ssoField = "", admidioField = "")
             {
                 var category = "";
                 var table = document.getElementById("' . $type . '_tbody");
@@ -76,7 +76,7 @@ class SSOClientPresenter extends PagePresenter
 
                 // New column for selecting the field
                 var newCellAdmidio = newTableRow.insertCell(-1);
-                htmlAdmidioValues = "<select class=\"form-control admidio-field-select\"  size=\"1\" id=\"admidio_' . $type . '" + fieldNumberIntern_' . $type . ' + "\" class=\"List_' . $type . '\" name=\"Admidio_' . $type . '[]\">";
+                htmlAdmidioValues = "<select class=\"form-control admidio-field-select\"  size=\"1\" id=\"' . $type . '_admidio" + fieldNumberIntern_' . $type . ' + "\" class=\"List_' . $type . '\" name=\"' . $type . '_Admidio[]\">";
                 for(var counter = 0; counter < arr_' . $type . '.length; counter++) {
                     if(category !=  arr_' . $type . '[counter]["cat_name"]) {
                         if(category.length > 0) {
@@ -97,7 +97,7 @@ class SSOClientPresenter extends PagePresenter
         
                 // New column for selecting the mapped name
                 var newCellSAML = newTableRow.insertCell(-1);
-                htmlMappedName = "<input type=\"text\" class=\"form-control saml-field-input\" id=\"saml_' . $type . '" + fieldNumberIntern_' . $type . ' + "\" name=\"SAML_' . $type . '[]\" value=\"" + samlField + "\" size=\"30\" maxlength=\"250\">";
+                htmlMappedName = "<input type=\"text\" class=\"form-control sso-field-input\" id=\"' . $type . '_sso" + fieldNumberIntern_' . $type . ' + "\" name=\"' . $type . '_sso[]\" value=\"" + ssoField + "\" size=\"30\" maxlength=\"250\">";
                 newCellSAML.innerHTML = htmlMappedName;
 
                 var newCellButtons = newTableRow.insertCell(-1);
@@ -120,14 +120,39 @@ class SSOClientPresenter extends PagePresenter
 
         // Add a row for each configured field / role 
         $js .= '';
-        foreach ($config as $samlField => $admidioField) {
+        foreach ($config as $ssoField => $admidioField) {
             $js .= '
-            addColumn_' . $type . '("' . $samlField . '", "' . $admidioField . '");';
+            addColumn_' . $type . '("' . $ssoField . '", "' . $admidioField . '");';
         }
 
         return array('js' => $js, 'jsInit' => $jsInit);
     }
 
+    protected function getAvailableRoles(): array {
+        global $gDb;
+        // Access restrictions by role/group are handled through role rights
+        $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
+                       FROM ' . TBL_ROLES . '
+                 INNER JOIN ' . TBL_CATEGORIES . '
+                         ON cat_id = rol_cat_id
+                 INNER JOIN ' . TBL_ORGANIZATIONS . '
+                         ON org_id = cat_org_id
+                      WHERE rol_valid  = true
+                        AND rol_system = false
+                        AND cat_name_intern <> \'EVENTS\'
+                   ORDER BY cat_name, rol_name';
+        $allRolesStatement = $gDb->queryPrepared($sqlRoles);
+        $allRolesSet = array();
+        while ($rowViewRoles = $allRolesStatement->fetch()) {
+            // Each role is now added to this array
+            $allRolesSet[] = array(
+                $rowViewRoles['rol_id'], // ID 
+                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
+                $rowViewRoles['cat_name'] // Group
+            );
+        }
+        return $allRolesSet;
+    }
 
     /**
      * Create the data for the edit form of a SAML client.
@@ -151,27 +176,7 @@ class SSOClientPresenter extends PagePresenter
             $client->readDataByUUID($this->objectUUID);
         }
 
-        // Access restrictions by role/group are handled through role rights
-        $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
-                       FROM ' . TBL_ROLES . '
-                 INNER JOIN ' . TBL_CATEGORIES . '
-                         ON cat_id = rol_cat_id
-                 INNER JOIN ' . TBL_ORGANIZATIONS . '
-                         ON org_id = cat_org_id
-                      WHERE rol_valid  = true
-                        AND rol_system = false
-                        AND cat_name_intern <> \'EVENTS\'
-                   ORDER BY cat_name, rol_name';
-        $allRolesStatement = $gDb->queryPrepared($sqlRoles);
-        $allRolesSet = array();
-        while ($rowViewRoles = $allRolesStatement->fetch()) {
-            // Each role is now added to this array
-            $allRolesSet[] = array(
-                $rowViewRoles['rol_id'], // ID 
-                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
-                $rowViewRoles['cat_name'] // Group
-            );
-        }
+        $allRolesSet = $this->getAvailableRoles();
 
         ChangelogService::displayHistoryButton($this, 'saml-client', 'saml_clients', !empty($this->objectUUID), array('uuid' => $this->objectUUID));
 
@@ -271,6 +276,7 @@ class SSOClientPresenter extends PagePresenter
             ['usr_id', $gL10n->get('SYS_SSO_USERID_ID') . ' - usr_id', $gL10n->get('SYS_SSO_USERID_FIELDS')],
             ['usr_uuid',  $gL10n->get('SYS_SSO_USERID_UUID') . ' - usr_uuid', $gL10n->get('SYS_SSO_USERID_FIELDS')],
             ['usr_login_name', $gL10n->get('SYS_SSO_USERID_LOGIN') . ' - usr_login_name', $gL10n->get('SYS_SSO_USERID_FIELDS')],
+            ['EMAIL', $gL10n->get('SYS_EMAIL') . ' - EMAIL', $gL10n->get('SYS_SSO_USERID_FIELDS')],
         ];
         $form->addSelectBox(
             'smc_userid_field',
@@ -297,34 +303,34 @@ class SSOClientPresenter extends PagePresenter
         }
         $userFields[] = ['roles', $gL10n->get('SYS_ROLES') . ' - roles', $gL10n->get('SYS_ROLES')];
 
-        $js = $this->createSAMLEditFormJS( $userFields, $client->getFieldMapping(), "saml_fields");
+        $js = $this->createSSOEditFormJS( $userFields, $client->getFieldMapping(), "fieldsmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
-        $this->addJavascript('$("#saml_fields_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
+        $this->addJavascript('$("#fieldsmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
 
         // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
-        $form->addCustomContent("Admidio_saml_fields", '', '');
-        $form->addCustomContent("SAML_saml_fields", '', '');
+        $form->addCustomContent("fieldsmap_Admidio", '', '');
+        $form->addCustomContent("fieldsmap_sso", '', '');
 
         $form->addCheckbox(
-            'saml_fields_all_other',
-            $gL10n->get('SYS_SSO_SAML_ATTRIBUTES_ALLOTHER'),
+            'sso_fields_all_other',
+            $gL10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER'),
             $client->getFieldMappingCatchall(),
             array('helpTextId' => '')
         );
 
         
-        $js = $this->createSAMLEditFormJS($allRolesSet, $client->getRoleMapping(), "saml_roles");
+        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
-        $this->addJavascript('$("#saml_roles_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
+        $this->addJavascript('$("#rolesmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
 
         // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
-        $form->addCustomContent("Admidio_saml_roles", '', '');
-        $form->addCustomContent("SAML_saml_roles", '', '');
+        $form->addCustomContent("rolesmap_Admidio", '', '');
+        $form->addCustomContent("rolesmap_sso", '', '');
 
         $form->addCheckbox(
-            'saml_roles_all_other',
+            'sso_roles_all_other',
             $gL10n->get('SYS_SSO_SAML_ROLES_ALLOTHER'),
             $client->getRoleMappingCatchall(),
             array('helpTextId' => '')
@@ -357,7 +363,7 @@ class SSOClientPresenter extends PagePresenter
 
 
         $form->addSelectBox(
-            'saml_roles_access',
+            'sso_roles_access',
             $gL10n->get('SYS_SSO_ROLES'),
             $allRolesSet,
             array(
@@ -527,8 +533,6 @@ class SSOClientPresenter extends PagePresenter
     
         $table = new \HtmlTable('adm_saml_clients_table', $this, true, false);
     
-    //    $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
-    
         $table->addRowHeadingByArray(array(
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
             $gL10n->get('SYS_SSO_CLIENT_ID'),
@@ -575,21 +579,6 @@ class SSOClientPresenter extends PagePresenter
     
         // add table to the form
         $this->addHtml(html: $table->show());
-
-        
-
-
-        /* ****************************************************/  
-        // OIDC clients
-        /* **************************************************** 
-        $this->addHtml('<h3 class="admidio-content-subheader">' . $gL10n->get('SYS_SSO_CLIENTS_OIDC') . '</h3>');
-
-        $table = new \HtmlTable('adm_saml_clients_table', $this, true, true);
-        $table->setMessageIfNoRowsFound('SYS_SSO_NO_OIDC_CLIENTS_FOUND');
-
-        $this->addHtml($table->show());
-        */
-
 
     }
 }

@@ -74,6 +74,9 @@ class KeyService {
         $config = $this->setupKeyConfig($algorithm);
 
         $key = openssl_pkey_new($config);
+        if ($key === false) {
+            throw new Exception(openssl_error_string(), array(openssl_error_string()));
+        }
         openssl_pkey_export($key, $privateKey);
         
         $keyDetails = openssl_pkey_get_details($key);
