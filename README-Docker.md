@@ -239,20 +239,18 @@ docker run --detach -it --name "Admidio" \
 
 ## Docker Compose Example (docker-compose.yaml)
 ```yaml
-version: "3.9"
-
 # https://github.com/Admidio/admidio/blob/master/README-Docker.md
 
 services:
   admidio-test-db:
     restart: unless-stopped
-    image: mariadb:latest
+    image: mariadb:lts-noble
     container_name: admidio-test-mariaDB
     volumes:
       - "./admidio-test/mariadb/config:/etc/mysql/conf.d"
       - "./admidio-test/mariadb/data:/var/lib/mysql"
-    ports:
-      - 3308:3306
+    # ports:
+    #   - 3308:3306
     environment:
       - MYSQL_ROOT_PASSWORD=rootpasswd
       - MYSQL_DATABASE=admidio
@@ -269,7 +267,6 @@ services:
   admidio:
     restart: unless-stopped
     image: admidio/admidio:branch_v4.3
-    # image: schast/admidio:branch_v4.3
     container_name: admidio-test-app
     depends_on:
       - admidio-test-db

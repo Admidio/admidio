@@ -384,8 +384,8 @@ try {
     }
 
     $page->assignSmartyVariable('showCurrentRoles', $gSettingsManager->getBool('profile_show_roles'));
-    $page->assignSmartyVariable('userRightAssignRoles', $gCurrentUser->assignRoles());
-    $page->assignSmartyVariable('userRightEditUser', $gCurrentUser->isAdministratorUsers());
+    $page->assignSmartyVariable('isAdministratorRoles', $gCurrentUser->isAdministratorRoles());
+    $page->assignSmartyVariable('isAdministratorUsers', $gCurrentUser->isAdministratorUsers());
     $page->assignSmartyVariable('masterData', $masterData);
     $page->assignSmartyVariable('profileData', $profileData);
     $page->assignSmartyVariable('lastLoginInfo', $gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));

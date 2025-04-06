@@ -47,7 +47,7 @@ try {
             // if there is no login then show a profile form where the user can register himself
             admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php');
             // => EXIT
-        } elseif (!$gCurrentUser->approveUsers()) {
+        } elseif (!$gCurrentUser->isAdministratorRegistration()) {
             // Only Users with the right "approve users" can work with registrations, otherwise exit.
             throw new Exception('SYS_NO_RIGHTS');
         }

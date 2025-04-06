@@ -125,7 +125,7 @@ class Component extends Entity
                     break;
 
                 case 'CATEGORY-REPORT':
-                    if ($gCurrentUser->checkRolesRight('rol_assign_roles')) {
+                    if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                         return true;
                     }
                     break;
@@ -179,7 +179,7 @@ class Component extends Entity
                     break;
 
                 case 'REGISTRATION':
-                    if ($gCurrentUser->approveUsers()) {
+                    if ($gCurrentUser->isAdministratorRegistration()) {
                         return true;
                     }
                     break;
@@ -229,7 +229,7 @@ class Component extends Entity
                 break;
 
             case 'CATEGORY-REPORT':
-                if ($gCurrentUser->checkRolesRight('rol_assign_roles')) {
+                if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                     return true;
                 }
                 break;
@@ -294,7 +294,7 @@ class Component extends Entity
                 break;
 
             case 'REGISTRATION':
-                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->approveUsers()) {
+                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->isAdministratorRegistration()) {
                     return true;
                 }
                 break;

@@ -848,7 +848,7 @@ class User extends Entity
             || ($categoryType === 'FOT' && $this->isAdministratorForum())
             || ($categoryType === 'LNK' && $this->isAdministratorWeblinks())
             || ($categoryType === 'USF' && $this->isAdministratorUsers())
-            || ($categoryType === 'ROL' && $this->assignRoles())
+            || ($categoryType === 'ROL' && $this->isAdministratorRoles())
         ) {
             $condition = '';
         } else {
@@ -1549,6 +1549,17 @@ class User extends Entity
     }
 
     /**
+     * Method checks if the current user is allowed to approve or reject registrations and therefore has
+     * admin access to the registration module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function isAdministratorRegistration(): bool
+    {
+        return $this->checkRolesRight('rol_approve_users');
+    }
+
+    /**
      * Method checks if the current user is allowed to manage roles and therefore has
      * admin access to the groups and roles module.
      * @return bool Return true if the user is admin of the module otherwise false
@@ -1932,7 +1943,7 @@ class User extends Entity
         // Only administrators are allowed to send new login data or users who want to approve login data
         if (
             $gSettingsManager->getBool('system_notifications_enabled')
-            && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers())
+            && ($gCurrentUser->isAdministrator() || $gCurrentUser->isAdministratorRegistration())
         ) {
             // Generate new secure-random password and save it
             $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
@@ -2221,29 +2232,6 @@ class User extends Entity
         $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling
 
         $this->resetInvalidLogins();
-    }
-
-    /**
-     * Function checks if the logged-in user is allowed to edit and assign registrations
-     * @return bool
-     * @throws Exception
-     */
-    public function approveUsers(): bool
-    {
-        return $this->checkRolesRight('rol_approve_users');
-    }
-
-    /**
-     * Checks if the user has the right to assign members to at least one role. This method also returns
-     * true if the user is a leader of the role and could assign other members to that role.
-     * @return bool Return **true** if the user can assign members to at least one role.
-     * @throws Exception
-     */
-    public function assignRoles(): bool
-    {
-        $this->checkRolesRight();
-
-        return $this->assignRoles;
     }
 
     /**
