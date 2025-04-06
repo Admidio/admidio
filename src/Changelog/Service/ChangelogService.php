@@ -227,6 +227,10 @@ class ChangelogService {
      */
     public static function getObjectForTable(string $module): Entity | null {
         global $gDb, $gProfileFields;
+
+        if (str_starts_with($module, TABLE_PREFIX . '_')) {
+            $module = substr($module, strlen(TABLE_PREFIX) + 1);
+        }
         // HANDLE REGISTERED CALLBACKS, THEN DEFAULT PROCESSING
         // First process callbacks defined for the given module:
         if (!empty($module) && array_key_exists($module, self::$customCallbacks['getObjectForTable'])) {
@@ -298,7 +302,7 @@ class ChangelogService {
                 return new Topic($gDb);
             case 'saml_clients':
                 return new SAMLClient($gDb);
-            case 'ssos_keys':
+            case 'sso_keys':
                 return new Key($gDb);
             default:
                 return null;

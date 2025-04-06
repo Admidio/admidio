@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Roles\Entity;
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Database;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
@@ -81,7 +82,11 @@ class RolesRightsData extends Entity
                 $obj = new MenuEntry($this->db, $objID);
                 break;
             default:
-                $obj = new Entity($this->db, $objTable, $objID);
+                $obj = ChangelogService::getObjectForTable($objTable);
+                if (!is_null($obj)) {
+                    $obj->readDataById($objID);
+                }
+                // $obj = new Entity($this->db, $objTable, $objID);
         }
         $objUuid = $obj->getValue($obj->columnPrefix . '_uuid'); 
         $objTableclean = str_replace(TABLE_PREFIX . '_', '', $objTable);
