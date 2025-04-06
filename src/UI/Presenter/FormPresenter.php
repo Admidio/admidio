@@ -131,7 +131,7 @@ class FormPresenter
      *                             is set as default and need not set with this parameter.
      * @throws Exception
      */
-    public function __construct(string $id, string $template, string $action = '', PagePresenter $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $template, string $action = '', ?PagePresenter $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(

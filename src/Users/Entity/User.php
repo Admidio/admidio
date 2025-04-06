@@ -113,7 +113,7 @@ class User extends Entity
      *                                  object with no specific user is created.
      * @throws Exception
      */
-    public function __construct(Database $database, ProfileFields $userFields = null, int $userId = 0)
+    public function __construct(Database $database, ?ProfileFields $userFields = null, int $userId = 0)
     {
         $this->changeNotificationEnabled = true;
 
@@ -242,7 +242,7 @@ class User extends Entity
      * @return bool Return true if a special right should be checked and the user has this right.
      * @throws Exception
      */
-    public function checkRolesRight(string $right = null): bool
+    public function checkRolesRight(?string $right = null): bool
     {
         $sqlFetchedRows = array();
 
@@ -421,7 +421,7 @@ class User extends Entity
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
      *                                       SYS_SECURITY_CODE_INVALID
      */
-    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, string $totpCode = null): bool
+    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, ?string $totpCode = null): bool
     {
         if ($this->checkPassword($password) && $this->checkMembership($isAdministrator) && $this->checkTotp($totpCode)) {
             $this->updateSession($setAutoLogin, $updateSessionCookies);

@@ -104,7 +104,7 @@ class ChangeNotification
      * @param User|null $user Optional the user object of the changed user could be set.
      * @throws Exception
      */
-    public function prepareUserChanges(int $userID, User $user = null)
+    public function prepareUserChanges(int $userID, ?User $user = null)
     {
         global $gDb, $gProfileFields;
         if (!isset($this->changes[$userID])) {
@@ -146,7 +146,7 @@ class ChangeNotification
      * @param string $new_value_db The new value of the field after the change as stored in the database
      * @throws Exception
      */
-    public function logProfileChange(int $userID, int $fieldId, string $fieldName, string $old_value = null, string $new_value = null, string $old_value_db = '', string $new_value_db = '', string $reason = "MODIFIED", $user = null)
+    public function logProfileChange(int $userID, int $fieldId, string $fieldName, ?string $old_value = null, ?string $new_value = null, string $old_value_db = '', string $new_value_db = '', string $reason = "MODIFIED", $user = null)
     {
         // Store the change to send out one change notification mail (after all modifications are done)
         $this->prepareUserChanges($userID, $user);
@@ -168,7 +168,7 @@ class ChangeNotification
      * @param User|null $user Optional the object of the changed user.
      * @throws Exception
      */
-    public function logUserChange(int $userID, string $fieldName, string $old_value = null, string $new_value = null, string $action = "MODIFIED", User $user = null)
+    public function logUserChange(int $userID, string $fieldName, ?string $old_value = null, ?string $new_value = null, string $action = "MODIFIED", ?User $user = null)
     {
         global $gSettingsManager, $gL10n, $gDb;
 
@@ -221,7 +221,7 @@ class ChangeNotification
      * @param string $old_value The previous value of the field before the change
      * @param string $new_value The new value of the field after the change
      */
-    public function logRoleChange(Membership $membership, string $fieldName, string $old_value = null, string $new_value = null)
+    public function logRoleChange(Membership $membership, string $fieldName, ?string $old_value = null, ?string $new_value = null)
     {
         global $gSettingsManager, $gL10n;
         $userID = $membership->getValue("mem_usr_id");
@@ -266,7 +266,7 @@ class ChangeNotification
      * @param User|null $user (optional) The User object of the newly created user
      * @throws Exception
      */
-    public function logUserCreation(int $userID, User $user = null)
+    public function logUserCreation(int $userID, ?User $user = null)
     {
         global $gProfileFields, $gDb, $gSettingsManager;
 
@@ -315,7 +315,7 @@ class ChangeNotification
      * @param User|null $user (optional) The User object of the user to be deleted
      * @throws Exception
      */
-    public function logUserDeletion(int $userID, User $user = null)
+    public function logUserDeletion(int $userID, ?User $user = null)
     {
         global $gProfileFields, $gL10n, $gDb, $gSettingsManager;
 
