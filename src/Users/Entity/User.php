@@ -1692,41 +1692,20 @@ class User extends Entity
     }
 
     /**
-     * Reads a user record out of the table adm_users in database selected by the unique user id.
-     * All profile fields of the object **mProfileFieldsData** will also be read. If no user was
-     * found than the default values of all profile fields will be set.
-     * @param int $id Unique id of the user that should be read
-     * @return bool Returns **true** if one record is found
-     * @throws Exception
-     */
-    public function readDataById(int $id): bool
-    {
-        if (parent::readDataById($id)) {
-            // read data of all user fields from current user
-            $this->mProfileFieldsData->readUserData($id, $this->organizationId);
-            return true;
-        } else {
-            $this->setDefaultValues();
-        }
-
-        return false;
-    }
-
-    /**
-     * Reads a record out of the table in database selected by the unique uuid column in the table.
-     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
-     * Per default all columns of the default table will be read and stored in the object. If no user
-     * was found than the default values of all profile fields will be set.
-     * Not every Admidio table has an uuid. Please check the database structure before you use this method.
-     * @param string $uuid Unique uuid that should be searched.
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the sql find more than one record the method returns **false**.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @throws Exception
      * @see Entity#readDataByColumns
-     * @see Entity#readData
+     * @see Entity#readDataById
+     * @see Entity#readDataByUuid
      */
-    public function readDataByUuid(string $uuid): bool
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
-        if (parent::readDataByUuid($uuid)) {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
             if (isset($this->mProfileFieldsData)) {
                 // read data of all user fields from current user
                 $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
