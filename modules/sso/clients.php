@@ -90,7 +90,7 @@ try {
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
             $oidcService = new OIDCService($gDb, $gCurrentUser);
-            $client = $oidcService->getClientFromID($getClientUUID);
+            $client = $oidcService->getClientFromUUID($getClientUUID);
             $client->delete();
             echo json_encode(array('status' => 'success'));
             break;

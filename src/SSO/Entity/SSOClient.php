@@ -5,6 +5,9 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Roles\Entity\RolesRights;
+use Admidio\Roles\Entity\Role;
+use Admidio\Users\Entity\User;
+
 
 
 class SSOClient extends Entity 
@@ -16,6 +19,7 @@ class SSOClient extends Entity
     protected string $ssoType = '';
 
     public function __construct(Database $database, string $tableName, string $columnPrefix, $client_id = null) {
+        $this->ssoType = 'saml';
         if (is_numeric($client_id)) {
             parent::__construct($database, $tableName, $columnPrefix, $client_id);
         } else {
@@ -202,6 +206,25 @@ class SSOClient extends Entity
     {
         $roles['*'] = $catchall;
         $this->setValue($this->columnPrefix . '_role_mapping', json_encode($roles));
+    }
+
+    public function getMappedRoleMemberships(User $user): array
+    {
+        $mapping = $this->getRoleMapping();
+        $includeAll = $this->getRoleMappingCatchall();
+
+        $mappedRoles = array();
+        // Loop through all roles of the user. If it is part of the mapping, or catchall is set, append it to the attribute
+        foreach ($user->getRoleMemberships() as $roleId) {
+            $rolesFound = array_keys($mapping, $roleId);
+            $mappedRoles = array_merge($mappedRoles, $rolesFound);
+            if (empty($rolesFound) && $includeAll) {
+                // CATCHALL: Add role with its admidio role name
+                $role = new Role($this->db, $roleId);
+                $mappedRoles[] = $role->getValue('rol_name');
+            }
+        }
+        return $mappedRoles;
     }
 
     /**

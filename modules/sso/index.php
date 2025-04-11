@@ -49,7 +49,7 @@ try {
                 $response = $oidcService->handleAuthorizationRequest();
             } elseif (strpos($requestUri, '/oidc/token') !== false && $method === 'POST') {
                 $response = $oidcService->handleTokenRequest();
-            } elseif (strpos($requestUri, '/oidc/userinfo') !== false && $method === 'GET') {
+            } elseif (strpos($requestUri, '/oidc/userinfo') !== false) {
                 $response = $oidcService->handleUserInfoRequest();
             } elseif (strpos($requestUri, '/oidc/jwks') !== false && $method === 'GET') {
                 $response = $oidcService->handleJWKSRequest();

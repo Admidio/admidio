@@ -584,22 +584,22 @@ class ChangelogService {
             'smc_slo_url' =>                'SYS_SSO_SLO_URL',
             'smc_x509_certificate' =>       'SYS_SSO_X509_CERTIFICATE',
             'smc_userid_field' =>           'SYS_SSO_USERID_FIELD',
-            'smc_field_mapping' =>          array('name' => 'SYS_SSO_SAML_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
-            'smc_role_mapping' =>           array('name' => 'SYS_SSO_SAML_ROLES', 'type' => 'SAML_roles_mapping'),
+            'smc_field_mapping' =>          array('name' => 'SYS_SSO_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
+            'smc_role_mapping' =>           array('name' => 'SYS_SSO_ROLESMAP', 'type' => 'SSO_roles_mapping'),
             'smc_validate_signatures' =>    array('name' => 'SYS_SSO_VALIDATE_SIGNATURES', 'type' => 'BOOL'),
             'smc_require_auth_signed' =>    array('name' => 'SYS_SSO_REQUIRE_AUTHN_SIGNED', 'type' => 'BOOL'),
             'smc_sign_assertions' =>        array('name' => 'SYS_SSO_SIGN_ASSERTIONS', 'type' => 'BOOL'),
             'smc_encrypt_assertions' =>     array('name' => 'SYS_SSO_ENCRYPT_ASSERTIONS', 'type' => 'BOOL'),
             'smc_assertion_lifetime' =>     'SYS_SSO_SAML_ASSERTION_LIFETIME',
             'smc_allowed_clock_skew' =>     'SYS_SSO_SAML_ALLOWED_CLOCK_SKEW',
-
+            
             'ocl_client_id' =>              'SYS_SSO_CLIENT_ID',
             'ocl_client_name' =>            'SYS_SSO_CLIENT_NAME',
             'ocl_client_secret' =>          'SYS_SSO_CLIENT_SECRET',
             'ocl_redirect_uri' =>           'SYS_SSO_REDIRECT_URI',
             'ocl_userid_field' =>           'SYS_SSO_USERID_FIELD',
-            'ocl_field_mapping' =>          array('name' => 'SYS_SSO_SAML_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
-            'ocl_role_mapping' =>           array('name' => 'SYS_SSO_SAML_ROLES', 'type' => 'SAML_roles_mapping'),
+            'ocl_field_mapping' =>          array('name' => 'SYS_SSO_ATTRIBUTES', 'type' => 'OIDC_field_mapping'),
+            'ocl_role_mapping' =>           array('name' => 'SYS_SSO_ROLESMAP', 'type' => 'SSO_roles_mapping'),
             // 'ocl_grant_types' =>            'TODO',
             // 'ocl_scope' =>                  'TODO',        
 
@@ -757,7 +757,7 @@ class ChangelogService {
      */
     public static function formatValue($value, $type, $entries = []) {
         global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n;
-        if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping']) ) {
+        if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping', 'SSO_field_mapping', 'SSO_roles_mapping', 'OIDC_field_mapping', 'OIDC_roles_mapping']) ) {
             $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
         }
 
@@ -912,10 +912,13 @@ class ChangelogService {
                     }
                     break;
                 case 'SAML_field_mapping':
-                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ATTRIBUTES_ALLOTHER')]);
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER')]);
                     break;
-                case 'SAML_roles_mapping':
-                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_SAML_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ROLES_ALLOTHER')]);
+                case 'OIDC_field_mapping':
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_ATTRIBUTES_NOOTHER')]);
+                    break;
+                case 'SSO_roles_mapping':
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_ROLES_ALLOTHER')]);
                     break;
 
             }

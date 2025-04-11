@@ -500,6 +500,7 @@ CREATE TABLE %PREFIX%_oidc_clients (
     ocl_scope                   varchar(255)        DEFAULT NULL,
     ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
     ocl_field_mapping           text                NULL,
+    ocl_role_mapping            text                NULL,
     ocl_usr_id_create           integer unsigned,
     ocl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ocl_usr_id_change           integer unsigned,

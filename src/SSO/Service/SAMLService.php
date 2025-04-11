@@ -377,7 +377,6 @@ class SAMLService extends SSOService {
                     '</div>';
                 $this->showSSOLoginForm($client, $message);
                 // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
-
                 exit;
             }
 
@@ -752,21 +751,8 @@ class SAMLService extends SSOService {
             $att->setName($samlAttribute);
 //            $att->setFriendlyName($friendlyName ?: $gL10n->get('SYS_ROLES'));
 
-            // Loop throu all roles of the user. If it is part of the mapping, or catchall is set, append it to the attribute
-            $roles = $user->getRoleMemberships();
-            $roleMapping = $client->getRoleMapping();
-            $allRoles = $client->getRoleMappingCatchall();
-
-            foreach ($roles as $roleId) {
-                $samlRolesFound = array_keys($roleMapping, $roleId);
-                foreach ($samlRolesFound as $samlRole) {
-                    $att->addAttributeValue($samlRole);
-                }
-                if (empty($samlRolesFound) && $allRoles) {
-                    // CATCHALL: Add role with its admidio role name
-                    $role = new Role($this->db, $roleId);
-                    $att->addAttributeValue($role->getValue('rol_name'));
-                }
+            foreach ($client->getMappedRoleMemberships($user) as $r) {
+                $att->addAttributeValue($r);
             }
         } else {
             // User profile fields or user fields

@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\SSO\Repository;
 
+use Admidio\SSO\Service\OIDCService;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 
@@ -22,8 +23,10 @@ class ClientRepository implements ClientRepositoryInterface {
         $client = new OIDCClient($this->db, $clientIdentifier);
         if ($client->isNewRecord()) 
             return null;
-        else
+        else {
+            OIDCService::setClient($client);
             return $client;
+        }
     }
     public function validateClient(string $clientIdentifier, ?string $clientSecret, ?string $grantType): bool {
         $client = new OIDCClient($this->db, $clientIdentifier);

@@ -42,8 +42,8 @@ use Admidio\Infrastructure\Database;
         foreach ($scopes as $sc) {
             $token->addScope($sc);
         }
-        $token->setUserIdentifier($userIdentifier);
         $token->setClient($clientEntity);
+        $token->setUserIdentifier($userIdentifier);
         return $token;
     }
 

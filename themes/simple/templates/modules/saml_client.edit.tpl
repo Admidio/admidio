@@ -67,7 +67,6 @@
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
                                     <a class="icon-text-link" href="javascript:addColumn_fieldsmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_FIELD')}</a>
-                                    <!--a class="icon-text-link" href="javascript:addAll_fieldsmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_FIELDS')}</a-->
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
@@ -82,7 +81,7 @@
             </div>
             <div class="admidio-form-group admidio-form-custom-content row mb-3">
                 <label class="col-sm-3 col-form-label">
-                    {$l10n->get('SYS_SSO_SAML_ROLES')}
+                    {$l10n->get('SYS_SSO_ROLESMAP')}
                 </label>
                 <div class="col-sm-9">
                     <div class="table-responsive">
@@ -102,18 +101,17 @@
                                     {foreach $elements['sso_roles_all_other'].attributes as $itemvar}
                                         {$itemvar@key}="{$itemvar}"
                                     {/foreach} >
-                                    <label class="form-check-label fw-normal" for="sso_roles_all_other"> {$l10n->get('SYS_SSO_SAML_ROLES_ALLOTHER')}</label>
+                                    <label class="form-check-label fw-normal" for="sso_roles_all_other"> {$l10n->get('SYS_SSO_ROLES_ALLOTHER')}</label>
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
                                     <a class="icon-text-link" href="javascript:addColumn_rolesmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ROLE')}</a>
-                                    <!--a class="icon-text-link" href="javascript:addAll_rolesmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ALL_ROLES')}</a-->
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <div class="form-text">{$l10n->get('SYS_SSO_SAML_ROLES_DESC')}</div>
+                                    <div class="form-text">{$l10n->get('SYS_SSO_ROLES_DESC')}</div>
                                 </td>
                             </tr>
                             </tfoot>

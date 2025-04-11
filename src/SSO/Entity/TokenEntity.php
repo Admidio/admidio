@@ -2,6 +2,7 @@
 
 namespace Admidio\SSO\Entity;
 
+use Admidio\SSO\Service\OIDCService;
 use League\OAuth2\Server\Entities\TokenInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -10,6 +11,7 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Users\Entity\User;
+use Admidio\SSO\Entity\UserEntity;
 
 
 class TokenEntity extends Entity implements TokenInterface
@@ -19,14 +21,12 @@ class TokenEntity extends Entity implements TokenInterface
      */
     protected array $scopes = [];
 
-    protected OIDCClient $client;
-    protected User $user;
+    protected ?OIDCClient $client = null;
+    protected ?UserEntity $user = null;
 
     public function __construct(Database $database, string $tableName = '', string $columnPrefix = '', string $tokenId = '') {
         global $gProfileFields;
         parent::__construct($database, $tableName, $columnPrefix);
-        $this->client = new OIDCClient($this->db);
-        $this->user = new User($this->db, $gProfileFields);
         if (!empty($tokenId)) {
             $this->readDataByColumns([$this->columnPrefix . '_token' => $tokenId]);
         }
@@ -46,7 +46,6 @@ class TokenEntity extends Entity implements TokenInterface
             fn($scope) => $scope->getIdentifier(),
             $this->getScopes());
         $this->setValue($this->columnPrefix . '_scope', implode(' ',$scopes));
-
 
         return parent::save($updateFingerPrint);
     }
@@ -68,15 +67,13 @@ class TokenEntity extends Entity implements TokenInterface
         // read client and user from DB
         $ocl_id = $this->getValue($this->columnPrefix . '_ocl_id');
         if (!empty($ocl_id)) {
-            $this->client = new OIDCClient($this->db, $ocl_id);
-        } else {
             $this->client = new OIDCClient($this->db);
+            $this->client->readDataById($ocl_id);
+            OIDCService::setClient($this->client);
         }
         $usr_id = $this->getValue($this->columnPrefix . '_usr_id');
         if (!empty($usr_id)) {
-            $this->user = new User($this->db, $gProfileFields, $usr_id);
-        } else {
-            $this->user = new User($this->db, $gProfileFields);
+            $this->user = new UserEntity($this->db, $gProfileFields, $this->client, $usr_id);
         }
 
         return $retVal;
@@ -160,14 +157,20 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function setUserIdentifier(string $identifier): void
     {
-        $userIDfield = $this->client->getValue($this->client->getColumnPrefix() . '_userid_field');
-        $this->user->readDataByColumns([$userIDfield => $identifier]);
-
-        // If no user with that identifier can be found -> thow exception
-        if ($this->user->isNewRecord()) { // user with given identifier couldn't be loaded
-            throw new OAuthServerException('User not found', 6, 'invalid_user');
+        global $gProfileFields;
+        if ($this->client) {
+            $userIDfield = $this->client->getUseridField();
+            $this->user = new UserEntity($this->db, $gProfileFields, $this->client);
+            $this->user->readDataByColumns([$userIDfield => $identifier]);
+            
+            // If no user with that identifier can be found -> thow exception
+            if ($this->user->isNewRecord()) { // user with given identifier couldn't be loaded
+                throw new OAuthServerException('User not found', 6, 'invalid_user');
+            }
+            $this->setValue($this->columnPrefix . '_usr_id', $this->user->getValue($this->user->getKeyColumnName()));
+        } else {
+            throw new OAuthServerException('Client not set', 6, 'invalid_client');
         }
-        $this->setValue($this->columnPrefix . '_usr_id', $this->user->getValue($this->user->getKeyColumnName()));
     }
 
     /**
@@ -177,14 +180,17 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function getUserIdentifier(): string|null
     {
-        $userIDfield = $this->client->getValue($this->client->getColumnPrefix() . '_userid_field');
+        if ($this->client === null || $this->user === null) {
+            return null;
+        }
+        $userIDfield = $this->client->getUseridField();
         return $this->user->getValue($userIDfield);
     }
 
     /**
      * Get the user that the token was issued to.
      */
-    public function getUser(): User
+    public function getUser(): UserEntity
     {
         return $this->user;
     }
@@ -202,8 +208,14 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function setClient(ClientEntityInterface $client): void
     {
+        if (!($client instanceof OIDCClient)) {
+            throw new OAuthServerException('Client must be an instance of OIDCClient', 6, 'invalid_client');
+        }
         // We cannot be sure that $client is an OIDCClient object, so we create a copy of type OIDCClient with the same identifier
-        $this->client = new OIDCClient($this->db, $client->getIdentifier());
+        $this->client = $client;
+        if ($this->user) {
+            $this->user->setClient($this->client);
+        }
         $this->setValue($this->columnPrefix . '_ocl_id', $this->client->getValue($this->client->keyColumnName));
     }
 

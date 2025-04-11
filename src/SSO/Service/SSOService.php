@@ -47,6 +47,14 @@ class SSOService {
         return $client;
     }
 
+    public function getClientFromUUID($clientUUID) {
+        $client = $this->createClientObject($clientUUID);
+        if ($client->isNewRecord()) {
+            throw new Exception("SSO client with UUID '$clientUUID' not found in database. Please check the SSO client settings and configure the client in Admidio.");
+        }
+        return $client;
+    }
+
 
     
     /**
@@ -117,7 +125,7 @@ class SSOService {
      * @param \Admidio\SSO\Entity\SSOClient $client
      * @return void
      */
-    protected function saveCustomClientSettings(array $formValues, SSOClient $client) {
+    protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
     }
 
     protected function getRolesRightName(): string {

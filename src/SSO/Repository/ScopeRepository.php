@@ -22,6 +22,10 @@ class ScopeRepository implements ScopeRepositoryInterface
      */
     public function getScopeEntityByIdentifier($identifier): ?ScopeEntity
     {
+        // If we return null for a scope that is not handled, the oauth server will throw an error.
+        // Since the oidc spec specifies that scopes that are not handled should be ignored, we return a new ScopeEntity instead.
+        // This way, the scope will be ignored and not throw an error.
+        // This is a workaround for the fact that the oauth2-server library does not support ignoring unknown scopes.
         switch ($identifier) {
             case 'openid':
             case 'profile':
@@ -30,13 +34,10 @@ class ScopeRepository implements ScopeRepositoryInterface
             case 'phone':
             // case 'offline_access':
             // case 'groups':
-            // default: 
+            default: 
                 return new ScopeEntity($identifier);
-            default: return null;
-
+            // default: return null;
         }
-        // $scope = new ScopeEntity($this->db, $identifier);
-        // return (!$scope->isNewRecord()) ? $scope : null;
     }
 
     /**

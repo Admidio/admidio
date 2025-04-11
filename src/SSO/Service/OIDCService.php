@@ -16,6 +16,9 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\Stream;
 
+use OpenIDConnectServer\ClaimExtractor;
+use OpenIDConnectServer\Entities\ClaimSetEntity;
+
 use Psr\Http\Message\ServerRequestInterface; // Needed for PSR-7 compliance
 use Psr\Http\Message\ResponseInterface; // Ensures correct return types for responses
 use Psr\Http\Server\RequestHandlerInterface; // May be useful for middleware in the future
@@ -30,6 +33,7 @@ use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\UserEntity;
 use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
+use Admidio\SSO\Entity\IdTokenResponse;
 
 /** ***************************************************************************
  * Properly handle scopes and claims
@@ -62,12 +66,16 @@ class OIDCService extends SSOService {
     private AuthorizationServer $authServer;
     private ResourceServer $resourceServer;
     private AccessTokenRepository $accessTokenRepository;
+    private ClaimExtractor $claimExtractor;
+    private ClientRepository $clientRepository;
 
     private string $issuerURL;
     private string $authorizationEndpoint;
     private string $tokenEndpoint;
     private string $userinfoEndpoint;
     private string $discoveryURL;
+
+    public static ?OIDCClient $client = null;
 
     private bool $isServiceSetup = false;
     
@@ -78,15 +86,23 @@ class OIDCService extends SSOService {
         $this->columnPrefix = 'ocl';
         $this->table = TBL_OIDC_CLIENTS;
 
+        // Attention: IssuerURL must be the base URL, where ./well-known/openid-configuration is located!
         $this->issuerURL = $gSettingsManager->get('sso_oidc_issuer_url') ?: ADMIDIO_URL;
-        $this->authorizationEndpoint = $this->issuerURL  . "/adm_program/modules/sso/index.php/oidc/authorize";
-        $this->tokenEndpoint = $this->issuerURL . "/adm_program/modules/sso/index.php/oidc/token";
-        $this->userinfoEndpoint = $this->issuerURL . "/adm_program/modules/sso/index.php/oidc/userinfo";
-        $this->discoveryURL = $this->issuerURL . "/adm_program/modules/sso/index.php/oidc/.well-known/openid-configuration";
+        if (empty($this->issuerURL)) {
+            $this->issuerURL = ADMIDIO_URL . '/adm_program/modules/sso/index.php/oidc';
+            $gSettingsManager->set('sso_oidc_issuer_url', $this->issuerURL);
+        }
+        $this->authorizationEndpoint = $this->issuerURL  . "/authorize";
+        $this->tokenEndpoint = $this->issuerURL . "/token";
+        $this->userinfoEndpoint = $this->issuerURL . "/userinfo";
+        $this->discoveryURL = $this->issuerURL . "/.well-known/openid-configuration";
 
     }
 
-    protected function saveCustomClientSettings(array $formValues, SSOClient $client) {
+    protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
+        if (array_key_exists('ocl_scope', $formValues)) {
+            $formValues['ocl_scope'] = implode(' ', array_merge(['openid'], $formValues['ocl_scope']));
+        }
         if (array_key_exists('new_ocl_client_secret', $formValues)) {
             // A new client secret -> store the hashed value in the database!
             $client->setValue(
@@ -94,6 +110,13 @@ class OIDCService extends SSOService {
                 password_hash($formValues['new_ocl_client_secret'], PASSWORD_DEFAULT)
             );
         }
+    }
+
+    public static function setClient(OIDCClient $client) {
+        self::$client = $client;
+    }
+    public static function getClient(): ?OIDCClient {
+        return self::$client;
     }
 
 
@@ -142,76 +165,6 @@ class OIDCService extends SSOService {
     }
 
     /**
-     * Generate user info based on the requested scopes and the user object.\
-     * 
-     *  Relevant Scopes and their claims:
-     *   - openid: sub
-     *   - profile: name, family_name, given_name, middle_name, nickname, preferred_username, profile, picture, website, gender, birthdate, zoneinfo, locale, updated_at
-     *   - email: email, email_verified
-     *   - address: address [JSON array: formatted, street_address, locality, region, postal_code, country]
-     *   - phone: phone_number, phone_number_verified Claims.
-     *   - [groups]
-     *   - [roles]
-     * 
-     * @param SSOClient $client The client requesting the user info
-     * @param User $user The user object containing the user data
-     * @param array $scopes The requested scopes
-     * @return array The user info as an associative array  
-     */
-    public function generateUserInfo(SSOClient $client, User $user, array $scopes) : array {
-        $userInfo = [];
-
-        if (in_array('openid', $scopes)) {
-            $userIDfield = $client->getValue($client->getColumnPrefix() . '_userid_field');
-            $userInfo['sub'] = $user->getValue($userIDfield);
-            $userInfo['uuid'] = $user->getValue('usr_uuid');
-        }
-        if (in_array('profile', $scopes)) {
-            $userInfo['name'] = $user->readableName();
-            $userInfo['family_name'] = $user->getValue('LAST_NAME');
-            $userInfo['given_name'] = $user->getValue('FIRST_NAME');
-            $userInfo['preferred_username'] = $user->getValue('usr_login_name');
-            // $userInfo['profile'] = $user->getValue('');
-            // $userInfo['picture'] = $user->getValue('');
-            $userInfo['website'] = $user->getValue('WEBSITE');
-            $userInfo['gender'] = $user->getValue('GENDER');
-            $userInfo['birthdate'] = $user->getValue('BIRTHDAY');
-        }
-
-        if (in_array('address', $scopes)) {
-            $userInfo['address'] = [
-                'formatted' => $user->getValue('ADDRESS'),
-                'street_address' => $user->getValue('STREET'),
-                'locality' => $user->getValue('CITY'),
-                'region' => $user->getValue('BUNDESLAND'),
-                'postal_code' => $user->getValue('POSTCODE'),
-                'country' => $user->getValue('COUNTRY')
-            ];
-            $userInfo['address'] = array_filter($userInfo['address'], function ($value) {
-                return $value !== '' && $value !== null;
-            });
-        }
-        if (in_array('phone', $scopes)) {
-            $userInfo['phone_number'] = $user->getValue('PHONE');
-            $userInfo['phone_number'] = $user->getValue('MOBILE');
-        }
-
-        if (in_array('email', $scopes)) {
-            $userInfo['email'] = $user->getValue("EMAIL");
-        }
-
-        // TODO_RK: Add explicitly selected fields from the client config!
-        // TODO_RK: Add groups and roles from the client config!
-
-        $userInfo = array_filter($userInfo, function ($value) {
-            return $value !== '' && $value !== null && $value !== [];
-        });
-
-        return $userInfo;
-    }
-
-
-    /**
      * Returns a PSR-7 request for the OAuth2 server while ensuring Admidio compatibility
      */
     private function getRequest() {
@@ -239,10 +192,19 @@ class OIDCService extends SSOService {
         $accessTokenRepository = new AccessTokenRepository($this->db);  // instance of AccessTokenRepositoryInterface
         $authCodeRepository = new AuthCodeRepository($this->db);        // instance of AuthCodeRepositoryInterface
         $userRepository = new UserRepository($this->db); // instance of UserRepositoryInterface // TODO_RK: Add user ID field and allowed Roles!
-        $refreshTokenRepository = new RefreshTokenRepository($this->db); // instance of RefreshTokenRepositoryInterface
+        $refreshTokenRepository = new RefreshTokenRepository(database: $this->db); // instance of RefreshTokenRepositoryInterface
+
+        // Provide the groups as a groups scope and claim
+        $claimsExtractor = new ClaimExtractor([
+            // new ClaimSetEntity('openid', ['sub']),
+            new ClaimSetEntity('groups', ['groups'])
+        ]);
+        $responseType = new IdTokenResponse($userRepository, $claimsExtractor);
 
         // Keep references to the relevant objects for later use
         $this->accessTokenRepository = $accessTokenRepository;
+        $this->claimExtractor = $claimsExtractor;
+        $this->clientRepository = $clientRepository;
 
         // Private key for signing
         $privateKeyID = $gSettingsManager->get('sso_oidc_signing_key');
@@ -263,7 +225,8 @@ class OIDCService extends SSOService {
             $accessTokenRepository,
             $scopeRepository,
             $privateKey,
-            $encryptionKey
+            $encryptionKey,
+            $responseType
         );
 
 
@@ -366,7 +329,7 @@ class OIDCService extends SSOService {
     }
 
     public function handleAuthorizationRequest(): ResponseInterface {
-        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId;
+        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n;
 
         if ($gSettingsManager->get('sso_oidc_enabled') !== '1') {
             throw new \Exception("SSO OIDC is not enabled");
@@ -381,16 +344,26 @@ class OIDCService extends SSOService {
     
             // Validate the HTTP request and return an AuthorizationRequest object.
             $authRequest = $this->authServer->validateAuthorizationRequest($request);
-            $client = $authRequest->getClient();
+            self::$client = $authRequest->getClient();
             
             // Redirect the user to a login endpoint if not logged in yet.
             if (!$gValidLogin) {
-                $this->showSSOLoginForm($client);
+                $this->showSSOLoginForm(self::$client);
                 // exit;
+            }
+
+            // Check whether the current user has access permissions to the SP client:
+            if (!self::$client->hasAccessRight()) {
+                $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
+                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array(self::$client->readableName())) . 
+                    '</div>';
+                $this->showSSOLoginForm(self::$client, $message);
+                // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
+                exit;
             }
             
             // Once the user has logged in set the user on the AuthorizationRequest
-            $authRequest->setUser(new UserEntity($this->db, $gProfileFields, $client->getUserIdField(), $gCurrentUserId));
+            $authRequest->setUser(new UserEntity($this->db, $gProfileFields, self::$client, $gCurrentUserId));
             
             // At this point you should redirect the user to an authorization page.
             // This form will ask the user to approve the client and the scopes requested.
@@ -466,21 +439,44 @@ class OIDCService extends SSOService {
                 return new JsonResponse(['error' => 'access_denied', 'message' => 'Token was revoked'], 403);
             }
 
-            $tokenScopes = $token->getScopes();
-            $tokenScopes = array_map(function($scope) {
-                return $scope->getIdentifier();
-            }, $tokenScopes);
-            $scopes = $request->getAttribute('oauth_scopes');
 
-            // Only accept scopes that are authorized for the token, even if the request contains more scopes
-            $scopes = array_intersect($scopes, $tokenScopes);
-            if (count($scopes) === 0) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'No valid scopes'], 403);
-            } 
+            $user = $token->getUser();
+            if ($user === null) {
+                return new JsonResponse(['error' => 'access_denied', 'message' => 'User not found'], 403);
+            }
 
-            $userinfo = $this->generateUserInfo($token->getClient(), $token->getUser(), $scopes);
+            /**
+             * @var OIDCClient $client
+             */
+            $client = $token->getClient();
+            if ($client === null) {
+                return new JsonResponse(['error' => 'access_denied', 'message' => 'Client not found'], 403);
+            }
+            if (!($client instanceof OIDCClient)) {
+                return new JsonResponse(['error' => 'access_denied', 'message' => 'Client not found'], 403);
+            }
+            $scopes = $token->getScopes();
+            $scopes = array_map(fn($s) => $s->getIdentifier(), $token->getScopes());
+            $requestScopes = $request->getAttribute('oauth_scopes');
+            $clientScopes = preg_split('/[,;\s]+/', trim($client->getValue($client->getColumnPrefix() . '_scope')));
 
-            return new JsonResponse($userinfo);
+            if (!empty($requestScopes)) {
+                $scopes = array_intersect($scopes, $requestScopes);
+            }
+            $scopes = array_intersect($scopes, $clientScopes);
+
+            // The openid scope with the mandatory sub claim is not added by default, and 
+            // it cannot be added globally, because then the JWT library will throw an error 
+            // due to mandatory claims being redefined. So, as a workaround, add the claim
+            //  set here.
+            $this->claimExtractor->addClaimSet(new ClaimSetEntity('openid', ['sub']));
+            $this->claimExtractor->addClaimSet(new ClaimSetEntity('custom', array_keys($client->getFieldMapping())));
+            
+
+            // Extract claims
+            $claims = $this->claimExtractor->extract($scopes, $user->getClaims());
+            return new JsonResponse($claims);
+
         } catch (OAuthServerException $exception) {
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
@@ -534,15 +530,14 @@ class OIDCService extends SSOService {
 
     public function handleDiscoveryRequest() {
         $issuer = $this->issuerURL;
-        $baseURL = "{$issuer}/adm_program/modules/sso/index.php/oidc";
 
         $config = [
             "issuer" => $issuer,
-            "authorization_endpoint" => "{$baseURL}/authorize",
-            "token_endpoint" => "{$baseURL}/token",
-            "userinfo_endpoint" => "{$baseURL}/userinfo",
-            "jwks_uri" => "{$baseURL}/jwks",
-            "scopes_supported" => ["openid", "profile", "email"],
+            "authorization_endpoint" => "{$issuer}/authorize",
+            "token_endpoint" => "{$issuer}/token",
+            "userinfo_endpoint" => "{$issuer}/userinfo",
+            "jwks_uri" => "{$issuer}/jwks",
+            "scopes_supported" => ["openid", "profile", "email", "phone", "address", "groups", "custom"],
             "response_types_supported" => ["code"],
             "grant_types_supported" => ["authorization_code", "refresh_token"], // TODO_RK: Everything is prepared for all different types of grants!
             "subject_types_supported" => ["public"],

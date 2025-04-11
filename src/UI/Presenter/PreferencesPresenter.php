@@ -2052,6 +2052,13 @@ class PreferencesPresenter extends PagePresenter
             (bool)$formValues['sso_oidc_enabled'],
             array('helpTextId' => 'SYS_SSO_OIDC_ENABLED_DESC')
         );
+
+        if (empty($formValues['sso_oidc_issuer_url'])) {
+            $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . '/adm_program/modules/sso/index.php/oidc';
+        }
+        if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
+            $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
+        }
         $formSSO->addInput(
             'sso_oidc_issuer_url',
             $gL10n->get('SYS_SSO_OIDC_ISSUER_URL'),
@@ -2080,13 +2087,13 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['sso_oidc_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'), 
                 'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
         );
-        $formSSO->addSelectBox(
-            'sso_oidc_encryption_key',
-            $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
-            $keys,
-            array('defaultValue' => $formValues['sso_oidc_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
-                'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
-        );
+        // $formSSO->addSelectBox(
+        //     'sso_oidc_encryption_key',
+        //     $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
+        //     $keys,
+        //     array('defaultValue' => $formValues['sso_oidc_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
+        //         'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
+        // );
 
         $discoveryURL = $oidcService->getDiscoveryURL();
         $staticSettings = array(

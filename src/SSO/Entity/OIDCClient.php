@@ -9,6 +9,10 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
     public function __construct(Database $database, $client_id = null) {
         parent::__construct($database, TBL_OIDC_CLIENTS, 'ocl', $client_id);
         $this->ssoType = 'oidc';
+        if ($this->isNewRecord()) {
+            $this->dbColumns[$this->columnPrefix . '_scope'] = 'profile email address phone groups custom';
+
+        }
     }
 
     public function getIdentifier(): string {
@@ -29,6 +33,17 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         // TODO_RK
         return true;
     }
+
+    public function getUseridField(): string
+    {
+        return $this->getValue($this->columnPrefix . '_userid_field')??'';
+    }
+
+    public function getFieldMappingNoDefault(): bool
+    {
+        return $this->getFieldMappingCatchall();
+    }
+
 
     /**
      * Retrieve the list of database fields that are ignored for the changelog.

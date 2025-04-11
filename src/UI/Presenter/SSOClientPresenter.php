@@ -333,7 +333,7 @@ class SSOClientPresenter extends PagePresenter
 
         $form->addCheckbox(
             'sso_roles_all_other',
-            $gL10n->get('SYS_SSO_SAML_ROLES_ALLOTHER'),
+            $gL10n->get('SYS_SSO_ROLES_ALLOTHER'),
             $client->getRoleMappingCatchall(),
             array('helpTextId' => '')
         );
@@ -596,7 +596,7 @@ class SSOClientPresenter extends PagePresenter
 
 
         // TAB: 
-
+    
         $useridFields = [
             ['usr_id', $gL10n->get('SYS_SSO_USERID_ID') . ' - usr_id', $gL10n->get('SYS_SSO_USERID_FIELDS')],
             ['usr_uuid',  $gL10n->get('SYS_SSO_USERID_UUID') . ' - usr_uuid', $gL10n->get('SYS_SSO_USERID_FIELDS')],
@@ -612,8 +612,24 @@ class SSOClientPresenter extends PagePresenter
                 'defaultValue' => $client->getValue('ocl_userid_field'),
                 'multiselect' => false,
                 'helpTextId' => 'SYS_SSO_USERID_FIELD_DESC'
-                )
-            );
+            )
+        );
+        // Make sure the 'openid' scope is always selected (required by the OIDC standard)
+        $scopes = ['profile', 'email', 'address', 'phone', 'groups', 'custom'];
+        $dbvalue = $client->getValue('ocl_scope');
+        $defaultValue = explode(' ', $client->getValue('ocl_scope'));
+        $defaultValue = preg_split('/[,;\s]+/', trim($client->getValue('ocl_scope')));
+        $form->addSelectBox(
+            'ocl_scope',
+            $gL10n->get('SYS_SSO_CLIENT_SCOPES'),
+            array_combine($scopes, $scopes),
+            array(
+                'property' => FormPresenter::FIELD_DEFAULT,
+                'defaultValue' => array_merge(explode(' ', $client->getValue('ocl_scope'))),
+                'multiselect' => true,
+                'helpTextId' => 'SYS_SSO_CLIENT_SCOPES_DESC'
+            )
+        );
 
 
         $userFields = $useridFields;
@@ -638,28 +654,28 @@ class SSOClientPresenter extends PagePresenter
         $form->addCustomContent("fieldsmap_sso", '', '');
 
         $form->addCheckbox(
-            'sso_fields_all_other',
-            $gL10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER'),
+            'sso_fields_no_other',
+            $gL10n->get('SYS_SSO_ATTRIBUTES_NOOTHER'),
             $client->getFieldMappingCatchall(),
             array('helpTextId' => '')
         );
 
         
-        // $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
-        // $this->addJavascript($js['jsInit'], false);
-        // $this->addJavascript($js['js'], true);
-        // $this->addJavascript('$("#oidc_roles_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
+        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
+        $this->addJavascript($js['jsInit'], false);
+        $this->addJavascript($js['js'], true);
+        $this->addJavascript('$("#rolesmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
 
-        // // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
-        // $form->addCustomContent("rolesmap_Admidio", '', '');
-        // $form->addCustomContent("rolesmap_oidc", '', '');
+        // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
+        $form->addCustomContent("rolesmap_Admidio", '', '');
+        $form->addCustomContent("rolesmap_sso", '', '');
 
-        // $form->addCheckbox(
-        //     'sso_roles_all_other',
-        //     $gL10n->get('SYS_SSO_OIDC_ROLES_ALLOTHER'),
-        //     $client->getRoleMappingCatchall(),
-        //     array('helpTextId' => '')
-        // );
+        $form->addCheckbox(
+            'sso_roles_all_other',
+            $gL10n->get('SYS_SSO_ROLES_ALLOTHER'),
+            $client->getRoleMappingCatchall(),
+            array('helpTextId' => '')
+        );
 
         // Add JS code for the move UP/DOWN "buttons":
         $this->addJavascript('
@@ -753,7 +769,7 @@ class SSOClientPresenter extends PagePresenter
             'bi-plus-circle-fill'
         );
 
-        ChangelogService::displayHistoryButton($this, 'sso-clients', array('saml_clients', 'oauth_clients'));
+        ChangelogService::displayHistoryButton($this, 'sso-clients', array('saml_clients', 'oidc_clients'));
 
 
         $this->addHtml('<p>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN_DESC') . '</p>');
@@ -853,12 +869,12 @@ class SSOClientPresenter extends PagePresenter
             $actions = '';
             // add link to edit SAML client
             $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
-                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT') . '"></i></a>';
+                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT') . '"></i></a>';
             
             // add link to delete SAML client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                     data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($client->readableName())) . '"
-                    data-href="callUrlHideElement(\'adm_oicd_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    data-href="callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
                 </a>';
             $templateClient[] = $actions;
