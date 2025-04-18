@@ -21,7 +21,7 @@
     <div class="card-header">{$l10n->get('SYS_SUBORDINATE_ORGANIZATIONS')}</div>
     <div class="card-body">
         <p class="lead">{$l10n->get('SYS_SUBORDINATE_ORGANIZATIONS_DESC', ['<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:mehrere_organisationen_verwalten">', '</a>'])}</p>
-        <p><a class="btn btn-primary" href="{$urlAdmidio}/adm_program/modules/organizations.php?mode=new_sub"><i class="bi bi-plus-circle-fill"></i>{$l10n->get('SYS_ADD_ORGANIZATION')}</a></p>
+        <p><a class="btn btn-primary" href="{$urlAdmidio}/modules/organizations.php?mode=new_sub"><i class="bi bi-plus-circle-fill"></i>{$l10n->get('SYS_ADD_ORGANIZATION')}</a></p>
 
         {if count($organizationsList) > 0}
             <div class="table-responsive">
@@ -44,7 +44,7 @@
                             <td>{$row.org_email_administrator}</td>
                             <td class="text-end">
                                 <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$l10n->get('SYS_DELETE_ORGANIZATION', array($row.org_longname))}"
-                                    data-href="callUrlHideElement('row_{$row.org_uuid}', '{$urlAdmidio}/adm_program/modules/organizations.php?mode=delete&org_uuid={$row.org_uuid}', '{$csrfToken}')">
+                                    data-href="callUrlHideElement('row_{$row.org_uuid}', '{$urlAdmidio}/modules/organizations.php?mode=delete&org_uuid={$row.org_uuid}', '{$csrfToken}')">
                                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DELETE')}"></i></a>
                             </td>
                         </tr>

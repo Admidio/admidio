@@ -12,4 +12,4 @@
   <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/vendor/twbs/bootstrap-icons/font/bootstrap-icons.min.css" />
 {/if}
 
-<script type="text/javascript" src="{$urlAdmidio}/adm_program/system/js/common_functions.js"></script>
+<script type="text/javascript" src="{$urlAdmidio}/system/js/common_functions.js"></script>

@@ -403,7 +403,7 @@ class Database
     protected function getPropertyFromDatabaseConfig(string $property): string
     {
         try {
-            $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
+            $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . FOLDER_SYSTEM . '/databases.xml', 0, true);
             $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
             return (string)$node[0];
         } catch (\Throwable $e) {

@@ -27,7 +27,7 @@ use Throwable;
  * // create a message
  * $page = new Installation();
  * $page->setUpdateModus();
- * $page->showMessage('error', 'Message', 'Some error message.', $gL10n->get('SYS_OVERVIEW'), 'bi-house-door-fill', ADMIDIO_URL . '/adm_program/overview.php');
+ * $page->showMessage('error', 'Message', 'Some error message.', $gL10n->get('SYS_OVERVIEW'), 'bi-house-door-fill', ADMIDIO_URL . '/modules/overview.php');
  * ```
  * @copyright The Admidio Team
  * @see https://www.admidio.org/

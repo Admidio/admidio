@@ -13,7 +13,7 @@
     </p>
 
     <p>
-        <a id="main_page" class="btn btn-secondary admidio-margin-bottom" href="{$urlAdmidio}/adm_program/overview.php">
+        <a id="main_page" class="btn btn-secondary admidio-margin-bottom" href="{$urlAdmidio}/modules/overview.php">
             <i class="bi bi-house-door-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_LATER')}"></i>{$l10n->get('SYS_LATER')}
         </a>
         <a id="adm_next_page" class="btn btn-primary admidio-margin-bottom ms-3" href="https://www.admidio.org/donate.php">

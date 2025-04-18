@@ -18,7 +18,7 @@ try {
     $rootPath = dirname(dirname(__DIR__));
     $pluginFolder = basename(__DIR__);
 
-    require_once($rootPath . '/adm_program/system/common.php');
+    require_once($rootPath . '/system/common.php');
 
     // only include config file if it exists
     if (is_file(__DIR__ . '/config.php')) {

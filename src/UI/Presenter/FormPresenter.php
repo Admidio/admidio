@@ -502,7 +502,7 @@ class FormPresenter
             ' . $toolbarJS . '
             language: "' . $gL10n->getLanguageLibs() . '",
             simpleUpload: {
-                uploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php?id=' . $id . '"
+                uploadUrl: "' . ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php?id=' . $id . '"
             }
         } )
         .then( newEditor => {

@@ -61,9 +61,9 @@ class SAMLService extends SSOService {
         $this->table = TBL_SAML_CLIENTS;
 
         $this->idpEntityId = $gSettingsManager->get('sso_saml_entity_id');
-        $this->ssoUrl      = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/sso";
-        $this->sloUrl      = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/slo";
-        $this->metadataUrl = ADMIDIO_URL . "/adm_program/modules/sso/index.php/saml/metadata";
+        $this->ssoUrl      = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/saml/sso';
+        $this->sloUrl      = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/saml/slo';
+        $this->metadataUrl = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/saml/metadata';
     }
 
     protected function getRolesRightName(): string {
@@ -100,7 +100,7 @@ class SAMLService extends SSOService {
         return new SAMLClient($database);
     }
 
-    
+
     public function getSignatureWriter(string $privkeyPEM, X509Certificate $cert) {
         $privateKeyResource = KeyHelper::createPrivateKey($privkeyPEM, '', false, XMLSecurityKey::RSA_SHA256);
         $signatureWriter = new SignatureWriter($cert, $privateKeyResource, XmlSecurityDSig::SHA256);
@@ -135,12 +135,12 @@ class SAMLService extends SSOService {
 
         $bindingFactory = new \LightSaml\Binding\BindingFactory();
         $binding = $bindingFactory->getBindingByRequest($request);
-        
+
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $binding->receive($request, $messageContext);
 
         $message = $messageContext->getMessage();
-        
+
         return $messageContext->getMessage();
     }
 
@@ -150,7 +150,7 @@ class SAMLService extends SSOService {
         // Private key and Certificate for signatures
         $signatureKeyID = $gSettingsManager->get('sso_saml_signing_key');
         $signatureKey = new Key($this->db, $signatureKeyID);
-        
+
         $idpPrivateKeyPem = $signatureKey->getValue('key_private');
         $idpCertPem = $signatureKey->getValue('key_certificate');
         if (!$idpCertPem) {
@@ -241,7 +241,7 @@ class SAMLService extends SSOService {
         $sloServicePost->setBinding(SamlConstants::BINDING_SAML2_HTTP_POST);
         $idpDescriptor->addSingleLogoutService($sloServicePost);
 
-        
+
 
         // Add the IDP Descriptor to EntityDescriptor
         $entityDescriptor->addItem($idpDescriptor);
@@ -256,7 +256,7 @@ class SAMLService extends SSOService {
 
         $context = new SerializationContext();
         $entityDescriptor->serialize($context->getDocument(), $context);
-        
+
         echo $context->getDocument()->saveXML();
     }
 
@@ -278,7 +278,7 @@ class SAMLService extends SSOService {
         $response->setIssueInstant(new \DateTime());
         $response->setDestination($request->getAssertionConsumerServiceURL());
 
-        
+
         $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
         $response->setIssuer($issuer);
 
@@ -289,7 +289,7 @@ class SAMLService extends SSOService {
 
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($response);
-        
+
         $binding = new HttpPostBinding();
         $httpResponse = $binding->send($messageContext);
         print $httpResponse->getContent();
@@ -319,7 +319,7 @@ class SAMLService extends SSOService {
             $SPcert->loadPem($certPem);
         }
         $key = KeyHelper::createPublicKey($SPcert);
-        
+
         /** @var \LightSaml\Model\XmlDSig\SignatureXmlReader $signatureReader */
         $signatureReader = $message->getSignature();
         if (is_null($signatureReader)) {
@@ -329,7 +329,7 @@ class SAMLService extends SSOService {
                 return false;
             }
         }
-        
+
         try {
             $ok = $signatureReader->validate($key);
             if ($ok) {
@@ -339,7 +339,7 @@ class SAMLService extends SSOService {
             }
         } catch (Exception $ex) {
             return $gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED');
-        }        
+        }
     }
 
 
@@ -372,8 +372,8 @@ class SAMLService extends SSOService {
 
             // Check whether the current user has access permissions to the SP client:
             if (!$client->hasAccessRight()) {
-                $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
-                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName())) . 
+                $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' .
+                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName())) .
                     '</div>';
                 $this->showSSOLoginForm($client, $message);
                 // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
@@ -392,7 +392,7 @@ class SAMLService extends SSOService {
             $issueInstant = new \DateTime();
             $notBefore = (clone $issueInstant)->sub(new \DateInterval('PT' . ($client->getValue('smc_allowed_clock_skew')??300) . 'S'));
             $notOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . ($client->getValue('smc_assertion_lifetime')??600) . 'S'));
-            
+
 
             $statusSuccess = new \LightSaml\Model\Protocol\Status(
                 new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));
@@ -405,7 +405,7 @@ class SAMLService extends SSOService {
             $response->setIssuer($issuer);
             $response->setInResponseTo($requestId);
             $assertion = new Assertion();
-            
+
             // Create SubjectConfirmationData
             $subjectConfirmationData = new \LightSaml\Model\Assertion\SubjectConfirmationData();
             $subjectConfirmationData
@@ -419,7 +419,7 @@ class SAMLService extends SSOService {
             $subjectConfirmation
                 ->setMethod(SamlConstants::CONFIRMATION_METHOD_BEARER) // Bearer confirmation method
                 ->setSubjectConfirmationData($subjectConfirmationData);
-                
+
             $subject = new Subject();
             $subject->setNameID(new NameID($login, SamlConstants::NAME_ID_FORMAT_UNSPECIFIED));
             $subject->addSubjectConfirmation($subjectConfirmation);
@@ -468,7 +468,7 @@ class SAMLService extends SSOService {
                     'fullname'       => $gL10n->get('SYS_NAME')
                 ];
                 foreach ($useridFields as $field => $friendlyName) {
-                    if (in_array($field, $fieldsDone)) 
+                    if (in_array($field, $fieldsDone))
                         continue;
                     $att = $this->getUserAttribute($client, $gCurrentUser, $field, $field, $friendlyName);
                     if ($att->getFirstAttributeValue() !== null) {
@@ -494,11 +494,11 @@ class SAMLService extends SSOService {
             // Sign the assertion and the whole response!
             $keys = $this->getKeysCertificates();
             $signAssertions = $client->getValue('smc_sign_assertions');
-            
+
             if ($signAssertions) {
                 $assertion->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
             }
-        
+
             // IF required, encrypt the assertion
             $encryptAssertion = $client->getValue('smc_encrypt_assertions');
             $encryptAssertionRequired = false;
@@ -510,19 +510,19 @@ class SAMLService extends SSOService {
                 } else {
                     $response->addAssertion($assertion);
                 }
-            
+
             } else {
                 // Finally add the assertion to the response:
                 $response->addAssertion($assertion);
             }
-        
+
             if ($signAssertions) {
                 $response->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
             }
-        
+
             $messageContext = new \LightSaml\Context\Profile\MessageContext();
             $messageContext->setMessage($response);
-            
+
             $binding = new HttpPostBinding();
             $httpResponse = $binding->send($messageContext);
             print $httpResponse->getContent();
@@ -546,7 +546,7 @@ class SAMLService extends SSOService {
             throw new Exception("Invalid request (not a LogoutRequest)");
         }
 
-        
+
         $sessionId = session_id();
         $entityIdClient = $request->getIssuer()->getValue();
         $client = $this->getClientFromID($entityIdClient);
@@ -571,28 +571,28 @@ class SAMLService extends SSOService {
 
                 // remove user from session
                 $gCurrentSession->logout();
-            
+
                 // if login organization is different to organization of config file then create new session variables
                 if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0 && $g_organization !== '') {
                     // read organization of config file with their preferences
                     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
-                
+
                     // read new profile field structure for this organization
                     $gProfileFields->readProfileFields($gCurrentOrgId);
-                
+
                     // save new organization id to session
                     $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
                     $gCurrentSession->save();
-                
+
                     // read all settings from the new organization
                     $gSettingsManager = new SettingsManager($gDb, $gCurrentOrgId);
                 }
-            
-            
+
+
 
                 /**  2. NOTIFY ALL REGISTERED CLIENTS OF THE LOGOUT */
 
-                
+
                 // Notify all registered SPs for logout
                 foreach ($this->getIds() as $spId) {
                     // Don't send a logout request to the client that initiated the logout request
@@ -606,7 +606,7 @@ class SAMLService extends SSOService {
 
                 $gCurrentUser->clear();
                 $gMenu->initialize();
-                
+
             }
 
             $logoutResponse = new LogoutResponse();
@@ -642,10 +642,10 @@ class SAMLService extends SSOService {
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setIssuer(new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId()));
         $logoutRequest->setId(\LightSaml\Helper::generateId());
-  
+
         $logoutRequest->setNameID(new NameID($login, SamlConstants::NAME_ID_FORMAT_UNSPECIFIED));
         $logoutRequest->setDestination($sloUrl);
-        
+
         // Sign the request
         $keys = $this->getKeysCertificates();
         $signAssertions = $client->getValue('smc_sign_assertions');
@@ -655,7 +655,7 @@ class SAMLService extends SSOService {
 
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($logoutRequest);
-        
+
         $binding = new HttpRedirectBinding();
         // $httpResponse = $binding->send($messageContext, $sloUrl);
 
@@ -674,13 +674,13 @@ class SAMLService extends SSOService {
         print $responseContent;
 
     }
-   
+
 /*
     public function handleAttributeQuery() {
         // TODO: This should work like the Response to an AuthnRequest, just with the requested attributes
         // Unfortunately, the lightsaml library does not provide a way to extract the requested attributes from the AttributeQuery
         // So the code would be quite different, as the request object does not provide nice accessor functions like AuthnRequest!
-        
+
         global $gSettingsManager, $gCurrentUserId, $rootPath;
         if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
             throw new Exception("SSO SAML is not enabled");
@@ -691,15 +691,15 @@ class SAMLService extends SSOService {
             throw new Exception("Invalid request (not an AttributeQuery)");
         }
 
-        
+
         // Load the SAML client data (entityID is in $request->issuer->getValue())
         $clientACS = $request->getAssertionConsumerServiceURL();
         $entityIdClient = $request->getIssuer()->getValue();
         $client = $this->getClientFromID($entityIdClient);
-        
+
         try{
             if (!$gCurrentUserId) {
-                require_once($rootPath . '/adm_program/system/login_valid.php');
+                require_once($rootPath . '/system/login_valid.php');
             }
             $response = new Response();
             $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
@@ -741,9 +741,9 @@ class SAMLService extends SSOService {
             'urn:oid:2.5.4.11' => 'roles',
         ];
         $field = $mapping[$samlAttribute]??$admidioField;
-        
+
         $att = new Attribute();
-        
+
         if ($field == 'usr_name' || $field == 'fullname') {
             $att->setName($samlAttribute);
             $att->setAttributeValue($user->readableName());
@@ -786,4 +786,4 @@ class SAMLService extends SSOService {
         }
         return $att;
     }
-}    
+}

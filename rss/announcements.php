@@ -18,7 +18,7 @@ use Admidio\Announcements\Service\AnnouncementsService;
 use Admidio\Infrastructure\Exception;
 
 try {
-    require_once(__DIR__ . '/../adm_program/system/common.php');
+    require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');

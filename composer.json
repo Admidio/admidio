@@ -50,7 +50,7 @@
             "Admidio\\": "src/"
         },
         "classmap": [
-            "adm_program/system/classes/",
+          "system/classes/",
             "libs/jquery-file-upload/server/php/",
             "libs/securimage/"
         ]

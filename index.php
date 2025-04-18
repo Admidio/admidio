@@ -20,13 +20,13 @@ if (!is_file(__DIR__ . '/adm_my_files/config.php')) {
     }
 }
 
-require_once(__DIR__ . '/adm_program/system/common.php');
+require_once(__DIR__ . '/system/common.php');
 
 if (isset($gHomepage)) {
     admRedirect($gHomepage);
 // => EXIT
 } else {
     // if parameter gHomepage doesn't exists then show default page
-    admRedirect(ADMIDIO_URL . '/adm_program/overview.php');
+    admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/overview.php');
     // => EXIT
 }

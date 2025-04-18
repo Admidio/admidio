@@ -60,7 +60,7 @@ if ($mode === 'html') {
     $form->addSelectBoxFromXml(
         'adm_db_engine',
         $gL10n->get('INS_DATABASE_SYSTEM'),
-        ADMIDIO_PATH . '/adm_program/system/databases.xml',
+        ADMIDIO_PATH . FOLDER_SYSTEM . '/databases.xml',
         'identifier',
         'name',
         array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $dbEngine)

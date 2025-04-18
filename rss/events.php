@@ -20,7 +20,7 @@ use Admidio\Infrastructure\RssFeed;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 
-require_once(__DIR__ . '/../adm_program/system/common.php');
+require_once(__DIR__ . '/../system/common.php');
 
 try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');

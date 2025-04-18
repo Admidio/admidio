@@ -64,7 +64,7 @@
     </label>
     <div class="col-sm-9">
         <div id="phpInfo">
-            <a href="{$admidioUrl}/adm_program/system/phpinfo.php" target="_blank">phpinfo()</a> <i class="bi bi-box-arrow-up-right"></i>
+            <a href="{$admidioUrl}/system/phpinfo.php" target="_blank">phpinfo()</a> <i class="bi bi-box-arrow-up-right"></i>
         </div>
     </div>
 </div>

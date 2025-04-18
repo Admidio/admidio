@@ -295,7 +295,7 @@ class ForumPresenter extends PagePresenter
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' .
                         SecurityUtils::encodeUrl(
-                            ADMIDIO_URL . '/adm_program/modules/forum.php',
+                            ADMIDIO_URL . FOLDER_MODULES . '/forum.php',
                             array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])
                         ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumTopic['fot_title'])),
