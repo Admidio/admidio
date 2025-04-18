@@ -35,7 +35,7 @@ try {
     }
 
     if ($gValidLogin) {
-        $gMessage->setForwardUrl(ADMIDIO_URL . '/adm_program/', 2000);
+        $gMessage->setForwardUrl(ADMIDIO_URL . '/', 2000);
         throw new Exception('SYS_RESET_PW_AREADY_LOGGED_IN');
     }
 

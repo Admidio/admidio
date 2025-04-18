@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * photo_uuid : UUID of album which photos should be shown
+ * photo_uuid : UUID of the album which photos should be shown
  * start_thumbnail : Number of the thumbnail which is the first that should be shown
  * start      : Position of query recordset where the visual output should start
  *
@@ -59,7 +59,7 @@ try {
 
         $headline = $photoAlbum->getValue('pho_name');
 
-        // Drop URL on navigation stack
+        // Drop URL on the navigation stack
         $gNavigation->addUrl(CURRENT_URL, $headline);
     } else {
         $headline = $gL10n->get('SYS_PHOTO_ALBUMS');
@@ -68,7 +68,7 @@ try {
         $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-image-fill');
     }
 
-    // create html page object
+    // create an HTML page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-photos', $headline);
     $page->setContentFullWidth();
 
@@ -123,13 +123,13 @@ try {
         $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/lightbox2/js/lightbox.js');
     }
 
-    // if a photo number was committed then simulate a left mouse click
+    // if a photo number was committed, then simulate a left mouse click
     if ($getPhotoNr > 0) {
         $page->addJavascript('$("#img_' . $getPhotoNr . '").trigger("click");', true);
     }
 
     if ($gCurrentUser->isAdministratorPhotos()) {
-        // show link to create new album
+        // show a link to create a new album
         $page->addPageFunctionsMenuItem(
             'menu_item_photos_new_album',
             $gL10n->get('SYS_CREATE_ALBUM'),
@@ -138,7 +138,7 @@ try {
         );
 
         if ($getPhotoUuid !== '') {
-            // show link to edit album
+            // show a link to edit the album
             $page->addPageFunctionsMenuItem(
                 'menu_item_photos_edit_album',
                 $gL10n->get('SYS_EDIT_ALBUM'),
@@ -146,19 +146,19 @@ try {
                 'bi-pencil-square'
             );
 
-            // show link to upload photos
+            // show a link to upload photos
             $page->addPageFunctionsMenuItem(
                 'menu_item_photos_upload_photo',
                 $gL10n->get('SYS_UPLOAD_PHOTOS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/file_upload.php', array('module' => 'photos', 'uuid' => $getPhotoUuid)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => 'photos', 'uuid' => $getPhotoUuid)),
                 'bi-upload'
             );
         }
     }
 
-    // show link to download photos if enabled
+    // show a link to download photos if enabled
     if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValue('pho_quantity') > 0) {
-        // show link to download photos
+        // show a link to download photos
         $page->addPageFunctionsMenuItem(
             'menu_item_photos_download',
             $gL10n->get('SYS_DOWNLOAD_ALBUM'),
@@ -177,7 +177,7 @@ try {
             $datePeriod .= ' ' . $gL10n->get('SYS_DATE_TO') . ' ' . $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
         }
 
-        // Notice for users with foto edit right that this album is locked
+        // Notice for users with photo edit right that this album is locked
         if ($photoAlbum->getValue('pho_locked') == 1) {
             $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('SYS_ALBUM_NOT_APPROVED') . '</div></p>');
         }
@@ -195,19 +195,19 @@ try {
     }
 
     // THUMBNAILS
-    // Only if current album contains images
+    // Only if the current album contains images
     if ($photoAlbum->getValue('pho_quantity') > 0) {
         $photoThumbnailTable = '';
         $firstPhotoNr = 1;
         $lastPhotoNr = $gSettingsManager->getInt('photo_thumbs_page');
 
-        // Open the correct album page when image number has been set
+        // Open the correct album page when the image number has been set
         if ($getPhotoNr > 0) {
             $firstPhotoNr = (round(($getPhotoNr - 1) / $gSettingsManager->getInt('photo_thumbs_page')) * $gSettingsManager->getInt('photo_thumbs_page')) + 1;
             $lastPhotoNr = $firstPhotoNr + $gSettingsManager->getInt('photo_thumbs_page') - 1;
         }
 
-        // create thumbnail container
+        // create a thumbnail container
         $page->addHtml('<div class="row">');
 
         for ($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); ++$actThumbnail) {
@@ -240,7 +240,7 @@ try {
                 }
 
                 if ($gSettingsManager->getBool('photo_download_enabled')) {
-                    // show link to download photo
+                    // show a link to download a photo
                     $photoThumbnailTable .= '
                         <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_download.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)) . '">
                             <i class="bi bi-download" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DOWNLOAD_PHOTO') . '"></i></a>';
@@ -266,7 +266,7 @@ try {
             }
         }
 
-        // the lightbox should be able to go through the whole album, therefore we must
+        // the lightbox should be able to go through the whole album, therefore, we must
         // integrate links to the photos of the album pages to this page and container but hidden
         if ((int)$gSettingsManager->get('photo_show_mode') === 1) {
             $photoThumbnailTableShown = false;
@@ -286,7 +286,7 @@ try {
             }
             $page->addHtml('</div>');   // close album-container
         } else {
-            // show photos if lightbox is not used
+            // show photos if the lightbox is not used
             $photoThumbnailTable .= '</div>';   // close album-container
             $page->addHtml($photoThumbnailTable);
         }
@@ -338,7 +338,7 @@ try {
     $albumsCount = $albumStatement->rowCount();
 
     if ($albumsCount > 0) {
-        // if there are photos in the current album and a sub albums exists, then show a separator
+        // if there are photos in the current album and sub albums exist, then show a separator
         if ($photoAlbum->getValue('pho_quantity') > 0) {
             $page->addHtml('<hr />');
         }
@@ -356,7 +356,7 @@ try {
             // folder of the album
             $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $childPhotoAlbum->getValue('pho_id');
 
-            // show album if album is not locked, or it has child albums or the user has the photo module edit right
+            // show album if the album is not locked, or it has child albums or the user has the photo module edit right
             if ((is_dir($albumFolder) && $childPhotoAlbum->isVisible())
                 || $childPhotoAlbum->hasChildAlbums()) {
                 // Get random image for preview
@@ -381,7 +381,7 @@ try {
                             class="card-img-top" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $shuffleImage['shuffle_pho_uuid'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)) . '" alt="' . $gL10n->get('SYS_PHOTOS') . '" /></a>
                         <div class="card-body">
                             <h5 class="card-title">' . $albumTitle);
-                // if user has admin rights for photo module then show some functions
+                // if the user has admin rights for photo module then show some functions
                 if ($gCurrentUser->isAdministratorPhotos()) {
                     if ((bool)$childPhotoAlbum->getValue('pho_locked') === false) {
                         $htmlLock = '<li><a class="dropdown-item admidio-album-lock" href="javascript:void(0)" data-id="' . $childPhotoAlbum->getValue('pho_uuid') . '" data-mode="lock">
@@ -414,7 +414,7 @@ try {
                     $albumDescription = $childPhotoAlbum->getValue('pho_description', 'html');
 
                     if (strlen($albumDescription) > 200) {
-                        // read first 200 chars of text, then search for last space and cut the text there. After that add a "more" link
+                        // read the first 200 chars of a text, then search for the last space and cut the text there. After that add a "more" link
                         $textPrev = substr($albumDescription, 0, 200);
                         $maxPosPrev = strrpos($textPrev, ' ');
                         $albumDescription = substr($textPrev, 0, $maxPosPrev) .
@@ -427,12 +427,12 @@ try {
 
                 $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($childPhotoAlbum->getPhotographer())) . '</p>');
 
-                // Notice for users with foto edit rights that the folder of the album doesn't exist
+                // Notice for users with photo edit rights that the folder of the album doesn't exist
                 if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->isAdministratorPhotos()) {
                     $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('SYS_ALBUM_FOLDER_NOT_FOUND') . '</div></p>');
                 }
 
-                // Notice for users with foto edit right that this album is locked
+                // Notice for users with photo edit right that this album is locked
                 if ($childPhotoAlbum->getValue('pho_locked') == 1) {
                     $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="bi bi-exclamation-triangle-fill"></i>' . $gL10n->get('SYS_ALBUM_NOT_APPROVED') . '</div></p>');
                 }
@@ -445,22 +445,22 @@ try {
                     </div>
                 </div>
             ');
-            }//Ende wenn Ordner existiert
+            }
         }//for
 
         $page->addHtml('</div>');
     }
 
-    // Empty album, if the album contains neither photos nor sub-folders
+    // Empty album, if the album contains neither photos nor subfolders
     if ($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($photoAlbum->getValue('pho_quantity')) === 0)) {  // alle vorhandenen Albumen werden ignoriert
         $page->addHtml($gL10n->get('SYS_ALBUM_CONTAINS_NO_PHOTOS'));
     }
 
-    // If necessary show links to navigate to next and previous albums of the query
+    // If necessary, show links to navigate to the next and previous albums of the query
     $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('photo_uuid' => $getPhotoUuid));
     $page->addHtml(admFuncGeneratePagination($baseUrl, $albumsCount, $gSettingsManager->getInt('photo_albums_per_page'), $getStart));
 
-    // show html of complete page
+    // show HTML of the complete page
     $page->show();
 } catch (Exception $e) {
     $gMessage->show($e->getMessage());

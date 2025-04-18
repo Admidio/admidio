@@ -26,7 +26,7 @@
  * folder_uuid        : UUID of the folder that should be shown, edited or saved
  * file_uuid          : UUID of the file that should be edited
  * name               : Name of un unmanaged file or folder that should be added to the database
- * view               : Could be set in **download+* mode. If set to true than the file output will directly be shown in the browser.
+ * view               : Could be set in **download+* mode. If set to true, then the file output will directly be shown in the browser.
  ***********************************************************************************************
  */
 
@@ -68,14 +68,14 @@ try {
     );
     $getFileUUID = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
 
-    // Check if module is activated
+    // Check if the module is activated
     if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
     switch ($getMode) {
         case 'list':
-            // create html page object
+            // create an HTML page object
             $page = new DocumentsPresenter($getFolderUUID);
             $page->createList();
             if ($getFolderUUID !== '') {
@@ -87,7 +87,7 @@ try {
             break;
 
         case 'new_folder':
-            // create html page object
+            // create an HTML page object
             $page = new DocumentsPresenter($getFolderUUID);
             $page->createFolderNewForm();
             $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
@@ -212,9 +212,9 @@ try {
             $folder->readDataByUuid($getFolderUUID);
             $folder->addFolderOrFileToDatabase($getName);
 
-            // back to previous page
+            // back to the previous page
             $gNavigation->addUrl(CURRENT_URL);
-            admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
+            admRedirect(ADMIDIO_URL . FOLDER_SYSTEM . '/back.php');
             // => EXIT
             break;
 

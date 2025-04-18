@@ -610,7 +610,7 @@ function admRedirect(string $url, int $statusCode = 303)
     } else {
         $gLogger->notice('REDIRECT: Redirecting to external URL!', $loggerObject);
 
-        $redirectUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/redirect.php', array('url' => $url));
+        $redirectUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/redirect.php', array('url' => $url));
     }
 
     header('Location: ' . $redirectUrl, true, $statusCode);

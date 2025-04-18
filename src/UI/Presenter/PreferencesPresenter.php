@@ -66,7 +66,7 @@ class PreferencesPresenter extends PagePresenter
 
         $this->setHtmlID('adm_preferences');
         $this->setHeadline($gL10n->get('SYS_SETTINGS'));
-        
+
         parent::__construct();
     }
 
@@ -324,7 +324,7 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_CAPTCHA_TYPE_TEXT')
         );
 
-        $fonts = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . '/adm_program/system/fonts/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+        $fonts = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_SYSTEM . '/fonts/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
         asort($fonts);
         $formCaptcha->addSelectBox(
             'captcha_fonts',
@@ -1934,8 +1934,8 @@ class PreferencesPresenter extends PagePresenter
 
         // Link to Key administration
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array());
-        $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" 
-            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
+        $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
             $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
             data-href="window.location.href=\'' . $url . '\'">
             <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_KEY_ADMIN') . '</a>';
@@ -1977,12 +1977,12 @@ class PreferencesPresenter extends PagePresenter
             // We can add the certificates as additional value attributes to the select entries
             $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
         }
-        
+
         $formSSO->addSelectBox(
             'sso_saml_signing_key',
             $gL10n->get('SYS_SSO_SIGNING_KEY'),
             $keys,
-            array('defaultValue' => $formValues['sso_saml_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'), 
+            array('defaultValue' => $formValues['sso_saml_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
                 'valueAttributes' => $valueAttributes, 'class' => 'if-saml-enabled')
         );
         $formSSO->addSelectBox(
@@ -2006,7 +2006,7 @@ class PreferencesPresenter extends PagePresenter
             'SYS_SSO_SAML_METADATA_URL' => ['value' => '<a href="' . $metaURL . '">' . $metaURL . '</a>', 'id' => 'metadata_URL'],
             'SYS_SSO_SAML_SSO_ENDPOINT' => ['value' => $samlService->getSsoEndpoint(), 'id' => 'SSO_endpoint'],
             'SYS_SSO_SAML_SLO_ENDPOINT' => ['value' => $samlService->getSloEndpoint(),'id' => 'SLO_endpoint'],
-            'SYS_SSO_KEY_CERTIFICATE'   => ['value' => '',  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa; 
+            'SYS_SSO_KEY_CERTIFICATE'   => ['value' => '',  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa;
                     border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
                     max-height: 150px; overflow: auto; border-radius: 0.375rem; font-size: smaller;']
         );
@@ -2014,9 +2014,9 @@ class PreferencesPresenter extends PagePresenter
         $formSSO->addCustomContent(
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            '<table id="sso_saml_sso_staticsettings" style="width: 100%" class="if-saml-enabled">' . implode('', 
+            '<table id="sso_saml_sso_staticsettings" style="width: 100%" class="if-saml-enabled">' . implode('',
                 array_map(function ($key, $value) use ($gL10n) {
-                    return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' . 
+                    return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' .
                         (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
             }, array_keys($staticSettings), $staticSettings)) . '</table>',
             array()
@@ -2024,8 +2024,8 @@ class PreferencesPresenter extends PagePresenter
 
         // Link to SAML Client administration
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
-        $html = '<a class="btn btn-secondary admidio-messagebox if-saml-enabled" href="javascript:void(0);" data-buttons="yes-no" 
-            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
+        $html = '<a class="btn btn-secondary admidio-messagebox if-saml-enabled" href="javascript:void(0);" data-buttons="yes-no"
+            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
             $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
             data-href="window.location.href=\'' . $url . '\'">
             <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';

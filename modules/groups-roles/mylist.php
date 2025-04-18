@@ -629,7 +629,7 @@ try {
 
     $page->assignSmartyVariable('urlConditionHelpText',
         SecurityUtils::encodeUrl(
-            ADMIDIO_URL . '/adm_program/system/msg_window.php',
+            ADMIDIO_URL . FOLDER_SYSTEM . '/msg_window.php',
             array('message_id' => 'mylist_condition', 'inline' => 'true')
         )
     );

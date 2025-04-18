@@ -1,6 +1,6 @@
 /**
  ***********************************************************************************************
- * Javascript functions for profile module
+ * JavaScript functions for profile module
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -9,7 +9,7 @@
  */
 
 function ProfileJS(gRootPath) {
-    this.url                     = gRootPath + "/adm_program/modules/profile/profile_function.php";
+    this.url                     = gRootPath + "/modules/profile/profile_function.php";
     this.formerRoleCount         = 0;
     this.futureRoleCount         = 0;
     this.userUuid                = "";

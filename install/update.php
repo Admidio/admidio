@@ -37,6 +37,7 @@ try {
      * @param string $message Message that should be shown to the user.
      * @param bool $reloadPage If set to **true** than the user could reload the update page.
      * @return void
+     * @throws \Admidio\Infrastructure\Exception
      */
     function showErrorMessage(string $message, bool $reloadPage = false): void
     {
@@ -60,7 +61,7 @@ try {
 
     $rootPath = dirname(__DIR__);
 
-    // embed config file
+    // embed a config file
     $g_organization = '';
     $configPath = $rootPath . '/adm_my_files/config.php';
 
@@ -74,7 +75,7 @@ try {
         exit();
     }
 
-    require_once($rootPath . FOLDER_SYSTEM . '/bootstrap/bootstrap.php');
+    require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
     // Initialize and check the parameters
 

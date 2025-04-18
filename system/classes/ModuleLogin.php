@@ -79,7 +79,7 @@ class ModuleLogin
         $form = new FormPresenter(
             'adm_login_form',
             'system/login.tpl',
-            ADMIDIO_URL . '/adm_program/system/login.php?mode=check',
+            ADMIDIO_URL . FOLDER_SYSTEM . '/login.php?mode=check',
             $page,
             array('showRequiredFields' => false)
         );
