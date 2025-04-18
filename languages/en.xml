@@ -147,8 +147,8 @@
   <string name="ORG_FIELD_NOT_REGISTRATION">Field is not displayed during registration</string>
   <string name="ORG_FIELD_REGISTRATION">Field is displayed during registration</string>
   <string name="ORG_FIELD_URL_DESC">The entered URL later links in the profile to the content that the user has entered in this field. Optionally, even the wildcard #user_content# can be defined in the URL. This is the content that the user has entered in the field..\n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
-  <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/overview.php)</string>
-  <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/overview.php)</string>
+  <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
+  <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Using the JavaScript editor</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">A full-featured JavaScript editor is being used in many modules of Admidio. Events, Announcements etc. can be edited in a comfortable way by the user. In case the editor has been activated, a simple multi-lin text box is being displayed.</string>

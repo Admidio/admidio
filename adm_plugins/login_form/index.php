@@ -131,7 +131,7 @@ try {
         $form = new FormPresenter(
             'adm_plugin_login_form',
             'plugin.login-form.edit.tpl',
-            ADMIDIO_URL . '/adm_program/system/login.php?mode=check',
+            ADMIDIO_URL . FOLDER_SYSTEM . '/login.php?mode=check',
             null,
             array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
         );

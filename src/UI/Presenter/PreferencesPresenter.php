@@ -1,20 +1,17 @@
 <?php
 namespace Admidio\UI\Presenter;
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Text;
-use Admidio\Preferences\Service\PreferencesService;
-use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
-use RuntimeException;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
-use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
+use RuntimeException;
 
 /**
  * @brief Class with methods to display the module pages and helpful functions.
@@ -24,7 +21,7 @@ use Admidio\SSO\Service\KeyService;
  *
  * **Code example**
  * ```
- * // generate html output with available registrations
+ * // generate HTML output with available registrations
  * $page = new ModuleRegistration('admidio-registration', $headline);
  * $page->createRegistrationList();
  * $page->show();
@@ -38,23 +35,23 @@ class PreferencesPresenter extends PagePresenter
     /**
      * @var array Array with all possible accordion entries for the system preferences.
      *            Each accordion entry consists of an array that has the following structure:
-     *            array('id' => 'xzy', 'title' => 'xyz', 'icon' => 'xyz')
+     *            array ('id' => 'xzy', 'title' => 'xyz', 'icon' => 'xyz')
      */
     protected array $accordionCommonPanels = array();
     /**
-     * @var array Array with all possible accordion entries for the modules preferences.
+     * @var array Array with all possible accordion entries for the module preferences.
      *            Each accordion entry consists of an array that has the following structure:
-     *            array('id' => 'xzy', 'title' => 'xyz', 'icon' => 'xyz')
+     *            array ('id' => 'xzy', 'title' => 'xyz', 'icon' => 'xyz')
      */
     protected array $accordionModulePanels = array();
     /**
      * @var string Name of the preference panel that should be shown after page loading.
-     *             If this parameter is empty then show the common preferences.
+     *             If this parameter is empty, then show the common preferences.
      */
     protected string $preferencesPanelToShow = '';
 
     /**
-     * Constructor that initialize the class member parameters
+     * Constructor that initializes the class member parameters
      * @throws Exception
      */
     public function __construct(string $panel = '')
@@ -199,8 +196,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the Admidio update preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the Admidio update preferences.
+     * Generates the HTML of the form from the Admidio update preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the Admidio update preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -233,8 +230,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the announcements preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the announcements preferences.
+     * Generates the HTML of the form from the announcement preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the announcement preferences.
      * @throws Exception|\Smarty\Exception
      */
     public function createAnnouncementsForm(): string
@@ -288,8 +285,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the captcha preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the captcha preferences.
+     * Generates the HTML of the form from the captcha preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the captcha preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -307,7 +304,7 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
 
-        // search all available themes in theme folder
+        // search all available themes in the theme folder
         $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
         if (count($themes) === 0) {
             throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
@@ -410,8 +407,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the category report preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the category report preferences.
+     * Generates the HTML of the form from the category report preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the category report preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -462,14 +459,14 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the changelog preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the changelog report preferences.
+     * Generates the HTML of the form from the changelog preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the changelog report preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
     public function createChangelogForm(): string
     {
-        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -529,8 +526,7 @@ class PreferencesPresenter extends PagePresenter
             $formChangelog->addCheckbox(
                 'changelog_table_' . $tableName,
                 "$tableLabel ($tableName)",
-                $formValues['changelog_table_' . $tableName] ?? false,
-                array()
+                $formValues['changelog_table_' . $tableName] ?? false
             );
         }
 
@@ -554,8 +550,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the common preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the common preferences.
+     * Generates the HTML of the form from the common preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the common preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -573,7 +569,7 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
 
-        // search all available themes in theme folder
+        // search all available themes in the theme folder
         $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
         if (count($themes) === 0) {
             throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
@@ -658,8 +654,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the contacts preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the contacts preferences.
+     * Generates the HTML of the form from the contact preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the contact preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -744,8 +740,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the documents & files preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the documents & files preferences.
+     * Generates the HTML of the form from the documents & files preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the documents & files preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -787,8 +783,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the email dispatch preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the email dispatch preferences.
+     * Generates the HTML of the form from the email dispatch preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the email dispatch preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -946,8 +942,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the events preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the events preferences.
+     * Generates the HTML of the form from the events preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the events preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1077,8 +1073,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the groups and roles preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the groups and roles preferences.
+     * Generates the HTML of the form from the group and roles preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the group and roles preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1177,8 +1173,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the forum preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the forum preferences.
+     * Generates the HTML of the form from the forum preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the forum preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1241,8 +1237,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the links preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the links preferences.
+     * Generates the HTML of the form from the link preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the link preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1310,8 +1306,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the messages preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the messages preferences.
+     * Generates the HTML of the form from the message preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the message preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1419,8 +1415,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the photos preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the photos preferences.
+     * Generates the HTML of the form from the photo preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the photo preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1549,8 +1545,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the PHP preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the PHP preferences.
+     * Generates the HTML of the form from the PHP preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the PHP preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1636,8 +1632,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the profile preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the profile preferences.
+     * Generates the HTML of the form from the profile preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the profile preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1710,8 +1706,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the regional settings preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the regional settings preferences.
+     * Generates the HTML of the form from the regional settings preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the regional settings preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1777,8 +1773,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the registration preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the registration preferences.
+     * Generates the HTML of the form from the registration preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the registration preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1838,8 +1834,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the security preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the security preferences.
+     * Generates the HTML of the form from the security preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the security preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1912,8 +1908,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the sso preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the sso preferences.
+     * Generates the HTML of the form from the sso preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the sso preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1933,7 +1929,7 @@ class PreferencesPresenter extends PagePresenter
 
 
         // Link to Key administration
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array());
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php');
         $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
             data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
             $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
@@ -1963,7 +1959,7 @@ class PreferencesPresenter extends PagePresenter
         $formSSO->addInput(
             'sso_saml_entity_id',
             $gL10n->get('SYS_SSO_SAML_ENTITY_ID'),
-            (string)$formValues['sso_saml_entity_id'],
+            $formValues['sso_saml_entity_id'],
             array('class' => 'copy-container if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_ENTITY_ID_DESC')
         );
 
@@ -2050,8 +2046,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the system information preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the system information preferences.
+     * Generates the HTML of the form from the system information preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the system information preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -2160,8 +2156,8 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the html of the form from the system notifications preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the system notifications preferences.
+     * Generates the HTML of the form from the system notifications preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the system notifications preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -2260,26 +2256,26 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Set a panel name that should be opened at page load.
-     * @param string $panelName Name of the panel that should be opened at page load.
+     * Set a panel name that should be opened at a page load.
+     * @param string $panelName Name of the panel that should be opened at a page load.
      * @return void
      */
-    public function setPanelToShow(string $panelName)
+    public function setPanelToShow(string $panelName): void
     {
         $this->preferencesPanelToShow = $panelName;
     }
 
     /**
-     * Read all available registrations from the database and create the html content of this
-     * page with the Smarty template engine and write the html output to the internal
-     * parameter **$pageContent**. If no registration is found than show a message to the user.
+     * Read all available registrations from the database and create the HTML content of this
+     * page with the Smarty template engine and write the HTML output to the internal
+     * parameter **$pageContent**. If no registration is found, then show a message to the user.
      */
-    public function show()
+    public function show(): void
     {
         global $gL10n;
 
         if ($this->preferencesPanelToShow !== '') {
-            // open the modules tab if the options of a module should be shown
+            // open the module tab if the options of a module should be shown
             if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
                 $this->addJavascript(
                     '
@@ -2361,7 +2357,7 @@ class PreferencesPresenter extends PagePresenter
         ChangelogService::displayHistoryButton($this, 'preferences', 'preferences,texts');
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
-        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
+        // is loaded on-demand, when there is no HTML page anymore to insert the css/JS file loading,
         // so we need to do it here, even when no selectbox will be used...
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');

@@ -15,8 +15,8 @@ use UnexpectedValueException;
  * component. It will read the database version from the component and set this as
  * source version. Then you should set the target version. The class will then search
  * for specific update xml files in special directories. For the system this should be
- * **adm_program/installation/db_scripts** and for plugins there should be an installed folder within the
- * plugin directory. The xml files should have the prefix update and then the main und subversion
+ * **install/db_scripts** and for plugins there should be an installed folder within the
+ * plugin directory. The XML files should have the prefix update and then the main und subversion
  * within their filename e.g. **update_3_0.xml**.
  *
  * **Code example**

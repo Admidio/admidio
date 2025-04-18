@@ -699,7 +699,7 @@ class SAMLService extends SSOService {
 
         try{
             if (!$gCurrentUserId) {
-                require_once($rootPath . '/adm_program/system/login_valid.php');
+                require_once($rootPath . '/system/login_valid.php');
             }
             $response = new Response();
             $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
