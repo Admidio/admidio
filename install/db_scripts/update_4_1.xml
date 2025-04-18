@@ -138,7 +138,7 @@
     <step id="850">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES ('MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0)</step>
     <step id="860">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
-        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CATEGORY-REPORT'), 1, %UUID%, false, 9, true, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC')</step>
+        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CATEGORY-REPORT'), 1, '%UUID%', false, 9, true, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC')</step>
     <step id="870">CREATE TABLE %PREFIX%_category_report
         (
         crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,

@@ -681,7 +681,7 @@ class Database
 
         // replace parameter %UUID% with an unique UUID at each occurrence
         while (($posUuid = strpos($sql, '%UUID%')) !== false) {
-            $sql = substr_replace($sql, '\'' . Uuid::uuid4() . '\'', $posUuid, strlen('%UUID%'));
+            $sql = substr_replace($sql, Uuid::uuid4(), $posUuid, strlen('%UUID%'));
         }
 
         return $sql;

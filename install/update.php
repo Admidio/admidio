@@ -4,6 +4,7 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\TenantStatistics;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\InstallationUpdate\Service\Update;
@@ -290,6 +291,9 @@ try {
         // start the update
         $update = new Update();
         $update->doAdmidioUpdate($installedDbVersion);
+
+        $anonymousData = new TenantStatistics($gSettingsManager->getString('system_tenant_id'));
+        $anonymousData->sent();
 
         echo json_encode(array(
             'status' => 'success',

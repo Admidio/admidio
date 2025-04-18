@@ -17,7 +17,7 @@
     <step id="150" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_photo_module' AND pr1.prf_name = 'photo_module_enabled'</step>
     <step id="160">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_photo_module'</step>
     <step id="170">ALTER TABLE %PREFIX%_registrations ADD COLUMN reg_validation_id varchar(50)</step>
-    <step id="180">UPDATE %PREFIX%_registrations SET reg_validation_id = %UUID%</step>
+    <step id="180">UPDATE %PREFIX%_registrations SET reg_validation_id = '%UUID%'</step>
     <step id="190" database="mysql">ALTER TABLE %PREFIX%_texts MODIFY COLUMN txt_name varchar(100) NOT NULL</step>
     <step id="200" database="pgsql">ALTER TABLE %PREFIX%_texts ALTER COLUMN txt_name TYPE varchar(100)</step>
     <step id="210">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_REGISTRATION_REFUSED' WHERE txt_name = 'SYSMAIL_REFUSE_REGISTRATION'</step>

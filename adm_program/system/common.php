@@ -180,7 +180,7 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
      */
     $gCurrentUser  =& $gCurrentSession->getObject('gCurrentUser');
     /**
-     * @var int $gCurrentOrgId The ID of the current registered user or 0 if its an visitor.
+     * @var int $gCurrentUserId The ID of the current registered user or 0 if its an visitor.
      */
     $gCurrentUserId = $gCurrentUser->getValue('usr_id');
     $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');

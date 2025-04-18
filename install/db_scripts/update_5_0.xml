@@ -42,7 +42,7 @@ gender-trans|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LI
     <step id="350">CREATE UNIQUE INDEX %PREFIX%_idx_ure_uuid ON %PREFIX%_user_relations (ure_uuid)</step>
     <step id="360">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta) VALUES ('MODULE', 'SYS_ORGANIZATION', 'ORGANIZATIONS',  '5.0.0', 0)</step>
     <step id="370">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
-        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'ORGANIZATIONS'), 2, %UUID%, false, 4, true, 'organization', '/adm_program/modules/organizations.php', 'diagram-3-fill', 'SYS_ORGANIZATION', 'SYS_ORGANIZATION_DESC')</step>
+        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'ORGANIZATIONS'), 2, '%UUID%', false, 4, true, 'organization', '/adm_program/modules/organizations.php', 'diagram-3-fill', 'SYS_ORGANIZATION', 'SYS_ORGANIZATION_DESC')</step>
     <step id="380" database="mysql">ALTER TABLE %PREFIX%_organizations MODIFY COLUMN org_longname varchar(255) NOT NULL</step>
     <step id="390" database="pgsql">ALTER TABLE %PREFIX%_organizations ALTER COLUMN org_longname TYPE varchar(255)</step>
     <step id="400" database="pgsql">ALTER TABLE %PREFIX%_organizations ALTER COLUMN org_longname SET NOT NULL</step>
@@ -264,5 +264,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_key_usr_change  FOREIGN KEY (key_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_key_usr_create  FOREIGN KEY (key_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
     <step id="1040">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/announcements.php' WHERE men_name_intern = 'announcements'</step>
+    <step id="1050">UPDATE %PREFIX%_preferences SET prf_value = '%UUID%' WHERE prf_name = 'system_tenant_id' AND prf_org_id = 1</step>
     <step>stop</step>
 </update>

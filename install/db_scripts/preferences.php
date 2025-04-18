@@ -33,6 +33,7 @@ $defaultOrgPreferences = array(
     'system_language' => 'de',
     'system_search_similar' => '1',
     'system_show_create_edit' => '1',
+    'system_tenant_id' => '',
     'system_time' => 'H:i',
     'system_url_imprint' => '',
     'system_url_data_protection' => '',
