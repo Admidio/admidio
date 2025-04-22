@@ -126,8 +126,8 @@ class DocumentsPresenter extends PagePresenter
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
-        $this->assignSmartyVariable('nameUserCreated', $file->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $file->getValue('fil_timestamp'));
+        $this->assignSmartyVariable('userCreatedName', $file->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $file->getValue('fil_timestamp'));
 
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
@@ -257,7 +257,7 @@ class DocumentsPresenter extends PagePresenter
         global $gCurrentSession, $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId;
 
         // first check whether the user also has the appropriate rights
-        if (!$gCurrentUser->administrateDocumentsFiles()) {
+        if (!$gCurrentUser->isAdministratorDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -450,8 +450,8 @@ class DocumentsPresenter extends PagePresenter
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
-        $this->assignSmartyVariable('nameUserCreated', $this->folder->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $this->folder->getValue('fol_timestamp'));
+        $this->assignSmartyVariable('userCreatedName', $this->folder->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $this->folder->getValue('fol_timestamp'));
 
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
@@ -514,7 +514,7 @@ class DocumentsPresenter extends PagePresenter
                 }
             }
 
-            if ($gCurrentUser->administrateDocumentsFiles()) {
+            if ($gCurrentUser->isAdministratorDocumentsFiles()) {
                 $this->addPageFunctionsMenuItem(
                     'menu_item_documents_permissions',
                     $gL10n->get('SYS_PERMISSIONS'),
@@ -530,7 +530,7 @@ class DocumentsPresenter extends PagePresenter
         $templateData = array();
         $infoAlert = '';
 
-        if ($gCurrentUser->administrateDocumentsFiles()) {
+        if ($gCurrentUser->isAdministratorDocumentsFiles()) {
             $infoAlert = $gL10n->get('SYS_DOCUMENTS_FILES_ROLES_VIEW', array(implode(', ', $this->folder->getViewRolesNames())));
         }
 
@@ -544,7 +544,7 @@ class DocumentsPresenter extends PagePresenter
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
 
                 if ($this->folder->hasUploadRight()) {
-                    if ($gCurrentUser->administrateDocumentsFiles()) {
+                    if ($gCurrentUser->isAdministratorDocumentsFiles()) {
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'permissions', 'folder_uuid' => $row['uuid'])),
                             'icon' => 'bi bi-shield-lock',

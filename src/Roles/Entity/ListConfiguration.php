@@ -92,7 +92,7 @@ class ListConfiguration extends Entity
         }
 
         // uuid could only be added by an administrator
-        if ($field === 'usr_uuid' && !$gCurrentUser->editUsers()) {
+        if ($field === 'usr_uuid' && !$gCurrentUser->isAdministratorUsers()) {
             return false;
         }
 
@@ -936,14 +936,14 @@ class ListConfiguration extends Entity
 
             // only add columns to the array if the current user is allowed to view them
             if ($usfId === 0
-                || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers())) {
+                || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->isAdministratorUsers())) {
                 // if only names should be shown, then check if it's a name field
                 if (!$this->showOnlyNames
                     || ($usfId > 0 && in_array($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), array('FIRST_NAME', 'LAST_NAME')))
                     || ($usfId === 0 && in_array($lscRow['lsc_special_field'], array('mem_begin', 'mem_end', 'mem_leader', 'mem_usr_id_change', 'mem_timestamp_change', 'mem_approved', 'mem_comment', 'mem_count_guests')))) {
                     // some user fields should only be viewed by users that could edit roles
                     if (!in_array($lscRow['lsc_special_field'], array('usr_login_name', 'usr_usr_id_create', 'usr_timestamp_create', 'usr_usr_id_change', 'usr_timestamp_change', 'usr_login_name', 'usr_uuid'))
-                        || $gCurrentUser->editUsers()) {
+                        || $gCurrentUser->isAdministratorUsers()) {
                         $lscNumber = (int)$lscRow['lsc_number'];
                         $this->columns[$lscNumber] = new ListColumns($this->db);
                         $this->columns[$lscNumber]->setArray($lscRow);

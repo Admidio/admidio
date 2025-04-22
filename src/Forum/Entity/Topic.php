@@ -146,7 +146,7 @@ class Topic extends Entity
         global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
 
         // check if the current user could edit the category of the topic
-        if ($gCurrentUser->administrateForum()
+        if ($gCurrentUser->isAdministratorForum()
             || in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('FOT'), true)) {
             // if category belongs to current organization than topic are editable
             if ($this->getValue('cat_org_id') > 0

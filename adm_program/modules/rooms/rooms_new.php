@@ -79,10 +79,10 @@ try {
     $form->addEditor('room_description', '', $room->getValue('room_description'));
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
-    $page->assignSmartyVariable('nameUserCreated', $room->getNameOfCreatingUser());
-    $page->assignSmartyVariable('timestampUserCreated', $room->getValue('ann_timestamp_create'));
-    $page->assignSmartyVariable('nameLastUserEdited', $room->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('timestampLastUserEdited', $room->getValue('ann_timestamp_change'));
+    $page->assignSmartyVariable('userCreatedName', $room->getNameOfCreatingUser());
+    $page->assignSmartyVariable('userCreatedTimestamp', $room->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('lastUserEditedName', $room->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $room->getValue('ann_timestamp_change'));
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
 

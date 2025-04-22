@@ -163,7 +163,7 @@ try {
     }
 
     // create sql to show all members (not accepted users should not be shown)
-    if ($getMembers && $gCurrentUser->editUsers()) {
+    if ($getMembers && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersThisOrga' => true,
@@ -172,7 +172,7 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif ($gCurrentUser->editUsers()) {
+    } elseif ($gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersDatabase' => true,
@@ -287,7 +287,7 @@ try {
             }
         }
 
-        if ($gCurrentUser->editUsers()) {
+        if ($gCurrentUser->isAdministratorUsers()) {
             // add link to send email to user
             if (!empty($row['member_email'])) {
                 if (!$gSettingsManager->getBool('enable_mail_module')) {

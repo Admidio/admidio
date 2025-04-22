@@ -150,7 +150,7 @@
     </div>
     <div class="card admidio-field-group" id="adm_profile_roles_box">
         <div class="card-header">{$l10n->get('SYS_ROLE_MEMBERSHIPS')}
-            {if $userRightAssignRoles}
+            {if $isAdministratorRoles}
                 <a class="btn btn-secondary float-end openPopup" id="profile_role_memberships_change"
                    data-class="modal-lg" href="javascript:void(0);" data-href="{$urlEditRoles}">
                     <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT')}</a>
@@ -202,7 +202,7 @@
 {if $showUserRelations}
     <div class="card admidio-field-group" id="profile_user_relations_box">
         <div class="card-header">{$l10n->get('SYS_USER_RELATIONS')}
-            {if $userRightEditUser}
+            {if $isAdministratorUsers}
                 <a class="admidio-icon-link float-end" id="profile_relations_new_entry" href="{$urlAssignUserRelations}">
                     <i class="bi bi-plus-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_CREATE_RELATIONSHIP')}"></i></a>
             {/if}
@@ -219,7 +219,7 @@
                             {/if}
                         </span>
                         <span class="float-end text-end">
-                            {if $userRightEditUser}
+                            {if $isAdministratorUsers}
                                 <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                                    data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$userRelation.relationName}))}" data-href="{$userRelation.urlRelationDelete}"><i
                                     class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_CANCEL_RELATIONSHIP')}"></i></a>
@@ -232,7 +232,7 @@
                     </div>
                     {if $showRelationsCreateEdit}
                         <div id="relation_info_{$userRelation.uuid}_Content" style="display: none;">
-                            {include file="sys-template-parts/system.info-create-edit.tpl" nameUserCreated=$userRelation.nameUserCreated timestampUserCreated=$userRelation.timestampUserCreated nameLastUserEdited=$userRelation.nameLastUserEdited timestampLastUserEdited=$userRelation.timestampLastUserEdited}
+                            {include file="sys-template-parts/system.info-create-edit.tpl" userCreatedName=$userRelation.userCreatedName userCreatedTimestamp=$userRelation.userCreatedTimestamp lastUserEditedName=$userRelation.lastUserEditedName lastUserEditedTimestamp=$userRelation.lastUserEditedTimestamp}
                         </div>
                     {/if}
                 </li>

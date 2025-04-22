@@ -10,16 +10,16 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
- * @brief Class with methods to display the module pages of the registration.
+ * @brief Class with methods to display the module pages of the forum.
  *
- * This class adds some functions that are used in the registration module to keep the
+ * This class adds some functions that are used in the forum module to keep the
  * code easy to read and short
  *
  * **Code example**
  * ```
  * // generate html output with available registrations
- * $page = new ModuleRegistration('admidio-registration', $headline);
- * $page->createRegistrationList();
+ * $page = new ForumPresenter();
+ * $page->createCards();
  * $page->show();
  * ```
  * @copyright The Admidio Team
@@ -77,19 +77,19 @@ class ForumPresenter extends PagePresenter
         if ($gSettingsManager->getBool('enable_rss') && $gSettingsManager->getInt('forum_module_enabled') === 1) {
             $this->addRssFile(
                 ADMIDIO_URL . '/rss/forum.php?organization=' . $gCurrentOrganization->getValue('org_shortname'),
-                $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_FORUM')))
+                $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $this->getHeadline()))
             );
         }
 
         // show link to create new topic
         $this->addPageFunctionsMenuItem(
             'menu_item_forum_topic_add',
-            $gL10n->get('SYS_CREATE_VAR', array('SYS_TOPIC')),
+            $gL10n->get('SYS_CREATE_TOPIC'),
             ADMIDIO_URL . FOLDER_MODULES . '/forum.php?mode=topic_edit',
             'bi-plus-circle-fill'
         );
 
-        if ($gCurrentUser->administrateForum()) {
+        if ($gCurrentUser->isAdministratorForum()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_forum_categories',
                 $gL10n->get('SYS_EDIT_CATEGORIES'),
@@ -98,7 +98,7 @@ class ForumPresenter extends PagePresenter
             );
         }
 
-        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $gCurrentUser->administrateForum());
+        ChangelogService::displayHistoryButton($this, 'forum', 'forum_topics,forum_posts', $gCurrentUser->isAdministratorForum());
 
         // add filter navbar
         $this->addJavascript('
@@ -150,7 +150,7 @@ class ForumPresenter extends PagePresenter
         $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'cards', 'cat_uuid' => $this->categoryUUID));
 
         $this->prepareData($offset);
-        $categoryService = new ForumService($gDb, $this->categoryUUID);
+        $forumService = new ForumService($gDb, $this->categoryUUID);
 
         $this->setHtmlID('adm_forum_cards');
         $this->createSharedHeader('cards');
@@ -163,7 +163,7 @@ class ForumPresenter extends PagePresenter
 
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
-        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->getTopicCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
+        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $forumService->countTopics(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
         try {
             $this->pageContent .= $this->smarty->fetch('modules/forum.cards.tpl');
         } catch (\Smarty\Exception $e) {
@@ -197,7 +197,7 @@ class ForumPresenter extends PagePresenter
 
         $this->smarty->assign('list', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
-        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->getTopicCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
+        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->countTopics(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
         try {
             $this->pageContent .= $this->smarty->fetch('modules/forum.list.tpl');
         } catch (\Smarty\Exception $e) {
@@ -283,14 +283,14 @@ class ForumPresenter extends PagePresenter
             $templateRow['category'] = Language::translateIfTranslationStrId($forumTopic['cat_name']);
             $templateRow['editable'] = false;
 
-            if ($gCurrentUser->administrateForum()
+            if ($gCurrentUser->isAdministratorForum()
                 || $gCurrentUser->getValue('usr_uuid') === $forumTopic['usr_uuid']) {
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumTopic['fot_uuid'])),
                     'icon' => 'bi bi-pencil-square',
-                    'tooltip' => $gL10n->get('SYS_EDIT_VAR', array('SYS_TOPIC'))
+                    'tooltip' => $gL10n->get('SYS_EDIT')
                 );
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' .
@@ -300,7 +300,7 @@ class ForumPresenter extends PagePresenter
                         ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumTopic['fot_title'])),
                     'icon' => 'bi bi-trash',
-                    'tooltip' => $gL10n->get('SYS_DELETE_VAR', array('SYS_TOPIC'))
+                    'tooltip' => $gL10n->get('SYS_DELETE')
                 );
             }
 

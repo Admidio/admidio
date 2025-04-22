@@ -63,7 +63,7 @@ try {
     } else {
         if ($getUserUuid === '') {
             // checks if the user has the necessary rights to create new users
-            if (!$gCurrentUser->editUsers()) {
+            if (!$gCurrentUser->isAdministratorUsers()) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
 
@@ -358,10 +358,10 @@ try {
 
         if ($getUserUuid !== '') {
             // show information about user who creates the recordset and changed it
-            $page->assignSmartyVariable('nameUserCreated', $user->getNameOfCreatingUser());
-            $page->assignSmartyVariable('timestampUserCreated', $user->getValue('ann_timestamp_create'));
-            $page->assignSmartyVariable('nameLastUserEdited', $user->getNameOfLastEditingUser());
-            $page->assignSmartyVariable('timestampLastUserEdited', $user->getValue('ann_timestamp_change'));
+            $page->assignSmartyVariable('userCreatedName', $user->getNameOfCreatingUser());
+            $page->assignSmartyVariable('userCreatedTimestamp', $user->getValue('ann_timestamp_create'));
+            $page->assignSmartyVariable('lastUserEditedName', $user->getNameOfLastEditingUser());
+            $page->assignSmartyVariable('lastUserEditedTimestamp', $user->getValue('ann_timestamp_change'));
         }
 
         $form->addToHtmlPage();
@@ -469,7 +469,7 @@ try {
 
                 // if current user has the right to assign roles then show roles dialog
                 // otherwise go to previous url (default roles are assigned automatically)
-                if ($gCurrentUser->assignRoles()) {
+                if ($gCurrentUser->isAdministratorRoles()) {
                     echo json_encode(array(
                         'status' => 'success',
                         'url' => SecurityUtils::encodeUrl(

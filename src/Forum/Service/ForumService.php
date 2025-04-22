@@ -119,11 +119,11 @@ class ForumService
     }
 
     /**
-     * Get number of available forum topics in the database.
+     * Get number of available forum topics from visible categories of the current organization.
      * @Return int Returns the total count of forum topics.
      * @throws Exception
      */
-    public function getTopicCount(): int
+    public function countTopics(): int
     {
         global $gCurrentUser, $gDb;
 
@@ -147,7 +147,7 @@ class ForumService
      * @return void
      * @throws Exception
      */
-    public function showRssFeed(string $organizationShortName): void
+    public function rssFeed(string $organizationShortName): void
     {
         global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gDb, $gL10n, $gCurrentOrgId;
 

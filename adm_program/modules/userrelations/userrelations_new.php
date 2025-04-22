@@ -33,7 +33,7 @@ try {
     }
 
     // only users who can edit all users are allowed to create user relations
-    if (!$gCurrentUser->editUsers()) {
+    if (!$gCurrentUser->isAdministratorUsers()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
@@ -70,7 +70,7 @@ try {
     );
 
     $sqlData = array();
-    if ($gCurrentUser->editUsers()) {
+    if ($gCurrentUser->isAdministratorUsers()) {
         // the user has the edit right, therefore he can edit all visible users
         $sqlData['query'] = 'SELECT usr_uuid, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
                            FROM ' . TBL_MEMBERS . '

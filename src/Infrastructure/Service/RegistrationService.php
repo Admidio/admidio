@@ -90,7 +90,7 @@ class RegistrationService
 
             // if current user has the right to assign roles then show roles dialog
             // otherwise go to previous url (default roles are assigned automatically)
-            if ($gCurrentUser->manageRoles()) {
+            if ($gCurrentUser->isAdministratorRoles()) {
                 // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
                 admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $assignUserUUID, 'accept_registration' => true)));
                 // => EXIT

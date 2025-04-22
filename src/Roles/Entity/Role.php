@@ -102,7 +102,7 @@ class Role extends Entity
             return false;
         }
 
-        if ($user->manageRoles()) {
+        if ($user->isAdministratorRoles()) {
             // only administrators are allowed to assign new members to administrator role
             if ((int)$this->getValue('rol_administrator') === 0 || $user->isAdministrator()) {
                 return true;

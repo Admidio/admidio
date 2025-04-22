@@ -34,7 +34,7 @@ try {
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
 
     // Only users with user-edit rights are allowed
-    if (!$gCurrentUser->editUsers()) {
+    if (!$gCurrentUser->isAdministratorUsers()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

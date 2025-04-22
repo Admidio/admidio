@@ -17,7 +17,7 @@ try {
     require(__DIR__ . '/../../system/login_valid.php');
 
     // only authorized users can import users
-    if (!$gCurrentUser->editUsers()) {
+    if (!$gCurrentUser->isAdministratorUsers()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

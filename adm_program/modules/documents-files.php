@@ -203,7 +203,7 @@ try {
             $getName = admFuncVariableIsValid($_GET, 'name', 'string');
 
             // only users with download administration rights should set new roles rights
-            if (!$gCurrentUser->administrateDocumentsFiles()) {
+            if (!$gCurrentUser->isAdministratorDocumentsFiles()) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
 

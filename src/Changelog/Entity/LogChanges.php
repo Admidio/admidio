@@ -196,7 +196,7 @@ class LogChanges extends Entity
      * @param string $objectname Human readable representation of the record (used in the log view)
      * @param string $action The cause of the log (CREATED, DELETED, MODIFY)
      */
-    protected function setLogBasevalues(string $table, int $id = 0, string $uuid = null, string $objectname = null, string $action = 'MODIFY') {
+    protected function setLogBasevalues(string $table, int $id = 0, ?string $uuid = null, ?string $objectname = null, string $action = 'MODIFY') {
         $this->objectTableName = $table;
         $this->setValue('log_table', $this->objectTableName);
         $this->setValue('log_record_id', $id);
@@ -213,7 +213,7 @@ class LogChanges extends Entity
      * @param int $id The record ID of the inserted record
      * @param string $objectname Human readable representation of the record (used in the log view)
      */
-    public function setLogCreation(string $table, int $id = 0, string $uuid = null, string $objectname = null)
+    public function setLogCreation(string $table, int $id = 0, ?string $uuid = null, ?string $objectname = null)
     {
         $this->setLogBasevalues($table, $id, $uuid, $objectname, 'CREATED');
     }
@@ -225,7 +225,7 @@ class LogChanges extends Entity
      * @param int $id The record ID of the inserted record
      * @param string $objectname Human readable representation of the record (used in the log view)
      */
-    public function setLogDeletion(string $table, int $id = 0, string $uuid = null, string $objectname = null) 
+    public function setLogDeletion(string $table, int $id = 0, ?string $uuid = null, ?string $objectname = null) 
     {
         $this->setLogBasevalues($table, $id, $uuid, $objectname, 'DELETED');
     }
@@ -237,7 +237,7 @@ class LogChanges extends Entity
      * @param int $id The record ID of the inserted record
      * @param string $objectname Human readable representation of the record (used in the log view)
      */
-    public function setLogModification(string $table, int $id, string $uuid = null, string $objectname = null, string $field, string $fieldName = null, string $oldValue = null, string $newValue = null)
+    public function setLogModification(string $table, int $id, ?string $uuid = null, ?string $objectname = null, ?string $field = null, ?string $fieldName = null, ?string $oldValue = null, ?string $newValue = null)
     {
         $this->setLogBasevalues($table, $id, $uuid, $objectname, 'MODIFY');
 

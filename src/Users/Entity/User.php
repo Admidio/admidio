@@ -113,7 +113,7 @@ class User extends Entity
      *                                  object with no specific user is created.
      * @throws Exception
      */
-    public function __construct(Database $database, ProfileFields $userFields = null, int $userId = 0)
+    public function __construct(Database $database, ?ProfileFields $userFields = null, int $userId = 0)
     {
         $this->changeNotificationEnabled = true;
 
@@ -242,7 +242,7 @@ class User extends Entity
      * @return bool Return true if a special right should be checked and the user has this right.
      * @throws Exception
      */
-    public function checkRolesRight(string $right = null): bool
+    public function checkRolesRight(?string $right = null): bool
     {
         $sqlFetchedRows = array();
 
@@ -422,7 +422,7 @@ class User extends Entity
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
      *                                       SYS_SECURITY_CODE_INVALID
      */
-    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, string $totpCode = null): bool
+    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, ?string $totpCode = null): bool
     {
         if ($this->checkPassword($password) && $this->checkMembership($isAdministrator) && $this->checkTotp($totpCode)) {
             $this->updateSession($setAutoLogin, $updateSessionCookies);
@@ -790,12 +790,12 @@ class User extends Entity
         $queryParams = array($categoryType, $this->organizationId);
 
         if (
-            ($categoryType === 'ANN' && $this->editAnnouncements())
-            || ($categoryType === 'EVT' && $this->administrateEvents())
-            || ($categoryType === 'FOT' && $this->administrateForum())
-            || ($categoryType === 'LNK' && $this->editWeblinksRight())
-            || ($categoryType === 'USF' && $this->editUsers())
-            || ($categoryType === 'ROL' && $this->manageRoles())
+            ($categoryType === 'ANN' && $this->isAdministratorAnnouncements())
+            || ($categoryType === 'EVT' && $this->isAdministratorEvents())
+            || ($categoryType === 'FOT' && $this->isAdministratorForum())
+            || ($categoryType === 'LNK' && $this->isAdministratorWeblinks())
+            || ($categoryType === 'USF' && $this->isAdministratorUsers())
+            || ($categoryType === 'ROL' && $this->isAdministratorRoles())
         ) {
             $condition = '';
         } else {
@@ -844,12 +844,12 @@ class User extends Entity
         $queryParams = array($categoryType, $this->organizationId);
 
         if (
-            ($categoryType === 'ANN' && $this->editAnnouncements())
-            || ($categoryType === 'EVT' && $this->administrateEvents())
-            || ($categoryType === 'FOT' && $this->administrateForum())
-            || ($categoryType === 'LNK' && $this->editWeblinksRight())
-            || ($categoryType === 'USF' && $this->editUsers())
-            || ($categoryType === 'ROL' && $this->assignRoles())
+            ($categoryType === 'ANN' && $this->isAdministratorAnnouncements())
+            || ($categoryType === 'EVT' && $this->isAdministratorEvents())
+            || ($categoryType === 'FOT' && $this->isAdministratorForum())
+            || ($categoryType === 'LNK' && $this->isAdministratorWeblinks())
+            || ($categoryType === 'USF' && $this->isAdministratorUsers())
+            || ($categoryType === 'ROL' && $this->isAdministratorRoles())
         ) {
             $condition = '';
         } else {
@@ -1230,7 +1230,7 @@ class User extends Entity
 
         $returnValue = false;
 
-        if ($this->editUsers()) {
+        if ($this->isAdministratorUsers()) {
             $returnValue = true;
         } else {
             if (count($this->rolesMembershipLeader) > 0) {
@@ -1495,6 +1495,105 @@ class User extends Entity
     }
 
     /**
+     * This method checks if the current user is allowed to administrate announcements. With this right he can create,
+     * edit announcements and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorAnnouncements(): bool
+    {
+        return $this->checkRolesRight('rol_announcements');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate events. With this right he can create,
+     * edit events and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorEvents(): bool
+    {
+        return $this->checkRolesRight('rol_events');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate documents and files. With this right he can
+     * create and edit folders, upload new files and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorDocumentsFiles(): bool
+    {
+        return $this->checkRolesRight('rol_documents_files');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate the forum. With this right he can create,
+     * edit topics and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorForum(): bool
+    {
+        return $this->checkRolesRight('rol_forum_admin');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate the photos' module. With this right he can create,
+     * edit albums and upload photos.
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorPhotos(): bool
+    {
+        return $this->checkRolesRight('rol_photo');
+    }
+
+    /**
+     * Method checks if the current user is allowed to approve or reject registrations and therefore has
+     * admin access to the registration module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function isAdministratorRegistration(): bool
+    {
+        return $this->checkRolesRight('rol_approve_users');
+    }
+
+    /**
+     * Method checks if the current user is allowed to manage roles and therefore has
+     * admin access to the groups and roles module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function isAdministratorRoles(): bool
+    {
+        return $this->checkRolesRight('rol_assign_roles');
+    }
+
+    /**
+     * Method checks if the current user is allowed to administrate other user profiles and therefore
+     * has access to the user management module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function isAdministratorUsers(): bool
+    {
+        return $this->checkRolesRight('rol_edit_user');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate weblinks. With this right he can create,
+     * edit weblinks and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorWeblinks(): bool
+    {
+        return $this->checkRolesRight('rol_weblinks');
+    }
+
+    /**
      * Checks if this user is an admin of the organization that is set in this class.
      * @return bool Return true if user is admin of this organization.
      * @throws Exception
@@ -1594,41 +1693,20 @@ class User extends Entity
     }
 
     /**
-     * Reads a user record out of the table adm_users in database selected by the unique user id.
-     * All profile fields of the object **mProfileFieldsData** will also be read. If no user was
-     * found than the default values of all profile fields will be set.
-     * @param int $id Unique id of the user that should be read
-     * @return bool Returns **true** if one record is found
-     * @throws Exception
-     */
-    public function readDataById(int $id): bool
-    {
-        if (parent::readDataById($id)) {
-            // read data of all user fields from current user
-            $this->mProfileFieldsData->readUserData($id, $this->organizationId);
-            return true;
-        } else {
-            $this->setDefaultValues();
-        }
-
-        return false;
-    }
-
-    /**
-     * Reads a record out of the table in database selected by the unique uuid column in the table.
-     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
-     * Per default all columns of the default table will be read and stored in the object. If no user
-     * was found than the default values of all profile fields will be set.
-     * Not every Admidio table has an uuid. Please check the database structure before you use this method.
-     * @param string $uuid Unique uuid that should be searched.
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the sql find more than one record the method returns **false**.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @throws Exception
      * @see Entity#readDataByColumns
-     * @see Entity#readData
+     * @see Entity#readDataById
+     * @see Entity#readDataByUuid
      */
-    public function readDataByUuid(string $uuid): bool
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
-        if (parent::readDataByUuid($uuid)) {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
             if (isset($this->mProfileFieldsData)) {
                 // read data of all user fields from current user
                 $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
@@ -1845,7 +1923,7 @@ class User extends Entity
         // Only administrators are allowed to send new login data or users who want to approve login data
         if (
             $gSettingsManager->getBool('system_notifications_enabled')
-            && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers())
+            && ($gCurrentUser->isAdministrator() || $gCurrentUser->isAdministratorRegistration())
         ) {
             // Generate new secure-random password and save it
             $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
@@ -2137,121 +2215,6 @@ class User extends Entity
     }
 
     /**
-     * Function checks if the logged-in user is allowed to create and edit announcements
-     * @return bool
-     * @throws Exception
-     */
-    public function editAnnouncements(): bool
-    {
-        return $this->checkRolesRight('rol_announcements');
-    }
-
-    /**
-     * Function checks if the logged-in user is allowed to edit and assign registrations
-     * @return bool
-     * @throws Exception
-     */
-    public function approveUsers(): bool
-    {
-        return $this->checkRolesRight('rol_approve_users');
-    }
-
-    /**
-     * Checks if the user has the right to assign members to at least one role. This method also returns
-     * true if the user is a leader of the role and could assign other members to that role.
-     * @return bool Return **true** if the user can assign members to at least one role.
-     * @throws Exception
-     */
-    public function assignRoles(): bool
-    {
-        $this->checkRolesRight();
-
-        return $this->assignRoles;
-    }
-
-    /**
-     * Method checks if the current user is allowed to manage roles and therefore has
-     * admin access to the groups and roles module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function manageRoles(): bool
-    {
-        return $this->checkRolesRight('rol_assign_roles');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the event module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function administrateEvents(): bool
-    {
-        return $this->checkRolesRight('rol_events');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the documents and files module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function administrateDocumentsFiles(): bool
-    {
-        return $this->checkRolesRight('rol_documents_files');
-    }
-
-        /**
-     * Method checks if the current user is allowed to administrate the inventory module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editInventory(): bool
-    {
-        return $this->checkRolesRight('rol_edit_inventory');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the forum module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function administrateForum(): bool
-    {
-        return $this->checkRolesRight('rol_forum_admin');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate other user profiles and therefore
-     * has access to the user management module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editUsers(): bool
-    {
-        return $this->checkRolesRight('rol_edit_user');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the photo's module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editPhotoRight(): bool
-    {
-        return $this->checkRolesRight('rol_photo');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the web links module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editWeblinksRight(): bool
-    {
-        return $this->checkRolesRight('rol_weblinks');
-    }
-
-    /**
      * Return the (internal) representation of this user's profile fields
      * @return object<ProfileFields> All profile fields of the user
      */
@@ -2262,7 +2225,7 @@ class User extends Entity
 
     /**
      * Return the human-readable name of this record.
-     * 
+     *
      * @return string The readable representation of the record ("Lastname, Firstname")
      */
     public function readableName(): string
@@ -2273,8 +2236,8 @@ class User extends Entity
     /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * For the users table, we also ignore usr_valid, usr_*_login, etc.
-     * 
-     * @return true Returns the list of database columns to be ignored for logging.
+     *
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {
@@ -2293,9 +2256,9 @@ class User extends Entity
 
     /**
      * Adjust the changelog entry for this db record: Don't store the actual password, just '********'. Also, the photo cannot be stores, so indicate this by '[...]', too.
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
     protected function adjustLogEntry(LogChanges $logEntry)

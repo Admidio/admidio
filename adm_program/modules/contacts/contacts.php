@@ -46,7 +46,7 @@ try {
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-contacts', $headline);
     $page->setContentFullWidth();
 
-    if ($gCurrentUser->editUsers()) {
+    if ($gCurrentUser->isAdministratorUsers()) {
         $page->addJavascript('
             $("#menu_item_contacts_create_contact").attr("href", "javascript:void(0);");
             $("#menu_item_contacts_create_contact").attr("data-href", "' . ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_new.php");

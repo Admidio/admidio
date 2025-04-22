@@ -276,7 +276,7 @@ try {
     );
 
     // show link to create relations
-    if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->editUsers()) {
+    if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->isAdministratorUsers()) {
         $page->addPageFunctionsMenuItem(
             'menu_item_profile_user_relation_types',
             $gL10n->get('SYS_CREATE_RELATIONSHIP'),
@@ -384,8 +384,8 @@ try {
     }
 
     $page->assignSmartyVariable('showCurrentRoles', $gSettingsManager->getBool('profile_show_roles'));
-    $page->assignSmartyVariable('userRightAssignRoles', $gCurrentUser->assignRoles());
-    $page->assignSmartyVariable('userRightEditUser', $gCurrentUser->editUsers());
+    $page->assignSmartyVariable('isAdministratorRoles', $gCurrentUser->isAdministratorRoles());
+    $page->assignSmartyVariable('isAdministratorUsers', $gCurrentUser->isAdministratorUsers());
     $page->assignSmartyVariable('masterData', $masterData);
     $page->assignSmartyVariable('profileData', $profileData);
     $page->assignSmartyVariable('lastLoginInfo', $gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
@@ -681,16 +681,16 @@ try {
                     $userRelation['urlUserEdit'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid')));
                 }
 
-                if ($gCurrentUser->editUsers()) {
+                if ($gCurrentUser->isAdministratorUsers()) {
                     $userRelation['urlRelationDelete'] = 'callUrlHideElement(\'row_ure_' . $relation->getValue('ure_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/userrelations/userrelations_function.php', array('mode' => 'delete', 'ure_uuid' => $relation->getValue('ure_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 }
 
                 // only show info if system setting is activated
                 if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
-                    $userRelation['nameUserCreated'] = $relation->getNameOfCreatingUser();
-                    $userRelation['timestampUserCreated'] = $relation->getValue('ure_timestamp_create');
-                    $userRelation['nameLastUserEdited'] = $relation->getNameOfLastEditingUser();
-                    $userRelation['timestampLastUserEdited'] = $relation->getValue('ure_timestamp_change');
+                    $userRelation['userCreatedName'] = $relation->getNameOfCreatingUser();
+                    $userRelation['userCreatedTimestamp'] = $relation->getValue('ure_timestamp_create');
+                    $userRelation['lastUserEditedName'] = $relation->getNameOfLastEditingUser();
+                    $userRelation['lastUserEditedTimestamp'] = $relation->getValue('ure_timestamp_change');
                 }
                 $userRelations[] = $userRelation;
             }
@@ -703,10 +703,10 @@ try {
     }
 
     // show information about user who creates the recordset and changed it
-    $page->assignSmartyVariable('nameUserCreated', $user->getNameOfCreatingUser());
-    $page->assignSmartyVariable('timestampUserCreated', $user->getValue('usr_timestamp_create'));
-    $page->assignSmartyVariable('nameLastUserEdited', $user->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('timestampLastUserEdited', $user->getValue('usr_timestamp_change'));
+    $page->assignSmartyVariable('userCreatedName', $user->getNameOfCreatingUser());
+    $page->assignSmartyVariable('userCreatedTimestamp', $user->getValue('usr_timestamp_create'));
+    $page->assignSmartyVariable('lastUserEditedName', $user->getNameOfLastEditingUser());
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $user->getValue('usr_timestamp_change'));
 
     $page->show();
 } catch (Exception $e) {

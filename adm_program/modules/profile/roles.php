@@ -38,7 +38,7 @@ try {
     $setRoleId = 0;
 
     // if user is allowed to assign at least one role then allow access
-    if (!$gCurrentUser->assignRoles()) {
+    if (!$gCurrentUser->isAdministratorRoles()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
@@ -181,7 +181,7 @@ try {
     $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
     $table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
 
-    if ($gCurrentUser->manageRoles()) {
+    if ($gCurrentUser->isAdministratorRoles()) {
         // User with role rights may assign ALL roles
         $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_uuid, rol_leader_rights, mem_rol_id, mem_usr_id, mem_leader
               FROM ' . TBL_ROLES . '

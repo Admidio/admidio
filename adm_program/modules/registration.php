@@ -47,7 +47,7 @@ try {
             // if there is no login then show a profile form where the user can register himself
             admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php');
             // => EXIT
-        } elseif (!$gCurrentUser->approveUsers()) {
+        } elseif (!$gCurrentUser->isAdministratorRegistration()) {
             // Only Users with the right "approve users" can work with registrations, otherwise exit.
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -108,7 +108,7 @@ try {
 
         // if current user has the right to assign roles then show roles dialog
         // otherwise go to previous url (default roles are assigned automatically)
-        if ($gCurrentUser->manageRoles()) {
+        if ($gCurrentUser->isAdministratorRoles()) {
             admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('accept_registration' => true, 'user_uuid' => $getUserUUID)));
             // => EXIT
         } else {

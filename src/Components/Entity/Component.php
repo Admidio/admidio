@@ -119,25 +119,25 @@ class Component extends Entity
         if (self::isVisible($componentName)) {
             switch ($componentName) {
                 case 'ANNOUNCEMENTS':
-                    if ($gCurrentUser->editAnnouncements()) {
+                    if ($gCurrentUser->isAdministratorAnnouncements()) {
                         return true;
                     }
                     break;
 
                 case 'CATEGORY-REPORT':
-                    if ($gCurrentUser->checkRolesRight('rol_assign_roles')) {
+                    if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                         return true;
                     }
                     break;
 
                 case 'EVENTS':
-                    if ($gCurrentUser->administrateEvents()) {
+                    if ($gCurrentUser->isAdministratorEvents()) {
                         return true;
                     }
                     break;
 
                 case 'DOCUMENTS-FILES':
-                    if ($gCurrentUser->administrateDocumentsFiles()) {
+                    if ($gCurrentUser->isAdministratorDocumentsFiles()) {
                         return true;
                     }
                     break;
@@ -149,31 +149,31 @@ class Component extends Entity
                         break;
     
                 case 'FORUM':
-                    if ($gCurrentUser->administrateForum()) {
+                    if ($gCurrentUser->isAdministratorForum()) {
                         return true;
                     }
                     break;
 
                 case 'LINKS':
-                    if ($gCurrentUser->editWeblinksRight()) {
+                    if ($gCurrentUser->isAdministratorWeblinks()) {
                         return true;
                     }
                     break;
 
                 case 'GROUPS-ROLES':
-                    if ($gCurrentUser->manageRoles()) {
+                    if ($gCurrentUser->isAdministratorRoles()) {
                         return true;
                     }
                     break;
 
                 case 'CONTACTS':
-                    if ($gCurrentUser->editUsers()) {
+                    if ($gCurrentUser->isAdministratorUsers()) {
                         return true;
                     }
                     break;
 
                 case 'PHOTOS':
-                    if ($gCurrentUser->editPhotoRight()) {
+                    if ($gCurrentUser->isAdministratorPhotos()) {
                         return true;
                     }
                     break;
@@ -185,7 +185,7 @@ class Component extends Entity
                     break;
 
                 case 'REGISTRATION':
-                    if ($gCurrentUser->approveUsers()) {
+                    if ($gCurrentUser->isAdministratorRegistration()) {
                         return true;
                     }
                     break;
@@ -235,7 +235,7 @@ class Component extends Entity
                 break;
 
             case 'CATEGORY-REPORT':
-                if ($gCurrentUser->checkRolesRight('rol_assign_roles')) {
+                if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                     return true;
                 }
                 break;
@@ -307,7 +307,7 @@ class Component extends Entity
                 break;
 
             case 'REGISTRATION':
-                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->approveUsers()) {
+                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->isAdministratorRegistration()) {
                     return true;
                 }
                 break;

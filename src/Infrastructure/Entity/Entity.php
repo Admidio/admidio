@@ -181,6 +181,30 @@ class Entity
     }
 
     /**
+     * Get the name of the underlying database table. This can be used to construct sql queries  without hardcoding the table.
+     * @return string The name of the underlying database table
+     */
+    public function getTableName(): string {
+        return $this->tableName;
+    }
+
+    /**
+     * Get the column prefix of the underlying table. This can be used to construct column names without hardcoding the prefix.
+     * @return string The column prefix used for the underlying database table
+     */
+    public function getColumnPrefix(): string {
+        return $this->columnPrefix;
+    }
+
+    /**
+     * Get the key column of the underlying database table. This can be used to construct sql queries names without hardcoding the column name.
+     * @return string The key column name used for the underlying database table
+     */
+    public function getKeyColumnName(): string {
+        return $this->keyColumnName;
+    }
+
+    /**
      * Reads the number of all records of this table
      * @return int Number of records of this table
      * @throws Exception

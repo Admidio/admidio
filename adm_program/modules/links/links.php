@@ -45,7 +45,7 @@ try {
         $category->readDataByUuid($getCatUuid);
         $headline .= ' - ' . $category->getValue('cat_name');
     }
-    
+
         // Create Link object
         $weblinks = new ModuleWeblinks();
         $weblinks->setParameter('lnk_uuid', $getLinkUuid);
@@ -71,7 +71,7 @@ try {
 
     if ($gSettingsManager->getBool('enable_rss')) {
         $page->addRssFile(
-            ADMIDIO_URL . FOLDER_MODULES . '/links/rss_links.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
+            ADMIDIO_URL . '/rss/links.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'),
             $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $headline))
         );
     }
@@ -91,7 +91,7 @@ try {
             );
         }
 
-        if ($gCurrentUser->editWeblinksRight()) {
+        if ($gCurrentUser->isAdministratorWeblinks()) {
             // show link to maintain categories
             $page->addPageFunctionsMenuItem(
                 'menu_item_links_maintain_categories',
@@ -102,7 +102,7 @@ try {
         }
 
         ChangelogService::displayHistoryButton($page, 'weblinks', 'links');
-        
+
         $page->addJavascript(
             '
         $("#cat_uuid").change(function() {

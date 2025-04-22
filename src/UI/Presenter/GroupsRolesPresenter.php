@@ -110,7 +110,7 @@ class GroupsRolesPresenter extends PagePresenter
                 );
             }
 
-            if ($gCurrentUser->manageRoles()) {
+            if ($gCurrentUser->isAdministratorRoles()) {
                 // set role active or inactive
                 if ($roleType === GroupsRolesPresenter::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
@@ -585,10 +585,10 @@ class GroupsRolesPresenter extends PagePresenter
 
         $this->assignSmartyVariable('eventRole', $eventRole);
         $this->assignSmartyVariable('roleName', $roleName);
-        $this->assignSmartyVariable('nameUserCreated', $role->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $role->getValue('rol_timestamp_create'));
-        $this->assignSmartyVariable('nameLastUserEdited', $role->getNameOfLastEditingUser());
-        $this->assignSmartyVariable('timestampLastUserEdited', $role->getValue('rol_timestamp_change'));
+        $this->assignSmartyVariable('userCreatedName', $role->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $role->getValue('rol_timestamp_create'));
+        $this->assignSmartyVariable('lastUserEditedName', $role->getNameOfLastEditingUser());
+        $this->assignSmartyVariable('lastUserEditedTimestamp', $role->getValue('rol_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -787,7 +787,7 @@ class GroupsRolesPresenter extends PagePresenter
     {
         global $gCurrentUser, $gSettingsManager, $gL10n, $gDb;
 
-        if ($gCurrentUser->manageRoles()) {
+        if ($gCurrentUser->isAdministratorRoles()) {
             // show link to create new role
             $this->addPageFunctionsMenuItem(
                 'menu_item_groups_roles_add',
@@ -863,7 +863,7 @@ class GroupsRolesPresenter extends PagePresenter
             FormPresenter::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => $categoryUUID)
         );
-        if ($gCurrentUser->manageRoles()) {
+        if ($gCurrentUser->isAdministratorRoles()) {
             $form->addSelectBox(
                 'role_type',
                 $gL10n->get('SYS_ROLE_TYPES'),

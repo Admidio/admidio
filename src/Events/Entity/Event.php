@@ -271,22 +271,24 @@ class Event extends Entity
     }
 
     /**
-     * This method checks if the current user is allowed to edit this event. Therefore,
-     * the event must be visible to the user and must be of the current organization.
-     * The user must be a member of at least one role that have the right to manage events.
-     * Global events could be only edited by the parent organization.
+     * This method checks if the current user is allowed to edit this event. Therefore, the event
+     * must be of the current organization. The user must have the right to administrate events or
+     * must be a member of at least one role that have the right to manage events and the event
+     * was created by the current user. Global events could be only edited by the parent organization.
      * @return bool Return true if the current user is allowed to edit this event
      * @throws Exception
      */
     public function isEditable(): bool
     {
-        global $gCurrentOrganization, $gCurrentUser;
+        global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
 
-        if ($gCurrentUser->administrateEvents()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)) {
+        if ($gCurrentUser->isAdministratorEvents()
+            || (in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)
+                && $gCurrentUser->getValue('usr_id') === $this->getValue('dat_usr_id_create'))
+        ) {
             // if category belongs to current organization than events are editable
             if ($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
+            && (int) $this->getValue('cat_org_id') === $gCurrentOrgId) {
                 return true;
             }
 

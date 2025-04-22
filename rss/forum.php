@@ -1,7 +1,8 @@
 <?php
 /**
  ***********************************************************************************************
- * Show RSS-Feed of the latest 50 forum topics
+ * RSS feed of the latest 50 forum topics
+ * Specification von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -29,7 +30,7 @@ try {
 
     // Show the RSS feed of the forum topics
     $forumService = new ForumService($gDb);
-    $forumService->showRssFeed($getOrganization);
+    $forumService->rssFeed($getOrganization);
 } catch (Throwable $e) {
     echo $e->getMessage();
 }

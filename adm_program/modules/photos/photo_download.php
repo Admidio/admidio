@@ -104,7 +104,7 @@ try {
 
         // add sub albums as subfolders
 
-        if (!$gCurrentUser->editPhotoRight()) {
+        if (!$gCurrentUser->isAdministratorPhotos()) {
             $sqlConditions .= ' AND pho_locked = false ';
         }
 
@@ -126,7 +126,7 @@ try {
             $photoAlbum->readDataById((int)$pdoStatement->fetchColumn());
 
             // ignore locked albums owned by others
-            if ($photoAlbum->getValue('pho_locked') == 0 || $gCurrentUser->editPhotoRight()) {
+            if ($photoAlbum->getValue('pho_locked') == 0 || $gCurrentUser->isAdministratorPhotos()) {
                 $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id');
                 // get number of photos in total
                 $quantity = $photoAlbum->getValue('pho_quantity');

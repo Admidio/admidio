@@ -53,6 +53,11 @@ DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_data       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_saml_clients         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sso_keys             CASCADE;
+
+
+
 
 /*==============================================================*/
 /* Table: adm_announcements                                     */
@@ -474,6 +479,69 @@ CREATE TABLE %PREFIX%_messages_recipients
     msr_usr_id                  integer unsigned,
     msr_role_mode               smallint            NOT NULL    DEFAULT 0,
     PRIMARY KEY (msr_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+/*==============================================================*/
+/* Tables: adm_saml_clients                                     */
+/* Data storage for saml  (client settings and tokens)          */
+/*==============================================================*/
+
+CREATE TABLE %PREFIX%_saml_clients (
+    smc_id                      integer unsigned    AUTO_INCREMENT,
+    smc_uuid                    varchar(36)         NOT NULL,
+    smc_org_id                  integer unsigned    NOT NULL,
+    smc_client_id               varchar(255)        NOT NULL UNIQUE,
+    smc_client_name             varchar(255)        NOT NULL,
+    smc_metadata_url            text                NULL,
+    smc_acs_url                 text                NOT NULL,
+    smc_slo_url                 text                NULL,
+    smc_x509_certificate        text                NOT NULL,
+    smc_userid_field            varchar(50)         NOT NULL    default 'usr_id',
+    smc_field_mapping           text                NULL,
+    smc_role_mapping            text                NULL,
+
+    smc_allowed_clock_skew      integer unsigned    NULL,
+    smc_assertion_lifetime      integer unsigned    NULL,
+    smc_sign_assertions         bool                DEFAULT true,
+    smc_encrypt_assertions      bool                DEFAULT false,
+    smc_require_auth_signed     bool                DEFAULT false,
+    smc_validate_signatures     bool                DEFAULT true,
+
+    smc_usr_id_create           integer unsigned,
+    smc_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    smc_usr_id_change           integer unsigned,
+    smc_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (smc_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+/*==============================================================*/
+/* Table: adm_sso_keys                                               */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_sso_keys (
+    key_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    key_uuid                    varchar(36)         NOT NULL,
+    key_org_id                  integer unsigned    NOT NULL,
+    key_name                    text                NOT NULL,
+-- TODO: Add key_type ENUM ('RSA', 'EC') or key_algorithm varchar(16) for signing algorithm e.g. RS256, ES256, etc.    
+    key_algorithm               varchar(50)         NOT NULL    DEFAULT 'RSA',
+    key_private                 text                NOT NULL,
+    key_public                  text                NOT NULL,
+    key_certificate             text                NULL,
+    key_expires_at              date                NULL,
+    key_is_active               boolean             NOT NULL    DEFAULT true,
+    key_usr_id_create           integer unsigned,
+    key_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    key_usr_id_change           integer unsigned,
+    key_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (key_id)
 )
 ENGINE = InnoDB
 DEFAULT character SET = utf8
@@ -1091,6 +1159,15 @@ ALTER TABLE %PREFIX%_roles_rights_data
 ALTER TABLE %PREFIX%_rooms
     ADD CONSTRAINT %PREFIX%_fk_room_usr_create FOREIGN KEY (room_usr_id_create) REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_room_usr_change FOREIGN KEY (room_usr_id_change) REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_saml_clients
+    ADD CONSTRAINT %PREFIX%_fk_smc_usr_create FOREIGN KEY (smc_usr_id_create)   REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_smc_usr_change FOREIGN KEY (smc_usr_id_change)   REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_sso_keys
+    ADD CONSTRAINT %PREFIX%_fk_key_org         FOREIGN KEY (key_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_key_usr_change  FOREIGN KEY (key_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_key_usr_create  FOREIGN KEY (key_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_sessions
     ADD CONSTRAINT %PREFIX%_fk_ses_org         FOREIGN KEY (ses_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,

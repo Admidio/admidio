@@ -45,7 +45,7 @@ ${IMAGE_NAMES} \
 .
 "
 
-docker build \
+docker --debug build \
   --build-arg ADMIDIO_BUILD_DATE="${ADMIDIO_BUILD_DATE}" \
   --build-arg ADMIDIO_VCS_REF="${ADMIDIO_VCS_REF}" \
   --build-arg ADMIDIO_VERSION="${ADMIDIO_VERSION}" \

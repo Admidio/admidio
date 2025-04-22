@@ -76,6 +76,7 @@ $defaultOrgPreferences = array(
     'changelog_table_forum_posts' => '0',
     'changelog_table_inventory_fields' => '0',
     'changelog_table_inventory_items' => '0',
+    'changelog_table_saml_clients' => '0',
     'changelog_table_others' => '0',
 
     // E-mail dispatch
@@ -208,6 +209,13 @@ $defaultOrgPreferences = array(
     'profile_show_former_roles' => '1',
     'profile_show_extern_roles' => '1',
     'profile_photo_storage' => '0',
+
+    // Single-sign-on (SAML, OIDC)
+    'sso_saml_enabled' => '0',
+    'sso_saml_entity_id' => ADMIDIO_URL,
+    'sso_saml_want_requests_signed' => '1',
+    'sso_saml_signing_key' => '0',
+    'sso_saml_encryption_key' => '0',
 
     // Weblinks
     'enable_weblinks_module' => '1',

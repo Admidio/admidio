@@ -9,15 +9,15 @@
  *
  * Parameters:
  *
- * mode : cards        - Show a list with all open registrations that should be approved.
- *        list         - Show users with similar names with the option to assign the registration to them.
- *        topic        - Assign registration to a user who is already a member of the organization
- *        topic_edit   - Assign registration to a user who is NOT yet a member of the organization
- *        topic_save   - Delete user account
- *        topic_delete - Delete user account
- *        post_edit    - Create new user and assign roles automatically without dialog
- *        post_save    - Registration does not need to be assigned, simply send login data
- *        post_delete  - Registration does not need to be assigned, simply send login data
+ * mode : cards        - Show a card list with all topics.
+ *        list         - Show a table list with all topics.
+ *        topic        - Show a topic with all posts
+ *        topic_edit   - Edit a topic
+ *        topic_save   - Save form data of a topic
+ *        topic_delete - Delete a topic
+ *        post_edit    - Create or edit a post
+ *        post_save    - Save form data of a post
+ *        post_delete  - Delete a post
  * topic_uuid    : UUID of the topic that should be shown.
  * post_uuid     : UUID of the post that should be shown.
  * category_uuid : Array of category UUIDs whose topics should be shown
@@ -60,7 +60,6 @@ try {
 
     switch ($getMode) {
         case 'cards':
-            // create html page object
             $page = new ForumPresenter($getCategoryUUID);
             $page->createCards($getOffset);
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
@@ -68,7 +67,6 @@ try {
             break;
 
         case 'list':
-            // create html page object
             $page = new ForumPresenter($getCategoryUUID);
             $page->createList();
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
@@ -76,7 +74,6 @@ try {
             break;
 
         case 'topic':
-            // create html page object
             $page = new ForumTopicPresenter($getTopicUUID);
             $page->createCards($getOffset);
             $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
@@ -84,7 +81,6 @@ try {
             break;
 
         case 'topic_edit':
-            // create html page object
             $page = new ForumTopicPresenter($getTopicUUID);
             $page->createEditForm();
             $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
@@ -112,7 +108,6 @@ try {
             break;
 
         case 'post_edit':
-            // create html page object
             $page = new ForumPostPresenter($getPostUUID);
             $page->createEditForm($getTopicUUID);
             $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());

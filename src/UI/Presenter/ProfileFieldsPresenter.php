@@ -248,10 +248,10 @@ class ProfileFieldsPresenter extends PagePresenter
 
         $this->assignSmartyVariable('fieldNameIntern', $usfNameIntern);
         $this->assignSmartyVariable('systemField', $userField->getValue('usf_system'));
-        $this->assignSmartyVariable('nameUserCreated', $userField->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $userField->getValue('ann_timestamp_create'));
-        $this->assignSmartyVariable('nameLastUserEdited', $userField->getNameOfLastEditingUser());
-        $this->assignSmartyVariable('timestampLastUserEdited', $userField->getValue('ann_timestamp_change'));
+        $this->assignSmartyVariable('userCreatedName', $userField->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $userField->getValue('ann_timestamp_create'));
+        $this->assignSmartyVariable('lastUserEditedName', $userField->getNameOfLastEditingUser());
+        $this->assignSmartyVariable('lastUserEditedTimestamp', $userField->getValue('ann_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }

@@ -214,7 +214,7 @@ try {
 
     foreach ($gProfileFields->getProfileFields() as $field) {
         // add profile field to user field array
-        if ($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->editUsers())) {
+        if ($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->isAdministratorUsers())) {
             $javascriptCode .= '
             userFields[' . ++$i . '] = {
                 "cat_name": "' . str_replace('"', '\'', $field->getValue('cat_name')) . '",
@@ -246,7 +246,7 @@ try {
         };';
 
     // administrator could export the uuid of each user to identify the user later at the import
-    if ($gCurrentUser->editUsers()) {
+    if ($gCurrentUser->isAdministratorUsers()) {
         $javascriptCode .= '
             userFields[' . ++$i . '] = {
                 "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
