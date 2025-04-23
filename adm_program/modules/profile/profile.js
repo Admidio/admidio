@@ -20,8 +20,12 @@ function ProfileJS(gRootPath) {
             url: this.url + "?mode=reload_current_memberships&user_uuid=" + this.userUuid,
             dataType: "html",
             success: function(responseText) {
-                $("#adm_profile_role_memberships .card-body").html(responseText);
-                formSubmitEvent('#adm_profile_role_memberships .card-body');
+                /* Tabs */
+                $("#adm_profile_role_memberships_current .card-body").html(responseText);
+                formSubmitEvent('#adm_profile_role_memberships_current .card-body');
+                /* Accordions */
+                $("#adm_collapse_profile_role_memberships_current .accordion-body").html(responseText);
+                formSubmitEvent('#adm_collapse_profile_role_memberships_current .accordion-body');
             }
         });
     };
@@ -31,8 +35,12 @@ function ProfileJS(gRootPath) {
                 url: this.url + "?mode=reload_former_memberships&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
+                    /* Tabs */
                     $("#adm_profile_role_memberships_former .card-body").html(responseText);
                     formSubmitEvent('#adm_profile_role_memberships_former .card-body');
+                    /* Accordions */
+                    $("#adm_collapse_profile_role_memberships_former .accordion-body").html(responseText);
+                    formSubmitEvent('#adm_collapse_profile_role_memberships_former .accordion-body');
                 }
             }
         );
@@ -43,8 +51,12 @@ function ProfileJS(gRootPath) {
                 url: this.url + "?mode=reload_future_memberships&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
+                    /* Tabs */
                     $("#adm_profile_role_memberships_future .card-body").html(responseText);
                     formSubmitEvent('#adm_profile_role_memberships_future .card-body');
+                    /* Accordions */
+                    $("#adm_collapse_profile_role_memberships_future .accordion-body").html(responseText);
+                    formSubmitEvent('#adm_collapse_profile_role_memberships_future .accordion-body');
                 }
             }
         );

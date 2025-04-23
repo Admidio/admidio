@@ -101,9 +101,15 @@ try {
         echo getRoleMemberships('former_role_list', $user, $roleStatement);
 
         if ($countRole === 0) {
+            /* Tabs */
             echo '<script type="text/javascript">$("#adm_profile_role_memberships_former_tab").css({ \'display\':\'none\' })</script>';
+            /* Accordions */
+            echo '<script type="text/javascript">$("#adm_profile_role_memberships_former_accordion").css({ \'display\':\'none\' })</script>';
         } else {
+            /* Tabs */
             echo '<script type="text/javascript">$("#adm_profile_role_memberships_former_tab").css({ \'display\':\'block\' })</script>';
+            /* Accordions */
+            echo '<script type="text/javascript">$("#adm_profile_role_memberships_former_accordion").css({ \'display\':\'block\' })</script>';
         }
     } elseif ($getMode === 'reload_future_memberships') {
         // reload future role memberships
@@ -112,9 +118,15 @@ try {
         echo getRoleMemberships('future_role_list', $user, $roleStatement);
 
         if ($countRole === 0) {
+            /* Tabs */
             echo '<script type="text/javascript">$("#adm_profile_role_memberships_future_tab").css({ \'display\':\'none\' })</script>';
+            /* Accordions */
+            echo '<script type="text/javascript">$("#adm_profile_role_memberships_future_accordion").css({ \'display\':\'none\' })</script>';
         } else {
+            /* Tabs */
             echo '<script type="text/javascript">$("#adm_profile_role_memberships_future_tab").css({ \'display\':\'block\' })</script>';
+            /* Accordions */
+            echo '<script type="text/javascript">$("#adm_profile_role_memberships_future_accordion").css({ \'display\':\'block\' })</script>';
         }
     } elseif ($getMode === 'save_membership') {
         // save membership date changes

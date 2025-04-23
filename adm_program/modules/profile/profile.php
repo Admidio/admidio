@@ -120,7 +120,10 @@ try {
             if (profileJS) {
                 profileJS.formerRoleCount--;
                 if (profileJS.formerRoleCount === 0) {
+                    /* Tabs */
                     $("#adm_profile_role_memberships_former").fadeOut("slow");
+                    /* Accordions */
+                    $("#adm_collapse_profile_role_memberships_former").fadeOut("slow");
                 }
             }
         }
@@ -129,7 +132,10 @@ try {
             if (profileJS) {
                 profileJS.futureRoleCount--;
                 if (profileJS.futureRoleCount === 0) {
+                    /* Tabs */
                     $("#adm_profile_role_memberships_future").fadeOut("slow");
+                    /* Accordions */
+                    $("#adm_collapse_profile_role_memberships_future").fadeOut("slow");
                 }
             }
         }
