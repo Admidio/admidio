@@ -55,8 +55,7 @@ try {
             // change mode of users that should be shown
             $("#mem_show_all").click(function() {
                 window.location.replace("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts.php', array('members' => $flagShowMembers)) . '");
-            ', true
-        );
+            });', true);
 
         $page->addPageFunctionsMenuItem(
             'menu_item_contacts_create_contact',
