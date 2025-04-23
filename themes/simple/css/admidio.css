@@ -79,6 +79,10 @@
     padding-left: 1rem;
     padding-right: 1rem;
     max-width: 1000px;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 }
 
 .admidio-max-content {
