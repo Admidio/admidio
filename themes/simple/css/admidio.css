@@ -370,17 +370,26 @@ label {
     padding: 0;
 }
 
-.admidio-tabbed-field-group .card-header {
-    font-weight: bold;
-    font-size: 100% !important;
+.tab-pane .card {
+    border-top-left-radius: unset;
+    border-top-right-radius: unset;
+    border-top: none;
 }
 
-.admidio-tabbed-field-group .profile-card-header-tabs, .profile-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
+.profile-tabs {
+    flex-wrap: nowrap;     /* never wrap */
+    width: 100%;
 }
 
+.profile-tabs .nav-link {
+    max-width: 250px;
+}
+
+.profile-tabs .dropdown-toggle {
+    white-space: normal;
+    text-align: center;
+    align-content: center;
+}
 .admidio-tabbed-field-group .list-group-item {
     border: none;
     padding: 0 0 1rem 0;
@@ -475,6 +484,9 @@ label {
     background-color: var(--bs-tertiary);
     font-weight: bold;
     height: 100%;
+}
+.nav-tabs .nav-link.active {
+    height: 102%;   /* important for not showing the vorder underneath the selected tab */
 }
 
 .navbar .admidio-form-group {
