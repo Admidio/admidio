@@ -120,7 +120,7 @@ try {
             if (profileJS) {
                 profileJS.formerRoleCount--;
                 if (profileJS.formerRoleCount === 0) {
-                    $("#adm_profile_former_roles_box").fadeOut("slow");
+                    $("#adm_profile_role_memberships_former").fadeOut("slow");
                 }
             }
         }
@@ -129,7 +129,7 @@ try {
             if (profileJS) {
                 profileJS.futureRoleCount--;
                 if (profileJS.futureRoleCount === 0) {
-                    $("#adm_profile_future_roles_box").fadeOut("slow");
+                    $("#adm_profile_role_memberships_future").fadeOut("slow");
                 }
             }
         }
@@ -284,6 +284,25 @@ try {
             'bi-person-heart'
         );
     }
+
+    // show link to edit role memberships
+    if ($gCurrentUser->isAdministratorUsers()) {
+        $page->addJavascript('
+            $("#menu_item_profile_role_memberships").attr("href", "javascript:void(0);");
+            $("#menu_item_profile_role_memberships").attr("data-class", "modal-lg");
+            $("#menu_item_profile_role_memberships").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)) .'");
+            $("#menu_item_profile_role_memberships").attr("class", "nav-link btn btn-secondary openPopup");
+            ', true
+        );
+
+        $page->addPageFunctionsMenuItem(
+            'menu_item_profile_role_memberships',
+            $gL10n->get('SYS_ROLE_MEMBERSHIPS_CHANGE'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)),
+            'bi-person-gear'
+        );
+    }
+
 
     // *******************************************************************************
     // User data block
@@ -544,7 +563,6 @@ try {
             }
         }
         $page->assignSmartyVariable('userRights', $userRightsArray);
-        $page->assignSmartyVariable('urlEditRoles', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
     }
 
 

@@ -20,8 +20,8 @@ function ProfileJS(gRootPath) {
             url: this.url + "?mode=reload_current_memberships&user_uuid=" + this.userUuid,
             dataType: "html",
             success: function(responseText) {
-                $("#adm_profile_roles_box .card-body").html(responseText);
-                formSubmitEvent('#adm_profile_roles_box .card-body');
+                $("#adm_profile_role_memberships .card-body").html(responseText);
+                formSubmitEvent('#adm_profile_role_memberships .card-body');
             }
         });
     };
@@ -31,8 +31,8 @@ function ProfileJS(gRootPath) {
                 url: this.url + "?mode=reload_former_memberships&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
-                    $("#adm_profile_former_roles_box .card-body").html(responseText);
-                    formSubmitEvent('#adm_profile_former_roles_box .card-body');
+                    $("#adm_profile_role_memberships_former .card-body").html(responseText);
+                    formSubmitEvent('#adm_profile_role_memberships_former .card-body');
                 }
             }
         );
@@ -43,8 +43,8 @@ function ProfileJS(gRootPath) {
                 url: this.url + "?mode=reload_future_memberships&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
-                    $("#adm_profile_future_roles_box .card-body").html(responseText);
-                    formSubmitEvent('#adm_profile_future_roles_box .card-body');
+                    $("#adm_profile_role_memberships_future .card-body").html(responseText);
+                    formSubmitEvent('#adm_profile_role_memberships_future .card-body');
                 }
             }
         );
