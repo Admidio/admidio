@@ -201,7 +201,7 @@ a {
 }
 
 /* default distance between elements */
-.admidio-blog, .admidio-field-group, .pagination,
+.admidio-blog, .admidio-field-group, .admidio-tabbed-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-menu-function-node,
 .dt-container, .admidio-margin-bottom, .admidio-content-header,
@@ -370,6 +370,30 @@ label {
     padding: 0;
 }
 
+.admidio-tabbed-field-group .card-header {
+    font-weight: bold;
+    font-size: 100% !important;
+}
+
+.admidio-tabbed-field-group .profile-card-header-tabs, .profile-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.admidio-tabbed-field-group .list-group-item {
+    border: none;
+    padding: 0 0 1rem 0;
+}
+
+.admidio-tabbed-field-group .button {
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.admidio-tabbed-field-group .list-group-item .list-group-item {
+    padding: 0;
+}
+
 .card .admidio-info-created-edited {
     margin-bottom: 0;
     margin-top: 0;
@@ -450,6 +474,7 @@ label {
 .nav-tabs .nav-link {
     background-color: var(--bs-tertiary);
     font-weight: bold;
+    height: 100%;
 }
 
 .navbar .admidio-form-group {
