@@ -340,7 +340,7 @@ class AnnouncementsPresenter extends PagePresenter
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_announcement_' . $announcementData['ann_uuid'] . '\', \'' .
                         SecurityUtils::encodeUrl(
-                            ADMIDIO_URL . '/adm_program/modules/announcements.php',
+                            ADMIDIO_URL . FOLDER_MODULES . '/announcements.php',
                             array('mode' => 'delete', 'announcement_uuid' => $announcementData['ann_uuid'])
                         ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($announcementData['ann_headline'])),

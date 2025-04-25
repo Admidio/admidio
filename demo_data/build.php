@@ -22,7 +22,7 @@ use Admidio\Session\Entity\Session;
 
 $rootPath = dirname(__DIR__);
 
-// embed config file
+// embed a config file
 $configPath = $rootPath . '/adm_my_files/config.php';
 if (is_file($configPath)) {
     require_once($configPath);
@@ -40,19 +40,19 @@ if (!isset($gImportDemoData) || !$gImportDemoData) {
     <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = true;</em></p>');
 }
 
-require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
+require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
 // this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
 const TBL_DATES = TABLE_PREFIX . '_dates';
 const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
 
 /**
- * Deletes all files and folder within adm_my_files except the config.php . After that all
- * files and folder of the demo_data folder adm_my_files will be copied to the original adm_my_files folder.
+ * Deletes all files and folder within adm_my_files except the config.php . After that, all
+ * files and folders of the demo_data folder adm_my_files will be copied to the original adm_my_files folder.
  * @throws RuntimeException
  * @throws UnexpectedValueException
  */
-function prepareAdmidioDataFolder()
+function prepareAdmidioDataFolder(): void
 {
     $dh = opendir(ADMIDIO_PATH . FOLDER_DATA);
 
@@ -90,8 +90,9 @@ function prepareAdmidioDataFolder()
 
 /**
  * @param bool $enable
+ * @throws \Admidio\Infrastructure\Exception
  */
-function toggleForeignKeyChecks(bool $enable)
+function toggleForeignKeyChecks(bool $enable): void
 {
     global $gDb;
 
@@ -105,8 +106,9 @@ function toggleForeignKeyChecks(bool $enable)
 /**
  * @param array<int,string> $sqlStatements
  * @param string $filename
+ * @throws \Admidio\Infrastructure\Exception
  */
-function executeSqlStatements(array $sqlStatements, string $filename)
+function executeSqlStatements(array $sqlStatements, string $filename): void
 {
     global $gDb, $gL10n;
 
@@ -137,8 +139,9 @@ function executeSqlStatements(array $sqlStatements, string $filename)
 
 /**
  * @param string $filename The SQL filename (db.sql, data.sql)
+ * @throws \Admidio\Infrastructure\Exception
  */
-function readAndExecuteSQLFromFile(string $filename)
+function readAndExecuteSQLFromFile(string $filename): void
 {
     $sqlFilePath = __DIR__ . '/' . $filename;
 
@@ -158,7 +161,10 @@ function readAndExecuteSQLFromFile(string $filename)
     echo 'Executing "'.$filename.'" SQL-Statements finished!<br />';
 }
 
-function resetPostgresSequences()
+/**
+ * @throws \Admidio\Infrastructure\Exception
+ */
+function resetPostgresSequences(): void
 {
     global $gDb;
 
@@ -177,8 +183,9 @@ function resetPostgresSequences()
 
 /**
  * @param string $language
+ * @throws \Admidio\Infrastructure\Exception
  */
-function setInstallationLanguage(string $language)
+function setInstallationLanguage(string $language): void
 {
     global $gDb;
 
@@ -200,7 +207,7 @@ function getInstalledDbVersion(): string
     $pdoStatement = $gDb->queryPrepared($sql, array(), false);
 
     if ($pdoStatement === false) {
-        // in Admidio version 2 the database version was stored in preferences table
+        // in Admidio version 2, the database version was stored in the preference table
         $sql = 'SELECT prf_value
                   FROM ' . TBL_PREFERENCES . '
                  WHERE prf_name   = \'db_version\'
@@ -218,7 +225,7 @@ function getInstalledDbVersion(): string
 
 /**
  * @param string $language
- * @throws RuntimeException
+ * @throws RuntimeException|\Admidio\Infrastructure\Exception
  */
 function doInstallation(string $language)
 {
@@ -240,17 +247,17 @@ function doInstallation(string $language)
     // in postgresql all sequences must get a new start value because our inserts have given ids
     resetPostgresSequences();
 
-    // set parameter lang to default language for this installation
+    // set parameter lang to the default language for this installation
     setInstallationLanguage($language);
 
-    // activate foreign key checks, so database is consistent
+    // activate foreign key checks, so a database is consistent
     toggleForeignKeyChecks(true);
 }
 
 // Initialize and check the parameters
 $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultValue' => 'de'));
 
-// start php session and remove session object with all data, so that
+// start a php session and remove a session object with all data so that
 // all data will be read after the update
 try {
     Session::start(COOKIE_PREFIX);
@@ -259,7 +266,7 @@ try {
 }
 unset($_SESSION['gCurrentSession']);
 
-// create language object to handle translations
+// create a language object to handle translations
 $gL10n = new Language($getLanguage);
 $gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
 
@@ -285,7 +292,7 @@ doInstallation($getLanguage);
 
 echo 'Installation successful!<br />';
 
-// read installed database version
+// read an installed database version
 try {
     $databaseVersion = getInstalledDbVersion();
 } catch (Exception $e) {

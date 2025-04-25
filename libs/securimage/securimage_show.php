@@ -48,7 +48,7 @@
 // error_reporting(E_ALL); ini_set('display_errors', 1);
 
 // ***** START ADMIDIO CODE *****
-require_once(__DIR__ . '/../../adm_program/system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 // ***** END ADMIDIO CODE *****
 
 $img = new Securimage();

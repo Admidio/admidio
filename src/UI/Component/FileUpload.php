@@ -108,7 +108,7 @@ class FileUpload
             });
 
             $("#fileupload").fileupload({
-                url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
+                url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
                 sequentialUploads: true,
                 dataType: "json",
                 formData: [{
